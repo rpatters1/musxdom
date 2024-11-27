@@ -32,8 +32,8 @@
  * 
  * Features include:
  * - Header-only implementation.
- * - Dependency-free class defintions.
- * - Xml Deserializer interfaces that allow the caller to use any Xml utility.
+ * - Dependency-free class definitions.
+ * - Xml Deserializer interfaces that allow the caller to use any Xml utility for xml handling.
  *
  * (This documentation reference is generated directly from
  * the source code, by the Doxygen application.)
