@@ -30,16 +30,16 @@
 namespace musx
 {
 
-/** @brief Static class that encapsulates the crypter for a `score.dat` file taken
+/** @brief Static class that encapsulates the encoder/decoder for a `score.dat` file taken
  * from a `.musx` file. A `.musx` file is a standard zip archive that contains
  * a directory structure containing all the data Finale uses to render a document.
- * The primary EnigmaXml document is a file called `score.dat`. This is a Gzip archive that
+ * The primary EnigmaXml document is in a file called `score.dat`. This is a Gzip archive that
  * has been encoded using the algorithm provided in this class.
  * 
  * The steps to extract EnigmaXml from a `.musx` document are:
  * - Unzip the `.musx` file.
  * - Read the `score.dat` file into a buffer.
- * - Decode the the buffer using `ScoreFileEncoder::cryptBuffer`.
+ * - Decode the the buffer using #ScoreFileEncoder::cryptBuffer.
  * - Gunzip the decoded buffer into the EnigmaXml.
  */
 class ScoreFileEncoder
