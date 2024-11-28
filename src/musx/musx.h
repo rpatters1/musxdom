@@ -41,9 +41,7 @@
  * @author Robert Patterson
  */
 
-#ifndef MUSX_H
-#define MUSX_H
+#pragma once
 
-#include "score_file_encoder.h"
-
-#endif // ifndef MUSX_H
+#include "ScoreFileEncoder.h"
+#include "xml/XmlInterface.h"
