@@ -43,5 +43,5 @@
 
 #pragma once
 
-#include "ScoreFileEncoder.h"
+#include "util/ScoreFileEncoder.h"
 #include "xml/XmlInterface.h"

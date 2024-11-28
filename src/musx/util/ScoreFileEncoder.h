@@ -26,8 +26,8 @@
 
 // Shout out to Deguerre https://github.com/Deguerre
 
-namespace musx
-{
+namespace musx {
+namespace util {
 
 /** @brief Static class that encapsulates the encoder/decoder for a `score.dat` file taken
  * from a `.musx` file. A `.musx` file is a standard zip archive that contains
@@ -52,6 +52,7 @@ public:
      * from a `.musx` archive. This is a symmetric algorithm that
      * encodes a decoded buffer or decodes an encoded buffer.
      * 
+     * @tparam CT the character type (signed or unsigned char). This is usually inferred.
      * @param [in,out] buffer a buffer that is re-coded in place,
      * @param [in] buffSize the number of characters in the buffer.
      */
@@ -74,8 +75,9 @@ public:
         }
     }
 
-    /** @brief version of cryptBuffer for containers.
+    /** @brief version of recodeBuffer for containers.
      * 
+     * @tparam T the container type (of signed or unsigned chars). This is usually inferred.
      * @param [in,out] buffer a container that is re-coded in place,
      */
     template <typename T>
@@ -89,4 +91,5 @@ public:
     }
 };
 
-} // end namespace
+} // namespace util
+} // namespace musx

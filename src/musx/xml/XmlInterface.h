@@ -28,6 +28,21 @@
 #include <stdexcept>
 
 namespace musx {
+namespace xml {
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+/**
+ * @brief Exception for load xml error.
+ */
+class load_error : public std::runtime_error
+{
+public:
+    /**
+     * @brief Constructor
+     */
+    load_error(const char *msg) : std::runtime_error(msg) {}
+};
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 /**
  * @brief Interface for an XML attribute.
@@ -107,11 +122,17 @@ public:
     }
 
     /**
-     * @brief Finds the first attribute.
-     * @param name [optional] The name of the attribute to find. If omitted or empty, finds the first attribute with any name.
+     * @brief Gets the first attribute.
      * @return A shared pointer to the attribute, or nullptr if not found.
      */
-    virtual std::shared_ptr<IXmlAttribute> getFirstAttribute(const std::string& name = {}) const = 0;
+    virtual std::shared_ptr<IXmlAttribute> getFirstAttribute() const = 0;
+
+    /**
+     * @brief Finds the first attribute.
+     * @param name The name of the attribute to find.
+     * @return A shared pointer to the attribute, or nullptr if not found.
+     */
+    virtual std::shared_ptr<IXmlAttribute> findAttribute(const std::string& name) const = 0;
 
     /**
      * @brief Finds the first child element.
@@ -151,8 +172,16 @@ public:
     /**
      * @brief Loads XML content from a string.
      * @param xmlContent The XML content as a string.
+     * @throws musx::xml::load_error if the load fails.
      */
     virtual void loadFromString(const std::string& xmlContent) = 0;
+
+    /**
+     * @brief Loads XML content from a vector of characters.
+     * @param xmlContent The XML content as a vector of characters.
+     * @throws musx::xml::load_error if the load fails.
+     */
+    virtual void loadFromString(const std::vector<char>& xmlContent) = 0;
 
     /**
      * @brief Gets the root element of the document.
@@ -161,4 +190,5 @@ public:
     virtual std::shared_ptr<IXmlElement> getRootElement() const = 0;
 };
 
+} // namespace xml
 } // namespace musx
