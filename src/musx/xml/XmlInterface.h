@@ -28,6 +28,11 @@
 #include <stdexcept>
 
 namespace musx {
+
+/**
+ * @namespace musx::xml
+ * @brief Provides interfaces and optional implementations for traversing XML.
+ */
 namespace xml {
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -47,7 +52,8 @@ public:
 /**
  * @brief Interface for an XML attribute.
  */
-class IXmlAttribute {
+class IXmlAttribute
+{
 public:
     virtual ~IXmlAttribute() = default;
 
@@ -89,7 +95,8 @@ public:
 /**
  * @brief Interface for an XML element.
  */
-class IXmlElement {
+class IXmlElement
+{
 public:
     virtual ~IXmlElement() = default;
 
@@ -165,7 +172,8 @@ public:
 /**
  * @brief Interface for an XML document.
  */
-class IXmlDocument {
+class IXmlDocument
+{
 public:
     virtual ~IXmlDocument() = default;
 

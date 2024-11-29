@@ -21,56 +21,57 @@
  */
 #pragma once
 
-#ifdef MUSX_USE_TINYXML2
+#ifdef MUSX_USE_RAPIDXML
 
 #include <string>
 #include <memory>
+#include <vector>
 #include <exception>
 
-#include "tinyxml2.h"
+#include "rapidxml.hpp"
 #include "XmlInterface.h"
 
 namespace musx {
 namespace xml {
 
 /**
- * @namespace musx::xml::tinyxml2
- * @brief Provides an implementation of #musx::xml::IXmlAttribute, #musx::xml::IXmlElement, and #musx::xml::IXmlDocument using the tinyxml2 library.
+ * @namespace musx::xml::rapidxml
+ * @brief Provides an implementation of #musx::xml::IXmlAttribute, #musx::xml::IXmlElement, and #musx::xml::IXmlDocument using the rapidxml library.
  *
- * This namespace contains optional implementations of the musx XML interfaces based on the tinyxml2 library.
+ * This namespace contains optional implementations of the musx XML interfaces based on the rapidxml library.
  * Users can replace this implementation with their own by adhering to the `musx::xml::IXml*` interfaces.
  * This design allows flexibility to use any XML parsing library without modifying the core musx interfaces.
  */
-namespace tinyxml2 {
+namespace rapidxml {
 
 /**
- * @brief Implementation of IXmlAttribute using tinyxml2.
+ * @brief Implementation of IXmlAttribute using rapidxml.
  */
 class Attribute : public musx::xml::IXmlAttribute
 {
-    const ::tinyxml2::XMLAttribute* const attribute; ///< Read-only pointer to tinyxml2::XMLAttribute.
+    ::rapidxml::xml_attribute<>* attribute; ///< Pointer to rapidxml::xml_attribute.
 
 public:
     /**
      * @brief Constructor
      */
-    explicit Attribute(const ::tinyxml2::XMLAttribute* attr) : attribute(attr) {}
+    explicit Attribute(::rapidxml::xml_attribute<>* attr) : attribute(attr) {}
 
-    std::string getName() const override { return attribute->Name(); }
-    std::string getValue() const override { return attribute->Value(); }
-    
+    std::string getName() const override { return attribute->name(); }
+    std::string getValue() const override { return attribute->value(); }
+
     std::shared_ptr<IXmlAttribute> nextAttribute() const override {
-        const ::tinyxml2::XMLAttribute *next = attribute->Next();
+        ::rapidxml::xml_attribute<>* next = attribute->next_attribute();
         return next ? std::make_shared<Attribute>(next) : nullptr;
     }
 };
 
 /**
- * @brief Implementation of IXmlElement using tinyxml2.
+ * @brief Implementation of IXmlElement using rapidxml.
  */
 class Element : public musx::xml::IXmlElement
 {
-    const ::tinyxml2::XMLElement* const element; ///< Read-only pointer to tinyxml2::XMLElement.
+    ::rapidxml::xml_node<>* element; ///< Pointer to rapidxml::xml_node.
 
     static const char* tagPtr(const std::string& tagName) {
         return tagName.empty() ? nullptr : tagName.c_str();
@@ -80,73 +81,91 @@ public:
     /**
      * @brief Constructor
      */
-    explicit Element(const ::tinyxml2::XMLElement* elem) : element(elem) {}
+    explicit Element(::rapidxml::xml_node<>* elem) : element(elem) {}
 
-    std::string getTagName() const override { return element->Name(); }
+    std::string getTagName() const override { return element->name(); }
 
     std::string getText() const override {
-        return element->GetText() ? element->GetText() : "";
+        return element->value() ? element->value() : "";
     }
 
     std::shared_ptr<IXmlAttribute> getFirstAttribute() const override {
-        const ::tinyxml2::XMLAttribute *attr = element->FirstAttribute();
+        ::rapidxml::xml_attribute<>* attr = element->first_attribute();
         return attr ? std::make_shared<Attribute>(attr) : nullptr;
     }
 
     std::shared_ptr<IXmlAttribute> findAttribute(const std::string& tagName) const override {
-        const ::tinyxml2::XMLAttribute *attr = element->FindAttribute(tagName.c_str());
+        ::rapidxml::xml_attribute<>* attr = element->first_attribute(tagName.c_str());
         return attr ? std::make_shared<Attribute>(attr) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getFirstChildElement(const std::string& tagName = {}) const override {
-        const ::tinyxml2::XMLElement* child = element->FirstChildElement(tagPtr(tagName));
+        ::rapidxml::xml_node<>* child = element->first_node(tagPtr(tagName));
         return child ? std::make_shared<Element>(child) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getNextSibling(const std::string& tagName = {}) const override {
-        const ::tinyxml2::XMLElement *sibling = element->NextSiblingElement(tagPtr(tagName));
+        ::rapidxml::xml_node<>* sibling = element->next_sibling(tagPtr(tagName));
         return sibling ? std::make_shared<Element>(sibling) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getPreviousSibling(const std::string& tagName = {}) const override {
-        const ::tinyxml2::XMLElement *sibling = element->PreviousSiblingElement(tagPtr(tagName));
-        return sibling ? std::make_shared<Element>(sibling) : nullptr;
+        // rapidxml does not directly support previous sibling, we need to iterate from the parent.
+        if (!element->parent()) return nullptr;
+
+        ::rapidxml::xml_node<>* prev = nullptr;
+        for (::rapidxml::xml_node<>* sibling = element->parent()->first_node(); sibling; sibling = sibling->next_sibling()) {
+            if (sibling == element) break;
+            if (tagName.empty() || sibling->name() == tagName) prev = sibling;
+        }
+        return prev ? std::make_shared<Element>(prev) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getParent() const override {
-        if (!element->Parent() || !element->Parent()->ToElement()) return nullptr;
-        return std::make_shared<Element>(element->Parent()->ToElement());
+        ::rapidxml::xml_node<>* parent = element->parent();
+        return parent && parent->type() == ::rapidxml::node_element ? std::make_shared<Element>(parent) : nullptr;
     }
 };
 
 /**
- * @brief Implementation of IXmlDocument using tinyxml2.
+ * @brief Implementation of IXmlDocument using rapidxml.
  */
 class Document : public musx::xml::IXmlDocument
 {
-    ::tinyxml2::XMLDocument doc; ///< Non-const since the document itself may be parsed or reset.
+    ::rapidxml::xml_document<> doc; ///< The rapidxml document.
+    std::vector<char> buffer; ///< Buffer for the document content.
 
 public:
     void loadFromString(const std::string& xmlContent) override {
-        if (doc.Parse(xmlContent.c_str()) != ::tinyxml2::XML_SUCCESS) {
-            throw musx::xml::load_error(doc.ErrorStr());
+        buffer.assign(xmlContent.begin(), xmlContent.end());
+        buffer.push_back('\0'); // Null-terminate the buffer.
+
+        try {
+            doc.parse<0>(buffer.data());
+        } catch (const ::rapidxml::parse_error& e) {
+            throw musx::xml::load_error(e.what());
         }
     }
 
     void loadFromString(const std::vector<char>& xmlContent) override {
-        if (doc.Parse(xmlContent.data(), xmlContent.size()) != ::tinyxml2::XML_SUCCESS) {
-            throw musx::xml::load_error(doc.ErrorStr());
+        buffer = xmlContent;
+        buffer.push_back('\0'); // Null-terminate the buffer.
+
+        try {
+            doc.parse<0>(buffer.data());
+        } catch (const ::rapidxml::parse_error& e) {
+            throw musx::xml::load_error(e.what());
         }
     }
 
     std::shared_ptr<IXmlElement> getRootElement() const override {
-        const ::tinyxml2::XMLElement* root = doc.RootElement();
+        ::rapidxml::xml_node<>* root = doc.first_node();
         return root ? std::make_shared<Element>(root) : nullptr;
     }
 };
 
-} // namespace tinyxml2
+} // namespace rapidxml
 } // namespace xml
 } // namespace musx
 
-#endif // MUSX_USE_TINYXML2
+#endif // MUSX_USE_RAPIDXML
