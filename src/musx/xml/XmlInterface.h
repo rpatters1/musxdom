@@ -115,14 +115,16 @@ public:
     /**
      * @brief Gets the text content of the element, converted to the specified type.
      * @tparam T The type to which the text content should be converted.
+     * @param defaultValue The value to return if the text of the element is empty.
      * @return The text content converted to the specified type.
      * @throws std::invalid_argument if the conversion fails.
      */
     template <typename T>
-    T getTextAs() const {
+    T getTextAs(T defaultValue = {}) const
+    {
         std::istringstream iss(getText());
-        T value;
-        if (!(iss >> value)) {
+        T value = defaultValue;
+        if (!iss.str().empty() && !(iss >> value)) {
             throw std::invalid_argument("Failed to convert text content [" + iss.str() + "] to the specified type");
         }
         return value;
