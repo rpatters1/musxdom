@@ -19,16 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef SCORE_FILE_ENCODER_H
-#define SCORE_FILE_ENCODER_H
+#pragma once
 
 #include <string>
 #include <cstdint>
 
 // Shout out to Deguerre https://github.com/Deguerre
 
-namespace musx
-{
+namespace musx {
+namespace util {
 
 /** @brief Static class that encapsulates the encoder/decoder for a `score.dat` file taken
  * from a `.musx` file. A `.musx` file is a standard zip archive that contains
@@ -39,7 +38,7 @@ namespace musx
  * The steps to extract EnigmaXml from a `.musx` document are:
  * - Unzip the `.musx` file.
  * - Read the `score.dat` file into a buffer.
- * - Decode the the buffer using #ScoreFileEncoder::cryptBuffer.
+ * - Decode the the buffer using #ScoreFileEncoder::recodeBuffer.
  * - Gunzip the decoded buffer into the EnigmaXml.
  */
 class ScoreFileEncoder
@@ -53,15 +52,16 @@ public:
      * from a `.musx` archive. This is a symmetric algorithm that
      * encodes a decoded buffer or decodes an encoded buffer.
      * 
+     * @tparam CT the character type (signed or unsigned char). This is usually inferred.
      * @param [in,out] buffer a buffer that is re-coded in place,
      * @param [in] buffSize the number of characters in the buffer.
      */
     template<typename CT>
-    static void cryptBuffer(CT* buffer, size_t buffSize)
+    static void recodeBuffer(CT* buffer, size_t buffSize)
     {
         static_assert(std::is_same<CT, uint8_t>::value ||
                       std::is_same<CT, char>::value,
-                      "cryptBuffer can only be called with buffers of uint8_t or char.");
+                      "recodeBuffer can only be called with buffers of uint8_t or char.");
         uint32_t state = INITIAL_STATE;
         int i = 0;
         for (size_t i = 0; i < buffSize; i++) {
@@ -75,21 +75,21 @@ public:
         }
     }
 
-    /** @brief version of cryptBuffer for containers.
+    /** @brief version of recodeBuffer for containers.
      * 
+     * @tparam T the container type (of signed or unsigned chars). This is usually inferred.
      * @param [in,out] buffer a container that is re-coded in place,
      */
     template <typename T>
-    static void cryptBuffer(T& buffer)
+    static void recodeBuffer(T& buffer)
     {
         // Ensure that the value type is either uint8_t or char
         static_assert(std::is_same<typename T::value_type, uint8_t>::value ||
                       std::is_same<typename T::value_type, char>::value,
-                      "cryptBuffer can only be called with containers of uint8_t or char.");
-        return cryptBuffer(buffer.data(), buffer.size());
+                      "recodeBuffer can only be called with containers of uint8_t or char.");
+        return recodeBuffer(buffer.data(), buffer.size());
     }
 };
 
-} // end namespace
-
-#endif //SCORE_FILE_ENCODER_H
+} // namespace util
+} // namespace musx

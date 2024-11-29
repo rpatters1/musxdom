@@ -41,9 +41,16 @@
  * @author Robert Patterson
  */
 
-#ifndef MUSX_H
-#define MUSX_H
+#pragma once
 
-#include "score_file_encoder.h"
+#include "util/ScoreFileEncoder.h"
+#include "xml/XmlInterface.h"
 
-#endif // ifndef MUSX_H
+#ifdef MUSX_USE_TINYXML2 // usually defined on the compile line or in CMakeLists.txt
+#include "xml/TinyXmlImpl.h"
+#endif
+
+#ifdef MUSX_USE_RAPIDXML // usually defined on the compile line or in CMakeLists.txt
+// ToDo: provide this implementation
+#include "xml/RapidXmlImpl.h"
+#endif
