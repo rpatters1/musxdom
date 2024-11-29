@@ -45,3 +45,12 @@
 
 #include "util/ScoreFileEncoder.h"
 #include "xml/XmlInterface.h"
+
+#ifdef MUSX_USE_TINYXML2 // usually defined on the compile line or in CMakeLists.txt
+#include "xml/TinyXmlImpl.h"
+#endif
+
+#ifdef MUSX_USE_RAPIDXML // usually defined on the compile line or in CMakeLists.txt
+// ToDo: provide this implementation
+#include "xml/RapidXmlImpl.h"
+#endif
