@@ -43,15 +43,16 @@ public:
      * @return A fully populated `Document` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
-    template <typename XmlReaderType>
+    template <typename XmlDocumentType>
     static musx::dom::Document create(const std::vector<char>& xmlBuffer)
     {
-        static_assert(std::is_convertible<XmlReaderType*, musx::xml::IXmlDocument*>::value, "XmlReaderType must derive from IXmlDocument.");
+        static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value, 
+                      "XmlReaderType must derive from IXmlDocument.");
 
-        XmlReaderType document;
-        document.loadFromString(xmlBuffer);
+        std::unique_ptr<musx::xml::IXmlDocument> document = std::make_unique<XmlDocumentType>();
+        document->loadFromString(xmlBuffer);
 
-        auto rootElement = document.getRootElement();
+        auto rootElement = document->getRootElement();
         if (!rootElement || rootElement->getTagName() != "finale") {
             throw std::invalid_argument("Missing <finale> element.");
         }
