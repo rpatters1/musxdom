@@ -1,0 +1,127 @@
+/*
+ * Copyright (C) 2024, Robert Patterson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+#pragma once
+
+#include <cstdint>
+
+namespace musx {
+namespace dom {
+
+using Cmper = uint16_t;     ///< Enigma "comperator" key type
+using Inci = int16_t;       ///< Enigma "incidend" key type
+using Evpu = int;           ///< EVPU value (288 per inch)
+using Edu = int;            ///< EDU value (1024 per quarter note)
+
+/**
+ * @brief Base class to enforce polymorphism across all DOM classes.
+ * 
+ * This class uses CRTP (Curiously Recurring Template Pattern) to ensure that all
+ * derived classes define a static constexpr `XmlNodeName` of type `constexpr char[]`.
+ * 
+ * @tparam Derived The derived class inheriting from this base.
+ */
+class Base
+{
+public:
+    /**
+     * @brief Virtual destructor for polymorphic behavior.
+     */
+    virtual ~Base() = default;
+
+protected:
+    /**
+     * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
+     * 
+     * Ensures at compile time that the derived class defines a static constexpr
+     * `XmlNodeName` of type `const char[]`.
+     */
+    Base() = default;
+};
+
+/**
+ * @brief Base class for all "options" types.
+ * 
+ * Options types derive from this base class so they can reside in the options pool.
+ */
+class OptionsBase : public Base
+{
+protected:
+    /**
+     * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
+     */
+    OptionsBase() : Base() {}
+};
+
+/**
+ * @brief Base class for all "others" types.
+ * 
+ * This class provides common attributes and methods for handling
+ * "others" types in the DOM, including `cmper` and `inci`.
+ */
+class OthersBase : public Base
+{
+private:
+    Cmper m_cmper; ///< Common attribute: cmper (key value).
+    Inci m_inci;  ///< Array index: inci (starting from 0).
+
+public:
+    /**
+     * @brief Constructs an OthersBase object.
+     * 
+     * @param cmper The `cmper` key value.
+     * @param inci The array index (`inci`).
+     */
+    OthersBase(int cmper, int inci)
+        : Base(), m_cmper(cmper), m_inci(inci) {}
+
+public:
+    /**
+     * @brief Gets the `cmper` key value.
+     * 
+     * @return The `cmper` value.
+     */
+    Cmper getCmper() const { return m_cmper; }
+
+    /**
+     * @brief Sets the `cmper` key value.
+     * 
+     * @param cmper The new `cmper` value.
+     */
+    void setCmper(Cmper cmper) { m_cmper = cmper; }
+
+    /**
+     * @brief Gets the array index (`inci`).
+     * 
+     * @return The `inci` value.
+     */
+    Inci getInci() const { return m_inci; }
+
+    /**
+     * @brief Sets the array index (`inci`).
+     * 
+     * @param inci The new `inci` value.
+     */
+    void setInci(Inci inci) { m_inci = inci; }
+};
+
+} // namespace dom
+} // namespace musx

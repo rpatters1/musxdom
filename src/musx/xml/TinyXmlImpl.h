@@ -48,19 +48,19 @@ namespace tinyxml2 {
  */
 class Attribute : public musx::xml::IXmlAttribute
 {
-    const ::tinyxml2::XMLAttribute* const attribute; ///< Read-only pointer to tinyxml2::XMLAttribute.
+    const ::tinyxml2::XMLAttribute* const m_attribute; ///< Read-only pointer to tinyxml2::XMLAttribute.
 
 public:
     /**
      * @brief Constructor
      */
-    explicit Attribute(const ::tinyxml2::XMLAttribute* attr) : attribute(attr) {}
+    explicit Attribute(const ::tinyxml2::XMLAttribute* attr) : m_attribute(attr) {}
 
-    std::string getName() const override { return attribute->Name(); }
-    std::string getValue() const override { return attribute->Value(); }
+    std::string getName() const override { return m_attribute->Name(); }
+    std::string getValue() const override { return m_attribute->Value(); }
     
     std::shared_ptr<IXmlAttribute> nextAttribute() const override {
-        const ::tinyxml2::XMLAttribute *next = attribute->Next();
+        const ::tinyxml2::XMLAttribute *next = m_attribute->Next();
         return next ? std::make_shared<Attribute>(next) : nullptr;
     }
 };
@@ -70,7 +70,7 @@ public:
  */
 class Element : public musx::xml::IXmlElement
 {
-    const ::tinyxml2::XMLElement* const element; ///< Read-only pointer to tinyxml2::XMLElement.
+    const ::tinyxml2::XMLElement* const m_element; ///< Read-only pointer to tinyxml2::XMLElement.
 
     static const char* tagPtr(const std::string& tagName) {
         return tagName.empty() ? nullptr : tagName.c_str();
@@ -80,42 +80,42 @@ public:
     /**
      * @brief Constructor
      */
-    explicit Element(const ::tinyxml2::XMLElement* elem) : element(elem) {}
+    explicit Element(const ::tinyxml2::XMLElement* elem) : m_element(elem) {}
 
-    std::string getTagName() const override { return element->Name(); }
+    std::string getTagName() const override { return m_element->Name(); }
 
     std::string getText() const override {
-        return element->GetText() ? element->GetText() : "";
+        return m_element->GetText() ? m_element->GetText() : "";
     }
 
     std::shared_ptr<IXmlAttribute> getFirstAttribute() const override {
-        const ::tinyxml2::XMLAttribute *attr = element->FirstAttribute();
+        const ::tinyxml2::XMLAttribute *attr = m_element->FirstAttribute();
         return attr ? std::make_shared<Attribute>(attr) : nullptr;
     }
 
     std::shared_ptr<IXmlAttribute> findAttribute(const std::string& tagName) const override {
-        const ::tinyxml2::XMLAttribute *attr = element->FindAttribute(tagName.c_str());
+        const ::tinyxml2::XMLAttribute *attr = m_element->FindAttribute(tagName.c_str());
         return attr ? std::make_shared<Attribute>(attr) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getFirstChildElement(const std::string& tagName = {}) const override {
-        const ::tinyxml2::XMLElement* child = element->FirstChildElement(tagPtr(tagName));
+        const ::tinyxml2::XMLElement* child = m_element->FirstChildElement(tagPtr(tagName));
         return child ? std::make_shared<Element>(child) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getNextSibling(const std::string& tagName = {}) const override {
-        const ::tinyxml2::XMLElement *sibling = element->NextSiblingElement(tagPtr(tagName));
+        const ::tinyxml2::XMLElement *sibling = m_element->NextSiblingElement(tagPtr(tagName));
         return sibling ? std::make_shared<Element>(sibling) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getPreviousSibling(const std::string& tagName = {}) const override {
-        const ::tinyxml2::XMLElement *sibling = element->PreviousSiblingElement(tagPtr(tagName));
+        const ::tinyxml2::XMLElement *sibling = m_element->PreviousSiblingElement(tagPtr(tagName));
         return sibling ? std::make_shared<Element>(sibling) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getParent() const override {
-        if (!element->Parent() || !element->Parent()->ToElement()) return nullptr;
-        return std::make_shared<Element>(element->Parent()->ToElement());
+        if (!m_element->Parent() || !m_element->Parent()->ToElement()) return nullptr;
+        return std::make_shared<Element>(m_element->Parent()->ToElement());
     }
 };
 
@@ -124,23 +124,23 @@ public:
  */
 class Document : public musx::xml::IXmlDocument
 {
-    ::tinyxml2::XMLDocument doc; ///< Non-const since the document itself may be parsed or reset.
+    ::tinyxml2::XMLDocument m_document; ///< Non-const since the document itself may be parsed or reset.
 
 public:
     void loadFromString(const std::string& xmlContent) override {
-        if (doc.Parse(xmlContent.c_str()) != ::tinyxml2::XML_SUCCESS) {
-            throw musx::xml::load_error(doc.ErrorStr());
+        if (m_document.Parse(xmlContent.c_str()) != ::tinyxml2::XML_SUCCESS) {
+            throw musx::xml::load_error(m_document.ErrorStr());
         }
     }
 
     void loadFromString(const std::vector<char>& xmlContent) override {
-        if (doc.Parse(xmlContent.data(), xmlContent.size()) != ::tinyxml2::XML_SUCCESS) {
-            throw musx::xml::load_error(doc.ErrorStr());
+        if (m_document.Parse(xmlContent.data(), xmlContent.size()) != ::tinyxml2::XML_SUCCESS) {
+            throw musx::xml::load_error(m_document.ErrorStr());
         }
     }
 
     std::shared_ptr<IXmlElement> getRootElement() const override {
-        const ::tinyxml2::XMLElement* root = doc.RootElement();
+        const ::tinyxml2::XMLElement* root = m_document.RootElement();
         return root ? std::make_shared<Element>(root) : nullptr;
     }
 };

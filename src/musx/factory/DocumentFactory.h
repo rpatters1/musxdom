@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "musx/dom/Document.h"
+#include "musx/dom/TypeRegistry.h"
 #include "musx/factory/HeaderFactory.h"
 #include "musx/xml/XmlInterface.h"
 
@@ -59,6 +60,8 @@ public:
 
         auto headerElement = getFirstChildElement(rootElement, "header");
         auto header = musx::factory::HeaderFactory::create(headerElement);
+
+        auto fontDef = dom::RegisteredTypes::createInstance("fontName", 1, 0);
 
         return musx::dom::Document(std::move(header));
     }
