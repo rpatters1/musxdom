@@ -24,8 +24,8 @@
 #include <memory>
 
 #include "musx/dom/Document.h"
-#include "musx/dom/TypeRegistry.h"
 #include "musx/factory/HeaderFactory.h"
+#include "musx/factory/OthersFactory.h"
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
@@ -61,9 +61,10 @@ public:
         auto headerElement = getFirstChildElement(rootElement, "header");
         auto header = musx::factory::HeaderFactory::create(headerElement);
 
-        auto fontDef = dom::RegisteredTypes::createInstance("fontName", 1, 0);
+        auto othersElement = getFirstChildElement(rootElement, "others");
+        auto othersPool = musx::factory::OthersFactory::create(othersElement);
 
-        return musx::dom::Document(std::move(header));
+        return musx::dom::Document(std::move(header), std::move(othersPool));
     }
 };
 

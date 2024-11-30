@@ -28,6 +28,8 @@
 
 #include "BaseClasses.h"
 #include "Others.h"
+#include "musx/factory/FieldPopulators.h"
+#include "musx/xml/XmlInterface.h"
 
 namespace musx {
 namespace dom {
@@ -81,22 +83,24 @@ public:
      * Uses the node name to look up the registered type and create an instance of it.
      *
      * @tparam Args The argument types required by the constructor of the target type.
-     * @param nodeName The XML node name for which an instance is to be created.
+     * @param node The XML node from which an instance is to be created.
      * @param args Arguments to be forwarded to the constructor of the target type.
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
     template <typename... Args>
-    static std::shared_ptr<Base> createInstance(std::string_view nodeName, Args&&... args)
+    static std::shared_ptr<Base> createInstance(const std::shared_ptr<xml::IXmlElement>& node, Args&&... args)
     {
-        auto typePtr = TypeRegistry::findRegisteredType(nodeName);
+        auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
-            return nullptr; // Type not found
+            return nullptr; // Type not yet implemented
         }
 
         return std::visit(
-            [&](auto const& ptr) {
+            [&](auto const& ptr) -> std::shared_ptr<Base> {
                 using T = std::remove_pointer_t<std::remove_reference_t<decltype(ptr)>>;
-                return std::make_shared<T>(std::forward<Args>(args)...);
+                auto instance = std::make_shared<T>(std::forward<Args>(args)...);
+                factory::FieldPopulator<T>::populate(*instance, node);
+                return instance;
             },
             typePtr.value()
         );
@@ -104,11 +108,12 @@ public:
 };
 
 /**
- * @brief The type registery.
+ * @brief The type registery. 
  */
-using RegisteredTypes = TypeRegistry<
-    FontDefinition
+using RegisteredTypes = TypeRegistry <
+    others::FontDefinition
     // Add pointers to additional supported types here.
+    // Also add a field populator in FieldPopulators.h
 >;
 
 } // namespace dom

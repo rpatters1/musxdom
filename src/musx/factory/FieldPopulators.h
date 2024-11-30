@@ -21,59 +21,35 @@
  */
 #pragma once
 
-#include <memory>
-
-#include "musx/dom/Header.h"
+#include "musx/dom/BaseClasses.h"
 #include "musx/dom/Others.h"
+#include "musx/xml/XmlInterface.h"
+#include "FactoryBase.h"
 
-/**
- * @namespace musx
- * @brief object model for musx file (enigmaxml)
- */
 namespace musx {
-
 namespace factory {
-class DocumentFactory;
-} // namespace factory
 
-/**
- * @namespace musx::dom
- * @brief classes representing the musx document
- */
-namespace dom {
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
-/**
- * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
- * 
- * @todo Add other members besides the header.
- */
-class Document
+template <typename T>
+struct FieldPopulator : public FactoryBase {};
+
+template <>
+struct FieldPopulator<dom::others::FontDefinition> : public FactoryBase
 {
-public:
-    /**
-     * @brief Retrieves the header of the document.
-     * 
-     * @return A constant reference to the document's `Header`.
-     */
-    const header::Header &getHeader() const { return m_header; }
-
-private:
-    /**
-     * @brief Constructs a `Document` object with a given `Header`.
-     * 
-     * @param header The header of the document.
-     */
-    explicit Document(header::Header header, others::OthersPool others) :
-        m_header(std::move(header)),
-        m_others(std::move(others))
-    {}
-
-    header::Header m_header; ///< The header of the document
-    others::OthersPool m_others;
-
-    // Grant the factory function access to the private constructor
-    friend class musx::factory::DocumentFactory;
+    static void populate(dom::others::FontDefinition& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    {
+        instance.charsetBank = getFirstChildElement(element, "charsetBank")->getText();
+        instance.charsetVal = getFirstChildElement(element, "charsetVal")->getTextAs<int>();
+        instance.pitch = getFirstChildElement(element, "pitch")->getTextAs<int>();
+        instance.family = getFirstChildElement(element, "family")->getTextAs<int>();
+        instance.name = getFirstChildElement(element, "name")->getText();
+    }
 };
 
-} // namespace dom
+// Repeat for other types...
+
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+} // namespace factory
 } // namespace musx
