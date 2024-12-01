@@ -31,9 +31,6 @@ namespace factory {
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
-template <typename T>
-struct FieldPopulator : public FactoryBase {};
-
 template <>
 struct FieldPopulator<dom::others::FontDefinition> : public FactoryBase
 {

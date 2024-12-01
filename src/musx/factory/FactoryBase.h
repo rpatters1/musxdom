@@ -80,5 +80,10 @@ public:
     virtual ~FactoryBase() {}
 };
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template <typename T>
+struct FieldPopulator : public FactoryBase {};
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
 } // namespace factory
 } // namespace musx

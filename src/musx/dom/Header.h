@@ -25,11 +25,6 @@
 #include <optional>
 
 namespace musx {
-
-namespace factory {
-class HeaderFactory;
-} // namespace factory
-
 namespace dom {
 
 /**
@@ -106,6 +101,8 @@ struct Header
     FileInfo created;               ///< Creation date and associated metadata
     FileInfo modified;              ///< Modification date and associated metadata
 };
+
+using HeaderPtr = std::shared_ptr<Header>;
 
 } // namespace header
 } // namespace dom

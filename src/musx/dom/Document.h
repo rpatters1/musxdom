@@ -23,8 +23,8 @@
 
 #include <memory>
 
-#include "musx/dom/Header.h"
-#include "musx/dom/ObjectPool.h"
+#include "Header.h"
+#include "ObjectPool.h"
 
 /**
  * @namespace musx
@@ -42,6 +42,8 @@ class DocumentFactory;
  */
 namespace dom {
 
+using namespace header;
+
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
  * 
@@ -51,9 +53,11 @@ class Document
 {
 public:
     /**
-     * @brief Retrieves the header pool
+     * @brief Retrieves the header
      */
-    header::Header &getHeader() { return m_header; }
+    HeaderPtr& getHeader() { return m_header; }
+    const HeaderPtr& getHeader() const { return m_header; }
+    
     /**
      * @brief Retrieves the others pool
      */
@@ -66,7 +70,7 @@ private:
      */
      explicit Document() = default;
 
-    header::Header m_header;    ///< The header pool
+    HeaderPtr m_header;    ///< The header pool
     OthersPoolPtr m_others;     ///< The others pool
 
     // Grant the factory function access to the private constructor

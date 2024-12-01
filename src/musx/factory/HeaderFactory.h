@@ -44,19 +44,18 @@ public:
      * @return A fully populated `Header` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
-    static musx::dom::header::Header create(const std::shared_ptr<xml::IXmlElement>& element)
+    static musx::dom::header::HeaderPtr create(const std::shared_ptr<xml::IXmlElement>& element)
     {
-        musx::dom::header::Header header;
         auto headerDataElement = getFirstChildElement(element, "headerData");
-
         if (!headerDataElement) {
             throw std::invalid_argument("Missing <headerData> element.");
         }
 
-        header.wordOrder = parseWordOrder(getFirstChildElement(headerDataElement, "wordOrder")->getText());
-        header.textEncoding = parseTextEncoding(getFirstChildElement(headerDataElement, "textEncoding")->getText());
-        header.created = parseFileInfo(getFirstChildElement(headerDataElement, "created"));
-        header.modified = parseFileInfo(getFirstChildElement(headerDataElement, "modified"));
+        auto header = std::make_shared<dom::header::Header>();
+        header->wordOrder = parseWordOrder(getFirstChildElement(headerDataElement, "wordOrder")->getText());
+        header->textEncoding = parseTextEncoding(getFirstChildElement(headerDataElement, "textEncoding")->getText());
+        header->created = parseFileInfo(getFirstChildElement(headerDataElement, "created"));
+        header->modified = parseFileInfo(getFirstChildElement(headerDataElement, "modified"));
 
         return header;
     }

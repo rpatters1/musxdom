@@ -29,7 +29,7 @@
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/Others.h"
 #include "musx/xml/XmlInterface.h"
-#include "FieldPopulators.h"
+#include "FieldPopulatorsOthers.h"
 
 namespace musx {
 namespace factory {
@@ -114,7 +114,7 @@ public:
 using RegisteredTypes = TypeRegistry <
     dom::others::FontDefinition
     // Add pointers to additional supported types here.
-    // Also add a field populator in FieldPopulators.h
+    // Also add a field populator in FieldPopulatorsOthers.h
 >;
 
 } // namespace factory
