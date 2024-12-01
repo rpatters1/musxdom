@@ -51,6 +51,8 @@ public:
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     using ObjectKey = std::variant<std::string, std::tuple<std::string, Cmper>, std::tuple<std::string, Cmper, Cmper>>;
 
+    virtual ~ObjectPool() = default;
+
     /**
      * @brief Adds an `OthersBase` object to the pool.
      * 

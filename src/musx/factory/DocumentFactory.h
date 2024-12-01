@@ -25,7 +25,7 @@
 
 #include "musx/dom/Document.h"
 #include "musx/factory/HeaderFactory.h"
-#include "musx/factory/OthersFactory.h"
+#include "musx/factory/PoolFactory.h"
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {

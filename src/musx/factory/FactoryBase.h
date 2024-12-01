@@ -25,6 +25,7 @@
 #include <string>
 #include <optional>
 
+#include "musx/dom/ObjectPool.h"
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
