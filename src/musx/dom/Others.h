@@ -45,7 +45,10 @@ class FontDefinition : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    FontDefinition(int cmper, int inci) : OthersBase(cmper, inci) {}
+    FontDefinition(int cmper, int inci, const std::weak_ptr<Document>& document)
+        : OthersBase(cmper, inci, document)
+    {
+    }
 
     // Public properties corresponding to the XML structure
     std::string charsetBank; ///< probably only "Mac" or "Win"

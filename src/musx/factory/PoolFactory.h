@@ -26,6 +26,7 @@
 #include "musx/xml/XmlInterface.h"
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/ObjectPool.h"
+#include "musx/dom/Document.h"
 
 namespace musx {
 namespace factory {
@@ -50,12 +51,12 @@ public:
      * @param element The XML element representing the `<others>` node.
      * @return A fully populated `ObjectPoolType` object.
      */
-    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element)
+    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
     {
         auto pool = std::make_shared<PoolType>();
 
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {
-            auto basePtr = DerivedType::extractFromXml(childElement);
+            auto basePtr = DerivedType::extractFromXml(childElement, document);
             if (basePtr) {
                 auto typedPtr = std::static_pointer_cast<ObjectBase>(basePtr);
                 assert(typedPtr); // program bug if null
@@ -75,7 +76,7 @@ class OthersFactory : public PoolFactory<OthersFactory, dom::OthersBase, dom::Ot
 public:
     using PoolFactory::create;
 
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element)
+    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
     {
         auto cmperAttribute = element->findAttribute("cmper");
         if (!cmperAttribute) {
@@ -83,8 +84,10 @@ public:
         }
         dom::Cmper cmper = cmperAttribute->getValueAs<dom::Cmper>();
         auto inciAttribute = element->findAttribute("inci");
-        return RegisteredTypes::createInstance(element, cmperAttribute->getValueAs<dom::Cmper>(),
-                                               inciAttribute ? inciAttribute->getValueAs<dom::Inci>() : 0);
+        return RegisteredTypes::createInstance(element,
+                                               cmperAttribute->getValueAs<dom::Cmper>(),
+                                               inciAttribute ? inciAttribute->getValueAs<dom::Inci>() : 0,
+                                               document);
     }
 };
 

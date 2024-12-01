@@ -24,11 +24,6 @@
 #include <cstdint>
 
 namespace musx {
-
-namespace factory {
-class DocumentFactory;
-} // namespace factory
-
 namespace dom {
 
 using Cmper = uint16_t;     ///< Enigma "comperator" key type
@@ -68,20 +63,10 @@ protected:
      * Ensures at compile time that the derived class defines a static constexpr
      * `XmlNodeName` of type `const char[]`.
      */
-    Base() = default;
+    Base(const std::weak_ptr<Document>& document) : m_document(document) {}
 
 private:
-    std::weak_ptr<Document> m_document;
-
-    /**
-     * @brief Sets the weak reference to Document.
-     * 
-     * @param doc A shared pointer to a Document instance.
-     */
-    void setDocument(const std::weak_ptr<Document>& doc) { m_document = doc; }
-
-    // Grant the factory function access to the private constructor
-    friend class musx::factory::DocumentFactory;
+    const std::weak_ptr<Document> m_document;
 };
 
 /**
@@ -95,7 +80,7 @@ protected:
     /**
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
      */
-    OptionsBase() : Base() {}
+    OptionsBase(const std::weak_ptr<Document>& document) : Base(document) {}
 };
 
 /**
@@ -117,8 +102,8 @@ protected:
      * @param cmper The `cmper` key value.
      * @param inci The array index (`inci`).
      */
-    OthersBase(int cmper, int inci)
-        : Base(), m_cmper(cmper), m_inci(inci) {}
+    OthersBase(int cmper, int inci, const std::weak_ptr<Document>& document)
+        : Base(document), m_cmper(cmper), m_inci(inci) {}
 
 public:
     /**

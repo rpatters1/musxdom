@@ -53,21 +53,26 @@ public:
         static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value, 
                       "XmlReaderType must derive from IXmlDocument.");
 
-        std::unique_ptr<musx::xml::IXmlDocument> document = std::make_unique<XmlDocumentType>();
-        document->loadFromString(xmlBuffer);
+        std::unique_ptr<musx::xml::IXmlDocument> xmlDocument = std::make_unique<XmlDocumentType>();
+        xmlDocument->loadFromString(xmlBuffer);
 
-        auto rootElement = document->getRootElement();
+        auto rootElement = xmlDocument->getRootElement();
         if (!rootElement || rootElement->getTagName() != "finale") {
             throw std::invalid_argument("Missing <finale> element.");
         }
 
-        auto headerElement = getFirstChildElement(rootElement, "header");
-        auto header = musx::factory::HeaderFactory::create(headerElement);
+        DocumentPtr document(new Document);
 
-        auto othersElement = getFirstChildElement(rootElement, "others");
-        auto othersPool = musx::factory::OthersFactory::create(othersElement);
+        for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {
+            if (element->getTagName() == "header") {
+                document->getHeader() = musx::factory::HeaderFactory::create(element);
+            }
+            else if (element->getTagName() == "others") {
+                document->getOthers() = musx::factory::OthersFactory::create(element, document);
+            }
+        }
 
-        return DocumentPtr(new Document(std::move(header), othersPool));
+        return document;
     }
 };
 

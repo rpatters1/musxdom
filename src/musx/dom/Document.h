@@ -51,25 +51,23 @@ class Document
 {
 public:
     /**
-     * @brief Retrieves the header of the document.
-     * 
-     * @return A constant reference to the document's `Header`.
+     * @brief Retrieves the header pool
      */
-    const header::Header &getHeader() const { return m_header; }
+    header::Header &getHeader() { return m_header; }
+    /**
+     * @brief Retrieves the others pool
+     */
+    OthersPoolPtr& getOthers() { return m_others; }
+    const OthersPoolPtr& getOthers() const { return m_others; }
 
 private:
     /**
-     * @brief Constructs a `Document` object with a given `Header`.
-     * 
-     * @param header The header of the document.
+     * @brief Constructs a `Document`
      */
-    explicit Document(header::Header header, const OthersPoolPtr& others) :
-        m_header(std::move(header)),
-        m_others(others)
-    {}
+     explicit Document() = default;
 
-    header::Header m_header; ///< The header of the document
-    OthersPoolPtr m_others;
+    header::Header m_header;    ///< The header pool
+    OthersPoolPtr m_others;     ///< The others pool
 
     // Grant the factory function access to the private constructor
     friend class musx::factory::DocumentFactory;
