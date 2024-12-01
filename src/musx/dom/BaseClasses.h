@@ -24,12 +24,19 @@
 #include <cstdint>
 
 namespace musx {
+
+namespace factory {
+class DocumentFactory;
+} // namespace factory
+
 namespace dom {
 
 using Cmper = uint16_t;     ///< Enigma "comperator" key type
 using Inci = int16_t;       ///< Enigma "incidend" key type
 using Evpu = int;           ///< EVPU value (288 per inch)
 using Edu = int;            ///< EDU value (1024 per quarter note)
+
+class Document;
 
 /**
  * @brief Base class to enforce polymorphism across all DOM classes.
@@ -47,6 +54,13 @@ public:
      */
     virtual ~Base() = default;
 
+    /**
+     * @brief Gets the weak reference to the Document.
+     * 
+     * @return A weak pointer to the Document instance.
+     */
+    std::weak_ptr<Document> getDocument() const { return m_document; }
+
 protected:
     /**
      * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
@@ -55,6 +69,19 @@ protected:
      * `XmlNodeName` of type `const char[]`.
      */
     Base() = default;
+
+private:
+    std::weak_ptr<Document> m_document;
+
+    /**
+     * @brief Sets the weak reference to Document.
+     * 
+     * @param doc A shared pointer to a Document instance.
+     */
+    void setDocument(const std::weak_ptr<Document>& doc) { m_document = doc; }
+
+    // Grant the factory function access to the private constructor
+    friend class musx::factory::DocumentFactory;
 };
 
 /**
@@ -83,7 +110,7 @@ private:
     Cmper m_cmper; ///< Common attribute: cmper (key value).
     Inci m_inci;  ///< Array index: inci (starting from 0).
 
-public:
+protected:
     /**
      * @brief Constructs an OthersBase object.
      * 

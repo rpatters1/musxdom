@@ -22,8 +22,9 @@
 #pragma once
 
 #include "FactoryBase.h"
-#include "musx/dom/TypeRegistry.h"
+#include "TypeRegistry.h"
 #include "musx/xml/XmlInterface.h"
+#include "musx/dom/ObjectPool.h"
 
 namespace musx {
 namespace factory {
@@ -41,9 +42,9 @@ public:
      * @return A fully populated `OthersPool` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
-    static musx::dom::others::OthersPool create(const std::shared_ptr<xml::IXmlElement>& element)
+    static dom::OthersPoolPtr create(const std::shared_ptr<xml::IXmlElement>& element)
     {
-        musx::dom::others::OthersPool othersPool;
+        auto othersPool = std::make_shared<dom::OthersPool>();
 
         for (auto otherElement = element->getFirstChildElement(); otherElement; otherElement = otherElement->getNextSibling()) {
             auto cmperAttribute = otherElement->findAttribute("cmper");
@@ -52,14 +53,14 @@ public:
             }
             dom::Cmper cmper = cmperAttribute->getValueAs<dom::Cmper>();
             auto inciAttribute = otherElement->findAttribute("inci");
-            auto basePtr = dom::RegisteredTypes::createInstance(otherElement,
-                                                                cmperAttribute->getValueAs<dom::Cmper>(),
-                                                                inciAttribute ? inciAttribute->getValueAs<dom::Inci>() : 0);
-            // ToDo: extract properties from xml
+            auto basePtr = RegisteredTypes::createInstance(otherElement,
+                                                           cmperAttribute->getValueAs<dom::Cmper>(),
+                                                           inciAttribute ? inciAttribute->getValueAs<dom::Inci>() : 0);
+        // ToDo: extract properties from xml
             if (basePtr) {
                 auto otherPtr = std::static_pointer_cast<dom::OthersBase>(basePtr);
                 assert(otherPtr); // program bug if null
-                othersPool.addOther(otherElement->getTagName(), otherPtr);
+                othersPool->add(otherElement->getTagName(), otherPtr);
             }
         }
 

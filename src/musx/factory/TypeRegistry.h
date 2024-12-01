@@ -26,13 +26,13 @@
 #include <string>
 #include <tuple>
 
-#include "BaseClasses.h"
-#include "Others.h"
-#include "musx/factory/FieldPopulators.h"
+#include "musx/dom/BaseClasses.h"
+#include "musx/dom/Others.h"
 #include "musx/xml/XmlInterface.h"
+#include "FieldPopulators.h"
 
 namespace musx {
-namespace dom {
+namespace factory {
 
 /**
  * @brief A registry of types for mapping XML node names to types.
@@ -47,6 +47,7 @@ class TypeRegistry
 {
 private:
     using VariantType = std::variant<Types*...>;
+    using Base = dom::Base;
 
     /**
      * @brief A compile-time registry of types, each associated with an XML node name.
@@ -111,10 +112,10 @@ public:
  * @brief The type registery. 
  */
 using RegisteredTypes = TypeRegistry <
-    others::FontDefinition
+    dom::others::FontDefinition
     // Add pointers to additional supported types here.
     // Also add a field populator in FieldPopulators.h
 >;
 
-} // namespace dom
+} // namespace factory
 } // namespace musx

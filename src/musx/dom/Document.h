@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "musx/dom/Header.h"
-#include "musx/dom/Others.h"
+#include "musx/dom/ObjectPool.h"
 
 /**
  * @namespace musx
@@ -63,17 +63,18 @@ private:
      * 
      * @param header The header of the document.
      */
-    explicit Document(header::Header header, others::OthersPool others) :
+    explicit Document(header::Header header, const OthersPoolPtr& others) :
         m_header(std::move(header)),
-        m_others(std::move(others))
+        m_others(others)
     {}
 
     header::Header m_header; ///< The header of the document
-    others::OthersPool m_others;
+    OthersPoolPtr m_others;
 
     // Grant the factory function access to the private constructor
     friend class musx::factory::DocumentFactory;
 };
+using DocumentPtr = std::shared_ptr<Document>;
 
 } // namespace dom
 } // namespace musx

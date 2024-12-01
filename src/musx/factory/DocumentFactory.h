@@ -36,6 +36,9 @@ namespace factory {
  */
 class DocumentFactory : FactoryBase
 {
+    using Document = musx::dom::Document;
+    using DocumentPtr = std::shared_ptr<Document>;
+
 public:
     /**
      * @brief Creates a `Document` object from an XML element.
@@ -45,7 +48,7 @@ public:
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
     template <typename XmlDocumentType>
-    static musx::dom::Document create(const std::vector<char>& xmlBuffer)
+    static DocumentPtr create(const std::vector<char>& xmlBuffer)
     {
         static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value, 
                       "XmlReaderType must derive from IXmlDocument.");
@@ -64,7 +67,7 @@ public:
         auto othersElement = getFirstChildElement(rootElement, "others");
         auto othersPool = musx::factory::OthersFactory::create(othersElement);
 
-        return musx::dom::Document(std::move(header), std::move(othersPool));
+        return DocumentPtr(new Document(std::move(header), othersPool));
     }
 };
 
