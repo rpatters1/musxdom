@@ -28,6 +28,7 @@
 #include <stdexcept>
 
 #include "BaseClasses.h"
+// do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -59,7 +60,6 @@ public:
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
 };
-
 
 } // namespace others
 } // namespace dom

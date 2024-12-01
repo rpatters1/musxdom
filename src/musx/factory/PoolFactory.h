@@ -34,9 +34,13 @@ namespace factory {
 /**
  * @brief Factory class for creating a `dom::ObjectPool` from XML.
  *
- * @tparam DerivedType the derived type for CRTP
- * @tparam ObjectBase the base type of objects in the pool
- * @tparam PoolType the pool type of the objects in the pool
+ * This factory class uses CRTP (Curiously Recurring Template Pattern) to implement a polymorphic factory for creating 
+ * `ObjectPool` objects from an XML representation. The derived classes are responsible for specifying their own 
+ * creation mechanisms by providing appropriate specializations.
+ *
+ * @tparam DerivedType The derived type for CRTP, which will implement specific extraction behavior from XML.
+ * @tparam ObjectBase The base type of the objects that are stored in the pool, providing a common interface.
+ * @tparam PoolType The type of the pool that stores the objects, such as a collection of `ObjectBase` derived objects.
  */
 template<typename DerivedType, typename ObjectBase, typename PoolType>
 class PoolFactory : public FactoryBase
@@ -48,7 +52,12 @@ public:
     /**
      * @brief Creates a `OthersPool` object from an XML element.
      *
+     * This function creates an object pool by parsing the XML element representing the `<others>` node.
+     * It iterates over each child element of the XML element, extracts relevant information using 
+     * `DerivedType::extractFromXml`, and adds the created objects to the pool.
+     *
      * @param element The XML element representing the `<others>` node.
+     * @param document The document object providing context for the XML parsing.
      * @return A fully populated `ObjectPoolType` object.
      */
     static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
@@ -56,11 +65,12 @@ public:
         auto pool = std::make_shared<PoolType>();
 
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {
+            std::string thisElt = childElement->getTagName();
             auto basePtr = DerivedType::extractFromXml(childElement, document);
             if (basePtr) {
                 auto typedPtr = std::static_pointer_cast<ObjectBase>(basePtr);
                 assert(typedPtr); // program bug if null
-                pool->add(element->getTagName(), typedPtr);
+                pool->add(childElement->getTagName(), typedPtr);
             }
         }
 
@@ -70,12 +80,27 @@ public:
 
 /**
  * @brief Factory class for creating `Others` objects from XML.
+ *
+ * This class specializes `PoolFactory` to handle the creation of `Others` objects, representing 
+ * various attributes stored in an `OthersPool`. It includes an XML parsing mechanism to 
+ * extract and create these objects, which are used in the document model.
  */
 class OthersFactory : public PoolFactory<OthersFactory, dom::OthersBase, dom::OthersPool>
 {
 public:
     using PoolFactory::create;
 
+    /**
+     * @brief Extracts an `OthersBase` object from an XML element.
+     *
+     * Extracts an `OthersBase` derived object from the given XML element using the specified 
+     * attributes such as `cmper` and `inci`. Throws an exception if a required attribute is missing.
+     *
+     * @param element The XML element from which to extract the object.
+     * @param document The document object providing context for the XML parsing.
+     * @return A shared pointer to the created object.
+     * @throws std::invalid_argument if required attributes are missing.
+     */
     static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
     {
         auto cmperAttribute = element->findAttribute("cmper");
@@ -90,6 +115,35 @@ public:
                                                document);
     }
 };
+
+/**
+ * @brief Factory class for creating `Options` objects from XML.
+ *
+ * This class specializes `PoolFactory` to handle the creation of `Options` objects, which 
+ * represent various document options stored in a `ScalarPool`. It includes functionality 
+ * for extracting and creating these objects from XML elements.
+ */
+class OptionsFactory : public PoolFactory<OptionsFactory, dom::OptionsBase, dom::ScalarPool<dom::OptionsBase>>
+{
+public:
+    using PoolFactory::create;
+
+    /**
+     * @brief Extracts an `OptionsBase` object from an XML element.
+     *
+     * Extracts an `OptionsBase` derived object from the given XML element by delegating 
+     * to the `RegisteredTypes` class. This allows the creation of `Options` objects from XML.
+     *
+     * @param element The XML element from which to extract the object.
+     * @param document The document object providing context for the XML parsing.
+     * @return A shared pointer to the created object.
+     */
+    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
+    {
+        return RegisteredTypes::createInstance(element, document);
+    }
+};
+
 
 } // namespace factory
 } // namespace musx

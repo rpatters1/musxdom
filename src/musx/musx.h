@@ -46,6 +46,7 @@
 #include "util/ScoreFileEncoder.h"
 #include "xml/XmlInterface.h"
 #include "dom/Document.h"
+#include "dom/Implementations.h"
 #include "factory/DocumentFactory.h"
 
 #ifdef MUSX_USE_TINYXML2 // usually defined on the compile line or in CMakeLists.txt

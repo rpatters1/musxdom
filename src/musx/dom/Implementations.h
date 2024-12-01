@@ -21,34 +21,27 @@
  */
 #pragma once
 
-#include "musx/dom/BaseClasses.h"
-#include "musx/dom/Others.h"
-#include "musx/xml/XmlInterface.h"
-#include "FactoryBase.h"
+#include <exception>
+
+ // This header includes method implementations that need to see all the classes in the dom
+
+#include "Options.h"
+#include "Others.h"
+#include "Document.h"
 
 namespace musx {
-namespace factory {
+namespace dom {
 
-using namespace dom::others;
-
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
-
-template <>
-struct FieldPopulator<FontDefinition> : public FactoryBase
+inline std::string options::DefaultFonts::DefaultFont::getFontName() const
 {
-    static void populate(FontDefinition& instance, const std::shared_ptr<xml::IXmlElement>& element)
-    {
-        instance.charsetBank = getFirstChildElement(element, "charsetBank")->getText();
-        instance.charsetVal = getFirstChildElement(element, "charsetVal")->getTextAs<int>();
-        instance.pitch = getFirstChildElement(element, "pitch")->getTextAs<int>();
-        instance.family = getFirstChildElement(element, "family")->getTextAs<int>();
-        instance.name = getFirstChildElement(element, "name")->getText();
+    auto document = this->getDocument().lock();
+    assert(document); // program bug if fail
+    auto fontDef = document->getOthers()->get<others::FontDefinition>(fontID);
+    if (fontDef.size() > 0) {
+        return fontDef[0]->name;
     }
+    throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontID));
 };
 
-// Repeat for other types...
-
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
-
-} // namespace factory
+} // namespace dom    
 } // namespace musx

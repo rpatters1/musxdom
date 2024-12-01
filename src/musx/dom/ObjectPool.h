@@ -48,7 +48,9 @@ template <typename ObjectBaseType>
 class ObjectPool
 {
 public:
+    /** @brief shared pointer to `ObjectBaseType` */
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
+    /** @brief key type for storing in pool */
     using ObjectKey = std::variant<std::string, std::tuple<std::string, Cmper>, std::tuple<std::string, Cmper, Cmper>>;
 
     virtual ~ObjectPool() = default;
@@ -56,8 +58,8 @@ public:
     /**
      * @brief Adds an `OthersBase` object to the pool.
      * 
-     * @param nodeName The XML node name associated with the object.
-     * @param other A shared pointer to the `OthersBase` object to add.
+     * @param key The key with which to store the object 
+     * @param object A shared pointer to the `ObjectBaseType` object to add.
      */
     void add(const ObjectKey& key, ObjectPtr object)
     {
@@ -150,6 +152,9 @@ public:
     { return ObjectPool<ScalarBase>::template get<T>(std::string(T::XmlNodeName)); }
 };
 
+/** @brief Shared `OptionsPool` pointer */
+using OptionsPoolPtr = std::shared_ptr<ScalarPool<OptionsBase>>;
+
 /**
  * @class OthersPool
  * @brief A pool that manages collections of `OthersBase` objects, organized by XML node names and `Cmper` values.
@@ -167,8 +172,10 @@ public:
     /** @brief Others version of #ObjectPool::get */
     template <typename T>
     std::vector<std::shared_ptr<T>> get(Cmper cmper) const
-    { return ObjectPool::get<T>(std::make_tuple(std::string(T::XmlNodeName, cmper))); }
+    { return ObjectPool::get<T>(std::make_tuple(std::string(T::XmlNodeName), cmper)); }
 };
+
+/** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;
 
 } // namespace dom

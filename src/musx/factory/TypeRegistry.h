@@ -27,8 +27,10 @@
 #include <tuple>
 
 #include "musx/dom/BaseClasses.h"
+#include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
 #include "musx/xml/XmlInterface.h"
+#include "FieldPopulatorsOptions.h"
 #include "FieldPopulatorsOthers.h"
 
 namespace musx {
@@ -99,9 +101,14 @@ public:
         return std::visit(
             [&](auto const& ptr) -> std::shared_ptr<Base> {
                 using T = std::remove_pointer_t<std::remove_reference_t<decltype(ptr)>>;
-                auto instance = std::make_shared<T>(std::forward<Args>(args)...);
-                factory::FieldPopulator<T>::populate(*instance, node);
-                return instance;
+                // Only enable this part if T is constructible with Args...
+                if constexpr (std::is_constructible_v<T, Args...>) {
+                    auto instance = std::make_shared<T>(std::forward<Args>(args)...);
+                    factory::FieldPopulator<T>::populate(*instance, node);
+                    return instance;
+                } else {
+                    throw std::runtime_error("Selected type is not constructible with given arguments");
+                }
             },
             typePtr.value()
         );
@@ -112,6 +119,9 @@ public:
  * @brief The type registery. 
  */
 using RegisteredTypes = TypeRegistry <
+    // options
+    dom::options::DefaultFonts,
+    // others
     dom::others::FontDefinition
     // Add pointers to additional supported types here.
     // Also add a field populator in FieldPopulatorsOthers.h

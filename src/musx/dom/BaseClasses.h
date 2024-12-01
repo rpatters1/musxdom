@@ -60,8 +60,7 @@ protected:
     /**
      * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
      * 
-     * Ensures at compile time that the derived class defines a static constexpr
-     * `XmlNodeName` of type `const char[]`.
+     * @param document A weak pointer to the parent document
      */
     Base(const std::weak_ptr<Document>& document) : m_document(document) {}
 
@@ -79,6 +78,8 @@ class OptionsBase : public Base
 protected:
     /**
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
+     *
+     * @param document A weak pointer to the parent document
      */
     OptionsBase(const std::weak_ptr<Document>& document) : Base(document) {}
 };
@@ -101,6 +102,7 @@ protected:
      * 
      * @param cmper The `cmper` key value.
      * @param inci The array index (`inci`).
+     * @param document A weak pointer to the parent document
      */
     OthersBase(int cmper, int inci, const std::weak_ptr<Document>& document)
         : Base(document), m_cmper(cmper), m_inci(inci) {}

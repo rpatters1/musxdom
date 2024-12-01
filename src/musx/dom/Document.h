@@ -25,8 +25,8 @@
 
 #include "Header.h"
 #include "ObjectPool.h"
-
-/**
+#
+ /**
  * @namespace musx
  * @brief object model for musx file (enigmaxml)
  */
@@ -52,16 +52,19 @@ using namespace header;
 class Document
 {
 public:
-    /**
-     * @brief Retrieves the header
-     */
+    /**  @brief Retrieves the header */
     HeaderPtr& getHeader() { return m_header; }
+    /**  @brief Retrieves the const header */
     const HeaderPtr& getHeader() const { return m_header; }
     
-    /**
-     * @brief Retrieves the others pool
-     */
+    /** @brief Retrieves the options pool */
+    OptionsPoolPtr& getOptions() { return m_options; }
+    /** @brief Retrieves the const options pool */
+    const OptionsPoolPtr& getOptions() const { return m_options; }
+    
+    /** @brief Retrieves the others pool */
     OthersPoolPtr& getOthers() { return m_others; }
+    /** @brief Retrieves the const others pool */
     const OthersPoolPtr& getOthers() const { return m_others; }
 
 private:
@@ -70,12 +73,15 @@ private:
      */
      explicit Document() = default;
 
-    HeaderPtr m_header;    ///< The header pool
-    OthersPoolPtr m_others;     ///< The others pool
+     HeaderPtr m_header;        ///< The header
+     OptionsPoolPtr m_options;  ///< The options pool
+     OthersPoolPtr m_others;    ///< The others pool
 
     // Grant the factory function access to the private constructor
     friend class musx::factory::DocumentFactory;
 };
+
+/** @brief Shared `Document` pointer */
 using DocumentPtr = std::shared_ptr<Document>;
 
 } // namespace dom

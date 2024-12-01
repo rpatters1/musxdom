@@ -102,6 +102,7 @@ struct Header
     FileInfo modified;              ///< Modification date and associated metadata
 };
 
+/** @brief Shared `Header` pointer */
 using HeaderPtr = std::shared_ptr<Header>;
 
 } // namespace header
