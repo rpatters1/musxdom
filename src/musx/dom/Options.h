@@ -32,6 +32,11 @@
 
 namespace musx {
 namespace dom {
+
+namespace others {
+class FontInfo;
+}
+
 namespace options {
 
 /**
@@ -108,44 +113,41 @@ public:
     };
 
     /**
-     * @struct DefaultFont
-     * @brief Represents the default font settings for a particular element type.
-     *
-     * The DefaultFont struct holds information about font properties, such as the font ID, size, and styles like
-     * bold, italic, underline, strikeout, fixed size, and visibility.
-     */
-    struct DefaultFont : public Base
-    {
-        Cmper fontID = 0;                      ///< Font ID. This is a Cmper for others::FontDefinition.
-        int fontSize = 0;                      ///< Font size.
-        bool bold = false;                     ///< Bold effect (default false).
-        bool italic = false;                   ///< Italic effect (default false).
-        bool underline = false;                ///< Underline effect (default false).
-        bool strikeout = false;                ///< Strikeout effect (default false).
-        bool absolute = false;                 ///< Fixed size effect (default false).
-        bool hidden = false;                   ///< Hidden effect (default false).
-
-        /**
-         * @brief Get the name of the font.
-         * @return The name of the font as a string.
-         */
-        std::string getFontName() const;
-
-        /**
-         * @brief Constructor
-         * @param document A weak pointer to the document object.
-         *
-         * Constructs a DefaultFont object that is associated with the provided document.
-         */
-        DefaultFont(const std::weak_ptr<Document>& document) : Base(document) {}
-    };
-
-    /**
      * @brief Stores the default fonts for different elements.
      *
-     * An unordered map that associates each FontType with its corresponding DefaultFont settings.
+     * An unordered map that associates each FontType with its corresponding #others::FontInfo settings.
      */
-    std::unordered_map<FontType, std::shared_ptr<DefaultFont>> defaultFonts;
+    std::unordered_map<FontType, std::shared_ptr<others::FontInfo>> defaultFonts;
+
+    /**
+     * @brief get the `others::FontInfo` for a particular type
+     * @param type the `FontType` to retrieve
+     * @return a shared pointer to the font info for that type
+     * @throws std::invalid_paremter if the type is not found in the document
+     */
+    std::shared_ptr<others::FontInfo> getFontInfo(FontType type) const
+    {
+        auto it = defaultFonts.find(type);
+        if (it == defaultFonts.end()) {
+            throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
+        }
+        return it->second;
+    }
+
+    /**
+     * @brief get the `others::FontInfo` for a particular type from the document pool
+     * @param type the `FontType` to retrieve
+     * @return a shared pointer to the font info for that type
+     * @throws std::invalid_paremter if the type is not found in the document
+     */
+    static std::shared_ptr<others::FontInfo> getFontInfo(const DocumentPtr& document, FontType type)
+    {
+        auto defaultFonts = document->getOptions()->get<DefaultFonts>();
+        if (defaultFonts.empty()) {
+            throw std::invalid_argument("Default fonts not found in document");
+        }
+        return defaultFonts[0]->getFontInfo(type);
+    }
 
     /**
      * @brief The XML node name for this type.

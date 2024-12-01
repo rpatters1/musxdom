@@ -21,18 +21,32 @@
  */
 #pragma once
 
-#include <exception>
-
- // This header includes method implementations that need to see all the classes in the dom
-
-#include "Options.h"
-#include "Others.h"
-#include "Document.h"
+#include "musx/dom/BaseClasses.h"
+#include "musx/dom/Header.h"
+#include "musx/xml/XmlInterface.h"
+#include "FactoryBase.h"
 
 namespace musx {
-namespace dom {
+namespace factory {
 
-// add functions if needed
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
-} // namespace dom    
+template <>
+struct FieldPopulator<dom::others::FontDefinition> : public FactoryBase
+{
+    static void populate(dom::others::FontDefinition& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    {
+        instance.charsetBank = getFirstChildElement(element, "charsetBank")->getText();
+        instance.charsetVal = getFirstChildElement(element, "charsetVal")->getTextAs<int>();
+        instance.pitch = getFirstChildElement(element, "pitch")->getTextAs<int>();
+        instance.family = getFirstChildElement(element, "family")->getTextAs<int>();
+        instance.name = getFirstChildElement(element, "name")->getText();
+    }
+};
+
+// Repeat for other types...
+
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+} // namespace factory
 } // namespace musx

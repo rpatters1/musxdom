@@ -61,6 +61,48 @@ public:
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
 };
 
+/**
+ * @struct FontInfo
+ * @brief Represents the default font settings for a particular element type.
+ *
+ * The FontInfo struct holds information about font properties, such as the font ID, size, and styles like
+ * bold, italic, underline, strikeout, fixed size, and visibility.
+ */
+struct FontInfo : public Base
+{
+    Cmper fontID = 0;                      ///< Font ID. This is a Cmper for others::FontDefinition.
+    int fontSize = 0;                      ///< Font size.
+    bool bold = false;                     ///< Bold effect (default false).
+    bool italic = false;                   ///< Italic effect (default false).
+    bool underline = false;                ///< Underline effect (default false).
+    bool strikeout = false;                ///< Strikeout effect (default false).
+    bool absolute = false;                 ///< Fixed size effect (default false).
+    bool hidden = false;                   ///< Hidden effect (default false).
+
+    /**
+     * @brief Get the name of the font.
+     * @return The name of the font as a string.
+     */
+    std::string getFontName() const
+    {
+        auto document = this->getDocument().lock();
+        assert(document); // program bug if fail
+        auto fontDef = document->getOthers()->get<others::FontDefinition>(fontID);
+        if (fontDef.size() > 0) {
+            return fontDef[0]->name;
+        }
+        throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontID));
+    }
+    
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the document object.
+     *
+     * Constructs a FontInfo object that is associated with the provided document.
+     */
+    FontInfo(const std::weak_ptr<Document>& document) : Base(document) {}
+};
+
 } // namespace others
 } // namespace dom
 } // namespace musx
