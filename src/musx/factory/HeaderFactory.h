@@ -52,10 +52,10 @@ public:
         }
 
         auto header = std::make_shared<dom::header::Header>();
-        header->wordOrder = parseWordOrder(getFirstChildElement(headerDataElement, "wordOrder")->getText());
-        header->textEncoding = parseTextEncoding(getFirstChildElement(headerDataElement, "textEncoding")->getText());
-        header->created = parseFileInfo(getFirstChildElement(headerDataElement, "created"));
-        header->modified = parseFileInfo(getFirstChildElement(headerDataElement, "modified"));
+        getFieldFromXml(headerDataElement, "wordOrder", header->wordOrder, parseWordOrder);
+        getFieldFromXml(headerDataElement, "textEncoding", header->textEncoding, parseTextEncoding);
+        getFieldFromXml(headerDataElement, "created", header->created, parseFileInfo);
+        getFieldFromXml(headerDataElement, "modified", header->modified, parseFileInfo);
 
         return header;
     }
@@ -68,8 +68,9 @@ private:
      * @return The corresponding `WordOrder` enum value.
      * @throws std::invalid_argument if the word order value is invalid.
      */
-    static musx::dom::header::WordOrder parseWordOrder(const std::string& value)
+    static musx::dom::header::WordOrder parseWordOrder(const std::shared_ptr<xml::IXmlElement>& element)
     {
+        std::string value = element->getText();
         if (value == "lo-endian") return musx::dom::header::WordOrder::LittleEndian;
         if (value == "hi-endian") return musx::dom::header::WordOrder::BigEndian;
         throw std::invalid_argument("Invalid word order value: " + value);
@@ -81,8 +82,9 @@ private:
      * @param value The string value to parse.
      * @return The corresponding `TextEncoding` enum value.
      */
-    static musx::dom::header::TextEncoding parseTextEncoding(const std::string& value)
+    static musx::dom::header::TextEncoding parseTextEncoding(const std::shared_ptr<xml::IXmlElement>& element)
     {
+        std::string value = element->getText();
         if (value == "Mac") return musx::dom::header::TextEncoding::Mac;
         if (value == "Windows") return musx::dom::header::TextEncoding::Windows;
         return musx::dom::header::TextEncoding::Other;
@@ -94,8 +96,9 @@ private:
      * @param value The string value to parse.
      * @return The corresponding `Platform` enum value.
      */
-    static musx::dom::header::Platform parsePlatform(const std::string& value)
+    static musx::dom::header::Platform parsePlatform(const std::shared_ptr<xml::IXmlElement>& element)
     {
+        std::string value = element->getText();
         if (value == "MAC") return musx::dom::header::Platform::Mac;
         if (value == "WIN") return musx::dom::header::Platform::Windows;
         return musx::dom::header::Platform::Other;
@@ -109,19 +112,19 @@ private:
      */
     static musx::dom::header::FileInfo parseFileInfo(const std::shared_ptr<xml::IXmlElement>& element)
     {
-        musx::dom::header::FileInfo date;
-        date.year = getFirstChildElement(element, "year")->getTextAs<int>();
-        date.month = getFirstChildElement(element, "month")->getTextAs<int>();
-        date.day = getFirstChildElement(element, "day")->getTextAs<int>();
-        date.modifiedBy = getFirstChildElement(element, "modifiedBy")->getText();
-        date.finaleVersion = parseFinaleVersion(getFirstChildElement(element, "enigmaVersion"));
-        date.application = getFirstChildElement(element, "application")->getText();
-        date.platform = parsePlatform(getFirstChildElement(element, "platform")->getText());
-        date.appVersion = parseFinaleVersion(getFirstChildElement(element, "appVersion"));
-        date.fileVersion = parseFinaleVersion(getFirstChildElement(element, "fileVersion"));
-        date.appRegion = getFirstChildElement(element, "appRegion")->getText();
+        musx::dom::header::FileInfo fileInfo;
+        getFieldFromXml(element, "year", fileInfo.year, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "month", fileInfo.month, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "day", fileInfo.day, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "modifiedBy", fileInfo.modifiedBy, [](auto element) { return element->getText(); });
+        getFieldFromXml(element, "enigmaVersion", fileInfo.finaleVersion, parseFinaleVersion);
+        getFieldFromXml(element, "application", fileInfo.application, [](auto element) { return element->getText(); });
+        getFieldFromXml(element, "platform", fileInfo.platform, parsePlatform);
+        getFieldFromXml(element, "appVersion", fileInfo.appVersion, parseFinaleVersion);
+        getFieldFromXml(element, "fileVersion", fileInfo.fileVersion, parseFinaleVersion);
+        getFieldFromXml(element, "appRegion", fileInfo.appRegion, [](auto element) { return element->getText(); });
 
-        return date;
+        return fileInfo;
     }
 
     /**
@@ -137,10 +140,10 @@ private:
         }
 
         musx::dom::header::FinaleVersion version;
-        version.major = getFirstChildElement(element, "major")->getTextAs<int>();
-        version.minor = getFirstChildElement(element, "minor")->getTextAs<int>();
+        getFieldFromXml(element, "major", version.major, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "minor", version.minor, [](auto element) { return element->template getTextAs<int>(); });
         version.maint = getOptionalChildTextAs<int>(element, "maint");
-        version.devStatus = getFirstChildElement(element, "devStatus")->getText();
+        getFieldFromXml(element, "devStatus", version.devStatus, [](auto element) { return element->getText(); });
         version.build = getOptionalChildTextAs<int>(element, "build");
 
         return version;

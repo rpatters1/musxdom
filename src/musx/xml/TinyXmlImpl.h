@@ -127,7 +127,8 @@ class Document : public musx::xml::IXmlDocument
     ::tinyxml2::XMLDocument m_document; ///< Non-const since the document itself may be parsed or reset.
 
 public:
-    void loadFromString(const std::string& xmlContent) override {
+    void loadFromString(const std::string& xmlContent) override
+    {
         if (m_document.Parse(xmlContent.c_str()) != ::tinyxml2::XML_SUCCESS) {
             throw musx::xml::load_error(m_document.ErrorStr());
         }

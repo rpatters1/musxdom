@@ -63,7 +63,7 @@ public:
      */
     enum class FontType
     {
-        Music,             ///< Music notation font.
+        Music,             ///< Default music font.
         Key,               ///< Key signature font.
         Clef,              ///< Clef symbol font.
         Time,              ///< Time signature font.

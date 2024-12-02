@@ -42,6 +42,19 @@ namespace factory {
 class FactoryBase
 {
 protected:
+    /** @brief Helper function to check if a child exists and populate it if so.
+     *
+     * @tparam DataType the type of data to be populated (usually inferred from the call)
+     * @tparam ParserFunc the parser function (usually inferred from the call)
+     */
+    template<typename DataType, typename ParserFunc>
+    static void getFieldFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc)
+    {
+        if (auto childElement = element->getFirstChildElement(nodeName)) {
+            dataField = parserFunc(childElement);
+        }
+    }
+
     /** @brief Helper function to throw when child element does not exist.
      *
      * @throws std::invalid_argument when child element does not exist.

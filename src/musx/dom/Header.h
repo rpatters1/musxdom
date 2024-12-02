@@ -67,11 +67,11 @@ enum class Platform
  */
 struct FinaleVersion
 {
-    int major;                         ///< Major version number
-    int minor;                         ///< Minor version number
-    std::optional<int> maint;          ///< Optional maintenance version number
-    std::string devStatus;             ///< Development status (e.g., "dev", "release")
-    std::optional<int> build;          ///< Optional build number
+    int major{};                        ///< Major version number
+    int minor{};                        ///< Minor version number
+    std::optional<int> maint;           ///< Optional maintenance version number
+    std::string devStatus;              ///< Development status (e.g., "dev", "release")
+    std::optional<int> build;           ///< Optional build number
 };
 
 /**
@@ -79,16 +79,16 @@ struct FinaleVersion
  */
 struct FileInfo
 {
-    int year;                       ///< Year (4 digits)
-    int month;                      ///< Month (1-12)
-    int day;                        ///< Day (1-31)
-    std::string modifiedBy;         ///< Initials of person who modified the file
-    FinaleVersion finaleVersion;    ///< Version of the Finale software
-    std::string application;        ///< Application that created or modified the file
-    Platform platform;              ///< Platform on which the file was created
-    FinaleVersion appVersion;       ///< Version of the application
-    FinaleVersion fileVersion;      ///< Version of the file format
-    std::string appRegion;          ///< Region information (e.g., "US")
+    int year{};                             ///< Year (4 digits)
+    int month{};                            ///< Month (1-12)
+    int day{};                              ///< Day (1-31)
+    std::string modifiedBy;                 ///< Initials of person who modified the file (often blank)
+    FinaleVersion finaleVersion;            ///< Version of the Finale software
+    std::string application;                ///< Application that created or modified the file
+    Platform platform = Platform::Other;    ///< Platform on which the file was created
+    FinaleVersion appVersion;               ///< Version of the application
+    FinaleVersion fileVersion;              ///< Version of the file format
+    std::string appRegion;                  ///< Region information (e.g., "US")
 };
 
 /**
@@ -96,10 +96,10 @@ struct FileInfo
  */
 struct Header
 {
-    WordOrder wordOrder;            ///< Word order used in the document
-    TextEncoding textEncoding;      ///< Text encoding used in the document
-    FileInfo created;               ///< Creation date and associated metadata
-    FileInfo modified;              ///< Modification date and associated metadata
+    WordOrder wordOrder = WordOrder::LittleEndian;      ///< Word order used in the document
+    TextEncoding textEncoding = TextEncoding::Other;    ///< Text encoding used in the document
+    FileInfo created;                                   ///< Creation date and associated metadata
+    FileInfo modified;                                  ///< Modification date and associated metadata
 };
 
 /** @brief Shared `Header` pointer */
