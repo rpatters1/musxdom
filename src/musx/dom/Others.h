@@ -61,6 +61,8 @@ public:
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
 };
 
+} // namespace others
+
 /**
  * @struct FontInfo
  * @brief Represents the default font settings for a particular element type.
@@ -93,7 +95,7 @@ struct FontInfo : public Base
         }
         throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontID));
     }
-    
+
     /**
      * @brief Constructor
      * @param document A weak pointer to the document object.
@@ -102,6 +104,8 @@ struct FontInfo : public Base
      */
     FontInfo(const std::weak_ptr<Document>& document) : Base(document) {}
 };
+
+namespace others {
 
 } // namespace others
 } // namespace dom

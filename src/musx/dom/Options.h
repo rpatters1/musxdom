@@ -33,9 +33,7 @@
 namespace musx {
 namespace dom {
 
-namespace others {
 class FontInfo;
-}
 
 namespace options {
 
@@ -115,17 +113,17 @@ public:
     /**
      * @brief Stores the default fonts for different elements.
      *
-     * An unordered map that associates each FontType with its corresponding #others::FontInfo settings.
+     * An unordered map that associates each `FontType` with its corresponding `FontInfo` settings.
      */
-    std::unordered_map<FontType, std::shared_ptr<others::FontInfo>> defaultFonts;
+    std::unordered_map<FontType, std::shared_ptr<FontInfo>> defaultFonts;
 
     /**
-     * @brief get the `others::FontInfo` for a particular type
+     * @brief get the `FontInfo` for a particular type
      * @param type the `FontType` to retrieve
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    std::shared_ptr<others::FontInfo> getFontInfo(FontType type) const
+    std::shared_ptr<FontInfo> getFontInfo(FontType type) const
     {
         auto it = defaultFonts.find(type);
         if (it == defaultFonts.end()) {
@@ -135,12 +133,13 @@ public:
     }
 
     /**
-     * @brief get the `others::FontInfo` for a particular type from the document pool
+     * @brief get the `FontInfo` for a particular type from the document pool
+     * @param document the `Document` to search
      * @param type the `FontType` to retrieve
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    static std::shared_ptr<others::FontInfo> getFontInfo(const DocumentPtr& document, FontType type)
+    static std::shared_ptr<FontInfo> getFontInfo(const DocumentPtr& document, FontType type)
     {
         auto defaultFonts = document->getOptions()->get<DefaultFonts>();
         if (defaultFonts.empty()) {

@@ -39,7 +39,7 @@ struct FieldPopulator<DefaultFonts> : public FactoryBase
     {
         auto fontElements = getFirstChildElement(element, "font");
         for (auto fontElement = getFirstChildElement(element, "font"); fontElement; fontElement = fontElement->getNextSibling("font")) {
-            auto fontInstance = std::make_shared<dom::others::FontInfo>(fonts.getDocument());
+            auto fontInstance = std::make_shared<dom::FontInfo>(fonts.getDocument());
 
             // Populate type attribute.
             auto typeStr = fontElement->findAttribute("type");
