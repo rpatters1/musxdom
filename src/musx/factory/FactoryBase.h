@@ -44,14 +44,24 @@ class FactoryBase
 protected:
     /** @brief Helper function to check if a child exists and populate it if so.
      *
+     * EnigmaXml generally omits fields when they have the default value (usually 0). This helper
+     * function handles that without causing an exception. However, fields retrieved with this function
+     * are expected to exist unless the `expected` parameter is false. If they are missing but expected,
+     * this fact may be logged.
+     *
      * @tparam DataType the type of data to be populated (usually inferred from the call)
      * @tparam ParserFunc the parser function (usually inferred from the call)
      */
     template<typename DataType, typename ParserFunc>
-    static void getFieldFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc)
+    static void getFieldFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc, bool expected = true)
     {
         if (auto childElement = element->getFirstChildElement(nodeName)) {
             dataField = parserFunc(childElement);
+        } else if (expected) {
+#ifdef MUSX_LOG_MISSING_FIELDS
+            //stdout in lieu of logging for now
+            std::cout << "Expected field <" << element->getTagName() << "><" << nodeName << "> not found." << std::endl;
+#endif
         }
     }
 

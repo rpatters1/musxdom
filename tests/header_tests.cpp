@@ -104,6 +104,7 @@ protected:
                 EXPECT_EQ(info.application, "FIN");
                 EXPECT_EQ(info.modifiedBy, "RGP");
                 EXPECT_EQ(info.appRegion, "US");
+                EXPECT_EQ(info.platform, musx::dom::header::Platform::Mac);
                 EXPECT_EQ(info.finaleVersion.major, 27);
                 EXPECT_EQ(info.finaleVersion.minor, 4);
                 ASSERT_FALSE(info.finaleVersion.maint.has_value());
@@ -150,4 +151,101 @@ TEST_F(HeaderTest, NoHeaderDataTag)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(malformed),
         std::invalid_argument
     );
+}
+
+
+TEST_F(HeaderTest, EnumTests)
+{
+    constexpr static musxtest::string_view invalidWordOrder = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+  <header>
+    <headerData>
+      <wordOrder>malformed</wordOrder>
+    </headerData>
+  </header>
+</finale>
+     )xml";
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(invalidWordOrder),
+        std::invalid_argument
+    );
+
+    constexpr static musxtest::string_view invalidTextEncoding = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+  <header>
+    <headerData>
+      <wordOrder>hi-endian</wordOrder>
+      <textEncoding>XXX</textEncoding>
+    </headerData>
+  </header>
+</finale>
+     )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(invalidTextEncoding);
+        auto header = doc->getHeader();
+        ASSERT_TRUE(header);
+        ASSERT_EQ(header->wordOrder, musx::dom::header::WordOrder::BigEndian);
+        ASSERT_EQ(header->textEncoding, musx::dom::header::TextEncoding::Other);
+    }
+
+    constexpr static musxtest::string_view winTextEncoding = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+  <header>
+    <headerData>
+      <wordOrder>lo-endian</wordOrder>
+      <textEncoding>Windows</textEncoding>
+    </headerData>
+  </header>
+</finale>
+     )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(winTextEncoding);
+        auto header = doc->getHeader();
+        ASSERT_TRUE(header);
+        ASSERT_EQ(header->wordOrder, musx::dom::header::WordOrder::LittleEndian);
+        ASSERT_EQ(header->textEncoding, musx::dom::header::TextEncoding::Windows);
+    }
+
+    // Mac platform tested above.
+
+    constexpr static musxtest::string_view winPlatform = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+  <header>
+    <headerData>
+      <created>
+        <platform>WIN</platform>
+      </created>
+    </headerData>
+  </header>
+</finale>
+     )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(winPlatform);
+        auto header = doc->getHeader();
+        ASSERT_TRUE(header);
+        ASSERT_EQ(header->created.platform, musx::dom::header::Platform::Windows);
+    }
+
+    constexpr static musxtest::string_view otherPlatform = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+  <header>
+    <headerData>
+      <created>
+        <platform>zzzzfdddsf</platform>
+      </created>
+    </headerData>
+  </header>
+</finale>
+     )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(otherPlatform);
+        auto header = doc->getHeader();
+        ASSERT_TRUE(header);
+        ASSERT_EQ(header->created.platform, musx::dom::header::Platform::Other);
+    }
 }

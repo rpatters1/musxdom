@@ -48,13 +48,8 @@ struct FieldPopulator<DefaultFonts> : public FactoryBase
             }
             FontType fontType = fromString(typeStr->getValue());
 
-            if (auto fontIDElement = fontElement->getFirstChildElement("fontID")) {
-                fontInstance->fontID = fontIDElement->getTextAs<dom::Cmper>();
-            }
-
-            if (auto fontSizeElement = fontElement->getFirstChildElement("fontSize")) {
-                fontInstance->fontSize = fontSizeElement->getTextAs<int>();
-            }
+            getFieldFromXml(fontElement, "fontID", fontInstance->fontID, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
+            getFieldFromXml(fontElement, "fontSize", fontInstance->fontSize, [](auto element) { return element->template getTextAs<int>(); });
 
             // Handle effects (bold, italic, absolute).
             if (auto efxElement = fontElement->getFirstChildElement("efx")) {

@@ -38,11 +38,11 @@ struct FieldPopulator<FontDefinition> : public FactoryBase
 {
     static void populate(FontDefinition& instance, const std::shared_ptr<xml::IXmlElement>& element)
     {
-        instance.charsetBank = getFirstChildElement(element, "charsetBank")->getText();
-        instance.charsetVal = getFirstChildElement(element, "charsetVal")->getTextAs<int>();
-        instance.pitch = getFirstChildElement(element, "pitch")->getTextAs<int>();
-        instance.family = getFirstChildElement(element, "family")->getTextAs<int>();
-        instance.name = getFirstChildElement(element, "name")->getText();
+        getFieldFromXml(element, "charsetBank", instance.charsetBank, [](auto element) { return element->getText(); });
+        getFieldFromXml(element, "charsetVal", instance.charsetVal, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "pitch", instance.pitch, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "family", instance.family, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "name", instance.name, [](auto element) { return element->getText(); });
     }
 };
 
