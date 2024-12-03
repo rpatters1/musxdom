@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - main
+      - add-options-to-document
   pull_request:
     branches:
       - main
-      - add-options-to-document
 
 jobs:
   build-and-test:
