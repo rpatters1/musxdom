@@ -49,19 +49,19 @@ namespace rapidxml {
  */
 class Attribute : public musx::xml::IXmlAttribute
 {
-    ::rapidxml::xml_attribute<>* attribute; ///< Pointer to rapidxml::xml_attribute.
+    ::rapidxml::xml_attribute<>* m_attribute; ///< Pointer to rapidxml::xml_attribute.
 
 public:
     /**
      * @brief Constructor
      */
-    explicit Attribute(::rapidxml::xml_attribute<>* attr) : attribute(attr) {}
+    explicit Attribute(::rapidxml::xml_attribute<>* attr) : m_attribute(attr) {}
 
-    std::string getName() const override { return attribute->name(); }
-    std::string getValue() const override { return attribute->value(); }
+    std::string getName() const override { return m_attribute->name(); }
+    std::string getValue() const override { return m_attribute->value(); }
 
     std::shared_ptr<IXmlAttribute> nextAttribute() const override {
-        ::rapidxml::xml_attribute<>* next = attribute->next_attribute();
+        ::rapidxml::xml_attribute<>* next = m_attribute->next_attribute();
         return next ? std::make_shared<Attribute>(next) : nullptr;
     }
 };
@@ -71,7 +71,7 @@ public:
  */
 class Element : public musx::xml::IXmlElement
 {
-    ::rapidxml::xml_node<>* element; ///< Pointer to rapidxml::xml_node.
+    ::rapidxml::xml_node<>* m_element; ///< Pointer to rapidxml::xml_node.
 
     static const char* tagPtr(const std::string& tagName) {
         return tagName.empty() ? nullptr : tagName.c_str();
@@ -81,48 +81,48 @@ public:
     /**
      * @brief Constructor
      */
-    explicit Element(::rapidxml::xml_node<>* elem) : element(elem) {}
+    explicit Element(::rapidxml::xml_node<>* elem) : m_element(elem) {}
 
-    std::string getTagName() const override { return element->name(); }
+    std::string getTagName() const override { return m_element->name(); }
 
     std::string getText() const override {
-        return element->value() ? element->value() : "";
+        return m_element->value() ? m_element->value() : "";
     }
 
     std::shared_ptr<IXmlAttribute> getFirstAttribute() const override {
-        ::rapidxml::xml_attribute<>* attr = element->first_attribute();
+        ::rapidxml::xml_attribute<>* attr = m_element->first_attribute();
         return attr ? std::make_shared<Attribute>(attr) : nullptr;
     }
 
     std::shared_ptr<IXmlAttribute> findAttribute(const std::string& tagName) const override {
-        ::rapidxml::xml_attribute<>* attr = element->first_attribute(tagName.c_str());
+        ::rapidxml::xml_attribute<>* attr = m_element->first_attribute(tagName.c_str());
         return attr ? std::make_shared<Attribute>(attr) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getFirstChildElement(const std::string& tagName = {}) const override {
-        ::rapidxml::xml_node<>* child = element->first_node(tagPtr(tagName));
+        ::rapidxml::xml_node<>* child = m_element->first_node(tagPtr(tagName));
         return child ? std::make_shared<Element>(child) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getNextSibling(const std::string& tagName = {}) const override {
-        ::rapidxml::xml_node<>* sibling = element->next_sibling(tagPtr(tagName));
+        ::rapidxml::xml_node<>* sibling = m_element->next_sibling(tagPtr(tagName));
         return sibling ? std::make_shared<Element>(sibling) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getPreviousSibling(const std::string& tagName = {}) const override {
         // rapidxml does not directly support previous sibling, we need to iterate from the parent.
-        if (!element->parent()) return nullptr;
+        if (!m_element->parent()) return nullptr;
 
         ::rapidxml::xml_node<>* prev = nullptr;
-        for (::rapidxml::xml_node<>* sibling = element->parent()->first_node(); sibling; sibling = sibling->next_sibling()) {
-            if (sibling == element) break;
+        for (::rapidxml::xml_node<>* sibling = m_element->parent()->first_node(); sibling; sibling = sibling->next_sibling()) {
+            if (sibling == m_element) break;
             if (tagName.empty() || sibling->name() == tagName) prev = sibling;
         }
         return prev ? std::make_shared<Element>(prev) : nullptr;
     }
 
     std::shared_ptr<IXmlElement> getParent() const override {
-        ::rapidxml::xml_node<>* parent = element->parent();
+        ::rapidxml::xml_node<>* parent = m_element->parent();
         return parent && parent->type() == ::rapidxml::node_element ? std::make_shared<Element>(parent) : nullptr;
     }
 };
@@ -132,34 +132,34 @@ public:
  */
 class Document : public musx::xml::IXmlDocument
 {
-    ::rapidxml::xml_document<> doc; ///< The rapidxml document.
-    std::vector<char> buffer; ///< Buffer for the document content.
+    ::rapidxml::xml_document<> m_document; ///< The rapidxml document.
+    std::vector<char> m_buffer; ///< Buffer for the document content.
 
 public:
     void loadFromString(const std::string& xmlContent) override {
-        buffer.assign(xmlContent.begin(), xmlContent.end());
-        buffer.push_back('\0'); // Null-terminate the buffer.
+        m_buffer.assign(xmlContent.begin(), xmlContent.end());
+        m_buffer.push_back('\0'); // Null-terminate the buffer.
 
         try {
-            doc.parse<0>(buffer.data());
+            m_document.parse<0>(m_buffer.data());
         } catch (const ::rapidxml::parse_error& e) {
             throw musx::xml::load_error(e.what());
         }
     }
 
     void loadFromString(const std::vector<char>& xmlContent) override {
-        buffer = xmlContent;
-        buffer.push_back('\0'); // Null-terminate the buffer.
+        m_buffer = xmlContent;
+        m_buffer.push_back('\0'); // Null-terminate the buffer.
 
         try {
-            doc.parse<0>(buffer.data());
+            m_document.parse<0>(m_buffer.data());
         } catch (const ::rapidxml::parse_error& e) {
             throw musx::xml::load_error(e.what());
         }
     }
 
     std::shared_ptr<IXmlElement> getRootElement() const override {
-        ::rapidxml::xml_node<>* root = doc.first_node();
+        ::rapidxml::xml_node<>* root = m_document.first_node();
         return root ? std::make_shared<Element>(root) : nullptr;
     }
 };

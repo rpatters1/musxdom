@@ -25,6 +25,7 @@
 
 #include "musx/dom/Document.h"
 #include "musx/factory/HeaderFactory.h"
+#include "musx/factory/PoolFactory.h"
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
@@ -35,6 +36,9 @@ namespace factory {
  */
 class DocumentFactory : FactoryBase
 {
+    using Document = musx::dom::Document;
+    using DocumentPtr = std::shared_ptr<Document>;
+
 public:
     /**
      * @brief Creates a `Document` object from an XML element.
@@ -43,23 +47,33 @@ public:
      * @return A fully populated `Document` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
-    template <typename XmlReaderType>
-    static musx::dom::Document create(const std::vector<char>& xmlBuffer)
+    template <typename XmlDocumentType>
+    static DocumentPtr create(const std::vector<char>& xmlBuffer)
     {
-        static_assert(std::is_convertible<XmlReaderType*, musx::xml::IXmlDocument*>::value, "XmlReaderType must derive from IXmlDocument.");
+        static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value, 
+                      "XmlReaderType must derive from IXmlDocument.");
 
-        XmlReaderType document;
-        document.loadFromString(xmlBuffer);
+        std::unique_ptr<musx::xml::IXmlDocument> xmlDocument = std::make_unique<XmlDocumentType>();
+        xmlDocument->loadFromString(xmlBuffer);
 
-        auto rootElement = document.getRootElement();
+        auto rootElement = xmlDocument->getRootElement();
         if (!rootElement || rootElement->getTagName() != "finale") {
             throw std::invalid_argument("Missing <finale> element.");
         }
 
-        auto headerElement = getFirstChildElement(rootElement, "header");
-        auto header = musx::factory::HeaderFactory::create(headerElement);
+        DocumentPtr document(new Document);
 
-        return musx::dom::Document(std::move(header));
+        for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {
+            if (element->getTagName() == "header") {
+                document->getHeader() = musx::factory::HeaderFactory::create(element);
+            } else if (element->getTagName() == "options") {
+                document->getOptions() = musx::factory::OptionsFactory::create(element, document);
+            } else if (element->getTagName() == "others") {
+                document->getOthers() = musx::factory::OthersFactory::create(element, document);
+            }
+        }
+
+        return document;
     }
 };
 

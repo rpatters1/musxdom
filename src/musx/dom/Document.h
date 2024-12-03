@@ -23,9 +23,10 @@
 
 #include <memory>
 
-#include "musx/dom/Header.h"
-
-/**
+#include "Header.h"
+#include "ObjectPool.h"
+#
+ /**
  * @namespace musx
  * @brief object model for musx file (enigmaxml)
  */
@@ -41,6 +42,8 @@ class DocumentFactory;
  */
 namespace dom {
 
+using namespace header;
+
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
  * 
@@ -49,27 +52,37 @@ namespace dom {
 class Document
 {
 public:
-    /**
-     * @brief Retrieves the header of the document.
-     * 
-     * @return A constant reference to the document's `Header`.
-     */
-    const header::Header &getHeader() const { return header; }
+    /**  @brief Retrieves the header */
+    HeaderPtr& getHeader() { return m_header; }
+    /**  @brief Retrieves the const header */
+    const HeaderPtr& getHeader() const { return m_header; }
+    
+    /** @brief Retrieves the options pool */
+    OptionsPoolPtr& getOptions() { return m_options; }
+    /** @brief Retrieves the const options pool */
+    const OptionsPoolPtr& getOptions() const { return m_options; }
+    
+    /** @brief Retrieves the others pool */
+    OthersPoolPtr& getOthers() { return m_others; }
+    /** @brief Retrieves the const others pool */
+    const OthersPoolPtr& getOthers() const { return m_others; }
 
 private:
     /**
-     * @brief Constructs a `Document` object with a given `Header`.
-     * 
-     * @param header The header of the document.
+     * @brief Constructs a `Document`
      */
-    explicit Document(header::Header header)
-        : header(std::move(header)) {}
+     explicit Document() = default;
 
-    header::Header header; ///< The header of the document
+     HeaderPtr m_header;        ///< The header
+     OptionsPoolPtr m_options;  ///< The options pool
+     OthersPoolPtr m_others;    ///< The others pool
 
     // Grant the factory function access to the private constructor
     friend class musx::factory::DocumentFactory;
 };
+
+/** @brief Shared `Document` pointer */
+using DocumentPtr = std::shared_ptr<Document>;
 
 } // namespace dom
 } // namespace musx
