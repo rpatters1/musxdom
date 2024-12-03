@@ -1,0 +1,47 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - add-options-to-document
+
+jobs:
+  build-and-test:
+    name: Build and Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            generator: Ninja
+          - os: macos-latest
+            generator: Ninja
+          - os: windows-latest
+            generator: "Visual Studio 17 2022"
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Display Preinstalled Tools
+      - name: Display preinstalled tools
+        run: |
+          cmake --version
+          ninja --version
+
+      # Step 3: Configure CMake
+      - name: Configure CMake
+        run: cmake -S . -B build -G "${{ matrix.generator }}"
+
+      # Step 4: Build with CMake
+      - name: Build
+        run: cmake --build build
+
+      # Step 5: Run tests
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
