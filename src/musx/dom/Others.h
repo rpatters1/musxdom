@@ -89,9 +89,11 @@ struct FontInfo : public Base
     {
         auto document = this->getDocument().lock();
         assert(document); // program bug if fail
-        auto fontDef = document->getOthers()->get<others::FontDefinition>(fontID);
-        if (fontDef.size() > 0) {
-            return fontDef[0]->name;
+        auto others = document->getOthers();
+        assert(others); // program bug if fail
+        auto fontDef = others->get<others::FontDefinition>(fontID);
+        if (fontDef) {
+            return fontDef->name;
         }
         throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontID));
     }

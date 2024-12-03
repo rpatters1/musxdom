@@ -68,14 +68,17 @@ public:
 
     /**
      * @brief Retrieves a vector of objects of a specific type from the pool.
-     * 
+     *
+     * Some types are arrays (with a 0-based "inci" value). Use this function to
+     * retrieve the entire array.
+     *
      * @tparam T The derived type of `OthersBase` to retrieve.
      *           Must have a `constexpr static std::string_view XmlNodeName` member.
      * @param key The key value used to filter the objects.
      * @return A vector of shared pointers to objects of type `T`.
      */
     template <typename T>
-    std::vector<std::shared_ptr<T>> get(const ObjectKey& key) const
+    std::vector<std::shared_ptr<T>> getArray(const ObjectKey& key) const
     {
         std::vector<std::shared_ptr<T>> result;
 
@@ -91,6 +94,29 @@ public:
             result.push_back(typedPtr);
         }
         return result;
+    }
+
+    /**
+     * @brief Retrieves the first (and usually only) object of a specific type from the pool.
+     *
+     * Many types are scalar values with only one instance per key. Use this function
+     * to retrieve them.
+     *
+     * @tparam T The derived type of `OthersBase` to retrieve.
+     *           Must have a `constexpr static std::string_view XmlNodeName` member.
+     * @param key The key value used to filter the objects.
+     * @return A shared_ptr to the type or nullptr if none exists
+     */
+    template <typename T>
+    std::shared_ptr<T> get(const ObjectKey& key) const
+    {
+        auto it = m_pool.find(key);
+        if (it == m_pool.end() || it->second.empty()) {
+            return nullptr;
+        }
+        auto typedPtr = std::static_pointer_cast<T>(it->second[0]);
+        assert(typedPtr); // There is a program bug if the pointer cast fails.
+        return typedPtr;
     }
 
 protected:
@@ -146,9 +172,14 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<ScalarBase>& other)
     { ObjectPool<ScalarBase>::add(nodeName, other); }
 
+    /** @brief Scalar version of #ObjectPool::getArray */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray() const
+    { return ObjectPool<ScalarBase>::template getArray<T>(std::string(T::XmlNodeName)); }
+
     /** @brief Scalar version of #ObjectPool::get */
     template <typename T>
-    std::vector<std::shared_ptr<T>> get() const
+    std::shared_ptr<T> get() const
     { return ObjectPool<ScalarBase>::template get<T>(std::string(T::XmlNodeName)); }
 };
 
@@ -169,9 +200,14 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& other)
     { ObjectPool::add(std::make_tuple(nodeName, other->getCmper()), other); }
 
+    /** @brief Others version of #ObjectPool::getArray */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray(Cmper cmper) const
+    { return ObjectPool::getArray<T>(std::make_tuple(std::string(T::XmlNodeName), cmper)); }
+
     /** @brief Others version of #ObjectPool::get */
     template <typename T>
-    std::vector<std::shared_ptr<T>> get(Cmper cmper) const
+    std::shared_ptr<T> get(Cmper cmper) const
     { return ObjectPool::get<T>(std::make_tuple(std::string(T::XmlNodeName), cmper)); }
 };
 

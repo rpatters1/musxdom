@@ -141,11 +141,15 @@ public:
      */
     static std::shared_ptr<FontInfo> getFontInfo(const DocumentPtr& document, FontType type)
     {
-        auto defaultFonts = document->getOptions()->get<DefaultFonts>();
-        if (defaultFonts.empty()) {
+        auto options = document->getOptions();
+        if (!options) {
+            throw std::invalid_argument("No options found in document");
+        }
+        auto defaultFonts = options->get<DefaultFonts>();
+        if (!defaultFonts) {
             throw std::invalid_argument("Default fonts not found in document");
         }
-        return defaultFonts[0]->getFontInfo(type);
+        return defaultFonts->getFontInfo(type);
     }
 
     /**

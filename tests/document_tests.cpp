@@ -50,7 +50,7 @@ TEST(DocumentTest, CreateHeader)
 {
     constexpr static musxtest::string_view emptyHeader = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
-<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+<finale>
   <header>
     <headerData>
     </headerData>
@@ -69,7 +69,7 @@ TEST(DocumentTest, CreateOptions)
 {
     constexpr static musxtest::string_view emptyHeader = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
-<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+<finale>
   <options>
   </options>
 </finale>
@@ -86,7 +86,7 @@ TEST(DocumentTest, CreateOthers)
 {
     constexpr static musxtest::string_view emptyHeader = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
-<finale version="27.4" xmlns="http://www.makemusic.com/2012/finale">
+<finale>
   <others>
   </others>
 </finale>
