@@ -70,8 +70,9 @@ public:
  * The FontInfo struct holds information about font properties, such as the font ID, size, and styles like
  * bold, italic, underline, strikeout, fixed size, and visibility.
  */
-struct FontInfo : public Base
+class FontInfo : public Base
 {
+public:
     Cmper fontID = 0;                      ///< Font ID. This is a Cmper for others::FontDefinition.
     int fontSize = 0;                      ///< Font size.
     bool bold = false;                     ///< Bold effect (default false).
