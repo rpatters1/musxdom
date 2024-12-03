@@ -39,40 +39,40 @@ struct FieldPopulator<DefaultFonts> : public FactoryBase
     {
         auto fontElements = getFirstChildElement(element, "font");
         for (auto fontElement = getFirstChildElement(element, "font"); fontElement; fontElement = fontElement->getNextSibling("font")) {
-            auto fontInstance = std::make_shared<dom::FontInfo>(fonts.getDocument());
-
-            // Populate type attribute.
             auto typeStr = fontElement->findAttribute("type");
             if (!typeStr) {
                 throw std::invalid_argument("font option has no type");
             }
             FontType fontType = fromString(typeStr->getValue());
 
-            getFieldFromXml(fontElement, "fontID", fontInstance->fontID, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
-            getFieldFromXml(fontElement, "fontSize", fontInstance->fontSize, [](auto element) { return element->template getTextAs<int>(); });
+            dom::Cmper fontId = 0;
+            int fontSize = 0;
 
-            // Handle effects (bold, italic, absolute).
+            getFieldFromXml(fontElement, "fontID", fontId, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
+            getFieldFromXml(fontElement, "fontSize", fontSize, [](auto element) { return element->template getTextAs<int>(); });
+
+            uint16_t fontEfx = dom::FontInfo::Plain;
             if (auto efxElement = fontElement->getFirstChildElement("efx")) {
                 for (auto efxChild = efxElement->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
                     auto efxName = efxChild->getTagName();
                     if (efxName == "bold") {
-                        fontInstance->bold = true;
+                        fontEfx |= dom::FontInfo::Bold;
                     } else if (efxName == "italic") {
-                        fontInstance->italic = true;
+                        fontEfx |= dom::FontInfo::Italic;
                     } else if (efxName == "underline") {
-                        fontInstance->underline = true;
+                        fontEfx |= dom::FontInfo::Underline;
                     } else if (efxName == "strikeout") {
-                        fontInstance->strikeout = true;
+                        fontEfx |= dom::FontInfo::Strikeout;
                     } else if (efxName == "absolute") {
-                        fontInstance->absolute = true;
+                        fontEfx |= dom::FontInfo::Absolute;
                     } else if (efxName == "hidden") {
-                        fontInstance->hidden = true;
+                        fontEfx |= dom::FontInfo::Hidden;
                     }
                 }
             }
 
             // Add the populated font instance to the vector.
-            fonts.defaultFonts.emplace(fontType, fontInstance);
+            fonts.defaultFonts.emplace(fontType, std::make_shared<dom::FontInfo>(fonts.getDocument(), fontId, fontSize, fontEfx));
         }
     }
 

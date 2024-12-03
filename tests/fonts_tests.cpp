@@ -74,12 +74,12 @@ TEST(FontTest, FontInfoPropertiesTest)
     ASSERT_TRUE(fontInfo);
     EXPECT_EQ(fontInfo->fontID, 1);
     EXPECT_EQ(fontInfo->fontSize, 12);
-    EXPECT_TRUE(fontInfo->bold);
-    EXPECT_TRUE(fontInfo->italic);
-    EXPECT_TRUE(fontInfo->underline);
-    EXPECT_TRUE(fontInfo->strikeout);
-    EXPECT_TRUE(fontInfo->absolute);
-    EXPECT_TRUE(fontInfo->hidden);
+    EXPECT_TRUE(fontInfo->bold());
+    EXPECT_TRUE(fontInfo->italic());
+    EXPECT_TRUE(fontInfo->underline());
+    EXPECT_TRUE(fontInfo->strikeout());
+    EXPECT_TRUE(fontInfo->absolute());
+    EXPECT_TRUE(fontInfo->hidden());
     EXPECT_EQ(fontInfo->getFontName(), "Times");
 }
 
@@ -104,12 +104,12 @@ TEST(FontTest, FontInfoNoName)
     ASSERT_TRUE(fontInfo);
     EXPECT_EQ(fontInfo->fontID, 13);
     EXPECT_EQ(fontInfo->fontSize, 24);
-    EXPECT_FALSE(fontInfo->bold);
-    EXPECT_FALSE(fontInfo->italic);
-    EXPECT_FALSE(fontInfo->underline);
-    EXPECT_FALSE(fontInfo->strikeout);
-    EXPECT_FALSE(fontInfo->absolute);
-    EXPECT_FALSE(fontInfo->hidden);
+    EXPECT_FALSE(fontInfo->bold());
+    EXPECT_FALSE(fontInfo->italic());
+    EXPECT_FALSE(fontInfo->underline());
+    EXPECT_FALSE(fontInfo->strikeout());
+    EXPECT_FALSE(fontInfo->absolute());
+    EXPECT_FALSE(fontInfo->hidden());
     EXPECT_THROW(
         // no fontName record for this font in xml, so this will throw
         ASSERT_EQ(fontInfo->getFontName(), "Finale Maestro"),

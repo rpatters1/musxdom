@@ -57,9 +57,11 @@ private:
      * The registry is an array of pairs, where each pair contains a node name (as a string)
      * and a corresponding type pointer (as nullptr).
      */
-    static constexpr auto registry = std::array {
-        std::pair<std::string_view, VariantType>{Types::XmlNodeName, static_cast<Types*>(nullptr)}...
-    };
+    static inline const auto registry = []() {
+        return std::unordered_map<std::string_view, VariantType>{
+            {Types::XmlNodeName, VariantType(static_cast<Types*>(nullptr))}...
+        };
+    }();
 
     /**
      * @brief Finds the registered type corresponding to the provided node name.
@@ -69,14 +71,13 @@ private:
      * @param nodeName The XML node name to search for.
      * @return A pair consisting of a boolean indicating success and a type pointer if found.
      */
-    static constexpr std::optional<VariantType> findRegisteredType(std::string_view nodeName)
+    static std::optional<VariantType> findRegisteredType(std::string_view nodeName)
     {
-        for (const auto& entry : registry) {
-            if (entry.first == nodeName) {
-                return entry.second;
-            }
+        const auto it = registry.find(nodeName);
+        if (it == registry.end()) {
+            return std::nullopt;
         }
-        return std::nullopt;
+        return it->second;
     }
 
 public:
