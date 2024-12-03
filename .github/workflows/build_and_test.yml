@@ -32,16 +32,27 @@ jobs:
       - name: Display preinstalled tools
         run: |
           cmake --version
-          ninja --version
+          
+      # Step 3: Install Ninja (if needed)
+      - name: Install Ninja on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
 
-      # Step 3: Configure CMake
+      - name: Install Ninja on macOS
+        if: matrix.os == 'macos-latest'
+        run: brew install ninja
+
+      - name: Verify Ninja Installation
+        run: ninja --version
+
+      # Step 4: Configure CMake
       - name: Configure CMake
         run: cmake -S . -B build -G "${{ matrix.generator }}"
 
-      # Step 4: Build with CMake
+      # Step 5: Build with CMake
       - name: Build
         run: cmake --build build
 
-      # Step 5: Run tests
+      # Step 6: Run tests
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
