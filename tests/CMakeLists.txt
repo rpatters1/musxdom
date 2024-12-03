@@ -43,4 +43,8 @@ target_link_libraries(musxdomtests
 
 # Discover tests
 include(GoogleTest)
-gtest_discover_tests(musxdomtests)
+gtest_discover_tests(musxdomtests
+    PROPERTIES
+        ENVIRONMENT "GTEST_COLOR=1"
+    EXTRA_ARGS --gtest_color=yes
+)

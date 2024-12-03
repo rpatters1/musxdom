@@ -186,8 +186,8 @@ TEST_F(HeaderTest, EnumTests)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(invalidTextEncoding);
         auto header = doc->getHeader();
         ASSERT_TRUE(header);
-        ASSERT_EQ(header->wordOrder, musx::dom::header::WordOrder::BigEndian);
-        ASSERT_EQ(header->textEncoding, musx::dom::header::TextEncoding::Other);
+        EXPECT_EQ(header->wordOrder, musx::dom::header::WordOrder::BigEndian);
+        EXPECT_EQ(header->textEncoding, musx::dom::header::TextEncoding::Other);
     }
 
     constexpr static musxtest::string_view winTextEncoding = R"xml(
@@ -205,8 +205,8 @@ TEST_F(HeaderTest, EnumTests)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(winTextEncoding);
         auto header = doc->getHeader();
         ASSERT_TRUE(header);
-        ASSERT_EQ(header->wordOrder, musx::dom::header::WordOrder::LittleEndian);
-        ASSERT_EQ(header->textEncoding, musx::dom::header::TextEncoding::Windows);
+        EXPECT_EQ(header->wordOrder, musx::dom::header::WordOrder::LittleEndian);
+        EXPECT_EQ(header->textEncoding, musx::dom::header::TextEncoding::Windows);
     }
 
     // Mac platform tested above.
@@ -227,7 +227,7 @@ TEST_F(HeaderTest, EnumTests)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(winPlatform);
         auto header = doc->getHeader();
         ASSERT_TRUE(header);
-        ASSERT_EQ(header->created.platform, musx::dom::header::Platform::Windows);
+        EXPECT_EQ(header->created.platform, musx::dom::header::Platform::Windows);
     }
 
     constexpr static musxtest::string_view otherPlatform = R"xml(
@@ -246,6 +246,6 @@ TEST_F(HeaderTest, EnumTests)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(otherPlatform);
         auto header = doc->getHeader();
         ASSERT_TRUE(header);
-        ASSERT_EQ(header->created.platform, musx::dom::header::Platform::Other);
+        EXPECT_EQ(header->created.platform, musx::dom::header::Platform::Other);
     }
 }

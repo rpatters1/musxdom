@@ -72,15 +72,15 @@ TEST(FontTest, FontInfoPropertiesTest)
     );
     auto fontInfo = defaultFonts->getFontInfo(musx::dom::options::DefaultFonts::FontType::Ending);
     ASSERT_TRUE(fontInfo);
-    ASSERT_EQ(fontInfo->fontID, 1);
-    ASSERT_EQ(fontInfo->fontSize, 12);
-    ASSERT_TRUE(fontInfo->bold);
-    ASSERT_TRUE(fontInfo->italic);
-    ASSERT_TRUE(fontInfo->underline);
-    ASSERT_TRUE(fontInfo->strikeout);
-    ASSERT_TRUE(fontInfo->absolute);
-    ASSERT_TRUE(fontInfo->hidden);
-    ASSERT_EQ(fontInfo->getFontName(), "Times");
+    EXPECT_EQ(fontInfo->fontID, 1);
+    EXPECT_EQ(fontInfo->fontSize, 12);
+    EXPECT_TRUE(fontInfo->bold);
+    EXPECT_TRUE(fontInfo->italic);
+    EXPECT_TRUE(fontInfo->underline);
+    EXPECT_TRUE(fontInfo->strikeout);
+    EXPECT_TRUE(fontInfo->absolute);
+    EXPECT_TRUE(fontInfo->hidden);
+    EXPECT_EQ(fontInfo->getFontName(), "Times");
 }
 
 TEST(FontTest, FontDefinitionProperties)
@@ -90,11 +90,11 @@ TEST(FontTest, FontDefinitionProperties)
     ASSERT_TRUE(others);
     auto fontDef = others->get<musx::dom::others::FontDefinition>(1);
     ASSERT_TRUE(fontDef);
-    ASSERT_EQ(fontDef->charsetBank, "Mac");
-    ASSERT_EQ(fontDef->charsetVal, 1);
-    ASSERT_EQ(fontDef->pitch, 2);
-    ASSERT_EQ(fontDef->family, 3);
-    ASSERT_EQ(fontDef->name, "Times");
+    EXPECT_EQ(fontDef->charsetBank, "Mac");
+    EXPECT_EQ(fontDef->charsetVal, 1);
+    EXPECT_EQ(fontDef->pitch, 2);
+    EXPECT_EQ(fontDef->family, 3);
+    EXPECT_EQ(fontDef->name, "Times");
 }
 
 TEST(FontTest, FontInfoNoName)
@@ -102,14 +102,14 @@ TEST(FontTest, FontInfoNoName)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
     auto fontInfo = musx::dom::options::DefaultFonts::getFontInfo(doc, musx::dom::options::DefaultFonts::FontType::Music);
     ASSERT_TRUE(fontInfo);
-    ASSERT_EQ(fontInfo->fontID, 13);
-    ASSERT_EQ(fontInfo->fontSize, 24);
-    ASSERT_FALSE(fontInfo->bold);
-    ASSERT_FALSE(fontInfo->italic);
-    ASSERT_FALSE(fontInfo->underline);
-    ASSERT_FALSE(fontInfo->strikeout);
-    ASSERT_FALSE(fontInfo->absolute);
-    ASSERT_FALSE(fontInfo->hidden);
+    EXPECT_EQ(fontInfo->fontID, 13);
+    EXPECT_EQ(fontInfo->fontSize, 24);
+    EXPECT_FALSE(fontInfo->bold);
+    EXPECT_FALSE(fontInfo->italic);
+    EXPECT_FALSE(fontInfo->underline);
+    EXPECT_FALSE(fontInfo->strikeout);
+    EXPECT_FALSE(fontInfo->absolute);
+    EXPECT_FALSE(fontInfo->hidden);
     EXPECT_THROW(
         // no fontName record for this font in xml, so this will throw
         ASSERT_EQ(fontInfo->getFontName(), "Finale Maestro"),
