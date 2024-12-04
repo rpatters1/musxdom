@@ -107,12 +107,128 @@ public:
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
 };
+#include <string>
+
+/**
+ * @class TextExpressionDef
+ * @brief Stores the properties and behaviors of text expressions.
+ *
+ * This class is identified by the XML node name "textExprDef".
+ */
+class TextExpressionDef : public OthersBase
+{
+public:
+    /**
+     * @enum PlaybackType
+     * @brief Specifies the playback behavior for the text expression.
+     */
+    enum class PlaybackType
+    {
+        None,                   ///< Default value, no playback (the default).
+        Tempo,                  ///< Playback affects tempo.  (xml value is "time")
+        MidiController,         ///< Playback type for MIDI controller commands.
+        KeyVelocity,            ///< Playback affects key velocity. (xml value is "amplitude")
+        Transpose,              ///< Playback causes transposition.
+        Channel,                ///< Playback set the MIDI channel.
+        MidiPatchChange,        ///< Playback changes the MIDI patch.
+        PercussionMidiMap,      ///< Playback uses percussion MIDI map. (xml value is "percMidiMap")
+        MidiPitchWheel,         ///< Playback affects the MIDI pitch wheel. (xml value is "midiPitchwheel")
+        Dump,                   ///< Playback is an arbitrary data dump. (Data is in <playDumpText> with the same Cmper value.)
+        PlayTempoToolChanges,   ///< Play changes from Tempo Tool. (xml value is "startTempo")
+        IgnoreTempoToolChanges, ///< Ignore changes from Tempo Tool. (xml value is "stopTempo")
+        Swing,                  ///< Playback in swing style
+        SmartPlaybackOn,        ///< Turn on smart playback. (xml value is "hpOn")
+        SmartPlaybackOff,       ///< Turn off smart playback. (xml value is "hpOff")
+    };
+
+    /**
+     * @enum HorizontalMeasExprAlign
+     * @brief Specifies the horizontal alignment relative to musical elements.
+     */
+    enum class HorizontalMeasExprAlign
+    {
+        Manual,                 ///< "Horizontal Click Position" alignment.
+        LeftOfAllNoteheads,     ///< Align left of all noteheads
+        LeftOfPrimaryNotehead,  ///< Align to the left of the primary notehead.
+        Stem,                   ///< Align to the stem.
+        CenterPrimaryNotehead,  ///< Align to the center of the primary notehead.
+        CenterAllNoteheads,     ///< Align to the center of all noteheads.
+        RightOfAllNoteheads,    ///< Align to the right of all noteheads.
+        LeftBarline,            ///< Align with left barline (the default). (xml value is "leftEdge", if encountered)
+        StartTimeSig,           ///< Align at the start of the time signature.
+        AfterClefKeyTime,       ///< Align after clef/key/time/repeat.
+        StartOfMusic,           ///< Align at start of music.
+        CenterOverBarlines,     ///< Align over the center of the barlines.
+        CenterOverMusic,        ///< Align over the center of music.
+        RightBarline            ///< Align with left barline. (xml value is "rightEdge")
+    };
+
+    /**
+     * @enum VerticalMeasExprAlign
+     * @brief Specifies the vertical alignment relative to musical elements.
+     */
+    enum class VerticalMeasExprAlign
+    {
+        Manual,              ///< "Vertical Click Position" alignment.
+        RefLine,             ///< Align to staff reference line.
+        AboveStaff,          ///< Align above ths staff (the default).
+        BelowStaff,          ///< Align below the staff.
+        TopNote,             ///< Align with top note.
+        BottomNote,          ///< Align with bottom note.
+        AboveEntry,          ///< Align above entry.
+        BelowEntry,          ///< Align below entry.
+        AboveStaffOrEntry,   ///< Align above the staff or entry.
+        BelowStaffOrEntry    ///< Align below the staff or entry.
+    };
+
+    /**
+     * @enum HorizontalExprAlign
+     * @brief Specifies the horizontal alignment for text expressions.
+     */
+    enum class HorizontalExprJustification
+    {
+        Left,    ///< Justified left.
+        Center,  ///< Justified center.
+        Right    ///< Justified right.
+    };
+
+    /// Properties
+    Cmper textIDKey{};                              ///< Identifier for the #TextBlock associated with this 
+    int categoryID{};                               ///< Identifier for the category of the text expression.
+    int value{};                                    ///< Value associated with the expression (e.g., velocity).
+    int auxData1{};                                 ///< Auxiliary data for the expression.
+    PlaybackType playbackType{ PlaybackType::None }; ///< Playback behavior of the text expression.
+    HorizontalMeasExprAlign horzMeasExprAlign{ HorizontalMeasExprAlign::LeftBarline }; ///< Horizontal alignment of the expression.
+    HorizontalExprJustification horzExprJustification{ HorizontalExprJustification::Left }; ///< Horizontal justification of the text expression.
+    VerticalMeasExprAlign vertMeasExprAlign{ VerticalMeasExprAlign::AboveStaff }; ///< Vertical alignment of the expression.
+    int measXAdjust{};                              ///< Horizontal adjustment for measurement alignment.
+    int yAdjustEntry{};                             ///< Vertical adjustment for entry alignment.
+    int yAdjustBaseline{};                          ///< Vertical adjustment for baseline alignment.
+    bool useCategoryFonts{};                        ///< Whether to use category fonts.
+    bool useCategoryPos{};                          ///< Whether to use category position.
+    bool hasEnclosure{};                            ///< Whether the text expression has an enclosure.
+    bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
+    bool useAuxData{};                              ///< Whether auxiliary data is used.
+    std::string descStr;                            ///< Description of the text expression.
+
+    /**
+     * @brief Constructor.
+     *
+     * Initializes all fields to their default values.
+     */
+    TextExpressionDef(const DocumentWeakPtr& document, Cmper cmper)
+        : OthersBase(document, cmper) {}
+
+    std::shared_ptr<Enclosure> getEnclosure() const;
+
+    constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
+};
 
 /**
  * @class TextExpressionEnclosure
  * @brief The enclosure for a text expression (if it exists)
  *
- * The cmper is the same as for #TextExpressionDef.
+ * The cmper is the same as for the associated #TextExpressionDef.
  *
  * This class is identified by the XML node name "textExpressionEnclosure".
  */

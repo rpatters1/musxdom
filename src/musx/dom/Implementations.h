@@ -32,6 +32,31 @@
 namespace musx {
 namespace dom {
 
+// ************************
+// ***** DefaultFonts *****
+// ************************
+
+inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(options::DefaultFonts::FontType type) const
+{
+    auto it = defaultFonts.find(type);
+    if (it == defaultFonts.end()) {
+        throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
+    }
+    return it->second;
+}
+
+inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(const DocumentPtr& document, options::DefaultFonts::FontType type)
+{
+    auto options = document->getOptions();
+    if (!options) {
+        throw std::invalid_argument("No options found in document");
+    }
+    auto defaultFonts = options->get<options::DefaultFonts>();
+    if (!defaultFonts) {
+        throw std::invalid_argument("Default fonts not found in document");
+    }
+    return defaultFonts->getFontInfo(type);
+}
 
 // ********************
 // ***** FontInfo *****
@@ -48,6 +73,20 @@ inline std::string FontInfo::getFontName() const
         return fontDef->name;
     }
     throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontId));
+}
+
+// *****************************
+// ***** TextExpressionDef *****
+// *****************************
+
+inline std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
+{
+    if (!hasEnclosure) return nullptr;
+    auto document = getDocument().lock();
+    assert(document);
+    auto others = document->getOthers();
+    assert(others); // program bug if fail
+    return others->get<others::TextExpressionEnclosure>(getCmper());
 }
 
 } // namespace dom    
