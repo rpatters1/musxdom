@@ -57,10 +57,10 @@ public:
         getFieldFromXml(element, "lineWidth", instance.lineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
         getFieldFromXml(element, "sides", instance.shape, [](auto element) {  return toShape(element->template getTextAs<uint8_t>()); });
         getFieldFromXml(element, "cornerRadius", instance.cornerRadius, [](auto element) { return element->template getTextAs<Efix>(); });
-        getFieldFromXml(element, "fixedSize", instance.fixedSize, [](auto element) { return element->template getTextAs<bool>(); });
-        getFieldFromXml(element, "notTall", instance.notTall, [](auto element) { return element->template getTextAs<bool>(); });
-        getFieldFromXml(element, "opaque", instance.opaque, [](auto element) { return element->template getTextAs<bool>(); });
-        getFieldFromXml(element, "roundCorners", instance.roundCorners, [](auto element) { return element->template getTextAs<bool>(); });
+        getFieldFromXml(element, "fixedSize", instance.fixedSize, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "notTall", instance.notTall, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "opaque", instance.opaque, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "roundCorners", instance.roundCorners, [](auto element) { return true; }, false);
     }
 };
 
