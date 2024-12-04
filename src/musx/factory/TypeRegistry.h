@@ -124,7 +124,8 @@ using RegisteredTypes = TypeRegistry <
     dom::options::DefaultFonts,
     // others
     dom::others::FontDefinition,
-    dom::others::TextExpressionEnclosure
+    dom::others::TextExpressionEnclosure,
+    dom::others::TextRepeatEnclosure
     // Add pointers to additional supported types here.
     // Also add a field populator in FieldPopulatorsOthers.h
 >;

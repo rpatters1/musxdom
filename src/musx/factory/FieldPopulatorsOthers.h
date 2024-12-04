@@ -82,6 +82,13 @@ struct FieldPopulator<TextExpressionEnclosure> : private FieldPopulator<Enclosur
 {
     using FieldPopulator<Enclosure>::populate;
 };
+
+template <>
+struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
+{
+    using FieldPopulator<Enclosure>::populate;
+};
+
 // Repeat for other types...
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS

@@ -225,7 +225,7 @@ namespace others {
  * @class TextExpressionEnclosure
  * @brief The enclosure for a text expression (if it exists)
  *
- * The cmper is the same as for #TextExpression
+ * The cmper is the same as for #TextExpressionDef.
  *
  * This class is identified by the XML node name "textExpressionEnclosure".
  */
@@ -235,6 +235,22 @@ public:
     using Enclosure::Enclosure;
 
     constexpr static std::string_view XmlNodeName = "textExpressionEnclosure"; ///< The XML node name for this type.
+};
+
+/**
+ * @class TextRepeatEnclosure
+ * @brief The enclosure for a text expression (if it exists)
+ *
+ * The cmper is the same as for #TextRepeateDef.
+ *
+ * This class is identified by the XML node name "textRepeatEnclosure".
+ */
+class TextRepeatEnclosure : public Enclosure
+{
+public:
+    using Enclosure::Enclosure;
+
+    constexpr static std::string_view XmlNodeName = "textRepeatEnclosure"; ///< The XML node name for this type.
 };
 
 } // namespace others
