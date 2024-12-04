@@ -99,15 +99,88 @@ public:
     }
 
     // Public properties corresponding to the XML structure
-    std::string charsetBank; ///< probably only "Mac" or "Win"
-    int charsetVal = 0;      ///< A value specifying the character set, usually 4095 or 0
-    int pitch = 0;           ///< Represents the `<pitch>` element, e.g., 0. (use unknown)
-    int family = 0;          ///< Represents the `<family>` element, e.g., 0. (use unknown)
-    std::string name;        ///< The font name e.g., "Broadway Copyist Text".
+    std::string charsetBank;    ///< probably only "Mac" or "Win"
+    int charsetVal{};           ///< A value specifying the character set, usually 4095 or 0
+    int pitch{};                ///< Represents the `<pitch>` element, e.g., 0. (use unknown)
+    int family{};               ///< Represents the `<family>` element, e.g., 0. (use unknown)
+    std::string name;           ///< The font name e.g., "Broadway Copyist Text".
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
 };
-#include <string>
+
+/**
+ * @enum PlaybackType
+ * @brief Specifies the playback behavior for the an expression or marking category.
+ */
+enum class PlaybackType
+{
+    None,                   ///< Default value, no playback (the default).
+    Tempo,                  ///< Playback affects tempo.  (xml value is "time")
+    MidiController,         ///< Playback type for MIDI controller commands.
+    KeyVelocity,            ///< Playback affects key velocity. (xml value is "amplitude")
+    Transpose,              ///< Playback causes transposition.
+    Channel,                ///< Playback set the MIDI channel.
+    MidiPatchChange,        ///< Playback changes the MIDI patch.
+    PercussionMidiMap,      ///< Playback uses percussion MIDI map. (xml value is "percMidiMap")
+    MidiPitchWheel,         ///< Playback affects the MIDI pitch wheel. (xml value is "midiPitchwheel")
+    Dump,                   ///< Playback is an arbitrary data dump. (Data is in <playDumpText> with the same Cmper value.)
+    PlayTempoToolChanges,   ///< Play changes from Tempo Tool. (xml value is "startTempo")
+    IgnoreTempoToolChanges, ///< Ignore changes from Tempo Tool. (xml value is "stopTempo")
+    Swing,                  ///< Playback in swing style
+    SmartPlaybackOn,        ///< Turn on smart playback. (xml value is "hpOn")
+    SmartPlaybackOff,       ///< Turn off smart playback. (xml value is "hpOff")
+};
+
+/**
+ * @enum HorizontalMeasExprAlign
+ * @brief Specifies the horizontal alignment relative to musical elements for an expression or marking category.
+ */
+enum class HorizontalMeasExprAlign
+{
+    Manual,                 ///< "Horizontal Click Position" alignment.
+    LeftOfAllNoteheads,     ///< Align left of all noteheads
+    LeftOfPrimaryNotehead,  ///< Align to the left of the primary notehead.
+    Stem,                   ///< Align to the stem.
+    CenterPrimaryNotehead,  ///< Align to the center of the primary notehead.
+    CenterAllNoteheads,     ///< Align to the center of all noteheads.
+    RightOfAllNoteheads,    ///< Align to the right of all noteheads.
+    LeftBarline,            ///< Align with left barline (the default). (xml value is "leftEdge", if encountered)
+    StartTimeSig,           ///< Align at the start of the time signature.
+    AfterClefKeyTime,       ///< Align after clef/key/time/repeat.
+    StartOfMusic,           ///< Align at start of music.
+    CenterOverBarlines,     ///< Align over the center of the barlines.
+    CenterOverMusic,        ///< Align over the center of music.
+    RightBarline            ///< Align with left barline. (xml value is "rightEdge")
+};
+
+/**
+ * @enum VerticalMeasExprAlign
+ * @brief Specifies the vertical alignment relative to musical elements for an expression or marking category.
+ */
+enum class VerticalMeasExprAlign
+{
+    Manual,              ///< "Vertical Click Position" alignment.
+    RefLine,             ///< Align to staff reference line.
+    AboveStaff,          ///< Align above ths staff (the default).
+    BelowStaff,          ///< Align below the staff.
+    TopNote,             ///< Align with top note.
+    BottomNote,          ///< Align with bottom note.
+    AboveEntry,          ///< Align above entry.
+    BelowEntry,          ///< Align below entry.
+    AboveStaffOrEntry,   ///< Align above the staff or entry.
+    BelowStaffOrEntry    ///< Align below the staff or entry.
+};
+
+/**
+ * @enum HorizontalExprAlign
+ * @brief Specifies the horizontal alignment for text expressions and marking categories.
+ */
+enum class HorizontalExprJustification
+{
+    Left,    ///< Justified left.
+    Center,  ///< Justified center.
+    Right    ///< Justified right.
+};
 
 /**
  * @class TextExpressionDef
@@ -118,81 +191,6 @@ public:
 class TextExpressionDef : public OthersBase
 {
 public:
-    /**
-     * @enum PlaybackType
-     * @brief Specifies the playback behavior for the text expression.
-     */
-    enum class PlaybackType
-    {
-        None,                   ///< Default value, no playback (the default).
-        Tempo,                  ///< Playback affects tempo.  (xml value is "time")
-        MidiController,         ///< Playback type for MIDI controller commands.
-        KeyVelocity,            ///< Playback affects key velocity. (xml value is "amplitude")
-        Transpose,              ///< Playback causes transposition.
-        Channel,                ///< Playback set the MIDI channel.
-        MidiPatchChange,        ///< Playback changes the MIDI patch.
-        PercussionMidiMap,      ///< Playback uses percussion MIDI map. (xml value is "percMidiMap")
-        MidiPitchWheel,         ///< Playback affects the MIDI pitch wheel. (xml value is "midiPitchwheel")
-        Dump,                   ///< Playback is an arbitrary data dump. (Data is in <playDumpText> with the same Cmper value.)
-        PlayTempoToolChanges,   ///< Play changes from Tempo Tool. (xml value is "startTempo")
-        IgnoreTempoToolChanges, ///< Ignore changes from Tempo Tool. (xml value is "stopTempo")
-        Swing,                  ///< Playback in swing style
-        SmartPlaybackOn,        ///< Turn on smart playback. (xml value is "hpOn")
-        SmartPlaybackOff,       ///< Turn off smart playback. (xml value is "hpOff")
-    };
-
-    /**
-     * @enum HorizontalMeasExprAlign
-     * @brief Specifies the horizontal alignment relative to musical elements.
-     */
-    enum class HorizontalMeasExprAlign
-    {
-        Manual,                 ///< "Horizontal Click Position" alignment.
-        LeftOfAllNoteheads,     ///< Align left of all noteheads
-        LeftOfPrimaryNotehead,  ///< Align to the left of the primary notehead.
-        Stem,                   ///< Align to the stem.
-        CenterPrimaryNotehead,  ///< Align to the center of the primary notehead.
-        CenterAllNoteheads,     ///< Align to the center of all noteheads.
-        RightOfAllNoteheads,    ///< Align to the right of all noteheads.
-        LeftBarline,            ///< Align with left barline (the default). (xml value is "leftEdge", if encountered)
-        StartTimeSig,           ///< Align at the start of the time signature.
-        AfterClefKeyTime,       ///< Align after clef/key/time/repeat.
-        StartOfMusic,           ///< Align at start of music.
-        CenterOverBarlines,     ///< Align over the center of the barlines.
-        CenterOverMusic,        ///< Align over the center of music.
-        RightBarline            ///< Align with left barline. (xml value is "rightEdge")
-    };
-
-    /**
-     * @enum VerticalMeasExprAlign
-     * @brief Specifies the vertical alignment relative to musical elements.
-     */
-    enum class VerticalMeasExprAlign
-    {
-        Manual,              ///< "Vertical Click Position" alignment.
-        RefLine,             ///< Align to staff reference line.
-        AboveStaff,          ///< Align above ths staff (the default).
-        BelowStaff,          ///< Align below the staff.
-        TopNote,             ///< Align with top note.
-        BottomNote,          ///< Align with bottom note.
-        AboveEntry,          ///< Align above entry.
-        BelowEntry,          ///< Align below entry.
-        AboveStaffOrEntry,   ///< Align above the staff or entry.
-        BelowStaffOrEntry    ///< Align below the staff or entry.
-    };
-
-    /**
-     * @enum HorizontalExprAlign
-     * @brief Specifies the horizontal alignment for text expressions.
-     */
-    enum class HorizontalExprJustification
-    {
-        Left,    ///< Justified left.
-        Center,  ///< Justified center.
-        Right    ///< Justified right.
-    };
-
-    /// Properties
     Cmper textIDKey{};                              ///< Identifier for the #TextBlock associated with this 
     int categoryID{};                               ///< Identifier for the category of the text expression.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
@@ -209,7 +207,7 @@ public:
     bool hasEnclosure{};                            ///< Whether the text expression has an enclosure.
     bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
     bool useAuxData{};                              ///< Whether auxiliary data is used.
-    std::string descStr;                            ///< Description of the text expression.
+    std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
     /**
      * @brief Constructor.

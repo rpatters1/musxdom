@@ -65,6 +65,90 @@ public:
 };
 
 template <>
+struct FieldPopulator<TextExpressionDef>;
+
+/** @brief Shared enum conversion utlities for expressions and marking categories */
+struct ExpressionEnumUtils
+{
+private:
+    /**
+     * @brief Converts XML string values to PlaybackType enum values.
+     */
+    static PlaybackType toPlaybackType(const std::string& value)
+    {
+        if (value == "none") return PlaybackType::None;
+        if (value == "time") return PlaybackType::Tempo;
+        if (value == "midiController") return PlaybackType::MidiController;
+        if (value == "amplitude") return PlaybackType::KeyVelocity;
+        if (value == "transpose") return PlaybackType::Transpose;
+        if (value == "channel") return PlaybackType::Channel;
+        if (value == "patchChange") return PlaybackType::MidiPatchChange;
+        if (value == "percMidiMap") return PlaybackType::PercussionMidiMap;
+        if (value == "midiPitchwheel") return PlaybackType::MidiPitchWheel;
+        if (value == "dump") return PlaybackType::Dump;
+        if (value == "startTempo") return PlaybackType::PlayTempoToolChanges;
+        if (value == "stopTempo") return PlaybackType::IgnoreTempoToolChanges;
+        if (value == "swing") return PlaybackType::Swing;
+        if (value == "hpOn") return PlaybackType::SmartPlaybackOn;
+        if (value == "hpOff") return PlaybackType::SmartPlaybackOff;
+        throw std::invalid_argument("Unknown playbackType value in XML: " + value);
+    }
+
+    /**
+     * @brief Converts XML string values to HorizontalMeasExprAlign enum values.
+     */
+    static HorizontalMeasExprAlign toHorizontalMeasExprAlign(const std::string& value)
+    {
+        if (value == "manual") return HorizontalMeasExprAlign::Manual;
+        if (value == "leftOfAllNoteheads") return HorizontalMeasExprAlign::LeftOfAllNoteheads;
+        if (value == "leftOfPrimaryNotehead") return HorizontalMeasExprAlign::LeftOfPrimaryNotehead;
+        if (value == "stem") return HorizontalMeasExprAlign::Stem;
+        if (value == "centerPrimaryNotehead") return HorizontalMeasExprAlign::CenterPrimaryNotehead;
+        if (value == "centerAllNoteheads") return HorizontalMeasExprAlign::CenterAllNoteheads;
+        if (value == "rightOfAllNoteheads") return HorizontalMeasExprAlign::RightOfAllNoteheads;
+        if (value == "leftEdge") return HorizontalMeasExprAlign::LeftBarline;
+        if (value == "startTimeSig") return HorizontalMeasExprAlign::StartTimeSig;
+        if (value == "afterClefKeyTime") return HorizontalMeasExprAlign::AfterClefKeyTime;
+        if (value == "startOfMusic") return HorizontalMeasExprAlign::StartOfMusic;
+        if (value == "centerOverBarlines") return HorizontalMeasExprAlign::CenterOverBarlines;
+        if (value == "centerOverMusic") return HorizontalMeasExprAlign::CenterOverMusic;
+        if (value == "rightEdge") return HorizontalMeasExprAlign::RightBarline;
+        throw std::invalid_argument("Unknown horzMeasExprAlign value in XML: " + value);
+    }
+
+    /**
+     * @brief Converts XML string values to VerticalMeasExprAlign enum values.
+     */
+    static VerticalMeasExprAlign toVerticalMeasExprAlign(const std::string& value)
+    {
+        if (value == "manual") return VerticalMeasExprAlign::Manual;
+        if (value == "refLine") return VerticalMeasExprAlign::RefLine;
+        if (value == "aboveStaff") return VerticalMeasExprAlign::AboveStaff;
+        if (value == "belowStaff") return VerticalMeasExprAlign::BelowStaff;
+        if (value == "topNote") return VerticalMeasExprAlign::TopNote;
+        if (value == "bottomNote") return VerticalMeasExprAlign::BottomNote;
+        if (value == "aboveEntry") return VerticalMeasExprAlign::AboveEntry;
+        if (value == "belowEntry") return VerticalMeasExprAlign::BelowEntry;
+        if (value == "aboveStaffOrEntry") return VerticalMeasExprAlign::AboveStaffOrEntry;
+        if (value == "belowStaffOrEntry") return VerticalMeasExprAlign::BelowStaffOrEntry;
+        throw std::invalid_argument("Invalid vertMeasExprAlign value in XML: " + value);
+    }
+
+    /**
+     * @brief Converts XML string values to HorizontalExprJustification enum values.
+     */
+    static HorizontalExprJustification toHorizontalExprJustification(const std::string& value)
+    {
+        if (value == "left") return HorizontalExprJustification::Left;
+        if (value == "center") return HorizontalExprJustification::Center;
+        if (value == "right") return HorizontalExprJustification::Right;
+        throw std::invalid_argument("Invalid horzExprJustification value in XML: " + value);
+    }
+
+    friend struct FieldPopulator<TextExpressionDef>;
+};
+
+template <>
 struct FieldPopulator<FontDefinition> : public FactoryBase
 {
     static void populate(FontDefinition& instance, const std::shared_ptr<xml::IXmlElement>& element)
@@ -81,79 +165,7 @@ template <>
 struct FieldPopulator<TextExpressionDef> : public FactoryBase
 {
 private:
-    /**
-     * @brief Converts XML string values to PlaybackType enum values.
-     */
-    static TextExpressionDef::PlaybackType toPlaybackType(const std::string& value)
-    {
-        if (value == "none") return TextExpressionDef::PlaybackType::None;
-        if (value == "time") return TextExpressionDef::PlaybackType::Tempo;
-        if (value == "midiController") return TextExpressionDef::PlaybackType::MidiController;
-        if (value == "amplitude") return TextExpressionDef::PlaybackType::KeyVelocity;
-        if (value == "transpose") return TextExpressionDef::PlaybackType::Transpose;
-        if (value == "channel") return TextExpressionDef::PlaybackType::Channel;
-        if (value == "patchChange") return TextExpressionDef::PlaybackType::MidiPatchChange;
-        if (value == "percMidiMap") return TextExpressionDef::PlaybackType::PercussionMidiMap;
-        if (value == "midiPitchwheel") return TextExpressionDef::PlaybackType::MidiPitchWheel;
-        if (value == "dump") return TextExpressionDef::PlaybackType::Dump;
-        if (value == "startTempo") return TextExpressionDef::PlaybackType::PlayTempoToolChanges;
-        if (value == "stopTempo") return TextExpressionDef::PlaybackType::IgnoreTempoToolChanges;
-        if (value == "swing") return TextExpressionDef::PlaybackType::Swing;
-        if (value == "hpOn") return TextExpressionDef::PlaybackType::SmartPlaybackOn;
-        if (value == "hpOff") return TextExpressionDef::PlaybackType::SmartPlaybackOff;
-        throw std::invalid_argument("Unknown playbackType value in XML: " + value);
-    }
-
-    /**
-     * @brief Converts XML string values to HorizontalMeasExprAlign enum values.
-     */
-    static TextExpressionDef::HorizontalMeasExprAlign toHorizontalMeasExprAlign(const std::string& value)
-    {
-        if (value == "manual") return TextExpressionDef::HorizontalMeasExprAlign::Manual;
-        if (value == "leftOfAllNoteheads") return TextExpressionDef::HorizontalMeasExprAlign::LeftOfAllNoteheads;
-        if (value == "leftOfPrimaryNotehead") return TextExpressionDef::HorizontalMeasExprAlign::LeftOfPrimaryNotehead;
-        if (value == "stem") return TextExpressionDef::HorizontalMeasExprAlign::Stem;
-        if (value == "centerPrimaryNotehead") return TextExpressionDef::HorizontalMeasExprAlign::CenterPrimaryNotehead;
-        if (value == "centerAllNoteheads") return TextExpressionDef::HorizontalMeasExprAlign::CenterAllNoteheads;
-        if (value == "rightOfAllNoteheads") return TextExpressionDef::HorizontalMeasExprAlign::RightOfAllNoteheads;
-        if (value == "leftEdge") return TextExpressionDef::HorizontalMeasExprAlign::LeftBarline;
-        if (value == "startTimeSig") return TextExpressionDef::HorizontalMeasExprAlign::StartTimeSig;
-        if (value == "afterClefKeyTime") return TextExpressionDef::HorizontalMeasExprAlign::AfterClefKeyTime;
-        if (value == "startOfMusic") return TextExpressionDef::HorizontalMeasExprAlign::StartOfMusic;
-        if (value == "centerOverBarlines") return TextExpressionDef::HorizontalMeasExprAlign::CenterOverBarlines;
-        if (value == "centerOverMusic") return TextExpressionDef::HorizontalMeasExprAlign::CenterOverMusic;
-        if (value == "rightEdge") return TextExpressionDef::HorizontalMeasExprAlign::RightBarline;
-        throw std::invalid_argument("Unknown horzMeasExprAlign value in XML: " + value);
-    }
-
-    /**
-     * @brief Converts XML string values to VerticalMeasExprAlign enum values.
-     */
-    static TextExpressionDef::VerticalMeasExprAlign toVerticalMeasExprAlign(const std::string& value)
-    {
-        if (value == "manual") return TextExpressionDef::VerticalMeasExprAlign::Manual;
-        if (value == "refLine") return TextExpressionDef::VerticalMeasExprAlign::RefLine;
-        if (value == "aboveStaff") return TextExpressionDef::VerticalMeasExprAlign::AboveStaff;
-        if (value == "belowStaff") return TextExpressionDef::VerticalMeasExprAlign::BelowStaff;
-        if (value == "topNote") return TextExpressionDef::VerticalMeasExprAlign::TopNote;
-        if (value == "bottomNote") return TextExpressionDef::VerticalMeasExprAlign::BottomNote;
-        if (value == "aboveEntry") return TextExpressionDef::VerticalMeasExprAlign::AboveEntry;
-        if (value == "belowEntry") return TextExpressionDef::VerticalMeasExprAlign::BelowEntry;
-        if (value == "aboveStaffOrEntry") return TextExpressionDef::VerticalMeasExprAlign::AboveStaffOrEntry;
-        if (value == "belowStaffOrEntry") return TextExpressionDef::VerticalMeasExprAlign::BelowStaffOrEntry;
-        throw std::invalid_argument("Invalid vertMeasExprAlign value in XML: " + value);
-    }
-
-    /**
-     * @brief Converts XML string values to HorizontalExprJustification enum values.
-     */
-    static TextExpressionDef::HorizontalExprJustification toHorizontalExprJustification(const std::string& value)
-    {
-        if (value == "left") return TextExpressionDef::HorizontalExprJustification::Left;
-        if (value == "center") return TextExpressionDef::HorizontalExprJustification::Center;
-        if (value == "right") return TextExpressionDef::HorizontalExprJustification::Right;
-        throw std::invalid_argument("Invalid horzExprJustification value in XML: " + value);
-    }
+    using Utils = ExpressionEnumUtils;
 
 public:
     /**
@@ -165,10 +177,10 @@ public:
         getFieldFromXml(element, "categoryID", instance.categoryID, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "value", instance.value, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "auxData1", instance.auxData1, [](auto element) { return element->template getTextAs<int>(); }, false);
-        getFieldFromXml(element, "playType", instance.playbackType, [](auto element) { return toPlaybackType(element->template getTextAs<std::string>()); }, false);
-        getFieldFromXml(element, "horzMeasExprAlign", instance.horzMeasExprAlign, [](auto element) { return toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "horzExprAlign", instance.horzExprJustification, [](auto element) { return toHorizontalExprJustification(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "vertMeasExprAlign", instance.vertMeasExprAlign, [](auto element) { return toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "playType", instance.playbackType, [](auto element) { return Utils::toPlaybackType(element->template getTextAs<std::string>()); }, false);
+        getFieldFromXml(element, "horzMeasExprAlign", instance.horzMeasExprAlign, [](auto element) { return Utils::toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "horzExprAlign", instance.horzExprJustification, [](auto element) { return Utils::toHorizontalExprJustification(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "vertMeasExprAlign", instance.vertMeasExprAlign, [](auto element) { return Utils::toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
         getFieldFromXml(element, "measXAdjust", instance.measXAdjust, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "yAdjustEntry", instance.yAdjustEntry, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "yAdjustBaseline", instance.yAdjustBaseline, [](auto element) { return element->template getTextAs<int>(); });
@@ -177,7 +189,7 @@ public:
         getFieldFromXml(element, "newEnclosure", instance.hasEnclosure, [](auto element) { return true; }, false);
         getFieldFromXml(element, "breakMmRest", instance.breakMmRest, [](auto element) { return true; }, false);
         getFieldFromXml(element, "useAuxData", instance.useAuxData, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "descStr", instance.descStr, [](auto element) { return element->getText(); }, false);
+        getFieldFromXml(element, "descStr", instance.description, [](auto element) { return element->getText(); }, false);
     }
 };
 
