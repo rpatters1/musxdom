@@ -25,6 +25,7 @@
 #include <string>
 #include <optional>
 
+#include "musx/dom/BaseClasses.h"
 #include "musx/dom/ObjectPool.h"
 #include "musx/xml/XmlInterface.h"
 
@@ -104,8 +105,45 @@ public:
 };
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
+
 template <typename T>
 struct FieldPopulator : public FactoryBase {};
+
+template <>
+struct FieldPopulator<dom::FontInfo> : public FactoryBase
+{
+    static void populate(dom::FontInfo& fontInfo, const std::shared_ptr<xml::IXmlElement>& element)
+    {
+        getFieldFromXml(element, "fontID", fontInfo.fontId, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
+        getFieldFromXml(element, "fontSize", fontInfo.fontSize, [](auto element) { return element->template getTextAs<int>(); });
+
+        fontInfo.fontEfx = dom::FontInfo::Plain;
+        if (auto efxElement = element->getFirstChildElement("efx")) {
+            for (auto efxChild = efxElement->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
+                auto efxName = efxChild->getTagName();
+                if (efxName == "bold") {
+                    fontInfo.fontEfx |= dom::FontInfo::Bold;
+                }
+                else if (efxName == "italic") {
+                    fontInfo.fontEfx |= dom::FontInfo::Italic;
+                }
+                else if (efxName == "underline") {
+                    fontInfo.fontEfx |= dom::FontInfo::Underline;
+                }
+                else if (efxName == "strikeout") {
+                    fontInfo.fontEfx |= dom::FontInfo::Strikeout;
+                }
+                else if (efxName == "absolute") {
+                    fontInfo.fontEfx |= dom::FontInfo::Absolute;
+                }
+                else if (efxName == "hidden") {
+                    fontInfo.fontEfx |= dom::FontInfo::Hidden;
+                }
+            }
+        }
+    }
+};
+
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 } // namespace factory

@@ -32,6 +32,7 @@ namespace factory {
 using namespace dom::options;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
+
 template <>
 struct FieldPopulator<DefaultFonts> : public FactoryBase
 {
@@ -45,34 +46,11 @@ struct FieldPopulator<DefaultFonts> : public FactoryBase
             }
             FontType fontType = fromString(typeStr->getValue());
 
-            dom::Cmper fontId = 0;
-            int fontSize = 0;
-
-            getFieldFromXml(fontElement, "fontID", fontId, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
-            getFieldFromXml(fontElement, "fontSize", fontSize, [](auto element) { return element->template getTextAs<int>(); });
-
-            uint16_t fontEfx = dom::FontInfo::Plain;
-            if (auto efxElement = fontElement->getFirstChildElement("efx")) {
-                for (auto efxChild = efxElement->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
-                    auto efxName = efxChild->getTagName();
-                    if (efxName == "bold") {
-                        fontEfx |= dom::FontInfo::Bold;
-                    } else if (efxName == "italic") {
-                        fontEfx |= dom::FontInfo::Italic;
-                    } else if (efxName == "underline") {
-                        fontEfx |= dom::FontInfo::Underline;
-                    } else if (efxName == "strikeout") {
-                        fontEfx |= dom::FontInfo::Strikeout;
-                    } else if (efxName == "absolute") {
-                        fontEfx |= dom::FontInfo::Absolute;
-                    } else if (efxName == "hidden") {
-                        fontEfx |= dom::FontInfo::Hidden;
-                    }
-                }
-            }
+            auto fontInfo = std::make_shared<dom::FontInfo>(fonts.getDocument());
+            FieldPopulator<dom::FontInfo>::populate(*fontInfo.get(), fontElement);
 
             // Add the populated font instance to the vector.
-            fonts.defaultFonts.emplace(fontType, std::make_shared<dom::FontInfo>(fonts.getDocument(), fontId, fontSize, fontEfx));
+            fonts.defaultFonts.emplace(fontType, fontInfo);
         }
     }
 

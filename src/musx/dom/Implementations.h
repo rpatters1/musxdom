@@ -32,7 +32,23 @@
 namespace musx {
 namespace dom {
 
-// add functions if needed
+
+// ********************
+// ***** FontInfo *****
+// ********************
+
+inline std::string FontInfo::getFontName() const
+{
+    auto document = this->getDocument().lock();
+    assert(document); // program bug if fail
+    auto others = document->getOthers();
+    assert(others); // program bug if fail
+    auto fontDef = others->get<others::FontDefinition>(fontId);
+    if (fontDef) {
+        return fontDef->name;
+    }
+    throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontId));
+}
 
 } // namespace dom    
 } // namespace musx

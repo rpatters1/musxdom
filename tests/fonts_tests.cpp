@@ -24,7 +24,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
-    constexpr static musxtest::string_view fontProperties = R"xml(
+constexpr static musxtest::string_view fontProperties = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <options>
@@ -72,7 +72,7 @@ TEST(FontTest, FontInfoPropertiesTest)
     );
     auto fontInfo = defaultFonts->getFontInfo(musx::dom::options::DefaultFonts::FontType::Ending);
     ASSERT_TRUE(fontInfo);
-    EXPECT_EQ(fontInfo->fontID, 1);
+    EXPECT_EQ(fontInfo->fontId, 1);
     EXPECT_EQ(fontInfo->fontSize, 12);
     EXPECT_TRUE(fontInfo->bold());
     EXPECT_TRUE(fontInfo->italic());
@@ -102,7 +102,7 @@ TEST(FontTest, FontInfoNoName)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
     auto fontInfo = musx::dom::options::DefaultFonts::getFontInfo(doc, musx::dom::options::DefaultFonts::FontType::Music);
     ASSERT_TRUE(fontInfo);
-    EXPECT_EQ(fontInfo->fontID, 13);
+    EXPECT_EQ(fontInfo->fontId, 13);
     EXPECT_EQ(fontInfo->fontSize, 24);
     EXPECT_FALSE(fontInfo->bold());
     EXPECT_FALSE(fontInfo->italic());

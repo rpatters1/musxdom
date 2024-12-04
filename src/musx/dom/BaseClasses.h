@@ -142,5 +142,109 @@ public:
     void setInci(Inci inci) { m_inci = inci; }
 };
 
+/**
+ * @struct FontInfo
+ * @brief Represents the default font settings for a particular element type.
+ *
+ * The FontInfo struct holds information about font properties, such as the font ID, size, and styles like
+ * bold, italic, underline, strikeout, fixed size, and visibility.
+ */
+class FontInfo : public Base
+{
+public:
+    /** @enum FontEffect describes each of the font effect style bits. */
+    enum FontEffect : uint16_t
+    {
+        Plain      = 0x00, ///< No effects
+        Bold       = 0x01, ///< Bold effect
+        Italic     = 0x02, ///< Italic effect
+        Underline  = 0x04, ///< Underline effect
+        Strikeout  = 0x20, ///< Strikeout effect
+        Absolute   = 0x40, ///< Fixed size effect
+        Hidden     = 0x80  ///< Hidden effect
+    };
+
+    Cmper fontId = 0;           ///< Font ID. This is a Cmper for others::FontDefinition.
+    int fontSize = 0;           ///< Font size.
+    uint16_t fontEfx = Plain;   ///< Font effects stored as bitmask.
+
+    /**
+     * @brief Default constructor
+     * @param document A weak pointer to the document object.
+     */
+    FontInfo(const DocumentWeakPtr& document) : Base(document) {}
+
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the document object.
+     * @param fontID The font ID.
+     * @param fontSize The font size.
+     * @param fontEfx The font effects (default: Plain).
+     */
+    FontInfo(const DocumentWeakPtr& document, Cmper fontId, int fontSize, uint16_t fontEfx = Plain)
+        : Base(document), fontId(fontId), fontSize(fontSize), fontEfx(fontEfx) {}
+
+    /**
+     * @brief Check if a specific effect is enabled.
+     * @param effect The font effect to check.
+     * @return True if the effect is enabled, false otherwise.
+     */
+    bool hasEffect(FontEffect effect) const { return (fontEfx & effect) != 0; }
+
+    /**
+     * @brief Enable a specific font effect.
+     * @param effect The font effect to enable.
+     */
+    void enableEffect(FontEffect effect) { fontEfx |= effect; }
+
+    /**
+     * @brief Disable a specific font effect.
+     * @param effect The font effect to disable.
+     */
+    void disableEffect(FontEffect effect) { fontEfx &= ~effect; }
+
+    /**
+     * @brief Check if the font is bold.
+     * @return True if bold is enabled, false otherwise.
+     */
+    bool bold() const { return hasEffect(Bold); }
+
+    /**
+     * @brief Check if the font is italic.
+     * @return True if italic is enabled, false otherwise.
+     */
+    bool italic() const { return hasEffect(Italic); }
+
+    /**
+     * @brief Check if the font is underlined.
+     * @return True if underline is enabled, false otherwise.
+     */
+    bool underline() const { return hasEffect(Underline); }
+
+    /**
+     * @brief Check if the font is strikeout.
+     * @return True if strikeout is enabled, false otherwise.
+     */
+    bool strikeout() const { return hasEffect(Strikeout); }
+
+    /**
+     * @brief Check if the font has an absolute size.
+     * @return True if absolute is enabled, false otherwise.
+     */
+    bool absolute() const { return hasEffect(Absolute); }
+
+    /**
+     * @brief Check if the font is hidden.
+     * @return True if hidden is enabled, false otherwise.
+     */
+    bool hidden() const { return hasEffect(Hidden); }
+
+    /**
+     * @brief Get the name of the font.
+     * @return The name of the font as a string.
+     */
+    std::string getFontName() const;
+};
+
 } // namespace dom
 } // namespace musx

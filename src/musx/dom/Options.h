@@ -32,9 +32,6 @@
 
 namespace musx {
 namespace dom {
-
-class FontInfo;
-
 namespace options {
 
 /**
