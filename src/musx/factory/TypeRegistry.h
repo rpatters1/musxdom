@@ -124,6 +124,8 @@ using RegisteredTypes = TypeRegistry <
     dom::options::DefaultFonts,
     // others
     dom::others::FontDefinition,
+    dom::others::MarkingCategory,
+    dom::others::MarkingCategoryName,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure

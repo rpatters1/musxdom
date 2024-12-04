@@ -65,6 +65,8 @@ public:
 };
 
 template <>
+struct FieldPopulator<MarkingCategory>;
+template <>
 struct FieldPopulator<TextExpressionDef>;
 
 /** @brief Shared enum conversion utlities for expressions and marking categories */
@@ -82,9 +84,11 @@ private:
         if (value == "amplitude") return PlaybackType::KeyVelocity;
         if (value == "transpose") return PlaybackType::Transpose;
         if (value == "channel") return PlaybackType::Channel;
-        if (value == "patchChange") return PlaybackType::MidiPatchChange;
+        if (value == "midiPatchChange") return PlaybackType::MidiPatchChange;
         if (value == "percMidiMap") return PlaybackType::PercussionMidiMap;
         if (value == "midiPitchwheel") return PlaybackType::MidiPitchWheel;
+        if (value == "midiPressure") return PlaybackType::ChannelPressure;
+        if (value == "rekey") return PlaybackType::RestrikeKeys;
         if (value == "dump") return PlaybackType::Dump;
         if (value == "startTempo") return PlaybackType::PlayTempoToolChanges;
         if (value == "stopTempo") return PlaybackType::IgnoreTempoToolChanges;
@@ -145,6 +149,7 @@ private:
         throw std::invalid_argument("Invalid horzExprJustification value in XML: " + value);
     }
 
+    friend struct FieldPopulator<MarkingCategory>;
     friend struct FieldPopulator<TextExpressionDef>;
 };
 
@@ -157,6 +162,70 @@ struct FieldPopulator<FontDefinition> : public FactoryBase
         getFieldFromXml(element, "charsetVal", instance.charsetVal, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "pitch", instance.pitch, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "family", instance.family, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "name", instance.name, [](auto element) { return element->getText(); });
+    }
+};
+
+template <>
+struct FieldPopulator<MarkingCategory> : public FactoryBase
+{
+private:
+    using Utils = ExpressionEnumUtils;
+
+    static MarkingCategory::CategoryType toCategoryType(const std::string& str)
+    {
+        if (str == "dynamics") return MarkingCategory::CategoryType::Dynamics;
+        if (str == "tempoMarks") return MarkingCategory::CategoryType::TempoMarks;
+        if (str == "tempoAlts") return MarkingCategory::CategoryType::TempoAlterations;
+        if (str == "expressiveText") return MarkingCategory::CategoryType::ExpressiveText;
+        if (str == "techniqueText") return MarkingCategory::CategoryType::TechniqueText;
+        if (str == "rehearsalMarks") return MarkingCategory::CategoryType::RehearsalMarks;
+        if (str == "misc") return MarkingCategory::CategoryType::Misc;
+        throw std::invalid_argument("Invalid marking category type value in XML: " + str);
+    }
+
+public:
+    static void populate(MarkingCategory& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    {
+        // Populate categoryType field
+        getFieldFromXml(element, "categoryType", instance.categoryType, [](auto element) { return toCategoryType(element->getText()); });
+
+        // Populate textFont, musicFont, and numberFont if the corresponding font tags exist
+        instance.textFont = FieldPopulator<FontInfo>::getFontFromXml(element, "textFont", instance.getDocument());
+        instance.musicFont = FieldPopulator<FontInfo>::getFontFromXml(element, "musicFont", instance.getDocument());
+        instance.numberFont = FieldPopulator<FontInfo>::getFontFromXml(element, "numberFont", instance.getDocument());
+
+        // Populate alignment and justification fields
+        getFieldFromXml(element, "horzAlign", instance.horzAlign, [](auto element) { return Utils::toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "vertAlign", instance.vertAlign, [](auto element) { return Utils::toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "justification", instance.justification, [](auto element) { return Utils::toHorizontalExprJustification(element->template getTextAs<std::string>()); });
+
+        // Populate offset fields
+        getFieldFromXml(element, "horzOffset", instance.horzOffset, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "vertOffsetBaseline", instance.vertOffsetBaseline, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "vertOffsetEntry", instance.vertOffsetEntry, [](auto element) { return element->template getTextAs<Evpu>(); });
+
+        // Populate boolean usage fields
+        getFieldFromXml(element, "usesTextFont", instance.usesTextFont, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesMusicFont", instance.usesMusicFont, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesNumberFont", instance.usesNumberFont, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesPositioning", instance.usesPositioning, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesStaffList", instance.usesStaffList, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesBreakMmRests", instance.usesBreakMmRests, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "breakMmRest", instance.breakMmRest, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "userCreated", instance.userCreated, [](auto element) { return true; }, false);
+
+        // Populate staffList field
+        getFieldFromXml(element, "staffList", instance.staffList, [](auto element) { return element->template getTextAs<Cmper>(); });
+    }
+};
+
+template <>
+struct FieldPopulator<MarkingCategoryName> : public FactoryBase
+{
+public:
+    static void populate(MarkingCategoryName& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    {
         getFieldFromXml(element, "name", instance.name, [](auto element) { return element->getText(); });
     }
 };
@@ -190,6 +259,17 @@ public:
         getFieldFromXml(element, "breakMmRest", instance.breakMmRest, [](auto element) { return true; }, false);
         getFieldFromXml(element, "useAuxData", instance.useAuxData, [](auto element) { return true; }, false);
         getFieldFromXml(element, "descStr", instance.description, [](auto element) { return element->getText(); }, false);
+
+        //Add this instance's id to the marking category's set.
+        if (instance.categoryID) {
+            auto document = instance.getDocument().lock();
+            assert(document);
+            auto markingCat = document->getOthers()->get<MarkingCategory>(instance.categoryID);
+            if (!markingCat) {
+                return; //throw std::invalid_argument("Marking category for text expression " + std::to_string(instance.getCmper()) + " is not loaded or does not exist.");
+            }
+            markingCat->textExpression.emplace(instance.getCmper());
+        }
     }
 };
 

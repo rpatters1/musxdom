@@ -142,6 +142,18 @@ struct FieldPopulator<dom::FontInfo> : public FactoryBase
             }
         }
     }
+
+    static std::shared_ptr<dom::FontInfo> getFontFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::string& nodeName, const dom::DocumentWeakPtr& document, bool expected = true)
+    {
+        std::shared_ptr<dom::FontInfo> retval;
+        getFieldFromXml(element, nodeName, retval, [document](auto fontElement) -> std::shared_ptr<dom::FontInfo> {
+                if (!fontElement->getFirstChildElement()) return nullptr;
+                auto fontInfo = std::make_shared<dom::FontInfo>(document);
+                FieldPopulator<dom::FontInfo>::populate(*fontInfo, fontElement);
+                return fontInfo;
+            }, expected);
+        return retval;
+    }
 };
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS

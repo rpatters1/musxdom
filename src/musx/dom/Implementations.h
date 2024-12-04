@@ -75,6 +75,23 @@ inline std::string FontInfo::getFontName() const
     throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontId));
 }
 
+// ****************************
+// ***** MarkingCategiory *****
+// ****************************
+
+inline std::string others::MarkingCategory::getName() const
+{
+    auto document = this->getDocument().lock();
+    assert(document); // program bug if fail
+    auto others = document->getOthers();
+    assert(others); // program bug if fail
+    auto catName = others->get<others::MarkingCategoryName>(getCmper());
+    if (catName) {
+        return catName->name;
+    }
+    return {};
+}
+
 // *****************************
 // ***** TextExpressionDef *****
 // *****************************

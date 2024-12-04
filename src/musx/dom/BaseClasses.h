@@ -177,7 +177,7 @@ public:
     /**
      * @brief Constructor
      * @param document A weak pointer to the document object.
-     * @param fontID The font ID.
+     * @param fontId The font ID.
      * @param fontSize The font size.
      * @param fontEfx The font effects (default: Plain).
      */

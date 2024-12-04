@@ -60,11 +60,12 @@ public:
      * @param document The document object providing context for the XML parsing.
      * @return A fully populated `ObjectPoolType` object.
      */
-    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document)
+    static void create(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, std::shared_ptr<PoolType>& pool)
     {
-        auto pool = std::make_shared<PoolType>();
-
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {
+            if (childElement->getTagName() == "textExprDef" || childElement->getTagName() == "markingsCategory") {
+                std::cout << "creating instance for node " << childElement->getTagName() << std::endl;
+            }
             std::string thisElt = childElement->getTagName();
             auto basePtr = DerivedType::extractFromXml(childElement, document);
             if (basePtr) {
@@ -73,8 +74,6 @@ public:
                 pool->add(childElement->getTagName(), typedPtr);
             }
         }
-
-        return pool;
     }
 };
 
@@ -88,7 +87,12 @@ public:
 class OthersFactory : public PoolFactory<OthersFactory, dom::OthersBase, dom::OthersPool>
 {
 public:
-    using PoolFactory::create;
+    /** @brief top-level create function */
+    static void create(const std::shared_ptr<xml::IXmlElement>& element, DocumentPtr& document)
+    {
+        document->getOthers() = std::make_shared<dom::OthersPool>();
+        PoolFactory::create(element, document, document->getOthers());
+    }
 
     /**
      * @brief Extracts an `OthersBase` object from an XML element.
@@ -130,7 +134,12 @@ public:
 class OptionsFactory : public PoolFactory<OptionsFactory, dom::OptionsBase, dom::ScalarPool<dom::OptionsBase>>
 {
 public:
-    using PoolFactory::create;
+    /** @brief top-level create function */
+    static void create(const std::shared_ptr<xml::IXmlElement>& element, DocumentPtr& document)
+    {
+        document->getOptions() = std::make_shared<dom::ScalarPool<dom::OptionsBase>>();
+        PoolFactory::create(element, document, document->getOptions());
+    }
 
     /**
      * @brief Extracts an `OptionsBase` object from an XML element.

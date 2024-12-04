@@ -44,7 +44,7 @@ public:
      * @return A fully populated `Header` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
-    static musx::dom::header::HeaderPtr create(const std::shared_ptr<xml::IXmlElement>& element)
+    static void create(const std::shared_ptr<xml::IXmlElement>& element, dom::DocumentPtr& document)
     {
         auto headerDataElement = getFirstChildElement(element, "headerData");
         if (!headerDataElement) {
@@ -52,12 +52,11 @@ public:
         }
 
         auto header = std::make_shared<dom::header::Header>();
+        document->getHeader() = header;
         getFieldFromXml(headerDataElement, "wordOrder", header->wordOrder, parseWordOrder);
         getFieldFromXml(headerDataElement, "textEncoding", header->textEncoding, parseTextEncoding);
         getFieldFromXml(headerDataElement, "created", header->created, parseFileInfo);
         getFieldFromXml(headerDataElement, "modified", header->modified, parseFileInfo);
-
-        return header;
     }
 
 private:

@@ -26,6 +26,7 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
+#include <set>
 
 #include "BaseClasses.h"
 // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
@@ -64,9 +65,7 @@ public:
      * @param cmper Comparison parameter.
      */
     Enclosure(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper)
-    {
-    }
+        : OthersBase(document, cmper) {}
 
     Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
     Evpu yAdd{};              ///< Center Y offset - offsets text from center (in EVPU).
@@ -94,9 +93,7 @@ class FontDefinition : public OthersBase
 public:
     /** @brief Constructor function */
     FontDefinition(const DocumentWeakPtr& document, int cmper)
-        : OthersBase(document, cmper)
-    {
-    }
+        : OthersBase(document, cmper) {}
 
     // Public properties corresponding to the XML structure
     std::string charsetBank;    ///< probably only "Mac" or "Win"
@@ -123,6 +120,8 @@ enum class PlaybackType
     MidiPatchChange,        ///< Playback changes the MIDI patch.
     PercussionMidiMap,      ///< Playback uses percussion MIDI map. (xml value is "percMidiMap")
     MidiPitchWheel,         ///< Playback affects the MIDI pitch wheel. (xml value is "midiPitchwheel")
+    ChannelPressure,        ///< Playback affects MIDI channel pressure. (xml vlaue is "midiPressure")
+    RestrikeKeys,           ///< Playback retrikes keys. (xml value is "rekey")
     Dump,                   ///< Playback is an arbitrary data dump. (Data is in <playDumpText> with the same Cmper value.)
     PlayTempoToolChanges,   ///< Play changes from Tempo Tool. (xml value is "startTempo")
     IgnoreTempoToolChanges, ///< Ignore changes from Tempo Tool. (xml value is "stopTempo")
@@ -172,7 +171,7 @@ enum class VerticalMeasExprAlign
 };
 
 /**
- * @enum HorizontalExprAlign
+ * @enum HorizontalExprJustification
  * @brief Specifies the horizontal alignment for text expressions and marking categories.
  */
 enum class HorizontalExprJustification
@@ -180,6 +179,92 @@ enum class HorizontalExprJustification
     Left,    ///< Justified left.
     Center,  ///< Justified center.
     Right    ///< Justified right.
+};
+
+/**
+ * @class MarkingCategory
+ * @brief Represents a category of markings used in the musx file.
+ *
+ * This class is identified by the XML node name "markingsCategory".
+ */
+class MarkingCategory : public OthersBase
+{
+public:
+    /** @brief Enumeration for the type of marking category */
+    enum class CategoryType {
+        Dynamics,           ///< Dynamics markings, such as forte, piano, etc.
+        TempoMarks,         ///< Tempo indications such as Allegro (with or without metronome marking).
+        TempoAlterations,   ///< Tempo alteration markings, such as accel. and rit. (xml value is "tempoAlts")
+        ExpressiveText,     ///< Expressive text such as "espressivo."
+        TechniqueText,      ///< Technique text such as "pizzicato" or "arco."
+        RehearsalMarks,     ///< Rehearsal marks, often used for reference points in the score.
+        Misc                ///< Represents miscellaneous markings that do not fit into other categories.
+    };
+
+    /** @brief Constructor function */
+    MarkingCategory(const DocumentWeakPtr& document, int cmper)
+        : OthersBase(document, cmper) {}
+
+    CategoryType categoryType{ CategoryType::Misc }; ///< Category type of the marking
+
+    // Font information for the marking category
+    std::shared_ptr<FontInfo> textFont;      ///< Text font
+    std::shared_ptr<FontInfo> musicFont;     ///< Music font
+    std::shared_ptr<FontInfo> numberFont;    ///< Number font
+
+    // Horizontal alignment for the marking
+    HorizontalMeasExprAlign horzAlign{ HorizontalMeasExprAlign::LeftBarline }; ///< Represents `<horzAlign>` element
+
+    // Vertical alignment for the marking
+    VerticalMeasExprAlign vertAlign{ VerticalMeasExprAlign::AboveStaff }; ///< Represents `<vertAlign>` element
+
+    // Justification for the text within the marking
+    HorizontalExprJustification justification{ HorizontalExprJustification::Left }; ///< Represents `<justification>` element
+
+    // Vertical and horizontal offsets for positioning adjustments
+    Evpu horzOffset{};         ///< Additional horizontal offset
+    Evpu vertOffsetBaseline{}; ///< Additional vertical offset
+    Evpu vertOffsetEntry{};    ///< Additional vertical entry offset
+
+    // Usage flags representing certain behaviors and visual elements
+    bool usesTextFont{};      ///< true if this category uses the text font
+    bool usesMusicFont{};     ///< true if this category uses the music font
+    bool usesNumberFont{};    ///< true if this category uses the number font
+    bool usesPositioning{};   ///< true if this category uses the positioning elements (Finale UI only allows true)
+    bool usesStaffList{};     ///< Represents `<usesStaffList>` element
+    bool usesBreakMmRests{};  ///< Represents `<usesBreakMmRests>` element
+    bool breakMmRest{};       ///< Represents `<breakMmRest>` element
+    bool userCreated{};       ///< Represents `<userCreated>` element
+
+    // Staff list represented as an integer
+    Cmper staffList{};        ///< Represents `<staffList>` element, e.g., 1
+
+    std::set<Cmper> textExpression;    ///< A list of text expressions in this category. (This in not in the xml but is created by the factory.)
+
+    /** @brief gets the name of the marking category */
+    std::string getName() const;
+
+    constexpr static std::string_view XmlNodeName = "markingsCategory"; ///< The XML node name for this type.
+};
+
+/**
+ * @class MarkingCategoryName
+ * @brief Represents the name associated with a @ref MarkingCategory.
+ *
+ * This class has the same #Cmper as its @ref MarkingCategory.
+ *
+ * This class is identified by the XML node name "markingsCategoryName".
+ */
+class MarkingCategoryName : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    MarkingCategoryName(const DocumentWeakPtr& document, int cmper)
+        : OthersBase(document, cmper) {}
+
+    std::string name; ///< The name of the marking category.
+
+    constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
 };
 
 /**
@@ -191,7 +276,7 @@ enum class HorizontalExprJustification
 class TextExpressionDef : public OthersBase
 {
 public:
-    Cmper textIDKey{};                              ///< Identifier for the #TextBlock associated with this 
+    Cmper textIDKey{};                              ///< Identifier for the @ref TextBlock associated with this 
     int categoryID{};                               ///< Identifier for the category of the text expression.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
     int auxData1{};                                 ///< Auxiliary data for the expression.
@@ -217,6 +302,7 @@ public:
     TextExpressionDef(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
+    /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;
 
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
@@ -226,7 +312,7 @@ public:
  * @class TextExpressionEnclosure
  * @brief The enclosure for a text expression (if it exists)
  *
- * The cmper is the same as for the associated #TextExpressionDef.
+ * The cmper is the same as for the associated @ref TextExpressionDef`.
  *
  * This class is identified by the XML node name "textExpressionEnclosure".
  */
@@ -242,7 +328,7 @@ public:
  * @class TextRepeatEnclosure
  * @brief The enclosure for a text expression (if it exists)
  *
- * The cmper is the same as for #TextRepeateDef.
+ * The cmper is the same as for @ref TextRepeateDef.
  *
  * This class is identified by the XML node name "textRepeatEnclosure".
  */
