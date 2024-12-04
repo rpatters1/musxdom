@@ -81,8 +81,5 @@ private:
     friend class musx::factory::DocumentFactory;
 };
 
-/** @brief Shared `Document` pointer */
-using DocumentPtr = std::shared_ptr<Document>;
-
 } // namespace dom
 } // namespace musx

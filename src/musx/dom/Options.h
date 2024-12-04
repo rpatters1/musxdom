@@ -53,7 +53,7 @@ public:
      *
      * Constructs a DefaultFonts object that is associated with the provided document.
      */
-    DefaultFonts(const std::weak_ptr<Document>& document) : OptionsBase(document) {}
+    DefaultFonts(const DocumentWeakPtr& document) : OptionsBase(document) {}
 
     /**
      * @enum FontType

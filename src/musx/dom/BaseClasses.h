@@ -28,10 +28,15 @@ namespace dom {
 
 using Cmper = uint16_t;     ///< Enigma "comperator" key type
 using Inci = int16_t;       ///< Enigma "incidend" key type
-using Evpu = int;           ///< EVPU value (288 per inch)
-using Edu = int;            ///< EDU value (1024 per quarter note)
+using Evpu = int32_t;       ///< EVPU value (288 per inch)
+using Efix = int32_t;       ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
+using Edu = int32_t;        ///< EDU value (1024 per quarter note)
 
 class Document;
+/** @brief Shared `Document` pointer */
+using DocumentPtr = std::shared_ptr<Document>;
+/** @brief Shared weak `Document` pointer */
+using DocumentWeakPtr = std::weak_ptr<Document>;
 
 /**
  * @brief Base class to enforce polymorphism across all DOM classes.
@@ -54,7 +59,7 @@ public:
      * 
      * @return A weak pointer to the Document instance.
      */
-    std::weak_ptr<Document> getDocument() const { return m_document; }
+    DocumentWeakPtr getDocument() const { return m_document; }
 
 protected:
     /**
@@ -62,10 +67,10 @@ protected:
      * 
      * @param document A weak pointer to the parent document
      */
-    Base(const std::weak_ptr<Document>& document) : m_document(document) {}
+    Base(const DocumentWeakPtr& document) : m_document(document) {}
 
 private:
-    const std::weak_ptr<Document> m_document;
+    const DocumentWeakPtr m_document;
 };
 
 /**
@@ -81,7 +86,7 @@ protected:
      *
      * @param document A weak pointer to the parent document
      */
-    OptionsBase(const std::weak_ptr<Document>& document) : Base(document) {}
+    OptionsBase(const DocumentWeakPtr& document) : Base(document) {}
 };
 
 /**
@@ -104,7 +109,7 @@ protected:
      * @param inci The array index (`inci`).
      * @param document A weak pointer to the parent document
      */
-    OthersBase(int cmper, int inci, const std::weak_ptr<Document>& document)
+    OthersBase(const DocumentWeakPtr& document, int cmper, int inci = 0)
         : Base(document), m_cmper(cmper), m_inci(inci) {}
 
 public:

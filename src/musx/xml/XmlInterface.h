@@ -123,11 +123,18 @@ public:
     T getTextAs(T defaultValue = {}) const
     {
         std::istringstream iss(getText());
-        T value = defaultValue;
-        if (!iss.str().empty() && !(iss >> value)) {
+        if (iss.str().empty()) {
+            return defaultValue;
+        }
+
+        using ValueType = std::conditional_t<std::is_same_v<T, char> || std::is_same_v<T, uint8_t>, int, T>;
+        ValueType value = ValueType(defaultValue);
+
+        if (!(iss >> value)) {
             throw std::invalid_argument("Failed to convert text content [" + iss.str() + "] to the specified type");
         }
-        return value;
+
+        return T(value);
     }
 
     /**

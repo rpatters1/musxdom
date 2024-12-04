@@ -29,9 +29,40 @@
 namespace musx {
 namespace factory {
 
+using namespace dom;
 using namespace dom::others;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
+
+template <>
+struct FieldPopulator<Enclosure> : public FactoryBase
+{
+private:
+    static Enclosure::Shape toShape(int value)
+    {
+        if (value >= static_cast<int>(Enclosure::Shape::NoEnclosure) &&
+            value <= static_cast<int>(Enclosure::Shape::Octogon)) {
+            return static_cast<Enclosure::Shape>(value);
+        }
+        throw std::invalid_argument("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
+    }
+
+public:
+    static void populate(Enclosure& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    {
+        getFieldFromXml(element, "xAdd", instance.xAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "yAdd", instance.yAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "xMargin", instance.xMargin, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "yMargin", instance.yMargin, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "lineWidth", instance.lineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "sides", instance.shape, [](auto element) {  return toShape(element->template getTextAs<uint8_t>()); });
+        getFieldFromXml(element, "cornerRadius", instance.cornerRadius, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "fixedSize", instance.fixedSize, [](auto element) { return element->template getTextAs<bool>(); });
+        getFieldFromXml(element, "notTall", instance.notTall, [](auto element) { return element->template getTextAs<bool>(); });
+        getFieldFromXml(element, "opaque", instance.opaque, [](auto element) { return element->template getTextAs<bool>(); });
+        getFieldFromXml(element, "roundCorners", instance.roundCorners, [](auto element) { return element->template getTextAs<bool>(); });
+    }
+};
 
 template <>
 struct FieldPopulator<FontDefinition> : public FactoryBase
@@ -46,6 +77,11 @@ struct FieldPopulator<FontDefinition> : public FactoryBase
     }
 };
 
+template <>
+struct FieldPopulator<TextExpressionEnclosure> : private FieldPopulator<Enclosure>
+{
+    using FieldPopulator<Enclosure>::populate;
+};
 // Repeat for other types...
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS

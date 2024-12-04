@@ -60,7 +60,7 @@ public:
      * @param document The document object providing context for the XML parsing.
      * @return A fully populated `ObjectPoolType` object.
      */
-    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
+    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document)
     {
         auto pool = std::make_shared<PoolType>();
 
@@ -101,7 +101,7 @@ public:
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
+    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document)
     {
         auto cmperAttribute = element->findAttribute("cmper");
         if (!cmperAttribute) {
@@ -109,10 +109,14 @@ public:
         }
         dom::Cmper cmper = cmperAttribute->getValueAs<dom::Cmper>();
         auto inciAttribute = element->findAttribute("inci");
-        return RegisteredTypes::createInstance(element,
-                                               cmperAttribute->getValueAs<dom::Cmper>(),
-                                               inciAttribute ? inciAttribute->getValueAs<dom::Inci>() : 0,
-                                               document);
+        if (inciAttribute) {
+            return RegisteredTypes::createInstance(element,
+                document, cmperAttribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
+        }
+        else {
+            return RegisteredTypes::createInstance(element,
+                document, cmperAttribute->getValueAs<dom::Cmper>());
+        }
     }
 };
 
@@ -138,7 +142,7 @@ public:
      * @param document The document object providing context for the XML parsing.
      * @return A shared pointer to the created object.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
+    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document)
     {
         return RegisteredTypes::createInstance(element, document);
     }

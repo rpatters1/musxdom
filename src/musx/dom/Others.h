@@ -35,6 +35,53 @@ namespace dom {
 namespace others {
 
 /**
+ * @class Enclosure
+ * @brief Represents the enclosure settings for text expressions.
+ */
+class Enclosure : public OthersBase
+{
+public:
+    /**
+     * @enum Shape
+     * @brief Enumeration for enclosure shapes.
+     */
+    enum class Shape : uint8_t
+    {
+        NoEnclosure = 0,    ///< No enclosure
+        Rectangle = 1,      ///< Rectangle
+        Ellipse = 2,        ///< Ellipse
+        Triangle = 3,       ///< Triangle
+        Diamond = 4,        ///< Diamond
+        Pentagon = 5,       ///< Pentagon
+        Hexagon = 6,        ///< Hexagon
+        Heptagon = 7,       ///< Heptagon
+        Octogon = 8         ///< Octogon
+    };
+
+    /**
+     * @brief Constructs an Enclosure object.
+     * @param document Shared pointer to the document.
+     * @param cmper Comparison parameter.
+     */
+    Enclosure(const DocumentWeakPtr& document, Cmper cmper)
+        : OthersBase(document, cmper)
+    {
+    }
+
+    Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
+    Evpu yAdd{};              ///< Center Y offset - offsets text from center (in EVPU).
+    Evpu xMargin{};           ///< Half width - extra space on left/right sides (in EVPU).
+    Evpu yMargin{};           ///< Half height - extra space on top/bottom sides (in EVPU).
+    Efix lineWidth{};         ///< Line thickness in 64ths of an EVPU (EFIX).
+    Shape shape{Shape::NoEnclosure}; ///< Enclosure shape (default: NoEnclosure).
+    Efix cornerRadius{};      ///< Corner radius (in EFIX).
+    bool fixedSize{};         ///< Whether the enclosure is fixed size (ignore text bounding box)
+    bool notTall{};           ///< "Enforce Minimum Width": don't let shape get taller than it is wide
+    bool opaque{};            ///< Whether the enclosure is opaque.
+    bool roundCorners{};      ///< Whether the enclosure has rounded corners.
+};
+
+/**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained in the musx file.
  *
@@ -46,8 +93,8 @@ class FontDefinition : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    FontDefinition(int cmper, int inci, const std::weak_ptr<Document>& document)
-        : OthersBase(cmper, inci, document)
+    FontDefinition(const DocumentWeakPtr& document, int cmper)
+        : OthersBase(document, cmper)
     {
     }
 
@@ -96,7 +143,7 @@ public:
      * @param fontSize The font size.
      * @param fontEfx The font effects (default: Plain).
      */
-    FontInfo(const std::weak_ptr<Document>& document, Cmper fontID, int fontSize, uint16_t fontEfx = Plain)
+    FontInfo(const DocumentWeakPtr& document, Cmper fontID, int fontSize, uint16_t fontEfx = Plain)
         : Base(document), fontID(fontID), fontSize(fontSize), fontEfx(fontEfx) {}
 
     /**
@@ -173,6 +220,22 @@ public:
 };
 
 namespace others {
+
+/**
+ * @class TextExpressionEnclosure
+ * @brief The enclosure for a text expression (if it exists)
+ *
+ * The cmper is the same as for #TextExpression
+ *
+ * This class is identified by the XML node name "textExpressionEnclosure".
+ */
+class TextExpressionEnclosure : public Enclosure
+{
+public:
+    using Enclosure::Enclosure;
+
+    constexpr static std::string_view XmlNodeName = "textExpressionEnclosure"; ///< The XML node name for this type.
+};
 
 } // namespace others
 } // namespace dom
