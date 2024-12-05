@@ -57,7 +57,7 @@ TEST(TextExpressionDefTest, ValidExpression)
 
     // Check every property
     EXPECT_EQ(expression->textIDKey, 4);  // From XML
-    EXPECT_EQ(expression->categoryID, 1);  // From XML
+    EXPECT_EQ(expression->categoryId, 1);  // From XML
     EXPECT_EQ(expression->value, 101);  // From XML
     EXPECT_EQ(expression->playbackType, musx::dom::others::PlaybackType::MidiController);  // From XML
     EXPECT_EQ(expression->horzMeasExprAlign, musx::dom::others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead);  // From XML

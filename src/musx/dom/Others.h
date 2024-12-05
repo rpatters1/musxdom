@@ -239,7 +239,7 @@ public:
     // Staff list represented as an integer
     Cmper staffList{};        ///< Represents `<staffList>` element, e.g., 1
 
-    std::set<Cmper> textExpression;    ///< A list of text expressions in this category. (This in not in the xml but is created by the factory.)
+    std::set<Cmper> textExpressions;    ///< A list of text expressions in this category. (This in not in the xml but is created by the factory.)
 
     /** @brief gets the name of the marking category */
     std::string getName() const;
@@ -277,7 +277,7 @@ class TextExpressionDef : public OthersBase
 {
 public:
     Cmper textIDKey{};                              ///< Identifier for the @ref TextBlock associated with this 
-    int categoryID{};                               ///< Identifier for the category of the text expression.
+    int categoryId{};                               ///< Identifier for the category of the text expression.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
     int auxData1{};                                 ///< Auxiliary data for the expression.
     PlaybackType playbackType{ PlaybackType::None }; ///< Playback behavior of the text expression.

@@ -48,7 +48,7 @@ private:
     }
 
 public:
-    static void populate(Enclosure& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    static void populate(Enclosure& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
         getFieldFromXml(element, "xAdd", instance.xAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "yAdd", instance.yAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
@@ -156,7 +156,7 @@ private:
 template <>
 struct FieldPopulator<FontDefinition> : public FactoryBase
 {
-    static void populate(FontDefinition& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    static void populate(FontDefinition& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
         getFieldFromXml(element, "charsetBank", instance.charsetBank, [](auto element) { return element->getText(); });
         getFieldFromXml(element, "charsetVal", instance.charsetVal, [](auto element) { return element->template getTextAs<int>(); });
@@ -185,7 +185,7 @@ private:
     }
 
 public:
-    static void populate(MarkingCategory& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    static void populate(MarkingCategory& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
         // Populate categoryType field
         getFieldFromXml(element, "categoryType", instance.categoryType, [](auto element) { return toCategoryType(element->getText()); });
@@ -224,7 +224,7 @@ template <>
 struct FieldPopulator<MarkingCategoryName> : public FactoryBase
 {
 public:
-    static void populate(MarkingCategoryName& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    static void populate(MarkingCategoryName& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
         getFieldFromXml(element, "name", instance.name, [](auto element) { return element->getText(); });
     }
@@ -240,10 +240,10 @@ public:
     /**
      * @brief Populates the fields of a TextExpressionDef instance from an XML element.
      */
-    static void populate(TextExpressionDef& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    static void populate(TextExpressionDef& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
     {
         getFieldFromXml(element, "textIDKey", instance.textIDKey, [](auto element) { return element->template getTextAs<Cmper>(); });
-        getFieldFromXml(element, "categoryID", instance.categoryID, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "categoryID", instance.categoryId, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "value", instance.value, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "auxData1", instance.auxData1, [](auto element) { return element->template getTextAs<int>(); }, false);
         getFieldFromXml(element, "playType", instance.playbackType, [](auto element) { return Utils::toPlaybackType(element->template getTextAs<std::string>()); }, false);
@@ -261,14 +261,16 @@ public:
         getFieldFromXml(element, "descStr", instance.description, [](auto element) { return element->getText(); }, false);
 
         //Add this instance's id to the marking category's set.
-        if (instance.categoryID) {
-            auto document = instance.getDocument().lock();
-            assert(document);
-            auto markingCat = document->getOthers()->get<MarkingCategory>(instance.categoryID);
-            if (!markingCat) {
-                return; //throw std::invalid_argument("Marking category for text expression " + std::to_string(instance.getCmper()) + " is not loaded or does not exist.");
-            }
-            markingCat->textExpression.emplace(instance.getCmper());
+        if (instance.categoryId) {
+            Cmper categoryId = instance.categoryId;
+            Cmper thisId = instance.getCmper();
+            elementLinker.addResolver([categoryId, thisId](const DocumentPtr& document) {
+                auto markingCat = document->getOthers()->get<MarkingCategory>(categoryId);
+                if (!markingCat) {
+                    throw std::invalid_argument("Marking category for text expression " + std::to_string(thisId) + " does not exist.");
+                }
+                markingCat->textExpressions.emplace(thisId);                
+            });
         }
     }
 };

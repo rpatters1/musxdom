@@ -92,7 +92,7 @@ public:
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
     template <typename... Args>
-    static std::shared_ptr<Base> createInstance(const std::shared_ptr<xml::IXmlElement>& node, Args&&... args)
+    static std::shared_ptr<Base> createInstance(const std::shared_ptr<xml::IXmlElement>& node, ElementLinker& elementLinker, Args&&... args)
     {
         auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
@@ -105,7 +105,7 @@ public:
                 // Only enable this part if T is constructible with Args...
                 if constexpr (std::is_constructible_v<T, Args...>) {
                     auto instance = std::make_shared<T>(std::forward<Args>(args)...);
-                    factory::FieldPopulator<T>::populate(*instance, node);
+                    factory::FieldPopulator<T>::populate(*instance, node, elementLinker);
                     return instance;
                 } else {
                     throw std::runtime_error("Selected type is not constructible with given arguments");

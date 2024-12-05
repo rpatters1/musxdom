@@ -58,22 +58,24 @@ public:
      *
      * @param element The XML element representing the `<others>` node.
      * @param document The document object providing context for the XML parsing.
+     * @param elementLinker A class for storing deferred linkage commands.
      * @return A fully populated `ObjectPoolType` object.
      */
-    static void create(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, std::shared_ptr<PoolType>& pool)
+    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
+        auto pool = std::make_shared<PoolType>();
+
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {
-            if (childElement->getTagName() == "textExprDef" || childElement->getTagName() == "markingsCategory") {
-                std::cout << "creating instance for node " << childElement->getTagName() << std::endl;
-            }
             std::string thisElt = childElement->getTagName();
-            auto basePtr = DerivedType::extractFromXml(childElement, document);
+            auto basePtr = DerivedType::extractFromXml(childElement, document, elementLinker);
             if (basePtr) {
                 auto typedPtr = std::static_pointer_cast<ObjectBase>(basePtr);
                 assert(typedPtr); // program bug if null
                 pool->add(childElement->getTagName(), typedPtr);
             }
         }
+
+        return pool;
     }
 };
 
@@ -87,12 +89,7 @@ public:
 class OthersFactory : public PoolFactory<OthersFactory, dom::OthersBase, dom::OthersPool>
 {
 public:
-    /** @brief top-level create function */
-    static void create(const std::shared_ptr<xml::IXmlElement>& element, DocumentPtr& document)
-    {
-        document->getOthers() = std::make_shared<dom::OthersPool>();
-        PoolFactory::create(element, document, document->getOthers());
-    }
+    using PoolFactory::create;
 
     /**
      * @brief Extracts an `OthersBase` object from an XML element.
@@ -105,7 +102,7 @@ public:
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document)
+    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
         auto cmperAttribute = element->findAttribute("cmper");
         if (!cmperAttribute) {
@@ -114,11 +111,11 @@ public:
         dom::Cmper cmper = cmperAttribute->getValueAs<dom::Cmper>();
         auto inciAttribute = element->findAttribute("inci");
         if (inciAttribute) {
-            return RegisteredTypes::createInstance(element,
+            return RegisteredTypes::createInstance(element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
         }
         else {
-            return RegisteredTypes::createInstance(element,
+            return RegisteredTypes::createInstance(element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>());
         }
     }
@@ -134,12 +131,7 @@ public:
 class OptionsFactory : public PoolFactory<OptionsFactory, dom::OptionsBase, dom::ScalarPool<dom::OptionsBase>>
 {
 public:
-    /** @brief top-level create function */
-    static void create(const std::shared_ptr<xml::IXmlElement>& element, DocumentPtr& document)
-    {
-        document->getOptions() = std::make_shared<dom::ScalarPool<dom::OptionsBase>>();
-        PoolFactory::create(element, document, document->getOptions());
-    }
+    using PoolFactory::create;
 
     /**
      * @brief Extracts an `OptionsBase` object from an XML element.
@@ -151,9 +143,9 @@ public:
      * @param document The document object providing context for the XML parsing.
      * @return A shared pointer to the created object.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document)
+    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
-        return RegisteredTypes::createInstance(element, document);
+        return RegisteredTypes::createInstance(element, elementLinker, document);
     }
 };
 

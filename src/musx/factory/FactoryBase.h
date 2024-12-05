@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <string>
 #include <optional>
+#include <functional>
 
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/ObjectPool.h"
@@ -36,6 +37,55 @@ namespace musx {
  * @brief Class factories are in this namespace
  */
 namespace factory {
+
+/**
+ * @class ElementLinker
+ * @brief A utility class for managing deferred relationships between elements during document construction.
+ *
+ * This class allows capturing relationships that cannot be resolved immediately during factory creation.
+ * The relationships are stored as resolver functions, which are executed later when all elements have been created.
+ */
+class ElementLinker {
+public:
+    /**
+     * @typedef Resolver
+     * @brief A callable type representing a deferred relationship resolver.
+     *
+     * Each resolver encapsulates the logic to resolve relationships between elements
+     * once the document is fully constructed.
+     */
+    using Resolver = std::function<void(const dom::DocumentPtr&)>;
+
+    /**
+     * @brief Adds a resolver function to the linker.
+     *
+     * This function captures the logic for resolving relationships that cannot be resolved immediately.
+     *
+     * @param resolver A callable object that resolves a relationship when invoked.
+     */
+    void addResolver(Resolver resolver) {
+        resolvers.emplace_back(std::move(resolver));
+    }
+
+    /**
+     * @brief Resolves all deferred relationships.
+     *
+     * Executes all stored resolver functions, establishing relationships between elements.
+     * Clears the internal storage of resolvers after execution.
+     *
+     * @throws std::runtime_error If any resolver function encounters an error.
+     */
+    void resolveAll(const dom::DocumentPtr& document) {
+        for (auto& resolver : resolvers) {
+            resolver(document);
+        }
+        resolvers.clear(); ///< Clear resolvers after execution
+    }
+
+private:
+    /// @brief A collection of resolver functions.
+    std::vector<Resolver> resolvers;
+};
 
 /**
  * @brief Factory base class.
