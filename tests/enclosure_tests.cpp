@@ -54,7 +54,7 @@ TEST(EnclosureTest, TextExpressionEnclosure)
         auto enclosure = others->get<musx::dom::others::TextExpressionEnclosure>(1);
         EXPECT_FALSE(enclosure) << "Enclosure 1 found but does not exists";
         enclosure = others->get<musx::dom::others::TextExpressionEnclosure>(25);
-        EXPECT_TRUE(enclosure) << "Enclosure 25 not found but does exist";
+        ASSERT_TRUE(enclosure) << "Enclosure 25 not found but does exist";
         EXPECT_EQ(enclosure->xAdd, -2);
         EXPECT_EQ(enclosure->yAdd, 2);
         EXPECT_EQ(enclosure->xMargin, -9);
@@ -92,7 +92,7 @@ TEST(EnclosureTest, TextRepeatEnclosure)
         auto enclosure = others->get<musx::dom::others::TextRepeatEnclosure>(1);
         EXPECT_FALSE(enclosure) << "Enclosure 1 found but does not exists";
         enclosure = others->get<musx::dom::others::TextRepeatEnclosure>(12);
-        EXPECT_TRUE(enclosure) << "Enclosure 12 not found but does exist";
+        ASSERT_TRUE(enclosure) << "Enclosure 12 not found but does exist";
         EXPECT_EQ(enclosure->xAdd, 0);
         EXPECT_EQ(enclosure->yAdd, 0);
         EXPECT_EQ(enclosure->xMargin, 9);

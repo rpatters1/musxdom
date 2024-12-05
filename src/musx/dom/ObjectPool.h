@@ -22,13 +22,14 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <memory>
 #include <tuple>
 #include <variant>
 #include <stdexcept>
 #include <functional>
+#include <limits>
 
 #include "BaseClasses.h"
 
@@ -44,15 +45,34 @@ namespace dom {
  *
  * @tparam ObjectBaseType the base type for the objects in the pool
  */
-template <typename ObjectBaseType>
+template <typename ObjectBaseType, typename TopKeyElementType = std::string>
 class ObjectPool
 {
 public:
     /** @brief shared pointer to `ObjectBaseType` */
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
-    using ObjectKey = std::variant<std::string, std::tuple<std::string, Cmper>, std::tuple<std::string, Cmper, Cmper>>;
+    struct ObjectKey {
+        TopKeyElementType nodeId;
+        std::optional<Cmper> cmper1;
+        std::optional<Cmper> cmper2;
+        std::optional<Inci> inci;
 
+        bool operator<(const ObjectKey& other) const {
+            if (nodeId != other.nodeId) {
+                return nodeId < other.nodeId;
+            }
+            if (cmper1 != other.cmper1) {
+                return cmper1 < other.cmper1;
+            }
+            if (cmper2 != other.cmper2) {
+                return cmper2 < other.cmper2;
+            }
+            return inci < other.inci;
+        }
+    };
+
+    /** @brief virtual destructor */
     virtual ~ObjectPool() = default;
 
     /**
@@ -63,7 +83,7 @@ public:
      */
     void add(const ObjectKey& key, ObjectPtr object)
     {
-        m_pool[key].push_back(object);
+        m_pool.emplace(key, object);
     }
 
     /**
@@ -73,7 +93,6 @@ public:
      * retrieve the entire array.
      *
      * @tparam T The derived type of `OthersBase` to retrieve.
-     *           Must have a `constexpr static std::string_view XmlNodeName` member.
      * @param key The key value used to filter the objects.
      * @return A vector of shared pointers to objects of type `T`.
      */
@@ -82,15 +101,19 @@ public:
     {
         std::vector<std::shared_ptr<T>> result;
 
-        // Find the pool entry for the specific XML node name.
-        auto it = m_pool.find(key);
-        if (it == m_pool.end()) return result;
+        auto rangeStart = m_pool.lower_bound(key);
+        auto rangeEnd = m_pool.upper_bound(
+            ObjectKey{
+                key.nodeId,
+                key.cmper1.value_or(std::numeric_limits<Cmper>::max()), 
+                key.cmper2.value_or(std::numeric_limits<Cmper>::max()), 
+                key.inci.value_or(std::numeric_limits<Inci>::max())
+            }
+        );
 
-        // Cast and add each object to the result vector.
-        for (const auto& object : it->second)
-        {
-            auto typedPtr = std::static_pointer_cast<T>(object);
-            assert(typedPtr); // There is a program bug if the pointer cast fails.
+        for (auto it = rangeStart; it != rangeEnd; ++it) {
+            auto typedPtr = std::static_pointer_cast<T>(it->second);
+            assert(typedPtr);
             result.push_back(typedPtr);
         }
         return result;
@@ -111,10 +134,10 @@ public:
     std::shared_ptr<T> get(const ObjectKey& key) const
     {
         auto it = m_pool.find(key);
-        if (it == m_pool.end() || it->second.empty()) {
+        if (it == m_pool.end()) {
             return nullptr;
         }
-        auto typedPtr = std::static_pointer_cast<T>(it->second[0]);
+        auto typedPtr = std::static_pointer_cast<T>(it->second);
         assert(typedPtr); // There is a program bug if the pointer cast fails.
         return typedPtr;
     }
@@ -124,39 +147,7 @@ protected:
     ObjectPool() = default;
 
 private:
-    // Hash function for std::tuple
-    struct HashTuple
-    {
-        // Function to calculate the hash of a tuple recursively using an index sequence
-        template <typename Tuple, std::size_t... Index>
-        std::size_t recursiveHash(const Tuple& tuple, std::index_sequence<Index...>) const {
-            std::size_t seed = 0;
-            (..., (seed ^= std::hash<std::tuple_element_t<Index, Tuple>>{}(std::get<Index>(tuple)) + 0x9e3779b9 + (seed << 6) + (seed >> 2)));
-            return seed;
-        }
-
-        // Operator() to calculate the hash of the entire tuple
-        template <typename... Args>
-        std::size_t operator()(const std::tuple<Args...>& tuple) const {
-            return recursiveHash(tuple, std::make_index_sequence<sizeof...(Args)>());
-        }
-    };
-
-    // Hash function for the Key type to support unordered_map
-    struct KeyHash {
-        std::size_t operator()(const ObjectKey& key) const {
-            return std::visit([](auto&& arg) {
-                using DecayedType = std::decay_t<decltype(arg)>;
-                if constexpr (std::is_same_v<DecayedType, std::string>) {
-                    return std::hash<std::string>{}(arg);
-                } else {
-                    return HashTuple{}(arg);
-                }
-             }, key);
-        }
-    };
-
-    std::unordered_map<ObjectKey, std::vector<ObjectPtr>, KeyHash> m_pool;
+    std::map<ObjectKey, ObjectPtr> m_pool;
 };
 
 /**
@@ -170,17 +161,17 @@ class ScalarPool : private ObjectPool<ScalarBase>
 public:
     /** @brief Scalar version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<ScalarBase>& other)
-    { ObjectPool<ScalarBase>::add(nodeName, other); }
+    { ObjectPool<ScalarBase>::add({nodeName}, other); }
 
     /** @brief Scalar version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray() const
-    { return ObjectPool<ScalarBase>::template getArray<T>(std::string(T::XmlNodeName)); }
+    { return ObjectPool<ScalarBase>::template getArray<T>({std::string(T::XmlNodeName)}); }
 
     /** @brief Scalar version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get() const
-    { return ObjectPool<ScalarBase>::template get<T>(std::string(T::XmlNodeName)); }
+    { return ObjectPool<ScalarBase>::template get<T>({std::string(T::XmlNodeName)}); }
 };
 
 /** @brief Shared `OptionsPool` pointer */
@@ -198,17 +189,19 @@ class OthersPool : private ObjectPool<OthersBase>
 public:
     /** @brief Others version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& other)
-    { ObjectPool::add(std::make_tuple(nodeName, other->getCmper()), other); }
+    { ObjectPool::add({nodeName, other->getCmper(), std::nullopt, other->getInci()}, other); }
 
     /** @brief Others version of #ObjectPool::getArray */
     template <typename T>
-    std::vector<std::shared_ptr<T>> getArray(Cmper cmper) const
-    { return ObjectPool::getArray<T>(std::make_tuple(std::string(T::XmlNodeName), cmper)); }
+    std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper = std::nullopt) const
+    { return ObjectPool::getArray<T>({std::string(T::XmlNodeName), cmper}); }
 
     /** @brief Others version of #ObjectPool::get */
     template <typename T>
-    std::shared_ptr<T> get(Cmper cmper) const
-    { return ObjectPool::get<T>(std::make_tuple(std::string(T::XmlNodeName), cmper)); }
+    std::shared_ptr<T> get(Cmper cmper, std::optional<Inci> inci = std::nullopt) const
+    {
+        return ObjectPool::get<T>({ std::string(T::XmlNodeName), cmper, std::nullopt, inci});
+    }
 };
 
 /** @brief Shared `OthersPool` pointer */

@@ -103,8 +103,8 @@ protected:
 class OthersBase : public Base
 {
 private:
-    Cmper m_cmper; ///< Common attribute: cmper (key value).
-    Inci m_inci;  ///< Array index: inci (starting from 0).
+    Cmper m_cmper;                  ///< Common attribute: cmper (key value).
+    std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
 
 protected:
     /**
@@ -114,7 +114,7 @@ protected:
      * @param inci The array index (`inci`).
      * @param document A weak pointer to the parent document
      */
-    OthersBase(const DocumentWeakPtr& document, int cmper, int inci = 0)
+    OthersBase(const DocumentWeakPtr& document, int cmper, std::optional<Inci> inci = std::nullopt)
         : Base(document), m_cmper(cmper), m_inci(inci) {}
 
 public:
@@ -133,18 +133,18 @@ public:
     void setCmper(Cmper cmper) { m_cmper = cmper; }
 
     /**
-     * @brief Gets the array index (`inci`).
+     * @brief Gets the optional array index (`inci`).
      * 
      * @return The `inci` value.
      */
-    Inci getInci() const { return m_inci; }
+    std::optional<Inci> getInci() const { return m_inci; }
 
     /**
      * @brief Sets the array index (`inci`).
      * 
      * @param inci The new `inci` value.
      */
-    void setInci(Inci inci) { m_inci = inci; }
+    void setInci(std::optional<Inci> inci) { m_inci = inci; }
 };
 
 /**
