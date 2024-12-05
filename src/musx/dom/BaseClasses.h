@@ -170,7 +170,8 @@ public:
      * @brief Default constructor
      * @param document A weak pointer to the document object.
      */
-    FontInfo(const DocumentWeakPtr& document) : Base(document) {}
+    explicit FontInfo(const DocumentWeakPtr& document)
+        : Base(document) {}
 
     /**
      * @brief Get the name of the font.

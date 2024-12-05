@@ -123,6 +123,7 @@ public:
 using RegisteredTypes = TypeRegistry <
     // options
     dom::options::DefaultFonts,
+    dom::options::PageFormatOptions,
     // others
     dom::others::FontDefinition,
     dom::others::MarkingCategory,
