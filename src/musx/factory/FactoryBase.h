@@ -162,32 +162,26 @@ struct FieldPopulator : public FactoryBase {};
 template <>
 struct FieldPopulator<dom::FontInfo> : public FactoryBase
 {
-    static void populate(dom::FontInfo& fontInfo, const std::shared_ptr<xml::IXmlElement>& element)
+    static void populate(const std::shared_ptr<dom::FontInfo>& fontInfo, const std::shared_ptr<xml::IXmlElement>& element)
     {
-        getFieldFromXml(element, "fontID", fontInfo.fontId, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
-        getFieldFromXml(element, "fontSize", fontInfo.fontSize, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "fontID", fontInfo->fontId, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
+        getFieldFromXml(element, "fontSize", fontInfo->fontSize, [](auto element) { return element->template getTextAs<int>(); });
 
-        fontInfo.fontEfx = dom::FontInfo::Plain;
         if (auto efxElement = element->getFirstChildElement("efx")) {
             for (auto efxChild = efxElement->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
                 auto efxName = efxChild->getTagName();
                 if (efxName == "bold") {
-                    fontInfo.fontEfx |= dom::FontInfo::Bold;
-                }
-                else if (efxName == "italic") {
-                    fontInfo.fontEfx |= dom::FontInfo::Italic;
-                }
-                else if (efxName == "underline") {
-                    fontInfo.fontEfx |= dom::FontInfo::Underline;
-                }
-                else if (efxName == "strikeout") {
-                    fontInfo.fontEfx |= dom::FontInfo::Strikeout;
-                }
-                else if (efxName == "absolute") {
-                    fontInfo.fontEfx |= dom::FontInfo::Absolute;
-                }
-                else if (efxName == "hidden") {
-                    fontInfo.fontEfx |= dom::FontInfo::Hidden;
+                    fontInfo->bold = true;
+                } else if (efxName == "italic") {
+                    fontInfo->italic = true;
+                } else if (efxName == "underline") {
+                    fontInfo->underline = true;
+                } else if (efxName == "strikeout") {
+                    fontInfo->strikeout = true;
+                } else if (efxName == "absolute") {
+                    fontInfo->absolute = true;
+                } else if (efxName == "hidden") {
+                    fontInfo->hidden = true;
                 }
             }
         }
@@ -199,7 +193,7 @@ struct FieldPopulator<dom::FontInfo> : public FactoryBase
         getFieldFromXml(element, nodeName, retval, [document](auto fontElement) -> std::shared_ptr<dom::FontInfo> {
                 if (!fontElement->getFirstChildElement()) return nullptr;
                 auto fontInfo = std::make_shared<dom::FontInfo>(document);
-                FieldPopulator<dom::FontInfo>::populate(*fontInfo, fontElement);
+                FieldPopulator<dom::FontInfo>::populate(fontInfo, fontElement);
                 return fontInfo;
             }, expected);
         return retval;

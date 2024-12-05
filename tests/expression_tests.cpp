@@ -42,6 +42,9 @@ TEST(TextExpressionDefTest, ValidExpression)
       <useCategoryFonts/>
       <descStr>fortissimo (velocity = 101)</descStr>
     </textExprDef>
+    <markingsCategory cmper="1">
+      <categoryType>dynamics</categoryType>
+    </markingsCategory>
   </others>
 </finale>
     )xml";
@@ -56,7 +59,7 @@ TEST(TextExpressionDefTest, ValidExpression)
     ASSERT_TRUE(expression) << "TextExpressionDef with cmper=3 not found but does exist";
 
     // Check every property
-    EXPECT_EQ(expression->textIDKey, 4);  // From XML
+    EXPECT_EQ(expression->textIdKey, 4);  // From XML
     EXPECT_EQ(expression->categoryId, 1);  // From XML
     EXPECT_EQ(expression->value, 101);  // From XML
     EXPECT_EQ(expression->playbackType, musx::dom::others::PlaybackType::MidiController);  // From XML
@@ -72,6 +75,13 @@ TEST(TextExpressionDefTest, ValidExpression)
     EXPECT_FALSE(expression->breakMmRest);  // Default
     EXPECT_TRUE(expression->useAuxData);  // From XML
     EXPECT_EQ(expression->description, "fortissimo (velocity = 101)");  // From XML
+
+    // Check marking cat
+    auto cat = others->get<musx::dom::others::MarkingCategory>(expression->categoryId);
+    ASSERT_TRUE(cat);
+    auto it = cat->textExpressions.find(expression->getCmper());
+    ASSERT_NE(it, cat->textExpressions.end());
+    ASSERT_TRUE(it->second.lock());
 }
 
 
@@ -148,13 +158,23 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     ASSERT_TRUE(markingCategory->textFont) << "TextFont is missing but exists in XML";
     EXPECT_EQ(markingCategory->textFont->fontId, 9);  // From XML
     EXPECT_EQ(markingCategory->textFont->fontSize, 14);  // From XML
-    EXPECT_TRUE(markingCategory->textFont->italic()) << "Italic effect expected but not found";  // From XML
+    EXPECT_FALSE(markingCategory->textFont->bold);
+    EXPECT_TRUE(markingCategory->textFont->italic) << "Italic effect expected but not found";
+    EXPECT_FALSE(markingCategory->textFont->underline);
+    EXPECT_FALSE(markingCategory->textFont->strikeout);
+    EXPECT_FALSE(markingCategory->textFont->absolute);
+    EXPECT_FALSE(markingCategory->textFont->hidden);
 
     // musicFont properties
     ASSERT_TRUE(markingCategory->musicFont) << "MusicFont is missing but exists in XML";
     EXPECT_EQ(markingCategory->musicFont->fontId, 0);  // Default value as fontID is missing
     EXPECT_EQ(markingCategory->musicFont->fontSize, 24);  // From XML
-    EXPECT_EQ(markingCategory->musicFont->fontEfx, 0);
+    EXPECT_FALSE(markingCategory->musicFont->bold);
+    EXPECT_FALSE(markingCategory->musicFont->italic);
+    EXPECT_FALSE(markingCategory->musicFont->underline);
+    EXPECT_FALSE(markingCategory->musicFont->strikeout);
+    EXPECT_FALSE(markingCategory->musicFont->absolute);
+    EXPECT_FALSE(markingCategory->musicFont->hidden);
 
     // numberFont should be nullptr because it has no subnodes
     EXPECT_EQ(markingCategory->numberFont, nullptr) << "NumberFont should be nullptr but is not";

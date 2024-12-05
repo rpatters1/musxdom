@@ -105,7 +105,7 @@ public:
                 // Only enable this part if T is constructible with Args...
                 if constexpr (std::is_constructible_v<T, Args...>) {
                     auto instance = std::make_shared<T>(std::forward<Args>(args)...);
-                    factory::FieldPopulator<T>::populate(*instance, node, elementLinker);
+                    factory::FieldPopulator<T>::populate(instance, node, elementLinker);
                     return instance;
                 } else {
                     throw std::runtime_error("Selected type is not constructible with given arguments");

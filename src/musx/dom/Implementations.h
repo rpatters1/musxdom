@@ -64,11 +64,7 @@ inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(const Docume
 
 inline std::string FontInfo::getFontName() const
 {
-    auto document = this->getDocument().lock();
-    assert(document); // program bug if fail
-    auto others = document->getOthers();
-    assert(others); // program bug if fail
-    auto fontDef = others->get<others::FontDefinition>(fontId);
+    auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(fontId);
     if (fontDef) {
         return fontDef->name;
     }
@@ -81,11 +77,7 @@ inline std::string FontInfo::getFontName() const
 
 inline std::string others::MarkingCategory::getName() const
 {
-    auto document = this->getDocument().lock();
-    assert(document); // program bug if fail
-    auto others = document->getOthers();
-    assert(others); // program bug if fail
-    auto catName = others->get<others::MarkingCategoryName>(getCmper());
+    auto catName = getDocument()->getOthers()->get<others::MarkingCategoryName>(getCmper());
     if (catName) {
         return catName->name;
     }
@@ -99,11 +91,7 @@ inline std::string others::MarkingCategory::getName() const
 inline std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 {
     if (!hasEnclosure) return nullptr;
-    auto document = getDocument().lock();
-    assert(document);
-    auto others = document->getOthers();
-    assert(others); // program bug if fail
-    return others->get<others::TextExpressionEnclosure>(getCmper());
+    return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getCmper());
 }
 
 } // namespace dom    

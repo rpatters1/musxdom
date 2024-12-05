@@ -48,19 +48,19 @@ private:
     }
 
 public:
-    static void populate(Enclosure& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    static void populate(const std::shared_ptr<Enclosure>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
-        getFieldFromXml(element, "xAdd", instance.xAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "yAdd", instance.yAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "xMargin", instance.xMargin, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "yMargin", instance.yMargin, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "lineWidth", instance.lineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
-        getFieldFromXml(element, "sides", instance.shape, [](auto element) {  return toShape(element->template getTextAs<uint8_t>()); });
-        getFieldFromXml(element, "cornerRadius", instance.cornerRadius, [](auto element) { return element->template getTextAs<Efix>(); });
-        getFieldFromXml(element, "fixedSize", instance.fixedSize, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "notTall", instance.notTall, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "opaque", instance.opaque, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "roundCorners", instance.roundCorners, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "xAdd", instance->xAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "yAdd", instance->yAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "xMargin", instance->xMargin, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "yMargin", instance->yMargin, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "lineWidth", instance->lineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "sides", instance->shape, [](auto element) { return toShape(element->template getTextAs<uint8_t>()); });
+        getFieldFromXml(element, "cornerRadius", instance->cornerRadius, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "fixedSize", instance->fixedSize, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "notTall", instance->notTall, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "opaque", instance->opaque, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "roundCorners", instance->roundCorners, [](auto element) { return true; }, false);
     }
 };
 
@@ -156,13 +156,13 @@ private:
 template <>
 struct FieldPopulator<FontDefinition> : public FactoryBase
 {
-    static void populate(FontDefinition& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    static void populate(const std::shared_ptr<FontDefinition>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
-        getFieldFromXml(element, "charsetBank", instance.charsetBank, [](auto element) { return element->getText(); });
-        getFieldFromXml(element, "charsetVal", instance.charsetVal, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "pitch", instance.pitch, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "family", instance.family, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "name", instance.name, [](auto element) { return element->getText(); });
+        getFieldFromXml(element, "charsetBank", instance->charsetBank, [](auto element) { return element->getText(); });
+        getFieldFromXml(element, "charsetVal", instance->charsetVal, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "pitch", instance->pitch, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "family", instance->family, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "name", instance->name, [](auto element) { return element->getText(); });
     }
 };
 
@@ -185,38 +185,38 @@ private:
     }
 
 public:
-    static void populate(MarkingCategory& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    static void populate(const std::shared_ptr<MarkingCategory>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
         // Populate categoryType field
-        getFieldFromXml(element, "categoryType", instance.categoryType, [](auto element) { return toCategoryType(element->getText()); });
+        getFieldFromXml(element, "categoryType", instance->categoryType, [](auto element) { return toCategoryType(element->getText()); });
 
         // Populate textFont, musicFont, and numberFont if the corresponding font tags exist
-        instance.textFont = FieldPopulator<FontInfo>::getFontFromXml(element, "textFont", instance.getDocument());
-        instance.musicFont = FieldPopulator<FontInfo>::getFontFromXml(element, "musicFont", instance.getDocument());
-        instance.numberFont = FieldPopulator<FontInfo>::getFontFromXml(element, "numberFont", instance.getDocument());
+        instance->textFont = FieldPopulator<FontInfo>::getFontFromXml(element, "textFont", instance->getDocument());
+        instance->musicFont = FieldPopulator<FontInfo>::getFontFromXml(element, "musicFont", instance->getDocument());
+        instance->numberFont = FieldPopulator<FontInfo>::getFontFromXml(element, "numberFont", instance->getDocument());
 
         // Populate alignment and justification fields
-        getFieldFromXml(element, "horzAlign", instance.horzAlign, [](auto element) { return Utils::toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "vertAlign", instance.vertAlign, [](auto element) { return Utils::toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "justification", instance.justification, [](auto element) { return Utils::toHorizontalExprJustification(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "horzAlign", instance->horzAlign, [](auto element) { return Utils::toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "vertAlign", instance->vertAlign, [](auto element) { return Utils::toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "justification", instance->justification, [](auto element) { return Utils::toHorizontalExprJustification(element->template getTextAs<std::string>()); });
 
         // Populate offset fields
-        getFieldFromXml(element, "horzOffset", instance.horzOffset, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "vertOffsetBaseline", instance.vertOffsetBaseline, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "vertOffsetEntry", instance.vertOffsetEntry, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "horzOffset", instance->horzOffset, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "vertOffsetBaseline", instance->vertOffsetBaseline, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "vertOffsetEntry", instance->vertOffsetEntry, [](auto element) { return element->template getTextAs<Evpu>(); });
 
         // Populate boolean usage fields
-        getFieldFromXml(element, "usesTextFont", instance.usesTextFont, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesMusicFont", instance.usesMusicFont, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesNumberFont", instance.usesNumberFont, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesPositioning", instance.usesPositioning, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesStaffList", instance.usesStaffList, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesBreakMmRests", instance.usesBreakMmRests, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "breakMmRest", instance.breakMmRest, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "userCreated", instance.userCreated, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesTextFont", instance->usesTextFont, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesMusicFont", instance->usesMusicFont, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesNumberFont", instance->usesNumberFont, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesPositioning", instance->usesPositioning, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesStaffList", instance->usesStaffList, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesBreakMmRests", instance->usesBreakMmRests, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "breakMmRest", instance->breakMmRest, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "userCreated", instance->userCreated, [](auto element) { return true; }, false);
 
         // Populate staffList field
-        getFieldFromXml(element, "staffList", instance.staffList, [](auto element) { return element->template getTextAs<Cmper>(); });
+        getFieldFromXml(element, "staffList", instance->staffList, [](auto element) { return element->template getTextAs<Cmper>(); });
     }
 };
 
@@ -224,9 +224,9 @@ template <>
 struct FieldPopulator<MarkingCategoryName> : public FactoryBase
 {
 public:
-    static void populate(MarkingCategoryName& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    static void populate(const std::shared_ptr<MarkingCategoryName>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
-        getFieldFromXml(element, "name", instance.name, [](auto element) { return element->getText(); });
+        getFieldFromXml(element, "name", instance->name, [](auto element) { return element->getText(); });
     }
 };
 
@@ -240,36 +240,34 @@ public:
     /**
      * @brief Populates the fields of a TextExpressionDef instance from an XML element.
      */
-    static void populate(TextExpressionDef& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
+    static void populate(const std::shared_ptr<TextExpressionDef>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
     {
-        getFieldFromXml(element, "textIDKey", instance.textIDKey, [](auto element) { return element->template getTextAs<Cmper>(); });
-        getFieldFromXml(element, "categoryID", instance.categoryId, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "value", instance.value, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "auxData1", instance.auxData1, [](auto element) { return element->template getTextAs<int>(); }, false);
-        getFieldFromXml(element, "playType", instance.playbackType, [](auto element) { return Utils::toPlaybackType(element->template getTextAs<std::string>()); }, false);
-        getFieldFromXml(element, "horzMeasExprAlign", instance.horzMeasExprAlign, [](auto element) { return Utils::toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "horzExprAlign", instance.horzExprJustification, [](auto element) { return Utils::toHorizontalExprJustification(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "vertMeasExprAlign", instance.vertMeasExprAlign, [](auto element) { return Utils::toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "measXAdjust", instance.measXAdjust, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "yAdjustEntry", instance.yAdjustEntry, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "yAdjustBaseline", instance.yAdjustBaseline, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "useCategoryFonts", instance.useCategoryFonts, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "useCategoryPos", instance.useCategoryPos, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "newEnclosure", instance.hasEnclosure, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "breakMmRest", instance.breakMmRest, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "useAuxData", instance.useAuxData, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "descStr", instance.description, [](auto element) { return element->getText(); }, false);
+        getFieldFromXml(element, "textIDKey", instance->textIdKey, [](auto element) { return element->template getTextAs<Cmper>(); });
+        getFieldFromXml(element, "categoryID", instance->categoryId, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "value", instance->value, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "auxData1", instance->auxData1, [](auto element) { return element->template getTextAs<int>(); }, false);
+        getFieldFromXml(element, "playType", instance->playbackType, [](auto element) { return Utils::toPlaybackType(element->template getTextAs<std::string>()); }, false);
+        getFieldFromXml(element, "horzMeasExprAlign", instance->horzMeasExprAlign, [](auto element) { return Utils::toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "horzExprAlign", instance->horzExprJustification, [](auto element) { return Utils::toHorizontalExprJustification(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "vertMeasExprAlign", instance->vertMeasExprAlign, [](auto element) { return Utils::toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
+        getFieldFromXml(element, "measXAdjust", instance->measXAdjust, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "yAdjustEntry", instance->yAdjustEntry, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "yAdjustBaseline", instance->yAdjustBaseline, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "useCategoryFonts", instance->useCategoryFonts, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "useCategoryPos", instance->useCategoryPos, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "newEnclosure", instance->hasEnclosure, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "breakMmRest", instance->breakMmRest, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "useAuxData", instance->useAuxData, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "descStr", instance->description, [](auto element) { return element->getText(); }, false);
 
         //Add this instance's id to the marking category's set.
-        if (instance.categoryId) {
-            Cmper categoryId = instance.categoryId;
-            Cmper thisId = instance.getCmper();
-            elementLinker.addResolver([categoryId, thisId](const DocumentPtr& document) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(categoryId);
+        if (instance->categoryId) {
+            elementLinker.addResolver([instance](const DocumentPtr& document) {
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->categoryId);
                 if (!markingCat) {
-                    throw std::invalid_argument("Marking category for text expression " + std::to_string(thisId) + " does not exist.");
+                    throw std::invalid_argument("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
-                markingCat->textExpressions.emplace(thisId);                
+                markingCat->textExpressions.emplace(instance->getCmper(), instance);                
             });
         }
     }

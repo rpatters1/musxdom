@@ -26,7 +26,7 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
-#include <set>
+#include <map>
 
 #include "BaseClasses.h"
 // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
@@ -181,6 +181,8 @@ enum class HorizontalExprJustification
     Right    ///< Justified right.
 };
 
+class TextExpressionDef;
+
 /**
  * @class MarkingCategory
  * @brief Represents a category of markings used in the musx file.
@@ -239,7 +241,11 @@ public:
     // Staff list represented as an integer
     Cmper staffList{};        ///< Represents `<staffList>` element, e.g., 1
 
-    std::set<Cmper> textExpressions;    ///< A list of text expressions in this category. (This in not in the xml but is created by the factory.)
+    /** @brief A list of text expressions in this category.
+     *
+     * (This in not in the xml but is created by the factory.)
+     */
+    std::map<Cmper, std::weak_ptr<TextExpressionDef>> textExpressions;
 
     /** @brief gets the name of the marking category */
     std::string getName() const;
@@ -276,7 +282,7 @@ public:
 class TextExpressionDef : public OthersBase
 {
 public:
-    Cmper textIDKey{};                              ///< Identifier for the @ref TextBlock associated with this 
+    Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this 
     int categoryId{};                               ///< Identifier for the category of the text expression.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
     int auxData1{};                                 ///< Auxiliary data for the expression.

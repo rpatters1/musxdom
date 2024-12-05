@@ -36,7 +36,7 @@ using namespace dom::options;
 template <>
 struct FieldPopulator<DefaultFonts> : public FactoryBase
 {
-    static void populate(DefaultFonts& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
+    static void populate(const std::shared_ptr<DefaultFonts>& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
     {
         auto fontElements = getFirstChildElement(element, "font");
         for (auto fontElement = getFirstChildElement(element, "font"); fontElement; fontElement = fontElement->getNextSibling("font")) {
@@ -46,11 +46,11 @@ struct FieldPopulator<DefaultFonts> : public FactoryBase
             }
             FontType fontType = fromString(typeStr->getValue());
 
-            auto fontInfo = std::make_shared<dom::FontInfo>(fonts.getDocument());
-            FieldPopulator<dom::FontInfo>::populate(*fontInfo.get(), fontElement);
+            auto fontInfo = std::make_shared<dom::FontInfo>(fonts->getDocument());
+            FieldPopulator<dom::FontInfo>::populate(fontInfo, fontElement);
 
             // Add the populated font instance to the vector.
-            fonts.defaultFonts.emplace(fontType, fontInfo);
+            fonts->defaultFonts.emplace(fontType, fontInfo);
         }
     }
 
