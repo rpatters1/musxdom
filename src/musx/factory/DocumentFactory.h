@@ -63,16 +63,18 @@ public:
 
         DocumentPtr document(new Document);
 
+        ElementLinker elementLinker;
         for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {
             if (element->getTagName() == "header") {
                 document->getHeader() = musx::factory::HeaderFactory::create(element);
             } else if (element->getTagName() == "options") {
-                document->getOptions() = musx::factory::OptionsFactory::create(element, document);
+                document->getOptions() = musx::factory::OptionsFactory::create(element, document, elementLinker);
             } else if (element->getTagName() == "others") {
-                document->getOthers() = musx::factory::OthersFactory::create(element, document);
+                document->getOthers() = musx::factory::OthersFactory::create(element, document, elementLinker);
             }
         }
-
+        elementLinker.resolveAll(document);
+        
         return document;
     }
 };

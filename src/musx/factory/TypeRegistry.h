@@ -57,9 +57,11 @@ private:
      * The registry is an array of pairs, where each pair contains a node name (as a string)
      * and a corresponding type pointer (as nullptr).
      */
-    static constexpr auto registry = std::array {
-        std::pair<std::string_view, VariantType>{Types::XmlNodeName, static_cast<Types*>(nullptr)}...
-    };
+    static inline const auto registry = []() {
+        return std::unordered_map<std::string_view, VariantType>{
+            {Types::XmlNodeName, VariantType(static_cast<Types*>(nullptr))}...
+        };
+    }();
 
     /**
      * @brief Finds the registered type corresponding to the provided node name.
@@ -69,14 +71,13 @@ private:
      * @param nodeName The XML node name to search for.
      * @return A pair consisting of a boolean indicating success and a type pointer if found.
      */
-    static constexpr std::optional<VariantType> findRegisteredType(std::string_view nodeName)
+    static std::optional<VariantType> findRegisteredType(std::string_view nodeName)
     {
-        for (const auto& entry : registry) {
-            if (entry.first == nodeName) {
-                return entry.second;
-            }
+        const auto it = registry.find(nodeName);
+        if (it == registry.end()) {
+            return std::nullopt;
         }
-        return std::nullopt;
+        return it->second;
     }
 
 public:
@@ -87,11 +88,12 @@ public:
      *
      * @tparam Args The argument types required by the constructor of the target type.
      * @param node The XML node from which an instance is to be created.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @param args Arguments to be forwarded to the constructor of the target type.
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
     template <typename... Args>
-    static std::shared_ptr<Base> createInstance(const std::shared_ptr<xml::IXmlElement>& node, Args&&... args)
+    static std::shared_ptr<Base> createInstance(const std::shared_ptr<xml::IXmlElement>& node, ElementLinker& elementLinker, Args&&... args)
     {
         auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
@@ -104,7 +106,7 @@ public:
                 // Only enable this part if T is constructible with Args...
                 if constexpr (std::is_constructible_v<T, Args...>) {
                     auto instance = std::make_shared<T>(std::forward<Args>(args)...);
-                    factory::FieldPopulator<T>::populate(*instance, node);
+                    factory::FieldPopulator<T>::populate(instance, node, elementLinker);
                     return instance;
                 } else {
                     throw std::runtime_error("Selected type is not constructible with given arguments");
@@ -122,7 +124,12 @@ using RegisteredTypes = TypeRegistry <
     // options
     dom::options::DefaultFonts,
     // others
-    dom::others::FontDefinition
+    dom::others::FontDefinition,
+    dom::others::MarkingCategory,
+    dom::others::MarkingCategoryName,
+    dom::others::TextExpressionDef,
+    dom::others::TextExpressionEnclosure,
+    dom::others::TextRepeatEnclosure
     // Add pointers to additional supported types here.
     // Also add a field populator in FieldPopulatorsOthers.h
 >;

@@ -32,47 +32,25 @@ namespace factory {
 using namespace dom::options;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
+
 template <>
 struct FieldPopulator<DefaultFonts> : public FactoryBase
 {
-    static void populate(DefaultFonts& fonts, const std::shared_ptr<xml::IXmlElement>& element)
+    static void populate(const std::shared_ptr<DefaultFonts>& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
         auto fontElements = getFirstChildElement(element, "font");
         for (auto fontElement = getFirstChildElement(element, "font"); fontElement; fontElement = fontElement->getNextSibling("font")) {
-            auto fontInstance = std::make_shared<dom::FontInfo>(fonts.getDocument());
-
-            // Populate type attribute.
             auto typeStr = fontElement->findAttribute("type");
             if (!typeStr) {
                 throw std::invalid_argument("font option has no type");
             }
             FontType fontType = fromString(typeStr->getValue());
 
-            getFieldFromXml(fontElement, "fontID", fontInstance->fontID, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
-            getFieldFromXml(fontElement, "fontSize", fontInstance->fontSize, [](auto element) { return element->template getTextAs<int>(); });
-
-            // Handle effects (bold, italic, absolute).
-            if (auto efxElement = fontElement->getFirstChildElement("efx")) {
-                for (auto efxChild = efxElement->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
-                    auto efxName = efxChild->getTagName();
-                    if (efxName == "bold") {
-                        fontInstance->bold = true;
-                    } else if (efxName == "italic") {
-                        fontInstance->italic = true;
-                    } else if (efxName == "underline") {
-                        fontInstance->underline = true;
-                    } else if (efxName == "strikeout") {
-                        fontInstance->strikeout = true;
-                    } else if (efxName == "absolute") {
-                        fontInstance->absolute = true;
-                    } else if (efxName == "hidden") {
-                        fontInstance->hidden = true;
-                    }
-                }
-            }
+            auto fontInfo = std::make_shared<dom::FontInfo>(fonts->getDocument());
+            FieldPopulator<dom::FontInfo>::populate(fontInfo, fontElement);
 
             // Add the populated font instance to the vector.
-            fonts.defaultFonts.emplace(fontType, fontInstance);
+            fonts->defaultFonts.emplace(fontType, fontInfo);
         }
     }
 

@@ -32,7 +32,67 @@
 namespace musx {
 namespace dom {
 
-// add functions if needed
+// ************************
+// ***** DefaultFonts *****
+// ************************
+
+inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(options::DefaultFonts::FontType type) const
+{
+    auto it = defaultFonts.find(type);
+    if (it == defaultFonts.end()) {
+        throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
+    }
+    return it->second;
+}
+
+inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(const DocumentPtr& document, options::DefaultFonts::FontType type)
+{
+    auto options = document->getOptions();
+    if (!options) {
+        throw std::invalid_argument("No options found in document");
+    }
+    auto defaultFonts = options->get<options::DefaultFonts>();
+    if (!defaultFonts) {
+        throw std::invalid_argument("Default fonts not found in document");
+    }
+    return defaultFonts->getFontInfo(type);
+}
+
+// ********************
+// ***** FontInfo *****
+// ********************
+
+inline std::string FontInfo::getFontName() const
+{
+    auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(fontId);
+    if (fontDef) {
+        return fontDef->name;
+    }
+    throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontId));
+}
+
+// ****************************
+// ***** MarkingCategiory *****
+// ****************************
+
+inline std::string others::MarkingCategory::getName() const
+{
+    auto catName = getDocument()->getOthers()->get<others::MarkingCategoryName>(getCmper());
+    if (catName) {
+        return catName->name;
+    }
+    return {};
+}
+
+// *****************************
+// ***** TextExpressionDef *****
+// *****************************
+
+inline std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
+{
+    if (!hasEnclosure) return nullptr;
+    return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getCmper());
+}
 
 } // namespace dom    
 } // namespace musx

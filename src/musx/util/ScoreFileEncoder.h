@@ -63,7 +63,6 @@ public:
                       std::is_same<CT, char>::value,
                       "recodeBuffer can only be called with buffers of uint8_t or char.");
         uint32_t state = INITIAL_STATE;
-        int i = 0;
         for (size_t i = 0; i < buffSize; i++) {
             if (i % RESET_LIMIT == 0) {
                 state = INITIAL_STATE;

@@ -32,9 +32,6 @@
 
 namespace musx {
 namespace dom {
-
-class FontInfo;
-
 namespace options {
 
 /**
@@ -53,7 +50,7 @@ public:
      *
      * Constructs a DefaultFonts object that is associated with the provided document.
      */
-    DefaultFonts(const std::weak_ptr<Document>& document) : OptionsBase(document) {}
+    DefaultFonts(const DocumentWeakPtr& document) : OptionsBase(document) {}
 
     /**
      * @enum FontType
@@ -123,14 +120,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    std::shared_ptr<FontInfo> getFontInfo(FontType type) const
-    {
-        auto it = defaultFonts.find(type);
-        if (it == defaultFonts.end()) {
-            throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
-        }
-        return it->second;
-    }
+    std::shared_ptr<FontInfo> getFontInfo(FontType type) const;
 
     /**
      * @brief get the `FontInfo` for a particular type from the document pool
@@ -139,18 +129,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    static std::shared_ptr<FontInfo> getFontInfo(const DocumentPtr& document, FontType type)
-    {
-        auto options = document->getOptions();
-        if (!options) {
-            throw std::invalid_argument("No options found in document");
-        }
-        auto defaultFonts = options->get<DefaultFonts>();
-        if (!defaultFonts) {
-            throw std::invalid_argument("Default fonts not found in document");
-        }
-        return defaultFonts->getFontInfo(type);
-    }
+    static std::shared_ptr<FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
 
     /**
      * @brief The XML node name for this type.

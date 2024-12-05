@@ -58,15 +58,16 @@ public:
      *
      * @param element The XML element representing the `<others>` node.
      * @param document The document object providing context for the XML parsing.
+     * @param elementLinker A class for storing deferred linkage commands.
      * @return A fully populated `ObjectPoolType` object.
      */
-    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
+    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
         auto pool = std::make_shared<PoolType>();
 
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {
             std::string thisElt = childElement->getTagName();
-            auto basePtr = DerivedType::extractFromXml(childElement, document);
+            auto basePtr = DerivedType::extractFromXml(childElement, document, elementLinker);
             if (basePtr) {
                 auto typedPtr = std::static_pointer_cast<ObjectBase>(basePtr);
                 assert(typedPtr); // program bug if null
@@ -98,21 +99,25 @@ public:
      *
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
+    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
         auto cmperAttribute = element->findAttribute("cmper");
         if (!cmperAttribute) {
             throw std::invalid_argument("missing cmper for others element " + element->getTagName());
         }
-        dom::Cmper cmper = cmperAttribute->getValueAs<dom::Cmper>();
         auto inciAttribute = element->findAttribute("inci");
-        return RegisteredTypes::createInstance(element,
-                                               cmperAttribute->getValueAs<dom::Cmper>(),
-                                               inciAttribute ? inciAttribute->getValueAs<dom::Inci>() : 0,
-                                               document);
+        if (inciAttribute) {
+            return RegisteredTypes::createInstance(element, elementLinker,
+                document, cmperAttribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
+        }
+        else {
+            return RegisteredTypes::createInstance(element, elementLinker,
+                document, cmperAttribute->getValueAs<dom::Cmper>());
+        }
     }
 };
 
@@ -136,11 +141,12 @@ public:
      *
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @return A shared pointer to the created object.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::shared_ptr<dom::Document>& document)
+    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
-        return RegisteredTypes::createInstance(element, document);
+        return RegisteredTypes::createInstance(element, elementLinker, document);
     }
 };
 
