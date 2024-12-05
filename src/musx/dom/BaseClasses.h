@@ -114,7 +114,7 @@ protected:
      * @param inci The array index (`inci`).
      * @param document A weak pointer to the parent document
      */
-    OthersBase(const DocumentWeakPtr& document, int cmper, std::optional<Inci> inci = std::nullopt)
+    OthersBase(const DocumentWeakPtr& document, Cmper cmper, std::optional<Inci> inci = std::nullopt)
         : Base(document), m_cmper(cmper), m_inci(inci) {}
 
 public:

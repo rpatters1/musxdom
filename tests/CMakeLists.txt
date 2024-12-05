@@ -31,6 +31,14 @@ add_executable(musxdomtests
 	pool_tests.cpp
 )
 
+if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
+    # Extra warnings for Clang/AppleClang
+    target_compile_options(musxdomtests PRIVATE -Wall -Wextra -Werror -pedantic)
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    # Extra warnings for MSVC
+    target_compile_options(musxdomtests PRIVATE /Zc:__cplusplus /W4 /WX)
+endif()
+
 # Compile definitions
 target_compile_definitions(musxdomtests PRIVATE MUSX_USE_TINYXML2)
 target_compile_definitions(musxdomtests PRIVATE MUSX_USE_RAPIDXML)

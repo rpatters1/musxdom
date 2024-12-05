@@ -36,7 +36,7 @@ using namespace dom::options;
 template <>
 struct FieldPopulator<DefaultFonts> : public FactoryBase
 {
-    static void populate(const std::shared_ptr<DefaultFonts>& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
+    static void populate(const std::shared_ptr<DefaultFonts>& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
         auto fontElements = getFirstChildElement(element, "font");
         for (auto fontElement = getFirstChildElement(element, "font"); fontElement; fontElement = fontElement->getNextSibling("font")) {

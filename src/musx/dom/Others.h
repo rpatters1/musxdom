@@ -92,7 +92,7 @@ class FontDefinition : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    FontDefinition(const DocumentWeakPtr& document, int cmper)
+    FontDefinition(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
     // Public properties corresponding to the XML structure
@@ -204,7 +204,7 @@ public:
     };
 
     /** @brief Constructor function */
-    MarkingCategory(const DocumentWeakPtr& document, int cmper)
+    MarkingCategory(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
     CategoryType categoryType{ CategoryType::Misc }; ///< Category type of the marking
@@ -265,7 +265,7 @@ class MarkingCategoryName : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    MarkingCategoryName(const DocumentWeakPtr& document, int cmper)
+    MarkingCategoryName(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
     std::string name; ///< The name of the marking category.
@@ -283,7 +283,7 @@ class TextExpressionDef : public OthersBase
 {
 public:
     Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this 
-    int categoryId{};                               ///< Identifier for the category of the text expression.
+    Cmper categoryId{};                             ///< Identifier for the category of the text expression.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
     int auxData1{};                                 ///< Auxiliary data for the expression.
     PlaybackType playbackType{ PlaybackType::None }; ///< Playback behavior of the text expression.

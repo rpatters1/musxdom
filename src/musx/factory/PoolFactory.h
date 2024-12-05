@@ -109,7 +109,6 @@ public:
         if (!cmperAttribute) {
             throw std::invalid_argument("missing cmper for others element " + element->getTagName());
         }
-        dom::Cmper cmper = cmperAttribute->getValueAs<dom::Cmper>();
         auto inciAttribute = element->findAttribute("inci");
         if (inciAttribute) {
             return RegisteredTypes::createInstance(element, elementLinker,

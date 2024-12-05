@@ -243,7 +243,7 @@ public:
     static void populate(const std::shared_ptr<TextExpressionDef>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
     {
         getFieldFromXml(element, "textIDKey", instance->textIdKey, [](auto element) { return element->template getTextAs<Cmper>(); });
-        getFieldFromXml(element, "categoryID", instance->categoryId, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "categoryID", instance->categoryId, [](auto element) { return element->template getTextAs<Cmper>(); });
         getFieldFromXml(element, "value", instance->value, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "auxData1", instance->auxData1, [](auto element) { return element->template getTextAs<int>(); }, false);
         getFieldFromXml(element, "playType", instance->playbackType, [](auto element) { return Utils::toPlaybackType(element->template getTextAs<std::string>()); }, false);
