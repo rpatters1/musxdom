@@ -88,6 +88,7 @@ public:
      *
      * @tparam Args The argument types required by the constructor of the target type.
      * @param node The XML node from which an instance is to be created.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @param args Arguments to be forwarded to the constructor of the target type.
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */

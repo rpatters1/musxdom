@@ -99,6 +99,7 @@ public:
      *
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
@@ -141,6 +142,7 @@ public:
      *
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @return A shared pointer to the created object.
      */
     static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)

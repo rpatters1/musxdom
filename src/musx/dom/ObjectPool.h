@@ -53,12 +53,14 @@ public:
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
-        TopKeyElementType nodeId;
-        std::optional<Cmper> cmper1;
-        std::optional<Cmper> cmper2;
-        std::optional<Inci> inci;
+        TopKeyElementType nodeId;       ///< the identifier for this node. usually the XML node name.
+        std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
+        std::optional<Cmper> cmper2;    ///< optional cmper2 for Details.
+        std::optional<Inci> inci;       ///< optional inci for multi-inci classes
 
-        bool operator<(const ObjectKey& other) const {
+        /** @brief comparison operator for std::map */
+        bool operator<(const ObjectKey& other) const
+        {
             if (nodeId != other.nodeId) {
                 return nodeId < other.nodeId;
             }
