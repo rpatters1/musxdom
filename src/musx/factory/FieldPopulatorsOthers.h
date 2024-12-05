@@ -57,10 +57,10 @@ public:
         getFieldFromXml(element, "lineWidth", instance->lineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
         getFieldFromXml(element, "sides", instance->shape, [](auto element) { return toShape(element->template getTextAs<uint8_t>()); });
         getFieldFromXml(element, "cornerRadius", instance->cornerRadius, [](auto element) { return element->template getTextAs<Efix>(); });
-        getFieldFromXml(element, "fixedSize", instance->fixedSize, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "notTall", instance->notTall, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "opaque", instance->opaque, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "roundCorners", instance->roundCorners, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "fixedSize", instance->fixedSize, [](auto) { return true; }, false);
+        getFieldFromXml(element, "notTall", instance->notTall, [](auto) { return true; }, false);
+        getFieldFromXml(element, "opaque", instance->opaque, [](auto) { return true; }, false);
+        getFieldFromXml(element, "roundCorners", instance->roundCorners, [](auto) { return true; }, false);
     }
 };
 
@@ -206,14 +206,14 @@ public:
         getFieldFromXml(element, "vertOffsetEntry", instance->vertOffsetEntry, [](auto element) { return element->template getTextAs<Evpu>(); });
 
         // Populate boolean usage fields
-        getFieldFromXml(element, "usesTextFont", instance->usesTextFont, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesMusicFont", instance->usesMusicFont, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesNumberFont", instance->usesNumberFont, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesPositioning", instance->usesPositioning, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesStaffList", instance->usesStaffList, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "usesBreakMmRests", instance->usesBreakMmRests, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "breakMmRest", instance->breakMmRest, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "userCreated", instance->userCreated, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "usesTextFont", instance->usesTextFont, [](auto) { return true; }, false);
+        getFieldFromXml(element, "usesMusicFont", instance->usesMusicFont, [](auto) { return true; }, false);
+        getFieldFromXml(element, "usesNumberFont", instance->usesNumberFont, [](auto) { return true; }, false);
+        getFieldFromXml(element, "usesPositioning", instance->usesPositioning, [](auto) { return true; }, false);
+        getFieldFromXml(element, "usesStaffList", instance->usesStaffList, [](auto) { return true; }, false);
+        getFieldFromXml(element, "usesBreakMmRests", instance->usesBreakMmRests, [](auto) { return true; }, false);
+        getFieldFromXml(element, "breakMmRest", instance->breakMmRest, [](auto) { return true; }, false);
+        getFieldFromXml(element, "userCreated", instance->userCreated, [](auto) { return true; }, false);
 
         // Populate staffList field
         getFieldFromXml(element, "staffList", instance->staffList, [](auto element) { return element->template getTextAs<Cmper>(); });
@@ -253,11 +253,11 @@ public:
         getFieldFromXml(element, "measXAdjust", instance->measXAdjust, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "yAdjustEntry", instance->yAdjustEntry, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "yAdjustBaseline", instance->yAdjustBaseline, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "useCategoryFonts", instance->useCategoryFonts, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "useCategoryPos", instance->useCategoryPos, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "newEnclosure", instance->hasEnclosure, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "breakMmRest", instance->breakMmRest, [](auto element) { return true; }, false);
-        getFieldFromXml(element, "useAuxData", instance->useAuxData, [](auto element) { return true; }, false);
+        getFieldFromXml(element, "useCategoryFonts", instance->useCategoryFonts, [](auto) { return true; }, false);
+        getFieldFromXml(element, "useCategoryPos", instance->useCategoryPos, [](auto) { return true; }, false);
+        getFieldFromXml(element, "newEnclosure", instance->hasEnclosure, [](auto) { return true; }, false);
+        getFieldFromXml(element, "breakMmRest", instance->breakMmRest, [](auto) { return true; }, false);
+        getFieldFromXml(element, "useAuxData", instance->useAuxData, [](auto) { return true; }, false);
         getFieldFromXml(element, "descStr", instance->description, [](auto element) { return element->getText(); }, false);
 
         //Add this instance's id to the marking category's set.

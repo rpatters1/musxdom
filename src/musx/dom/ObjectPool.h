@@ -58,6 +58,14 @@ public:
         std::optional<Cmper> cmper2;    ///< optional cmper2 for Details.
         std::optional<Inci> inci;       ///< optional inci for multi-inci classes
 
+        /** @brief explicit constructor for optional parameters */
+        ObjectKey(const TopKeyElementType n,
+            std::optional<Cmper> c1 = std::nullopt,
+            std::optional<Cmper> c2 = std::nullopt,
+            std::optional<Inci> i = std::nullopt) : nodeId(n), cmper1(c1), cmper2(c2), inci(i)
+        {
+        }
+
         /** @brief comparison operator for std::map */
         bool operator<(const ObjectKey& other) const
         {
@@ -202,7 +210,7 @@ public:
     template <typename T>
     std::shared_ptr<T> get(Cmper cmper, std::optional<Inci> inci = std::nullopt) const
     {
-        return ObjectPool::get<T>({ std::string(T::XmlNodeName), cmper, std::nullopt, inci});
+        return ObjectPool::get<T>({std::string(T::XmlNodeName), cmper, std::nullopt, inci});
     }
 };
 
