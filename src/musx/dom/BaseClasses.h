@@ -147,6 +147,7 @@ public:
     void setInci(std::optional<Inci> inci) { m_inci = inci; }
 };
 
+class FontInfo;
 /**
  * @brief Base class for all text blocks.
  * 
@@ -178,6 +179,12 @@ public:
      * @brief Sets the raw text number.
      */
     void setTextNumber(Cmper textNumber) { m_textNumber = textNumber; }
+
+    /**
+     * @brief Returns a shared pointer to a FontInfo instance that reflects
+     * the first font information in the text.
+     */
+    std::shared_ptr<FontInfo> parseFirstFontInfo() const;
 };
 
 /**
@@ -211,6 +218,29 @@ public:
      * @return The name of the font as a string.
      */
     std::string getFontName() const;
+
+    /**
+     * @brief Sets the id of the font from a string name.
+     * @param name The font name to find.
+     * @throws std::invalid_parameter if the name is not found.
+     */
+    void setFontIdByName(const std::string& name);
+
+    /**
+     * @brief Set style effects based on a bitmask. This is mainly useful for capturing text styles
+     * from enigma strings. (See @ref EnigmaString::parseFontCommand.)
+     *
+     * @param efx A 16-bit integer representing style effects with specific bit masks.
+     */
+    void setEnigmaStyles(uint16_t efx)
+    {
+        bold = efx & 0x01;         // FONT_EFX_BOLD
+        italic = efx & 0x02;       // FONT_EFX_ITALIC
+        underline = efx & 0x04;    // FONT_EFX_UNDERLINE
+        strikeout = efx & 0x20;    // FONT_EFX_STRIKEOUT
+        absolute = efx & 0x40;     // FONT_EFX_ABSOLUTE
+        hidden = efx & 0x80;       // FONT_EFX_HIDDEN
+    }
 };
 
 } // namespace dom

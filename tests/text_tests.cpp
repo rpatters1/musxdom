@@ -27,6 +27,190 @@
 constexpr static musxtest::string_view fontProperties = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
+  <others>
+    <fontName cmper="0">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Finale Maestro</name>
+    </fontName>
+    <fontName cmper="1">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Times</name>
+    </fontName>
+    <fontName cmper="2">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Helvetica</name>
+    </fontName>
+    <fontName cmper="3">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Seville</name>
+    </fontName>
+    <fontName cmper="4">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Jazz</name>
+    </fontName>
+    <fontName cmper="5">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Maestro Percussion</name>
+    </fontName>
+    <fontName cmper="6">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>JazzPerc</name>
+    </fontName>
+    <fontName cmper="7">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Broadway Copyist</name>
+    </fontName>
+    <fontName cmper="8">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Finale AlphaNotes</name>
+    </fontName>
+    <fontName cmper="9">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Times New Roman</name>
+    </fontName>
+    <fontName cmper="10">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Menlo</name>
+    </fontName>
+    <fontName cmper="11">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>New York</name>
+    </fontName>
+    <fontName cmper="12">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Maestro</name>
+    </fontName>
+    <fontName cmper="13">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Finale Maestro</name>
+    </fontName>
+    <fontName cmper="14">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Patmm</name>
+    </fontName>
+    <fontName cmper="15">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Broadway Copyist Perc</name>
+    </fontName>
+    <fontName cmper="16">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>JazzText</name>
+    </fontName>
+    <fontName cmper="17">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>GraceNotes</name>
+    </fontName>
+    <fontName cmper="18">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Garamond</name>
+    </fontName>
+    <fontName cmper="19">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Bravura</name>
+    </fontName>
+    <fontName cmper="20">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Arial</name>
+    </fontName>
+    <fontName cmper="21">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Petrucci</name>
+    </fontName>
+    <fontName cmper="22">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Palatino</name>
+    </fontName>
+    <fontName cmper="23">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Finale Lyrics</name>
+    </fontName>
+    <fontName cmper="27">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Geneva</name>
+    </fontName>
+    <fontName cmper="28">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Lucida Grande</name>
+    </fontName>
+  </others>
   <texts>
     <fileInfo type="title">My Piece</fileInfo>
     <fileInfo type="composer">L. BEETHOVEN</fileInfo>
@@ -169,15 +353,15 @@ www.greatrivermusic.com</blockText>
     <expression number="213">^fontTxt(Times,4096)^size(10)^nfx(130)score spacing</expression>
     <expression number="214">^fontTxt(Times,4096)^size(10)^nfx(130)igrc</expression>
     <expression number="215">^fontTxt(Times,4096)^size(10)^nfx(130)iclefs</expression>
-    <expression number="216">^fontTxt(Times,4096)^size(10)^nfx(130)skip ties</expression>
-    <expression number="217">^fontTxt(Times,4096)^size(10)^nfx(130)skip tie ends</expression>
-    <expression number="218">^fontTxt(Times,4096)^size(10)^nfx(130)skip trill-to</expression>
+    <expression number="216">^fontTxt(Times,4096)^size(12)^nfx(130)skip ties</expression>
+    <expression number="217">^fontTxt(Times(bad,4096)^size(10)^nfx(130)skip tie ends</expression>
+    <expression number="218">^fontTxt(TimesXXX,4096)^size(10)^nfx(130)skip trill-to</expression>
     <expression number="219">^font(Times,4096)^size(14)^nfx(2)22100:0: 0E000F001D000000EAFF0000</expression>
     <expression number="221">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
     <expression number="222">^fontTxt(Times New Roman,4096)^size(14)^nfx(2)più ^fontMus(Font0,0)^size(24)^nfx(0)</expression>
     <expression number="223">^fontMus(Font0,0)^size(24)^nfx(0)^fontTxt(Times New Roman,4096)^size(14)^nfx(2) sempre</expression>
     <expression number="224">^fontMus(Font0,0)^size(24)^nfx(0)^fontTxt(Times New Roman,4096)^size(14)^nfx(2) sempre</expression>
-    <bookmarkText number="1">Bookmark  to Bar 12</bookmarkText>
+    <bookmarkText number="1">Bookmark to Bar 12</bookmarkText>
   </texts>
 </finale>
     )xml";
@@ -239,6 +423,12 @@ TEST(TextsTest, FileInfoText)
     ASSERT_EQ(texts->getArray<FileInfoText>(Cmper(Type::Arranger)).size(), 1);
     EXPECT_EQ(texts->getArray<FileInfoText>(Cmper(Type::Arranger))[0]->getTextType(), Type::Arranger);
     EXPECT_EQ(texts->getArray<FileInfoText>(8).size(), 0);
+
+    // Test ctor exception
+    EXPECT_THROW(
+        auto malformed = FileInfoText(doc, 8), // invalid text type
+        std::invalid_argument
+    );
 }
 
 TEST(TextsTest, LyricsText)
@@ -278,4 +468,105 @@ TEST(TextsTest, LyricsText)
     ASSERT_EQ(texts->getArray<LyricsSection>().size(), 1);
     EXPECT_EQ(texts->getArray<LyricsSection>()[0]->getTextNumber(), 1);
     EXPECT_EQ(texts->getArray<LyricsSection>(2).size(), 0);
+}
+
+TEST(TextsTest, OtherText)
+{
+    using musx::dom::texts::BlockText;
+    using musx::dom::texts::SmartShapeText;
+    using musx::dom::texts::ExpressionText;
+    using musx::dom::texts::BookmarkText;
+    using musx::dom::Cmper;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+    
+    // Test block text
+    auto blockText = texts->get<BlockText>(23);
+    ASSERT_TRUE(blockText);
+    EXPECT_EQ(blockText->text, "^fontid(0)^size(24)^nfx(0)");
+    EXPECT_FALSE(texts->get<BlockText>(15));
+    EXPECT_FALSE(texts->get<BlockText>(33));
+    ASSERT_EQ(texts->getArray<BlockText>().size(), 16);
+    EXPECT_EQ(texts->getArray<BlockText>()[12]->getTextNumber(), 29);
+    EXPECT_EQ(texts->getArray<BlockText>(2).size(), 0);
+
+    // Test smart shape text
+    auto ssText = texts->get<SmartShapeText>(2);
+    ASSERT_TRUE(ssText);
+    EXPECT_EQ(ssText->text, "^fontid(1)^size(12)^nfx(2)Gliss.");
+    EXPECT_FALSE(texts->get<SmartShapeText>(9));
+    ASSERT_EQ(texts->getArray<SmartShapeText>().size(), 62);
+    EXPECT_EQ(texts->getArray<SmartShapeText>()[8]->getTextNumber(), 13);
+    EXPECT_EQ(texts->getArray<SmartShapeText>(10).size(), 0);
+    
+    // Test Section
+    auto expText = texts->get<ExpressionText>(3);
+    ASSERT_TRUE(expText);
+    EXPECT_EQ(expText->text, "^fontMus(Font0,0)^size(24)^nfx(0)");
+    EXPECT_FALSE(texts->get<ExpressionText>(101));
+    ASSERT_EQ(texts->getArray<ExpressionText>().size(), 53);
+    EXPECT_EQ(texts->getArray<ExpressionText>()[0]->getTextNumber(), 1);
+    EXPECT_EQ(texts->getArray<ExpressionText>(225).size(), 0);
+    
+    // Test bookmark text
+    auto bookmark = texts->get<BookmarkText>(1);
+    ASSERT_TRUE(bookmark);
+    EXPECT_EQ(bookmark->text, "Bookmark to Bar 12");
+    EXPECT_FALSE(texts->get<BookmarkText>(2));
+    ASSERT_EQ(texts->getArray<BookmarkText>().size(), 1);
+    EXPECT_EQ(texts->getArray<BookmarkText>()[0]->getTextNumber(), 1);
+    EXPECT_EQ(texts->getArray<BookmarkText>(2).size(), 0);
+}
+
+TEST(TextsTest, EnigmaComponents)
+{
+    auto components = musx::util::EnigmaString::parseEnigmaComponents("^fontTxt(Times,4096)");
+    EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "Times", "4096" }));
+    components = musx::util::EnigmaString::parseEnigmaComponents("^fontTxt((Times),(4096))");
+    EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "(Times)", "(4096)" }));
+    components = musx::util::EnigmaString::parseEnigmaComponents("^size(10)");
+    EXPECT_EQ(components, std::vector<std::string>({ "size", "10" }));
+    components = musx::util::EnigmaString::parseEnigmaComponents("^some");
+    EXPECT_EQ(components, std::vector<std::string>({ "some" }));
+    components = musx::util::EnigmaString::parseEnigmaComponents("^^");
+    EXPECT_EQ(components, std::vector<std::string>({ "^" }));
+    components = musx::util::EnigmaString::parseEnigmaComponents("^^invalid");
+    EXPECT_EQ(components, std::vector<std::string>({}));
+    components = musx::util::EnigmaString::parseEnigmaComponents("^fontTxt(Times(bad,4096)");
+    EXPECT_EQ(components, std::vector<std::string>({}));
+}
+
+TEST(TextsTests, FontFromEnigma)
+{
+    using musx::dom::texts::ExpressionText;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    auto text = texts->get<ExpressionText>(216);
+    ASSERT_TRUE(text);
+    auto font = text->parseFirstFontInfo();
+    EXPECT_EQ(font->fontId, 1);
+    EXPECT_EQ(font->fontSize, 12);
+    EXPECT_FALSE(font->bold);
+    EXPECT_TRUE(font->italic);
+    EXPECT_FALSE(font->underline);
+    EXPECT_FALSE(font->strikeout);
+    EXPECT_FALSE(font->absolute);
+    EXPECT_TRUE(font->hidden);
+
+    text = texts->get<ExpressionText>(217);
+    ASSERT_TRUE(text);
+    font = text->parseFirstFontInfo();
+    EXPECT_FALSE(font);
+
+    text = texts->get<ExpressionText>(218);
+    ASSERT_TRUE(text);
+    EXPECT_THROW(
+        text->parseFirstFontInfo(),
+        std::invalid_argument
+    );
 }
