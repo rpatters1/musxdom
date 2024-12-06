@@ -122,7 +122,7 @@ public:
         );
 
         for (auto it = rangeStart; it != rangeEnd; ++it) {
-            auto typedPtr = std::static_pointer_cast<T>(it->second);
+            auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
             assert(typedPtr);
             result.push_back(typedPtr);
         }
@@ -147,7 +147,7 @@ public:
         if (it == m_pool.end()) {
             return nullptr;
         }
-        auto typedPtr = std::static_pointer_cast<T>(it->second);
+        auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
         assert(typedPtr); // There is a program bug if the pointer cast fails.
         return typedPtr;
     }

@@ -69,7 +69,7 @@ public:
             std::string thisElt = childElement->getTagName();
             auto basePtr = DerivedType::extractFromXml(childElement, document, elementLinker);
             if (basePtr) {
-                auto typedPtr = std::static_pointer_cast<ObjectBase>(basePtr);
+                auto typedPtr = std::dynamic_pointer_cast<ObjectBase>(basePtr);
                 assert(typedPtr); // program bug if null
                 pool->add(childElement->getTagName(), typedPtr);
             }
