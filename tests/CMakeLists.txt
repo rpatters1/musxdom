@@ -28,6 +28,7 @@ add_executable(musxdomtests
 	expression_tests.cpp
 	fonts_tests.cpp
 	header_tests.cpp
+    page_options_tests.cpp
 	pool_tests.cpp
 )
 
