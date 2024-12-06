@@ -52,7 +52,7 @@ public:
     /**
      * @brief Virtual destructor for polymorphic behavior.
      */
-    virtual ~Base() = default;
+    virtual ~Base() noexcept(false) = default;
 
     /**
      * @brief Gets a reference to the Document.
@@ -110,8 +110,8 @@ protected:
     /**
      * @brief Constructs an OthersBase object.
      * 
-     * @param cmper The `cmper` key value.
-     * @param inci The array index (`inci`).
+     * @param cmper The `Cmper` key value.
+     * @param inci The array index (`Inci`).
      * @param document A weak pointer to the parent document
      */
     OthersBase(const DocumentWeakPtr& document, Cmper cmper, std::optional<Inci> inci = std::nullopt)
@@ -145,6 +145,39 @@ public:
      * @param inci The new `inci` value.
      */
     void setInci(std::optional<Inci> inci) { m_inci = inci; }
+};
+
+/**
+ * @brief Base class for all text blocks.
+ * 
+ * Options types derive from this base class so they can reside in the text pool.
+ */
+class TextsBase : public Base
+{
+private:
+    Cmper m_textNumber;             ///< Common attribute: cmper (key value).
+
+public:
+    /**
+     * @brief Constructs a `TextsBase` object.
+     * 
+     * @param document A weak pointer to the parent document
+     * @param textNumber The text number (`Cmper`).
+     */
+    TextsBase(const DocumentWeakPtr& document, Cmper textNumber)
+        : Base(document), m_textNumber(textNumber) {}
+
+    std::string text;    ///< Raw Enigma string (with Enigma string tags), encoded UTF-8.
+
+    /**
+     * @brief Returns the raw text number.
+     */
+    Cmper getTextNumber() const { return m_textNumber; }
+
+    /**
+     * @brief Sets the raw text number.
+     */
+    void setTextNumber(Cmper textNumber) { m_textNumber = textNumber; }
 };
 
 /**

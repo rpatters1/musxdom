@@ -66,6 +66,11 @@ public:
     OthersPoolPtr& getOthers() { return m_others; }
     /** @brief Retrieves the const others pool */
     const OthersPoolPtr& getOthers() const { return m_others; }
+    
+    /** @brief Retrieves the texts pool */
+    TextsPoolPtr& getTexts() { return m_texts; }
+    /** @brief Retrieves the const texts pool */
+    const TextsPoolPtr& getTexts() const { return m_texts; }
 
 private:
     /**
@@ -73,9 +78,12 @@ private:
      */
      explicit Document() = default;
 
-     HeaderPtr m_header;        ///< The header
-     OptionsPoolPtr m_options;  ///< The options pool
-     OthersPoolPtr m_others;    ///< The others pool
+     HeaderPtr m_header;        ///< The <header>
+     OptionsPoolPtr m_options;  ///< The <options> pool
+     OthersPoolPtr m_others;    ///< The <others> pool
+     // ToDo: DetailsPoolPtr
+     // ToDo: EntriesPoolPtr
+     TextsPoolPtr m_texts;      ///< The <texts> pool
 
     // Grant the factory function access to the private constructor
     friend class musx::factory::DocumentFactory;

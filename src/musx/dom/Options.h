@@ -138,9 +138,6 @@ public:
     constexpr static std::string_view XmlNodeName = "fontOptions";
 };
 
-#include <memory>
-#include <string>
-
 /**
  * @class PageFormatOptions
  * @brief Options for page formatting in the document.

@@ -1,0 +1,281 @@
+/*
+ * Copyright (C) 2024, Robert Patterson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+#include "gtest/gtest.h"
+#include "musx/musx.h"
+#include "test_utils.h"
+
+constexpr static musxtest::string_view fontProperties = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <texts>
+    <fileInfo type="title">My Piece</fileInfo>
+    <fileInfo type="composer">L. BEETHOVEN</fileInfo>
+    <fileInfo type="copyright">1823</fileInfo>
+    <fileInfo type="description">GRM–####</fileInfo>
+    <fileInfo type="lyricist">Lyricist</fileInfo>
+    <fileInfo type="arranger">Arranger</fileInfo>
+    <fileInfo type="subtitle">Subtitle</fileInfo>
+    <verse number="1">^fontid(23)^size(12)^nfx(0)The first verse.</verse>
+    <chorus number="1">^fontid(11)^size(12)^nfx(0)The first chorus.</chorus>
+    <section number="1">^fontid(11)^size(12)^nfx(0)The first sec-tion.</section>
+    <blockText number="1">^fontid(9)^size(12)^nfx(0)SCORE</blockText>
+    <blockText number="17">^fontid(9)^size(12)^nfx(0)^page(0)</blockText>
+    <blockText number="18">^fontid(9)^size(12)^nfx(0)^title()</blockText>
+    <blockText number="20">^fontid(9)^size(12)^nfx(0)^arranger()</blockText>
+    <blockText number="21">^fontid(9)^size(18)^nfx(0)^subtitle()</blockText>
+    <blockText number="22">^fontid(9)^size(12)^nfx(128)(SMuFL Default file for Beta Testing)</blockText>
+    <blockText number="23">^fontid(0)^size(24)^nfx(0)</blockText>
+    <blockText number="24">^fontid(1)^size(12)^nfx(67)^page(0)</blockText>
+    <blockText number="25">^fontid(22)^size(8)^nfx(64)^description()</blockText>
+    <blockText number="26">^fontid(1)^size(12)^nfx(1)^partname()</blockText>
+    <blockText number="27">^fontid(1)^size(24)^nfx(65)^title()
+^size(10)^nfx(66)for</blockText>
+    <blockText number="28">^fontid(1)^size(12)^nfx(65)^composer() (^copyright())</blockText>
+    <blockText number="29">^fontid(1)^size(9)^nfx(64)Licensed by ASCAP
+One Lincoln Plaza
+New York, NY  10023</blockText>
+    <blockText number="30">^fontid(1)^size(9)^nfx(64)©^copyright() Great River Music
+All rights reserved.
+www.greatrivermusic.com</blockText>
+    <blockText number="31">^fontid(1)^size(12)^nfx(1)^partname()</blockText>
+    <blockText number="32">^fontid(1)^size(14)^nfx(2)Text block</blockText>
+    <smartShapeText number="1">^fontid(9)^size(12)^nfx(2)Glissando</smartShapeText>
+    <smartShapeText number="2">^fontid(1)^size(12)^nfx(2)Gliss.</smartShapeText>
+    <smartShapeText number="3">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="4">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="5">^fontid(9)^size(12)^nfx(2)rit.</smartShapeText>
+    <smartShapeText number="6">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="7">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="8">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="13">^fontid(2)^size(10)^nfx(0)A.H.</smartShapeText>
+    <smartShapeText number="14">^fontid(2)^size(10)^nfx(0)A.H.</smartShapeText>
+    <smartShapeText number="15">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="16">^fontid(2)^size(10)^nfx(0)Artificial Harmonic</smartShapeText>
+    <smartShapeText number="17">^fontid(2)^size(10)^nfx(0)A.H.</smartShapeText>
+    <smartShapeText number="18">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="19">^fontid(2)^size(10)^nfx(0)N.H.</smartShapeText>
+    <smartShapeText number="20">^fontid(2)^size(10)^nfx(0)N.H.</smartShapeText>
+    <smartShapeText number="21">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="22">^fontid(2)^size(10)^nfx(0)Natural Harmonic</smartShapeText>
+    <smartShapeText number="23">^fontid(2)^size(10)^nfx(0)N.H.</smartShapeText>
+    <smartShapeText number="24">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="25">^fontid(2)^size(10)^nfx(0)P.H.</smartShapeText>
+    <smartShapeText number="26">^fontid(2)^size(10)^nfx(0)P.H.</smartShapeText>
+    <smartShapeText number="27">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="28">^fontid(2)^size(10)^nfx(0)Pick Harmonics</smartShapeText>
+    <smartShapeText number="29">^fontid(2)^size(10)^nfx(0)P.H.</smartShapeText>
+    <smartShapeText number="30">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="31">^fontid(2)^size(10)^nfx(0)P.M.</smartShapeText>
+    <smartShapeText number="32">^fontid(2)^size(10)^nfx(0)P.M.</smartShapeText>
+    <smartShapeText number="33">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="34">^fontid(2)^size(10)^nfx(0)Palm Mute</smartShapeText>
+    <smartShapeText number="35">^fontid(2)^size(10)^nfx(0)P.M.</smartShapeText>
+    <smartShapeText number="36">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="37">^fontid(2)^size(10)^nfx(0)let ring</smartShapeText>
+    <smartShapeText number="38">^fontid(2)^size(10)^nfx(0)let ring</smartShapeText>
+    <smartShapeText number="39">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="40">^fontid(2)^size(10)^nfx(0)hold bend</smartShapeText>
+    <smartShapeText number="41">^fontid(2)^size(10)^nfx(0)hold bend</smartShapeText>
+    <smartShapeText number="42">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="43">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="44">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="45">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="46">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="47">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="48">^fontid(2)^size(6)^nfx(0)|</smartShapeText>
+    <smartShapeText number="49">^fontid(9)^size(12)^nfx(2)rall.</smartShapeText>
+    <smartShapeText number="50">^fontid(9)^size(12)^nfx(2)accel.</smartShapeText>
+    <smartShapeText number="51">^fontid(9)^size(12)^nfx(2)cresc.</smartShapeText>
+    <smartShapeText number="52">^fontid(9)^size(12)^nfx(2)dim.
+
+
+</smartShapeText>
+    <smartShapeText number="53">^fontid(9)^size(12)^nfx(2)decresc.</smartShapeText>
+    <smartShapeText number="54">^fontid(2)^size(10)^nfx(0)H</smartShapeText>
+    <smartShapeText number="55">^fontid(2)^size(10)^nfx(0)P</smartShapeText>
+    <smartShapeText number="56">^fontid(2)^size(10)^nfx(0)B</smartShapeText>
+    <smartShapeText number="57">^fontid(2)^size(10)^nfx(0)R</smartShapeText>
+    <smartShapeText number="58">^fontid(2)^size(10)^nfx(0)S</smartShapeText>
+    <smartShapeText number="59">^fontid(2)^size(10)^nfx(0)T</smartShapeText>
+    <smartShapeText number="60">^fontid(13)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="61">^fontid(13)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="62">^fontid(13)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="63">^fontid(13)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="64">^fontid(0)^size(24)^nfx(0)</smartShapeText>
+    <smartShapeText number="65">^fontid(0)^size(24)^nfx(0)^baseline(-12)^baseline(0)^baseline(-12)</smartShapeText>
+    <smartShapeText number="66">^fontid(27)^size(8)^nfx(0)^baseline(-20)|</smartShapeText>
+    <expression number="1">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="2">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="3">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="4">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="5">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="6">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="7">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="8">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="9">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="10">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="11">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="12">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="13">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="14">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="15">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="16">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="17">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="18">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="19">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="20">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="21">^fontTxt(Times New Roman,4096)^size(14)^nfx(2)subito ^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="22">^fontTxt(Times New Roman,4096)^size(14)^nfx(2)sub. ^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="150">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="180">^fontTxt(Patmm,4096)^size(14)^nfx(0)Tempo (∞=^value())</expression>
+    <expression number="192">^fontTxt(Garamond,4096)^size(30)^nfx(1)^rehearsal()</expression>
+    <expression number="193">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="194">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="195">^fontTxt(Times,4096)^size(10)^nfx(130)igpat</expression>
+    <expression number="196">^fontTxt(Times,4096)^size(10)^nfx(130)skbeam</expression>
+    <expression number="197">^fontTxt(Times,4096)^size(10)^nfx(130)skstem</expression>
+    <expression number="199">^font(Times,4096)^size(14)^nfx(2)Expressions in this category are used by the Patterson Plugins Collection as a data store within your document. Please ignore them.</expression>
+    <expression number="201">^fontTxt(Times,4096)^size(10)^nfx(130)skip spacing</expression>
+    <expression number="203">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="204">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="205">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="206">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="207">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="208">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="209">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="210">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="211">^font(Times,4096)^size(14)^nfx(1)G.P.</expression>
+    <expression number="212">^fontTxt(Times,4096)^size(10)^nfx(130)match score system</expression>
+    <expression number="213">^fontTxt(Times,4096)^size(10)^nfx(130)score spacing</expression>
+    <expression number="214">^fontTxt(Times,4096)^size(10)^nfx(130)igrc</expression>
+    <expression number="215">^fontTxt(Times,4096)^size(10)^nfx(130)iclefs</expression>
+    <expression number="216">^fontTxt(Times,4096)^size(10)^nfx(130)skip ties</expression>
+    <expression number="217">^fontTxt(Times,4096)^size(10)^nfx(130)skip tie ends</expression>
+    <expression number="218">^fontTxt(Times,4096)^size(10)^nfx(130)skip trill-to</expression>
+    <expression number="219">^font(Times,4096)^size(14)^nfx(2)22100:0: 0E000F001D000000EAFF0000</expression>
+    <expression number="221">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="222">^fontTxt(Times New Roman,4096)^size(14)^nfx(2)più ^fontMus(Font0,0)^size(24)^nfx(0)</expression>
+    <expression number="223">^fontMus(Font0,0)^size(24)^nfx(0)^fontTxt(Times New Roman,4096)^size(14)^nfx(2) sempre</expression>
+    <expression number="224">^fontMus(Font0,0)^size(24)^nfx(0)^fontTxt(Times New Roman,4096)^size(14)^nfx(2) sempre</expression>
+    <bookmarkText number="1">Bookmark  to Bar 12</bookmarkText>
+  </texts>
+</finale>
+    )xml";
+
+TEST(TextsTest, FileInfoText)
+{
+    using FileInfoText = musx::dom::texts::FileInfoText;
+    using Type = FileInfoText::TextType;
+    using musx::dom::Cmper;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+    
+    // Test Title
+    auto fileInfo = texts->get<FileInfoText>(Cmper(Type::Title));
+    ASSERT_TRUE(fileInfo);
+    EXPECT_EQ(fileInfo->text, "My Piece");
+    EXPECT_EQ(fileInfo->getTextType(), Type::Title);
+
+    // Test Composer
+    fileInfo = texts->get<FileInfoText>(Cmper(Type::Composer));
+    ASSERT_TRUE(fileInfo);
+    EXPECT_EQ(fileInfo->text, "L. BEETHOVEN");
+    EXPECT_EQ(fileInfo->getTextType(), Type::Composer);
+
+    // Test Copyright
+    fileInfo = texts->get<FileInfoText>(Cmper(Type::Copyright));
+    ASSERT_TRUE(fileInfo);
+    EXPECT_EQ(fileInfo->text, "1823");
+    EXPECT_EQ(fileInfo->getTextType(), Type::Copyright);
+
+    // Test Description
+    fileInfo = texts->get<FileInfoText>(Cmper(Type::Description));
+    ASSERT_TRUE(fileInfo);
+    EXPECT_EQ(fileInfo->text, "GRM–####");
+    EXPECT_EQ(fileInfo->getTextType(), Type::Description);
+
+    // Test Lyricist
+    fileInfo = texts->get<FileInfoText>(Cmper(Type::Lyricist));
+    ASSERT_TRUE(fileInfo);
+    EXPECT_EQ(fileInfo->text, "Lyricist");
+    EXPECT_EQ(fileInfo->getTextType(), Type::Lyricist);
+
+    // Test Arranger
+    fileInfo = texts->get<FileInfoText>(Cmper(Type::Arranger));
+    ASSERT_TRUE(fileInfo);
+    EXPECT_EQ(fileInfo->text, "Arranger");
+    EXPECT_EQ(fileInfo->getTextType(), Type::Arranger);
+
+    // Test Subtitle
+    fileInfo = texts->get<FileInfoText>(Cmper(Type::Subtitle));
+    ASSERT_TRUE(fileInfo);
+    EXPECT_EQ(fileInfo->text, "Subtitle");
+    EXPECT_EQ(fileInfo->getTextType(), Type::Subtitle);
+
+    // Test array
+    EXPECT_EQ(texts->getArray<FileInfoText>().size(), 7);
+    ASSERT_EQ(texts->getArray<FileInfoText>(Cmper(Type::Arranger)).size(), 1);
+    EXPECT_EQ(texts->getArray<FileInfoText>(Cmper(Type::Arranger))[0]->getTextType(), Type::Arranger);
+    EXPECT_EQ(texts->getArray<FileInfoText>(8).size(), 0);
+}
+
+TEST(TextsTest, LyricsText)
+{
+    using musx::dom::texts::LyricsVerse;
+    using musx::dom::texts::LyricsChorus;
+    using musx::dom::texts::LyricsSection;
+    using musx::dom::Cmper;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+    
+    // Test Verse
+    auto lyricsVerse = texts->get<LyricsVerse>(1);
+    ASSERT_TRUE(lyricsVerse);
+    EXPECT_EQ(lyricsVerse->text, "^fontid(23)^size(12)^nfx(0)The first verse.");
+    EXPECT_FALSE(texts->get<LyricsVerse>(2));
+    ASSERT_EQ(texts->getArray<LyricsVerse>().size(), 1);
+    EXPECT_EQ(texts->getArray<LyricsVerse>()[0]->getTextNumber(), 1);
+    EXPECT_EQ(texts->getArray<LyricsVerse>(2).size(), 0);
+
+    // Test Chorus
+    auto lyricsChorus = texts->get<LyricsChorus>(1);
+    ASSERT_TRUE(lyricsChorus);
+    EXPECT_EQ(lyricsChorus->text, "^fontid(11)^size(12)^nfx(0)The first chorus.");
+    EXPECT_FALSE(texts->get<LyricsChorus>(2));
+    ASSERT_EQ(texts->getArray<LyricsChorus>().size(), 1);
+    EXPECT_EQ(texts->getArray<LyricsChorus>()[0]->getTextNumber(), 1);
+    EXPECT_EQ(texts->getArray<LyricsChorus>(2).size(), 0);
+    
+    // Test Section
+    auto lyricsSection = texts->get<LyricsSection>(1);
+    ASSERT_TRUE(lyricsSection);
+    EXPECT_EQ(lyricsSection->text, "^fontid(11)^size(12)^nfx(0)The first sec-tion.");
+    EXPECT_FALSE(texts->get<LyricsSection>(2));
+    ASSERT_EQ(texts->getArray<LyricsSection>().size(), 1);
+    EXPECT_EQ(texts->getArray<LyricsSection>()[0]->getTextNumber(), 1);
+    EXPECT_EQ(texts->getArray<LyricsSection>(2).size(), 0);
+}

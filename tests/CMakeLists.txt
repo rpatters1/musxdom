@@ -30,6 +30,7 @@ add_executable(musxdomtests
 	header_tests.cpp
     page_options_tests.cpp
 	pool_tests.cpp
+    text_tests.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")

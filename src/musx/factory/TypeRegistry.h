@@ -29,9 +29,11 @@
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
+#include "musx/dom/Texts.h"
 #include "musx/xml/XmlInterface.h"
 #include "FieldPopulatorsOptions.h"
 #include "FieldPopulatorsOthers.h"
+#include "FieldPopulatorsTexts.h"
 
 namespace musx {
 namespace factory {
@@ -130,7 +132,16 @@ using RegisteredTypes = TypeRegistry <
     dom::others::MarkingCategoryName,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
-    dom::others::TextRepeatEnclosure
+    dom::others::TextRepeatEnclosure,
+    // texts
+    dom::texts::FileInfoText,
+    dom::texts::LyricsVerse,
+    dom::texts::LyricsChorus,
+    dom::texts::LyricsSection,
+    dom::texts::BlockText,
+    dom::texts::SmartShapeText,
+    dom::texts::ExpressionText,
+    dom::texts::BookmarkText
     // Add pointers to additional supported types here.
     // Also add a field populator in FieldPopulatorsOthers.h
 >;

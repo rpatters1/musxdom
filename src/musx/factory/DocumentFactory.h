@@ -71,6 +71,8 @@ public:
                 document->getOptions() = musx::factory::OptionsFactory::create(element, document, elementLinker);
             } else if (element->getTagName() == "others") {
                 document->getOthers() = musx::factory::OthersFactory::create(element, document, elementLinker);
+            } else if (element->getTagName() == "texts") {
+                document->getTexts() = musx::factory::TextsFactory::create(element, document, elementLinker);
             }
         }
         elementLinker.resolveAll(document);
