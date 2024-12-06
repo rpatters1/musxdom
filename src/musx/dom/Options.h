@@ -173,23 +173,23 @@ public:
         int pagePercent{};               ///< Page scaling percentage (a value of 100 means no scaling).
         int sysPercent{};                ///< System scaling percentage (a value of 100 means no scaling).
         int rawStaffHeight{};            ///< Raw staff height (in 1/16 Evpu units).
-        Evpu leftPageMarginTop{};        ///< Top margin for the left page.
+        Evpu leftPageMarginTop{};        ///< Top margin for the left page. (Sign reversed in Finale UI.)
         Evpu leftPageMarginLeft{};       ///< Left margin for the left page.
         Evpu leftPageMarginBottom{};     ///< Bottom margin for the left page.
-        Evpu leftPageMarginRight{};      ///< Right margin for the left page.
-        Evpu rightPageMarginTop{};       ///< Top margin for the right page.
+        Evpu leftPageMarginRight{};      ///< Right margin for the left page. (Sign reversed in Finale UI.)
+        Evpu rightPageMarginTop{};       ///< Top margin for the right page. (Sign reversed in Finale UI.)
         Evpu rightPageMarginLeft{};      ///< Left margin for the right page.
         Evpu rightPageMarginBottom{};    ///< Bottom margin for the right page.
-        Evpu rightPageMarginRight{};     ///< Right margin for the right page.
-        Evpu sysMarginTop{};             ///< System top margin.
+        Evpu rightPageMarginRight{};     ///< Right margin for the right page. (Sign reversed in Finale UI.)
+        Evpu sysMarginTop{};             ///< System top margin. (Sign reversed in Finale UI.)
         Evpu sysMarginLeft{};            ///< System left margin.
         Evpu sysMarginBottom{};          ///< System bottom margin.
-        Evpu sysMarginRight{};           ///< System bottom margin.
-        Evpu sysDistanceBetween{};       ///< Distance between systems.
-        Evpu firstPageMarginTop{};       ///< Top margin for the first page.
-        Evpu firstSysMarginTop{};        ///< Top margin for the first system.
+        Evpu sysMarginRight{};           ///< System bottom margin. (Sign reversed in Finale UI.)
+        Evpu sysDistanceBetween{};       ///< Distance between systems. (Sign reversed in Finale UI.)
+        Evpu firstPageMarginTop{};       ///< Top margin for the first page. (Sign reversed in Finale UI.)
+        Evpu firstSysMarginTop{};        ///< Top margin for the first system. (Sign reversed in Finale UI.)
         Evpu firstSysMarginLeft{};       ///< Left margin for the first system.
-        Evpu firstSysMarginDistance{};   ///< Distance between the first systems.
+        Evpu firstSysMarginDistance{};   ///< Distance between the first systems. (Sign reversed in Finale UI.)
         bool facingPages{};              ///< Whether to use the right page margin values.
         bool differentFirstSysMargin{};  ///< Whether to use the first system values.
         bool differentFirstPageMargin{}; ///< Whether to use the `firstPageMarginTop` value.
