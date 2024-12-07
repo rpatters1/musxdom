@@ -72,6 +72,9 @@ public:
         Subtitle = 7      ///< Subtitle of the piece.
     };
 
+    /**
+     * @brief Returns the @ref TextType of the current instance.
+     */
     TextType getTextType() const
     {
         const Cmper textNumber = getTextNumber();

@@ -32,11 +32,12 @@ namespace musx {
 namespace util {
 
 /**
- * @brief Static class that provides utilties to extract information from enigma strings
+ * @brief Static class that provides utilties to extract information from enigma strings.
  */
 class EnigmaString
 {
 public:
+    /** @brief Returns true if the enigma string starts with a font command. */
     static bool startsWithFontCommand(const std::string& text)
     {
         const std::vector<std::string> textCmds = { "^font", "^fontid", "^Font", "^fontMus", "^fontTxt", "^fontNum", "^size", "^nfx" };
@@ -48,6 +49,26 @@ public:
         return false;
     }
     
+    /**
+     * @brief Parses an enigma text insert into its constituent components.
+     *
+     * The function takes an enigma text insert starting with `^` and extracts the command
+     * and its parameters. If the string is invalid or unbalanced, it returns an empty vector.
+     *
+     * Examples:
+     * @code{.cpp}
+     * parseEnigmaComponents("^fontTxt(Times,4096)");   // Returns {"fontTxt", "Times", "4096"}
+     * parseEnigmaComponents("^size(10)");              // Returns {"size", "10"}
+     * parseEnigmaComponents("^nfx(130,(xyz))");        // Returns {"nfx", "130", "(xyz)"}
+     * parseEnigmaComponents("^some");                  // Returns {"some"}
+     * parseEnigmaComponents("^^");                     // Returns {"^"}
+     * parseEnigmaComponents("^^invalid");              // Returns {}
+     * parseEnigmaComponents("^unbalanced(abc");        // Returns {}
+     * @endcode
+     *
+     * @param input The enigma text insert to parse.
+     * @return A vector of strings representing the command and its parameters, or an empty vector if invalid.
+     */
     static std::vector<std::string> parseEnigmaComponents(const std::string& input)
     {
         if (input.empty() || input[0] != '^')
@@ -100,7 +121,16 @@ public:
         return components;
     }
 
-    static bool parseFontCommand(const std::string& fontTag, FontInfo& fontInfo) {
+    /**
+     * @brief Incorporates an enigma font command into the supplied @ref dom::FontInfo instance.
+     *
+     * Enigma font commands are
+     * - one of the font identifying commands, such as `^font`, `fontid`, etc. (See @ref startsWithFontCommand.)
+     * - `^size` specifies the font size in points.
+     * - `^nfx` specifies a bit mask of style properties. These are resolved with @ref dom::FontInfo::setEnigmaStyles.
+     */
+    static bool parseFontCommand(const std::string& fontTag, FontInfo& fontInfo)
+    {
         if (fontTag.empty() || fontTag[0] != '^') {
             return false;
         }
