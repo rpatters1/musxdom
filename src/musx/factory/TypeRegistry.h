@@ -120,20 +120,35 @@ public:
 };
 
 /**
- * @brief The type registery. 
+ * @brief The type registery for `<options>`.
+ *
+ * These types are maintained in the order in which Finale serializes them.
  */
-using RegisteredTypes = TypeRegistry <
-    // options
+using RegisteredOptions = TypeRegistry <
     dom::options::DefaultFonts,
-    dom::options::PageFormatOptions,
-    // others
+    dom::options::PageFormatOptions
+>;
+
+/**
+ * @brief The type registery for `<others>`.
+ *
+ * These types are maintained in the order in which Finale serializes them.
+ */
+using RegisteredOthers = TypeRegistry <
     dom::others::FontDefinition,
-    dom::others::MarkingCategory,
-    dom::others::MarkingCategoryName,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,
-    // texts
+    dom::others::MarkingCategory,
+    dom::others::MarkingCategoryName
+>;
+
+/**
+ * @brief The type registery for `<texts>`.
+ *
+ * These types are maintained in the order in which Finale serializes them.
+ */
+using RegisteredTexts = TypeRegistry <
     dom::texts::FileInfoText,
     dom::texts::LyricsVerse,
     dom::texts::LyricsChorus,
@@ -142,8 +157,6 @@ using RegisteredTypes = TypeRegistry <
     dom::texts::SmartShapeText,
     dom::texts::ExpressionText,
     dom::texts::BookmarkText
-    // Add pointers to additional supported types here.
-    // Also add a field populator in FieldPopulatorsOthers.h
 >;
 
 } // namespace factory

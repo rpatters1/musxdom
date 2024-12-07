@@ -28,6 +28,12 @@
 #include "musx/dom/ObjectPool.h"
 #include "musx/dom/Document.h"
 
+#define DISPLAY_NODE_NAMES
+
+#ifdef DISPLAY_NODE_NAMES
+#include <set>
+#endif
+
 namespace musx {
 namespace factory {
 
@@ -65,10 +71,23 @@ public:
     {
         auto pool = std::make_shared<PoolType>();
 
-        for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {
-            std::string thisElt = childElement->getTagName();
+#ifdef DISPLAY_NODE_NAMES
+        std::set<std::string> alreadyDisplayed;
+        std::cout << "============" << std::endl
+                  << element->getTagName() << std::endl
+                  << "============" << std::endl;
+#endif
+
+        for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {            
             auto basePtr = DerivedType::extractFromXml(childElement, document, elementLinker);
             if (basePtr) {
+#ifdef DISPLAY_NODE_NAMES
+                auto it = alreadyDisplayed.find(childElement->getTagName());
+                if (it == alreadyDisplayed.end()) {
+                    std::cout << "  " << childElement->getTagName() << std::endl;
+                    alreadyDisplayed.emplace(childElement->getTagName());
+                }
+#endif
                 auto typedPtr = std::dynamic_pointer_cast<ObjectBase>(basePtr);
                 assert(typedPtr); // program bug if null
                 pool->add(childElement->getTagName(), typedPtr);
@@ -95,7 +114,7 @@ public:
      * @brief Extracts an `OptionsBase` object from an XML element.
      *
      * Extracts an `OptionsBase` derived object from the given XML element by delegating 
-     * to the `RegisteredTypes` class. This allows the creation of `Options` objects from XML.
+     * to the `RegisteredOptions` class. This allows the creation of `Options` objects from XML.
      *
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
@@ -104,7 +123,7 @@ public:
      */
     static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
-        return RegisteredTypes::createInstance(element, elementLinker, document);
+        return RegisteredOptions::createInstance(element, elementLinker, document);
     }
 };
 
@@ -140,11 +159,11 @@ public:
         }
         auto inciAttribute = element->findAttribute("inci");
         if (inciAttribute) {
-            return RegisteredTypes::createInstance(element, elementLinker,
+            return RegisteredOthers::createInstance(element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
         }
         else {
-            return RegisteredTypes::createInstance(element, elementLinker,
+            return RegisteredOthers::createInstance(element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>());
         }
     }
@@ -192,7 +211,7 @@ public:
             }
             return textAttribute->getValueAs<Cmper>();
         }();
-        return RegisteredTypes::createInstance(element, elementLinker, document, textNumber);
+        return RegisteredTexts::createInstance(element, elementLinker, document, textNumber);
     }
 
 private:
