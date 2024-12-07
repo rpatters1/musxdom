@@ -28,9 +28,7 @@
 #include "musx/dom/ObjectPool.h"
 #include "musx/dom/Document.h"
 
-#define DISPLAY_NODE_NAMES
-
-#ifdef DISPLAY_NODE_NAMES
+#ifdef MUSX_DISPLAY_NODE_NAMES
 #include <set>
 #endif
 
@@ -71,7 +69,7 @@ public:
     {
         auto pool = std::make_shared<PoolType>();
 
-#ifdef DISPLAY_NODE_NAMES
+#ifdef MUSX_DISPLAY_NODE_NAMES
         std::set<std::string> alreadyDisplayed;
         std::cout << "============" << std::endl
                   << element->getTagName() << std::endl
@@ -81,7 +79,7 @@ public:
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {            
             auto basePtr = DerivedType::extractFromXml(childElement, document, elementLinker);
             if (basePtr) {
-#ifdef DISPLAY_NODE_NAMES
+#ifdef MUSX_DISPLAY_NODE_NAMES
                 auto it = alreadyDisplayed.find(childElement->getTagName());
                 if (it == alreadyDisplayed.end()) {
                     std::cout << "  " << childElement->getTagName() << std::endl;

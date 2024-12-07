@@ -12,11 +12,11 @@ Include the top header in your source file.
 #include "musx/musx.h"
 ```
 
-You will also need an xml parser. This repository provides implementations for [tinyxml](https://github.com/leethomason/tinyxml2) and [rapidxml](https://github.com/dwd/rapidxml). If you wish to use one of these, define one and/or the other in your project's CMakeLists.txt file:
+You will also need an xml parser. This repository provides implementations for [tinyxml](https://github.com/leethomason/tinyxml2) and [rapidxml](https://rapidxml.sourceforge.net/). If you wish to use one of these, define one and/or the other in your project's CMakeLists.txt file:
 
 ```cmake
-target_compile_definitions(denigma PRIVATE MUSX_USE_TINYXML2) # for tinyxml2
-target_compile_definitions(denigma PRIVATE MUSX_USE_RAPIDXML) # for rapidxml
+target_compile_definitions(your-project PRIVATE MUSX_USE_TINYXML2) # for tinyxml2
+target_compile_definitions(your-project PRIVATE MUSX_USE_RAPIDXML) # for rapidxml
 ```
 
 You then must add the dependency for the one you choose to your CMakeLists.txt.
@@ -33,17 +33,11 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(tinyxml2)
 ```
 
-For rapidxml:
+For rapidxml, you will need to download the original version from [SourceForge](https://rapidxml.sourceforge.net/). There are more recent forks of rapidxml available, but they may not work with C++17 or the implementation here. Download the zip file and unzip it to a location like `.third_party/rapidxml/`. Then you can add it to your CMakeLists.txt file with:
 
 ```cmake
-# Add rapidxml
-set(RAPIDXML_SENTRY OFF)
-FetchContent_Declare(
-    rapidxml
-    URL https://github.com/dwd/rapidxml/archive/refs/heads/master.zip
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-)
-FetchContent_MakeAvailable(rapidxml)
+# Add the include path for rapidxml
+target_include_directories(your-project PRIVATE "${CMAKE_SOURCE_DIR}/third_party/rapidxml")
 ```
 
 You can include them both if you wish to benchmark one against the other. If you prefer a different xml parser, you can use it by defining an implementation of `musx::xml:: IXmlAttribute`, `musx::xml::IXmlElement`, and `musx::xml::IXmlDocument` for your parser.
