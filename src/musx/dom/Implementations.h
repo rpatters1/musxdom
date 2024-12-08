@@ -104,26 +104,26 @@ inline std::string others::MarkingCategory::getName() const
 
 inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 {
-        std::string text = this->text;
+        std::string searchText = this->text;
         FontInfo fontInfo(this->getDocument());
         bool foundTag = false;
 
         while (true) {
-            if (!musx::util::EnigmaString::startsWithFontCommand(text)) {
+            if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
                 break;
             }
 
-            size_t endOfTag = text.find_first_of(')');
+            size_t endOfTag = searchText.find_first_of(')');
             if (endOfTag == std::string::npos) {
                 break;
             }
 
-            std::string fontTag = text.substr(0, endOfTag + 1);
+            std::string fontTag = searchText.substr(0, endOfTag + 1);
             if (!musx::util::EnigmaString::parseFontCommand(fontTag, fontInfo)) {
                 return nullptr;
             }
 
-            text.erase(0, endOfTag + 1);
+            searchText.erase(0, endOfTag + 1);
             foundTag = true;
         }
 
