@@ -24,7 +24,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
-constexpr static musxtest::string_view fontProperties = R"xml(
+constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -210,8 +210,8 @@ constexpr static musxtest::string_view fontProperties = R"xml(
       <family>0</family>
       <name>Lucida Grande</name>
     </fontName>
-  </others>
-  <texts>
+  </others>)xml" // MSC doesn't like long string literals
+  R"xml(<texts>
     <fileInfo type="title">My Piece</fileInfo>
     <fileInfo type="composer">L. BEETHOVEN</fileInfo>
     <fileInfo type="copyright">1823</fileInfo>
@@ -372,7 +372,7 @@ TEST(TextsTest, FileInfoText)
     using Type = FileInfoText::TextType;
     using musx::dom::Cmper;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
     
@@ -438,7 +438,7 @@ TEST(TextsTest, LyricsText)
     using musx::dom::texts::LyricsSection;
     using musx::dom::Cmper;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
     
@@ -478,7 +478,7 @@ TEST(TextsTest, OtherText)
     using musx::dom::texts::BookmarkText;
     using musx::dom::Cmper;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
     
@@ -542,7 +542,7 @@ TEST(TextsTests, FontFromEnigma)
 {
     using musx::dom::texts::ExpressionText;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
