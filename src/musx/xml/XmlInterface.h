@@ -127,7 +127,11 @@ public:
             return defaultValue;
         }
 
-        using ValueType = std::conditional_t<std::is_same_v<T, char> || std::is_same_v<T, uint8_t>, int, T>;
+        using ValueType = std::conditional_t<
+                            std::is_same_v<T, char>
+                            || std::is_same_v<T, uint8_t>
+                            || std::is_same_v<T, char16_t>
+                            || std::is_same_v<T, char32_t>, int, T>;
         ValueType value = ValueType(defaultValue);
 
         if (!(iss >> value)) {

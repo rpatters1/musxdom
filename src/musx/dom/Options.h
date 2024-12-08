@@ -35,6 +35,59 @@ namespace dom {
 namespace options {
 
 /**
+ * @class ClefOptions
+ * @brief Options for configuring clefs in a musical context.
+ */
+class ClefOptions : public OptionsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the document object.
+     *
+     * Constructs a DefaultFonts object that is associated with the provided document.
+     */
+    explicit ClefOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    /**
+     * @brief Represents a single clef definition.
+     */
+    struct ClefDef
+    {
+        int middleCPos{};               ///< Staff position of middle-C for this clef (from top staffline). (xml node is `<adjust>`.)
+        char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
+        int staffPositon{};             ///< Staff position of the clef symbol's baseline (from top staffline). (xml node is `<clefYDisp>`)
+        Efix baselineAdjust{};          ///< Additional baseline adjustment in Efix. (xml node is `<baseAdjust>`)
+        int shapeId{};                  ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
+        bool isShape{};                 ///< Indicates if the clef is a shape.
+        bool scaleToStaffHeight{};      ///< Indicates if the shape should scale to staff height.
+        bool useOwnFont{};              ///< Indicates if the clef has its own font.
+        std::shared_ptr<FontInfo> font; ///< When `useOwnFont` is true, this is the clef's font. Otherwise `nullptr`.
+    };
+
+    int defaultClef{};                  ///< Default clef identifier. An index into `clefDefs`.
+    int clefChangePercent{};            ///< Percentage adjustment for end-of-measure clef changes. 100 means no adjustment. (xml node is `<endMeasClefPercent>`)
+    Evpu clefChangeOffset{};            ///< Offset from next barline for end-of-measure clef changes. (xml node is `<endMeasClefPosAdd>`).
+    Evpu clefFrontSepar{};              ///< Spacing before clef. (xml node is `<clefFront>`)
+    Evpu clefBackSepar{};               ///< Spacing after clef. (xml node is `<clefBack>`)
+    bool showClefFirstSystemOnly{};     ///< "Display Clef Only on First System"
+    Evpu clefKeySepar{};                ///< "Extra Space Between Clef and Key Signature" (xml node is `<clefKey>`)
+    Evpu clefTimeSepar{};               ///< "Extra Space Between Clef and Time Signature" (xml node is `<clefTime>`)
+    bool cautionaryClefChanges{};       ///< "Display Courtesy Clef a End of Staff System"
+
+    /**
+     * @brief Vector of clef definitions (@ref ClefDef).
+     */
+    std::vector<ClefDef> clefDefs{18};  // reserve space for 18 clef definitions, 0..17, which is the norm for Finale
+
+    /**
+     * @brief The XML node name for this type.
+     */
+    constexpr static std::string_view XmlNodeName = "clefOptions";
+};
+
+/**
  * @class DefaultFonts
  * @brief An unordered map of default font settings for the document.
  *

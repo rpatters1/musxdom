@@ -35,6 +35,57 @@ using namespace dom::options;
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
 template <>
+struct FieldPopulator<ClefOptions> : public FactoryBase
+{
+private:
+    static void populateClefDef(const std::shared_ptr<xml::IXmlElement>& element, const DocumentWeakPtr& document, ClefOptions::ClefDef& def)
+    {
+        getFieldFromXml(element, "adjust", def.middleCPos, [](auto el) { return el->template getTextAs<int>(); });
+        getFieldFromXml(element, "clefChar", def.clefChar, [](auto el) { return el->template getTextAs<char32_t>(); });
+        getFieldFromXml(element, "clefYDisp", def.staffPositon, [](auto el) { return el->template getTextAs<int>(); });
+        getFieldFromXml(element, "baseAdjust", def.baselineAdjust, [](auto el) { return el->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "shapeID", def.shapeId, [](auto el) { return el->template getTextAs<int>(); }, false);
+        getFieldFromXml(element, "isShape", def.isShape, [](auto) { return true; }, false);
+        getFieldFromXml(element, "scaleToStaffHeight", def.scaleToStaffHeight, [](auto) { return true; }, false);
+        getFieldFromXml(element, "useOwnFont", def.useOwnFont, [](auto) { return true; }, false);
+        def.font = FieldPopulator<FontInfo>::getFontFromXml(element, "font", document, false);
+        if (def.useOwnFont && !def.font) {
+            throw std::invalid_argument("Use own font was specified, but no font was found in the xml.");
+        }
+    }
+
+public:
+    static void populate(const std::shared_ptr<ClefOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "defaultClef", instance->defaultClef, [](auto el) { return el->template getTextAs<int>(); });
+        getFieldFromXml(element, "endMeasClefPercent", instance->clefChangePercent, [](auto el) { return el->template getTextAs<int>(); });
+        getFieldFromXml(element, "endMeasClefPosAdd", instance->clefChangeOffset, [](auto el) { return el->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "clefFront", instance->clefFrontSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "clefBack", instance->clefBackSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "clefKey", instance->clefKeySepar, [](auto el) { return el->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "clefTime", instance->clefTimeSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "showClefFirstSystemOnly", instance->showClefFirstSystemOnly, [](auto) { return true; }, false);
+        getFieldFromXml(element, "cautionaryClefChanges", instance->cautionaryClefChanges, [](auto) { return true; }, false);
+
+        size_t i = 0;
+        for (auto clefDefElement = element->getFirstChildElement("clefDef");
+             clefDefElement;
+             clefDefElement = clefDefElement->getNextSibling("clefDef"), i++) {
+            if (i >= instance->clefDefs.size()) {
+                instance->clefDefs.resize(i + 1);
+            }
+            auto indexAttr = clefDefElement->findAttribute("index");
+            size_t index = indexAttr ? indexAttr->getValueAs<size_t>() : -1;
+            if (index != i) {
+                throw std::invalid_argument("ClefDef index mismatch. Expected: " + std::to_string(i) + ", Found: " + std::to_string(index));
+            }
+            populateClefDef(clefDefElement, instance->getDocument(), instance->clefDefs[i]);
+        }
+        instance->clefDefs.resize(i);
+    }
+};
+
+template <>
 struct FieldPopulator<DefaultFonts> : public FactoryBase
 {
     static void populate(const std::shared_ptr<DefaultFonts>& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)

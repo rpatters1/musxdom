@@ -214,14 +214,9 @@ public:
     std::shared_ptr<FontInfo> musicFont;     ///< Music font
     std::shared_ptr<FontInfo> numberFont;    ///< Number font
 
-    // Horizontal alignment for the marking
-    HorizontalMeasExprAlign horzAlign{ HorizontalMeasExprAlign::LeftBarline }; ///< Represents `<horzAlign>` element
-
-    // Vertical alignment for the marking
-    VerticalMeasExprAlign vertAlign{ VerticalMeasExprAlign::AboveStaff }; ///< Represents `<vertAlign>` element
-
-    // Justification for the text within the marking
-    HorizontalExprJustification justification{ HorizontalExprJustification::Left }; ///< Represents `<justification>` element
+    HorizontalMeasExprAlign horzAlign{ HorizontalMeasExprAlign::LeftBarline }; ///< Horizontal alignment for the marking
+    VerticalMeasExprAlign vertAlign{ VerticalMeasExprAlign::AboveStaff }; ///< Vertical alignment for the marking
+    HorizontalExprJustification justification{ HorizontalExprJustification::Left }; ///< Justification for the text within the marking
 
     // Vertical and horizontal offsets for positioning adjustments
     Evpu horzOffset{};         ///< Additional horizontal offset
@@ -229,17 +224,17 @@ public:
     Evpu vertOffsetEntry{};    ///< Additional vertical entry offset
 
     // Usage flags representing certain behaviors and visual elements
-    bool usesTextFont{};      ///< true if this category uses the text font
-    bool usesMusicFont{};     ///< true if this category uses the music font
-    bool usesNumberFont{};    ///< true if this category uses the number font
-    bool usesPositioning{};   ///< true if this category uses the positioning elements (Finale UI only allows true)
-    bool usesStaffList{};     ///< Represents `<usesStaffList>` element
-    bool usesBreakMmRests{};  ///< Represents `<usesBreakMmRests>` element
-    bool breakMmRest{};       ///< Represents `<breakMmRest>` element
-    bool userCreated{};       ///< Represents `<userCreated>` element
+    bool usesTextFont{};      ///< whether this category uses the text font
+    bool usesMusicFont{};     ///< whether this category uses the music font
+    bool usesNumberFont{};    ///< whether this category uses the number font
+    bool usesPositioning{};   ///< whether this category uses the positioning elements (Finale UI only allows true)
+    bool usesStaffList{};     ///< whether this category uses a staff list
+    bool usesBreakMmRests{};  ///< whether this category uses the `breakMmRest` setting
+    bool breakMmRest{};       ///< whether expressions in this category break multimeasure rests
+    bool userCreated{};       ///< whether the user created this category
 
     // Staff list represented as an integer
-    Cmper staffList{};        ///< Represents `<staffList>` element, e.g., 1
+    Cmper staffList{};        ///< The staff list if `useStaffList` is true
 
     /** @brief A list of text expressions in this category.
      *

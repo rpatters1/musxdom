@@ -23,6 +23,7 @@ FetchContent_MakeAvailable(tinyxml2)
 # Add the test executable
 add_executable(musxdomtests
 	musxdomtests.cpp
+    clef_options_tests.cpp
 	document_tests.cpp
 	enclosure_tests.cpp
 	expression_tests.cpp
