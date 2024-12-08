@@ -144,15 +144,15 @@ public:
         if (commandPart == "fontMus" || commandPart == "fontTxt" || commandPart == "fontNum" || commandPart == "font" || commandPart == "fontid") {
             const std::string& param1 = components[1];
             if (commandPart == "fontid") {
-                fontInfo.fontId = std::stoi(param1);
+                fontInfo.fontId = Cmper(std::stoi(param1));
             } else if (param1.find("Font") == 0) { // Starts with "Font"
-                fontInfo.fontId = std::stoi(param1.substr(4));
+                fontInfo.fontId = Cmper(std::stoi(param1.substr(4)));
             } else {
                 fontInfo.setFontIdByName(param1);
             }
             return true;
         } else if (commandPart == "nfx") {
-            fontInfo.setEnigmaStyles(std::stoi(components[1]));
+            fontInfo.setEnigmaStyles(uint16_t(std::stoi(components[1])));
             return true;
         } else if (commandPart == "size") {
             fontInfo.fontSize = std::stoi(components[1]);
