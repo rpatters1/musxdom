@@ -27,7 +27,9 @@
 
 #include "Options.h"
 #include "Others.h"
+#include "Texts.h"
 #include "Document.h"
+#include "musx/util/EnigmaString.h"
 
 namespace musx {
 namespace dom {
@@ -68,7 +70,19 @@ inline std::string FontInfo::getFontName() const
     if (fontDef) {
         return fontDef->name;
     }
-    throw std::invalid_argument("Font defintion not found for font id " + std::to_string(fontId));
+    throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
+}
+
+inline void FontInfo::setFontIdByName(const std::string& name)
+{
+    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>();
+    for (auto fontDef : fontDefs) {
+        if (fontDef->name == name) {
+            fontId = fontDef->getCmper();
+            return;
+        }
+    }
+    throw std::invalid_argument("font definition not found for font \"" + name + "\"");
 }
 
 // ****************************
@@ -82,6 +96,42 @@ inline std::string others::MarkingCategory::getName() const
         return catName->name;
     }
     return {};
+}
+
+// ********************
+// ***** TextBase *****
+// ********************
+
+inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
+{
+        std::string searchText = this->text;
+        FontInfo fontInfo(this->getDocument());
+        bool foundTag = false;
+
+        while (true) {
+            if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
+                break;
+            }
+
+            size_t endOfTag = searchText.find_first_of(')');
+            if (endOfTag == std::string::npos) {
+                break;
+            }
+
+            std::string fontTag = searchText.substr(0, endOfTag + 1);
+            if (!musx::util::EnigmaString::parseFontCommand(fontTag, fontInfo)) {
+                return nullptr;
+            }
+
+            searchText.erase(0, endOfTag + 1);
+            foundTag = true;
+        }
+
+        if (foundTag) {
+            return std::make_shared<FontInfo>(fontInfo);
+        }
+
+        return nullptr;
 }
 
 // *****************************

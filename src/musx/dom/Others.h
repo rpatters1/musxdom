@@ -64,7 +64,7 @@ public:
      * @param document Shared pointer to the document.
      * @param cmper Comparison parameter.
      */
-    Enclosure(const DocumentWeakPtr& document, Cmper cmper)
+    explicit Enclosure(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
     Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
@@ -92,7 +92,7 @@ class FontDefinition : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    FontDefinition(const DocumentWeakPtr& document, Cmper cmper)
+    explicit FontDefinition(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
     // Public properties corresponding to the XML structure
@@ -204,7 +204,7 @@ public:
     };
 
     /** @brief Constructor function */
-    MarkingCategory(const DocumentWeakPtr& document, Cmper cmper)
+    explicit MarkingCategory(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
     CategoryType categoryType{ CategoryType::Misc }; ///< Category type of the marking
@@ -265,7 +265,7 @@ class MarkingCategoryName : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    MarkingCategoryName(const DocumentWeakPtr& document, Cmper cmper)
+    explicit MarkingCategoryName(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
     std::string name; ///< The name of the marking category.
@@ -305,7 +305,7 @@ public:
      *
      * Initializes all fields to their default values.
      */
-    TextExpressionDef(const DocumentWeakPtr& document, Cmper cmper)
+    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */

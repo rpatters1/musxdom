@@ -122,7 +122,7 @@ public:
         );
 
         for (auto it = rangeStart; it != rangeEnd; ++it) {
-            auto typedPtr = std::static_pointer_cast<T>(it->second);
+            auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
             assert(typedPtr);
             result.push_back(typedPtr);
         }
@@ -147,7 +147,7 @@ public:
         if (it == m_pool.end()) {
             return nullptr;
         }
-        auto typedPtr = std::static_pointer_cast<T>(it->second);
+        auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
         assert(typedPtr); // There is a program bug if the pointer cast fails.
         return typedPtr;
     }
@@ -166,7 +166,7 @@ private:
  * Examples include header and options objects.
  */
 template<typename ScalarBase>
-class ScalarPool : private ObjectPool<ScalarBase>
+class ScalarPool : protected ObjectPool<ScalarBase>
 {
 public:
     /** @brief Scalar version of #ObjectPool::add */
@@ -188,34 +188,49 @@ public:
 using OptionsPoolPtr = std::shared_ptr<ScalarPool<OptionsBase>>;
 
 /**
- * @class OthersPool
- * @brief A pool that manages collections of `OthersBase` objects, organized by XML node names and `Cmper` values.
+ * @class OneCmperPool
+ * @brief A pool that manages collections of `OneCmperBase` objects, organized by XML node names and `Cmper` values.
  * 
- * This class provides functionality to store and retrieve objects derived from `OthersBase`,
- * categorized by their node names and a `Cmper` attribute.
+ * Examples of `OneCmperBase` classes are @ref OthersBase and @ref TextsBase.
  */
-class OthersPool : private ObjectPool<OthersBase>
+template<typename OneCmperBase>
+class OneCmperPool : protected ObjectPool<OneCmperBase>
+{
+public:
+    /** @brief OneCmperBase version of #ObjectPool::getArray */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper = std::nullopt) const
+    { return ObjectPool<OneCmperBase>::template getArray<T>({std::string(T::XmlNodeName), cmper}); }
+
+    /** @brief OneCmperBase version of #ObjectPool::get */
+    template <typename T>
+    std::shared_ptr<T> get(Cmper cmper, std::optional<Inci> inci = std::nullopt) const
+    {
+        return ObjectPool<OneCmperBase>::template get<T>({std::string(T::XmlNodeName), cmper, std::nullopt, inci});
+    }
+};
+
+/** @brief Others pool */
+class OthersPool : public OneCmperPool<OthersBase>
 {
 public:
     /** @brief Others version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& other)
     { ObjectPool::add({nodeName, other->getCmper(), std::nullopt, other->getInci()}, other); }
-
-    /** @brief Others version of #ObjectPool::getArray */
-    template <typename T>
-    std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper = std::nullopt) const
-    { return ObjectPool::getArray<T>({std::string(T::XmlNodeName), cmper}); }
-
-    /** @brief Others version of #ObjectPool::get */
-    template <typename T>
-    std::shared_ptr<T> get(Cmper cmper, std::optional<Inci> inci = std::nullopt) const
-    {
-        return ObjectPool::get<T>({std::string(T::XmlNodeName), cmper, std::nullopt, inci});
-    }
 };
-
 /** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;
+
+/** @brief Text pool */
+class TextsPool : public OneCmperPool<TextsBase>
+{
+public:
+    /** @brief Texts version of #ObjectPool::add */
+    void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& text)
+    { ObjectPool::add({nodeName, text->getTextNumber(), std::nullopt, std::nullopt}, text); }
+};
+/** @brief Shared `OthersPool` pointer */
+using TextsPoolPtr = std::shared_ptr<TextsPool>;
 
 } // namespace dom
 } // namespace musx

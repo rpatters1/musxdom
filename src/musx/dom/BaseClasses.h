@@ -52,7 +52,7 @@ public:
     /**
      * @brief Virtual destructor for polymorphic behavior.
      */
-    virtual ~Base() = default;
+    virtual ~Base() noexcept(false) = default;
 
     /**
      * @brief Gets a reference to the Document.
@@ -110,8 +110,8 @@ protected:
     /**
      * @brief Constructs an OthersBase object.
      * 
-     * @param cmper The `cmper` key value.
-     * @param inci The array index (`inci`).
+     * @param cmper The `Cmper` key value.
+     * @param inci The array index (`Inci`).
      * @param document A weak pointer to the parent document
      */
     OthersBase(const DocumentWeakPtr& document, Cmper cmper, std::optional<Inci> inci = std::nullopt)
@@ -147,6 +147,46 @@ public:
     void setInci(std::optional<Inci> inci) { m_inci = inci; }
 };
 
+class FontInfo;
+/**
+ * @brief Base class for all text blocks.
+ * 
+ * Options types derive from this base class so they can reside in the text pool.
+ */
+class TextsBase : public Base
+{
+private:
+    Cmper m_textNumber;             ///< Common attribute: cmper (key value).
+
+public:
+    /**
+     * @brief Constructs a `TextsBase` object.
+     * 
+     * @param document A weak pointer to the parent document
+     * @param textNumber The text number (`Cmper`).
+     */
+    TextsBase(const DocumentWeakPtr& document, Cmper textNumber)
+        : Base(document), m_textNumber(textNumber) {}
+
+    std::string text;    ///< Raw Enigma string (with Enigma string tags), encoded UTF-8.
+
+    /**
+     * @brief Returns the raw text number.
+     */
+    Cmper getTextNumber() const { return m_textNumber; }
+
+    /**
+     * @brief Sets the raw text number.
+     */
+    void setTextNumber(Cmper textNumber) { m_textNumber = textNumber; }
+
+    /**
+     * @brief Returns a shared pointer to a FontInfo instance that reflects
+     * the first font information in the text.
+     */
+    std::shared_ptr<FontInfo> parseFirstFontInfo() const;
+};
+
 /**
  * @struct FontInfo
  * @brief Represents the default font settings for a particular element type.
@@ -170,13 +210,37 @@ public:
      * @brief Default constructor
      * @param document A weak pointer to the document object.
      */
-    FontInfo(const DocumentWeakPtr& document) : Base(document) {}
+    explicit FontInfo(const DocumentWeakPtr& document)
+        : Base(document) {}
 
     /**
      * @brief Get the name of the font.
      * @return The name of the font as a string.
      */
     std::string getFontName() const;
+
+    /**
+     * @brief Sets the id of the font from a string name.
+     * @param name The font name to find.
+     * @throws std::invalid_parameter if the name is not found.
+     */
+    void setFontIdByName(const std::string& name);
+
+    /**
+     * @brief Set style effects based on a bitmask. This is mainly useful for capturing text styles
+     * from enigma strings. (See @ref musx::util::EnigmaString::parseFontCommand.)
+     *
+     * @param efx A 16-bit integer representing style effects with specific bit masks.
+     */
+    void setEnigmaStyles(uint16_t efx)
+    {
+        bold = efx & 0x01;         // FONT_EFX_BOLD
+        italic = efx & 0x02;       // FONT_EFX_ITALIC
+        underline = efx & 0x04;    // FONT_EFX_UNDERLINE
+        strikeout = efx & 0x20;    // FONT_EFX_STRIKEOUT
+        absolute = efx & 0x40;     // FONT_EFX_ABSOLUTE
+        hidden = efx & 0x80;       // FONT_EFX_HIDDEN
+    }
 };
 
 } // namespace dom

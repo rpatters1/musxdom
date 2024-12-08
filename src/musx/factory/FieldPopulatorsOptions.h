@@ -29,6 +29,7 @@
 namespace musx {
 namespace factory {
 
+using namespace dom;
 using namespace dom::options;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -105,6 +106,77 @@ private:
         else if (typeStr == "timeParts") return FontType::TimeParts;
         else if (typeStr == "timePlusParts") return FontType::TimePlusParts;
         else throw std::invalid_argument("Unknown FontType string: " + typeStr);
+    }
+};
+
+template <>
+struct FieldPopulator<PageFormatOptions> : public FactoryBase {
+    static void populate(const std::shared_ptr<PageFormatOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "adjustPageScope", instance->adjustPageScope, [](auto element) {
+            return toAdjustPageScope(element->getText());
+        });
+        getFieldFromXml(element, "pageFormatScore", instance->pageFormatScore, [](auto element) {
+            auto pageFormat = std::make_shared<PageFormatOptions::PageFormat>();
+            populatePageFormat(pageFormat, element);
+            return pageFormat;
+        });
+        getFieldFromXml(element, "pageFormatParts", instance->pageFormatParts, [](auto element) {
+            auto pageFormat = std::make_shared<PageFormatOptions::PageFormat>();
+            populatePageFormat(pageFormat, element);
+            return pageFormat;
+        });
+        getFieldFromXml(element, "avoidSystemMarginCollisions", instance->avoidSystemMarginCollisions, [](auto) { return true; }, false);
+    }
+
+private:
+    /**
+     * @brief Converts a string to an AdjustPageScope enum value.
+     * 
+     * @param value The string representation of the scope.
+     * @return PageFormatOptions::AdjustPageScope The corresponding enum value.
+     */
+    static PageFormatOptions::AdjustPageScope toAdjustPageScope(const std::string& value)
+    {
+        if (value == "current") {
+            return PageFormatOptions::AdjustPageScope::Current;
+        } else if (value == "all") {
+            return PageFormatOptions::AdjustPageScope::All;
+        } else if (value == "leftOrRight") {
+            return PageFormatOptions::AdjustPageScope::LeftOrRight;
+        } else if (value == "range") {
+            return PageFormatOptions::AdjustPageScope::PageRange;
+        }
+        throw std::runtime_error("Invalid value for adjustPageScope: " + value);
+    }
+
+    static void populatePageFormat(const std::shared_ptr<PageFormatOptions::PageFormat>& instance, const std::shared_ptr<xml::IXmlElement>& element)
+    {
+        getFieldFromXml(element, "pageHeight", instance->pageHeight, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "pageWidth", instance->pageWidth, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "pagePercent", instance->pagePercent, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "sysPercent", instance->sysPercent, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "rawStaffHeight", instance->rawStaffHeight, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "leftPageMarginTop", instance->leftPageMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "leftPageMarginLeft", instance->leftPageMarginLeft, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "leftPageMarginBottom", instance->leftPageMarginBottom, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "leftPageMarginRight", instance->leftPageMarginRight, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "rightPageMarginTop", instance->rightPageMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "rightPageMarginLeft", instance->rightPageMarginLeft, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "rightPageMarginBottom", instance->rightPageMarginBottom, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "rightPageMarginRight", instance->rightPageMarginRight, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "sysMarginTop", instance->sysMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "sysMarginLeft", instance->sysMarginLeft, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "sysMarginBottom", instance->sysMarginBottom, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "sysMarginRight", instance->sysMarginRight, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "sysDistanceBetween", instance->sysDistanceBetween, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "firstPageMarginTop", instance->firstPageMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "firstSysMarginTop", instance->firstSysMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "firstSysMarginLeft", instance->firstSysMarginLeft, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "firstSysMarginDistance", instance->firstSysMarginDistance, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "facingPages", instance->facingPages, [](auto) { return true; }, false);
+        getFieldFromXml(element, "differentFirstSysMargin", instance->differentFirstSysMargin, [](auto) { return true; }, false);
+        getFieldFromXml(element, "differentFirstPageMargin", instance->differentFirstPageMargin, [](auto) { return true; }, false);
     }
 };
 

@@ -27,7 +27,6 @@
 #include <functional>
 
 #include "musx/dom/BaseClasses.h"
-#include "musx/dom/ObjectPool.h"
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
