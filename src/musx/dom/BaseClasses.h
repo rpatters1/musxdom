@@ -22,6 +22,17 @@
 #pragma once
 
 #include <cstdint>
+#include <filesystem>
+
+#if defined(_WIN32)
+#define MUSX_RUNNING_ON_WINDOWS
+#elif defined(__APPLE__) && defined(__MACH__)
+#define MUSX_RUNNING_ON_MACOS
+#elif defined(__unix__) || defined(__linux__)
+#define MUSX_RUNNING_ON_LINUX_UNIX
+#else
+#error "Unable to detect operating system platform."
+#endif
 
 namespace musx {
 namespace dom {
@@ -241,6 +252,18 @@ public:
         absolute = efx & 0x40;     // FONT_EFX_ABSOLUTE
         hidden = efx & 0x80;       // FONT_EFX_HIDDEN
     }
+
+    /**
+     * @brief Calculates whether this is a SMuFL font.
+     */
+    bool calcIsSMuFL() const;
+
+    /**
+     * @brief Returns the standard SMuFL font folder.
+     *
+     * @return a std::vector<std::filesystem::path> where element 0 is the user path and element 1 is the system path
+     */
+    static std::vector<std::filesystem::path> calcSMuFLPaths();
 };
 
 } // namespace dom

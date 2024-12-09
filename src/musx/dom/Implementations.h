@@ -21,7 +21,9 @@
  */
 #pragma once
 
+#include <cstdlib>
 #include <exception>
+#include <filesystem>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -83,6 +85,56 @@ inline void FontInfo::setFontIdByName(const std::string& name)
         }
     }
     throw std::invalid_argument("font definition not found for font \"" + name + "\"");
+}
+
+inline bool FontInfo::calcIsSMuFL() const
+{
+    auto name = getFontName();
+    auto standardFontPaths = calcSMuFLPaths();
+    for (const auto& path : standardFontPaths) {
+        if (!path.empty()) {
+            std::filesystem::path metaFilePath(path / name / name);
+            metaFilePath.replace_extension(".json");
+            if (std::filesystem::is_regular_file(metaFilePath)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
+{
+#if defined(MUSX_RUNNING_ON_WINDOWS)
+    auto systemEnv = "COMMONPROGRAMFILES";
+    auto userEnv = "LOCALAPPDATA";
+#elif defined(MUSX_RUNNING_ON_MACOS)
+    auto systemEnv = "";
+    auto userEnv = "HOME";
+#elif defined(MUSX_RUNNING_ON_LINUX_UNIX)
+    auto systemEnv = "XDG_DATA_DIRS";
+    auto userEnv = "XDG_DATA_HOME";
+#else
+    static_assert(false, "Unsupported OS for FontInfo::calcSMuFLPaths");
+#endif
+    auto getPath = [](const std::string& envVariable) -> std::filesystem::path {
+        std::string path;
+        if (!envVariable.empty()) {
+            if (auto envValue = getenv(envVariable.c_str())) {
+                path = envValue;
+            } else {
+                return "";
+            }
+        }
+#if defined(MUSX_RUNNING_ON_MACOS)
+        path += "/Library/Application Support";
+#endif
+        return path + "/SMuFL/Fonts/";
+    };
+    std::vector<std::filesystem::path> retval(2);
+    retval[0] = getPath(userEnv);
+    retval[1] = getPath(systemEnv);
+    return retval;
 }
 
 // ****************************
