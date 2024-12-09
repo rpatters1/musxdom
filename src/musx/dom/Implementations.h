@@ -118,7 +118,7 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     static_assert(false, "Unsupported OS for FontInfo::calcSMuFLPaths");
 #endif
     auto getPath = [](const std::string& envVariable) -> std::filesystem::path {
-        std::string path;
+        std::filesystem::path path;
 #if defined(MUSX_RUNNING_ON_WINDOWS)
         char* buffer = nullptr;
         size_t bufferSize = 0;
@@ -138,9 +138,10 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         }
 #endif
 #if defined(MUSX_RUNNING_ON_MACOS)
-        path += "/Library/Application Support";
+        path = path / "Library" / "Application Support";
 #endif
-        return path + "/SMuFL/Fonts/";
+        path = path / "SMuFL" / "Fonts";
+        return path;
     };
     std::vector<std::filesystem::path> retval(2);
     retval[0] = getPath(userEnv);
