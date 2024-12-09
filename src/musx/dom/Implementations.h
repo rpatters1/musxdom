@@ -119,6 +119,16 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 #endif
     auto getPath = [](const std::string& envVariable) -> std::filesystem::path {
         std::string path;
+#if defined(MUSX_RUNNING_ON_WINDOWS)
+        char* buffer = nullptr;
+        size_t bufferSize = 0;
+        if (_dupenv_s(&buffer, &bufferSize, envVariable.c_str()) == 0 && buffer != nullptr) {
+            path = buffer;
+            free(buffer);
+        } else {
+            return "";
+        }
+#else
         if (!envVariable.empty()) {
             if (auto envValue = getenv(envVariable.c_str())) {
                 path = envValue;
@@ -126,6 +136,7 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
                 return "";
             }
         }
+#endif
 #if defined(MUSX_RUNNING_ON_MACOS)
         path += "/Library/Application Support";
 #endif

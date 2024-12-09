@@ -22,6 +22,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cassert>
 #include <filesystem>
 
 #if defined(_WIN32)
