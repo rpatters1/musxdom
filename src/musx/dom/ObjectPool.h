@@ -115,9 +115,9 @@ public:
         auto rangeEnd = m_pool.upper_bound(
             ObjectKey{
                 key.nodeId,
-                key.cmper1.value_or(std::numeric_limits<Cmper>::max()), 
-                key.cmper2.value_or(std::numeric_limits<Cmper>::max()), 
-                key.inci.value_or(std::numeric_limits<Inci>::max())
+                key.cmper1.value_or((std::numeric_limits<Cmper>::max)()), 
+                key.cmper2.value_or((std::numeric_limits<Cmper>::max)()), 
+                key.inci.value_or((std::numeric_limits<Inci>::max)())
             }
         );
 
