@@ -99,8 +99,10 @@ public:
     /**
      * @brief Retrieves a vector of objects of a specific type from the pool.
      *
-     * Some types are arrays (with a 0-based "inci" value). Use this function to
-     * retrieve the entire array.
+     * This function may be used to
+     * - retrieve a multi-inci array
+     * - get all the objects of a specific type, regardless of @ref Cmper value(s), such as getting a vector
+     * of all the @ref others::TextExpressionDef instances.
      *
      * @tparam T The derived type of `OthersBase` to retrieve.
      * @param key The key value used to filter the objects.
