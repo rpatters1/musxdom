@@ -23,15 +23,20 @@ FetchContent_MakeAvailable(tinyxml2)
 # Add the test executable
 add_executable(musxdomtests
 	musxdomtests.cpp
-    clef_options_tests.cpp
 	document_tests.cpp
-	enclosure_tests.cpp
-	expression_tests.cpp
-	fonts_tests.cpp
 	header_tests.cpp
-    page_options_tests.cpp
 	pool_tests.cpp
-    text_tests.cpp
+    # options
+    options/barline_options_tests.cpp
+    options/clef_options_tests.cpp
+    options/line_curve_options_tests.cpp
+    options/page_options_tests.cpp
+    options/repeat_options_tests.cpp
+    # others
+	others/enclosure_tests.cpp
+	others/expression_tests.cpp
+	others/fonts_tests.cpp
+    others/text_tests.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
@@ -46,7 +51,8 @@ endif()
 target_compile_definitions(musxdomtests PRIVATE MUSX_USE_TINYXML2)
 target_compile_definitions(musxdomtests PRIVATE MUSX_USE_RAPIDXML)
 
-# Add the include path for rapidxml
+# Add the include paths
+target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/third_party/rapidxml")
 
 # Link Google Test and the library to the test executable

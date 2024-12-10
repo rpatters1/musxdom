@@ -35,6 +35,37 @@ namespace dom {
 namespace options {
 
 /**
+ * @class BarlineOptions
+ * @brief Options controlling the appearance of barlines in the musx file.
+ *
+ * This class is identified by the XML node name "barlineOptions".
+ */
+class BarlineOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit BarlineOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    bool drawBarlines{};                    ///< "Display All Barlines"
+    bool drawCloseSystemBarline{};          ///< "Close Barline at End of Each System"
+    bool drawCloseFinalBarline{};           ///< "Close Barline at End of Piece"
+    bool drawFinalBarlineOnLastMeas{};      ///< "Final Barline at End of Piece"
+    bool drawDoubleBarlineBeforeKeyChanges{}; ///< "Double Barline Before Key Changes"
+    bool drawLeftBarlineSingleStaff{};      ///< Left Barlines: "Display on Single Staves"
+    bool drawLeftBarlineMultipleStaves{};   ///< Left Barlines: "Display on Multiple Staves"
+    bool leftBarlineUsePrevStyle{};         ///< Left Barlines: "Default Style is Previous Measure's Right Barline"
+    Efix thickBarlineWidth{};               ///< Width of thick barlines in @ref Efix.
+    Efix barlineWidth{};                    ///< Width of thin barlines in @ref Efix.
+    Efix doubleBarlineSpace{};              ///< Space between double barlines in @ref Efix.
+    Efix finalBarlineSpace{};               ///< Space between final barlines in @ref Efix.
+    Evpu barlineDashOn{};                   ///< Dash length for dashed barlines in @ref Evpu.
+    Evpu barlineDashOff{};                  ///< Dash space for dashed barlines in @ref Evpu.
+
+    constexpr static std::string_view XmlNodeName = "barlineOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class ClefOptions
  * @brief Options for configuring clefs in a musical context.
  */
@@ -192,6 +223,36 @@ public:
 };
 
 /**
+ * @class LineCurveOptions
+ * @brief Options controlling the appearance of line and curve elements in the musx file.
+ *
+ * This class is identified by the XML node name "lineCurveOptions".
+ */
+class LineCurveOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit LineCurveOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    int bezierStep{};                    ///< Number of steps for Bézier curves.
+    Efix enclosureWidth{};               ///< Default enclosure width in @ref Efix.
+    bool enclosureRoundCorners{};        ///< Whether default enclosures have rounded corners.
+    Efix enclosureCornerRadius{};        ///< Default rounded corner radius width for enclosures in @ref Efix.
+    Efix staffLineWidth{};               ///< Width of staff lines in @ref Efix.
+    Efix legerLineWidth{};               ///< Width of leger lines in @ref Efix.
+    Evpu legerFrontLength{};             ///< Front length of leger lines in @ref Evpu.
+    Evpu legerBackLength{};              ///< Back length of leger lines in @ref Evpu.
+    Evpu restLegerFrontLength{};         ///< Front length of rest leger lines in @ref Evpu.
+    Evpu restLegerBackLength{};          ///< Back length of rest leger lines in @ref Evpu.
+    double psUlDepth{};                  ///< Depth of PostScript underline in 72 dpi points.
+    double psUlWidth{};                  ///< Width of PostScript underline in 72 dpi points.
+    double pathSlurTipWidth{};           ///< Width of slur tip path in fractional @ref Evpu.
+
+    constexpr static std::string_view XmlNodeName = "lineCurveOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class PageFormatOptions
  * @brief Options for page formatting in the document.
  * 
@@ -268,6 +329,64 @@ public:
      * @brief The XML node name for this type.
      */
     constexpr static std::string_view XmlNodeName = "pageFormatOptions";
+};
+
+/**
+ * @class RepeatOptions
+ * @brief Options controlling the appearance of repeats in the musx file.
+ *
+ * This class is identified by the XML node name "repeatOptions".
+ */
+class RepeatOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit RepeatOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    /// @brief Wing Styles from Document Options - Repeats
+    enum class WingStyle
+    {
+        None,
+        Curved,
+        SingleLine,
+        DoubleLine
+    };
+
+    /// @brief Back-to-Back Styles from Document Options - Repeats
+    enum class BackToBackStyle
+    {
+        Thin,
+        Mixed,
+        Thick
+    };
+
+    int maxPasses{};                       ///< Maximum number of passes for repeats.
+    bool addPeriod{};                      ///< "Add Period After Number"
+    Efix thickLineWidth{};                 ///< Heavy line thickness in @ref Efix.
+    Efix thinLineWidth{};                  ///< Thin line thickness in @ref Efix.
+    Efix lineSpace{};                      ///< Space between lines in @ref Efix.
+    BackToBackStyle backToBackStyle{ BackToBackStyle::Thin }; ///< Back-to-back style.
+    Evpu forwardDotHPos{};                 ///< Horizontal separation of forward repeat dots in @ref Evpu.
+    Evpu backwardDotHPos{};                ///< Horizontal separation of backward repeat dots in @ref Evpu.
+    Evpu upperDotVPos{};                   ///< Vertical adjustment of the upper dot in @ref Evpu.
+    Evpu lowerDotVPos{};                   ///< Vertical adjustment of the lower dot in @ref Evpu.
+    WingStyle wingStyle{ WingStyle::None }; ///< Wing style.
+    Evpu afterClefSpace{};                 ///< Space after clef in @ref Evpu.
+    Evpu afterKeySpace{};                  ///< Space after key signature in @ref Evpu.
+    Evpu afterTimeSpace{};                 ///< Space after time signature in @ref Evpu.
+    Cmper showOnStaffListNumber{};         ///< Staff list number (0 if none). @ref Cmper links to associated "repeatStaffList..." xml nodes.
+    Evpu bracketHeight{};                  ///< Height of the bracket in @ref Evpu.
+    Evpu bracketHookLen{};                 ///< Length of the bracket hook in @ref Evpu.
+    Efix bracketLineWidth{};               ///< Width of the bracket line in @ref Efix.
+    Evpu bracketStartInset{};              ///< Inset at the start of the bracket in @ref Evpu.
+    Evpu bracketEndInset{};                ///< Inset at the end of the bracket in @ref Evpu.
+    Evpu bracketTextHPos{};                ///< Horizontal position of bracket text in @ref Evpu.
+    Evpu bracketTextVPos{};                ///< Vertical position of bracket text in @ref Evpu.
+    Evpu bracketEndHookLen{};              ///< Length of the hook at the end of the bracket in @ref Evpu.
+    bool bracketEndAnchorThinLine{};       ///< Whether the end of the bracket anchors to a thin line.
+
+    constexpr static std::string_view XmlNodeName = "repeatOptions"; ///< The XML node name for this type.
 };
 
 } // namespace options
