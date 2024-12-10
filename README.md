@@ -1,6 +1,13 @@
 # musx object model
 
-Header-only object model for the EnigmaXml format in Finale musx files.
+Header-only object model ifor the EnigmaXml format in Finale musx files. It is compatible with the C++17 standard.
+
+**This project is not affiliated with or endorsed by Finale or its parent company.**
+
+- It is an independent open-source header library designed to help users access and convert their own data in the absence of Finale, which has been discontinued.
+- It does not contain any Finale source code.
+- It has been separately developed by analyzing the contents of EnigmaXml files and other publically available resources, such as the [PDK Framework](https://pdk.finalelua.com/) for Finale and Jari Williamsson’s [original site](https://www.finaletips.nu/frameworkref/index.html).
+- Nothing in this repository circumvents digital copy protection on the Finale application.
 
 ### Setup Instructions
 
