@@ -111,9 +111,9 @@ public:
 };
 
 template <>
-struct FieldPopulator<DefaultFonts> : public FactoryBase
+struct FieldPopulator<FontOptions> : public FactoryBase
 {
-    static void populate(const std::shared_ptr<DefaultFonts>& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    static void populate(const std::shared_ptr<FontOptions>& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
         auto fontElements = getFirstChildElement(element, "font");
         for (auto fontElement = getFirstChildElement(element, "font"); fontElement; fontElement = fontElement->getNextSibling("font")) {
@@ -127,12 +127,12 @@ struct FieldPopulator<DefaultFonts> : public FactoryBase
             FieldPopulator<dom::FontInfo>::populate(fontInfo, fontElement);
 
             // Add the populated font instance to the vector.
-            fonts->defaultFonts.emplace(fontType, fontInfo);
+            fonts->fontOptions.emplace(fontType, fontInfo);
         }
     }
 
 private:
-    using FontType = DefaultFonts::FontType;
+    using FontType = FontOptions::FontType;
 
     static FontType fromString(const std::string& typeStr)
     {

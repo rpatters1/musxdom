@@ -76,7 +76,7 @@ public:
      * @brief Constructor
      * @param document A weak pointer to the document object.
      *
-     * Constructs a DefaultFonts object that is associated with the provided document.
+     * Constructs a FontOptions object that is associated with the provided document.
      */
     explicit ClefOptions(const DocumentWeakPtr& document)
         : OptionsBase(document) {}
@@ -119,22 +119,22 @@ public:
 };
 
 /**
- * @class DefaultFonts
+ * @class FontOptions
  * @brief An unordered map of default font settings for the document.
  *
- * The DefaultFonts class stores default font settings used throughout the document. It provides functionality
+ * The FontOptions class stores default font settings used throughout the document. It provides functionality
  * to manage various font attributes, such as size, style (bold, italic), and whether the font is hidden or fixed size.
  */
-class DefaultFonts : public OptionsBase
+class FontOptions : public OptionsBase
 {
 public:
     /**
      * @brief Constructor
      * @param document A weak pointer to the document object.
      *
-     * Constructs a DefaultFonts object that is associated with the provided document.
+     * Constructs a FontOptions object that is associated with the provided document.
      */
-    explicit DefaultFonts(const DocumentWeakPtr& document)
+    explicit FontOptions(const DocumentWeakPtr& document)
         : OptionsBase(document) {}
 
     /**
@@ -197,7 +197,7 @@ public:
      *
      * An unordered map that associates each `FontType` with its corresponding `FontInfo` settings.
      */
-    std::unordered_map<FontType, std::shared_ptr<FontInfo>> defaultFonts;
+    std::unordered_map<FontType, std::shared_ptr<FontInfo>> fontOptions;
 
     /**
      * @brief get the `FontInfo` for a particular type

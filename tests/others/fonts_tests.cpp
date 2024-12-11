@@ -64,13 +64,13 @@ TEST(FontTest, FontInfoPropertiesTest)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
-    auto defaultFonts = options->get<musx::dom::options::DefaultFonts>();
-    ASSERT_TRUE(defaultFonts);
+    auto fontOptions = options->get<musx::dom::options::FontOptions>();
+    ASSERT_TRUE(fontOptions);
     EXPECT_THROW(
-        defaultFonts->getFontInfo(musx::dom::options::DefaultFonts::FontType::AbbrvStaffNames),
+        fontOptions->getFontInfo(musx::dom::options::FontOptions::FontType::AbbrvStaffNames),
         std::invalid_argument
     );
-    auto fontInfo = defaultFonts->getFontInfo(musx::dom::options::DefaultFonts::FontType::Ending);
+    auto fontInfo = fontOptions->getFontInfo(musx::dom::options::FontOptions::FontType::Ending);
     ASSERT_TRUE(fontInfo);
     EXPECT_EQ(fontInfo->fontId, 1);
     EXPECT_EQ(fontInfo->fontSize, 12);
@@ -100,7 +100,7 @@ TEST(FontTest, FontDefinitionProperties)
 TEST(FontTest, FontInfoNoName)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
-    auto fontInfo = musx::dom::options::DefaultFonts::getFontInfo(doc, musx::dom::options::DefaultFonts::FontType::Music);
+    auto fontInfo = musx::dom::options::FontOptions::getFontInfo(doc, musx::dom::options::FontOptions::FontType::Music);
     ASSERT_TRUE(fontInfo);
     EXPECT_EQ(fontInfo->fontId, 13);
     EXPECT_EQ(fontInfo->fontSize, 24);

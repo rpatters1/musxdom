@@ -127,7 +127,7 @@ public:
 using RegisteredOptions = TypeRegistry <
     dom::options::BarlineOptions,
     dom::options::ClefOptions,
-    dom::options::DefaultFonts,
+    dom::options::FontOptions,
     dom::options::LineCurveOptions,
     dom::options::PageFormatOptions,
     dom::options::RepeatOptions

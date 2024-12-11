@@ -36,30 +36,30 @@
 namespace musx {
 namespace dom {
 
-// ************************
-// ***** DefaultFonts *****
-// ************************
+// ***********************
+// ***** FontOptions *****
+// ***********************
 
-inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(options::DefaultFonts::FontType type) const
+inline std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(options::FontOptions::FontType type) const
 {
-    auto it = defaultFonts.find(type);
-    if (it == defaultFonts.end()) {
+    auto it = fontOptions.find(type);
+    if (it == fontOptions.end()) {
         throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
     }
     return it->second;
 }
 
-inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(const DocumentPtr& document, options::DefaultFonts::FontType type)
+inline std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
 {
     auto options = document->getOptions();
     if (!options) {
         throw std::invalid_argument("No options found in document");
     }
-    auto defaultFonts = options->get<options::DefaultFonts>();
-    if (!defaultFonts) {
+    auto fontOptions = options->get<options::FontOptions>();
+    if (!fontOptions) {
         throw std::invalid_argument("Default fonts not found in document");
     }
-    return defaultFonts->getFontInfo(type);
+    return fontOptions->getFontInfo(type);
 }
 
 // ********************
