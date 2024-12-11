@@ -72,7 +72,7 @@ public:
     Evpu xMargin{};           ///< Half width - extra space on left/right sides (in EVPU).
     Evpu yMargin{};           ///< Half height - extra space on top/bottom sides (in EVPU).
     Efix lineWidth{};         ///< Line thickness in 64ths of an EVPU (EFIX).
-    Shape shape{Shape::NoEnclosure}; ///< Enclosure shape (default: NoEnclosure).
+    Shape shape{};            ///< Enclosure shape (default: NoEnclosure).
     Efix cornerRadius{};      ///< Corner radius (in EFIX).
     bool fixedSize{};         ///< Whether the enclosure is fixed size (ignore text bounding box)
     bool notTall{};           ///< "Enforce Minimum Width": don't let shape get taller than it is wide
@@ -136,6 +136,7 @@ enum class PlaybackType
  */
 enum class HorizontalMeasExprAlign
 {
+    LeftBarline,            ///< Align with left barline (the default). (xml value is "leftEdge", if encountered)
     Manual,                 ///< "Horizontal Click Position" alignment.
     LeftOfAllNoteheads,     ///< Align left of all noteheads
     LeftOfPrimaryNotehead,  ///< Align to the left of the primary notehead.
@@ -143,7 +144,6 @@ enum class HorizontalMeasExprAlign
     CenterPrimaryNotehead,  ///< Align to the center of the primary notehead.
     CenterAllNoteheads,     ///< Align to the center of all noteheads.
     RightOfAllNoteheads,    ///< Align to the right of all noteheads.
-    LeftBarline,            ///< Align with left barline (the default). (xml value is "leftEdge", if encountered)
     StartTimeSig,           ///< Align at the start of the time signature.
     AfterClefKeyTime,       ///< Align after clef/key/time/repeat.
     StartOfMusic,           ///< Align at start of music.
@@ -158,9 +158,9 @@ enum class HorizontalMeasExprAlign
  */
 enum class VerticalMeasExprAlign
 {
+    AboveStaff,          ///< Align above ths staff (the default).
     Manual,              ///< "Vertical Click Position" alignment.
     RefLine,             ///< Align to staff reference line.
-    AboveStaff,          ///< Align above ths staff (the default).
     BelowStaff,          ///< Align below the staff.
     TopNote,             ///< Align with top note.
     BottomNote,          ///< Align with bottom note.
@@ -193,7 +193,8 @@ class MarkingCategory : public OthersBase
 {
 public:
     /** @brief Enumeration for the type of marking category */
-    enum class CategoryType {
+    enum class CategoryType
+    {
         Dynamics,           ///< Dynamics markings, such as forte, piano, etc.
         TempoMarks,         ///< Tempo indications such as Allegro (with or without metronome marking).
         TempoAlterations,   ///< Tempo alteration markings, such as accel. and rit. (xml value is "tempoAlts")
@@ -214,9 +215,9 @@ public:
     std::shared_ptr<FontInfo> musicFont;     ///< Music font
     std::shared_ptr<FontInfo> numberFont;    ///< Number font
 
-    HorizontalMeasExprAlign horzAlign{ HorizontalMeasExprAlign::LeftBarline }; ///< Horizontal alignment for the marking
-    VerticalMeasExprAlign vertAlign{ VerticalMeasExprAlign::AboveStaff }; ///< Vertical alignment for the marking
-    HorizontalExprJustification justification{ HorizontalExprJustification::Left }; ///< Justification for the text within the marking
+    HorizontalMeasExprAlign horzAlign{};     ///< Horizontal alignment for the marking
+    VerticalMeasExprAlign vertAlign{};       ///< Vertical alignment for the marking
+    HorizontalExprJustification justification{}; ///< Justification for the text within the marking
 
     // Vertical and horizontal offsets for positioning adjustments
     Evpu horzOffset{};         ///< Additional horizontal offset
@@ -281,10 +282,10 @@ public:
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
     int auxData1{};                                 ///< Auxiliary data for the expression.
-    PlaybackType playbackType{ PlaybackType::None }; ///< Playback behavior of the text expression.
-    HorizontalMeasExprAlign horzMeasExprAlign{ HorizontalMeasExprAlign::LeftBarline }; ///< Horizontal alignment of the expression.
-    HorizontalExprJustification horzExprJustification{ HorizontalExprJustification::Left }; ///< Horizontal justification of the text expression.
-    VerticalMeasExprAlign vertMeasExprAlign{ VerticalMeasExprAlign::AboveStaff }; ///< Vertical alignment of the expression.
+    PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
+    HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
+    HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
     int measXAdjust{};                              ///< Horizontal adjustment for measurement alignment.
     int yAdjustEntry{};                             ///< Vertical adjustment for entry alignment.
     int yAdjustBaseline{};                          ///< Vertical adjustment for baseline alignment.

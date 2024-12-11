@@ -84,7 +84,7 @@ constexpr static musxtest::string_view xml = R"xml(
 </finale>
 )xml";
 
-TEST(PageFormatOptionsTest, PageFormatPropertiesTest)
+TEST(PageFormatOptionsTest, PropertiesTest)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto options = doc->getOptions();
@@ -155,4 +155,25 @@ TEST(PageFormatOptionsTest, PageFormatPropertiesTest)
 
     // Test avoidSystemMarginCollisions
     EXPECT_TRUE(pageFormatOptions->avoidSystemMarginCollisions);
+}
+
+constexpr static musxtest::string_view noPageScopexml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <pageFormatOptions/>
+  </options>
+</finale>
+)xml";
+
+TEST(PageFormatOptionsTest, EnumDefaultsTest)
+{
+  auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(noPageScopexml);
+  auto options = doc->getOptions();
+  ASSERT_TRUE(options);
+  auto pageFormatOptions = options->get<musx::dom::options::PageFormatOptions>();
+  ASSERT_TRUE(pageFormatOptions);
+
+  // Test adjustPageScope takes correct default
+  EXPECT_EQ(pageFormatOptions->adjustPageScope, musx::dom::options::PageFormatOptions::AdjustPageScope::Current);
 }

@@ -126,3 +126,23 @@ TEST(EnclosureTest, InvalidShape)
         );
     }
 }
+
+TEST(EnclosureTest, EnumDefault)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <textRepeatEnclosure cmper="12"/>
+  </others>
+</finale>
+    )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+        auto others = doc->getOthers();
+        ASSERT_TRUE(others);
+        auto enclosure = others->get<musx::dom::others::TextRepeatEnclosure>(12);
+        ASSERT_TRUE(enclosure) << "Enclosure 12 not found but does exist";
+        EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::NoEnclosure);
+    }
+}

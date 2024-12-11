@@ -312,10 +312,10 @@ public:
     };
 
     // Properties
-    AdjustPageScope adjustPageScope{AdjustPageScope::Current}; ///< Scope of page adjustments.
+    AdjustPageScope adjustPageScope{};    ///< Scope of page adjustments.
     std::shared_ptr<PageFormat> pageFormatScore; ///< Page format for score settings.
     std::shared_ptr<PageFormat> pageFormatParts; ///< Page format for parts settings.
-    bool avoidSystemMarginCollisions{}; ///< Whether to avoid system margin collisions.
+    bool avoidSystemMarginCollisions{};   ///< Whether to avoid system margin collisions.
 
     /**
      * @brief Constructor for PageFormatOptions.
@@ -366,12 +366,12 @@ public:
     Efix thickLineWidth{};                 ///< Heavy line thickness in @ref Efix.
     Efix thinLineWidth{};                  ///< Thin line thickness in @ref Efix.
     Efix lineSpace{};                      ///< Space between lines in @ref Efix.
-    BackToBackStyle backToBackStyle{ BackToBackStyle::Thin }; ///< Back-to-back style.
+    BackToBackStyle backToBackStyle{};     ///< Back-to-back style.
     Evpu forwardDotHPos{};                 ///< Horizontal separation of forward repeat dots in @ref Evpu.
     Evpu backwardDotHPos{};                ///< Horizontal separation of backward repeat dots in @ref Evpu.
     Evpu upperDotVPos{};                   ///< Vertical adjustment of the upper dot in @ref Evpu.
     Evpu lowerDotVPos{};                   ///< Vertical adjustment of the lower dot in @ref Evpu.
-    WingStyle wingStyle{ WingStyle::None }; ///< Wing style.
+    WingStyle wingStyle{};                 ///< Wing style.
     Evpu afterClefSpace{};                 ///< Space after clef in @ref Evpu.
     Evpu afterKeySpace{};                  ///< Space after key signature in @ref Evpu.
     Evpu afterTimeSpace{};                 ///< Space after time signature in @ref Evpu.

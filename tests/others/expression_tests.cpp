@@ -206,3 +206,37 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     // Check the name using getName() method from MarkingCategory
     EXPECT_EQ(markingCategory->getName(), markingCategoryName->name);  // Should match the name from MarkingCategoryName
 }
+
+TEST(TextExpressionDefTest, EnumDefaults)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <textExprDef cmper="3">
+      <textIDKey>4</textIDKey>
+      <categoryID>1</categoryID>
+      <value>101</value>
+      <useAuxData/>
+      <useCategoryFonts/>
+      <descStr>fortissimo (velocity = 101)</descStr>
+    </textExprDef>
+    <markingsCategory cmper="1">
+      <categoryType>dynamics</categoryType>
+    </markingsCategory>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others) << "Others node not found in XML";
+
+    auto expression = others->get<musx::dom::others::TextExpressionDef>(3);
+    ASSERT_TRUE(expression) << "TextExpressionDef with cmper=3 not found but does exist";
+
+    EXPECT_EQ(expression->playbackType, musx::dom::others::PlaybackType::None);
+    EXPECT_EQ(expression->horzMeasExprAlign, musx::dom::others::HorizontalMeasExprAlign::LeftBarline);
+    EXPECT_EQ(expression->horzExprJustification, musx::dom::others::HorizontalExprJustification::Left);
+    EXPECT_EQ(expression->vertMeasExprAlign, musx::dom::others::VerticalMeasExprAlign::AboveStaff);
+}

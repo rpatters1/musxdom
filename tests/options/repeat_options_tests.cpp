@@ -93,3 +93,27 @@ TEST(RepeatOptionsTest, PropertiesTest)
     EXPECT_TRUE(repeatOptions->bracketEndAnchorThinLine);
     EXPECT_EQ(repeatOptions->showOnStaffListNumber, 1);
 }
+
+
+TEST(RepeatOptionsTest, DefaultEnumsTest)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <repeatOptions/>
+  </options>
+</finale>
+)xml";
+    
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+
+    auto repeatOptions = options->get<musx::dom::options::RepeatOptions>();
+    ASSERT_TRUE(repeatOptions);
+
+    // Test default values of enums
+    EXPECT_EQ(repeatOptions->backToBackStyle, musx::dom::options::RepeatOptions::BackToBackStyle::Thin);
+    EXPECT_EQ(repeatOptions->wingStyle, musx::dom::options::RepeatOptions::WingStyle::None);
+}
