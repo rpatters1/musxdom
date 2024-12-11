@@ -189,6 +189,9 @@ public:
     {
         // Populate categoryType field
         getFieldFromXml(element, "categoryType", instance->categoryType, [](auto element) { return toCategoryType(element->getText()); });
+        if (instance->categoryType == MarkingCategory::CategoryType::Invalid) {
+            throw std::invalid_argument("Encountered <markingsCategory> node (cmper " + std::to_string(instance->getCmper()) + ") with no categoryType");
+        }
 
         // Populate textFont, musicFont, and numberFont if the corresponding font tags exist
         instance->textFont = FieldPopulator<FontInfo>::getFontFromXml(element, "textFont", instance->getDocument());

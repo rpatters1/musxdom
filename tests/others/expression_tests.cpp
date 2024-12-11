@@ -240,3 +240,23 @@ TEST(TextExpressionDefTest, EnumDefaults)
     EXPECT_EQ(expression->horzExprJustification, musx::dom::others::HorizontalExprJustification::Left);
     EXPECT_EQ(expression->vertMeasExprAlign, musx::dom::others::VerticalMeasExprAlign::AboveStaff);
 }
+
+TEST(MarkingCategoryTest, MissingCategoryType)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <markingsCategory cmper="10"/>
+    <markingsCategoryName cmper="10">
+      <name>Vocal Dynamics</name>
+    </markingsCategoryName>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
+        std::invalid_argument
+    );
+}

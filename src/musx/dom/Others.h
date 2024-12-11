@@ -195,6 +195,7 @@ public:
     /** @brief Enumeration for the type of marking category */
     enum class CategoryType
     {
+        Invalid,            ///< There should always be a category type supplied
         Dynamics,           ///< Dynamics markings, such as forte, piano, etc.
         TempoMarks,         ///< Tempo indications such as Allegro (with or without metronome marking).
         TempoAlterations,   ///< Tempo alteration markings, such as accel. and rit. (xml value is "tempoAlts")
@@ -208,7 +209,7 @@ public:
     explicit MarkingCategory(const DocumentWeakPtr& document, Cmper cmper)
         : OthersBase(document, cmper) {}
 
-    CategoryType categoryType{ CategoryType::Misc }; ///< Category type of the marking
+    CategoryType categoryType{}; ///< Category type of the marking
 
     // Font information for the marking category
     std::shared_ptr<FontInfo> textFont;      ///< Text font
