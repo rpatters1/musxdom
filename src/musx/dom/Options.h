@@ -223,6 +223,35 @@ public:
 };
 
 /**
+ * @class KeySignatureOptions
+ * @brief Options controlling the appearance and behavior of key signatures.
+ *
+ * This class is identified by the XML node name "keySignatureOptions".
+ */
+class KeySignatureOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit KeySignatureOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    bool doKeyCancel{};                        ///< "Cancel Outgoing Key Signature"
+    bool doCStart{};                           ///< "In C, Display Naturals at Start of Staff System"
+    bool redisplayOnModeChange{};              ///< "Redisplay Key Signature If Only Mode is Changing" (xml node is `<doBankDiff>`)
+    Evpu keyFront{};                           ///< "Space Before Key Signature"
+    Evpu keyMid{};                             ///< "Space After Cancelled Key"
+    Evpu keyBack{};                            ///< "Space After Key Signature"
+    Evpu acciAdd{};                            ///< "Space Between Key Signature Accidentals"
+    bool showKeyFirstSystemOnly{};             ///< "Show Key Signature Only on First System"
+    Evpu keyTimeSepar{};                       ///< "Extra Space Between Key & Time Signatures" (xml node is `<keyTime>`)
+    bool simplifyKeyHoldOctave{};              ///< "Preserve Octave When Simplifying Keys"
+    bool cautionaryKeyChanges{};               ///< "Display Courtesy Key Signature at End of Staff System"
+    bool doKeyCancelBetweenSharpsFlats{};      ///< "When Switching Between Sharps and Flats"
+
+    constexpr static std::string_view XmlNodeName = "keySignatureOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class LineCurveOptions
  * @brief Options controlling the appearance of line and curve elements in the musx file.
  *

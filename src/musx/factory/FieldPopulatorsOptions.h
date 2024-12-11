@@ -186,6 +186,26 @@ private:
 };
 
 template <>
+struct FieldPopulator<KeySignatureOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<KeySignatureOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "doKeyCancel", instance->doKeyCancel, [](auto) { return true; }, false);
+        getFieldFromXml(element, "doCStart", instance->doCStart, [](auto) { return true; }, false);
+        getFieldFromXml(element, "doBankDiff", instance->redisplayOnModeChange, [](auto) { return true; }, false);
+        getFieldFromXml(element, "keyFront", instance->keyFront, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "keyMid", instance->keyMid, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "keyBack", instance->keyBack, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "acciAdd", instance->acciAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "showKeyFirstSystemOnly", instance->showKeyFirstSystemOnly, [](auto) { return true; }, false);
+        getFieldFromXml(element, "keyTime", instance->keyTimeSepar, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "simplifyKeyHoldOctave", instance->simplifyKeyHoldOctave, [](auto) { return true; }, false);
+        getFieldFromXml(element, "cautionaryKeyChanges", instance->cautionaryKeyChanges, [](auto) { return true; }, false);
+        getFieldFromXml(element, "doKeyCancelBetweenSharpsFlats", instance->doKeyCancelBetweenSharpsFlats, [](auto) { return true; }, false);
+    }
+};
+
+template <>
 struct FieldPopulator<LineCurveOptions> : public FactoryBase
 {
     static void populate(const std::shared_ptr<LineCurveOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)

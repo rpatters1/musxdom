@@ -27,16 +27,17 @@ add_executable(musxdomtests
 	header_tests.cpp
 	pool_tests.cpp
     # options
-    options/barline_options_tests.cpp
-    options/clef_options_tests.cpp
-    options/line_curve_options_tests.cpp
-    options/page_options_tests.cpp
-    options/repeat_options_tests.cpp
+    options/barline_options.cpp
+    options/clef_options.cpp
+    options/key_signature_options.cpp
+    options/line_curve_options.cpp
+    options/page_options.cpp
+    options/repeat_options.cpp
     # others
-	others/enclosure_tests.cpp
-	others/expression_tests.cpp
-	others/fonts_tests.cpp
-    others/text_tests.cpp
+	others/enclosure.cpp
+	others/expression.cpp
+	others/fonts.cpp
+    others/text.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")

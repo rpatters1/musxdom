@@ -128,6 +128,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::BarlineOptions,
     dom::options::ClefOptions,
     dom::options::FontOptions,
+    dom::options::KeySignatureOptions,
     dom::options::LineCurveOptions,
     dom::options::PageFormatOptions,
     dom::options::RepeatOptions
