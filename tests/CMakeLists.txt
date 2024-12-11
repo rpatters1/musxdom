@@ -32,7 +32,9 @@ add_executable(musxdomtests
     options/key_signature_options.cpp
     options/line_curve_options.cpp
     options/page_options.cpp
+    options/piano_brace_bracket_options.cpp
     options/repeat_options.cpp
+    options/time_signature_options.cpp
     # others
 	others/enclosure.cpp
 	others/expression.cpp

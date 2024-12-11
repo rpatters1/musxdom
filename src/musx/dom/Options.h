@@ -36,7 +36,7 @@ namespace options {
 
 /**
  * @class BarlineOptions
- * @brief Options controlling the appearance of barlines in the musx file.
+ * @brief Options controlling the appearance of barlines.
  *
  * This class is identified by the XML node name "barlineOptions".
  */
@@ -253,7 +253,7 @@ public:
 
 /**
  * @class LineCurveOptions
- * @brief Options controlling the appearance of line and curve elements in the musx file.
+ * @brief Options controlling the appearance of line and curve elements.
  *
  * This class is identified by the XML node name "lineCurveOptions".
  */
@@ -274,9 +274,9 @@ public:
     Evpu legerBackLength{};              ///< Back length of leger lines in @ref Evpu.
     Evpu restLegerFrontLength{};         ///< Front length of rest leger lines in @ref Evpu.
     Evpu restLegerBackLength{};          ///< Back length of rest leger lines in @ref Evpu.
-    double psUlDepth{};                  ///< Depth of PostScript underline in 72 dpi points.
-    double psUlWidth{};                  ///< Width of PostScript underline in 72 dpi points.
-    double pathSlurTipWidth{};           ///< Width of slur tip path in fractional @ref Evpu.
+    double psUlDepth{};                  ///< Depth of PostScript underline in 72 dpi points (fractional).
+    double psUlWidth{};                  ///< Width of PostScript underline in 72 dpi points (fractional).
+    EvpuFloat pathSlurTipWidth{};        ///< Width of slur tip path in fractional @ref EvpuFloat.
 
     constexpr static std::string_view XmlNodeName = "lineCurveOptions"; ///< The XML node name for this type.
 };
@@ -361,8 +361,37 @@ public:
 };
 
 /**
+ * @class PianoBraceBracketOptions
+ * @brief Options controlling the appearance of piano braces and brackets.
+ *
+ * This class is identified by the XML node name "pianoBraceBracketOptions".
+ */
+class PianoBraceBracketOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit PianoBraceBracketOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    Evpu defBracketPos{};                   ///< "Group Brackets: Default Distance from Left Edge of Staff"
+    EvpuFloat centerThickness{};            ///< Center thickness of braces in fractional @ref EvpuFloat.
+    EvpuFloat tipThickness{};               ///< End thickness of braces in fractional @ref EvpuFloat. (xml node is `<endThickness>`)
+    EvpuFloat outerBodyV{};                 ///< Vertical position of the outer wing in fractional @ref EvpuFloat. (xml node is `<outerWingY>`)
+    EvpuFloat innerTipV{};                  ///< Vertical position of the inner tip in fractional @ref EvpuFloat. (xml node is `<innerTipY>`)
+    EvpuFloat innerBodyV{};                 ///< Vertical position of the inner body in fractional @ref EvpuFloat. (xml node is `<innerWingY>`)
+    EvpuFloat outerTipH{};                  ///< Horizontal position of the outer tip in fractional @ref EvpuFloat. (xml node is `<outerTipX>`)
+    EvpuFloat outerTipV{};                  ///< Vertical position of the outer tip in fractional @ref EvpuFloat. (xml node is `<outerTipY>`)
+    EvpuFloat outerBodyH{};                 ///< Horizontal positione of the outer body in fractional @ref EvpuFloat. (xml node is `<outerWingX>`)
+    EvpuFloat width{};                      ///< Width of braces in fractional @ref EvpuFloat.
+    EvpuFloat innerTipH{};                  ///< Horizontal position of the inner tip in fractional @ref EvpuFloat. (xml node is `<innerTipX>`)
+    EvpuFloat innerBodyH{};                 ///< Horizontal position of the inner body in fractional @ref EvpuFloat. (xml node is `<innerWingX>`)
+
+    constexpr static std::string_view XmlNodeName = "pianoBraceBracketOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class RepeatOptions
- * @brief Options controlling the appearance of repeats in the musx file.
+ * @brief Options controlling the appearance of repeats.
  *
  * This class is identified by the XML node name "repeatOptions".
  */
@@ -416,6 +445,37 @@ public:
     bool bracketEndAnchorThinLine{};       ///< Whether the end of the bracket anchors to a thin line.
 
     constexpr static std::string_view XmlNodeName = "repeatOptions"; ///< The XML node name for this type.
+};
+
+/**
+ * @class TimeSignatureOptions
+ * @brief Options controlling the appearance and behavior of time signatures.
+ *
+ * This class is identified by the XML node name "timeSignatureOptions".
+ */
+class TimeSignatureOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TimeSignatureOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    Evpu timeUpperLift{};           ///< "Vertical Adjustment: Top Symbol, Score"
+    Evpu timeFront{};               ///< "Space Before Time Signature, Score"
+    Evpu timeBack{};                ///< "Space After Time Signature, Score"
+    Evpu timeFrontParts{};          ///< "Space Before Time Signature, Parts"
+    Evpu timeBackParts{};           ///< "Space After Time Signature, Parts"
+    Evpu timeUpperLiftParts{};      ///< "Vertical Adjustment: Top Symbol, Parts"
+    Evpu timeLowerLiftParts{};      ///< "Vertical Adjustment: Bottom Symbol, Parts"
+    Evpu timeAbrvLiftParts{};       ///< "Vertical Adjustment: Abbreviated Symbol, Parts"
+    bool timeSigDoAbrvCommon{};     ///< Abbreviate common time.
+    bool timeSigDoAbrvCut{};        ///< Abbreviate cut time.
+    int numCompositeDecimalPlaces{};///< "Decimal Places for Composite Meters" (xml node is `<defFloat>`)
+    bool cautionaryTimeChanges{};   ///< "Display Courtesy Time Signature at End of Staff System"
+    Evpu timeLowerLift{};           ///< "Vertical Adjustment: Bottom Symbol, Score"
+    Evpu timeAbrvLift{};            ///< "Vertical Adjustment: Abbreviated Symbol, Score"
+
+    constexpr static std::string_view XmlNodeName = "timeSignatureOptions"; ///< The XML node name for this type.
 };
 
 } // namespace options

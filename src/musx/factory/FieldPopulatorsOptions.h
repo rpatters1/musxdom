@@ -222,7 +222,7 @@ struct FieldPopulator<LineCurveOptions> : public FactoryBase
         getFieldFromXml(element, "restLegerBackLength", instance->restLegerBackLength, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "psUlDepth", instance->psUlDepth, [](auto element) { return element->template getTextAs<double>(); });
         getFieldFromXml(element, "psUlWidth", instance->psUlWidth, [](auto element) { return element->template getTextAs<double>(); });
-        getFieldFromXml(element, "pathSlurTipWidth", instance->pathSlurTipWidth, [](auto element) { return element->template getTextAs<double>(); });
+        getFieldFromXml(element, "pathSlurTipWidth", instance->pathSlurTipWidth, [](auto element) { return element->template getTextAs<EvpuFloat>(); });
     }
 };
 
@@ -298,6 +298,26 @@ private:
 };
 
 template <>
+struct FieldPopulator<PianoBraceBracketOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<PianoBraceBracketOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "defBracketPos", instance->defBracketPos, [](auto elem) { return elem->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "centerThickness", instance->centerThickness, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "endThickness", instance->tipThickness, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "outerWingY", instance->outerBodyV, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "innerTipY", instance->innerTipV, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "innerWingY", instance->innerBodyV, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "outerTipX", instance->outerTipH, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "outerTipY", instance->outerTipV, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "outerWingX", instance->outerBodyH, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "width", instance->width, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "innerTipX", instance->innerTipH, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+        getFieldFromXml(element, "innerWingX", instance->innerBodyH, [](auto elem) { return elem->template getTextAs<EvpuFloat>(); });
+    }
+};
+
+template <>
 struct FieldPopulator<RepeatOptions> : public FactoryBase
 {
     static void populate(const std::shared_ptr<RepeatOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
@@ -349,7 +369,27 @@ private:
     }
 };
 
-// Repeat for other types...
+template <>
+struct FieldPopulator<TimeSignatureOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<TimeSignatureOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "timeUpperLift", instance->timeUpperLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeFront", instance->timeFront, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeBack", instance->timeBack, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeFrontParts", instance->timeFrontParts, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeBackParts", instance->timeBackParts, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeUpperLiftParts", instance->timeUpperLiftParts, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeLowerLiftParts", instance->timeLowerLiftParts, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeAbrvLiftParts", instance->timeAbrvLiftParts, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeSigDoAbrvCommon", instance->timeSigDoAbrvCommon, [](auto) { return true; }, false);
+        getFieldFromXml(element, "timeSigDoAbrvCut", instance->timeSigDoAbrvCut, [](auto) { return true; }, false);
+        getFieldFromXml(element, "defFloat", instance->numCompositeDecimalPlaces, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "cautionaryTimeChanges", instance->cautionaryTimeChanges, [](auto) { return true; }, false);
+        getFieldFromXml(element, "timeLowerLift", instance->timeLowerLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "timeAbrvLift", instance->timeAbrvLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+    }
+};
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 

@@ -41,6 +41,7 @@ namespace dom {
 using Cmper = uint16_t;     ///< Enigma "comperator" key type
 using Inci = int16_t;       ///< Enigma "incidend" key type
 using Evpu = int32_t;       ///< EVPU value (288 per inch)
+using EvpuFloat = double;   ///< EVPU fractional value (288.0 per inch)
 using Efix = int32_t;       ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
 using Edu = int32_t;        ///< EDU value (1024 per quarter note)
 

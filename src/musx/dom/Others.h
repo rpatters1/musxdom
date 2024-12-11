@@ -82,7 +82,7 @@ public:
 
 /**
  * @class FontDefinition
- * @brief The name and font characteristics of fonts contained in the musx file.
+ * @brief The name and font characteristics of fonts contained.
  *
  * The cmper is the font ID used in classes throughout the document.
  *
@@ -185,7 +185,7 @@ class TextExpressionDef;
 
 /**
  * @class MarkingCategory
- * @brief Represents a category of markings used in the musx file.
+ * @brief Represents a category of markings used.
  *
  * This class is identified by the XML node name "markingsCategory".
  */

@@ -131,7 +131,9 @@ using RegisteredOptions = TypeRegistry <
     dom::options::KeySignatureOptions,
     dom::options::LineCurveOptions,
     dom::options::PageFormatOptions,
-    dom::options::RepeatOptions
+    dom::options::PianoBraceBracketOptions,
+    dom::options::RepeatOptions,
+    dom::options::TimeSignatureOptions
 >;
 
 /**
