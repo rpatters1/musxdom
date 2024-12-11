@@ -34,6 +34,9 @@ using namespace dom::others;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
+// Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
+// The goal is that this may facilitate serialization in the future.
+
 template <>
 struct FieldPopulator<Enclosure> : public FactoryBase
 {

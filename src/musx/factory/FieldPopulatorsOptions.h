@@ -34,25 +34,28 @@ using namespace dom::options;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
+// Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
+// The goal is that this may facilitate serialization in the future.
+
 template <>
 struct FieldPopulator<BarlineOptions> : public FactoryBase
 {
     static void populate(const std::shared_ptr<BarlineOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
-        getFieldFromXml(element, "drawBarlines", instance->drawBarlines, [](auto) { return true; }, false);
         getFieldFromXml(element, "drawCloseSystemBarline", instance->drawCloseSystemBarline, [](auto) { return true; }, false);
         getFieldFromXml(element, "drawCloseFinalBarline", instance->drawCloseFinalBarline, [](auto) { return true; }, false);
         getFieldFromXml(element, "drawFinalBarlineOnLastMeas", instance->drawFinalBarlineOnLastMeas, [](auto) { return true; }, false);
-        getFieldFromXml(element, "drawDoubleBarlineBeforeKeyChanges", instance->drawDoubleBarlineBeforeKeyChanges, [](auto) { return true; }, false);
+        getFieldFromXml(element, "leftBarlineUsePrevStyle", instance->leftBarlineUsePrevStyle, [](auto) { return true; }, false);
         getFieldFromXml(element, "drawLeftBarlineSingleStaff", instance->drawLeftBarlineSingleStaff, [](auto) { return true; }, false);
         getFieldFromXml(element, "drawLeftBarlineMultipleStaves", instance->drawLeftBarlineMultipleStaves, [](auto) { return true; }, false);
-        getFieldFromXml(element, "leftBarlineUsePrevStyle", instance->leftBarlineUsePrevStyle, [](auto) { return true; }, false);
-        getFieldFromXml(element, "thickBarlineWidth", instance->thickBarlineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "drawBarlines", instance->drawBarlines, [](auto) { return true; }, false);
         getFieldFromXml(element, "barlineWidth", instance->barlineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "thickBarlineWidth", instance->thickBarlineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
         getFieldFromXml(element, "doubleBarlineSpace", instance->doubleBarlineSpace, [](auto element) { return element->template getTextAs<Efix>(); });
         getFieldFromXml(element, "finalBarlineSpace", instance->finalBarlineSpace, [](auto element) { return element->template getTextAs<Efix>(); });
         getFieldFromXml(element, "barlineDashOn", instance->barlineDashOn, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "barlineDashOff", instance->barlineDashOff, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "drawDoubleBarlineBeforeKeyChanges", instance->drawDoubleBarlineBeforeKeyChanges, [](auto) { return true; }, false);
     }
 };
 
@@ -69,11 +72,11 @@ private:
         getFieldFromXml(element, "shapeID", def.shapeId, [](auto el) { return el->template getTextAs<int>(); }, false);
         getFieldFromXml(element, "isShape", def.isShape, [](auto) { return true; }, false);
         getFieldFromXml(element, "scaleToStaffHeight", def.scaleToStaffHeight, [](auto) { return true; }, false);
-        getFieldFromXml(element, "useOwnFont", def.useOwnFont, [](auto) { return true; }, false);
         def.font = FieldPopulator<FontInfo>::getFontFromXml(element, "font", document, false);
         if (def.useOwnFont && !def.font) {
             throw std::invalid_argument("Use own font was specified, but no font was found in the xml.");
         }
+        getFieldFromXml(element, "useOwnFont", def.useOwnFont, [](auto) { return true; }, false);
     }
 
 public:
@@ -84,9 +87,9 @@ public:
         getFieldFromXml(element, "endMeasClefPosAdd", instance->clefChangeOffset, [](auto el) { return el->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "clefFront", instance->clefFrontSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "clefBack", instance->clefBackSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "showClefFirstSystemOnly", instance->showClefFirstSystemOnly, [](auto) { return true; }, false);
         getFieldFromXml(element, "clefKey", instance->clefKeySepar, [](auto el) { return el->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "clefTime", instance->clefTimeSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "showClefFirstSystemOnly", instance->showClefFirstSystemOnly, [](auto) { return true; }, false);
         getFieldFromXml(element, "cautionaryClefChanges", instance->cautionaryClefChanges, [](auto) { return true; }, false);
 
         size_t i = 0;
@@ -207,9 +210,6 @@ template <>
 struct FieldPopulator<PageFormatOptions> : public FactoryBase {
     static void populate(const std::shared_ptr<PageFormatOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
-        getFieldFromXml(element, "adjustPageScope", instance->adjustPageScope, [](auto element) {
-            return toAdjustPageScope(element->getText());
-        });
         getFieldFromXml(element, "pageFormatScore", instance->pageFormatScore, [](auto element) {
             auto pageFormat = std::make_shared<PageFormatOptions::PageFormat>();
             populatePageFormat(pageFormat, element);
@@ -221,6 +221,9 @@ struct FieldPopulator<PageFormatOptions> : public FactoryBase {
             return pageFormat;
         });
         getFieldFromXml(element, "avoidSystemMarginCollisions", instance->avoidSystemMarginCollisions, [](auto) { return true; }, false);
+        getFieldFromXml(element, "adjustPageScope", instance->adjustPageScope, [](auto element) {
+            return toAdjustPageScope(element->getText());
+        });
     }
 
 private:
@@ -279,6 +282,7 @@ struct FieldPopulator<RepeatOptions> : public FactoryBase
 {
     static void populate(const std::shared_ptr<RepeatOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
+        getFieldFromXml(element, "bracketHeight", instance->bracketHeight, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "maxPasses", instance->maxPasses, [](auto element) { return element->template getTextAs<int>(); });
         getFieldFromXml(element, "addPeriod", instance->addPeriod, [](auto) { return true; }, false);
         getFieldFromXml(element, "thickLineWidth", instance->thickLineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
@@ -293,8 +297,6 @@ struct FieldPopulator<RepeatOptions> : public FactoryBase
         getFieldFromXml(element, "afterClefSpace", instance->afterClefSpace, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "afterKeySpace", instance->afterKeySpace, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "afterTimeSpace", instance->afterTimeSpace, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "showOnStaffListNumber", instance->showOnStaffListNumber, [](auto element) { return element->template getTextAs<Cmper>(); });
-        getFieldFromXml(element, "bracketHeight", instance->bracketHeight, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "bracketHookLen", instance->bracketHookLen, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "bracketLineWidth", instance->bracketLineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
         getFieldFromXml(element, "bracketStartInset", instance->bracketStartInset, [](auto element) { return element->template getTextAs<Evpu>(); });
@@ -303,6 +305,7 @@ struct FieldPopulator<RepeatOptions> : public FactoryBase
         getFieldFromXml(element, "bracketTextVPos", instance->bracketTextVPos, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "bracketEndHookLen", instance->bracketEndHookLen, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "bracketEndAnchorThinLine", instance->bracketEndAnchorThinLine, [](auto) { return true; }, false);
+        getFieldFromXml(element, "showOnStaffListNumber", instance->showOnStaffListNumber, [](auto element) { return element->template getTextAs<Cmper>(); });
     }
 
 private:
