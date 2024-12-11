@@ -27,6 +27,7 @@ add_executable(musxdomtests
 	header.cpp
 	pool.cpp
     # options
+    options/alternate_notation_options.cpp
     options/barline_options.cpp
     options/clef_options.cpp
     options/key_signature_options.cpp

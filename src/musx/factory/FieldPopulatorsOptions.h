@@ -38,6 +38,21 @@ using namespace dom::options;
 // The goal is that this may facilitate serialization in the future.
 
 template <>
+struct FieldPopulator<AlternateNotationOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<AlternateNotationOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "halfSlashLift", instance->halfSlashLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "wholeSlashLift", instance->wholeSlashLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "dWholeSlashLift", instance->dWholeSlashLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "halfSlashStemLift", instance->halfSlashStemLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "quartSlashStemLift", instance->quartSlashStemLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "quartSlashLift", instance->quartSlashLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "twoMeasNumLift", instance->twoMeasNumLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+    }
+};
+
+template <>
 struct FieldPopulator<BarlineOptions> : public FactoryBase
 {
     static void populate(const std::shared_ptr<BarlineOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)

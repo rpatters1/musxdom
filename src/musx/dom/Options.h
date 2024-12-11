@@ -35,6 +35,30 @@ namespace dom {
 namespace options {
 
 /**
+ * @class AlternateNotationOptions
+ * @brief Options controlling the appearance of alternate notation.
+ *
+ * This class is identified by the XML node name "alternateNotationOptions".
+ */
+class AlternateNotationOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit AlternateNotationOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    Evpu halfSlashLift{};       ///< Baseline adjustment for half diamond in @ref Evpu.
+    Evpu wholeSlashLift{};      ///< Baseline adjustment for whole diamond in @ref Evpu.
+    Evpu dWholeSlashLift{};     ///< LBaseline adjustment for double whole diamond in @ref Evpu.
+    Evpu halfSlashStemLift{};   ///< Stem connection value for half diamond in @ref Evpu.
+    Evpu quartSlashStemLift{};  ///< Stem connection value for quarter slashes in @ref Evpu.
+    Evpu quartSlashLift{};      ///< Baseline adjustment for quarter slashes in @ref Evpu.
+    Evpu twoMeasNumLift{};      ///< Vertical offset for two-bar repeat numbers in @ref Evpu.
+
+    constexpr static std::string_view XmlNodeName = "alternateNotationOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class BarlineOptions
  * @brief Options controlling the appearance of barlines.
  *

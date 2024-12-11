@@ -33,6 +33,12 @@
 #include "Document.h"
 #include "musx/util/EnigmaString.h"
 
+#if not defined(MUSX_RUNNING_ON_WINDOWS)
+#include <pwd.h>
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+
 namespace musx {
 namespace dom {
 
@@ -117,7 +123,22 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 #else
     static_assert(false, "Unsupported OS for FontInfo::calcSMuFLPaths");
 #endif
-    auto getPath = [](const std::string& envVariable) -> std::filesystem::path {
+
+#if ! defined(MUSX_RUNNING_ON_WINDOWS)    
+    auto getHomePath = []() -> std::filesystem::path {
+        auto homeEnv = getenv("HOME");
+        if (!homeEnv) {
+            uid_t uid = getuid(); // Get the current user's UID
+            struct passwd *pw = getpwuid(uid); // Fetch the password entry for the UID
+            if (pw) {
+                return pw->pw_dir;
+            }
+        }
+        return "";
+    };
+#endif
+    
+    auto getPath = [getHomePath](const std::string& envVariable) -> std::filesystem::path {
         std::filesystem::path path;
 #if defined(MUSX_RUNNING_ON_WINDOWS)
         char* buffer = nullptr;
@@ -129,12 +150,21 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
             return "";
         }
 #else
-        if (!envVariable.empty()) {
+        if (envVariable == "HOME") {
+            path = getHomePath();
+        } else if (!envVariable.empty()) {
             if (auto envValue = getenv(envVariable.c_str())) {
                 path = envValue;
+#if defined(MUSX_RUNNING_ON_LINUX_UNIX)
+            } else if (envVariable == "XDG_DATA_HOME") {
+                path = getHomePath() / ".local" / "share"
+#endif         
             } else {
                 return "";
             }
+        }
+        else {
+            path = "/";
         }
 #endif
 #if defined(MUSX_RUNNING_ON_MACOS)

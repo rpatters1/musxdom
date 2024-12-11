@@ -125,6 +125,7 @@ public:
  * These types are maintained in the order in which Finale serializes them.
  */
 using RegisteredOptions = TypeRegistry <
+    dom::options::AlternateNotationOptions,
     dom::options::BarlineOptions,
     dom::options::ClefOptions,
     dom::options::FontOptions,
