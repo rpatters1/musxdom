@@ -23,9 +23,9 @@ FetchContent_MakeAvailable(tinyxml2)
 # Add the test executable
 add_executable(musxdomtests
 	musxdomtests.cpp
-	document_tests.cpp
-	header_tests.cpp
-	pool_tests.cpp
+	document.cpp
+	header.cpp
+	pool.cpp
     # options
     options/barline_options.cpp
     options/clef_options.cpp
