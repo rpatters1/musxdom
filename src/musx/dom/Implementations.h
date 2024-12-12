@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
+#include <sstream>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -125,57 +126,72 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 #endif
 
 #if ! defined(MUSX_RUNNING_ON_WINDOWS)    
-    auto getHomePath = []() -> std::filesystem::path {
+    auto getHomePath = []() -> std::string {
         auto homeEnv = getenv("HOME");
-        if (!homeEnv) {
-            uid_t uid = getuid(); // Get the current user's UID
-            struct passwd *pw = getpwuid(uid); // Fetch the password entry for the UID
-            if (pw) {
-                return pw->pw_dir;
-            }
+        if (homeEnv) {
+            return homeEnv;
+        }
+        uid_t uid = getuid(); // Get the current user's UID
+        struct passwd *pw = getpwuid(uid); // Fetch the password entry for the UID
+        if (pw) {
+            return pw->pw_dir;
         }
         return "";
     };
 #endif
     
-    auto getPath = [getHomePath](const std::string& envVariable) -> std::filesystem::path {
-        std::filesystem::path path;
+    auto getBasePaths = [getHomePath](const std::string& envVariable) -> std::vector<std::string> {
+        std::vector<std::string> paths;
 #if defined(MUSX_RUNNING_ON_WINDOWS)
         char* buffer = nullptr;
         size_t bufferSize = 0;
         if (_dupenv_s(&buffer, &bufferSize, envVariable.c_str()) == 0 && buffer != nullptr) {
-            path = buffer;
+            paths.emplace_back(buffer);
             free(buffer);
         } else {
-            return "";
+            return {};
         }
 #else
         if (envVariable == "HOME") {
-            path = getHomePath();
+            paths.emplace_back(getHomePath());
         } else if (!envVariable.empty()) {
             if (auto envValue = getenv(envVariable.c_str())) {
-                path = envValue;
+                std::stringstream ss(envValue);
+                std::string path;
+                while (std::getline(ss, path, ':')) {
+                    paths.push_back(path);
+                }
 #if defined(MUSX_RUNNING_ON_LINUX_UNIX)
             } else if (envVariable == "XDG_DATA_HOME") {
-                path = getHomePath() / ".local" / "share"
+                paths.emplace_back(getHomePath() + "/.local/share");
+            } else if (envVariable == "XDG_DATA_DIRS") {
+                paths.emplace_back("/usr/local/share");
+                paths.emplace_back("/usr/share");
 #endif         
             } else {
-                return "";
+                return {};
             }
         }
         else {
-            path = "/";
+            paths.emplace_back("/");
         }
 #endif
+        return paths;
+    };
+    auto paths = getBasePaths(userEnv);
+    auto temp = getBasePaths(systemEnv);
+    paths.insert(paths.end(),
+                 std::make_move_iterator(temp.begin()),
+                 std::make_move_iterator(temp.end()));
+    std::vector<std::filesystem::path> retval;
+    for (const auto& next : paths) {
+        std::filesystem::path path = next;
 #if defined(MUSX_RUNNING_ON_MACOS)
         path = path / "Library" / "Application Support";
 #endif
         path = path / "SMuFL" / "Fonts";
-        return path;
-    };
-    std::vector<std::filesystem::path> retval(2);
-    retval[0] = getPath(userEnv);
-    retval[1] = getPath(systemEnv);
+        retval.emplace_back(std::move(path));
+    }
     return retval;
 }
 
