@@ -126,6 +126,34 @@ public:
 };
 
 template <>
+struct FieldPopulator<FlagOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<FlagOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "straightFlags", instance->straightFlags, [](auto) { return true; }, false);
+        getFieldFromXml(element, "upHAdj", instance->upHAdj, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "downHAdj", instance->downHAdj, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "upHAdj2", instance->upHAdj2, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "downHAdj2", instance->downHAdj2, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "upHAdj16", instance->upHAdj16, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "downHAdj16", instance->downHAdj16, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "eighthFlagHoist", instance->eighthFlagHoist, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "stUpHAdj", instance->stUpHAdj, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "stDownHAdj", instance->stDownHAdj, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "upVAdj", instance->upVAdj, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "downVAdj", instance->downVAdj, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "upVadj2", instance->upVAdj2, [](auto element) { return element->template getTextAs<Efix>(); }); // "upVadj2" is not a typo!
+        getFieldFromXml(element, "downVAdj2", instance->downVAdj2, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "upVAdj16", instance->upVAdj16, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "downVAdj16", instance->downVAdj16, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "stUpVAdj", instance->stUpVAdj, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "stDownVAdj", instance->stDownVAdj, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "separ", instance->flagSpacing, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "extra", instance->secondaryGroupAdj, [](auto element) { return element->template getTextAs<Evpu>(); });
+    }
+};
+
+template <>
 struct FieldPopulator<FontOptions> : public FactoryBase
 {
     static void populate(const std::shared_ptr<FontOptions>& fonts, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
@@ -197,6 +225,20 @@ private:
         else if (typeStr == "timeParts") return FontType::TimeParts;
         else if (typeStr == "timePlusParts") return FontType::TimePlusParts;
         else throw std::invalid_argument("Unknown FontType string: " + typeStr);
+    }
+};
+
+template <>
+struct FieldPopulator<GraceNoteOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<GraceNoteOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "tabGracePerc", instance->tabGracePerc, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "gracePerc", instance->gracePerc, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "playbackDuration", instance->playbackDuration, [](auto element) { return element->template getTextAs<Edu>(); });
+        getFieldFromXml(element, "graceBackup", instance->entryOffset, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "slashFlaggedGraceNotes", instance->slashFlaggedGraceNotes, [](auto) { return true; }, false);
+        getFieldFromXml(element, "graceSlashWidth", instance->graceSlashWidth, [](auto element) { return element->template getTextAs<Efix>(); });
     }
 };
 
@@ -381,6 +423,22 @@ private:
         if (str == "mixed") return RepeatOptions::BackToBackStyle::Mixed;
         if (str == "thick") return RepeatOptions::BackToBackStyle::Thick;
         throw std::invalid_argument("Invalid back-to-back style value in XML: " + str);
+    }
+};
+
+template <>
+struct FieldPopulator<StemOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<StemOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "halfStemLength", instance->halfStemLength, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "stemLength", instance->stemLength, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "stem2", instance->shortStemLength, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "revStemAdj", instance->revStemAdj, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "noReverseStems", instance->noReverseStems, [](auto) { return true; }, false);
+        getFieldFromXml(element, "stemWidth", instance->stemWidth, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "stemLift", instance->stemOffset, [](auto element) { return element->template getTextAs<Efix>(); });
+        getFieldFromXml(element, "useStemConnections", instance->useStemConnections, [](auto) { return true; }, false);
     }
 };
 

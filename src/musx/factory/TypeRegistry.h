@@ -128,12 +128,15 @@ using RegisteredOptions = TypeRegistry <
     dom::options::AlternateNotationOptions,
     dom::options::BarlineOptions,
     dom::options::ClefOptions,
+    dom::options::FlagOptions,
     dom::options::FontOptions,
+    dom::options::GraceNoteOptions,
     dom::options::KeySignatureOptions,
     dom::options::LineCurveOptions,
     dom::options::PageFormatOptions,
     dom::options::PianoBraceBracketOptions,
     dom::options::RepeatOptions,
+    dom::options::StemOptions,
     dom::options::TimeSignatureOptions
 >;
 

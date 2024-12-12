@@ -143,6 +143,43 @@ public:
 };
 
 /**
+ * @class FlagOptions
+ * @brief Options controlling the appearance and adjustments of flags.
+ *
+ * This class is identified by the XML node name "flagOptions".
+ */
+class FlagOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit FlagOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    bool straightFlags{};                   ///< Whether to use straight flags.
+    Efix upHAdj{};                          ///< Horizontal adjustment for upward flags in @ref Efix.
+    Efix downHAdj{};                        ///< Horizontal adjustment for downward flags in @ref Efix.
+    Efix upHAdj2{};                         ///< Horizontal adjustment for secondary upward flags in @ref Efix.
+    Efix downHAdj2{};                       ///< Horizontal adjustment for secondary downward flags in @ref Efix.
+    Efix upHAdj16{};                        ///< Horizontal adjustment for sixteenth upward flags in @ref Efix.
+    Efix downHAdj16{};                      ///< Horizontal adjustment for sixteenth downward flags in @ref Efix.
+    Efix eighthFlagHoist{};                 ///< Hoist value for eighth note flags in @ref Efix. (This value is not on Finale's UI page for Flag Options.)
+    Efix stUpHAdj{};                        ///< Horizontal adjustment for straight upward flags in @ref Efix.
+    Efix stDownHAdj{};                      ///< Horizontal adjustment for straight downward flags in @ref Efix.
+    Efix upVAdj{};                          ///< Vertical adjustment for upward flags in @ref Efix.
+    Efix downVAdj{};                        ///< Vertical adjustment for downward flags in @ref Efix.
+    Efix upVAdj2{};                         ///< Vertical adjustment for secondary upward flags in @ref Efix. (xml node is `<upVadj2>`: this is probably a type somewhere in Finale)
+    Efix downVAdj2{};                       ///< Vertical adjustment for secondary downward flags in @ref Efix.
+    Efix upVAdj16{};                        ///< Vertical adjustment for sixteenth upward flags in @ref Efix.
+    Efix downVAdj16{};                      ///< Vertical adjustment for sixteenth downward flags in @ref Efix.
+    Efix stUpVAdj{};                        ///< Vertical adjustment for straight upward flags in @ref Efix.
+    Efix stDownVAdj{};                      ///< Vertical adjustment for straight downward flags in @ref Efix.
+    Evpu flagSpacing{};                     ///< "Flag Spacing" in @ref Evpu. (xml node is `<separ>`)
+    Evpu secondaryGroupAdj{};               ///< "Secondary Group Adjust" in @ref Evpu. (xml node is `<extra>`)
+
+    constexpr static std::string_view XmlNodeName = "flagOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class FontOptions
  * @brief An unordered map of default font settings for the document.
  *
@@ -244,6 +281,29 @@ public:
      * @brief The XML node name for this type.
      */
     constexpr static std::string_view XmlNodeName = "fontOptions";
+};
+
+/**
+ * @class GraceNoteOptions
+ * @brief Options controlling the appearance and behavior of grace notes.
+ *
+ * This class is identified by the XML node name "graceNoteOptions".
+ */
+class GraceNoteOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit GraceNoteOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    int tabGracePerc{};              ///< "Tablature Grace Note Size" (%)
+    int gracePerc{};                 ///< "Grace Note Size" (%)
+    Edu playbackDuration{};          ///< Playback duration for grace notes in @ref Edu.
+    Evpu entryOffset{};              ///< "Grace Note Offset on Entry" in @ref Evpu. (xml node is `<graceBackup>`)
+    bool slashFlaggedGraceNotes{};   ///< "Always Slash Flagged Grace Notes"
+    Efix graceSlashWidth{};          ///< Width (thickness) of grace note slashes in @ref Efix.
+
+    constexpr static std::string_view XmlNodeName = "graceNoteOptions"; ///< The XML node name for this type.
 };
 
 /**
@@ -469,6 +529,31 @@ public:
     bool bracketEndAnchorThinLine{};       ///< Whether the end of the bracket anchors to a thin line.
 
     constexpr static std::string_view XmlNodeName = "repeatOptions"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StemOptions
+ * @brief Options controlling the appearance of stems.
+ *
+ * This class is identified by the XML node name "stemOptions".
+ */
+class StemOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit StemOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    Evpu halfStemLength{};     ///< Half stem length in @ref Evpu.
+    Evpu stemLength{};         ///< Stem length in @ref Evpu.
+    Evpu shortStemLength{};    ///< Short stem length in @ref Evpu. (xml node is `<stem2>`)
+    Evpu revStemAdj{};         ///< Reverse stem adjustment in @ref Evpu.
+    bool noReverseStems{};     ///< Set if "Display Reverse Stemming" is unchecked. (This bit is reversed in the Finale UI.)
+    Efix stemWidth{};          ///< Stem width in @ref Efix.
+    Efix stemOffset{};         ///< Stem offset in @ref Efix. (xml node is `<stemLift>`)
+    bool useStemConnections{}; ///< "Use Stem Connections"
+
+    constexpr static std::string_view XmlNodeName = "stemOptions"; ///< The XML node name for this type.
 };
 
 /**
