@@ -34,7 +34,7 @@
 #include "Document.h"
 #include "musx/util/EnigmaString.h"
 
-#if not defined(MUSX_RUNNING_ON_WINDOWS)
+#if ! defined(MUSX_RUNNING_ON_WINDOWS)
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -138,6 +138,8 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         }
         return "";
     };
+#else
+    auto getHomePath = []() -> void {};
 #endif
     
     auto getBasePaths = [getHomePath](const std::string& envVariable) -> std::vector<std::string> {
