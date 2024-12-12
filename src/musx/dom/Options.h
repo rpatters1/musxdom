@@ -366,6 +366,71 @@ public:
 };
 
 /**
+ * @class MusicSpacingOptions
+ * @brief Options controlling music spacing.
+ *
+ * This class is identified by the XML node name "musicSpacingOptions".
+ */
+class MusicSpacingOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MusicSpacingOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+ 
+    /// @brief Options for how to handle unisons
+    enum class ColUnisonsChoice
+    {
+        None,           ///< Do not avoid collisions with unisons. (The default.)
+        DiffNoteheads,  ///< Avoid collisions with unisons that have different noteheads.
+        All             ///< Avoid collisions with all unisons.
+    };
+
+    /// @brief Options for how to handle grace note spacing
+    enum class GraceNoteSpacing
+    {
+        ResetToEntry,   ///< Reset to the entry position. (The default.)
+        Automatic,      ///< Automatically recompute grace note spacing. This activates `minDistGrace`. (xml value is "recomp")
+        KeepCurrent     ///< Keep current grace note spacing. (xml value is "keep")
+    };
+
+    /// @brief Options for how to handle manual positioning
+    enum class ManualPositioning
+    {
+        Clear,          ///< Clear manual positioning.
+        Ignore,         ///< Ignore manual positioning.
+        Incorporate     ///< Incorporate manual positioning. (xml value is "incorp")
+    };
+
+    Evpu minWidth{};                        ///< Minimum measure width in @ref Evpu.
+    Evpu maxWidth{};                        ///< Maximum measure width in @ref Evpu.
+    Evpu minDistance{};                     ///< Minimum distance between items in @ref Evpu.
+    Evpu minDistTiedNotes{};                ///< Minimum distance between tied notes in @ref Evpu.
+    bool avoidColNotes{};                   ///< Avoid collisions with notes.
+    bool avoidColLyrics{};                  ///< Avoid collisions with lyrics.
+    bool avoidColChords{};                  ///< Avoid collisions with chords.
+    bool avoidColArtics{};                  ///< Avoid collisions with articulations.
+    bool avoidColClefs{};                   ///< Avoid collisions with clefs.
+    bool avoidColSeconds{};                 ///< Avoid collisions with seconds.
+    bool avoidColStems{};                   ///< Avoid collisions with stems.
+    ColUnisonsChoice avoidColUnisons{};     ///< Choice for how to handle collisions with unisons.
+    bool avoidColLedgers{};                 ///< Avoid collisions with ledger lines.
+    ManualPositioning manualPositioning{};  ///< Manual positioning choice.
+    bool ignoreHidden{};                    ///< Ignore hidden notes. (This value is reversed in the Finale UI.)
+    bool useAllottmentTables{};             ///< Use allotment tables for spacing.
+    Edu referenceDuration{};                ///< Reference duration for spacing in @ref Edu.
+    Evpu referenceWidth{};                  ///< Reference width for spacing in @ref Evpu.
+    double scalingFactor{};                 ///< Scaling factor for spacing.
+    Evpu defaultAllotment{};                ///< Default allotment for spacing in @ref Evpu. (This value may not be settable in the Finale UI.)
+    Evpu minDistGrace{};                    ///< Minimum distance for grace notes in @ref Evpu.
+    GraceNoteSpacing graceNoteSpacing{};    ///< Choice for how to handle grace note spacing. (xml node is `<graceNoteManualPositioning>`)
+    Evpu musFront{};                        ///< Additional spacing before the first note in @ref Evpu. (From Notes & Rests window.)
+    Evpu musBack{};                         ///< Additional spacing after the last note in @ref Evpu. (From Notes & Rests window.)
+
+    constexpr static std::string_view XmlNodeName = "musicSpacingOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class PageFormatOptions
  * @brief Options for page formatting in the document.
  * 

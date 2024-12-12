@@ -133,6 +133,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::GraceNoteOptions,
     dom::options::KeySignatureOptions,
     dom::options::LineCurveOptions,
+    dom::options::MusicSpacingOptions,
     dom::options::PageFormatOptions,
     dom::options::PianoBraceBracketOptions,
     dom::options::RepeatOptions,

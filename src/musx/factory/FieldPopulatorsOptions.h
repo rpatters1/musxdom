@@ -284,6 +284,60 @@ struct FieldPopulator<LineCurveOptions> : public FactoryBase
 };
 
 template <>
+struct FieldPopulator<MusicSpacingOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<MusicSpacingOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "minWidth", instance->minWidth, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "maxWidth", instance->maxWidth, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "minDistance", instance->minDistance, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "minDistTiedNotes", instance->minDistTiedNotes, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "avoidColNotes", instance->avoidColNotes, [](auto) { return true; }, false);
+        getFieldFromXml(element, "avoidColLyrics", instance->avoidColLyrics, [](auto) { return true; }, false);
+        getFieldFromXml(element, "avoidColChords", instance->avoidColChords, [](auto) { return true; }, false);
+        getFieldFromXml(element, "avoidColArtics", instance->avoidColArtics, [](auto) { return true; }, false);
+        getFieldFromXml(element, "avoidColClefs", instance->avoidColClefs, [](auto) { return true; }, false);
+        getFieldFromXml(element, "avoidColSeconds", instance->avoidColSeconds, [](auto) { return true; }, false);
+        getFieldFromXml(element, "avoidColStems", instance->avoidColStems, [](auto) { return true; }, false);
+        getFieldFromXml(element, "avoidColUnisons", instance->avoidColUnisons, [](auto element) { return toColUnisonsChoice(element->getText()); });
+        getFieldFromXml(element, "avoidColLedgers", instance->avoidColLedgers, [](auto) { return true; }, false);
+        getFieldFromXml(element, "manualPositioning", instance->manualPositioning, [](auto element) { return toManualPositioning(element->getText()); });
+        getFieldFromXml(element, "ignoreHidden", instance->ignoreHidden, [](auto) { return true; }, false);
+        getFieldFromXml(element, "useAllottmentTables", instance->useAllottmentTables, [](auto) { return true; }, false);
+        getFieldFromXml(element, "referenceDuration", instance->referenceDuration, [](auto element) { return element->template getTextAs<Edu>(); });
+        getFieldFromXml(element, "referenceWidth", instance->referenceWidth, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "scalingFactor", instance->scalingFactor, [](auto element) { return element->template getTextAs<double>(); });
+        getFieldFromXml(element, "defaultAllotment", instance->defaultAllotment, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "minDistGrace", instance->minDistGrace, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "graceNoteManualPositioning", instance->graceNoteSpacing, [](auto element) { return toGraceNoteSpacing(element->getText()); });
+        getFieldFromXml(element, "musFront", instance->musFront, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "musBack", instance->musBack, [](auto element) { return element->template getTextAs<Evpu>(); });
+    }
+
+private:
+    static MusicSpacingOptions::ColUnisonsChoice toColUnisonsChoice(const std::string& value)
+    {
+        if (value == "diffNoteheads") return MusicSpacingOptions::ColUnisonsChoice::DiffNoteheads;
+        if (value == "all") return MusicSpacingOptions::ColUnisonsChoice::All;
+        return MusicSpacingOptions::ColUnisonsChoice::None; // Default
+    }
+
+    static MusicSpacingOptions::ManualPositioning toManualPositioning(const std::string& value)
+    {
+        if (value == "clear") return MusicSpacingOptions::ManualPositioning::Clear;
+        if (value == "incorp") return MusicSpacingOptions::ManualPositioning::Incorporate;
+        return MusicSpacingOptions::ManualPositioning::Ignore; // Default
+    }
+
+    static MusicSpacingOptions::GraceNoteSpacing toGraceNoteSpacing(const std::string& value)
+    {
+        if (value == "recomp") return MusicSpacingOptions::GraceNoteSpacing::Automatic;
+        if (value == "keep") return MusicSpacingOptions::GraceNoteSpacing::KeepCurrent;
+        return MusicSpacingOptions::GraceNoteSpacing::ResetToEntry; // Default
+    }
+};
+
+template <>
 struct FieldPopulator<PageFormatOptions> : public FactoryBase {
     static void populate(const std::shared_ptr<PageFormatOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
     {
