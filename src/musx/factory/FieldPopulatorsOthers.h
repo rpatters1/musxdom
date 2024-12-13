@@ -170,6 +170,26 @@ struct FieldPopulator<FontDefinition> : public FactoryBase
 };
 
 template <>
+struct FieldPopulator<LayerAttributes> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<LayerAttributes>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        // Populating fields from XML
+        getFieldFromXml(element, "restOffset", instance->restOffset, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "flipTies", instance->freezTiesToStems, [](auto) { return true; }, false);
+        getFieldFromXml(element, "floatLayer", instance->onlyIfOtherLayersHaveNotes, [](auto) { return true; }, false);
+        getFieldFromXml(element, "useRestOff", instance->useRestOffset, [](auto) { return true; }, false);
+        getFieldFromXml(element, "freezeLayUp", instance->freezeStemsUp, [](auto) { return true; }, false);
+        getFieldFromXml(element, "freezeLayer", instance->freezeLayer, [](auto) { return true; }, false);
+        getFieldFromXml(element, "playback", instance->playback, [](auto) { return true; }, false);
+        getFieldFromXml(element, "spacing", instance->affectSpacing, [](auto) { return true; }, false);
+        getFieldFromXml(element, "ignoreHidden", instance->ignoreHiddenNotesOnly, [](auto) { return true; }, false);
+        getFieldFromXml(element, "ignoreHiddenLayers", instance->ignoreHiddenLayers, [](auto) { return true; }, false);
+        getFieldFromXml(element, "hideLayer", instance->hideLayer, [](auto) { return true; }, false);
+    }
+};
+
+template <>
 struct FieldPopulator<MarkingCategory> : public FactoryBase
 {
 private:

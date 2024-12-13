@@ -136,6 +136,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::GraceNoteOptions,
     dom::options::KeySignatureOptions,
     dom::options::LineCurveOptions,
+    dom::options::MiscOptions,
     dom::options::MusicSpacingOptions,
     dom::options::PageFormatOptions,
     dom::options::PianoBraceBracketOptions,
@@ -151,6 +152,7 @@ using RegisteredOptions = TypeRegistry <
  */
 using RegisteredOthers = TypeRegistry <
     dom::others::FontDefinition,
+    dom::others::LayerAttributes,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,

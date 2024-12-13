@@ -47,6 +47,7 @@ add_executable(musxdomtests
 	others/enclosure.cpp
 	others/expression.cpp
 	others/fonts.cpp
+	others/layer_attributes.cpp
     others/text.cpp
 )
 

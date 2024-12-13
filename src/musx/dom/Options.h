@@ -460,6 +460,30 @@ public:
 };
 
 /**
+ * @class MiscOptions
+ * @brief Options controlling miscellaneous settings.
+ *
+ * This class is identified by the XML node name "miscOptions".
+ */
+class MiscOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MiscOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    bool showRepeatsForParts{};             ///< "Show Repeats for Parts"
+    bool keepOctaveTransInConcertPitch{};   ///< "Keep Octave Transposition in Concert Pitch" (xml node is `<retainOctaveTransInConcertPitch>`)
+    bool showActiveLayerOnly{};             ///< "Show Active Layer Only" (xml node is `<showCurrentLayerOnly>`)
+    bool consolidateRestsAcrossLayers{};    ///< "Consolidate Rests Across Layers" (xml node is `<combineRestsAcrossLayers>`)
+    Evpu shapeDesignerDashLength{};         ///< Shape Designer dash length in @ref Evpu. (xml node is `<sdDashOn>`)
+    Evpu shapeDesignerDashSpace{};          ///< Shape Designer dash space in @ref Evpu. (xml node is `<sdDashOff>`)
+    bool alignMeasureNumbersWithBarlines{}; ///< "Align Measure Numbers With Barlines" (xml node is `<drawMeasureNumbersOverBarlines>`)
+
+    constexpr static std::string_view XmlNodeName = "miscOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class MusicSpacingOptions
  * @brief Options controlling music spacing.
  *

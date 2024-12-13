@@ -343,6 +343,21 @@ struct FieldPopulator<LineCurveOptions> : public FactoryBase
 };
 
 template <>
+struct FieldPopulator<MiscOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<MiscOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "showRepeatsForParts", instance->showRepeatsForParts, [](auto) { return true; }, false);
+        getFieldFromXml(element, "retainOctaveTransInConcertPitch", instance->keepOctaveTransInConcertPitch, [](auto) { return true; }, false);
+        getFieldFromXml(element, "showCurrentLayerOnly", instance->showActiveLayerOnly, [](auto) { return true; }, false);
+        getFieldFromXml(element, "combineRestsAcrossLayers", instance->consolidateRestsAcrossLayers, [](auto) { return true; }, false);
+        getFieldFromXml(element, "sdDashOn", instance->shapeDesignerDashLength, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "sdDashOff", instance->shapeDesignerDashSpace, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "drawMeasureNumbersOverBarlines", instance->alignMeasureNumbersWithBarlines, [](auto) { return true; }, false);
+    }
+};
+
+template <>
 struct FieldPopulator<MusicSpacingOptions> : public FactoryBase
 {
     static void populate(const std::shared_ptr<MusicSpacingOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)

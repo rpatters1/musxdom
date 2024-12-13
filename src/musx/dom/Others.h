@@ -106,6 +106,38 @@ public:
 };
 
 /**
+ * @class LayerAttributes
+ * @brief Represents the attributes of a Finale "layer".
+ *
+ * The cmper is the layer ID (0-3). In the Finale UI these are represented as Layer 1 thru Layer 4.
+ * The 0-based cmper value is used to identify layers where needed, rather than the 1-based UI value.
+ *
+ * This class is identified by the XML node name "layerAtts".
+ */
+class LayerAttributes : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit LayerAttributes(const DocumentWeakPtr& document, Cmper cmper)
+        : OthersBase(document, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    int restOffset{};                   ///< "Adjust Floating Rests by " number of staff steps.
+    bool freezTiesToStems{};            ///< "Freeze Ties in the Same Direction as Stems" (xml node is `<flipTies>`)
+    bool onlyIfOtherLayersHaveNotes{};  ///< "Apply Settings Only if Notes are in Other Layers" (xml node is `<floatLayer>`)
+    bool useRestOffset{};               ///< "Adjust Floating Rests by ". Determines if `restOffset` is used. (xml node is `<useRestOff>`)
+    bool freezeStemsUp{};               ///< If true, freeze stems up, otherwise freeze stems down. Only used if `freezeLayer` is true. (xml node is `<freezeLayUp>`)
+    bool freezeLayer{};                 ///< "Freeze Stems and Ties"
+    bool playback{};                    ///< If true, playback this layer. If false, the layer is muted.
+    bool affectSpacing{};               ///< "Affect Music Spacing" (xml node is `<spacing>`)
+    bool ignoreHiddenNotesOnly{};       ///< "Ignore Layers Containing Only Hidden Notes" (xml node is `<ignoreHidden>`)
+    bool ignoreHiddenLayers{};          ///< "Ignore Hidden Layers"
+    bool hideLayer{};                   ///< "Hide Layer when Inactive"
+
+    constexpr static std::string_view XmlNodeName = "layerAtts"; ///< The XML node name for this type.
+};
+
+/**
  * @enum PlaybackType
  * @brief Specifies the playback behavior for the an expression or marking category.
  */
