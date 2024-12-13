@@ -57,15 +57,15 @@ TEST(PianoBraceBracketOptionsTest, PropertiesTest)
 
     // Test all properties of PianoBraceBracketOptions
     EXPECT_EQ(pianoBraceBracketOptions->defBracketPos, Evpu(-12));
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->centerThickness, 2.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->tipThickness, 7.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->outerBodyV, 5.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->innerTipV, 3.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->innerBodyV, 6.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->outerTipH, 1.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->outerTipV, 2.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->outerBodyH, 4.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->width, 12.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->innerTipH, 12.0f);
-    EXPECT_FLOAT_EQ(pianoBraceBracketOptions->innerBodyH, 12.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->centerThickness, 2.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->tipThickness, 7.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->outerBodyV, 5.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->innerTipV, 3.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->innerBodyV, 6.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->outerTipH, 1.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->outerTipV, 2.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->outerBodyH, 4.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->width, 12.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->innerTipH, 12.0f);
+    EXPECT_DOUBLE_EQ(pianoBraceBracketOptions->innerBodyH, 12.0f);
 }
