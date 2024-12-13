@@ -35,6 +35,29 @@ namespace dom {
 namespace options {
 
 /**
+ * @class AccidentalOptions
+ * @brief Options controlling the appearance and positioning of accidentals.
+ *
+ * This class is identified by the XML node name "accidentalOptions".
+ */
+class AccidentalOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit AccidentalOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    int minOverlap{};                       ///< "Minimum Vertical Spacing Between Accidentals (Measured in Steps)" (xml node is `<overlap>`)
+    Evpu multiCharSpace{};                  ///< "Space Within Multi-Character Accidentals" (xml node is `<bacciAdd>`)
+    bool crossLayerPositioning{};           ///< "Use Cross-Layer Accidental Positioning" (xml node is `<useNewAcciPositioning>`)
+    Evpu startMeasureSepar{};               ///< "Adjustment at Start of Measure"--The sign is reversed in the Finale UI. (xml node is `<frontAcciSepar>`)
+    Evpu acciNoteSpace{};                   ///< Space between accidentals and notes.
+    Evpu acciAcciSpace{};                   ///< Space between accidentals.
+
+    constexpr static std::string_view XmlNodeName = "accidentalOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class AlternateNotationOptions
  * @brief Options controlling the appearance of alternate notation.
  *
@@ -56,6 +79,39 @@ public:
     Evpu twoMeasNumLift{};      ///< Vertical offset for two-bar repeat numbers in @ref Evpu.
 
     constexpr static std::string_view XmlNodeName = "alternateNotationOptions"; ///< The XML node name for this type.
+};
+
+/**
+ * @class AugmentationDotOptions
+ * @brief Options controlling the appearance of augmentation dots.
+ *
+ * This class is identified by the XML node name "augmentationDotOptions".
+ */
+class AugmentationDotOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit AugmentationDotOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    Evpu dotUpFlagOffset{};     ///< "Horizontal Adjustment for Upstem Flags"
+    Evpu dotOffset{};           ///< "Space Between Dots"
+    bool adjMultipleVoices{};   ///< "Adjust Dots for Multiple Voices" (xml node is `<doDotDownAdjust>`)
+    Evpu dotNoteOffset{};      ///< "Space Between Dot and Note" (xml node is `<dotFirstOffset>`)
+    Evpu dotLift{};             ///< "Vertical Adjustment of Dot"
+    /**
+     * @brief Use legacy dot positioning on flipped stems.
+     *
+     * Finale 27.4 fixed a long-standing bug in how dots on flipped stems are positioned. Finale added
+     * this option to avoid messing up documents in which the user manually worked around the bug.
+     * Enabling it suppresses the 27.4 behavior. It is not represented in the Finale UI, except as
+     * a question when you first open a document that it detects might contain the workaround.
+     *
+     * xml node is `<skip27_4DotAdjust>`
+     */
+    bool useLegacyFlippedStemPositioning{};
+
+    constexpr static std::string_view XmlNodeName = "augmentationDotOptions"; ///< The XML node name for this type.
 };
 
 /**
@@ -87,6 +143,44 @@ public:
     Evpu barlineDashOff{};                  ///< Dash space for dashed barlines in @ref Evpu.
 
     constexpr static std::string_view XmlNodeName = "barlineOptions"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BeamOptions
+ * @brief Options controlling the appearance of beams.
+ *
+ * This class is identified by the XML node name "beamOptions".
+ */
+class BeamOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit BeamOptions(const DocumentWeakPtr& document)
+        : OptionsBase(document) {}
+
+    enum class FlattenStyle
+    {
+        OnEndNotes,         ///< Beaming style: Flatten based on end notes only (the default)
+        OnStandardNote,     ///< Beaming style: Flatten based on standard note
+        OnExtremeNote,      ///< Beaming style: Flatten based on extreme note
+        AlwaysFlat          ///< Beaming style: Flatten all beams
+    };
+
+    Evpu beamStubLength{};                   ///< "Broken Beam Length" in @ref Evpu.
+    Evpu maxSlope{};                         ///< Maximum slope in @ref Evpu.
+    Evpu beamSepar{};                        ///< Secondary beam separation in @ref Evpu. This is the distance between the top of one beam to the top of the next.
+    Evpu maxFromMiddle{};                    ///< "Maximum Distance from Middle Staff Line" in @ref Evpu. (xml node is `<hmBeamTip>`)
+    FlattenStyle beamingStyle{};             ///< Beaming style.
+    bool extendBeamsOverRests{};             ///< "Extend Beams Over Rests" (xml node is `<incEdgeRestsInBeamGroups>`)
+    bool incRestsInFourGroups{};             ///< "Include Rests when Beaming in Group of Four" (xml node is `<incRestsInClassicBeams>`)
+    bool beamFourEighthsInCommonTime{};      ///< "Beam Four Eighth Notes Together in Common Time"
+    bool beamThreeEighthsInCommonTime{};     ///< "Beam Three Eighth Notes Together Before/After An Eighth Rest"
+    bool dispHalfStemsOnRests{};             ///< "Display Half-Stems for Beamed Rests" (xml node is `<doStemStubs>`)
+    bool spanSpace{};                        ///< "Allow Primary Beam Within a Space"
+    bool extendSecBeamsOverRests{};          ///< "Extend Secondary Beams Over Rests"
+    Efix beamWidth{};                        ///< Thickness of beams in @ref Efix.
+
+    constexpr static std::string_view XmlNodeName = "beamOptions"; ///< The XML node name for this type.
 };
 
 /**

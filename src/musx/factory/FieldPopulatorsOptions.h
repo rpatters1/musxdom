@@ -38,6 +38,20 @@ using namespace dom::options;
 // The goal is that this may facilitate serialization in the future.
 
 template <>
+struct FieldPopulator<AccidentalOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<AccidentalOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "overlap", instance->minOverlap, [](auto element) { return element->template getTextAs<int>(); });
+        getFieldFromXml(element, "bacciAdd", instance->multiCharSpace, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "useNewAcciPositioning", instance->crossLayerPositioning, [](auto) { return true; }, false);
+        getFieldFromXml(element, "frontAcciSepar", instance->startMeasureSepar, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "acciNoteSpace", instance->acciNoteSpace, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "acciAcciSpace", instance->acciAcciSpace, [](auto element) { return element->template getTextAs<Evpu>(); });
+    }
+};
+
+template <>
 struct FieldPopulator<AlternateNotationOptions> : public FactoryBase
 {
     static void populate(const std::shared_ptr<AlternateNotationOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
@@ -49,6 +63,20 @@ struct FieldPopulator<AlternateNotationOptions> : public FactoryBase
         getFieldFromXml(element, "quartSlashStemLift", instance->quartSlashStemLift, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "quartSlashLift", instance->quartSlashLift, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "twoMeasNumLift", instance->twoMeasNumLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+    }
+};
+
+template <>
+struct FieldPopulator<AugmentationDotOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<AugmentationDotOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "dotUpFlagOffset", instance->dotUpFlagOffset, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "dotOffset", instance->dotOffset, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "doDotDownAdjust", instance->adjMultipleVoices, [](auto) { return true; }, false);
+        getFieldFromXml(element, "dotFirstOffset", instance->dotNoteOffset, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "dotLift", instance->dotLift, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "skip27_4DotAdjust", instance->useLegacyFlippedStemPositioning, [](auto) { return true; }, false);
     }
 };
 
@@ -71,6 +99,37 @@ struct FieldPopulator<BarlineOptions> : public FactoryBase
         getFieldFromXml(element, "barlineDashOn", instance->barlineDashOn, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "barlineDashOff", instance->barlineDashOff, [](auto element) { return element->template getTextAs<Evpu>(); });
         getFieldFromXml(element, "drawDoubleBarlineBeforeKeyChanges", instance->drawDoubleBarlineBeforeKeyChanges, [](auto) { return true; }, false);
+    }
+};
+
+template <>
+struct FieldPopulator<BeamOptions> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<BeamOptions>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        getFieldFromXml(element, "beamStubLength", instance->beamStubLength, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "maxSlope", instance->maxSlope, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "beamSepar", instance->beamSepar, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "hmBeamTip", instance->maxFromMiddle, [](auto element) { return element->template getTextAs<Evpu>(); });
+        getFieldFromXml(element, "beamingStyle", instance->beamingStyle, [](auto element) { return toFlattenStyle(element->getText()); });
+        getFieldFromXml(element, "incEdgeRestsInBeamGroups", instance->extendBeamsOverRests, [](auto) { return true; }, false);
+        getFieldFromXml(element, "incRestsInClassicBeams", instance->incRestsInFourGroups, [](auto) { return true; }, false);
+        getFieldFromXml(element, "beamFourEighthsInCommonTime", instance->beamFourEighthsInCommonTime, [](auto) { return true; }, false);
+        getFieldFromXml(element, "beamThreeEighthsInCommonTime", instance->beamThreeEighthsInCommonTime, [](auto) { return true; }, false);
+        getFieldFromXml(element, "doStemStubs", instance->dispHalfStemsOnRests, [](auto) { return true; }, false);
+        getFieldFromXml(element, "spanSpace", instance->spanSpace, [](auto) { return true; }, false);
+        getFieldFromXml(element, "extendSecBeamsOverRests", instance->extendSecBeamsOverRests, [](auto) { return true; }, false);
+        getFieldFromXml(element, "beamWidth", instance->beamWidth, [](auto element) { return element->template getTextAs<Efix>(); });
+    }
+
+private:
+    static BeamOptions::FlattenStyle toFlattenStyle(const std::string& text)
+    {
+        if (text == "onEndNotes") return BeamOptions::FlattenStyle::OnEndNotes;
+        if (text == "onStandardNote") return BeamOptions::FlattenStyle::OnStandardNote;
+        if (text == "onExtremeNote") return BeamOptions::FlattenStyle::OnExtremeNote;
+        if (text == "alwaysFlat") return BeamOptions::FlattenStyle::AlwaysFlat;
+        throw std::invalid_argument("Encountered unknown value for BeamOptions::FlattenStyle: " + text);
     }
 };
 

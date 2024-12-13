@@ -27,8 +27,11 @@ add_executable(musxdomtests
 	header.cpp
 	pool.cpp
     # options
+    options/accidental_options.cpp
     options/alternate_notation_options.cpp
+    options/augementation_dot_options.cpp
     options/barline_options.cpp
+    options/beam_options.cpp
     options/clef_options.cpp
     options/flag_options.cpp
     options/grace_note_options.cpp
