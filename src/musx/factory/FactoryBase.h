@@ -25,6 +25,7 @@
 #include <string>
 #include <optional>
 #include <functional>
+#include <unordered_set>
 
 #include "musx/dom/BaseClasses.h"
 #include "musx/xml/XmlInterface.h"
@@ -43,6 +44,7 @@ namespace factory {
  *
  * This class allows capturing relationships that cannot be resolved immediately during factory creation.
  * The relationships are stored as resolver functions, which are executed later when all elements have been created.
+ * It also provides a mechanism to ensure that specific resolvers are added only once by using unique keys.
  */
 class ElementLinker {
 public:
@@ -59,10 +61,19 @@ public:
      * @brief Adds a resolver function to the linker.
      *
      * This function captures the logic for resolving relationships that cannot be resolved immediately.
+     * Optionally, a unique key can be provided to ensure that the resolver is only added once.
      *
      * @param resolver A callable object that resolves a relationship when invoked.
+     * @param key An optional unique key for the resolver. If provided, the resolver is added only once per key.
      */
-    void addResolver(Resolver resolver) {
+    void addResolver(Resolver resolver, const std::string& key = {})
+    {
+        if (!key.empty()) {
+            if (registeredResolvers.count(key) > 0) {
+                return; // Skip adding if the resolver with the same key is already registered
+            }
+            registeredResolvers.insert(key);
+        }
         resolvers.emplace_back(std::move(resolver));
     }
 
@@ -70,21 +81,32 @@ public:
      * @brief Resolves all deferred relationships.
      *
      * Executes all stored resolver functions, establishing relationships between elements.
-     * Clears the internal storage of resolvers after execution.
+     * Clears the internal storage of resolvers and registered keys after execution.
      *
+     * @param document The document in which relationships are resolved.
      * @throws std::runtime_error If any resolver function encounters an error.
      */
-    void resolveAll(const dom::DocumentPtr& document) {
+    void resolveAll(const dom::DocumentPtr& document)
+    {
         for (auto& resolver : resolvers) {
             resolver(document);
         }
         resolvers.clear(); ///< Clear resolvers after execution
+        registeredResolvers.clear(); ///< Clear registered keys after execution
     }
 
 private:
     /// @brief A collection of resolver functions.
     std::vector<Resolver> resolvers;
+
+    /**
+     * @brief Tracks registered resolver keys to ensure uniqueness.
+     *
+     * This set stores keys for resolvers that have already been added, preventing duplicate registrations.
+     */
+    std::unordered_set<std::string> registeredResolvers;
 };
+
 
 /**
  * @brief Factory base class.

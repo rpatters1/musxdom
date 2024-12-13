@@ -172,7 +172,7 @@ struct FieldPopulator<FontDefinition> : public FactoryBase
 template <>
 struct FieldPopulator<LayerAttributes> : public FactoryBase
 {
-    static void populate(const std::shared_ptr<LayerAttributes>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    static void populate(const std::shared_ptr<LayerAttributes>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
     {
         // Populating fields from XML
         getFieldFromXml(element, "restOffset", instance->restOffset, [](auto element) { return element->template getTextAs<int>(); });
@@ -186,6 +186,20 @@ struct FieldPopulator<LayerAttributes> : public FactoryBase
         getFieldFromXml(element, "ignoreHidden", instance->ignoreHiddenNotesOnly, [](auto) { return true; }, false);
         getFieldFromXml(element, "ignoreHiddenLayers", instance->ignoreHiddenLayers, [](auto) { return true; }, false);
         getFieldFromXml(element, "hideLayer", instance->hideLayer, [](auto) { return true; }, false);
+        elementLinker.addResolver(
+            [](const dom::DocumentPtr& document) {
+                auto layers = document->getOthers()->getArray<LayerAttributes>();
+                if (layers.size() != 4) {
+                    throw std::invalid_argument("Expected exactly 4 <layerAtts> elements.");
+                }
+                for (size_t i = 0; i < layers.size(); i++) {
+                    if (layers[i]->getCmper() != i) {
+                        throw std::invalid_argument("Expected <layerAtts> elements to have cmper values 0, 1, 2, 3 in order.");
+                    }
+                }
+            },
+            "others::LayerAttributes" // Unique key for this resolver prevents adding it more than once
+        );
     }
 };
 

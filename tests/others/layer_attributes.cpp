@@ -125,3 +125,76 @@ TEST(LayerAttributesTest, PopulateLayerAttributes)
         }
     }
 }
+
+TEST(LayerAttributesTest, WrongNumberOfLayers)
+{
+  constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <layerAtts cmper="0"/>
+    <layerAtts cmper="1"/>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
+        std::invalid_argument
+    );
+
+    constexpr static musxtest::string_view xml2 = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <layerAtts cmper="0"/>
+    <layerAtts cmper="1"/>
+    <layerAtts cmper="2"/>
+    <layerAtts cmper="3"/>
+    <layerAtts cmper="4"/>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml2),
+        std::invalid_argument
+    );
+}
+
+TEST(LayerAttributesTest, WrongCmperVals)
+{
+  constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <layerAtts cmper="0"/>
+    <layerAtts cmper="2"/>
+    <layerAtts cmper="1"/>
+    <layerAtts cmper="4"/>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
+        std::invalid_argument
+    );
+    
+    constexpr static musxtest::string_view xml2 = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <layerAtts cmper="1"/>
+    <layerAtts cmper="2"/>
+    <layerAtts cmper="3"/>
+    <layerAtts cmper="4"/>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml2),
+        std::invalid_argument
+    );
+}
