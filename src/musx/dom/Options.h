@@ -44,8 +44,8 @@ class AccidentalOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit AccidentalOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit AccidentalOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     int minOverlap{};                       ///< "Minimum Vertical Spacing Between Accidentals (Measured in Steps)" (xml node is `<overlap>`)
     Evpu multiCharSpace{};                  ///< "Space Within Multi-Character Accidentals" (xml node is `<bacciAdd>`)
@@ -67,8 +67,8 @@ class AlternateNotationOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit AlternateNotationOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit AlternateNotationOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     Evpu halfSlashLift{};       ///< Baseline adjustment for half diamond in @ref Evpu.
     Evpu wholeSlashLift{};      ///< Baseline adjustment for whole diamond in @ref Evpu.
@@ -91,8 +91,8 @@ class AugmentationDotOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit AugmentationDotOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit AugmentationDotOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     Evpu dotUpFlagOffset{};     ///< "Horizontal Adjustment for Upstem Flags"
     Evpu dotOffset{};           ///< "Space Between Dots"
@@ -124,8 +124,8 @@ class BarlineOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit BarlineOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit BarlineOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     bool drawBarlines{};                    ///< "Display All Barlines"
     bool drawCloseSystemBarline{};          ///< "Close Barline at End of Each System"
@@ -155,8 +155,8 @@ class BeamOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit BeamOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit BeamOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     /// @brief Beaming style choices for when to flatten beams
     enum class FlattenStyle
@@ -195,11 +195,12 @@ public:
      * @brief Constructor
      * @param document A weak pointer to the document object.
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      *
      * Constructs a FontOptions object that is associated with the provided document.
      */
-    explicit ClefOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit ClefOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     /**
      * @brief Represents a single clef definition.
@@ -248,8 +249,8 @@ class FlagOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit FlagOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit FlagOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     bool straightFlags{};                   ///< Whether to use straight flags.
     Efix upHAdj{};                          ///< Horizontal adjustment for upward flags in @ref Efix.
@@ -289,11 +290,12 @@ public:
      * @brief Constructor
      * @param document A weak pointer to the document object.
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      *
      * Constructs a FontOptions object that is associated with the provided document.
      */
-    explicit FontOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit FontOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     /**
      * @enum FontType
@@ -390,8 +392,8 @@ class GraceNoteOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit GraceNoteOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit GraceNoteOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     int tabGracePerc{};              ///< "Tablature Grace Note Size" (%)
     int gracePerc{};                 ///< "Grace Note Size" (%)
@@ -413,8 +415,8 @@ class KeySignatureOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit KeySignatureOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit KeySignatureOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     bool doKeyCancel{};                        ///< "Cancel Outgoing Key Signature"
     bool doCStart{};                           ///< "In C, Display Naturals at Start of Staff System"
@@ -442,8 +444,8 @@ class LineCurveOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit LineCurveOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit LineCurveOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     int bezierStep{};                    ///< Number of steps for Bézier curves.
     Efix enclosureWidth{};               ///< Default enclosure width in @ref Efix.
@@ -472,8 +474,8 @@ class MiscOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit MiscOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit MiscOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     bool showRepeatsForParts{};             ///< "Show Repeats for Parts"
     bool keepOctaveTransInConcertPitch{};   ///< "Keep Octave Transposition in Concert Pitch" (xml node is `<retainOctaveTransInConcertPitch>`)
@@ -496,8 +498,8 @@ class MusicSpacingOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit MusicSpacingOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit MusicSpacingOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
  
     /// @brief Options for how to handle unisons
     enum class ColUnisonsChoice
@@ -621,9 +623,10 @@ public:
      * 
      * @param document A shared pointer to the document.
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      */
-    explicit PageFormatOptions(const DocumentPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit PageFormatOptions(const DocumentPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     /**
      * @brief The XML node name for this type.
@@ -641,8 +644,8 @@ class PianoBraceBracketOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit PianoBraceBracketOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit PianoBraceBracketOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     Evpu defBracketPos{};                   ///< "Group Brackets: Default Distance from Left Edge of Staff"
     EvpuFloat centerThickness{};            ///< Center thickness of braces in fractional @ref EvpuFloat.
@@ -670,8 +673,8 @@ class RepeatOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit RepeatOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit RepeatOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     /// @brief Wing Styles from Document Options - Repeats
     enum class WingStyle
@@ -728,8 +731,8 @@ class StemOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit StemOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit StemOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     Evpu halfStemLength{};     ///< Half stem length in @ref Evpu.
     Evpu stemLength{};         ///< Stem length in @ref Evpu.
@@ -753,8 +756,8 @@ class TimeSignatureOptions : public OptionsBase
 {
 public:
     /** @brief Constructor function */
-    explicit TimeSignatureOptions(const DocumentWeakPtr& document, Cmper partId = 0)
-        : OptionsBase(document, partId) {}
+    explicit TimeSignatureOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
 
     Evpu timeUpperLift{};           ///< "Vertical Adjustment: Top Symbol, Score"
     Evpu timeFront{};               ///< "Space Before Time Signature, Score"

@@ -48,8 +48,8 @@ public:
      * @param partId Always 0, but this parameter is needed for the generic factory routine
      * @param textNumber The text number (`Cmper`).
      */
-    FileInfoText(const DocumentWeakPtr& document, Cmper partId, Cmper textNumber)
-        : TextsBase(document, partId, textNumber)
+    FileInfoText(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper textNumber)
+        : TextsBase(document, partId, shareMode, textNumber)
     {
         if (textNumber <= 0 || textNumber > Cmper(TextType::Subtitle)) {
             throw std::invalid_argument("invalid text type value provided to FileInfoText constructor");

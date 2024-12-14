@@ -88,6 +88,7 @@ public:
      *
      * Uses the node name to look up the registered type and create an instance of it.
      *
+     * @tparam PoolRT The return type of the pool function.
      * @tparam Args The argument types required by the constructor of the target type.
      * @param node The XML node from which an instance is to be created.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
@@ -95,8 +96,8 @@ public:
      * @param args Arguments to be forwarded to the constructor of the target type.
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
-    template <typename... Args>
-    static std::shared_ptr<Base> createInstance(const std::shared_ptr<xml::IXmlElement>& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
+    template <typename PoolRT, typename... Args>
+    static std::shared_ptr<Base> createInstance(PoolRT (Document::*poolFunc)() const, const std::shared_ptr<xml::IXmlElement>& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
     {
         auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
@@ -107,11 +108,26 @@ public:
             [&](auto const& ptr) -> std::shared_ptr<Base> {
                 using T = std::remove_pointer_t<std::remove_reference_t<decltype(ptr)>>;
                 // Only enable this part if T is constructible with Args...
-                if constexpr (std::is_constructible_v<T, const DocumentPtr&, Cmper, Args...>) {
+                if constexpr (std::is_constructible_v<T, const DocumentPtr&, Cmper, Base::ShareMode, Args...>) {
                     auto partAttr = node->findAttribute("part");
                     Cmper partId = partAttr ? partAttr->getValueAs<Cmper>() : 0; // zero is the score ID
-                    //ToDo: populate sharing mode and shared fields
-                    auto instance = std::make_shared<T>(document, partId, std::forward<Args>(args)...);
+                    auto shareMode = Base::ShareMode::All;
+                    if (auto shareAttr = node->findAttribute("shared")) {
+                        shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
+                    }
+                    auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
+                    if (instance->getShareMode() == Base::ShareMode::Partial) {
+                        for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
+                            instance->addSharedNode(child->getTagName());
+                        }
+                        auto scoreValue = (document.get()->*poolFunc)()->template get<T>(std::forward<Args>(args)...);
+                        if (scoreValue) {
+                            *instance = *scoreValue;
+                        }
+                        else {
+                            throw std::invalid_argument("score instance not found for partially linked part instance");
+                        }
+                    }
                     factory::FieldPopulator<T>::populate(instance, node, elementLinker);
                     return instance;
                 } else {

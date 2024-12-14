@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cassert>
 #include <filesystem>
+#include <set>
 
 #if defined(_WIN32)
 #define MUSX_RUNNING_ON_WINDOWS
@@ -62,6 +63,17 @@ using DocumentWeakPtr = std::weak_ptr<Document>;
 class Base
 {
 public:
+    /// @brief The container type for shared nodes
+    using SharedNodes = std::set<std::string>;
+
+    ///> @enmum ShareMode
+    enum class ShareMode
+    {
+        All,            ///> All parts and score always share (no "share" attribute). Default.
+        Partial,        ///> Part and score share some attributes and share others. (attribute "share"="true")
+        None            ///> Each part and score has its own version of the DOM class. (attribute "share"="false")
+    };
+
     /**
      * @brief Virtual destructor for polymorphic behavior.
      */
@@ -84,6 +96,24 @@ public:
      */
     Cmper getPartId() const { return m_partId; }
 
+    /**
+     * @brief Gets the sharing mode for this instance.
+     */
+    ShareMode getShareMode() const { return m_shareMode; }
+
+    /**
+     * @brief Gets the shared nodes for this instance.
+     */
+    const SharedNodes& getSharedNodes() const { return m_sharedNodes; }
+
+    /**
+     * @brief Adds a shared node for this instance
+     */
+    void addSharedNode(const std::string& nodeName)
+    {
+        m_sharedNodes.insert(nodeName);
+    }
+
 protected:
     /**
      * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
@@ -91,19 +121,17 @@ protected:
      * @param document A weak pointer to the parent document
      * @param partId The part Id for this instance, or zero if for score.
      */
-    Base(const DocumentWeakPtr& document, Cmper partId)
-        : m_document(document), m_partId(partId) {}
+    Base(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
+        : m_document(document), m_partId(partId), m_shareMode(shareMode) {}
 
-    /// @brief copy constructor
-    Base(const Base& src)
-        : m_document(src.m_document), m_partId(src.m_partId) {}
-
-    /// @brief assignment constructor
+    /// @brief assignment constructor: m_sharedNodes is intentionally omitted
     Base& operator=(const Base&) { return *this; }
 
 private:
     const DocumentWeakPtr m_document;
     const Cmper m_partId;
+    const ShareMode m_shareMode;
+    SharedNodes m_sharedNodes;
 };
 
 /**
@@ -119,9 +147,10 @@ protected:
      *
      * @param document A weak pointer to the parent document
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      */
-    OptionsBase(const DocumentWeakPtr& document, Cmper partId)
-        : Base(document, partId) {}
+    OptionsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
+        : Base(document, partId, shareMode) {}
 };
 
 /**
@@ -142,11 +171,12 @@ protected:
      * 
      * @param document A weak pointer to the parent document
      * @param partId The part Id for this Other, or zero if for score.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      * @param cmper The `Cmper` key value.
      * @param inci The array index (`Inci`).
      */
-    OthersBase(const DocumentWeakPtr& document, Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt)
-        : Base(document, partId), m_cmper(cmper), m_inci(inci) {}
+    OthersBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, std::optional<Inci> inci = std::nullopt)
+        : Base(document, partId, shareMode), m_cmper(cmper), m_inci(inci) {}
 
 public:
     /**
@@ -195,10 +225,11 @@ public:
      * 
      * @param document A weak pointer to the parent document
      * @param partId Always 0, but this parameter is needed for the generic factory routine
+     * @param shareMode Always `ShareMode::All`, but this parameter is needed for the generic factory routine.
      * @param textNumber The text number (`Cmper`).
      */
-    TextsBase(const DocumentWeakPtr& document, Cmper partId, Cmper textNumber)
-        : Base(document, partId), m_textNumber(textNumber) {}
+    TextsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper textNumber)
+        : Base(document, partId, shareMode), m_textNumber(textNumber) {}
 
     std::string text;    ///< Raw Enigma string (with Enigma string tags), encoded UTF-8.
 
@@ -243,7 +274,7 @@ public:
      * @param document A weak pointer to the document object.
      */
     explicit FontInfo(const DocumentWeakPtr& document)
-        : Base(document, 0) {}
+        : Base(document, 0, ShareMode::All) {}
 
     /**
      * @brief Get the name of the font.

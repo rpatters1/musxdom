@@ -121,7 +121,7 @@ public:
      */
     static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
-        return RegisteredOptions::createInstance(element, elementLinker, document);
+        return RegisteredOptions::createInstance(&Document::getOptions, element, elementLinker, document);
     }
 };
 
@@ -157,11 +157,11 @@ public:
         }
         auto inciAttribute = element->findAttribute("inci");
         if (inciAttribute) {
-            return RegisteredOthers::createInstance(element, elementLinker,
+            return RegisteredOthers::createInstance(&Document::getOthers, element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
         }
         else {
-            return RegisteredOthers::createInstance(element, elementLinker,
+            return RegisteredOthers::createInstance(&Document::getOthers, element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>());
         }
     }
@@ -209,7 +209,7 @@ public:
             }
             return textAttribute->getValueAs<Cmper>();
         }();
-        return RegisteredTexts::createInstance(element, elementLinker, document, textNumber);
+        return RegisteredTexts::createInstance(&Document::getTexts, element, elementLinker, document, textNumber);
     }
 
 private:

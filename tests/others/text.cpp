@@ -426,7 +426,7 @@ TEST(TextsTest, FileInfoText)
 
     // Test ctor exception
     EXPECT_THROW(
-        auto malformed = FileInfoText(doc, 0, 8), // invalid text type
+        auto malformed = FileInfoText(doc, 0, Base::ShareMode::All, 8), // invalid text type
         std::invalid_argument
     );
 }
