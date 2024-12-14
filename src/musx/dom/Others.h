@@ -62,10 +62,11 @@ public:
     /**
      * @brief Constructs an Enclosure object.
      * @param document Shared pointer to the document.
+     * @param partId Usually 0. This parameter is needed for the generic factory routine.
      * @param cmper Comparison parameter.
      */
-    explicit Enclosure(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit Enclosure(const DocumentWeakPtr& document, Cmper partId, Cmper cmper)
+        : OthersBase(document, partId, cmper) {}
 
     Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
     Evpu yAdd{};              ///< Center Y offset - offsets text from center (in EVPU).
@@ -92,8 +93,8 @@ class FontDefinition : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    explicit FontDefinition(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit FontDefinition(const DocumentWeakPtr& document, Cmper partId, Cmper cmper)
+        : OthersBase(document, partId, cmper) {}
 
     // Public properties corresponding to the XML structure
     std::string charsetBank;    ///< probably only "Mac" or "Win"
@@ -118,8 +119,8 @@ class LayerAttributes : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    explicit LayerAttributes(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit LayerAttributes(const DocumentWeakPtr& document, Cmper partId, Cmper cmper)
+        : OthersBase(document, partId, cmper) {}
 
     // Public properties corresponding to the XML structure
     int restOffset{};                   ///< "Adjust Floating Rests by " number of staff steps.
@@ -238,8 +239,8 @@ public:
     };
 
     /** @brief Constructor function */
-    explicit MarkingCategory(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit MarkingCategory(const DocumentWeakPtr& document, Cmper partId, Cmper cmper)
+        : OthersBase(document, partId, cmper) {}
 
     CategoryType categoryType{}; ///< Category type of the marking
 
@@ -294,8 +295,8 @@ class MarkingCategoryName : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    explicit MarkingCategoryName(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit MarkingCategoryName(const DocumentWeakPtr& document, Cmper partId, Cmper cmper)
+        : OthersBase(document, partId, cmper) {}
 
     std::string name; ///< The name of the marking category.
 
@@ -334,8 +335,8 @@ public:
      *
      * Initializes all fields to their default values.
      */
-    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper partId, Cmper cmper)
+        : OthersBase(document, partId, cmper) {}
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;

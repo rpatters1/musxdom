@@ -54,15 +54,17 @@ public:
     /** @brief key type for storing in pool */
     struct ObjectKey {
         TopKeyElementType nodeId;       ///< the identifier for this node. usually the XML node name.
+        Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
         std::optional<Cmper> cmper2;    ///< optional cmper2 for Details.
         std::optional<Inci> inci;       ///< optional inci for multi-inci classes
 
         /** @brief explicit constructor for optional parameters */
         ObjectKey(const TopKeyElementType n,
+            Cmper p,
             std::optional<Cmper> c1 = std::nullopt,
             std::optional<Cmper> c2 = std::nullopt,
-            std::optional<Inci> i = std::nullopt) : nodeId(n), cmper1(c1), cmper2(c2), inci(i)
+            std::optional<Inci> i = std::nullopt) : nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
         {
         }
 
@@ -71,6 +73,9 @@ public:
         {
             if (nodeId != other.nodeId) {
                 return nodeId < other.nodeId;
+            }
+            if (partId != other.partId) {
+                return partId < other.partId;
             }
             if (cmper1 != other.cmper1) {
                 return cmper1 < other.cmper1;
@@ -117,7 +122,8 @@ public:
         auto rangeEnd = m_pool.upper_bound(
             ObjectKey{
                 key.nodeId,
-                key.cmper1.value_or((std::numeric_limits<Cmper>::max)()), 
+                key.partId,
+                key.cmper1.value_or((std::numeric_limits<Cmper>::max)()),
                 key.cmper2.value_or((std::numeric_limits<Cmper>::max)()), 
                 key.inci.value_or((std::numeric_limits<Inci>::max)())
             }
@@ -173,17 +179,21 @@ class ScalarPool : protected ObjectPool<ScalarBase>
 public:
     /** @brief Scalar version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<ScalarBase>& other)
-    { ObjectPool<ScalarBase>::add({nodeName}, other); }
+    { ObjectPool<ScalarBase>::add({nodeName, 0}, other); }
 
     /** @brief Scalar version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray() const
-    { return ObjectPool<ScalarBase>::template getArray<T>({std::string(T::XmlNodeName)}); }
+    {
+        return ObjectPool<ScalarBase>::template getArray<T>({ std::string(T::XmlNodeName), 0 });
+    }
 
     /** @brief Scalar version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get() const
-    { return ObjectPool<ScalarBase>::template get<T>({std::string(T::XmlNodeName)}); }
+    {
+        return ObjectPool<ScalarBase>::template get<T>({ std::string(T::XmlNodeName), 0 });
+    }
 };
 
 /** @brief Shared `OptionsPool` pointer */
@@ -202,13 +212,15 @@ public:
     /** @brief OneCmperBase version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper = std::nullopt) const
-    { return ObjectPool<OneCmperBase>::template getArray<T>({std::string(T::XmlNodeName), cmper}); }
+    {
+        return ObjectPool<OneCmperBase>::template getArray<T>({ std::string(T::XmlNodeName), 0, cmper });
+    }
 
     /** @brief OneCmperBase version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get(Cmper cmper, std::optional<Inci> inci = std::nullopt) const
     {
-        return ObjectPool<OneCmperBase>::template get<T>({std::string(T::XmlNodeName), cmper, std::nullopt, inci});
+        return ObjectPool<OneCmperBase>::template get<T>({std::string(T::XmlNodeName), 0, cmper, std::nullopt, inci});
     }
 };
 
@@ -217,8 +229,8 @@ class OthersPool : public OneCmperPool<OthersBase>
 {
 public:
     /** @brief Others version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& other)
-    { ObjectPool::add({nodeName, other->getCmper(), std::nullopt, other->getInci()}, other); }
+    void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& other, Cmper partId = 0)
+    { ObjectPool::add({nodeName, partId, other->getCmper(), std::nullopt, other->getInci()}, other); }
 };
 /** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;
@@ -229,7 +241,7 @@ class TextsPool : public OneCmperPool<TextsBase>
 public:
     /** @brief Texts version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& text)
-    { ObjectPool::add({nodeName, text->getTextNumber(), std::nullopt, std::nullopt}, text); }
+    { ObjectPool::add({nodeName, 0, text->getTextNumber(), std::nullopt, std::nullopt}, text); }
 };
 /** @brief Shared `OthersPool` pointer */
 using TextsPoolPtr = std::shared_ptr<TextsPool>;

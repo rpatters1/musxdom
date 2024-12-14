@@ -79,16 +79,31 @@ public:
         return document;
     }
 
+    /**
+     * @brief Gets the partId for this instance (or 0 for score)
+     */
+    Cmper getPartId() const { return m_partId; }
+
 protected:
     /**
      * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
      * 
      * @param document A weak pointer to the parent document
+     * @param partId The part Id for this instance, or zero if for score.
      */
-    Base(const DocumentWeakPtr& document) : m_document(document) {}
+    Base(const DocumentWeakPtr& document, Cmper partId)
+        : m_document(document), m_partId(partId) {}
+
+    /// @brief copy constructor
+    Base(const Base& src)
+        : m_document(src.m_document), m_partId(src.m_partId) {}
+
+    /// @brief assignment constructor
+    Base& operator=(const Base&) { return *this; }
 
 private:
     const DocumentWeakPtr m_document;
+    const Cmper m_partId;
 };
 
 /**
@@ -103,8 +118,10 @@ protected:
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
      *
      * @param document A weak pointer to the parent document
+     * @param partId Usually 0. This parameter is needed for the generic factory routine.
      */
-    OptionsBase(const DocumentWeakPtr& document) : Base(document) {}
+    OptionsBase(const DocumentWeakPtr& document, Cmper partId)
+        : Base(document, partId) {}
 };
 
 /**
@@ -123,12 +140,13 @@ protected:
     /**
      * @brief Constructs an OthersBase object.
      * 
+     * @param document A weak pointer to the parent document
+     * @param partId The part Id for this Other, or zero if for score.
      * @param cmper The `Cmper` key value.
      * @param inci The array index (`Inci`).
-     * @param document A weak pointer to the parent document
      */
-    OthersBase(const DocumentWeakPtr& document, Cmper cmper, std::optional<Inci> inci = std::nullopt)
-        : Base(document), m_cmper(cmper), m_inci(inci) {}
+    OthersBase(const DocumentWeakPtr& document, Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt)
+        : Base(document, partId), m_cmper(cmper), m_inci(inci) {}
 
 public:
     /**
@@ -176,10 +194,11 @@ public:
      * @brief Constructs a `TextsBase` object.
      * 
      * @param document A weak pointer to the parent document
+     * @param partId Always 0, but this parameter is needed for the generic factory routine
      * @param textNumber The text number (`Cmper`).
      */
-    TextsBase(const DocumentWeakPtr& document, Cmper textNumber)
-        : Base(document), m_textNumber(textNumber) {}
+    TextsBase(const DocumentWeakPtr& document, Cmper partId, Cmper textNumber)
+        : Base(document, partId), m_textNumber(textNumber) {}
 
     std::string text;    ///< Raw Enigma string (with Enigma string tags), encoded UTF-8.
 
@@ -224,7 +243,7 @@ public:
      * @param document A weak pointer to the document object.
      */
     explicit FontInfo(const DocumentWeakPtr& document)
-        : Base(document) {}
+        : Base(document, 0) {}
 
     /**
      * @brief Get the name of the font.
