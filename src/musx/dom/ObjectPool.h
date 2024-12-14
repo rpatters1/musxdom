@@ -160,6 +160,32 @@ public:
         return typedPtr;
     }
 
+
+    /**
+     * @brief Retrieves the first (and usually only) object of a specific type from the pool for a part
+     *
+     * If no part item exists, returns the score item.
+     *
+     * @tparam T The derived type of `OthersBase` to retrieve.
+     *           Must have a `constexpr static std::string_view XmlNodeName` member.
+     * @param key The key value used to filter the objects.
+     * @return A shared_ptr to the type or nullptr if none exists
+     */
+    template <typename T>
+    std::shared_ptr<T> getEffectiveForPart(const ObjectKey& key) const
+    {
+        if (auto partVersion = get<T>(key)) {
+            return partVersion;
+        }
+        if (key.partId == 0) {
+            // if this is already the score version, there is nothing to return.
+            return nullptr;
+        }
+        ObjectKey scoreKey(key);
+        scoreKey.partId = 0;
+        return get<T>(scoreKey);
+    }
+
 protected:
     // prevent standalone construction
     ObjectPool() = default;
@@ -178,8 +204,8 @@ class ScalarPool : protected ObjectPool<ScalarBase>
 {
 public:
     /** @brief Scalar version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<ScalarBase>& other)
-    { ObjectPool<ScalarBase>::add({nodeName, 0}, other); }
+    void add(const std::string& nodeName, const std::shared_ptr<ScalarBase>& instance)
+    { ObjectPool<ScalarBase>::add({nodeName, instance->getPartId()}, instance); }
 
     /** @brief Scalar version of #ObjectPool::getArray */
     template <typename T>
@@ -222,6 +248,13 @@ public:
     {
         return ObjectPool<OneCmperBase>::template get<T>({std::string(T::XmlNodeName), 0, cmper, std::nullopt, inci});
     }
+
+    /** @brief OneCmperBase version of #ObjectPool::get */
+    template <typename T>
+    std::shared_ptr<T> getEffectiveForPart(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
+    {
+        return ObjectPool<OneCmperBase>::template getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper, std::nullopt, inci});
+    }
 };
 
 /** @brief Others pool */
@@ -229,8 +262,8 @@ class OthersPool : public OneCmperPool<OthersBase>
 {
 public:
     /** @brief Others version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& other, Cmper partId = 0)
-    { ObjectPool::add({nodeName, partId, other->getCmper(), std::nullopt, other->getInci()}, other); }
+    void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
+    { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
 };
 /** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;
@@ -240,8 +273,8 @@ class TextsPool : public OneCmperPool<TextsBase>
 {
 public:
     /** @brief Texts version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& text)
-    { ObjectPool::add({nodeName, 0, text->getTextNumber(), std::nullopt, std::nullopt}, text); }
+    void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
+    { ObjectPool::add({nodeName, instance->getPartId(), instance->getTextNumber(), std::nullopt, std::nullopt}, instance); }
 };
 /** @brief Shared `OthersPool` pointer */
 using TextsPoolPtr = std::shared_ptr<TextsPool>;

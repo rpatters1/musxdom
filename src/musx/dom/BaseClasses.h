@@ -46,6 +46,8 @@ using EvpuFloat = double;   ///< EVPU fractional value (288.0 per inch)
 using Efix = int32_t;       ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
 using Edu = int32_t;        ///< EDU value (1024 per quarter note)
 
+constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
+
 class Document;
 /** @brief Shared `Document` pointer */
 using DocumentPtr = std::shared_ptr<Document>;
@@ -102,16 +104,16 @@ public:
     ShareMode getShareMode() const { return m_shareMode; }
 
     /**
-     * @brief Gets the shared nodes for this instance.
+     * @brief Gets the unlinked nodes for this instance. (Only populated for `ShareMode::Partial`)
      */
-    const SharedNodes& getSharedNodes() const { return m_sharedNodes; }
+    const SharedNodes& getUnlinkedNodes() const { return m_unlinkedNodes; }
 
     /**
      * @brief Adds a shared node for this instance
      */
     void addSharedNode(const std::string& nodeName)
     {
-        m_sharedNodes.insert(nodeName);
+        m_unlinkedNodes.insert(nodeName);
     }
 
 protected:
@@ -124,14 +126,14 @@ protected:
     Base(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
         : m_document(document), m_partId(partId), m_shareMode(shareMode) {}
 
-    /// @brief assignment constructor: m_sharedNodes is intentionally omitted
+    /// @brief assignment constructor: m_unlinkedNodes is intentionally omitted
     Base& operator=(const Base&) { return *this; }
 
 private:
     const DocumentWeakPtr m_document;
     const Cmper m_partId;
     const ShareMode m_shareMode;
-    SharedNodes m_sharedNodes;
+    SharedNodes m_unlinkedNodes;
 };
 
 /**

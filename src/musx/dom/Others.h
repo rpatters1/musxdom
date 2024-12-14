@@ -304,6 +304,30 @@ public:
 };
 
 /**
+ * @class PartGlobals
+ * @brief Represents global values that can vary by part
+ *
+ * The cmper is always 65534.
+ *
+ * This class is identified by the XML node name "partGlobals".
+ */
+class PartGlobals : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit PartGlobals(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    bool showTransposed{};                  ///< If true, "Display Concert Pitch" is unchecked for the part.
+    Cmper scrollViewIUlist{};               ///< If this value is non-zero, it is the iuList @ref Cmper of the current Staff List in Scroll View.
+    Cmper studioViewIUlist{};               ///< The iuList @ref Cmper for Studio View.
+    Cmper specialPartExtractionIUList{};    ///< If non-zero, Special Part Extraction is in effect and this is the iuList @ref Cmper. (xml node is `<pageViewIUlist>`)
+
+    constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
+};
+
+/**
  * @class TextExpressionDef
  * @brief Stores the properties and behaviors of text expressions.
  *

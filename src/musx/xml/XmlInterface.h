@@ -79,6 +79,17 @@ public:
     T getValueAs() const {
         std::istringstream iss(getValue());
         T value;
+        if constexpr (std::is_same_v<T, bool>) {
+            std::string str;
+            iss >> str;
+            std::transform(str.begin(), str.end(), str.begin(), ::tolower); // Ensure case insensitivity
+            if (str == "true") {
+                return true;
+            }
+            else if (str == "false") {
+                return false;
+            }
+        }
         if (!(iss >> value)) {
             throw std::invalid_argument("Failed to convert attribute value [" + iss.str() + "] to the specified type");
         }

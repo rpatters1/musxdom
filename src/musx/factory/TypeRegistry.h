@@ -176,6 +176,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,
+    dom::others::PartGlobals,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName
 >;

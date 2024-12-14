@@ -261,6 +261,19 @@ public:
 };
 
 template <>
+struct FieldPopulator<PartGlobals> : public FactoryBase
+{
+    static void populate(const std::shared_ptr<PartGlobals>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    {
+        // Populating fields from XML
+        getFieldFromXml(element, "showTransposed", instance->showTransposed, [](auto) { return true; }, false);
+        getFieldFromXml(element, "scrollViewIUlist", instance->scrollViewIUlist, [](auto element) { return element->template getTextAs<Cmper>(); });
+        getFieldFromXml(element, "studioViewIUlist", instance->studioViewIUlist, [](auto element) { return element->template getTextAs<Cmper>(); });
+        getFieldFromXml(element, "pageViewIUlist", instance->specialPartExtractionIUList, [](auto element) { return element->template getTextAs<Cmper>(); });
+    }
+};
+
+template <>
 struct FieldPopulator<MarkingCategoryName> : public FactoryBase
 {
 public:
