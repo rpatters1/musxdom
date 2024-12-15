@@ -322,7 +322,13 @@ public:
     bool showTransposed{};                  ///< If true, "Display Concert Pitch" is unchecked for the part.
     Cmper scrollViewIUlist{};               ///< If this value is non-zero, it is the iuList @ref Cmper of the current Staff List in Scroll View.
     Cmper studioViewIUlist{};               ///< The iuList @ref Cmper for Studio View.
-    Cmper specialPartExtractionIUList{};    ///< If non-zero, Special Part Extraction is in effect and this is the iuList @ref Cmper. (xml node is `<pageViewIUlist>`)
+    /** @brief If non-zero, Special Part Extraction is in effect and this is the @ref Cmper for its @ref InstrumentUsed array.
+     *
+     * When Special Part Extraction is in effect, staff systems no longer have their own instrument lists. Instead, they use this value.
+     *
+     * (xml node is `<pageViewIUlist>`)
+    */
+    Cmper specialPartExtractionIUList{};    ///< If non-zero, Special Part Extraction is in effect and this is the iuList @ref Cmper. 
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
 };
