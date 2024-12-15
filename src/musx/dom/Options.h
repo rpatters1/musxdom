@@ -722,6 +722,195 @@ public:
 };
 
 /**
+ * @class SmartShapeOptions
+ * @brief Options controlling the appearance of smart shapes in the musx file.
+ *
+ * This class is identified by the XML node name "smartShapeOptions".
+ */
+class SmartShapeOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit SmartShapeOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    /// @brief Default slur direction
+    enum class DefaultDirection
+    {
+        Automatic,
+        Over,
+        Under
+    };
+
+    /// @brief Connection index values
+    enum class ConnectionIndex
+    {
+        HeadRightTop,
+        StemRightTop,
+        StemLeftTop,
+        HeadLeftBottom,
+        StemRightBottom,
+        StemLeftBottom,
+        NoteRightCenter,
+        NoteLeftCenter,
+        NoteRightBottom,
+        NoteLeftTop,
+        NoteRightTop,
+        NoteLeftBottom
+    };
+
+    /// @brief Slur connection style types
+    enum class SlurConnectStyleType
+    {
+        OverNoteStart,
+        OverNoteEnd,
+        OverStemStart,
+        OverStemEnd,
+        UnderNoteStart,
+        UnderNoteEnd,
+        UnderStemStart,
+        UnderStemEnd,
+        OverMixStemStart,
+        OverMixStemEnd,
+        OverStemGrace,
+        OverStemPrincipal,
+        UnderStemGrace,
+        UnderStemPrincipal,
+        UnderNoteGrace,
+        UnderStemNotePrincipal,
+        OverNoteGrace,
+        OverStemNotePrincipal,
+        OverBeamStart,
+        OverBeamEnd,
+        UnderBeamStart,
+        UnderBeamEnd,
+        OverMixFlagStart,
+        OverFlagStart,
+        UnderFlagStart,
+        OverTabNumStart,
+        OverTabNumEnd,
+        UnderTabNumStart,
+        UnderTabNumEnd
+    };
+
+    /// @brief Tab slide connection style types
+    enum class TabSlideConnectStyleType
+    {
+        DiffLevelPitchUpLineStart,
+        DiffLevelPitchUpLineEnd,
+        DiffLevelPitchUpSpaceStart,
+        DiffLevelPitchUpSpaceEnd,
+        DiffLevelPitchDownLineStart,
+        DiffLevelPitchDownLineEnd,
+        DiffLevelPitchDownSpaceStart,
+        DiffLevelPitchDownSpaceEnd,
+        SameLevelPitchUpLineStart,
+        SameLevelPitchUpLineEnd,
+        SameLevelPitchUpSpaceStart,
+        SameLevelPitchUpSpaceEnd,
+        SameLevelPitchDownLineStart,
+        SameLevelPitchDownLineEnd,
+        SameLevelPitchDownSpaceStart,
+        SameLevelPitchDownSpaceEnd,
+        SameLevelPitchSameStart,
+        SameLevelPitchSameEnd
+    };
+
+    /// @brief Glissando connection style types
+    enum class GlissandoConnectStyleType
+    {
+        DefaultStart,
+        DefaultEnd
+    };
+
+    /// @brief Bend curve connection style types
+    enum class BendCurveConnectStyleType
+    {
+        NoteStart,
+        StaffEnd,
+        StaffStart,
+        NoteEnd,
+        StaffToTopLineStart,
+        StaffFromTopLineEnd,
+        StaffEndOffset,
+        StaffFromTopEndOffset
+    };
+
+    /// @brief Slue control style types
+    enum class SlurControlStyleType
+    {
+        ShortSpan,
+        MediumSpan,
+        LongSpan,
+        ExtraLongSpan
+    };
+
+    Evpu shortHairpinOpeningWidth{};         ///< "Short Hairpin Opening Width"
+    Evpu crescHeight{};                      ///< "Crescendo Height"
+    Evpu maximumShortHairpinLength{};       ///< "Maximum Short Hairpin Length"
+    Efix crescLineWidth{};                  ///< "Crescendo Line Width"
+    Evpu hookLength{};                       ///< "Hook Length"
+    Efix smartLineWidth{};                  ///< "Smart Line Width"
+    bool showOctavaAsText{};                   ///< "Show Octava As Text"
+    Evpu smartDashOn{};                      ///< "Smart Dash On Length"
+    Evpu smartDashOff{};                     ///< "Smart Dash Off Length"
+    bool crescHorizontal{};                    ///< "Horizontal Crescendo"
+    DefaultDirection direction{};           ///< Default slur direction
+    Evpu slurThicknessCp1X{};                ///< "Slur Thickness Control Point 1 X"
+    Evpu slurThicknessCp1Y{};                ///< "Slur Thickness Control Point 1 Y"
+    Evpu slurThicknessCp2X{};                ///< "Slur Thickness Control Point 2 X"
+    Evpu slurThicknessCp2Y{};                ///< "Slur Thickness Control Point 2 Y"
+    bool slurAvoidAccidentals{};               ///< "Slur Avoid Accidentals"
+    Evpu slurAvoidStaffLinesAmt{};            ///< "Slur Avoid Staff Lines Amount"
+    Efix maxSlurStretch{};                 ///< "Maximum Slur Stretch"
+    Efix maxSlurLift{};                    ///< "Maximum Slur Lift"
+    int slurSymmetry{};                   ///< "Slur Symmetry"
+    bool useEngraverSlurs{};                   ///< "Use Engraver Slurs"
+    Evpu slurLeftBreakHorzAdj{};              ///< "Slur Left Break Horizontal Adjustment"
+    Evpu slurRightBreakHorzAdj{};            ///< "Slur Right Break Horizontal Adjustment"
+    Evpu slurBreakVertAdj{};                 ///< "Slur Break Vertical Adjustment"
+    bool slurAvoidStaffLines{};             ///< "Slur Avoid Staff Lines"
+    Evpu slurPadding{};                      ///< "Slur Padding"
+    Efix maxSlurAngle{};                   ///< "Maximum Slur Angle"
+    Evpu slurAcciPadding{};                  ///< "Slur Accidental Padding"
+    bool slurDoStretchFirst{};
+    bool slurStretchByPercent{};
+    int maxSlurStretchPercent{};          ///< "Maximum Slur Stretch Percentage"
+    Evpu articAvoidSlurAmt{};                 ///< "Articulation Avoid Slur Amount"
+    Cmper ssLineStyleCmpCustom{};              ///< "SS Line Style Custom"
+    Cmper ssLineStyleCmpGlissando{};           ///< "SS Line Style Glissando"
+    Cmper ssLineStyleCmpTabSlide{};            ///< "SS Line Style Tab Slide"
+    Cmper ssLineStyleCmpTabBendCurve{};        ///< "SS Line Style Tab Bend Curve"
+    EvpuFloat smartSlurTipWidth{};            ///< "Smart Slur Tip Width"
+    bool guitarBendUseParens{};                ///< "Guitar Bend Use Parentheses"
+    bool guitarBendHideBendTo{};               ///< "Guitar Bend Hide Bend To"
+    bool guitarBendGenText{};                  ///< "Guitar Bend Generate Text"
+    bool guitarBendUseFull{};                  ///< "Guitar Bend Use Full"
+
+    // ConnectionStyle structure
+    struct ConnectionStyle {
+        ConnectionIndex connectIndex{}; ///< Index of connection point
+        Evpu xOffset{};                ///< Horizontal offset
+        Evpu yOffset{};                ///< Vertical offset
+    };
+
+    // Struct for control styles
+    struct ControlStyle {
+        Efix span{};                  ///< Length of the span
+        Efix inset{};                 ///< Inset value
+        Evpu height{};               ///< Height of the span
+    };
+
+    std::unordered_map<SlurConnectStyleType, std::shared_ptr<ConnectionStyle>> slurConnectStyles;
+    std::unordered_map<SlurControlStyleType, std::shared_ptr<ControlStyle>> slurControlStyles;
+    std::unordered_map<TabSlideConnectStyleType, std::shared_ptr<ConnectionStyle>> tabSlideConnectStyles;
+    std::unordered_map<GlissandoConnectStyleType, std::shared_ptr<ConnectionStyle>> glissandoConnectStyles;
+    std::unordered_map<BendCurveConnectStyleType, std::shared_ptr<ConnectionStyle>> bendCurveConnectStyles;
+
+    constexpr static std::string_view XmlNodeName = "smartShapeOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class StemOptions
  * @brief Options controlling the appearance of stems.
  *
