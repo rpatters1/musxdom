@@ -345,14 +345,14 @@ public:
     Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this 
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
-    int auxData1{};                                 ///< Auxiliary data for the expression.
+    int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
     PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
     HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
     HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
     VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
-    int measXAdjust{};                              ///< Horizontal adjustment for measurement alignment.
-    int yAdjustEntry{};                             ///< Vertical adjustment for entry alignment.
-    int yAdjustBaseline{};                          ///< Vertical adjustment for baseline alignment.
+    Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
+    Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
+    Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
     bool useCategoryFonts{};                        ///< Whether to use category fonts.
     bool useCategoryPos{};                          ///< Whether to use category position.
     bool hasEnclosure{};                            ///< Whether the text expression has an enclosure.

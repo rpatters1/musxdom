@@ -77,6 +77,7 @@ target_link_libraries(musxdomtests
 # Discover tests
 include(GoogleTest)
 gtest_discover_tests(musxdomtests
+    DISCOVERY_TIMEOUT 60 # Set timeout to 60 seconds
     PROPERTIES
         ENVIRONMENT "GTEST_COLOR=1"
     EXTRA_ARGS --gtest_color=yes

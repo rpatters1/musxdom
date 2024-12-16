@@ -103,6 +103,9 @@ public:
     virtual std::shared_ptr<IXmlAttribute> nextAttribute() const = 0;
 };
 
+class IXmlElement;
+using XmlElementPtr = std::shared_ptr<IXmlElement>; ///< shared pointer to @ref IXmlElement
+
 /**
  * @brief Interface for an XML element.
  */
@@ -170,27 +173,27 @@ public:
      * @param tagName [optional] The tag name of the child elements to find. If omitted or empty, finds the first child with any name.
      * @return A shared pointer to the child element, or nullptr if not found.
      */
-    virtual std::shared_ptr<IXmlElement> getFirstChildElement(const std::string& tagName = {}) const = 0;
+    virtual XmlElementPtr getFirstChildElement(const std::string& tagName = {}) const = 0;
 
     /**
      * @brief Gets the next sibling element.
      * @param tagName [optional] The tag name of the sibling elements to find. If omitted or empty, finds the next sibling with any name.
      * @return A shared pointer to the next sibling element, or nullptr if not found.
      */
-    virtual std::shared_ptr<IXmlElement> getNextSibling(const std::string& tagName = {}) const = 0;
+    virtual XmlElementPtr getNextSibling(const std::string& tagName = {}) const = 0;
 
     /**
      * @brief Gets the previous sibling element.
      * @param tagName [optional] The tag name of the sibling elements to find. If omitted or empty, finds the previous sibling with any name.
      * @return A shared pointer to the previous sibling element, or nullptr if not found.
      */
-    virtual std::shared_ptr<IXmlElement> getPreviousSibling(const std::string& tagName = {}) const = 0;
+    virtual XmlElementPtr getPreviousSibling(const std::string& tagName = {}) const = 0;
 
     /**
      * @brief Gets the parent element.
      * @return A shared pointer to the parent element, or nullptr if not applicable.
      */
-    virtual std::shared_ptr<IXmlElement> getParent() const = 0;
+    virtual XmlElementPtr getParent() const = 0;
 };
 
 /**
