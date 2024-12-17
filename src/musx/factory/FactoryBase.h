@@ -28,6 +28,7 @@
 #include <functional>
 #include <unordered_set>
 #include <tuple>
+#include <iostream>
 
 #include "musx/dom/BaseClasses.h"
 #include "musx/xml/XmlInterface.h"

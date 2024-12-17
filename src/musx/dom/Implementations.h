@@ -217,7 +217,7 @@ inline std::string others::MarkingCategory::getName() const
 inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 {
         std::string searchText = this->text;
-        FontInfo fontInfo(this->getDocument());
+        auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
         bool foundTag = false;
 
         while (true) {
@@ -231,7 +231,7 @@ inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
             }
 
             std::string fontTag = searchText.substr(0, endOfTag + 1);
-            if (!musx::util::EnigmaString::parseFontCommand(fontTag, fontInfo)) {
+            if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
                 return nullptr;
             }
 
@@ -240,7 +240,7 @@ inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
         }
 
         if (foundTag) {
-            return std::make_shared<FontInfo>(fontInfo);
+            return fontInfo;
         }
 
         return nullptr;

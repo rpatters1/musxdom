@@ -76,6 +76,12 @@ target_link_libraries(musxdomtests
 	tinyxml2
 )
 
+# Add Precompiled Headers (PCH) for the test suite
+target_precompile_headers(musxdomtests PRIVATE
+    "gtest/gtest.h"
+    "${CMAKE_SOURCE_DIR}/src/musx/musx.h"
+)
+
 # Discover tests
 include(GoogleTest)
 gtest_discover_tests(musxdomtests
