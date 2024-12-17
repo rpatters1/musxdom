@@ -183,7 +183,10 @@ public:
 template<typename EnumClass, typename FromClass>
 EnumClass toEnum(const FromClass&)
 {
-    assert(false); // program bug if here
+    // Force a compile-time error when this primary template is instantiated.
+    static_assert(!std::is_same<EnumClass, EnumClass>::value, 
+        "toEnum must be specialized for the given EnumClass and FromClass.");
+    // this line should never be executed, but it satisfies the compiler of the return path.
     throw std::runtime_error("toEnum must be specialized.");
 }
 
@@ -222,13 +225,23 @@ struct FieldPopulator : public FactoryBase
         }
     }
 
+    /** @brief creates and populates an instance */
     template <typename... Args>
     static std::shared_ptr<T> createAndPopulate(const XmlElementPtr& element, Args... args)
     {
-        if (!element->getFirstChildElement()) return nullptr;
         auto instance = std::make_shared<T>(std::forward<Args>(args)...);
         FieldPopulator<T>::populate(instance, element);
         return instance;
+    }
+
+    /** @brief creates and populates an instance unless the xml node contains no children.
+     * Then it returns nullptr.
+     */
+    template <typename... Args>
+    static std::shared_ptr<T> createAndPopulateNullDefault(const XmlElementPtr& element, Args... args)
+    {
+        if (!element->getFirstChildElement()) return nullptr;
+        return createAndPopulate(element, std::forward<Args>(args)...);
     }
 
 private:
@@ -251,49 +264,28 @@ private:
 };
 
 template <>
-struct FieldPopulator<dom::FontInfo> : public FactoryBase
-{
-    static void populate(const std::shared_ptr<dom::FontInfo>& fontInfo, const XmlElementPtr& element)
-    {
-        getFieldFromXml(element, "fontID", fontInfo->fontId, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
-        getFieldFromXml(element, "fontSize", fontInfo->fontSize, [](auto element) { return element->template getTextAs<int>(); });
-
-        if (auto efxElement = element->getFirstChildElement("efx")) {
-            for (auto efxChild = efxElement->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
+inline const XmlElementArray<dom::FontInfo> FieldPopulator<dom::FontInfo>::xmlElements = {
+    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
+    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
+    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) {
+            for (auto efxChild = e->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
                 auto efxName = efxChild->getTagName();
                 if (efxName == "bold") {
-                    fontInfo->bold = true;
+                    i->bold = true;
                 } else if (efxName == "italic") {
-                    fontInfo->italic = true;
+                    i->italic = true;
                 } else if (efxName == "underline") {
-                    fontInfo->underline = true;
+                    i->underline = true;
                 } else if (efxName == "strikeout") {
-                    fontInfo->strikeout = true;
+                    i->strikeout = true;
                 } else if (efxName == "absolute") {
-                    fontInfo->absolute = true;
+                    i->absolute = true;
                 } else if (efxName == "hidden") {
-                    fontInfo->hidden = true;
+                    i->hidden = true;
                 }
-            }
+            }        
         }
-    }
-
-    static std::shared_ptr<dom::FontInfo> getFontFromXml(const XmlElementPtr& fontElement, const dom::DocumentWeakPtr& document)
-    {
-        if (!fontElement->getFirstChildElement()) return nullptr;
-        auto fontInfo = std::make_shared<dom::FontInfo>(document);
-        FieldPopulator<dom::FontInfo>::populate(fontInfo, fontElement);
-        return fontInfo;
-    }
-
-    static std::shared_ptr<dom::FontInfo> getFontFromXml(const XmlElementPtr& element, const std::string& nodeName, const dom::DocumentWeakPtr& document, bool expected = true)
-    {
-        std::shared_ptr<dom::FontInfo> retval;
-        getFieldFromXml(element, nodeName, retval, [document](auto fontElement) -> std::shared_ptr<dom::FontInfo> {
-                return getFontFromXml(fontElement, document);
-            }, expected);
-        return retval;
-    }
+    },
 };
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS

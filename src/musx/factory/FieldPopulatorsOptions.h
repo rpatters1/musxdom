@@ -122,7 +122,7 @@ inline const XmlElementArray<ClefOptions::ClefDef> FieldPopulator<ClefOptions::C
     {"shapeID", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->shapeId = e->getTextAs<int>(); }},
     {"isShape", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->isShape = true; }},
     {"scaleToStaffHeight", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->scaleToStaffHeight = true; }},
-    {"font", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->font = FieldPopulator<FontInfo>::getFontFromXml(e, i->getDocument()); }},
+    {"font", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->font = FieldPopulator<FontInfo>::createAndPopulateNullDefault(e, i->getDocument()); }},
     {"useOwnFont", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->useOwnFont = true; }},
 };
 
@@ -363,74 +363,49 @@ inline const XmlElementArray<MusicSpacingOptions> FieldPopulator<MusicSpacingOpt
 };
 
 template <>
-struct FieldPopulator<PageFormatOptions> : public FactoryBase {
-    static void populate(const std::shared_ptr<PageFormatOptions>& instance, const XmlElementPtr& element, ElementLinker&)
-    {
-        getFieldFromXml(element, "pageFormatScore", instance->pageFormatScore, [](auto element) {
-            auto pageFormat = std::make_shared<PageFormatOptions::PageFormat>();
-            populatePageFormat(pageFormat, element);
-            return pageFormat;
-        });
-        getFieldFromXml(element, "pageFormatParts", instance->pageFormatParts, [](auto element) {
-            auto pageFormat = std::make_shared<PageFormatOptions::PageFormat>();
-            populatePageFormat(pageFormat, element);
-            return pageFormat;
-        });
-        getFieldFromXml(element, "avoidSystemMarginCollisions", instance->avoidSystemMarginCollisions, [](auto) { return true; }, false);
-        getFieldFromXml(element, "adjustPageScope", instance->adjustPageScope, [](auto element) {
-            return toAdjustPageScope(element->getText());
-        });
-    }
+inline const XmlElementArray<PageFormatOptions::PageFormat> FieldPopulator<PageFormatOptions::PageFormat>::xmlElements = {
+    {"pageHeight", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->pageHeight = e->getTextAs<Evpu>(); }},
+    {"pageWidth", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->pageWidth = e->getTextAs<Evpu>(); }},
+    {"pagePercent", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->pagePercent = e->getTextAs<int>(); }},
+    {"sysPercent", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->sysPercent = e->getTextAs<int>(); }},
+    {"rawStaffHeight", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->rawStaffHeight = e->getTextAs<int>(); }},
+    {"leftPageMarginTop", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->leftPageMarginTop = e->getTextAs<Evpu>(); }},
+    {"leftPageMarginLeft", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->leftPageMarginLeft = e->getTextAs<Evpu>(); }},
+    {"leftPageMarginBottom", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->leftPageMarginBottom = e->getTextAs<Evpu>(); }},
+    {"leftPageMarginRight", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->leftPageMarginRight = e->getTextAs<Evpu>(); }},
+    {"rightPageMarginTop", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->rightPageMarginTop = e->getTextAs<Evpu>(); }},
+    {"rightPageMarginLeft", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->rightPageMarginLeft = e->getTextAs<Evpu>(); }},
+    {"rightPageMarginBottom", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->rightPageMarginBottom = e->getTextAs<Evpu>(); }},
+    {"rightPageMarginRight", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->rightPageMarginRight = e->getTextAs<Evpu>(); }},
+    {"sysMarginTop", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->sysMarginTop = e->getTextAs<Evpu>(); }},
+    {"sysMarginLeft", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->sysMarginLeft = e->getTextAs<Evpu>(); }},
+    {"sysMarginBottom", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->sysMarginBottom = e->getTextAs<Evpu>(); }},
+    {"sysMarginRight", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->sysMarginRight = e->getTextAs<Evpu>(); }},
+    {"sysDistanceBetween", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->sysDistanceBetween = e->getTextAs<Evpu>(); }},
+    {"firstPageMarginTop", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->firstPageMarginTop = e->getTextAs<Evpu>(); }},
+    {"firstSysMarginTop", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->firstSysMarginTop = e->getTextAs<Evpu>(); }},
+    {"firstSysMarginLeft", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->firstSysMarginLeft = e->getTextAs<Evpu>(); }},
+    {"firstSysMarginDistance", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->firstSysMarginDistance = e->getTextAs<Evpu>(); }},
+    {"facingPages", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->facingPages = true; }},
+    {"differentFirstSysMargin", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->differentFirstSysMargin = true; }},
+    {"differentFirstPageMargin", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->differentFirstPageMargin = true; }},
+};
 
-private:
-    /**
-     * @brief Converts a string to an AdjustPageScope enum value.
-     * 
-     * @param value The string representation of the scope.
-     * @return PageFormatOptions::AdjustPageScope The corresponding enum value.
-     */
-    static PageFormatOptions::AdjustPageScope toAdjustPageScope(const std::string& value)
-    {
-        if (value == "current") {
-            return PageFormatOptions::AdjustPageScope::Current;
-        } else if (value == "all") {
-            return PageFormatOptions::AdjustPageScope::All;
-        } else if (value == "leftOrRight") {
-            return PageFormatOptions::AdjustPageScope::LeftOrRight;
-        } else if (value == "range") {
-            return PageFormatOptions::AdjustPageScope::PageRange;
-        }
-        throw std::runtime_error("Invalid value for adjustPageScope: " + value);
-    }
+template <>
+inline PageFormatOptions::AdjustPageScope toEnum<PageFormatOptions::AdjustPageScope>(const std::string& value) {
+    if (value == "current") return PageFormatOptions::AdjustPageScope::Current;
+    if (value == "all") return PageFormatOptions::AdjustPageScope::All;
+    if (value == "leftOrRight") return PageFormatOptions::AdjustPageScope::LeftOrRight;
+    if (value == "range") return PageFormatOptions::AdjustPageScope::PageRange;
+    throw std::runtime_error("Invalid value for AdjustPageScope: " + value);
+}
 
-    static void populatePageFormat(const std::shared_ptr<PageFormatOptions::PageFormat>& instance, const XmlElementPtr& element)
-    {
-        getFieldFromXml(element, "pageHeight", instance->pageHeight, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "pageWidth", instance->pageWidth, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "pagePercent", instance->pagePercent, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "sysPercent", instance->sysPercent, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "rawStaffHeight", instance->rawStaffHeight, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "leftPageMarginTop", instance->leftPageMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "leftPageMarginLeft", instance->leftPageMarginLeft, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "leftPageMarginBottom", instance->leftPageMarginBottom, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "leftPageMarginRight", instance->leftPageMarginRight, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "rightPageMarginTop", instance->rightPageMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "rightPageMarginLeft", instance->rightPageMarginLeft, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "rightPageMarginBottom", instance->rightPageMarginBottom, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "rightPageMarginRight", instance->rightPageMarginRight, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "sysMarginTop", instance->sysMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "sysMarginLeft", instance->sysMarginLeft, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "sysMarginBottom", instance->sysMarginBottom, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "sysMarginRight", instance->sysMarginRight, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "sysDistanceBetween", instance->sysDistanceBetween, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "firstPageMarginTop", instance->firstPageMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "firstSysMarginTop", instance->firstSysMarginTop, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "firstSysMarginLeft", instance->firstSysMarginLeft, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "firstSysMarginDistance", instance->firstSysMarginDistance, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "facingPages", instance->facingPages, [](auto) { return true; }, false);
-        getFieldFromXml(element, "differentFirstSysMargin", instance->differentFirstSysMargin, [](auto) { return true; }, false);
-        getFieldFromXml(element, "differentFirstPageMargin", instance->differentFirstPageMargin, [](auto) { return true; }, false);
-    }
+template <>
+inline const XmlElementArray<PageFormatOptions> FieldPopulator<PageFormatOptions>::xmlElements = {
+    {"pageFormatScore", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i){ i->pageFormatScore = FieldPopulator<PageFormatOptions::PageFormat>::createAndPopulate(e); }},
+    {"pageFormatParts", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i) { i->pageFormatParts = FieldPopulator<PageFormatOptions::PageFormat>::createAndPopulate(e); }},
+    {"avoidSystemMarginCollisions", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions>& i) { i->avoidSystemMarginCollisions = true; }},
+    {"adjustPageScope", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i) { i->adjustPageScope = toEnum<PageFormatOptions::AdjustPageScope>(e->getText()); }},
 };
 
 template <>

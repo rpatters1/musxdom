@@ -189,11 +189,11 @@ template <>
 inline const XmlElementArray<MarkingCategory> FieldPopulator<MarkingCategory>::xmlElements = {
     {"categoryType", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->categoryType = toEnum<MarkingCategory::CategoryType>(e->getText()); }},
     {"textFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
-        { i->textFont = FieldPopulator<FontInfo>::getFontFromXml(e, i->getDocument()); }},
+        { i->textFont = FieldPopulator<FontInfo>::createAndPopulateNullDefault(e, i->getDocument()); }},
     {"musicFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
-        { i->musicFont = FieldPopulator<FontInfo>::getFontFromXml(e, i->getDocument()); }},
+        { i->musicFont = FieldPopulator<FontInfo>::createAndPopulateNullDefault(e, i->getDocument()); }},
     {"numberFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
-        { i->numberFont = FieldPopulator<FontInfo>::getFontFromXml(e, i->getDocument()); }},
+        { i->numberFont = FieldPopulator<FontInfo>::createAndPopulateNullDefault(e, i->getDocument()); }},
     {"horzAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzAlign = toEnum<HorizontalMeasExprAlign>(e->getText()); }},
     {"vertAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertAlign = toEnum<VerticalMeasExprAlign>(e->getText()); }},
     {"justification", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->justification = toEnum<HorizontalExprJustification>(e->getText()); }},
