@@ -62,6 +62,7 @@ TEST(EnclosureTest, TextExpressionEnclosure)
         EXPECT_EQ(enclosure->lineWidth, 128);
         EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::Triangle);
         EXPECT_EQ(enclosure->cornerRadius, 1088);
+        EXPECT_FALSE(enclosure->equalAspect);
         EXPECT_TRUE(enclosure->fixedSize);
         EXPECT_TRUE(enclosure->notTall);
         EXPECT_TRUE(enclosure->opaque);
@@ -80,7 +81,7 @@ TEST(EnclosureTest, TextRepeatEnclosure)
       <yMargin>9</yMargin>
       <lineWidth>256</lineWidth>
       <sides>1</sides>
-      <notTall/>
+      <equalAspect/>
     </textRepeatEnclosure>
   </others>
 </finale>
@@ -101,7 +102,8 @@ TEST(EnclosureTest, TextRepeatEnclosure)
         EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::Rectangle);
         EXPECT_EQ(enclosure->cornerRadius, 0);
         EXPECT_FALSE(enclosure->fixedSize);
-        EXPECT_TRUE(enclosure->notTall);
+        EXPECT_TRUE(enclosure->equalAspect);
+        EXPECT_FALSE(enclosure->notTall);
         EXPECT_FALSE(enclosure->opaque);
         EXPECT_FALSE(enclosure->roundCorners);
     }

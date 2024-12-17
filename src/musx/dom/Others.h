@@ -76,6 +76,7 @@ public:
     Shape shape{};            ///< Enclosure shape (default: NoEnclosure).
     Efix cornerRadius{};      ///< Corner radius (in EFIX).
     bool fixedSize{};         ///< Whether the enclosure is fixed size (ignore text bounding box)
+    bool equalAspect{};       ///< "Match Height and Width"
     bool notTall{};           ///< "Enforce Minimum Width": don't let shape get taller than it is wide
     bool opaque{};            ///< Whether the enclosure is opaque.
     bool roundCorners{};      ///< Whether the enclosure has rounded corners.
@@ -136,6 +137,21 @@ public:
     bool hideLayer{};                   ///< "Hide Layer when Inactive"
 
     constexpr static std::string_view XmlNodeName = "layerAtts"; ///< The XML node name for this type.
+};
+
+/**
+ * @enum RehearsalMarkStyle
+ * @brief Specifies the sequencing style for rehearsal marks
+ */
+enum class RehearsalMarkStyle
+{
+    None,                       ///< Default value, no rehearsal mark style
+    Letters,                    ///< A, B, C...AA, BB, CC
+    LetterNumbers,              ///< A, B, C...A1, B1, C1
+    LettersLowerCase,           ///< a, b, c...aa, bb, cc
+    LettersNumbersLowerCase,    ///< a, b, c...a1, b1, c1
+    Numbers,                    ///< 1, 2, 3, 4
+    MeasureNumber               ///< Displays the current measure number
 };
 
 /**
@@ -344,20 +360,23 @@ class TextExpressionDef : public OthersBase
 public:
     Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this 
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
+    RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
     int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
+    int playPass{};                                 ///< "Play Only on Pass" value.
+    bool hideMeasureNum;                            ///< "Hide Measure Numbers" (used on Rehearsal Marks)
+    bool useAuxData{};                              ///< Whether auxiliary data is used.
+    bool hasEnclosure{};                            ///< Whether the text expression has an enclosure. (xml node is "newEnclosure")
+    bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
     PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
     HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
-    HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
     VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
+    HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
     Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
     Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
     bool useCategoryFonts{};                        ///< Whether to use category fonts.
     bool useCategoryPos{};                          ///< Whether to use category position.
-    bool hasEnclosure{};                            ///< Whether the text expression has an enclosure.
-    bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
-    bool useAuxData{};                              ///< Whether auxiliary data is used.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
     /**
