@@ -68,7 +68,7 @@ TEST(LayerAttributesTest, PopulateLayerAttributes)
     ASSERT_TRUE(others);
 
     // Test LayerAttributes for each cmper value
-    for (int i = 0; i < 4; ++i)
+    for (Cmper i = 0; i < 4; ++i)
     {
         auto layerAttributes = others->get<musx::dom::others::LayerAttributes>(i);
         ASSERT_TRUE(layerAttributes);
