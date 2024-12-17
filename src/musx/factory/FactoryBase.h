@@ -23,6 +23,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <optional>
 #include <functional>
 #include <unordered_set>
@@ -180,14 +181,38 @@ public:
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
-template<typename EnumClass, typename FromClass>
-EnumClass toEnum(const FromClass&)
+template <typename EnumClass, typename FromClass = std::string_view>
+using XmlEnumMapping = std::unordered_map<FromClass, EnumClass>;
+template <typename EnumClass, typename FromClass = std::string_view>
+class EnumMapper
 {
-    // Force a compile-time error when this primary template is instantiated.
-    static_assert(!std::is_same<EnumClass, EnumClass>::value, 
-        "toEnum must be specialized for the given EnumClass and FromClass.");
-    // this line should never be executed, but it satisfies the compiler of the return path.
-    throw std::runtime_error("toEnum must be specialized.");
+    static XmlEnumMapping<EnumClass, FromClass> mapping; // this value must be specialized
+
+    // If we ever need to, we can create a static lazy-initialize reverse mapping function here
+
+public:
+    static EnumClass xmlToEnum(const FromClass& value)
+    {
+        auto it = mapping.find(value);
+        if (it != mapping.end()) {
+            return it->second;
+        }
+        if constexpr (std::is_arithmetic_v<FromClass>) {
+            throw std::invalid_argument("Invalid enum value from xml: " + std::to_string(value));
+        } else {
+            throw std::invalid_argument("Invalid enum value from xml: " + std::string(value));
+        }
+    }
+};
+
+template<typename EnumClass, typename FromClass>
+EnumClass toEnum(const FromClass& value)
+{
+    if constexpr (std::is_convertible_v<FromClass, std::string_view>) {
+        return EnumMapper<EnumClass, std::string_view>::xmlToEnum(value);
+    } else {
+        return EnumMapper<EnumClass, FromClass>::xmlToEnum(value);
+    }
 }
 
 template <typename T>

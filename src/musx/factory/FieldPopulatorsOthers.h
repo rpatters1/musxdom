@@ -103,107 +103,85 @@ inline const ResolverArray<LayerAttributes> FieldPopulator<LayerAttributes>::res
 };
 
 template <>
-inline RehearsalMarkStyle toEnum<RehearsalMarkStyle>(const std::string& value)
-{
-    static const std::unordered_map<std::string, RehearsalMarkStyle> mapping = {
-        {"letters", RehearsalMarkStyle::Letters},
-        {"letNum", RehearsalMarkStyle::LetterNumbers},
-        {"lettersLc", RehearsalMarkStyle::LettersLowerCase},
-        {"letNumLc", RehearsalMarkStyle::LettersNumbersLowerCase},
-        {"numbers", RehearsalMarkStyle::Numbers},
-        {"measNum", RehearsalMarkStyle::MeasureNumber}
-    };
-
-    auto it = mapping.find(value);
-    if (it != mapping.end()) {
-        return it->second;
-    }
-    throw std::invalid_argument("Invalid RehearsalMarkStyle string: " + value);
-}
+inline XmlEnumMapping<RehearsalMarkStyle> EnumMapper<RehearsalMarkStyle>::mapping = {
+    {"letters", RehearsalMarkStyle::Letters},
+    {"letNum", RehearsalMarkStyle::LetterNumbers},
+    {"lettersLc", RehearsalMarkStyle::LettersLowerCase},
+    {"letNumLc", RehearsalMarkStyle::LettersNumbersLowerCase},
+    {"numbers", RehearsalMarkStyle::Numbers},
+    {"measNum", RehearsalMarkStyle::MeasureNumber}
+};
 
 template <>
-inline PlaybackType toEnum<PlaybackType>(const std::string& value)
-{
-    if (value == "none") return PlaybackType::None;
-    if (value == "time") return PlaybackType::Tempo;
-    if (value == "midiController") return PlaybackType::MidiController;
-    if (value == "amplitude") return PlaybackType::KeyVelocity;
-    if (value == "transpose") return PlaybackType::Transpose;
-    if (value == "channel") return PlaybackType::Channel;
-    if (value == "midiPatchChange") return PlaybackType::MidiPatchChange;
-    if (value == "percMidiMap") return PlaybackType::PercussionMidiMap;
-    if (value == "midiPitchwheel") return PlaybackType::MidiPitchWheel;
-    if (value == "midiPressure") return PlaybackType::ChannelPressure;
-    if (value == "rekey") return PlaybackType::RestrikeKeys;
-    if (value == "dump") return PlaybackType::Dump;
-    if (value == "startTempo") return PlaybackType::PlayTempoToolChanges;
-    if (value == "stopTempo") return PlaybackType::IgnoreTempoToolChanges;
-    if (value == "swing") return PlaybackType::Swing;
-    if (value == "hpOn") return PlaybackType::SmartPlaybackOn;
-    if (value == "hpOff") return PlaybackType::SmartPlaybackOff;
-    throw std::invalid_argument("Unknown playbackType value in XML: " + value);
-}
-
-// Specialization for HorizontalMeasExprAlign
-template <>
-inline HorizontalMeasExprAlign toEnum<HorizontalMeasExprAlign>(const std::string& value)
-{
-    if (value == "manual") return HorizontalMeasExprAlign::Manual;
-    if (value == "leftOfAllNoteheads") return HorizontalMeasExprAlign::LeftOfAllNoteheads;
-    if (value == "leftOfPrimaryNotehead") return HorizontalMeasExprAlign::LeftOfPrimaryNotehead;
-    if (value == "stem") return HorizontalMeasExprAlign::Stem;
-    if (value == "centerPrimaryNotehead") return HorizontalMeasExprAlign::CenterPrimaryNotehead;
-    if (value == "centerAllNoteheads") return HorizontalMeasExprAlign::CenterAllNoteheads;
-    if (value == "rightOfAllNoteheads") return HorizontalMeasExprAlign::RightOfAllNoteheads;
-    if (value == "leftEdge") return HorizontalMeasExprAlign::LeftBarline;
-    if (value == "startTimeSig") return HorizontalMeasExprAlign::StartTimeSig;
-    if (value == "afterClefKeyTime") return HorizontalMeasExprAlign::AfterClefKeyTime;
-    if (value == "startOfMusic") return HorizontalMeasExprAlign::StartOfMusic;
-    if (value == "centerOverBarlines") return HorizontalMeasExprAlign::CenterOverBarlines;
-    if (value == "centerOverMusic") return HorizontalMeasExprAlign::CenterOverMusic;
-    if (value == "rightEdge") return HorizontalMeasExprAlign::RightBarline;
-    throw std::invalid_argument("Unknown horzMeasExprAlign value in XML: " + value);
-}
-
-// Specialization for VerticalMeasExprAlign
-template <>
-inline VerticalMeasExprAlign toEnum<VerticalMeasExprAlign>(const std::string& value)
-{
-    if (value == "manual") return VerticalMeasExprAlign::Manual;
-    if (value == "refLine") return VerticalMeasExprAlign::RefLine;
-    if (value == "aboveStaff") return VerticalMeasExprAlign::AboveStaff;
-    if (value == "belowStaff") return VerticalMeasExprAlign::BelowStaff;
-    if (value == "topNote") return VerticalMeasExprAlign::TopNote;
-    if (value == "bottomNote") return VerticalMeasExprAlign::BottomNote;
-    if (value == "aboveEntry") return VerticalMeasExprAlign::AboveEntry;
-    if (value == "belowEntry") return VerticalMeasExprAlign::BelowEntry;
-    if (value == "aboveStaffOrEntry") return VerticalMeasExprAlign::AboveStaffOrEntry;
-    if (value == "belowStaffOrEntry") return VerticalMeasExprAlign::BelowStaffOrEntry;
-    throw std::invalid_argument("Invalid vertMeasExprAlign value in XML: " + value);
-}
-
-// Specialization for HorizontalExprJustification
-template <>
-inline HorizontalExprJustification toEnum<HorizontalExprJustification>(const std::string& value)
-{
-    if (value == "left") return HorizontalExprJustification::Left;
-    if (value == "center") return HorizontalExprJustification::Center;
-    if (value == "right") return HorizontalExprJustification::Right;
-    throw std::invalid_argument("Invalid horzExprJustification value in XML: " + value);
-}
+inline XmlEnumMapping<PlaybackType> EnumMapper<PlaybackType>::mapping = {
+    {"none", PlaybackType::None},
+    {"time", PlaybackType::Tempo},
+    {"midiController", PlaybackType::MidiController},
+    {"amplitude", PlaybackType::KeyVelocity},
+    {"transpose", PlaybackType::Transpose},
+    {"channel", PlaybackType::Channel},
+    {"midiPatchChange", PlaybackType::MidiPatchChange},
+    {"percMidiMap", PlaybackType::PercussionMidiMap},
+    {"midiPitchwheel", PlaybackType::MidiPitchWheel},
+    {"midiPressure", PlaybackType::ChannelPressure},
+    {"rekey", PlaybackType::RestrikeKeys},
+    {"dump", PlaybackType::Dump},
+    {"startTempo", PlaybackType::PlayTempoToolChanges},
+    {"stopTempo", PlaybackType::IgnoreTempoToolChanges},
+    {"swing", PlaybackType::Swing},
+    {"hpOn", PlaybackType::SmartPlaybackOn},
+    {"hpOff", PlaybackType::SmartPlaybackOff}
+};
 
 template <>
-inline MarkingCategory::CategoryType toEnum<MarkingCategory::CategoryType>(const std::string& str)
-{
-    if (str == "dynamics") return MarkingCategory::CategoryType::Dynamics;
-    if (str == "tempoMarks") return MarkingCategory::CategoryType::TempoMarks;
-    if (str == "tempoAlts") return MarkingCategory::CategoryType::TempoAlterations;
-    if (str == "expressiveText") return MarkingCategory::CategoryType::ExpressiveText;
-    if (str == "techniqueText") return MarkingCategory::CategoryType::TechniqueText;
-    if (str == "rehearsalMarks") return MarkingCategory::CategoryType::RehearsalMarks;
-    if (str == "misc") return MarkingCategory::CategoryType::Misc;
-    throw std::invalid_argument("Invalid marking category type value in XML: " + str);
-}
+inline XmlEnumMapping<HorizontalMeasExprAlign> EnumMapper<HorizontalMeasExprAlign>::mapping = {
+    {"manual", HorizontalMeasExprAlign::Manual},
+    {"leftOfAllNoteheads", HorizontalMeasExprAlign::LeftOfAllNoteheads},
+    {"leftOfPrimaryNotehead", HorizontalMeasExprAlign::LeftOfPrimaryNotehead},
+    {"stem", HorizontalMeasExprAlign::Stem},
+    {"centerPrimaryNotehead", HorizontalMeasExprAlign::CenterPrimaryNotehead},
+    {"centerAllNoteheads", HorizontalMeasExprAlign::CenterAllNoteheads},
+    {"rightOfAllNoteheads", HorizontalMeasExprAlign::RightOfAllNoteheads},
+    {"leftEdge", HorizontalMeasExprAlign::LeftBarline},
+    {"startTimeSig", HorizontalMeasExprAlign::StartTimeSig},
+    {"afterClefKeyTime", HorizontalMeasExprAlign::AfterClefKeyTime},
+    {"startOfMusic", HorizontalMeasExprAlign::StartOfMusic},
+    {"centerOverBarlines", HorizontalMeasExprAlign::CenterOverBarlines},
+    {"centerOverMusic", HorizontalMeasExprAlign::CenterOverMusic},
+    {"rightEdge", HorizontalMeasExprAlign::RightBarline}
+};
+
+template <>
+inline XmlEnumMapping<VerticalMeasExprAlign> EnumMapper<VerticalMeasExprAlign>::mapping = {
+    {"manual", VerticalMeasExprAlign::Manual},
+    {"refLine", VerticalMeasExprAlign::RefLine},
+    {"aboveStaff", VerticalMeasExprAlign::AboveStaff},
+    {"belowStaff", VerticalMeasExprAlign::BelowStaff},
+    {"topNote", VerticalMeasExprAlign::TopNote},
+    {"bottomNote", VerticalMeasExprAlign::BottomNote},
+    {"aboveEntry", VerticalMeasExprAlign::AboveEntry},
+    {"belowEntry", VerticalMeasExprAlign::BelowEntry},
+    {"aboveStaffOrEntry", VerticalMeasExprAlign::AboveStaffOrEntry},
+    {"belowStaffOrEntry", VerticalMeasExprAlign::BelowStaffOrEntry}
+};
+
+template <>
+inline XmlEnumMapping<HorizontalExprJustification> EnumMapper<HorizontalExprJustification>::mapping = {
+    {"left", HorizontalExprJustification::Left},
+    {"center", HorizontalExprJustification::Center},
+    {"right", HorizontalExprJustification::Right}
+};
+
+template <>
+inline XmlEnumMapping<MarkingCategory::CategoryType> EnumMapper<MarkingCategory::CategoryType>::mapping = {
+    {"dynamics", MarkingCategory::CategoryType::Dynamics},
+    {"tempoMarks", MarkingCategory::CategoryType::TempoMarks},
+    {"tempoAlts", MarkingCategory::CategoryType::TempoAlterations},
+    {"expressiveText", MarkingCategory::CategoryType::ExpressiveText},
+    {"techniqueText", MarkingCategory::CategoryType::TechniqueText},
+    {"rehearsalMarks", MarkingCategory::CategoryType::RehearsalMarks},
+    {"misc", MarkingCategory::CategoryType::Misc}
+};
 
 template <>
 inline const XmlElementArray<MarkingCategory> FieldPopulator<MarkingCategory>::xmlElements = {

@@ -87,14 +87,12 @@ inline const XmlElementArray<BarlineOptions> FieldPopulator<BarlineOptions>::xml
 };
 
 template <>
-inline BeamOptions::FlattenStyle toEnum<BeamOptions::FlattenStyle>(const std::string& text)
-{
-    if (text == "onEndNotes") return BeamOptions::FlattenStyle::OnEndNotes;
-    if (text == "onStandardNote") return BeamOptions::FlattenStyle::OnStandardNote;
-    if (text == "onExtremeNote") return BeamOptions::FlattenStyle::OnExtremeNote;
-    if (text == "alwaysFlat") return BeamOptions::FlattenStyle::AlwaysFlat;
-    throw std::invalid_argument("Encountered unknown value for BeamOptions::FlattenStyle: " + text);
-}
+inline XmlEnumMapping<BeamOptions::FlattenStyle> EnumMapper<BeamOptions::FlattenStyle>::mapping = {
+    {"onEndNotes", BeamOptions::FlattenStyle::OnEndNotes},
+    {"onStandardNote", BeamOptions::FlattenStyle::OnStandardNote},
+    {"onExtremeNote", BeamOptions::FlattenStyle::OnExtremeNote},
+    {"alwaysFlat", BeamOptions::FlattenStyle::AlwaysFlat}
+};
 
 template <>
 inline const XmlElementArray<BeamOptions> FieldPopulator<BeamOptions>::xmlElements = {
@@ -186,56 +184,53 @@ inline const XmlElementArray<FlagOptions> FieldPopulator<FlagOptions>::xmlElemen
 };
 
 template <>
-inline FontOptions::FontType toEnum<FontOptions::FontType>(const std::string& typeStr)
-{
-    using FontType = FontOptions::FontType;
-    if (typeStr == "music") return FontType::Music;
-    if (typeStr == "key") return FontType::Key;
-    if (typeStr == "clef") return FontType::Clef;
-    if (typeStr == "time") return FontType::Time;
-    if (typeStr == "chord") return FontType::Chord;
-    if (typeStr == "chordAcci") return FontType::ChordAcci;
-    if (typeStr == "ending") return FontType::Ending;
-    if (typeStr == "tuplet") return FontType::Tuplet;
-    if (typeStr == "textBlock") return FontType::TextBlock;
-    if (typeStr == "lyricVerse") return FontType::LyricVerse;
-    if (typeStr == "lyricChorus") return FontType::LyricChorus;
-    if (typeStr == "lyricSection") return FontType::LyricSection;
-    if (typeStr == "multiMeasRest") return FontType::MultiMeasRest;
-    if (typeStr == "tablature") return FontType::Tablature;
-    if (typeStr == "chordSuffix") return FontType::ChordSuffix;
-    if (typeStr == "expression") return FontType::Expression;
-    if (typeStr == "repeat") return FontType::Repeat;
-    if (typeStr == "fretboard") return FontType::Fretboard;
-    if (typeStr == "flags") return FontType::Flags;
-    if (typeStr == "accis") return FontType::Accis;
-    if (typeStr == "altNotSlash") return FontType::AltNotSlash;
-    if (typeStr == "altNotNum") return FontType::AltNotNum;
-    if (typeStr == "rests") return FontType::Rests;
-    if (typeStr == "reptDots") return FontType::ReptDots;
-    if (typeStr == "noteheads") return FontType::Noteheads;
-    if (typeStr == "augDots") return FontType::AugDots;
-    if (typeStr == "timePlus") return FontType::TimePlus;
-    if (typeStr == "articulation") return FontType::Articulation;
-    if (typeStr == "percussion") return FontType::Percussion;
-    if (typeStr == "smartShape8va") return FontType::SmartShape8va;
-    if (typeStr == "measNumb") return FontType::MeasNumb;
-    if (typeStr == "staffNames") return FontType::StaffNames;
-    if (typeStr == "abbrvStaffNames") return FontType::AbbrvStaffNames;
-    if (typeStr == "groupNames") return FontType::GroupNames;
-    if (typeStr == "smartShape8vb") return FontType::SmartShape8vb;
-    if (typeStr == "smartShape15ma") return FontType::SmartShape15ma;
-    if (typeStr == "smartShape15mb") return FontType::SmartShape15mb;
-    if (typeStr == "smartShapeTrill") return FontType::SmartShapeTrill;
-    if (typeStr == "smartShapeWiggle") return FontType::SmartShapeWiggle;
-    if (typeStr == "abbrvGroupNames") return FontType::AbbrvGroupNames;
-    if (typeStr == "bendCurveFull") return FontType::BendCurveFull;
-    if (typeStr == "bendCurveWhole") return FontType::BendCurveWhole;
-    if (typeStr == "bendCurveFrac") return FontType::BendCurveFrac;
-    if (typeStr == "timeParts") return FontType::TimeParts;
-    if (typeStr == "timePlusParts") return FontType::TimePlusParts;
-    throw std::invalid_argument("Unknown FontType string: " + typeStr);
-}
+inline XmlEnumMapping<FontOptions::FontType> EnumMapper<FontOptions::FontType>::mapping = {
+    {"music", FontOptions::FontType::Music},
+    {"key", FontOptions::FontType::Key},
+    {"clef", FontOptions::FontType::Clef},
+    {"time", FontOptions::FontType::Time},
+    {"chord", FontOptions::FontType::Chord},
+    {"chordAcci", FontOptions::FontType::ChordAcci},
+    {"ending", FontOptions::FontType::Ending},
+    {"tuplet", FontOptions::FontType::Tuplet},
+    {"textBlock", FontOptions::FontType::TextBlock},
+    {"lyricVerse", FontOptions::FontType::LyricVerse},
+    {"lyricChorus", FontOptions::FontType::LyricChorus},
+    {"lyricSection", FontOptions::FontType::LyricSection},
+    {"multiMeasRest", FontOptions::FontType::MultiMeasRest},
+    {"tablature", FontOptions::FontType::Tablature},
+    {"chordSuffix", FontOptions::FontType::ChordSuffix},
+    {"expression", FontOptions::FontType::Expression},
+    {"repeat", FontOptions::FontType::Repeat},
+    {"fretboard", FontOptions::FontType::Fretboard},
+    {"flags", FontOptions::FontType::Flags},
+    {"accis", FontOptions::FontType::Accis},
+    {"altNotSlash", FontOptions::FontType::AltNotSlash},
+    {"altNotNum", FontOptions::FontType::AltNotNum},
+    {"rests", FontOptions::FontType::Rests},
+    {"reptDots", FontOptions::FontType::ReptDots},
+    {"noteheads", FontOptions::FontType::Noteheads},
+    {"augDots", FontOptions::FontType::AugDots},
+    {"timePlus", FontOptions::FontType::TimePlus},
+    {"articulation", FontOptions::FontType::Articulation},
+    {"percussion", FontOptions::FontType::Percussion},
+    {"smartShape8va", FontOptions::FontType::SmartShape8va},
+    {"measNumb", FontOptions::FontType::MeasNumb},
+    {"staffNames", FontOptions::FontType::StaffNames},
+    {"abbrvStaffNames", FontOptions::FontType::AbbrvStaffNames},
+    {"groupNames", FontOptions::FontType::GroupNames},
+    {"smartShape8vb", FontOptions::FontType::SmartShape8vb},
+    {"smartShape15ma", FontOptions::FontType::SmartShape15ma},
+    {"smartShape15mb", FontOptions::FontType::SmartShape15mb},
+    {"smartShapeTrill", FontOptions::FontType::SmartShapeTrill},
+    {"smartShapeWiggle", FontOptions::FontType::SmartShapeWiggle},
+    {"abbrvGroupNames", FontOptions::FontType::AbbrvGroupNames},
+    {"bendCurveFull", FontOptions::FontType::BendCurveFull},
+    {"bendCurveWhole", FontOptions::FontType::BendCurveWhole},
+    {"bendCurveFrac", FontOptions::FontType::BendCurveFrac},
+    {"timeParts", FontOptions::FontType::TimeParts},
+    {"timePlusParts", FontOptions::FontType::TimePlusParts}
+};
 
 template <>
 inline const XmlElementArray<FontOptions> FieldPopulator<FontOptions>::xmlElements = {
@@ -311,28 +306,22 @@ inline const XmlElementArray<MiscOptions> FieldPopulator<MiscOptions>::xmlElemen
 };
 
 template <>
-inline MusicSpacingOptions::ColUnisonsChoice toEnum<MusicSpacingOptions::ColUnisonsChoice>(const std::string& value)
-{
-    if (value == "diffNoteheads") return MusicSpacingOptions::ColUnisonsChoice::DiffNoteheads;
-    if (value == "all") return MusicSpacingOptions::ColUnisonsChoice::All;
-    return MusicSpacingOptions::ColUnisonsChoice::None; // Default
-}
+inline XmlEnumMapping<MusicSpacingOptions::ColUnisonsChoice> EnumMapper<MusicSpacingOptions::ColUnisonsChoice>::mapping = {
+    {"diffNoteheads", MusicSpacingOptions::ColUnisonsChoice::DiffNoteheads},
+    {"all", MusicSpacingOptions::ColUnisonsChoice::All}
+};
 
 template <>
-inline MusicSpacingOptions::ManualPositioning toEnum<MusicSpacingOptions::ManualPositioning>(const std::string& value)
-{
-    if (value == "clear") return MusicSpacingOptions::ManualPositioning::Clear;
-    if (value == "incorp") return MusicSpacingOptions::ManualPositioning::Incorporate;
-    return MusicSpacingOptions::ManualPositioning::Ignore; // Default
-}
+inline XmlEnumMapping<MusicSpacingOptions::ManualPositioning> EnumMapper<MusicSpacingOptions::ManualPositioning>::mapping = {
+    {"clear", MusicSpacingOptions::ManualPositioning::Clear},
+    {"incorp", MusicSpacingOptions::ManualPositioning::Incorporate}
+};
 
 template <>
-inline MusicSpacingOptions::GraceNoteSpacing toEnum<MusicSpacingOptions::GraceNoteSpacing>(const std::string& value)
-{
-    if (value == "recomp") return MusicSpacingOptions::GraceNoteSpacing::Automatic;
-    if (value == "keep") return MusicSpacingOptions::GraceNoteSpacing::KeepCurrent;
-    return MusicSpacingOptions::GraceNoteSpacing::ResetToEntry; // Default
-}
+inline XmlEnumMapping<MusicSpacingOptions::GraceNoteSpacing> EnumMapper<MusicSpacingOptions::GraceNoteSpacing>::mapping = {
+    {"recomp", MusicSpacingOptions::GraceNoteSpacing::Automatic},
+    {"keep", MusicSpacingOptions::GraceNoteSpacing::KeepCurrent}
+};
 
 template <>
 inline const XmlElementArray<MusicSpacingOptions> FieldPopulator<MusicSpacingOptions>::xmlElements = {
@@ -392,13 +381,12 @@ inline const XmlElementArray<PageFormatOptions::PageFormat> FieldPopulator<PageF
 };
 
 template <>
-inline PageFormatOptions::AdjustPageScope toEnum<PageFormatOptions::AdjustPageScope>(const std::string& value) {
-    if (value == "current") return PageFormatOptions::AdjustPageScope::Current;
-    if (value == "all") return PageFormatOptions::AdjustPageScope::All;
-    if (value == "leftOrRight") return PageFormatOptions::AdjustPageScope::LeftOrRight;
-    if (value == "range") return PageFormatOptions::AdjustPageScope::PageRange;
-    throw std::runtime_error("Invalid value for AdjustPageScope: " + value);
-}
+inline XmlEnumMapping<PageFormatOptions::AdjustPageScope> EnumMapper<PageFormatOptions::AdjustPageScope>::mapping = {
+    {"current", PageFormatOptions::AdjustPageScope::Current},
+    {"all", PageFormatOptions::AdjustPageScope::All},
+    {"leftOrRight", PageFormatOptions::AdjustPageScope::LeftOrRight},
+    {"range", PageFormatOptions::AdjustPageScope::PageRange}
+};
 
 template <>
 inline const XmlElementArray<PageFormatOptions> FieldPopulator<PageFormatOptions>::xmlElements = {
@@ -425,23 +413,19 @@ inline const XmlElementArray<PianoBraceBracketOptions> FieldPopulator<PianoBrace
 };
 
 template <>
-inline RepeatOptions::WingStyle toEnum<RepeatOptions::WingStyle>(const std::string& str)
-{
-    if (str == "none") return RepeatOptions::WingStyle::None;
-    if (str == "curved") return RepeatOptions::WingStyle::Curved;
-    if (str == "singleLine") return RepeatOptions::WingStyle::SingleLine;
-    if (str == "doubleLine") return RepeatOptions::WingStyle::DoubleLine;
-    throw std::invalid_argument("Invalid wing style value in XML: " + str);
-}
+inline XmlEnumMapping<RepeatOptions::WingStyle> EnumMapper<RepeatOptions::WingStyle>::mapping = {
+    {"none", RepeatOptions::WingStyle::None},
+    {"curved", RepeatOptions::WingStyle::Curved},
+    {"singleLine", RepeatOptions::WingStyle::SingleLine},
+    {"doubleLine", RepeatOptions::WingStyle::DoubleLine}
+};
 
 template <>
-inline RepeatOptions::BackToBackStyle toEnum<RepeatOptions::BackToBackStyle>(const std::string& str)
-{
-    if (str == "thin") return RepeatOptions::BackToBackStyle::Thin;
-    if (str == "mixed") return RepeatOptions::BackToBackStyle::Mixed;
-    if (str == "thick") return RepeatOptions::BackToBackStyle::Thick;
-    throw std::invalid_argument("Invalid back-to-back style value in XML: " + str);
-}
+inline XmlEnumMapping<RepeatOptions::BackToBackStyle> EnumMapper<RepeatOptions::BackToBackStyle>::mapping = {
+    {"thin", RepeatOptions::BackToBackStyle::Thin},
+    {"mixed", RepeatOptions::BackToBackStyle::Mixed},
+    {"thick", RepeatOptions::BackToBackStyle::Thick}
+};
 
 template <>
 inline const XmlElementArray<RepeatOptions> FieldPopulator<RepeatOptions>::xmlElements = {
