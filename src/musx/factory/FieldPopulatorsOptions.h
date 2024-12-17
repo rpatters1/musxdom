@@ -456,6 +456,186 @@ inline const XmlElementArray<RepeatOptions> FieldPopulator<RepeatOptions>::xmlEl
 };
 
 template <>
+inline XmlEnumMapping<SmartShapeOptions::DefaultDirection> EnumMapper<SmartShapeOptions::DefaultDirection>::mapping = {
+    {"automatic", SmartShapeOptions::DefaultDirection::Automatic},
+    {"over", SmartShapeOptions::DefaultDirection::Over},
+    {"under", SmartShapeOptions::DefaultDirection::Under},
+};
+
+template <>
+inline XmlEnumMapping<SmartShapeOptions::ConnectionIndex> EnumMapper<SmartShapeOptions::ConnectionIndex>::mapping = {
+    {"headRightTop", SmartShapeOptions::ConnectionIndex::HeadRightTop},
+    {"headLeftTop", SmartShapeOptions::ConnectionIndex::HeadLeftTop},
+    {"stemRightTop", SmartShapeOptions::ConnectionIndex::StemRightTop},
+    {"stemLeftTop", SmartShapeOptions::ConnectionIndex::StemLeftTop},
+    {"headRightBottom", SmartShapeOptions::ConnectionIndex::HeadRightBottom},
+    {"headLeftBottom", SmartShapeOptions::ConnectionIndex::HeadLeftBottom},
+    {"stemRightBottom", SmartShapeOptions::ConnectionIndex::StemRightBottom},
+    {"stemLeftBottom", SmartShapeOptions::ConnectionIndex::StemLeftBottom},
+    {"noteRightCenter", SmartShapeOptions::ConnectionIndex::NoteRightCenter},
+    {"noteLeftCenter", SmartShapeOptions::ConnectionIndex::NoteLeftCenter},
+    {"noteRightBottom", SmartShapeOptions::ConnectionIndex::NoteRightBottom},
+    {"noteLeftBottom", SmartShapeOptions::ConnectionIndex::NoteLeftBottom},
+    {"noteLeftTop", SmartShapeOptions::ConnectionIndex::NoteLeftTop},
+    {"noteRightTop", SmartShapeOptions::ConnectionIndex::NoteRightTop}
+};
+
+template <>
+inline XmlEnumMapping<SmartShapeOptions::SlurConnectStyleType> EnumMapper<SmartShapeOptions::SlurConnectStyleType>::mapping = {
+    {"overNoteStart", SmartShapeOptions::SlurConnectStyleType::OverNoteStart},
+    {"overNoteEnd", SmartShapeOptions::SlurConnectStyleType::OverNoteEnd},
+    {"overStemStart", SmartShapeOptions::SlurConnectStyleType::OverStemStart},
+    {"overStemEnd", SmartShapeOptions::SlurConnectStyleType::OverStemEnd},
+    {"underNoteStart", SmartShapeOptions::SlurConnectStyleType::UnderNoteStart},
+    {"underNoteEnd", SmartShapeOptions::SlurConnectStyleType::UnderNoteEnd},
+    {"underStemStart", SmartShapeOptions::SlurConnectStyleType::UnderStemStart},
+    {"underStemEnd", SmartShapeOptions::SlurConnectStyleType::UnderStemEnd},
+    {"overMixStemStart", SmartShapeOptions::SlurConnectStyleType::OverMixStemStart},
+    {"overMixStemEnd", SmartShapeOptions::SlurConnectStyleType::OverMixStemEnd},
+    {"overStemGrace", SmartShapeOptions::SlurConnectStyleType::OverStemGrace},
+    {"overStemPrincipal", SmartShapeOptions::SlurConnectStyleType::OverStemPrincipal},
+    {"underStemGrace", SmartShapeOptions::SlurConnectStyleType::UnderStemGrace},
+    {"underStemPrincipal", SmartShapeOptions::SlurConnectStyleType::UnderStemPrincipal},
+    {"underNoteGrace", SmartShapeOptions::SlurConnectStyleType::UnderNoteGrace},
+    {"underStemNotePrincipal", SmartShapeOptions::SlurConnectStyleType::UnderStemNotePrincipal},
+    {"overNoteGrace", SmartShapeOptions::SlurConnectStyleType::OverNoteGrace},
+    {"overStemNotePrincipal", SmartShapeOptions::SlurConnectStyleType::OverStemNotePrincipal},
+    {"overBeamStart", SmartShapeOptions::SlurConnectStyleType::OverBeamStart},
+    {"overBeamEnd", SmartShapeOptions::SlurConnectStyleType::OverBeamEnd},
+    {"underBeamStart", SmartShapeOptions::SlurConnectStyleType::UnderBeamStart},
+    {"underBeamEnd", SmartShapeOptions::SlurConnectStyleType::UnderBeamEnd},
+    {"overMixFlagStart", SmartShapeOptions::SlurConnectStyleType::OverMixFlagStart},
+    {"overFlagStart", SmartShapeOptions::SlurConnectStyleType::OverFlagStart},
+    {"underFlagStart", SmartShapeOptions::SlurConnectStyleType::UnderFlagStart},
+    {"overTabNumStart", SmartShapeOptions::SlurConnectStyleType::OverTabNumStart},
+    {"overTabNumEnd", SmartShapeOptions::SlurConnectStyleType::OverTabNumEnd},
+    {"underTabNumStart", SmartShapeOptions::SlurConnectStyleType::UnderTabNumStart},
+    {"underTabNumEnd", SmartShapeOptions::SlurConnectStyleType::UnderTabNumEnd}
+};
+
+template <>
+inline XmlEnumMapping<SmartShapeOptions::TabSlideConnectStyleType> EnumMapper<SmartShapeOptions::TabSlideConnectStyleType>::mapping = {
+    {"diffLevelPitchUpLineStart", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpLineStart},
+    {"diffLevelPitchUpLineEnd", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpLineEnd},
+    {"diffLevelPitchUpSpaceStart", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpSpaceStart},
+    {"diffLevelPitchUpSpaceEnd", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpSpaceEnd},
+    {"diffLevelPitchDownLineStart", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchDownLineStart},
+    {"diffLevelPitchDownLineEnd", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchDownLineEnd},
+    {"diffLevelPitchDownSpaceStart", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchDownSpaceStart},
+    {"diffLevelPitchDownSpaceEnd", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchDownSpaceEnd},
+    {"sameLevelPitchUpLineStart", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchUpLineStart},
+    {"sameLevelPitchUpLineEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchUpLineEnd},
+    {"sameLevelPitchUpSpaceStart", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchUpSpaceStart},
+    {"sameLevelPitchUpSpaceEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchUpSpaceEnd},
+    {"sameLevelPitchDownLineStart", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchDownLineStart},
+    {"sameLevelPitchDownLineEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchDownLineEnd},
+    {"sameLevelPitchDownSpaceStart", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchDownSpaceStart},
+    {"sameLevelPitchDownSpaceEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchDownSpaceEnd},
+    {"sameLevelPitchSameStart", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchSameStart},
+    {"sameLevelPitchSameEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchSameEnd}
+};
+
+template <>
+inline XmlEnumMapping<SmartShapeOptions::GlissandoConnectStyleType> EnumMapper<SmartShapeOptions::GlissandoConnectStyleType>::mapping = {
+    {"defaultStart", SmartShapeOptions::GlissandoConnectStyleType::DefaultStart},
+    {"defaultEnd", SmartShapeOptions::GlissandoConnectStyleType::DefaultEnd}
+};
+
+template <>
+inline XmlEnumMapping<SmartShapeOptions::BendCurveConnectStyleType> EnumMapper<SmartShapeOptions::BendCurveConnectStyleType>::mapping = {
+    {"noteStart", SmartShapeOptions::BendCurveConnectStyleType::NoteStart},
+    {"staffEnd", SmartShapeOptions::BendCurveConnectStyleType::StaffEnd},
+    {"staffStart", SmartShapeOptions::BendCurveConnectStyleType::StaffStart},
+    {"noteEnd", SmartShapeOptions::BendCurveConnectStyleType::NoteEnd},
+    {"staffToTopLineStart", SmartShapeOptions::BendCurveConnectStyleType::StaffToTopLineStart},
+    {"staffFromTopLineEnd", SmartShapeOptions::BendCurveConnectStyleType::StaffFromTopLineEnd},
+    {"staffEndOffset", SmartShapeOptions::BendCurveConnectStyleType::StaffEndOffset},
+    {"staffFromTopEndOffset", SmartShapeOptions::BendCurveConnectStyleType::StaffFromTopEndOffset}
+};
+
+template <>
+inline XmlEnumMapping<SmartShapeOptions::SlurControlStyleType> EnumMapper<SmartShapeOptions::SlurControlStyleType>::mapping = {
+    {"shortSpan", SmartShapeOptions::SlurControlStyleType::ShortSpan},
+    {"mediumSpan", SmartShapeOptions::SlurControlStyleType::MediumSpan},
+    {"longSpan", SmartShapeOptions::SlurControlStyleType::LongSpan},
+    {"extraLongSpan", SmartShapeOptions::SlurControlStyleType::ExtraLongSpan}
+};
+
+template <>
+inline const XmlElementArray<SmartShapeOptions::ConnectionStyle> FieldPopulator<SmartShapeOptions::ConnectionStyle>::xmlElements = {
+    {"connectIndex", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->connectIndex = toEnum<SmartShapeOptions::ConnectionIndex>(e->getTextTrimmed()); }},
+    {"xOffset", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"yOffset", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->yOffset = e->getTextAs<Evpu>(); }}
+};
+
+template <>
+inline const XmlElementArray<SmartShapeOptions::ControlStyle> FieldPopulator<SmartShapeOptions::ControlStyle>::xmlElements = {
+    {"span", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ControlStyle>& i) { i->span = e->getTextAs<Efix>(); }},
+    {"inset", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ControlStyle>& i) { i->inset = e->getTextAs<Efix>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ControlStyle>& i) { i->height = e->getTextAs<Evpu>(); }}
+};
+
+template <typename EnumClass, typename EmbeddedClass>
+static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray)
+{
+    auto typeAttr = e->findAttribute("type");
+    if (!typeAttr) {
+        throw std::invalid_argument("<" + e->getTagName() + "> element has no type attribute");
+    }
+    listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
+}
+
+template <>
+inline const XmlElementArray<SmartShapeOptions> FieldPopulator<SmartShapeOptions>::xmlElements = {
+    {"shortHairpinOpeningWidth", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->shortHairpinOpeningWidth = e->getTextAs<Evpu>(); }},
+    {"crescHeight", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->crescHeight = e->getTextAs<Evpu>(); }},
+    {"maximumShortHairpinLength", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->maximumShortHairpinLength = e->getTextAs<Evpu>(); }},
+    {"crescLineWidth", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->crescLineWidth = e->getTextAs<Efix>(); }},
+    {"hookLength", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->hookLength = e->getTextAs<Evpu>(); }},
+    {"smartLineWidth", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->smartLineWidth = e->getTextAs<Efix>(); }},
+    {"showOctavaAsText", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->showOctavaAsText = true; }},
+    {"smartDashOn", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->smartDashOn = e->getTextAs<Evpu>(); }},
+    {"smartDashOff", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->smartDashOff = e->getTextAs<Evpu>(); }},
+    {"crescHorizontal", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->crescHorizontal = true; }},
+    {"direction", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->direction = toEnum<SmartShapeOptions::DefaultDirection>(e->getTextTrimmed()); }},
+    {"slurThicknessCp1X", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp1X = e->getTextAs<Evpu>(); }},
+    {"slurThicknessCp1Y", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp1Y = e->getTextAs<Evpu>(); }},
+    {"slurThicknessCp2X", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp2X = e->getTextAs<Evpu>(); }},
+    {"slurThicknessCp2Y", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp2Y = e->getTextAs<Evpu>(); }},
+    {"slurAvoidAccidentals", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->slurAvoidAccidentals = true; }},
+    {"slurAvoidStaffLinesAmt", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurAvoidStaffLinesAmt = e->getTextAs<Evpu>(); }},
+    {"maxSlurStretch", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->maxSlurStretch = e->getTextAs<Efix>(); }},
+    {"maxSlurLift", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->maxSlurLift = e->getTextAs<Efix>(); }},
+    {"slurSymmetry", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurSymmetry = e->getTextAs<int>(); }},
+    {"useEngraverSlurs", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->useEngraverSlurs = true; }},
+    {"slurLeftBreakHorzAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurLeftBreakHorzAdj = e->getTextAs<Evpu>(); }},
+    {"slurRightBreakHorzAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurRightBreakHorzAdj = e->getTextAs<Evpu>(); }},
+    {"slurBreakVertAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurBreakVertAdj = e->getTextAs<Evpu>(); }},
+    {"slurAvoidStaffLines", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->slurAvoidStaffLines = true; }},
+    {"slurPadding", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurPadding = e->getTextAs<Evpu>(); }},
+    {"maxSlurAngle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->maxSlurAngle = e->getTextAs<Efix>(); }},
+    {"slurAcciPadding", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurAcciPadding = e->getTextAs<Evpu>(); }},
+    {"slurDoStretchFirst", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->slurDoStretchFirst = true; }},
+    {"slurStretchByPercent", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->slurStretchByPercent = true; }},
+    {"maxSlurStretchPercent", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->maxSlurStretchPercent = e->getTextAs<int>(); }},
+    {"articAvoidSlurAmt", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->articAvoidSlurAmt = e->getTextAs<Evpu>(); }},
+    {"ssLineStyleCmpCustom", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->ssLineStyleCmpCustom = e->getTextAs<Cmper>(); }},
+    {"ssLineStyleCmpGlissando", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->ssLineStyleCmpGlissando = e->getTextAs<Cmper>(); }},
+    {"ssLineStyleCmpTabSlide", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->ssLineStyleCmpTabSlide = e->getTextAs<Cmper>(); }},
+    {"ssLineStyleCmpTabBendCurve", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->ssLineStyleCmpTabBendCurve = e->getTextAs<Cmper>(); }},
+    {"smartSlurTipWidth", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->smartSlurTipWidth = e->getTextAs<EvpuFloat>(); }},
+    {"guitarBendUseParens", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->guitarBendUseParens = true; }},
+    {"guitarBendHideBendTo", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->guitarBendHideBendTo = true; }},
+    {"guitarBendGenText", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->guitarBendGenText = true; }},
+    {"guitarBendUseFull", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->guitarBendUseFull = true; }},
+    {"slurConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { populateEmbeddedClass(e, i->slurConnectStyles); }},
+    {"slurControlStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { populateEmbeddedClass(e, i->slurControlStyles); }},
+    {"tabSlideConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { populateEmbeddedClass(e, i->tabSlideConnectStyles); }},
+    {"glissandoConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { populateEmbeddedClass(e, i->glissandoConnectStyles); }},
+    {"bendCurveConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { populateEmbeddedClass(e, i->bendCurveConnectStyles); }},
+};
+
+template <>
 inline const XmlElementArray<StemOptions> FieldPopulator<StemOptions>::xmlElements = {
     {"halfStemLength", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->halfStemLength = e->getTextAs<Evpu>(); }},
     {"stemLength", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemLength = e->getTextAs<Evpu>(); }},

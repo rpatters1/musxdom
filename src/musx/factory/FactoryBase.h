@@ -236,7 +236,7 @@ struct FieldPopulator : public FactoryBase
             } else {
                 std::cout << "xml element <" << element->getTagName() << "> has child <" << child->getTagName() << "> which is not in the element list" << std::endl;
                 //DBG
-                throw std::invalid_argument("xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list");
+                //throw std::invalid_argument("xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list");
                 //END DBG
             }
         }

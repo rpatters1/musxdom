@@ -750,17 +750,19 @@ public:
     enum class ConnectionIndex
     {
         HeadRightTop,
+        HeadLeftTop,
         StemRightTop,
         StemLeftTop,
+        HeadRightBottom,
         HeadLeftBottom,
         StemRightBottom,
         StemLeftBottom,
         NoteRightCenter,
         NoteLeftCenter,
         NoteRightBottom,
-        NoteLeftTop,
+        NoteLeftBottom,
         NoteRightTop,
-        NoteLeftBottom
+        NoteLeftTop
     };
 
     /// @brief Slur connection style types

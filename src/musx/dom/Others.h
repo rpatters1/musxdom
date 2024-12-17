@@ -242,7 +242,7 @@ class MarkingCategory : public OthersBase
 {
 public:
     /** @brief Enumeration for the type of marking category */
-    enum class CategoryType
+    enum class CategoryType : Cmper
     {
         Invalid,            ///< There should always be a category type supplied
         Dynamics,           ///< Dynamics markings, such as forte, piano, etc.

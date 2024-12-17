@@ -78,6 +78,11 @@ public:
     virtual std::string getValue() const = 0;
 
     /**
+     * @brief Gets the text content of the attribute with whitespace trimmed.
+     */
+    std::string getValueTrimmed() const { return trim(getValue()); }
+
+    /**
      * @brief Gets the value of the attribute, converted to the specified type.
      * @tparam T The type to which the value should be converted.
      * @return The value converted to the specified type.
@@ -85,7 +90,7 @@ public:
      */
     template <typename T>
     T getValueAs() const {
-        std::istringstream iss(getValue());
+        std::istringstream iss(getValueTrimmed());
         T value;
         if constexpr (std::is_same_v<T, bool>) {
             std::string str;

@@ -161,6 +161,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::PageFormatOptions,
     dom::options::PianoBraceBracketOptions,
     dom::options::RepeatOptions,
+    dom::options::SmartShapeOptions,
     dom::options::StemOptions,
     dom::options::TimeSignatureOptions
 >;

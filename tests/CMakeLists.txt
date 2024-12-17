@@ -42,6 +42,7 @@ add_executable(musxdomtests
     options/page_options.cpp
     options/piano_brace_bracket_options.cpp
     options/repeat_options.cpp
+    options/smart_shape_options.cpp
     options/stem_options.cpp
     options/time_signature_options.cpp
     # others
