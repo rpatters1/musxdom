@@ -26,6 +26,7 @@
 #include <vector>
 #include <sstream>
 #include <stdexcept>
+#include <algorithm>
 
 namespace musx {
 
