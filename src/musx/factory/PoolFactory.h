@@ -121,7 +121,7 @@ public:
      */
     static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
-        return RegisteredOptions::createInstance(static_cast<const OptionsPoolPtr& (Document::*)() const>(&Document::getOptions), element, elementLinker, document);
+        return RegisteredOptions::createInstance(document->getOptions(), element, elementLinker, document);
     }
 };
 
@@ -157,11 +157,11 @@ public:
         }
         auto inciAttribute = element->findAttribute("inci");
         if (inciAttribute) {
-            return RegisteredOthers::createInstance(static_cast<const OthersPoolPtr & (Document::*)() const>(&Document::getOthers), element, elementLinker,
+            return RegisteredOthers::createInstance(document->getOthers(), element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
         }
         else {
-            return RegisteredOthers::createInstance(static_cast<const OthersPoolPtr & (Document::*)() const>(&Document::getOthers), element, elementLinker,
+            return RegisteredOthers::createInstance(document->getOthers(), element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>());
         }
     }
@@ -209,7 +209,7 @@ public:
             }
             return textAttribute->getValueAs<Cmper>();
         }();
-        return RegisteredTexts::createInstance(static_cast<const TextsPoolPtr & (Document::*)() const>(&Document::getTexts), element, elementLinker, document, textNumber);
+        return RegisteredTexts::createInstance(document->getTexts(), element, elementLinker, document, textNumber);
     }
 
 private:

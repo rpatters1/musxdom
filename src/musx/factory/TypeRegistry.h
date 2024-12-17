@@ -88,17 +88,17 @@ public:
      *
      * Uses the node name to look up the registered type and create an instance of it.
      *
-     * @tparam PoolRT The return type of the pool function.
+     * @tparam PoolPtr The object pool type for getting score versions (when doing part linkage)
      * @tparam Args The argument types required by the constructor of the target type.
-     * @param poolFunc The function that returns the correct pool from @ref dom::Document. (For example, `getOptions`, `getOthers`, `getTexts`, etc.)
+     * @param pool The object pool for getting score versions (when doing part linkage)
      * @param node The XML node from which an instance is to be created.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @param document The document that we are creating the instance for.
      * @param args Arguments to be forwarded to the constructor of the target type.
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
-    template <typename PoolRT, typename... Args>
-    static std::shared_ptr<Base> createInstance(const PoolRT& (Document::*poolFunc)() const, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
+    template <typename PoolPtr, typename... Args>
+    static std::shared_ptr<Base> createInstance(const PoolPtr& pool, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
     {
         auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
@@ -121,7 +121,7 @@ public:
                         for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
                             instance->addUnlinkedNode(child->getTagName());
                         }
-                        auto scoreValue = (document.get()->*poolFunc)()->template get<T>(std::forward<Args>(args)...);
+                        auto scoreValue = pool->template get<T>(std::forward<Args>(args)...);
                         if (scoreValue) {
                             *instance = *scoreValue;
                         }
