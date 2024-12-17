@@ -68,11 +68,11 @@ public:
     /// @brief The container type for shared nodes
     using SharedNodes = std::set<std::string>;
 
-    ///> @enmum ShareMode
+    ///> @enum ShareMode
     enum class ShareMode
     {
         All,            ///> All parts and score always share (no "share" attribute). Default.
-        Partial,        ///> Part and score share some attributes and share others. (attribute "share"="true")
+        Partial,        ///> Part and score share some attributes and have their own unlinked versions of others. (attribute "share"="true")
         None            ///> Each part and score has its own version of the DOM class. (attribute "share"="false")
     };
 
@@ -121,7 +121,8 @@ protected:
      * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
      * 
      * @param document A weak pointer to the parent document
-     * @param partId The part Id for this instance, or zero if for score.
+     * @param partId The part ID for this instance, or zero if for score.
+     * @param shareMode The @ref ShareMode for this instance.
      */
     Base(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
         : m_document(document), m_partId(partId), m_shareMode(shareMode) {}

@@ -90,6 +90,7 @@ public:
      *
      * @tparam PoolRT The return type of the pool function.
      * @tparam Args The argument types required by the constructor of the target type.
+     * @param poolFunc The function that returns the correct pool from @ref dom::Document. (For example, `getOptions`, `getOthers`, `getTexts`, etc.)
      * @param node The XML node from which an instance is to be created.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @param document The document that we are creating the instance for.

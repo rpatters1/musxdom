@@ -208,6 +208,7 @@ public:
     class ClefDef : public Base
     {
     public:
+        /** @brief the constructor */
         explicit ClefDef(const DocumentWeakPtr& document)
             : Base(document, 0, ShareMode::All) {}
             
@@ -879,8 +880,8 @@ public:
     Evpu slurPadding{};                      ///< "Slur Padding"
     Efix maxSlurAngle{};                   ///< "Maximum Slur Angle"
     Evpu slurAcciPadding{};                  ///< "Slur Accidental Padding"
-    bool slurDoStretchFirst{};
-    bool slurStretchByPercent{};
+    bool slurDoStretchFirst{};              ///< "Initial Adjustment: Stretch"
+    bool slurStretchByPercent{};            ///< "As Percentage of Slur Length"
     int maxSlurStretchPercent{};          ///< "Maximum Slur Stretch Percentage"
     Evpu articAvoidSlurAmt{};                 ///< "Articulation Avoid Slur Amount"
     Cmper ssLineStyleCmpCustom{};              ///< "SS Line Style Custom"
@@ -893,25 +894,25 @@ public:
     bool guitarBendGenText{};                  ///< "Guitar Bend Generate Text"
     bool guitarBendUseFull{};                  ///< "Guitar Bend Use Full"
 
-    // ConnectionStyle structure
+    /// @brief Defined the connection offsets for each @ref ConnectionIndex value.
     struct ConnectionStyle {
         ConnectionIndex connectIndex{}; ///< Index of connection point
         Evpu xOffset{};                ///< Horizontal offset
         Evpu yOffset{};                ///< Vertical offset
     };
 
-    // Struct for control styles
+    /// @brief defines the slur contours for short, medium, long, and extra long slurs
     struct ControlStyle {
         Efix span{};                  ///< Length of the span
         Efix inset{};                 ///< Inset value
         Evpu height{};               ///< Height of the span
     };
 
-    std::unordered_map<SlurConnectStyleType, std::shared_ptr<ConnectionStyle>> slurConnectStyles;
-    std::unordered_map<SlurControlStyleType, std::shared_ptr<ControlStyle>> slurControlStyles;
-    std::unordered_map<TabSlideConnectStyleType, std::shared_ptr<ConnectionStyle>> tabSlideConnectStyles;
-    std::unordered_map<GlissandoConnectStyleType, std::shared_ptr<ConnectionStyle>> glissandoConnectStyles;
-    std::unordered_map<BendCurveConnectStyleType, std::shared_ptr<ConnectionStyle>> bendCurveConnectStyles;
+    std::unordered_map<SlurConnectStyleType, std::shared_ptr<ConnectionStyle>> slurConnectStyles; ///< Slur connections
+    std::unordered_map<SlurControlStyleType, std::shared_ptr<ControlStyle>> slurControlStyles; ///< Slur contours
+    std::unordered_map<TabSlideConnectStyleType, std::shared_ptr<ConnectionStyle>> tabSlideConnectStyles; ///< Tab slide connections
+    std::unordered_map<GlissandoConnectStyleType, std::shared_ptr<ConnectionStyle>> glissandoConnectStyles; ///< Glissando connections
+    std::unordered_map<BendCurveConnectStyleType, std::shared_ptr<ConnectionStyle>> bendCurveConnectStyles; ///< Benx curve connections
 
     constexpr static std::string_view XmlNodeName = "smartShapeOptions"; ///< The XML node name for this type.
 };

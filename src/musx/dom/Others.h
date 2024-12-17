@@ -63,6 +63,7 @@ public:
      * @brief Constructs an Enclosure object.
      * @param document Shared pointer to the document.
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      * @param cmper Comparison parameter.
      */
     explicit Enclosure(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
