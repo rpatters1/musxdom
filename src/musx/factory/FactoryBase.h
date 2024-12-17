@@ -221,8 +221,13 @@ template <typename T>
 using XmlElementDescriptor = std::tuple<const std::string_view, XmlElementPopulator<T>>;
 template <typename T>
 using XmlElementArray = std::vector<XmlElementDescriptor<T>>;
+
+using ResolverList = std::vector<ElementLinker::Resolver>;
 template <typename T>
-using ResolverArray = std::vector<ElementLinker::Resolver>;
+struct ResolverArray
+{
+    inline static const ResolverList value = {};
+};
 
 template <typename T>
 struct FieldPopulator : public FactoryBase
@@ -245,7 +250,7 @@ struct FieldPopulator : public FactoryBase
     static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element, ElementLinker& elementLinker)
     {
         populate(instance, element);
-        for (const auto& resolver : resolvers) {
+        for (const auto& resolver : ResolverArray<T>::value) {
             elementLinker.addResolver(resolver);
         }
     }
@@ -280,7 +285,6 @@ private:
     }
 
     static const XmlElementArray<T> xmlElements;
-    inline static const ResolverArray<T> resolvers = {};
 };
 
 template <>

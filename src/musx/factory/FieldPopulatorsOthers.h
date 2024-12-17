@@ -88,7 +88,9 @@ inline const XmlElementArray<LayerAttributes> FieldPopulator<LayerAttributes>::x
 };
 
 template <>
-inline const ResolverArray<LayerAttributes> FieldPopulator<LayerAttributes>::resolvers = {
+struct ResolverArray<LayerAttributes>
+{
+    inline static const ResolverList value = {
         [](const dom::DocumentPtr& document) {
             auto layers = document->getOthers()->getArray<LayerAttributes>();
             if (layers.size() != 4) {
@@ -100,6 +102,7 @@ inline const ResolverArray<LayerAttributes> FieldPopulator<LayerAttributes>::res
                 }
             }
         }
+    };
 };
 
 template <>
@@ -210,7 +213,9 @@ inline const XmlElementArray<MarkingCategory> FieldPopulator<MarkingCategory>::x
 };
 
 template <>
-inline const ResolverArray<MarkingCategory> FieldPopulator<MarkingCategory>::resolvers = {
+struct ResolverArray<MarkingCategory>
+{
+    inline static const ResolverList value = {
         [](const dom::DocumentPtr& document) {
             auto cats = document->getOthers()->getArray<MarkingCategory>();
             for (const auto& cat : cats) {
@@ -219,6 +224,7 @@ inline const ResolverArray<MarkingCategory> FieldPopulator<MarkingCategory>::res
                 }
             }
         }
+    };
 };
 
 template <>
@@ -259,7 +265,9 @@ inline const XmlElementArray<TextExpressionDef> FieldPopulator<TextExpressionDef
 };
 
 template <>
-inline const ResolverArray<TextExpressionDef> FieldPopulator<TextExpressionDef>::resolvers = {
+struct ResolverArray<TextExpressionDef>
+{
+    inline static const ResolverList value = {
         [](const dom::DocumentPtr& document) {
             auto exps = document->getOthers()->getArray<TextExpressionDef>();
             for (const auto& instance : exps) {
@@ -272,6 +280,7 @@ inline const ResolverArray<TextExpressionDef> FieldPopulator<TextExpressionDef>:
                 }
             }
         }
+    };
 };
 
 template <>

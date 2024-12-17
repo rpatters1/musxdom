@@ -147,16 +147,19 @@ inline const XmlElementArray<ClefOptions> FieldPopulator<ClefOptions>::xmlElemen
 };
 
 template <>
-inline const ResolverArray<ClefOptions> FieldPopulator<ClefOptions>::resolvers = {
-    [](const dom::DocumentPtr& document) {
-        auto clefOptions = document->getOptions()->get<ClefOptions>();
-        for (size_t i = 0; i < clefOptions->clefDefs.size(); i++) {
-            const auto& def = clefOptions->clefDefs[i];
-            if (def->useOwnFont && !def->font) {
-                throw std::invalid_argument("Use own font was specified for clef " + std::to_string(i) + ", but no font was found in the xml.");
+struct ResolverArray<ClefOptions>
+{
+    inline static const ResolverList value = {
+        [](const dom::DocumentPtr& document) {
+            auto clefOptions = document->getOptions()->get<ClefOptions>();
+            for (size_t i = 0; i < clefOptions->clefDefs.size(); i++) {
+                const auto& def = clefOptions->clefDefs[i];
+                if (def->useOwnFont && !def->font) {
+                    throw std::invalid_argument("Use own font was specified for clef " + std::to_string(i) + ", but no font was found in the xml.");
+                }
             }
-        }
-    },
+        },
+    };
 };
 
 template <>
