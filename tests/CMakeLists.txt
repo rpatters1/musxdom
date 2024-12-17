@@ -37,6 +37,7 @@ add_executable(musxdomtests
     options/grace_note_options.cpp
     options/key_signature_options.cpp
     options/line_curve_options.cpp
+    options/misc_options.cpp
     options/music_spacing_options.cpp
     options/page_options.cpp
     options/piano_brace_bracket_options.cpp
