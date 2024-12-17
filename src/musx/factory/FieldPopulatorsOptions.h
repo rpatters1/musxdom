@@ -96,7 +96,6 @@ inline BeamOptions::FlattenStyle toEnum<BeamOptions::FlattenStyle>(const std::st
     throw std::invalid_argument("Encountered unknown value for BeamOptions::FlattenStyle: " + text);
 }
 
-// Refactored FieldPopulator
 template <>
 inline const XmlElementArray<BeamOptions> FieldPopulator<BeamOptions>::xmlElements = {
     {"beamStubLength", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamStubLength = e->getTextAs<Evpu>(); }},
@@ -115,54 +114,51 @@ inline const XmlElementArray<BeamOptions> FieldPopulator<BeamOptions>::xmlElemen
 };
 
 template <>
-struct FieldPopulator<ClefOptions> : public FactoryBase
-{
-private:
-    static void populateClefDef(const XmlElementPtr& element, const DocumentWeakPtr& document, ClefOptions::ClefDef& def)
-    {
-        getFieldFromXml(element, "adjust", def.middleCPos, [](auto el) { return el->template getTextAs<int>(); });
-        getFieldFromXml(element, "clefChar", def.clefChar, [](auto el) { return el->template getTextAs<char32_t>(); });
-        getFieldFromXml(element, "clefYDisp", def.staffPositon, [](auto el) { return el->template getTextAs<int>(); });
-        getFieldFromXml(element, "baseAdjust", def.baselineAdjust, [](auto el) { return el->template getTextAs<Efix>(); });
-        getFieldFromXml(element, "shapeID", def.shapeId, [](auto el) { return el->template getTextAs<int>(); }, false);
-        getFieldFromXml(element, "isShape", def.isShape, [](auto) { return true; }, false);
-        getFieldFromXml(element, "scaleToStaffHeight", def.scaleToStaffHeight, [](auto) { return true; }, false);
-        def.font = FieldPopulator<FontInfo>::getFontFromXml(element, "font", document, false);
-        if (def.useOwnFont && !def.font) {
-            throw std::invalid_argument("Use own font was specified, but no font was found in the xml.");
-        }
-        getFieldFromXml(element, "useOwnFont", def.useOwnFont, [](auto) { return true; }, false);
-    }
+inline const XmlElementArray<ClefOptions::ClefDef> FieldPopulator<ClefOptions::ClefDef>::xmlElements = {
+    {"adjust", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->middleCPos = e->getTextAs<int>(); }},
+    {"clefChar", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->clefChar = e->getTextAs<char32_t>(); }},
+    {"clefYDisp", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->staffPositon = e->getTextAs<int>(); }},
+    {"baseAdjust", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->baselineAdjust = e->getTextAs<Efix>(); }},
+    {"shapeID", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->shapeId = e->getTextAs<int>(); }},
+    {"isShape", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->isShape = true; }},
+    {"scaleToStaffHeight", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->scaleToStaffHeight = true; }},
+    {"font", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->font = FieldPopulator<FontInfo>::getFontFromXml(e, i->getDocument()); }},
+    {"useOwnFont", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->useOwnFont = true; }},
+};
 
-public:
-    static void populate(const std::shared_ptr<ClefOptions>& instance, const XmlElementPtr& element, ElementLinker&)
-    {
-        getFieldFromXml(element, "defaultClef", instance->defaultClef, [](auto el) { return el->template getTextAs<int>(); });
-        getFieldFromXml(element, "endMeasClefPercent", instance->clefChangePercent, [](auto el) { return el->template getTextAs<int>(); });
-        getFieldFromXml(element, "endMeasClefPosAdd", instance->clefChangeOffset, [](auto el) { return el->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "clefFront", instance->clefFrontSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "clefBack", instance->clefBackSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "showClefFirstSystemOnly", instance->showClefFirstSystemOnly, [](auto) { return true; }, false);
-        getFieldFromXml(element, "clefKey", instance->clefKeySepar, [](auto el) { return el->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "clefTime", instance->clefTimeSepar, [](auto el) { return el->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "cautionaryClefChanges", instance->cautionaryClefChanges, [](auto) { return true; }, false);
-
-        size_t i = 0;
-        for (auto clefDefElement = element->getFirstChildElement("clefDef");
-             clefDefElement;
-             clefDefElement = clefDefElement->getNextSibling("clefDef"), i++) {
-            if (i >= instance->clefDefs.size()) {
-                instance->clefDefs.resize(i + 1);
-            }
-            auto indexAttr = clefDefElement->findAttribute("index");
+template <>
+inline const XmlElementArray<ClefOptions> FieldPopulator<ClefOptions>::xmlElements = {
+    {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->defaultClef = e->getTextAs<int>(); }},
+    {"endMeasClefPercent", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->clefChangePercent = e->getTextAs<int>(); }},
+    {"endMeasClefPosAdd", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->clefChangeOffset = e->getTextAs<Evpu>(); }},
+    {"clefFront", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->clefFrontSepar = e->getTextAs<Evpu>(); }},
+    {"clefBack", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->clefBackSepar = e->getTextAs<Evpu>(); }},
+    {"showClefFirstSystemOnly", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions>& i) { i->showClefFirstSystemOnly = true; }},
+    {"clefKey", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->clefKeySepar = e->getTextAs<Evpu>(); }},
+    {"clefTime", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->clefTimeSepar = e->getTextAs<Evpu>(); }},
+    {"cautionaryClefChanges", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions>& i) { i->cautionaryClefChanges = true; }},
+    {"clefDef", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) {
+            auto indexAttr = e->findAttribute("index");
             size_t index = indexAttr ? indexAttr->getValueAs<size_t>() : -1;
-            if (index != i) {
-                throw std::invalid_argument("ClefDef index mismatch. Expected: " + std::to_string(i) + ", Found: " + std::to_string(index));
+            if (i->clefDefs.size() != index) {
+                throw std::invalid_argument("ClefDef index mismatch. Expected: " + std::to_string(i->clefDefs.size()) + ", Found: " + std::to_string(index));
             }
-            populateClefDef(clefDefElement, instance->getDocument(), instance->clefDefs[i]);
+            i->clefDefs.push_back(FieldPopulator<ClefOptions::ClefDef>::createAndPopulate(e, i->getDocument()));
         }
-        instance->clefDefs.resize(i);
-    }
+    },
+};
+
+template <>
+inline const ResolverArray<ClefOptions> FieldPopulator<ClefOptions>::resolvers = {
+    [](const dom::DocumentPtr& document) {
+        auto clefOptions = document->getOptions()->get<ClefOptions>();
+        for (size_t i = 0; i < clefOptions->clefDefs.size(); i++) {
+            const auto& def = clefOptions->clefDefs[i];
+            if (def->useOwnFont && !def->font) {
+                throw std::invalid_argument("Use own font was specified for clef " + std::to_string(i) + ", but no font was found in the xml.");
+            }
+        }
+    },
 };
 
 template <>
@@ -190,17 +186,66 @@ inline const XmlElementArray<FlagOptions> FieldPopulator<FlagOptions>::xmlElemen
 };
 
 template <>
-struct FieldPopulator<FontOptions> : public FactoryBase
+inline FontOptions::FontType toEnum<FontOptions::FontType>(const std::string& typeStr)
 {
-    static void populate(const std::shared_ptr<FontOptions>& fonts, const XmlElementPtr& element, ElementLinker&)
+    using FontType = FontOptions::FontType;
+    if (typeStr == "music") return FontType::Music;
+    if (typeStr == "key") return FontType::Key;
+    if (typeStr == "clef") return FontType::Clef;
+    if (typeStr == "time") return FontType::Time;
+    if (typeStr == "chord") return FontType::Chord;
+    if (typeStr == "chordAcci") return FontType::ChordAcci;
+    if (typeStr == "ending") return FontType::Ending;
+    if (typeStr == "tuplet") return FontType::Tuplet;
+    if (typeStr == "textBlock") return FontType::TextBlock;
+    if (typeStr == "lyricVerse") return FontType::LyricVerse;
+    if (typeStr == "lyricChorus") return FontType::LyricChorus;
+    if (typeStr == "lyricSection") return FontType::LyricSection;
+    if (typeStr == "multiMeasRest") return FontType::MultiMeasRest;
+    if (typeStr == "tablature") return FontType::Tablature;
+    if (typeStr == "chordSuffix") return FontType::ChordSuffix;
+    if (typeStr == "expression") return FontType::Expression;
+    if (typeStr == "repeat") return FontType::Repeat;
+    if (typeStr == "fretboard") return FontType::Fretboard;
+    if (typeStr == "flags") return FontType::Flags;
+    if (typeStr == "accis") return FontType::Accis;
+    if (typeStr == "altNotSlash") return FontType::AltNotSlash;
+    if (typeStr == "altNotNum") return FontType::AltNotNum;
+    if (typeStr == "rests") return FontType::Rests;
+    if (typeStr == "reptDots") return FontType::ReptDots;
+    if (typeStr == "noteheads") return FontType::Noteheads;
+    if (typeStr == "augDots") return FontType::AugDots;
+    if (typeStr == "timePlus") return FontType::TimePlus;
+    if (typeStr == "articulation") return FontType::Articulation;
+    if (typeStr == "percussion") return FontType::Percussion;
+    if (typeStr == "smartShape8va") return FontType::SmartShape8va;
+    if (typeStr == "measNumb") return FontType::MeasNumb;
+    if (typeStr == "staffNames") return FontType::StaffNames;
+    if (typeStr == "abbrvStaffNames") return FontType::AbbrvStaffNames;
+    if (typeStr == "groupNames") return FontType::GroupNames;
+    if (typeStr == "smartShape8vb") return FontType::SmartShape8vb;
+    if (typeStr == "smartShape15ma") return FontType::SmartShape15ma;
+    if (typeStr == "smartShape15mb") return FontType::SmartShape15mb;
+    if (typeStr == "smartShapeTrill") return FontType::SmartShapeTrill;
+    if (typeStr == "smartShapeWiggle") return FontType::SmartShapeWiggle;
+    if (typeStr == "abbrvGroupNames") return FontType::AbbrvGroupNames;
+    if (typeStr == "bendCurveFull") return FontType::BendCurveFull;
+    if (typeStr == "bendCurveWhole") return FontType::BendCurveWhole;
+    if (typeStr == "bendCurveFrac") return FontType::BendCurveFrac;
+    if (typeStr == "timeParts") return FontType::TimeParts;
+    if (typeStr == "timePlusParts") return FontType::TimePlusParts;
+    throw std::invalid_argument("Unknown FontType string: " + typeStr);
+}
+
+template <>
+inline const XmlElementArray<FontOptions> FieldPopulator<FontOptions>::xmlElements = {
     {
-        auto fontElements = getFirstChildElement(element, "font");
-        for (auto fontElement = getFirstChildElement(element, "font"); fontElement; fontElement = fontElement->getNextSibling("font")) {
+        "font", [](const XmlElementPtr& fontElement, const std::shared_ptr<FontOptions>& fonts) {
             auto typeStr = fontElement->findAttribute("type");
             if (!typeStr) {
                 throw std::invalid_argument("font option has no type");
             }
-            FontType fontType = fromString(typeStr->getValue());
+            auto fontType = toEnum<FontOptions::FontType>(typeStr->getValue());
 
             auto fontInfo = std::make_shared<dom::FontInfo>(fonts->getDocument());
             FieldPopulator<dom::FontInfo>::populate(fontInfo, fontElement);
@@ -208,60 +253,7 @@ struct FieldPopulator<FontOptions> : public FactoryBase
             // Add the populated font instance to the vector.
             fonts->fontOptions.emplace(fontType, fontInfo);
         }
-    }
-
-private:
-    using FontType = FontOptions::FontType;
-
-    static FontType fromString(const std::string& typeStr)
-    {
-        if (typeStr == "music") return FontType::Music;
-        else if (typeStr == "key") return FontType::Key;
-        else if (typeStr == "clef") return FontType::Clef;
-        else if (typeStr == "time") return FontType::Time;
-        else if (typeStr == "chord") return FontType::Chord;
-        else if (typeStr == "chordAcci") return FontType::ChordAcci;
-        else if (typeStr == "ending") return FontType::Ending;
-        else if (typeStr == "tuplet") return FontType::Tuplet;
-        else if (typeStr == "textBlock") return FontType::TextBlock;
-        else if (typeStr == "lyricVerse") return FontType::LyricVerse;
-        else if (typeStr == "lyricChorus") return FontType::LyricChorus;
-        else if (typeStr == "lyricSection") return FontType::LyricSection;
-        else if (typeStr == "multiMeasRest") return FontType::MultiMeasRest;
-        else if (typeStr == "tablature") return FontType::Tablature;
-        else if (typeStr == "chordSuffix") return FontType::ChordSuffix;
-        else if (typeStr == "expression") return FontType::Expression;
-        else if (typeStr == "repeat") return FontType::Repeat;
-        else if (typeStr == "fretboard") return FontType::Fretboard;
-        else if (typeStr == "flags") return FontType::Flags;
-        else if (typeStr == "accis") return FontType::Accis;
-        else if (typeStr == "altNotSlash") return FontType::AltNotSlash;
-        else if (typeStr == "altNotNum") return FontType::AltNotNum;
-        else if (typeStr == "rests") return FontType::Rests;
-        else if (typeStr == "reptDots") return FontType::ReptDots;
-        else if (typeStr == "noteheads") return FontType::Noteheads;
-        else if (typeStr == "augDots") return FontType::AugDots;
-        else if (typeStr == "timePlus") return FontType::TimePlus;
-        else if (typeStr == "articulation") return FontType::Articulation;
-        else if (typeStr == "percussion") return FontType::Percussion;
-        else if (typeStr == "smartShape8va") return FontType::SmartShape8va;
-        else if (typeStr == "measNumb") return FontType::MeasNumb;
-        else if (typeStr == "staffNames") return FontType::StaffNames;
-        else if (typeStr == "abbrvStaffNames") return FontType::AbbrvStaffNames;
-        else if (typeStr == "groupNames") return FontType::GroupNames;
-        else if (typeStr == "smartShape8vb") return FontType::SmartShape8vb;
-        else if (typeStr == "smartShape15ma") return FontType::SmartShape15ma;
-        else if (typeStr == "smartShape15mb") return FontType::SmartShape15mb;
-        else if (typeStr == "smartShapeTrill") return FontType::SmartShapeTrill;
-        else if (typeStr == "smartShapeWiggle") return FontType::SmartShapeWiggle;
-        else if (typeStr == "abbrvGroupNames") return FontType::AbbrvGroupNames;
-        else if (typeStr == "bendCurveFull") return FontType::BendCurveFull;
-        else if (typeStr == "bendCurveWhole") return FontType::BendCurveWhole;
-        else if (typeStr == "bendCurveFrac") return FontType::BendCurveFrac;
-        else if (typeStr == "timeParts") return FontType::TimeParts;
-        else if (typeStr == "timePlusParts") return FontType::TimePlusParts;
-        else throw std::invalid_argument("Unknown FontType string: " + typeStr);
-    }
+    },
 };
 
 template <>
@@ -306,23 +298,6 @@ inline const XmlElementArray<LineCurveOptions> FieldPopulator<LineCurveOptions>:
     {"psUlWidth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->psUlWidth = e->getTextAs<double>(); }},
     {"pathSlurTipWidth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->pathSlurTipWidth = e->getTextAs<EvpuFloat>(); }},
 };
-
-#if 0
-template <>
-struct FieldPopulator<MiscOptions> : public FactoryBase
-{
-    static void populate(const std::shared_ptr<MiscOptions>& instance, const XmlElementPtr& element, ElementLinker&)
-    {
-        getFieldFromXml(element, "showRepeatsForParts", instance->showRepeatsForParts, [](auto) { return true; }, false);
-        getFieldFromXml(element, "retainOctaveTransInConcertPitch", instance->keepOctaveTransInConcertPitch, [](auto) { return true; }, false);
-        getFieldFromXml(element, "showCurrentLayerOnly", instance->showActiveLayerOnly, [](auto) { return true; }, false);
-        getFieldFromXml(element, "combineRestsAcrossLayers", instance->consolidateRestsAcrossLayers, [](auto) { return true; }, false);
-        getFieldFromXml(element, "sdDashOn", instance->shapeDesignerDashLength, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "sdDashOff", instance->shapeDesignerDashSpace, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "drawMeasureNumbersOverBarlines", instance->alignMeasureNumbersWithBarlines, [](auto) { return true; }, false);
-    }
-};
-#endif
 
 template <>
 inline const XmlElementArray<MiscOptions> FieldPopulator<MiscOptions>::xmlElements = {

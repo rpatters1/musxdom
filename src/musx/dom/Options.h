@@ -205,8 +205,12 @@ public:
     /**
      * @brief Represents a single clef definition.
      */
-    struct ClefDef
+    class ClefDef : public Base
     {
+    public:
+        explicit ClefDef(const DocumentWeakPtr& document)
+            : Base(document, 0, ShareMode::All) {}
+            
         int middleCPos{};               ///< Staff position of middle-C for this clef (from top staffline). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
         int staffPositon{};             ///< Staff position of the clef symbol's baseline (from top staffline). (xml node is `<clefYDisp>`)
@@ -231,7 +235,7 @@ public:
     /**
      * @brief Vector of clef definitions (@ref ClefDef).
      */
-    std::vector<ClefDef> clefDefs{18};  // reserve space for 18 clef definitions, 0..17, which is the norm for Finale
+    std::vector<std::shared_ptr<ClefDef>> clefDefs;
 
     /**
      * @brief The XML node name for this type.

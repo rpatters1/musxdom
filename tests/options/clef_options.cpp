@@ -137,31 +137,31 @@ TEST(ClefOptionsTest, ClefDefPropertiesTest)
 
     // Test ClefDef index 0
     const auto& clefDef0 = clefOptions->clefDefs[0];
-    EXPECT_EQ(clefDef0.middleCPos, -10);
-    EXPECT_EQ(clefDef0.clefChar, 0xe050);
-    EXPECT_EQ(clefDef0.staffPositon, -6);
-    EXPECT_FALSE(clefDef0.isShape);
-    EXPECT_FALSE(clefDef0.scaleToStaffHeight);
+    EXPECT_EQ(clefDef0->middleCPos, -10);
+    EXPECT_EQ(clefDef0->clefChar, 0xe050);
+    EXPECT_EQ(clefDef0->staffPositon, -6);
+    EXPECT_FALSE(clefDef0->isShape);
+    EXPECT_FALSE(clefDef0->scaleToStaffHeight);
 
     // Test ClefDef index 4
     const auto& clefDef4 = clefOptions->clefDefs[4];
-    EXPECT_EQ(clefDef4.middleCPos, -10);
-    EXPECT_EQ(clefDef4.clefChar, 0xe06a);
-    EXPECT_EQ(clefDef4.staffPositon, -4);
-    EXPECT_EQ(clefDef4.baselineAdjust, 12);
-    ASSERT_TRUE(clefDef4.font);
-    EXPECT_EQ(clefDef4.font->fontId, 10);
-    EXPECT_EQ(clefDef4.font->fontSize, 24);
-    EXPECT_TRUE(clefDef4.useOwnFont);
-    EXPECT_FALSE(clefDef4.isShape);
-    EXPECT_FALSE(clefDef4.scaleToStaffHeight);
+    EXPECT_EQ(clefDef4->middleCPos, -10);
+    EXPECT_EQ(clefDef4->clefChar, 0xe06a);
+    EXPECT_EQ(clefDef4->staffPositon, -4);
+    EXPECT_EQ(clefDef4->baselineAdjust, 12);
+    ASSERT_TRUE(clefDef4->font);
+    EXPECT_EQ(clefDef4->font->fontId, 10);
+    EXPECT_EQ(clefDef4->font->fontSize, 24);
+    EXPECT_TRUE(clefDef4->useOwnFont);
+    EXPECT_FALSE(clefDef4->isShape);
+    EXPECT_FALSE(clefDef4->scaleToStaffHeight);
 
     // Test ClefDef index 16
     const auto& clefDef16 = clefOptions->clefDefs[16];
-    EXPECT_EQ(clefDef16.middleCPos, -10);
-    EXPECT_EQ(clefDef16.shapeId, 2);
-    EXPECT_TRUE(clefDef16.isShape);
-    EXPECT_TRUE(clefDef16.scaleToStaffHeight);
+    EXPECT_EQ(clefDef16->middleCPos, -10);
+    EXPECT_EQ(clefDef16->shapeId, 2);
+    EXPECT_TRUE(clefDef16->isShape);
+    EXPECT_TRUE(clefDef16->scaleToStaffHeight);
 }
 
 TEST(ClefOptionsTest, OutOfSeqenceClefDef)

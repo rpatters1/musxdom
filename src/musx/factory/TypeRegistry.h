@@ -118,7 +118,7 @@ public:
                     auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
                     if (instance->getShareMode() == Base::ShareMode::Partial) {
                         for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
-                            instance->addSharedNode(child->getTagName());
+                            instance->addUnlinkedNode(child->getTagName());
                         }
                         auto scoreValue = (document.get()->*poolFunc)()->template get<T>(std::forward<Args>(args)...);
                         if (scoreValue) {

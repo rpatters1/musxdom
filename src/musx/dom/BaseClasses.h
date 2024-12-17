@@ -111,7 +111,7 @@ public:
     /**
      * @brief Adds a shared node for this instance
      */
-    void addSharedNode(const std::string& nodeName)
+    void addUnlinkedNode(const std::string& nodeName)
     {
         m_unlinkedNodes.insert(nodeName);
     }

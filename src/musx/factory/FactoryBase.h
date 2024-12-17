@@ -199,7 +199,7 @@ using ResolverArray = std::vector<ElementLinker::Resolver>;
 template <typename T>
 struct FieldPopulator : public FactoryBase
 {
-    static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element, ElementLinker& elementLinker)
+    static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element)
     {
         for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
             auto it = elementXref().find(child->getTagName());
@@ -212,9 +212,23 @@ struct FieldPopulator : public FactoryBase
                 //END DBG
             }
         }
+    }
+
+    static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element, ElementLinker& elementLinker)
+    {
+        populate(instance, element);
         for (const auto& resolver : resolvers) {
             elementLinker.addResolver(resolver);
         }
+    }
+
+    template <typename... Args>
+    static std::shared_ptr<T> createAndPopulate(const XmlElementPtr& element, Args... args)
+    {
+        if (!element->getFirstChildElement()) return nullptr;
+        auto instance = std::make_shared<T>(std::forward<Args>(args)...);
+        FieldPopulator<T>::populate(instance, element);
+        return instance;
     }
 
 private:
