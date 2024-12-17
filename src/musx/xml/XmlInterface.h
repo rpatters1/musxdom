@@ -47,6 +47,14 @@ public:
      */
     load_error(const char *msg) : std::runtime_error(msg) {}
 };
+
+/** @brief trims whitespace from a string */
+inline std::string trim(const std::string& str)
+{
+    auto start = std::find_if_not(str.begin(), str.end(), ::isspace);
+    auto end = std::find_if_not(str.rbegin(), str.rend(), ::isspace).base();
+    return (start < end) ? std::string(start, end) : std::string();
+}
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 /**
@@ -127,6 +135,11 @@ public:
     virtual std::string getText() const = 0;
 
     /**
+     * @brief Gets the text content of the element with whitespace trimmed.
+     */
+    std::string getTextTrimmed() const { return trim(getText()); }
+
+    /**
      * @brief Gets the text content of the element, converted to the specified type.
      * @tparam T The type to which the text content should be converted.
      * @param defaultValue The value to return if the text of the element is empty.
@@ -136,7 +149,7 @@ public:
     template <typename T>
     T getTextAs(T defaultValue = {}) const
     {
-        std::istringstream iss(getText());
+        std::istringstream iss(getTextTrimmed());
         if (iss.str().empty()) {
             return defaultValue;
         }

@@ -225,23 +225,10 @@ struct FieldPopulator : public FactoryBase
         }
     }
 
-    /** @brief creates and populates an instance */
     template <typename... Args>
-    static std::shared_ptr<T> createAndPopulate(const XmlElementPtr& element, Args... args)
+    static std::shared_ptr<T> createAndPopulate(const XmlElementPtr& element, Args&&... args)
     {
-        auto instance = std::make_shared<T>(std::forward<Args>(args)...);
-        FieldPopulator<T>::populate(instance, element);
-        return instance;
-    }
-
-    /** @brief creates and populates an instance unless the xml node contains no children.
-     * Then it returns nullptr.
-     */
-    template <typename... Args>
-    static std::shared_ptr<T> createAndPopulateNullDefault(const XmlElementPtr& element, Args... args)
-    {
-        if (!element->getFirstChildElement()) return nullptr;
-        return createAndPopulate(element, std::forward<Args>(args)...);
+       return FieldPopulator<T>::createAndPopulateImpl(element, std::forward<Args>(args)...);
     }
 
 private:
@@ -257,6 +244,14 @@ private:
                 return retval;
             }();
         return xref;
+    }
+
+    template <typename... Args>
+    static std::shared_ptr<T> createAndPopulateImpl(const XmlElementPtr& element, Args&&... args)
+    {
+        auto instance = std::make_shared<T>(std::forward<Args>(args)...);
+        FieldPopulator<T>::populate(instance, element);
+        return instance;
     }
 
     static const XmlElementArray<T> xmlElements;
@@ -287,6 +282,14 @@ inline const XmlElementArray<dom::FontInfo> FieldPopulator<dom::FontInfo>::xmlEl
         }
     },
 };
+
+template <>
+template <typename... Args>
+inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(const XmlElementPtr& element, Args&&... args)
+{
+    if (!element->getFirstChildElement()) return nullptr;
+    return FieldPopulator<FontInfo>::createAndPopulateImpl(element, std::forward<Args>(args)...);
+}
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 

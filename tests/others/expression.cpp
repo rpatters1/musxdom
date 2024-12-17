@@ -35,7 +35,7 @@ TEST(TextExpressionDefTest, ValidExpression)
       <categoryID>1</categoryID>
       <value>101</value>
       <useAuxData/>
-      <playType>midiController</playType>
+      <playType> midiController</playType>
       <horzMeasExprAlign>leftOfPrimaryNotehead</horzMeasExprAlign>
       <horzExprAlign>right</horzExprAlign>
       <yAdjustEntry>-54</yAdjustEntry>
