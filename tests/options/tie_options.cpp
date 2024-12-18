@@ -110,7 +110,7 @@ TEST(TieOptionsTest, PropertiesTest)
     EXPECT_TRUE(tieOptions->useInterpolation);
     EXPECT_TRUE(tieOptions->useTieEndCtlStyle);
     EXPECT_TRUE(tieOptions->avoidStaffLinesOnly);
-    EXPECT_FLOAT_EQ(tieOptions->tieTipWidth, 0.25);
+    EXPECT_DOUBLE_EQ(tieOptions->tieTipWidth, 0.25);
 
     // Test tie connect styles
     ASSERT_TRUE(tieOptions->tieConnectStyles.count(TieOptions::ConnectStyleType::OverStartPosInner));
