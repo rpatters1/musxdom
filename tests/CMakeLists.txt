@@ -38,12 +38,14 @@ add_executable(musxdomtests
     options/key_signature_options.cpp
     options/line_curve_options.cpp
     options/misc_options.cpp
+    options/multimeasure_rest_options.cpp
     options/music_spacing_options.cpp
     options/page_options.cpp
     options/piano_brace_bracket_options.cpp
     options/repeat_options.cpp
     options/smart_shape_options.cpp
     options/stem_options.cpp
+    options/tie_options.cpp
     options/time_signature_options.cpp
     # others
 	others/enclosure.cpp
@@ -65,6 +67,7 @@ endif()
 # Compile definitions
 target_compile_definitions(musxdomtests PRIVATE MUSX_USE_TINYXML2)
 target_compile_definitions(musxdomtests PRIVATE MUSX_USE_RAPIDXML)
+target_compile_definitions(musxdomtests PRIVATE MUSX_THROW_ON_UNKNOWN_XML)
 
 # Add the include paths
 target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/tests")

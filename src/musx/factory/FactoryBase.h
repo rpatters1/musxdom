@@ -198,11 +198,20 @@ public:
         if (it != mapping.end()) {
             return it->second;
         }
-        if constexpr (std::is_arithmetic_v<FromClass>) {
-            throw std::invalid_argument("Invalid enum value from xml: " + std::to_string(value));
-        } else {
-            throw std::invalid_argument("Invalid enum value from xml: " + std::string(value));
-        }
+        std::string msg = [value]() {
+            if constexpr (std::is_arithmetic_v<FromClass>) {
+                return "Invalid enum value from xml: " + std::to_string(value);
+            }
+            else {
+                return "Invalid enum value from xml: " + std::string(value);
+            }
+        }();
+#ifdef MUSX_THROW_ON_UNKNOWN_XML
+        throw std::invalid_argument(msg);
+#else
+        std::cout << msg << std::endl;
+        return {};
+#endif
     }
 };
 
@@ -240,10 +249,12 @@ struct FieldPopulator : public FactoryBase
             if (it != elementXref().end()) {
                 std::get<1>(*it)(child, instance);
             } else {
-                std::cout << "xml element <" << element->getTagName() << "> has child <" << child->getTagName() << "> which is not in the element list" << std::endl;
-                //DBG
-                //throw std::invalid_argument("xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list");
-                //END DBG
+                std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list";
+#ifdef MUSX_THROW_ON_UNKNOWN_XML
+                throw std::invalid_argument(msg);
+#else
+                std::cout << msg << std::endl;
+#endif
             }
         }
     }
@@ -287,6 +298,16 @@ private:
 
     static const XmlElementArray<T> xmlElements;
 };
+
+template <typename EnumClass, typename EmbeddedClass>
+static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray)
+{
+    auto typeAttr = e->findAttribute("type");
+    if (!typeAttr) {
+        throw std::invalid_argument("<" + e->getTagName() + "> element has no type attribute");
+    }
+    listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
+}
 
 template <>
 inline const XmlElementArray<dom::FontInfo> FieldPopulator<dom::FontInfo>::xmlElements = {

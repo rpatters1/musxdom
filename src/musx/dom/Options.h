@@ -494,6 +494,34 @@ public:
 };
 
 /**
+ * @class MultimeasureRestOptions
+ * @brief Options controlling the appearance and behavior of multimeasure rests.
+ *
+ * This class is identified by the XML node name "multimeasureRestOptions".
+ */
+class MultimeasureRestOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MultimeasureRestOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    Evpu measWidth{};            ///< Space allocated per measure in multimeasure rest in @ref Evpu. (xml node is `<meaSpace>`)
+    Evpu numAdjY{};              ///< Vertical adjustment for number in @ref Evpu. The Finale UI reverses the sign of this value. (xml node is `<numdec>`)
+    Cmper shapeDef{};            ///< @ref Cmper of shape for multimeasure rest H-bar.
+    int numStart{};              ///< Value for "Start Number At".
+    int useSymsThreshold{};      ///< Numbers of bars rest below this number use symbols if `useSymbols` is checked. (xml node is `<threshold>`)
+    Evpu symSpacing{};           ///< Spacing between symbols in @ref Evpu if `useSymbols` is checkd. (xml node is `<spacing>`)
+    Evpu numAdjX{};              ///< Horizontal adjustment for number in @ref Evpu.
+    Evpu startAdjust{};          ///< Start point adjustment for H-bar shape in @ref Evpu.
+    Evpu endAdjust{};            ///< End point adjustment for H-bar shape in @ref Evpu.
+    bool useSymbols{};           ///< Use character style for rests. (xml node is `<useCharRestStyle>`)
+    bool autoUpdateMmRests{};    ///< Automatically update multimeasure rests when the user changes these options.
+
+    constexpr static std::string_view XmlNodeName = "multimeasureRestOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class MusicSpacingOptions
  * @brief Options controlling music spacing.
  *
@@ -940,6 +968,132 @@ public:
     bool useStemConnections{}; ///< "Use Stem Connections"
 
     constexpr static std::string_view XmlNodeName = "stemOptions"; ///< The XML node name for this type.
+};
+
+/**
+ * @class TieOptions
+ * @brief Options controlling the appearance of ties.
+ *
+ * This class is identified by the XML node name "tieOptions".
+ */
+class TieOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TieOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    /** @brief Enumeration for seconds placement options */
+    enum class SecondsPlacement
+    {
+        None,                   ///< the default
+        ShiftForSeconds         ///< xml value is "both"
+    };
+
+    /** @brief Enumeration for chord tie direction type */
+    enum class ChordTieDirType {
+        OutsideInside,          ///< Legacy Finale 3.7 behavior (the default)
+        StemReversal,           ///< Split at stem reversal point.
+        SplitEvenly             ///< Split evenly
+    };
+
+    /** @brief Enumeration for mixed stem direction */
+    enum class MixedStemDirection {
+        Over,
+        Under,
+        OppositeFirst           ///< xml value is "start"
+    };
+
+    /** @brief Enumeration for special position mode */
+    enum class SpecialPosMode {
+        None, ///< the default
+        Avoid
+    };
+
+    /** @brief Enumeration for inset styles */
+    enum class InsetStyle {
+        Fixed,                  ///< the default
+        Percent
+    };
+
+    /** @brief Enumeration for tie connect style types */
+    enum class ConnectStyleType {
+        OverStartPosInner,
+        OverEndPosInner,
+        UnderStartPosInner,
+        UnderEndPosInner,
+        OverHighestNoteStartPosOver,
+        OverHighestNoteEndPosOver,
+        UnderLowestNoteStartPosUnder,
+        UnderLowestNoteEndPosUnder,
+        OverHighestNoteStemStartPosOver,
+        OverHighestNoteStemEndPosOver,
+        UnderLowestNoteStemStartPosUnder,
+        UnderLowestNoteStemEndPosUnder
+    };
+
+    /** @brief Enumeration for tie control style types */
+    enum class ControlStyleType {
+        ShortSpan,
+        MediumSpan,
+        LongSpan,
+        TieEnds
+    };
+
+    Evpu frontTieSepar{};                   ///< Separation for the front of ties
+    Evpu thicknessRight{};                 ///< Right thickness of the tie
+    Evpu thicknessLeft{};                  ///< Left thickness of the tie
+    bool breakForTimeSigs{}; ///< Break ties for time signatures
+    bool breakForKeySigs{};  ///< Break ties for key signatures
+    Evpu breakTimeSigLeftHOffset{};        ///< Left horizontal offset for breaking time signature
+    Evpu breakTimeSigRightHOffset{};       ///< Right horizontal offset for breaking time signature
+    Evpu breakKeySigLeftHOffset{};         ///< Left horizontal offset for breaking key signature
+    Evpu breakKeySigRightHOffset{};        ///< Right horizontal offset for breaking key signature
+    Evpu sysBreakLeftHAdj{};               ///< Left adjustment for system breaks
+    Evpu sysBreakRightHAdj{};              ///< Right adjustment for system breaks
+    bool useOuterPlacement{}; ///< Use outer placement for ties
+    SecondsPlacement secondsPlacement{}; ///< Placement of seconds
+    ChordTieDirType chordTieDirType{}; ///< Chord tie direction type
+    bool chordTieDirOpposingSeconds{}; ///< Chord tie opposing seconds
+    MixedStemDirection mixedStemDirection{}; ///< Mixed stem direction
+    bool afterSingleDot{}; ///< Special handling after a single dot
+    bool afterMultipleDots{}; ///< Special handling after multiple dots
+    bool beforeAcciSingleNote{}; ///< Special handling before accidental single notes
+    SpecialPosMode specialPosMode{}; ///< Special positioning mode
+    Evpu avoidStaffLinesDistance{};        ///< Distance to avoid staff lines
+    InsetStyle insetStyle{}; ///< Inset style for ties
+    bool useInterpolation{}; ///< "Interpolate Height Between Short and Long Span"
+    bool useTieEndCtlStyle{}; ///< Use tie end control style
+    bool avoidStaffLinesOnly{}; ///< Only avoid staff lines
+    EvpuFloat tieTipWidth{};               ///< Width of the tie tip
+
+    /** @brief Struct for tie connect style */
+    struct ConnectStyle {
+        Evpu offsetX{}; ///< Horizontal offset
+        Evpu offsetY{}; ///< Vertical offset
+    };
+
+    /** @brief Tie connect styles */
+    std::unordered_map<ConnectStyleType, std::shared_ptr<ConnectStyle>> tieConnectStyles;
+
+    /** @brief Struct for tie control style control points */
+    struct ControlPoint {
+        Efix insetRatio{}; ///< Inset ratio
+        Evpu height{}; ///< Height
+        Evpu insetFixed{}; ///< Fixed inset
+    };
+
+    /** @brief Struct for tie control style */
+    struct ControlStyle {
+        Evpu span{}; ///< Span length
+        std::shared_ptr<ControlPoint> cp1; ///< Control point 1
+        std::shared_ptr<ControlPoint> cp2; ///< Control point 2
+    };
+
+    /** @brief Tie control styles */
+    std::unordered_map<ControlStyleType, std::shared_ptr<ControlStyle>> tieControlStyles;
+
+    constexpr static std::string_view XmlNodeName = "tieOptions"; ///< The XML node name for this type
 };
 
 /**

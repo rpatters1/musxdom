@@ -158,12 +158,14 @@ using RegisteredOptions = TypeRegistry <
     dom::options::KeySignatureOptions,
     dom::options::LineCurveOptions,
     dom::options::MiscOptions,
+    dom::options::MultimeasureRestOptions,
     dom::options::MusicSpacingOptions,
     dom::options::PageFormatOptions,
     dom::options::PianoBraceBracketOptions,
     dom::options::RepeatOptions,
     dom::options::SmartShapeOptions,
     dom::options::StemOptions,
+    dom::options::TieOptions,
     dom::options::TimeSignatureOptions
 >;
 

@@ -309,6 +309,21 @@ inline const XmlElementArray<MiscOptions> FieldPopulator<MiscOptions>::xmlElemen
 };
 
 template <>
+inline const XmlElementArray<MultimeasureRestOptions> FieldPopulator<MultimeasureRestOptions>::xmlElements = {
+    {"meaSpace", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->measWidth = e->getTextAs<Evpu>();}},
+    {"numdec", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->numAdjY = e->getTextAs<Evpu>();}},
+    {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->shapeDef = e->getTextAs<Cmper>();}},
+    {"numStart", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->numStart = e->getTextAs<int>();}},
+    {"threshold", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->useSymsThreshold = e->getTextAs<int>();}},
+    {"spacing", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->symSpacing = e->getTextAs<Evpu>();}},
+    {"numAdjX", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->numAdjX = e->getTextAs<Evpu>();}},
+    {"startAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->startAdjust = e->getTextAs<Evpu>();}},
+    {"endAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->endAdjust = e->getTextAs<Evpu>();}},
+    {"useCharRestStyle", [](const XmlElementPtr&, const std::shared_ptr<MultimeasureRestOptions>& i) {i->useSymbols = true;}},
+    {"autoUpdateMmRests", [](const XmlElementPtr&, const std::shared_ptr<MultimeasureRestOptions>& i) {i->autoUpdateMmRests = true;}},
+};
+
+template <>
 inline XmlEnumMapping<MusicSpacingOptions::ColUnisonsChoice> EnumMapper<MusicSpacingOptions::ColUnisonsChoice>::mapping = {
     {"diffNoteheads", MusicSpacingOptions::ColUnisonsChoice::DiffNoteheads},
     {"all", MusicSpacingOptions::ColUnisonsChoice::All}
@@ -578,16 +593,6 @@ inline const XmlElementArray<SmartShapeOptions::ControlStyle> FieldPopulator<Sma
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ControlStyle>& i) { i->height = e->getTextAs<Evpu>(); }}
 };
 
-template <typename EnumClass, typename EmbeddedClass>
-static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray)
-{
-    auto typeAttr = e->findAttribute("type");
-    if (!typeAttr) {
-        throw std::invalid_argument("<" + e->getTagName() + "> element has no type attribute");
-    }
-    listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
-}
-
 template <>
 inline const XmlElementArray<SmartShapeOptions> FieldPopulator<SmartShapeOptions>::xmlElements = {
     {"shortHairpinOpeningWidth", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->shortHairpinOpeningWidth = e->getTextAs<Evpu>(); }},
@@ -648,6 +653,110 @@ inline const XmlElementArray<StemOptions> FieldPopulator<StemOptions>::xmlElemen
     {"stemWidth", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemWidth = e->getTextAs<Efix>(); }},
     {"stemLift", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemOffset = e->getTextAs<Efix>(); }},
     {"useStemConnections", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>& i) { i->useStemConnections = true; }},
+};
+
+template <>
+inline XmlEnumMapping<TieOptions::SecondsPlacement> EnumMapper<TieOptions::SecondsPlacement>::mapping = {
+    {"both", TieOptions::SecondsPlacement::ShiftForSeconds}
+};
+
+template <>
+inline XmlEnumMapping<TieOptions::ChordTieDirType> EnumMapper<TieOptions::ChordTieDirType>::mapping = {
+    {"stemReversal", TieOptions::ChordTieDirType::StemReversal},
+    {"splitEvenly", TieOptions::ChordTieDirType::SplitEvenly}
+};
+
+template <>
+inline XmlEnumMapping<TieOptions::MixedStemDirection> EnumMapper<TieOptions::MixedStemDirection>::mapping = {
+    {"over", TieOptions::MixedStemDirection::Over},
+    {"under", TieOptions::MixedStemDirection::Under},
+    {"start", TieOptions::MixedStemDirection::OppositeFirst}
+};
+
+template <>
+inline XmlEnumMapping<TieOptions::SpecialPosMode> EnumMapper<TieOptions::SpecialPosMode>::mapping = {
+    {"avoid", TieOptions::SpecialPosMode::Avoid}
+};
+
+template <>
+inline XmlEnumMapping<TieOptions::InsetStyle> EnumMapper<TieOptions::InsetStyle>::mapping = {
+    {"percent", TieOptions::InsetStyle::Percent}
+};
+
+template <>
+inline XmlEnumMapping<TieOptions::ConnectStyleType> EnumMapper<TieOptions::ConnectStyleType>::mapping = {
+    {"overStartPosInner", TieOptions::ConnectStyleType::OverStartPosInner},
+    {"overEndPosInner", TieOptions::ConnectStyleType::OverEndPosInner},
+    {"underStartPosInner", TieOptions::ConnectStyleType::UnderStartPosInner},
+    {"underEndPosInner", TieOptions::ConnectStyleType::UnderEndPosInner},
+    {"overHighestNoteStartPosOver", TieOptions::ConnectStyleType::OverHighestNoteStartPosOver},
+    {"overHighestNoteEndPosOver", TieOptions::ConnectStyleType::OverHighestNoteEndPosOver},
+    {"underLowestNoteStartPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStartPosUnder},
+    {"underLowestNoteEndPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteEndPosUnder},
+    {"overHighestNoteStemStartPosOver", TieOptions::ConnectStyleType::OverHighestNoteStemStartPosOver},
+    {"overHighestNoteStemEndPosOver", TieOptions::ConnectStyleType::OverHighestNoteStemEndPosOver},
+    {"underLowestNoteStemStartPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStemStartPosUnder},
+    {"underLowestNoteStemEndPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStemEndPosUnder}
+};
+
+template <>
+inline XmlEnumMapping<TieOptions::ControlStyleType> EnumMapper<TieOptions::ControlStyleType>::mapping = {
+    {"shortSpan", TieOptions::ControlStyleType::ShortSpan},
+    {"mediumSpan", TieOptions::ControlStyleType::MediumSpan},
+    {"longSpan", TieOptions::ControlStyleType::LongSpan},
+    {"tieEnds", TieOptions::ControlStyleType::TieEnds}
+};
+
+template <>
+inline const XmlElementArray<TieOptions::ConnectStyle> FieldPopulator<TieOptions::ConnectStyle>::xmlElements = {
+    {"offsetX", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ConnectStyle>& i) { i->offsetX = e->getTextAs<Evpu>(); }},
+    {"offsetY", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ConnectStyle>& i) { i->offsetY = e->getTextAs<Evpu>(); }}
+};
+
+template <>
+inline const XmlElementArray<TieOptions::ControlPoint> FieldPopulator<TieOptions::ControlPoint>::xmlElements = {
+    {"insetRatio", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlPoint>& i) { i->insetRatio = e->getTextAs<Efix>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlPoint>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"insetFixed", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlPoint>& i) { i->insetFixed = e->getTextAs<Evpu>(); }}
+};
+
+template <>
+inline const XmlElementArray<TieOptions::ControlStyle> FieldPopulator<TieOptions::ControlStyle>::xmlElements = {
+    {"span", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlStyle>& i) { i->span = e->getTextAs<Evpu>(); }},
+    {"cp1", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlStyle>& i) { i->cp1 = FieldPopulator<TieOptions::ControlPoint>::createAndPopulate(e); }},
+    {"cp2", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlStyle>& i) { i->cp2 = FieldPopulator<TieOptions::ControlPoint>::createAndPopulate(e); }}
+};
+
+template <>
+inline const XmlElementArray<TieOptions> FieldPopulator<TieOptions>::xmlElements = {
+    {"frontTieSepar", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->frontTieSepar = e->getTextAs<Evpu>(); }},
+    {"thicknessRight", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->thicknessRight = e->getTextAs<Evpu>(); }},
+    {"thicknessLeft", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->thicknessLeft = e->getTextAs<Evpu>(); }},
+    {"breakForTimeSigs", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->breakForTimeSigs = true; }},
+    {"breakForKeySigs", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->breakForKeySigs = true; }},
+    {"breakTimeSigLeftHOffset", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->breakTimeSigLeftHOffset = e->getTextAs<Evpu>(); }},
+    {"breakTimeSigRightHOffset", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->breakTimeSigRightHOffset = e->getTextAs<Evpu>(); }},
+    {"breakKeySigLeftHOffset", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->breakKeySigLeftHOffset = e->getTextAs<Evpu>(); }},
+    {"breakKeySigRightHOffset", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->breakKeySigRightHOffset = e->getTextAs<Evpu>(); }},
+    {"sysBreakLeftHAdj", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->sysBreakLeftHAdj = e->getTextAs<Evpu>(); }},
+    {"sysBreakRightHAdj", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->sysBreakRightHAdj = e->getTextAs<Evpu>(); }},
+    {"useOuterPlacement", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->useOuterPlacement = true; }},
+    {"secondsPlacement", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->secondsPlacement = toEnum<TieOptions::SecondsPlacement>(e->getTextTrimmed()); }},
+    {"chordTieDirType", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->chordTieDirType = toEnum<TieOptions::ChordTieDirType>(e->getTextTrimmed()); }},
+    {"chordTieDirOpposingSeconds", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->chordTieDirOpposingSeconds = true; }},
+    {"mixedStemDirection", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->mixedStemDirection = toEnum<TieOptions::MixedStemDirection>(e->getTextTrimmed()); }},
+    {"afterSingleDot", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->afterSingleDot = true; }},
+    {"afterMultipleDots", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->afterMultipleDots = true; }},
+    {"beforeAcciSingleNote", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->beforeAcciSingleNote = true; }},
+    {"specialPosMode", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->specialPosMode = toEnum<TieOptions::SpecialPosMode>(e->getTextTrimmed()); }},
+    {"avoidStaffLinesDistance", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->avoidStaffLinesDistance = e->getTextAs<Evpu>(); }},
+    {"insetStyle", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->insetStyle = toEnum<TieOptions::InsetStyle>(e->getTextTrimmed()); }},
+    {"useInterpolation", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->useInterpolation = true; }},
+    {"useTieEndCtlStyle", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->useTieEndCtlStyle = true; }},
+    {"avoidStaffLinesOnly", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->avoidStaffLinesOnly = true; }},
+    {"tieTipWidth", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->tieTipWidth = e->getTextAs<EvpuFloat>(); }},
+    {"tieConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { populateEmbeddedClass(e, i->tieConnectStyles); }},
+    {"tieControlStyle", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { populateEmbeddedClass(e, i->tieControlStyles); }}
 };
 
 template <>
