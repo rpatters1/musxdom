@@ -64,9 +64,9 @@ public:
      * @param document Shared pointer to the document.
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
      * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
-     * @param cmper Comparison parameter.
+     * @param cmper Comparison parameter. This will be zero for enclosures taken from @ref MeasureNumberRegion.
      */
-    explicit Enclosure(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+    explicit Enclosure(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
         : OthersBase(document, partId, shareMode, cmper) {}
 
     Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
@@ -138,6 +138,101 @@ public:
     bool hideLayer{};                   ///< "Hide Layer when Inactive"
 
     constexpr static std::string_view XmlNodeName = "layerAtts"; ///< The XML node name for this type.
+};
+
+/**
+ * @class MeasureNumberRegion
+ * @brief Represents the Measure Number Region with detailed font and enclosure settings for score and part data.
+ *
+ * This class is identified by the XML node name "measNumbRegion".
+ */
+class MeasureNumberRegion : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /// @brief Alignment and justification options for measure numbers.
+    enum class AlignJustify
+    {
+        Left,   ///< default value
+        Right,
+        Center
+    };
+
+    /// @brief Precision for time display
+    enum class TimePrecision
+    {
+        WholeSeconds,   ///< the default value
+        Tenths,
+        Hundredths,
+        Thousandths,
+    };
+
+    /// @brief Measure number data that can differ in score or part.
+    class ScorePartData : public Base
+    {
+    public:
+        /** @brief Constructor */
+        explicit ScorePartData(const DocumentWeakPtr& document) : Base(document, 0, ShareMode::All) {}
+
+        std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
+        std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
+        std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.
+        std::shared_ptr<Enclosure> startEnclosure;    ///< Enclosure settings for numbers at start of system.
+        std::shared_ptr<Enclosure> multipleEnclosure; ///< Enclosure settings for mid-system numbers.
+
+        Evpu startYdisp{};         ///< Vertical offset for numbers at start of system.
+        Evpu multipleYdisp{};      ///< Vertical offset for mid-system numbers.
+        Evpu mmRestYdisp{};        ///< Vertical offset for multi-measure rest ranges.
+        char32_t leftMmBracketChar{};  ///< UTF-32 code for the left bracket of multi-measure rest ranges.
+        char32_t rightMmBracketChar{}; ///< UTF-32 code for the right bracket of multi-measure rest ranges.
+        int startWith{};           ///< "Beginning with" value. (This value is 0-based. The Finale UI adds 1 for user display.)
+        int incidence{};           ///< "Show on Every" value.
+        AlignJustify startAlign{};  ///< Alignment of numbers at the start of system
+        AlignJustify multipleAlign{}; ///< Alignment for mid-system numbers.
+        AlignJustify mmRestAlign{}; ///< Alignment for multi-measure ranges.
+        bool showOnStart{};        ///< "Show On Start of Staff System" (xml node is `<startOfLine>`)
+        bool showOnEvery{};        ///< "Show on Every" activates mid-system numbers. (xml node is `<multipleOf>`)
+        bool hideFirstMeasure{};   ///< "Hide First Measure Number in Region." (xml node is `<exceptFirstMeas>`)
+        bool showMmRange{};        ///< "Show Measure Ranges on Multimeasure Rests" (xml node is `<mmRestRange>`)
+        bool showOnMmRest{};       ///< "Show on Multimeasure Rests"  (xml node is `<mmRestRangeForce>`)
+        bool useStartEncl{};       ///< Use enclosure for start-of-system settings.
+        bool useMultipleEncl{};    ///< Use enclosure for mid-system settings.
+        bool showOnTop{};          ///< Show measure numbers on the top staff.
+        bool showOnBottom{};       ///< Show measure numbers on the bottom staff.
+        bool excludeOthers{};      ///< Exclude other staves.
+        bool breakMmRest{};        ///< Mid-system numbers break multimeasure rests.
+        AlignJustify startJustify{}; ///< Justification for numbers at the start of system.
+        AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
+        AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
+    };
+
+    // Public properties
+    std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
+    std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
+
+    Cmper startMeas{};      ///< Starting measure number for the region.
+    Cmper endMeas{};        ///< Ending measure number for the region.
+    char32_t startChar{};      ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
+    int base{};         ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
+    std::string prefix;   ///< Text prefix for measure numbers (encoded UTF-8).
+    std::string suffix;   ///< Text suffix for measure numbers (encoded UTF-8).
+
+    bool countFromOne{};        ///< Start counting from 1 rather than 0, e.g., "1, 2, 3, 4" numbering style (in conjuction with base 10)
+    bool noZero;                ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences
+    bool doubleUp{};            ///< Indicates "a, b, c...aa, bb, cc" number style: the symbols are repeated when they exceed the base.
+    bool time{};                ///< Display real time sequences rather than numbers or letters.
+    bool includeHours{};        ///< Display hours (when showing real time measure numbers)
+    bool smpteFrames{};         ///< SMPTE frames (when showing real time measure numbers). This option supercedes `timePrecision`.
+    bool useScoreInfoForPart{}; ///< Use score-wide settings for parts.
+    int region{};               ///< The region ID. This 1-based value is set by Finale and never changes, whereas the @ref Cmper may change when Finale sorts the regions.
+    TimePrecision timePrecision{}; ///< Precision for real-time sequences.
+    bool hideScroll{};          ///< Indicates if numbers are hidden in Scroll View and Studio View.
+    bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
+
+    constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
 };
 
 /**

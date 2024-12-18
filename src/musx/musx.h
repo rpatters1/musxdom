@@ -43,6 +43,11 @@
  * The recommended way to define these macros is from your make file or build project. They are primarily intended
  * for debugging.
  *
+ * The EnigmaXml that is extracted from a `.musx` file follows the pattern that any missing node receives the default value.
+ * This is mainly interesting for booleans and enums. The xml nodes for booleans only show up if they are `true`. The default
+ * values for enums do not show up either, which means it is frequently difficult to know what their string values are. For this
+ * reason, default enum values are usually omitted from the `XmlEnumMapping` tables.
+ *
  * (This documentation reference is generated directly from
  * the source code, by the Doxygen application.)
  *
