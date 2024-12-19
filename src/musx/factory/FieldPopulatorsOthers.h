@@ -47,8 +47,7 @@ inline Enclosure::Shape toEnum<Enclosure::Shape>(const uint8_t& value)
     throw std::invalid_argument("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
 }
 
-template <>
-inline const XmlElementArray<Enclosure> FieldPopulator<Enclosure>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(Enclosure, {
     {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
     {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
     {"xMargin", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xMargin = e->getTextAs<Evpu>(); }},
@@ -61,7 +60,7 @@ inline const XmlElementArray<Enclosure> FieldPopulator<Enclosure>::xmlElements =
     {"notTall", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->notTall = true; }},
     {"opaque", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->opaque = true; }},
     {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->roundCorners = true; }},
-};
+});
 
 template <>
 inline XmlEnumMapping<NamePositioning::AlignJustify> EnumMapper<NamePositioning::AlignJustify>::mapping = {
@@ -70,27 +69,24 @@ inline XmlEnumMapping<NamePositioning::AlignJustify> EnumMapper<NamePositioning:
     {"right", NamePositioning::AlignJustify::Right},
 };
 
-template <>
-inline const XmlElementArray<NamePositioning> FieldPopulator<NamePositioning>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
     {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
     {"indivPos", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->indivPos = true; }},
     {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
     {"expand", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->expand = true; }},
-};
+});
 
-template <>
-inline const XmlElementArray<FontDefinition> FieldPopulator<FontDefinition>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
     {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
     {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},
     {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->pitch = e->getTextAs<int>(); }},
     {"family", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->family = e->getTextAs<int>(); }},
     {"name", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->name = e->getText(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<LayerAttributes> FieldPopulator<LayerAttributes>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(LayerAttributes, {
     {"restOffset", [](const XmlElementPtr& e, const std::shared_ptr<LayerAttributes>& i) { i->restOffset = e->getTextAs<int>(); }},
     {"flipTies", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->freezTiesToStems = true; }},
     {"floatLayer", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->onlyIfOtherLayersHaveNotes = true; }},
@@ -102,7 +98,7 @@ inline const XmlElementArray<LayerAttributes> FieldPopulator<LayerAttributes>::x
     {"ignoreHidden", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->ignoreHiddenNotesOnly = true; }},
     {"ignoreHiddenLayers", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->ignoreHiddenLayers = true; }},
     {"hideLayer", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->hideLayer = true; }},
-};
+});
 
 MUSX_RESOLVER_ARRAY(LayerAttributes, {
     [](const dom::DocumentPtr& document) {
@@ -133,8 +129,7 @@ inline XmlEnumMapping<MeasureNumberRegion::TimePrecision> EnumMapper<MeasureNumb
     {"thousandths", MeasureNumberRegion::TimePrecision::Thousandths},
 };
 
-template <>
-inline const XmlElementArray<MeasureNumberRegion::ScorePartData> FieldPopulator<MeasureNumberRegion::ScorePartData>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
     {"startFont", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
     {"multipleFont", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
     {"mmRestFont", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
@@ -164,10 +159,9 @@ inline const XmlElementArray<MeasureNumberRegion::ScorePartData> FieldPopulator<
     {"startJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startJustify = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }},
     {"multipleJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleJustify = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }},
     {"mmRestJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestJustify = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }}
-};
+});
 
-template <>
-inline const XmlElementArray<MeasureNumberRegion> FieldPopulator<MeasureNumberRegion>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
     {"scoreData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->scoreData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
     {"partData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->partData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
     {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startMeas = e->getTextAs<Cmper>(); }},
@@ -187,7 +181,7 @@ inline const XmlElementArray<MeasureNumberRegion> FieldPopulator<MeasureNumberRe
     {"timePrecision", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->timePrecision = toEnum<MeasureNumberRegion::TimePrecision>(e->getTextTrimmed()); }},
     {"hideScroll", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hideScroll = true; }},
     {"hidePage", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hidePage = true; }}
-};
+});
 
 template <>
 inline XmlEnumMapping<RehearsalMarkStyle> EnumMapper<RehearsalMarkStyle>::mapping = {
@@ -270,8 +264,7 @@ inline XmlEnumMapping<MarkingCategory::CategoryType> EnumMapper<MarkingCategory:
     {"misc", MarkingCategory::CategoryType::Misc}
 };
 
-template <>
-inline const XmlElementArray<MarkingCategory> FieldPopulator<MarkingCategory>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
     {"categoryType", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->categoryType = toEnum<MarkingCategory::CategoryType>(e->getTextTrimmed()); }},
     {"textFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
         { i->textFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
@@ -294,7 +287,7 @@ inline const XmlElementArray<MarkingCategory> FieldPopulator<MarkingCategory>::x
     {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->breakMmRest = true; }},
     {"userCreated", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->userCreated = true; }},
     {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->staffList = e->getTextAs<Cmper>(); }},
-};
+});
 
 MUSX_RESOLVER_ARRAY(MarkingCategory, {
     [](const dom::DocumentPtr& document) {
@@ -307,21 +300,18 @@ MUSX_RESOLVER_ARRAY(MarkingCategory, {
     }
 });
 
-template <>
-inline const XmlElementArray<PartGlobals> FieldPopulator<PartGlobals>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
     {"showTransposed", [](const XmlElementPtr&, const std::shared_ptr<PartGlobals>& i) { i->showTransposed = true; }},
     {"scrollViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->scrollViewIUlist = e->getTextAs<Cmper>(); }},
     {"studioViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->studioViewIUlist = e->getTextAs<Cmper>(); }},
     {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<MarkingCategoryName> FieldPopulator<MarkingCategoryName>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(MarkingCategoryName, {
     {"name", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategoryName>& i) { i->name = e->getText(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<TextExpressionDef> FieldPopulator<TextExpressionDef>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
     {"textIDKey", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->textIdKey = e->getTextAs<Cmper>(); }},
     {"categoryID", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->categoryId = e->getTextAs<Cmper>(); }},
     {"rehearsalMarkStyle", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->rehearsalMarkStyle = toEnum<RehearsalMarkStyle>(e->getTextTrimmed()); }},
@@ -342,7 +332,7 @@ inline const XmlElementArray<TextExpressionDef> FieldPopulator<TextExpressionDef
     {"useCategoryFonts", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->useCategoryFonts = true; }},
     {"useCategoryPos", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->useCategoryPos = true; }},
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->description = e->getText(); }},
-};
+});
 
 MUSX_RESOLVER_ARRAY(TextExpressionDef, {
     [](const dom::DocumentPtr& document) {

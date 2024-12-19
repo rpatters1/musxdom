@@ -37,18 +37,16 @@ using namespace dom::options;
 // Field populator arrays are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
 
-template <>
-inline const XmlElementArray<AccidentalOptions> FieldPopulator<AccidentalOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(AccidentalOptions, {
     {"overlap", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalOptions>& i) { i->minOverlap = e->getTextAs<int>(); }},
     {"bacciAdd", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalOptions>& i) { i->multiCharSpace = e->getTextAs<Evpu>(); }},
     {"useNewAcciPositioning", [](const XmlElementPtr&, const std::shared_ptr<AccidentalOptions>& i) { i->crossLayerPositioning = true; }},
     {"frontAcciSepar", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalOptions>& i) { i->startMeasureSepar = e->getTextAs<Evpu>(); }},
     {"acciNoteSpace", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalOptions>& i) { i->acciNoteSpace = e->getTextAs<Evpu>(); }},
     {"acciAcciSpace", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalOptions>& i) { i->acciAcciSpace = e->getTextAs<Evpu>(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<AlternateNotationOptions> FieldPopulator<AlternateNotationOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(AlternateNotationOptions, {
     {"halfSlashLift", [](const XmlElementPtr& e, const std::shared_ptr<AlternateNotationOptions>& i) { i->halfSlashLift = e->getTextAs<Evpu>(); }},
     {"wholeSlashLift", [](const XmlElementPtr& e, const std::shared_ptr<AlternateNotationOptions>& i) { i->wholeSlashLift = e->getTextAs<Evpu>(); }},
     {"dWholeSlashLift", [](const XmlElementPtr& e, const std::shared_ptr<AlternateNotationOptions>& i) { i->dWholeSlashLift = e->getTextAs<Evpu>(); }},
@@ -56,20 +54,18 @@ inline const XmlElementArray<AlternateNotationOptions> FieldPopulator<AlternateN
     {"quartSlashStemLift", [](const XmlElementPtr& e, const std::shared_ptr<AlternateNotationOptions>& i) { i->quartSlashStemLift = e->getTextAs<Evpu>(); }},
     {"quartSlashLift", [](const XmlElementPtr& e, const std::shared_ptr<AlternateNotationOptions>& i) { i->quartSlashLift = e->getTextAs<Evpu>(); }},
     {"twoMeasNumLift", [](const XmlElementPtr& e, const std::shared_ptr<AlternateNotationOptions>& i) { i->twoMeasNumLift = e->getTextAs<Evpu>(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<AugmentationDotOptions> FieldPopulator<AugmentationDotOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(AugmentationDotOptions, {
     {"dotUpFlagOffset", [](const XmlElementPtr& e, const std::shared_ptr<AugmentationDotOptions>& i) { i->dotUpFlagOffset = e->getTextAs<Evpu>(); }},
     {"dotOffset", [](const XmlElementPtr& e, const std::shared_ptr<AugmentationDotOptions>& i) { i->dotOffset = e->getTextAs<Evpu>(); }},
     {"doDotDownAdjust", [](const XmlElementPtr&, const std::shared_ptr<AugmentationDotOptions>& i) { i->adjMultipleVoices = true; }},
     {"dotFirstOffset", [](const XmlElementPtr& e, const std::shared_ptr<AugmentationDotOptions>& i) { i->dotNoteOffset = e->getTextAs<Evpu>(); }},
     {"dotLift", [](const XmlElementPtr& e, const std::shared_ptr<AugmentationDotOptions>& i) { i->dotLift = e->getTextAs<Evpu>(); }},
     {"skip27_4DotAdjust", [](const XmlElementPtr&, const std::shared_ptr<AugmentationDotOptions>& i) { i->useLegacyFlippedStemPositioning = true; }},
-};
+});
 
-template <>
-inline const XmlElementArray<BarlineOptions> FieldPopulator<BarlineOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(BarlineOptions, {
     {"drawCloseSystemBarline", [](const XmlElementPtr&, const std::shared_ptr<BarlineOptions>& i) { i->drawCloseSystemBarline = true; }},
     {"drawCloseFinalBarline", [](const XmlElementPtr&, const std::shared_ptr<BarlineOptions>& i) { i->drawCloseFinalBarline = true; }},
     {"drawFinalBarlineOnLastMeas", [](const XmlElementPtr&, const std::shared_ptr<BarlineOptions>& i) { i->drawFinalBarlineOnLastMeas = true; }},
@@ -84,7 +80,7 @@ inline const XmlElementArray<BarlineOptions> FieldPopulator<BarlineOptions>::xml
     {"barlineDashOn", [](const XmlElementPtr& e, const std::shared_ptr<BarlineOptions>& i) { i->barlineDashOn = e->getTextAs<Evpu>(); }},
     {"barlineDashOff", [](const XmlElementPtr& e, const std::shared_ptr<BarlineOptions>& i) { i->barlineDashOff = e->getTextAs<Evpu>(); }},
     {"drawDoubleBarlineBeforeKeyChanges", [](const XmlElementPtr&, const std::shared_ptr<BarlineOptions>& i) { i->drawDoubleBarlineBeforeKeyChanges = true; }},
-};
+});
 
 template <>
 inline XmlEnumMapping<BeamOptions::FlattenStyle> EnumMapper<BeamOptions::FlattenStyle>::mapping = {
@@ -94,8 +90,7 @@ inline XmlEnumMapping<BeamOptions::FlattenStyle> EnumMapper<BeamOptions::Flatten
     {"alwaysFlat", BeamOptions::FlattenStyle::AlwaysFlat}
 };
 
-template <>
-inline const XmlElementArray<BeamOptions> FieldPopulator<BeamOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(BeamOptions, {
     {"beamStubLength", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamStubLength = e->getTextAs<Evpu>(); }},
     {"maxSlope", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->maxSlope = e->getTextAs<Evpu>(); }},
     {"beamSepar", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamSepar = e->getTextAs<Evpu>(); }},
@@ -109,10 +104,9 @@ inline const XmlElementArray<BeamOptions> FieldPopulator<BeamOptions>::xmlElemen
     {"spanSpace", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->spanSpace = true; }},
     {"extendSecBeamsOverRests", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->extendSecBeamsOverRests = true; }},
     {"beamWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamWidth = e->getTextAs<Efix>(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<ClefOptions::ClefDef> FieldPopulator<ClefOptions::ClefDef>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(ClefOptions::ClefDef, {
     {"adjust", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->middleCPos = e->getTextAs<int>(); }},
     {"clefChar", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->clefChar = e->getTextAs<char32_t>(); }},
     {"clefYDisp", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->staffPositon = e->getTextAs<int>(); }},
@@ -122,10 +116,9 @@ inline const XmlElementArray<ClefOptions::ClefDef> FieldPopulator<ClefOptions::C
     {"scaleToStaffHeight", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->scaleToStaffHeight = true; }},
     {"font", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->font = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
     {"useOwnFont", [](const XmlElementPtr&, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->useOwnFont = true; }},
-};
+});
 
-template <>
-inline const XmlElementArray<ClefOptions> FieldPopulator<ClefOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(ClefOptions, {
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->defaultClef = e->getTextAs<int>(); }},
     {"endMeasClefPercent", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->clefChangePercent = e->getTextAs<int>(); }},
     {"endMeasClefPosAdd", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->clefChangeOffset = e->getTextAs<Evpu>(); }},
@@ -144,7 +137,7 @@ inline const XmlElementArray<ClefOptions> FieldPopulator<ClefOptions>::xmlElemen
             i->clefDefs.push_back(FieldPopulator<ClefOptions::ClefDef>::createAndPopulate(e, i->getDocument()));
         }
     },
-};
+});
 
 MUSX_RESOLVER_ARRAY(ClefOptions, {
     [](const dom::DocumentPtr& document) {
@@ -158,8 +151,7 @@ MUSX_RESOLVER_ARRAY(ClefOptions, {
     },
 });
 
-template <>
-inline const XmlElementArray<FlagOptions> FieldPopulator<FlagOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(FlagOptions, {
     {"straightFlags", [](const XmlElementPtr&, const std::shared_ptr<FlagOptions>& i) { i->straightFlags = true; }},
     {"upHAdj", [](const XmlElementPtr& e, const std::shared_ptr<FlagOptions>& i) { i->upHAdj = e->getTextAs<Efix>(); }},
     {"downHAdj", [](const XmlElementPtr& e, const std::shared_ptr<FlagOptions>& i) { i->downHAdj = e->getTextAs<Efix>(); }},
@@ -180,7 +172,7 @@ inline const XmlElementArray<FlagOptions> FieldPopulator<FlagOptions>::xmlElemen
     {"stDownVAdj", [](const XmlElementPtr& e, const std::shared_ptr<FlagOptions>& i) { i->stDownVAdj = e->getTextAs<Efix>(); }},
     {"separ", [](const XmlElementPtr& e, const std::shared_ptr<FlagOptions>& i) { i->flagSpacing = e->getTextAs<Evpu>(); }},
     {"extra", [](const XmlElementPtr& e, const std::shared_ptr<FlagOptions>& i) { i->secondaryGroupAdj = e->getTextAs<Evpu>(); }},
-};
+});
 
 template <>
 inline XmlEnumMapping<FontOptions::FontType> EnumMapper<FontOptions::FontType>::mapping = {
@@ -231,8 +223,7 @@ inline XmlEnumMapping<FontOptions::FontType> EnumMapper<FontOptions::FontType>::
     {"timePlusParts", FontOptions::FontType::TimePlusParts}
 };
 
-template <>
-inline const XmlElementArray<FontOptions> FieldPopulator<FontOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(FontOptions, {
     {
         "font", [](const XmlElementPtr& fontElement, const std::shared_ptr<FontOptions>& fonts) {
             auto typeStr = fontElement->findAttribute("type");
@@ -248,20 +239,18 @@ inline const XmlElementArray<FontOptions> FieldPopulator<FontOptions>::xmlElemen
             fonts->fontOptions.emplace(fontType, fontInfo);
         }
     },
-};
+});
 
-template <>
-inline const XmlElementArray<GraceNoteOptions> FieldPopulator<GraceNoteOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(GraceNoteOptions, {
     {"tabGracePerc", [](const XmlElementPtr& e, const std::shared_ptr<GraceNoteOptions>& i) { i->tabGracePerc = e->getTextAs<int>(); }},
     {"gracePerc", [](const XmlElementPtr& e, const std::shared_ptr<GraceNoteOptions>& i) { i->gracePerc = e->getTextAs<int>(); }},
     {"playbackDuration", [](const XmlElementPtr& e, const std::shared_ptr<GraceNoteOptions>& i) { i->playbackDuration = e->getTextAs<Edu>(); }},
     {"graceBackup", [](const XmlElementPtr& e, const std::shared_ptr<GraceNoteOptions>& i) { i->entryOffset = e->getTextAs<Evpu>(); }},
     {"slashFlaggedGraceNotes", [](const XmlElementPtr&, const std::shared_ptr<GraceNoteOptions>& i) { i->slashFlaggedGraceNotes = true; }},
     {"graceSlashWidth", [](const XmlElementPtr& e, const std::shared_ptr<GraceNoteOptions>& i) { i->graceSlashWidth = e->getTextAs<Efix>(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<KeySignatureOptions> FieldPopulator<KeySignatureOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(KeySignatureOptions, {
     {"doKeyCancel", [](const XmlElementPtr&, const std::shared_ptr<KeySignatureOptions>& i) { i->doKeyCancel = true; }},
     {"doCStart", [](const XmlElementPtr&, const std::shared_ptr<KeySignatureOptions>& i) { i->doCStart = true; }},
     {"doBankDiff", [](const XmlElementPtr&, const std::shared_ptr<KeySignatureOptions>& i) { i->redisplayOnModeChange = true; }},
@@ -274,10 +263,9 @@ inline const XmlElementArray<KeySignatureOptions> FieldPopulator<KeySignatureOpt
     {"simplifyKeyHoldOctave", [](const XmlElementPtr&, const std::shared_ptr<KeySignatureOptions>& i) { i->simplifyKeyHoldOctave = true; }},
     {"cautionaryKeyChanges", [](const XmlElementPtr&, const std::shared_ptr<KeySignatureOptions>& i) { i->cautionaryKeyChanges = true; }},
     {"doKeyCancelBetweenSharpsFlats", [](const XmlElementPtr&, const std::shared_ptr<KeySignatureOptions>& i) { i->doKeyCancelBetweenSharpsFlats = true; }},
-};
+});
 
-template <>
-inline const XmlElementArray<LineCurveOptions> FieldPopulator<LineCurveOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(LineCurveOptions, {
     {"bezierStep", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->bezierStep = e->getTextAs<int>(); }},
     {"enclosureWidth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->enclosureWidth = e->getTextAs<Efix>(); }},
     {"enclosureRoundCorners", [](const XmlElementPtr&, const std::shared_ptr<LineCurveOptions>& i) { i->enclosureRoundCorners = true; }},
@@ -291,10 +279,9 @@ inline const XmlElementArray<LineCurveOptions> FieldPopulator<LineCurveOptions>:
     {"psUlDepth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->psUlDepth = e->getTextAs<double>(); }},
     {"psUlWidth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->psUlWidth = e->getTextAs<double>(); }},
     {"pathSlurTipWidth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->pathSlurTipWidth = e->getTextAs<EvpuFloat>(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<MiscOptions> FieldPopulator<MiscOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(MiscOptions, {
     {"showRepeatsForParts", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->showRepeatsForParts = true;}},
     {"retainOctaveTransInConcertPitch", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->keepOctaveTransInConcertPitch = true;}},
     {"showCurrentLayerOnly", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->showActiveLayerOnly = true;}},
@@ -302,10 +289,9 @@ inline const XmlElementArray<MiscOptions> FieldPopulator<MiscOptions>::xmlElemen
     {"sdDashOn", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->shapeDesignerDashLength = e->getTextAs<Evpu>();}},
     {"sdDashOff", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->shapeDesignerDashSpace = e->getTextAs<Evpu>();}},
     {"drawMeasureNumbersOverBarlines", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->alignMeasureNumbersWithBarlines = true;}},
-};
+});
 
-template <>
-inline const XmlElementArray<MultimeasureRestOptions> FieldPopulator<MultimeasureRestOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(MultimeasureRestOptions, {
     {"meaSpace", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->measWidth = e->getTextAs<Evpu>();}},
     {"numdec", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->numAdjY = e->getTextAs<Evpu>();}},
     {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->shapeDef = e->getTextAs<Cmper>();}},
@@ -317,7 +303,7 @@ inline const XmlElementArray<MultimeasureRestOptions> FieldPopulator<Multimeasur
     {"endAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->endAdjust = e->getTextAs<Evpu>();}},
     {"useCharRestStyle", [](const XmlElementPtr&, const std::shared_ptr<MultimeasureRestOptions>& i) {i->useSymbols = true;}},
     {"autoUpdateMmRests", [](const XmlElementPtr&, const std::shared_ptr<MultimeasureRestOptions>& i) {i->autoUpdateMmRests = true;}},
-};
+});
 
 template <>
 inline XmlEnumMapping<MusicSpacingOptions::ColUnisonsChoice> EnumMapper<MusicSpacingOptions::ColUnisonsChoice>::mapping = {
@@ -337,8 +323,7 @@ inline XmlEnumMapping<MusicSpacingOptions::GraceNoteSpacing> EnumMapper<MusicSpa
     {"keep", MusicSpacingOptions::GraceNoteSpacing::KeepCurrent}
 };
 
-template <>
-inline const XmlElementArray<MusicSpacingOptions> FieldPopulator<MusicSpacingOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
     {"minWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->minWidth = e->getTextAs<Evpu>(); }},
     {"maxWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->maxWidth = e->getTextAs<Evpu>(); }},
     {"minDistance", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->minDistance = e->getTextAs<Evpu>(); }},
@@ -363,10 +348,9 @@ inline const XmlElementArray<MusicSpacingOptions> FieldPopulator<MusicSpacingOpt
     {"graceNoteManualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->graceNoteSpacing = toEnum<MusicSpacingOptions::GraceNoteSpacing>(e->getTextTrimmed()); }},
     {"musFront", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->musFront = e->getTextAs<Evpu>(); }},
     {"musBack", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->musBack = e->getTextAs<Evpu>(); }},
-};
+});
 
-template <>
-inline const XmlElementArray<PageFormatOptions::PageFormat> FieldPopulator<PageFormatOptions::PageFormat>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(PageFormatOptions::PageFormat, {
     {"pageHeight", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->pageHeight = e->getTextAs<Evpu>(); }},
     {"pageWidth", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->pageWidth = e->getTextAs<Evpu>(); }},
     {"pagePercent", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->pagePercent = e->getTextAs<int>(); }},
@@ -392,7 +376,7 @@ inline const XmlElementArray<PageFormatOptions::PageFormat> FieldPopulator<PageF
     {"facingPages", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->facingPages = true; }},
     {"differentFirstSysMargin", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->differentFirstSysMargin = true; }},
     {"differentFirstPageMargin", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->differentFirstPageMargin = true; }},
-};
+});
 
 template <>
 inline XmlEnumMapping<PageFormatOptions::AdjustPageScope> EnumMapper<PageFormatOptions::AdjustPageScope>::mapping = {
@@ -402,16 +386,14 @@ inline XmlEnumMapping<PageFormatOptions::AdjustPageScope> EnumMapper<PageFormatO
     {"range", PageFormatOptions::AdjustPageScope::PageRange}
 };
 
-template <>
-inline const XmlElementArray<PageFormatOptions> FieldPopulator<PageFormatOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(PageFormatOptions, {
     {"pageFormatScore", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i){ i->pageFormatScore = FieldPopulator<PageFormatOptions::PageFormat>::createAndPopulate(e); }},
     {"pageFormatParts", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i) { i->pageFormatParts = FieldPopulator<PageFormatOptions::PageFormat>::createAndPopulate(e); }},
     {"avoidSystemMarginCollisions", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions>& i) { i->avoidSystemMarginCollisions = true; }},
     {"adjustPageScope", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i) { i->adjustPageScope = toEnum<PageFormatOptions::AdjustPageScope>(e->getTextTrimmed()); }},
-};
+});
 
-template <>
-inline const XmlElementArray<PianoBraceBracketOptions> FieldPopulator<PianoBraceBracketOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(PianoBraceBracketOptions, {
     {"defBracketPos", [](const XmlElementPtr& e, const std::shared_ptr<PianoBraceBracketOptions>& i) { i->defBracketPos = e->getTextAs<Evpu>(); }},
     {"centerThickness", [](const XmlElementPtr& e, const std::shared_ptr<PianoBraceBracketOptions>& i) { i->centerThickness = e->getTextAs<EvpuFloat>(); }},
     {"endThickness", [](const XmlElementPtr& e, const std::shared_ptr<PianoBraceBracketOptions>& i) { i->tipThickness = e->getTextAs<EvpuFloat>(); }},
@@ -424,7 +406,7 @@ inline const XmlElementArray<PianoBraceBracketOptions> FieldPopulator<PianoBrace
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<PianoBraceBracketOptions>& i) { i->width = e->getTextAs<EvpuFloat>(); }},
     {"innerTipX", [](const XmlElementPtr& e, const std::shared_ptr<PianoBraceBracketOptions>& i) { i->innerTipH = e->getTextAs<EvpuFloat>(); }},
     {"innerWingX", [](const XmlElementPtr& e, const std::shared_ptr<PianoBraceBracketOptions>& i) { i->innerBodyH = e->getTextAs<EvpuFloat>(); }},
-};
+});
 
 template <>
 inline XmlEnumMapping<RepeatOptions::WingStyle> EnumMapper<RepeatOptions::WingStyle>::mapping = {
@@ -441,8 +423,7 @@ inline XmlEnumMapping<RepeatOptions::BackToBackStyle> EnumMapper<RepeatOptions::
     {"thick", RepeatOptions::BackToBackStyle::Thick}
 };
 
-template <>
-inline const XmlElementArray<RepeatOptions> FieldPopulator<RepeatOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(RepeatOptions, {
     {"bracketHeight", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->bracketHeight = e->getTextAs<Evpu>(); }},
     {"maxPasses", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->maxPasses = e->getTextAs<int>(); }},
     {"addPeriod", [](const XmlElementPtr&, const std::shared_ptr<RepeatOptions>& i) { i->addPeriod = true; }},
@@ -467,7 +448,7 @@ inline const XmlElementArray<RepeatOptions> FieldPopulator<RepeatOptions>::xmlEl
     {"bracketEndHookLen", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->bracketEndHookLen = e->getTextAs<Evpu>(); }},
     {"bracketEndAnchorThinLine", [](const XmlElementPtr&, const std::shared_ptr<RepeatOptions>& i) { i->bracketEndAnchorThinLine = true; }},
     {"showOnStaffListNumber", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->showOnStaffListNumber = e->getTextAs<Cmper>(); }},
-};
+});
 
 template <>
 inline XmlEnumMapping<SmartShapeOptions::DefaultDirection> EnumMapper<SmartShapeOptions::DefaultDirection>::mapping = {
@@ -575,22 +556,19 @@ inline XmlEnumMapping<SmartShapeOptions::SlurControlStyleType> EnumMapper<SmartS
     {"extraLongSpan", SmartShapeOptions::SlurControlStyleType::ExtraLongSpan}
 };
 
-template <>
-inline const XmlElementArray<SmartShapeOptions::ConnectionStyle> FieldPopulator<SmartShapeOptions::ConnectionStyle>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(SmartShapeOptions::ConnectionStyle, {
     {"connectIndex", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->connectIndex = toEnum<SmartShapeOptions::ConnectionIndex>(e->getTextTrimmed()); }},
     {"xOffset", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
     {"yOffset", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->yOffset = e->getTextAs<Evpu>(); }}
-};
+});
 
-template <>
-inline const XmlElementArray<SmartShapeOptions::ControlStyle> FieldPopulator<SmartShapeOptions::ControlStyle>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(SmartShapeOptions::ControlStyle, {
     {"span", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ControlStyle>& i) { i->span = e->getTextAs<Efix>(); }},
     {"inset", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ControlStyle>& i) { i->inset = e->getTextAs<Efix>(); }},
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ControlStyle>& i) { i->height = e->getTextAs<Evpu>(); }}
-};
+});
 
-template <>
-inline const XmlElementArray<SmartShapeOptions> FieldPopulator<SmartShapeOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(SmartShapeOptions, {
     {"shortHairpinOpeningWidth", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->shortHairpinOpeningWidth = e->getTextAs<Evpu>(); }},
     {"crescHeight", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->crescHeight = e->getTextAs<Evpu>(); }},
     {"maximumShortHairpinLength", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->maximumShortHairpinLength = e->getTextAs<Evpu>(); }},
@@ -637,10 +615,9 @@ inline const XmlElementArray<SmartShapeOptions> FieldPopulator<SmartShapeOptions
     {"tabSlideConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { populateEmbeddedClass(e, i->tabSlideConnectStyles); }},
     {"glissandoConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { populateEmbeddedClass(e, i->glissandoConnectStyles); }},
     {"bendCurveConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { populateEmbeddedClass(e, i->bendCurveConnectStyles); }},
-};
+});
 
-template <>
-inline const XmlElementArray<StaffOptions> FieldPopulator<StaffOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(StaffOptions, {
     {"staffSeparation", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->staffSeparation = e->getTextAs<Evpu>(); }},
     {"staffSeparIncr", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->staffSeparIncr = e->getTextAs<Evpu>(); }},
     {"autoAdjustStaffSepar", [](const XmlElementPtr&, const std::shared_ptr<StaffOptions>& i) { i->autoAdjustStaffSepar = true; }},
@@ -652,10 +629,9 @@ inline const XmlElementArray<StaffOptions> FieldPopulator<StaffOptions>::xmlElem
         { i->groupNameFullPos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
     {"groupNameAbbrvPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
         { i->groupNameAbbrvPos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
-};
+});
 
-template <>
-inline const XmlElementArray<StemOptions> FieldPopulator<StemOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(StemOptions, {
     {"halfStemLength", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->halfStemLength = e->getTextAs<Evpu>(); }},
     {"stemLength", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemLength = e->getTextAs<Evpu>(); }},
     {"stem2", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->shortStemLength = e->getTextAs<Evpu>(); }},
@@ -664,7 +640,7 @@ inline const XmlElementArray<StemOptions> FieldPopulator<StemOptions>::xmlElemen
     {"stemWidth", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemWidth = e->getTextAs<Efix>(); }},
     {"stemLift", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemOffset = e->getTextAs<Efix>(); }},
     {"useStemConnections", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>& i) { i->useStemConnections = true; }},
-};
+});
 
 template <>
 inline XmlEnumMapping<TieOptions::SecondsPlacement> EnumMapper<TieOptions::SecondsPlacement>::mapping = {
@@ -718,28 +694,24 @@ inline XmlEnumMapping<TieOptions::ControlStyleType> EnumMapper<TieOptions::Contr
     {"tieEnds", TieOptions::ControlStyleType::TieEnds}
 };
 
-template <>
-inline const XmlElementArray<TieOptions::ConnectStyle> FieldPopulator<TieOptions::ConnectStyle>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(TieOptions::ConnectStyle, {
     {"offsetX", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ConnectStyle>& i) { i->offsetX = e->getTextAs<Evpu>(); }},
     {"offsetY", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ConnectStyle>& i) { i->offsetY = e->getTextAs<Evpu>(); }}
-};
+});
 
-template <>
-inline const XmlElementArray<TieOptions::ControlPoint> FieldPopulator<TieOptions::ControlPoint>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(TieOptions::ControlPoint, {
     {"insetRatio", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlPoint>& i) { i->insetRatio = e->getTextAs<Efix>(); }},
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlPoint>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"insetFixed", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlPoint>& i) { i->insetFixed = e->getTextAs<Evpu>(); }}
-};
+});
 
-template <>
-inline const XmlElementArray<TieOptions::ControlStyle> FieldPopulator<TieOptions::ControlStyle>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(TieOptions::ControlStyle, {
     {"span", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlStyle>& i) { i->span = e->getTextAs<Evpu>(); }},
     {"cp1", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlStyle>& i) { i->cp1 = FieldPopulator<TieOptions::ControlPoint>::createAndPopulate(e); }},
     {"cp2", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ControlStyle>& i) { i->cp2 = FieldPopulator<TieOptions::ControlPoint>::createAndPopulate(e); }}
-};
+});
 
-template <>
-inline const XmlElementArray<TieOptions> FieldPopulator<TieOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(TieOptions, {
     {"frontTieSepar", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->frontTieSepar = e->getTextAs<Evpu>(); }},
     {"thicknessRight", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->thicknessRight = e->getTextAs<Evpu>(); }},
     {"thicknessLeft", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->thicknessLeft = e->getTextAs<Evpu>(); }},
@@ -768,10 +740,9 @@ inline const XmlElementArray<TieOptions> FieldPopulator<TieOptions>::xmlElements
     {"tieTipWidth", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->tieTipWidth = e->getTextAs<EvpuFloat>(); }},
     {"tieConnectStyle", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { populateEmbeddedClass(e, i->tieConnectStyles); }},
     {"tieControlStyle", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { populateEmbeddedClass(e, i->tieControlStyles); }}
-};
+});
 
-template <>
-inline const XmlElementArray<TimeSignatureOptions> FieldPopulator<TimeSignatureOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(TimeSignatureOptions, {
     {"timeUpperLift", [](const XmlElementPtr& e, const std::shared_ptr<TimeSignatureOptions>& i) { i->timeUpperLift = e->getTextAs<Evpu>(); }},
     {"timeFront", [](const XmlElementPtr& e, const std::shared_ptr<TimeSignatureOptions>& i) { i->timeFront = e->getTextAs<Evpu>(); }},
     {"timeBack", [](const XmlElementPtr& e, const std::shared_ptr<TimeSignatureOptions>& i) { i->timeBack = e->getTextAs<Evpu>(); }},
@@ -786,7 +757,7 @@ inline const XmlElementArray<TimeSignatureOptions> FieldPopulator<TimeSignatureO
     {"cautionaryTimeChanges", [](const XmlElementPtr&, const std::shared_ptr<TimeSignatureOptions>& i) { i->cautionaryTimeChanges = true; }},
     {"timeLowerLift", [](const XmlElementPtr& e, const std::shared_ptr<TimeSignatureOptions>& i) { i->timeLowerLift = e->getTextAs<Evpu>(); }},
     {"timeAbrvLift", [](const XmlElementPtr& e, const std::shared_ptr<TimeSignatureOptions>& i) { i->timeAbrvLift = e->getTextAs<Evpu>(); }},
-};
+});
 
 template <>
 inline XmlEnumMapping<TupletOptions::AutoBracketStyle> EnumMapper<TupletOptions::AutoBracketStyle>::mapping = {
@@ -820,8 +791,7 @@ inline XmlEnumMapping<TupletOptions::BracketStyle> EnumMapper<TupletOptions::Bra
     {"bracket", TupletOptions::BracketStyle::Bracket},
 };
 
-template <>
-inline const XmlElementArray<TupletOptions> FieldPopulator<TupletOptions>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(TupletOptions, {
     {"flat", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->alwaysFlat = true; }},
     {"fullDura", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->fullDura = true; }},
     {"metricCenter", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->metricCenter = true; }},
@@ -849,7 +819,7 @@ inline const XmlElementArray<TupletOptions> FieldPopulator<TupletOptions>::xmlEl
     {"tupLineWidth", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupLineWidth = e->getTextAs<Efix>(); }},
     {"tupNUpstemOffset", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupNUpstemOffset = e->getTextAs<Evpu>(); }},
     {"tupNDownstemOffset", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupNDownstemOffset = e->getTextAs<Evpu>(); }},
-};
+});
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 

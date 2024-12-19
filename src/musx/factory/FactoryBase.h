@@ -319,8 +319,7 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
     listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
 }
 
-template <>
-inline const XmlElementArray<dom::FontInfo> FieldPopulator<dom::FontInfo>::xmlElements = {
+MUSX_XML_ELEMENT_ARRAY(dom::FontInfo, {
     {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
     {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
     {"efx", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) {
@@ -342,7 +341,7 @@ inline const XmlElementArray<dom::FontInfo> FieldPopulator<dom::FontInfo>::xmlEl
             }        
         }
     },
-};
+});
 
 template <>
 template <typename... Args>
