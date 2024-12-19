@@ -64,6 +64,23 @@ inline const XmlElementArray<Enclosure> FieldPopulator<Enclosure>::xmlElements =
 };
 
 template <>
+inline XmlEnumMapping<NamePositioning::AlignJustify> EnumMapper<NamePositioning::AlignJustify>::mapping = {
+    //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
+    {"center", NamePositioning::AlignJustify::Center},
+    {"right", NamePositioning::AlignJustify::Right},
+};
+
+template <>
+inline const XmlElementArray<NamePositioning> FieldPopulator<NamePositioning>::xmlElements = {
+    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
+    {"indivPos", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->indivPos = e->getTextAs<bool>(); }},
+    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
+    {"expand", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->expand = e->getTextAs<bool>(); }},
+};
+
+template <>
 inline const XmlElementArray<FontDefinition> FieldPopulator<FontDefinition>::xmlElements = {
     {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
     {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},

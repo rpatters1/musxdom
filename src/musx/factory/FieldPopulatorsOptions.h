@@ -644,6 +644,21 @@ inline const XmlElementArray<SmartShapeOptions> FieldPopulator<SmartShapeOptions
 };
 
 template <>
+inline const XmlElementArray<StaffOptions> FieldPopulator<StaffOptions>::xmlElements = {
+    {"staffSeparation", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->staffSeparation = e->getTextAs<Evpu>(); }},
+    {"staffSeparIncr", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->staffSeparIncr = e->getTextAs<Evpu>(); }},
+    {"autoAdjustStaffSepar", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->autoAdjustStaffSepar = e->getTextAs<bool>(); }},
+    {"namePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
+        { i->namePos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
+    {"namePosAbbrv", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
+        { i->namePosAbbrv = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
+    {"groupNameFullPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
+        { i->groupNameFullPos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
+    {"groupNameAbbrvPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
+        { i->groupNameAbbrvPos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
+};
+
+template <>
 inline const XmlElementArray<StemOptions> FieldPopulator<StemOptions>::xmlElements = {
     {"halfStemLength", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->halfStemLength = e->getTextAs<Evpu>(); }},
     {"stemLength", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemLength = e->getTextAs<Evpu>(); }},

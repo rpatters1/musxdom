@@ -36,54 +36,6 @@ namespace dom {
 namespace others {
 
 /**
- * @class Enclosure
- * @brief Represents the enclosure settings for text expressions.
- */
-class Enclosure : public OthersBase
-{
-public:
-    /**
-     * @enum Shape
-     * @brief Enumeration for enclosure shapes.
-     */
-    enum class Shape : uint8_t
-    {
-        NoEnclosure = 0,    ///< No enclosure
-        Rectangle = 1,      ///< Rectangle
-        Ellipse = 2,        ///< Ellipse
-        Triangle = 3,       ///< Triangle
-        Diamond = 4,        ///< Diamond
-        Pentagon = 5,       ///< Pentagon
-        Hexagon = 6,        ///< Hexagon
-        Heptagon = 7,       ///< Heptagon
-        Octogon = 8         ///< Octogon
-    };
-
-    /**
-     * @brief Constructs an Enclosure object.
-     * @param document Shared pointer to the document.
-     * @param partId Usually 0. This parameter is needed for the generic factory routine.
-     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
-     * @param cmper Comparison parameter. This will be zero for enclosures taken from @ref MeasureNumberRegion.
-     */
-    explicit Enclosure(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
-        : OthersBase(document, partId, shareMode, cmper) {}
-
-    Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
-    Evpu yAdd{};              ///< Center Y offset - offsets text from center (in EVPU).
-    Evpu xMargin{};           ///< Half width - extra space on left/right sides (in EVPU).
-    Evpu yMargin{};           ///< Half height - extra space on top/bottom sides (in EVPU).
-    Efix lineWidth{};         ///< Line thickness in 64ths of an EVPU (EFIX).
-    Shape shape{};            ///< Enclosure shape (default: NoEnclosure).
-    Efix cornerRadius{};      ///< Corner radius (in EFIX).
-    bool fixedSize{};         ///< Whether the enclosure is fixed size (ignore text bounding box)
-    bool equalAspect{};       ///< "Match Height and Width"
-    bool notTall{};           ///< "Enforce Minimum Width": don't let shape get taller than it is wide
-    bool opaque{};            ///< Whether the enclosure is opaque.
-    bool roundCorners{};      ///< Whether the enclosure has rounded corners.
-};
-
-/**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained.
  *
@@ -156,9 +108,9 @@ public:
     /// @brief Alignment and justification options for measure numbers.
     enum class AlignJustify
     {
-        Left,   ///< default value
-        Right,
-        Center
+        Left,   ///< Left alignment or justification (the default value.)
+        Right,  ///< Right alignment.
+        Center  ///< Center alignment.
     };
 
     /// @brief Precision for time display

@@ -946,6 +946,33 @@ public:
 };
 
 /**
+ * @class StaffOptions
+ * @brief Options controlling the appearance and layout of staves.
+ *
+ * This class is identified by the XML node name "staffOptions".
+ */
+class StaffOptions : public OptionsBase
+{
+    using NamePositioning = others::NamePositioning;
+
+public:
+    /** @brief Constructor function */
+    explicit StaffOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    Evpu staffSeparation{};         ///< Default topline-to-topline distance in @ref Evpu. (This value is sign-reversed in the Finale UI.)
+    Evpu staffSeparIncr{};          ///< "Add Vertical Space" value for Setup Wizard.
+    bool autoAdjustStaffSepar{};    ///< "The Default Value Topline-to-Topline Distance is a Preferred Value That Can Change if Necessary" (for Setup Wizard.)
+
+    std::shared_ptr<NamePositioning> namePos;           ///< Default full name positioning for staves.
+    std::shared_ptr<NamePositioning> namePosAbbrv;      ///< Default abbreviated name positioning for staves.
+    std::shared_ptr<NamePositioning> groupNameFullPos;  ///< Default full name positioning for staff groups.
+    std::shared_ptr<NamePositioning> groupNameAbbrvPos; ///< Default abbreviated name positioning for staff groups.
+
+    constexpr static std::string_view XmlNodeName = "staffOptions"; ///< The XML node name for this type.
+};
+
+/**
  * @class StemOptions
  * @brief Options controlling the appearance of stems.
  *

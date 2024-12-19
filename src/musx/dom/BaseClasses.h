@@ -321,5 +321,95 @@ public:
     static std::vector<std::filesystem::path> calcSMuFLPaths();
 };
 
+namespace others {
+
+// The following classed are defined here because they are shared by multiple subclasses.
+
+/**
+ * @class Enclosure
+ * @brief Represents the enclosure settings for text expressions.
+ */
+class Enclosure : public OthersBase
+{
+public:
+    /**
+     * @enum Shape
+     * @brief Enumeration for enclosure shapes.
+     */
+    enum class Shape : uint8_t
+    {
+        NoEnclosure = 0,    ///< No enclosure
+        Rectangle = 1,      ///< Rectangle
+        Ellipse = 2,        ///< Ellipse
+        Triangle = 3,       ///< Triangle
+        Diamond = 4,        ///< Diamond
+        Pentagon = 5,       ///< Pentagon
+        Hexagon = 6,        ///< Hexagon
+        Heptagon = 7,       ///< Heptagon
+        Octogon = 8         ///< Octogon
+    };
+
+    /**
+     * @brief Constructs an Enclosure object.
+     * @param document Shared pointer to the document.
+     * @param partId Usually 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
+     * @param cmper Comperator parameter. This value is zero for enclosures taken from @ref MeasureNumberRegion.
+     */
+    explicit Enclosure(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
+    Evpu yAdd{};              ///< Center Y offset - offsets text from center (in EVPU).
+    Evpu xMargin{};           ///< Half width - extra space on left/right sides (in EVPU).
+    Evpu yMargin{};           ///< Half height - extra space on top/bottom sides (in EVPU).
+    Efix lineWidth{};         ///< Line thickness in 64ths of an EVPU (EFIX).
+    Shape shape{};            ///< Enclosure shape (default: NoEnclosure).
+    Efix cornerRadius{};      ///< Corner radius (in EFIX).
+    bool fixedSize{};         ///< Whether the enclosure is fixed size (ignore text bounding box)
+    bool equalAspect{};       ///< "Match Height and Width"
+    bool notTall{};           ///< "Enforce Minimum Width": don't let shape get taller than it is wide
+    bool opaque{};            ///< Whether the enclosure is opaque.
+    bool roundCorners{};      ///< Whether the enclosure has rounded corners.
+};
+
+/**
+ * @class NamePositioning
+ * @brief Contains horizontal and vertical offsets, alignment, and expansion settings for name positioning.
+ * 
+ * This class is used both for default names as well as name positioning @ref Staff, @ref StaffStyle,
+ * and @ref StaffGroup.
+ */
+class NamePositioning : OthersBase
+{
+public:
+
+    /**
+     * @brief Constructs an NamePositioning object.
+     * @param document Shared pointer to the document.
+     * @param partId The part ID if this name positioning is unlinked.
+     * @param shareMode The share mode if this name positioning is unlinked.
+     * @param cmper Comperator parameter. This value is zero for name positioning taken from @ref options::StaffOptions.
+     */
+    explicit NamePositioning(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /// @brief Alignment and justification options for staff and group names.
+    enum class AlignJustify
+    {
+        Left,   ///< Left alignment or justification (the default value.)
+        Right,  ///< Right alignment.
+        Center  ///< Center alignment.
+    };
+    
+    Evpu horzOff{};             ///< Horizontal distance from staff in @ref Evpu.
+    Evpu vertOff{};             ///< Vertical offset from staff in @ref Evpu.
+    AlignJustify justify{};     ///< Justification for the name text.
+    bool indivPos{};            ///< Indicates that this positioning overrides the default positioning. (Not used by @ref options::StaffOptions.)
+    AlignJustify hAlign{};      ///< Horizontal alignment for the name text. (xml node is `<halign>`)
+    bool expand{};              ///< "Expand Single Word"
+};
+
+} // namespace others
 } // namespace dom
 } // namespace musx
