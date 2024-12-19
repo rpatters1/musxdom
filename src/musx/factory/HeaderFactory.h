@@ -44,7 +44,7 @@ public:
      * @return A fully populated `Header` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
-    static musx::dom::header::HeaderPtr create(const std::shared_ptr<xml::IXmlElement>& element)
+    static musx::dom::header::HeaderPtr create(const XmlElementPtr& element)
     {
         auto headerDataElement = getFirstChildElement(element, "headerData");
         if (!headerDataElement) {
@@ -68,7 +68,7 @@ private:
      * @return The corresponding `WordOrder` enum value.
      * @throws std::invalid_argument if the word order value is invalid.
      */
-    static musx::dom::header::WordOrder parseWordOrder(const std::shared_ptr<xml::IXmlElement>& element)
+    static musx::dom::header::WordOrder parseWordOrder(const XmlElementPtr& element)
     {
         std::string value = element->getText();
         if (value == "lo-endian") return musx::dom::header::WordOrder::LittleEndian;
@@ -82,7 +82,7 @@ private:
      * @param value The string value to parse.
      * @return The corresponding `TextEncoding` enum value.
      */
-    static musx::dom::header::TextEncoding parseTextEncoding(const std::shared_ptr<xml::IXmlElement>& element)
+    static musx::dom::header::TextEncoding parseTextEncoding(const XmlElementPtr& element)
     {
         std::string value = element->getText();
         if (value == "Mac") return musx::dom::header::TextEncoding::Mac;
@@ -96,7 +96,7 @@ private:
      * @param value The string value to parse.
      * @return The corresponding `Platform` enum value.
      */
-    static musx::dom::header::Platform parsePlatform(const std::shared_ptr<xml::IXmlElement>& element)
+    static musx::dom::header::Platform parsePlatform(const XmlElementPtr& element)
     {
         std::string value = element->getText();
         if (value == "MAC") return musx::dom::header::Platform::Mac;
@@ -110,7 +110,7 @@ private:
      * @param element The XML element representing a `<created>` or `<modified>` node.
      * @return A fully populated `FileInfo` object.
      */
-    static musx::dom::header::FileInfo parseFileInfo(const std::shared_ptr<xml::IXmlElement>& element)
+    static musx::dom::header::FileInfo parseFileInfo(const XmlElementPtr& element)
     {
         musx::dom::header::FileInfo fileInfo;
         getFieldFromXml(element, "year", fileInfo.year, [](auto element) { return element->template getTextAs<int>(); });
@@ -134,7 +134,7 @@ private:
      * @return A fully populated `FinaleVersion` object.
      * @throws std::runtime_error If required nodes or attributes are missing or invalid.
      */
-    static musx::dom::header::FinaleVersion parseFinaleVersion(const std::shared_ptr<xml::IXmlElement>& element) {
+    static musx::dom::header::FinaleVersion parseFinaleVersion(const XmlElementPtr& element) {
         if (!element) {
             throw std::runtime_error("Missing version element.");
         }

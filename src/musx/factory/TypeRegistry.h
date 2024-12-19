@@ -88,14 +88,17 @@ public:
      *
      * Uses the node name to look up the registered type and create an instance of it.
      *
+     * @tparam PoolPtr The object pool type for getting score versions (when doing part linkage)
      * @tparam Args The argument types required by the constructor of the target type.
+     * @param pool The object pool for getting score versions (when doing part linkage)
      * @param node The XML node from which an instance is to be created.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @param document The document that we are creating the instance for.
      * @param args Arguments to be forwarded to the constructor of the target type.
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
-    template <typename... Args>
-    static std::shared_ptr<Base> createInstance(const std::shared_ptr<xml::IXmlElement>& node, ElementLinker& elementLinker, Args&&... args)
+    template <typename PoolPtr, typename... Args>
+    static std::shared_ptr<Base> createInstance(const PoolPtr& pool, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
     {
         auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
@@ -106,8 +109,26 @@ public:
             [&](auto const& ptr) -> std::shared_ptr<Base> {
                 using T = std::remove_pointer_t<std::remove_reference_t<decltype(ptr)>>;
                 // Only enable this part if T is constructible with Args...
-                if constexpr (std::is_constructible_v<T, Args...>) {
-                    auto instance = std::make_shared<T>(std::forward<Args>(args)...);
+                if constexpr (std::is_constructible_v<T, const DocumentPtr&, Cmper, Base::ShareMode, Args...>) {
+                    auto partAttr = node->findAttribute("part");
+                    Cmper partId = partAttr ? partAttr->getValueAs<Cmper>() : 0; // zero is the score ID
+                    auto shareMode = Base::ShareMode::All;
+                    if (auto shareAttr = node->findAttribute("shared")) {
+                        shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
+                    }
+                    auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
+                    if (instance->getShareMode() == Base::ShareMode::Partial) {
+                        for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
+                            instance->addUnlinkedNode(child->getTagName());
+                        }
+                        auto scoreValue = pool->template get<T>(std::forward<Args>(args)...);
+                        if (scoreValue) {
+                            *instance = *scoreValue;
+                        }
+                        else {
+                            throw std::invalid_argument("score instance not found for partially linked part instance");
+                        }
+                    }
                     factory::FieldPopulator<T>::populate(instance, node, elementLinker);
                     return instance;
                 } else {
@@ -125,8 +146,29 @@ public:
  * These types are maintained in the order in which Finale serializes them.
  */
 using RegisteredOptions = TypeRegistry <
-    dom::options::DefaultFonts,
-    dom::options::PageFormatOptions
+    dom::options::AccidentalOptions,
+    dom::options::AlternateNotationOptions,
+    dom::options::AugmentationDotOptions,
+    dom::options::BarlineOptions,
+    dom::options::BeamOptions,
+    dom::options::ClefOptions,
+    dom::options::FlagOptions,
+    dom::options::FontOptions,
+    dom::options::GraceNoteOptions,
+    dom::options::KeySignatureOptions,
+    dom::options::LineCurveOptions,
+    dom::options::MiscOptions,
+    dom::options::MultimeasureRestOptions,
+    dom::options::MusicSpacingOptions,
+    dom::options::PageFormatOptions,
+    dom::options::PianoBraceBracketOptions,
+    dom::options::RepeatOptions,
+    dom::options::SmartShapeOptions,
+    dom::options::StaffOptions,
+    dom::options::StemOptions,
+    dom::options::TieOptions,
+    dom::options::TimeSignatureOptions,
+    dom::options::TupletOptions
 >;
 
 /**
@@ -136,9 +178,12 @@ using RegisteredOptions = TypeRegistry <
  */
 using RegisteredOthers = TypeRegistry <
     dom::others::FontDefinition,
+    dom::others::LayerAttributes,
+    dom::others::MeasureNumberRegion,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,
+    dom::others::PartGlobals,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName
 >;

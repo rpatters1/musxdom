@@ -45,10 +45,26 @@ public:
      * @brief Constructs a `FileInfoText` object.
      * 
      * @param document A weak pointer to the parent document
+     * @param shareMode Always `ShareMode::All`, but this parameeter is needed for the generic factory routine.
+     * @param partId Always 0, but this parameter is needed for the generic factory routine.
      * @param textNumber The text number (`Cmper`).
      */
-    FileInfoText(const DocumentWeakPtr& document, Cmper textNumber)
-        : TextsBase(document, textNumber)
+    explicit FileInfoText(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper textNumber)
+        : TextsBase(document, partId, shareMode, textNumber)
+    {
+        if (textNumber <= 0 || textNumber > Cmper(TextType::Subtitle)) {
+            throw std::invalid_argument("invalid text type value provided to FileInfoText constructor");
+        }
+    }
+
+    /**
+     * @brief Constructs a `FileInfoText` object.
+     * 
+     * @param document A weak pointer to the parent document
+     * @param textNumber The text number (`Cmper`).
+     */
+    explicit FileInfoText(const DocumentWeakPtr& document, Cmper textNumber)
+        : TextsBase(document, 0, ShareMode::All, textNumber)
     {
         if (textNumber <= 0 || textNumber > Cmper(TextType::Subtitle)) {
             throw std::invalid_argument("invalid text type value provided to FileInfoText constructor");

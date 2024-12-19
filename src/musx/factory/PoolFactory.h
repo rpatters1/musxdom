@@ -65,7 +65,7 @@ public:
      * @param elementLinker A class for storing deferred linkage commands.
      * @return A fully populated `ObjectPoolType` object.
      */
-    static std::shared_ptr<PoolType> create(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static std::shared_ptr<PoolType> create(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
         auto pool = std::make_shared<PoolType>();
 
@@ -119,9 +119,9 @@ public:
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
      * @return A shared pointer to the created object.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
-        return RegisteredOptions::createInstance(element, elementLinker, document);
+        return RegisteredOptions::createInstance(document->getOptions(), element, elementLinker, document);
     }
 };
 
@@ -149,7 +149,7 @@ public:
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
         auto cmperAttribute = element->findAttribute("cmper");
         if (!cmperAttribute) {
@@ -157,11 +157,11 @@ public:
         }
         auto inciAttribute = element->findAttribute("inci");
         if (inciAttribute) {
-            return RegisteredOthers::createInstance(element, elementLinker,
+            return RegisteredOthers::createInstance(document->getOthers(), element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
         }
         else {
-            return RegisteredOthers::createInstance(element, elementLinker,
+            return RegisteredOthers::createInstance(document->getOthers(), element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>());
         }
     }
@@ -191,7 +191,7 @@ public:
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
-    static auto extractFromXml(const std::shared_ptr<xml::IXmlElement>& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
         auto textAttributeName = [element]() -> std::string {
             if (element->getTagName() == texts::FileInfoText::XmlNodeName) {
@@ -209,7 +209,7 @@ public:
             }
             return textAttribute->getValueAs<Cmper>();
         }();
-        return RegisteredTexts::createInstance(element, elementLinker, document, textNumber);
+        return RegisteredTexts::createInstance(document->getTexts(), element, elementLinker, document, textNumber);
     }
 
 private:

@@ -33,9 +33,12 @@ TEST(TextExpressionDefTest, ValidExpression)
     <textExprDef cmper="3">
       <textIDKey>4</textIDKey>
       <categoryID>1</categoryID>
+      <rehearsalMarkStyle>measNum</rehearsalMarkStyle>
       <value>101</value>
+      <playPass>2</playPass>
+      <hideMeasureNum/>
       <useAuxData/>
-      <playType>midiController</playType>
+      <playType> midiController</playType>
       <horzMeasExprAlign>leftOfPrimaryNotehead</horzMeasExprAlign>
       <horzExprAlign>right</horzExprAlign>
       <yAdjustEntry>-54</yAdjustEntry>
@@ -61,7 +64,13 @@ TEST(TextExpressionDefTest, ValidExpression)
     // Check every property
     EXPECT_EQ(expression->textIdKey, 4);  // From XML
     EXPECT_EQ(expression->categoryId, 1);  // From XML
+    EXPECT_EQ(expression->rehearsalMarkStyle, musx::dom::others::RehearsalMarkStyle::MeasureNumber);  // From XML
     EXPECT_EQ(expression->value, 101);  // From XML
+    EXPECT_EQ(expression->playPass, 2);  // From XML
+    EXPECT_TRUE(expression->hideMeasureNum);  // From XML
+    EXPECT_TRUE(expression->useAuxData);  // From XML
+    EXPECT_FALSE(expression->hasEnclosure);  // Default
+    EXPECT_FALSE(expression->breakMmRest);  // Default
     EXPECT_EQ(expression->playbackType, musx::dom::others::PlaybackType::MidiController);  // From XML
     EXPECT_EQ(expression->horzMeasExprAlign, musx::dom::others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead);  // From XML
     EXPECT_EQ(expression->horzExprJustification, musx::dom::others::HorizontalExprJustification::Right);  // From XML
@@ -71,9 +80,6 @@ TEST(TextExpressionDefTest, ValidExpression)
     EXPECT_EQ(expression->yAdjustBaseline, 0);  // Default
     EXPECT_TRUE(expression->useCategoryFonts);  // From XML
     EXPECT_FALSE(expression->useCategoryPos);  // Default
-    EXPECT_FALSE(expression->hasEnclosure);  // Default
-    EXPECT_FALSE(expression->breakMmRest);  // Default
-    EXPECT_TRUE(expression->useAuxData);  // From XML
     EXPECT_EQ(expression->description, "fortissimo (velocity = 101)");  // From XML
 
     // Check marking cat
@@ -205,4 +211,59 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
 
     // Check the name using getName() method from MarkingCategory
     EXPECT_EQ(markingCategory->getName(), markingCategoryName->name);  // Should match the name from MarkingCategoryName
+}
+
+TEST(TextExpressionDefTest, EnumDefaults)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <textExprDef cmper="3">
+      <textIDKey>4</textIDKey>
+      <categoryID>1</categoryID>
+      <value>101</value>
+      <useAuxData/>
+      <useCategoryFonts/>
+      <descStr>fortissimo (velocity = 101)</descStr>
+    </textExprDef>
+    <markingsCategory cmper="1">
+      <categoryType>dynamics</categoryType>
+    </markingsCategory>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others) << "Others node not found in XML";
+
+    auto expression = others->get<musx::dom::others::TextExpressionDef>(3);
+    ASSERT_TRUE(expression) << "TextExpressionDef with cmper=3 not found but does exist";
+
+    EXPECT_EQ(expression->rehearsalMarkStyle, musx::dom::others::RehearsalMarkStyle::None);
+    EXPECT_EQ(expression->playbackType, musx::dom::others::PlaybackType::None);
+    EXPECT_EQ(expression->horzMeasExprAlign, musx::dom::others::HorizontalMeasExprAlign::LeftBarline);
+    EXPECT_EQ(expression->horzExprJustification, musx::dom::others::HorizontalExprJustification::Left);
+    EXPECT_EQ(expression->vertMeasExprAlign, musx::dom::others::VerticalMeasExprAlign::AboveStaff);
+}
+
+TEST(MarkingCategoryTest, MissingCategoryType)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <markingsCategory cmper="10"/>
+    <markingsCategoryName cmper="10">
+      <name>Vocal Dynamics</name>
+    </markingsCategoryName>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
+        std::invalid_argument
+    );
 }

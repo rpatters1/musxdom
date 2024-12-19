@@ -4,6 +4,7 @@
 /bin/
 /lib/
 /obj/
+/Testing
 
 # Ignore build tools and temporary files
 CMakeFiles/

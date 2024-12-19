@@ -538,7 +538,7 @@ TEST(TextsTest, EnigmaComponents)
     EXPECT_EQ(components, std::vector<std::string>({}));
 }
 
-TEST(TextsTests, FontFromEnigma)
+TEST(TextsTest, FontFromEnigma)
 {
     using musx::dom::texts::ExpressionText;
 

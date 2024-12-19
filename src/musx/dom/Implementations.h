@@ -21,7 +21,10 @@
  */
 #pragma once
 
+#include <cstdlib>
 #include <exception>
+#include <filesystem>
+#include <sstream>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -31,33 +34,39 @@
 #include "Document.h"
 #include "musx/util/EnigmaString.h"
 
+#if ! defined(MUSX_RUNNING_ON_WINDOWS)
+#include <pwd.h>
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+
 namespace musx {
 namespace dom {
 
-// ************************
-// ***** DefaultFonts *****
-// ************************
+// ***********************
+// ***** FontOptions *****
+// ***********************
 
-inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(options::DefaultFonts::FontType type) const
+inline std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(options::FontOptions::FontType type) const
 {
-    auto it = defaultFonts.find(type);
-    if (it == defaultFonts.end()) {
+    auto it = fontOptions.find(type);
+    if (it == fontOptions.end()) {
         throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
     }
     return it->second;
 }
 
-inline std::shared_ptr<FontInfo> options::DefaultFonts::getFontInfo(const DocumentPtr& document, options::DefaultFonts::FontType type)
+inline std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
 {
     auto options = document->getOptions();
     if (!options) {
         throw std::invalid_argument("No options found in document");
     }
-    auto defaultFonts = options->get<options::DefaultFonts>();
-    if (!defaultFonts) {
+    auto fontOptions = options->get<options::FontOptions>();
+    if (!fontOptions) {
         throw std::invalid_argument("Default fonts not found in document");
     }
-    return defaultFonts->getFontInfo(type);
+    return fontOptions->getFontInfo(type);
 }
 
 // ********************
@@ -85,6 +94,109 @@ inline void FontInfo::setFontIdByName(const std::string& name)
     throw std::invalid_argument("font definition not found for font \"" + name + "\"");
 }
 
+inline bool FontInfo::calcIsSMuFL() const
+{
+    auto name = getFontName();
+    auto standardFontPaths = calcSMuFLPaths();
+    for (const auto& path : standardFontPaths) {
+        if (!path.empty()) {
+            std::filesystem::path metaFilePath(path / name / name);
+            metaFilePath.replace_extension(".json");
+            if (std::filesystem::is_regular_file(metaFilePath)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
+{
+#if defined(MUSX_RUNNING_ON_WINDOWS)
+    auto systemEnv = "COMMONPROGRAMFILES";
+    auto userEnv = "LOCALAPPDATA";
+#elif defined(MUSX_RUNNING_ON_MACOS)
+    auto systemEnv = "";
+    auto userEnv = "HOME";
+#elif defined(MUSX_RUNNING_ON_LINUX_UNIX)
+    auto systemEnv = "XDG_DATA_DIRS";
+    auto userEnv = "XDG_DATA_HOME";
+#else
+    static_assert(false, "Unsupported OS for FontInfo::calcSMuFLPaths");
+#endif
+
+#if ! defined(MUSX_RUNNING_ON_WINDOWS)    
+    auto getHomePath = []() -> std::string {
+        auto homeEnv = getenv("HOME");
+        if (homeEnv) {
+            return homeEnv;
+        }
+        uid_t uid = getuid(); // Get the current user's UID
+        struct passwd *pw = getpwuid(uid); // Fetch the password entry for the UID
+        if (pw) {
+            return pw->pw_dir;
+        }
+        return "";
+    };
+#else
+    auto getHomePath = []() -> void {};
+#endif
+    
+    auto getBasePaths = [getHomePath](const std::string& envVariable) -> std::vector<std::string> {
+        std::vector<std::string> paths;
+#if defined(MUSX_RUNNING_ON_WINDOWS)
+        char* buffer = nullptr;
+        size_t bufferSize = 0;
+        if (_dupenv_s(&buffer, &bufferSize, envVariable.c_str()) == 0 && buffer != nullptr) {
+            paths.emplace_back(buffer);
+            free(buffer);
+        } else {
+            return {};
+        }
+#else
+        if (envVariable == "HOME") {
+            paths.emplace_back(getHomePath());
+        } else if (!envVariable.empty()) {
+            if (auto envValue = getenv(envVariable.c_str())) {
+                std::stringstream ss(envValue);
+                std::string path;
+                while (std::getline(ss, path, ':')) {
+                    paths.push_back(path);
+                }
+#if defined(MUSX_RUNNING_ON_LINUX_UNIX)
+            } else if (envVariable == "XDG_DATA_HOME") {
+                paths.emplace_back(getHomePath() + "/.local/share");
+            } else if (envVariable == "XDG_DATA_DIRS") {
+                paths.emplace_back("/usr/local/share");
+                paths.emplace_back("/usr/share");
+#endif         
+            } else {
+                return {};
+            }
+        }
+        else {
+            paths.emplace_back("/");
+        }
+#endif
+        return paths;
+    };
+    auto paths = getBasePaths(userEnv);
+    auto temp = getBasePaths(systemEnv);
+    paths.insert(paths.end(),
+                 std::make_move_iterator(temp.begin()),
+                 std::make_move_iterator(temp.end()));
+    std::vector<std::filesystem::path> retval;
+    for (const auto& next : paths) {
+        std::filesystem::path path = next;
+#if defined(MUSX_RUNNING_ON_MACOS)
+        path = path / "Library" / "Application Support";
+#endif
+        path = path / "SMuFL" / "Fonts";
+        retval.emplace_back(std::move(path));
+    }
+    return retval;
+}
+
 // ****************************
 // ***** MarkingCategiory *****
 // ****************************
@@ -105,7 +217,7 @@ inline std::string others::MarkingCategory::getName() const
 inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 {
         std::string searchText = this->text;
-        FontInfo fontInfo(this->getDocument());
+        auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
         bool foundTag = false;
 
         while (true) {
@@ -119,7 +231,7 @@ inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
             }
 
             std::string fontTag = searchText.substr(0, endOfTag + 1);
-            if (!musx::util::EnigmaString::parseFontCommand(fontTag, fontInfo)) {
+            if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
                 return nullptr;
             }
 
@@ -128,7 +240,7 @@ inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
         }
 
         if (foundTag) {
-            return std::make_shared<FontInfo>(fontInfo);
+            return fontInfo;
         }
 
         return nullptr;

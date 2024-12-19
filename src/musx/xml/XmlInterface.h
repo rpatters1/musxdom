@@ -26,6 +26,7 @@
 #include <vector>
 #include <sstream>
 #include <stdexcept>
+#include <algorithm>
 
 namespace musx {
 
@@ -47,6 +48,14 @@ public:
      */
     load_error(const char *msg) : std::runtime_error(msg) {}
 };
+
+/** @brief trims whitespace from a string */
+inline std::string trim(const std::string& str)
+{
+    auto start = std::find_if_not(str.begin(), str.end(), ::isspace);
+    auto end = std::find_if_not(str.rbegin(), str.rend(), ::isspace).base();
+    return (start < end) ? std::string(start, end) : std::string();
+}
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 /**
@@ -70,6 +79,11 @@ public:
     virtual std::string getValue() const = 0;
 
     /**
+     * @brief Gets the text content of the attribute with whitespace trimmed.
+     */
+    std::string getValueTrimmed() const { return trim(getValue()); }
+
+    /**
      * @brief Gets the value of the attribute, converted to the specified type.
      * @tparam T The type to which the value should be converted.
      * @return The value converted to the specified type.
@@ -77,8 +91,19 @@ public:
      */
     template <typename T>
     T getValueAs() const {
-        std::istringstream iss(getValue());
+        std::istringstream iss(getValueTrimmed());
         T value;
+        if constexpr (std::is_same_v<T, bool>) {
+            std::string str;
+            iss >> str;
+            std::transform(str.begin(), str.end(), str.begin(), ::tolower); // Ensure case insensitivity
+            if (str == "true") {
+                return true;
+            }
+            else if (str == "false") {
+                return false;
+            }
+        }
         if (!(iss >> value)) {
             throw std::invalid_argument("Failed to convert attribute value [" + iss.str() + "] to the specified type");
         }
@@ -91,6 +116,9 @@ public:
      */
     virtual std::shared_ptr<IXmlAttribute> nextAttribute() const = 0;
 };
+
+class IXmlElement;
+using XmlElementPtr = std::shared_ptr<IXmlElement>; ///< shared pointer to @ref IXmlElement
 
 /**
  * @brief Interface for an XML element.
@@ -113,6 +141,11 @@ public:
     virtual std::string getText() const = 0;
 
     /**
+     * @brief Gets the text content of the element with whitespace trimmed.
+     */
+    std::string getTextTrimmed() const { return trim(getText()); }
+
+    /**
      * @brief Gets the text content of the element, converted to the specified type.
      * @tparam T The type to which the text content should be converted.
      * @param defaultValue The value to return if the text of the element is empty.
@@ -122,12 +155,18 @@ public:
     template <typename T>
     T getTextAs(T defaultValue = {}) const
     {
-        std::istringstream iss(getText());
+        static_assert(!std::is_same_v<T, bool>, "Do not use getTextAs with bool type. Simply assign true. (The presence of the node means true.)");
+
+        std::istringstream iss(getTextTrimmed());
         if (iss.str().empty()) {
             return defaultValue;
         }
 
-        using ValueType = std::conditional_t<std::is_same_v<T, char> || std::is_same_v<T, uint8_t>, int, T>;
+        using ValueType = std::conditional_t<
+                            std::is_same_v<T, char>
+                            || std::is_same_v<T, uint8_t>
+                            || std::is_same_v<T, char16_t>
+                            || std::is_same_v<T, char32_t>, int, T>;
         ValueType value = ValueType(defaultValue);
 
         if (!(iss >> value)) {
@@ -155,27 +194,27 @@ public:
      * @param tagName [optional] The tag name of the child elements to find. If omitted or empty, finds the first child with any name.
      * @return A shared pointer to the child element, or nullptr if not found.
      */
-    virtual std::shared_ptr<IXmlElement> getFirstChildElement(const std::string& tagName = {}) const = 0;
+    virtual XmlElementPtr getFirstChildElement(const std::string& tagName = {}) const = 0;
 
     /**
      * @brief Gets the next sibling element.
      * @param tagName [optional] The tag name of the sibling elements to find. If omitted or empty, finds the next sibling with any name.
      * @return A shared pointer to the next sibling element, or nullptr if not found.
      */
-    virtual std::shared_ptr<IXmlElement> getNextSibling(const std::string& tagName = {}) const = 0;
+    virtual XmlElementPtr getNextSibling(const std::string& tagName = {}) const = 0;
 
     /**
      * @brief Gets the previous sibling element.
      * @param tagName [optional] The tag name of the sibling elements to find. If omitted or empty, finds the previous sibling with any name.
      * @return A shared pointer to the previous sibling element, or nullptr if not found.
      */
-    virtual std::shared_ptr<IXmlElement> getPreviousSibling(const std::string& tagName = {}) const = 0;
+    virtual XmlElementPtr getPreviousSibling(const std::string& tagName = {}) const = 0;
 
     /**
      * @brief Gets the parent element.
      * @return A shared pointer to the parent element, or nullptr if not applicable.
      */
-    virtual std::shared_ptr<IXmlElement> getParent() const = 0;
+    virtual XmlElementPtr getParent() const = 0;
 };
 
 /**

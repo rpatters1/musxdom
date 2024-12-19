@@ -37,7 +37,7 @@ using namespace dom::texts;
 template <>
 struct FieldPopulator<TextsBase> : public FactoryBase
 {
-    static void populate(const std::shared_ptr<TextsBase>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
+    static void populate(const std::shared_ptr<TextsBase>& instance, const XmlElementPtr& element, ElementLinker&)
     {
         instance->text = element->getText();
     }

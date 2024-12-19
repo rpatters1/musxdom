@@ -22,6 +22,19 @@
 #pragma once
 
 #include <cstdint>
+#include <cassert>
+#include <filesystem>
+#include <set>
+
+#if defined(_WIN32)
+#define MUSX_RUNNING_ON_WINDOWS
+#elif defined(__APPLE__) && defined(__MACH__)
+#define MUSX_RUNNING_ON_MACOS
+#elif defined(__unix__) || defined(__linux__)
+#define MUSX_RUNNING_ON_LINUX_UNIX
+#else
+#error "Unable to detect operating system platform."
+#endif
 
 namespace musx {
 namespace dom {
@@ -29,8 +42,11 @@ namespace dom {
 using Cmper = uint16_t;     ///< Enigma "comperator" key type
 using Inci = int16_t;       ///< Enigma "incidend" key type
 using Evpu = int32_t;       ///< EVPU value (288 per inch)
+using EvpuFloat = double;   ///< EVPU fractional value (288.0 per inch)
 using Efix = int32_t;       ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
 using Edu = int32_t;        ///< EDU value (1024 per quarter note)
+
+constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 
 class Document;
 /** @brief Shared `Document` pointer */
@@ -49,6 +65,17 @@ using DocumentWeakPtr = std::weak_ptr<Document>;
 class Base
 {
 public:
+    /// @brief The container type for shared nodes
+    using SharedNodes = std::set<std::string>;
+
+    ///> @enum ShareMode
+    enum class ShareMode
+    {
+        All,            ///> All parts and score always share (no "share" attribute). Default.
+        Partial,        ///> Part and score share some attributes and have their own unlinked versions of others. (attribute "share"="true")
+        None            ///> Each part and score has its own version of the DOM class. (attribute "share"="false")
+    };
+
     /**
      * @brief Virtual destructor for polymorphic behavior.
      */
@@ -66,16 +93,48 @@ public:
         return document;
     }
 
+    /**
+     * @brief Gets the partId for this instance (or 0 for score)
+     */
+    Cmper getPartId() const { return m_partId; }
+
+    /**
+     * @brief Gets the sharing mode for this instance.
+     */
+    ShareMode getShareMode() const { return m_shareMode; }
+
+    /**
+     * @brief Gets the unlinked nodes for this instance. (Only populated for `ShareMode::Partial`)
+     */
+    const SharedNodes& getUnlinkedNodes() const { return m_unlinkedNodes; }
+
+    /**
+     * @brief Adds a shared node for this instance
+     */
+    void addUnlinkedNode(const std::string& nodeName)
+    {
+        m_unlinkedNodes.insert(nodeName);
+    }
+
 protected:
     /**
      * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
      * 
      * @param document A weak pointer to the parent document
+     * @param partId The part ID for this instance, or zero if for score.
+     * @param shareMode The @ref ShareMode for this instance.
      */
-    Base(const DocumentWeakPtr& document) : m_document(document) {}
+    Base(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
+        : m_document(document), m_partId(partId), m_shareMode(shareMode) {}
+
+    /// @brief assignment constructor: m_unlinkedNodes is intentionally omitted
+    Base& operator=(const Base&) { return *this; }
 
 private:
     const DocumentWeakPtr m_document;
+    const Cmper m_partId;
+    const ShareMode m_shareMode;
+    SharedNodes m_unlinkedNodes;
 };
 
 /**
@@ -90,8 +149,11 @@ protected:
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
      *
      * @param document A weak pointer to the parent document
+     * @param partId Usually 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      */
-    OptionsBase(const DocumentWeakPtr& document) : Base(document) {}
+    OptionsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
+        : Base(document, partId, shareMode) {}
 };
 
 /**
@@ -110,12 +172,14 @@ protected:
     /**
      * @brief Constructs an OthersBase object.
      * 
+     * @param document A weak pointer to the parent document
+     * @param partId The part Id for this Other, or zero if for score.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      * @param cmper The `Cmper` key value.
      * @param inci The array index (`Inci`).
-     * @param document A weak pointer to the parent document
      */
-    OthersBase(const DocumentWeakPtr& document, Cmper cmper, std::optional<Inci> inci = std::nullopt)
-        : Base(document), m_cmper(cmper), m_inci(inci) {}
+    OthersBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, std::optional<Inci> inci = std::nullopt)
+        : Base(document, partId, shareMode), m_cmper(cmper), m_inci(inci) {}
 
 public:
     /**
@@ -163,10 +227,12 @@ public:
      * @brief Constructs a `TextsBase` object.
      * 
      * @param document A weak pointer to the parent document
+     * @param partId Always 0, but this parameter is needed for the generic factory routine
+     * @param shareMode Always `ShareMode::All`, but this parameter is needed for the generic factory routine.
      * @param textNumber The text number (`Cmper`).
      */
-    TextsBase(const DocumentWeakPtr& document, Cmper textNumber)
-        : Base(document), m_textNumber(textNumber) {}
+    TextsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper textNumber)
+        : Base(document, partId, shareMode), m_textNumber(textNumber) {}
 
     std::string text;    ///< Raw Enigma string (with Enigma string tags), encoded UTF-8.
 
@@ -211,7 +277,7 @@ public:
      * @param document A weak pointer to the document object.
      */
     explicit FontInfo(const DocumentWeakPtr& document)
-        : Base(document) {}
+        : Base(document, 0, ShareMode::All) {}
 
     /**
      * @brief Get the name of the font.
@@ -241,7 +307,109 @@ public:
         absolute = efx & 0x40;     // FONT_EFX_ABSOLUTE
         hidden = efx & 0x80;       // FONT_EFX_HIDDEN
     }
+
+    /**
+     * @brief Calculates whether this is a SMuFL font.
+     */
+    bool calcIsSMuFL() const;
+
+    /**
+     * @brief Returns the standard SMuFL font folder.
+     *
+     * @return a std::vector<std::filesystem::path> where element 0 is the user path and element 1 is the system path
+     */
+    static std::vector<std::filesystem::path> calcSMuFLPaths();
 };
 
+namespace others {
+
+// The following classes are defined here because they are shared by multiple subclasses and container classes.
+
+/**
+ * @class Enclosure
+ * @brief Represents the enclosure settings for text expressions.
+ */
+class Enclosure : public OthersBase
+{
+public:
+    /**
+     * @enum Shape
+     * @brief Enumeration for enclosure shapes.
+     */
+    enum class Shape : uint8_t
+    {
+        NoEnclosure = 0,    ///< No enclosure
+        Rectangle = 1,      ///< Rectangle
+        Ellipse = 2,        ///< Ellipse
+        Triangle = 3,       ///< Triangle
+        Diamond = 4,        ///< Diamond
+        Pentagon = 5,       ///< Pentagon
+        Hexagon = 6,        ///< Hexagon
+        Heptagon = 7,       ///< Heptagon
+        Octogon = 8         ///< Octogon
+    };
+
+    /**
+     * @brief Constructs an Enclosure object.
+     * @param document Shared pointer to the document.
+     * @param partId Usually 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
+     * @param cmper Comperator parameter. This value is zero for enclosures taken from @ref MeasureNumberRegion.
+     */
+    explicit Enclosure(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
+    Evpu yAdd{};              ///< Center Y offset - offsets text from center (in EVPU).
+    Evpu xMargin{};           ///< Half width - extra space on left/right sides (in EVPU).
+    Evpu yMargin{};           ///< Half height - extra space on top/bottom sides (in EVPU).
+    Efix lineWidth{};         ///< Line thickness in 64ths of an EVPU (EFIX).
+    Shape shape{};            ///< Enclosure shape (default: NoEnclosure).
+    Efix cornerRadius{};      ///< Corner radius (in EFIX).
+    bool fixedSize{};         ///< Whether the enclosure is fixed size (ignore text bounding box)
+    bool equalAspect{};       ///< "Match Height and Width"
+    bool notTall{};           ///< "Enforce Minimum Width": don't let shape get taller than it is wide
+    bool opaque{};            ///< Whether the enclosure is opaque.
+    bool roundCorners{};      ///< Whether the enclosure has rounded corners.
+};
+
+/**
+ * @class NamePositioning
+ * @brief Contains horizontal and vertical offsets, alignment, and expansion settings for name positioning.
+ * 
+ * This class is used both for default names as well as name positioning @ref Staff, @ref StaffStyle,
+ * and @ref StaffGroup.
+ */
+class NamePositioning : OthersBase
+{
+public:
+
+    /**
+     * @brief Constructs an NamePositioning object.
+     * @param document Shared pointer to the document.
+     * @param partId The part ID if this name positioning is unlinked.
+     * @param shareMode The share mode if this name positioning is unlinked.
+     * @param cmper Comperator parameter. This value is zero for name positioning taken from @ref options::StaffOptions.
+     */
+    explicit NamePositioning(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /// @brief Alignment and justification options for staff and group names.
+    enum class AlignJustify
+    {
+        Left,   ///< Left alignment or justification (the default value.)
+        Right,  ///< Right alignment.
+        Center  ///< Center alignment.
+    };
+    
+    Evpu horzOff{};             ///< Horizontal distance from staff in @ref Evpu.
+    Evpu vertOff{};             ///< Vertical offset from staff in @ref Evpu.
+    AlignJustify justify{};     ///< Justification for the name text.
+    bool indivPos{};            ///< Indicates that this positioning overrides the default positioning. (Not used by @ref options::StaffOptions.)
+    AlignJustify hAlign{};      ///< Horizontal alignment for the name text. (xml node is `<halign>`)
+    bool expand{};              ///< "Expand Single Word"
+};
+
+} // namespace others
 } // namespace dom
 } // namespace musx

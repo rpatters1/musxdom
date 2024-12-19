@@ -62,6 +62,7 @@ TEST(EnclosureTest, TextExpressionEnclosure)
         EXPECT_EQ(enclosure->lineWidth, 128);
         EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::Triangle);
         EXPECT_EQ(enclosure->cornerRadius, 1088);
+        EXPECT_FALSE(enclosure->equalAspect);
         EXPECT_TRUE(enclosure->fixedSize);
         EXPECT_TRUE(enclosure->notTall);
         EXPECT_TRUE(enclosure->opaque);
@@ -80,7 +81,7 @@ TEST(EnclosureTest, TextRepeatEnclosure)
       <yMargin>9</yMargin>
       <lineWidth>256</lineWidth>
       <sides>1</sides>
-      <notTall/>
+      <equalAspect/>
     </textRepeatEnclosure>
   </others>
 </finale>
@@ -101,7 +102,8 @@ TEST(EnclosureTest, TextRepeatEnclosure)
         EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::Rectangle);
         EXPECT_EQ(enclosure->cornerRadius, 0);
         EXPECT_FALSE(enclosure->fixedSize);
-        EXPECT_TRUE(enclosure->notTall);
+        EXPECT_TRUE(enclosure->equalAspect);
+        EXPECT_FALSE(enclosure->notTall);
         EXPECT_FALSE(enclosure->opaque);
         EXPECT_FALSE(enclosure->roundCorners);
     }
@@ -124,5 +126,25 @@ TEST(EnclosureTest, InvalidShape)
             auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
             std::invalid_argument
         );
+    }
+}
+
+TEST(EnclosureTest, EnumDefault)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <textRepeatEnclosure cmper="12"/>
+  </others>
+</finale>
+    )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+        auto others = doc->getOthers();
+        ASSERT_TRUE(others);
+        auto enclosure = others->get<musx::dom::others::TextRepeatEnclosure>(12);
+        ASSERT_TRUE(enclosure) << "Enclosure 12 not found but does exist";
+        EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::NoEnclosure);
     }
 }

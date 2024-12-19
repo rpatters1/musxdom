@@ -23,14 +23,40 @@ FetchContent_MakeAvailable(tinyxml2)
 # Add the test executable
 add_executable(musxdomtests
 	musxdomtests.cpp
-	document_tests.cpp
-	enclosure_tests.cpp
-	expression_tests.cpp
-	fonts_tests.cpp
-	header_tests.cpp
-    page_options_tests.cpp
-	pool_tests.cpp
-    text_tests.cpp
+	document.cpp
+	header.cpp
+	pool.cpp
+    # options
+    options/accidental_options.cpp
+    options/alternate_notation_options.cpp
+    options/augementation_dot_options.cpp
+    options/barline_options.cpp
+    options/beam_options.cpp
+    options/clef_options.cpp
+    options/flag_options.cpp
+    options/grace_note_options.cpp
+    options/key_signature_options.cpp
+    options/line_curve_options.cpp
+    options/misc_options.cpp
+    options/multimeasure_rest_options.cpp
+    options/music_spacing_options.cpp
+    options/page_options.cpp
+    options/piano_brace_bracket_options.cpp
+    options/repeat_options.cpp
+    options/smart_shape_options.cpp
+    options/staff_options.cpp
+    options/stem_options.cpp
+    options/tie_options.cpp
+    options/time_signature_options.cpp
+    options/tuplet_options.cpp
+    # others
+	others/enclosure.cpp
+	others/expression.cpp
+	others/fonts.cpp
+	others/layer_attributes.cpp
+    others/measure_number_region.cpp
+	others/part_globals.cpp
+    others/text.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
@@ -44,8 +70,10 @@ endif()
 # Compile definitions
 target_compile_definitions(musxdomtests PRIVATE MUSX_USE_TINYXML2)
 target_compile_definitions(musxdomtests PRIVATE MUSX_USE_RAPIDXML)
+target_compile_definitions(musxdomtests PRIVATE MUSX_THROW_ON_UNKNOWN_XML)
 
-# Add the include path for rapidxml
+# Add the include paths
+target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/third_party/rapidxml")
 
 # Link Google Test and the library to the test executable
@@ -54,9 +82,16 @@ target_link_libraries(musxdomtests
 	tinyxml2
 )
 
+# Add Precompiled Headers (PCH) for the test suite
+target_precompile_headers(musxdomtests PRIVATE
+    "${gtest_SOURCE_DIR}/include/gtest/gtest.h"
+    "${CMAKE_SOURCE_DIR}/src/musx/musx.h"
+)
+
 # Discover tests
 include(GoogleTest)
 gtest_discover_tests(musxdomtests
+    DISCOVERY_TIMEOUT 60 # Set timeout to 60 seconds
     PROPERTIES
         ENVIRONMENT "GTEST_COLOR=1"
     EXTRA_ARGS --gtest_color=yes

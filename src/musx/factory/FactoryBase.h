@@ -23,8 +23,12 @@
 
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <optional>
 #include <functional>
+#include <unordered_set>
+#include <tuple>
+#include <iostream>
 
 #include "musx/dom/BaseClasses.h"
 #include "musx/xml/XmlInterface.h"
@@ -37,12 +41,15 @@ namespace musx {
  */
 namespace factory {
 
+using namespace musx::xml;
+
 /**
  * @class ElementLinker
  * @brief A utility class for managing deferred relationships between elements during document construction.
  *
  * This class allows capturing relationships that cannot be resolved immediately during factory creation.
  * The relationships are stored as resolver functions, which are executed later when all elements have been created.
+ * It also provides a mechanism to ensure that specific resolvers are added only once by using unique keys.
  */
 class ElementLinker {
 public:
@@ -59,10 +66,19 @@ public:
      * @brief Adds a resolver function to the linker.
      *
      * This function captures the logic for resolving relationships that cannot be resolved immediately.
+     * Optionally, a unique key can be provided to ensure that the resolver is only added once.
      *
      * @param resolver A callable object that resolves a relationship when invoked.
+     * @param key An optional unique key for the resolver. If provided, the resolver is added only once per key.
      */
-    void addResolver(Resolver resolver) {
+    void addResolver(Resolver resolver, const std::string_view& key = {})
+    {
+        if (!key.empty()) {
+            if (registeredResolvers.count(key) > 0) {
+                return; // Skip adding if the resolver with the same key is already registered
+            }
+            registeredResolvers.insert(key);
+        }
         resolvers.emplace_back(std::move(resolver));
     }
 
@@ -70,21 +86,32 @@ public:
      * @brief Resolves all deferred relationships.
      *
      * Executes all stored resolver functions, establishing relationships between elements.
-     * Clears the internal storage of resolvers after execution.
+     * Clears the internal storage of resolvers and registered keys after execution.
      *
+     * @param document The document in which relationships are resolved.
      * @throws std::runtime_error If any resolver function encounters an error.
      */
-    void resolveAll(const dom::DocumentPtr& document) {
+    void resolveAll(const dom::DocumentPtr& document)
+    {
         for (auto& resolver : resolvers) {
             resolver(document);
         }
         resolvers.clear(); ///< Clear resolvers after execution
+        registeredResolvers.clear(); ///< Clear registered keys after execution
     }
 
 private:
     /// @brief A collection of resolver functions.
     std::vector<Resolver> resolvers;
+
+    /**
+     * @brief Tracks registered resolver keys to ensure uniqueness.
+     *
+     * This set stores keys for resolvers that have already been added, preventing duplicate registrations.
+     */
+    std::unordered_set<std::string_view> registeredResolvers;
 };
+
 
 /**
  * @brief Factory base class.
@@ -103,7 +130,7 @@ protected:
      * @tparam ParserFunc the parser function (usually inferred from the call)
      */
     template<typename DataType, typename ParserFunc>
-    static void getFieldFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc, bool expected = true)
+    static void getFieldFromXml(const XmlElementPtr& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc, bool expected = true)
     {
         if (auto childElement = element->getFirstChildElement(nodeName)) {
             dataField = parserFunc(childElement);
@@ -119,7 +146,7 @@ protected:
      *
      * @throws std::invalid_argument when child element does not exist.
      */
-    static std::shared_ptr<xml::IXmlElement> getFirstChildElement(const std::shared_ptr<xml::IXmlElement>& element, const std::string& childElementName)
+    static XmlElementPtr getFirstChildElement(const XmlElementPtr& element, const std::string& childElementName)
     {
         auto childElement = element->getFirstChildElement(childElementName);
         if (!childElement) {
@@ -129,7 +156,7 @@ protected:
     }
 
     /** @brief Helper function to return std::nullopt when child element does not exist. */
-    static std::optional<std::string> getOptionalChildText(const std::shared_ptr<xml::IXmlElement>& element, const std::string& childElementName)
+    static std::optional<std::string> getOptionalChildText(const XmlElementPtr& element, const std::string& childElementName)
     {
         auto childElement = element->getFirstChildElement(childElementName);
         if (!childElement) {
@@ -140,7 +167,7 @@ protected:
 
     /** @brief Helper function to return std::nullopt when child element does not exist. */
     template<typename T>
-    static std::optional<T> getOptionalChildTextAs(const std::shared_ptr<xml::IXmlElement>& element, const std::string& childElementName, T defaultValue = {})
+    static std::optional<T> getOptionalChildTextAs(const XmlElementPtr& element, const std::string& childElementName, T defaultValue = {})
     {
         auto childElement = element->getFirstChildElement(childElementName);
         if (!childElement) {
@@ -155,49 +182,165 @@ public:
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
-template <typename T>
-struct FieldPopulator : public FactoryBase {};
-
-template <>
-struct FieldPopulator<dom::FontInfo> : public FactoryBase
+template <typename EnumClass, typename FromClass = std::string_view>
+using XmlEnumMapping = std::unordered_map<FromClass, EnumClass>;
+template <typename EnumClass, typename FromClass = std::string_view>
+class EnumMapper
 {
-    static void populate(const std::shared_ptr<dom::FontInfo>& fontInfo, const std::shared_ptr<xml::IXmlElement>& element)
-    {
-        getFieldFromXml(element, "fontID", fontInfo->fontId, [](auto element) { return element->template getTextAs<dom::Cmper>(); }, false); // false: allow fontID to be omitted for 0 (default music font)
-        getFieldFromXml(element, "fontSize", fontInfo->fontSize, [](auto element) { return element->template getTextAs<int>(); });
+    static XmlEnumMapping<EnumClass, FromClass> mapping; // this value must be specialized
 
-        if (auto efxElement = element->getFirstChildElement("efx")) {
-            for (auto efxChild = efxElement->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
-                auto efxName = efxChild->getTagName();
-                if (efxName == "bold") {
-                    fontInfo->bold = true;
-                } else if (efxName == "italic") {
-                    fontInfo->italic = true;
-                } else if (efxName == "underline") {
-                    fontInfo->underline = true;
-                } else if (efxName == "strikeout") {
-                    fontInfo->strikeout = true;
-                } else if (efxName == "absolute") {
-                    fontInfo->absolute = true;
-                } else if (efxName == "hidden") {
-                    fontInfo->hidden = true;
-                }
+    // If we ever need to, we can create a static lazy-initialize reverse mapping function here
+
+public:
+    static EnumClass xmlToEnum(const FromClass& value)
+    {
+        auto it = mapping.find(value);
+        if (it != mapping.end()) {
+            return it->second;
+        }
+        std::string msg = [value]() {
+            if constexpr (std::is_arithmetic_v<FromClass>) {
+                return "Invalid enum value from xml: " + std::to_string(value);
+            }
+            else {
+                return "Invalid enum value from xml: " + std::string(value);
+            }
+        }();
+#ifdef MUSX_THROW_ON_UNKNOWN_XML
+        throw std::invalid_argument(msg);
+#else
+        std::cout << msg << std::endl;
+        return {};
+#endif
+    }
+};
+
+template<typename EnumClass, typename FromClass>
+EnumClass toEnum(const FromClass& value)
+{
+    if constexpr (std::is_convertible_v<FromClass, std::string_view>) {
+        return EnumMapper<EnumClass, std::string_view>::xmlToEnum(value);
+    } else {
+        return EnumMapper<EnumClass, FromClass>::xmlToEnum(value);
+    }
+}
+
+template <typename T>
+using XmlElementPopulator = std::function<void(const XmlElementPtr&, const std::shared_ptr<T>&)>;
+template <typename T>
+using XmlElementDescriptor = std::tuple<const std::string_view, XmlElementPopulator<T>>;
+template <typename T>
+using XmlElementArray = std::vector<XmlElementDescriptor<T>>;
+
+using ResolverList = std::vector<ElementLinker::Resolver>;
+template <typename T>
+struct ResolverArray
+{
+    inline static const ResolverList value = {};
+};
+
+template <typename T>
+struct FieldPopulator : public FactoryBase
+{
+    static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element)
+    {
+        for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
+            auto it = elementXref().find(child->getTagName());
+            if (it != elementXref().end()) {
+                std::get<1>(*it)(child, instance);
+            } else {
+                std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list";
+#ifdef MUSX_THROW_ON_UNKNOWN_XML
+                throw std::invalid_argument(msg);
+#else
+                std::cout << msg << std::endl;
+#endif
             }
         }
     }
 
-    static std::shared_ptr<dom::FontInfo> getFontFromXml(const std::shared_ptr<xml::IXmlElement>& element, const std::string& nodeName, const dom::DocumentWeakPtr& document, bool expected = true)
+    static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element, ElementLinker& elementLinker)
     {
-        std::shared_ptr<dom::FontInfo> retval;
-        getFieldFromXml(element, nodeName, retval, [document](auto fontElement) -> std::shared_ptr<dom::FontInfo> {
-                if (!fontElement->getFirstChildElement()) return nullptr;
-                auto fontInfo = std::make_shared<dom::FontInfo>(document);
-                FieldPopulator<dom::FontInfo>::populate(fontInfo, fontElement);
-                return fontInfo;
-            }, expected);
-        return retval;
+        populate(instance, element);
+        for (const auto& resolver : ResolverArray<T>::value) {
+            elementLinker.addResolver(resolver);
+        }
     }
+
+    template <typename... Args>
+    static std::shared_ptr<T> createAndPopulate(const XmlElementPtr& element, Args&&... args)
+    {
+       return FieldPopulator<T>::createAndPopulateImpl(element, std::forward<Args>(args)...);
+    }
+
+private:
+    static const std::unordered_map<std::string_view, XmlElementPopulator<T>>& elementXref()
+    {
+        static const std::unordered_map<std::string_view, XmlElementPopulator<T>> xref = []()
+            {
+                std::unordered_map<std::string_view, XmlElementPopulator<T>> retval;
+                for (std::size_t i = 0; i < FieldPopulator<T>::xmlElements.size(); i++) {
+                    const XmlElementDescriptor<T> descriptor = FieldPopulator<T>::xmlElements[i];
+                    retval[std::get<0>(descriptor)] = std::get<1>(descriptor);
+                }
+                return retval;
+            }();
+        return xref;
+    }
+
+    template <typename... Args>
+    static std::shared_ptr<T> createAndPopulateImpl(const XmlElementPtr& element, Args&&... args)
+    {
+        auto instance = std::make_shared<T>(std::forward<Args>(args)...);
+        FieldPopulator<T>::populate(instance, element);
+        return instance;
+    }
+
+    static const XmlElementArray<T> xmlElements;
 };
+
+template <typename EnumClass, typename EmbeddedClass>
+static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray)
+{
+    auto typeAttr = e->findAttribute("type");
+    if (!typeAttr) {
+        throw std::invalid_argument("<" + e->getTagName() + "> element has no type attribute");
+    }
+    listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
+}
+
+template <>
+inline const XmlElementArray<dom::FontInfo> FieldPopulator<dom::FontInfo>::xmlElements = {
+    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
+    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
+    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) {
+            for (auto efxChild = e->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
+                auto efxName = efxChild->getTagName();
+                if (efxName == "bold") {
+                    i->bold = true;
+                } else if (efxName == "italic") {
+                    i->italic = true;
+                } else if (efxName == "underline") {
+                    i->underline = true;
+                } else if (efxName == "strikeout") {
+                    i->strikeout = true;
+                } else if (efxName == "absolute") {
+                    i->absolute = true;
+                } else if (efxName == "hidden") {
+                    i->hidden = true;
+                }
+            }        
+        }
+    },
+};
+
+template <>
+template <typename... Args>
+inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(const XmlElementPtr& element, Args&&... args)
+{
+    if (!element->getFirstChildElement()) return nullptr;
+    return FieldPopulator<FontInfo>::createAndPopulateImpl(element, std::forward<Args>(args)...);
+}
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 

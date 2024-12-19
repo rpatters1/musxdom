@@ -29,248 +29,346 @@
 namespace musx {
 namespace factory {
 
-using namespace dom;
-using namespace dom::others;
+using namespace ::musx::dom;
+using namespace ::musx::dom::others;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
-template <>
-struct FieldPopulator<Enclosure> : public FactoryBase
-{
-private:
-    static Enclosure::Shape toShape(int value)
-    {
-        if (value >= static_cast<int>(Enclosure::Shape::NoEnclosure) &&
-            value <= static_cast<int>(Enclosure::Shape::Octogon)) {
-            return static_cast<Enclosure::Shape>(value);
-        }
-        throw std::invalid_argument("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
-    }
+// Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
+// The goal is that this may facilitate serialization in the future.
 
-public:
-    static void populate(const std::shared_ptr<Enclosure>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
-    {
-        getFieldFromXml(element, "xAdd", instance->xAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "yAdd", instance->yAdd, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "xMargin", instance->xMargin, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "yMargin", instance->yMargin, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "lineWidth", instance->lineWidth, [](auto element) { return element->template getTextAs<Efix>(); });
-        getFieldFromXml(element, "sides", instance->shape, [](auto element) { return toShape(element->template getTextAs<uint8_t>()); });
-        getFieldFromXml(element, "cornerRadius", instance->cornerRadius, [](auto element) { return element->template getTextAs<Efix>(); });
-        getFieldFromXml(element, "fixedSize", instance->fixedSize, [](auto) { return true; }, false);
-        getFieldFromXml(element, "notTall", instance->notTall, [](auto) { return true; }, false);
-        getFieldFromXml(element, "opaque", instance->opaque, [](auto) { return true; }, false);
-        getFieldFromXml(element, "roundCorners", instance->roundCorners, [](auto) { return true; }, false);
+template <>
+inline Enclosure::Shape toEnum<Enclosure::Shape>(const uint8_t& value)
+{
+    if (value >= static_cast<uint8_t>(Enclosure::Shape::NoEnclosure) &&
+        value <= static_cast<uint8_t>(Enclosure::Shape::Octogon)) {
+        return static_cast<Enclosure::Shape>(value);
     }
+    throw std::invalid_argument("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
+}
+
+template <>
+inline const XmlElementArray<Enclosure> FieldPopulator<Enclosure>::xmlElements = {
+    {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
+    {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
+    {"xMargin", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xMargin = e->getTextAs<Evpu>(); }},
+    {"yMargin", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yMargin = e->getTextAs<Evpu>(); }},
+    {"lineWidth", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->lineWidth = e->getTextAs<Efix>(); }},
+    {"sides", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->shape = toEnum<Enclosure::Shape>(e->getTextAs<uint8_t>()); }},
+    {"cornerRadius", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
+    {"fixedSize", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->fixedSize = true; }},
+    {"equalAspect", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->equalAspect = true; }},
+    {"notTall", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->notTall = true; }},
+    {"opaque", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->opaque = true; }},
+    {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->roundCorners = true; }},
 };
 
 template <>
-struct FieldPopulator<MarkingCategory>;
-template <>
-struct FieldPopulator<TextExpressionDef>;
-
-/** @brief Shared enum conversion utlities for expressions and marking categories */
-struct ExpressionEnumUtils
-{
-private:
-    /**
-     * @brief Converts XML string values to PlaybackType enum values.
-     */
-    static PlaybackType toPlaybackType(const std::string& value)
-    {
-        if (value == "none") return PlaybackType::None;
-        if (value == "time") return PlaybackType::Tempo;
-        if (value == "midiController") return PlaybackType::MidiController;
-        if (value == "amplitude") return PlaybackType::KeyVelocity;
-        if (value == "transpose") return PlaybackType::Transpose;
-        if (value == "channel") return PlaybackType::Channel;
-        if (value == "midiPatchChange") return PlaybackType::MidiPatchChange;
-        if (value == "percMidiMap") return PlaybackType::PercussionMidiMap;
-        if (value == "midiPitchwheel") return PlaybackType::MidiPitchWheel;
-        if (value == "midiPressure") return PlaybackType::ChannelPressure;
-        if (value == "rekey") return PlaybackType::RestrikeKeys;
-        if (value == "dump") return PlaybackType::Dump;
-        if (value == "startTempo") return PlaybackType::PlayTempoToolChanges;
-        if (value == "stopTempo") return PlaybackType::IgnoreTempoToolChanges;
-        if (value == "swing") return PlaybackType::Swing;
-        if (value == "hpOn") return PlaybackType::SmartPlaybackOn;
-        if (value == "hpOff") return PlaybackType::SmartPlaybackOff;
-        throw std::invalid_argument("Unknown playbackType value in XML: " + value);
-    }
-
-    /**
-     * @brief Converts XML string values to HorizontalMeasExprAlign enum values.
-     */
-    static HorizontalMeasExprAlign toHorizontalMeasExprAlign(const std::string& value)
-    {
-        if (value == "manual") return HorizontalMeasExprAlign::Manual;
-        if (value == "leftOfAllNoteheads") return HorizontalMeasExprAlign::LeftOfAllNoteheads;
-        if (value == "leftOfPrimaryNotehead") return HorizontalMeasExprAlign::LeftOfPrimaryNotehead;
-        if (value == "stem") return HorizontalMeasExprAlign::Stem;
-        if (value == "centerPrimaryNotehead") return HorizontalMeasExprAlign::CenterPrimaryNotehead;
-        if (value == "centerAllNoteheads") return HorizontalMeasExprAlign::CenterAllNoteheads;
-        if (value == "rightOfAllNoteheads") return HorizontalMeasExprAlign::RightOfAllNoteheads;
-        if (value == "leftEdge") return HorizontalMeasExprAlign::LeftBarline;
-        if (value == "startTimeSig") return HorizontalMeasExprAlign::StartTimeSig;
-        if (value == "afterClefKeyTime") return HorizontalMeasExprAlign::AfterClefKeyTime;
-        if (value == "startOfMusic") return HorizontalMeasExprAlign::StartOfMusic;
-        if (value == "centerOverBarlines") return HorizontalMeasExprAlign::CenterOverBarlines;
-        if (value == "centerOverMusic") return HorizontalMeasExprAlign::CenterOverMusic;
-        if (value == "rightEdge") return HorizontalMeasExprAlign::RightBarline;
-        throw std::invalid_argument("Unknown horzMeasExprAlign value in XML: " + value);
-    }
-
-    /**
-     * @brief Converts XML string values to VerticalMeasExprAlign enum values.
-     */
-    static VerticalMeasExprAlign toVerticalMeasExprAlign(const std::string& value)
-    {
-        if (value == "manual") return VerticalMeasExprAlign::Manual;
-        if (value == "refLine") return VerticalMeasExprAlign::RefLine;
-        if (value == "aboveStaff") return VerticalMeasExprAlign::AboveStaff;
-        if (value == "belowStaff") return VerticalMeasExprAlign::BelowStaff;
-        if (value == "topNote") return VerticalMeasExprAlign::TopNote;
-        if (value == "bottomNote") return VerticalMeasExprAlign::BottomNote;
-        if (value == "aboveEntry") return VerticalMeasExprAlign::AboveEntry;
-        if (value == "belowEntry") return VerticalMeasExprAlign::BelowEntry;
-        if (value == "aboveStaffOrEntry") return VerticalMeasExprAlign::AboveStaffOrEntry;
-        if (value == "belowStaffOrEntry") return VerticalMeasExprAlign::BelowStaffOrEntry;
-        throw std::invalid_argument("Invalid vertMeasExprAlign value in XML: " + value);
-    }
-
-    /**
-     * @brief Converts XML string values to HorizontalExprJustification enum values.
-     */
-    static HorizontalExprJustification toHorizontalExprJustification(const std::string& value)
-    {
-        if (value == "left") return HorizontalExprJustification::Left;
-        if (value == "center") return HorizontalExprJustification::Center;
-        if (value == "right") return HorizontalExprJustification::Right;
-        throw std::invalid_argument("Invalid horzExprJustification value in XML: " + value);
-    }
-
-    friend struct FieldPopulator<MarkingCategory>;
-    friend struct FieldPopulator<TextExpressionDef>;
+inline XmlEnumMapping<NamePositioning::AlignJustify> EnumMapper<NamePositioning::AlignJustify>::mapping = {
+    //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
+    {"center", NamePositioning::AlignJustify::Center},
+    {"right", NamePositioning::AlignJustify::Right},
 };
 
 template <>
-struct FieldPopulator<FontDefinition> : public FactoryBase
-{
-    static void populate(const std::shared_ptr<FontDefinition>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
-    {
-        getFieldFromXml(element, "charsetBank", instance->charsetBank, [](auto element) { return element->getText(); });
-        getFieldFromXml(element, "charsetVal", instance->charsetVal, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "pitch", instance->pitch, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "family", instance->family, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "name", instance->name, [](auto element) { return element->getText(); });
-    }
+inline const XmlElementArray<NamePositioning> FieldPopulator<NamePositioning>::xmlElements = {
+    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
+    {"indivPos", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->indivPos = true; }},
+    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
+    {"expand", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->expand = true; }},
 };
 
 template <>
-struct FieldPopulator<MarkingCategory> : public FactoryBase
-{
-private:
-    using Utils = ExpressionEnumUtils;
-
-    static MarkingCategory::CategoryType toCategoryType(const std::string& str)
-    {
-        if (str == "dynamics") return MarkingCategory::CategoryType::Dynamics;
-        if (str == "tempoMarks") return MarkingCategory::CategoryType::TempoMarks;
-        if (str == "tempoAlts") return MarkingCategory::CategoryType::TempoAlterations;
-        if (str == "expressiveText") return MarkingCategory::CategoryType::ExpressiveText;
-        if (str == "techniqueText") return MarkingCategory::CategoryType::TechniqueText;
-        if (str == "rehearsalMarks") return MarkingCategory::CategoryType::RehearsalMarks;
-        if (str == "misc") return MarkingCategory::CategoryType::Misc;
-        throw std::invalid_argument("Invalid marking category type value in XML: " + str);
-    }
-
-public:
-    static void populate(const std::shared_ptr<MarkingCategory>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
-    {
-        // Populate categoryType field
-        getFieldFromXml(element, "categoryType", instance->categoryType, [](auto element) { return toCategoryType(element->getText()); });
-
-        // Populate textFont, musicFont, and numberFont if the corresponding font tags exist
-        instance->textFont = FieldPopulator<FontInfo>::getFontFromXml(element, "textFont", instance->getDocument());
-        instance->musicFont = FieldPopulator<FontInfo>::getFontFromXml(element, "musicFont", instance->getDocument());
-        instance->numberFont = FieldPopulator<FontInfo>::getFontFromXml(element, "numberFont", instance->getDocument());
-
-        // Populate alignment and justification fields
-        getFieldFromXml(element, "horzAlign", instance->horzAlign, [](auto element) { return Utils::toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "vertAlign", instance->vertAlign, [](auto element) { return Utils::toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "justification", instance->justification, [](auto element) { return Utils::toHorizontalExprJustification(element->template getTextAs<std::string>()); });
-
-        // Populate offset fields
-        getFieldFromXml(element, "horzOffset", instance->horzOffset, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "vertOffsetBaseline", instance->vertOffsetBaseline, [](auto element) { return element->template getTextAs<Evpu>(); });
-        getFieldFromXml(element, "vertOffsetEntry", instance->vertOffsetEntry, [](auto element) { return element->template getTextAs<Evpu>(); });
-
-        // Populate boolean usage fields
-        getFieldFromXml(element, "usesTextFont", instance->usesTextFont, [](auto) { return true; }, false);
-        getFieldFromXml(element, "usesMusicFont", instance->usesMusicFont, [](auto) { return true; }, false);
-        getFieldFromXml(element, "usesNumberFont", instance->usesNumberFont, [](auto) { return true; }, false);
-        getFieldFromXml(element, "usesPositioning", instance->usesPositioning, [](auto) { return true; }, false);
-        getFieldFromXml(element, "usesStaffList", instance->usesStaffList, [](auto) { return true; }, false);
-        getFieldFromXml(element, "usesBreakMmRests", instance->usesBreakMmRests, [](auto) { return true; }, false);
-        getFieldFromXml(element, "breakMmRest", instance->breakMmRest, [](auto) { return true; }, false);
-        getFieldFromXml(element, "userCreated", instance->userCreated, [](auto) { return true; }, false);
-
-        // Populate staffList field
-        getFieldFromXml(element, "staffList", instance->staffList, [](auto element) { return element->template getTextAs<Cmper>(); });
-    }
+inline const XmlElementArray<FontDefinition> FieldPopulator<FontDefinition>::xmlElements = {
+    {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
+    {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},
+    {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->pitch = e->getTextAs<int>(); }},
+    {"family", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->family = e->getTextAs<int>(); }},
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->name = e->getText(); }},
 };
 
 template <>
-struct FieldPopulator<MarkingCategoryName> : public FactoryBase
-{
-public:
-    static void populate(const std::shared_ptr<MarkingCategoryName>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker&)
-    {
-        getFieldFromXml(element, "name", instance->name, [](auto element) { return element->getText(); });
-    }
+inline const XmlElementArray<LayerAttributes> FieldPopulator<LayerAttributes>::xmlElements = {
+    {"restOffset", [](const XmlElementPtr& e, const std::shared_ptr<LayerAttributes>& i) { i->restOffset = e->getTextAs<int>(); }},
+    {"flipTies", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->freezTiesToStems = true; }},
+    {"floatLayer", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->onlyIfOtherLayersHaveNotes = true; }},
+    {"useRestOff", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->useRestOffset = true; }},
+    {"freezeLayUp", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->freezeStemsUp = true; }},
+    {"freezeLayer", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->freezeLayer = true; }},
+    {"playback", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->playback = true; }},
+    {"spacing", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->affectSpacing = true; }},
+    {"ignoreHidden", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->ignoreHiddenNotesOnly = true; }},
+    {"ignoreHiddenLayers", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->ignoreHiddenLayers = true; }},
+    {"hideLayer", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->hideLayer = true; }},
 };
 
 template <>
-struct FieldPopulator<TextExpressionDef> : public FactoryBase
+struct ResolverArray<LayerAttributes>
 {
-private:
-    using Utils = ExpressionEnumUtils;
-
-public:
-    /**
-     * @brief Populates the fields of a TextExpressionDef instance from an XML element.
-     */
-    static void populate(const std::shared_ptr<TextExpressionDef>& instance, const std::shared_ptr<xml::IXmlElement>& element, ElementLinker& elementLinker)
-    {
-        getFieldFromXml(element, "textIDKey", instance->textIdKey, [](auto element) { return element->template getTextAs<Cmper>(); });
-        getFieldFromXml(element, "categoryID", instance->categoryId, [](auto element) { return element->template getTextAs<Cmper>(); });
-        getFieldFromXml(element, "value", instance->value, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "auxData1", instance->auxData1, [](auto element) { return element->template getTextAs<int>(); }, false);
-        getFieldFromXml(element, "playType", instance->playbackType, [](auto element) { return Utils::toPlaybackType(element->template getTextAs<std::string>()); }, false);
-        getFieldFromXml(element, "horzMeasExprAlign", instance->horzMeasExprAlign, [](auto element) { return Utils::toHorizontalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "horzExprAlign", instance->horzExprJustification, [](auto element) { return Utils::toHorizontalExprJustification(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "vertMeasExprAlign", instance->vertMeasExprAlign, [](auto element) { return Utils::toVerticalMeasExprAlign(element->template getTextAs<std::string>()); });
-        getFieldFromXml(element, "measXAdjust", instance->measXAdjust, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "yAdjustEntry", instance->yAdjustEntry, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "yAdjustBaseline", instance->yAdjustBaseline, [](auto element) { return element->template getTextAs<int>(); });
-        getFieldFromXml(element, "useCategoryFonts", instance->useCategoryFonts, [](auto) { return true; }, false);
-        getFieldFromXml(element, "useCategoryPos", instance->useCategoryPos, [](auto) { return true; }, false);
-        getFieldFromXml(element, "newEnclosure", instance->hasEnclosure, [](auto) { return true; }, false);
-        getFieldFromXml(element, "breakMmRest", instance->breakMmRest, [](auto) { return true; }, false);
-        getFieldFromXml(element, "useAuxData", instance->useAuxData, [](auto) { return true; }, false);
-        getFieldFromXml(element, "descStr", instance->description, [](auto element) { return element->getText(); }, false);
-
-        //Add this instance's id to the marking category's set.
-        if (instance->categoryId) {
-            elementLinker.addResolver([instance](const DocumentPtr& document) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->categoryId);
-                if (!markingCat) {
-                    throw std::invalid_argument("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
+    inline static const ResolverList value = {
+        [](const dom::DocumentPtr& document) {
+            auto layers = document->getOthers()->getArray<LayerAttributes>();
+            if (layers.size() != 4) {
+                throw std::invalid_argument("Expected exactly 4 <layerAtts> elements.");
+            }
+            for (size_t i = 0; i < layers.size(); i++) {
+                if (layers[i]->getCmper() != i) {
+                    throw std::invalid_argument("Expected <layerAtts> elements to have cmper values 0, 1, 2, 3 in order.");
                 }
-                markingCat->textExpressions.emplace(instance->getCmper(), instance);                
-            });
+            }
         }
-    }
+    };
+};
+
+template <>
+inline XmlEnumMapping<MeasureNumberRegion::AlignJustify> EnumMapper<MeasureNumberRegion::AlignJustify>::mapping = {
+    //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
+    {"center", MeasureNumberRegion::AlignJustify::Center},
+    {"right", MeasureNumberRegion::AlignJustify::Right},
+};
+
+template <>
+inline XmlEnumMapping<MeasureNumberRegion::TimePrecision> EnumMapper<MeasureNumberRegion::TimePrecision>::mapping = {
+    //{"wholeSeconds", MeasureNumberRegion::TimePrecision::WholeSeconds}, this is the default and is not known to occur in the xml
+    {"tenths", MeasureNumberRegion::TimePrecision::Tenths},
+    {"hundredths", MeasureNumberRegion::TimePrecision::Hundredths},
+    {"thousandths", MeasureNumberRegion::TimePrecision::Thousandths},
+};
+
+template <>
+inline const XmlElementArray<MeasureNumberRegion::ScorePartData> FieldPopulator<MeasureNumberRegion::ScorePartData>::xmlElements = {
+    {"startFont", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"multipleFont", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"mmRestFont", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"startEnclosure", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startEnclosure = FieldPopulator<Enclosure>::createAndPopulate(e, i->getDocument()); }},
+    {"multipleEnclosure", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleEnclosure = FieldPopulator<Enclosure>::createAndPopulate(e, i->getDocument()); }},
+    {"startYdisp", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startYdisp = e->getTextAs<Evpu>(); }},
+    {"multipleYdisp", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleYdisp = e->getTextAs<Evpu>(); }},
+    {"mmRestYdisp", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestYdisp = e->getTextAs<Evpu>(); }},
+    {"leftMmBracketChar", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->leftMmBracketChar = e->getTextAs<char32_t>(); }},
+    {"rightMmBracketChar", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->rightMmBracketChar = e->getTextAs<char32_t>(); }},
+    {"startWith", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startWith = e->getTextAs<int>(); }},
+    {"incidence", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->incidence = e->getTextAs<int>(); }},
+    {"startAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startAlign = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }},
+    {"multipleAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleAlign = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }},
+    {"mmRestAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestAlign = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }},
+    {"startOfLine", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showOnStart = true; }},
+    {"multipleOf", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showOnEvery = true; }},
+    {"exceptFirstMeas", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->hideFirstMeasure = true; }},
+    {"mmRestRange", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showMmRange = true; }},
+    {"mmRestRangeForce", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showOnMmRest = true; }},
+    {"useStartEncl", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->useStartEncl = true; }},
+    {"useMultipleEncl", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->useMultipleEncl = true; }},
+    {"showOnTop", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showOnTop = true; }},
+    {"showOnBottom", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showOnBottom = true; }},
+    {"excludeOthers", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->excludeOthers = true; }},
+    {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->breakMmRest = true; }},
+    {"startJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startJustify = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }},
+    {"multipleJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleJustify = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }},
+    {"mmRestJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestJustify = toEnum<MeasureNumberRegion::AlignJustify>(e->getTextTrimmed()); }}
+};
+
+template <>
+inline const XmlElementArray<MeasureNumberRegion> FieldPopulator<MeasureNumberRegion>::xmlElements = {
+    {"scoreData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->scoreData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
+    {"partData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->partData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
+    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startMeas = e->getTextAs<Cmper>(); }},
+    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->endMeas = e->getTextAs<Cmper>(); }},
+    {"startChar", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startChar = e->getTextAs<char32_t>(); }},
+    {"base", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->base = e->getTextAs<int>(); }},
+    {"prefix", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->prefix = e->getTextTrimmed(); }},
+    {"suffix", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->suffix = e->getTextTrimmed(); }},
+    {"countFromOne", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->countFromOne = true; }},
+    {"noZero", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->noZero = true; }},
+    {"doubleUp", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->doubleUp = true; }},
+    {"time", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->time = true; }},
+    {"includeHours", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->includeHours = true; }},
+    {"smpteFrames", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->smpteFrames = true; }},
+    {"useScoreInfoForPart", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->useScoreInfoForPart = true; }},
+    {"region", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->region = e->getTextAs<int>(); }},
+    {"timePrecision", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->timePrecision = toEnum<MeasureNumberRegion::TimePrecision>(e->getTextTrimmed()); }},
+    {"hideScroll", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hideScroll = true; }},
+    {"hidePage", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hidePage = true; }}
+};
+
+template <>
+inline XmlEnumMapping<RehearsalMarkStyle> EnumMapper<RehearsalMarkStyle>::mapping = {
+    {"letters", RehearsalMarkStyle::Letters},
+    {"letNum", RehearsalMarkStyle::LetterNumbers},
+    {"lettersLc", RehearsalMarkStyle::LettersLowerCase},
+    {"letNumLc", RehearsalMarkStyle::LettersNumbersLowerCase},
+    {"numbers", RehearsalMarkStyle::Numbers},
+    {"measNum", RehearsalMarkStyle::MeasureNumber}
+};
+
+template <>
+inline XmlEnumMapping<PlaybackType> EnumMapper<PlaybackType>::mapping = {
+    {"none", PlaybackType::None},
+    {"time", PlaybackType::Tempo},
+    {"midiController", PlaybackType::MidiController},
+    {"amplitude", PlaybackType::KeyVelocity},
+    {"transpose", PlaybackType::Transpose},
+    {"channel", PlaybackType::Channel},
+    {"midiPatchChange", PlaybackType::MidiPatchChange},
+    {"percMidiMap", PlaybackType::PercussionMidiMap},
+    {"midiPitchwheel", PlaybackType::MidiPitchWheel},
+    {"midiPressure", PlaybackType::ChannelPressure},
+    {"rekey", PlaybackType::RestrikeKeys},
+    {"dump", PlaybackType::Dump},
+    {"startTempo", PlaybackType::PlayTempoToolChanges},
+    {"stopTempo", PlaybackType::IgnoreTempoToolChanges},
+    {"swing", PlaybackType::Swing},
+    {"hpOn", PlaybackType::SmartPlaybackOn},
+    {"hpOff", PlaybackType::SmartPlaybackOff}
+};
+
+template <>
+inline XmlEnumMapping<HorizontalMeasExprAlign> EnumMapper<HorizontalMeasExprAlign>::mapping = {
+    {"manual", HorizontalMeasExprAlign::Manual},
+    {"leftOfAllNoteheads", HorizontalMeasExprAlign::LeftOfAllNoteheads},
+    {"leftOfPrimaryNotehead", HorizontalMeasExprAlign::LeftOfPrimaryNotehead},
+    {"stem", HorizontalMeasExprAlign::Stem},
+    {"centerPrimaryNotehead", HorizontalMeasExprAlign::CenterPrimaryNotehead},
+    {"centerAllNoteheads", HorizontalMeasExprAlign::CenterAllNoteheads},
+    {"rightOfAllNoteheads", HorizontalMeasExprAlign::RightOfAllNoteheads},
+    {"leftEdge", HorizontalMeasExprAlign::LeftBarline},
+    {"startTimeSig", HorizontalMeasExprAlign::StartTimeSig},
+    {"afterClefKeyTime", HorizontalMeasExprAlign::AfterClefKeyTime},
+    {"startOfMusic", HorizontalMeasExprAlign::StartOfMusic},
+    {"centerOverBarlines", HorizontalMeasExprAlign::CenterOverBarlines},
+    {"centerOverMusic", HorizontalMeasExprAlign::CenterOverMusic},
+    {"rightEdge", HorizontalMeasExprAlign::RightBarline}
+};
+
+template <>
+inline XmlEnumMapping<VerticalMeasExprAlign> EnumMapper<VerticalMeasExprAlign>::mapping = {
+    {"manual", VerticalMeasExprAlign::Manual},
+    {"refLine", VerticalMeasExprAlign::RefLine},
+    {"aboveStaff", VerticalMeasExprAlign::AboveStaff},
+    {"belowStaff", VerticalMeasExprAlign::BelowStaff},
+    {"topNote", VerticalMeasExprAlign::TopNote},
+    {"bottomNote", VerticalMeasExprAlign::BottomNote},
+    {"aboveEntry", VerticalMeasExprAlign::AboveEntry},
+    {"belowEntry", VerticalMeasExprAlign::BelowEntry},
+    {"aboveStaffOrEntry", VerticalMeasExprAlign::AboveStaffOrEntry},
+    {"belowStaffOrEntry", VerticalMeasExprAlign::BelowStaffOrEntry}
+};
+
+template <>
+inline XmlEnumMapping<HorizontalExprJustification> EnumMapper<HorizontalExprJustification>::mapping = {
+    {"left", HorizontalExprJustification::Left},
+    {"center", HorizontalExprJustification::Center},
+    {"right", HorizontalExprJustification::Right}
+};
+
+template <>
+inline XmlEnumMapping<MarkingCategory::CategoryType> EnumMapper<MarkingCategory::CategoryType>::mapping = {
+    {"dynamics", MarkingCategory::CategoryType::Dynamics},
+    {"tempoMarks", MarkingCategory::CategoryType::TempoMarks},
+    {"tempoAlts", MarkingCategory::CategoryType::TempoAlterations},
+    {"expressiveText", MarkingCategory::CategoryType::ExpressiveText},
+    {"techniqueText", MarkingCategory::CategoryType::TechniqueText},
+    {"rehearsalMarks", MarkingCategory::CategoryType::RehearsalMarks},
+    {"misc", MarkingCategory::CategoryType::Misc}
+};
+
+template <>
+inline const XmlElementArray<MarkingCategory> FieldPopulator<MarkingCategory>::xmlElements = {
+    {"categoryType", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->categoryType = toEnum<MarkingCategory::CategoryType>(e->getTextTrimmed()); }},
+    {"textFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
+        { i->textFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"musicFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
+        { i->musicFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"numberFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
+        { i->numberFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"horzAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzAlign = toEnum<HorizontalMeasExprAlign>(e->getTextTrimmed()); }},
+    {"vertAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertAlign = toEnum<VerticalMeasExprAlign>(e->getTextTrimmed()); }},
+    {"justification", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->justification = toEnum<HorizontalExprJustification>(e->getTextTrimmed()); }},
+    {"horzOffset", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"vertOffsetBaseline", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertOffsetBaseline = e->getTextAs<Evpu>(); }},
+    {"vertOffsetEntry", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertOffsetEntry = e->getTextAs<Evpu>(); }},
+    {"usesTextFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesTextFont = true; }},
+    {"usesMusicFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesMusicFont = true; }},
+    {"usesNumberFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesNumberFont = true; }},
+    {"usesPositioning", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesPositioning = true; }},
+    {"usesStaffList", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesStaffList = true; }},
+    {"usesBreakMmRests", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesBreakMmRests = true; }},
+    {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->breakMmRest = true; }},
+    {"userCreated", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->userCreated = true; }},
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+};
+
+template <>
+struct ResolverArray<MarkingCategory>
+{
+    inline static const ResolverList value = {
+        [](const dom::DocumentPtr& document) {
+            auto cats = document->getOthers()->getArray<MarkingCategory>();
+            for (const auto& cat : cats) {
+                if (cat->categoryType == MarkingCategory::CategoryType::Invalid) {
+                    throw std::invalid_argument("Encountered <markingsCategory> node (cmper " + std::to_string(cat->getCmper()) + ") with no categoryType");
+                }
+            }
+        }
+    };
+};
+
+template <>
+inline const XmlElementArray<PartGlobals> FieldPopulator<PartGlobals>::xmlElements = {
+    {"showTransposed", [](const XmlElementPtr&, const std::shared_ptr<PartGlobals>& i) { i->showTransposed = true; }},
+    {"scrollViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->scrollViewIUlist = e->getTextAs<Cmper>(); }},
+    {"studioViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->studioViewIUlist = e->getTextAs<Cmper>(); }},
+    {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
+};
+
+template <>
+inline const XmlElementArray<MarkingCategoryName> FieldPopulator<MarkingCategoryName>::xmlElements = {
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategoryName>& i) { i->name = e->getText(); }},
+};
+
+template <>
+inline const XmlElementArray<TextExpressionDef> FieldPopulator<TextExpressionDef>::xmlElements = {
+    {"textIDKey", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->textIdKey = e->getTextAs<Cmper>(); }},
+    {"categoryID", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->categoryId = e->getTextAs<Cmper>(); }},
+    {"rehearsalMarkStyle", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->rehearsalMarkStyle = toEnum<RehearsalMarkStyle>(e->getTextTrimmed()); }},
+    {"value", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->value = e->getTextAs<int>(); }},
+    {"auxdata1", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->auxData1 = e->getTextAs<int>(); }},
+    {"playPass", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->playPass = e->getTextAs<int>(); }},
+    {"hideMeasureNum", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->hideMeasureNum = true; }},
+    {"useAuxData", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->useAuxData = true; }},
+    {"newEnclosure", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->hasEnclosure = true; }},
+    {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->breakMmRest = true; }},
+    {"playType", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->playbackType = toEnum<PlaybackType>(e->getTextTrimmed()); }},
+    {"horzMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->horzMeasExprAlign = toEnum<HorizontalMeasExprAlign>(e->getTextTrimmed()); }},
+    {"horzExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->horzExprJustification = toEnum<HorizontalExprJustification>(e->getTextTrimmed()); }},
+    {"vertMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->vertMeasExprAlign = toEnum<VerticalMeasExprAlign>(e->getTextTrimmed()); }},
+    {"measXAdjust", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->measXAdjust = e->getTextAs<Evpu>(); }},
+    {"yAdjustEntry", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->yAdjustEntry = e->getTextAs<Evpu>(); }},
+    {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
+    {"useCategoryFonts", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->useCategoryFonts = true; }},
+    {"useCategoryPos", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->useCategoryPos = true; }},
+    {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->description = e->getText(); }},
+};
+
+template <>
+struct ResolverArray<TextExpressionDef>
+{
+    inline static const ResolverList value = {
+        [](const dom::DocumentPtr& document) {
+            auto exps = document->getOthers()->getArray<TextExpressionDef>();
+            for (const auto& instance : exps) {
+                if (instance->categoryId) {
+                    auto markingCat = document->getOthers()->get<MarkingCategory>(instance->categoryId);
+                    if (!markingCat) {
+                        throw std::invalid_argument("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
+                    }
+                    markingCat->textExpressions.emplace(instance->getCmper(), instance);
+                }
+            }
+        }
+    };
 };
 
 template <>

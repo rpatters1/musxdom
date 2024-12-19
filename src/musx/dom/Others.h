@@ -36,53 +36,8 @@ namespace dom {
 namespace others {
 
 /**
- * @class Enclosure
- * @brief Represents the enclosure settings for text expressions.
- */
-class Enclosure : public OthersBase
-{
-public:
-    /**
-     * @enum Shape
-     * @brief Enumeration for enclosure shapes.
-     */
-    enum class Shape : uint8_t
-    {
-        NoEnclosure = 0,    ///< No enclosure
-        Rectangle = 1,      ///< Rectangle
-        Ellipse = 2,        ///< Ellipse
-        Triangle = 3,       ///< Triangle
-        Diamond = 4,        ///< Diamond
-        Pentagon = 5,       ///< Pentagon
-        Hexagon = 6,        ///< Hexagon
-        Heptagon = 7,       ///< Heptagon
-        Octogon = 8         ///< Octogon
-    };
-
-    /**
-     * @brief Constructs an Enclosure object.
-     * @param document Shared pointer to the document.
-     * @param cmper Comparison parameter.
-     */
-    explicit Enclosure(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
-
-    Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).
-    Evpu yAdd{};              ///< Center Y offset - offsets text from center (in EVPU).
-    Evpu xMargin{};           ///< Half width - extra space on left/right sides (in EVPU).
-    Evpu yMargin{};           ///< Half height - extra space on top/bottom sides (in EVPU).
-    Efix lineWidth{};         ///< Line thickness in 64ths of an EVPU (EFIX).
-    Shape shape{Shape::NoEnclosure}; ///< Enclosure shape (default: NoEnclosure).
-    Efix cornerRadius{};      ///< Corner radius (in EFIX).
-    bool fixedSize{};         ///< Whether the enclosure is fixed size (ignore text bounding box)
-    bool notTall{};           ///< "Enforce Minimum Width": don't let shape get taller than it is wide
-    bool opaque{};            ///< Whether the enclosure is opaque.
-    bool roundCorners{};      ///< Whether the enclosure has rounded corners.
-};
-
-/**
  * @class FontDefinition
- * @brief The name and font characteristics of fonts contained in the musx file.
+ * @brief The name and font characteristics of fonts contained.
  *
  * The cmper is the font ID used in classes throughout the document.
  *
@@ -92,8 +47,8 @@ class FontDefinition : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    explicit FontDefinition(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit FontDefinition(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
 
     // Public properties corresponding to the XML structure
     std::string charsetBank;    ///< probably only "Mac" or "Win"
@@ -103,6 +58,148 @@ public:
     std::string name;           ///< The font name e.g., "Broadway Copyist Text".
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
+};
+
+/**
+ * @class LayerAttributes
+ * @brief Represents the attributes of a Finale "layer".
+ *
+ * The cmper is the layer ID (0-3). In the Finale UI these are represented as Layer 1 thru Layer 4.
+ * The 0-based cmper value is used to identify layers where needed, rather than the 1-based UI value.
+ *
+ * This class is identified by the XML node name "layerAtts".
+ */
+class LayerAttributes : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit LayerAttributes(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    int restOffset{};                   ///< "Adjust Floating Rests by " number of staff steps.
+    bool freezTiesToStems{};            ///< "Freeze Ties in the Same Direction as Stems" (xml node is `<flipTies>`)
+    bool onlyIfOtherLayersHaveNotes{};  ///< "Apply Settings Only if Notes are in Other Layers" (xml node is `<floatLayer>`)
+    bool useRestOffset{};               ///< "Adjust Floating Rests by ". Determines if `restOffset` is used. (xml node is `<useRestOff>`)
+    bool freezeStemsUp{};               ///< If true, freeze stems up, otherwise freeze stems down. Only used if `freezeLayer` is true. (xml node is `<freezeLayUp>`)
+    bool freezeLayer{};                 ///< "Freeze Stems and Ties"
+    bool playback{};                    ///< If true, playback this layer. If false, the layer is muted.
+    bool affectSpacing{};               ///< "Affect Music Spacing" (xml node is `<spacing>`)
+    bool ignoreHiddenNotesOnly{};       ///< "Ignore Layers Containing Only Hidden Notes" (xml node is `<ignoreHidden>`)
+    bool ignoreHiddenLayers{};          ///< "Ignore Hidden Layers"
+    bool hideLayer{};                   ///< "Hide Layer when Inactive"
+
+    constexpr static std::string_view XmlNodeName = "layerAtts"; ///< The XML node name for this type.
+};
+
+/**
+ * @class MeasureNumberRegion
+ * @brief Represents the Measure Number Region with detailed font and enclosure settings for score and part data.
+ *
+ * This class is identified by the XML node name "measNumbRegion".
+ */
+class MeasureNumberRegion : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /// @brief Alignment and justification options for measure numbers.
+    enum class AlignJustify
+    {
+        Left,   ///< Left alignment or justification (the default value.)
+        Right,  ///< Right alignment.
+        Center  ///< Center alignment.
+    };
+
+    /// @brief Precision for time display
+    enum class TimePrecision
+    {
+        WholeSeconds,   ///< the default value
+        Tenths,
+        Hundredths,
+        Thousandths,
+    };
+
+    /// @brief Measure number data that can differ in score or part.
+    class ScorePartData : public Base
+    {
+    public:
+        /** @brief Constructor */
+        explicit ScorePartData(const DocumentWeakPtr& document) : Base(document, 0, ShareMode::All) {}
+
+        std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
+        std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
+        std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.
+        std::shared_ptr<Enclosure> startEnclosure;    ///< Enclosure settings for numbers at start of system.
+        std::shared_ptr<Enclosure> multipleEnclosure; ///< Enclosure settings for mid-system numbers.
+
+        Evpu startYdisp{};         ///< Vertical offset for numbers at start of system.
+        Evpu multipleYdisp{};      ///< Vertical offset for mid-system numbers.
+        Evpu mmRestYdisp{};        ///< Vertical offset for multi-measure rest ranges.
+        char32_t leftMmBracketChar{};  ///< UTF-32 code for the left bracket of multi-measure rest ranges.
+        char32_t rightMmBracketChar{}; ///< UTF-32 code for the right bracket of multi-measure rest ranges.
+        int startWith{};           ///< "Beginning with" value. (This value is 0-based. The Finale UI adds 1 for user display.)
+        int incidence{};           ///< "Show on Every" value.
+        AlignJustify startAlign{};  ///< Alignment of numbers at the start of system
+        AlignJustify multipleAlign{}; ///< Alignment for mid-system numbers.
+        AlignJustify mmRestAlign{}; ///< Alignment for multi-measure ranges.
+        bool showOnStart{};        ///< "Show On Start of Staff System" (xml node is `<startOfLine>`)
+        bool showOnEvery{};        ///< "Show on Every" activates mid-system numbers. (xml node is `<multipleOf>`)
+        bool hideFirstMeasure{};   ///< "Hide First Measure Number in Region." (xml node is `<exceptFirstMeas>`)
+        bool showMmRange{};        ///< "Show Measure Ranges on Multimeasure Rests" (xml node is `<mmRestRange>`)
+        bool showOnMmRest{};       ///< "Show on Multimeasure Rests"  (xml node is `<mmRestRangeForce>`)
+        bool useStartEncl{};       ///< Use enclosure for start-of-system settings.
+        bool useMultipleEncl{};    ///< Use enclosure for mid-system settings.
+        bool showOnTop{};          ///< Show measure numbers on the top staff.
+        bool showOnBottom{};       ///< Show measure numbers on the bottom staff.
+        bool excludeOthers{};      ///< Exclude other staves.
+        bool breakMmRest{};        ///< Mid-system numbers break multimeasure rests.
+        AlignJustify startJustify{}; ///< Justification for numbers at the start of system.
+        AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
+        AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
+    };
+
+    // Public properties
+    std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
+    std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
+
+    Cmper startMeas{};      ///< Starting measure number for the region.
+    Cmper endMeas{};        ///< Ending measure number for the region.
+    char32_t startChar{};      ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
+    int base{};         ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
+    std::string prefix;   ///< Text prefix for measure numbers (encoded UTF-8).
+    std::string suffix;   ///< Text suffix for measure numbers (encoded UTF-8).
+
+    bool countFromOne{};        ///< Start counting from 1 rather than 0, e.g., "1, 2, 3, 4" numbering style (in conjuction with base 10)
+    bool noZero;                ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences
+    bool doubleUp{};            ///< Indicates "a, b, c...aa, bb, cc" number style: the symbols are repeated when they exceed the base.
+    bool time{};                ///< Display real time sequences rather than numbers or letters.
+    bool includeHours{};        ///< Display hours (when showing real time measure numbers)
+    bool smpteFrames{};         ///< SMPTE frames (when showing real time measure numbers). This option supercedes `timePrecision`.
+    bool useScoreInfoForPart{}; ///< Use score-wide settings for parts.
+    int region{};               ///< The region ID. This 1-based value is set by Finale and never changes, whereas the @ref Cmper may change when Finale sorts the regions.
+    TimePrecision timePrecision{}; ///< Precision for real-time sequences.
+    bool hideScroll{};          ///< Indicates if numbers are hidden in Scroll View and Studio View.
+    bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
+
+    constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
+};
+
+/**
+ * @enum RehearsalMarkStyle
+ * @brief Specifies the sequencing style for rehearsal marks
+ */
+enum class RehearsalMarkStyle
+{
+    None,                       ///< Default value, no rehearsal mark style
+    Letters,                    ///< A, B, C...AA, BB, CC
+    LetterNumbers,              ///< A, B, C...A1, B1, C1
+    LettersLowerCase,           ///< a, b, c...aa, bb, cc
+    LettersNumbersLowerCase,    ///< a, b, c...a1, b1, c1
+    Numbers,                    ///< 1, 2, 3, 4
+    MeasureNumber               ///< Displays the current measure number
 };
 
 /**
@@ -136,6 +233,7 @@ enum class PlaybackType
  */
 enum class HorizontalMeasExprAlign
 {
+    LeftBarline,            ///< Align with left barline (the default). (xml value is "leftEdge", if encountered)
     Manual,                 ///< "Horizontal Click Position" alignment.
     LeftOfAllNoteheads,     ///< Align left of all noteheads
     LeftOfPrimaryNotehead,  ///< Align to the left of the primary notehead.
@@ -143,7 +241,6 @@ enum class HorizontalMeasExprAlign
     CenterPrimaryNotehead,  ///< Align to the center of the primary notehead.
     CenterAllNoteheads,     ///< Align to the center of all noteheads.
     RightOfAllNoteheads,    ///< Align to the right of all noteheads.
-    LeftBarline,            ///< Align with left barline (the default). (xml value is "leftEdge", if encountered)
     StartTimeSig,           ///< Align at the start of the time signature.
     AfterClefKeyTime,       ///< Align after clef/key/time/repeat.
     StartOfMusic,           ///< Align at start of music.
@@ -158,9 +255,9 @@ enum class HorizontalMeasExprAlign
  */
 enum class VerticalMeasExprAlign
 {
+    AboveStaff,          ///< Align above ths staff (the default).
     Manual,              ///< "Vertical Click Position" alignment.
     RefLine,             ///< Align to staff reference line.
-    AboveStaff,          ///< Align above ths staff (the default).
     BelowStaff,          ///< Align below the staff.
     TopNote,             ///< Align with top note.
     BottomNote,          ///< Align with bottom note.
@@ -185,7 +282,7 @@ class TextExpressionDef;
 
 /**
  * @class MarkingCategory
- * @brief Represents a category of markings used in the musx file.
+ * @brief Represents a category of markings used.
  *
  * This class is identified by the XML node name "markingsCategory".
  */
@@ -193,7 +290,9 @@ class MarkingCategory : public OthersBase
 {
 public:
     /** @brief Enumeration for the type of marking category */
-    enum class CategoryType {
+    enum class CategoryType : Cmper
+    {
+        Invalid,            ///< There should always be a category type supplied
         Dynamics,           ///< Dynamics markings, such as forte, piano, etc.
         TempoMarks,         ///< Tempo indications such as Allegro (with or without metronome marking).
         TempoAlterations,   ///< Tempo alteration markings, such as accel. and rit. (xml value is "tempoAlts")
@@ -204,24 +303,19 @@ public:
     };
 
     /** @brief Constructor function */
-    explicit MarkingCategory(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit MarkingCategory(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
 
-    CategoryType categoryType{ CategoryType::Misc }; ///< Category type of the marking
+    CategoryType categoryType{}; ///< Category type of the marking
 
     // Font information for the marking category
     std::shared_ptr<FontInfo> textFont;      ///< Text font
     std::shared_ptr<FontInfo> musicFont;     ///< Music font
     std::shared_ptr<FontInfo> numberFont;    ///< Number font
 
-    // Horizontal alignment for the marking
-    HorizontalMeasExprAlign horzAlign{ HorizontalMeasExprAlign::LeftBarline }; ///< Represents `<horzAlign>` element
-
-    // Vertical alignment for the marking
-    VerticalMeasExprAlign vertAlign{ VerticalMeasExprAlign::AboveStaff }; ///< Represents `<vertAlign>` element
-
-    // Justification for the text within the marking
-    HorizontalExprJustification justification{ HorizontalExprJustification::Left }; ///< Represents `<justification>` element
+    HorizontalMeasExprAlign horzAlign{};     ///< Horizontal alignment for the marking
+    VerticalMeasExprAlign vertAlign{};       ///< Vertical alignment for the marking
+    HorizontalExprJustification justification{}; ///< Justification for the text within the marking
 
     // Vertical and horizontal offsets for positioning adjustments
     Evpu horzOffset{};         ///< Additional horizontal offset
@@ -229,17 +323,17 @@ public:
     Evpu vertOffsetEntry{};    ///< Additional vertical entry offset
 
     // Usage flags representing certain behaviors and visual elements
-    bool usesTextFont{};      ///< true if this category uses the text font
-    bool usesMusicFont{};     ///< true if this category uses the music font
-    bool usesNumberFont{};    ///< true if this category uses the number font
-    bool usesPositioning{};   ///< true if this category uses the positioning elements (Finale UI only allows true)
-    bool usesStaffList{};     ///< Represents `<usesStaffList>` element
-    bool usesBreakMmRests{};  ///< Represents `<usesBreakMmRests>` element
-    bool breakMmRest{};       ///< Represents `<breakMmRest>` element
-    bool userCreated{};       ///< Represents `<userCreated>` element
+    bool usesTextFont{};      ///< whether this category uses the text font
+    bool usesMusicFont{};     ///< whether this category uses the music font
+    bool usesNumberFont{};    ///< whether this category uses the number font
+    bool usesPositioning{};   ///< whether this category uses the positioning elements (Finale UI only allows true)
+    bool usesStaffList{};     ///< whether this category uses a staff list
+    bool usesBreakMmRests{};  ///< whether this category uses the `breakMmRest` setting
+    bool breakMmRest{};       ///< whether expressions in this category break multimeasure rests
+    bool userCreated{};       ///< whether the user created this category
 
     // Staff list represented as an integer
-    Cmper staffList{};        ///< Represents `<staffList>` element, e.g., 1
+    Cmper staffList{};        ///< The staff list if `useStaffList` is true
 
     /** @brief A list of text expressions in this category.
      *
@@ -265,12 +359,42 @@ class MarkingCategoryName : public OthersBase
 {
 public:
     /** @brief Constructor function */
-    explicit MarkingCategoryName(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit MarkingCategoryName(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
 
     std::string name; ///< The name of the marking category.
 
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
+};
+
+/**
+ * @class PartGlobals
+ * @brief Represents global values that can vary by part
+ *
+ * The cmper is always 65534.
+ *
+ * This class is identified by the XML node name "partGlobals".
+ */
+class PartGlobals : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit PartGlobals(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    bool showTransposed{};                  ///< If true, "Display Concert Pitch" is unchecked for the part.
+    Cmper scrollViewIUlist{};               ///< If this value is non-zero, it is the iuList @ref Cmper of the current Staff List in Scroll View.
+    Cmper studioViewIUlist{};               ///< The iuList @ref Cmper for Studio View.
+    /** @brief If non-zero, Special Part Extraction is in effect and this is the @ref Cmper for its @ref InstrumentUsed array.
+     *
+     * When Special Part Extraction is in effect, staff systems no longer have their own instrument lists. Instead, they use this value.
+     *
+     * (xml node is `<pageViewIUlist>`)
+    */
+    Cmper specialPartExtractionIUList{};    ///< If non-zero, Special Part Extraction is in effect and this is the iuList @ref Cmper. 
+
+    constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
 };
 
 /**
@@ -284,20 +408,23 @@ class TextExpressionDef : public OthersBase
 public:
     Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this 
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
+    RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
-    int auxData1{};                                 ///< Auxiliary data for the expression.
-    PlaybackType playbackType{ PlaybackType::None }; ///< Playback behavior of the text expression.
-    HorizontalMeasExprAlign horzMeasExprAlign{ HorizontalMeasExprAlign::LeftBarline }; ///< Horizontal alignment of the expression.
-    HorizontalExprJustification horzExprJustification{ HorizontalExprJustification::Left }; ///< Horizontal justification of the text expression.
-    VerticalMeasExprAlign vertMeasExprAlign{ VerticalMeasExprAlign::AboveStaff }; ///< Vertical alignment of the expression.
-    int measXAdjust{};                              ///< Horizontal adjustment for measurement alignment.
-    int yAdjustEntry{};                             ///< Vertical adjustment for entry alignment.
-    int yAdjustBaseline{};                          ///< Vertical adjustment for baseline alignment.
+    int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
+    int playPass{};                                 ///< "Play Only on Pass" value.
+    bool hideMeasureNum;                            ///< "Hide Measure Numbers" (used on Rehearsal Marks)
+    bool useAuxData{};                              ///< Whether auxiliary data is used.
+    bool hasEnclosure{};                            ///< Whether the text expression has an enclosure. (xml node is "newEnclosure")
+    bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
+    PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
+    HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
+    VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
+    HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
+    Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
+    Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
     bool useCategoryFonts{};                        ///< Whether to use category fonts.
     bool useCategoryPos{};                          ///< Whether to use category position.
-    bool hasEnclosure{};                            ///< Whether the text expression has an enclosure.
-    bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
-    bool useAuxData{};                              ///< Whether auxiliary data is used.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
     /**
@@ -305,8 +432,8 @@ public:
      *
      * Initializes all fields to their default values.
      */
-    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper cmper)
-        : OthersBase(document, cmper) {}
+    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;
