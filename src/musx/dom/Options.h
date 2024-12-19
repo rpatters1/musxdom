@@ -316,7 +316,7 @@ public:
         Time,              ///< Time signature font.
         Chord,             ///< Chord name font.
         ChordAcci,         ///< Chord accidental font.
-        Ending,            ///< Ending font.
+        Ending,            ///< Repeat ending number font.
         Tuplet,            ///< Tuplet font.
         TextBlock,         ///< Text block font.
         LyricVerse,        ///< Lyric verse font.
@@ -1125,6 +1125,90 @@ public:
     Evpu timeAbrvLift{};            ///< "Vertical Adjustment: Abbreviated Symbol, Score"
 
     constexpr static std::string_view XmlNodeName = "timeSignatureOptions"; ///< The XML node name for this type.
+};
+
+/**
+ * @class TupletOptions
+ * @brief Options controlling the appearance of tuplets.
+ *
+ * This class is identified by the XML node name "tupletOptions".
+ */
+class TupletOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TupletOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    /** @brief Auto-bracket style options. */
+    enum class AutoBracketStyle
+    {
+        Always,             ///< "Always Use Specified Shape"--the default value
+        UnbeamedOnly,       ///< "Bracket Unbeamed Notes Only"
+        NeverBeamSide,      ///< "Never Bracket Beamed Notes on Beam Side"
+    };
+
+    /** @brief Number style options.
+     * 
+     * @warning Finale appears to have implemented `RatioPlusBothNotes` and `RatioPlusDenominatorNote`
+     * backwards from how they are named. It is probably a long-standing bug that was never worth fixing.
+    */
+    enum class NumberStyle
+    {
+        Nothing,                    ///< The default
+        Number,                     ///< Number only
+        UseRatio,                   ///< Ratio X:Y
+        RatioPlusBothNotes,         ///< @warning displays a note value on the denominator
+        RatioPlusDenominatorNote,   ///< @warning display notes on both values (xml value is "ratioPlusDenNote")
+    };
+
+    /** @brief Positioning style options. */
+    enum class PositioningStyle
+    {
+        Manual,     ///< The default
+        BeamSide,   ///< Display the tuplet on the beam side
+        NoteSide,   ///< Display the tuplet on the note side
+        Above,      ///< Display the tuplet above the notes
+        Below       ///< Display the tuplet below the notes
+    };
+
+    /** @brief Bracket style options. */
+    enum class BracketStyle
+    {
+        Nothing,    ///< No bracket (the default)
+        Slur,       ///< Use a slur instead of a bracket.
+        Bracket     ///< Use a bracket.
+    };
+
+    bool alwaysFlat{};                      ///< "Always Flat" (xml node is `<flat>`)
+    bool fullDura{};                        ///< "Bracket Full Duration"
+    bool metricCenter{};                    ///< "Center Number Using Duration"
+    bool avoidStaff{};                      ///< "Avoid Staff"
+    AutoBracketStyle autoBracketStyle{};    ///< Autobracket style
+    Evpu tupOffX{};                         ///< Horizontal offset.
+    Evpu tupOffY{};                         ///< Vertical.
+    Evpu brackOffX{};                       ///< Horizontal offset for brackets.
+    Evpu brackOffY{};                       ///< Vertical offset for brackets.
+    NumberStyle numStyle{};                 ///< Number style
+    PositioningStyle posStyle{};            ///< Positioning style
+    bool allowHorz{};                       ///< "Allow Horizontal Drag"
+    bool ignoreHorzNumOffset{};             ///< "Ignore Horizontal Number Offset" (xml node is `<ignoreGlOffs>`)
+    bool breakBracket{};                    ///< "Break Slur or Bracket"
+    bool matchHooks{};                      ///< "Match Length of Hooks"
+    bool useBottomNote{};                   ///< "Use Bottom Note" (xml node is `<noteBelow>`)
+    BracketStyle brackStyle{};              ///< Bracket style.
+    bool smartTuplet{};                     ///< "Engraver Tuplets"
+    Evpu leftHookLen{};                     ///< Length of the left hook in the tuplet bracket. (This value is sign-reversed in the Finale UI.)
+    Evpu leftHookExt{};                     ///< Extension of the left hook beyond the tuplet bracket.
+    Evpu rightHookLen{};                    ///< Length of the right hook in the tuplet bracket. (This value is sign-reversed in the Finale UI.)
+    Evpu rightHookExt{};                    ///< Extension of the right hook beyond the tuplet bracket.
+    Evpu manualSlopeAdj{};                  ///< "Manual Slope Adjustment" in @ref Evpu. (xml node is `<slope>`)
+    int tupMaxSlope{};                      ///< Maximum slope for automatic tuplet brackets in 10ths of an angular degree.
+    Efix tupLineWidth{};                    ///< Line width for tuplet brackets in @ref Efix.
+    Evpu tupNUpstemOffset{};                ///< Offset for upstem tuplet numbers.
+    Evpu tupNDownstemOffset{};              ///< Offset for downstem tuplet numbers.
+
+    constexpr static std::string_view XmlNodeName = "tupletOptions"; ///< The XML node name for this type.
 };
 
 } // namespace options

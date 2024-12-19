@@ -47,6 +47,7 @@ add_executable(musxdomtests
     options/stem_options.cpp
     options/tie_options.cpp
     options/time_signature_options.cpp
+    options/tuplet_options.cpp
     # others
 	others/enclosure.cpp
 	others/expression.cpp

@@ -777,6 +777,69 @@ inline const XmlElementArray<TimeSignatureOptions> FieldPopulator<TimeSignatureO
     {"timeAbrvLift", [](const XmlElementPtr& e, const std::shared_ptr<TimeSignatureOptions>& i) { i->timeAbrvLift = e->getTextAs<Evpu>(); }},
 };
 
+template <>
+inline XmlEnumMapping<TupletOptions::AutoBracketStyle> EnumMapper<TupletOptions::AutoBracketStyle>::mapping = {
+    //{"always", TupletOptions::AutoBracketStyle::Always}, this is the default and is not known to occur in the xml
+    {"unbeamedOnly", TupletOptions::AutoBracketStyle::UnbeamedOnly},
+    {"neverBeamSide", TupletOptions::AutoBracketStyle::NeverBeamSide},
+};
+
+template <>
+inline XmlEnumMapping<TupletOptions::NumberStyle> EnumMapper<TupletOptions::NumberStyle>::mapping = {
+    //{"nothing", TupletOptions::NumberStyle::Nothing}, this is the default and is not known to occur in the xml
+    {"number", TupletOptions::NumberStyle::Number},
+    {"useRatio", TupletOptions::NumberStyle::UseRatio},
+    {"ratioPlusBothNotes", TupletOptions::NumberStyle::RatioPlusBothNotes},
+    {"ratioPlusDenNote", TupletOptions::NumberStyle::RatioPlusDenominatorNote},
+};
+
+template <>
+inline XmlEnumMapping<TupletOptions::PositioningStyle> EnumMapper<TupletOptions::PositioningStyle>::mapping = {
+    //{"manual", TupletOptions::PositioningStyle::Manual}, this is the default and is not known to occur in the xml
+    {"beamSide", TupletOptions::PositioningStyle::BeamSide},
+    {"noteSide", TupletOptions::PositioningStyle::NoteSide},
+    {"above", TupletOptions::PositioningStyle::Above},
+    {"below", TupletOptions::PositioningStyle::Below},
+};
+
+template <>
+inline XmlEnumMapping<TupletOptions::BracketStyle> EnumMapper<TupletOptions::BracketStyle>::mapping = {
+    //{"nothing", TupletOptions::BracketStyle::Nothing}, this is the default and is not known to occur in the xml
+    {"slur", TupletOptions::BracketStyle::Slur},
+    {"bracket", TupletOptions::BracketStyle::Bracket},
+};
+
+template <>
+inline const XmlElementArray<TupletOptions> FieldPopulator<TupletOptions>::xmlElements = {
+    {"flat", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->alwaysFlat = true; }},
+    {"fullDura", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->fullDura = true; }},
+    {"metricCenter", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->metricCenter = true; }},
+    {"avoidStaff", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->avoidStaff = true; }},
+    {"autoBracketStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->autoBracketStyle = toEnum<TupletOptions::AutoBracketStyle>(e->getTextTrimmed()); }},
+    {"tupOffX", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupOffX = e->getTextAs<Evpu>(); }},
+    {"tupOffY", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupOffY = e->getTextAs<Evpu>(); }},
+    {"brackOffX", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->brackOffX = e->getTextAs<Evpu>(); }},
+    {"brackOffY", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->brackOffY = e->getTextAs<Evpu>(); }},
+    {"numStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->numStyle = toEnum<TupletOptions::NumberStyle>(e->getTextTrimmed()); }},
+    {"posStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->posStyle = toEnum<TupletOptions::PositioningStyle>(e->getTextTrimmed()); }},
+    {"allowHorz", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->allowHorz = true; }},
+    {"ignoreGlOffs", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->ignoreHorzNumOffset = true; }},
+    {"breakBracket", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->breakBracket = true; }},
+    {"matchHooks", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->matchHooks = true; }},
+    {"noteBelow", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->useBottomNote = true; }},
+    {"brackStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->brackStyle = toEnum<TupletOptions::BracketStyle>(e->getTextTrimmed()); }},
+    {"smartTuplet", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->smartTuplet = true; }},
+    {"leftHookLen", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->leftHookLen = e->getTextAs<Evpu>(); }},
+    {"leftHookExt", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->leftHookExt = e->getTextAs<Evpu>(); }},
+    {"rightHookLen", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->rightHookLen = e->getTextAs<Evpu>(); }},
+    {"rightHookExt", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->rightHookExt = e->getTextAs<Evpu>(); }},
+    {"slope", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->manualSlopeAdj = e->getTextAs<Evpu>(); }},
+    {"tupMaxSlope", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupMaxSlope = e->getTextAs<int>(); }},
+    {"tupLineWidth", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupLineWidth = e->getTextAs<Efix>(); }},
+    {"tupNUpstemOffset", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupNUpstemOffset = e->getTextAs<Evpu>(); }},
+    {"tupNDownstemOffset", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupNDownstemOffset = e->getTextAs<Evpu>(); }},
+};
+
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 } // namespace factory
