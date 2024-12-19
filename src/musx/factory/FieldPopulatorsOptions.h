@@ -647,7 +647,7 @@ template <>
 inline const XmlElementArray<StaffOptions> FieldPopulator<StaffOptions>::xmlElements = {
     {"staffSeparation", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->staffSeparation = e->getTextAs<Evpu>(); }},
     {"staffSeparIncr", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->staffSeparIncr = e->getTextAs<Evpu>(); }},
-    {"autoAdjustStaffSepar", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->autoAdjustStaffSepar = e->getTextAs<bool>(); }},
+    {"autoAdjustStaffSepar", [](const XmlElementPtr&, const std::shared_ptr<StaffOptions>& i) { i->autoAdjustStaffSepar = true; }},
     {"namePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
         { i->namePos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
     {"namePosAbbrv", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 

@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-#      - dev/add-classes-for-mss
   pull_request:
     branches:
       - main

@@ -29,8 +29,8 @@
 namespace musx {
 namespace factory {
 
-using namespace dom;
-using namespace dom::others;
+using namespace ::musx::dom;
+using namespace ::musx::dom::others;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
@@ -75,9 +75,9 @@ inline const XmlElementArray<NamePositioning> FieldPopulator<NamePositioning>::x
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
     {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
-    {"indivPos", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->indivPos = e->getTextAs<bool>(); }},
+    {"indivPos", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->indivPos = true; }},
     {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
-    {"expand", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->expand = e->getTextAs<bool>(); }},
+    {"expand", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->expand = true; }},
 };
 
 template <>

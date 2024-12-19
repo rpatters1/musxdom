@@ -323,7 +323,7 @@ public:
 
 namespace others {
 
-// The following classed are defined here because they are shared by multiple subclasses.
+// The following classes are defined here because they are shared by multiple subclasses and container classes.
 
 /**
  * @class Enclosure

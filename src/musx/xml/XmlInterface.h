@@ -155,6 +155,8 @@ public:
     template <typename T>
     T getTextAs(T defaultValue = {}) const
     {
+        static_assert(!std::is_same_v<T, bool>, "Do not use getTextAs with bool type. Simply assign true. (The presence of the node means true.)");
+
         std::istringstream iss(getTextTrimmed());
         if (iss.str().empty()) {
             return defaultValue;
