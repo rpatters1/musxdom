@@ -104,23 +104,19 @@ inline const XmlElementArray<LayerAttributes> FieldPopulator<LayerAttributes>::x
     {"hideLayer", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->hideLayer = true; }},
 };
 
-template <>
-struct ResolverArray<LayerAttributes>
-{
-    inline static const ResolverList value = {
-        [](const dom::DocumentPtr& document) {
-            auto layers = document->getOthers()->getArray<LayerAttributes>();
-            if (layers.size() != 4) {
-                throw std::invalid_argument("Expected exactly 4 <layerAtts> elements.");
-            }
-            for (size_t i = 0; i < layers.size(); i++) {
-                if (layers[i]->getCmper() != i) {
-                    throw std::invalid_argument("Expected <layerAtts> elements to have cmper values 0, 1, 2, 3 in order.");
-                }
+MUSX_RESOLVER_ARRAY(LayerAttributes, {
+    [](const dom::DocumentPtr& document) {
+        auto layers = document->getOthers()->getArray<LayerAttributes>();
+        if (layers.size() != 4) {
+            throw std::invalid_argument("Expected exactly 4 <layerAtts> elements.");
+        }
+        for (size_t i = 0; i < layers.size(); i++) {
+            if (layers[i]->getCmper() != i) {
+                throw std::invalid_argument("Expected <layerAtts> elements to have cmper values 0, 1, 2, 3 in order.");
             }
         }
-    };
-};
+    }
+});
 
 template <>
 inline XmlEnumMapping<MeasureNumberRegion::AlignJustify> EnumMapper<MeasureNumberRegion::AlignJustify>::mapping = {
@@ -300,20 +296,16 @@ inline const XmlElementArray<MarkingCategory> FieldPopulator<MarkingCategory>::x
     {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->staffList = e->getTextAs<Cmper>(); }},
 };
 
-template <>
-struct ResolverArray<MarkingCategory>
-{
-    inline static const ResolverList value = {
-        [](const dom::DocumentPtr& document) {
-            auto cats = document->getOthers()->getArray<MarkingCategory>();
-            for (const auto& cat : cats) {
-                if (cat->categoryType == MarkingCategory::CategoryType::Invalid) {
-                    throw std::invalid_argument("Encountered <markingsCategory> node (cmper " + std::to_string(cat->getCmper()) + ") with no categoryType");
-                }
+MUSX_RESOLVER_ARRAY(MarkingCategory, {
+    [](const dom::DocumentPtr& document) {
+        auto cats = document->getOthers()->getArray<MarkingCategory>();
+        for (const auto& cat : cats) {
+            if (cat->categoryType == MarkingCategory::CategoryType::Invalid) {
+                throw std::invalid_argument("Encountered <markingsCategory> node (cmper " + std::to_string(cat->getCmper()) + ") with no categoryType");
             }
         }
-    };
-};
+    }
+});
 
 template <>
 inline const XmlElementArray<PartGlobals> FieldPopulator<PartGlobals>::xmlElements = {
@@ -352,24 +344,20 @@ inline const XmlElementArray<TextExpressionDef> FieldPopulator<TextExpressionDef
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->description = e->getText(); }},
 };
 
-template <>
-struct ResolverArray<TextExpressionDef>
-{
-    inline static const ResolverList value = {
-        [](const dom::DocumentPtr& document) {
-            auto exps = document->getOthers()->getArray<TextExpressionDef>();
-            for (const auto& instance : exps) {
-                if (instance->categoryId) {
-                    auto markingCat = document->getOthers()->get<MarkingCategory>(instance->categoryId);
-                    if (!markingCat) {
-                        throw std::invalid_argument("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
-                    }
-                    markingCat->textExpressions.emplace(instance->getCmper(), instance);
+MUSX_RESOLVER_ARRAY(TextExpressionDef, {
+    [](const dom::DocumentPtr& document) {
+        auto exps = document->getOthers()->getArray<TextExpressionDef>();
+        for (const auto& instance : exps) {
+            if (instance->categoryId) {
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->categoryId);
+                if (!markingCat) {
+                    throw std::invalid_argument("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
+                markingCat->textExpressions.emplace(instance->getCmper(), instance);
             }
         }
-    };
-};
+    }
+});
 
 template <>
 struct FieldPopulator<TextExpressionEnclosure> : private FieldPopulator<Enclosure>

@@ -239,6 +239,16 @@ struct ResolverArray
     inline static const ResolverList value = {};
 };
 
+#define MUSX_RESOLVER_ARRAY(Type, ...) \
+template <> \
+struct ResolverArray<Type> { \
+    inline static const ResolverList value = __VA_ARGS__; \
+};
+
+#define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
+template <> \
+inline const XmlElementArray<Type> FieldPopulator<Type>::xmlElements = __VA_ARGS__;
+
 template <typename T>
 struct FieldPopulator : public FactoryBase
 {
