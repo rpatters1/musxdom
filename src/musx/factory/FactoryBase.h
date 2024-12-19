@@ -183,19 +183,29 @@ public:
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
 template <typename EnumClass, typename FromClass = std::string_view>
-using XmlEnumMapping = std::unordered_map<FromClass, EnumClass>;
+using XmlEnumMappingElement = std::unordered_map<FromClass, EnumClass>;
+template <typename EnumClass, typename FromClass = std::string_view>
+struct XmlEnumMapping
+{
+    inline static const XmlEnumMappingElement<EnumClass, FromClass> mapping;
+};
+
+#define MUSX_XML_ENUM_MAPPING(Type, ...) \
+template <> \
+struct XmlEnumMapping<Type> { \
+    inline static const XmlEnumMappingElement<Type> mapping = __VA_ARGS__; \
+};
+
 template <typename EnumClass, typename FromClass = std::string_view>
 class EnumMapper
 {
-    static XmlEnumMapping<EnumClass, FromClass> mapping; // this value must be specialized
-
     // If we ever need to, we can create a static lazy-initialize reverse mapping function here
 
 public:
     static EnumClass xmlToEnum(const FromClass& value)
     {
-        auto it = mapping.find(value);
-        if (it != mapping.end()) {
+        auto it = XmlEnumMapping<EnumClass>::mapping.find(value);
+        if (it != XmlEnumMapping<EnumClass>::mapping.end()) {
             return it->second;
         }
         std::string msg = [value]() {

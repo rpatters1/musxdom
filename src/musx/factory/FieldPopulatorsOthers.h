@@ -62,12 +62,11 @@ MUSX_XML_ELEMENT_ARRAY(Enclosure, {
     {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->roundCorners = true; }},
 });
 
-template <>
-inline XmlEnumMapping<NamePositioning::AlignJustify> EnumMapper<NamePositioning::AlignJustify>::mapping = {
+MUSX_XML_ENUM_MAPPING(NamePositioning::AlignJustify, {
     //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", NamePositioning::AlignJustify::Center},
     {"right", NamePositioning::AlignJustify::Right},
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
@@ -114,20 +113,18 @@ MUSX_RESOLVER_ARRAY(LayerAttributes, {
     }
 });
 
-template <>
-inline XmlEnumMapping<MeasureNumberRegion::AlignJustify> EnumMapper<MeasureNumberRegion::AlignJustify>::mapping = {
+MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
     //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", MeasureNumberRegion::AlignJustify::Center},
     {"right", MeasureNumberRegion::AlignJustify::Right},
-};
+});
 
-template <>
-inline XmlEnumMapping<MeasureNumberRegion::TimePrecision> EnumMapper<MeasureNumberRegion::TimePrecision>::mapping = {
+MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::TimePrecision, {
     //{"wholeSeconds", MeasureNumberRegion::TimePrecision::WholeSeconds}, this is the default and is not known to occur in the xml
     {"tenths", MeasureNumberRegion::TimePrecision::Tenths},
     {"hundredths", MeasureNumberRegion::TimePrecision::Hundredths},
     {"thousandths", MeasureNumberRegion::TimePrecision::Thousandths},
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
     {"startFont", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
@@ -183,18 +180,16 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
     {"hidePage", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hidePage = true; }}
 });
 
-template <>
-inline XmlEnumMapping<RehearsalMarkStyle> EnumMapper<RehearsalMarkStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(RehearsalMarkStyle, {
     {"letters", RehearsalMarkStyle::Letters},
     {"letNum", RehearsalMarkStyle::LetterNumbers},
     {"lettersLc", RehearsalMarkStyle::LettersLowerCase},
     {"letNumLc", RehearsalMarkStyle::LettersNumbersLowerCase},
     {"numbers", RehearsalMarkStyle::Numbers},
     {"measNum", RehearsalMarkStyle::MeasureNumber}
-};
+});
 
-template <>
-inline XmlEnumMapping<PlaybackType> EnumMapper<PlaybackType>::mapping = {
+MUSX_XML_ENUM_MAPPING(PlaybackType, {
     {"none", PlaybackType::None},
     {"time", PlaybackType::Tempo},
     {"midiController", PlaybackType::MidiController},
@@ -212,10 +207,9 @@ inline XmlEnumMapping<PlaybackType> EnumMapper<PlaybackType>::mapping = {
     {"swing", PlaybackType::Swing},
     {"hpOn", PlaybackType::SmartPlaybackOn},
     {"hpOff", PlaybackType::SmartPlaybackOff}
-};
+});
 
-template <>
-inline XmlEnumMapping<HorizontalMeasExprAlign> EnumMapper<HorizontalMeasExprAlign>::mapping = {
+MUSX_XML_ENUM_MAPPING(HorizontalMeasExprAlign, {
     {"manual", HorizontalMeasExprAlign::Manual},
     {"leftOfAllNoteheads", HorizontalMeasExprAlign::LeftOfAllNoteheads},
     {"leftOfPrimaryNotehead", HorizontalMeasExprAlign::LeftOfPrimaryNotehead},
@@ -230,10 +224,9 @@ inline XmlEnumMapping<HorizontalMeasExprAlign> EnumMapper<HorizontalMeasExprAlig
     {"centerOverBarlines", HorizontalMeasExprAlign::CenterOverBarlines},
     {"centerOverMusic", HorizontalMeasExprAlign::CenterOverMusic},
     {"rightEdge", HorizontalMeasExprAlign::RightBarline}
-};
+});
 
-template <>
-inline XmlEnumMapping<VerticalMeasExprAlign> EnumMapper<VerticalMeasExprAlign>::mapping = {
+MUSX_XML_ENUM_MAPPING(VerticalMeasExprAlign, {
     {"manual", VerticalMeasExprAlign::Manual},
     {"refLine", VerticalMeasExprAlign::RefLine},
     {"aboveStaff", VerticalMeasExprAlign::AboveStaff},
@@ -244,17 +237,15 @@ inline XmlEnumMapping<VerticalMeasExprAlign> EnumMapper<VerticalMeasExprAlign>::
     {"belowEntry", VerticalMeasExprAlign::BelowEntry},
     {"aboveStaffOrEntry", VerticalMeasExprAlign::AboveStaffOrEntry},
     {"belowStaffOrEntry", VerticalMeasExprAlign::BelowStaffOrEntry}
-};
+});
 
-template <>
-inline XmlEnumMapping<HorizontalExprJustification> EnumMapper<HorizontalExprJustification>::mapping = {
+MUSX_XML_ENUM_MAPPING(HorizontalExprJustification, {
     {"left", HorizontalExprJustification::Left},
     {"center", HorizontalExprJustification::Center},
     {"right", HorizontalExprJustification::Right}
-};
+});
 
-template <>
-inline XmlEnumMapping<MarkingCategory::CategoryType> EnumMapper<MarkingCategory::CategoryType>::mapping = {
+MUSX_XML_ENUM_MAPPING(MarkingCategory::CategoryType, {
     {"dynamics", MarkingCategory::CategoryType::Dynamics},
     {"tempoMarks", MarkingCategory::CategoryType::TempoMarks},
     {"tempoAlts", MarkingCategory::CategoryType::TempoAlterations},
@@ -262,7 +253,7 @@ inline XmlEnumMapping<MarkingCategory::CategoryType> EnumMapper<MarkingCategory:
     {"techniqueText", MarkingCategory::CategoryType::TechniqueText},
     {"rehearsalMarks", MarkingCategory::CategoryType::RehearsalMarks},
     {"misc", MarkingCategory::CategoryType::Misc}
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
     {"categoryType", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->categoryType = toEnum<MarkingCategory::CategoryType>(e->getTextTrimmed()); }},

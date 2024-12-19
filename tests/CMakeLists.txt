@@ -83,10 +83,10 @@ target_link_libraries(musxdomtests
 )
 
 # Add Precompiled Headers (PCH) for the test suite
-#target_precompile_headers(musxdomtests PRIVATE
-#    "${gtest_SOURCE_DIR}/include/gtest/gtest.h"
-#    "${CMAKE_SOURCE_DIR}/src/musx/musx.h"
-#)
+target_precompile_headers(musxdomtests PRIVATE
+    "${gtest_SOURCE_DIR}/include/gtest/gtest.h"
+    "${CMAKE_SOURCE_DIR}/src/musx/musx.h"
+)
 
 # Discover tests
 include(GoogleTest)

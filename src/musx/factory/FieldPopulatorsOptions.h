@@ -82,13 +82,12 @@ MUSX_XML_ELEMENT_ARRAY(BarlineOptions, {
     {"drawDoubleBarlineBeforeKeyChanges", [](const XmlElementPtr&, const std::shared_ptr<BarlineOptions>& i) { i->drawDoubleBarlineBeforeKeyChanges = true; }},
 });
 
-template <>
-inline XmlEnumMapping<BeamOptions::FlattenStyle> EnumMapper<BeamOptions::FlattenStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(BeamOptions::FlattenStyle, {
     {"onEndNotes", BeamOptions::FlattenStyle::OnEndNotes},
     {"onStandardNote", BeamOptions::FlattenStyle::OnStandardNote},
     {"onExtremeNote", BeamOptions::FlattenStyle::OnExtremeNote},
     {"alwaysFlat", BeamOptions::FlattenStyle::AlwaysFlat}
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(BeamOptions, {
     {"beamStubLength", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamStubLength = e->getTextAs<Evpu>(); }},
@@ -174,8 +173,7 @@ MUSX_XML_ELEMENT_ARRAY(FlagOptions, {
     {"extra", [](const XmlElementPtr& e, const std::shared_ptr<FlagOptions>& i) { i->secondaryGroupAdj = e->getTextAs<Evpu>(); }},
 });
 
-template <>
-inline XmlEnumMapping<FontOptions::FontType> EnumMapper<FontOptions::FontType>::mapping = {
+MUSX_XML_ENUM_MAPPING(FontOptions::FontType, {
     {"music", FontOptions::FontType::Music},
     {"key", FontOptions::FontType::Key},
     {"clef", FontOptions::FontType::Clef},
@@ -221,7 +219,7 @@ inline XmlEnumMapping<FontOptions::FontType> EnumMapper<FontOptions::FontType>::
     {"bendCurveFrac", FontOptions::FontType::BendCurveFrac},
     {"timeParts", FontOptions::FontType::TimeParts},
     {"timePlusParts", FontOptions::FontType::TimePlusParts}
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(FontOptions, {
     {
@@ -305,23 +303,20 @@ MUSX_XML_ELEMENT_ARRAY(MultimeasureRestOptions, {
     {"autoUpdateMmRests", [](const XmlElementPtr&, const std::shared_ptr<MultimeasureRestOptions>& i) {i->autoUpdateMmRests = true;}},
 });
 
-template <>
-inline XmlEnumMapping<MusicSpacingOptions::ColUnisonsChoice> EnumMapper<MusicSpacingOptions::ColUnisonsChoice>::mapping = {
+MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ColUnisonsChoice, {
     {"diffNoteheads", MusicSpacingOptions::ColUnisonsChoice::DiffNoteheads},
     {"all", MusicSpacingOptions::ColUnisonsChoice::All}
-};
+});
 
-template <>
-inline XmlEnumMapping<MusicSpacingOptions::ManualPositioning> EnumMapper<MusicSpacingOptions::ManualPositioning>::mapping = {
+MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ManualPositioning, {
     {"clear", MusicSpacingOptions::ManualPositioning::Clear},
     {"incorp", MusicSpacingOptions::ManualPositioning::Incorporate}
-};
+});
 
-template <>
-inline XmlEnumMapping<MusicSpacingOptions::GraceNoteSpacing> EnumMapper<MusicSpacingOptions::GraceNoteSpacing>::mapping = {
+MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::GraceNoteSpacing, {
     {"recomp", MusicSpacingOptions::GraceNoteSpacing::Automatic},
     {"keep", MusicSpacingOptions::GraceNoteSpacing::KeepCurrent}
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
     {"minWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->minWidth = e->getTextAs<Evpu>(); }},
@@ -378,13 +373,12 @@ MUSX_XML_ELEMENT_ARRAY(PageFormatOptions::PageFormat, {
     {"differentFirstPageMargin", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->differentFirstPageMargin = true; }},
 });
 
-template <>
-inline XmlEnumMapping<PageFormatOptions::AdjustPageScope> EnumMapper<PageFormatOptions::AdjustPageScope>::mapping = {
+MUSX_XML_ENUM_MAPPING(PageFormatOptions::AdjustPageScope, {
     {"current", PageFormatOptions::AdjustPageScope::Current},
     {"all", PageFormatOptions::AdjustPageScope::All},
     {"leftOrRight", PageFormatOptions::AdjustPageScope::LeftOrRight},
     {"range", PageFormatOptions::AdjustPageScope::PageRange}
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(PageFormatOptions, {
     {"pageFormatScore", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i){ i->pageFormatScore = FieldPopulator<PageFormatOptions::PageFormat>::createAndPopulate(e); }},
@@ -408,20 +402,18 @@ MUSX_XML_ELEMENT_ARRAY(PianoBraceBracketOptions, {
     {"innerWingX", [](const XmlElementPtr& e, const std::shared_ptr<PianoBraceBracketOptions>& i) { i->innerBodyH = e->getTextAs<EvpuFloat>(); }},
 });
 
-template <>
-inline XmlEnumMapping<RepeatOptions::WingStyle> EnumMapper<RepeatOptions::WingStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(RepeatOptions::WingStyle, {
     {"none", RepeatOptions::WingStyle::None},
     {"curved", RepeatOptions::WingStyle::Curved},
     {"singleLine", RepeatOptions::WingStyle::SingleLine},
     {"doubleLine", RepeatOptions::WingStyle::DoubleLine}
-};
+});
 
-template <>
-inline XmlEnumMapping<RepeatOptions::BackToBackStyle> EnumMapper<RepeatOptions::BackToBackStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(RepeatOptions::BackToBackStyle, {
     {"thin", RepeatOptions::BackToBackStyle::Thin},
     {"mixed", RepeatOptions::BackToBackStyle::Mixed},
     {"thick", RepeatOptions::BackToBackStyle::Thick}
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(RepeatOptions, {
     {"bracketHeight", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->bracketHeight = e->getTextAs<Evpu>(); }},
@@ -450,15 +442,13 @@ MUSX_XML_ELEMENT_ARRAY(RepeatOptions, {
     {"showOnStaffListNumber", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->showOnStaffListNumber = e->getTextAs<Cmper>(); }},
 });
 
-template <>
-inline XmlEnumMapping<SmartShapeOptions::DefaultDirection> EnumMapper<SmartShapeOptions::DefaultDirection>::mapping = {
+MUSX_XML_ENUM_MAPPING(SmartShapeOptions::DefaultDirection, {
     {"automatic", SmartShapeOptions::DefaultDirection::Automatic},
     {"over", SmartShapeOptions::DefaultDirection::Over},
     {"under", SmartShapeOptions::DefaultDirection::Under},
-};
+});
 
-template <>
-inline XmlEnumMapping<SmartShapeOptions::ConnectionIndex> EnumMapper<SmartShapeOptions::ConnectionIndex>::mapping = {
+MUSX_XML_ENUM_MAPPING(SmartShapeOptions::ConnectionIndex, {
     {"headRightTop", SmartShapeOptions::ConnectionIndex::HeadRightTop},
     {"headLeftTop", SmartShapeOptions::ConnectionIndex::HeadLeftTop},
     {"stemRightTop", SmartShapeOptions::ConnectionIndex::StemRightTop},
@@ -473,10 +463,9 @@ inline XmlEnumMapping<SmartShapeOptions::ConnectionIndex> EnumMapper<SmartShapeO
     {"noteLeftBottom", SmartShapeOptions::ConnectionIndex::NoteLeftBottom},
     {"noteLeftTop", SmartShapeOptions::ConnectionIndex::NoteLeftTop},
     {"noteRightTop", SmartShapeOptions::ConnectionIndex::NoteRightTop}
-};
+});
 
-template <>
-inline XmlEnumMapping<SmartShapeOptions::SlurConnectStyleType> EnumMapper<SmartShapeOptions::SlurConnectStyleType>::mapping = {
+MUSX_XML_ENUM_MAPPING(SmartShapeOptions::SlurConnectStyleType, {
     {"overNoteStart", SmartShapeOptions::SlurConnectStyleType::OverNoteStart},
     {"overNoteEnd", SmartShapeOptions::SlurConnectStyleType::OverNoteEnd},
     {"overStemStart", SmartShapeOptions::SlurConnectStyleType::OverStemStart},
@@ -506,10 +495,9 @@ inline XmlEnumMapping<SmartShapeOptions::SlurConnectStyleType> EnumMapper<SmartS
     {"overTabNumEnd", SmartShapeOptions::SlurConnectStyleType::OverTabNumEnd},
     {"underTabNumStart", SmartShapeOptions::SlurConnectStyleType::UnderTabNumStart},
     {"underTabNumEnd", SmartShapeOptions::SlurConnectStyleType::UnderTabNumEnd}
-};
+});
 
-template <>
-inline XmlEnumMapping<SmartShapeOptions::TabSlideConnectStyleType> EnumMapper<SmartShapeOptions::TabSlideConnectStyleType>::mapping = {
+MUSX_XML_ENUM_MAPPING(SmartShapeOptions::TabSlideConnectStyleType, {
     {"diffLevelPitchUpLineStart", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpLineStart},
     {"diffLevelPitchUpLineEnd", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpLineEnd},
     {"diffLevelPitchUpSpaceStart", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpSpaceStart},
@@ -528,16 +516,14 @@ inline XmlEnumMapping<SmartShapeOptions::TabSlideConnectStyleType> EnumMapper<Sm
     {"sameLevelPitchDownSpaceEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchDownSpaceEnd},
     {"sameLevelPitchSameStart", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchSameStart},
     {"sameLevelPitchSameEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchSameEnd}
-};
+});
 
-template <>
-inline XmlEnumMapping<SmartShapeOptions::GlissandoConnectStyleType> EnumMapper<SmartShapeOptions::GlissandoConnectStyleType>::mapping = {
+MUSX_XML_ENUM_MAPPING(SmartShapeOptions::GlissandoConnectStyleType, {
     {"defaultStart", SmartShapeOptions::GlissandoConnectStyleType::DefaultStart},
     {"defaultEnd", SmartShapeOptions::GlissandoConnectStyleType::DefaultEnd}
-};
+});
 
-template <>
-inline XmlEnumMapping<SmartShapeOptions::BendCurveConnectStyleType> EnumMapper<SmartShapeOptions::BendCurveConnectStyleType>::mapping = {
+MUSX_XML_ENUM_MAPPING(SmartShapeOptions::BendCurveConnectStyleType, {
     {"noteStart", SmartShapeOptions::BendCurveConnectStyleType::NoteStart},
     {"staffEnd", SmartShapeOptions::BendCurveConnectStyleType::StaffEnd},
     {"staffStart", SmartShapeOptions::BendCurveConnectStyleType::StaffStart},
@@ -546,15 +532,14 @@ inline XmlEnumMapping<SmartShapeOptions::BendCurveConnectStyleType> EnumMapper<S
     {"staffFromTopLineEnd", SmartShapeOptions::BendCurveConnectStyleType::StaffFromTopLineEnd},
     {"staffEndOffset", SmartShapeOptions::BendCurveConnectStyleType::StaffEndOffset},
     {"staffFromTopEndOffset", SmartShapeOptions::BendCurveConnectStyleType::StaffFromTopEndOffset}
-};
+});
 
-template <>
-inline XmlEnumMapping<SmartShapeOptions::SlurControlStyleType> EnumMapper<SmartShapeOptions::SlurControlStyleType>::mapping = {
+MUSX_XML_ENUM_MAPPING(SmartShapeOptions::SlurControlStyleType, {
     {"shortSpan", SmartShapeOptions::SlurControlStyleType::ShortSpan},
     {"mediumSpan", SmartShapeOptions::SlurControlStyleType::MediumSpan},
     {"longSpan", SmartShapeOptions::SlurControlStyleType::LongSpan},
     {"extraLongSpan", SmartShapeOptions::SlurControlStyleType::ExtraLongSpan}
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeOptions::ConnectionStyle, {
     {"connectIndex", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->connectIndex = toEnum<SmartShapeOptions::ConnectionIndex>(e->getTextTrimmed()); }},
@@ -642,36 +627,30 @@ MUSX_XML_ELEMENT_ARRAY(StemOptions, {
     {"useStemConnections", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>& i) { i->useStemConnections = true; }},
 });
 
-template <>
-inline XmlEnumMapping<TieOptions::SecondsPlacement> EnumMapper<TieOptions::SecondsPlacement>::mapping = {
+MUSX_XML_ENUM_MAPPING(TieOptions::SecondsPlacement, {
     {"both", TieOptions::SecondsPlacement::ShiftForSeconds}
-};
+});
 
-template <>
-inline XmlEnumMapping<TieOptions::ChordTieDirType> EnumMapper<TieOptions::ChordTieDirType>::mapping = {
+MUSX_XML_ENUM_MAPPING(TieOptions::ChordTieDirType, {
     {"stemReversal", TieOptions::ChordTieDirType::StemReversal},
     {"splitEvenly", TieOptions::ChordTieDirType::SplitEvenly}
-};
+});
 
-template <>
-inline XmlEnumMapping<TieOptions::MixedStemDirection> EnumMapper<TieOptions::MixedStemDirection>::mapping = {
+MUSX_XML_ENUM_MAPPING(TieOptions::MixedStemDirection, {
     {"over", TieOptions::MixedStemDirection::Over},
     {"under", TieOptions::MixedStemDirection::Under},
     {"start", TieOptions::MixedStemDirection::OppositeFirst}
-};
+});
 
-template <>
-inline XmlEnumMapping<TieOptions::SpecialPosMode> EnumMapper<TieOptions::SpecialPosMode>::mapping = {
+MUSX_XML_ENUM_MAPPING(TieOptions::SpecialPosMode, {
     {"avoid", TieOptions::SpecialPosMode::Avoid}
-};
+});
 
-template <>
-inline XmlEnumMapping<TieOptions::InsetStyle> EnumMapper<TieOptions::InsetStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(TieOptions::InsetStyle, {
     {"percent", TieOptions::InsetStyle::Percent}
-};
+});
 
-template <>
-inline XmlEnumMapping<TieOptions::ConnectStyleType> EnumMapper<TieOptions::ConnectStyleType>::mapping = {
+MUSX_XML_ENUM_MAPPING(TieOptions::ConnectStyleType, {
     {"overStartPosInner", TieOptions::ConnectStyleType::OverStartPosInner},
     {"overEndPosInner", TieOptions::ConnectStyleType::OverEndPosInner},
     {"underStartPosInner", TieOptions::ConnectStyleType::UnderStartPosInner},
@@ -684,15 +663,14 @@ inline XmlEnumMapping<TieOptions::ConnectStyleType> EnumMapper<TieOptions::Conne
     {"overHighestNoteStemEndPosOver", TieOptions::ConnectStyleType::OverHighestNoteStemEndPosOver},
     {"underLowestNoteStemStartPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStemStartPosUnder},
     {"underLowestNoteStemEndPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStemEndPosUnder}
-};
+});
 
-template <>
-inline XmlEnumMapping<TieOptions::ControlStyleType> EnumMapper<TieOptions::ControlStyleType>::mapping = {
+MUSX_XML_ENUM_MAPPING(TieOptions::ControlStyleType, {
     {"shortSpan", TieOptions::ControlStyleType::ShortSpan},
     {"mediumSpan", TieOptions::ControlStyleType::MediumSpan},
     {"longSpan", TieOptions::ControlStyleType::LongSpan},
     {"tieEnds", TieOptions::ControlStyleType::TieEnds}
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(TieOptions::ConnectStyle, {
     {"offsetX", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions::ConnectStyle>& i) { i->offsetX = e->getTextAs<Evpu>(); }},
@@ -759,37 +737,33 @@ MUSX_XML_ELEMENT_ARRAY(TimeSignatureOptions, {
     {"timeAbrvLift", [](const XmlElementPtr& e, const std::shared_ptr<TimeSignatureOptions>& i) { i->timeAbrvLift = e->getTextAs<Evpu>(); }},
 });
 
-template <>
-inline XmlEnumMapping<TupletOptions::AutoBracketStyle> EnumMapper<TupletOptions::AutoBracketStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(TupletOptions::AutoBracketStyle, {
     //{"always", TupletOptions::AutoBracketStyle::Always}, this is the default and is not known to occur in the xml
     {"unbeamedOnly", TupletOptions::AutoBracketStyle::UnbeamedOnly},
     {"neverBeamSide", TupletOptions::AutoBracketStyle::NeverBeamSide},
-};
+});
 
-template <>
-inline XmlEnumMapping<TupletOptions::NumberStyle> EnumMapper<TupletOptions::NumberStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(TupletOptions::NumberStyle, {
     //{"nothing", TupletOptions::NumberStyle::Nothing}, this is the default and is not known to occur in the xml
     {"number", TupletOptions::NumberStyle::Number},
     {"useRatio", TupletOptions::NumberStyle::UseRatio},
     {"ratioPlusBothNotes", TupletOptions::NumberStyle::RatioPlusBothNotes},
     {"ratioPlusDenNote", TupletOptions::NumberStyle::RatioPlusDenominatorNote},
-};
+});
 
-template <>
-inline XmlEnumMapping<TupletOptions::PositioningStyle> EnumMapper<TupletOptions::PositioningStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(TupletOptions::PositioningStyle, {
     //{"manual", TupletOptions::PositioningStyle::Manual}, this is the default and is not known to occur in the xml
     {"beamSide", TupletOptions::PositioningStyle::BeamSide},
     {"noteSide", TupletOptions::PositioningStyle::NoteSide},
     {"above", TupletOptions::PositioningStyle::Above},
     {"below", TupletOptions::PositioningStyle::Below},
-};
+});
 
-template <>
-inline XmlEnumMapping<TupletOptions::BracketStyle> EnumMapper<TupletOptions::BracketStyle>::mapping = {
+MUSX_XML_ENUM_MAPPING(TupletOptions::BracketStyle, {
     //{"nothing", TupletOptions::BracketStyle::Nothing}, this is the default and is not known to occur in the xml
     {"slur", TupletOptions::BracketStyle::Slur},
     {"bracket", TupletOptions::BracketStyle::Bracket},
-};
+});
 
 MUSX_XML_ELEMENT_ARRAY(TupletOptions, {
     {"flat", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->alwaysFlat = true; }},
