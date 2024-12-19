@@ -230,7 +230,16 @@ using XmlElementPopulator = std::function<void(const XmlElementPtr&, const std::
 template <typename T>
 using XmlElementDescriptor = std::tuple<const std::string_view, XmlElementPopulator<T>>;
 template <typename T>
-using XmlElementArray = std::vector<XmlElementDescriptor<T>>;
+struct XmlElementArray
+{
+    inline static const std::vector<XmlElementDescriptor<T>> value;
+};
+
+#define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
+template <> \
+struct XmlElementArray<Type> { \
+    inline static const std::vector<XmlElementDescriptor<Type>> value = __VA_ARGS__; \
+};
 
 using ResolverList = std::vector<ElementLinker::Resolver>;
 template <typename T>
@@ -244,10 +253,6 @@ template <> \
 struct ResolverArray<Type> { \
     inline static const ResolverList value = __VA_ARGS__; \
 };
-
-#define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
-template <> \
-inline const XmlElementArray<Type> FieldPopulator<Type>::xmlElements = __VA_ARGS__;
 
 template <typename T>
 struct FieldPopulator : public FactoryBase
@@ -289,8 +294,8 @@ private:
         static const std::unordered_map<std::string_view, XmlElementPopulator<T>> xref = []()
             {
                 std::unordered_map<std::string_view, XmlElementPopulator<T>> retval;
-                for (std::size_t i = 0; i < FieldPopulator<T>::xmlElements.size(); i++) {
-                    const XmlElementDescriptor<T> descriptor = FieldPopulator<T>::xmlElements[i];
+                for (std::size_t i = 0; i < XmlElementArray<T>::value.size(); i++) {
+                    const XmlElementDescriptor<T> descriptor = XmlElementArray<T>::value[i];
                     retval[std::get<0>(descriptor)] = std::get<1>(descriptor);
                 }
                 return retval;
@@ -305,8 +310,6 @@ private:
         FieldPopulator<T>::populate(instance, element);
         return instance;
     }
-
-    static const XmlElementArray<T> xmlElements;
 };
 
 template <typename EnumClass, typename EmbeddedClass>
