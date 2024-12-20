@@ -30,8 +30,8 @@
 #include <tuple>
 #include <iostream>
 
-#include "musx/dom/BaseClasses.h"
 #include "musx/xml/XmlInterface.h"
+#include "musx/dom/BaseClasses.h"
 
 namespace musx {
 
@@ -192,8 +192,8 @@ struct XmlEnumMapping
 
 #define MUSX_XML_ENUM_MAPPING(Type, ...) \
 template <> \
-struct XmlEnumMapping<Type> { \
-    inline static const XmlEnumMappingElement<Type> mapping = __VA_ARGS__; \
+struct ::musx::factory::XmlEnumMapping<Type> { \
+    inline static const ::musx::factory::XmlEnumMappingElement<Type> mapping = __VA_ARGS__; \
 };
 
 template <typename EnumClass, typename FromClass = std::string_view>
@@ -235,21 +235,8 @@ EnumClass toEnum(const FromClass& value)
     }
 }
 
-template <typename T>
-using XmlElementPopulator = std::function<void(const XmlElementPtr&, const std::shared_ptr<T>&)>;
-template <typename T>
-using XmlElementDescriptor = std::tuple<const std::string_view, XmlElementPopulator<T>>;
-template <typename T>
-struct XmlElementArray
-{
-    inline static const std::vector<XmlElementDescriptor<T>> value;
-};
-
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
-template <> \
-struct XmlElementArray<Type> { \
-    inline static const std::vector<XmlElementDescriptor<Type>> value = __VA_ARGS__; \
-};
+inline const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__; \
 
 using ResolverList = std::vector<ElementLinker::Resolver>;
 template <typename T>
@@ -304,8 +291,8 @@ private:
         static const std::unordered_map<std::string_view, XmlElementPopulator<T>> xref = []()
             {
                 std::unordered_map<std::string_view, XmlElementPopulator<T>> retval;
-                for (std::size_t i = 0; i < XmlElementArray<T>::value.size(); i++) {
-                    const XmlElementDescriptor<T> descriptor = XmlElementArray<T>::value[i];
+                for (std::size_t i = 0; i < T::XmlElementMapping.size(); i++) {
+                    const XmlElementDescriptor<T> descriptor = T::XmlElementMapping[i];
                     retval[std::get<0>(descriptor)] = std::get<1>(descriptor);
                 }
                 return retval;
@@ -332,7 +319,23 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
     listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
 }
 
-MUSX_XML_ELEMENT_ARRAY(dom::FontInfo, {
+template <>
+template <typename... Args>
+inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(const XmlElementPtr& element, Args&&... args)
+{
+    if (!element->getFirstChildElement()) return nullptr;
+    return FieldPopulator<FontInfo>::createAndPopulateImpl(element, std::forward<Args>(args)...);
+}
+
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+} // namespace factory
+
+namespace dom {
+
+using namespace musx::xml;
+
+MUSX_XML_ELEMENT_ARRAY(FontInfo, {
     {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
     {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
     {"efx", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) {
@@ -356,15 +359,5 @@ MUSX_XML_ELEMENT_ARRAY(dom::FontInfo, {
     },
 });
 
-template <>
-template <typename... Args>
-inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(const XmlElementPtr& element, Args&&... args)
-{
-    if (!element->getFirstChildElement()) return nullptr;
-    return FieldPopulator<FontInfo>::createAndPopulateImpl(element, std::forward<Args>(args)...);
-}
-
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
-
-} // namespace factory
+} // namespace dom
 } // namespace musx

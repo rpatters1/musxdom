@@ -27,10 +27,11 @@
 #include "FactoryBase.h"
 
 namespace musx {
-namespace factory {
+namespace dom {
+namespace options {
 
-using namespace dom;
-using namespace dom::options;
+using namespace ::musx::xml;
+using namespace ::musx::factory;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
@@ -797,5 +798,6 @@ MUSX_XML_ELEMENT_ARRAY(TupletOptions, {
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-} // namespace factory
+} // namespace options
+} // namespace dom
 } // namespace musx

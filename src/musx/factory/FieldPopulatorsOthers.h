@@ -27,10 +27,11 @@
 #include "FactoryBase.h"
 
 namespace musx {
-namespace factory {
+namespace dom {
+namespace others {
 
-using namespace ::musx::dom;
-using namespace ::musx::dom::others;
+using namespace ::musx::xml;
+using namespace ::musx::factory;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
@@ -356,5 +357,6 @@ struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-} // namespace factory
+} // namespace others
+} // namespace dom
 } // namespace musx

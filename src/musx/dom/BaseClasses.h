@@ -36,6 +36,8 @@
 #error "Unable to detect operating system platform."
 #endif
 
+#include "musx/xml/XmlInterface.h"
+
 namespace musx {
 namespace dom {
 
@@ -142,8 +144,7 @@ private:
  * 
  * Options types derive from this base class so they can reside in the options pool.
  */
-class OptionsBase : public Base
-{
+class OptionsBase : public Base {
 protected:
     /**
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
@@ -319,6 +320,8 @@ public:
      * @return a std::vector<std::filesystem::path> where element 0 is the user path and element 1 is the system path
      */
     static std::vector<std::filesystem::path> calcSMuFLPaths();
+    
+    static const xml::XmlElementArray<FontInfo> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 namespace others {
@@ -329,8 +332,7 @@ namespace others {
  * @class Enclosure
  * @brief Represents the enclosure settings for text expressions.
  */
-class Enclosure : public OthersBase
-{
+class Enclosure : public OthersBase {
 public:
     /**
      * @enum Shape
@@ -408,6 +410,8 @@ public:
     bool indivPos{};            ///< Indicates that this positioning overrides the default positioning. (Not used by @ref options::StaffOptions.)
     AlignJustify hAlign{};      ///< Horizontal alignment for the name text. (xml node is `<halign>`)
     bool expand{};              ///< "Expand Single Word"
+
+    static const xml::XmlElementArray<Enclosure> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 } // namespace others
