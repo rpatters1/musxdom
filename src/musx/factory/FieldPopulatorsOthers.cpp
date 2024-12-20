@@ -36,7 +36,7 @@ MUSX_XML_ENUM_MAPPING(NamePositioning::AlignJustify, {
     //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", NamePositioning::AlignJustify::Center},
     {"right", NamePositioning::AlignJustify::Right},
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
     //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml

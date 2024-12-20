@@ -34,7 +34,7 @@ MUSX_XML_ENUM_MAPPING(BeamOptions::FlattenStyle, {
     {"onStandardNote", BeamOptions::FlattenStyle::OnStandardNote},
     {"onExtremeNote", BeamOptions::FlattenStyle::OnExtremeNote},
     {"alwaysFlat", BeamOptions::FlattenStyle::AlwaysFlat}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(FontOptions::FontType, {
     {"music", FontOptions::FontType::Music},
@@ -82,48 +82,48 @@ MUSX_XML_ENUM_MAPPING(FontOptions::FontType, {
     {"bendCurveFrac", FontOptions::FontType::BendCurveFrac},
     {"timeParts", FontOptions::FontType::TimeParts},
     {"timePlusParts", FontOptions::FontType::TimePlusParts}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ColUnisonsChoice, {
     {"diffNoteheads", MusicSpacingOptions::ColUnisonsChoice::DiffNoteheads},
     {"all", MusicSpacingOptions::ColUnisonsChoice::All}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ManualPositioning, {
     {"clear", MusicSpacingOptions::ManualPositioning::Clear},
     {"incorp", MusicSpacingOptions::ManualPositioning::Incorporate}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::GraceNoteSpacing, {
     {"recomp", MusicSpacingOptions::GraceNoteSpacing::Automatic},
     {"keep", MusicSpacingOptions::GraceNoteSpacing::KeepCurrent}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(PageFormatOptions::AdjustPageScope, {
     {"current", PageFormatOptions::AdjustPageScope::Current},
     {"all", PageFormatOptions::AdjustPageScope::All},
     {"leftOrRight", PageFormatOptions::AdjustPageScope::LeftOrRight},
     {"range", PageFormatOptions::AdjustPageScope::PageRange}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(RepeatOptions::BackToBackStyle, {
     {"thin", RepeatOptions::BackToBackStyle::Thin},
     {"mixed", RepeatOptions::BackToBackStyle::Mixed},
     {"thick", RepeatOptions::BackToBackStyle::Thick}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(RepeatOptions::WingStyle, {
     {"none", RepeatOptions::WingStyle::None},
     {"curved", RepeatOptions::WingStyle::Curved},
     {"singleLine", RepeatOptions::WingStyle::SingleLine},
     {"doubleLine", RepeatOptions::WingStyle::DoubleLine}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::DefaultDirection, {
     {"automatic", SmartShapeOptions::DefaultDirection::Automatic},
     {"over", SmartShapeOptions::DefaultDirection::Over},
     {"under", SmartShapeOptions::DefaultDirection::Under},
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::ConnectionIndex, {
     {"headRightTop", SmartShapeOptions::ConnectionIndex::HeadRightTop},
@@ -140,7 +140,7 @@ MUSX_XML_ENUM_MAPPING(SmartShapeOptions::ConnectionIndex, {
     {"noteLeftBottom", SmartShapeOptions::ConnectionIndex::NoteLeftBottom},
     {"noteLeftTop", SmartShapeOptions::ConnectionIndex::NoteLeftTop},
     {"noteRightTop", SmartShapeOptions::ConnectionIndex::NoteRightTop}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::SlurConnectStyleType, {
     {"overNoteStart", SmartShapeOptions::SlurConnectStyleType::OverNoteStart},
@@ -172,7 +172,7 @@ MUSX_XML_ENUM_MAPPING(SmartShapeOptions::SlurConnectStyleType, {
     {"overTabNumEnd", SmartShapeOptions::SlurConnectStyleType::OverTabNumEnd},
     {"underTabNumStart", SmartShapeOptions::SlurConnectStyleType::UnderTabNumStart},
     {"underTabNumEnd", SmartShapeOptions::SlurConnectStyleType::UnderTabNumEnd}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::TabSlideConnectStyleType, {
     {"diffLevelPitchUpLineStart", SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpLineStart},
@@ -193,12 +193,12 @@ MUSX_XML_ENUM_MAPPING(SmartShapeOptions::TabSlideConnectStyleType, {
     {"sameLevelPitchDownSpaceEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchDownSpaceEnd},
     {"sameLevelPitchSameStart", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchSameStart},
     {"sameLevelPitchSameEnd", SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchSameEnd}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::GlissandoConnectStyleType, {
     {"defaultStart", SmartShapeOptions::GlissandoConnectStyleType::DefaultStart},
     {"defaultEnd", SmartShapeOptions::GlissandoConnectStyleType::DefaultEnd}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::BendCurveConnectStyleType, {
     {"noteStart", SmartShapeOptions::BendCurveConnectStyleType::NoteStart},
@@ -209,37 +209,37 @@ MUSX_XML_ENUM_MAPPING(SmartShapeOptions::BendCurveConnectStyleType, {
     {"staffFromTopLineEnd", SmartShapeOptions::BendCurveConnectStyleType::StaffFromTopLineEnd},
     {"staffEndOffset", SmartShapeOptions::BendCurveConnectStyleType::StaffEndOffset},
     {"staffFromTopEndOffset", SmartShapeOptions::BendCurveConnectStyleType::StaffFromTopEndOffset}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::SlurControlStyleType, {
     {"shortSpan", SmartShapeOptions::SlurControlStyleType::ShortSpan},
     {"mediumSpan", SmartShapeOptions::SlurControlStyleType::MediumSpan},
     {"longSpan", SmartShapeOptions::SlurControlStyleType::LongSpan},
     {"extraLongSpan", SmartShapeOptions::SlurControlStyleType::ExtraLongSpan}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TieOptions::SecondsPlacement, {
     {"both", TieOptions::SecondsPlacement::ShiftForSeconds}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TieOptions::ChordTieDirType, {
     {"stemReversal", TieOptions::ChordTieDirType::StemReversal},
     {"splitEvenly", TieOptions::ChordTieDirType::SplitEvenly}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TieOptions::MixedStemDirection, {
     {"over", TieOptions::MixedStemDirection::Over},
     {"under", TieOptions::MixedStemDirection::Under},
     {"start", TieOptions::MixedStemDirection::OppositeFirst}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TieOptions::SpecialPosMode, {
     {"avoid", TieOptions::SpecialPosMode::Avoid}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TieOptions::InsetStyle, {
     {"percent", TieOptions::InsetStyle::Percent}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TieOptions::ConnectStyleType, {
     {"overStartPosInner", TieOptions::ConnectStyleType::OverStartPosInner},
@@ -254,20 +254,20 @@ MUSX_XML_ENUM_MAPPING(TieOptions::ConnectStyleType, {
     {"overHighestNoteStemEndPosOver", TieOptions::ConnectStyleType::OverHighestNoteStemEndPosOver},
     {"underLowestNoteStemStartPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStemStartPosUnder},
     {"underLowestNoteStemEndPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStemEndPosUnder}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TieOptions::ControlStyleType, {
     {"shortSpan", TieOptions::ControlStyleType::ShortSpan},
     {"mediumSpan", TieOptions::ControlStyleType::MediumSpan},
     {"longSpan", TieOptions::ControlStyleType::LongSpan},
     {"tieEnds", TieOptions::ControlStyleType::TieEnds}
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TupletOptions::AutoBracketStyle, {
     //{"always", TupletOptions::AutoBracketStyle::Always}, this is the default and is not known to occur in the xml
     {"unbeamedOnly", TupletOptions::AutoBracketStyle::UnbeamedOnly},
     {"neverBeamSide", TupletOptions::AutoBracketStyle::NeverBeamSide},
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TupletOptions::NumberStyle, {
     //{"nothing", TupletOptions::NumberStyle::Nothing}, this is the default and is not known to occur in the xml
@@ -275,7 +275,7 @@ MUSX_XML_ENUM_MAPPING(TupletOptions::NumberStyle, {
     {"useRatio", TupletOptions::NumberStyle::UseRatio},
     {"ratioPlusBothNotes", TupletOptions::NumberStyle::RatioPlusBothNotes},
     {"ratioPlusDenNote", TupletOptions::NumberStyle::RatioPlusDenominatorNote},
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TupletOptions::PositioningStyle, {
     //{"manual", TupletOptions::PositioningStyle::Manual}, this is the default and is not known to occur in the xml

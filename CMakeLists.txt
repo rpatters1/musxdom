@@ -9,8 +9,20 @@ if (MSVC)
     add_compile_options(/bigobj)
 endif()
 
+set(MUSX_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "Root directory of musx")
+
+# Enable testing if not explicitly disabled by the parent project
+if(NOT DEFINED BUILD_TESTING)
+    set(BUILD_TESTING ON CACHE BOOL "Enable testing")
+endif()
+
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
 # Add the include directory
-include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Enable testing globally
 enable_testing()
@@ -18,19 +30,44 @@ enable_testing()
 set(BUILD_TESTING OFF CACHE BOOL "Disable tests for external dependencies" FORCE)
 
 set(MUSX_SRC_FILES
-${CMAKE_SOURCE_DIR}/src/musx/dom/Implementations.cpp
-${CMAKE_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOptions.cpp
-    ${CMAKE_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOthers.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOptions.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOthers.cpp
     # Add more files here as needed
 )
 
 # Create a static library for the project
 add_library(musx STATIC ${MUSX_SRC_FILES})
 
+# Detect if we are building standalone or as part of a consuming project
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    set(MUSX_STANDALONE_BUILD TRUE)
+else()
+    set(MUSX_STANDALONE_BUILD FALSE)
+endif()
+
+# Define options for compile-time macros
+option(MUSX_THROW_ON_UNKNOWN_XML "Enable throwing on unknown XML" OFF)
+option(MUSX_USE_TINYXML2 "Enable tinyxml2 parsing classes" OFF)
+option(MUSX_USE_RAPIDXML "Enable rapidxml parsing classes" OFF)
+option(MUSX_DISPLAY_NODE_NAMES "Write node names to std::cout as they are processed" OFF)
+
+# Override defaults for stand-alone builds
+if(MUSX_STANDALONE_BUILD)
+    set(MUSX_THROW_ON_UNKNOWN_XML ON CACHE BOOL "Enable throwing on unknown XML" FORCE)
+    set(MUSX_USE_TINYXML2 ON CACHE BOOL "Enable tinyxml2 parsing classes" FORCE)
+    set(MUSX_USE_RAPIDXML ON CACHE BOOL "Enable rapidxml parsing classes" FORCE)
+    set(MUSX_DISPLAY_NODE_NAMES OFF CACHE BOOL "Write node names to std::cout as they are processed" FORCE)
+endif()
+
+target_compile_definitions(musx INTERFACE
+    $<$<BOOL:${MUSX_THROW_ON_UNKNOWN_XML}>:MUSX_THROW_ON_UNKNOWN_XML>
+    $<$<BOOL:${MUSX_USE_TINYXML2}>:MUSX_USE_TINYXML2>
+    $<$<BOOL:${MUSX_USE_RAPIDXML}>:MUSX_USE_RAPIDXML>
+    $<$<BOOL:${MUSX_DISPLAY_NODE_NAMES}>:MUSX_DISPLAY_NODE_NAMES>
+)
+
 target_compile_definitions(musx PRIVATE MUSX_THROW_ON_UNKNOWN_XML)
 
 # Ensure the library uses the correct include paths
-target_include_directories(musx PUBLIC ${CMAKE_SOURCE_DIR}/src)
-
-# Add the tests directory
-add_subdirectory(tests)
+target_include_directories(musx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

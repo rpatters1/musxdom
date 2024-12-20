@@ -67,14 +67,9 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(musxdomtests PRIVATE /Zc:__cplusplus /W4 /WX)
 endif()
 
-# Compile definitions
-target_compile_definitions(musxdomtests PRIVATE MUSX_USE_TINYXML2)
-target_compile_definitions(musxdomtests PRIVATE MUSX_USE_RAPIDXML)
-target_compile_definitions(musxdomtests PRIVATE MUSX_THROW_ON_UNKNOWN_XML)
-
 # Add the include paths
-target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
-target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/third_party/rapidxml")
+target_include_directories(musxdomtests PRIVATE "${MUSX_ROOT_DIR}/tests")
+target_include_directories(musxdomtests PRIVATE "${MUSX_ROOT_DIR}/third_party/rapidxml")
 
 # Link Google Test and the library to the test executable
 target_link_libraries(musxdomtests 
@@ -86,7 +81,7 @@ target_link_libraries(musxdomtests
 # Add Precompiled Headers (PCH) for the test suite
 target_precompile_headers(musxdomtests PRIVATE
     "${gtest_SOURCE_DIR}/include/gtest/gtest.h"
-    "${CMAKE_SOURCE_DIR}/src/musx/musx.h"
+    "${MUSX_ROOT_DIR}/src/musx/musx.h"
 )
 
 # Discover tests

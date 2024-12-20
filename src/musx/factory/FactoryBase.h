@@ -194,7 +194,7 @@ struct XmlEnumMapping
 
 #define MUSX_XML_ENUM_MAPPING(Type, ...) \
 template <> \
-const XmlEnumMappingElement<Type> XmlEnumMapping<Type>::mapping = __VA_ARGS__;
+const XmlEnumMappingElement<Type> XmlEnumMapping<Type>::mapping = __VA_ARGS__
 
 template <typename EnumClass, typename FromClass = std::string_view>
 class EnumMapper
@@ -236,7 +236,7 @@ EnumClass toEnum(const FromClass& value)
 }
 
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
-const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__;
+const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__
 
 using ResolverList = std::vector<ElementLinker::Resolver>;
 template <typename T>
