@@ -77,9 +77,10 @@ target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
 target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/third_party/rapidxml")
 
 # Link Google Test and the library to the test executable
-target_link_libraries(musxdomtests
+target_link_libraries(musxdomtests 
     gtest_main
 	tinyxml2
+    musx
 )
 
 # Add Precompiled Headers (PCH) for the test suite

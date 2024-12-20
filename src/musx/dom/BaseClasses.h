@@ -320,7 +320,7 @@ public:
      * @return a std::vector<std::filesystem::path> where element 0 is the user path and element 1 is the system path
      */
     static std::vector<std::filesystem::path> calcSMuFLPaths();
-    
+
     static const xml::XmlElementArray<FontInfo> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
@@ -373,6 +373,8 @@ public:
     bool notTall{};           ///< "Enforce Minimum Width": don't let shape get taller than it is wide
     bool opaque{};            ///< Whether the enclosure is opaque.
     bool roundCorners{};      ///< Whether the enclosure has rounded corners.
+
+    static const xml::XmlElementArray<Enclosure> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -411,7 +413,7 @@ public:
     AlignJustify hAlign{};      ///< Horizontal alignment for the name text. (xml node is `<halign>`)
     bool expand{};              ///< "Expand Single Word"
 
-    static const xml::XmlElementArray<Enclosure> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<NamePositioning> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 } // namespace others

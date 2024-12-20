@@ -192,8 +192,8 @@ struct XmlEnumMapping
 
 #define MUSX_XML_ENUM_MAPPING(Type, ...) \
 template <> \
-struct ::musx::factory::XmlEnumMapping<Type> { \
-    inline static const ::musx::factory::XmlEnumMappingElement<Type> mapping = __VA_ARGS__; \
+struct XmlEnumMapping<Type> { \
+    inline static const XmlEnumMappingElement<Type> mapping = __VA_ARGS__; \
 };
 
 template <typename EnumClass, typename FromClass = std::string_view>
@@ -291,8 +291,8 @@ private:
         static const std::unordered_map<std::string_view, XmlElementPopulator<T>> xref = []()
             {
                 std::unordered_map<std::string_view, XmlElementPopulator<T>> retval;
-                for (std::size_t i = 0; i < T::XmlElementMapping.size(); i++) {
-                    const XmlElementDescriptor<T> descriptor = T::XmlElementMapping[i];
+                for (std::size_t i = 0; i < T::XmlMappingArray.size(); i++) {
+                    const XmlElementDescriptor<T> descriptor = T::XmlMappingArray[i];
                     retval[std::get<0>(descriptor)] = std::get<1>(descriptor);
                 }
                 return retval;
