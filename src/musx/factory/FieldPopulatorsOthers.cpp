@@ -21,14 +21,117 @@
  */
 #include "musx/musx.h"
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+
 namespace musx {
+namespace factory {
+
+using namespace ::musx::xml;
+using namespace ::musx::dom::others;
+
+// Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
+// The goal is that this may facilitate serialization in the future.
+
+MUSX_XML_ENUM_MAPPING(NamePositioning::AlignJustify, {
+    //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
+    {"center", NamePositioning::AlignJustify::Center},
+    {"right", NamePositioning::AlignJustify::Right},
+    });
+
+MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
+    //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
+    {"center", MeasureNumberRegion::AlignJustify::Center},
+    {"right", MeasureNumberRegion::AlignJustify::Right},
+});
+
+MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::TimePrecision, {
+    //{"wholeSeconds", MeasureNumberRegion::TimePrecision::WholeSeconds}, this is the default and is not known to occur in the xml
+    {"tenths", MeasureNumberRegion::TimePrecision::Tenths},
+    {"hundredths", MeasureNumberRegion::TimePrecision::Hundredths},
+    {"thousandths", MeasureNumberRegion::TimePrecision::Thousandths},
+});
+
+MUSX_XML_ENUM_MAPPING(RehearsalMarkStyle, {
+    {"letters", RehearsalMarkStyle::Letters},
+    {"letNum", RehearsalMarkStyle::LetterNumbers},
+    {"lettersLc", RehearsalMarkStyle::LettersLowerCase},
+    {"letNumLc", RehearsalMarkStyle::LettersNumbersLowerCase},
+    {"numbers", RehearsalMarkStyle::Numbers},
+    {"measNum", RehearsalMarkStyle::MeasureNumber}
+});
+
+MUSX_XML_ENUM_MAPPING(PlaybackType, {
+    {"none", PlaybackType::None},
+    {"time", PlaybackType::Tempo},
+    {"midiController", PlaybackType::MidiController},
+    {"amplitude", PlaybackType::KeyVelocity},
+    {"transpose", PlaybackType::Transpose},
+    {"channel", PlaybackType::Channel},
+    {"midiPatchChange", PlaybackType::MidiPatchChange},
+    {"percMidiMap", PlaybackType::PercussionMidiMap},
+    {"midiPitchwheel", PlaybackType::MidiPitchWheel},
+    {"midiPressure", PlaybackType::ChannelPressure},
+    {"rekey", PlaybackType::RestrikeKeys},
+    {"dump", PlaybackType::Dump},
+    {"startTempo", PlaybackType::PlayTempoToolChanges},
+    {"stopTempo", PlaybackType::IgnoreTempoToolChanges},
+    {"swing", PlaybackType::Swing},
+    {"hpOn", PlaybackType::SmartPlaybackOn},
+    {"hpOff", PlaybackType::SmartPlaybackOff}
+});
+
+MUSX_XML_ENUM_MAPPING(HorizontalMeasExprAlign, {
+    {"manual", HorizontalMeasExprAlign::Manual},
+    {"leftOfAllNoteheads", HorizontalMeasExprAlign::LeftOfAllNoteheads},
+    {"leftOfPrimaryNotehead", HorizontalMeasExprAlign::LeftOfPrimaryNotehead},
+    {"stem", HorizontalMeasExprAlign::Stem},
+    {"centerPrimaryNotehead", HorizontalMeasExprAlign::CenterPrimaryNotehead},
+    {"centerAllNoteheads", HorizontalMeasExprAlign::CenterAllNoteheads},
+    {"rightOfAllNoteheads", HorizontalMeasExprAlign::RightOfAllNoteheads},
+    {"leftEdge", HorizontalMeasExprAlign::LeftBarline},
+    {"startTimeSig", HorizontalMeasExprAlign::StartTimeSig},
+    {"afterClefKeyTime", HorizontalMeasExprAlign::AfterClefKeyTime},
+    {"startOfMusic", HorizontalMeasExprAlign::StartOfMusic},
+    {"centerOverBarlines", HorizontalMeasExprAlign::CenterOverBarlines},
+    {"centerOverMusic", HorizontalMeasExprAlign::CenterOverMusic},
+    {"rightEdge", HorizontalMeasExprAlign::RightBarline}
+});
+
+MUSX_XML_ENUM_MAPPING(VerticalMeasExprAlign, {
+    {"manual", VerticalMeasExprAlign::Manual},
+    {"refLine", VerticalMeasExprAlign::RefLine},
+    {"aboveStaff", VerticalMeasExprAlign::AboveStaff},
+    {"belowStaff", VerticalMeasExprAlign::BelowStaff},
+    {"topNote", VerticalMeasExprAlign::TopNote},
+    {"bottomNote", VerticalMeasExprAlign::BottomNote},
+    {"aboveEntry", VerticalMeasExprAlign::AboveEntry},
+    {"belowEntry", VerticalMeasExprAlign::BelowEntry},
+    {"aboveStaffOrEntry", VerticalMeasExprAlign::AboveStaffOrEntry},
+    {"belowStaffOrEntry", VerticalMeasExprAlign::BelowStaffOrEntry}
+});
+
+MUSX_XML_ENUM_MAPPING(HorizontalExprJustification, {
+    {"left", HorizontalExprJustification::Left},
+    {"center", HorizontalExprJustification::Center},
+    {"right", HorizontalExprJustification::Right}
+});
+
+MUSX_XML_ENUM_MAPPING(MarkingCategory::CategoryType, {
+    {"dynamics", MarkingCategory::CategoryType::Dynamics},
+    {"tempoMarks", MarkingCategory::CategoryType::TempoMarks},
+    {"tempoAlts", MarkingCategory::CategoryType::TempoAlterations},
+    {"expressiveText", MarkingCategory::CategoryType::ExpressiveText},
+    {"techniqueText", MarkingCategory::CategoryType::TechniqueText},
+    {"rehearsalMarks", MarkingCategory::CategoryType::RehearsalMarks},
+    {"misc", MarkingCategory::CategoryType::Misc}
+});
+
+} // namespace factory
 namespace dom {
 namespace others {
 
 using namespace ::musx::xml;
 using namespace ::musx::factory;
-
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
 MUSX_XML_ELEMENT_ARRAY(Enclosure, {
     {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
@@ -189,8 +292,9 @@ MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->description = e->getText(); }},
 });
 
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
-
 } // namespace others
 } // namespace dom
 } // namespace musx
+
+
+#endif // DOXYGEN_SHOULD_IGNORE_THIS

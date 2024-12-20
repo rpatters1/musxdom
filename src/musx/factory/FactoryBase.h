@@ -27,6 +27,7 @@
 #include <optional>
 #include <functional>
 #include <unordered_set>
+#include <unordered_map>
 #include <tuple>
 #include <iostream>
 
@@ -42,6 +43,7 @@ namespace musx {
 namespace factory {
 
 using namespace musx::xml;
+using namespace musx::dom;
 
 /**
  * @class ElementLinker
@@ -187,14 +189,12 @@ using XmlEnumMappingElement = std::unordered_map<FromClass, EnumClass>;
 template <typename EnumClass, typename FromClass = std::string_view>
 struct XmlEnumMapping
 {
-    inline static const XmlEnumMappingElement<EnumClass, FromClass> mapping;
+    static const XmlEnumMappingElement<EnumClass, FromClass> mapping;
 };
 
 #define MUSX_XML_ENUM_MAPPING(Type, ...) \
 template <> \
-struct XmlEnumMapping<Type> { \
-    inline static const XmlEnumMappingElement<Type> mapping = __VA_ARGS__; \
-};
+const XmlEnumMappingElement<Type> XmlEnumMapping<Type>::mapping = __VA_ARGS__;
 
 template <typename EnumClass, typename FromClass = std::string_view>
 class EnumMapper
@@ -236,7 +236,7 @@ EnumClass toEnum(const FromClass& value)
 }
 
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
-inline const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__; \
+const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__;
 
 using ResolverList = std::vector<ElementLinker::Resolver>;
 template <typename T>
@@ -330,34 +330,4 @@ inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(con
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 } // namespace factory
-
-namespace dom {
-
-using namespace musx::xml;
-
-MUSX_XML_ELEMENT_ARRAY(FontInfo, {
-    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
-    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
-    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) {
-            for (auto efxChild = e->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
-                auto efxName = efxChild->getTagName();
-                if (efxName == "bold") {
-                    i->bold = true;
-                } else if (efxName == "italic") {
-                    i->italic = true;
-                } else if (efxName == "underline") {
-                    i->underline = true;
-                } else if (efxName == "strikeout") {
-                    i->strikeout = true;
-                } else if (efxName == "absolute") {
-                    i->absolute = true;
-                } else if (efxName == "hidden") {
-                    i->hidden = true;
-                }
-            }        
-        }
-    },
-});
-
-} // namespace dom
 } // namespace musx

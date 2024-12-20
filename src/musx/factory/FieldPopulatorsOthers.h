@@ -26,14 +26,13 @@
 #include "musx/xml/XmlInterface.h"
 #include "FactoryBase.h"
 
-namespace musx {
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
+namespace musx {
 namespace factory {
 
 using namespace ::musx::xml;
 using namespace ::musx::dom::others;
-
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
 // Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
@@ -48,99 +47,17 @@ inline Enclosure::Shape toEnum<Enclosure::Shape>(const uint8_t& value)
     throw std::invalid_argument("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
 }
 
-MUSX_XML_ENUM_MAPPING(NamePositioning::AlignJustify, {
-    //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
-    {"center", NamePositioning::AlignJustify::Center},
-    {"right", NamePositioning::AlignJustify::Right},
-    });
+template <>
+struct FieldPopulator<TextExpressionEnclosure> : private FieldPopulator<Enclosure>
+{
+    using FieldPopulator<Enclosure>::populate;
+};
 
-MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
-    //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
-    {"center", MeasureNumberRegion::AlignJustify::Center},
-    {"right", MeasureNumberRegion::AlignJustify::Right},
-});
-
-MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::TimePrecision, {
-    //{"wholeSeconds", MeasureNumberRegion::TimePrecision::WholeSeconds}, this is the default and is not known to occur in the xml
-    {"tenths", MeasureNumberRegion::TimePrecision::Tenths},
-    {"hundredths", MeasureNumberRegion::TimePrecision::Hundredths},
-    {"thousandths", MeasureNumberRegion::TimePrecision::Thousandths},
-});
-
-MUSX_XML_ENUM_MAPPING(RehearsalMarkStyle, {
-    {"letters", RehearsalMarkStyle::Letters},
-    {"letNum", RehearsalMarkStyle::LetterNumbers},
-    {"lettersLc", RehearsalMarkStyle::LettersLowerCase},
-    {"letNumLc", RehearsalMarkStyle::LettersNumbersLowerCase},
-    {"numbers", RehearsalMarkStyle::Numbers},
-    {"measNum", RehearsalMarkStyle::MeasureNumber}
-});
-
-MUSX_XML_ENUM_MAPPING(PlaybackType, {
-    {"none", PlaybackType::None},
-    {"time", PlaybackType::Tempo},
-    {"midiController", PlaybackType::MidiController},
-    {"amplitude", PlaybackType::KeyVelocity},
-    {"transpose", PlaybackType::Transpose},
-    {"channel", PlaybackType::Channel},
-    {"midiPatchChange", PlaybackType::MidiPatchChange},
-    {"percMidiMap", PlaybackType::PercussionMidiMap},
-    {"midiPitchwheel", PlaybackType::MidiPitchWheel},
-    {"midiPressure", PlaybackType::ChannelPressure},
-    {"rekey", PlaybackType::RestrikeKeys},
-    {"dump", PlaybackType::Dump},
-    {"startTempo", PlaybackType::PlayTempoToolChanges},
-    {"stopTempo", PlaybackType::IgnoreTempoToolChanges},
-    {"swing", PlaybackType::Swing},
-    {"hpOn", PlaybackType::SmartPlaybackOn},
-    {"hpOff", PlaybackType::SmartPlaybackOff}
-});
-
-MUSX_XML_ENUM_MAPPING(HorizontalMeasExprAlign, {
-    {"manual", HorizontalMeasExprAlign::Manual},
-    {"leftOfAllNoteheads", HorizontalMeasExprAlign::LeftOfAllNoteheads},
-    {"leftOfPrimaryNotehead", HorizontalMeasExprAlign::LeftOfPrimaryNotehead},
-    {"stem", HorizontalMeasExprAlign::Stem},
-    {"centerPrimaryNotehead", HorizontalMeasExprAlign::CenterPrimaryNotehead},
-    {"centerAllNoteheads", HorizontalMeasExprAlign::CenterAllNoteheads},
-    {"rightOfAllNoteheads", HorizontalMeasExprAlign::RightOfAllNoteheads},
-    {"leftEdge", HorizontalMeasExprAlign::LeftBarline},
-    {"startTimeSig", HorizontalMeasExprAlign::StartTimeSig},
-    {"afterClefKeyTime", HorizontalMeasExprAlign::AfterClefKeyTime},
-    {"startOfMusic", HorizontalMeasExprAlign::StartOfMusic},
-    {"centerOverBarlines", HorizontalMeasExprAlign::CenterOverBarlines},
-    {"centerOverMusic", HorizontalMeasExprAlign::CenterOverMusic},
-    {"rightEdge", HorizontalMeasExprAlign::RightBarline}
-});
-
-MUSX_XML_ENUM_MAPPING(VerticalMeasExprAlign, {
-    {"manual", VerticalMeasExprAlign::Manual},
-    {"refLine", VerticalMeasExprAlign::RefLine},
-    {"aboveStaff", VerticalMeasExprAlign::AboveStaff},
-    {"belowStaff", VerticalMeasExprAlign::BelowStaff},
-    {"topNote", VerticalMeasExprAlign::TopNote},
-    {"bottomNote", VerticalMeasExprAlign::BottomNote},
-    {"aboveEntry", VerticalMeasExprAlign::AboveEntry},
-    {"belowEntry", VerticalMeasExprAlign::BelowEntry},
-    {"aboveStaffOrEntry", VerticalMeasExprAlign::AboveStaffOrEntry},
-    {"belowStaffOrEntry", VerticalMeasExprAlign::BelowStaffOrEntry}
-});
-
-MUSX_XML_ENUM_MAPPING(HorizontalExprJustification, {
-    {"left", HorizontalExprJustification::Left},
-    {"center", HorizontalExprJustification::Center},
-    {"right", HorizontalExprJustification::Right}
-});
-
-MUSX_XML_ENUM_MAPPING(MarkingCategory::CategoryType, {
-    {"dynamics", MarkingCategory::CategoryType::Dynamics},
-    {"tempoMarks", MarkingCategory::CategoryType::TempoMarks},
-    {"tempoAlts", MarkingCategory::CategoryType::TempoAlterations},
-    {"expressiveText", MarkingCategory::CategoryType::ExpressiveText},
-    {"techniqueText", MarkingCategory::CategoryType::TechniqueText},
-    {"rehearsalMarks", MarkingCategory::CategoryType::RehearsalMarks},
-    {"misc", MarkingCategory::CategoryType::Misc}
-});
+template <>
+struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
+{
+    using FieldPopulator<Enclosure>::populate;
+};
 
 MUSX_RESOLVER_ARRAY(LayerAttributes, {
     [](const dom::DocumentPtr& document) {
@@ -182,19 +99,7 @@ MUSX_RESOLVER_ARRAY(TextExpressionDef, {
     }
 });
 
-template <>
-struct FieldPopulator<TextExpressionEnclosure> : private FieldPopulator<Enclosure>
-{
-    using FieldPopulator<Enclosure>::populate;
-};
-
-template <>
-struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
-{
-    using FieldPopulator<Enclosure>::populate;
-};
-
-#endif // DOXYGEN_SHOULD_IGNORE THIS
-
 } // namespace factory
 } // namespace musx
+
+#endif // DOXYGEN_SHOULD_IGNORE THIS
