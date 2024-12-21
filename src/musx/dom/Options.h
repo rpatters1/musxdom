@@ -40,8 +40,7 @@ namespace options {
  *
  * This class is identified by the XML node name "accidentalOptions".
  */
-class AccidentalOptions : public OptionsBase
-{
+class AccidentalOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit AccidentalOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -55,6 +54,7 @@ public:
     Evpu acciAcciSpace{};                   ///< Space between accidentals.
 
     constexpr static std::string_view XmlNodeName = "accidentalOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AccidentalOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -63,8 +63,7 @@ public:
  *
  * This class is identified by the XML node name "alternateNotationOptions".
  */
-class AlternateNotationOptions : public OptionsBase
-{
+class AlternateNotationOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit AlternateNotationOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -79,6 +78,7 @@ public:
     Evpu twoMeasNumLift{};      ///< Vertical offset for two-bar repeat numbers in @ref Evpu.
 
     constexpr static std::string_view XmlNodeName = "alternateNotationOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AlternateNotationOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -87,8 +87,7 @@ public:
  *
  * This class is identified by the XML node name "augmentationDotOptions".
  */
-class AugmentationDotOptions : public OptionsBase
-{
+class AugmentationDotOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit AugmentationDotOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -112,6 +111,7 @@ public:
     bool useLegacyFlippedStemPositioning{};
 
     constexpr static std::string_view XmlNodeName = "augmentationDotOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AugmentationDotOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -120,8 +120,7 @@ public:
  *
  * This class is identified by the XML node name "barlineOptions".
  */
-class BarlineOptions : public OptionsBase
-{
+class BarlineOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit BarlineOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -143,6 +142,7 @@ public:
     Evpu barlineDashOff{};                  ///< Dash space for dashed barlines in @ref Evpu.
 
     constexpr static std::string_view XmlNodeName = "barlineOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<BarlineOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -151,8 +151,7 @@ public:
  *
  * This class is identified by the XML node name "beamOptions".
  */
-class BeamOptions : public OptionsBase
-{
+class BeamOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit BeamOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -182,14 +181,14 @@ public:
     Efix beamWidth{};                        ///< Thickness of beams in @ref Efix.
 
     constexpr static std::string_view XmlNodeName = "beamOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<BeamOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
  * @class ClefOptions
  * @brief Options for configuring clefs in a musical context.
  */
-class ClefOptions : public OptionsBase
-{
+class ClefOptions : public OptionsBase {
 public:
     /**
      * @brief Constructor
@@ -221,6 +220,8 @@ public:
         bool scaleToStaffHeight{};      ///< Indicates if the shape should scale to staff height.
         bool useOwnFont{};              ///< Indicates if the clef has its own font.
         std::shared_ptr<FontInfo> font; ///< When `useOwnFont` is true, this is the clef's font. Otherwise `nullptr`.
+
+        static const xml::XmlElementArray<ClefDef> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
     };
 
     int defaultClef{};                  ///< Default clef identifier. An index into `clefDefs`.
@@ -242,6 +243,7 @@ public:
      * @brief The XML node name for this type.
      */
     constexpr static std::string_view XmlNodeName = "clefOptions";
+    static const xml::XmlElementArray<ClefOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -250,8 +252,7 @@ public:
  *
  * This class is identified by the XML node name "flagOptions".
  */
-class FlagOptions : public OptionsBase
-{
+class FlagOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit FlagOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -279,6 +280,7 @@ public:
     Evpu secondaryGroupAdj{};               ///< "Secondary Group Adjust" in @ref Evpu. (xml node is `<extra>`)
 
     constexpr static std::string_view XmlNodeName = "flagOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<FlagOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -288,8 +290,7 @@ public:
  * The FontOptions class stores default font settings used throughout the document. It provides functionality
  * to manage various font attributes, such as size, style (bold, italic), and whether the font is hidden or fixed size.
  */
-class FontOptions : public OptionsBase
-{
+class FontOptions : public OptionsBase {
 public:
     /**
      * @brief Constructor
@@ -385,6 +386,7 @@ public:
      * @brief The XML node name for this type.
      */
     constexpr static std::string_view XmlNodeName = "fontOptions";
+    static const xml::XmlElementArray<FontOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -393,8 +395,7 @@ public:
  *
  * This class is identified by the XML node name "graceNoteOptions".
  */
-class GraceNoteOptions : public OptionsBase
-{
+class GraceNoteOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit GraceNoteOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -408,6 +409,7 @@ public:
     Efix graceSlashWidth{};          ///< Width (thickness) of grace note slashes in @ref Efix.
 
     constexpr static std::string_view XmlNodeName = "graceNoteOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<GraceNoteOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -416,8 +418,7 @@ public:
  *
  * This class is identified by the XML node name "keySignatureOptions".
  */
-class KeySignatureOptions : public OptionsBase
-{
+class KeySignatureOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit KeySignatureOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -437,6 +438,7 @@ public:
     bool doKeyCancelBetweenSharpsFlats{};      ///< "When Switching Between Sharps and Flats"
 
     constexpr static std::string_view XmlNodeName = "keySignatureOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeySignatureOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -445,8 +447,7 @@ public:
  *
  * This class is identified by the XML node name "lineCurveOptions".
  */
-class LineCurveOptions : public OptionsBase
-{
+class LineCurveOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit LineCurveOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -467,6 +468,7 @@ public:
     EvpuFloat pathSlurTipWidth{};        ///< Width of slur tip path in fractional @ref EvpuFloat.
 
     constexpr static std::string_view XmlNodeName = "lineCurveOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<LineCurveOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -475,8 +477,7 @@ public:
  *
  * This class is identified by the XML node name "miscOptions".
  */
-class MiscOptions : public OptionsBase
-{
+class MiscOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit MiscOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -491,6 +492,7 @@ public:
     bool alignMeasureNumbersWithBarlines{}; ///< "Align Measure Numbers With Barlines" (xml node is `<drawMeasureNumbersOverBarlines>`)
 
     constexpr static std::string_view XmlNodeName = "miscOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MiscOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -499,8 +501,7 @@ public:
  *
  * This class is identified by the XML node name "multimeasureRestOptions".
  */
-class MultimeasureRestOptions : public OptionsBase
-{
+class MultimeasureRestOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit MultimeasureRestOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -519,6 +520,7 @@ public:
     bool autoUpdateMmRests{};    ///< Automatically update multimeasure rests when the user changes these options.
 
     constexpr static std::string_view XmlNodeName = "multimeasureRestOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MultimeasureRestOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -527,8 +529,7 @@ public:
  *
  * This class is identified by the XML node name "musicSpacingOptions".
  */
-class MusicSpacingOptions : public OptionsBase
-{
+class MusicSpacingOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit MusicSpacingOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -584,6 +585,7 @@ public:
     Evpu musBack{};                         ///< Additional spacing after the last note in @ref Evpu. (From Notes & Rests window.)
 
     constexpr static std::string_view XmlNodeName = "musicSpacingOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MusicSpacingOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -599,7 +601,8 @@ public:
      * @enum AdjustPageScope
      * @brief Enum for the scope of page adjustments.
      */
-    enum class AdjustPageScope {
+    enum class AdjustPageScope
+    {
         Current,        ///< Adjust the current page only.
         All,            ///< Adjust all pages.
         LeftOrRight,    ///< Adjust left or right pages.
@@ -643,6 +646,8 @@ public:
          * @brief Default constructor for PageFormat.
          */
         PageFormat() = default;
+
+        static const xml::XmlElementArray<PageFormat> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
     };
 
     // Properties
@@ -653,18 +658,21 @@ public:
 
     /**
      * @brief Constructor for PageFormatOptions.
-     * 
+     *
      * @param document A shared pointer to the document.
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
      * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      */
     explicit PageFormatOptions(const DocumentPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
-        : OptionsBase(document, partId, shareMode) {}
+        : OptionsBase(document, partId, shareMode)
+    {
+    }
 
     /**
      * @brief The XML node name for this type.
      */
     constexpr static std::string_view XmlNodeName = "pageFormatOptions";
+    static const xml::XmlElementArray<PageFormatOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -673,8 +681,7 @@ public:
  *
  * This class is identified by the XML node name "pianoBraceBracketOptions".
  */
-class PianoBraceBracketOptions : public OptionsBase
-{
+class PianoBraceBracketOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit PianoBraceBracketOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -694,6 +701,7 @@ public:
     EvpuFloat innerBodyH{};                 ///< Horizontal position of the inner body in fractional @ref EvpuFloat. (xml node is `<innerWingX>`)
 
     constexpr static std::string_view XmlNodeName = "pianoBraceBracketOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PianoBraceBracketOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -702,8 +710,7 @@ public:
  *
  * This class is identified by the XML node name "repeatOptions".
  */
-class RepeatOptions : public OptionsBase
-{
+class RepeatOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit RepeatOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -752,6 +759,7 @@ public:
     bool bracketEndAnchorThinLine{};       ///< Whether the end of the bracket anchors to a thin line.
 
     constexpr static std::string_view XmlNodeName = "repeatOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -760,8 +768,7 @@ public:
  *
  * This class is identified by the XML node name "smartShapeOptions".
  */
-class SmartShapeOptions : public OptionsBase
-{
+class SmartShapeOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit SmartShapeOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -927,6 +934,8 @@ public:
         ConnectionIndex connectIndex{}; ///< Index of connection point
         Evpu xOffset{};                ///< Horizontal offset
         Evpu yOffset{};                ///< Vertical offset
+
+        static const xml::XmlElementArray<ConnectionStyle> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
     };
 
     /// @brief defines the slur contours for short, medium, long, and extra long slurs
@@ -934,6 +943,8 @@ public:
         Efix span{};                  ///< Length of the span
         Efix inset{};                 ///< Inset value
         Evpu height{};               ///< Height of the span
+
+        static const xml::XmlElementArray<ControlStyle> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
     };
 
     std::unordered_map<SlurConnectStyleType, std::shared_ptr<ConnectionStyle>> slurConnectStyles; ///< Slur connections
@@ -943,6 +954,7 @@ public:
     std::unordered_map<BendCurveConnectStyleType, std::shared_ptr<ConnectionStyle>> bendCurveConnectStyles; ///< Benx curve connections
 
     constexpr static std::string_view XmlNodeName = "smartShapeOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SmartShapeOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -951,9 +963,8 @@ public:
  *
  * This class is identified by the XML node name "staffOptions".
  */
-class StaffOptions : public OptionsBase
-{
-    using NamePositioning = others::NamePositioning;
+class StaffOptions : public OptionsBase {
+using NamePositioning = others::NamePositioning;
 
 public:
     /** @brief Constructor function */
@@ -970,6 +981,7 @@ public:
     std::shared_ptr<NamePositioning> groupNameAbbrvPos; ///< Default abbreviated name positioning for staff groups.
 
     constexpr static std::string_view XmlNodeName = "staffOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -978,8 +990,7 @@ public:
  *
  * This class is identified by the XML node name "stemOptions".
  */
-class StemOptions : public OptionsBase
-{
+class StemOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit StemOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -995,6 +1006,7 @@ public:
     bool useStemConnections{}; ///< "Use Stem Connections"
 
     constexpr static std::string_view XmlNodeName = "stemOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StemOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -1003,8 +1015,7 @@ public:
  *
  * This class is identified by the XML node name "tieOptions".
  */
-class TieOptions : public OptionsBase
-{
+class TieOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit TieOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -1098,6 +1109,8 @@ public:
     struct ConnectStyle {
         Evpu offsetX{}; ///< Horizontal offset
         Evpu offsetY{}; ///< Vertical offset
+
+        static const xml::XmlElementArray<ConnectStyle> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
     };
 
     /** @brief Tie connect styles */
@@ -1108,6 +1121,8 @@ public:
         Efix insetRatio{}; ///< Inset ratio
         Evpu height{}; ///< Height
         Evpu insetFixed{}; ///< Fixed inset
+
+        static const xml::XmlElementArray<ControlPoint> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
     };
 
     /** @brief Struct for tie control style */
@@ -1115,12 +1130,15 @@ public:
         Evpu span{}; ///< Span length
         std::shared_ptr<ControlPoint> cp1; ///< Control point 1
         std::shared_ptr<ControlPoint> cp2; ///< Control point 2
+
+        static const xml::XmlElementArray<ControlStyle> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
     };
 
     /** @brief Tie control styles */
     std::unordered_map<ControlStyleType, std::shared_ptr<ControlStyle>> tieControlStyles;
 
     constexpr static std::string_view XmlNodeName = "tieOptions"; ///< The XML node name for this type
+    static const xml::XmlElementArray<TieOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -1152,6 +1170,7 @@ public:
     Evpu timeAbrvLift{};            ///< "Vertical Adjustment: Abbreviated Symbol, Score"
 
     constexpr static std::string_view XmlNodeName = "timeSignatureOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TimeSignatureOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 /**
@@ -1160,8 +1179,7 @@ public:
  *
  * This class is identified by the XML node name "tupletOptions".
  */
-class TupletOptions : public OptionsBase
-{
+class TupletOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit TupletOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -1236,6 +1254,7 @@ public:
     Evpu tupNDownstemOffset{};              ///< Offset for downstem tuplet numbers.
 
     constexpr static std::string_view XmlNodeName = "tupletOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TupletOptions> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
 };
 
 } // namespace options
