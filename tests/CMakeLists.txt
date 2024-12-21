@@ -1,5 +1,8 @@
-# Enable testing
-enable_testing()
+# Save the current state of BUILD_TESTING
+set(PREV_BUILD_TESTING ${BUILD_TESTING})
+
+# Turn off BUILD_TESTING for dependencies
+set(BUILD_TESTING OFF CACHE BOOL "Disable testing for dependencies" FORCE)
 
 # Add Google Test
 include(FetchContent)
@@ -19,6 +22,12 @@ FetchContent_Declare(
 	DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(tinyxml2)
+
+# Restore BUILD_TESTING for the top-level tests
+set(BUILD_TESTING ${PREV_BUILD_TESTING} CACHE BOOL "Restore BUILD_TESTING for top-level project tests" FORCE)
+
+# Enable testing
+enable_testing()
 
 # Add the test executable
 add_executable(musxdomtests
@@ -67,25 +76,21 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(musxdomtests PRIVATE /Zc:__cplusplus /W4 /WX)
 endif()
 
-# Compile definitions
-target_compile_definitions(musxdomtests PRIVATE MUSX_USE_TINYXML2)
-target_compile_definitions(musxdomtests PRIVATE MUSX_USE_RAPIDXML)
-target_compile_definitions(musxdomtests PRIVATE MUSX_THROW_ON_UNKNOWN_XML)
-
 # Add the include paths
-target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/tests")
-target_include_directories(musxdomtests PRIVATE "${CMAKE_SOURCE_DIR}/third_party/rapidxml")
+target_include_directories(musxdomtests PRIVATE "${MUSX_ROOT_DIR}/tests")
+target_include_directories(musxdomtests PRIVATE "${MUSX_ROOT_DIR}/third_party/rapidxml")
 
 # Link Google Test and the library to the test executable
-target_link_libraries(musxdomtests
+target_link_libraries(musxdomtests 
     gtest_main
 	tinyxml2
+    musx
 )
 
 # Add Precompiled Headers (PCH) for the test suite
 target_precompile_headers(musxdomtests PRIVATE
     "${gtest_SOURCE_DIR}/include/gtest/gtest.h"
-    "${CMAKE_SOURCE_DIR}/src/musx/musx.h"
+    "${MUSX_ROOT_DIR}/src/musx/musx.h"
 )
 
 # Discover tests

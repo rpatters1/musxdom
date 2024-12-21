@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#pragma once
-
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
@@ -28,11 +26,7 @@
 
  // This header includes method implementations that need to see all the classes in the dom
 
-#include "Options.h"
-#include "Others.h"
-#include "Texts.h"
-#include "Document.h"
-#include "musx/util/EnigmaString.h"
+#include "musx/musx.h"
 
 #if ! defined(MUSX_RUNNING_ON_WINDOWS)
 #include <pwd.h>
@@ -47,7 +41,7 @@ namespace dom {
 // ***** FontOptions *****
 // ***********************
 
-inline std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(options::FontOptions::FontType type) const
+std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(options::FontOptions::FontType type) const
 {
     auto it = fontOptions.find(type);
     if (it == fontOptions.end()) {
@@ -56,7 +50,7 @@ inline std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(options::Font
     return it->second;
 }
 
-inline std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
+std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
 {
     auto options = document->getOptions();
     if (!options) {
@@ -73,7 +67,7 @@ inline std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const Documen
 // ***** FontInfo *****
 // ********************
 
-inline std::string FontInfo::getFontName() const
+std::string FontInfo::getFontName() const
 {
     auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(fontId);
     if (fontDef) {
@@ -82,7 +76,7 @@ inline std::string FontInfo::getFontName() const
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
 }
 
-inline void FontInfo::setFontIdByName(const std::string& name)
+void FontInfo::setFontIdByName(const std::string& name)
 {
     auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>();
     for (auto fontDef : fontDefs) {
@@ -94,7 +88,7 @@ inline void FontInfo::setFontIdByName(const std::string& name)
     throw std::invalid_argument("font definition not found for font \"" + name + "\"");
 }
 
-inline bool FontInfo::calcIsSMuFL() const
+bool FontInfo::calcIsSMuFL() const
 {
     auto name = getFontName();
     auto standardFontPaths = calcSMuFLPaths();
@@ -110,7 +104,7 @@ inline bool FontInfo::calcIsSMuFL() const
     return false;
 }
 
-inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
+std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 {
 #if defined(MUSX_RUNNING_ON_WINDOWS)
     auto systemEnv = "COMMONPROGRAMFILES";
@@ -201,7 +195,7 @@ inline std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** MarkingCategiory *****
 // ****************************
 
-inline std::string others::MarkingCategory::getName() const
+std::string others::MarkingCategory::getName() const
 {
     auto catName = getDocument()->getOthers()->get<others::MarkingCategoryName>(getCmper());
     if (catName) {
@@ -214,7 +208,7 @@ inline std::string others::MarkingCategory::getName() const
 // ***** TextBase *****
 // ********************
 
-inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
+std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 {
         std::string searchText = this->text;
         auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
@@ -250,7 +244,7 @@ inline std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 // ***** TextExpressionDef *****
 // *****************************
 
-inline std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
+std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 {
     if (!hasEnclosure) return nullptr;
     return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getCmper());

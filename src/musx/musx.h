@@ -58,7 +58,6 @@
 
 #include "xml/XmlInterface.h"
 #include "dom/Document.h"
-#include "dom/Implementations.h"
 #include "factory/DocumentFactory.h"
 #include "util/ScoreFileEncoder.h"
 #include "util/EnigmaString.h"

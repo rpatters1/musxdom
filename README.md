@@ -1,6 +1,6 @@
 # musx object model
 
-Header-only object model ifor the EnigmaXml format in Finale musx files. It is compatible with the C++17 standard.
+Document object model for the EnigmaXml format in Finale musx files. It is compatible with the C++17 standard.
 
 **This project is not affiliated with or endorsed by Finale or its parent company.**
 
@@ -11,22 +11,36 @@ Header-only object model ifor the EnigmaXml format in Finale musx files. It is c
 
 ### Setup Instructions
 
-Clone the git repository and add the `./src` folder to your include paths.
-
 Include the top header in your source file.
 
 ```cpp
 #include "musx/musx.h"
 ```
 
+Add the libary to your project with `FetchContent`:
+
+```cmake
+include(FetchContent)
+
+FetchContent_Declare(
+  musx
+  GIT_REPOSITORY https://github.com/rpatters1/musx-object-model
+  GIT_TAG main # Replace with the desired commit hash, tag, or branch
+)
+FetchContent_MakeAvailable(musx)
+
+# Also add somewhere:
+target_link_libraries(project PRIVATE musx) # replace "your_project" with your actual project name
+```
+
 You will also need an xml parser. This repository provides implementations for [tinyxml](https://github.com/leethomason/tinyxml2) and [rapidxml](https://rapidxml.sourceforge.net/). If you wish to use one of these, define one and/or the other in your project's CMakeLists.txt file:
 
 ```cmake
-target_compile_definitions(your-project PRIVATE MUSX_USE_TINYXML2) # for tinyxml2
-target_compile_definitions(your-project PRIVATE MUSX_USE_RAPIDXML) # for rapidxml
+set(MUSX_USE_TINYXML2 ON CACHE BOOL "Disable tinyxml2 parsing classes" FORCE)
+set(MUSX_USE_RAPIDXML ON CACHE BOOL "Enable rapidxml parsing classes" FORCE)
 ```
 
-You then must add the dependency for the one you choose to your CMakeLists.txt.
+You then must add the dependency for the chosen parser(s) to your CMakeLists.txt.
 
 For tinyxml2:
 
@@ -56,14 +70,14 @@ Examples:
 ```cpp
 using namespace musx::factory;
 using namespace musx::xml;
-auto doc = DocumentFactory::create<tinyxml2::Document>(enigmaXmlBuffer); // to use tinyxml2;
-auto doc = DocumentFactory::create<rapidxml::Document>(enigmaXmlBuffer); // to use rapidxml;
-auto doc = DocumentFactory::create<MyCustomXmlDocument>(enigmaXmlBuffer); // to use a different xml parser
+auto docTiny = DocumentFactory::create<tinyxml2::Document>(enigmaXmlBuffer); // to use tinyxml2;
+auto docRapid = DocumentFactory::create<rapidxml::Document>(enigmaXmlBuffer); // to use rapidxml;
+auto docOther = DocumentFactory::create<OtherXmlDocument>(enigmaXmlBuffer); // to use a different xml parser
 ```
 
 ### To Run the Tests
 
-You need `cmake` to build and run the tests. To configure the build directory:
+You need `cmake` to build and run the tests. From the directory containing this repository, configure the build directory:
 
 ```bash
 cmake -S . build

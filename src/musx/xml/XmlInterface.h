@@ -27,6 +27,9 @@
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
+#include <functional>
+
+// Do not add header dependencies from musx.
 
 namespace musx {
 
@@ -119,6 +122,12 @@ public:
 
 class IXmlElement;
 using XmlElementPtr = std::shared_ptr<IXmlElement>; ///< shared pointer to @ref IXmlElement
+template <typename T>
+using XmlElementPopulator = std::function<void(const XmlElementPtr&, const std::shared_ptr<T>&)>;
+template <typename T>
+using XmlElementDescriptor = std::tuple<const std::string_view, XmlElementPopulator<T>>;
+template <typename T>
+using XmlElementArray = std::vector<XmlElementDescriptor<T>>;
 
 /**
  * @brief Interface for an XML element.

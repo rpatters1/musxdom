@@ -27,11 +27,12 @@
 #include <optional>
 #include <functional>
 #include <unordered_set>
+#include <unordered_map>
 #include <tuple>
 #include <iostream>
 
-#include "musx/dom/BaseClasses.h"
 #include "musx/xml/XmlInterface.h"
+#include "musx/dom/BaseClasses.h"
 
 namespace musx {
 
@@ -42,6 +43,7 @@ namespace musx {
 namespace factory {
 
 using namespace musx::xml;
+using namespace musx::dom;
 
 /**
  * @class ElementLinker
@@ -183,19 +185,27 @@ public:
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
 template <typename EnumClass, typename FromClass = std::string_view>
-using XmlEnumMapping = std::unordered_map<FromClass, EnumClass>;
+using XmlEnumMappingElement = std::unordered_map<FromClass, EnumClass>;
+template <typename EnumClass, typename FromClass = std::string_view>
+struct XmlEnumMapping
+{
+    static const XmlEnumMappingElement<EnumClass, FromClass> mapping;
+};
+
+#define MUSX_XML_ENUM_MAPPING(Type, ...) \
+template <> \
+const XmlEnumMappingElement<Type> XmlEnumMapping<Type>::mapping = __VA_ARGS__
+
 template <typename EnumClass, typename FromClass = std::string_view>
 class EnumMapper
 {
-    static XmlEnumMapping<EnumClass, FromClass> mapping; // this value must be specialized
-
     // If we ever need to, we can create a static lazy-initialize reverse mapping function here
 
 public:
     static EnumClass xmlToEnum(const FromClass& value)
     {
-        auto it = mapping.find(value);
-        if (it != mapping.end()) {
+        auto it = XmlEnumMapping<EnumClass>::mapping.find(value);
+        if (it != XmlEnumMapping<EnumClass>::mapping.end()) {
             return it->second;
         }
         std::string msg = [value]() {
@@ -225,18 +235,20 @@ EnumClass toEnum(const FromClass& value)
     }
 }
 
-template <typename T>
-using XmlElementPopulator = std::function<void(const XmlElementPtr&, const std::shared_ptr<T>&)>;
-template <typename T>
-using XmlElementDescriptor = std::tuple<const std::string_view, XmlElementPopulator<T>>;
-template <typename T>
-using XmlElementArray = std::vector<XmlElementDescriptor<T>>;
+#define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
+const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__
 
 using ResolverList = std::vector<ElementLinker::Resolver>;
 template <typename T>
 struct ResolverArray
 {
     inline static const ResolverList value = {};
+};
+
+#define MUSX_RESOLVER_ARRAY(Type, ...) \
+template <> \
+struct ResolverArray<Type> { \
+    inline static const ResolverList value = __VA_ARGS__; \
 };
 
 template <typename T>
@@ -279,8 +291,8 @@ private:
         static const std::unordered_map<std::string_view, XmlElementPopulator<T>> xref = []()
             {
                 std::unordered_map<std::string_view, XmlElementPopulator<T>> retval;
-                for (std::size_t i = 0; i < FieldPopulator<T>::xmlElements.size(); i++) {
-                    const XmlElementDescriptor<T> descriptor = FieldPopulator<T>::xmlElements[i];
+                for (std::size_t i = 0; i < T::XmlMappingArray.size(); i++) {
+                    const XmlElementDescriptor<T> descriptor = T::XmlMappingArray[i];
                     retval[std::get<0>(descriptor)] = std::get<1>(descriptor);
                 }
                 return retval;
@@ -295,8 +307,6 @@ private:
         FieldPopulator<T>::populate(instance, element);
         return instance;
     }
-
-    static const XmlElementArray<T> xmlElements;
 };
 
 template <typename EnumClass, typename EmbeddedClass>
@@ -308,31 +318,6 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
     }
     listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
 }
-
-template <>
-inline const XmlElementArray<dom::FontInfo> FieldPopulator<dom::FontInfo>::xmlElements = {
-    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
-    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
-    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) {
-            for (auto efxChild = e->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
-                auto efxName = efxChild->getTagName();
-                if (efxName == "bold") {
-                    i->bold = true;
-                } else if (efxName == "italic") {
-                    i->italic = true;
-                } else if (efxName == "underline") {
-                    i->underline = true;
-                } else if (efxName == "strikeout") {
-                    i->strikeout = true;
-                } else if (efxName == "absolute") {
-                    i->absolute = true;
-                } else if (efxName == "hidden") {
-                    i->hidden = true;
-                }
-            }        
-        }
-    },
-};
 
 template <>
 template <typename... Args>
