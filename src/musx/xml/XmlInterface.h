@@ -27,6 +27,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
+#include <functional>
 
 // Do not add header dependencies from musx.
 
