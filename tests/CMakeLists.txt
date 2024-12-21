@@ -1,5 +1,8 @@
-# Enable testing
-enable_testing()
+# Save the current state of BUILD_TESTING
+set(PREV_BUILD_TESTING ${BUILD_TESTING})
+
+# Turn off BUILD_TESTING for dependencies
+set(BUILD_TESTING OFF CACHE BOOL "Disable testing for dependencies" FORCE)
 
 # Add Google Test
 include(FetchContent)
@@ -19,6 +22,12 @@ FetchContent_Declare(
 	DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(tinyxml2)
+
+# Restore BUILD_TESTING for the top-level tests
+set(BUILD_TESTING ${PREV_BUILD_TESTING} CACHE BOOL "Restore BUILD_TESTING for top-level project tests" FORCE)
+
+# Enable testing
+enable_testing()
 
 # Add the test executable
 add_executable(musxdomtests
