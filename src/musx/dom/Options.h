@@ -554,7 +554,7 @@ public:
     /// @brief Options for how to handle manual positioning
     enum class ManualPositioning
     {
-        Clear,          ///< Clear manual positioning.
+        Clear,          ///< Clear manual positioning (the default).
         Ignore,         ///< Ignore manual positioning.
         Incorporate     ///< Incorporate manual positioning. (xml value is "incorp")
     };

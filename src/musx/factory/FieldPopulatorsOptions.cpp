@@ -90,7 +90,8 @@ MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ColUnisonsChoice, {
 });
 
 MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ManualPositioning, {
-    {"clear", MusicSpacingOptions::ManualPositioning::Clear},
+    // {"clear", MusicSpacingOptions::ManualPositioning::Clear}, the default value is not known to occur in the xml
+    {"ignore", MusicSpacingOptions::ManualPositioning::Ignore},
     {"incorp", MusicSpacingOptions::ManualPositioning::Incorporate}
 });
 
