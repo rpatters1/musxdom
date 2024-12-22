@@ -24,7 +24,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(tinyxml2)
 
 # Restore BUILD_TESTING for the top-level tests
-set(BUILD_TESTING ${PREV_BUILD_TESTING} CACHE BOOL "Restore BUILD_TESTING for top-level project tests" FORCE)
+set(BUILD_TESTING ${PREV_BUILD_TESTING})
 
 # Enable testing
 enable_testing()
@@ -64,6 +64,7 @@ add_executable(musxdomtests
 	others/fonts.cpp
 	others/layer_attributes.cpp
     others/measure_number_region.cpp
+    others/part_definition.cpp
 	others/part_globals.cpp
     others/text_block.cpp
     others/text.cpp
@@ -76,6 +77,9 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     # Extra warnings for MSVC
     target_compile_options(musxdomtests PRIVATE /Zc:__cplusplus /W4 /WX)
 endif()
+
+add_dependencies(musxdomtests musx)
+target_sources(musxdomtests PUBLIC "${MUSX_ROOT_DIR}/src/musx/musx.h")
 
 # Add the include paths
 target_include_directories(musxdomtests PRIVATE "${MUSX_ROOT_DIR}/tests")

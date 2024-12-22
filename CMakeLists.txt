@@ -27,10 +27,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(BUILD_TESTING OFF CACHE BOOL "Disable tests for external dependencies" FORCE)
 
 set(MUSX_SRC_FILES
-${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOptions.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOptions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOthers.cpp
-    # Add more files here as needed
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/EnigmaString.cpp
 )
 
 # Create a static library for the project

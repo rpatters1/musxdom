@@ -166,8 +166,8 @@ public:
     std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
     std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
 
-    Cmper startMeas{};      ///< Starting measure number for the region.
-    Cmper endMeas{};        ///< Ending measure number for the region.
+    MeasCmper startMeas{};       ///< Starting measure number for the region.
+    MeasCmper endMeas{};        ///< Ending measure number for the region.
     char32_t startChar{};      ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
     int base{};         ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
     std::string prefix;   ///< Text prefix for measure numbers (encoded UTF-8).
@@ -409,6 +409,41 @@ public:
 
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MarkingCategoryName> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ *
+ * @class PartDefinition
+ * @brief Represents the attributes of a Finale "partDef".
+ *
+ * @todo After identifying all possible fields, remove the override of #PartDefinition::requireAllFields.
+ *
+ * The cmper is the part definition ID, representing unique part definitions in the Finale document.
+ * This class is identified by the XML node name "partDef".
+ */
+class PartDefinition : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit PartDefinition(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    Cmper nameId{};                    ///< @ref Cmper of the part name @ref TextBlock. (xml tag is `<nameID>`)
+    int partOrder{};                   ///< Value that determines the order of listed parts in Finale's UI.
+    int copies{};                      ///< Number of copies to print.
+    bool extractPart{};                ///< Indicates if the part should be extracted.
+    bool needsRecalc{};                ///< Indicates if the part needs update layout.
+    bool useAsSmpInst{};               ///< Indicates if the part is used as a SmartMusic instrument.
+    int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
+
+    /** @brief Get the part name if any */
+    std::string getName() const;
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "partDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PartDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

@@ -219,8 +219,8 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
     {"scoreData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->scoreData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
     {"partData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->partData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
-    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startMeas = e->getTextAs<Cmper>(); }},
-    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->endMeas = e->getTextAs<Cmper>(); }},
+    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
+    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
     {"startChar", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startChar = e->getTextAs<char32_t>(); }},
     {"base", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->base = e->getTextAs<int>(); }},
     {"prefix", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->prefix = e->getTextTrimmed(); }},
@@ -275,6 +275,16 @@ MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
     {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->breakMmRest = true; }},
     {"userCreated", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->userCreated = true; }},
     {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(PartDefinition, {
+    {"nameID", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->nameId = e->getTextAs<Cmper>(); }},
+    {"partOrder", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->partOrder = e->getTextAs<int>(); }},
+    {"copies", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->copies = e->getTextAs<int>(); }},
+    {"extractPart", [](const XmlElementPtr&, const std::shared_ptr<PartDefinition>& i) { i->extractPart = true; }},
+    {"needsRecalc", [](const XmlElementPtr&, const std::shared_ptr<PartDefinition>& i) { i->needsRecalc = true; }},
+    {"useAsSmpInst", [](const XmlElementPtr&, const std::shared_ptr<PartDefinition>& i) { i->useAsSmpInst = true; }},
+    {"smartMusicInst", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->smartMusicInst = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PartGlobals, {

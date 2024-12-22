@@ -80,7 +80,7 @@ TEST(FontTest, FontInfoPropertiesTest)
     EXPECT_TRUE(fontInfo->strikeout);
     EXPECT_TRUE(fontInfo->absolute);
     EXPECT_TRUE(fontInfo->hidden);
-    EXPECT_EQ(fontInfo->getFontName(), "Times");
+    EXPECT_EQ(fontInfo->getName(), "Times");
 }
 
 TEST(FontTest, FontDefinitionProperties)
@@ -112,7 +112,7 @@ TEST(FontTest, FontInfoNoName)
     EXPECT_FALSE(fontInfo->hidden);
     EXPECT_THROW(
         // no fontName record for this font in xml, so this will throw
-        ASSERT_EQ(fontInfo->getFontName(), "Finale Maestro"),
+        ASSERT_EQ(fontInfo->getName(), "Finale Maestro"),
         std::invalid_argument
     );
 }

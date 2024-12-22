@@ -48,6 +48,9 @@ using EvpuFloat = double;   ///< EVPU fractional value (288.0 per inch)
 using Efix = int32_t;       ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
 using Edu = int32_t;        ///< EDU value (1024 per quarter note)
 
+using MeasCmper = int16_t;  ///< Enigma meas Cmper (may be negative when not applicable)
+using InstCmper = int16_t;  ///< Enigma inst Cmper (may be negative when not applicable)
+
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 
 class Document;
@@ -296,7 +299,7 @@ public:
      * @brief Get the name of the font.
      * @return The name of the font as a string.
      */
-    std::string getFontName() const;
+    std::string getName() const;
 
     /**
      * @brief Sets the id of the font from a string name.
