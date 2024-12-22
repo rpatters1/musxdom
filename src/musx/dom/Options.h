@@ -574,6 +574,7 @@ public:
     bool avoidColLedgers{};                 ///< Avoid collisions with ledger lines.
     ManualPositioning manualPositioning{};  ///< Manual positioning choice.
     bool ignoreHidden{};                    ///< Ignore hidden notes. (This value is reversed in the Finale UI.)
+    bool interpolateAllotments{};           ///< Interpolate allotments.
     bool useAllottmentTables{};             ///< Use allotment tables for spacing.
     Edu referenceDuration{};                ///< Reference duration for spacing in @ref Edu.
     Evpu referenceWidth{};                  ///< Reference width for spacing in @ref Evpu.

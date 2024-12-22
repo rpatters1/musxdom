@@ -46,6 +46,7 @@ TEST(MusicSpacingOptionsTest, PropertiesTest)
       <avoidColLedgers/>
       <manualPositioning>incorp</manualPositioning>
       <ignoreHidden/>
+      <interpolateAllotments/>
       <useAllottmentTables/>
       <referenceDuration>1024</referenceDuration>
       <referenceWidth>96</referenceWidth>
@@ -87,6 +88,7 @@ TEST(MusicSpacingOptionsTest, PropertiesTest)
     EXPECT_TRUE(musicSpacingOptions->avoidColLedgers);
     EXPECT_EQ(musicSpacingOptions->manualPositioning, ManualPositioning::Incorporate);
     EXPECT_TRUE(musicSpacingOptions->ignoreHidden);
+    EXPECT_TRUE(musicSpacingOptions->interpolateAllotments);
     EXPECT_TRUE(musicSpacingOptions->useAllottmentTables);
     EXPECT_EQ(musicSpacingOptions->referenceDuration, 1024);
     EXPECT_EQ(musicSpacingOptions->referenceWidth, 96);

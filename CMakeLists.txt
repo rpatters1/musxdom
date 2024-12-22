@@ -24,9 +24,6 @@ endif()
 # Add the include directory
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# Enable testing globally
-enable_testing()
-
 set(BUILD_TESTING OFF CACHE BOOL "Disable tests for external dependencies" FORCE)
 
 set(MUSX_SRC_FILES
@@ -60,14 +57,15 @@ if(MUSX_STANDALONE_BUILD)
     set(MUSX_DISPLAY_NODE_NAMES OFF CACHE BOOL "Write node names to std::cout as they are processed" FORCE)
 endif()
 
-target_compile_definitions(musx INTERFACE
+target_compile_definitions(musx PUBLIC
     $<$<BOOL:${MUSX_THROW_ON_UNKNOWN_XML}>:MUSX_THROW_ON_UNKNOWN_XML>
-    $<$<BOOL:${MUSX_USE_TINYXML2}>:MUSX_USE_TINYXML2>
-    $<$<BOOL:${MUSX_USE_RAPIDXML}>:MUSX_USE_RAPIDXML>
     $<$<BOOL:${MUSX_DISPLAY_NODE_NAMES}>:MUSX_DISPLAY_NODE_NAMES>
 )
 
-target_compile_definitions(musx PRIVATE MUSX_THROW_ON_UNKNOWN_XML)
+target_compile_definitions(musx INTERFACE
+    $<$<BOOL:${MUSX_USE_TINYXML2}>:MUSX_USE_TINYXML2>
+    $<$<BOOL:${MUSX_USE_RAPIDXML}>:MUSX_USE_RAPIDXML>
+)
 
 # Ensure the library uses the correct include paths
 target_include_directories(musx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

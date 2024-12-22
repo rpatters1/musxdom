@@ -545,6 +545,7 @@ MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
     {"avoidColLedgers", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->avoidColLedgers = true; }},
     {"manualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->manualPositioning = toEnum<MusicSpacingOptions::ManualPositioning>(e->getTextTrimmed()); }},
     {"ignoreHidden", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->ignoreHidden = true; }},
+    {"interpolateAllotments", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->interpolateAllotments = true; }},
     {"useAllottmentTables", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->useAllottmentTables = true; }},
     {"referenceDuration", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->referenceDuration = e->getTextAs<Edu>(); }},
     {"referenceWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->referenceWidth = e->getTextAs<Evpu>(); }},
