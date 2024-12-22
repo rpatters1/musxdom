@@ -81,8 +81,8 @@ private:
      HeaderPtr m_header;        ///< The <header>
      OptionsPoolPtr m_options;  ///< The <options> pool
      OthersPoolPtr m_others;    ///< The <others> pool
-     // ToDo: DetailsPoolPtr
-     // ToDo: EntriesPoolPtr
+     ///< @todo DetailsPoolPtr
+     ///< @todo EntriesPoolPtr
      TextsPoolPtr m_texts;      ///< The <texts> pool
 
     // Grant the factory function access to the private constructor

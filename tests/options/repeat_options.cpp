@@ -54,6 +54,7 @@ TEST(RepeatOptionsTest, PropertiesTest)
       <bracketTextVPos>36</bracketTextVPos>
       <bracketEndHookLen>1</bracketEndHookLen>
       <bracketEndAnchorThinLine/>
+      <showOnTopStaffOnly/>
       <showOnStaffListNumber>1</showOnStaffListNumber>
     </repeatOptions>
   </options>
@@ -91,6 +92,7 @@ TEST(RepeatOptionsTest, PropertiesTest)
     EXPECT_EQ(repeatOptions->bracketTextVPos, 36);
     EXPECT_EQ(repeatOptions->bracketEndHookLen, 1);
     EXPECT_TRUE(repeatOptions->bracketEndAnchorThinLine);
+    EXPECT_TRUE(repeatOptions->showOnTopStaffOnly);
     EXPECT_EQ(repeatOptions->showOnStaffListNumber, 1);
 }
 

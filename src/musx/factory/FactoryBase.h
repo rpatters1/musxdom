@@ -260,13 +260,24 @@ struct FieldPopulator : public FactoryBase
             auto it = elementXref().find(child->getTagName());
             if (it != elementXref().end()) {
                 std::get<1>(*it)(child, instance);
-            } else {
-                std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list";
+            }
+            else {
+                const bool requireField = [instance]() {
+                    if constexpr (std::is_base_of_v<Base, T>) {
+                        return instance->requireAllFields();
+                    }
+                    else {
+                        return true;
+                    }
+                }();
+                if (requireField) {
+                    std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list";
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
-                throw std::invalid_argument(msg);
+                    throw std::invalid_argument(msg);
 #else
-                std::cout << msg << std::endl;
+                    std::cout << msg << std::endl;
 #endif
+                }
             }
         }
     }

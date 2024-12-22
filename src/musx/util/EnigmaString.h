@@ -22,7 +22,7 @@
 #pragma once
 
 #include <string>
-#include <memory>
+#include <vector>
 
 #include "musx/dom/BaseClasses.h"
 
@@ -38,16 +38,7 @@ class EnigmaString
 {
 public:
     /** @brief Returns true if the enigma string starts with a font command. */
-    static bool startsWithFontCommand(const std::string& text)
-    {
-        const std::vector<std::string> textCmds = { "^font", "^fontid", "^Font", "^fontMus", "^fontTxt", "^fontNum", "^size", "^nfx" };
-        for (const auto& textCmd : textCmds) {
-            if (text.rfind(textCmd, 0) == 0) { // Checks if text starts with textCmd
-                return true;
-            }
-        }
-        return false;
-    }
+    static bool startsWithFontCommand(const std::string& text);
     
     /**
      * @brief Parses an enigma text insert into its constituent components.
@@ -57,69 +48,19 @@ public:
      *
      * Examples:
      * @code{.cpp}
-     * parseEnigmaComponents("^fontTxt(Times,4096)");   // Returns {"fontTxt", "Times", "4096"}
-     * parseEnigmaComponents("^size(10)");              // Returns {"size", "10"}
-     * parseEnigmaComponents("^nfx(130,(xyz))");        // Returns {"nfx", "130", "(xyz)"}
-     * parseEnigmaComponents("^some");                  // Returns {"some"}
-     * parseEnigmaComponents("^^");                     // Returns {"^"}
-     * parseEnigmaComponents("^^invalid");              // Returns {}
-     * parseEnigmaComponents("^unbalanced(abc");        // Returns {}
+     * parseComponents("^fontTxt(Times,4096)");   // Returns {"fontTxt", "Times", "4096"}
+     * parseComponents("^size(10)");              // Returns {"size", "10"}
+     * parseComponents("^nfx(130,(xyz))");        // Returns {"nfx", "130", "(xyz)"}
+     * parseComponents("^some");                  // Returns {"some"}
+     * parseComponents("^^");                     // Returns {"^"}
+     * parseComponents("^^invalid");              // Returns {}
+     * parseComponents("^unbalanced(abc");        // Returns {}
      * @endcode
      *
      * @param input The enigma text insert to parse.
      * @return A vector of strings representing the command and its parameters, or an empty vector if invalid.
      */
-    static std::vector<std::string> parseEnigmaComponents(const std::string& input)
-    {
-        if (input.empty() || input[0] != '^')
-            return {}; // Invalid input
-
-        if (input.size() == 2 && input[1] == '^') {
-            return { "^" }; // "^^" returns "^"
-        }
-
-        size_t i = 1; // Start after '^'
-        while (i < input.size() && std::isalpha(input[i])) 
-            ++i;
-
-        if (i == 1) 
-            return {}; // No valid command found
-
-        std::vector<std::string> components;
-        components.push_back(input.substr(1, i - 1)); // Extract command
-
-        if (i < input.size() && input[i] == '(') {
-            size_t start = ++i, depth = 1;
-            while (i < input.size() && depth > 0) {
-                if (input[i] == '(') 
-                    ++depth;
-                else if (input[i] == ')') 
-                    --depth;
-                ++i;
-            }
-
-            if (depth != 0) 
-                return {}; // Unbalanced parentheses
-
-            std::string params = input.substr(start, i - start - 1);
-            size_t j = 0, paramStart = 0, parenDepth = 0;
-
-            // Split parameters by ',' while respecting nested parentheses
-            while (j <= params.size()) {
-                if (j == params.size() || (params[j] == ',' && parenDepth == 0)) {
-                    if (j > paramStart) 
-                        components.push_back(params.substr(paramStart, j - paramStart));
-                    paramStart = j + 1;
-                } else if (params[j] == '(') 
-                    ++parenDepth;
-                else if (params[j] == ')') 
-                    --parenDepth;
-                ++j;
-            }
-        }
-
-        return components;
-    }
+    static std::vector<std::string> parseComponents(const std::string& input);
 
     /**
      * @brief Incorporates an enigma font command into the supplied @ref dom::FontInfo instance.
@@ -129,38 +70,16 @@ public:
      * - `^size` specifies the font size in points.
      * - `^nfx` specifies a bit mask of style properties. These are resolved with @ref dom::FontInfo::setEnigmaStyles.
      */
-    static bool parseFontCommand(const std::string& fontTag, FontInfo& fontInfo)
-    {
-        if (fontTag.empty() || fontTag[0] != '^') {
-            return false;
-        }
+    static bool parseFontCommand(const std::string& fontTag, FontInfo& fontInfo);
 
-        std::vector<std::string> components = parseEnigmaComponents(fontTag);
-        if (components.size() < 2) {
-            return false;
-        }
+    /** @brief Trims all font tags from an enigma string. */
+    static std::string trimFontTags(const std::string& input);
 
-        const std::string& commandPart = components[0];
-        if (commandPart == "fontMus" || commandPart == "fontTxt" || commandPart == "fontNum" || commandPart == "font" || commandPart == "fontid") {
-            const std::string& param1 = components[1];
-            if (commandPart == "fontid") {
-                fontInfo.fontId = Cmper(std::stoi(param1));
-            } else if (param1.find("Font") == 0) { // Starts with "Font"
-                fontInfo.fontId = Cmper(std::stoi(param1.substr(4)));
-            } else {
-                fontInfo.setFontIdByName(param1);
-            }
-            return true;
-        } else if (commandPart == "nfx") {
-            fontInfo.setEnigmaStyles(uint16_t(std::stoi(components[1])));
-            return true;
-        } else if (commandPart == "size") {
-            fontInfo.fontSize = std::stoi(components[1]);
-            return true;
-        }
+    /** @brief Trims all enigma tags from an enigma string, leaving just the plain text. */
+    static std::string trimTags(const std::string& input);
 
-        return false;
-    }
+    /** @brief Replaces ^flat() and ^sharp() inserts with 'b' and '#'. */
+    static std::string replaceAccidentalTags(const std::string& input);
 };
 
 } // namespace util

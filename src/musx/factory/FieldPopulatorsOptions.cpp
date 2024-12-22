@@ -90,7 +90,8 @@ MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ColUnisonsChoice, {
 });
 
 MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ManualPositioning, {
-    {"clear", MusicSpacingOptions::ManualPositioning::Clear},
+    // {"clear", MusicSpacingOptions::ManualPositioning::Clear}, the default value is not known to occur in the xml
+    {"ignore", MusicSpacingOptions::ManualPositioning::Ignore},
     {"incorp", MusicSpacingOptions::ManualPositioning::Incorporate}
 });
 
@@ -544,6 +545,7 @@ MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
     {"avoidColLedgers", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->avoidColLedgers = true; }},
     {"manualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->manualPositioning = toEnum<MusicSpacingOptions::ManualPositioning>(e->getTextTrimmed()); }},
     {"ignoreHidden", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->ignoreHidden = true; }},
+    {"interpolateAllotments", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->interpolateAllotments = true; }},
     {"useAllottmentTables", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->useAllottmentTables = true; }},
     {"referenceDuration", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->referenceDuration = e->getTextAs<Edu>(); }},
     {"referenceWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->referenceWidth = e->getTextAs<Evpu>(); }},
@@ -629,6 +631,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatOptions, {
     {"bracketTextVPos", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->bracketTextVPos = e->getTextAs<Evpu>(); }},
     {"bracketEndHookLen", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->bracketEndHookLen = e->getTextAs<Evpu>(); }},
     {"bracketEndAnchorThinLine", [](const XmlElementPtr&, const std::shared_ptr<RepeatOptions>& i) { i->bracketEndAnchorThinLine = true; }},
+    {"showOnTopStaffOnly", [](const XmlElementPtr&, const std::shared_ptr<RepeatOptions>& i) { i->showOnTopStaffOnly = true; }},
     {"showOnStaffListNumber", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->showOnStaffListNumber = e->getTextAs<Cmper>(); }},
 });
 
@@ -716,6 +719,7 @@ MUSX_XML_ELEMENT_ARRAY(StemOptions, {
     {"stemWidth", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemWidth = e->getTextAs<Efix>(); }},
     {"stemLift", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemOffset = e->getTextAs<Efix>(); }},
     {"useStemConnections", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>& i) { i->useStemConnections = true; }},
+    {"stemConnect", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>&) { /** @todo: parse stem connections. */ }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieOptions::ConnectStyle, {

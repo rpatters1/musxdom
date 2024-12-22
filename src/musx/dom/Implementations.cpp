@@ -67,7 +67,7 @@ std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& d
 // ***** FontInfo *****
 // ********************
 
-std::string FontInfo::getFontName() const
+std::string FontInfo::getName() const
 {
     auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(fontId);
     if (fontDef) {
@@ -90,7 +90,7 @@ void FontInfo::setFontIdByName(const std::string& name)
 
 bool FontInfo::calcIsSMuFL() const
 {
-    auto name = getFontName();
+    auto name = getName();
     auto standardFontPaths = calcSMuFLPaths();
     for (const auto& path : standardFontPaths) {
         if (!path.empty()) {
@@ -202,6 +202,22 @@ std::string others::MarkingCategory::getName() const
         return catName->name;
     }
     return {};
+}
+
+// **************************
+// ***** PartDefinition *****
+// **************************
+
+
+std::string others::PartDefinition::getName() const
+{
+    auto document = getDocument();
+    auto textBlock = document->getOthers()->get<others::TextBlock>(this->nameId);
+    if (!textBlock) return {};
+    auto block = document->getTexts()->get<texts::BlockText>(textBlock->textId);
+    if (!block) return {};
+    const std::string accisAdded = musx::util::EnigmaString::replaceAccidentalTags(block->text);
+    return musx::util::EnigmaString::trimTags(accisAdded);
 }
 
 // ********************

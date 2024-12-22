@@ -522,19 +522,19 @@ TEST(TextsTest, OtherText)
 
 TEST(TextsTest, EnigmaComponents)
 {
-    auto components = musx::util::EnigmaString::parseEnigmaComponents("^fontTxt(Times,4096)");
+    auto components = musx::util::EnigmaString::parseComponents("^fontTxt(Times,4096)");
     EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "Times", "4096" }));
-    components = musx::util::EnigmaString::parseEnigmaComponents("^fontTxt((Times),(4096))");
+    components = musx::util::EnigmaString::parseComponents("^fontTxt((Times),(4096))");
     EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "(Times)", "(4096)" }));
-    components = musx::util::EnigmaString::parseEnigmaComponents("^size(10)");
+    components = musx::util::EnigmaString::parseComponents("^size(10)");
     EXPECT_EQ(components, std::vector<std::string>({ "size", "10" }));
-    components = musx::util::EnigmaString::parseEnigmaComponents("^some");
+    components = musx::util::EnigmaString::parseComponents("^some");
     EXPECT_EQ(components, std::vector<std::string>({ "some" }));
-    components = musx::util::EnigmaString::parseEnigmaComponents("^^");
+    components = musx::util::EnigmaString::parseComponents("^^");
     EXPECT_EQ(components, std::vector<std::string>({ "^" }));
-    components = musx::util::EnigmaString::parseEnigmaComponents("^^invalid");
+    components = musx::util::EnigmaString::parseComponents("^^invalid");
     EXPECT_EQ(components, std::vector<std::string>({}));
-    components = musx::util::EnigmaString::parseEnigmaComponents("^fontTxt(Times(bad,4096)");
+    components = musx::util::EnigmaString::parseComponents("^fontTxt(Times(bad,4096)");
     EXPECT_EQ(components, std::vector<std::string>({}));
 }
 
@@ -569,4 +569,15 @@ TEST(TextsTest, FontFromEnigma)
         text->parseFirstFontInfo(),
         std::invalid_argument
     );
+}
+
+TEST(TextsTest, EnigmaParsing)
+{
+    using EnigmaString = musx::util::EnigmaString;
+    auto result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()");
+    EXPECT_EQ(result, "^font(New York)#^natural()b^composer()");
+    result = EnigmaString::trimTags(result);
+    EXPECT_EQ(result, "#b");
+    result = EnigmaString::trimTags("^font(New York)^sharp()The composer tag is ^^composer()");
+    EXPECT_EQ(result, "The composer tag is ^composer()");
 }

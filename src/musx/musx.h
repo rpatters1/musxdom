@@ -67,6 +67,5 @@
 #endif
 
 #ifdef MUSX_USE_RAPIDXML // usually defined on the compile line or in CMakeLists.txt
-// ToDo: provide this implementation
 #include "xml/RapidXmlImpl.h"
 #endif
