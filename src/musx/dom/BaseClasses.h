@@ -118,6 +118,18 @@ public:
         m_unlinkedNodes.insert(nodeName);
     }
 
+    /**
+     * @brief Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.
+     *
+     * Some classes make it difficult to discover all the possible xml tags that might be used for all its options.
+     * An example is @ref others::TextBlock. By overriding this function, a class can allow its members to be discovered
+     * as needed without causing error messages or throwing exceptions.
+     *
+     * Note that this value only escapes errors on fields. Enum values must still have all values provided to avoid
+     * error messages or exceptions.
+     */
+    virtual bool requireAllFields() const { return true; }
+
 protected:
     /**
      * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
@@ -321,7 +333,7 @@ public:
      */
     static std::vector<std::filesystem::path> calcSMuFLPaths();
 
-    static const xml::XmlElementArray<FontInfo> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<FontInfo> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 namespace others {
@@ -374,7 +386,7 @@ public:
     bool opaque{};            ///< Whether the enclosure is opaque.
     bool roundCorners{};      ///< Whether the enclosure has rounded corners.
 
-    static const xml::XmlElementArray<Enclosure> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Enclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -384,7 +396,7 @@ public:
  * This class is used both for default names as well as name positioning @ref Staff, @ref StaffStyle,
  * and @ref StaffGroup.
  */
-class NamePositioning : OthersBase
+class NamePositioning : public OthersBase
 {
 public:
 
@@ -413,7 +425,7 @@ public:
     AlignJustify hAlign{};      ///< Horizontal alignment for the name text. (xml node is `<halign>`)
     bool expand{};              ///< "Expand Single Word"
 
-    static const xml::XmlElementArray<NamePositioning> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<NamePositioning> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 } // namespace others

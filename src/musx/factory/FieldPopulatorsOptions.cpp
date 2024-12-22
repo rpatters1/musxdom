@@ -631,6 +631,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatOptions, {
     {"bracketTextVPos", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->bracketTextVPos = e->getTextAs<Evpu>(); }},
     {"bracketEndHookLen", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->bracketEndHookLen = e->getTextAs<Evpu>(); }},
     {"bracketEndAnchorThinLine", [](const XmlElementPtr&, const std::shared_ptr<RepeatOptions>& i) { i->bracketEndAnchorThinLine = true; }},
+    {"showOnTopStaffOnly", [](const XmlElementPtr&, const std::shared_ptr<RepeatOptions>& i) { i->showOnTopStaffOnly = true; }},
     {"showOnStaffListNumber", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->showOnStaffListNumber = e->getTextAs<Cmper>(); }},
 });
 
@@ -718,6 +719,7 @@ MUSX_XML_ELEMENT_ARRAY(StemOptions, {
     {"stemWidth", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemWidth = e->getTextAs<Efix>(); }},
     {"stemLift", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemOffset = e->getTextAs<Efix>(); }},
     {"useStemConnections", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>& i) { i->useStemConnections = true; }},
+    {"stemConnect", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>&) { /** @todo: parse stem connections. */ }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieOptions::ConnectStyle, {

@@ -180,6 +180,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::FontDefinition,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
+    dom::others::TextBlock,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,

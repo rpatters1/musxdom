@@ -57,7 +57,7 @@ public:
     std::string name;           ///< The font name e.g., "Broadway Copyist Text".
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<FontDefinition> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<FontDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -89,7 +89,7 @@ public:
     bool hideLayer{};                   ///< "Hide Layer when Inactive"
 
     constexpr static std::string_view XmlNodeName = "layerAtts"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<LayerAttributes> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<LayerAttributes> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -159,7 +159,7 @@ public:
         AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
         AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
 
-        static const xml::XmlElementArray<ScorePartData> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<ScorePartData> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
     };
 
     // Public properties
@@ -186,7 +186,49 @@ public:
     bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
 
     constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MeasureNumberRegion> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MeasureNumberRegion> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TextBlock
+ * @brief Represents the attributes of a Finale "textBlock".
+ *
+ * @todo After identifying all possible fields, remove the override of #TextBlock::requireAllFields.
+ *
+ * The cmper is the textBlock ID, representing unique text blocks in the Finale document.
+ * This class is identified by the XML node name "textBlock".
+ */
+class TextBlock : public OthersBase
+{
+public:
+    /** @brief Enum for textTag values */
+    enum class TextType
+    {
+        Block,      ///< #textId is a #Cmper for a @ref texts::BlockText
+        Expression  ///< #textId is a #Cmper for a @ref texts::ExpressionText
+    };
+
+    /** @brief Constructor function */
+    explicit TextBlock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
+    int lineSpacingPercentage{};       ///< Line spacing percentage.
+    bool newPos36{};                   ///< This is likely a compatibility setting. Best guess is that blocks created before Finale 3.6 do not have this set.
+    bool showShape{};                  ///< Show shape
+    bool noExpandSingleWord{};         ///< Do not expand single word
+    bool wordWrap{};                   ///< Wrap words (in frames)
+    Evpu width{};                      ///< Width of frame
+    Evpu height{};                     ///< Height of frame
+    bool roundCorners{};               ///< Use rounded corners on frame
+    Efix cornerRadius{};               ///< Corner radius for rounded corners.
+    TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextBlock> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -346,7 +388,7 @@ public:
     std::string getName() const;
 
     constexpr static std::string_view XmlNodeName = "markingsCategory"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MarkingCategory> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MarkingCategory> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -366,7 +408,7 @@ public:
     std::string name; ///< The name of the marking category.
 
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MarkingCategoryName> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MarkingCategoryName> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -396,7 +438,7 @@ public:
     Cmper specialPartExtractionIUList{};    ///< If non-zero, Special Part Extraction is in effect and this is the iuList @ref Cmper. 
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<PartGlobals> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<PartGlobals> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -440,7 +482,7 @@ public:
     std::shared_ptr<Enclosure> getEnclosure() const;
 
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextExpressionDef> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextExpressionDef> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -456,7 +498,7 @@ public:
     using Enclosure::Enclosure;
 
     constexpr static std::string_view XmlNodeName = "textExpressionEnclosure"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextExpressionEnclosure> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextExpressionEnclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -472,7 +514,7 @@ public:
     using Enclosure::Enclosure;
 
     constexpr static std::string_view XmlNodeName = "textRepeatEnclosure"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextRepeatEnclosure> XmlMappingArray; ///< Required for @ref musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextRepeatEnclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 } // namespace others

@@ -51,6 +51,11 @@ MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::TimePrecision, {
     {"thousandths", MeasureNumberRegion::TimePrecision::Thousandths},
 });
 
+MUSX_XML_ENUM_MAPPING(TextBlock::TextType, {
+    {"block", TextBlock::TextType::Block},
+    {"expression", TextBlock::TextType::Expression}
+});
+
 MUSX_XML_ENUM_MAPPING(RehearsalMarkStyle, {
     {"letters", RehearsalMarkStyle::Letters},
     {"letNum", RehearsalMarkStyle::LetterNumbers},
@@ -231,6 +236,20 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
     {"timePrecision", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->timePrecision = toEnum<MeasureNumberRegion::TimePrecision>(e->getTextTrimmed()); }},
     {"hideScroll", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hideScroll = true; }},
     {"hidePage", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hidePage = true; }}
+});
+
+MUSX_XML_ELEMENT_ARRAY(TextBlock, {
+    {"textID", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textId = e->getTextAs<Cmper>(); }},
+    {"lineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},
+    {"newPos36", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->newPos36 = true; }},
+    {"showShape", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->showShape = true; }},
+    {"noExpandSingleWord", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->noExpandSingleWord = true; }},
+    {"wordWrap", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->wordWrap = true; }},
+    {"width", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->roundCorners = true; }},
+    {"cornerRadius", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
+    {"textTag", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textType = toEnum<TextBlock::TextType>(e->getTextTrimmed()); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {

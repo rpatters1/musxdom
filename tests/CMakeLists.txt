@@ -65,6 +65,7 @@ add_executable(musxdomtests
 	others/layer_attributes.cpp
     others/measure_number_region.cpp
 	others/part_globals.cpp
+    others/text_block.cpp
     others/text.cpp
 )
 
@@ -81,7 +82,7 @@ target_include_directories(musxdomtests PRIVATE "${MUSX_ROOT_DIR}/tests")
 target_include_directories(musxdomtests PRIVATE "${MUSX_ROOT_DIR}/third_party/rapidxml")
 
 # Link Google Test and the library to the test executable
-target_link_libraries(musxdomtests 
+target_link_libraries(musxdomtests PRIVATE
     gtest_main
 	tinyxml2
     musx
