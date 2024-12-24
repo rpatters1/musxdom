@@ -133,7 +133,7 @@ protected:
      * @tparam ParserFunc the parser function (usually inferred from the call)
      */
     template<typename DataType, typename ParserFunc>
-    static void getFieldFromXml(const XmlElementPtr& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc, bool expected = true)
+    static void getFieldFromXml(const XmlElementPtr& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc, bool expected = false)
     {
         if (auto childElement = element->getFirstChildElement(nodeName)) {
             dataField = parserFunc(childElement);
