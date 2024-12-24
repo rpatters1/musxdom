@@ -29,8 +29,9 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <tuple>
-#include <iostream>
+#include <sstream>
 
+#include "musx/util/Logger.h"
 #include "musx/xml/XmlInterface.h"
 #include "musx/dom/BaseClasses.h"
 
@@ -137,10 +138,9 @@ protected:
         if (auto childElement = element->getFirstChildElement(nodeName)) {
             dataField = parserFunc(childElement);
         } else if (expected) {
-#ifdef MUSX_LOG_MISSING_FIELDS
-            //stdout in lieu of logging for now
-            std::cout << "Expected field <" << element->getTagName() << "><" << nodeName << "> not found." << std::endl;
-#endif
+            std::stringstream msg;
+            msg << "Expected field <" << element->getTagName() << "><" << nodeName << "> not found.";
+            util::Logger::log(util::Logger::LogLevel::Warning, msg.str());
         }
     }
 
@@ -219,7 +219,7 @@ public:
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
         throw std::invalid_argument(msg);
 #else
-        std::cout << msg << std::endl;
+        util::Logger::log(util::Logger::LogLevel::Error, msg);
         return {};
 #endif
     }
@@ -275,7 +275,7 @@ struct FieldPopulator : public FactoryBase
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
                     throw std::invalid_argument(msg);
 #else
-                    std::cout << msg << std::endl;
+                    util::Logger::log(util::Logger::LogLevel::Error, msg);
 #endif
                 }
             }
