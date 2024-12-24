@@ -271,7 +271,7 @@ struct FieldPopulator : public FactoryBase
                     }
                 }();
                 if (requireField) {
-                    std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list";
+                    std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.";
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
                     throw std::invalid_argument(msg);
 #else
