@@ -211,15 +211,14 @@ public:
         std::string msg = [value]() {
             if constexpr (std::is_arithmetic_v<FromClass>) {
                 return "Invalid enum value from xml: " + std::to_string(value);
-            }
-            else {
+            } else {
                 return "Invalid enum value from xml: " + std::string(value);
             }
         }();
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
         throw std::invalid_argument(msg);
 #else
-        util::Logger::log(util::Logger::LogLevel::Error, msg);
+        util::Logger::log(util::Logger::LogLevel::Warning, msg);
         return {};
 #endif
     }
@@ -275,7 +274,7 @@ struct FieldPopulator : public FactoryBase
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
                     throw std::invalid_argument(msg);
 #else
-                    util::Logger::log(util::Logger::LogLevel::Error, msg);
+                    util::Logger::log(util::Logger::LogLevel::Warning, msg);
 #endif
                 }
             }
