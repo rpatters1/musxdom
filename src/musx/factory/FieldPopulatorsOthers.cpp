@@ -226,6 +226,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
     {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
     {"startChar", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startChar = e->getTextAs<char32_t>(); }},
     {"base", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->base = e->getTextAs<int>(); }},
+    {"offset", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->numberOffset = e->getTextAs<int>(); }},
     {"prefix", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->prefix = e->getTextTrimmed(); }},
     {"suffix", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->suffix = e->getTextTrimmed(); }},
     {"countFromOne", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->countFromOne = true; }},

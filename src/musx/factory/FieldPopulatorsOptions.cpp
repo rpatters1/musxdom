@@ -386,6 +386,7 @@ MUSX_XML_ELEMENT_ARRAY(BeamOptions, {
     {"beamFourEighthsInCommonTime", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->beamFourEighthsInCommonTime = true; }},
     {"beamThreeEighthsInCommonTime", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->beamThreeEighthsInCommonTime = true; }},
     {"doStemStubs", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->dispHalfStemsOnRests = true; }},
+    {"oldFinaleRestBeams", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->oldFinaleRestBeams = true; }},
     {"spanSpace", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->spanSpace = true; }},
     {"extendSecBeamsOverRests", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->extendSecBeamsOverRests = true; }},
     {"beamWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamWidth = e->getTextAs<Efix>(); }},
@@ -530,7 +531,7 @@ MUSX_XML_ELEMENT_ARRAY(MultimeasureRestOptions, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
-    {"layoutType", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>&) { /* appears to be an unused field, perhaps intended for future enhancement */ }},
+    {"layoutType", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>&) { /* appears to be cruft left over from legacy Finale */ }},
     {"minWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->minWidth = e->getTextAs<Evpu>(); }},
     {"maxWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->maxWidth = e->getTextAs<Evpu>(); }},
     {"minDistance", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->minDistance = e->getTextAs<Evpu>(); }},

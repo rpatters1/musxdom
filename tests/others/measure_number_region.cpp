@@ -96,6 +96,7 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
       <endMeas>1000</endMeas>
       <startChar>164</startChar>
       <base>10</base>
+      <offset>2</offset>
       <prefix>&lt;|</prefix>
       <suffix>&gt;|</suffix>
       <countFromOne/>
@@ -125,6 +126,7 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_EQ(measureNumberRegion->startMeas, 1);
     EXPECT_EQ(measureNumberRegion->endMeas, 1000);
     EXPECT_EQ(measureNumberRegion->base, 10);
+    EXPECT_EQ(measureNumberRegion->numberOffset, 2);
     EXPECT_EQ(measureNumberRegion->prefix, "<|");
     EXPECT_EQ(measureNumberRegion->suffix, ">|");
     EXPECT_TRUE(measureNumberRegion->countFromOne);
