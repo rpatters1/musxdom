@@ -42,9 +42,10 @@ public:
      * @brief Enum class representing the severity levels of log messages.
      */
     enum class LogLevel {
-        Info,    ///< Informational messages for general program operation.
-        Warning, ///< Warning messages indicating potential issues.
-        Error    ///< Error messages indicating critical issues.
+        Info,       ///< Informational messages for general program operation.
+        Warning,    ///< Warning messages indicating potential issues.
+        Error,      ///< Error messages indicating critical issues.
+        Verbose     ///< Informational messages that should only displayed when verbose logging is requested.
     };
 
     /**

@@ -71,9 +71,9 @@ public:
 
 #ifdef MUSX_DISPLAY_NODE_NAMES
         std::set<std::string> alreadyDisplayed;
-        std::cout << "============" << std::endl
-                  << element->getTagName() << std::endl
-                  << "============" << std::endl;
+        util::Logger::log(util::Logger::LogLevel::Verbose, "============");
+        util::Logger::log(util::Logger::LogLevel::Verbose, element->getTagName());
+        util::Logger::log(util::Logger::LogLevel::Verbose, "============");
 #endif
 
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {            
@@ -82,7 +82,7 @@ public:
 #ifdef MUSX_DISPLAY_NODE_NAMES
                 auto it = alreadyDisplayed.find(childElement->getTagName());
                 if (it == alreadyDisplayed.end()) {
-                    std::cout << "  " << childElement->getTagName() << std::endl;
+                    util::Logger::log(util::Logger::LogLevel::Verbose, childElement->getTagName());
                     alreadyDisplayed.emplace(childElement->getTagName());
                 }
 #endif

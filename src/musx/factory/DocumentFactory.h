@@ -76,7 +76,9 @@ public:
             }
         }
         elementLinker.resolveAll(document);
-        
+#ifdef MUSX_DISPLAY_NODE_NAMES
+        util::Logger::log(util::Logger::LogLevel::Verbose, "============");
+#endif        
         return document;
     }
 };
