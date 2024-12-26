@@ -134,8 +134,11 @@ public:
         std::shared_ptr<Enclosure> startEnclosure;    ///< Enclosure settings for numbers at start of system.
         std::shared_ptr<Enclosure> multipleEnclosure; ///< Enclosure settings for mid-system numbers.
 
+        Evpu startXdisp{};         ///< Horizontal offset for numbers at start of system.
         Evpu startYdisp{};         ///< Vertical offset for numbers at start of system.
+        Evpu multipleXdisp{};      ///< Horizontal offset for mid-system numbers.
         Evpu multipleYdisp{};      ///< Vertical offset for mid-system numbers.
+        Evpu mmRestXdisp{};        ///< Horizontal offset for multi-measure rest ranges.
         Evpu mmRestYdisp{};        ///< Vertical offset for multi-measure rest ranges.
         char32_t leftMmBracketChar{};  ///< UTF-32 code for the left bracket of multi-measure rest ranges.
         char32_t rightMmBracketChar{}; ///< UTF-32 code for the right bracket of multi-measure rest ranges.
@@ -166,12 +169,13 @@ public:
     std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
     std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
 
-    MeasCmper startMeas{};       ///< Starting measure number for the region.
+    MeasCmper startMeas{};      ///< Starting measure number for the region.
     MeasCmper endMeas{};        ///< Ending measure number for the region.
-    char32_t startChar{};      ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
-    int base{};         ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
-    std::string prefix;   ///< Text prefix for measure numbers (encoded UTF-8).
-    std::string suffix;   ///< Text suffix for measure numbers (encoded UTF-8).
+    char32_t startChar{};       ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
+    int base{};                 ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
+    int numberOffset{};         ///< This value is 1 less than the "Starting Number" field in the Finale UI. (xml node is `<offset>`)
+    std::string prefix;         ///< Text prefix for measure numbers (encoded UTF-8).
+    std::string suffix;         ///< Text suffix for measure numbers (encoded UTF-8).
 
     bool countFromOne{};        ///< Start counting from 1 rather than 0, e.g., "1, 2, 3, 4" numbering style (in conjuction with base 10)
     bool noZero;                ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences

@@ -386,6 +386,7 @@ MUSX_XML_ELEMENT_ARRAY(BeamOptions, {
     {"beamFourEighthsInCommonTime", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->beamFourEighthsInCommonTime = true; }},
     {"beamThreeEighthsInCommonTime", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->beamThreeEighthsInCommonTime = true; }},
     {"doStemStubs", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->dispHalfStemsOnRests = true; }},
+    {"oldFinaleRestBeams", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->oldFinaleRestBeams = true; }},
     {"spanSpace", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->spanSpace = true; }},
     {"extendSecBeamsOverRests", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->extendSecBeamsOverRests = true; }},
     {"beamWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamWidth = e->getTextAs<Efix>(); }},
@@ -530,6 +531,7 @@ MUSX_XML_ELEMENT_ARRAY(MultimeasureRestOptions, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
+    {"layoutType", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>&) { /* appears to be cruft left over from legacy Finale */ }},
     {"minWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->minWidth = e->getTextAs<Evpu>(); }},
     {"maxWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->maxWidth = e->getTextAs<Evpu>(); }},
     {"minDistance", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->minDistance = e->getTextAs<Evpu>(); }},
@@ -546,6 +548,7 @@ MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
     {"manualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->manualPositioning = toEnum<MusicSpacingOptions::ManualPositioning>(e->getTextTrimmed()); }},
     {"ignoreHidden", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->ignoreHidden = true; }},
     {"interpolateAllotments", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->interpolateAllotments = true; }},
+    {"usePrinter", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->usePrinter = true; }},
     {"useAllottmentTables", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->useAllottmentTables = true; }},
     {"referenceDuration", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->referenceDuration = e->getTextAs<Edu>(); }},
     {"referenceWidth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->referenceWidth = e->getTextAs<Evpu>(); }},

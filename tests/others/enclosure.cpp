@@ -52,7 +52,7 @@ TEST(EnclosureTest, TextExpressionEnclosure)
         auto others = doc->getOthers();
         ASSERT_TRUE(others);
         auto enclosure = others->get<musx::dom::others::TextExpressionEnclosure>(1);
-        EXPECT_FALSE(enclosure) << "Enclosure 1 found but does not exists";
+        EXPECT_FALSE(enclosure) << "Enclosure 1 found but does not exist";
         enclosure = others->get<musx::dom::others::TextExpressionEnclosure>(25);
         ASSERT_TRUE(enclosure) << "Enclosure 25 not found but does exist";
         EXPECT_EQ(enclosure->xAdd, -2);

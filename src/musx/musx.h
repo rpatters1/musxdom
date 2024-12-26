@@ -36,9 +36,9 @@
  * - Xml Deserializer interfaces that allow the caller to use any Xml utility for xml handling.
  *
  * The following macro definitions are available to modify behavior of the library.
- * - `MUSX_DISPLAY_NODE_NAMES`: Print to `std::cout` each node name that is processed in the order found.
+ * - `MUSX_DISPLAY_NODE_NAMES`: Log each node name that is processed in the order found. (When verbose logging is specified.)
  * - `MUSX_THROW_ON_UNKNOWN_XML`: Throws `std::invalid_argument` if an unknown child node is encountered. Otherwise
- * it prints a message to `std::cout`. This macro does not affect unknown top-level nodes, which are always silently skipped.
+ * it prints a message to `std::cerr`. This macro does not affect unknown top-level nodes, which are always silently skipped.
  *
  * The recommended way to define these macros is from your make file or build project. They are primarily intended
  * for debugging.
@@ -61,6 +61,7 @@
 #include "factory/DocumentFactory.h"
 #include "util/ScoreFileEncoder.h"
 #include "util/EnigmaString.h"
+#include "util/Logger.h"
 
 #ifdef MUSX_USE_TINYXML2 // usually defined on the compile line or in CMakeLists.txt
 #include "xml/TinyXmlImpl.h"

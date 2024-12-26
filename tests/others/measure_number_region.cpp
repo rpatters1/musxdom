@@ -66,8 +66,11 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
           <roundCorners/>
           <cornerRadius>768</cornerRadius>
         </multipleEnclosure>
+        <startXdisp>1</startXdisp>
         <startYdisp>-144</startYdisp>
+        <multipleXdisp>3</multipleXdisp>
         <multipleYdisp>-144</multipleYdisp>
+        <mmRestXdisp>5</mmRestXdisp>
         <mmRestYdisp>-144</mmRestYdisp>
         <leftMmBracketChar>91</leftMmBracketChar>
         <rightMmBracketChar>93</rightMmBracketChar>
@@ -93,6 +96,7 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
       <endMeas>1000</endMeas>
       <startChar>164</startChar>
       <base>10</base>
+      <offset>2</offset>
       <prefix>&lt;|</prefix>
       <suffix>&gt;|</suffix>
       <countFromOne/>
@@ -122,6 +126,7 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_EQ(measureNumberRegion->startMeas, 1);
     EXPECT_EQ(measureNumberRegion->endMeas, 1000);
     EXPECT_EQ(measureNumberRegion->base, 10);
+    EXPECT_EQ(measureNumberRegion->numberOffset, 2);
     EXPECT_EQ(measureNumberRegion->prefix, "<|");
     EXPECT_EQ(measureNumberRegion->suffix, ">|");
     EXPECT_TRUE(measureNumberRegion->countFromOne);
@@ -169,8 +174,11 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_EQ(scoreData->multipleEnclosure->shape, others::Enclosure::Shape::Ellipse);
 
     // Other fields
+    EXPECT_EQ(scoreData->startXdisp, 1);
     EXPECT_EQ(scoreData->startYdisp, -144);
+    EXPECT_EQ(scoreData->multipleXdisp, 3);
     EXPECT_EQ(scoreData->multipleYdisp, -144);
+    EXPECT_EQ(scoreData->mmRestXdisp, 5);
     EXPECT_EQ(scoreData->mmRestYdisp, -144);
     EXPECT_EQ(scoreData->leftMmBracketChar, 91);
     EXPECT_EQ(scoreData->rightMmBracketChar, 93);

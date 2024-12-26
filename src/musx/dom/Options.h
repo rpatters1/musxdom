@@ -176,6 +176,7 @@ public:
     bool beamFourEighthsInCommonTime{};      ///< "Beam Four Eighth Notes Together in Common Time"
     bool beamThreeEighthsInCommonTime{};     ///< "Beam Three Eighth Notes Together Before/After An Eighth Rest"
     bool dispHalfStemsOnRests{};             ///< "Display Half-Stems for Beamed Rests" (xml node is `<doStemStubs>`)
+    bool oldFinaleRestBeams{};               ///< Compatibility setting for legacy Finale files
     bool spanSpace{};                        ///< "Allow Primary Beam Within a Space"
     bool extendSecBeamsOverRests{};          ///< "Extend Secondary Beams Over Rests"
     Efix beamWidth{};                        ///< Thickness of beams in @ref Efix.
@@ -559,6 +560,7 @@ public:
         Incorporate     ///< Incorporate manual positioning. (xml value is "incorp")
     };
 
+    // layoutType appears to be cruft left over from legacy Finale. The only value seems to be "entry".
     Evpu minWidth{};                        ///< Minimum measure width in @ref Evpu.
     Evpu maxWidth{};                        ///< Maximum measure width in @ref Evpu.
     Evpu minDistance{};                     ///< Minimum distance between items in @ref Evpu.
@@ -575,6 +577,7 @@ public:
     ManualPositioning manualPositioning{};  ///< Manual positioning choice.
     bool ignoreHidden{};                    ///< Ignore hidden notes. (This value is reversed in the Finale UI.)
     bool interpolateAllotments{};           ///< Interpolate allotments.
+    bool usePrinter{};                      ///< "Use Fonts & Resolution From Printer" (may be a Windows-only option)
     bool useAllottmentTables{};             ///< Use allotment tables for spacing.
     Edu referenceDuration{};                ///< Reference duration for spacing in @ref Edu.
     Evpu referenceWidth{};                  ///< Reference width for spacing in @ref Evpu.

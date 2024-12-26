@@ -41,6 +41,7 @@ TEST(BeamOptionsTest, PropertiesTest)
       <beamFourEighthsInCommonTime/>
       <beamThreeEighthsInCommonTime/>
       <doStemStubs/>
+      <oldFinaleRestBeams/>
       <spanSpace/>
       <extendSecBeamsOverRests/>
       <beamWidth>768</beamWidth>
@@ -69,6 +70,7 @@ TEST(BeamOptionsTest, PropertiesTest)
     EXPECT_TRUE(beamOptions->beamFourEighthsInCommonTime);
     EXPECT_TRUE(beamOptions->beamThreeEighthsInCommonTime);
     EXPECT_TRUE(beamOptions->dispHalfStemsOnRests);
+    EXPECT_TRUE(beamOptions->oldFinaleRestBeams);
     EXPECT_TRUE(beamOptions->spanSpace);
     EXPECT_TRUE(beamOptions->extendSecBeamsOverRests);
     EXPECT_EQ(beamOptions->beamWidth, 768);

@@ -29,8 +29,9 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <tuple>
-#include <iostream>
+#include <sstream>
 
+#include "musx/util/Logger.h"
 #include "musx/xml/XmlInterface.h"
 #include "musx/dom/BaseClasses.h"
 
@@ -132,15 +133,14 @@ protected:
      * @tparam ParserFunc the parser function (usually inferred from the call)
      */
     template<typename DataType, typename ParserFunc>
-    static void getFieldFromXml(const XmlElementPtr& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc, bool expected = true)
+    static void getFieldFromXml(const XmlElementPtr& element, const std::string& nodeName, DataType& dataField, ParserFunc parserFunc, bool expected = false)
     {
         if (auto childElement = element->getFirstChildElement(nodeName)) {
             dataField = parserFunc(childElement);
         } else if (expected) {
-#ifdef MUSX_LOG_MISSING_FIELDS
-            //stdout in lieu of logging for now
-            std::cout << "Expected field <" << element->getTagName() << "><" << nodeName << "> not found." << std::endl;
-#endif
+            std::stringstream msg;
+            msg << "Expected field <" << element->getTagName() << "><" << nodeName << "> not found.";
+            util::Logger::log(util::Logger::LogLevel::Warning, msg.str());
         }
     }
 
@@ -211,15 +211,14 @@ public:
         std::string msg = [value]() {
             if constexpr (std::is_arithmetic_v<FromClass>) {
                 return "Invalid enum value from xml: " + std::to_string(value);
-            }
-            else {
+            } else {
                 return "Invalid enum value from xml: " + std::string(value);
             }
         }();
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
         throw std::invalid_argument(msg);
 #else
-        std::cout << msg << std::endl;
+        util::Logger::log(util::Logger::LogLevel::Warning, msg);
         return {};
 #endif
     }
@@ -271,11 +270,11 @@ struct FieldPopulator : public FactoryBase
                     }
                 }();
                 if (requireField) {
-                    std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list";
+                    std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.";
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
                     throw std::invalid_argument(msg);
 #else
-                    std::cout << msg << std::endl;
+                    util::Logger::log(util::Logger::LogLevel::Warning, msg);
 #endif
                 }
             }
