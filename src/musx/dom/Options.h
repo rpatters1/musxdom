@@ -559,6 +559,7 @@ public:
         Incorporate     ///< Incorporate manual positioning. (xml value is "incorp")
     };
 
+    // layoutType appears to be a field that was never used for anything
     Evpu minWidth{};                        ///< Minimum measure width in @ref Evpu.
     Evpu maxWidth{};                        ///< Maximum measure width in @ref Evpu.
     Evpu minDistance{};                     ///< Minimum distance between items in @ref Evpu.
@@ -575,6 +576,7 @@ public:
     ManualPositioning manualPositioning{};  ///< Manual positioning choice.
     bool ignoreHidden{};                    ///< Ignore hidden notes. (This value is reversed in the Finale UI.)
     bool interpolateAllotments{};           ///< Interpolate allotments.
+    bool usePrinter{};                      ///< "Use Fonts & Resolution From Printer" (may be a Windows-only option)
     bool useAllottmentTables{};             ///< Use allotment tables for spacing.
     Edu referenceDuration{};                ///< Reference duration for spacing in @ref Edu.
     Evpu referenceWidth{};                  ///< Reference width for spacing in @ref Evpu.

@@ -66,8 +66,11 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
           <roundCorners/>
           <cornerRadius>768</cornerRadius>
         </multipleEnclosure>
+        <startXdisp>1</startXdisp>
         <startYdisp>-144</startYdisp>
+        <multipleXdisp>3</multipleXdisp>
         <multipleYdisp>-144</multipleYdisp>
+        <mmRestXdisp>5</mmRestXdisp>
         <mmRestYdisp>-144</mmRestYdisp>
         <leftMmBracketChar>91</leftMmBracketChar>
         <rightMmBracketChar>93</rightMmBracketChar>
@@ -169,8 +172,11 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_EQ(scoreData->multipleEnclosure->shape, others::Enclosure::Shape::Ellipse);
 
     // Other fields
+    EXPECT_EQ(scoreData->startXdisp, 1);
     EXPECT_EQ(scoreData->startYdisp, -144);
+    EXPECT_EQ(scoreData->multipleXdisp, 3);
     EXPECT_EQ(scoreData->multipleYdisp, -144);
+    EXPECT_EQ(scoreData->mmRestXdisp, 5);
     EXPECT_EQ(scoreData->mmRestYdisp, -144);
     EXPECT_EQ(scoreData->leftMmBracketChar, 91);
     EXPECT_EQ(scoreData->rightMmBracketChar, 93);

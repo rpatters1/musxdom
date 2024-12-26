@@ -134,8 +134,11 @@ public:
         std::shared_ptr<Enclosure> startEnclosure;    ///< Enclosure settings for numbers at start of system.
         std::shared_ptr<Enclosure> multipleEnclosure; ///< Enclosure settings for mid-system numbers.
 
+        Evpu startXdisp{};         ///< Horizontal offset for numbers at start of system.
         Evpu startYdisp{};         ///< Vertical offset for numbers at start of system.
+        Evpu multipleXdisp{};      ///< Horizontal offset for mid-system numbers.
         Evpu multipleYdisp{};      ///< Vertical offset for mid-system numbers.
+        Evpu mmRestXdisp{};        ///< Horizontal offset for multi-measure rest ranges.
         Evpu mmRestYdisp{};        ///< Vertical offset for multi-measure rest ranges.
         char32_t leftMmBracketChar{};  ///< UTF-32 code for the left bracket of multi-measure rest ranges.
         char32_t rightMmBracketChar{}; ///< UTF-32 code for the right bracket of multi-measure rest ranges.
