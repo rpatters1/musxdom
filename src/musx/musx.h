@@ -70,3 +70,7 @@
 #ifdef MUSX_USE_RAPIDXML // usually defined on the compile line or in CMakeLists.txt
 #include "xml/RapidXmlImpl.h"
 #endif
+
+#ifdef MUSX_USE_PUGIXML // usually defined on the compile line or in CMakeLists.txt
+#include "xml/PugiXmlImpl.h"
+#endif

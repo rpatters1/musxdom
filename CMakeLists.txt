@@ -47,6 +47,7 @@ endif()
 option(MUSX_THROW_ON_UNKNOWN_XML "Enable throwing on unknown XML" OFF)
 option(MUSX_USE_TINYXML2 "Enable tinyxml2 parsing classes" OFF)
 option(MUSX_USE_RAPIDXML "Enable rapidxml parsing classes" OFF)
+option(MUSX_USE_PUGIXML "Enable pugixml parsing classes" OFF)
 option(MUSX_DISPLAY_NODE_NAMES "Write node names to std::cout as they are processed" OFF)
 
 # Override defaults for stand-alone builds
@@ -54,6 +55,7 @@ if(MUSX_STANDALONE_BUILD)
     set(MUSX_THROW_ON_UNKNOWN_XML ON CACHE BOOL "Enable throwing on unknown XML" FORCE)
     set(MUSX_USE_TINYXML2 ON CACHE BOOL "Enable tinyxml2 parsing classes" FORCE)
     set(MUSX_USE_RAPIDXML ON CACHE BOOL "Enable rapidxml parsing classes" FORCE)
+    set(MUSX_USE_PUGIXML ON CACHE BOOL "Enable pugixml parsing classes" FORCE)
     set(MUSX_DISPLAY_NODE_NAMES OFF CACHE BOOL "Write node names to std::cout as they are processed" FORCE)
 endif()
 
@@ -65,6 +67,7 @@ target_compile_definitions(musx PUBLIC
 target_compile_definitions(musx INTERFACE
     $<$<BOOL:${MUSX_USE_TINYXML2}>:MUSX_USE_TINYXML2>
     $<$<BOOL:${MUSX_USE_RAPIDXML}>:MUSX_USE_RAPIDXML>
+    $<$<BOOL:${MUSX_USE_PUGIXML}>:MUSX_USE_PUGIXML>
 )
 
 # Ensure the library uses the correct include paths
