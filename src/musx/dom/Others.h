@@ -452,8 +452,8 @@ public:
         : OthersBase(document, partId, shareMode, cmper) {}
 
     // Public properties corresponding to the XML structure
-    int defaultClef{};              ///< Index of default clef for the staff.
-    int transposedClef{};           ///< Index of transposed clef for the staff.
+    ClefIndex defaultClef{};        ///< Index of default clef for the staff.
+    ClefIndex transposedClef{};     ///< Index of transposed clef for the staff.
     Evpu lineSpace{};               ///< Distance between staff lines.
     Evpu topBarlineOffset{};        ///< Offset for the top barline.
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
@@ -510,6 +510,12 @@ public:
     bool roundCorners{};               ///< Use rounded corners on frame
     Efix cornerRadius{};               ///< Corner radius for rounded corners.
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
+
+    /** @brief return display text with Enigma tags removed */
+    std::string getDisplayText() const;
+
+    /** @brief return display text with Enigma tags removed */
+    static std::string getDisplayText(const DocumentPtr& document, const Cmper textId);
 
     bool requireAllFields() const override { return false; }
 

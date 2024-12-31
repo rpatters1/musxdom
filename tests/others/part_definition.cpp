@@ -24,9 +24,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
-TEST(PartDefinitionTest, PopulateFields)
-{
-    constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -39,23 +37,49 @@ TEST(PartDefinitionTest, PopulateFields)
       <useAsSmpInst/>
       <smartMusicInst>-1</smartMusicInst>
     </partDef>
+    <textBlock cmper="42">
+      <textID>33</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
   </others>
+  <texts>
+    <blockText number="33">^fontid(1)^size(14)^nfx(2)Alto Sax in E^flat()</blockText>
+  </texts>
 </finale>
     )xml";
-    {
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
-        auto others = doc->getOthers();
-        ASSERT_TRUE(others);
-        
-        auto partDef = others->get<musx::dom::others::PartDefinition>(1);
-        ASSERT_TRUE(partDef) << "PartDefinition with cmper 1 not found";
-        
-        EXPECT_EQ(partDef->nameId, 42);
-        EXPECT_EQ(partDef->partOrder, 3);
-        EXPECT_EQ(partDef->copies, 2);
-        EXPECT_TRUE(partDef->extractPart);
-        EXPECT_TRUE(partDef->needsRecalc);
-        EXPECT_TRUE(partDef->useAsSmpInst);
-        EXPECT_EQ(partDef->smartMusicInst, -1);
-    }
+
+TEST(PartDefinitionTest, PopulateFields)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+    
+    auto partDef = others->get<musx::dom::others::PartDefinition>(1);
+    ASSERT_TRUE(partDef) << "PartDefinition with cmper 1 not found";
+    
+    EXPECT_EQ(partDef->nameId, 42);
+    EXPECT_EQ(partDef->partOrder, 3);
+    EXPECT_EQ(partDef->copies, 2);
+    EXPECT_TRUE(partDef->extractPart);
+    EXPECT_TRUE(partDef->needsRecalc);
+    EXPECT_TRUE(partDef->useAsSmpInst);
+    EXPECT_EQ(partDef->smartMusicInst, -1);
+}
+
+TEST(PartDefinitionTest, GetName)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+    
+    auto partDef = others->get<musx::dom::others::PartDefinition>(1);
+    ASSERT_TRUE(partDef) << "PartDefinition with cmper 1 not found";
+
+    EXPECT_EQ(partDef->getName(), "Alto Sax in Eb");
 }

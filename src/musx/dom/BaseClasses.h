@@ -46,10 +46,11 @@ using Inci = int16_t;       ///< Enigma "incidend" key type
 using Evpu = int32_t;       ///< EVPU value (288 per inch)
 using EvpuFloat = double;   ///< EVPU fractional value (288.0 per inch)
 using Efix = int32_t;       ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
-using Edu = int32_t;        ///< EDU value (1024 per quarter note)
+using Edu = int32_t;        ///< "Elapsed Durational Units" value (1024 per quarter note)
 
 using MeasCmper = int16_t;  ///< Enigma meas Cmper (may be negative when not applicable)
-using InstCmper = int16_t;  ///< Enigma inst Cmper (may be negative when not applicable)
+using InstCmper = int16_t;  ///< Enigma staff (inst) Cmper (may be negative when not applicable)
+using ClefIndex = int16_t;  ///< Index into @ref options::ClefOptions::clefDefs.
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 
@@ -390,6 +391,35 @@ public:
     bool roundCorners{};      ///< Whether the enclosure has rounded corners.
 
     static const xml::XmlElementArray<Enclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ *
+ * @class MusicRange
+ * @brief Represents a range of music using measure and EDUs.
+ * 
+ * This class is used to specify start and end points in a musical range using measures and EDUs.
+ */
+class MusicRange : public OthersBase
+{
+public:
+
+    /**
+     * @brief Constructs a MusicRange object.
+     * @param document Shared pointer to the document.
+     * @param partId The part ID if this range is unlinked.
+     * @param shareMode The share mode if this range is unlinked.
+     * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::InstrumentUsed.
+     */
+    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    MeasCmper startMeas{};      ///< Starting measure in the range.
+    Edu startEdu{};             ///< Starting EDU (Elapsed Durational Unit) in the range.
+    MeasCmper endMeas{};        ///< Ending measure in the range.
+    Edu endEdu{};               ///< Ending EDU (Elapsed Durational Unit) in the range.
+
+    static const xml::XmlElementArray<MusicRange> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

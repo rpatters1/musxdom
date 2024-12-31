@@ -225,7 +225,7 @@ public:
         static const xml::XmlElementArray<ClefDef> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
     };
 
-    int defaultClef{};                  ///< Default clef identifier. An index into `clefDefs`.
+    ClefIndex defaultClef{};            ///< Default clef identifier. An index into `clefDefs`.
     int clefChangePercent{};            ///< Percentage adjustment for end-of-measure clef changes. 100 means no adjustment. (xml node is `<endMeasClefPercent>`)
     Evpu clefChangeOffset{};            ///< Offset from next barline for end-of-measure clef changes. (xml node is `<endMeasClefPosAdd>`).
     Evpu clefFrontSepar{};              ///< Spacing before clef. (xml node is `<clefFront>`)

@@ -208,16 +208,9 @@ std::string others::MarkingCategory::getName() const
 // ***** PartDefinition *****
 // **************************
 
-
 std::string others::PartDefinition::getName() const
 {
-    auto document = getDocument();
-    auto textBlock = document->getOthers()->get<others::TextBlock>(this->nameId);
-    if (!textBlock) return {};
-    auto block = document->getTexts()->get<texts::BlockText>(textBlock->textId);
-    if (!block) return {};
-    const std::string accisAdded = musx::util::EnigmaString::replaceAccidentalTags(block->text);
-    return musx::util::EnigmaString::trimTags(accisAdded);
+    return TextBlock::getDisplayText(getDocument(), nameId);
 }
 
 // ********************
@@ -226,34 +219,64 @@ std::string others::PartDefinition::getName() const
 
 std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 {
-        std::string searchText = this->text;
-        auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
-        bool foundTag = false;
+    std::string searchText = this->text;
+    auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
+    bool foundTag = false;
 
-        while (true) {
-            if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
-                break;
-            }
-
-            size_t endOfTag = searchText.find_first_of(')');
-            if (endOfTag == std::string::npos) {
-                break;
-            }
-
-            std::string fontTag = searchText.substr(0, endOfTag + 1);
-            if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
-                return nullptr;
-            }
-
-            searchText.erase(0, endOfTag + 1);
-            foundTag = true;
+    while (true) {
+        if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
+            break;
         }
 
-        if (foundTag) {
-            return fontInfo;
+        size_t endOfTag = searchText.find_first_of(')');
+        if (endOfTag == std::string::npos) {
+            break;
         }
 
-        return nullptr;
+        std::string fontTag = searchText.substr(0, endOfTag + 1);
+        if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
+            return nullptr;
+        }
+
+        searchText.erase(0, endOfTag + 1);
+        foundTag = true;
+    }
+
+    if (foundTag) {
+        return fontInfo;
+    }
+
+    return nullptr;
+}
+
+// *********************
+// ***** TextBlock *****
+// *********************
+
+std::string others::TextBlock::getDisplayText() const
+{
+    auto document = getDocument();
+    auto getText = [&](const auto& block) -> std::string {
+        if (!block) return {};
+        auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text);
+        return musx::util::EnigmaString::trimTags(retval);
+    };
+    switch (textType) {
+    default:
+    case TextType::Block:
+        return getText(document->getTexts()->get<texts::BlockText>(textId));
+    case TextType::Expression:
+        return getText(document->getTexts()->get<texts::ExpressionText>(textId));        
+    }
+}
+
+std::string others::TextBlock::getDisplayText(const DocumentPtr& document, const Cmper textId)
+{
+    auto textBlock = document->getOthers()->get<others::TextBlock>(textId);
+    if (textBlock) {
+        return textBlock->getDisplayText();
+    }
+    return {};
 }
 
 // *****************************
