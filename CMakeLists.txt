@@ -16,6 +16,8 @@ if(NOT DEFINED BUILD_TESTING)
     set(BUILD_TESTING ON CACHE BOOL "Enable testing")
 endif()
 
+message(STATUS "musx BUILD_TESTING=${BUILD_TESTING}")
+
 if(BUILD_TESTING)
     enable_testing()
     add_subdirectory(tests)
@@ -23,8 +25,6 @@ endif()
 
 # Add the include directory
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-set(BUILD_TESTING OFF CACHE BOOL "Disable tests for external dependencies" FORCE)
 
 set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp

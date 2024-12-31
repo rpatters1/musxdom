@@ -181,6 +181,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
     dom::others::TextBlock,
+    dom::others::Staff,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,

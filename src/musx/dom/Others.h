@@ -194,48 +194,6 @@ public:
 };
 
 /**
- * @class TextBlock
- * @brief Represents the attributes of a Finale "textBlock".
- *
- * @todo After identifying all possible fields, remove the override of #TextBlock::requireAllFields.
- *
- * The cmper is the textBlock ID, representing unique text blocks in the Finale document.
- * This class is identified by the XML node name "textBlock".
- */
-class TextBlock : public OthersBase
-{
-public:
-    /** @brief Enum for textTag values */
-    enum class TextType
-    {
-        Block,      ///< #textId is a #Cmper for a @ref texts::BlockText
-        Expression  ///< #textId is a #Cmper for a @ref texts::ExpressionText
-    };
-
-    /** @brief Constructor function */
-    explicit TextBlock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
-
-    // Public properties corresponding to the XML structure
-    Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
-    int lineSpacingPercentage{};       ///< Line spacing percentage.
-    bool newPos36{};                   ///< This is likely a compatibility setting. Best guess is that blocks created before Finale 3.6 do not have this set.
-    bool showShape{};                  ///< Show shape
-    bool noExpandSingleWord{};         ///< Do not expand single word
-    bool wordWrap{};                   ///< Wrap words (in frames)
-    Evpu width{};                      ///< Width of frame
-    Evpu height{};                     ///< Height of frame
-    bool roundCorners{};               ///< Use rounded corners on frame
-    Efix cornerRadius{};               ///< Corner radius for rounded corners.
-    TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
-
-    bool requireAllFields() const override { return false; }
-
-    constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextBlock> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
-};
-
-/**
  * @enum RehearsalMarkStyle
  * @brief Specifies the sequencing style for rehearsal marks
  */
@@ -478,6 +436,85 @@ public:
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartGlobals> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class Staff
+ * @brief Represents the definition of a Finale staff.
+ *
+ * The cmper is the staff ID. This class is identified by the XML node name "staffSpec".
+ */
+class Staff : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit Staff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    int defaultClef{};              ///< Index of default clef for the staff.
+    int transposedClef{};           ///< Index of transposed clef for the staff.
+    Evpu lineSpace{};               ///< Distance between staff lines.
+    Evpu topBarlineOffset{};        ///< Offset for the top barline.
+    Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
+    Evpu dwRestOffset{};            ///< Offset for downstem rests.
+    Evpu wRestOffset{};             ///< Offset for whole rests.
+    Evpu hRestOffset{};             ///< Offset for half rests.
+    Evpu otherRestOffset{};         ///< Offset for other rests.
+    Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
+    Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
+    int staffLines{};               ///< Number of lines in the staff.
+    int stemReversal{};             ///< Stem reversal value.
+    Cmper fullName{};               ///< Full name @ref TextBlock ID.
+    Cmper abbrvName{};              ///< Abbreviated name @ref TextBlock ID.
+    Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<Staff> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TextBlock
+ * @brief Represents the attributes of a Finale "textBlock".
+ *
+ * @todo After identifying all possible fields, remove the override of #TextBlock::requireAllFields.
+ *
+ * The cmper is the textBlock ID, representing unique text blocks in the Finale document.
+ * This class is identified by the XML node name "textBlock".
+ */
+class TextBlock : public OthersBase
+{
+public:
+    /** @brief Enum for textTag values */
+    enum class TextType
+    {
+        Block,      ///< #textId is a #Cmper for a @ref texts::BlockText
+        Expression  ///< #textId is a #Cmper for a @ref texts::ExpressionText
+    };
+
+    /** @brief Constructor function */
+    explicit TextBlock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
+    int lineSpacingPercentage{};       ///< Line spacing percentage.
+    bool newPos36{};                   ///< This is likely a compatibility setting. Best guess is that blocks created before Finale 3.6 do not have this set.
+    bool showShape{};                  ///< Show shape
+    bool noExpandSingleWord{};         ///< Do not expand single word
+    bool wordWrap{};                   ///< Wrap words (in frames)
+    Evpu width{};                      ///< Width of frame
+    Evpu height{};                     ///< Height of frame
+    bool roundCorners{};               ///< Use rounded corners on frame
+    Efix cornerRadius{};               ///< Corner radius for rounded corners.
+    TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextBlock> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
