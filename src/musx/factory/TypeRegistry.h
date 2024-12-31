@@ -126,13 +126,13 @@ public:
                             *instance = *scoreValue;
                         }
                         else {
-                            throw std::invalid_argument("score instance not found for partially linked part instance");
+                            throw std::invalid_argument("Score instance not found for partially linked part instance");
                         }
                     }
                     factory::FieldPopulator<T>::populate(instance, node, elementLinker);
                     return instance;
                 } else {
-                    throw std::runtime_error("Selected type is not constructible with given arguments");
+                    throw std::runtime_error("Type for " + node->getTagName() + " is not constructible with given arguments");
                 }
             },
             typePtr.value()
@@ -178,6 +178,7 @@ using RegisteredOptions = TypeRegistry <
  */
 using RegisteredOthers = TypeRegistry <
     dom::others::FontDefinition,
+    dom::others::InstrumentUsed,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
     dom::others::TextBlock,

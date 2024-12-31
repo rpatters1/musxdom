@@ -60,6 +60,29 @@ public:
     static const xml::XmlElementArray<FontDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
+class Staff;
+/**
+ * @class InstrumentUsed
+ * @brief An array of InstrumentUsed defines a set of staves in a staff system or in Scroll View.
+ *
+ * This class is identified by the XML node name "instUsed".
+ */
+class InstrumentUsed : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit InstrumentUsed(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
+
+    InstCmper staffId{};                    ///< Staff cmper (xml node is `<inst>`)
+    Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
+    std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
+
+    static std::shared_ptr<Staff> getStaffAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
+
+    constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<InstrumentUsed> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
 /**
  * @class LayerAttributes
  * @brief Represents the attributes of a Finale "layer".
@@ -465,9 +488,12 @@ public:
     Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
     int staffLines{};               ///< Number of lines in the staff.
     int stemReversal{};             ///< Stem reversal value.
-    Cmper fullName{};               ///< Full name @ref TextBlock ID.
-    Cmper abbrvName{};              ///< Abbreviated name @ref TextBlock ID.
+    Cmper fullNameTextId{};         ///< Full name @ref TextBlock ID. (xml node is `<fullName>`)
+    Cmper abbrvNameTextId{};        ///< Abbreviated name @ref TextBlock ID. (xml node is `<abbrvName>`)
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
+
+    /// @brief Get the full staff name without Enigma tags
+    std::string getFullName() const;
 
     bool requireAllFields() const override { return false; }
 
@@ -512,10 +538,10 @@ public:
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
 
     /** @brief return display text with Enigma tags removed */
-    std::string getDisplayText() const;
+    std::string getText(bool trimTags = false) const;
 
     /** @brief return display text with Enigma tags removed */
-    static std::string getDisplayText(const DocumentPtr& document, const Cmper textId);
+    static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false);
 
     bool requireAllFields() const override { return false; }
 

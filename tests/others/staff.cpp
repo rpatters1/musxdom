@@ -82,8 +82,8 @@ TEST(StaffTest, PopulateFields)
         EXPECT_EQ(staff1->hRestOffset, -4);
         EXPECT_EQ(staff1->otherRestOffset, -4);
         EXPECT_EQ(staff1->stemReversal, -1);
-        EXPECT_EQ(staff1->fullName, 75);
-        EXPECT_EQ(staff1->abbrvName, 76);
+        EXPECT_EQ(staff1->fullNameTextId, 75);
+        EXPECT_EQ(staff1->abbrvNameTextId, 76);
         EXPECT_EQ(staff1->topRepeatDotOff, -3);
         EXPECT_EQ(staff1->botRepeatDotOff, -5);
         EXPECT_EQ(staff1->vertTabNumOff, -1024);

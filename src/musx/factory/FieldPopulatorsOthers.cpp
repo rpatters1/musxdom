@@ -181,6 +181,14 @@ MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
 
 // Classes from Others.h
 
+MUSX_XML_ELEMENT_ARRAY(InstrumentUsed, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
+    {"trackType", [](const XmlElementPtr&, const std::shared_ptr<InstrumentUsed>&) { /* this field seems like it was for future enhancement */ }},
+    {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
+    {"range", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i)
+        { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(LayerAttributes, {
     {"restOffset", [](const XmlElementPtr& e, const std::shared_ptr<LayerAttributes>& i) { i->restOffset = e->getTextAs<int>(); }},
     {"flipTies", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->freezTiesToStems = true; }},
@@ -193,7 +201,7 @@ MUSX_XML_ELEMENT_ARRAY(LayerAttributes, {
     {"ignoreHidden", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->ignoreHiddenNotesOnly = true; }},
     {"ignoreHiddenLayers", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->ignoreHiddenLayers = true; }},
     {"hideLayer", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->hideLayer = true; }},
-});
+    });
 
 MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
     {"categoryType", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->categoryType = toEnum<MarkingCategory::CategoryType>(e->getTextTrimmed()); }},
@@ -313,8 +321,8 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"botRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
     {"stemReversal", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemReversal = e->getTextAs<int>(); }},
-    {"fullName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fullName = e->getTextAs<Cmper>(); }},
-    {"abbrvName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->abbrvName = e->getTextAs<Cmper>(); }},
+    {"fullName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fullNameTextId = e->getTextAs<Cmper>(); }},
+    {"abbrvName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->abbrvNameTextId = e->getTextAs<Cmper>(); }},
     {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
 });
 

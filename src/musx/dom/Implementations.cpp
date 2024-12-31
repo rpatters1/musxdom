@@ -191,6 +191,17 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     return retval;
 }
 
+// **************************
+// ***** InstrumentUsed *****
+// **************************
+
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
+{
+    if (index > iuArray.size()) return nullptr;
+    auto iuItem = iuArray[index];
+    return iuItem->getDocument()->getOthers()->getEffectiveForPart<others::Staff>(iuItem->getPartId(), iuItem->staffId);
+}
+
 // ****************************
 // ***** MarkingCategiory *****
 // ****************************
@@ -210,7 +221,7 @@ std::string others::MarkingCategory::getName() const
 
 std::string others::PartDefinition::getName() const
 {
-    return TextBlock::getDisplayText(getDocument(), nameId);
+    return TextBlock::getText(getDocument(), nameId, true); // true: trim tags
 }
 
 // ********************
@@ -249,15 +260,25 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
     return nullptr;
 }
 
+// *****************
+// ***** Staff *****
+// *****************
+
+std::string others::Staff::getFullName() const
+{
+    return others::TextBlock::getText(getDocument(), fullNameTextId, true); // true: strip enigma tags
+}
+
 // *********************
 // ***** TextBlock *****
 // *********************
 
-std::string others::TextBlock::getDisplayText() const
+std::string others::TextBlock::getText(bool trimTags) const
 {
     auto document = getDocument();
     auto getText = [&](const auto& block) -> std::string {
         if (!block) return {};
+        if (!trimTags) return block->text;
         auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text);
         return musx::util::EnigmaString::trimTags(retval);
     };
@@ -270,11 +291,11 @@ std::string others::TextBlock::getDisplayText() const
     }
 }
 
-std::string others::TextBlock::getDisplayText(const DocumentPtr& document, const Cmper textId)
+std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags)
 {
     auto textBlock = document->getOthers()->get<others::TextBlock>(textId);
     if (textBlock) {
-        return textBlock->getDisplayText();
+        return textBlock->getText(trimTags);
     }
     return {};
 }

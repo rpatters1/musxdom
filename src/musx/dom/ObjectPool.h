@@ -160,7 +160,6 @@ public:
         return typedPtr;
     }
 
-
     /**
      * @brief Retrieves the first (and usually only) object of a specific type from the pool for a part
      *
@@ -240,6 +239,16 @@ public:
     std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper = std::nullopt) const
     {
         return ObjectPool<OneCmperBase>::template getArray<T>({ std::string(T::XmlNodeName), 0, cmper });
+    }
+
+    /** @brief OneCmperBase version of #ObjectPool::getArray with call for part
+     *
+     * Use this with items that always exist for parts, such as @ref InstrumentUsed lists.
+    */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArrayForPart(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
+    {
+        return ObjectPool<OneCmperBase>::template getArray<T>({ std::string(T::XmlNodeName), partId, cmper });
     }
 
     /** @brief OneCmperBase version of #ObjectPool::get */
