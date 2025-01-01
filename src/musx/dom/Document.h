@@ -67,6 +67,11 @@ public:
     /** @brief Retrieves the const others pool */
     const OthersPoolPtr& getOthers() const { return m_others; }
     
+    /** @brief Retrieves the entry pool */
+    EntryPoolPtr& getEntries() { return m_entries; }
+    /** @brief Retrieves the entry others pool */
+    const EntryPoolPtr& getEntries() const { return m_entries; }
+
     /** @brief Retrieves the texts pool */
     TextsPoolPtr& getTexts() { return m_texts; }
     /** @brief Retrieves the const texts pool */
@@ -82,7 +87,7 @@ private:
      OptionsPoolPtr m_options;  ///< The <options> pool
      OthersPoolPtr m_others;    ///< The <others> pool
      ///< @todo DetailsPoolPtr
-     ///< @todo EntriesPoolPtr
+     EntryPoolPtr m_entries;    ///< The <entries> pool
      TextsPoolPtr m_texts;      ///< The <texts> pool
 
     // Grant the factory function access to the private constructor

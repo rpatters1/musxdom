@@ -37,6 +37,22 @@
 namespace musx {
 namespace dom {
 
+// *****************
+// ***** Entry *****
+// *****************
+
+std::shared_ptr<Entry> Entry::getNext() const
+{
+    if (!m_next) return nullptr;
+    return getDocument()->getEntries()->get<Entry>(m_next);
+}
+
+std::shared_ptr<Entry> Entry::getPrevious() const
+{
+    if (!m_prev) return nullptr;
+    return getDocument()->getEntries()->get<Entry>(m_prev);
+}
+
 // ***********************
 // ***** FontOptions *****
 // ***********************

@@ -77,6 +77,9 @@ public:
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
     std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
+    /// @brief Returns the @ref Staff instance at a specified index of iuArray
+    /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
+    /// @param index The index to finc.
     static std::shared_ptr<Staff> getStaffAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.

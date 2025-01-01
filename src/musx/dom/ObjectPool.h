@@ -32,6 +32,7 @@
 #include <limits>
 
 #include "BaseClasses.h"
+#include "Entries.h"
 
 namespace musx {
 namespace dom {
@@ -243,7 +244,7 @@ public:
 
     /** @brief OneCmperBase version of #ObjectPool::getArray with call for part
      *
-     * Use this with items that always exist for parts, such as @ref InstrumentUsed lists.
+     * Use this with items that always exist for parts, such as @ref others::InstrumentUsed lists.
     */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArrayForPart(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
@@ -276,6 +277,22 @@ public:
 };
 /** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;
+
+/** @brief Entry pool */
+class EntryPool : public ObjectPool<Entry, EntryNumber>
+{
+public:
+    /** @brief Others version of #ObjectPool::add */
+    void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
+    { ObjectPool::add({entryNumber, 0, std::nullopt, std::nullopt, std::nullopt}, instance); }
+
+    /** @brief EntryPool version of #ObjectPool::get */
+    template <typename T>
+    std::shared_ptr<T> get(EntryNumber entryNumber) const
+    { return ObjectPool::get<T>({entryNumber, 0, std::nullopt, std::nullopt, std::nullopt}); }
+};
+/** @brief Shared `EntryPool` pointer */
+using EntryPoolPtr = std::shared_ptr<EntryPool>;
 
 /** @brief Text pool */
 class TextsPool : public OneCmperPool<TextsBase>

@@ -82,13 +82,17 @@ public:
 #ifdef MUSX_DISPLAY_NODE_NAMES
                 auto it = alreadyDisplayed.find(childElement->getTagName());
                 if (it == alreadyDisplayed.end()) {
-                    util::Logger::log(util::Logger::LogLevel::Verbose, childElement->getTagName());
+                    util::Logger::log(util::Logger::LogLevel::Verbose, "  " + childElement->getTagName());
                     alreadyDisplayed.emplace(childElement->getTagName());
                 }
 #endif
                 auto typedPtr = std::dynamic_pointer_cast<ObjectBase>(basePtr);
                 assert(typedPtr); // program bug if null
-                pool->add(childElement->getTagName(), typedPtr);
+                if constexpr (std::is_same_v<PoolType, EntryPool>) {
+                    pool->add(typedPtr->getEntryNumber(), typedPtr);
+                } else {
+                    pool->add(childElement->getTagName(), typedPtr);
+                }
             }
         }
 
@@ -164,6 +168,49 @@ public:
             return RegisteredOthers::createInstance(document->getOthers(), element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>());
         }
+    }
+};
+
+/**
+ * @brief Factory class for creating `Entry` objects from XML.
+ *
+ * This class specializes `PoolFactory` to handle the creation of `Entry` objects, which 
+ * represent chords and notes.
+ */
+class EntryFactory : public PoolFactory<EntryFactory, dom::Entry, dom::EntryPool>
+{
+public:
+    using PoolFactory::create;
+
+    /**
+     * @brief Extracts an `Entry` object from an XML element.
+     *
+     * Extracts an `EntryFactory` derived object from the given XML element by delegating 
+     * to the `RegisteredEntries` class. This allows the creation of `Options` objects from XML.
+     *
+     * @param element The XML element from which to extract the object.
+     * @param document The document object providing context for the XML parsing.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @return A shared pointer to the created object.
+     */
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    {
+        auto entnumAttr = element->findAttribute("entnum");
+        if (!entnumAttr) {
+            throw std::invalid_argument("missing entum attribute for entry");
+        }
+        auto prevAttr = element->findAttribute("prev");
+        if (!entnumAttr) {
+            throw std::invalid_argument("missing prev attribute for entry");
+        }
+        auto nextAttr = element->findAttribute("next");
+        if (!entnumAttr) {
+            throw std::invalid_argument("missing next attribute for entry");
+        }
+        return RegisteredEntries::createInstance(document->getEntries(), element, elementLinker, document,
+            entnumAttr->getValueAs<EntryNumber>(),
+            prevAttr->getValueAs<EntryNumber>(),
+            nextAttr->getValueAs<EntryNumber>());
     }
 };
 

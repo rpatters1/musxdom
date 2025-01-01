@@ -41,16 +41,18 @@
 namespace musx {
 namespace dom {
 
-using Cmper = uint16_t;     ///< Enigma "comperator" key type
-using Inci = int16_t;       ///< Enigma "incidend" key type
-using Evpu = int32_t;       ///< EVPU value (288 per inch)
-using EvpuFloat = double;   ///< EVPU fractional value (288.0 per inch)
-using Efix = int32_t;       ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
-using Edu = int32_t;        ///< "Elapsed Durational Units" value (1024 per quarter note)
+using Cmper = uint16_t;         ///< Enigma "comperator" key type
+using Inci = int16_t;           ///< Enigma "incidend" key type
+using Evpu = int32_t;           ///< EVPU value (288 per inch)
+using EvpuFloat = double;       ///< EVPU fractional value (288.0 per inch)
+using Efix = int32_t;           ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
+using Edu = int32_t;            ///< "Elapsed Durational Units" value (1024 per quarter note)
 
-using MeasCmper = int16_t;  ///< Enigma meas Cmper (may be negative when not applicable)
-using InstCmper = int16_t;  ///< Enigma staff (inst) Cmper (may be negative when not applicable)
-using ClefIndex = int16_t;  ///< Index into @ref options::ClefOptions::clefDefs.
+using MeasCmper = int16_t;      ///< Enigma meas Cmper (may be negative when not applicable)
+using InstCmper = int16_t;      ///< Enigma staff (inst) Cmper (may be negative when not applicable)
+using ClefIndex = int16_t;      ///< Index into @ref options::ClefOptions::clefDefs.
+using EntryNumber = int32_t;    ///< Entry identifier.
+using NoteNumber = int16_t;     ///< Note identifier.
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 

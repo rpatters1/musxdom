@@ -29,6 +29,7 @@
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
+#include "musx/dom/Entries.h"
 #include "musx/dom/Texts.h"
 #include "musx/xml/XmlInterface.h"
 #include "FieldPopulatorsOptions.h"
@@ -117,16 +118,18 @@ public:
                         shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
                     }
                     auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
-                    if (instance->getShareMode() == Base::ShareMode::Partial) {
-                        for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
-                            instance->addUnlinkedNode(child->getTagName());
-                        }
-                        auto scoreValue = pool->template get<T>(std::forward<Args>(args)...);
-                        if (scoreValue) {
-                            *instance = *scoreValue;
-                        }
-                        else {
-                            throw std::invalid_argument("Score instance not found for partially linked part instance");
+                    if constexpr (!std::is_same_v < PoolPtr, EntryPoolPtr>) {
+                        if (instance->getShareMode() == Base::ShareMode::Partial) {
+                            for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
+                                instance->addUnlinkedNode(child->getTagName());
+                            }
+                            auto scoreValue = pool->template get<T>(std::forward<Args>(args)...);
+                            if (scoreValue) {
+                                *instance = *scoreValue;
+                            }
+                            else {
+                                throw std::invalid_argument("Score instance not found for partially linked part instance");
+                            }
                         }
                     }
                     factory::FieldPopulator<T>::populate(instance, node, elementLinker);
@@ -190,6 +193,15 @@ using RegisteredOthers = TypeRegistry <
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName
+>;
+
+/**
+ * @brief The type registery for `<entries>`.
+ *
+ * These types are maintained in the order in which Finale serializes them.
+ */
+using RegisteredEntries = TypeRegistry <
+    dom::Entry
 >;
 
 /**
