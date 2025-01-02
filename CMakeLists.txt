@@ -29,6 +29,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsEntries.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsDetails.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOptions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOthers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/EnigmaString.cpp
@@ -46,6 +47,7 @@ endif()
 
 # Define options for compile-time macros
 option(MUSX_THROW_ON_UNKNOWN_XML "Enable throwing on unknown XML" OFF)
+option(MUSX_THROW_ON_INTEGRITY_CHECK_FAIL "Enable throwing integrity check failures" OFF)
 option(MUSX_USE_TINYXML2 "Enable tinyxml2 parsing classes" OFF)
 option(MUSX_USE_RAPIDXML "Enable rapidxml parsing classes" OFF)
 option(MUSX_USE_PUGIXML "Enable pugixml parsing classes" OFF)
@@ -54,6 +56,7 @@ option(MUSX_DISPLAY_NODE_NAMES "Write node names to std::cout as they are proces
 # Override defaults for stand-alone builds
 if(MUSX_STANDALONE_BUILD)
     set(MUSX_THROW_ON_UNKNOWN_XML ON CACHE BOOL "Enable throwing on unknown XML" FORCE)
+    set(MUSX_THROW_ON_INTEGRITY_CHECK_FAIL ON CACHE BOOL "Enable throwing integrity check failures" FORCE)
     set(MUSX_USE_TINYXML2 ON CACHE BOOL "Enable tinyxml2 parsing classes" FORCE)
     set(MUSX_USE_RAPIDXML ON CACHE BOOL "Enable rapidxml parsing classes" FORCE)
     set(MUSX_USE_PUGIXML ON CACHE BOOL "Enable pugixml parsing classes" FORCE)
@@ -63,6 +66,7 @@ endif()
 target_compile_definitions(musx PUBLIC
     $<$<BOOL:${MUSX_THROW_ON_UNKNOWN_XML}>:MUSX_THROW_ON_UNKNOWN_XML>
     $<$<BOOL:${MUSX_DISPLAY_NODE_NAMES}>:MUSX_DISPLAY_NODE_NAMES>
+    $<$<BOOL:${MUSX_THROW_ON_INTEGRITY_CHECK_FAIL}>:MUSX_THROW_ON_INTEGRITY_CHECK_FAIL>
 )
 
 target_compile_definitions(musx INTERFACE

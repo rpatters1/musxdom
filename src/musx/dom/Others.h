@@ -60,6 +60,44 @@ public:
     static const xml::XmlElementArray<FontDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class Frame
+ * @brief Represents the attributes of a TGF entry frame.
+ *
+ * The class is identified by the XML node name "frameSpec".
+ */
+class Frame : public OthersBase
+{
+public:
+    /** @brief Constructor function.
+     * The inci appears always to be zero. It might be either a holdover from legacy Finale or a bug
+     * in Finale's export routine.
+     */
+    explicit Frame(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci = 0)
+        : OthersBase(document, partId, shareMode, cmper, std::nullopt) {}
+
+    // Public properties corresponding to the XML structure
+    EntryNumber startEntry{}; ///< Start entry number for this frame.
+    EntryNumber endEntry{};   ///< End entry number for this frame.
+
+    void integrityCheck() const override
+    {
+        this->OthersBase::integrityCheck();
+        if (getInci().has_value() && getInci().value()) {
+            MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has non-zero inci [" + std::to_string(getInci().value()) + "].");
+        }
+        if (!startEntry) {
+            MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has no start entry.");
+        }
+        if (!endEntry) {
+            MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has no end entry.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "frameSpec"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<Frame> XmlMappingArray;    ///< Required for musx::factory::FieldPopulator.
+};
+
 class Staff;
 /**
  * @class InstrumentUsed
@@ -400,7 +438,6 @@ public:
 };
 
 /**
- *
  * @class PartDefinition
  * @brief Represents the attributes of a Finale "partDef".
  *

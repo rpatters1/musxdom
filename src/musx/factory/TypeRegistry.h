@@ -29,6 +29,7 @@
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
+#include "musx/dom/Details.h"
 #include "musx/dom/Entries.h"
 #include "musx/dom/Texts.h"
 #include "musx/xml/XmlInterface.h"
@@ -181,6 +182,7 @@ using RegisteredOptions = TypeRegistry <
  */
 using RegisteredOthers = TypeRegistry <
     dom::others::FontDefinition,
+    dom::others::Frame,
     dom::others::InstrumentUsed,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
@@ -193,6 +195,15 @@ using RegisteredOthers = TypeRegistry <
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName
+>;
+
+/**
+ * @brief The type registery for `<details>`.
+ *
+ * These types are maintained in the order in which Finale serializes them.
+ */
+using RegisteredDetails = TypeRegistry <
+    dom::details::GFrameHold
 >;
 
 /**

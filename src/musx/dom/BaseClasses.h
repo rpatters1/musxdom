@@ -36,6 +36,12 @@
 #error "Unable to detect operating system platform."
 #endif
 
+#ifdef MUSX_THROW_ON_INTEGRITY_CHECK_FAIL
+#define MUSX_INTEGRITY_ERROR(S) throw std::invalid_argument(S)
+#else
+#define MUSX_INTEGRITY_ERROR(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
+#endif
+
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
@@ -125,6 +131,15 @@ public:
     }
 
     /**
+     * @brief Allows a class to determine if it has been properly contructed by the factory.
+     *
+     * The defauly implementation does nothing.
+     *
+     * @throws std::invalid_argument if there is a problem.
+     */
+    virtual void integrityCheck() const { }
+
+    /**
      * @brief Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.
      *
      * Some classes make it difficult to discover all the possible xml tags that might be used for all its options.
@@ -183,17 +198,13 @@ protected:
  */
 class OthersBase : public Base
 {
-private:
-    Cmper m_cmper;                  ///< Common attribute: cmper (key value).
-    std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
-
 protected:
     /**
      * @brief Constructs an OthersBase object.
      * 
      * @param document A weak pointer to the parent document
      * @param partId The part Id for this Other, or zero if for score.
-     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
      * @param cmper The `Cmper` key value.
      * @param inci The array index (`Inci`).
      */
@@ -228,6 +239,72 @@ public:
      * @param inci The new `inci` value.
      */
     void setInci(std::optional<Inci> inci) { m_inci = inci; }
+
+private:
+    Cmper m_cmper;                  ///< Common attribute: cmper (key value).
+    std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
+};
+
+/**
+ * @brief Base class for all "details" types.
+ * 
+ * This class provides common attributes and methods for handling
+ * "details" types in the DOM, including `cmper1`, `cmper2`, and `inci`.
+ */
+class DetailsBase : public Base
+{
+protected:
+    /**
+     * @brief Constructs a DetailsBase object.
+     * 
+     * @param document A weak pointer to the parent document
+     * @param partId The part Id for this Other, or zero if for score.
+     * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
+     * @param cmper1 The first `Cmper` key value.
+     * @param cmper2 The second `Cmper` key value.
+     * @param inci The array index (`Inci`).
+     */
+    DetailsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt)
+        : Base(document, partId, shareMode), m_cmper1(cmper1), m_cmper2(cmper2), m_inci(inci) {}
+
+public:
+    /**
+     * @brief Gets the `cmper1` key value.
+     */
+    Cmper getCmper1() const { return m_cmper1; }
+
+    /**
+     * @brief Gets the `cmper2` key value.
+     */
+    Cmper getCmper2() const { return m_cmper2; }
+
+    /**
+     * @brief Sets the `cmper1` key value.
+     * @param cmper The new `cmper` value.
+     */
+    void setCmper1(Cmper cmper) { m_cmper1 = cmper; }
+
+    /**
+     * @brief Sets the `cmper2` key value.
+     * @param cmper The new `cmper` value.
+     */
+    void setCmper2(Cmper cmper) { m_cmper2 = cmper; }
+
+    /**
+     * @brief Gets the optional array index (`inci`).
+     */
+    std::optional<Inci> getInci() const { return m_inci; }
+
+    /**
+     * @brief Sets the array index (`inci`).
+     * @param inci The new `inci` value.
+     */
+    void setInci(std::optional<Inci> inci) { m_inci = inci; }
+
+private:
+    Cmper m_cmper1;                  ///< Common attribute: cmper1 (key value).
+    Cmper m_cmper2;                  ///< Common attribute: cmper2 (key value).
+    std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
 };
 
 class FontInfo;
@@ -238,9 +315,6 @@ class FontInfo;
  */
 class TextsBase : public Base
 {
-private:
-    Cmper m_textNumber;             ///< Common attribute: cmper (key value).
-
 public:
     /**
      * @brief Constructs a `TextsBase` object.
@@ -270,6 +344,9 @@ public:
      * the first font information in the text.
      */
     std::shared_ptr<FontInfo> parseFirstFontInfo() const;
+
+private:
+    Cmper m_textNumber;             ///< Common attribute: cmper (key value).
 };
 
 /**

@@ -271,12 +271,59 @@ public:
 class OthersPool : public OneCmperPool<OthersBase>
 {
 public:
-    /** @brief Others version of #ObjectPool::add */
+    /** @brief OthersPool version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
 };
 /** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;
+
+/**
+ * @class DetailsPool
+ * @brief A pool that manages collections of `DetailsBase` objects, organized by XML node names and `Cmper` values.
+ * 
+ * Examples of `OneCmperBase` classes are @ref OthersBase and @ref TextsBase.
+ */
+class DetailsPool : protected ObjectPool<DetailsBase>
+{
+public:
+    /** @brief DetailsPool version of #ObjectPool::getArray */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
+    {
+        return ObjectPool::template getArray<T>({ std::string(T::XmlNodeName), 0, cmper1, cmper2 });
+    }
+
+    /** @brief DetailsPool version of #ObjectPool::getArray with call for part
+     *
+     * Use this with items that always exist for parts, such as @ref others::InstrumentUsed lists.
+    */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArrayForPart(Cmper partId, std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
+    {
+        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 });
+    }
+
+    /** @brief DetailsPool version of #ObjectPool::get */
+    template <typename T>
+    std::shared_ptr<T> get(Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
+    {
+        return ObjectPool::get<T>({std::string(T::XmlNodeName), 0, cmper1, cmper2, inci});
+    }
+
+    /** @brief DetailsPool version of #ObjectPool::get */
+    template <typename T>
+    std::shared_ptr<T> getEffectiveForPart(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
+    {
+        return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper1, cmper2, inci});
+    }
+
+    /** @brief DetailsPool version of #ObjectPool::add */
+    void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
+    { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
+};
+/** @brief Shared `DetailsPool` pointer */
+using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
 
 /** @brief Entry pool */
 class EntryPool : public ObjectPool<Entry, EntryNumber>
@@ -284,12 +331,12 @@ class EntryPool : public ObjectPool<Entry, EntryNumber>
 public:
     /** @brief Others version of #ObjectPool::add */
     void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
-    { ObjectPool::add({entryNumber, 0, std::nullopt, std::nullopt, std::nullopt}, instance); }
+    { ObjectPool::add({ entryNumber, 0 }, instance); }
 
     /** @brief EntryPool version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get(EntryNumber entryNumber) const
-    { return ObjectPool::get<T>({entryNumber, 0, std::nullopt, std::nullopt, std::nullopt}); }
+    { return ObjectPool::get<T>({ entryNumber, 0 }); }
 };
 /** @brief Shared `EntryPool` pointer */
 using EntryPoolPtr = std::shared_ptr<EntryPool>;
@@ -300,7 +347,7 @@ class TextsPool : public OneCmperPool<TextsBase>
 public:
     /** @brief Texts version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
-    { ObjectPool::add({nodeName, instance->getPartId(), instance->getTextNumber(), std::nullopt, std::nullopt}, instance); }
+    { ObjectPool::add({ nodeName, instance->getPartId(), instance->getTextNumber() }, instance); }
 };
 /** @brief Shared `OthersPool` pointer */
 using TextsPoolPtr = std::shared_ptr<TextsPool>;

@@ -23,6 +23,7 @@
 #include <exception>
 #include <filesystem>
 #include <sstream>
+#include <functional>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -44,13 +45,47 @@ namespace dom {
 std::shared_ptr<Entry> Entry::getNext() const
 {
     if (!m_next) return nullptr;
-    return getDocument()->getEntries()->get<Entry>(m_next);
+    auto retval = getDocument()->getEntries()->get<Entry>(m_next);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has next entry " + std::to_string(m_next) + " that does not exist.");
+    }
+    return retval;
 }
 
 std::shared_ptr<Entry> Entry::getPrevious() const
 {
     if (!m_prev) return nullptr;
-    return getDocument()->getEntries()->get<Entry>(m_prev);
+    auto retval = getDocument()->getEntries()->get<Entry>(m_prev);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has previous entry " + std::to_string(m_prev) + " that does not exist.");
+    }
+    return retval;
+}
+
+Entry::NoteType Entry::calcNoteType() const
+{
+    if (duration <= 1 || duration >= 0x10000) {
+        throw std::invalid_argument("Duration is out of valid range for NoteType.");
+    }
+
+    // Find the most significant bit position
+    Edu value = duration;
+    Edu msb = 1;
+    while (value > 1) {
+        value >>= 1;
+        msb <<= 1;
+    }
+
+    return static_cast<Entry::NoteType>(msb);
+}
+
+int Entry::calcAugmentationDots() const
+{
+    int count = 0;
+    for (Edu msb = Edu(calcNoteType()) >> 1; duration & msb; msb >>= 1) {
+        count++;
+    }
+    return count;
 }
 
 // ***********************
@@ -205,6 +240,36 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         retval.emplace_back(std::move(path));
     }
     return retval;
+}
+
+// **********************
+// ***** GFrameHold *****
+// **********************
+
+void details::GFrameHold::iterateEntries(std::function<bool(const std::shared_ptr<const Entry>&)> iterator)
+{
+    auto doIteration = [&](const std::shared_ptr<others::Frame>& frame) -> bool {
+        if (frame) {
+            auto firstEntry = getDocument()->getEntries()->get<Entry>(frame->startEntry);
+            if (!firstEntry) {
+                MUSX_INTEGRITY_ERROR("Frame hold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
+                return true;
+            }
+            for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
+                if (!iterator(nextEntry)) {
+                    return false;
+                }
+                if (nextEntry->getEntryNumber() == frame->endEntry) {
+                    break;
+                }
+            }
+        }
+        return true;
+    };
+    if (!doIteration(getDocument()->getOthers()->get<others::Frame>(frame1))) return;
+    if (!doIteration(getDocument()->getOthers()->get<others::Frame>(frame2))) return;
+    if (!doIteration(getDocument()->getOthers()->get<others::Frame>(frame3))) return;
+    if (!doIteration(getDocument()->getOthers()->get<others::Frame>(frame4))) return;
 }
 
 // **************************

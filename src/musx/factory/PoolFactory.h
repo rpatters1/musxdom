@@ -172,6 +172,56 @@ public:
 };
 
 /**
+ * @brief Factory class for creating `Details` objects from XML.
+ *
+ * This class specializes `PoolFactory` to handle the creation of `Others` objects, representing 
+ * various attributes stored in an `OthersPool`. It includes an XML parsing mechanism to 
+ * extract and create these objects, which are used in the document model.
+ */
+class DetailsFactory : public PoolFactory<DetailsFactory, dom::DetailsBase, dom::DetailsPool>
+{
+public:
+    using PoolFactory::create;
+
+    /**
+     * @brief Extracts an `OthersBase` object from an XML element.
+     *
+     * Extracts an `OthersBase` derived object from the given XML element using the specified 
+     * attributes `cmper` and `inci`. Throws an exception if a required attribute is missing.
+     *
+     * @param element The XML element from which to extract the object.
+     * @param document The document object providing context for the XML parsing.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @return A shared pointer to the created object.
+     * @throws std::invalid_argument if required attributes are missing.
+     */
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    {
+        if (auto entnumAttribute = element->findAttribute("entnum")) {
+            /// @todo handle entry details here
+            return std::shared_ptr<Base>{};
+        }
+        auto cmper1Attribute = element->findAttribute("cmper1");
+        if (!cmper1Attribute) {
+            throw std::invalid_argument("missing cmper1 for details element " + element->getTagName());
+        }
+        auto cmper2Attribute = element->findAttribute("cmper2");
+        if (!cmper2Attribute) {
+            throw std::invalid_argument("missing cmper2 for details element " + element->getTagName());
+        }
+        auto inciAttribute = element->findAttribute("inci");
+        if (inciAttribute) {
+            return RegisteredDetails::createInstance(document->getOthers(), element, elementLinker,
+                document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
+        }
+        else {
+            return RegisteredDetails::createInstance(document->getOthers(), element, elementLinker,
+                document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>());
+        }
+    }
+};
+
+/**
  * @brief Factory class for creating `Entry` objects from XML.
  *
  * This class specializes `PoolFactory` to handle the creation of `Entry` objects, which 

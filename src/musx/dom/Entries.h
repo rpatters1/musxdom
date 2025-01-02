@@ -35,9 +35,6 @@ namespace dom {
  */
 class Note : public Base 
 {
-private:
-    NoteNumber m_noteId{}; ///< Unique identifier for the note.
-
 public:
     /** @brief Constructor function */
     explicit Note(const DocumentWeakPtr& document, NoteNumber noteId)
@@ -55,6 +52,9 @@ public:
     bool requireAllFields() const override { return false; }
 
     static const xml::XmlElementArray<Note> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+
+private:
+    NoteNumber m_noteId{}; ///< Unique identifier for the note.
 };
 
 /**
@@ -64,11 +64,6 @@ public:
  * This class is identified by the XML node name "entry".
  */
 class Entry : public Base {
-private:
-    EntryNumber m_entnum;   ///< Entry number.
-    EntryNumber m_prev;     ///< Previous entry number in the list. (0 if none)
-    EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
-
 public:
     /** @brief Constructor function
      *
@@ -77,10 +72,43 @@ public:
     explicit Entry(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, EntryNumber prev, EntryNumber next)
         : Base(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next) {}
 
-    Edu duration{};          ///< Duration of the entry, not taking into account tuplets. (xml node is `<dura>`).
+    /**
+     * @brief Enum class representing note types based on EDU values.
+     *
+     * The values are expressed in hexadecimal.
+     */
+    enum class NoteType : Edu {
+        Maxima = 0x8000,
+        Long = 0x4000,
+        Breve = 0x2000,
+        Whole = 0x1000,
+        Half = 0x0800,
+        Quarter = 0x0400,
+        Eighth = 0x0200,
+        Note16th = 0x0100,
+        Note32nd = 0x0080,
+        Note64th = 0x0040,
+        Note128th = 0x0020,
+        Note256th = 0x0010,
+        Note512th = 0x0008,
+        Note1024th = 0x0004,
+        Note2048th = 0x0002
+    };
+
+    /**
+     * @brief Duration of the entry, not taking into account tuplets.
+     *
+     * This is effectively the type of note (quarter, eight, whole etc.) plus the augmentation dots, if any.
+     * The most significant bit determines the note type and each set bit to the right is an augmentation dot.
+     *
+     * (xml node is `<dura>`)
+    */
+    Edu duration{};
     int numNotes{};          ///< Number of notes in the entry. There is an error if this is not the same as notes.size().
     bool isValid{};          ///< Should always be true.
     bool isNote{};           ///< If this value is false, the entry is a rest.
+    bool floatRest{};        ///< Is floating rest. If false, the first note element gives the staff position of the rest.
+    bool isHidden{};         ///< Indicates the entry is hidden, (xml node is `<ignore>`)
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
@@ -102,10 +130,38 @@ public:
     /// @brief Gets the previous entry in this frame or nullptr if none
     std::shared_ptr<Entry> getPrevious() const;
 
+    /**
+     * @brief Calculates the NoteType based on the most significant bit of the duration field.
+     *
+     * @return NoteType corresponding to the most significant bit of the duration.
+     * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
+     */
+    NoteType calcNoteType() const;
+
+    /**
+     * @brief Calculates the number of augmentation dots in the duration.
+     *
+     * @return The number of augmentation dots.
+     */
+    int calcAugmentationDots() const;
+
+    void integrityCheck() const override
+    {
+        this->Base::integrityCheck();
+        if (numNotes != notes.size()) {
+            MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
+        }
+    }
+
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "entry"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Entry> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+
+private:
+    EntryNumber m_entnum;   ///< Entry number.
+    EntryNumber m_prev;     ///< Previous entry number in the list. (0 if none)
+    EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
 };
 
 } // namespace dom

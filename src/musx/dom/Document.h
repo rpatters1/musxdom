@@ -67,6 +67,11 @@ public:
     /** @brief Retrieves the const others pool */
     const OthersPoolPtr& getOthers() const { return m_others; }
     
+    /** @brief Retrieves the details pool */
+    DetailsPoolPtr& getDetails() { return m_details; }
+    /** @brief Retrieves the const others pool */
+    const DetailsPoolPtr& getDetails() const { return m_details; }
+    
     /** @brief Retrieves the entry pool */
     EntryPoolPtr& getEntries() { return m_entries; }
     /** @brief Retrieves the entry others pool */
@@ -86,7 +91,7 @@ private:
      HeaderPtr m_header;        ///< The <header>
      OptionsPoolPtr m_options;  ///< The <options> pool
      OthersPoolPtr m_others;    ///< The <others> pool
-     ///< @todo DetailsPoolPtr
+     DetailsPoolPtr m_details;  ///< The <details> pool
      EntryPoolPtr m_entries;    ///< The <entries> pool
      TextsPoolPtr m_texts;      ///< The <texts> pool
 

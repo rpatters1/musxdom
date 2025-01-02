@@ -216,7 +216,7 @@ public:
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
         int staffPositon{};             ///< Staff position of the clef symbol's baseline (from top staffline). (xml node is `<clefYDisp>`)
         Efix baselineAdjust{};          ///< Additional baseline adjustment in Efix. (xml node is `<baseAdjust>`)
-        int shapeId{};                  ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
+        Cmper shapeId{};                ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
         bool isShape{};                 ///< Indicates if the clef is a shape.
         bool scaleToStaffHeight{};      ///< Indicates if the shape should scale to staff height.
         bool useOwnFont{};              ///< Indicates if the clef has its own font.

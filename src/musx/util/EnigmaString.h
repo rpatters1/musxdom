@@ -24,11 +24,12 @@
 #include <string>
 #include <vector>
 
-#include "musx/dom/BaseClasses.h"
-
-using namespace musx::dom;
-
 namespace musx {
+
+namespace dom {
+class FontInfo;
+} // namespace dom
+
 namespace util {
 
 /**
@@ -70,7 +71,7 @@ public:
      * - `^size` specifies the font size in points.
      * - `^nfx` specifies a bit mask of style properties. These are resolved with @ref dom::FontInfo::setEnigmaStyles.
      */
-    static bool parseFontCommand(const std::string& fontTag, FontInfo& fontInfo);
+    static bool parseFontCommand(const std::string& fontTag, dom::FontInfo& fontInfo);
 
     /** @brief Trims all font tags from an enigma string. */
     static std::string trimFontTags(const std::string& input);

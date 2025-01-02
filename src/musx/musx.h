@@ -39,6 +39,8 @@
  * - `MUSX_DISPLAY_NODE_NAMES`: Log each node name that is processed in the order found. (When verbose logging is specified.)
  * - `MUSX_THROW_ON_UNKNOWN_XML`: Throws `std::invalid_argument` if an unknown child node is encountered. Otherwise
  * it prints a message to `std::cerr`. This macro does not affect unknown top-level nodes, which are always silently skipped.
+ * - `MUSX_THROW_ON_INTEGRITY_CHECK_FAIL`: Throws `std::invalid_argument` if a class fails its integrity check. Otherwise
+ * it prints a message to `std::cerr`.
  *
  * The recommended way to define these macros is from your make file or build project. They are primarily intended
  * for debugging.
@@ -56,12 +58,12 @@
 
 #pragma once
 
-#include "xml/XmlInterface.h"
-#include "dom/Document.h"
-#include "factory/DocumentFactory.h"
 #include "util/ScoreFileEncoder.h"
 #include "util/EnigmaString.h"
 #include "util/Logger.h"
+#include "xml/XmlInterface.h"
+#include "dom/Document.h"
+#include "factory/DocumentFactory.h"
 
 #ifdef MUSX_USE_TINYXML2 // usually defined on the compile line or in CMakeLists.txt
 #include "xml/TinyXmlImpl.h"
