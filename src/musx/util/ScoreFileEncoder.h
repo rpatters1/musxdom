@@ -55,7 +55,7 @@ public:
      * @tparam CT the character type (signed or unsigned char). This is usually inferred.
      * @param [in,out] buffer a buffer that is re-coded in place,
      * @param [in] buffSize the number of characters in the buffer.
-     * @param [in,out] initialState a value to try for recoading. Must be a specific value to
+     * @param [in,out] initialState a value to try for recoding. Must be a specific value to
      */
     template<typename CT>
     static void recodeBuffer(CT* buffer, size_t buffSize, uint32_t initialState = INITIAL_STATE)
@@ -80,7 +80,7 @@ public:
      * 
      * @tparam T the container type (of signed or unsigned chars). This is usually inferred.
      * @param [in,out] buffer a container that is re-coded in place.
-     * @param [in,out] initialState a value to try for recoading. Must be a specific value to
+     * @param [in,out] initialState a value to try for recoding. Must be a specific value to
      * successfully decode EnigmaXml.
      */
     template <typename T>
@@ -90,7 +90,7 @@ public:
         static_assert(std::is_same<typename T::value_type, uint8_t>::value ||
                       std::is_same<typename T::value_type, char>::value,
                       "recodeBuffer can only be called with containers of uint8_t or char.");
-        return recodeBuffer(buffer.data(), buffer.size());
+        return recodeBuffer(buffer.data(), buffer.size(), initialState);
     }
 };
 
