@@ -96,9 +96,10 @@ public:
     /// @brief Describes how this instance is shared between part and score.
     enum class ShareMode
     {
-        All,            ///> All parts and score always share (no "share" attribute). Default.
-        Partial,        ///> Part and score share some attributes and have their own unlinked versions of others. (attribute "share"="true")
-        None            ///> Each part and score has its own version of the DOM class. (attribute "share"="false")
+        // this enum was giving Doxygen fits until I switched to using the slash-splat-bang-lt comment commands.
+        All,            /*!< All parts and score always share (no "share" attribute). Default. */
+        Partial,        /*!< Part and score share some attributes and have their own unlinked versions of others. (attribute "share"="true") */
+        None            /*!< Each part and score has its own version of the DOM class. (attribute "share"="false") */
     };
 
     /**
@@ -157,7 +158,7 @@ public:
      * An example is @ref others::TextBlock. By overriding this function, a class can allow its members to be discovered
      * as needed without causing error messages or throwing exceptions.
      *
-     * Note that this value only escapes errors on fields. Enum values must still have all values provided to avoid
+     * @remark This value only escapes errors on fields. Enum values must still have all values provided to avoid
      * error messages or exceptions.
      */
     virtual bool requireAllFields() const { return true; }
