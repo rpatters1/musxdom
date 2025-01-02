@@ -83,6 +83,7 @@ using DocumentPtr = std::shared_ptr<Document>;
 using DocumentWeakPtr = std::weak_ptr<Document>;
 
 /**
+ * @class Base
  * @brief Base class to enforce polymorphism across all DOM classes.
  */
 class Base
