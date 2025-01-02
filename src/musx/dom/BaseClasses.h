@@ -70,11 +70,6 @@ using DocumentWeakPtr = std::weak_ptr<Document>;
 
 /**
  * @brief Base class to enforce polymorphism across all DOM classes.
- * 
- * This class uses CRTP (Curiously Recurring Template Pattern) to ensure that all
- * derived classes define a static constexpr `XmlNodeName` of type `constexpr char[]`.
- * 
- * @tparam Derived The derived class inheriting from this base.
  */
 class Base
 {
@@ -82,7 +77,8 @@ public:
     /// @brief The container type for shared nodes
     using SharedNodes = std::set<std::string>;
 
-    ///> @enum ShareMode
+    /// @enum ShareMode
+    /// @brief Describes how this instance is shared between part and score.
     enum class ShareMode
     {
         All,            ///> All parts and score always share (no "share" attribute). Default.

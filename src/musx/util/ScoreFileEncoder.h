@@ -55,19 +55,21 @@ public:
      * @tparam CT the character type (signed or unsigned char). This is usually inferred.
      * @param [in,out] buffer a buffer that is re-coded in place,
      * @param [in] buffSize the number of characters in the buffer.
+     * @param [in,out] initialState a value to try for recoading. Must be a specific value to
      */
     template<typename CT>
-    static void recodeBuffer(CT* buffer, size_t buffSize)
+    static void recodeBuffer(CT* buffer, size_t buffSize, uint32_t initialState = INITIAL_STATE)
     {
         static_assert(std::is_same<CT, uint8_t>::value ||
                       std::is_same<CT, char>::value,
                       "recodeBuffer can only be called with buffers of uint8_t or char.");
-        uint32_t state = INITIAL_STATE;
+        uint32_t state = initialState;
         for (size_t i = 0; i < buffSize; i++) {
             if (i % RESET_LIMIT == 0) {
-                state = INITIAL_STATE;
+                state = initialState;
             }
-            state = state * 0x41c64e6d + 0x3039; // BSD rand()!
+            // this algorithm is BSD rand()!
+            state = state * 0x41c64e6d + 0x3039;
             uint16_t upper = state >> 16;
             uint8_t c = upper + upper / 255;
             buffer[i] ^= c;
@@ -77,10 +79,12 @@ public:
     /** @brief version of recodeBuffer for containers.
      * 
      * @tparam T the container type (of signed or unsigned chars). This is usually inferred.
-     * @param [in,out] buffer a container that is re-coded in place,
+     * @param [in,out] buffer a container that is re-coded in place.
+     * @param [in,out] initialState a value to try for recoading. Must be a specific value to
+     * successfully decode EnigmaXml.
      */
     template <typename T>
-    static void recodeBuffer(T& buffer)
+    static void recodeBuffer(T& buffer, uint32_t initialState = INITIAL_STATE)
     {
         // Ensure that the value type is either uint8_t or char
         static_assert(std::is_same<typename T::value_type, uint8_t>::value ||

@@ -34,7 +34,7 @@ namespace details {
  * @class GFrameHold
  * @brief Represents the attributes of a Finale frame holder.
  *
- * Cmper1 is the staff (inst) cmper and Cmper2 is the meas cmper
+ * Cmper1 is the staff (inst) @ref Cmper and Cmper2 is the measur @ref Cmper
  * This class is identified by the XML node name "gfhold".
  */
 class GFrameHold : public DetailsBase
@@ -43,9 +43,10 @@ public:
     /**
      * @brief Constructor function
      * @param document A weak pointer to the associated document.
-     * @param shareMode The sharing mode for this GFrameHold.
-     * @param inst The primary identifier for this GFrameHold.
-     * @param meas The secondary identifier for this GFrameHold.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this GFrameHold (probably always #ShareMode::All)
+     * @param inst The staff ID for this GFrameHold.
+     * @param meas The measure ID for this GFrameHold.
      */
     explicit GFrameHold(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas)
         : DetailsBase(document, partId, shareMode, inst, meas) {}
