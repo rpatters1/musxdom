@@ -39,19 +39,16 @@ namespace musx {
  */
 namespace xml {
 
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 /**
  * @brief Exception for load xml error.
  */
 class load_error : public std::runtime_error
 {
 public:
-    /**
-     * @brief Constructor
-     */
-    load_error(const char *msg) : std::runtime_error(msg) {}
+    using std::runtime_error::runtime_error;
 };
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 /** @brief trims whitespace from a string */
 inline std::string trim(const std::string& str)
 {

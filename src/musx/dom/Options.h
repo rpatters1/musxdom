@@ -32,6 +32,11 @@
 
 namespace musx {
 namespace dom {
+
+/**
+ * @namespace musx::dom::options
+ * @brief Classes in the @ref OptionsPool.
+ */
 namespace options {
 
 /**

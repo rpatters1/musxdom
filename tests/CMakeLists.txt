@@ -41,6 +41,7 @@ enable_testing()
 add_executable(musxdomtests
 	musxdomtests.cpp
 	document.cpp
+    entries.cpp
 	header.cpp
 	pool.cpp
     # options
@@ -70,13 +71,17 @@ add_executable(musxdomtests
 	others/enclosure.cpp
 	others/expression.cpp
 	others/fonts.cpp
+    others/frame.cpp
 	others/layer_attributes.cpp
+	others/instrument_used.cpp
     others/measure_number_region.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
     others/staff.cpp
     others/text_block.cpp
     others/text.cpp
+    # details
+	details/gfhold.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")

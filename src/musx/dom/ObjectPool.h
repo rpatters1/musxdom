@@ -222,8 +222,10 @@ public:
     }
 };
 
+/** @brief OptionsPool typedef */
+using OptionsPool = ScalarPool<OptionsBase>;
 /** @brief Shared `OptionsPool` pointer */
-using OptionsPoolPtr = std::shared_ptr<ScalarPool<OptionsBase>>;
+using OptionsPoolPtr = std::shared_ptr<OptionsPool>;
 
 /**
  * @class OneCmperPool

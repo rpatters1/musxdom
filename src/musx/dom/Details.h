@@ -28,6 +28,11 @@
 
 namespace musx {
 namespace dom {
+
+/**
+ * @namespace musx::dom::details
+ * @brief Classes in the @ref DetailsPool.
+ */
 namespace details {
 
 /**

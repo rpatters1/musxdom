@@ -37,7 +37,7 @@
 #endif
 
 #ifdef MUSX_THROW_ON_INTEGRITY_CHECK_FAIL
-#define MUSX_INTEGRITY_ERROR(S) throw std::invalid_argument(S)
+#define MUSX_INTEGRITY_ERROR(S) throw ::musx::dom::integrity_error(S)
 #else
 #define MUSX_INTEGRITY_ERROR(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
 #endif
@@ -45,7 +45,21 @@
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
+
+/**
+ * @namespace musx::dom
+ * @brief The DOM (document object model) for musx files.
+ */
 namespace dom {
+
+/**
+ * @brief Exception for integrity errors.
+ */
+class integrity_error : public std::runtime_error
+{
+public:
+    using std::runtime_error::runtime_error;
+};
 
 using Cmper = uint16_t;         ///< Enigma "comperator" key type
 using Inci = int16_t;           ///< Enigma "incidend" key type
@@ -131,7 +145,7 @@ public:
      *
      * The defauly implementation does nothing.
      *
-     * @throws std::invalid_argument if there is a problem.
+     * @throws #musx::dom::integrity_error if there is a problem.
      */
     virtual void integrityCheck() const { }
 

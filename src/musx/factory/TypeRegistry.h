@@ -119,7 +119,7 @@ public:
                         shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
                     }
                     auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
-                    if constexpr (!std::is_same_v < PoolPtr, EntryPoolPtr>) {
+                    if constexpr (!std::is_same_v<PoolPtr, EntryPoolPtr>) {
                         if (instance->getShareMode() == Base::ShareMode::Partial) {
                             for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
                                 instance->addUnlinkedNode(child->getTagName());

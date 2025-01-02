@@ -33,6 +33,11 @@
 
 namespace musx {
 namespace dom {
+
+/**
+ * @namespace musx::dom::others
+ * @brief Classes in the @ref OthersPool.
+ */
 namespace others {
 
 /**
@@ -73,8 +78,8 @@ public:
      * The inci appears always to be zero. It might be either a holdover from legacy Finale or a bug
      * in Finale's export routine.
      */
-    explicit Frame(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci = 0)
-        : OthersBase(document, partId, shareMode, cmper, std::nullopt) {}
+    explicit Frame(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci = 0)
+        : OthersBase(document, partId, shareMode, cmper, inci ? std::optional<Inci>(inci) : std::nullopt) {}
 
     // Public properties corresponding to the XML structure
     EntryNumber startEntry{}; ///< Start entry number for this frame.
@@ -287,9 +292,9 @@ enum class PlaybackType
     MidiPatchChange,        ///< Playback changes the MIDI patch.
     PercussionMidiMap,      ///< Playback uses percussion MIDI map. (xml value is "percMidiMap")
     MidiPitchWheel,         ///< Playback affects the MIDI pitch wheel. (xml value is "midiPitchwheel")
-    ChannelPressure,        ///< Playback affects MIDI channel pressure. (xml vlaue is "midiPressure")
+    ChannelPressure,        ///< Playback affects MIDI channel pressure. (xml value is "midiPressure")
     RestrikeKeys,           ///< Playback retrikes keys. (xml value is "rekey")
-    Dump,                   ///< Playback is an arbitrary data dump. (Data is in <playDumpText> with the same Cmper value.)
+    Dump,                   ///< Playback is an arbitrary data dump. (Data is in node `<playDumpText>` with the same @ref Cmper value.)
     PlayTempoToolChanges,   ///< Play changes from Tempo Tool. (xml value is "startTempo")
     IgnoreTempoToolChanges, ///< Ignore changes from Tempo Tool. (xml value is "stopTempo")
     Swing,                  ///< Playback in swing style
