@@ -71,10 +71,10 @@ TEST(GFrameHoldTest, PopulateFields)
         EXPECT_EQ(gfhold->showClefMode, details::GFrameHold::ShowClefMode::Always);
         EXPECT_EQ(gfhold->clefPercent, 75);
         EXPECT_FALSE(gfhold->mirrorFrame);
-        EXPECT_EQ(gfhold->frame1, 21240);
-        EXPECT_EQ(gfhold->frame2, 0);  // Not present, should be default
-        EXPECT_EQ(gfhold->frame3, 0);  // Not present, should be default
-        EXPECT_EQ(gfhold->frame4, 0);  // Not present, should be default
+        EXPECT_EQ(gfhold->frames[0], 21240);
+        EXPECT_EQ(gfhold->frames[1], 0);  // Not present, should be default
+        EXPECT_EQ(gfhold->frames[2], 0);  // Not present, should be default
+        EXPECT_EQ(gfhold->frames[3], 0);  // Not present, should be default
     }
 
     // Test GFrameHold for cmper1=3, cmper2=1083
@@ -87,10 +87,10 @@ TEST(GFrameHoldTest, PopulateFields)
         EXPECT_EQ(gfhold->showClefMode, details::GFrameHold::ShowClefMode::Never);
         EXPECT_EQ(gfhold->clefPercent, 75);
         EXPECT_FALSE(gfhold->mirrorFrame);
-        EXPECT_EQ(gfhold->frame1, 22464);
-        EXPECT_EQ(gfhold->frame2, 0);  // Not present, should be default
-        EXPECT_EQ(gfhold->frame3, 22465);
-        EXPECT_EQ(gfhold->frame4, 0);  // Not present, should be default
+        EXPECT_EQ(gfhold->frames[0], 22464);
+        EXPECT_EQ(gfhold->frames[1], 0);  // Not present, should be default
+        EXPECT_EQ(gfhold->frames[2], 22465);
+        EXPECT_EQ(gfhold->frames[3], 0);  // Not present, should be default
     }
 
     // Test GFrameHold for cmper1=3, cmper2=1129
@@ -103,10 +103,10 @@ TEST(GFrameHoldTest, PopulateFields)
         EXPECT_EQ(gfhold->showClefMode, details::GFrameHold::ShowClefMode::WhenNeeded);
         EXPECT_EQ(gfhold->clefPercent, 75);
         EXPECT_TRUE(gfhold->mirrorFrame);
-        EXPECT_EQ(gfhold->frame1, 0);  // Not present, should be default
-        EXPECT_EQ(gfhold->frame2, 0);  // Not present, should be default
-        EXPECT_EQ(gfhold->frame3, 0);  // Not present, should be default
-        EXPECT_EQ(gfhold->frame4, 22911);
+        EXPECT_EQ(gfhold->frames[0], 0);  // Not present, should be default
+        EXPECT_EQ(gfhold->frames[1], 0);  // Not present, should be default
+        EXPECT_EQ(gfhold->frames[2], 0);  // Not present, should be default
+        EXPECT_EQ(gfhold->frames[3], 22911);
     }
 }
 

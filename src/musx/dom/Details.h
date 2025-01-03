@@ -21,6 +21,7 @@
  */
 #pragma once
 #include <functional>
+#include <vector>
 
 #include "BaseClasses.h"
 
@@ -54,7 +55,7 @@ public:
      * @param meas The measure ID for this GFrameHold.
      */
     explicit GFrameHold(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas)
-        : DetailsBase(document, partId, shareMode, inst, meas) {}
+        : DetailsBase(document, partId, shareMode, inst, meas), frames(MAX_LAYERS) {}
 
     /**
      * @brief Enum representing the clef mode for the frame.
@@ -72,10 +73,7 @@ public:
     ShowClefMode showClefMode{};            ///< "Show Clef" mode. (xml tag is `<clefMode>`)
     bool mirrorFrame{};                     ///< Indicates this is a mirror frame. (Not used after Finale 14.5.)
     int clefPercent{};                      ///< Clef percent where 100 means 100%.
-    Cmper frame1{};                         ///< @ref others::Frame for layer 1 @ref Cmper (if non-zero)
-    Cmper frame2{};                         ///< @ref others::Frame for layer 2 @ref Cmper (if non-zero)
-    Cmper frame3{};                         ///< @ref others::Frame for layer 3 @ref Cmper (if non-zero)
-    Cmper frame4{};                         ///< @ref others::Frame for layer 4 @ref Cmper (if non-zero)
+    std::vector<Cmper> frames;              ///< @ref others::Frame values for layers 1..4 (layer indices 0..3) if non-zero
 
     /// @brief returns the inst (staff) number for this GFrameHold
     InstCmper getStaff() const { return InstCmper(getCmper1()); }
@@ -84,9 +82,18 @@ public:
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
     /**
-     * @brief iterates the entries for this gfhold from left to right for each existing layer in order
+     * @brief iterates the entries for the specified layer in this gfhold from left to right
+     * @param layerIndex The layer index (0..3) to iterate
+     * @return true if higher-level iteration should continue. false if it should halt.
+     * @throws std::invalid_argument if the layer index is out of range
      */
-    void iterateEntries(std::function<bool(const std::shared_ptr<const Entry>&)> iterator);
+    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const Entry>&)> iterator);
+
+    /**
+     * @brief iterates the entries for this gfhold from left to right for each layer in order
+     * @return true if higher-level iteration should continue. false if it should halt.
+     */
+    bool iterateEntries(std::function<bool(const std::shared_ptr<const Entry>&)> iterator);
 
     void integrityCheck() const override
     {

@@ -246,30 +246,42 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** GFrameHold *****
 // **********************
 
-void details::GFrameHold::iterateEntries(std::function<bool(const std::shared_ptr<const Entry>&)> iterator)
+bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const Entry>&)> iterator)
 {
-    auto doIteration = [&](const std::shared_ptr<others::Frame>& frame) -> bool {
-        if (frame) {
-            auto firstEntry = getDocument()->getEntries()->get<Entry>(frame->startEntry);
-            if (!firstEntry) {
-                MUSX_INTEGRITY_ERROR("Frame hold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
-                return true;
+    if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
+        throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
+    }
+    if (!frames[layerIndex]) return true; // nothing here
+    auto frame = getDocument()->getOthers()->get<others::Frame>(frames[layerIndex]);
+    if (frame) {
+        auto firstEntry = getDocument()->getEntries()->get<Entry>(frame->startEntry);
+        if (!firstEntry) {
+            MUSX_INTEGRITY_ERROR("Frame hold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
+            return true; // we won't get here if we are throwing; otherwise it is just a warning and we can continue
+        }
+        for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
+            if (!iterator(nextEntry)) {
+                return false;
             }
-            for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
-                if (!iterator(nextEntry)) {
-                    return false;
-                }
-                if (nextEntry->getEntryNumber() == frame->endEntry) {
-                    break;
-                }
+            if (nextEntry->getEntryNumber() == frame->endEntry) {
+                break;
             }
         }
-        return true;
-    };
-    if (!doIteration(getDocument()->getOthers()->get<others::Frame>(frame1))) return;
-    if (!doIteration(getDocument()->getOthers()->get<others::Frame>(frame2))) return;
-    if (!doIteration(getDocument()->getOthers()->get<others::Frame>(frame3))) return;
-    if (!doIteration(getDocument()->getOthers()->get<others::Frame>(frame4))) return;
+    } else {
+        MUSX_INTEGRITY_ERROR("Frame hold for staff " + std::to_string(getStaff()) + " and measure "
+            + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
+    }
+    return true;
+}
+
+bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_ptr<const Entry>&)> iterator)
+{
+    for (LayerIndex layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
+        if (!iterateEntries(layerIndex, iterator)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 // **************************
