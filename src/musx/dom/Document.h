@@ -46,8 +46,6 @@ using namespace header;
 
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
- * 
- * @todo Add other members besides the header.
  */
 class Document
 {
@@ -95,7 +93,7 @@ private:
      EntryPoolPtr m_entries;    ///< The <entries> pool
      TextsPoolPtr m_texts;      ///< The <texts> pool
 
-    // Grant the factory function access to the private constructor
+    // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;
 };
 
