@@ -53,7 +53,7 @@ namespace musx {
 namespace dom {
 
 /**
- * @brief Exception for integrity errors.
+ * @brief Exception for integrity errors. (Used when `MUSX_THROW_ON_INTEGRITY_CHECK_FAIL` is defined.)
  */
 class integrity_error : public std::runtime_error
 {

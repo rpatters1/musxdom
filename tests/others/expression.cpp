@@ -106,8 +106,8 @@ TEST(TextExpressionDefTest, InvalidPlaybackType)
     )xml";
 
     EXPECT_THROW(
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml),
-        std::invalid_argument
+      auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml),
+      musx::factory::unknown_xml_error
     );
 }
 
