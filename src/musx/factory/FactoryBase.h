@@ -46,6 +46,17 @@ namespace factory {
 using namespace musx::xml;
 using namespace musx::dom;
 
+
+/**
+ * @brief Exception for unknown xml node errors. (Used when `MUSX_THROW_ON_UNKNOWN_XML` is defined.)
+ */
+class unknown_xml_error : public std::runtime_error
+{
+public:
+    using std::runtime_error::runtime_error;
+};
+
+
 /**
  * @class ElementLinker
  * @brief A utility class for managing deferred relationships between elements during document construction.
@@ -216,7 +227,7 @@ public:
             }
         }();
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
-        throw std::invalid_argument(msg);
+        throw unknown_xml_error(msg);
 #else
         util::Logger::log(util::Logger::LogLevel::Warning, msg);
         return {};
@@ -259,25 +270,26 @@ struct FieldPopulator : public FactoryBase
             auto it = elementXref().find(child->getTagName());
             if (it != elementXref().end()) {
                 std::get<1>(*it)(child, instance);
-            }
-            else {
-                const bool requireField = [instance]() {
+            } else {
+                const bool requireFields = [instance]() {
                     if constexpr (std::is_base_of_v<Base, T>) {
                         return instance->requireAllFields();
-                    }
-                    else {
+                    } else {
                         return true;
                     }
                 }();
-                if (requireField) {
+                if (requireFields) {
                     std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.";
 #ifdef MUSX_THROW_ON_UNKNOWN_XML
-                    throw std::invalid_argument(msg);
+                    throw unknown_xml_error(msg);
 #else
                     util::Logger::log(util::Logger::LogLevel::Warning, msg);
 #endif
                 }
             }
+        }
+        if constexpr (std::is_base_of_v<Base, T>) {
+            instance->integrityCheck();
         }
     }
 

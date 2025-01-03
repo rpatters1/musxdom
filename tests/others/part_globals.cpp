@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 constexpr static musxtest::string_view partGlobalsXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>

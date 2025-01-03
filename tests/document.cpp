@@ -40,9 +40,12 @@ TEST(DocumentTest, DocumentFormation)
     )xml";
     {
         auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(emptyData);
-        EXPECT_FALSE(doc->getHeader());
-        EXPECT_FALSE(doc->getOptions());
-        EXPECT_FALSE(doc->getOthers());
+        EXPECT_TRUE(doc->getHeader());
+        EXPECT_TRUE(doc->getOptions());
+        EXPECT_TRUE(doc->getOthers());
+        EXPECT_TRUE(doc->getDetails());
+        EXPECT_TRUE(doc->getEntries());
+        EXPECT_TRUE(doc->getTexts());
     }
 }
 
@@ -60,8 +63,11 @@ TEST(DocumentTest, CreateHeader)
     {
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(emptyHeader);
         EXPECT_TRUE(doc->getHeader());
-        EXPECT_FALSE(doc->getOptions());
-        EXPECT_FALSE(doc->getOthers());
+        EXPECT_TRUE(doc->getOptions());
+        EXPECT_TRUE(doc->getOthers());
+        EXPECT_TRUE(doc->getDetails());
+        EXPECT_TRUE(doc->getEntries());
+        EXPECT_TRUE(doc->getTexts());
     }
 }
 
@@ -76,9 +82,12 @@ TEST(DocumentTest, CreateOptions)
     )xml";
     {
         auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(emptyHeader);
-        EXPECT_FALSE(doc->getHeader());
+        EXPECT_TRUE(doc->getHeader());
         EXPECT_TRUE(doc->getOptions());
-        EXPECT_FALSE(doc->getOthers());
+        EXPECT_TRUE(doc->getOthers());
+        EXPECT_TRUE(doc->getDetails());
+        EXPECT_TRUE(doc->getEntries());
+        EXPECT_TRUE(doc->getTexts());
     }
 }
 
@@ -93,8 +102,117 @@ TEST(DocumentTest, CreateOthers)
     )xml";
     {
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(emptyHeader);
-        EXPECT_FALSE(doc->getHeader());
-        EXPECT_FALSE(doc->getOptions());
+        EXPECT_TRUE(doc->getHeader());
+        EXPECT_TRUE(doc->getOptions());
         EXPECT_TRUE(doc->getOthers());
+        EXPECT_TRUE(doc->getDetails());
+        EXPECT_TRUE(doc->getEntries());
+        EXPECT_TRUE(doc->getTexts());
     }
+}
+
+TEST(DocumentTest, CreateDetails)
+{
+    constexpr static musxtest::string_view emptyHeader = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+  </details>
+</finale>
+    )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(emptyHeader);
+        EXPECT_TRUE(doc->getHeader());
+        EXPECT_TRUE(doc->getOptions());
+        EXPECT_TRUE(doc->getOthers());
+        EXPECT_TRUE(doc->getDetails());
+        EXPECT_TRUE(doc->getEntries());
+        EXPECT_TRUE(doc->getTexts());
+    }
+}
+
+TEST(DocumentTest, CreateEntries)
+{
+    constexpr static musxtest::string_view emptyHeader = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <entries>
+  </entries>
+</finale>
+    )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(emptyHeader);
+        EXPECT_TRUE(doc->getHeader());
+        EXPECT_TRUE(doc->getOptions());
+        EXPECT_TRUE(doc->getOthers());
+        EXPECT_TRUE(doc->getDetails());
+        EXPECT_TRUE(doc->getEntries());
+        EXPECT_TRUE(doc->getTexts());
+    }
+}
+
+TEST(DocumentTest, CreateTexts)
+{
+    constexpr static musxtest::string_view emptyHeader = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <texts>
+  </texts>
+</finale>
+    )xml";
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(emptyHeader);
+        EXPECT_TRUE(doc->getHeader());
+        EXPECT_TRUE(doc->getOptions());
+        EXPECT_TRUE(doc->getOthers());
+        EXPECT_TRUE(doc->getDetails());
+        EXPECT_TRUE(doc->getEntries());
+        EXPECT_TRUE(doc->getTexts());
+    }
+}
+
+TEST(DocumentTest, MalformedXml)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <entries>
+    <entry entnum="1001" prev="1000" next="1002">
+      <dura>896</dura>
+      <numNotes>2</numNotes>
+      <isValid/>
+      <isNote/>
+      <floatRest/>
+      <sorted/>
+      <note id="1">
+        <harmLev>-4</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+      <note id="2">
+        <harmLev>-2</harmLev>
+        <harmAlt>1</harmAlt>
+        <isValid/>
+        <showAcci/>
+      </note>
+    </entry>
+</finale>
+    )xml";
+
+    // </entries> tag is missing
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml),
+        musx::xml::load_error
+    );
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
+        musx::xml::load_error
+    );
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml),
+        musx::xml::load_error
+    );
 }

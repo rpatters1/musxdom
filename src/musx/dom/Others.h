@@ -33,6 +33,11 @@
 
 namespace musx {
 namespace dom {
+
+/**
+ * @namespace musx::dom::others
+ * @brief Classes in the @ref OthersPool.
+ */
 namespace others {
 
 /**
@@ -58,6 +63,70 @@ public:
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FontDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class Frame
+ * @brief Represents the attributes of a TGF entry frame.
+ *
+ * The class is identified by the XML node name "frameSpec".
+ */
+class Frame : public OthersBase
+{
+public:
+    /** @brief Constructor function.
+     * The inci appears always to be zero. It might be either a holdover from legacy Finale or a bug
+     * in Finale's export routine.
+     */
+    explicit Frame(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci = 0)
+        : OthersBase(document, partId, shareMode, cmper, inci ? std::optional<Inci>(inci) : std::nullopt) {}
+
+    // Public properties corresponding to the XML structure
+    EntryNumber startEntry{}; ///< Start entry number for this frame.
+    EntryNumber endEntry{};   ///< End entry number for this frame.
+
+    void integrityCheck() const override
+    {
+        this->OthersBase::integrityCheck();
+        if (getInci().has_value() && getInci().value()) {
+            MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has non-zero inci [" + std::to_string(getInci().value()) + "].");
+        }
+        if (!startEntry) {
+            MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has no start entry.");
+        }
+        if (!endEntry) {
+            MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has no end entry.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "frameSpec"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<Frame> XmlMappingArray;    ///< Required for musx::factory::FieldPopulator.
+};
+
+class Staff;
+/**
+ * @class InstrumentUsed
+ * @brief An array of InstrumentUsed defines a set of staves in a staff system or in Scroll View.
+ *
+ * This class is identified by the XML node name "instUsed".
+ */
+class InstrumentUsed : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit InstrumentUsed(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
+
+    InstCmper staffId{};                    ///< Staff cmper (xml node is `<inst>`)
+    Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
+    std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
+
+    /// @brief Returns the @ref Staff instance at a specified index of iuArray
+    /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
+    /// @param index The index to finc.
+    static std::shared_ptr<Staff> getStaffAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
+
+    constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<InstrumentUsed> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -194,48 +263,6 @@ public:
 };
 
 /**
- * @class TextBlock
- * @brief Represents the attributes of a Finale "textBlock".
- *
- * @todo After identifying all possible fields, remove the override of #TextBlock::requireAllFields.
- *
- * The cmper is the textBlock ID, representing unique text blocks in the Finale document.
- * This class is identified by the XML node name "textBlock".
- */
-class TextBlock : public OthersBase
-{
-public:
-    /** @brief Enum for textTag values */
-    enum class TextType
-    {
-        Block,      ///< #textId is a #Cmper for a @ref texts::BlockText
-        Expression  ///< #textId is a #Cmper for a @ref texts::ExpressionText
-    };
-
-    /** @brief Constructor function */
-    explicit TextBlock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
-
-    // Public properties corresponding to the XML structure
-    Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
-    int lineSpacingPercentage{};       ///< Line spacing percentage.
-    bool newPos36{};                   ///< This is likely a compatibility setting. Best guess is that blocks created before Finale 3.6 do not have this set.
-    bool showShape{};                  ///< Show shape
-    bool noExpandSingleWord{};         ///< Do not expand single word
-    bool wordWrap{};                   ///< Wrap words (in frames)
-    Evpu width{};                      ///< Width of frame
-    Evpu height{};                     ///< Height of frame
-    bool roundCorners{};               ///< Use rounded corners on frame
-    Efix cornerRadius{};               ///< Corner radius for rounded corners.
-    TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
-
-    bool requireAllFields() const override { return false; }
-
-    constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextBlock> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
-};
-
-/**
  * @enum RehearsalMarkStyle
  * @brief Specifies the sequencing style for rehearsal marks
  */
@@ -265,9 +292,9 @@ enum class PlaybackType
     MidiPatchChange,        ///< Playback changes the MIDI patch.
     PercussionMidiMap,      ///< Playback uses percussion MIDI map. (xml value is "percMidiMap")
     MidiPitchWheel,         ///< Playback affects the MIDI pitch wheel. (xml value is "midiPitchwheel")
-    ChannelPressure,        ///< Playback affects MIDI channel pressure. (xml vlaue is "midiPressure")
+    ChannelPressure,        ///< Playback affects MIDI channel pressure. (xml value is "midiPressure")
     RestrikeKeys,           ///< Playback retrikes keys. (xml value is "rekey")
-    Dump,                   ///< Playback is an arbitrary data dump. (Data is in <playDumpText> with the same Cmper value.)
+    Dump,                   ///< Playback is an arbitrary data dump. (Data is in node `<playDumpText>` with the same @ref Cmper value.)
     PlayTempoToolChanges,   ///< Play changes from Tempo Tool. (xml value is "startTempo")
     IgnoreTempoToolChanges, ///< Ignore changes from Tempo Tool. (xml value is "stopTempo")
     Swing,                  ///< Playback in swing style
@@ -416,7 +443,6 @@ public:
 };
 
 /**
- *
  * @class PartDefinition
  * @brief Represents the attributes of a Finale "partDef".
  *
@@ -481,6 +507,94 @@ public:
 };
 
 /**
+ * @class Staff
+ * @brief Represents the definition of a Finale staff.
+ *
+ * The cmper is the staff ID. This class is identified by the XML node name "staffSpec".
+ */
+class Staff : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit Staff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    ClefIndex defaultClef{};        ///< Index of default clef for the staff.
+    ClefIndex transposedClef{};     ///< Index of transposed clef for the staff.
+    Evpu lineSpace{};               ///< Distance between staff lines.
+    Evpu topBarlineOffset{};        ///< Offset for the top barline.
+    Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
+    Evpu dwRestOffset{};            ///< Offset for downstem rests.
+    Evpu wRestOffset{};             ///< Offset for whole rests.
+    Evpu hRestOffset{};             ///< Offset for half rests.
+    Evpu otherRestOffset{};         ///< Offset for other rests.
+    Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
+    Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
+    int staffLines{};               ///< Number of lines in the staff.
+    int stemReversal{};             ///< Stem reversal value.
+    Cmper fullNameTextId{};         ///< Full name @ref TextBlock ID. (xml node is `<fullName>`)
+    Cmper abbrvNameTextId{};        ///< Abbreviated name @ref TextBlock ID. (xml node is `<abbrvName>`)
+    Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
+
+    /// @brief Get the full staff name without Enigma tags
+    std::string getFullName() const;
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<Staff> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TextBlock
+ * @brief Represents the attributes of a Finale "textBlock".
+ *
+ * @todo After identifying all possible fields, remove the override of #TextBlock::requireAllFields.
+ *
+ * The cmper is the textBlock ID, representing unique text blocks in the Finale document.
+ * This class is identified by the XML node name "textBlock".
+ */
+class TextBlock : public OthersBase
+{
+public:
+    /** @brief Enum for textTag values */
+    enum class TextType
+    {
+        Block,      ///< #textId is a #Cmper for a @ref texts::BlockText
+        Expression  ///< #textId is a #Cmper for a @ref texts::ExpressionText
+    };
+
+    /** @brief Constructor function */
+    explicit TextBlock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
+    int lineSpacingPercentage{};       ///< Line spacing percentage.
+    bool newPos36{};                   ///< This is likely a compatibility setting. Best guess is that blocks created before Finale 3.6 do not have this set.
+    bool showShape{};                  ///< Show shape
+    bool noExpandSingleWord{};         ///< Do not expand single word
+    bool wordWrap{};                   ///< Wrap words (in frames)
+    Evpu width{};                      ///< Width of frame
+    Evpu height{};                     ///< Height of frame
+    bool roundCorners{};               ///< Use rounded corners on frame
+    Efix cornerRadius{};               ///< Corner radius for rounded corners.
+    TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
+
+    /** @brief return display text with Enigma tags removed */
+    std::string getText(bool trimTags = false) const;
+
+    /** @brief return display text with Enigma tags removed */
+    static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false);
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextBlock> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class TextExpressionDef
  * @brief Stores the properties and behaviors of text expressions.
  *
@@ -495,9 +609,11 @@ public:
     int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
     int playPass{};                                 ///< "Play Only on Pass" value.
     bool hideMeasureNum;                            ///< "Hide Measure Numbers" (used on Rehearsal Marks)
+    bool matchPlayback;                             ///< purpose needs investigation.
     bool useAuxData{};                              ///< Whether auxiliary data is used.
     bool hasEnclosure{};                            ///< Whether the text expression has an enclosure. (xml node is "newEnclosure")
     bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
+    bool createdByHp{};                             ///< Whether the text block was created by Finale's smart playback system
     PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
     HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
     VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.

@@ -46,8 +46,6 @@ using namespace header;
 
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
- * 
- * @todo Add other members besides the header.
  */
 class Document
 {
@@ -67,6 +65,16 @@ public:
     /** @brief Retrieves the const others pool */
     const OthersPoolPtr& getOthers() const { return m_others; }
     
+    /** @brief Retrieves the details pool */
+    DetailsPoolPtr& getDetails() { return m_details; }
+    /** @brief Retrieves the const others pool */
+    const DetailsPoolPtr& getDetails() const { return m_details; }
+    
+    /** @brief Retrieves the entry pool */
+    EntryPoolPtr& getEntries() { return m_entries; }
+    /** @brief Retrieves the entry others pool */
+    const EntryPoolPtr& getEntries() const { return m_entries; }
+
     /** @brief Retrieves the texts pool */
     TextsPoolPtr& getTexts() { return m_texts; }
     /** @brief Retrieves the const texts pool */
@@ -81,11 +89,11 @@ private:
      HeaderPtr m_header;        ///< The <header>
      OptionsPoolPtr m_options;  ///< The <options> pool
      OthersPoolPtr m_others;    ///< The <others> pool
-     ///< @todo DetailsPoolPtr
-     ///< @todo EntriesPoolPtr
+     DetailsPoolPtr m_details;  ///< The <details> pool
+     EntryPoolPtr m_entries;    ///< The <entries> pool
      TextsPoolPtr m_texts;      ///< The <texts> pool
 
-    // Grant the factory function access to the private constructor
+    // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;
 };
 

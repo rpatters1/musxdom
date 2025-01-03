@@ -32,6 +32,11 @@
 
 namespace musx {
 namespace dom {
+
+/**
+ * @namespace musx::dom::options
+ * @brief Classes in the @ref OptionsPool.
+ */
 namespace options {
 
 /**
@@ -216,7 +221,7 @@ public:
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
         int staffPositon{};             ///< Staff position of the clef symbol's baseline (from top staffline). (xml node is `<clefYDisp>`)
         Efix baselineAdjust{};          ///< Additional baseline adjustment in Efix. (xml node is `<baseAdjust>`)
-        int shapeId{};                  ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
+        Cmper shapeId{};                ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
         bool isShape{};                 ///< Indicates if the clef is a shape.
         bool scaleToStaffHeight{};      ///< Indicates if the shape should scale to staff height.
         bool useOwnFont{};              ///< Indicates if the clef has its own font.
@@ -225,7 +230,7 @@ public:
         static const xml::XmlElementArray<ClefDef> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
     };
 
-    int defaultClef{};                  ///< Default clef identifier. An index into `clefDefs`.
+    ClefIndex defaultClef{};            ///< Default clef identifier. An index into `clefDefs`.
     int clefChangePercent{};            ///< Percentage adjustment for end-of-measure clef changes. 100 means no adjustment. (xml node is `<endMeasClefPercent>`)
     Evpu clefChangeOffset{};            ///< Offset from next barline for end-of-measure clef changes. (xml node is `<endMeasClefPosAdd>`).
     Evpu clefFrontSepar{};              ///< Spacing before clef. (xml node is `<clefFront>`)

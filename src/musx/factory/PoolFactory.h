@@ -82,13 +82,17 @@ public:
 #ifdef MUSX_DISPLAY_NODE_NAMES
                 auto it = alreadyDisplayed.find(childElement->getTagName());
                 if (it == alreadyDisplayed.end()) {
-                    util::Logger::log(util::Logger::LogLevel::Verbose, childElement->getTagName());
+                    util::Logger::log(util::Logger::LogLevel::Verbose, "  " + childElement->getTagName());
                     alreadyDisplayed.emplace(childElement->getTagName());
                 }
 #endif
                 auto typedPtr = std::dynamic_pointer_cast<ObjectBase>(basePtr);
                 assert(typedPtr); // program bug if null
-                pool->add(childElement->getTagName(), typedPtr);
+                if constexpr (std::is_same_v<PoolType, EntryPool>) {
+                    pool->add(typedPtr->getEntryNumber(), typedPtr);
+                } else {
+                    pool->add(childElement->getTagName(), typedPtr);
+                }
             }
         }
 
@@ -164,6 +168,99 @@ public:
             return RegisteredOthers::createInstance(document->getOthers(), element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>());
         }
+    }
+};
+
+/**
+ * @brief Factory class for creating `Details` objects from XML.
+ *
+ * This class specializes `PoolFactory` to handle the creation of `Others` objects, representing 
+ * various attributes stored in an `OthersPool`. It includes an XML parsing mechanism to 
+ * extract and create these objects, which are used in the document model.
+ */
+class DetailsFactory : public PoolFactory<DetailsFactory, dom::DetailsBase, dom::DetailsPool>
+{
+public:
+    using PoolFactory::create;
+
+    /**
+     * @brief Extracts an `OthersBase` object from an XML element.
+     *
+     * Extracts an `OthersBase` derived object from the given XML element using the specified 
+     * attributes `cmper` and `inci`. Throws an exception if a required attribute is missing.
+     *
+     * @param element The XML element from which to extract the object.
+     * @param document The document object providing context for the XML parsing.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @return A shared pointer to the created object.
+     * @throws std::invalid_argument if required attributes are missing.
+     */
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    {
+        if (auto entnumAttribute = element->findAttribute("entnum")) {
+            /// @todo handle entry details here
+            return std::shared_ptr<Base>{};
+        }
+        auto cmper1Attribute = element->findAttribute("cmper1");
+        if (!cmper1Attribute) {
+            throw std::invalid_argument("missing cmper1 for details element " + element->getTagName());
+        }
+        auto cmper2Attribute = element->findAttribute("cmper2");
+        if (!cmper2Attribute) {
+            throw std::invalid_argument("missing cmper2 for details element " + element->getTagName());
+        }
+        auto inciAttribute = element->findAttribute("inci");
+        if (inciAttribute) {
+            return RegisteredDetails::createInstance(document->getOthers(), element, elementLinker,
+                document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
+        }
+        else {
+            return RegisteredDetails::createInstance(document->getOthers(), element, elementLinker,
+                document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>());
+        }
+    }
+};
+
+/**
+ * @brief Factory class for creating `Entry` objects from XML.
+ *
+ * This class specializes `PoolFactory` to handle the creation of `Entry` objects, which 
+ * represent chords and notes.
+ */
+class EntryFactory : public PoolFactory<EntryFactory, dom::Entry, dom::EntryPool>
+{
+public:
+    using PoolFactory::create;
+
+    /**
+     * @brief Extracts an `Entry` object from an XML element.
+     *
+     * Extracts an `EntryFactory` derived object from the given XML element by delegating 
+     * to the `RegisteredEntries` class. This allows the creation of `Options` objects from XML.
+     *
+     * @param element The XML element from which to extract the object.
+     * @param document The document object providing context for the XML parsing.
+     * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @return A shared pointer to the created object.
+     */
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    {
+        auto entnumAttr = element->findAttribute("entnum");
+        if (!entnumAttr) {
+            throw std::invalid_argument("missing entum attribute for entry");
+        }
+        auto prevAttr = element->findAttribute("prev");
+        if (!entnumAttr) {
+            throw std::invalid_argument("missing prev attribute for entry");
+        }
+        auto nextAttr = element->findAttribute("next");
+        if (!entnumAttr) {
+            throw std::invalid_argument("missing next attribute for entry");
+        }
+        return RegisteredEntries::createInstance(document->getEntries(), element, elementLinker, document,
+            entnumAttr->getValueAs<EntryNumber>(),
+            prevAttr->getValueAs<EntryNumber>(),
+            nextAttr->getValueAs<EntryNumber>());
     }
 };
 

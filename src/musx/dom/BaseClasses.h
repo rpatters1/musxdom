@@ -36,22 +36,47 @@
 #error "Unable to detect operating system platform."
 #endif
 
+#ifdef MUSX_THROW_ON_INTEGRITY_CHECK_FAIL
+#define MUSX_INTEGRITY_ERROR(S) throw ::musx::dom::integrity_error(S)
+#else
+#define MUSX_INTEGRITY_ERROR(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
+#endif
+
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
+
+/**
+ * @namespace musx::dom
+ * @brief The DOM (document object model) for musx files.
+ */
 namespace dom {
 
-using Cmper = uint16_t;     ///< Enigma "comperator" key type
-using Inci = int16_t;       ///< Enigma "incidend" key type
-using Evpu = int32_t;       ///< EVPU value (288 per inch)
-using EvpuFloat = double;   ///< EVPU fractional value (288.0 per inch)
-using Efix = int32_t;       ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
-using Edu = int32_t;        ///< EDU value (1024 per quarter note)
+/**
+ * @brief Exception for integrity errors. (Used when `MUSX_THROW_ON_INTEGRITY_CHECK_FAIL` is defined.)
+ */
+class integrity_error : public std::runtime_error
+{
+public:
+    using std::runtime_error::runtime_error;
+};
 
-using MeasCmper = int16_t;  ///< Enigma meas Cmper (may be negative when not applicable)
-using InstCmper = int16_t;  ///< Enigma inst Cmper (may be negative when not applicable)
+using Cmper = uint16_t;             ///< Enigma "comperator" key type
+using Inci = int16_t;               ///< Enigma "incidend" key type
+using Evpu = int32_t;               ///< EVPU value (288 per inch)
+using EvpuFloat = double;           ///< EVPU fractional value (288.0 per inch)
+using Efix = int32_t;               ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
+using Edu = int32_t;                ///< "Elapsed Durational Units" value (1024 per quarter note)
+
+using MeasCmper = int16_t;          ///< Enigma meas Cmper (may be negative when not applicable)
+using InstCmper = int16_t;          ///< Enigma staff (inst) Cmper (may be negative when not applicable)
+using ClefIndex = int16_t;          ///< Index into @ref options::ClefOptions::clefDefs.
+using EntryNumber = int32_t;        ///< Entry identifier.
+using NoteNumber = int16_t;         ///< Note identifier.
+using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
+constexpr int MAX_LAYERS = 4;   ///< The maximum number of music layers in a Finale document.
 
 class Document;
 /** @brief Shared `Document` pointer */
@@ -60,12 +85,8 @@ using DocumentPtr = std::shared_ptr<Document>;
 using DocumentWeakPtr = std::weak_ptr<Document>;
 
 /**
+ * @class Base
  * @brief Base class to enforce polymorphism across all DOM classes.
- * 
- * This class uses CRTP (Curiously Recurring Template Pattern) to ensure that all
- * derived classes define a static constexpr `XmlNodeName` of type `constexpr char[]`.
- * 
- * @tparam Derived The derived class inheriting from this base.
  */
 class Base
 {
@@ -73,12 +94,14 @@ public:
     /// @brief The container type for shared nodes
     using SharedNodes = std::set<std::string>;
 
-    ///> @enum ShareMode
+    /// @enum ShareMode
+    /// @brief Describes how this instance is shared between part and score.
     enum class ShareMode
     {
-        All,            ///> All parts and score always share (no "share" attribute). Default.
-        Partial,        ///> Part and score share some attributes and have their own unlinked versions of others. (attribute "share"="true")
-        None            ///> Each part and score has its own version of the DOM class. (attribute "share"="false")
+        // this enum was giving Doxygen fits until I switched to using the slash-splat-bang-lt comment commands.
+        All,            /*!< All parts and score always share (no "share" attribute). Default. */
+        Partial,        /*!< Part and score share some attributes and have their own unlinked versions of others. (attribute "share"="true") */
+        None            /*!< Each part and score has its own version of the DOM class. (attribute "share"="false") */
     };
 
     /**
@@ -122,13 +145,22 @@ public:
     }
 
     /**
+     * @brief Allows a class to determine if it has been properly contructed by the factory.
+     *
+     * The defauly implementation does nothing.
+     *
+     * @throws #musx::dom::integrity_error if there is a problem.
+     */
+    virtual void integrityCheck() const { }
+
+    /**
      * @brief Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.
      *
      * Some classes make it difficult to discover all the possible xml tags that might be used for all its options.
      * An example is @ref others::TextBlock. By overriding this function, a class can allow its members to be discovered
      * as needed without causing error messages or throwing exceptions.
      *
-     * Note that this value only escapes errors on fields. Enum values must still have all values provided to avoid
+     * @remark This value only escapes errors on fields. Enum values must still have all values provided to avoid
      * error messages or exceptions.
      */
     virtual bool requireAllFields() const { return true; }
@@ -180,17 +212,13 @@ protected:
  */
 class OthersBase : public Base
 {
-private:
-    Cmper m_cmper;                  ///< Common attribute: cmper (key value).
-    std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
-
 protected:
     /**
      * @brief Constructs an OthersBase object.
      * 
      * @param document A weak pointer to the parent document
      * @param partId The part Id for this Other, or zero if for score.
-     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
+     * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
      * @param cmper The `Cmper` key value.
      * @param inci The array index (`Inci`).
      */
@@ -225,6 +253,72 @@ public:
      * @param inci The new `inci` value.
      */
     void setInci(std::optional<Inci> inci) { m_inci = inci; }
+
+private:
+    Cmper m_cmper;                  ///< Common attribute: cmper (key value).
+    std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
+};
+
+/**
+ * @brief Base class for all "details" types.
+ * 
+ * This class provides common attributes and methods for handling
+ * "details" types in the DOM, including `cmper1`, `cmper2`, and `inci`.
+ */
+class DetailsBase : public Base
+{
+protected:
+    /**
+     * @brief Constructs a DetailsBase object.
+     * 
+     * @param document A weak pointer to the parent document
+     * @param partId The part Id for this Other, or zero if for score.
+     * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
+     * @param cmper1 The first `Cmper` key value.
+     * @param cmper2 The second `Cmper` key value.
+     * @param inci The array index (`Inci`).
+     */
+    DetailsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt)
+        : Base(document, partId, shareMode), m_cmper1(cmper1), m_cmper2(cmper2), m_inci(inci) {}
+
+public:
+    /**
+     * @brief Gets the `cmper1` key value.
+     */
+    Cmper getCmper1() const { return m_cmper1; }
+
+    /**
+     * @brief Gets the `cmper2` key value.
+     */
+    Cmper getCmper2() const { return m_cmper2; }
+
+    /**
+     * @brief Sets the `cmper1` key value.
+     * @param cmper The new `cmper` value.
+     */
+    void setCmper1(Cmper cmper) { m_cmper1 = cmper; }
+
+    /**
+     * @brief Sets the `cmper2` key value.
+     * @param cmper The new `cmper` value.
+     */
+    void setCmper2(Cmper cmper) { m_cmper2 = cmper; }
+
+    /**
+     * @brief Gets the optional array index (`inci`).
+     */
+    std::optional<Inci> getInci() const { return m_inci; }
+
+    /**
+     * @brief Sets the array index (`inci`).
+     * @param inci The new `inci` value.
+     */
+    void setInci(std::optional<Inci> inci) { m_inci = inci; }
+
+private:
+    Cmper m_cmper1;                  ///< Common attribute: cmper1 (key value).
+    Cmper m_cmper2;                  ///< Common attribute: cmper2 (key value).
+    std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
 };
 
 class FontInfo;
@@ -235,9 +329,6 @@ class FontInfo;
  */
 class TextsBase : public Base
 {
-private:
-    Cmper m_textNumber;             ///< Common attribute: cmper (key value).
-
 public:
     /**
      * @brief Constructs a `TextsBase` object.
@@ -267,6 +358,9 @@ public:
      * the first font information in the text.
      */
     std::shared_ptr<FontInfo> parseFirstFontInfo() const;
+
+private:
+    Cmper m_textNumber;             ///< Common attribute: cmper (key value).
 };
 
 /**
@@ -390,6 +484,35 @@ public:
     bool roundCorners{};      ///< Whether the enclosure has rounded corners.
 
     static const xml::XmlElementArray<Enclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ *
+ * @class MusicRange
+ * @brief Represents a range of music using measure and EDUs.
+ * 
+ * This class is used to specify start and end points in a musical range using measures and EDUs.
+ */
+class MusicRange : public OthersBase
+{
+public:
+
+    /**
+     * @brief Constructs a MusicRange object.
+     * @param document Shared pointer to the document.
+     * @param partId The part ID if this range is unlinked.
+     * @param shareMode The share mode if this range is unlinked.
+     * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::InstrumentUsed.
+     */
+    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    MeasCmper startMeas{};      ///< Starting measure in the range.
+    Edu startEdu{};             ///< Starting EDU (Elapsed Durational Unit) in the range.
+    MeasCmper endMeas{};        ///< Ending measure in the range.
+    Edu endEdu{};               ///< Ending EDU (Elapsed Durational Unit) in the range.
+
+    static const xml::XmlElementArray<MusicRange> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

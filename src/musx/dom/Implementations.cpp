@@ -23,6 +23,7 @@
 #include <exception>
 #include <filesystem>
 #include <sstream>
+#include <functional>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -36,6 +37,56 @@
 
 namespace musx {
 namespace dom {
+
+// *****************
+// ***** Entry *****
+// *****************
+
+std::shared_ptr<Entry> Entry::getNext() const
+{
+    if (!m_next) return nullptr;
+    auto retval = getDocument()->getEntries()->get<Entry>(m_next);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has next entry " + std::to_string(m_next) + " that does not exist.");
+    }
+    return retval;
+}
+
+std::shared_ptr<Entry> Entry::getPrevious() const
+{
+    if (!m_prev) return nullptr;
+    auto retval = getDocument()->getEntries()->get<Entry>(m_prev);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has previous entry " + std::to_string(m_prev) + " that does not exist.");
+    }
+    return retval;
+}
+
+Entry::NoteType Entry::calcNoteType() const
+{
+    if (duration <= 1 || duration >= 0x10000) {
+        throw std::invalid_argument("Duration is out of valid range for NoteType.");
+    }
+
+    // Find the most significant bit position
+    Edu value = duration;
+    Edu msb = 1;
+    while (value > 1) {
+        value >>= 1;
+        msb <<= 1;
+    }
+
+    return static_cast<Entry::NoteType>(msb);
+}
+
+int Entry::calcAugmentationDots() const
+{
+    int count = 0;
+    for (Edu msb = Edu(calcNoteType()) >> 1; duration & msb; msb >>= 1) {
+        count++;
+    }
+    return count;
+}
 
 // ***********************
 // ***** FontOptions *****
@@ -191,6 +242,59 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     return retval;
 }
 
+// **********************
+// ***** GFrameHold *****
+// **********************
+
+bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const Entry>&)> iterator)
+{
+    if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
+        throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
+    }
+    if (!frames[layerIndex]) return true; // nothing here
+    auto frame = getDocument()->getOthers()->get<others::Frame>(frames[layerIndex]);
+    if (frame) {
+        auto firstEntry = getDocument()->getEntries()->get<Entry>(frame->startEntry);
+        if (!firstEntry) {
+            MUSX_INTEGRITY_ERROR("Frame hold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
+            return true; // we won't get here if we are throwing; otherwise it is just a warning and we can continue
+        }
+        for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
+            if (!iterator(nextEntry)) {
+                return false;
+            }
+            if (nextEntry->getEntryNumber() == frame->endEntry) {
+                break;
+            }
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("Frame hold for staff " + std::to_string(getStaff()) + " and measure "
+            + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
+    }
+    return true;
+}
+
+bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_ptr<const Entry>&)> iterator)
+{
+    for (LayerIndex layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
+        if (!iterateEntries(layerIndex, iterator)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// **************************
+// ***** InstrumentUsed *****
+// **************************
+
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
+{
+    if (index > iuArray.size()) return nullptr;
+    auto iuItem = iuArray[index];
+    return iuItem->getDocument()->getOthers()->getEffectiveForPart<others::Staff>(iuItem->getPartId(), iuItem->staffId);
+}
+
 // ****************************
 // ***** MarkingCategiory *****
 // ****************************
@@ -208,16 +312,9 @@ std::string others::MarkingCategory::getName() const
 // ***** PartDefinition *****
 // **************************
 
-
 std::string others::PartDefinition::getName() const
 {
-    auto document = getDocument();
-    auto textBlock = document->getOthers()->get<others::TextBlock>(this->nameId);
-    if (!textBlock) return {};
-    auto block = document->getTexts()->get<texts::BlockText>(textBlock->textId);
-    if (!block) return {};
-    const std::string accisAdded = musx::util::EnigmaString::replaceAccidentalTags(block->text);
-    return musx::util::EnigmaString::trimTags(accisAdded);
+    return TextBlock::getText(getDocument(), nameId, true); // true: trim tags
 }
 
 // ********************
@@ -226,34 +323,74 @@ std::string others::PartDefinition::getName() const
 
 std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 {
-        std::string searchText = this->text;
-        auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
-        bool foundTag = false;
+    std::string searchText = this->text;
+    auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
+    bool foundTag = false;
 
-        while (true) {
-            if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
-                break;
-            }
-
-            size_t endOfTag = searchText.find_first_of(')');
-            if (endOfTag == std::string::npos) {
-                break;
-            }
-
-            std::string fontTag = searchText.substr(0, endOfTag + 1);
-            if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
-                return nullptr;
-            }
-
-            searchText.erase(0, endOfTag + 1);
-            foundTag = true;
+    while (true) {
+        if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
+            break;
         }
 
-        if (foundTag) {
-            return fontInfo;
+        size_t endOfTag = searchText.find_first_of(')');
+        if (endOfTag == std::string::npos) {
+            break;
         }
 
-        return nullptr;
+        std::string fontTag = searchText.substr(0, endOfTag + 1);
+        if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
+            return nullptr;
+        }
+
+        searchText.erase(0, endOfTag + 1);
+        foundTag = true;
+    }
+
+    if (foundTag) {
+        return fontInfo;
+    }
+
+    return nullptr;
+}
+
+// *****************
+// ***** Staff *****
+// *****************
+
+std::string others::Staff::getFullName() const
+{
+    return others::TextBlock::getText(getDocument(), fullNameTextId, true); // true: strip enigma tags
+}
+
+// *********************
+// ***** TextBlock *****
+// *********************
+
+std::string others::TextBlock::getText(bool trimTags) const
+{
+    auto document = getDocument();
+    auto getText = [&](const auto& block) -> std::string {
+        if (!block) return {};
+        if (!trimTags) return block->text;
+        auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text);
+        return musx::util::EnigmaString::trimTags(retval);
+    };
+    switch (textType) {
+    default:
+    case TextType::Block:
+        return getText(document->getTexts()->get<texts::BlockText>(textId));
+    case TextType::Expression:
+        return getText(document->getTexts()->get<texts::ExpressionText>(textId));        
+    }
+}
+
+std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags)
+{
+    auto textBlock = document->getOthers()->get<others::TextBlock>(textId);
+    if (textBlock) {
+        return textBlock->getText(trimTags);
+    }
+    return {};
 }
 
 // *****************************

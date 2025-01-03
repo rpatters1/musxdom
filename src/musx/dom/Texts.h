@@ -32,6 +32,11 @@
 
 namespace musx {
 namespace dom {
+
+/**
+ * @namespace musx::dom::texts
+ * @brief Classes in the @ref TextsPool.
+ */
 namespace texts {
 
 /**

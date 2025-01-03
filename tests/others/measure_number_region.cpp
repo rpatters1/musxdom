@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 TEST(MeasureNumberRegionTest, PropertiesTest)
 {
     constexpr static musxtest::string_view xml = R"xml(

@@ -138,6 +138,8 @@ namespace others {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
+// Classes from BaseClasses.h
+
 MUSX_XML_ELEMENT_ARRAY(Enclosure, {
     {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
     {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
@@ -153,6 +155,26 @@ MUSX_XML_ELEMENT_ARRAY(Enclosure, {
     {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->roundCorners = true; }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
+    {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
+    {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},
+    {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->pitch = e->getTextAs<int>(); }},
+    {"family", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->family = e->getTextAs<int>(); }},
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->name = e->getText(); }},
+    });
+
+MUSX_XML_ELEMENT_ARRAY(Frame, {
+    {"startEntry", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->startEntry = e->getTextAs<EntryNumber>(); }},
+    {"endEntry", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->endEntry = e->getTextAs<EntryNumber>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(MusicRange, {
+    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
+    {"startEdu", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->startEdu = e->getTextAs<Edu>(); }},
+    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
+    {"endEdu", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->endEdu = e->getTextAs<Edu>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
@@ -162,12 +184,14 @@ MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"expand", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->expand = true; }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
-    {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
-    {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},
-    {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->pitch = e->getTextAs<int>(); }},
-    {"family", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->family = e->getTextAs<int>(); }},
-    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->name = e->getText(); }},
+// Classes from Others.h
+
+MUSX_XML_ELEMENT_ARRAY(InstrumentUsed, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
+    {"trackType", [](const XmlElementPtr&, const std::shared_ptr<InstrumentUsed>&) { /* this field seems like it was for future enhancement */ }},
+    {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
+    {"range", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i)
+        { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(LayerAttributes, {
@@ -182,6 +206,35 @@ MUSX_XML_ELEMENT_ARRAY(LayerAttributes, {
     {"ignoreHidden", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->ignoreHiddenNotesOnly = true; }},
     {"ignoreHiddenLayers", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->ignoreHiddenLayers = true; }},
     {"hideLayer", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->hideLayer = true; }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
+    {"categoryType", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->categoryType = toEnum<MarkingCategory::CategoryType>(e->getTextTrimmed()); }},
+    {"textFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
+        { i->textFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"musicFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
+        { i->musicFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"numberFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
+        { i->numberFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"horzAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzAlign = toEnum<HorizontalMeasExprAlign>(e->getTextTrimmed()); }},
+    {"vertAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertAlign = toEnum<VerticalMeasExprAlign>(e->getTextTrimmed()); }},
+    {"justification", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->justification = toEnum<HorizontalExprJustification>(e->getTextTrimmed()); }},
+    {"horzOffset", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"vertOffsetBaseline", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertOffsetBaseline = e->getTextAs<Evpu>(); }},
+    {"vertOffsetEntry", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertOffsetEntry = e->getTextAs<Evpu>(); }},
+    {"usesTextFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesTextFont = true; }},
+    {"usesMusicFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesMusicFont = true; }},
+    {"usesNumberFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesNumberFont = true; }},
+    {"usesPositioning", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesPositioning = true; }},
+    {"usesStaffList", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesStaffList = true; }},
+    {"usesBreakMmRests", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesBreakMmRests = true; }},
+    {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->breakMmRest = true; }},
+    {"userCreated", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->userCreated = true; }},
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(MarkingCategoryName, {
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategoryName>& i) { i->name = e->getText(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
@@ -242,45 +295,6 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
     {"hidePage", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hidePage = true; }}
 });
 
-MUSX_XML_ELEMENT_ARRAY(TextBlock, {
-    {"textID", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textId = e->getTextAs<Cmper>(); }},
-    {"lineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},
-    {"newPos36", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->newPos36 = true; }},
-    {"showShape", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->showShape = true; }},
-    {"noExpandSingleWord", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->noExpandSingleWord = true; }},
-    {"wordWrap", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->wordWrap = true; }},
-    {"width", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->width = e->getTextAs<Evpu>(); }},
-    {"height", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->height = e->getTextAs<Evpu>(); }},
-    {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->roundCorners = true; }},
-    {"cornerRadius", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
-    {"textTag", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textType = toEnum<TextBlock::TextType>(e->getTextTrimmed()); }}
-});
-
-MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
-    {"categoryType", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->categoryType = toEnum<MarkingCategory::CategoryType>(e->getTextTrimmed()); }},
-    {"textFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
-        { i->textFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
-    {"musicFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
-        { i->musicFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
-    {"numberFont", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i)
-        { i->numberFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
-    {"horzAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzAlign = toEnum<HorizontalMeasExprAlign>(e->getTextTrimmed()); }},
-    {"vertAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertAlign = toEnum<VerticalMeasExprAlign>(e->getTextTrimmed()); }},
-    {"justification", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->justification = toEnum<HorizontalExprJustification>(e->getTextTrimmed()); }},
-    {"horzOffset", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
-    {"vertOffsetBaseline", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertOffsetBaseline = e->getTextAs<Evpu>(); }},
-    {"vertOffsetEntry", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertOffsetEntry = e->getTextAs<Evpu>(); }},
-    {"usesTextFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesTextFont = true; }},
-    {"usesMusicFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesMusicFont = true; }},
-    {"usesNumberFont", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesNumberFont = true; }},
-    {"usesPositioning", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesPositioning = true; }},
-    {"usesStaffList", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesStaffList = true; }},
-    {"usesBreakMmRests", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->usesBreakMmRests = true; }},
-    {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->breakMmRest = true; }},
-    {"userCreated", [](const XmlElementPtr&, const std::shared_ptr<MarkingCategory>& i) { i->userCreated = true; }},
-    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->staffList = e->getTextAs<Cmper>(); }},
-});
-
 MUSX_XML_ELEMENT_ARRAY(PartDefinition, {
     {"nameID", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->nameId = e->getTextAs<Cmper>(); }},
     {"partOrder", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->partOrder = e->getTextAs<int>(); }},
@@ -298,8 +312,37 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
     {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(MarkingCategoryName, {
-    {"name", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategoryName>& i) { i->name = e->getText(); }},
+MUSX_XML_ELEMENT_ARRAY(Staff, {
+    {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
+    {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},
+    {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
+    {"topBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topBarlineOffset = e->getTextAs<Evpu>(); }},
+    {"botBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botBarlineOffset = e->getTextAs<Evpu>(); }},
+    {"dwRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->dwRestOffset = e->getTextAs<Evpu>(); }},
+    {"wRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->wRestOffset = e->getTextAs<Evpu>(); }},
+    {"hRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hRestOffset = e->getTextAs<Evpu>(); }},
+    {"otherRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->otherRestOffset = e->getTextAs<Evpu>(); }},
+    {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
+    {"botRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botRepeatDotOff = e->getTextAs<Evpu>(); }},
+    {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
+    {"stemReversal", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemReversal = e->getTextAs<int>(); }},
+    {"fullName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fullNameTextId = e->getTextAs<Cmper>(); }},
+    {"abbrvName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->abbrvNameTextId = e->getTextAs<Cmper>(); }},
+    {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TextBlock, {
+    {"textID", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textId = e->getTextAs<Cmper>(); }},
+    {"lineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},
+    {"newPos36", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->newPos36 = true; }},
+    {"showShape", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->showShape = true; }},
+    {"noExpandSingleWord", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->noExpandSingleWord = true; }},
+    {"wordWrap", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->wordWrap = true; }},
+    {"width", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<TextBlock>& i) { i->roundCorners = true; }},
+    {"cornerRadius", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
+    {"textTag", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textType = toEnum<TextBlock::TextType>(e->getTextTrimmed()); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
@@ -310,9 +353,11 @@ MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
     {"auxdata1", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->auxData1 = e->getTextAs<int>(); }},
     {"playPass", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->playPass = e->getTextAs<int>(); }},
     {"hideMeasureNum", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->hideMeasureNum = true; }},
+    {"matchPlayback", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->matchPlayback = true; }},
     {"useAuxData", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->useAuxData = true; }},
     {"newEnclosure", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->hasEnclosure = true; }},
     {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->breakMmRest = true; }},
+    {"createdByHp", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->createdByHp = true; }},
     {"playType", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->playbackType = toEnum<PlaybackType>(e->getTextTrimmed()); }},
     {"horzMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->horzMeasExprAlign = toEnum<HorizontalMeasExprAlign>(e->getTextTrimmed()); }},
     {"horzExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->horzExprJustification = toEnum<HorizontalExprJustification>(e->getTextTrimmed()); }},

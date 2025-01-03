@@ -1,8 +1,8 @@
 # Save the current state of BUILD_TESTING
-set(PREV_BUILD_TESTING ${BUILD_TESTING})
+# set(PREV_BUILD_TESTING ${BUILD_TESTING})
 
 # Turn off BUILD_TESTING for dependencies
-set(BUILD_TESTING OFF CACHE BOOL "Disable testing for dependencies" FORCE)
+# set(BUILD_TESTING OFF CACHE BOOL "Disable testing for dependencies" FORCE)
 
 # Add Google Test
 include(FetchContent)
@@ -23,8 +23,16 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(tinyxml2)
 
+# Fetch pugixml
+FetchContent_Declare(
+    pugixml
+    URL https://github.com/zeux/pugixml/releases/download/v1.14/pugixml-1.14.tar.gz
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(pugixml)
+
 # Restore BUILD_TESTING for the top-level tests
-set(BUILD_TESTING ${PREV_BUILD_TESTING})
+# set(BUILD_TESTING ${PREV_BUILD_TESTING})
 
 # Enable testing
 enable_testing()
@@ -33,6 +41,7 @@ enable_testing()
 add_executable(musxdomtests
 	musxdomtests.cpp
 	document.cpp
+    entries.cpp
 	header.cpp
 	pool.cpp
     # options
@@ -62,12 +71,17 @@ add_executable(musxdomtests
 	others/enclosure.cpp
 	others/expression.cpp
 	others/fonts.cpp
+    others/frame.cpp
 	others/layer_attributes.cpp
+	others/instrument_used.cpp
     others/measure_number_region.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
+    others/staff.cpp
     others/text_block.cpp
     others/text.cpp
+    # details
+	details/gfhold.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
@@ -89,6 +103,7 @@ target_include_directories(musxdomtests PRIVATE "${MUSX_ROOT_DIR}/third_party/ra
 target_link_libraries(musxdomtests PRIVATE
     gtest_main
 	tinyxml2
+    pugixml
     musx
 )
 
