@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['range_0',['range',['../classmusx_1_1dom_1_1others_1_1InstrumentUsed.html#a8a3d732b6c0597c1702674248d4e5ed5',1,'musx::dom::others::InstrumentUsed']]],
+  ['rawstaffheight_1',['rawStaffHeight',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a9727082a171e44493c395283f01c44c0',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
+  ['redisplayonmodechange_2',['redisplayOnModeChange',['../classmusx_1_1dom_1_1options_1_1KeySignatureOptions.html#a9df1d6245a9109561408413573c2d5fd',1,'musx::dom::options::KeySignatureOptions']]],
+  ['referenceduration_3',['referenceDuration',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#ad46e8fdebd2d85a7e215fdde1d6a70e8',1,'musx::dom::options::MusicSpacingOptions']]],
+  ['referencewidth_4',['referenceWidth',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#ac2d0e7a15a3c084b4582f6d3e0b5215b',1,'musx::dom::options::MusicSpacingOptions']]],
+  ['region_5',['region',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a70042b114ec188eebc96169311c3020b',1,'musx::dom::others::MeasureNumberRegion']]],
+  ['rehearsalmarkstyle_6',['rehearsalMarkStyle',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a13bbf631cd6f1733b1ab5b728128c16d',1,'musx::dom::others::TextExpressionDef']]],
+  ['restlegerbacklength_7',['restLegerBackLength',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#ae6f29f583323f31b315af30c5d76c4e1',1,'musx::dom::options::LineCurveOptions']]],
+  ['restlegerfrontlength_8',['restLegerFrontLength',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#ac7102f91bfcc461ed6f39221962476f7',1,'musx::dom::options::LineCurveOptions']]],
+  ['restoffset_9',['restOffset',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a80308258d56a623e79326926df83b23a',1,'musx::dom::others::LayerAttributes']]],
+  ['revstemadj_10',['revStemAdj',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#aadca94125d82671f759cbb310992c389',1,'musx::dom::options::StemOptions']]],
+  ['righthookext_11',['rightHookExt',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aaeee2517bf68d5a061a1e56f20259d45',1,'musx::dom::options::TupletOptions']]],
+  ['righthooklen_12',['rightHookLen',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#adb49b84e731fcd20a50f090e04757c48',1,'musx::dom::options::TupletOptions']]],
+  ['rightmmbracketchar_13',['rightMmBracketChar',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a8147ebe70eaade3ce4c7e3972f3307b9',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
+  ['rightpagemarginbottom_14',['rightPageMarginBottom',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#ab7f4c945b5158cca4b3cee58e7c959d8',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
+  ['rightpagemarginleft_15',['rightPageMarginLeft',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#ac7d94fe9bb188deb5da65a6fe6748105',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
+  ['rightpagemarginright_16',['rightPageMarginRight',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#adbf9b10e1e970707d389c7e3e2a496db',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
+  ['rightpagemargintop_17',['rightPageMarginTop',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a47415187ff25f3c834cae05055cf6891',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
+  ['roundcorners_18',['roundcorners',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#a502c88f616ec3a0c59fe7b0b96a7e994',1,'musx::dom::others::Enclosure::roundCorners'],['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a3a9445aa2eee10d991758f216038ee6f',1,'musx::dom::others::TextBlock::roundCorners']]]
+];

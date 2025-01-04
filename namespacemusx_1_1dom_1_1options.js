@@ -1,0 +1,26 @@
+var namespacemusx_1_1dom_1_1options =
+[
+    [ "AccidentalOptions", "classmusx_1_1dom_1_1options_1_1AccidentalOptions.html", "classmusx_1_1dom_1_1options_1_1AccidentalOptions" ],
+    [ "AlternateNotationOptions", "classmusx_1_1dom_1_1options_1_1AlternateNotationOptions.html", "classmusx_1_1dom_1_1options_1_1AlternateNotationOptions" ],
+    [ "AugmentationDotOptions", "classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html", "classmusx_1_1dom_1_1options_1_1AugmentationDotOptions" ],
+    [ "BarlineOptions", "classmusx_1_1dom_1_1options_1_1BarlineOptions.html", "classmusx_1_1dom_1_1options_1_1BarlineOptions" ],
+    [ "BeamOptions", "classmusx_1_1dom_1_1options_1_1BeamOptions.html", "classmusx_1_1dom_1_1options_1_1BeamOptions" ],
+    [ "ClefOptions", "classmusx_1_1dom_1_1options_1_1ClefOptions.html", "classmusx_1_1dom_1_1options_1_1ClefOptions" ],
+    [ "FlagOptions", "classmusx_1_1dom_1_1options_1_1FlagOptions.html", "classmusx_1_1dom_1_1options_1_1FlagOptions" ],
+    [ "FontOptions", "classmusx_1_1dom_1_1options_1_1FontOptions.html", "classmusx_1_1dom_1_1options_1_1FontOptions" ],
+    [ "GraceNoteOptions", "classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html", "classmusx_1_1dom_1_1options_1_1GraceNoteOptions" ],
+    [ "KeySignatureOptions", "classmusx_1_1dom_1_1options_1_1KeySignatureOptions.html", "classmusx_1_1dom_1_1options_1_1KeySignatureOptions" ],
+    [ "LineCurveOptions", "classmusx_1_1dom_1_1options_1_1LineCurveOptions.html", "classmusx_1_1dom_1_1options_1_1LineCurveOptions" ],
+    [ "MiscOptions", "classmusx_1_1dom_1_1options_1_1MiscOptions.html", "classmusx_1_1dom_1_1options_1_1MiscOptions" ],
+    [ "MultimeasureRestOptions", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions" ],
+    [ "MusicSpacingOptions", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions" ],
+    [ "PageFormatOptions", "classmusx_1_1dom_1_1options_1_1PageFormatOptions.html", "classmusx_1_1dom_1_1options_1_1PageFormatOptions" ],
+    [ "PianoBraceBracketOptions", "classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html", "classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions" ],
+    [ "RepeatOptions", "classmusx_1_1dom_1_1options_1_1RepeatOptions.html", "classmusx_1_1dom_1_1options_1_1RepeatOptions" ],
+    [ "SmartShapeOptions", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions" ],
+    [ "StaffOptions", "classmusx_1_1dom_1_1options_1_1StaffOptions.html", "classmusx_1_1dom_1_1options_1_1StaffOptions" ],
+    [ "StemOptions", "classmusx_1_1dom_1_1options_1_1StemOptions.html", "classmusx_1_1dom_1_1options_1_1StemOptions" ],
+    [ "TieOptions", "classmusx_1_1dom_1_1options_1_1TieOptions.html", "classmusx_1_1dom_1_1options_1_1TieOptions" ],
+    [ "TimeSignatureOptions", "classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html", "classmusx_1_1dom_1_1options_1_1TimeSignatureOptions" ],
+    [ "TupletOptions", "classmusx_1_1dom_1_1options_1_1TupletOptions.html", "classmusx_1_1dom_1_1options_1_1TupletOptions" ]
+];

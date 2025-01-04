@@ -1,0 +1,35 @@
+var classmusx_1_1dom_1_1others_1_1MarkingCategory =
+[
+    [ "CategoryType", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039a", [
+      [ "Invalid", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa4bbb8f967da6d1a610596d7257179c2b", null ],
+      [ "Dynamics", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa405d9a69e5139b9df0df6b66e18fc9e2", null ],
+      [ "TempoMarks", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa7ce20fd7047cba7f41aa314967db8052", null ],
+      [ "TempoAlterations", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aaccf76ee4037068159869619c57b3d63f", null ],
+      [ "ExpressiveText", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aae7f420d8c90135a08100c5fcb0d547ed", null ],
+      [ "TechniqueText", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa6069d91daf122d174f94d24dd782ed30", null ],
+      [ "RehearsalMarks", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa3949b44e2eeb012f8dafa6d11cd865c6", null ],
+      [ "Misc", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa74248c725e00bf9fe04df4e35b249a19", null ]
+    ] ],
+    [ "MarkingCategory", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ac9704a53879f462ef45fe10d9404e554", null ],
+    [ "getName", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a15e05f61a10d3a92b4399feda7259506", null ],
+    [ "breakMmRest", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ab5e72426d1e44dc8d12632441c8726a9", null ],
+    [ "categoryType", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#af1ee5a4eb2f3864079627aebd99ff5b0", null ],
+    [ "horzAlign", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#af1c2c79138184dcf8f929e90c88e0bd5", null ],
+    [ "horzOffset", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a0e3c8f1f9f51a0f4f7b75497ec5c06d7", null ],
+    [ "justification", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ac5c5df5abf04583a5bfc03c0fc51fd3f", null ],
+    [ "musicFont", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7e97659c8727ca49809ba173718c96f3", null ],
+    [ "numberFont", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#afd5fcceb53abce7485ddf8d0ad42e570", null ],
+    [ "staffList", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ab0f7ffd82576570edabb8a5a8b556e01", null ],
+    [ "textExpressions", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ac89eea86f25dc822a7dc657b1b4bf261", null ],
+    [ "textFont", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a8ffe03bed1d6c66933766df2de35e95d", null ],
+    [ "userCreated", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a6f2ea8bc5edea8fa36ae1231a9480a83", null ],
+    [ "usesBreakMmRests", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a1ee0d14e2c6d6b5a78fc3fb5fe80a7d7", null ],
+    [ "usesMusicFont", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a0f38a642bebab52677852f5e018da852", null ],
+    [ "usesNumberFont", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a1f1bfc41e46c1b798bd953d01dadc94c", null ],
+    [ "usesPositioning", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ac11a69fdbc848f69a7e19c624e256af2", null ],
+    [ "usesStaffList", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ac1d0021a79211919ff768db947af5a8f", null ],
+    [ "usesTextFont", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a03b851ee61a59288ec2bbd86e131cb33", null ],
+    [ "vertAlign", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#aa44a507a849f21b4827fc7bc6934318e", null ],
+    [ "vertOffsetBaseline", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a47b6b362dc66c546199cfb55d1be55ea", null ],
+    [ "vertOffsetEntry", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a8d5d459054636796379ed6b037e25921", null ]
+];

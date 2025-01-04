@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['name_0',['name',['../classmusx_1_1dom_1_1others_1_1MarkingCategoryName.html#a4e6c007405ca54fe8567e5fd4fa6c88e',1,'musx::dom::others::MarkingCategoryName::name'],['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a8e7a9da4a78cac297c9e4fc8af40194e',1,'musx::dom::others::FontDefinition::name']]],
+  ['nameid_1',['nameId',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#a0bf08d6f99a555bd17b80be7e8236723',1,'musx::dom::others::PartDefinition']]],
+  ['namepos_2',['namePos',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#ab2a6aad8bcc9dd3472abe5e2cc59465c',1,'musx::dom::options::StaffOptions']]],
+  ['nameposabbrv_3',['namePosAbbrv',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#abaea11b728f4bb2c0c4c265af70a525e',1,'musx::dom::options::StaffOptions']]],
+  ['needsrecalc_4',['needsRecalc',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#af633048d5d46f57de55922f030fced13',1,'musx::dom::others::PartDefinition']]],
+  ['newpos36_5',['newPos36',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a4e4b6ab69888bba10dbd27f470bc385f',1,'musx::dom::others::TextBlock']]],
+  ['nodeid_6',['nodeId',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#adcbfd8e3576aabcdddf16a9bbf5415bf',1,'musx::dom::ObjectPool::ObjectKey']]],
+  ['noexpandsingleword_7',['noExpandSingleWord',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a34633d8ec36d5f5e8457c6fe7fd18ec4',1,'musx::dom::others::TextBlock']]],
+  ['noreversestems_8',['noReverseStems',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a46cbe2425f784c455eacea4b6ea5a1d0',1,'musx::dom::options::StemOptions']]],
+  ['notes_9',['notes',['../classmusx_1_1dom_1_1Entry.html#a533b919d0efa81b9d26fb16ade0b7773',1,'musx::dom::Entry']]],
+  ['nottall_10',['notTall',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#a0065585cac3d0d21e652d6ae958e3817',1,'musx::dom::others::Enclosure']]],
+  ['nozero_11',['noZero',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a86cbaee836938f30869076e21e3d87fa',1,'musx::dom::others::MeasureNumberRegion']]],
+  ['numadjx_12',['numAdjX',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a6d567a319b51dad23b443ac03429fe44',1,'musx::dom::options::MultimeasureRestOptions']]],
+  ['numadjy_13',['numAdjY',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ae5046a1150b53942817647813b0ebc0f',1,'musx::dom::options::MultimeasureRestOptions']]],
+  ['numberfont_14',['numberFont',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#afd5fcceb53abce7485ddf8d0ad42e570',1,'musx::dom::others::MarkingCategory']]],
+  ['numberoffset_15',['numberOffset',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#ac5aca26cc324acc33a8cc34b8a3a0674',1,'musx::dom::others::MeasureNumberRegion']]],
+  ['numcompositedecimalplaces_16',['numCompositeDecimalPlaces',['../classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html#a6bb2fc74b2ad812559ab02ed3c99f39d',1,'musx::dom::options::TimeSignatureOptions']]],
+  ['numnotes_17',['numNotes',['../classmusx_1_1dom_1_1Entry.html#ab528469b556bcfba86cc0d5fe79955f1',1,'musx::dom::Entry']]],
+  ['numstart_18',['numStart',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ab6d157e089a94a4a63eefed7e58315e1',1,'musx::dom::options::MultimeasureRestOptions']]],
+  ['numstyle_19',['numStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a8348203034a4c11f23c6a2b947064615',1,'musx::dom::options::TupletOptions']]]
+];

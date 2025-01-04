@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['shiftforseconds_0',['ShiftForSeconds',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a291f7a4f2892f12f8f77afbd030c1e58a93753c19a638b2a3d82dabe2389d888a',1,'musx::dom::options::TieOptions']]],
+  ['slur_1',['Slur',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a0520ad11e6b380aafe8a9be9ce72f0a5a76ddef8b6ba62064b651ebe9fc708332',1,'musx::dom::options::TupletOptions']]],
+  ['smartplaybackoff_2',['SmartPlaybackOff',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea6a389774ad28ddb18732bbe33692be32',1,'musx::dom::others']]],
+  ['smartplaybackon_3',['SmartPlaybackOn',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea1d5141b33e809ed351a8a37311abffea',1,'musx::dom::others']]],
+  ['smartshape15ma_4',['SmartShape15ma',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa85d898cce50d1ed16d490f38e44ec8e3',1,'musx::dom::options::FontOptions']]],
+  ['smartshape15mb_5',['SmartShape15mb',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aac22ec665cc8ccf9bbc6c59d1a4f72be0',1,'musx::dom::options::FontOptions']]],
+  ['smartshape8va_6',['SmartShape8va',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa5f11c2665ccb79a4dbeac305703a9c22',1,'musx::dom::options::FontOptions']]],
+  ['smartshape8vb_7',['SmartShape8vb',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aadf35c7ce0174982f2fe5a2a29e6177cc',1,'musx::dom::options::FontOptions']]],
+  ['smartshapetrill_8',['SmartShapeTrill',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa9427e114e6be4c1ecd006f9f6f5e1a20',1,'musx::dom::options::FontOptions']]],
+  ['smartshapewiggle_9',['SmartShapeWiggle',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa8e21490e70addaf5e481f2e96f4b5d62',1,'musx::dom::options::FontOptions']]],
+  ['splitevenly_10',['SplitEvenly',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fab9e279a647b045b9b8046f152ce466e5',1,'musx::dom::options::TieOptions']]],
+  ['staffnames_11',['StaffNames',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa88fe4a96eb446ca6edf1d7d6ccc336ce',1,'musx::dom::options::FontOptions']]],
+  ['startofmusic_12',['StartOfMusic',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eac50fccfc5c4998ee4d5b92dc7b11e842',1,'musx::dom::others']]],
+  ['starttimesig_13',['StartTimeSig',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea5089152b50433cc58e8d31c990fadc74',1,'musx::dom::others']]],
+  ['stem_14',['Stem',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eaf546c89d3a37a97fe46aa01fc0d67ed2',1,'musx::dom::others']]],
+  ['stemreversal_15',['StemReversal',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa0674e7e4fbd13db5049c5f7b8847bbd2',1,'musx::dom::options::TieOptions']]],
+  ['subtitle_16',['Subtitle',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa035f4e29da2d6d31303f7d7cfa1be13b',1,'musx::dom::texts::FileInfoText']]],
+  ['swing_17',['Swing',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea198b44a40aa77f2256886010c7526c0b',1,'musx::dom::others']]]
+];

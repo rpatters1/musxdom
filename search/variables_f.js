@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['pageformatparts_0',['pageFormatParts',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#a34eb9ebed12498b9a41f8e0654fe8edb',1,'musx::dom::options::PageFormatOptions']]],
+  ['pageformatscore_1',['pageFormatScore',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#a35c4887d1f0825ab5785a0f64acf6967',1,'musx::dom::options::PageFormatOptions']]],
+  ['pageheight_2',['pageHeight',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a334356e1fec71ddc22887008f98eb0c5',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
+  ['pagepercent_3',['pagePercent',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a08743a3aad8f4c7eec307e3f1fd47397',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
+  ['pagewidth_4',['pageWidth',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a58f524b344f145949f323c05498f5ef8',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
+  ['partdata_5',['partData',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#af89c8fbb75e599b2fb44d34b9122bf92',1,'musx::dom::others::MeasureNumberRegion']]],
+  ['partid_6',['partId',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a856575ddfd2c70250333c4b9bd449e3f',1,'musx::dom::ObjectPool::ObjectKey']]],
+  ['partorder_7',['partOrder',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#a905607c86784a417ba48bbd86cc01f4a',1,'musx::dom::others::PartDefinition']]],
+  ['pathslurtipwidth_8',['pathSlurTipWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#a730ed2648165ab9cad9ed079740e56b8',1,'musx::dom::options::LineCurveOptions']]],
+  ['performancedata_9',['performanceData',['../classmusx_1_1dom_1_1Entry.html#addbada32311803e48b2b05238332c83c',1,'musx::dom::Entry']]],
+  ['pitch_10',['pitch',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#af762ba4f6477051d106eb142ae9265dd',1,'musx::dom::others::FontDefinition']]],
+  ['platform_11',['platform',['../structmusx_1_1dom_1_1header_1_1FileInfo.html#a4b619edff1f1025f07bd4d15f3848e01',1,'musx::dom::header::FileInfo']]],
+  ['playback_12',['playback',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a61936759c31d7c739786fe382b9b6342',1,'musx::dom::others::LayerAttributes']]],
+  ['playbackduration_13',['playbackDuration',['../classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html#afc838f4ca330a7873faf6114ccdc3e65',1,'musx::dom::options::GraceNoteOptions']]],
+  ['playbacktype_14',['playbackType',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a4837499eccadd103d4c08637c43266d2',1,'musx::dom::others::TextExpressionDef']]],
+  ['playpass_15',['playPass',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a518f6b45f5640e3972bc5571873d9a22',1,'musx::dom::others::TextExpressionDef']]],
+  ['posstyle_16',['posStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ab49a3155e543397c4c7bfd2855beff69',1,'musx::dom::options::TupletOptions']]],
+  ['prefix_17',['prefix',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a40e1cb47a848d40286b94b7ed1c2f9ba',1,'musx::dom::others::MeasureNumberRegion']]],
+  ['psuldepth_18',['psUlDepth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#aa73f5b5b66b72438d9670504179fad69',1,'musx::dom::options::LineCurveOptions']]],
+  ['psulwidth_19',['psUlWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#ae67127c98f19abfbbaf2cf4c1b33e495',1,'musx::dom::options::LineCurveOptions']]]
+];

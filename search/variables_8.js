@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['ignorehidden_0',['ignoreHidden',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#abc3776c3ea1cc4118e9adb11548c0d80',1,'musx::dom::options::MusicSpacingOptions']]],
+  ['ignorehiddenlayers_1',['ignoreHiddenLayers',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a8bdb6eade6b17a1bc87cb2e65b02a0c4',1,'musx::dom::others::LayerAttributes']]],
+  ['ignorehiddennotesonly_2',['ignoreHiddenNotesOnly',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a9febb8189265d0741e82af73d02b5fe7',1,'musx::dom::others::LayerAttributes']]],
+  ['ignorehorznumoffset_3',['ignoreHorzNumOffset',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#abe6c4075e78c34a630f4465cc5ddc3e2',1,'musx::dom::options::TupletOptions']]],
+  ['inci_4',['inci',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ab6e7d0f9f95e725f2a36da72d85aee5b',1,'musx::dom::ObjectPool::ObjectKey']]],
+  ['incidence_5',['incidence',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a632b780c6dc8e819d29ccb5f7c67d019',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
+  ['includehours_6',['includeHours',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#afa750557598400b578275e692ec9054b',1,'musx::dom::others::MeasureNumberRegion']]],
+  ['increstsinfourgroups_7',['incRestsInFourGroups',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a5927aa74943a8cd65ba5f7bd6dd17ce9',1,'musx::dom::options::BeamOptions']]],
+  ['indivpos_8',['indivPos',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#a1a12671dc1334ce3a5da6b10153afb71',1,'musx::dom::others::NamePositioning']]],
+  ['innerbodyh_9',['innerBodyH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a49ec730dac8edc2ce8080b97ed809409',1,'musx::dom::options::PianoBraceBracketOptions']]],
+  ['innerbodyv_10',['innerBodyV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ade97d88a29b352086034905be7904943',1,'musx::dom::options::PianoBraceBracketOptions']]],
+  ['innertiph_11',['innerTipH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ac90d1313561f018beb94fdc8a74541c3',1,'musx::dom::options::PianoBraceBracketOptions']]],
+  ['innertipv_12',['innerTipV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ac430f0c09a7cdc3ff1fabbf2fb103674',1,'musx::dom::options::PianoBraceBracketOptions']]],
+  ['inset_13',['inset',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html#a57f2e610406323a25fa00ea7554e2899',1,'musx::dom::options::SmartShapeOptions::ControlStyle']]],
+  ['insetfixed_14',['insetFixed',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76',1,'musx::dom::options::TieOptions::ControlPoint']]],
+  ['insetratio_15',['insetRatio',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521',1,'musx::dom::options::TieOptions::ControlPoint']]],
+  ['insetstyle_16',['insetStyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions']]],
+  ['interpolateallotments_17',['interpolateAllotments',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#ad55a6666bb6174e0550843e314b99dac',1,'musx::dom::options::MusicSpacingOptions']]],
+  ['ishidden_18',['isHidden',['../classmusx_1_1dom_1_1Entry.html#aa140b2bc34357eee1085828bae9c9bae',1,'musx::dom::Entry']]],
+  ['isnote_19',['isNote',['../classmusx_1_1dom_1_1Entry.html#a1b7183f1bc2716b5eb961a2beab9e3c9',1,'musx::dom::Entry']]],
+  ['isshape_20',['isShape',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#aafb0704b240bf7675074b1eb4879487b',1,'musx::dom::options::ClefOptions::ClefDef']]],
+  ['isvalid_21',['isvalid',['../classmusx_1_1dom_1_1Note.html#a3e9ab0528cef1b53791ad277da67b26b',1,'musx::dom::Note::isValid'],['../classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b',1,'musx::dom::Entry::isValid']]],
+  ['italic_22',['italic',['../classmusx_1_1dom_1_1FontInfo.html#ace55cebaa51ad5c68f5e177301938e2f',1,'musx::dom::FontInfo']]]
+];
