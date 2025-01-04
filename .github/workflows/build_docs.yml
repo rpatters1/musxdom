@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev/get-github-docs-working
 
 jobs:
   build-and-deploy:
