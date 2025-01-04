@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
+
 project(musx)
 
 # Set the C++ standard
@@ -11,16 +12,14 @@ endif()
 
 set(MUSX_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "Root directory of musx")
 
-# Enable testing if not explicitly disabled by the parent project
-if(NOT DEFINED BUILD_TESTING)
-    set(BUILD_TESTING ON CACHE BOOL "Enable testing")
-endif()
-
-message(STATUS "musx BUILD_TESTING=${BUILD_TESTING}")
-
-if(BUILD_TESTING)
+# Allow users to disable building tests
+option(musx_BUILD_TESTING "Enable testing for your library" ON)
+if(musx_BUILD_TESTING)
+    message(STATUS "Testing enabled for musx_BUILD_TESTING.")
     enable_testing()
     add_subdirectory(tests)
+else()
+    message(STATUS "Testing not enabled for musx_BUILD_TESTING.")
 endif()
 
 # Add the include directory

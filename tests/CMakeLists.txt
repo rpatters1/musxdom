@@ -1,8 +1,3 @@
-# Save the current state of BUILD_TESTING
-# set(PREV_BUILD_TESTING ${BUILD_TESTING})
-
-# Turn off BUILD_TESTING for dependencies
-# set(BUILD_TESTING OFF CACHE BOOL "Disable testing for dependencies" FORCE)
 
 # Add Google Test
 include(FetchContent)
@@ -15,6 +10,9 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# Disable building tests for tinyxml2
+set(tinyxml2_BUILD_TESTING OFF CACHE BOOL "Do not build tests for tinyxml2")
+
 # Add tinyxml2
 FetchContent_Declare(
     tinyxml2
@@ -23,6 +21,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(tinyxml2)
 
+# Disable building tests for tinyxml2
+set(PUGIXML_BUILD_TESTS OFF CACHE BOOL "Do not build tests for pugixml")
+
 # Fetch pugixml
 FetchContent_Declare(
     pugixml
@@ -30,9 +31,6 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(pugixml)
-
-# Restore BUILD_TESTING for the top-level tests
-# set(BUILD_TESTING ${PREV_BUILD_TESTING})
 
 # Enable testing
 enable_testing()
