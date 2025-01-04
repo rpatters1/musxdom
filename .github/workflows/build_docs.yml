@@ -1,0 +1,29 @@
+name: Build and Deploy Doxygen
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository with submodules
+      uses: actions/checkout@v4
+      with:
+        submodules: true  # Ensures submodules are initialized and updated
+
+    - name: Install Doxygen
+      run: sudo apt-get update && sudo apt-get install -y doxygen
+
+    - name: Generate Doxygen documentation
+      run: doxygen Doxyfile
+      working-directory: ./docs  # Change directory to docs before running Doxygen
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/generated/html

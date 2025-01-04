@@ -10,6 +10,10 @@ Document object model for the EnigmaXml format in Finale musx files. It is compa
 - It has been separately developed by analyzing the contents of EnigmaXml files and other publically available resources, such as the [PDK Framework](https://pdk.finalelua.com/) for Finale and Jari Williamsson’s [original site](https://www.finaletips.nu/frameworkref/index.html).
 - Nothing in this repository circumvents digital copy protection on the Finale application.
 
+### Documentation
+
+[MUSX Document Model](https://rpatters1.github.io/musx-object-model/)
+
 ### Setup Instructions
 
 Include the top header in your source file.
