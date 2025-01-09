@@ -40,10 +40,11 @@ public:
     explicit Note(const DocumentWeakPtr& document, NoteNumber noteId)
         : Base(document, 0, ShareMode::All), m_noteId(noteId) {}
 
-    int harmLev{};    ///< Diatonic displacement relative to tonic or to C (for keyless scores)
-    int harmAlt{};    ///< Chromatic alterations relative to key signature.
-    bool isValid{};   ///< Should always be true.
-    bool showAcci{};  ///< Should the accidental be shown?
+    int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
+    int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
+    bool isValid{};     ///< Should always be true but otherwise appears to be used internally by Finale.
+    bool showAcci{};    ///< True if the note has an accidental. (Dynamically changed by Finale unless `freezeAcci` is set.)
+    bool freezeAcci{};  ///< True if the accidental should be forced on or off (based on `showAcci`.)
 
     /// @brief Gets the note id for this note. This value does not change, even if the notes
     /// in a chord are rearranged (which affects the order of #Entry::notes.)
@@ -105,7 +106,7 @@ public:
     */
     Edu duration{};
     int numNotes{};          ///< Number of notes in the entry. There is an error if this is not the same as notes.size().
-    bool isValid{};          ///< Should always be true.
+    bool isValid{};          ///< Should always be true but otherwise appears to be used internally by Finale.
     bool isNote{};           ///< If this value is false, the entry is a rest.
     bool floatRest{};        ///< Is floating rest. If false, the first note element gives the staff position of the rest.
     bool isHidden{};         ///< Indicates the entry is hidden, (xml node is `<ignore>`)
@@ -116,7 +117,7 @@ public:
     bool sorted{};           ///< Sorted flag.
     bool lyricDetail{};      ///< Indicates there is a lyric assignment on the entry.
     bool performanceData{};  ///< Indicates there is performance data on the entry.
-    bool smartShapeDetail{}; ///< Indicates there is a 
+    bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool freezeBeam{};       ///< Freeze beam flag (Derived from the presence of `<freezeBeam>` node.)
 
     /** @brief Collection of notes that comprise the entry. These are in order from lowest to highest. */

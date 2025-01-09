@@ -38,6 +38,7 @@ MUSX_XML_ELEMENT_ARRAY(Note, {
     {"harmAlt", [](const XmlElementPtr& e, const std::shared_ptr<Note>& i) { i->harmAlt = e->getTextAs<int>(); }},
     {"isValid", [](const XmlElementPtr&, const std::shared_ptr<Note>& i) { i->isValid = true; }},
     {"showAcci", [](const XmlElementPtr&, const std::shared_ptr<Note>& i) { i->showAcci = true; }},
+    {"freezeAcci", [](const XmlElementPtr&, const std::shared_ptr<Note>& i) { i->freezeAcci = true; }},
 });
 
 // XML mappings for the Entry class
