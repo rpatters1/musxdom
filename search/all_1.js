@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['backtobackstyle_0',['backtobackstyle',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a371657b833569796518bf7f6dc8be94a',1,'musx::dom::options::RepeatOptions::BackToBackStyle'],['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a3721c724bf35905e52d0360cf05eb269',1,'musx::dom::options::RepeatOptions::backToBackStyle']]],
+  ['backtobackstyle_0',['backtobackstyle',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a3721c724bf35905e52d0360cf05eb269',1,'musx::dom::options::RepeatOptions::backToBackStyle'],['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a371657b833569796518bf7f6dc8be94a',1,'musx::dom::options::RepeatOptions::BackToBackStyle']]],
   ['backwarddothpos_1',['backwardDotHPos',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a1efedafe5f209644b4891241e3a4dae3',1,'musx::dom::options::RepeatOptions']]],
   ['barlinedashoff_2',['barlineDashOff',['../classmusx_1_1dom_1_1options_1_1BarlineOptions.html#a45667bce2c889d6c0d82908aaabe71b9',1,'musx::dom::options::BarlineOptions']]],
   ['barlinedashon_3',['barlineDashOn',['../classmusx_1_1dom_1_1options_1_1BarlineOptions.html#ad60945677c9c0a147b86b2cac1811043',1,'musx::dom::options::BarlineOptions']]],
   ['barlineoptions_4',['barlineoptions',['../classmusx_1_1dom_1_1options_1_1BarlineOptions.html',1,'musx::dom::options::BarlineOptions'],['../classmusx_1_1dom_1_1options_1_1BarlineOptions.html#a9ec1d009c75e0adc7c5bbbd53bb0bc1f',1,'musx::dom::options::BarlineOptions::BarlineOptions(const DocumentWeakPtr &amp;document, Cmper partId=0, ShareMode shareMode=ShareMode::All)']]],
   ['barlinewidth_5',['barlineWidth',['../classmusx_1_1dom_1_1options_1_1BarlineOptions.html#a391c4530aca213dcf204edb449e51df0',1,'musx::dom::options::BarlineOptions']]],
-  ['base_6',['base',['../classmusx_1_1dom_1_1Base.html',1,'musx::dom::Base'],['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a6a32a3ade5ed0d369a6a80390a49ef23',1,'musx::dom::others::MeasureNumberRegion::base'],['../classmusx_1_1dom_1_1Base.html#a57d15e8a530fbfb694e4d3fbd5ae2dd5',1,'musx::dom::Base::Base()']]],
+  ['base_6',['base',['../classmusx_1_1dom_1_1Base.html',1,'musx::dom::Base'],['../classmusx_1_1dom_1_1Base.html#a57d15e8a530fbfb694e4d3fbd5ae2dd5',1,'musx::dom::Base::Base()'],['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a6a32a3ade5ed0d369a6a80390a49ef23',1,'musx::dom::others::MeasureNumberRegion::base']]],
   ['baselineadjust_7',['baselineAdjust',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a258831024841fc8f5ede65dc0db8a2f2',1,'musx::dom::options::ClefOptions::ClefDef']]],
   ['beam_8',['beam',['../classmusx_1_1dom_1_1Entry.html#ad829caa4f42eee2a016822e76d04f44c',1,'musx::dom::Entry']]],
   ['beamfoureighthsincommontime_9',['beamFourEighthsInCommonTime',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#af6ed16a95786f6a3eeabdee7a53def83',1,'musx::dom::options::BeamOptions']]],

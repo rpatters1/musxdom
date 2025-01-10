@@ -18,11 +18,12 @@ var searchData=
   ['fontsize_15',['fontSize',['../classmusx_1_1dom_1_1FontInfo.html#add260a29c5ba23bf36e73c6604f40809',1,'musx::dom::FontInfo']]],
   ['forwarddothpos_16',['forwardDotHPos',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a82569127d1768a98a8d6f585a37a0937',1,'musx::dom::options::RepeatOptions']]],
   ['frames_17',['frames',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#af4f503a7c86b003d64ed1b83546e6814',1,'musx::dom::details::GFrameHold']]],
-  ['freezebeam_18',['freezeBeam',['../classmusx_1_1dom_1_1Entry.html#aeb7ecc28f468574c224acf57e4555841',1,'musx::dom::Entry']]],
-  ['freezelayer_19',['freezeLayer',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a564eb010412560a9f59370ef58a79921',1,'musx::dom::others::LayerAttributes']]],
-  ['freezestemsup_20',['freezeStemsUp',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a99be0482dc8814f7072b913c148d8a10',1,'musx::dom::others::LayerAttributes']]],
-  ['freeztiestostems_21',['freezTiesToStems',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae78c54acbf7d6f784f5426d7d0f2ccf1',1,'musx::dom::others::LayerAttributes']]],
-  ['fronttiesepar_22',['frontTieSepar',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa2e43b5f5401cb4d6e52276f2193e8df',1,'musx::dom::options::TieOptions']]],
-  ['fulldura_23',['fullDura',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a1b89db38d501187137dbe74f25878dd1',1,'musx::dom::options::TupletOptions']]],
-  ['fullnametextid_24',['fullNameTextId',['../classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af',1,'musx::dom::others::Staff']]]
+  ['freezeacci_18',['freezeAcci',['../classmusx_1_1dom_1_1Note.html#afe747089f18d125be7a444492a9db822',1,'musx::dom::Note']]],
+  ['freezebeam_19',['freezeBeam',['../classmusx_1_1dom_1_1Entry.html#aeb7ecc28f468574c224acf57e4555841',1,'musx::dom::Entry']]],
+  ['freezelayer_20',['freezeLayer',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a564eb010412560a9f59370ef58a79921',1,'musx::dom::others::LayerAttributes']]],
+  ['freezestemsup_21',['freezeStemsUp',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a99be0482dc8814f7072b913c148d8a10',1,'musx::dom::others::LayerAttributes']]],
+  ['freeztiestostems_22',['freezTiesToStems',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae78c54acbf7d6f784f5426d7d0f2ccf1',1,'musx::dom::others::LayerAttributes']]],
+  ['fronttiesepar_23',['frontTieSepar',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa2e43b5f5401cb4d6e52276f2193e8df',1,'musx::dom::options::TieOptions']]],
+  ['fulldura_24',['fullDura',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a1b89db38d501187137dbe74f25878dd1',1,'musx::dom::options::TupletOptions']]],
+  ['fullnametextid_25',['fullNameTextId',['../classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af',1,'musx::dom::others::Staff']]]
 ];

@@ -1,5 +1,7 @@
 var NAVTREEINDEX10 =
 {
+"namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371a8b9f1adf7751215ad7b7f65e44b5bbc7":[1,0,0,0,3,21,7],
+"namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371aaccc4ff44a1eeebdae36465ad7bfbe60":[1,0,0,0,3,21,2],
 "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371ab1a05c4a10b09f21b56525156ff36d2b":[1,0,0,0,3,21,4],
 "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371abb687185d85176091c6c1b32eff713e4":[1,0,0,0,3,21,9],
 "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371ad87fd08d41425e6c4edc15479ea1849b":[1,0,0,0,3,21,6],

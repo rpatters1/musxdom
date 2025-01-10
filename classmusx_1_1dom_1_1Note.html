@@ -28,7 +28,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">MUSX Document Model<span id="projectnumber">&#160;0.1</span>
+   <div id="projectname">MUSX Document Model
    </div>
   </td>
  </tr>
@@ -162,20 +162,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 Public Attributes</h2></td></tr>
 <tr class="memitem:a984a3b0f4ecfb02a3ccf3ba55cd497c0" id="r_a984a3b0f4ecfb02a3ccf3ba55cd497c0"><td class="memItemLeft" align="right" valign="top"><a id="a984a3b0f4ecfb02a3ccf3ba55cd497c0" name="a984a3b0f4ecfb02a3ccf3ba55cd497c0"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>harmLev</b> {}</td></tr>
-<tr class="memdesc:a984a3b0f4ecfb02a3ccf3ba55cd497c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Diatonic displacement relative to tonic or to C (for keyless scores) <br /></td></tr>
+<tr class="memdesc:a984a3b0f4ecfb02a3ccf3ba55cd497c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C). <br /></td></tr>
 <tr class="separator:a984a3b0f4ecfb02a3ccf3ba55cd497c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68935b6052e3c788f5015b39ad538f0b" id="r_a68935b6052e3c788f5015b39ad538f0b"><td class="memItemLeft" align="right" valign="top"><a id="a68935b6052e3c788f5015b39ad538f0b" name="a68935b6052e3c788f5015b39ad538f0b"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>harmAlt</b> {}</td></tr>
-<tr class="memdesc:a68935b6052e3c788f5015b39ad538f0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chromatic alterations relative to key signature. <br /></td></tr>
+<tr class="memdesc:a68935b6052e3c788f5015b39ad538f0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7. <br /></td></tr>
 <tr class="separator:a68935b6052e3c788f5015b39ad538f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e9ab0528cef1b53791ad277da67b26b" id="r_a3e9ab0528cef1b53791ad277da67b26b"><td class="memItemLeft" align="right" valign="top"><a id="a3e9ab0528cef1b53791ad277da67b26b" name="a3e9ab0528cef1b53791ad277da67b26b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> {}</td></tr>
-<tr class="memdesc:a3e9ab0528cef1b53791ad277da67b26b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should always be true. <br /></td></tr>
+<tr class="memdesc:a3e9ab0528cef1b53791ad277da67b26b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should always be true but otherwise appears to be used internally by Finale. <br /></td></tr>
 <tr class="separator:a3e9ab0528cef1b53791ad277da67b26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af07df87315ac74c605c9a6bb06c0c882" id="r_af07df87315ac74c605c9a6bb06c0c882"><td class="memItemLeft" align="right" valign="top"><a id="af07df87315ac74c605c9a6bb06c0c882" name="af07df87315ac74c605c9a6bb06c0c882"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>showAcci</b> {}</td></tr>
-<tr class="memdesc:af07df87315ac74c605c9a6bb06c0c882"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should the accidental be shown? <br /></td></tr>
+<tr class="memdesc:af07df87315ac74c605c9a6bb06c0c882"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the note has an accidental. (Dynamically changed by Finale unless <code>freezeAcci</code> is set.) <br /></td></tr>
 <tr class="separator:af07df87315ac74c605c9a6bb06c0c882"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe747089f18d125be7a444492a9db822" id="r_afe747089f18d125be7a444492a9db822"><td class="memItemLeft" align="right" valign="top"><a id="afe747089f18d125be7a444492a9db822" name="afe747089f18d125be7a444492a9db822"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>freezeAcci</b> {}</td></tr>
+<tr class="memdesc:afe747089f18d125be7a444492a9db822"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the accidental should be forced on or off (based on <code>showAcci</code>.) <br /></td></tr>
+<tr class="separator:afe747089f18d125be7a444492a9db822"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
