@@ -331,7 +331,7 @@ using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
 class EntryPool : public ObjectPool<Entry, EntryNumber>
 {
 public:
-    /** @brief Others version of #ObjectPool::add */
+    /** @brief EntryPool version of #ObjectPool::add */
     void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
     { ObjectPool::add({ entryNumber, 0 }, instance); }
 

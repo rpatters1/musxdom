@@ -1,3 +1,6 @@
+# Save the current state
+set(_original_WARN_DEPRECATED ${CMAKE_WARN_DEPRECATED})
+set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "Suppress deprecation warnings for external projects" FORCE)
 
 # Add Google Test
 include(FetchContent)
@@ -31,6 +34,9 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(pugixml)
+
+# Restore the original state
+set(CMAKE_WARN_DEPRECATED ${_original_WARN_DEPRECATED} CACHE BOOL "Restore original deprecation warnings setting" FORCE)
 
 # Enable testing
 enable_testing()

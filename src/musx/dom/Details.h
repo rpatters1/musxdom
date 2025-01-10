@@ -50,9 +50,9 @@ public:
      * @brief Constructor function
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for (probably always 0).
-     * @param shareMode The sharing mode for this GFrameHold (probably always #ShareMode::All)
-     * @param inst The staff ID for this GFrameHold.
-     * @param meas The measure ID for this GFrameHold.
+     * @param shareMode The sharing mode for this #GFrameHold (probably always #ShareMode::All)
+     * @param inst The staff ID for this #GFrameHold.
+     * @param meas The measure ID for this #GFrameHold.
      */
     explicit GFrameHold(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas)
         : DetailsBase(document, partId, shareMode, inst, meas), frames(MAX_LAYERS) {}
@@ -75,22 +75,24 @@ public:
     int clefPercent{};                      ///< Clef percent where 100 means 100%.
     std::vector<Cmper> frames;              ///< @ref others::Frame values for layers 1..4 (layer indices 0..3) if non-zero
 
-    /// @brief returns the inst (staff) number for this GFrameHold
+    /// @brief returns the inst (staff) number for this #GFrameHold
     InstCmper getStaff() const { return InstCmper(getCmper1()); }
 
-    /// @brief returns the measure number for this GFrameHold
+    /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
     /**
-     * @brief iterates the entries for the specified layer in this gfhold from left to right
-     * @param layerIndex The layer index (0..3) to iterate
+     * @brief iterates the entries for the specified layer in this #GFrameHold from left to right
+     * @param layerIndex The layer index (0..3) to iterate.
+     * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
      * @throws std::invalid_argument if the layer index is out of range
      */
     bool iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const Entry>&)> iterator);
 
     /**
-     * @brief iterates the entries for this gfhold from left to right for each layer in order
+     * @brief iterates the entries for this #GFrameHold from left to right for each layer in order
+     * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
      */
     bool iterateEntries(std::function<bool(const std::shared_ptr<const Entry>&)> iterator);

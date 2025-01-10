@@ -49,6 +49,7 @@ TEST(EntryTest, PopulateFields)
         <harmAlt>1</harmAlt>
         <isValid/>
         <showAcci/>
+        <freezeAcci/>
       </note>
     </entry>
     <entry entnum="1002" prev="1001" next="1003">
@@ -92,6 +93,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_EQ(note->harmAlt, 1);
         EXPECT_TRUE(note->isValid);
         EXPECT_TRUE(note->showAcci);
+        EXPECT_TRUE(note->freezeAcci);
 
         EXPECT_EQ(entry->calcNoteType(), Entry::NoteType::Eighth);
         EXPECT_EQ(entry->calcAugmentationDots(), 2);
