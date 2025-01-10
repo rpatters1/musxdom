@@ -48,11 +48,17 @@
  *
  * The EnigmaXml that is extracted from a `.musx` file follows the pattern that any missing node receives the default value.
  * This is mainly interesting for booleans and enums. The xml nodes for booleans only show up if they are `true`. The default
- * values for enums do not show up either, which means it is frequently difficult to know what their string values are. For this
+ * values for enums do not show up either, which means it is frequently difficult to know what their string values might be. For this
  * reason, default enum values are usually omitted from the `XmlEnumMapping` tables.
  *
- * (This documentation reference is generated directly from
- * the source code, by the Doxygen application.)
+ * <b>The Musx Document Model project is not affiliated with or endorsed by Finale or its parent company</b>.
+ * - It is an independent open-source library designed to help users access and convert their own data in the absence of Finale, which has been discontinued.
+ * - It does not contain any Finale source code.
+ * - It is not capable of writing Finale files, only reading them.
+ * - It has been separately developed by analyzing the contents of EnigmaXml files and other publically available resources, such as the [PDK Framework](https://pdk.finalelua.com/) for Finale and Jari Williamsson’s [original site](https://www.finaletips.nu/frameworkref/index.html).
+ * - Nothing in the repository circumvents digital copy protection on the Finale application.
+ *
+ * (This reference web-site is generated directly from the source code by the Doxygen application.)
  *
  * @author Robert Patterson
  */
