@@ -15,11 +15,10 @@ var namespacemusx_1_1dom =
     [ "integrity_error", "classmusx_1_1dom_1_1integrity__error.html", null ],
     [ "Note", "classmusx_1_1dom_1_1Note.html", "classmusx_1_1dom_1_1Note" ],
     [ "ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html", "classmusx_1_1dom_1_1ObjectPool" ],
-    [ "OneCmperPool", "classmusx_1_1dom_1_1OneCmperPool.html", "classmusx_1_1dom_1_1OneCmperPool" ],
     [ "OptionsBase", "classmusx_1_1dom_1_1OptionsBase.html", "classmusx_1_1dom_1_1OptionsBase" ],
+    [ "OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", "classmusx_1_1dom_1_1OptionsPool" ],
     [ "OthersBase", "classmusx_1_1dom_1_1OthersBase.html", "classmusx_1_1dom_1_1OthersBase" ],
     [ "OthersPool", "classmusx_1_1dom_1_1OthersPool.html", "classmusx_1_1dom_1_1OthersPool" ],
-    [ "ScalarPool", "classmusx_1_1dom_1_1ScalarPool.html", "classmusx_1_1dom_1_1ScalarPool" ],
     [ "TextsBase", "classmusx_1_1dom_1_1TextsBase.html", "classmusx_1_1dom_1_1TextsBase" ],
     [ "TextsPool", "classmusx_1_1dom_1_1TextsPool.html", "classmusx_1_1dom_1_1TextsPool" ],
     [ "ClefIndex", "namespacemusx_1_1dom.html#a79036ddff994d4ce8ebdc6c5275c4385", null ],
@@ -38,10 +37,10 @@ var namespacemusx_1_1dom =
     [ "LayerIndex", "namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981", null ],
     [ "MeasCmper", "namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817", null ],
     [ "NoteNumber", "namespacemusx_1_1dom.html#ac2cf4aba3b1d8b1e87e637752cfa6d3d", null ],
-    [ "OptionsPool", "namespacemusx_1_1dom.html#aa0e9d3c97039679724c253565f2e45f1", null ],
     [ "OptionsPoolPtr", "namespacemusx_1_1dom.html#a970ba333257a18f1f81abb356b3e6727", null ],
     [ "OthersPoolPtr", "namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e", null ],
     [ "TextsPoolPtr", "namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4", null ],
     [ "MAX_LAYERS", "namespacemusx_1_1dom.html#a83d296c53df0e81b30707dfd6210b77b", null ],
-    [ "MUSX_GLOBALS_CMPER", "namespacemusx_1_1dom.html#a484882ede2c8bb64570f45fce4c0edef", null ]
+    [ "MUSX_GLOBALS_CMPER", "namespacemusx_1_1dom.html#a484882ede2c8bb64570f45fce4c0edef", null ],
+    [ "SCORE_PARTID", "namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0", null ]
 ];

@@ -20,7 +20,7 @@ var searchData=
   ['inset_17',['inset',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html#a57f2e610406323a25fa00ea7554e2899',1,'musx::dom::options::SmartShapeOptions::ControlStyle']]],
   ['insetfixed_18',['insetFixed',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76',1,'musx::dom::options::TieOptions::ControlPoint']]],
   ['insetratio_19',['insetRatio',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521',1,'musx::dom::options::TieOptions::ControlPoint']]],
-  ['insetstyle_20',['insetstyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions::insetStyle'],['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa595700238a8bcb2327afec614f402cf',1,'musx::dom::options::TieOptions::InsetStyle']]],
+  ['insetstyle_20',['insetstyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa595700238a8bcb2327afec614f402cf',1,'musx::dom::options::TieOptions::InsetStyle'],['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions::insetStyle']]],
   ['instcmper_21',['InstCmper',['../namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a',1,'musx::dom']]],
   ['instrumentused_22',['instrumentused',['../classmusx_1_1dom_1_1others_1_1InstrumentUsed.html',1,'musx::dom::others::InstrumentUsed'],['../classmusx_1_1dom_1_1others_1_1InstrumentUsed.html#a74531709779349befe7b2fb4a318bff8',1,'musx::dom::others::InstrumentUsed::InstrumentUsed()']]],
   ['integrity_5ferror_23',['integrity_error',['../classmusx_1_1dom_1_1integrity__error.html',1,'musx::dom']]],

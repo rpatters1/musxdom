@@ -74,11 +74,10 @@ var annotated_dup =
         [ "integrity_error", "classmusx_1_1dom_1_1integrity__error.html", null ],
         [ "Note", "classmusx_1_1dom_1_1Note.html", "classmusx_1_1dom_1_1Note" ],
         [ "ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html", "classmusx_1_1dom_1_1ObjectPool" ],
-        [ "OneCmperPool", "classmusx_1_1dom_1_1OneCmperPool.html", "classmusx_1_1dom_1_1OneCmperPool" ],
         [ "OptionsBase", "classmusx_1_1dom_1_1OptionsBase.html", "classmusx_1_1dom_1_1OptionsBase" ],
+        [ "OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", "classmusx_1_1dom_1_1OptionsPool" ],
         [ "OthersBase", "classmusx_1_1dom_1_1OthersBase.html", "classmusx_1_1dom_1_1OthersBase" ],
         [ "OthersPool", "classmusx_1_1dom_1_1OthersPool.html", "classmusx_1_1dom_1_1OthersPool" ],
-        [ "ScalarPool", "classmusx_1_1dom_1_1ScalarPool.html", "classmusx_1_1dom_1_1ScalarPool" ],
         [ "TextsBase", "classmusx_1_1dom_1_1TextsBase.html", "classmusx_1_1dom_1_1TextsBase" ],
         [ "TextsPool", "classmusx_1_1dom_1_1TextsPool.html", "classmusx_1_1dom_1_1TextsPool" ]
       ] ],

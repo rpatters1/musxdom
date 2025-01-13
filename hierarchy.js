@@ -80,7 +80,7 @@ var hierarchy =
       [ "musx::factory::PoolFactory< EntryFactory, dom::Entry, dom::EntryPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
         [ "musx::factory::EntryFactory", "classmusx_1_1factory_1_1EntryFactory.html", null ]
       ] ],
-      [ "musx::factory::PoolFactory< OptionsFactory, dom::OptionsBase, dom::ScalarPool< dom::OptionsBase > >", "classmusx_1_1factory_1_1PoolFactory.html", [
+      [ "musx::factory::PoolFactory< OptionsFactory, dom::OptionsBase, dom::OptionsPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
         [ "musx::factory::OptionsFactory", "classmusx_1_1factory_1_1OptionsFactory.html", null ]
       ] ],
       [ "musx::factory::PoolFactory< OthersFactory, dom::OthersBase, dom::OthersPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
@@ -113,28 +113,22 @@ var hierarchy =
     ] ],
     [ "musx::util::Logger", "classmusx_1_1util_1_1Logger.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType, TopKeyElementType >::ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
-    [ "musx::dom::ObjectPool< ObjectBaseType, TopKeyElementType >", "classmusx_1_1dom_1_1ObjectPool.html", [
-      [ "musx::dom::OneCmperPool< OthersBase >", "classmusx_1_1dom_1_1OneCmperPool.html", [
-        [ "musx::dom::OthersPool", "classmusx_1_1dom_1_1OthersPool.html", null ]
-      ] ],
-      [ "musx::dom::OneCmperPool< TextsBase >", "classmusx_1_1dom_1_1OneCmperPool.html", [
-        [ "musx::dom::TextsPool", "classmusx_1_1dom_1_1TextsPool.html", null ]
-      ] ]
-    ] ],
+    [ "musx::dom::ObjectPool< ObjectBaseType, TopKeyElementType >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
     [ "musx::dom::ObjectPool< DetailsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
       [ "musx::dom::DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", null ]
     ] ],
     [ "musx::dom::ObjectPool< Entry, EntryNumber >", "classmusx_1_1dom_1_1ObjectPool.html", [
       [ "musx::dom::EntryPool", "classmusx_1_1dom_1_1EntryPool.html", null ]
     ] ],
-    [ "musx::dom::ObjectPool< OneCmperBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
-      [ "musx::dom::OneCmperPool< OneCmperBase >", "classmusx_1_1dom_1_1OneCmperPool.html", null ]
+    [ "musx::dom::ObjectPool< OptionsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
+      [ "musx::dom::OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", null ]
     ] ],
-    [ "musx::dom::ObjectPool< OthersBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
-    [ "musx::dom::ObjectPool< ScalarBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
-      [ "musx::dom::ScalarPool< ScalarBase >", "classmusx_1_1dom_1_1ScalarPool.html", null ]
+    [ "musx::dom::ObjectPool< OthersBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
+      [ "musx::dom::OthersPool", "classmusx_1_1dom_1_1OthersPool.html", null ]
     ] ],
-    [ "musx::dom::ObjectPool< TextsBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
+    [ "musx::dom::ObjectPool< TextsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
+      [ "musx::dom::TextsPool", "classmusx_1_1dom_1_1TextsPool.html", null ]
+    ] ],
     [ "musx::dom::options::PageFormatOptions::PageFormat", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html", null ],
     [ "std::runtime_error", null, [
       [ "musx::dom::integrity_error", "classmusx_1_1dom_1_1integrity__error.html", null ],
