@@ -76,7 +76,8 @@ using NoteNumber = int16_t;         ///< Note identifier.
 using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
-constexpr int MAX_LAYERS = 4;   ///< The maximum number of music layers in a Finale document.
+constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
+constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
 
 class Document;
 /** @brief Shared `Document` pointer */
@@ -197,8 +198,8 @@ protected:
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
      *
      * @param document A weak pointer to the parent document
-     * @param partId Usually 0. This parameter is needed for the generic factory routine.
-     * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
+     * @param partId Always 0. This parameter is needed for the generic factory routine.
+     * @param shareMode Always `ShareMode::All`. This parameter is needed for the generic factory routine.
      */
     OptionsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
         : Base(document, partId, shareMode) {}
@@ -272,7 +273,7 @@ protected:
      * @brief Constructs a DetailsBase object.
      * 
      * @param document A weak pointer to the parent document
-     * @param partId The part Id for this Other, or zero if for score.
+     * @param partId The part Id for this Detail, or zero if for score.
      * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
      * @param cmper1 The first `Cmper` key value.
      * @param cmper2 The second `Cmper` key value.
@@ -387,7 +388,7 @@ public:
      * @param document A weak pointer to the document object.
      */
     explicit FontInfo(const DocumentWeakPtr& document)
-        : Base(document, 0, ShareMode::All) {}
+        : Base(document, SCORE_PARTID, ShareMode::All) {}
 
     /**
      * @brief Get the name of the font.
@@ -500,11 +501,11 @@ public:
     /**
      * @brief Constructs a MusicRange object.
      * @param document Shared pointer to the document.
-     * @param partId The part ID if this range is unlinked.
+     * @param partId The part ID if this range is unlinked, otherwise 0.
      * @param shareMode The share mode if this range is unlinked.
      * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::InstrumentUsed.
      */
-    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
         : OthersBase(document, partId, shareMode, cmper) {}
 
     MeasCmper startMeas{};      ///< Starting measure in the range.
@@ -533,7 +534,7 @@ public:
      * @param shareMode The share mode if this name positioning is unlinked.
      * @param cmper Comperator parameter. This value is zero for name positioning taken from @ref options::StaffOptions.
      */
-    explicit NamePositioning(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+    explicit NamePositioning(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
         : OthersBase(document, partId, shareMode, cmper) {}
 
     /// @brief Alignment and justification options for staff and group names.

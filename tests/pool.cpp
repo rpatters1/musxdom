@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
@@ -212,15 +214,17 @@ constexpr static musxtest::string_view xml = R"xml(
 </finale>
     )xml";
 
+using namespace musx::dom;
+
 TEST(PoolTest, Scalar)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
-    EXPECT_TRUE(others->get<musx::dom::others::TextExpressionDef>(3));
-    EXPECT_FALSE(others->get<musx::dom::others::TextExpressionDef>(4));
-    EXPECT_TRUE(others->get<musx::dom::others::MarkingCategory>(3));
-    EXPECT_FALSE(others->get<musx::dom::others::MarkingCategory>(8));
+    EXPECT_TRUE(others->get<others::TextExpressionDef>(SCORE_PARTID, 3));
+    EXPECT_FALSE(others->get<others::TextExpressionDef>(SCORE_PARTID, 4));
+    EXPECT_TRUE(others->get<others::MarkingCategory>(SCORE_PARTID, 3));
+    EXPECT_FALSE(others->get<others::MarkingCategory>(SCORE_PARTID, 8));
 }
 
 TEST(PoolTest, Vector)
@@ -228,12 +232,12 @@ TEST(PoolTest, Vector)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
-    EXPECT_EQ(others->getArray<musx::dom::others::MarkingCategory>().size(), 7);
-    EXPECT_EQ(others->getArray<musx::dom::others::MarkingCategory>(6).size(), 1);
-    EXPECT_EQ(others->getArray<musx::dom::others::MarkingCategory>(5)[0]->categoryType, musx::dom::others::MarkingCategory::CategoryType::TechniqueText);
-    EXPECT_EQ(others->getArray<musx::dom::others::MarkingCategory>(8).size(), 0);
-    EXPECT_EQ(others->getArray<musx::dom::others::TextExpressionDef>().size(), 3);
-    EXPECT_EQ(others->getArray<musx::dom::others::TextExpressionDef>(2).size(), 1);
-    EXPECT_EQ(others->getArray<musx::dom::others::TextExpressionDef>(1)[0]->description, "fortissississimo (velocity = 127)");
-    EXPECT_EQ(others->getArray<musx::dom::others::TextExpressionDef>(4).size(), 0);
+    EXPECT_EQ(others->getArray<others::MarkingCategory>(SCORE_PARTID).size(), 7);
+    EXPECT_EQ(others->getArray<others::MarkingCategory>(SCORE_PARTID, 6).size(), 1);
+    EXPECT_EQ(others->getArray<others::MarkingCategory>(SCORE_PARTID, 5)[0]->categoryType, others::MarkingCategory::CategoryType::TechniqueText);
+    EXPECT_EQ(others->getArray<others::MarkingCategory>(SCORE_PARTID, 8).size(), 0);
+    EXPECT_EQ(others->getArray<others::TextExpressionDef>(SCORE_PARTID).size(), 3);
+    EXPECT_EQ(others->getArray<others::TextExpressionDef>(SCORE_PARTID, 2).size(), 1);
+    EXPECT_EQ(others->getArray<others::TextExpressionDef>(SCORE_PARTID, 1)[0]->description, "fortissississimo (velocity = 127)");
+    EXPECT_EQ(others->getArray<others::TextExpressionDef>(SCORE_PARTID, 4).size(), 0);
 }

@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 TEST(StaffTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -70,7 +72,7 @@ TEST(StaffTest, PopulateFields)
         auto others = doc->getOthers();
         ASSERT_TRUE(others);
 
-        auto staff1 = others->get<musx::dom::others::Staff>(15);
+        auto staff1 = others->get<others::Staff>(SCORE_PARTID, 15);
         ASSERT_TRUE(staff1) << "Staff with cmper 15 not found";
 
         EXPECT_EQ(staff1->staffLines, 5);
@@ -88,7 +90,7 @@ TEST(StaffTest, PopulateFields)
         EXPECT_EQ(staff1->botRepeatDotOff, -5);
         EXPECT_EQ(staff1->vertTabNumOff, -1024);
 
-        auto staff2 = others->get<musx::dom::others::Staff>(16);
+        auto staff2 = others->get<others::Staff>(SCORE_PARTID, 16);
         ASSERT_TRUE(staff2) << "Staff with cmper 16 not found";
 
         EXPECT_EQ(staff2->staffLines, 5);

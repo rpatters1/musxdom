@@ -52,19 +52,19 @@ TEST(FrameTest, PopulateFields)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     
-    auto frame = others->get<others::Frame>(1);
+    auto frame = others->get<others::Frame>(SCORE_PARTID, 1);
     ASSERT_TRUE(frame) << "Frame with cmper 1 not found";
     
     EXPECT_EQ(frame->startEntry, 1);
     EXPECT_EQ(frame->endEntry, 2);
 
-    frame = others->get<others::Frame>(2);
+    frame = others->get<others::Frame>(SCORE_PARTID, 2);
     ASSERT_TRUE(frame) << "Frame with cmper 2 not found";
 
     EXPECT_EQ(frame->startEntry, 2140);
     EXPECT_EQ(frame->endEntry, 2142);
 
-    frame = others->get<others::Frame>(3);
+    frame = others->get<others::Frame>(SCORE_PARTID, 3);
     ASSERT_TRUE(frame) << "Frame with cmper 3 not found";
 
     EXPECT_EQ(frame->startEntry, 2144);

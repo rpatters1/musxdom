@@ -23,6 +23,7 @@
 
 #include <string>
 #include <map>
+#include <unordered_map>
 #include <vector>
 #include <memory>
 #include <tuple>
@@ -86,6 +87,16 @@ public:
             }
             return inci < other.inci;
         }
+
+        /** @brief Returns a string version of the nodeId for inclusion in messages. */
+        std::string nodeString() const
+        {
+            if constexpr (std::is_same_v<TopKeyElementType, std::string>) {
+                return nodeId;
+            } else {
+                return std::string("entry ") + std::to_string(nodeId);
+            }
+        }
     };
 
     /** @brief virtual destructor */
@@ -100,6 +111,17 @@ public:
     void add(const ObjectKey& key, ObjectPtr object)
     {
         m_pool.emplace(key, object);
+        auto it = m_shareMode.find(key.nodeId);
+        if (it == m_shareMode.end()) {
+            m_shareMode.emplace(key.nodeId, object->getShareMode());
+        } else if (object->getShareMode() != it->second && object->getShareMode() != Base::ShareMode::All) {
+            if (it->second == Base::ShareMode::All) {
+                m_shareMode[key.nodeId] = object->getShareMode();
+            } else {
+                MUSX_INTEGRITY_ERROR("Share mode for added " + key.nodeString() + " object [" + std::to_string(int(object->getShareMode()))
+                    + "] does not match previous [" + std::to_string(int(it->second)) + "]");                
+            }
+        }
     }
 
     /**
@@ -136,6 +158,42 @@ public:
             result.push_back(typedPtr);
         }
         return result;
+    }
+
+    /**
+     * @brief Retrieves a vector of objects of a specific type from the pool.
+     *
+     * This function may be used to
+     * - retrieve a multi-inci array
+     * - get all the objects of a specific type, regardless of @ref Cmper value(s), such as getting a vector
+     * of all the @ref others::TextExpressionDef instances.
+     *
+     * @tparam T The derived type of `OthersBase` to retrieve.
+     * @param key The key value used to filter the objects.
+     * @return A vector of shared pointers to objects of type `T`.
+     */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArrayForPart(const ObjectKey& key) const
+    {
+        if (key.partId == SCORE_PARTID) {
+            return getArray<T>(key);
+        }
+        auto it = m_shareMode.find(key.nodeId);
+        if (it == m_shareMode.end()) {
+            throw std::invalid_argument("Share mode not found for node " + key.nodeString());
+        }
+        switch (it->second) {
+        default:
+        case Base::ShareMode::All: {
+            ObjectKey scoreKey(key);
+            scoreKey.partId = SCORE_PARTID;
+            return getArray<T>(scoreKey);
+        }
+        case Base::ShareMode::None:
+            return getArray<T>(key);
+        case Base::ShareMode::Partial:
+            throw std::invalid_argument("Arrays of partially linked classes are not currently supported. Requested node: " + key.nodeString());
+        }
     }
 
     /**
@@ -177,12 +235,12 @@ public:
         if (auto partVersion = get<T>(key)) {
             return partVersion;
         }
-        if (key.partId == 0) {
+        if (key.partId == SCORE_PARTID) {
             // if this is already the score version, there is nothing to return.
             return nullptr;
         }
         ObjectKey scoreKey(key);
-        scoreKey.partId = 0;
+        scoreKey.partId = SCORE_PARTID;
         return get<T>(scoreKey);
     }
 
@@ -192,90 +250,62 @@ protected:
 
 private:
     std::map<ObjectKey, ObjectPtr> m_pool;
+    std::unordered_map<TopKeyElementType, dom::Base::ShareMode> m_shareMode;
 };
 
 /**
- * @class ScalarPool
- * @brief A pool that manages collections of `ScalarBase` objects that have no Cmper value.
- * Examples include header and options objects.
+ * @class OptionsPool
+ * @brief A pool that manages collections of `OptionsBase` objects that have no Cmper value.
  */
-template<typename ScalarBase>
-class ScalarPool : protected ObjectPool<ScalarBase>
+class OptionsPool : protected ObjectPool<OptionsBase>
 {
 public:
     /** @brief Scalar version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<ScalarBase>& instance)
-    { ObjectPool<ScalarBase>::add({nodeName, instance->getPartId()}, instance); }
+    void add(const std::string& nodeName, const std::shared_ptr<OptionsBase>& instance)
+    {
+        if (instance->getPartId()) {
+            MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-zero part id [" + std::to_string(instance->getPartId()) + "]");
+        }
+        ObjectPool::add({ nodeName, instance->getPartId() }, instance);
+    }
 
     /** @brief Scalar version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray() const
     {
-        return ObjectPool<ScalarBase>::template getArray<T>({ std::string(T::XmlNodeName), 0 });
+        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
     }
 
     /** @brief Scalar version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get() const
     {
-        return ObjectPool<ScalarBase>::template get<T>({ std::string(T::XmlNodeName), 0 });
+        return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
     }
 };
-
-/** @brief OptionsPool typedef */
-using OptionsPool = ScalarPool<OptionsBase>;
 /** @brief Shared `OptionsPool` pointer */
 using OptionsPoolPtr = std::shared_ptr<OptionsPool>;
 
 /**
- * @class OneCmperPool
- * @brief A pool that manages collections of `OneCmperBase` objects, organized by XML node names and `Cmper` values.
- * 
- * Examples of `OneCmperBase` classes are @ref OthersBase and @ref TextsBase.
+ * @class OthersPool
+ * @brief A pool that manages collections of `OthersBase` objects.
  */
-template<typename OneCmperBase>
-class OneCmperPool : protected ObjectPool<OneCmperBase>
-{
-public:
-    /** @brief OneCmperBase version of #ObjectPool::getArray */
-    template <typename T>
-    std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper = std::nullopt) const
-    {
-        return ObjectPool<OneCmperBase>::template getArray<T>({ std::string(T::XmlNodeName), 0, cmper });
-    }
-
-    /** @brief OneCmperBase version of #ObjectPool::getArray with call for part
-     *
-     * Use this with items that always exist for parts, such as @ref others::InstrumentUsed lists.
-    */
-    template <typename T>
-    std::vector<std::shared_ptr<T>> getArrayForPart(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
-    {
-        return ObjectPool<OneCmperBase>::template getArray<T>({ std::string(T::XmlNodeName), partId, cmper });
-    }
-
-    /** @brief OneCmperBase version of #ObjectPool::get */
-    template <typename T>
-    std::shared_ptr<T> get(Cmper cmper, std::optional<Inci> inci = std::nullopt) const
-    {
-        return ObjectPool<OneCmperBase>::template get<T>({std::string(T::XmlNodeName), 0, cmper, std::nullopt, inci});
-    }
-
-    /** @brief OneCmperBase version of #ObjectPool::get */
-    template <typename T>
-    std::shared_ptr<T> getEffectiveForPart(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
-    {
-        return ObjectPool<OneCmperBase>::template getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper, std::nullopt, inci});
-    }
-};
-
-/** @brief Others pool */
-class OthersPool : public OneCmperPool<OthersBase>
+class OthersPool : public ObjectPool<OthersBase>
 {
 public:
     /** @brief OthersPool version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
+    
+    /** @brief OthersPool version of #ObjectPool::getArray */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
+    { return ObjectPool::getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper }); }
+
+    /** @brief OthersPool version of #ObjectPool::get */
+    template <typename T>
+    std::shared_ptr<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
+    { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper, std::nullopt, inci}); }
 };
 /** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;
@@ -289,40 +319,19 @@ using OthersPoolPtr = std::shared_ptr<OthersPool>;
 class DetailsPool : protected ObjectPool<DetailsBase>
 {
 public:
-    /** @brief DetailsPool version of #ObjectPool::getArray */
-    template <typename T>
-    std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
-    {
-        return ObjectPool::template getArray<T>({ std::string(T::XmlNodeName), 0, cmper1, cmper2 });
-    }
-
-    /** @brief DetailsPool version of #ObjectPool::getArray with call for part
-     *
-     * Use this with items that always exist for parts, such as @ref others::InstrumentUsed lists.
-    */
-    template <typename T>
-    std::vector<std::shared_ptr<T>> getArrayForPart(Cmper partId, std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
-    {
-        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 });
-    }
-
-    /** @brief DetailsPool version of #ObjectPool::get */
-    template <typename T>
-    std::shared_ptr<T> get(Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
-    {
-        return ObjectPool::get<T>({std::string(T::XmlNodeName), 0, cmper1, cmper2, inci});
-    }
-
-    /** @brief DetailsPool version of #ObjectPool::get */
-    template <typename T>
-    std::shared_ptr<T> getEffectiveForPart(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
-    {
-        return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper1, cmper2, inci});
-    }
-
     /** @brief DetailsPool version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
+
+    /** @brief DetailsPool version of #ObjectPool::getArray */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
+    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 }); }
+
+    /** @brief DetailsPool version of #ObjectPool::get */
+    template <typename T>
+    std::shared_ptr<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
+    { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper1, cmper2, inci}); }
 };
 /** @brief Shared `DetailsPool` pointer */
 using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
@@ -333,23 +342,38 @@ class EntryPool : public ObjectPool<Entry, EntryNumber>
 public:
     /** @brief EntryPool version of #ObjectPool::add */
     void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
-    { ObjectPool::add({ entryNumber, 0 }, instance); }
+    { ObjectPool::add({ entryNumber, SCORE_PARTID }, instance); }
 
     /** @brief EntryPool version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get(EntryNumber entryNumber) const
-    { return ObjectPool::get<T>({ entryNumber, 0 }); }
+    { return ObjectPool::get<T>({ entryNumber, SCORE_PARTID }); }
 };
 /** @brief Shared `EntryPool` pointer */
 using EntryPoolPtr = std::shared_ptr<EntryPool>;
 
 /** @brief Text pool */
-class TextsPool : public OneCmperPool<TextsBase>
+class TextsPool : public ObjectPool<TextsBase>
 {
 public:
     /** @brief Texts version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
-    { ObjectPool::add({ nodeName, instance->getPartId(), instance->getTextNumber() }, instance); }
+    {
+        if (instance->getPartId()) {
+            MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-zero part id [" + std::to_string(instance->getPartId()) + "]");
+        }
+        ObjectPool::add({ nodeName, instance->getPartId(), instance->getTextNumber() }, instance);
+    }
+    
+    /** @brief Texts version of #ObjectPool::getArray */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper = std::nullopt) const
+    { return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper }); }
+
+    /** @brief Texts version of #ObjectPool::get */
+    template <typename T>
+    std::shared_ptr<T> get(Cmper cmper) const
+    { return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt }); }
 };
 /** @brief Shared `OthersPool` pointer */
 using TextsPoolPtr = std::shared_ptr<TextsPool>;
