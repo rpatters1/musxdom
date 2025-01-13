@@ -107,7 +107,7 @@ public:
  * represent various document options stored in a `ScalarPool`. It includes functionality 
  * for extracting and creating these objects from XML elements.
  */
-class OptionsFactory : public PoolFactory<OptionsFactory, dom::OptionsBase, dom::ScalarPool<dom::OptionsBase>>
+class OptionsFactory : public PoolFactory<OptionsFactory, dom::OptionsBase, dom::OptionsPool>
 {
 public:
     using PoolFactory::create;

@@ -120,7 +120,7 @@ std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& d
 
 std::string FontInfo::getName() const
 {
-    auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(fontId);
+    auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId);
     if (fontDef) {
         return fontDef->name;
     }
@@ -129,7 +129,7 @@ std::string FontInfo::getName() const
 
 void FontInfo::setFontIdByName(const std::string& name)
 {
-    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>();
+    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>(getPartId());
     for (auto fontDef : fontDefs) {
         if (fontDef->name == name) {
             fontId = fontDef->getCmper();
@@ -252,7 +252,7 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
     if (!frames[layerIndex]) return true; // nothing here
-    auto frame = getDocument()->getOthers()->get<others::Frame>(frames[layerIndex]);
+    auto frame = getDocument()->getOthers()->get<others::Frame>(getPartId(), frames[layerIndex]);
     if (frame) {
         auto firstEntry = getDocument()->getEntries()->get<Entry>(frame->startEntry);
         if (!firstEntry) {
@@ -292,7 +292,7 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std
 {
     if (index > iuArray.size()) return nullptr;
     auto iuItem = iuArray[index];
-    return iuItem->getDocument()->getOthers()->getEffectiveForPart<others::Staff>(iuItem->getPartId(), iuItem->staffId);
+    return iuItem->getDocument()->getOthers()->get<others::Staff>(iuItem->getPartId(), iuItem->staffId);
 }
 
 // ****************************
@@ -301,7 +301,7 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std
 
 std::string others::MarkingCategory::getName() const
 {
-    auto catName = getDocument()->getOthers()->get<others::MarkingCategoryName>(getCmper());
+    auto catName = getDocument()->getOthers()->get<others::MarkingCategoryName>(getPartId(), getCmper());
     if (catName) {
         return catName->name;
     }
@@ -386,7 +386,7 @@ std::string others::TextBlock::getText(bool trimTags) const
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags)
 {
-    auto textBlock = document->getOthers()->get<others::TextBlock>(textId);
+    auto textBlock = document->getOthers()->get<others::TextBlock>(SCORE_PARTID, textId);
     if (textBlock) {
         return textBlock->getText(trimTags);
     }
@@ -400,7 +400,7 @@ std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper 
 std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 {
     if (!hasEnclosure) return nullptr;
-    return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getCmper());
+    return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getPartId(), getCmper());
 }
 
 } // namespace dom    

@@ -63,7 +63,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
     // Test GFrameHold for cmper1=3, cmper2=915
     {
-        auto gfhold = details->get<details::GFrameHold>(3, 915);
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 3, 915);
         ASSERT_TRUE(gfhold);
 
         EXPECT_EQ(gfhold->clefId.value_or(-1), 0); // Default to -1 if not set
@@ -79,7 +79,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
     // Test GFrameHold for cmper1=3, cmper2=1083
     {
-        auto gfhold = details->get<details::GFrameHold>(3, 1083);
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 3, 1083);
         ASSERT_TRUE(gfhold);
 
         EXPECT_EQ(gfhold->clefId.value_or(-1), 3); // Default to -1 if not set
@@ -95,7 +95,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
     // Test GFrameHold for cmper1=3, cmper2=1129
     {
-        auto gfhold = details->get<details::GFrameHold>(3, 1129);
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 3, 1129);
         ASSERT_TRUE(gfhold);
 
         EXPECT_FALSE(gfhold->clefId.has_value());
@@ -176,7 +176,7 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    auto gfhold = details->get<details::GFrameHold>(3, 915);
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 3, 915);
     ASSERT_TRUE(gfhold);
 
     EXPECT_THROW(

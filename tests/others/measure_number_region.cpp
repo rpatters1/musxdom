@@ -121,7 +121,7 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
-    auto measureNumberRegion = others->get<MeasureNumberRegion>(1);
+    auto measureNumberRegion = others->get<MeasureNumberRegion>(SCORE_PARTID, 1);
     ASSERT_TRUE(measureNumberRegion);
 
     // Test basic region fields

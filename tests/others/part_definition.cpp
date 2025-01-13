@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
@@ -60,7 +62,7 @@ TEST(PartDefinitionTest, PopulateFields)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     
-    auto partDef = others->get<musx::dom::others::PartDefinition>(1);
+    auto partDef = others->get<others::PartDefinition>(SCORE_PARTID, 1);
     ASSERT_TRUE(partDef) << "PartDefinition with cmper 1 not found";
     
     EXPECT_EQ(partDef->nameId, 42);
@@ -78,7 +80,7 @@ TEST(PartDefinitionTest, GetName)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     
-    auto partDef = others->get<musx::dom::others::PartDefinition>(1);
+    auto partDef = others->get<others::PartDefinition>(SCORE_PARTID, 1);
     ASSERT_TRUE(partDef) << "PartDefinition with cmper 1 not found";
 
     EXPECT_EQ(partDef->getName(), "Alto Sax in Eb");

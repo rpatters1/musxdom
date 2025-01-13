@@ -24,6 +24,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
 
 TEST(EnclosureTest, TextExpressionEnclosure)
 {
@@ -51,16 +52,16 @@ TEST(EnclosureTest, TextExpressionEnclosure)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
         auto others = doc->getOthers();
         ASSERT_TRUE(others);
-        auto enclosure = others->get<musx::dom::others::TextExpressionEnclosure>(1);
+        auto enclosure = others->get<others::TextExpressionEnclosure>(SCORE_PARTID, 1);
         EXPECT_FALSE(enclosure) << "Enclosure 1 found but does not exist";
-        enclosure = others->get<musx::dom::others::TextExpressionEnclosure>(25);
+        enclosure = others->get<others::TextExpressionEnclosure>(SCORE_PARTID, 25);
         ASSERT_TRUE(enclosure) << "Enclosure 25 not found but does exist";
         EXPECT_EQ(enclosure->xAdd, -2);
         EXPECT_EQ(enclosure->yAdd, 2);
         EXPECT_EQ(enclosure->xMargin, -9);
         EXPECT_EQ(enclosure->yMargin, 23);
         EXPECT_EQ(enclosure->lineWidth, 128);
-        EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::Triangle);
+        EXPECT_EQ(enclosure->shape, others::Enclosure::Shape::Triangle);
         EXPECT_EQ(enclosure->cornerRadius, 1088);
         EXPECT_FALSE(enclosure->equalAspect);
         EXPECT_TRUE(enclosure->fixedSize);
@@ -90,16 +91,16 @@ TEST(EnclosureTest, TextRepeatEnclosure)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
         auto others = doc->getOthers();
         ASSERT_TRUE(others);
-        auto enclosure = others->get<musx::dom::others::TextRepeatEnclosure>(1);
+        auto enclosure = others->get<others::TextRepeatEnclosure>(SCORE_PARTID, 1);
         EXPECT_FALSE(enclosure) << "Enclosure 1 found but does not exists";
-        enclosure = others->get<musx::dom::others::TextRepeatEnclosure>(12);
+        enclosure = others->get<others::TextRepeatEnclosure>(SCORE_PARTID, 12);
         ASSERT_TRUE(enclosure) << "Enclosure 12 not found but does exist";
         EXPECT_EQ(enclosure->xAdd, 0);
         EXPECT_EQ(enclosure->yAdd, 0);
         EXPECT_EQ(enclosure->xMargin, 9);
         EXPECT_EQ(enclosure->yMargin, 9);
         EXPECT_EQ(enclosure->lineWidth, 256);
-        EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::Rectangle);
+        EXPECT_EQ(enclosure->shape, others::Enclosure::Shape::Rectangle);
         EXPECT_EQ(enclosure->cornerRadius, 0);
         EXPECT_FALSE(enclosure->fixedSize);
         EXPECT_TRUE(enclosure->equalAspect);
@@ -143,8 +144,8 @@ TEST(EnclosureTest, EnumDefault)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
         auto others = doc->getOthers();
         ASSERT_TRUE(others);
-        auto enclosure = others->get<musx::dom::others::TextRepeatEnclosure>(12);
+        auto enclosure = others->get<others::TextRepeatEnclosure>(SCORE_PARTID, 12);
         ASSERT_TRUE(enclosure) << "Enclosure 12 not found but does exist";
-        EXPECT_EQ(enclosure->shape, musx::dom::others::Enclosure::Shape::NoEnclosure);
+        EXPECT_EQ(enclosure->shape, others::Enclosure::Shape::NoEnclosure);
     }
 }

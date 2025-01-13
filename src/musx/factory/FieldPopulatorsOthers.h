@@ -61,7 +61,7 @@ struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
 
 MUSX_RESOLVER_ARRAY(LayerAttributes, {
     [](const dom::DocumentPtr& document) {
-        auto layers = document->getOthers()->getArray<LayerAttributes>();
+        auto layers = document->getOthers()->getArray<LayerAttributes>(SCORE_PARTID);
         if (layers.size() != 4) {
             throw std::invalid_argument("Expected exactly 4 <layerAtts> elements.");
         }
@@ -75,7 +75,7 @@ MUSX_RESOLVER_ARRAY(LayerAttributes, {
 
 MUSX_RESOLVER_ARRAY(MarkingCategory, {
     [](const dom::DocumentPtr& document) {
-        auto cats = document->getOthers()->getArray<MarkingCategory>();
+        auto cats = document->getOthers()->getArray<MarkingCategory>(SCORE_PARTID);
         for (const auto& cat : cats) {
             if (cat->categoryType == MarkingCategory::CategoryType::Invalid) {
                 throw std::invalid_argument("Encountered <markingsCategory> node (cmper " + std::to_string(cat->getCmper()) + ") with no categoryType");
@@ -86,10 +86,10 @@ MUSX_RESOLVER_ARRAY(MarkingCategory, {
 
 MUSX_RESOLVER_ARRAY(TextExpressionDef, {
     [](const dom::DocumentPtr& document) {
-        auto exps = document->getOthers()->getArray<TextExpressionDef>();
+        auto exps = document->getOthers()->getArray<TextExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {
             if (instance->categoryId) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->categoryId);
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
                 if (!markingCat) {
                     throw std::invalid_argument("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }

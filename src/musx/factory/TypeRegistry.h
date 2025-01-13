@@ -124,7 +124,13 @@ public:
                             for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
                                 instance->addUnlinkedNode(child->getTagName());
                             }
-                            auto scoreValue = pool->template get<T>(std::forward<Args>(args)...);
+                            auto scoreValue = [&]() {
+                                if constexpr (std::is_same_v<PoolPtr, OthersPoolPtr> || std::is_same_v<PoolPtr, DetailsPoolPtr>) {
+                                    return pool->template get<T>(partId, std::forward<Args>(args)...);
+                                } else {
+                                    return pool->template get<T>(std::forward<Args>(args)...);
+                                }
+                            }();
                             if (scoreValue) {
                                 *instance = *scoreValue;
                             }

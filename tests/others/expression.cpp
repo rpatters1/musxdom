@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 TEST(TextExpressionDefTest, ValidExpression)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -56,25 +58,25 @@ TEST(TextExpressionDefTest, ValidExpression)
     auto others = doc->getOthers();
     ASSERT_TRUE(others) << "Others node not found in XML";
 
-    auto expression = others->get<musx::dom::others::TextExpressionDef>(1);
+    auto expression = others->get<others::TextExpressionDef>(SCORE_PARTID, 1);
     EXPECT_FALSE(expression) << "TextExpressionDef with cmper=1 found but does not exist";
-    expression = others->get<musx::dom::others::TextExpressionDef>(3);
+    expression = others->get<others::TextExpressionDef>(SCORE_PARTID, 3);
     ASSERT_TRUE(expression) << "TextExpressionDef with cmper=3 not found but does exist";
 
     // Check every property
     EXPECT_EQ(expression->textIdKey, 4);  // From XML
     EXPECT_EQ(expression->categoryId, 1);  // From XML
-    EXPECT_EQ(expression->rehearsalMarkStyle, musx::dom::others::RehearsalMarkStyle::MeasureNumber);  // From XML
+    EXPECT_EQ(expression->rehearsalMarkStyle, others::RehearsalMarkStyle::MeasureNumber);  // From XML
     EXPECT_EQ(expression->value, 101);  // From XML
     EXPECT_EQ(expression->playPass, 2);  // From XML
     EXPECT_TRUE(expression->hideMeasureNum);  // From XML
     EXPECT_TRUE(expression->useAuxData);  // From XML
     EXPECT_FALSE(expression->hasEnclosure);  // Default
     EXPECT_FALSE(expression->breakMmRest);  // Default
-    EXPECT_EQ(expression->playbackType, musx::dom::others::PlaybackType::MidiController);  // From XML
-    EXPECT_EQ(expression->horzMeasExprAlign, musx::dom::others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead);  // From XML
-    EXPECT_EQ(expression->horzExprJustification, musx::dom::others::HorizontalExprJustification::Right);  // From XML
-    EXPECT_EQ(expression->vertMeasExprAlign, musx::dom::others::VerticalMeasExprAlign::AboveStaff);  // Default
+    EXPECT_EQ(expression->playbackType, others::PlaybackType::MidiController);  // From XML
+    EXPECT_EQ(expression->horzMeasExprAlign, others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead);  // From XML
+    EXPECT_EQ(expression->horzExprJustification, others::HorizontalExprJustification::Right);  // From XML
+    EXPECT_EQ(expression->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaff);  // Default
     EXPECT_EQ(expression->measXAdjust, 0);  // Default
     EXPECT_EQ(expression->yAdjustEntry, -54);  // From XML
     EXPECT_EQ(expression->yAdjustBaseline, 0);  // Default
@@ -83,7 +85,7 @@ TEST(TextExpressionDefTest, ValidExpression)
     EXPECT_EQ(expression->description, "fortissimo (velocity = 101)");  // From XML
 
     // Check marking cat
-    auto cat = others->get<musx::dom::others::MarkingCategory>(expression->categoryId);
+    auto cat = others->get<others::MarkingCategory>(SCORE_PARTID, expression->categoryId);
     ASSERT_TRUE(cat);
     auto it = cat->textExpressions.find(expression->getCmper());
     ASSERT_NE(it, cat->textExpressions.end());
@@ -154,11 +156,11 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     ASSERT_TRUE(others) << "Others node not found in XML";
 
     // Get MarkingCategory with cmper=10
-    auto markingCategory = others->get<musx::dom::others::MarkingCategory>(10);
+    auto markingCategory = others->get<others::MarkingCategory>(SCORE_PARTID, 10);
     ASSERT_TRUE(markingCategory) << "MarkingCategory with cmper=10 not found but does exist";
 
     // Check every property of MarkingCategory
-    EXPECT_EQ(markingCategory->categoryType, musx::dom::others::MarkingCategory::CategoryType::Dynamics);  // From XML
+    EXPECT_EQ(markingCategory->categoryType, others::MarkingCategory::CategoryType::Dynamics);  // From XML
 
     // textFont properties
     ASSERT_TRUE(markingCategory->textFont) << "TextFont is missing but exists in XML";
@@ -186,10 +188,10 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     EXPECT_EQ(markingCategory->numberFont, nullptr) << "NumberFont should be nullptr but is not";
 
     // Other properties
-    EXPECT_EQ(markingCategory->justification, musx::dom::others::HorizontalExprJustification::Right);  // From XML
-    EXPECT_EQ(markingCategory->horzAlign, musx::dom::others::HorizontalMeasExprAlign::LeftOfAllNoteheads);  // From XML
+    EXPECT_EQ(markingCategory->justification, others::HorizontalExprJustification::Right);  // From XML
+    EXPECT_EQ(markingCategory->horzAlign, others::HorizontalMeasExprAlign::LeftOfAllNoteheads);  // From XML
     EXPECT_EQ(markingCategory->horzOffset, 12);  // From XML
-    EXPECT_EQ(markingCategory->vertAlign, musx::dom::others::VerticalMeasExprAlign::AboveStaffOrEntry);  // From XML
+    EXPECT_EQ(markingCategory->vertAlign, others::VerticalMeasExprAlign::AboveStaffOrEntry);  // From XML
     EXPECT_EQ(markingCategory->vertOffsetEntry, 36);  // From XML
     EXPECT_EQ(markingCategory->vertOffsetBaseline, 36);  // From XML
 
@@ -205,7 +207,7 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     EXPECT_EQ(markingCategory->staffList, 1);  // From XML
 
     // Get MarkingCategoryName with cmper=10
-    auto markingCategoryName = others->get<musx::dom::others::MarkingCategoryName>(10);
+    auto markingCategoryName = others->get<others::MarkingCategoryName>(SCORE_PARTID, 10);
     ASSERT_TRUE(markingCategoryName) << "MarkingCategoryName with cmper=10 not found but does exist";
     EXPECT_EQ(markingCategoryName->name, "Vocal Dynamics");
 
@@ -238,14 +240,14 @@ TEST(TextExpressionDefTest, EnumDefaults)
     auto others = doc->getOthers();
     ASSERT_TRUE(others) << "Others node not found in XML";
 
-    auto expression = others->get<musx::dom::others::TextExpressionDef>(3);
+    auto expression = others->get<others::TextExpressionDef>(SCORE_PARTID, 3);
     ASSERT_TRUE(expression) << "TextExpressionDef with cmper=3 not found but does exist";
 
-    EXPECT_EQ(expression->rehearsalMarkStyle, musx::dom::others::RehearsalMarkStyle::None);
-    EXPECT_EQ(expression->playbackType, musx::dom::others::PlaybackType::None);
-    EXPECT_EQ(expression->horzMeasExprAlign, musx::dom::others::HorizontalMeasExprAlign::LeftBarline);
-    EXPECT_EQ(expression->horzExprJustification, musx::dom::others::HorizontalExprJustification::Left);
-    EXPECT_EQ(expression->vertMeasExprAlign, musx::dom::others::VerticalMeasExprAlign::AboveStaff);
+    EXPECT_EQ(expression->rehearsalMarkStyle, others::RehearsalMarkStyle::None);
+    EXPECT_EQ(expression->playbackType, others::PlaybackType::None);
+    EXPECT_EQ(expression->horzMeasExprAlign, others::HorizontalMeasExprAlign::LeftBarline);
+    EXPECT_EQ(expression->horzExprJustification, others::HorizontalExprJustification::Left);
+    EXPECT_EQ(expression->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaff);
 }
 
 TEST(MarkingCategoryTest, MissingCategoryType)

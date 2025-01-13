@@ -76,7 +76,8 @@ using NoteNumber = int16_t;         ///< Note identifier.
 using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
-constexpr int MAX_LAYERS = 4;   ///< The maximum number of music layers in a Finale document.
+constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
+constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
 
 class Document;
 /** @brief Shared `Document` pointer */

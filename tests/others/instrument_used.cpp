@@ -66,7 +66,7 @@ TEST(InstrumentUsedTest, PopulateFields)
 
     // Test InstrumentUsed with cmper=1 (system) and inci=0
     {
-        auto instUsed = others->get<others::InstrumentUsed>(1, 0);
+        auto instUsed = others->get<others::InstrumentUsed>(SCORE_PARTID, 1, 0);
         ASSERT_TRUE(instUsed);
 
         EXPECT_EQ(instUsed->staffId, 6);
@@ -81,7 +81,7 @@ TEST(InstrumentUsedTest, PopulateFields)
 
     // Test InstrumentUsed with cmper=1 (system) and inci=1
     {
-        auto instUsed = others->get<others::InstrumentUsed>(1, 1);
+        auto instUsed = others->get<others::InstrumentUsed>(SCORE_PARTID, 1, 1);
         ASSERT_TRUE(instUsed);
 
         EXPECT_EQ(instUsed->staffId, 16);

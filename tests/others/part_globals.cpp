@@ -48,7 +48,7 @@ TEST(PartGlobalsTest, PartGlobalsPropertiesTest)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(partGlobalsXml);
     ASSERT_TRUE(doc);
 
-    auto partGlobals = doc->getOthers()->getEffectiveForPart<musx::dom::others::PartGlobals>(27, MUSX_GLOBALS_CMPER);
+    auto partGlobals = doc->getOthers()->get<others::PartGlobals>(27, MUSX_GLOBALS_CMPER);
     ASSERT_TRUE(partGlobals);
 
     EXPECT_FALSE(partGlobals->showTransposed);
@@ -56,7 +56,7 @@ TEST(PartGlobalsTest, PartGlobalsPropertiesTest)
     EXPECT_EQ(partGlobals->studioViewIUlist, 65400);
     EXPECT_EQ(partGlobals->specialPartExtractionIUList, 0);
 
-    auto partGlobalsForScore = doc->getOthers()->getEffectiveForPart<musx::dom::others::PartGlobals>(0, MUSX_GLOBALS_CMPER);
+    auto partGlobalsForScore = doc->getOthers()->get<others::PartGlobals>(SCORE_PARTID, MUSX_GLOBALS_CMPER);
     ASSERT_TRUE(partGlobalsForScore);
 
     EXPECT_TRUE(partGlobalsForScore->showTransposed);
@@ -65,7 +65,7 @@ TEST(PartGlobalsTest, PartGlobalsPropertiesTest)
     EXPECT_EQ(partGlobalsForScore->specialPartExtractionIUList, 65528);
 
     // This should return the score value
-    auto partGlobalsForNonexistent = doc->getOthers()->getEffectiveForPart<musx::dom::others::PartGlobals>(1, MUSX_GLOBALS_CMPER);
+    auto partGlobalsForNonexistent = doc->getOthers()->get<others::PartGlobals>(1, MUSX_GLOBALS_CMPER);
     ASSERT_TRUE(partGlobalsForNonexistent);
 
     EXPECT_TRUE(partGlobalsForNonexistent->showTransposed);

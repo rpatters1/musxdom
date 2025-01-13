@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 TEST(TextBlockTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -60,7 +62,7 @@ TEST(TextBlockTest, PopulateFields)
     ASSERT_TRUE(others);
 
     // Test first text block
-    auto textBlock1 = others->get<musx::dom::others::TextBlock>(32);
+    auto textBlock1 = others->get<others::TextBlock>(SCORE_PARTID, 32);
     ASSERT_TRUE(textBlock1) << "TextBlock 32 not found but does exist";
     EXPECT_EQ(textBlock1->textId, 31);
     EXPECT_EQ(textBlock1->lineSpacingPercentage, 100);
@@ -72,10 +74,10 @@ TEST(TextBlockTest, PopulateFields)
     EXPECT_EQ(textBlock1->height, 117);
     EXPECT_TRUE(textBlock1->roundCorners);
     EXPECT_EQ(textBlock1->cornerRadius, 512);
-    EXPECT_EQ(textBlock1->textType, musx::dom::others::TextBlock::TextType::Block);
+    EXPECT_EQ(textBlock1->textType, others::TextBlock::TextType::Block);
 
     // Test second text block
-    auto textBlock2 = others->get<musx::dom::others::TextBlock>(33);
+    auto textBlock2 = others->get<others::TextBlock>(SCORE_PARTID, 33);
     ASSERT_TRUE(textBlock2) << "TextBlock 33 not found but does exist";
     EXPECT_EQ(textBlock2->textId, 221);
     EXPECT_EQ(textBlock2->lineSpacingPercentage, 100);
@@ -87,5 +89,5 @@ TEST(TextBlockTest, PopulateFields)
     EXPECT_EQ(textBlock2->height, 0);
     EXPECT_FALSE(textBlock2->roundCorners);
     EXPECT_EQ(textBlock2->cornerRadius, 0);
-    EXPECT_EQ(textBlock2->textType, musx::dom::others::TextBlock::TextType::Expression);
+    EXPECT_EQ(textBlock2->textType, others::TextBlock::TextType::Expression);
 }
