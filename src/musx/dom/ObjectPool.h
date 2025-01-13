@@ -23,6 +23,7 @@
 
 #include <string>
 #include <map>
+#include <unordered_map>
 #include <vector>
 #include <memory>
 #include <tuple>
@@ -86,6 +87,15 @@ public:
             }
             return inci < other.inci;
         }
+
+        std::string nodeString() const
+        {
+            if constexpr (std::is_same_v<TopKeyElementType, std::string>) {
+                return nodeId;
+            } else {
+                return std::string("entry ") + std::to_string(nodeId);
+            }
+        }
     };
 
     /** @brief virtual destructor */
@@ -100,6 +110,17 @@ public:
     void add(const ObjectKey& key, ObjectPtr object)
     {
         m_pool.emplace(key, object);
+        auto it = m_shareMode.find(key.nodeId);
+        if (it == m_shareMode.end()) {
+            m_shareMode.emplace(key.nodeId, object->getShareMode());
+        } else if (object->getShareMode() != it->second && object->getShareMode() != Base::ShareMode::All) {
+            if (it->second == Base::ShareMode::All) {
+                m_shareMode[key.nodeId] = object->getShareMode();
+            } else {
+                MUSX_INTEGRITY_ERROR("Share mode for added " + key.nodeString() + " object [" + std::to_string(int(object->getShareMode()))
+                    + "] does not match previous [" + std::to_string(int(it->second)) + "]");                
+            }
+        }
     }
 
     /**
@@ -136,6 +157,42 @@ public:
             result.push_back(typedPtr);
         }
         return result;
+    }
+
+    /**
+     * @brief Retrieves a vector of objects of a specific type from the pool.
+     *
+     * This function may be used to
+     * - retrieve a multi-inci array
+     * - get all the objects of a specific type, regardless of @ref Cmper value(s), such as getting a vector
+     * of all the @ref others::TextExpressionDef instances.
+     *
+     * @tparam T The derived type of `OthersBase` to retrieve.
+     * @param key The key value used to filter the objects.
+     * @return A vector of shared pointers to objects of type `T`.
+     */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArrayForPart(const ObjectKey& key) const
+    {
+        if (key.partId == SCORE_PARTID) {
+            return getArray<T>(key);
+        }
+        auto it = m_shareMode.find(key.nodeId);
+        if (it == m_shareMode.end()) {
+            throw std::invalid_argument("Share mode not found for node " + key.nodeString());
+        }
+        switch (it->second) {
+        default:
+        case Base::ShareMode::All: {
+            ObjectKey scoreKey(key);
+            scoreKey.partId = SCORE_PARTID;
+            return getArray<T>(scoreKey);
+        }
+        case Base::ShareMode::None:
+            return getArray<T>(key);
+        case Base::ShareMode::Partial:
+            throw std::invalid_argument("Arrays of partially linked classes are not currently supported. Requested node: " + key.nodeString());
+        }
     }
 
     /**
@@ -192,6 +249,7 @@ protected:
 
 private:
     std::map<ObjectKey, ObjectPtr> m_pool;
+    std::unordered_map<TopKeyElementType, dom::Base::ShareMode> m_shareMode;
 };
 
 /**
@@ -241,7 +299,7 @@ public:
     /** @brief OneCmperBase version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
-    { return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), partId, cmper }); }
+    { return ObjectPool::getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper }); }
 
     /** @brief OneCmperBase version of #ObjectPool::get */
     template <typename T>
@@ -267,7 +325,7 @@ public:
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
-    { return ObjectPool::template getArray<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 }); }
+    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 }); }
 
     /** @brief DetailsPool version of #ObjectPool::get */
     template <typename T>

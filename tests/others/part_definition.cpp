@@ -30,6 +30,85 @@ constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
+    <measNumbRegion cmper="1">
+      <scoreData>
+        <startFont>
+          <fontID>1</fontID>
+          <fontSize>10</fontSize>
+          <efx>
+            <italic/>
+            <absolute/>
+          </efx>
+        </startFont>
+        <multipleFont>
+          <fontID>2</fontID>
+          <fontSize>12</fontSize>
+        </multipleFont>
+        <mmRestFont>
+          <fontID>3</fontID>
+          <fontSize>14</fontSize>
+        </mmRestFont>
+        <startEnclosure>
+          <xMargin>9</xMargin>
+          <yMargin>9</yMargin>
+          <lineWidth>256</lineWidth>
+          <sides>1</sides>
+          <notTall/>
+          <roundCorners/>
+          <cornerRadius>768</cornerRadius>
+        </startEnclosure>
+        <multipleEnclosure>
+          <xMargin>44</xMargin>
+          <yMargin>44</yMargin>
+          <lineWidth>256</lineWidth>
+          <sides>2</sides>
+          <notTall/>
+          <roundCorners/>
+          <cornerRadius>768</cornerRadius>
+        </multipleEnclosure>
+        <startXdisp>1</startXdisp>
+        <startYdisp>-144</startYdisp>
+        <multipleXdisp>3</multipleXdisp>
+        <multipleYdisp>-144</multipleYdisp>
+        <mmRestXdisp>5</mmRestXdisp>
+        <mmRestYdisp>-144</mmRestYdisp>
+        <leftMmBracketChar>91</leftMmBracketChar>
+        <rightMmBracketChar>93</rightMmBracketChar>
+        <startWith>2</startWith>
+        <incidence>1</incidence>
+        <multipleAlign>center</multipleAlign>
+        <mmRestAlign>center</mmRestAlign>
+        <startOfLine/>
+        <multipleOf/>
+        <exceptFirstMeas/>
+        <mmRestRange/>
+        <mmRestRangeForce/>
+        <useStartEncl/>
+        <useMultipleEncl/>
+        <showOnTop/>
+        <showOnBottom/>
+        <excludeOthers/>
+        <breakMmRest/>
+        <multipleJustify>center</multipleJustify>
+        <mmRestJustify>center</mmRestJustify>
+      </scoreData>
+      <startMeas>1</startMeas>
+      <endMeas>1000</endMeas>
+      <startChar>164</startChar>
+      <base>10</base>
+      <offset>2</offset>
+      <prefix>&lt;|</prefix>
+      <suffix>&gt;|</suffix>
+      <countFromOne/>
+      <noZero/>
+      <doubleUp/>
+      <includeHours/>
+      <smpteFrames/>
+      <useScoreInfoForPart/>
+      <region>1</region>
+      <timePrecision>thousandths</timePrecision>
+      <hideScroll/>
+    </measNumbRegion>
     <partDef cmper="1">
       <nameID>42</nameID>
       <partOrder>3</partOrder>
@@ -58,7 +137,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(PartDefinitionTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     
@@ -84,4 +163,13 @@ TEST(PartDefinitionTest, GetName)
     ASSERT_TRUE(partDef) << "PartDefinition with cmper 1 not found";
 
     EXPECT_EQ(partDef->getName(), "Alto Sax in Eb");
+}
+
+TEST(PartDefinitionTest, GetArrayForScore)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    EXPECT_EQ(others->getArray<others::MeasureNumberRegion>(1).size(), 1) << "getArray should return the score's list, since meas numbs always linked";
 }
