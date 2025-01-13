@@ -88,6 +88,7 @@ public:
             return inci < other.inci;
         }
 
+        /** @brief Returns a string version of the nodeId for inclusion in messages. */
         std::string nodeString() const
         {
             if constexpr (std::is_same_v<TopKeyElementType, std::string>) {
@@ -296,12 +297,12 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
     
-    /** @brief OneCmperBase version of #ObjectPool::getArray */
+    /** @brief OthersPool version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
     { return ObjectPool::getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper }); }
 
-    /** @brief OneCmperBase version of #ObjectPool::get */
+    /** @brief OthersPool version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
     { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper, std::nullopt, inci}); }
