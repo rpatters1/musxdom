@@ -177,12 +177,12 @@ public:
         if (auto partVersion = get<T>(key)) {
             return partVersion;
         }
-        if (key.partId == 0) {
+        if (key.partId == SCORE_PARTID) {
             // if this is already the score version, there is nothing to return.
             return nullptr;
         }
         ObjectKey scoreKey(key);
-        scoreKey.partId = 0;
+        scoreKey.partId = SCORE_PARTID;
         return get<T>(scoreKey);
     }
 
