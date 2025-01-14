@@ -1,0 +1,284 @@
+/*
+ * Copyright (C) 2025, Robert Patterson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+#include "gtest/gtest.h"
+#include "musx/musx.h"
+#include "test_utils.h"
+
+using namespace musx::dom;
+
+constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+      <beats>2</beats>
+      <divbeat>2</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <altNumTsig/>
+      <altDenTsig/>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <abbrvTime/>
+      <useDisplayTimesig/>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <measSpec cmper="1" part="1" shared="true">
+      <width>420</width>
+    </measSpec>
+    <measSpec cmper="2">
+      <width>600</width>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>6</dispBeats>
+      <dispDivbeat>6</dispDivbeat>
+      <mnSepPlace/>
+      <barline>normal</barline>
+      <useDisplayTimesig/>
+      <leftBarline>default</leftBarline>
+      <displayAltNumTsig/>
+      <displayAltDenTsig/>
+    </measSpec>
+    <measSpec cmper="2" part="1" shared="true">
+      <width>368</width>
+      <posMode>beatchartPlusPos</posMode>
+    </measSpec>
+    <measSpec cmper="3">
+      <width>600</width>
+      <beats>4</beats>
+      <divbeat>4</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <frontSpaceExtra>11</frontSpaceExtra>
+      <backSpaceExtra>13</backSpaceExtra>
+      <hideCaution/>
+      <groupBarlineOverride/>
+      <altNumTsig/>
+      <altDenTsig/>
+      <showKey>ignoreKey</showKey>
+      <showTime>ignoreTime</showTime>
+      <indivPosDef/>
+      <posMode>beatchartPlusPos</posMode>
+      <breakRest/>
+      <barline>double</barline>
+      <abbrvTime/>
+      <useDisplayTimesig/>
+      <leftBarline>final</leftBarline>
+    </measSpec>
+    <measSpec cmper="3" part="1" shared="true">
+      <width>420</width>
+      <frontSpaceExtra>0</frontSpaceExtra>
+      <backSpaceExtra>0</backSpaceExtra>
+    </measSpec>
+  </others>
+</finale>
+)xml";
+
+TEST(MeasureTest, PopulateScore)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    // Measure 1 (Score)
+    auto measure1 = others->get<others::Measure>(SCORE_PARTID, 1);
+    ASSERT_TRUE(measure1) << "Measure for score with cmper 1 not found";
+
+    EXPECT_EQ(measure1->width, Evpu(600));
+    EXPECT_EQ(measure1->beats, Cmper(2));
+    EXPECT_EQ(measure1->divBeat, Cmper(2));
+    EXPECT_EQ(measure1->dispBeats, Cmper(4));
+    EXPECT_EQ(measure1->dispDivbeat, Cmper(1024));
+    EXPECT_FALSE(measure1->hideCaution);
+    EXPECT_FALSE(measure1->groupBarlineOverride);
+    EXPECT_TRUE(measure1->compositeNumerator);
+    EXPECT_TRUE(measure1->compositeDenominator);
+    EXPECT_EQ(measure1->positioningMode, others::Measure::PositioningType::TimeSigPlusPositioning);
+    EXPECT_EQ(measure1->barlineType, others::Measure::BarlineType::Normal);
+    EXPECT_TRUE(measure1->abbrvTime);
+    EXPECT_TRUE(measure1->useDisplayTimesig);
+    EXPECT_EQ(measure1->leftBarlineType, others::Measure::BarlineType::OptionsDefault);
+
+    // Measure 2 (Score)
+    auto measure2 = others->get<others::Measure>(SCORE_PARTID, 2);
+    ASSERT_TRUE(measure2) << "Measure 2 for score not found";
+
+    EXPECT_EQ(measure2->width, Evpu(600));
+    EXPECT_EQ(measure2->beats, Cmper(4));
+    EXPECT_EQ(measure2->divBeat, Cmper(1024));
+    EXPECT_EQ(measure2->dispBeats, Cmper(6));
+    EXPECT_EQ(measure2->dispDivbeat, Cmper(6));
+    EXPECT_FALSE(measure2->compositeNumerator);
+    EXPECT_FALSE(measure2->compositeDenominator);
+    EXPECT_EQ(measure2->barlineType, others::Measure::BarlineType::Normal);
+    EXPECT_TRUE(measure2->useDisplayTimesig);
+    EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::OptionsDefault);
+    EXPECT_TRUE(measure2->compositeDispNumerator);
+    EXPECT_TRUE(measure2->compositeDispDenominator);
+
+    // Measure 3 (Score)
+    auto measure3 = others->get<others::Measure>(SCORE_PARTID, 3);
+    ASSERT_TRUE(measure3) << "Measure 3 for score not found";
+
+    EXPECT_EQ(measure3->width, Evpu(600));
+    EXPECT_EQ(measure3->beats, Cmper(4));
+    EXPECT_EQ(measure3->divBeat, Cmper(4));
+    EXPECT_EQ(measure3->dispBeats, Cmper(4));
+    EXPECT_EQ(measure3->dispDivbeat, Cmper(1024));
+    EXPECT_EQ(measure3->frontSpaceExtra, Evpu(11));
+    EXPECT_EQ(measure3->backSpaceExtra, Evpu(13));
+    EXPECT_TRUE(measure3->hideCaution);
+    EXPECT_TRUE(measure3->groupBarlineOverride);
+    EXPECT_TRUE(measure3->compositeNumerator);
+    EXPECT_TRUE(measure3->compositeDenominator);
+    EXPECT_EQ(measure3->showKey, others::Measure::ShowKeySigMode::Never);
+    EXPECT_EQ(measure3->showTime, others::Measure::ShowTimeSigMode::Never);
+    EXPECT_TRUE(measure3->evenlyAcrossMeasure);
+    EXPECT_EQ(measure3->positioningMode, others::Measure::PositioningType::BeatChartPlusPositioning);
+    EXPECT_TRUE(measure3->breakMmRest);
+    EXPECT_EQ(measure3->barlineType, others::Measure::BarlineType::Double);
+    EXPECT_TRUE(measure3->abbrvTime);
+    EXPECT_TRUE(measure3->useDisplayTimesig);
+    EXPECT_EQ(measure3->leftBarlineType, others::Measure::BarlineType::Final);
+}
+
+TEST(MeasureTest, PopulatePart)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    const Cmper partId = 1;
+
+    // Measure 1 (Part 1)
+    auto measure1 = others->get<others::Measure>(partId, 1);
+    ASSERT_TRUE(measure1) << "Measure 1 for part 1 not found";
+
+    // Explicitly test every field, including inherited values
+    EXPECT_EQ(measure1->width, Evpu(420)); // Overridden in part-specific measure
+    EXPECT_EQ(measure1->beats, Cmper(2)); // Inherited from score
+    EXPECT_EQ(measure1->divBeat, Cmper(2)); // Inherited from score
+    EXPECT_EQ(measure1->dispBeats, Cmper(4)); // Inherited from score
+    EXPECT_EQ(measure1->dispDivbeat, Cmper(1024)); // Inherited from score
+    EXPECT_TRUE(measure1->compositeNumerator); // Inherited from score
+    EXPECT_TRUE(measure1->compositeDenominator); // Inherited from score
+    EXPECT_EQ(measure1->positioningMode, others::Measure::PositioningType::TimeSigPlusPositioning); // Inherited from score
+    EXPECT_EQ(measure1->barlineType, others::Measure::BarlineType::Normal); // Inherited from score
+    EXPECT_TRUE(measure1->abbrvTime); // Inherited from score
+    EXPECT_TRUE(measure1->useDisplayTimesig); // Inherited from score
+    EXPECT_EQ(measure1->leftBarlineType, others::Measure::BarlineType::OptionsDefault); // Inherited from score
+
+    // Measure 2 (Part 1)
+    auto measure2 = others->get<others::Measure>(partId, 2);
+    ASSERT_TRUE(measure2) << "Measure 2 for part 1 not found";
+
+    EXPECT_EQ(measure2->width, Evpu(368)); // Overridden in part-specific measure
+    EXPECT_EQ(measure2->beats, Cmper(4)); // Inherited from score
+    EXPECT_EQ(measure2->divBeat, Cmper(1024)); // Inherited from score
+    EXPECT_EQ(measure2->dispBeats, Cmper(6)); // Inherited from score
+    EXPECT_EQ(measure2->dispDivbeat, Cmper(6)); // Inherited from score
+    EXPECT_FALSE(measure2->compositeNumerator); // Inherited from score
+    EXPECT_FALSE(measure2->compositeDenominator); // Inherited from score
+    EXPECT_EQ(measure2->positioningMode, others::Measure::PositioningType::BeatChartPlusPositioning); // Overridden
+    EXPECT_EQ(measure2->barlineType, others::Measure::BarlineType::Normal); // Inherited from score
+    EXPECT_TRUE(measure2->useDisplayTimesig); // Inherited from score
+    EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::OptionsDefault); // Inherited from score
+    EXPECT_TRUE(measure2->compositeDispNumerator); // Inherited from score
+    EXPECT_TRUE(measure2->compositeDispDenominator); // Inherited from score
+
+    // Measure 3 (Part 1)
+    auto measure3 = others->get<others::Measure>(partId, 3);
+    ASSERT_TRUE(measure3) << "Measure 3 for part 1 not found";
+
+    EXPECT_EQ(measure3->width, Evpu(420)); // Overridden in part-specific measure
+    EXPECT_EQ(measure3->beats, Cmper(4)); // Inherited from score
+    EXPECT_EQ(measure3->divBeat, Cmper(4)); // Inherited from score
+    EXPECT_EQ(measure3->dispBeats, Cmper(4)); // Inherited from score
+    EXPECT_EQ(measure3->dispDivbeat, Cmper(1024)); // Inherited from score
+    EXPECT_EQ(measure3->frontSpaceExtra, Evpu(0)); // Overridden
+    EXPECT_EQ(measure3->backSpaceExtra, Evpu(0)); // Overridden
+    EXPECT_TRUE(measure3->hideCaution); // Inherited from score
+    EXPECT_TRUE(measure3->groupBarlineOverride); // Inherited from score
+    EXPECT_TRUE(measure3->compositeNumerator); // Inherited from score
+    EXPECT_TRUE(measure3->compositeDenominator); // Inherited from score
+    EXPECT_EQ(measure3->showKey, others::Measure::ShowKeySigMode::Never); // Inherited from score
+    EXPECT_EQ(measure3->showTime, others::Measure::ShowTimeSigMode::Never); // Inherited from score
+    EXPECT_TRUE(measure3->evenlyAcrossMeasure); // Inherited from score
+    EXPECT_EQ(measure3->positioningMode, others::Measure::PositioningType::BeatChartPlusPositioning); // Inherited from score
+    EXPECT_TRUE(measure3->breakMmRest); // Inherited from score
+    EXPECT_EQ(measure3->barlineType, others::Measure::BarlineType::Double); // Inherited from score
+    EXPECT_TRUE(measure3->abbrvTime); // Inherited from score
+    EXPECT_TRUE(measure3->useDisplayTimesig); // Inherited from score
+    EXPECT_EQ(measure3->leftBarlineType, others::Measure::BarlineType::Final); // Inherited from score
+}
+
+TEST(MeasureTest, UnlinkedNodes)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    const Cmper partId = 1;
+
+    // Measure 1 (Part 1)
+    auto measure1 = others->get<others::Measure>(partId, 1);
+    ASSERT_TRUE(measure1) << "Measure 1 for part 1 not found";
+
+    auto unlinkedNodes = measure1->getUnlinkedNodes();
+
+    // Check overridden nodes
+    EXPECT_NE(unlinkedNodes.find("width"), unlinkedNodes.end()) << "Width should be unlinked in Measure 1 Part 1";
+
+    // Check linked nodes
+    EXPECT_EQ(unlinkedNodes.find("beats"), unlinkedNodes.end()) << "Beats should be linked in Measure 1 Part 1";
+    EXPECT_EQ(unlinkedNodes.find("groupBarlineOverride"), unlinkedNodes.end()) << "GroupBarlineOverride should be linked in Measure 1 Part 1";
+
+    // Measure 2 (Part 1)
+    auto measure2 = others->get<others::Measure>(partId, 2);
+    ASSERT_TRUE(measure2) << "Measure 2 for part 1 not found";
+
+    unlinkedNodes = measure2->getUnlinkedNodes();
+
+    // Check overridden nodes
+    EXPECT_NE(unlinkedNodes.find("width"), unlinkedNodes.end()) << "Width should be unlinked in Measure 2 Part 1";
+    EXPECT_NE(unlinkedNodes.find("posMode"), unlinkedNodes.end()) << "Positioning mode should be unlinked in Measure 2 Part 1";
+
+    // Check linked nodes
+    EXPECT_EQ(unlinkedNodes.find("beats"), unlinkedNodes.end()) << "Beats should be linked in Measure 2 Part 1";
+    EXPECT_EQ(unlinkedNodes.find("useDisplayTimesig"), unlinkedNodes.end()) << "UseDisplayTimesig should be linked in Measure 2 Part 1";
+
+    // Measure 3 (Part 1)
+    auto measure3 = others->get<others::Measure>(partId, 3);
+    ASSERT_TRUE(measure3) << "Measure 3 for part 1 not found";
+
+    unlinkedNodes = measure3->getUnlinkedNodes();
+
+    // Check overridden nodes
+    EXPECT_NE(unlinkedNodes.find("width"), unlinkedNodes.end()) << "Width should be unlinked in Measure 3 Part 1";
+    EXPECT_NE(unlinkedNodes.find("frontSpaceExtra"), unlinkedNodes.end()) << "FrontSpaceExtra should be unlinked in Measure 3 Part 1";
+    EXPECT_NE(unlinkedNodes.find("backSpaceExtra"), unlinkedNodes.end()) << "BackSpaceExtra should be unlinked in Measure 3 Part 1";
+
+    // Check linked nodes
+    EXPECT_EQ(unlinkedNodes.find("barline"), unlinkedNodes.end()) << "Barline should be linked in Measure 3 Part 1";
+    EXPECT_EQ(unlinkedNodes.find("compositeNumerator"), unlinkedNodes.end()) << "CompositeNumerator should be linked in Measure 3 Part 1";
+}
