@@ -77,7 +77,7 @@ public:
 #endif
 
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {            
-            auto basePtr = DerivedType::extractFromXml(childElement, document, elementLinker);
+            auto basePtr = DerivedType::extractFromXml(childElement, document, elementLinker, pool);
             if (basePtr) {
 #ifdef MUSX_DISPLAY_NODE_NAMES
                 auto it = alreadyDisplayed.find(childElement->getTagName());
@@ -121,11 +121,12 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
      * @return A shared pointer to the created object.
      */
-    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker, const OptionsPoolPtr& pool)
     {
-        return RegisteredOptions::createInstance(document->getOptions(), element, elementLinker, document);
+        return RegisteredOptions::createInstance(pool, element, elementLinker, document);
     }
 };
 
@@ -150,10 +151,11 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
-    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker, const OthersPoolPtr& pool)
     {
         auto cmperAttribute = element->findAttribute("cmper");
         if (!cmperAttribute) {
@@ -161,11 +163,11 @@ public:
         }
         auto inciAttribute = element->findAttribute("inci");
         if (inciAttribute) {
-            return RegisteredOthers::createInstance(document->getOthers(), element, elementLinker,
+            return RegisteredOthers::createInstance(pool, element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
         }
         else {
-            return RegisteredOthers::createInstance(document->getOthers(), element, elementLinker,
+            return RegisteredOthers::createInstance(pool, element, elementLinker,
                 document, cmperAttribute->getValueAs<dom::Cmper>());
         }
     }
@@ -192,10 +194,11 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
-    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker, const DetailsPoolPtr& pool)
     {
         if (auto entnumAttribute = element->findAttribute("entnum")) {
             /// @todo handle entry details here
@@ -211,11 +214,11 @@ public:
         }
         auto inciAttribute = element->findAttribute("inci");
         if (inciAttribute) {
-            return RegisteredDetails::createInstance(document->getOthers(), element, elementLinker,
+            return RegisteredDetails::createInstance(pool, element, elementLinker,
                 document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
         }
         else {
-            return RegisteredDetails::createInstance(document->getOthers(), element, elementLinker,
+            return RegisteredDetails::createInstance(pool, element, elementLinker,
                 document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>());
         }
     }
@@ -241,9 +244,10 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
      * @return A shared pointer to the created object.
      */
-    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker, const EntryPoolPtr& pool)
     {
         auto entnumAttr = element->findAttribute("entnum");
         if (!entnumAttr) {
@@ -257,7 +261,7 @@ public:
         if (!entnumAttr) {
             throw std::invalid_argument("missing next attribute for entry");
         }
-        return RegisteredEntries::createInstance(document->getEntries(), element, elementLinker, document,
+        return RegisteredEntries::createInstance(pool, element, elementLinker, document,
             entnumAttr->getValueAs<EntryNumber>(),
             prevAttr->getValueAs<EntryNumber>(),
             nextAttr->getValueAs<EntryNumber>());
@@ -285,10 +289,11 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
+     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
-    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
+    static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker, const TextsPoolPtr& pool)
     {
         auto textAttributeName = [element]() -> std::string {
             if (element->getTagName() == texts::FileInfoText::XmlNodeName) {
@@ -306,7 +311,7 @@ public:
             }
             return textAttribute->getValueAs<Cmper>();
         }();
-        return RegisteredTexts::createInstance(document->getTexts(), element, elementLinker, document, textNumber);
+        return RegisteredTexts::createInstance(pool, element, elementLinker, document, textNumber);
     }
 
 private:
