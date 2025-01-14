@@ -629,7 +629,7 @@ public:
         Evpu pageWidth{};                ///< Width of the page.
         int pagePercent{};               ///< Page scaling percentage (a value of 100 means no scaling).
         int sysPercent{};                ///< System scaling percentage (a value of 100 means no scaling).
-        int rawStaffHeight{};            ///< Raw staff height (in 1/16 Evpu units).
+        Evpu16ths rawStaffHeight{};      ///< Raw staff height (in 1/16 Evpu units).
         Evpu leftPageMarginTop{};        ///< Top margin for the left page. (Sign reversed in Finale UI.)
         Evpu leftPageMarginLeft{};       ///< Left margin for the left page.
         Evpu leftPageMarginBottom{};     ///< Bottom margin for the left page.

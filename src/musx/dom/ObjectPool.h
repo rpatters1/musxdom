@@ -192,7 +192,9 @@ public:
         case Base::ShareMode::None:
             return getArray<T>(key);
         case Base::ShareMode::Partial:
-            throw std::invalid_argument("Arrays of partially linked classes are not currently supported. Requested node: " + key.nodeString());
+            // it appears that all partially shareable nodes are created for each part, even if there is nothing in them.
+            // that means we will create an entire copy of the score values as needed, so here we can just return them.
+            return getArray<T>(key);
         }
     }
 

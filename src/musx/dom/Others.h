@@ -443,6 +443,128 @@ public:
 };
 
 /**
+ * @class Measure
+ * @brief Represents the attributes of a measure.
+ *
+ * This class is identified by the XML node name "measSpec".
+ */
+class Measure : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit Measure(const DocumentWeakPtr& document, Cmper measureId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, measureId, shareMode, cmper) {}
+
+    /// @enum PositioningType
+    /// @brief Positioning (music spacing) type for the measure
+    enum class PositioningType
+    {
+        Manual,                     ///< "Manually (By Dragging)" the default.
+        TimeSigPlusPositioning,     ///< "According to the Time Signature" (xml node is `<timesigPlusPos>`)
+        BeatChartPlusPositioning    ///< "Using Beat-Chart Spacing" (xml node is `<beatchartPlusPos>`)
+    };
+
+    /// @enum BarlineType
+    /// @brief Barline type for left and right barlines.
+    enum class BarlineType
+    {
+        None,                   ///< No barline. (This is the default value for the enum.)
+        OptionsDefault,         ///< Left barlines only: use value from @ref options::BarlineOptions (xml values is "default")
+        Normal,                 ///< Normal barline
+        Double,                 ///< Double barline
+        Final,                  ///< Final barline
+        Solid,                  ///< Solid (thick) barline
+        Dashed,                 ///< Dashed barline (xml value is "dash")
+        Tick,                   ///< Right barlines only: tick barline (xml value is "partial")
+        Custom                  ///< Custom barline (created with Shape Designer)
+    };
+
+    /// @enum ShowKeyMode
+    /// @enum How and whether to show a Key Signature in this measure.
+    enum class ShowKeySigMode
+    {
+        IfNeeded,               ///< Show if needed (the default)
+        Always,                 ///< Always show (xml value is "deltaKey")
+        Never                   ///< Never show (xml value is "ignoreKey")
+    };
+
+    /// @enum ShowTimeSigMode
+    /// @enum How and whether to show a Time Signature in this measure.
+    enum class ShowTimeSigMode
+    {
+        IfNeeded,               ///< Show if needed (the default)
+        Always,                 ///< Always show (xml value is "deltaTime")
+        Never                   ///< Never show (xml value is "ignoreTime")
+    };
+
+    Evpu width{};               ///< "Ideal" measure width in Evpu. Page layout determines actual width.
+    Cmper beats{};              ///< Number of beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
+    Cmper divBeat{};            ///< Divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
+    Cmper dispBeats{};          ///< Displayed beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
+    Cmper dispDivbeat{};        ///< Displayed divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
+    Evpu frontSpaceExtra{};     ///< Extra space at front of bar.
+    Evpu backSpaceExtra{};      ///< Extra space at end of bar.
+    bool breakWordExt{};        ///< Barline ends word extensions on lyrics.
+    bool hideCaution{};         ///< "Hide Cautionary Clefs, Key, and Time Signature"
+    bool showFullNames{};       ///< "Show Full Staff & Group Names"
+    bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
+    bool groupBarlineOverride{}; ///< Override the barline specified by a @ref StaffGroup (if any)
+    Cmper customBarShape{};     ///< Cmper of Shape Designer shape for custom right barline
+    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer shape for custom left barline
+    ShowKeySigMode showKey{};   ///< Show mode for key signatures
+    ShowTimeSigMode showTime{}; ///< Show mode for time signatures
+    PositioningType positioningMode{}; ///< Positioning type for the measure. (xml node is `<posMode>`)
+    bool beginNewSystem{};      ///< "Begin a New Staff System" (xml node is `<lineBreak>`)
+    bool breakMmRest{};         ///< "Break a Multimeasure Rests" (xml node is `<breakRest>`)
+    bool noMeasNum{};           ///< Inverse of "Include in Measure Numbering"
+    BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
+    bool hasSmartShape{};       ///< Indicates if the measure has a smart shape.
+    bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
+    bool hasExpression{};       ///< Indicates if the measure has expressions. (xml node is `<hasExpr>`)
+    bool compositeNumerator{};  ///< Indicates a composite numerator for the time signature. (xml node is `<altNumTsig>`)
+    bool compositeDenominator{}; ///< Indicates a composite denominator for the time signature. (xml node is `<altDenTsig>`)
+    bool abbrvTime{};           ///< Indicates abbreviated time signature (e.g., Common or Cut time.) Applies to the display time signature only.
+                                ///< The actual time signature's abbreviation is controlled by the values in @ref options::TimeSignatureOptions.
+    bool useDisplayTimesig{};   ///< Indicates whether to use the display time signature.
+    BarlineType leftBarlineType{}; ///< Left barline type. (xml node is `<leftBarline>`)
+    bool compositeDispNumerator{};  ///< Indicates a composite numerator for the display time signature. (xml node is `<displayAltNumTsig>`)
+    bool compositeDispDenominator{}; ///< Indicates a composite denominator for the display time signature. (xml node is `<displayAltDenTsig>`)
+
+    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
+
+    constexpr static std::string_view XmlNodeName = "measSpec"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<Measure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class Page
+ * @brief Represents the attributes of a page in the page layout.
+ *
+ * This class is identified by the XML node name "pageSpec".
+ */
+class Page : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit Page(const DocumentWeakPtr& document, Cmper pageId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, pageId, shareMode, cmper) {}
+
+    Evpu height{};              ///< Page height in Evpu.
+    Evpu width{};               ///< Page width in Evpu.
+    int percent{};              ///< Percent value (scaling factor).
+    SystemCmper firstSystem{};  ///< First system on the page (-1 if page is blank). See @ref StaffSystem.
+    bool holdMargins{};         ///< "Hold Margins" (xml node is `scaleContentOnly`)
+    Evpu margTop{};             ///< Top margin in Evpu.
+    Evpu margLeft{};            ///< Left margin in Evpu.
+    Evpu margBottom{};          ///< Bottom margin in Evpu.
+    Evpu margRight{};           ///< Right margin in Evpu.
+
+    /** @brief is this a blank page */
+    bool isBlank() const { return firstSystem < 0; }
+
+    constexpr static std::string_view XmlNodeName = "pageSpec"; ///> The XML node name for this type.
+    static const xml::XmlElementArray<Page> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class PartDefinition
  * @brief Represents the attributes of a Finale "partDef".
  *
@@ -544,6 +666,43 @@ public:
 
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Staff> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffSystem
+ * @brief Represents the attributes of a staff system in the page layout.
+ *
+ * This class is identified by the XML node name "staffSystemSpec".
+ */
+class StaffSystem : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit StaffSystem(const DocumentWeakPtr& document, Cmper staffSystemId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, staffSystemId, shareMode, cmper)
+    {
+    }
+
+    MeasCmper startMeas{};          ///< Starting measure of the staff system. See @ref Measure.
+    MeasCmper endMeas{};            ///< Ending measure of the staff system. See @ref Measure.
+    double horzPercent{};           ///< Horizontal scaling percentage (fractional, 100.0 means no scaling).
+                                    ///< This value affects "stretchable" items such as word extensions on lyrics.
+    int ssysPercent{};              ///< Staff system scaling percentage (100 means no scaling).
+    Evpu16ths staffHeight{};        ///< Staff height in 1/16 Evpu units.
+    Evpu top{};                     ///< Top margin in Evpu.
+    Evpu left{};                    ///< Left margin in Evpu.
+    Evpu right{};                   ///< Right margin in Evpu.
+    Evpu bottom{};                  ///< Bottom margin in Evpu.
+    bool hasStaffScaling{};         ///< Indicates if any individual staff in the system has scaling applied.
+    bool placeEndSpaceBeforeBarline{}; ///< Indicates that extra space is placed before the barline.
+    bool scaleVert{};               ///< "Resize Vertical Space"
+    bool holdMargins{};             ///< "Hold Margins" (xml node is `<scaleContentOnly>`)
+    Evpu distanceToPrev{};          ///< Distance to the previous staff system in Evpu.
+    Evpu extraStartSystemSpace{};   ///< Extra space at the start of the staff system in Evpu.
+    Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
+
+    constexpr static std::string_view XmlNodeName = "staffSystemSpec"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffSystem> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
