@@ -121,7 +121,7 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
-     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
+     * @param pool The pool we are constructiong. (It hasn't been assigned to @p document yet.)
      * @return A shared pointer to the created object.
      */
     static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker, const OptionsPoolPtr& pool)
@@ -151,7 +151,7 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
-     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
+     * @param pool The pool we are constructiong. (It hasn't been assigned to @p document yet.)
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
@@ -194,7 +194,7 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
-     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
+     * @param pool The pool we are constructiong. (It hasn't been assigned to @p document yet.)
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */
@@ -244,7 +244,7 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
-     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
+     * @param pool The pool we are constructiong. (It hasn't been assigned to @p document yet.)
      * @return A shared pointer to the created object.
      */
     static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker, const EntryPoolPtr& pool)
@@ -289,7 +289,7 @@ public:
      * @param element The XML element from which to extract the object.
      * @param document The document object providing context for the XML parsing.
      * @param elementLinker The @ref ElementLinker instance that is used to resolve all internal connections after the document is created.
-     * @param pool The pool we are constructiong. (It hasn't been assigned to #document yet.)
+     * @param pool The pool we are constructiong. (It hasn't been assigned to @p document yet.)
      * @return A shared pointer to the created object.
      * @throws std::invalid_argument if required attributes are missing.
      */

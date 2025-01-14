@@ -478,8 +478,8 @@ public:
         Custom                  ///< Custom barline (created with Shape Designer)
     };
 
-    /// @enum ShowKeyMode
-    /// @enum How and whether to show a Key Signature in this measure.
+    /// @enum ShowKeySigMode
+    /// @brief How and whether to show a Key Signature in this measure.
     enum class ShowKeySigMode
     {
         IfNeeded,               ///< Show if needed (the default)
@@ -488,7 +488,7 @@ public:
     };
 
     /// @enum ShowTimeSigMode
-    /// @enum How and whether to show a Time Signature in this measure.
+    /// @brief How and whether to show a Time Signature in this measure.
     enum class ShowTimeSigMode
     {
         IfNeeded,               ///< Show if needed (the default)
@@ -560,7 +560,7 @@ public:
     /** @brief is this a blank page */
     bool isBlank() const { return firstSystem < 0; }
 
-    constexpr static std::string_view XmlNodeName = "pageSpec"; ///> The XML node name for this type.
+    constexpr static std::string_view XmlNodeName = "pageSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Page> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
