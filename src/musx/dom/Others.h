@@ -688,7 +688,7 @@ public:
     double horzPercent{};           ///< Horizontal scaling percentage (fractional, 100.0 means no scaling).
                                     ///< This value affects "stretchable" items such as word extensions on lyrics.
     int ssysPercent{};              ///< Staff system scaling percentage (100 means no scaling).
-    Evpu16ths staffHeight{};        ///< Staff height in 1/16 Evpu units.
+    Efix staffHeight{};             ///< Staff height in Efix units. Note that this is different units than #options::PageFormatOptions::PageFormat::rawStaffHeight.
     Evpu top{};                     ///< Top margin in Evpu.
     Evpu left{};                    ///< Left margin in Evpu.
     Evpu right{};                   ///< Right margin in Evpu.

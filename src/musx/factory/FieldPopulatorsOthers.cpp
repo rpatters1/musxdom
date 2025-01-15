@@ -412,7 +412,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffSystem, {
     {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
     {"horzPercent", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->horzPercent = e->getTextAs<double>() / 100.0; }},
     {"ssysPercent", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->ssysPercent = e->getTextAs<int>(); }},
-    {"staffHeight", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->staffHeight = e->getTextAs<Evpu16ths>(); }},
+    {"staffHeight", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->staffHeight = e->getTextAs<Efix>(); }},
     {"top", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->top = e->getTextAs<Evpu>(); }},
     {"left", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->left = e->getTextAs<Evpu>(); }},
     {"right", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->right = e->getTextAs<Evpu>(); }},

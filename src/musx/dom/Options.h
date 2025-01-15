@@ -629,7 +629,7 @@ public:
         Evpu pageWidth{};                ///< Width of the page.
         int pagePercent{};               ///< Page scaling percentage (a value of 100 means no scaling).
         int sysPercent{};                ///< System scaling percentage (a value of 100 means no scaling).
-        Evpu16ths rawStaffHeight{};      ///< Raw staff height (in 1/16 Evpu units).
+        Evpu16ths rawStaffHeight{};      ///< Raw staff height (in 1/16 Evpu units). Note that is is diffent units than #others::StaffSystem::staffHeight.
         Evpu leftPageMarginTop{};        ///< Top margin for the left page. (Sign reversed in Finale UI.)
         Evpu leftPageMarginLeft{};       ///< Left margin for the left page.
         Evpu leftPageMarginBottom{};     ///< Bottom margin for the left page.
@@ -665,6 +665,20 @@ public:
     std::shared_ptr<PageFormat> pageFormatParts; ///< Page format for parts settings.
     bool avoidSystemMarginCollisions{};   ///< Whether to avoid system margin collisions.
 
+    /** @brief Calculates the page format options for a specific part
+     *
+     * The options are mixed with actual page and system information for the specified part
+     * to produce a set of page format options that matches the input @p partId if it uses consistent
+     * page formatting on all its pages. This may be useful if a particular part uses different settings
+     * than the other parts. An example might be a Piano/Vocal score with a different page size than the
+     * other parts.
+     *
+     * @param partId [in] the part for which to calculate. Pass #SCORE_PARTID for the score.
+     * @returns A pointer to a detached instance of @ref PageFormat that is a best approximation
+     * to the settings for the input part.
+     */
+    std::shared_ptr<PageFormat> calcPageFormatForPart(Cmper partId) const;
+
     /**
      * @brief Constructor for PageFormatOptions.
      *
@@ -673,9 +687,7 @@ public:
      * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      */
     explicit PageFormatOptions(const DocumentPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
-        : OptionsBase(document, partId, shareMode)
-    {
-    }
+        : OptionsBase(document, partId, shareMode) {}
 
     /**
      * @brief The XML node name for this type.

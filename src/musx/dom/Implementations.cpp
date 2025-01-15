@@ -308,6 +308,66 @@ std::string others::MarkingCategory::getName() const
     return {};
 }
 
+// *****************************
+// ***** PageFormatOptions *****
+// *****************************
+
+std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
+{
+    const auto& baseOptions = (partId == SCORE_PARTID) ? pageFormatScore : pageFormatParts;
+    auto retval = std::make_shared<options::PageFormatOptions::PageFormat>(*baseOptions);
+    auto pages = getDocument()->getOthers()->getArray<others::Page>(partId);
+    auto page1 = pages.size() >= 1 ? pages[0] : nullptr;
+    auto page2 = pages.size() >= 2 ? pages[1] : page1; // left page
+    auto page3 = pages.size() >= 3 ? pages[2] : page1; // right page that isn't page 1
+    if (page2) {
+        retval->pageHeight = page2->height;
+        retval->pageWidth = page2->width;
+        retval->pagePercent = page2->percent;
+        retval->leftPageMarginTop = page2->margTop;
+        retval->leftPageMarginLeft = page2->margLeft;
+        retval->leftPageMarginBottom = page2->margBottom;
+        retval->leftPageMarginRight = page2->margRight;
+    }
+    if (page1) {
+        if (retval->differentFirstPageMargin || page1->margTop != page2->margTop) {
+            retval->firstPageMarginTop = page1->margTop;
+            retval->differentFirstPageMargin = true;
+        }
+    }
+    if (page3) {
+        if (retval->facingPages || page3->margTop != page2->margTop || page3->margLeft != page2->margLeft
+               || page3->margBottom != page2->margBottom || page3->margRight != page2->margRight) {
+            retval->facingPages = true;
+            retval->rightPageMarginTop = page3->margTop;
+            retval->rightPageMarginLeft = page3->margLeft;
+            retval->rightPageMarginBottom = page3->margBottom;
+            retval->rightPageMarginRight = page3->margBottom;
+        }
+    }
+    auto systems = getDocument()->getOthers()->getArray<others::StaffSystem>(partId);
+    auto system1 = systems.size() >= 1 ? systems[0] : nullptr;
+    auto system2 = systems.size() >= 2 ? systems[1] : system1;
+    if (system2) {
+        retval->sysPercent = system2->ssysPercent;
+        retval->rawStaffHeight = system2->staffHeight >> 2; // convert Efix to Evpu16ths
+        retval->sysMarginTop = system2->top;
+        retval->sysMarginLeft = system2->left;
+        retval->sysMarginBottom = system2->bottom;
+        retval->sysMarginRight = system2->right;
+        // do not copy system2->distanceToPrev because it varies from the default quite often
+    }
+    if (system1) {
+        if (retval->differentFirstSysMargin || system1->top != system2->top || system1->left != system2->left) {
+            retval->differentFirstSysMargin = true;
+            retval->firstSysMarginTop = system1->top;
+            retval->firstSysMarginLeft = system1->left;
+            // do not change retval->firstSysMarginDistance because it varies so much depending on context
+        }
+    }
+    return retval;
+}
+
 // **************************
 // ***** PartDefinition *****
 // **************************
