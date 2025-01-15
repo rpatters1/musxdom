@@ -78,10 +78,13 @@ add_executable(musxdomtests
     others/frame.cpp
 	others/layer_attributes.cpp
 	others/instrument_used.cpp
+    others/measure.cpp
     others/measure_number_region.cpp
+    others/page.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
     others/staff.cpp
+    others/staff_system.cpp
     others/text_block.cpp
     others/text.cpp
     # details

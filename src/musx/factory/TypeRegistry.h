@@ -113,7 +113,7 @@ public:
                 // Only enable this part if T is constructible with Args...
                 if constexpr (std::is_constructible_v<T, const DocumentPtr&, Cmper, Base::ShareMode, Args...>) {
                     auto partAttr = node->findAttribute("part");
-                    Cmper partId = partAttr ? partAttr->getValueAs<Cmper>() : 0; // zero is the score ID
+                    Cmper partId = partAttr ? partAttr->getValueAs<Cmper>() : SCORE_PARTID; // zero is the score ID
                     auto shareMode = Base::ShareMode::All;
                     if (auto shareAttr = node->findAttribute("shared")) {
                         shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
@@ -126,7 +126,7 @@ public:
                             }
                             auto scoreValue = [&]() {
                                 if constexpr (std::is_same_v<PoolPtr, OthersPoolPtr> || std::is_same_v<PoolPtr, DetailsPoolPtr>) {
-                                    return pool->template get<T>(partId, std::forward<Args>(args)...);
+                                    return pool->template get<T>(SCORE_PARTID, std::forward<Args>(args)...);
                                 } else {
                                     return pool->template get<T>(std::forward<Args>(args)...);
                                 }
@@ -192,7 +192,10 @@ using RegisteredOthers = TypeRegistry <
     dom::others::InstrumentUsed,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
+    dom::others::Measure,
     dom::others::TextBlock,
+    dom::others::Page,
+    dom::others::StaffSystem,
     dom::others::Staff,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
