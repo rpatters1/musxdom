@@ -551,11 +551,11 @@ public:
     Evpu width{};               ///< Page width in Evpu.
     int percent{};              ///< Percent value (scaling factor).
     SystemCmper firstSystem{};  ///< First system on the page (-1 if page is blank). See @ref StaffSystem.
-    bool holdMargins{};         ///< "Hold Margins" (xml node is `scaleContentOnly`)
-    Evpu margTop{};             ///< Top margin in Evpu.
+    bool holdMargins{};         ///< "Hold Margins" (xml node is `<scaleContentOnly>`)
+    Evpu margTop{};             ///< Top margin in Evpu. (Sign reversed in Finale UI.)
     Evpu margLeft{};            ///< Left margin in Evpu.
     Evpu margBottom{};          ///< Bottom margin in Evpu.
-    Evpu margRight{};           ///< Right margin in Evpu.
+    Evpu margRight{};           ///< Right margin in Evpu. (Sign reversed in Finale UI.)
 
     /** @brief is this a blank page */
     bool isBlank() const { return firstSystem < 0; }
@@ -689,10 +689,11 @@ public:
                                     ///< This value affects "stretchable" items such as word extensions on lyrics.
     int ssysPercent{};              ///< Staff system scaling percentage (100 means no scaling).
     Efix staffHeight{};             ///< Staff height in Efix units. Note that this is different units than #options::PageFormatOptions::PageFormat::rawStaffHeight.
-    Evpu top{};                     ///< Top margin in Evpu.
+    Evpu top{};                     ///< Top margin in Evpu. (Sign reversed in Finale UI.)
     Evpu left{};                    ///< Left margin in Evpu.
-    Evpu right{};                   ///< Right margin in Evpu.
-    Evpu bottom{};                  ///< Bottom margin in Evpu.
+    Evpu right{};                   ///< Right margin in Evpu. (Sign reversed in Finale UI.)
+    Evpu bottom{};                  ///< Bottom margin in Evpu. This value is 96 (i.e., 1 5-line staff thickness) less than the U.I. value.
+                                    ///< That means if you enter 0 in the Finale UI, this value is -96.
     bool hasStaffScaling{};         ///< Indicates if any individual staff in the system has scaling applied.
     bool placeEndSpaceBeforeBarline{}; ///< Indicates that extra space is placed before the barline.
     bool scaleVert{};               ///< "Resize Vertical Space"

@@ -640,7 +640,8 @@ public:
         Evpu rightPageMarginRight{};     ///< Right margin for the right page. (Sign reversed in Finale UI.)
         Evpu sysMarginTop{};             ///< System top margin. (Sign reversed in Finale UI.)
         Evpu sysMarginLeft{};            ///< System left margin.
-        Evpu sysMarginBottom{};          ///< System bottom margin.
+        Evpu sysMarginBottom{};          ///< System bottom margin. This value is 96 (i.e., 1 5-line staff thickness) less than the U.I. value.
+                                         ///< That means if you enter 0 in the Finale UI, this value is -96. The U.I. value is also sign reversed.
         Evpu sysMarginRight{};           ///< System bottom margin. (Sign reversed in Finale UI.)
         Evpu sysDistanceBetween{};       ///< Distance between systems. (Sign reversed in Finale UI.)
         Evpu firstPageMarginTop{};       ///< Top margin for the first page. (Sign reversed in Finale UI.)

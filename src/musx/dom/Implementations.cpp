@@ -342,7 +342,7 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
             retval->rightPageMarginTop = page3->margTop;
             retval->rightPageMarginLeft = page3->margLeft;
             retval->rightPageMarginBottom = page3->margBottom;
-            retval->rightPageMarginRight = page3->margBottom;
+            retval->rightPageMarginRight = page3->margRight;
         }
     }
     auto systems = getDocument()->getOthers()->getArray<others::StaffSystem>(partId);
@@ -350,7 +350,7 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
     auto system2 = systems.size() >= 2 ? systems[1] : system1;
     if (system2) {
         retval->sysPercent = system2->ssysPercent;
-        retval->rawStaffHeight = system2->staffHeight >> 2; // convert Efix to Evpu16ths
+        retval->rawStaffHeight = system2->staffHeight >> 2; // divide by 4 to convert Efix (1/64 Evpu) to Evpu16ths
         retval->sysMarginTop = system2->top;
         retval->sysMarginLeft = system2->left;
         retval->sysMarginBottom = system2->bottom;

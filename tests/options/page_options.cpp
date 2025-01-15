@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 #include "gtest/gtest.h"
 #include "musx/musx.h"
 #include "test_utils.h"
+
+using namespace musx::dom;
 
 constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -89,11 +90,11 @@ TEST(PageFormatOptionsTest, PropertiesTest)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
-    auto pageFormatOptions = options->get<musx::dom::options::PageFormatOptions>();
+    auto pageFormatOptions = options->get<options::PageFormatOptions>();
     ASSERT_TRUE(pageFormatOptions);
 
     // Test adjustPageScope
-    EXPECT_EQ(pageFormatOptions->adjustPageScope, musx::dom::options::PageFormatOptions::AdjustPageScope::PageRange);
+    EXPECT_EQ(pageFormatOptions->adjustPageScope, options::PageFormatOptions::AdjustPageScope::PageRange);
 
     // Test pageFormatScore
     auto pageFormatScore = pageFormatOptions->pageFormatScore;
@@ -168,12 +169,163 @@ constexpr static musxtest::string_view noPageScopexml = R"xml(
 
 TEST(PageFormatOptionsTest, EnumDefaultsTest)
 {
-  auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(noPageScopexml);
-  auto options = doc->getOptions();
-  ASSERT_TRUE(options);
-  auto pageFormatOptions = options->get<musx::dom::options::PageFormatOptions>();
-  ASSERT_TRUE(pageFormatOptions);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(noPageScopexml);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+    auto pageFormatOptions = options->get<options::PageFormatOptions>();
+    ASSERT_TRUE(pageFormatOptions);
 
-  // Test adjustPageScope takes correct default
-  EXPECT_EQ(pageFormatOptions->adjustPageScope, musx::dom::options::PageFormatOptions::AdjustPageScope::Current);
+    // Test adjustPageScope takes correct default
+    EXPECT_EQ(pageFormatOptions->adjustPageScope, options::PageFormatOptions::AdjustPageScope::Current);
+}
+
+constexpr static musxtest::string_view pageDiffThanOptsXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <pageFormatOptions>
+      <pageFormatScore>
+        <pageHeight>3744</pageHeight>
+        <pageWidth>2880</pageWidth>
+        <pagePercent>100</pagePercent>
+        <sysPercent>70</sysPercent>
+        <rawStaffHeight>1536</rawStaffHeight>
+        <leftPageMarginTop>-288</leftPageMarginTop>
+        <leftPageMarginLeft>288</leftPageMarginLeft>
+        <leftPageMarginBottom>288</leftPageMarginBottom>
+        <leftPageMarginRight>-288</leftPageMarginRight>
+        <rightPageMarginTop>-144</rightPageMarginTop>
+        <rightPageMarginLeft>144</rightPageMarginLeft>
+        <rightPageMarginBottom>144</rightPageMarginBottom>
+        <rightPageMarginRight>-144</rightPageMarginRight>
+        <sysMarginLeft>24</sysMarginLeft>
+        <sysMarginBottom>-96</sysMarginBottom>
+        <sysDistanceBetween>-216</sysDistanceBetween>
+        <differentFirstSysMargin/>
+        <firstPageMarginTop>-100</firstPageMarginTop>
+        <firstSysMarginLeft>576</firstSysMarginLeft>
+        <firstSysMarginDistance>-490</firstSysMarginDistance>
+      </pageFormatScore>
+      <pageFormatParts>
+        <pageHeight>3744</pageHeight>
+        <pageWidth>2880</pageWidth>
+        <pagePercent>100</pagePercent>
+        <sysPercent>85</sysPercent>
+        <rawStaffHeight>1536</rawStaffHeight>
+        <leftPageMarginTop>-288</leftPageMarginTop>
+        <leftPageMarginLeft>288</leftPageMarginLeft>
+        <leftPageMarginBottom>288</leftPageMarginBottom>
+        <leftPageMarginRight>-288</leftPageMarginRight>
+        <rightPageMarginTop>-288</rightPageMarginTop>
+        <rightPageMarginLeft>288</rightPageMarginLeft>
+        <rightPageMarginBottom>288</rightPageMarginBottom>
+        <rightPageMarginRight>-288</rightPageMarginRight>
+        <sysMarginBottom>-96</sysMarginBottom>
+        <sysDistanceBetween>-162</sysDistanceBetween>
+        <differentFirstSysMargin/>
+        <firstPageMarginTop>-144</firstPageMarginTop>
+        <firstSysMarginLeft>144</firstSysMarginLeft>
+        <firstSysMarginDistance>-432</firstSysMarginDistance>
+      </pageFormatParts>
+      <avoidSystemMarginCollisions/>
+      <adjustPageScope>leftOrRight</adjustPageScope>
+    </pageFormatOptions>
+  </options>
+  <others>
+    <pageSpec cmper="1">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-512</margTop>
+      <margLeft>288</margLeft>
+      <margBottom>288</margBottom>
+      <margRight>-216</margRight>
+    </pageSpec>
+    <pageSpec cmper="2">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>5</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-288</margTop>
+      <margLeft>216</margLeft>
+      <margBottom>288</margBottom>
+      <margRight>-288</margRight>
+    </pageSpec>
+    <pageSpec cmper="3">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>11</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-288</margTop>
+      <margLeft>288</margLeft>
+      <margBottom>288</margBottom>
+      <margRight>-216</margRight>
+    </pageSpec>
+    <staffSystemSpec cmper="1">
+      <startMeas>1</startMeas>
+      <endMeas>3</endMeas>
+      <horzPercent>12142</horzPercent>
+      <ssysPercent>90</ssysPercent>
+      <staffHeight>5760</staffHeight>
+      <top>-490</top>
+      <left>576</left>
+      <bottom>-96</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2">
+      <startMeas>3</startMeas>
+      <endMeas>6</endMeas>
+      <horzPercent>12072</horzPercent>
+      <ssysPercent>90</ssysPercent>
+      <staffHeight>5760</staffHeight>
+      <left>24</left>
+      <bottom>-96</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-216</distanceToPrev>
+    </staffSystemSpec>
+  </others>
+</finale>
+)xml";
+
+TEST(PageFormatOptionsTest, CalcPageFormat)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(pageDiffThanOptsXml);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+    auto pageFormatOptions = options->get<options::PageFormatOptions>();
+    ASSERT_TRUE(pageFormatOptions);
+    auto actualFormat = pageFormatOptions->calcPageFormatForPart(SCORE_PARTID);
+    ASSERT_TRUE(actualFormat);
+
+    EXPECT_EQ(actualFormat->pageHeight, 3168);
+    EXPECT_EQ(actualFormat->pageWidth, 2448);
+    EXPECT_EQ(actualFormat->pagePercent, 100);
+    EXPECT_EQ(actualFormat->sysPercent, 90);
+    EXPECT_EQ(actualFormat->rawStaffHeight, 1440);
+    EXPECT_EQ(actualFormat->leftPageMarginTop, -288);
+    EXPECT_EQ(actualFormat->leftPageMarginLeft, 216);
+    EXPECT_EQ(actualFormat->leftPageMarginBottom, 288);
+    EXPECT_EQ(actualFormat->leftPageMarginRight, -288);
+    EXPECT_EQ(actualFormat->rightPageMarginTop, -288);
+    EXPECT_EQ(actualFormat->rightPageMarginLeft, 288);
+    EXPECT_EQ(actualFormat->rightPageMarginBottom, 288);
+    EXPECT_EQ(actualFormat->rightPageMarginRight, -216);
+    EXPECT_EQ(actualFormat->sysMarginTop, 0);
+    EXPECT_EQ(actualFormat->sysMarginLeft, 24);
+    EXPECT_EQ(actualFormat->sysMarginBottom, -96);
+    EXPECT_EQ(actualFormat->sysMarginRight, 0);
+    EXPECT_EQ(actualFormat->sysDistanceBetween, -216);
+    EXPECT_EQ(actualFormat->firstPageMarginTop, -512);
+    EXPECT_EQ(actualFormat->firstSysMarginTop, -490);
+    EXPECT_EQ(actualFormat->firstSysMarginLeft, 576);
+    EXPECT_EQ(actualFormat->firstSysMarginDistance, -490);
+    EXPECT_TRUE(actualFormat->facingPages);
+    EXPECT_TRUE(actualFormat->differentFirstSysMargin);
+    EXPECT_TRUE(actualFormat->differentFirstPageMargin);
 }

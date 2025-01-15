@@ -55,7 +55,6 @@ constexpr static musxtest::string_view xml = R"xml(
       <mnSepPlace/>
       <barline>normal</barline>
       <useDisplayTimesig/>
-      <leftBarline>default</leftBarline>
       <displayAltNumTsig/>
       <displayAltDenTsig/>
     </measSpec>
@@ -132,7 +131,7 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_FALSE(measure2->compositeDenominator);
     EXPECT_EQ(measure2->barlineType, others::Measure::BarlineType::Normal);
     EXPECT_TRUE(measure2->useDisplayTimesig);
-    EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::OptionsDefault);
+    EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::None);
     EXPECT_TRUE(measure2->compositeDispNumerator);
     EXPECT_TRUE(measure2->compositeDispDenominator);
 
@@ -202,7 +201,7 @@ TEST(MeasureTest, PopulatePart)
     EXPECT_EQ(measure2->positioningMode, others::Measure::PositioningType::BeatChartPlusPositioning); // Overridden
     EXPECT_EQ(measure2->barlineType, others::Measure::BarlineType::Normal); // Inherited from score
     EXPECT_TRUE(measure2->useDisplayTimesig); // Inherited from score
-    EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::OptionsDefault); // Inherited from score
+    EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::None); // Inherited from score
     EXPECT_TRUE(measure2->compositeDispNumerator); // Inherited from score
     EXPECT_TRUE(measure2->compositeDispDenominator); // Inherited from score
 
