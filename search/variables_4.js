@@ -7,12 +7,15 @@ var searchData=
   ['endadjust_4',['endAdjust',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a361418a9dd78bbc1b60806fa9c731e30',1,'musx::dom::options::MultimeasureRestOptions']]],
   ['endedu_5',['endEdu',['../classmusx_1_1dom_1_1others_1_1MusicRange.html#aac17b17671eca550defdcb50e7cef39e',1,'musx::dom::others::MusicRange']]],
   ['endentry_6',['endEntry',['../classmusx_1_1dom_1_1others_1_1Frame.html#abb48ea9427c249672bfdd7d96d618d3e',1,'musx::dom::others::Frame']]],
-  ['endmeas_7',['endmeas',['../classmusx_1_1dom_1_1others_1_1MusicRange.html#a37ef03db45de918b1715589348d32879',1,'musx::dom::others::MusicRange::endMeas'],['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#ab963e84b7d2072b6e2b66d7b050e814f',1,'musx::dom::others::MeasureNumberRegion::endMeas']]],
+  ['endmeas_7',['endmeas',['../classmusx_1_1dom_1_1others_1_1MusicRange.html#a37ef03db45de918b1715589348d32879',1,'musx::dom::others::MusicRange::endMeas'],['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#ab963e84b7d2072b6e2b66d7b050e814f',1,'musx::dom::others::MeasureNumberRegion::endMeas'],['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12',1,'musx::dom::others::StaffSystem::endMeas']]],
   ['entryoffset_8',['entryOffset',['../classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html#a88c3291be21d430946ebbd2207eaf32d',1,'musx::dom::options::GraceNoteOptions']]],
   ['equalaspect_9',['equalAspect',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#adc45c942c6c8c141bd8988779134d319',1,'musx::dom::others::Enclosure']]],
-  ['excludeothers_10',['excludeOthers',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a6bdd14ae516689a55b2f32acd849ea1f',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
-  ['expand_11',['expand',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#a28c31242e0f4e63e4749c079eaf91261',1,'musx::dom::others::NamePositioning']]],
-  ['extendbeamsoverrests_12',['extendBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a1f3b47bbee6bfc6cce1eebee87ce55f8',1,'musx::dom::options::BeamOptions']]],
-  ['extendsecbeamsoverrests_13',['extendSecBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a02176fb4836f94f10f6fdb5e856785d6',1,'musx::dom::options::BeamOptions']]],
-  ['extractpart_14',['extractPart',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aa8675552dd37b6a515773aa5f860d46d',1,'musx::dom::others::PartDefinition']]]
+  ['evenlyacrossmeasure_10',['evenlyAcrossMeasure',['../classmusx_1_1dom_1_1others_1_1Measure.html#a5781a46eeda907460083218b14a76892',1,'musx::dom::others::Measure']]],
+  ['excludeothers_11',['excludeOthers',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a6bdd14ae516689a55b2f32acd849ea1f',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
+  ['expand_12',['expand',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#a28c31242e0f4e63e4749c079eaf91261',1,'musx::dom::others::NamePositioning']]],
+  ['extendbeamsoverrests_13',['extendBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a1f3b47bbee6bfc6cce1eebee87ce55f8',1,'musx::dom::options::BeamOptions']]],
+  ['extendsecbeamsoverrests_14',['extendSecBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a02176fb4836f94f10f6fdb5e856785d6',1,'musx::dom::options::BeamOptions']]],
+  ['extractpart_15',['extractPart',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aa8675552dd37b6a515773aa5f860d46d',1,'musx::dom::others::PartDefinition']]],
+  ['extraendsystemspace_16',['extraEndSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a81d083d6208bfcde0680e0d5e2b74c7c',1,'musx::dom::others::StaffSystem']]],
+  ['extrastartsystemspace_17',['extraStartSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#aeb8d6f9841c73fdf5f04be04a7393d91',1,'musx::dom::others::StaffSystem']]]
 ];

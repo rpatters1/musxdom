@@ -15,7 +15,7 @@ var classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat =
     [ "pageHeight", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a334356e1fec71ddc22887008f98eb0c5", null ],
     [ "pagePercent", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a08743a3aad8f4c7eec307e3f1fd47397", null ],
     [ "pageWidth", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a58f524b344f145949f323c05498f5ef8", null ],
-    [ "rawStaffHeight", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a9727082a171e44493c395283f01c44c0", null ],
+    [ "rawStaffHeight", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a38d3541e5aabcd32d87c09e699328327", null ],
     [ "rightPageMarginBottom", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#ab7f4c945b5158cca4b3cee58e7c959d8", null ],
     [ "rightPageMarginLeft", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#ac7d94fe9bb188deb5da65a6fe6748105", null ],
     [ "rightPageMarginRight", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#adbf9b10e1e970707d389c7e3e2a496db", null ],

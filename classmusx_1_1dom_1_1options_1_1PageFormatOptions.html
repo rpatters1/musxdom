@@ -149,6 +149,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:af16bd3db82e9d4d900211d7a426289bc" id="r_af16bd3db82e9d4d900211d7a426289bc"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html">PageFormat</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#af16bd3db82e9d4d900211d7a426289bc">calcPageFormatForPart</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId) const</td></tr>
+<tr class="memdesc:af16bd3db82e9d4d900211d7a426289bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the page format options for a specific part.  <br /></td></tr>
+<tr class="separator:af16bd3db82e9d4d900211d7a426289bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefcd4f6b649f5ac24b1965eeea534fea" id="r_aefcd4f6b649f5ac24b1965eeea534fea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aefcd4f6b649f5ac24b1965eeea534fea">PageFormatOptions</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId=0, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode=<a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">ShareMode::All</a>)</td></tr>
 <tr class="memdesc:aefcd4f6b649f5ac24b1965eeea534fea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classmusx_1_1dom_1_1options_1_1PageFormatOptions.html" title="Options for page formatting in the document.">PageFormatOptions</a>.  <br /></td></tr>
 <tr class="separator:aefcd4f6b649f5ac24b1965eeea534fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -316,6 +319,35 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af16bd3db82e9d4d900211d7a426289bc" name="af16bd3db82e9d4d900211d7a426289bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af16bd3db82e9d4d900211d7a426289bc">&#9670;&#160;</a></span>calcPageFormatForPart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html">options::PageFormatOptions::PageFormat</a> &gt; musx::dom::options::PageFormatOptions::calcPageFormatForPart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the page format options for a specific part. </p>
+<p>The options are mixed with actual page and system information for the specified part to produce a set of page format options that matches the input <code>partId</code> if it uses consistent page formatting on all its pages. This may be useful if a particular part uses different settings than the other parts. An example might be a Piano/Vocal score with a different page size than the other parts.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partId</td><td>[in] the part for which to calculate. Pass <a class="el" href="namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0" title="The part id of the score.">SCORE_PARTID</a> for the score. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to a detached instance of <a class="el" href="classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html">PageFormat</a> that is a best approximation to the settings for the input part. </dd></dl>
 
 </div>
 </div>

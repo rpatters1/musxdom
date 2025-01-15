@@ -118,9 +118,9 @@ $(document).ready(function(){initNavTree('classmusx_1_1factory_1_1OthersFactory.
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a8f81cece4283a21d41bb13224cfb28f8" id="r_a8f81cece4283a21d41bb13224cfb28f8"><td class="memItemLeft" align="right" valign="top">static auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1OthersFactory.html#a8f81cece4283a21d41bb13224cfb28f8">extractFromXml</a> (const <a class="el" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a> &amp;element, const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">dom::DocumentPtr</a> &amp;document, <a class="el" href="classmusx_1_1factory_1_1ElementLinker.html">ElementLinker</a> &amp;elementLinker)</td></tr>
-<tr class="memdesc:a8f81cece4283a21d41bb13224cfb28f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts an <code>OthersBase</code> object from an XML element.  <br /></td></tr>
-<tr class="separator:a8f81cece4283a21d41bb13224cfb28f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a432928a6b8141dbd46248436177306a7" id="r_a432928a6b8141dbd46248436177306a7"><td class="memItemLeft" align="right" valign="top">static auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1OthersFactory.html#a432928a6b8141dbd46248436177306a7">extractFromXml</a> (const <a class="el" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a> &amp;element, const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">dom::DocumentPtr</a> &amp;document, <a class="el" href="classmusx_1_1factory_1_1ElementLinker.html">ElementLinker</a> &amp;elementLinker, const <a class="el" href="namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e">OthersPoolPtr</a> &amp;pool)</td></tr>
+<tr class="memdesc:a432928a6b8141dbd46248436177306a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts an <code>OthersBase</code> object from an XML element.  <br /></td></tr>
+<tr class="separator:a432928a6b8141dbd46248436177306a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafc7c73784042c1569d10f34dec2d66a" id="r_aafc7c73784042c1569d10f34dec2d66a"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; PoolType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1OthersFactory.html#aafc7c73784042c1569d10f34dec2d66a">create</a> (const <a class="el" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a> &amp;element, const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">dom::DocumentPtr</a> &amp;document, <a class="el" href="classmusx_1_1factory_1_1ElementLinker.html">ElementLinker</a> &amp;elementLinker)</td></tr>
 <tr class="memdesc:aafc7c73784042c1569d10f34dec2d66a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>OthersPool</code> object from an XML element.  <br /></td></tr>
 <tr class="separator:aafc7c73784042c1569d10f34dec2d66a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,8 +207,8 @@ template&lt;typename T &gt; </td></tr>
 
 </div>
 </div>
-<a id="a8f81cece4283a21d41bb13224cfb28f8" name="a8f81cece4283a21d41bb13224cfb28f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f81cece4283a21d41bb13224cfb28f8">&#9670;&#160;</a></span>extractFromXml()</h2>
+<a id="a432928a6b8141dbd46248436177306a7" name="a432928a6b8141dbd46248436177306a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a432928a6b8141dbd46248436177306a7">&#9670;&#160;</a></span>extractFromXml()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -232,7 +232,13 @@ template&lt;typename T &gt; </td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classmusx_1_1factory_1_1ElementLinker.html">ElementLinker</a> &amp;&#160;</td>
-          <td class="paramname"><em>elementLinker</em>&#160;</td>
+          <td class="paramname"><em>elementLinker</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e">OthersPoolPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>pool</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -254,6 +260,7 @@ template&lt;typename T &gt; </td></tr>
     <tr><td class="paramname">element</td><td>The XML element from which to extract the object. </td></tr>
     <tr><td class="paramname">document</td><td>The document object providing context for the XML parsing. </td></tr>
     <tr><td class="paramname">elementLinker</td><td>The <a class="el" href="classmusx_1_1factory_1_1ElementLinker.html">ElementLinker</a> instance that is used to resolve all internal connections after the document is created. </td></tr>
+    <tr><td class="paramname">pool</td><td>The pool we are constructiong. (It hasn't been assigned to <code>document</code> yet.) </td></tr>
   </table>
   </dd>
 </dl>

@@ -5,5 +5,6 @@ var searchData=
   ['entrynumber_2',['EntryNumber',['../namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b',1,'musx::dom']]],
   ['entrypoolptr_3',['EntryPoolPtr',['../namespacemusx_1_1dom.html#adb56e4e338213ad74040718738d97547',1,'musx::dom']]],
   ['evpu_4',['Evpu',['../namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2',1,'musx::dom']]],
-  ['evpufloat_5',['EvpuFloat',['../namespacemusx_1_1dom.html#a901fc57f5455ae033180b2401434b6a9',1,'musx::dom']]]
+  ['evpu16ths_5',['Evpu16ths',['../namespacemusx_1_1dom.html#a724894a371aee2f8438f1dec8109e451',1,'musx::dom']]],
+  ['evpufloat_6',['EvpuFloat',['../namespacemusx_1_1dom.html#a901fc57f5455ae033180b2401434b6a9',1,'musx::dom']]]
 ];

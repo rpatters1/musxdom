@@ -12,6 +12,7 @@ var searchData=
   ['smartshapeoptions_9',['SmartShapeOptions',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a56cd4e97b860e30b3a8eaf383b972932',1,'musx::dom::options::SmartShapeOptions']]],
   ['staff_10',['Staff',['../classmusx_1_1dom_1_1others_1_1Staff.html#a6b2463c519cd866520ed2116151334b5',1,'musx::dom::others::Staff']]],
   ['staffoptions_11',['StaffOptions',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#af1602f801dd9ee76f7f64a9dbd687413',1,'musx::dom::options::StaffOptions']]],
-  ['startswithfontcommand_12',['startsWithFontCommand',['../classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d',1,'musx::util::EnigmaString']]],
-  ['stemoptions_13',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a5c48c35393259a1e2ff79abcd5495acf',1,'musx::dom::options::StemOptions']]]
+  ['staffsystem_12',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440',1,'musx::dom::others::StaffSystem']]],
+  ['startswithfontcommand_13',['startsWithFontCommand',['../classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d',1,'musx::util::EnigmaString']]],
+  ['stemoptions_14',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a5c48c35393259a1e2ff79abcd5495acf',1,'musx::dom::options::StemOptions']]]
 ];

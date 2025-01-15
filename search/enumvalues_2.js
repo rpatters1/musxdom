@@ -14,5 +14,6 @@ var searchData=
   ['clef_11',['Clef',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa4fb26ab17477cfbc62b748034c0de041',1,'musx::dom::options::FontOptions']]],
   ['composer_12',['Composer',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aabcba235aa0401fd10464df6afbfaab77',1,'musx::dom::texts::FileInfoText']]],
   ['copyright_13',['Copyright',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa6016a2b341113bf496b719905398ecd2',1,'musx::dom::texts::FileInfoText']]],
-  ['current_14',['Current',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2a222a267cc5778206b253be35ee3ddab5',1,'musx::dom::options::PageFormatOptions']]]
+  ['current_14',['Current',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2a222a267cc5778206b253be35ee3ddab5',1,'musx::dom::options::PageFormatOptions']]],
+  ['custom_15',['Custom',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117a90589c47f06eb971d548591f23c285af',1,'musx::dom::others::Measure']]]
 ];

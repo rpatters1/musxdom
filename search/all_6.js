@@ -55,11 +55,12 @@ var searchData=
   ['gracenotespacing_52',['gracenotespacing',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a3d5fb29e48c2b11a942457e49d5d9a8b',1,'musx::dom::options::MusicSpacingOptions::GraceNoteSpacing'],['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a24488dcc1889e7a6034a0f633da3ad22',1,'musx::dom::options::MusicSpacingOptions::graceNoteSpacing']]],
   ['graceperc_53',['gracePerc',['../classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html#aaeeb66dc8b7e845b3aa03ef1b33ff024',1,'musx::dom::options::GraceNoteOptions']]],
   ['graceslashwidth_54',['graceSlashWidth',['../classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html#a5d1f224b15d03b98bf68bd5c3533321f',1,'musx::dom::options::GraceNoteOptions']]],
-  ['groupnameabbrvpos_55',['groupNameAbbrvPos',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#ab1184f50329a789b93244eb2a0ea8dfd',1,'musx::dom::options::StaffOptions']]],
-  ['groupnamefullpos_56',['groupNameFullPos',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#a272ad513d2821b93dfa281dc18e5522f',1,'musx::dom::options::StaffOptions']]],
-  ['groupnames_57',['GroupNames',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aad6873827e9811f30be8dafd6617d6083',1,'musx::dom::options::FontOptions']]],
-  ['guitarbendgentext_58',['guitarBendGenText',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aeffcdfab05f3e35aa9773545eae34695',1,'musx::dom::options::SmartShapeOptions']]],
-  ['guitarbendhidebendto_59',['guitarBendHideBendTo',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a5c73f134a44ff04965bf758d6206e818',1,'musx::dom::options::SmartShapeOptions']]],
-  ['guitarbendusefull_60',['guitarBendUseFull',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aaad38ee9084b3f7eb0bdde64b6c74945',1,'musx::dom::options::SmartShapeOptions']]],
-  ['guitarbenduseparens_61',['guitarBendUseParens',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a68617bb70576652cecd2ad4179a12751',1,'musx::dom::options::SmartShapeOptions']]]
+  ['groupbarlineoverride_55',['groupBarlineOverride',['../classmusx_1_1dom_1_1others_1_1Measure.html#a36468ede56f05fdf822842def92fd22f',1,'musx::dom::others::Measure']]],
+  ['groupnameabbrvpos_56',['groupNameAbbrvPos',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#ab1184f50329a789b93244eb2a0ea8dfd',1,'musx::dom::options::StaffOptions']]],
+  ['groupnamefullpos_57',['groupNameFullPos',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#a272ad513d2821b93dfa281dc18e5522f',1,'musx::dom::options::StaffOptions']]],
+  ['groupnames_58',['GroupNames',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aad6873827e9811f30be8dafd6617d6083',1,'musx::dom::options::FontOptions']]],
+  ['guitarbendgentext_59',['guitarBendGenText',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aeffcdfab05f3e35aa9773545eae34695',1,'musx::dom::options::SmartShapeOptions']]],
+  ['guitarbendhidebendto_60',['guitarBendHideBendTo',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a5c73f134a44ff04965bf758d6206e818',1,'musx::dom::options::SmartShapeOptions']]],
+  ['guitarbendusefull_61',['guitarBendUseFull',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aaad38ee9084b3f7eb0bdde64b6c74945',1,'musx::dom::options::SmartShapeOptions']]],
+  ['guitarbenduseparens_62',['guitarBendUseParens',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a68617bb70576652cecd2ad4179a12751',1,'musx::dom::options::SmartShapeOptions']]]
 ];
