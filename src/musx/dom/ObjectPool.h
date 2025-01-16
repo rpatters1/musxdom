@@ -110,6 +110,14 @@ public:
      */
     void add(const ObjectKey& key, ObjectPtr object)
     {
+        if (key.inci.has_value()) {
+            ObjectKey noInciKey = key;
+            noInciKey.inci = std::nullopt;
+            auto currentIncis = getArray<ObjectBaseType>(noInciKey);
+            if (key.inci.value() != currentIncis.size()) {
+                MUSX_INTEGRITY_ERROR("Node " + key.nodeString() + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
+            }
+        }
         m_pool.emplace(key, object);
         auto it = m_shareMode.find(key.nodeId);
         if (it == m_shareMode.end()) {

@@ -53,6 +53,8 @@ MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::TimePrecision, {
 
 MUSX_XML_ENUM_MAPPING(Measure::PositioningType, {
     // {"manual", Measure::PositioningType::Manual}, // This is the default and is not known to occur in the XML.
+    {"timesig", Measure::PositioningType::TimeSignature},
+    {"beatchart", Measure::PositioningType::BeatChart},
     {"timesigPlusPos", Measure::PositioningType::TimeSigPlusPositioning},
     {"beatchartPlusPos", Measure::PositioningType::BeatChartPlusPositioning},
 });
@@ -191,11 +193,12 @@ MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
     {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->pitch = e->getTextAs<int>(); }},
     {"family", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->family = e->getTextAs<int>(); }},
     {"name", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->name = e->getText(); }},
-    });
+});
 
 MUSX_XML_ELEMENT_ARRAY(Frame, {
     {"startEntry", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->startEntry = e->getTextAs<EntryNumber>(); }},
     {"endEntry", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->endEntry = e->getTextAs<EntryNumber>(); }},
+    {"startTime", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->startTime = e->getTextAs<Edu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MusicRange, {

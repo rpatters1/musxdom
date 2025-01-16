@@ -69,32 +69,35 @@ public:
  * @class Frame
  * @brief Represents the attributes of a TGF entry frame.
  *
+ * The inci is almost always zero. It appears there can be multiple incis when there is an old-style pickup.
+ * In this case, the observed order of Frame incis is
+ * - `inci 0`: startTime
+ * - `inci 1`: startEntry & endEntry
+ *
  * The class is identified by the XML node name "frameSpec".
  */
 class Frame : public OthersBase
 {
 public:
-    /** @brief Constructor function.
-     * The inci appears always to be zero. It might be either a holdover from legacy Finale or a bug
-     * in Finale's export routine.
-     */
+    /** @brief Constructor function. */
     explicit Frame(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci = 0)
-        : OthersBase(document, partId, shareMode, cmper, inci ? std::optional<Inci>(inci) : std::nullopt) {}
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
 
     // Public properties corresponding to the XML structure
-    EntryNumber startEntry{}; ///< Start entry number for this frame.
-    EntryNumber endEntry{};   ///< End entry number for this frame.
+    EntryNumber startEntry{}; ///< Start entry number for this frame. (Appears to be zero when #startTime is supplied.)
+    EntryNumber endEntry{};   ///< End entry number for this frame. (Appears to be zero when #startTime is supplied.)
+    Edu startTime{};          ///< The starting position within the measure. (Appears to be zero when #startEntry and #endEntry are supplied.)
 
     void integrityCheck() const override
     {
         this->OthersBase::integrityCheck();
-        if (getInci().has_value() && getInci().value()) {
-            MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has non-zero inci [" + std::to_string(getInci().value()) + "].");
+        if (startTime && (startEntry || endEntry)) {
+            MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has non-zero startTime and non-zero startEntry or endEntry.");
         }
-        if (!startEntry) {
+        if (!startTime && !startEntry) {
             MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has no start entry.");
         }
-        if (!endEntry) {
+        if (!startTime && !endEntry) {
             MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has no end entry.");
         }
     }
@@ -459,6 +462,8 @@ public:
     enum class PositioningType
     {
         Manual,                     ///< "Manually (By Dragging)" the default.
+        TimeSignature,              ///< Legacy option "Use the Time Signature" (xml node is `<timesig>`)
+        BeatChart,                  ///< Legacy option "Use a Beat Positioning Chart" (xml node is `<beatchart>`)
         TimeSigPlusPositioning,     ///< "According to the Time Signature" (xml node is `<timesigPlusPos>`)
         BeatChartPlusPositioning    ///< "Using Beat-Chart Spacing" (xml node is `<beatchartPlusPos>`)
     };
