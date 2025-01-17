@@ -31,6 +31,9 @@ constexpr static musxtest::string_view xml = R"xml(
 <finale>
   <others>
     <frameSpec cmper="1" inci="0">
+      <startTime>512</startTime>
+    </frameSpec>
+    <frameSpec cmper="1" inci="1">
       <startEntry>1</startEntry>
       <endEntry>2</endEntry>
     </frameSpec>
@@ -52,19 +55,24 @@ TEST(FrameTest, PopulateFields)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     
-    auto frame = others->get<others::Frame>(SCORE_PARTID, 1);
-    ASSERT_TRUE(frame) << "Frame with cmper 1 not found";
-    
+    auto frame = others->get<others::Frame>(SCORE_PARTID, 1, 0);
+    ASSERT_TRUE(frame) << "Frame with cmper 1 inci 0 not found";
+
+    EXPECT_EQ(frame->startTime, 512);
+
+    frame = others->get<others::Frame>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(frame) << "Frame with cmper 1 inci 1 not found";
+
     EXPECT_EQ(frame->startEntry, 1);
     EXPECT_EQ(frame->endEntry, 2);
 
-    frame = others->get<others::Frame>(SCORE_PARTID, 2);
+    frame = others->get<others::Frame>(SCORE_PARTID, 2, 0);
     ASSERT_TRUE(frame) << "Frame with cmper 2 not found";
 
     EXPECT_EQ(frame->startEntry, 2140);
     EXPECT_EQ(frame->endEntry, 2142);
 
-    frame = others->get<others::Frame>(SCORE_PARTID, 3);
+    frame = others->get<others::Frame>(SCORE_PARTID, 3, 0);
     ASSERT_TRUE(frame) << "Frame with cmper 3 not found";
 
     EXPECT_EQ(frame->startEntry, 2144);
@@ -88,7 +96,25 @@ TEST(FrameTest, IntegrityCheck)
     EXPECT_THROW(
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlWrongInci),
         musx::dom::integrity_error
-    ) << "inci is not 0";
+    ) << "inci is out of sequence";
+
+    constexpr static musxtest::string_view xmlStartTime = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <frameSpec cmper="1" inci="0">
+      <startEntry>1</startEntry>
+      <endEntry>2</endEntry>
+      <startTime>512</startTime>
+    </frameSpec>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlStartTime),
+        musx::dom::integrity_error
+    ) << "startTime supplied along with start and end entries";
         
     constexpr static musxtest::string_view xmlMissingStart = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>

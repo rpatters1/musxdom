@@ -252,11 +252,19 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
     if (!frames[layerIndex]) return true; // nothing here
-    auto frame = getDocument()->getOthers()->get<others::Frame>(getPartId(), frames[layerIndex]);
+    auto frameIncis = getDocument()->getOthers()->getArray<others::Frame>(getPartId(), frames[layerIndex]);
+    auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
+        for (const auto& frame : frameIncis) {
+            if (frame->startEntry) {
+                return frame;
+            }
+        }
+        return nullptr;
+    }();
     if (frame) {
         auto firstEntry = getDocument()->getEntries()->get<Entry>(frame->startEntry);
         if (!firstEntry) {
-            MUSX_INTEGRITY_ERROR("Frame hold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
+            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
             return true; // we won't get here if we are throwing; otherwise it is just a warning and we can continue
         }
         for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
@@ -268,7 +276,7 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
             }
         }
     } else {
-        MUSX_INTEGRITY_ERROR("Frame hold for staff " + std::to_string(getStaff()) + " and measure "
+        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
     }
     return true;

@@ -913,7 +913,7 @@ public:
     Evpu shortHairpinOpeningWidth{};         ///< "Short Hairpin Opening Width"
     Evpu crescHeight{};                      ///< "Crescendo Height"
     Evpu maximumShortHairpinLength{};       ///< "Maximum Short Hairpin Length"
-    Efix crescLineWidth{};                  ///< "Crescendo Line Width"
+    Efix crescLineWidth{};                  ///< "Crescendo/Decrescendo Line Width"
     Evpu hookLength{};                       ///< "Hook Length"
     Efix smartLineWidth{};                  ///< "Smart Line Width"
     bool showOctavaAsText{};                   ///< "Show Octava As Text"
