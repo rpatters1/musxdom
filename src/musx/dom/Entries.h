@@ -165,5 +165,57 @@ private:
     EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
 };
 
+/**
+ * @class EntryInfo
+ * @brief Information an entry along with the entry.
+ *
+ * This class is used in iteration functions to supply information about the entry along with the entry itself.
+ *
+ * @todo add current clef index, actual duration, and elapsed duration.
+ */
+class EntryInfo
+{
+public:
+    /** @brief Constructor function
+     *
+     * @param staff The @ref Staff of the entry
+     * @param measure The @ref Measure of the entry
+     * @param layerIndex The @ref LayerIndex (0..3) of the entry
+     * @param entry The entry.
+    */
+    explicit EntryInfo(InstCmper staff, MeasCmper measure, LayerIndex layerIndex, const std::shared_ptr<Entry>& entry)
+        : m_staff(staff), m_measure(measure), m_layerIndex(layerIndex), m_entry(entry)
+    {
+    }
+
+    /// @brief Get the staff for the entry
+    InstCmper getStaff() const { return m_staff; }
+
+    /// @brief Get the measure for the entry
+    MeasCmper getMeasure() const { return m_measure; }
+
+    /// @brief Get the layer index (0..3) of the entry
+    LayerIndex getLayerIndex() const { return m_layerIndex; }
+
+    /// @brief Get the entry,
+    /// @throws std::logic_error if the entry pointer is no longer valid 
+    std::shared_ptr<Entry> getEntry() const
+    {
+        auto retval = m_entry.lock();
+        if (!retval) {
+            throw std::logic_error("Entry pointer is no longer valid for staff " + std::to_string(m_staff)
+                + ", measure " + std::to_string(m_measure) + ", layer " + std::to_string(m_layerIndex));
+        }
+        return retval;
+    }
+
+private:
+    InstCmper m_staff;
+    MeasCmper m_measure;
+    LayerIndex m_layerIndex;
+
+    std::weak_ptr<Entry> m_entry;
+};
+
 } // namespace dom
 } // namespace entries
