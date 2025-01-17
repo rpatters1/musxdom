@@ -13,6 +13,8 @@ var classmusx_1_1dom_1_1others_1_1Measure =
     ] ],
     [ "PositioningType", "classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88f", [
       [ "Manual", "classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fae1ba155a9f2e8c3be94020eef32a0301", null ],
+      [ "TimeSignature", "classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fab257862f6113a65ca9c23ad50d8676a6", null ],
+      [ "BeatChart", "classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fa73753453774aa5374fc4331d7368df38", null ],
       [ "TimeSigPlusPositioning", "classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fac23c5ff7432156275a4927a6e0bbba26", null ],
       [ "BeatChartPlusPositioning", "classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fae3071387678c750ac7668cc07c51fc03", null ]
     ] ],

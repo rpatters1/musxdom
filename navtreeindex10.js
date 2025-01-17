@@ -1,5 +1,11 @@
 var NAVTREEINDEX10 =
 {
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html":[1,0,0,2,2,0],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a167994db8499f43f36c2649a8ca23e4e":[1,0,0,2,2,0,0],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a167994db8499f43f36c2649a8ca23e4e":[2,0,0,3,2,0,0],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a3dc87d58c8be6e108538934fab02a317":[2,0,0,3,2,0,1],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a3dc87d58c8be6e108538934fab02a317":[1,0,0,2,2,0,1],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ac88cab337dbb357332347bf974319176":[1,0,0,2,2,0,3],
 "classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ac88cab337dbb357332347bf974319176":[2,0,0,3,2,0,3],
 "classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ae8b5c50a34b3092cedc0e4176941a786":[1,0,0,2,2,0,2],
 "classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ae8b5c50a34b3092cedc0e4176941a786":[2,0,0,3,2,0,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX10 =
 "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a7bc4a8dfba81b53feedf0b918ed01c44":[2,0,0,0,14,0,3],
 "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a7bc4a8dfba81b53feedf0b918ed01c44":[1,0,0,0,14,0,3],
 "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a856575ddfd2c70250333c4b9bd449e3f":[1,0,0,0,14,0,7],
-"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a856575ddfd2c70250333c4b9bd449e3f":[2,0,0,0,14,0,7],
-"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ab6e7d0f9f95e725f2a36da72d85aee5b":[2,0,0,0,14,0,5],
-"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ab6e7d0f9f95e725f2a36da72d85aee5b":[1,0,0,0,14,0,5],
-"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ac4b09ba83a0700cb7697a61b5315d5fe":[2,0,0,0,14,0,2],
-"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ac4b09ba83a0700cb7697a61b5315d5fe":[1,0,0,0,14,0,2],
-"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#adcbfd8e3576aabcdddf16a9bbf5415bf":[1,0,0,0,14,0,6],
-"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#adcbfd8e3576aabcdddf16a9bbf5415bf":[2,0,0,0,14,0,6]
+"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a856575ddfd2c70250333c4b9bd449e3f":[2,0,0,0,14,0,7]
 };

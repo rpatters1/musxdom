@@ -122,7 +122,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1Frame.ht
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a264bdcc5b32fb5a8455e0d5ecfd6783b" id="r_a264bdcc5b32fb5a8455e0d5ecfd6783b"><td class="memItemLeft" align="right" valign="top"><a id="a264bdcc5b32fb5a8455e0d5ecfd6783b" name="a264bdcc5b32fb5a8455e0d5ecfd6783b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Frame</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> inci=0)</td></tr>
-<tr class="memdesc:a264bdcc5b32fb5a8455e0d5ecfd6783b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. The inci appears always to be zero. It might be either a holdover from legacy Finale or a bug in Finale's export routine. <br /></td></tr>
+<tr class="memdesc:a264bdcc5b32fb5a8455e0d5ecfd6783b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a264bdcc5b32fb5a8455e0d5ecfd6783b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e28ca74ea2fbb31423e3fb6899eb388" id="r_a4e28ca74ea2fbb31423e3fb6899eb388"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#a4e28ca74ea2fbb31423e3fb6899eb388">integrityCheck</a> () const override</td></tr>
 <tr class="memdesc:a4e28ca74ea2fbb31423e3fb6899eb388"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory.  <br /></td></tr>
@@ -172,12 +172,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 Public Attributes</h2></td></tr>
 <tr class="memitem:ae3d19c1fa7f8072a5e46fc0e5c6fbfbc" id="r_ae3d19c1fa7f8072a5e46fc0e5c6fbfbc"><td class="memItemLeft" align="right" valign="top"><a id="ae3d19c1fa7f8072a5e46fc0e5c6fbfbc" name="ae3d19c1fa7f8072a5e46fc0e5c6fbfbc"></a>
 <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>startEntry</b> {}</td></tr>
-<tr class="memdesc:ae3d19c1fa7f8072a5e46fc0e5c6fbfbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start entry number for this frame. <br /></td></tr>
+<tr class="memdesc:ae3d19c1fa7f8072a5e46fc0e5c6fbfbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start entry number for this frame. (Appears to be zero when <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#a89d81e4c619756fb1c417d374cf670c9" title="The starting position within the measure. (Appears to be zero when startEntry and endEntry are suppli...">startTime</a> is supplied.) <br /></td></tr>
 <tr class="separator:ae3d19c1fa7f8072a5e46fc0e5c6fbfbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb48ea9427c249672bfdd7d96d618d3e" id="r_abb48ea9427c249672bfdd7d96d618d3e"><td class="memItemLeft" align="right" valign="top"><a id="abb48ea9427c249672bfdd7d96d618d3e" name="abb48ea9427c249672bfdd7d96d618d3e"></a>
 <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>endEntry</b> {}</td></tr>
-<tr class="memdesc:abb48ea9427c249672bfdd7d96d618d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">End entry number for this frame. <br /></td></tr>
+<tr class="memdesc:abb48ea9427c249672bfdd7d96d618d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">End entry number for this frame. (Appears to be zero when <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#a89d81e4c619756fb1c417d374cf670c9" title="The starting position within the measure. (Appears to be zero when startEntry and endEntry are suppli...">startTime</a> is supplied.) <br /></td></tr>
 <tr class="separator:abb48ea9427c249672bfdd7d96d618d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89d81e4c619756fb1c417d374cf670c9" id="r_a89d81e4c619756fb1c417d374cf670c9"><td class="memItemLeft" align="right" valign="top"><a id="a89d81e4c619756fb1c417d374cf670c9" name="a89d81e4c619756fb1c417d374cf670c9"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>startTime</b> {}</td></tr>
+<tr class="memdesc:a89d81e4c619756fb1c417d374cf670c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The starting position within the measure. (Appears to be zero when <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#ae3d19c1fa7f8072a5e46fc0e5c6fbfbc" title="Start entry number for this frame. (Appears to be zero when startTime is supplied....">startEntry</a> and <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#abb48ea9427c249672bfdd7d96d618d3e" title="End entry number for this frame. (Appears to be zero when startTime is supplied.)">endEntry</a> are supplied.) <br /></td></tr>
+<tr class="separator:a89d81e4c619756fb1c417d374cf670c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -218,6 +222,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the attributes of a TGF entry frame. </p>
+<p>The inci is almost always zero. It appears there can be multiple incis when there is an old-style pickup. In this case, the observed order of <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html" title="Represents the attributes of a TGF entry frame.">Frame</a> incis is</p><ul>
+<li><code>inci 0</code>: startTime</li>
+<li><code>inci 1</code>: startEntry &amp; endEntry</li>
+</ul>
 <p>The class is identified by the XML node name "frameSpec". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a4e28ca74ea2fbb31423e3fb6899eb388" name="a4e28ca74ea2fbb31423e3fb6899eb388"></a>
