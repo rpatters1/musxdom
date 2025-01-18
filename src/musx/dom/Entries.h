@@ -199,7 +199,7 @@ public:
 
     /// @brief Get the entry,
     /// @throws std::logic_error if the entry pointer is no longer valid 
-    std::shared_ptr<Entry> getEntry() const
+    std::shared_ptr<const Entry> getEntry() const
     {
         auto retval = m_entry.lock();
         if (!retval) {
@@ -214,7 +214,7 @@ private:
     MeasCmper m_measure;
     LayerIndex m_layerIndex;
 
-    std::weak_ptr<Entry> m_entry;
+    std::weak_ptr<const Entry> m_entry;
 };
 
 } // namespace dom
