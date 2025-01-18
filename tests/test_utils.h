@@ -23,6 +23,8 @@
 
 #include <string_view>
 #include <vector>
+#include <filesystem>
+#include <iostream>
 
 namespace musxtest {
 
@@ -36,5 +38,11 @@ public:
         return std::vector<char>(begin(), end());
     }
 };
+
+inline std::filesystem::path getInputPath()
+{ return std::filesystem::current_path(); }
+
+// STOOPID Google test can't ASSERT out of a non-void function
+void readFile(const std::filesystem::path& filePath, std::vector<char>& contents);
 
 } // namespace musxtext

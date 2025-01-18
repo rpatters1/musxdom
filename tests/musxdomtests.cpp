@@ -19,8 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <filesystem>
+#include <fstream>
 
 #include "gtest/gtest.h"
+#include "test_utils.h"
+
+namespace musxtest {
+
+void readFile(const std::filesystem::path& filePath, std::vector<char>& contents)
+{
+    ASSERT_TRUE(std::filesystem::is_regular_file(filePath)) << filePath.u8string() << " is not a file";
+    std::ifstream file(filePath, std::ios::binary);
+    ASSERT_TRUE(file.is_open()) << "failed to open file: " << filePath.u8string();
+    contents = std::vector<char>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+}
+
+} // namespace musxtest
 
 // Optional setup/teardown for test suite
 class TestEnvironment : public ::testing::Environment {

@@ -124,6 +124,7 @@ target_precompile_headers(musxdomtests PRIVATE
 include(GoogleTest)
 gtest_discover_tests(musxdomtests
     DISCOVERY_TIMEOUT 60 # Set timeout to 60 seconds
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
     PROPERTIES
         ENVIRONMENT "GTEST_COLOR=1"
     EXTRA_ARGS --gtest_color=yes

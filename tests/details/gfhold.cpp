@@ -185,3 +185,38 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
     ) << "gfhold not iterable";
 
 }
+
+TEST(GFrameHold, IterationTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "layers.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+    ASSERT_TRUE(gfhold);
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        auto entry = entryInfo->getEntry();
+        EXPECT_TRUE(entryInfo->getLayerIndex() == 0 || entryInfo->getLayerIndex() == 1) << "unexpected layer index " << entryInfo->getLayerIndex();
+        if (entryInfo->getLayerIndex() == 0) {
+            EXPECT_EQ(entry->duration, Edu(Entry::NoteType::Whole)) << "unexpected note duration " << entry->duration;
+            EXPECT_TRUE(entry->isNote) << "layerIndex 0 entry is not a note";
+        } else {
+            EXPECT_EQ(entry->duration, Edu(Entry::NoteType::Half)) << "unexpected note duration " << entry->duration;
+        }
+        return true;
+    });
+
+    gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 2, 1);
+    ASSERT_TRUE(gfhold);
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        auto entry = entryInfo->getEntry();
+        EXPECT_TRUE(entryInfo->getLayerIndex() == 2) << "unexpected layer index " << entryInfo->getLayerIndex();
+        EXPECT_EQ(entry->duration, Edu(Entry::NoteType::Whole)) << "unexpected note duration " << entry->duration;
+        EXPECT_TRUE(entry->isNote) << "layerIndex 0 entry is not a note";
+        return true;
+    });
+}

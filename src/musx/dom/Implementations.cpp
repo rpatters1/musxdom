@@ -246,7 +246,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** GFrameHold *****
 // **********************
 
-bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const Entry>&)> iterator)
+bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
 {
     if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
@@ -268,7 +268,9 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
             return true; // we won't get here if we are throwing; otherwise it is just a warning and we can continue
         }
         for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
-            if (!iterator(nextEntry)) {
+            auto entryInfo = std::make_shared<EntryInfo>(getStaff(), getMeasure(), layerIndex, nextEntry);
+            // @todo: calculate and add running values (clef, elapsed duration, actual duration)
+            if (!iterator(entryInfo)) {
                 return false;
             }
             if (nextEntry->getEntryNumber() == frame->endEntry) {
@@ -282,7 +284,7 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
     return true;
 }
 
-bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_ptr<const Entry>&)> iterator)
+bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
 {
     for (LayerIndex layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
         if (!iterateEntries(layerIndex, iterator)) {
