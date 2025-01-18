@@ -72,6 +72,7 @@ var annotated_dup =
         [ "DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", "classmusx_1_1dom_1_1DetailsPool" ],
         [ "Document", "classmusx_1_1dom_1_1Document.html", "classmusx_1_1dom_1_1Document" ],
         [ "Entry", "classmusx_1_1dom_1_1Entry.html", "classmusx_1_1dom_1_1Entry" ],
+        [ "EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", "classmusx_1_1dom_1_1EntryInfo" ],
         [ "EntryPool", "classmusx_1_1dom_1_1EntryPool.html", "classmusx_1_1dom_1_1EntryPool" ],
         [ "FontInfo", "classmusx_1_1dom_1_1FontInfo.html", "classmusx_1_1dom_1_1FontInfo" ],
         [ "integrity_error", "classmusx_1_1dom_1_1integrity__error.html", null ],

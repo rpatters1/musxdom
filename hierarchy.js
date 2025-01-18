@@ -76,6 +76,7 @@ var hierarchy =
     [ "musx::dom::Document", "classmusx_1_1dom_1_1Document.html", null ],
     [ "musx::factory::ElementLinker", "classmusx_1_1factory_1_1ElementLinker.html", null ],
     [ "musx::util::EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", null ],
+    [ "musx::dom::EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", null ],
     [ "musx::factory::FactoryBase", "classmusx_1_1factory_1_1FactoryBase.html", [
       [ "musx::factory::PoolFactory< DetailsFactory, dom::DetailsBase, dom::DetailsPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
         [ "musx::factory::DetailsFactory", "classmusx_1_1factory_1_1DetailsFactory.html", null ]

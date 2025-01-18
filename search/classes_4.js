@@ -6,6 +6,7 @@ var searchData=
   ['enigmastring_3',['EnigmaString',['../classmusx_1_1util_1_1EnigmaString.html',1,'musx::util']]],
   ['entry_4',['Entry',['../classmusx_1_1dom_1_1Entry.html',1,'musx::dom']]],
   ['entryfactory_5',['EntryFactory',['../classmusx_1_1factory_1_1EntryFactory.html',1,'musx::factory']]],
-  ['entrypool_6',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
-  ['expressiontext_7',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]]
+  ['entryinfo_6',['EntryInfo',['../classmusx_1_1dom_1_1EntryInfo.html',1,'musx::dom']]],
+  ['entrypool_7',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
+  ['expressiontext_8',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]]
 ];
