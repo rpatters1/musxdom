@@ -1,7 +1,3 @@
-# Save the current state
-set(_original_WARN_DEPRECATED ${CMAKE_WARN_DEPRECATED})
-set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "Suppress deprecation warnings for external projects" FORCE)
-
 # Add Google Test
 include(FetchContent)
 FetchContent_Declare(
@@ -30,13 +26,10 @@ set(PUGIXML_BUILD_TESTS OFF CACHE BOOL "Do not build tests for pugixml")
 # Fetch pugixml
 FetchContent_Declare(
     pugixml
-    URL https://github.com/zeux/pugixml/releases/download/v1.14/pugixml-1.14.tar.gz
+    URL https://github.com/zeux/pugixml/releases/download/v1.15/pugixml-1.15.tar.gz
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(pugixml)
-
-# Restore the original state
-set(CMAKE_WARN_DEPRECATED ${_original_WARN_DEPRECATED} CACHE BOOL "Restore original deprecation warnings setting" FORCE)
 
 # Enable testing
 enable_testing()
