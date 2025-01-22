@@ -200,9 +200,18 @@ public:
      */
     static auto extractFromXml(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker, const DetailsPoolPtr& pool)
     {
+        std::optional<dom::Inci> inci;
+        if (auto inciAttribute = element->findAttribute("inci")) {
+            inci = inciAttribute->getValueAs<dom::Inci>();
+        }
         if (auto entnumAttribute = element->findAttribute("entnum")) {
-            /// @todo handle entry details here
-            return std::shared_ptr<Base>{};
+            if (inci.has_value()) {
+                return RegisteredDetails::createInstance(pool, element, elementLinker,
+                    document, entnumAttribute->getValueAs<dom::EntryNumber>(), inci.value());
+            } else {
+                return RegisteredDetails::createInstance(pool, element, elementLinker,
+                    document, entnumAttribute->getValueAs<dom::EntryNumber>());
+            }
         }
         auto cmper1Attribute = element->findAttribute("cmper1");
         if (!cmper1Attribute) {
@@ -212,12 +221,10 @@ public:
         if (!cmper2Attribute) {
             throw std::invalid_argument("missing cmper2 for details element " + element->getTagName());
         }
-        auto inciAttribute = element->findAttribute("inci");
-        if (inciAttribute) {
+        if (inci.has_value()) {
             return RegisteredDetails::createInstance(pool, element, elementLinker,
-                document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>(), inciAttribute->getValueAs<dom::Inci>());
-        }
-        else {
+                document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>(), inci.value());
+        } else {
             return RegisteredDetails::createInstance(pool, element, elementLinker,
                 document, cmper1Attribute->getValueAs<dom::Cmper>(), cmper2Attribute->getValueAs<dom::Cmper>());
         }
