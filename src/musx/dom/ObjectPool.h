@@ -334,14 +334,29 @@ public:
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
     /** @brief DetailsPool version of #ObjectPool::getArray */
-    template <typename T>
+    template <typename T, typename Enable = void>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
     { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 }); }
 
+    /** @brief EntryDetailsPool version of #ObjectPool::getArray */
+    template <typename T, std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>>>
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<EntryNumber> entnum = std::nullopt) const
+    {
+        if (!entnum.has_value()) {
+            return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId });
+        }
+        return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum.value() >> 16), Cmper(entnum.value() & 0xffff) });
+    }
+
     /** @brief DetailsPool version of #ObjectPool::get */
-    template <typename T>
+    template <typename T, typename Enable = void>
     std::shared_ptr<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
     { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper1, cmper2, inci}); }
+
+    /** @brief EntryDetailsPool version of #ObjectPool::get */
+    template <typename T, std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>>>
+    std::shared_ptr<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
+    { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci}); }
 };
 /** @brief Shared `DetailsPool` pointer */
 using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
