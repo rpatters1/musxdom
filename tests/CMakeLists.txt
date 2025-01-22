@@ -82,6 +82,7 @@ add_executable(musxdomtests
     others/text.cpp
     # details
 	details/gfhold.cpp
+    details/tuplet_defs.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")

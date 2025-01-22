@@ -30,6 +30,12 @@
 namespace musx {
 namespace dom {
 
+namespace options {
+
+class TupletOptions;
+
+} // namespace options
+
 /**
  * @namespace musx::dom::details
  * @brief Classes in the @ref DetailsPool.
@@ -110,6 +116,58 @@ public:
 
     constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
     static const xml::XmlElementArray<GFrameHold> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TupletDef
+ * @brief Options controlling the appearance of tuplets.
+ *
+ * This class is identified by the XML node name "tupletDef".
+ */
+class TupletDef : public EntryDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TupletDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    using AutoBracketStyle = options::TupletOptions::AutoBracketStyle;
+    using NumberStyle = options::TupletOptions::NumberStyle;
+    using PositioningStyle = options::TupletOptions::PositioningStyle;
+    using BracketStyle = options::TupletOptions::BracketStyle;
+
+    int displayNumber{};                    ///< The number of notes to display (xml node is `<symbolicNum>`)
+    Edu displayDuration{};                  ///< The duration of each note to display (xml node is `<symbolicDur>`)
+    int inTheTimeOfNumber{};                ///< The number of notes "in the time of" (xml node is `<refNum>`)
+    Edu inTheTimeOfDuration{};              ///< The duration of eacn note "in the time of" (xml node is `<refDur>`)
+    bool alwaysFlat{};                      ///< "Always Flat" (xml node is `<flat>`)
+    bool fullDura{};                        ///< "Bracket Full Duration"
+    bool metricCenter{};                    ///< "Center Number Using Duration"
+    bool avoidStaff{};                      ///< "Avoid Staff"
+    AutoBracketStyle autoBracketStyle{};    ///< Autobracket style
+    Evpu tupOffX{};                         ///< Horizontal offset.
+    Evpu tupOffY{};                         ///< Vertical.
+    Evpu brackOffX{};                       ///< Horizontal offset for brackets.
+    Evpu brackOffY{};                       ///< Vertical offset for brackets.
+    NumberStyle numStyle{};                 ///< Number style
+    PositioningStyle posStyle{};            ///< Positioning style
+    bool allowHorz{};                       ///< "Allow Horizontal Drag"
+    bool ignoreHorzNumOffset{};             ///< "Ignore Horizontal Number Offset" (xml node is `<ignoreGlOffs>`)
+    bool breakBracket{};                    ///< "Break Slur or Bracket"
+    bool matchHooks{};                      ///< "Match Length of Hooks"
+    bool useBottomNote{};                   ///< "Use Bottom Note" (xml node is `<noteBelow>`)
+    BracketStyle brackStyle{};              ///< Bracket style.
+    bool smartTuplet{};                     ///< "Engraver Tuplets"
+    Evpu leftHookLen{};                     ///< Length of the left hook in the tuplet bracket. (This value is sign-reversed in the Finale UI.)
+    Evpu leftHookExt{};                     ///< Extension of the left hook beyond the tuplet bracket.
+    Evpu rightHookLen{};                    ///< Length of the right hook in the tuplet bracket. (This value is sign-reversed in the Finale UI.)
+    Evpu rightHookExt{};                    ///< Extension of the right hook beyond the tuplet bracket.
+    Evpu manualSlopeAdj{};                  ///< "Manual Slope Adjustment" in @ref Evpu. (xml node is `<slope>`)
+
+    constexpr static std::string_view XmlNodeName = "tupletDef";    ///< The XML node name for this type.
+    static const xml::XmlElementArray<TupletDef> XmlMappingArray;   ///< Required for musx::factory::FieldPopulator.
 };
 
 } // namespace details
