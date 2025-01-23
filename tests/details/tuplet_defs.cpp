@@ -155,9 +155,4 @@ TEST(TupletDefTest, PartCheck)
     
     tupletDef = details->getArray<details::TupletDef>(1, 7);
     ASSERT_EQ(tupletDef.size(), 1) << "TupletDef array for part1 entnum 7 had " << std::to_string(tupletDef.size()) << " items";
-
-    EXPECT_THROW(
-        tupletDef = details->getArray<details::TupletDef>(1),
-        std::invalid_argument
-    ) << "expect throw if entnum is omitted from array search";
 }

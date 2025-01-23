@@ -340,21 +340,13 @@ public:
 
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
-    std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
     { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 }); }
 
     /** @brief EntryDetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
-    std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<EntryNumber> entnum = std::nullopt) const
-    {
-        return ObjectPool::template getArrayForPart<T>(
-            {
-                std::string(T::XmlNodeName), partId,
-                entnum ? std::optional<Cmper>(Cmper(entnum.value() >> 16)) : std::nullopt,
-                entnum ? std::optional<Cmper>(Cmper(entnum.value() & 0xffff)) : std::nullopt
-            }
-        );
-    }
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId, EntryNumber entnum) const
+    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) }); }
 
     /** @brief DetailsPool version of #ObjectPool::get */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
@@ -370,7 +362,7 @@ public:
 using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
 
 /** @brief Entry pool */
-class EntryPool : public ObjectPool<Entry, EntryNumber>
+class EntryPool : protected ObjectPool<Entry, EntryNumber>
 {
 public:
     /** @brief EntryPool version of #ObjectPool::add */
@@ -386,7 +378,7 @@ public:
 using EntryPoolPtr = std::shared_ptr<EntryPool>;
 
 /** @brief Text pool */
-class TextsPool : public ObjectPool<TextsBase>
+class TextsPool : protected ObjectPool<TextsBase>
 {
 public:
     /** @brief Texts version of #ObjectPool::add */
