@@ -21,8 +21,9 @@
  */
 #pragma once
 
+#include "musx/util/Fraction.h"
 #include "BaseClasses.h"
-// do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
+ // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -140,6 +141,11 @@ public:
     NoteType calcNoteType() const;
 
     /**
+     * @brief Calculates the duration as a @ref Fraction of a whole note
+     */
+    util::Fraction calcFraction() const { return util::Fraction(duration, int(NoteType::Whole));  }
+
+    /**
      * @brief Calculates the number of augmentation dots in the duration.
      *
      * @return The number of augmentation dots.
@@ -187,6 +193,9 @@ public:
         : m_staff(staff), m_measure(measure), m_layerIndex(layerIndex), m_entry(entry)
     {
     }
+
+    util::Fraction elapsedDuration{};
+    util::Fraction actualDuration{};
 
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }

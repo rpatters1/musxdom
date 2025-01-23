@@ -24,6 +24,7 @@
 #include <filesystem>
 #include <sstream>
 #include <functional>
+#include <numeric>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -246,13 +247,35 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** GFrameHold *****
 // **********************
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+struct TupletState
+{
+    util::Fraction remainingSymbolicDuration;         // The remaining symbolic duration
+    util::Fraction ratio;             // The remaining actual duration
+    std::shared_ptr<const details::TupletDef> tuplet; // The tuplet.
+
+    void accountFor(util::Fraction actual)
+    {
+        remainingSymbolicDuration -= (actual / ratio);
+    }
+
+    TupletState(const std::shared_ptr<details::TupletDef>& t)
+        : remainingSymbolicDuration(t->displayNumber * t->displayDuration, int(Entry::NoteType::Whole)),
+          ratio(t->inTheTimeOfNumber * t->inTheTimeOfDuration, t->displayNumber * t->displayDuration),
+          tuplet(t)
+    {
+    }
+};
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
 bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
 {
     if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
     if (!frames[layerIndex]) return true; // nothing here
-    auto frameIncis = getDocument()->getOthers()->getArray<others::Frame>(getPartId(), frames[layerIndex]);
+    auto document = getDocument();
+    auto frameIncis = document->getOthers()->getArray<others::Frame>(getPartId(), frames[layerIndex]);
     auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
         for (const auto& frame : frameIncis) {
             if (frame->startEntry) {
@@ -262,20 +285,49 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
         return nullptr;
     }();
     if (frame) {
-        auto firstEntry = getDocument()->getEntries()->get<Entry>(frame->startEntry);
+        auto firstEntry = document->getEntries()->get<Entry>(frame->startEntry);
         if (!firstEntry) {
             MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
             return true; // we won't get here if we are throwing; otherwise it is just a warning and we can continue
         }
+        std::vector<TupletState> activeTuplets; // List of active tuplets
+        util::Fraction actualElapsedDuration = 0;
+        for (const auto& f : frameIncis) {
+            actualElapsedDuration += util::Fraction(f->startTime, int(Entry::NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
+        }
         for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
             auto entryInfo = std::make_shared<EntryInfo>(getStaff(), getMeasure(), layerIndex, nextEntry);
-            // @todo: calculate and add running values (clef, elapsed duration, actual duration)
+            auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, nextEntry->getEntryNumber());
+            for (const auto& tuplet : tuplets) {
+                activeTuplets.emplace_back(tuplet);
+            }
+
+            // @todo: calculate and add running values (clef, key)
+            util::Fraction cumulativeRatio = 1;
+            for (const auto& t : activeTuplets) {
+                cumulativeRatio *= t.ratio;
+            }
+            util::Fraction actualDuration = nextEntry->calcFraction() * cumulativeRatio;
+            entryInfo->actualDuration = actualDuration;
+            entryInfo->elapsedDuration = actualElapsedDuration;
+
             if (!iterator(entryInfo)) {
                 return false;
             }
+
             if (nextEntry->getEntryNumber() == frame->endEntry) {
                 break;
             }
+
+            actualElapsedDuration += actualDuration;
+            for (auto& t : activeTuplets) {
+                t.remainingSymbolicDuration -= actualDuration / t.ratio;
+            }
+            activeTuplets.erase(
+                std::remove_if(activeTuplets.begin(), activeTuplets.end(),
+                    [](const TupletState& t) { return t.remainingSymbolicDuration <= 0; }),
+                activeTuplets.end()
+            );
         }
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "

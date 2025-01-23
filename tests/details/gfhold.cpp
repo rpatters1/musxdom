@@ -220,3 +220,57 @@ TEST(GFrameHold, IterationTest)
         return true;
     });
 }
+
+TEST(GFrameHold, QuintupletTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "quintuplet.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        std::cout << entryInfo->elapsedDuration << "     " << entryInfo->actualDuration << "     " << entryInfo->actualDuration.calcDuration() << std::endl;
+        return true;
+    });
+}
+
+TEST(GFrameHold, TripletTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "triplet.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        std::cout << entryInfo->elapsedDuration << "     " << entryInfo->actualDuration << "     " << entryInfo->actualDuration.calcDuration() << std::endl;
+        return true;
+    });
+}
+
+TEST(GFrameHold, NestedTupletTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "nested_tuplets.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        std::cout << entryInfo->elapsedDuration << "     " << entryInfo->actualDuration << "     " << entryInfo->actualDuration.calcDuration() << std::endl;
+        return true;
+    });
+}
