@@ -25,6 +25,7 @@
 #include "test_utils.h"
 
 using namespace musx::dom;
+using namespace musx::util;
 
 TEST(GFrameHoldTest, PopulateFields)
 {
@@ -231,10 +232,20 @@ TEST(GFrameHold, QuintupletTest)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
+    std::vector<Fraction> expectedValues = {
+      Fraction(1, 10), Fraction(1, 10), Fraction(1, 10), Fraction(1, 10), Fraction(1, 10), Fraction(1, 2)
+    };
+
     auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
+    size_t x = 0;
+    Fraction total = 0;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
-        std::cout << entryInfo->elapsedDuration << "     " << entryInfo->actualDuration << "     " << entryInfo->actualDuration.calcDuration() << std::endl;
+        EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+        if (x >= expectedValues.size()) return false;
+        EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
+        EXPECT_EQ(total, entryInfo->elapsedDuration);
+        total += expectedValues[x++];
         return true;
     });
 }
@@ -249,10 +260,20 @@ TEST(GFrameHold, TripletTest)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
+    std::vector<Fraction> expectedValues = {
+      Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 2)
+    };
+
     auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
+    size_t x = 0;
+    Fraction total = 0;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
-        std::cout << entryInfo->elapsedDuration << "     " << entryInfo->actualDuration << "     " << entryInfo->actualDuration.calcDuration() << std::endl;
+        EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+        if (x >= expectedValues.size()) return false;
+        EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
+        EXPECT_EQ(total, entryInfo->elapsedDuration);
+        total += expectedValues[x++];
         return true;
     });
 }
