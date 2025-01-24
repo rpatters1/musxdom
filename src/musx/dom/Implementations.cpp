@@ -255,9 +255,9 @@ std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries()
         MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1)) + " is not iterable.");
         return retval;
     }
-    for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
-        retval.emplace_back(nextEntry);
-        if (nextEntry->getEntryNumber() == endEntry) {
+    for (auto entry = firstEntry; entry; entry = entry->getNext()) {
+        retval.emplace_back(entry);
+        if (entry->getEntryNumber() == endEntry) {
             break;
         }
     }
@@ -308,17 +308,32 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
         retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);        auto entries = frame->getEntries();
-        std::vector<TupletState> activeTuplets; // List of active tuplets
-        util::Fraction actualElapsedDuration = 0;
+        std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
+        std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
+        util::Fraction v1ActualElapsedDuration = 0;
         for (const auto& f : frameIncis) {
-            actualElapsedDuration += util::Fraction(f->startTime, int(Entry::NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
+            v1ActualElapsedDuration += util::Fraction(f->startTime, int(Entry::NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
         }
-        for (const auto& nextEntry : entries) {
-            auto entryInfo = std::make_shared<EntryInfo>(layerIndex, nextEntry);
+        util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
+        for (size_t i = 0; i < entries.size(); i++) {
+            const auto& entry = entries[i];
+            auto entryInfo = std::make_shared<EntryInfo>(layerIndex, entry);
+            if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
+                entryInfo->v2Launch = true;
+            }
+            if (entryInfo->v2Launch) {
+                // Note: v1 tuplets do not appear to affect v2 entries. If they did this would be correct:
+                //      v2ActiveTuplets = v1ActiveTuplets;
+                // But since they do not:
+                v2ActiveTuplets.clear();
+                v2ActualElapsedDuration = v1ActualElapsedDuration;
+            }
+            std::vector<TupletState>& activeTuplets = entry->voice2 ? v2ActiveTuplets : v1ActiveTuplets;
+            util::Fraction& actualElapsedDuration = entry->voice2 ? v2ActualElapsedDuration : v1ActualElapsedDuration;
             entryInfo->elapsedDuration = actualElapsedDuration;
             util::Fraction cumulativeRatio = 1;
-            if (!nextEntry->graceNote) {
-                auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, nextEntry->getEntryNumber());
+            if (!entry->graceNote) {
+                auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
                 std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
                     });
@@ -330,14 +345,14 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 for (const auto& t : activeTuplets) {
                     cumulativeRatio *= t.ratio;
                 }
-                util::Fraction actualDuration = nextEntry->calcFraction() * cumulativeRatio;
+                util::Fraction actualDuration = entry->calcFraction() * cumulativeRatio;
                 entryInfo->actualDuration = actualDuration;
             }
 
             retval->addEntry(entryInfo);
 
             actualElapsedDuration += entryInfo->actualDuration;
-            if (!nextEntry->graceNote) {
+            if (!entry->graceNote) {
                 for (auto it = activeTuplets.rbegin(); it != activeTuplets.rend(); ++it) {
                     it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
                     cumulativeRatio /= it->ratio;

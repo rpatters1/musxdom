@@ -128,9 +128,14 @@ public:
     /// @brief Gets the entry number for this entry
     EntryNumber getEntryNumber() const { return m_entnum; }
 
-    /// @brief Gets the next entry in this frame or nullptr if none
+    /// @brief Gets the next entry in this list or nullptr if none.
+    ///
+    /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
     std::shared_ptr<Entry> getNext() const;
-    /// @brief Gets the previous entry in this frame or nullptr if none
+    
+    /// @brief Gets the previous entry in this list or nullptr if none
+    ///
+    /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
     std::shared_ptr<Entry> getPrevious() const;
 
     /**
