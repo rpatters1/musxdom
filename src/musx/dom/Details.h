@@ -140,8 +140,8 @@ public:
 
     int displayNumber{};                    ///< The number of notes to display (xml node is `<symbolicNum>`)
     Edu displayDuration{};                  ///< The duration of each note to display (xml node is `<symbolicDur>`)
-    int inTheTimeOfNumber{};                ///< The number of notes "in the time of" (xml node is `<refNum>`)
-    Edu inTheTimeOfDuration{};              ///< The duration of eacn note "in the time of" (xml node is `<refDur>`)
+    int referenceNumber{};                  ///< The number of notes "in the time of" (xml node is `<refNum>`)
+    Edu referenceDuration{};                ///< The duration of eacn note "in the time of" (xml node is `<refDur>`)
     bool alwaysFlat{};                      ///< "Always Flat" (xml node is `<flat>`)
     bool fullDura{};                        ///< "Bracket Full Duration"
     bool metricCenter{};                    ///< "Center Number Using Duration"
@@ -166,6 +166,15 @@ public:
     Evpu rightHookExt{};                    ///< Extension of the right hook beyond the tuplet bracket.
     Evpu manualSlopeAdj{};                  ///< "Manual Slope Adjustment" in @ref Evpu. (xml node is `<slope>`)
 
+    /** @brief return the reference duration as a @ref Fraction of a whole note */
+    util::Fraction calcReferenceDuration() const { return util::Fraction(referenceNumber * referenceDuration, Edu(Entry::NoteType::Whole)); }
+
+    /** @brief return the display duration as a @ref Fraction of a whole note */
+    util::Fraction calcDisplayDuration() const { return util::Fraction(displayNumber * displayDuration, Edu(Entry::NoteType::Whole)); }
+
+    /** @brief return the tuplet ratio (reference / display) */
+    util::Fraction calcRatio() const { return util::Fraction(referenceNumber * referenceDuration, displayNumber * displayDuration); }
+        
     constexpr static std::string_view XmlNodeName = "tupletDef";    ///< The XML node name for this type.
     static const xml::XmlElementArray<TupletDef> XmlMappingArray;   ///< Required for musx::factory::FieldPopulator.
 };

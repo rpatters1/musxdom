@@ -117,8 +117,8 @@ TEST(TupletDefTest, PopulateFields)
 
     EXPECT_EQ(tupletDef->displayNumber, 3);
     EXPECT_EQ(tupletDef->displayDuration, 512);
-    EXPECT_EQ(tupletDef->inTheTimeOfNumber, 2);
-    EXPECT_EQ(tupletDef->inTheTimeOfDuration, 512);
+    EXPECT_EQ(tupletDef->referenceNumber, 2);
+    EXPECT_EQ(tupletDef->referenceDuration, 512);
     EXPECT_TRUE(tupletDef->alwaysFlat);
     EXPECT_TRUE(tupletDef->fullDura);
     EXPECT_TRUE(tupletDef->metricCenter);

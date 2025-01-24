@@ -63,8 +63,8 @@ MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
 MUSX_XML_ELEMENT_ARRAY(TupletDef, {
     {"symbolicNum", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->displayNumber = e->getTextAs<int>(); }},
     {"symbolicDur", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->displayDuration = e->getTextAs<Edu>(); }},
-    {"refNum", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->inTheTimeOfNumber = e->getTextAs<int>(); }},
-    {"refDur", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->inTheTimeOfDuration = e->getTextAs<Edu>(); }},
+    {"refNum", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->referenceNumber = e->getTextAs<int>(); }},
+    {"refDur", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->referenceDuration = e->getTextAs<Edu>(); }},
     {"flat", [](const XmlElementPtr&, const std::shared_ptr<TupletDef>& i) { i->alwaysFlat = true; }},
     {"fullDura", [](const XmlElementPtr&, const std::shared_ptr<TupletDef>& i) { i->fullDura = true; }},
     {"metricCenter", [](const XmlElementPtr&, const std::shared_ptr<TupletDef>& i) { i->metricCenter = true; }},

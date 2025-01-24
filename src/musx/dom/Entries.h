@@ -109,6 +109,7 @@ public:
     int numNotes{};          ///< Number of notes in the entry. There is an error if this is not the same as notes.size().
     bool isValid{};          ///< Should always be true but otherwise appears to be used internally by Finale.
     bool isNote{};           ///< If this value is false, the entry is a rest.
+    bool graceNote{};        ///< Indicate the entry is a grace note.
     bool floatRest{};        ///< Is floating rest. If false, the first note element gives the staff position of the rest.
     bool isHidden{};         ///< Indicates the entry is hidden, (xml node is `<ignore>`)
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)

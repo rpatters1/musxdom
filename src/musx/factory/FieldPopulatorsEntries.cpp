@@ -47,6 +47,7 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"numNotes", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->numNotes = e->getTextAs<int>(); }},
     {"isValid", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->isValid = true; }},
     {"isNote", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->isNote = true; }},
+    {"graceNote", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->graceNote = true; }},
     {"floatRest", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->floatRest = true; }},
     {"ignore", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->isHidden = true; }},
     {"v2", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->voice2 = true; }},

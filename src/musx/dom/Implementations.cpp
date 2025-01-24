@@ -261,7 +261,7 @@ struct TupletState
 
     TupletState(const std::shared_ptr<details::TupletDef>& t)
         : remainingSymbolicDuration(t->displayNumber * t->displayDuration, int(Entry::NoteType::Whole)),
-          ratio(t->inTheTimeOfNumber * t->inTheTimeOfDuration, t->displayNumber * t->displayDuration),
+          ratio(t->referenceNumber * t->referenceDuration, t->displayNumber * t->displayDuration),
           tuplet(t)
     {
     }
@@ -297,19 +297,24 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
         }
         for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
             auto entryInfo = std::make_shared<EntryInfo>(getStaff(), getMeasure(), layerIndex, nextEntry);
-            auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, nextEntry->getEntryNumber());
-            for (const auto& tuplet : tuplets) {
-                activeTuplets.emplace_back(tuplet);
-            }
-
-            // @todo: calculate and add running values (clef, key)
-            util::Fraction cumulativeRatio = 1;
-            for (const auto& t : activeTuplets) {
-                cumulativeRatio *= t.ratio;
-            }
-            util::Fraction actualDuration = nextEntry->calcFraction() * cumulativeRatio;
-            entryInfo->actualDuration = actualDuration;
             entryInfo->elapsedDuration = actualElapsedDuration;
+            util::Fraction cumulativeRatio = 1;
+            if (!nextEntry->graceNote) {
+                auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, nextEntry->getEntryNumber());
+                std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
+                    return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
+                    });
+                for (const auto& tuplet : tuplets) {
+                    activeTuplets.emplace_back(tuplet);
+                }
+
+                // @todo: calculate and add running values (clef, key)
+                for (const auto& t : activeTuplets) {
+                    cumulativeRatio *= t.ratio;
+                }
+                util::Fraction actualDuration = nextEntry->calcFraction() * cumulativeRatio;
+                entryInfo->actualDuration = actualDuration;
+            }
 
             if (!iterator(entryInfo)) {
                 return false;
@@ -319,15 +324,18 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
                 break;
             }
 
-            actualElapsedDuration += actualDuration;
-            for (auto& t : activeTuplets) {
-                t.remainingSymbolicDuration -= actualDuration / t.ratio;
+            actualElapsedDuration += entryInfo->actualDuration;
+            if (!nextEntry->graceNote) {
+                for (auto it = activeTuplets.rbegin(); it != activeTuplets.rend(); ++it) {
+                    it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
+                    cumulativeRatio /= it->ratio;
+                }
+                activeTuplets.erase(
+                    std::remove_if(activeTuplets.begin(), activeTuplets.end(),
+                        [](const TupletState& t) { return t.remainingSymbolicDuration <= 0; }),
+                    activeTuplets.end()
+                );
             }
-            activeTuplets.erase(
-                std::remove_if(activeTuplets.begin(), activeTuplets.end(),
-                    [](const TupletState& t) { return t.remainingSymbolicDuration <= 0; }),
-                activeTuplets.end()
-            );
         }
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "

@@ -37,6 +37,7 @@ TEST(EntryTest, PopulateFields)
       <numNotes>2</numNotes>
       <isValid/>
       <isNote/>
+      <graceNote/>
       <floatRest/>
       <sorted/>
       <note id="1">
@@ -80,6 +81,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_EQ(entry->numNotes, 2);
         EXPECT_TRUE(entry->isValid);
         EXPECT_TRUE(entry->isNote);
+        EXPECT_TRUE(entry->graceNote);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_FALSE(entry->isHidden);
         EXPECT_TRUE(entry->sorted);
