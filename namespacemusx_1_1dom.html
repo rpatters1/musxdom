@@ -139,6 +139,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents an entry containing metadata and notes.  <a href="classmusx_1_1dom_1_1Entry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">EntryDetailsBase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> class for all "details" types that use <code>entnum</code> rather than <code>cmper</code> and <code>cmper</code>.  <a href="classmusx_1_1dom_1_1EntryDetailsBase.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instances for a given frame, along with computed information.  <a href="classmusx_1_1dom_1_1EntryFrame.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information an entry along with the entry.  <a href="classmusx_1_1dom_1_1EntryInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,7 +190,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>Cmper</b> = uint16_t
 <tr class="separator:a849c0fb091707be060d840e877486f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e1523afa8705d91b1d694405c2feefb" id="r_a7e1523afa8705d91b1d694405c2feefb"><td class="memItemLeft" align="right" valign="top"><a id="a7e1523afa8705d91b1d694405c2feefb" name="a7e1523afa8705d91b1d694405c2feefb"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Inci</b> = int16_t</td></tr>
-<tr class="memdesc:a7e1523afa8705d91b1d694405c2feefb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enigma "incidend" key type. <br /></td></tr>
+<tr class="memdesc:a7e1523afa8705d91b1d694405c2feefb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enigma "incident" key type. <br /></td></tr>
 <tr class="separator:a7e1523afa8705d91b1d694405c2feefb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f27f66bcae06e7ccf1173bfca211da2" id="r_a7f27f66bcae06e7ccf1173bfca211da2"><td class="memItemLeft" align="right" valign="top"><a id="a7f27f66bcae06e7ccf1173bfca211da2" name="a7f27f66bcae06e7ccf1173bfca211da2"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Evpu</b> = int32_t</td></tr>
@@ -204,8 +210,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>Efix</b> = int32_t</
 <tr class="separator:a3e452e4045d32c7e8a6acab66adf8e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a907ef641c247f1a5dbe75bbc972661f5" id="r_a907ef641c247f1a5dbe75bbc972661f5"><td class="memItemLeft" align="right" valign="top"><a id="a907ef641c247f1a5dbe75bbc972661f5" name="a907ef641c247f1a5dbe75bbc972661f5"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Edu</b> = int32_t</td></tr>
-<tr class="memdesc:a907ef641c247f1a5dbe75bbc972661f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Elapsed Durational Units" value (1024 per quarter note) <br /></td></tr>
+<tr class="memdesc:a907ef641c247f1a5dbe75bbc972661f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Enigma Durational Units" value (1024 per quarter note) <br /></td></tr>
 <tr class="separator:a907ef641c247f1a5dbe75bbc972661f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea2ad29fab8a84e0bc89e8d209068a2e" id="r_aea2ad29fab8a84e0bc89e8d209068a2e"><td class="memItemLeft" align="right" valign="top"><a id="aea2ad29fab8a84e0bc89e8d209068a2e" name="aea2ad29fab8a84e0bc89e8d209068a2e"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>EduFloat</b> = double</td></tr>
+<tr class="memdesc:aea2ad29fab8a84e0bc89e8d209068a2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Enigma Durational Units" floating point value (1024.0 per quarter note) <br /></td></tr>
+<tr class="separator:aea2ad29fab8a84e0bc89e8d209068a2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d5af8a8174c235d3292c076def44817" id="r_a3d5af8a8174c235d3292c076def44817"><td class="memItemLeft" align="right" valign="top"><a id="a3d5af8a8174c235d3292c076def44817" name="a3d5af8a8174c235d3292c076def44817"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>MeasCmper</b> = int16_t</td></tr>
 <tr class="memdesc:a3d5af8a8174c235d3292c076def44817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enigma meas Cmper (may be negative when not applicable) <br /></td></tr>

@@ -11,7 +11,7 @@ var searchData=
   ['useallottmenttables_8',['useAllottmentTables',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a75c8cd874ecb74c3e69505a28b23b776',1,'musx::dom::options::MusicSpacingOptions']]],
   ['useassmpinst_9',['useAsSmpInst',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#ae04fcc1db50fdb0732bf8cd1c14460bc',1,'musx::dom::others::PartDefinition']]],
   ['useauxdata_10',['useAuxData',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#ac06271429f157de59fc82eb100a0980c',1,'musx::dom::others::TextExpressionDef']]],
-  ['usebottomnote_11',['useBottomNote',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ae67cbd8d6f49ade1acdc0e502b590be4',1,'musx::dom::options::TupletOptions']]],
+  ['usebottomnote_11',['usebottomnote',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#ae63c861c81ddf203f26fbda46a34779b',1,'musx::dom::details::TupletDef::useBottomNote'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ae67cbd8d6f49ade1acdc0e502b590be4',1,'musx::dom::options::TupletOptions::useBottomNote']]],
   ['usecategoryfonts_12',['useCategoryFonts',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a7b242ea790f1dcfe8db605c7a9dbbc41',1,'musx::dom::others::TextExpressionDef']]],
   ['usecategorypos_13',['useCategoryPos',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#ae38ed27be05877e0006ac1fe2154ab3a',1,'musx::dom::others::TextExpressionDef']]],
   ['usedisplaytimesig_14',['useDisplayTimesig',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1e0fa48f6f2a9e28cdcc9ff10941eced',1,'musx::dom::others::Measure']]],

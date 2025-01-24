@@ -5,8 +5,10 @@ var searchData=
   ['enclosure_2',['Enclosure',['../classmusx_1_1dom_1_1others_1_1Enclosure.html',1,'musx::dom::others']]],
   ['enigmastring_3',['EnigmaString',['../classmusx_1_1util_1_1EnigmaString.html',1,'musx::util']]],
   ['entry_4',['Entry',['../classmusx_1_1dom_1_1Entry.html',1,'musx::dom']]],
-  ['entryfactory_5',['EntryFactory',['../classmusx_1_1factory_1_1EntryFactory.html',1,'musx::factory']]],
-  ['entryinfo_6',['EntryInfo',['../classmusx_1_1dom_1_1EntryInfo.html',1,'musx::dom']]],
-  ['entrypool_7',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
-  ['expressiontext_8',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]]
+  ['entrydetailsbase_5',['EntryDetailsBase',['../classmusx_1_1dom_1_1EntryDetailsBase.html',1,'musx::dom']]],
+  ['entryfactory_6',['EntryFactory',['../classmusx_1_1factory_1_1EntryFactory.html',1,'musx::factory']]],
+  ['entryframe_7',['EntryFrame',['../classmusx_1_1dom_1_1EntryFrame.html',1,'musx::dom']]],
+  ['entryinfo_8',['EntryInfo',['../classmusx_1_1dom_1_1EntryInfo.html',1,'musx::dom']]],
+  ['entrypool_9',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
+  ['expressiontext_10',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]]
 ];

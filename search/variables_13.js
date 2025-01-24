@@ -40,7 +40,7 @@ var searchData=
   ['tupmaxslope_37',['tupMaxSlope',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a718a32e0c906673a736bdeca877d4aa3',1,'musx::dom::options::TupletOptions']]],
   ['tupndownstemoffset_38',['tupNDownstemOffset',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a9984eadfd356b7375e5aa87781003873',1,'musx::dom::options::TupletOptions']]],
   ['tupnupstemoffset_39',['tupNUpstemOffset',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a30767ab6e94fa38401bf1781b6172117',1,'musx::dom::options::TupletOptions']]],
-  ['tupoffx_40',['tupOffX',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a52089dcba358c8715b70424484fb1fc3',1,'musx::dom::options::TupletOptions']]],
-  ['tupoffy_41',['tupOffY',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a53f6f79f64324d045ef5b585161ca509',1,'musx::dom::options::TupletOptions']]],
+  ['tupoffx_40',['tupoffx',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a443a6da4c724b87229efeea24735ac6a',1,'musx::dom::details::TupletDef::tupOffX'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a52089dcba358c8715b70424484fb1fc3',1,'musx::dom::options::TupletOptions::tupOffX']]],
+  ['tupoffy_41',['tupoffy',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#aa53c7f1b844fbd4c29dae1c3dac07341',1,'musx::dom::details::TupletDef::tupOffY'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a53f6f79f64324d045ef5b585161ca509',1,'musx::dom::options::TupletOptions::tupOffY']]],
   ['twomeasnumlift_42',['twoMeasNumLift',['../classmusx_1_1dom_1_1options_1_1AlternateNotationOptions.html#ad7f218c11996aaa61edc1a51e37fdc44',1,'musx::dom::options::AlternateNotationOptions']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['textspoolptr_0',['TextsPoolPtr',['../namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4',1,'musx::dom']]]
+  ['positioningstyle_0',['PositioningStyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a7ea2241fe5b7e1f7f50d5529bdce04ab',1,'musx::dom::details::TupletDef']]]
 ];

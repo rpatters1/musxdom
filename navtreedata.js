@@ -44,7 +44,8 @@ var NAVTREE =
         [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ],
-        [ "Enumerations", "functions_enum.html", null ]
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Related Symbols", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -56,17 +57,17 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "BaseClasses_8h_source.html",
-"classmusx_1_1dom_1_1Note.html#af07df87315ac74c605c9a6bb06c0c882",
-"classmusx_1_1dom_1_1options_1_1ClefOptions.html#a71428b29b9d43237cabe6b71434ff35e",
-"classmusx_1_1dom_1_1options_1_1MiscOptions.html#a29c447a6be104b943277c8697500148f",
-"classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a5b4eedf2af0e5ec4e6f1aa99fb800129",
-"classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a78f888825940c384ecf6cf636de520b8afc35622cd111606aea45a8548cc74be2",
-"classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html#a9aaaa670f3d7787e4e20b6ca9bf1328e",
-"classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa74248c725e00bf9fe04df4e35b249a19",
-"classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a64fcf0de37cb59530ef5365fb6665526",
-"classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a13bbf631cd6f1733b1ab5b728128c16d",
-"classmusx_1_1xml_1_1rapidxml_1_1Element.html#a55be7030b116f6280b61184f54a78e0b",
-"namespaces.html"
+"classmusx_1_1dom_1_1FontInfo.html#adbc3f5da67f3aa51ca0717573b87bcee",
+"classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html#ad35128b9728005c72efd94a302720a4b",
+"classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aad6873827e9811f30be8dafd6617d6083",
+"classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a38d3541e5aabcd32d87c09e699328327",
+"classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a518fb0b39dfee6bd61b31d42c7d4e03ca65c8b12b80048e6b94d93bdce775d51b",
+"classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a030032d5979564f0099dd1164b7ef5d6",
+"classmusx_1_1dom_1_1others_1_1Enclosure.html#ae764b4abee5af2139922a0e95ba56baf",
+"classmusx_1_1dom_1_1others_1_1Measure.html#aeb614cef216dd886141f0f40e38db835",
+"classmusx_1_1dom_1_1others_1_1Staff.html#a84137b810463f8edc4eedb7422e7bce5",
+"classmusx_1_1util_1_1Fraction.html#ae099c1bdde8f857a3542fcf812fa3b4c",
+"index.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

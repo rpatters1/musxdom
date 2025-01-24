@@ -9,6 +9,7 @@ var searchData=
   ['textspool_6',['TextsPool',['../classmusx_1_1dom_1_1TextsPool.html',1,'musx::dom']]],
   ['tieoptions_7',['TieOptions',['../classmusx_1_1dom_1_1options_1_1TieOptions.html',1,'musx::dom::options']]],
   ['timesignatureoptions_8',['TimeSignatureOptions',['../classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html',1,'musx::dom::options']]],
-  ['tupletoptions_9',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html',1,'musx::dom::options']]],
-  ['typeregistry_10',['TypeRegistry',['../classmusx_1_1factory_1_1TypeRegistry.html',1,'musx::factory']]]
+  ['tupletdef_9',['TupletDef',['../classmusx_1_1dom_1_1details_1_1TupletDef.html',1,'musx::dom::details']]],
+  ['tupletoptions_10',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html',1,'musx::dom::options']]],
+  ['typeregistry_11',['TypeRegistry',['../classmusx_1_1factory_1_1TypeRegistry.html',1,'musx::factory']]]
 ];

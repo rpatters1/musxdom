@@ -19,7 +19,7 @@ var searchData=
   ['playbacktype_16',['playbackType',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a4837499eccadd103d4c08637c43266d2',1,'musx::dom::others::TextExpressionDef']]],
   ['playpass_17',['playPass',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a518f6b45f5640e3972bc5571873d9a22',1,'musx::dom::others::TextExpressionDef']]],
   ['positioningmode_18',['positioningMode',['../classmusx_1_1dom_1_1others_1_1Measure.html#aad487f03c201f552c5b47007fd334376',1,'musx::dom::others::Measure']]],
-  ['posstyle_19',['posStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ab49a3155e543397c4c7bfd2855beff69',1,'musx::dom::options::TupletOptions']]],
+  ['posstyle_19',['posstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#af1594038b518530e42c5985efdad0d44',1,'musx::dom::details::TupletDef::posStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ab49a3155e543397c4c7bfd2855beff69',1,'musx::dom::options::TupletOptions::posStyle']]],
   ['prefix_20',['prefix',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a40e1cb47a848d40286b94b7ed1c2f9ba',1,'musx::dom::others::MeasureNumberRegion']]],
   ['psuldepth_21',['psUlDepth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#aa73f5b5b66b72438d9670504179fad69',1,'musx::dom::options::LineCurveOptions']]],
   ['psulwidth_22',['psUlWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#ae67127c98f19abfbbaf2cf4c1b33e495',1,'musx::dom::options::LineCurveOptions']]]

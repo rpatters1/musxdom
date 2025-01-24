@@ -3,7 +3,7 @@ var searchData=
   ['ignorehidden_0',['ignoreHidden',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#abc3776c3ea1cc4118e9adb11548c0d80',1,'musx::dom::options::MusicSpacingOptions']]],
   ['ignorehiddenlayers_1',['ignoreHiddenLayers',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a8bdb6eade6b17a1bc87cb2e65b02a0c4',1,'musx::dom::others::LayerAttributes']]],
   ['ignorehiddennotesonly_2',['ignoreHiddenNotesOnly',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a9febb8189265d0741e82af73d02b5fe7',1,'musx::dom::others::LayerAttributes']]],
-  ['ignorehorznumoffset_3',['ignoreHorzNumOffset',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#abe6c4075e78c34a630f4465cc5ddc3e2',1,'musx::dom::options::TupletOptions']]],
+  ['ignorehorznumoffset_3',['ignorehorznumoffset',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a894ff328c4cf7937f162d4842efb9659',1,'musx::dom::details::TupletDef::ignoreHorzNumOffset'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#abe6c4075e78c34a630f4465cc5ddc3e2',1,'musx::dom::options::TupletOptions::ignoreHorzNumOffset']]],
   ['inci_4',['inci',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ab6e7d0f9f95e725f2a36da72d85aee5b',1,'musx::dom::ObjectPool::ObjectKey']]],
   ['incidence_5',['incidence',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a632b780c6dc8e819d29ccb5f7c67d019',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['includehours_6',['includeHours',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#afa750557598400b578275e692ec9054b',1,'musx::dom::others::MeasureNumberRegion']]],

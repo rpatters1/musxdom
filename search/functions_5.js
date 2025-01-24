@@ -6,5 +6,6 @@ var searchData=
   ['fontdefinition_3',['FontDefinition',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a5ab1f7c8015fbf95b296fdf824cacdb5',1,'musx::dom::others::FontDefinition']]],
   ['fontinfo_4',['FontInfo',['../classmusx_1_1dom_1_1FontInfo.html#ab7780442c860877cb3e329df96d3e49b',1,'musx::dom::FontInfo']]],
   ['fontoptions_5',['FontOptions',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#ad02a81fefc0688893ddf06685aa6da8c',1,'musx::dom::options::FontOptions']]],
-  ['frame_6',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html#a264bdcc5b32fb5a8455e0d5ecfd6783b',1,'musx::dom::others::Frame']]]
+  ['fraction_6',['Fraction',['../classmusx_1_1util_1_1Fraction.html#a3a95749410ef64c078d957fc4d659900',1,'musx::util::Fraction']]],
+  ['frame_7',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html#a264bdcc5b32fb5a8455e0d5ecfd6783b',1,'musx::dom::others::Frame']]]
 ];

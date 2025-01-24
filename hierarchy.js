@@ -2,6 +2,9 @@ var hierarchy =
 [
     [ "musx::dom::Base", "classmusx_1_1dom_1_1Base.html", [
       [ "musx::dom::DetailsBase", "classmusx_1_1dom_1_1DetailsBase.html", [
+        [ "musx::dom::EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", [
+          [ "musx::dom::details::TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", null ]
+        ] ],
         [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ]
       ] ],
       [ "musx::dom::Entry", "classmusx_1_1dom_1_1Entry.html", null ],
@@ -76,6 +79,7 @@ var hierarchy =
     [ "musx::dom::Document", "classmusx_1_1dom_1_1Document.html", null ],
     [ "musx::factory::ElementLinker", "classmusx_1_1factory_1_1ElementLinker.html", null ],
     [ "musx::util::EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", null ],
+    [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ],
     [ "musx::dom::EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", null ],
     [ "musx::factory::FactoryBase", "classmusx_1_1factory_1_1FactoryBase.html", [
       [ "musx::factory::PoolFactory< DetailsFactory, dom::DetailsBase, dom::DetailsPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
@@ -99,6 +103,7 @@ var hierarchy =
     ] ],
     [ "musx::dom::header::FileInfo", "structmusx_1_1dom_1_1header_1_1FileInfo.html", null ],
     [ "musx::dom::header::FinaleVersion", "structmusx_1_1dom_1_1header_1_1FinaleVersion.html", null ],
+    [ "musx::util::Fraction", "classmusx_1_1util_1_1Fraction.html", null ],
     [ "musx::dom::header::Header", "structmusx_1_1dom_1_1header_1_1Header.html", null ],
     [ "musx::xml::IXmlAttribute", "classmusx_1_1xml_1_1IXmlAttribute.html", [
       [ "musx::xml::pugi::Attribute", "classmusx_1_1xml_1_1pugi_1_1Attribute.html", null ],

@@ -20,5 +20,5 @@ var searchData=
   ['numcompositedecimalplaces_17',['numCompositeDecimalPlaces',['../classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html#a6bb2fc74b2ad812559ab02ed3c99f39d',1,'musx::dom::options::TimeSignatureOptions']]],
   ['numnotes_18',['numNotes',['../classmusx_1_1dom_1_1Entry.html#ab528469b556bcfba86cc0d5fe79955f1',1,'musx::dom::Entry']]],
   ['numstart_19',['numStart',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ab6d157e089a94a4a63eefed7e58315e1',1,'musx::dom::options::MultimeasureRestOptions']]],
-  ['numstyle_20',['numStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a8348203034a4c11f23c6a2b947064615',1,'musx::dom::options::TupletOptions']]]
+  ['numstyle_20',['numstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#aabf043233a1e800a7c54ab945f20096a',1,'musx::dom::details::TupletDef::numStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a8348203034a4c11f23c6a2b947064615',1,'musx::dom::options::TupletOptions::numStyle']]]
 ];

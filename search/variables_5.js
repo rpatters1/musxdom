@@ -26,6 +26,6 @@ var searchData=
   ['freeztiestostems_23',['freezTiesToStems',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae78c54acbf7d6f784f5426d7d0f2ccf1',1,'musx::dom::others::LayerAttributes']]],
   ['frontspaceextra_24',['frontSpaceExtra',['../classmusx_1_1dom_1_1others_1_1Measure.html#a809fb9908533a86729c984a0267bb526',1,'musx::dom::others::Measure']]],
   ['fronttiesepar_25',['frontTieSepar',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa2e43b5f5401cb4d6e52276f2193e8df',1,'musx::dom::options::TieOptions']]],
-  ['fulldura_26',['fullDura',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a1b89db38d501187137dbe74f25878dd1',1,'musx::dom::options::TupletOptions']]],
+  ['fulldura_26',['fulldura',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a65ecefa0b98208ef05274a352b3c28a1',1,'musx::dom::details::TupletDef::fullDura'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a1b89db38d501187137dbe74f25878dd1',1,'musx::dom::options::TupletOptions::fullDura']]],
   ['fullnametextid_27',['fullNameTextId',['../classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af',1,'musx::dom::others::Staff']]]
 ];

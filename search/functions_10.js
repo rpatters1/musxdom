@@ -7,5 +7,6 @@ var searchData=
   ['timesignatureoptions_4',['TimeSignatureOptions',['../classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html#a9fb522d4e6a09b44a93bc94aebb2c6f6',1,'musx::dom::options::TimeSignatureOptions']]],
   ['trimfonttags_5',['trimFontTags',['../classmusx_1_1util_1_1EnigmaString.html#a6973476856fe97c708c61f92dde3d820',1,'musx::util::EnigmaString']]],
   ['trimtags_6',['trimTags',['../classmusx_1_1util_1_1EnigmaString.html#a0613f33d67f174d1901dd935232a74b9',1,'musx::util::EnigmaString']]],
-  ['tupletoptions_7',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a2cacc300b9d29984c4568b26bb60ca7e',1,'musx::dom::options::TupletOptions']]]
+  ['tupletdef_7',['TupletDef',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a92caadc2a2773e781568727763c87621',1,'musx::dom::details::TupletDef']]],
+  ['tupletoptions_8',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a2cacc300b9d29984c4568b26bb60ca7e',1,'musx::dom::options::TupletOptions']]]
 ];

@@ -60,7 +60,7 @@ var searchData=
   ['smartmusicinst_57',['smartMusicInst',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#a2196083a94f56555b95331ddd206ff2c',1,'musx::dom::others::PartDefinition']]],
   ['smartshapedetail_58',['smartShapeDetail',['../classmusx_1_1dom_1_1Entry.html#aa04b08c5cb6dbde8e24b7ff5be524c04',1,'musx::dom::Entry']]],
   ['smartslurtipwidth_59',['smartSlurTipWidth',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aa0b22666ca5cf647ddac2e656f101a2d',1,'musx::dom::options::SmartShapeOptions']]],
-  ['smarttuplet_60',['smartTuplet',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a33dff184815cb1f22b29f5fb59236e39',1,'musx::dom::options::TupletOptions']]],
+  ['smarttuplet_60',['smarttuplet',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a9eb785ccfdabb9b7a5385cca2bd52116',1,'musx::dom::details::TupletDef::smartTuplet'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a33dff184815cb1f22b29f5fb59236e39',1,'musx::dom::options::TupletOptions::smartTuplet']]],
   ['smpteframes_61',['smpteFrames',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a1af1b83e09e55258f46f98b2215c5af2',1,'musx::dom::others::MeasureNumberRegion']]],
   ['sorted_62',['sorted',['../classmusx_1_1dom_1_1Entry.html#ab76162a84d2dc54af058a611af01d51a',1,'musx::dom::Entry']]],
   ['span_63',['span',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html#ae8162b4c016df9cd1984991d5253162c',1,'musx::dom::options::SmartShapeOptions::ControlStyle::span'],['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#aef79db715a9c3dd86b613daaa73dc23b',1,'musx::dom::options::TieOptions::ControlStyle::span']]],

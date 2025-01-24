@@ -3,7 +3,8 @@ var annotated_dup =
     [ "musx", "namespacemusx.html", [
       [ "dom", "namespacemusx_1_1dom.html", [
         [ "details", "namespacemusx_1_1dom_1_1details.html", [
-          [ "GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", "classmusx_1_1dom_1_1details_1_1GFrameHold" ]
+          [ "GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", "classmusx_1_1dom_1_1details_1_1GFrameHold" ],
+          [ "TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", "classmusx_1_1dom_1_1details_1_1TupletDef" ]
         ] ],
         [ "header", "namespacemusx_1_1dom_1_1header.html", [
           [ "FileInfo", "structmusx_1_1dom_1_1header_1_1FileInfo.html", "structmusx_1_1dom_1_1header_1_1FileInfo" ],
@@ -72,6 +73,8 @@ var annotated_dup =
         [ "DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", "classmusx_1_1dom_1_1DetailsPool" ],
         [ "Document", "classmusx_1_1dom_1_1Document.html", "classmusx_1_1dom_1_1Document" ],
         [ "Entry", "classmusx_1_1dom_1_1Entry.html", "classmusx_1_1dom_1_1Entry" ],
+        [ "EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", "classmusx_1_1dom_1_1EntryDetailsBase" ],
+        [ "EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", "classmusx_1_1dom_1_1EntryFrame" ],
         [ "EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", "classmusx_1_1dom_1_1EntryInfo" ],
         [ "EntryPool", "classmusx_1_1dom_1_1EntryPool.html", "classmusx_1_1dom_1_1EntryPool" ],
         [ "FontInfo", "classmusx_1_1dom_1_1FontInfo.html", "classmusx_1_1dom_1_1FontInfo" ],
@@ -101,6 +104,7 @@ var annotated_dup =
       ] ],
       [ "util", null, [
         [ "EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", null ],
+        [ "Fraction", "classmusx_1_1util_1_1Fraction.html", "classmusx_1_1util_1_1Fraction" ],
         [ "Logger", "classmusx_1_1util_1_1Logger.html", "classmusx_1_1util_1_1Logger" ]
       ] ],
       [ "xml", "namespacemusx_1_1xml.html", [

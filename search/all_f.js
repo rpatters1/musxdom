@@ -40,9 +40,9 @@ var searchData=
   ['poolfactory_3c_20othersfactory_2c_20dom_3a_3aothersbase_2c_20dom_3a_3aotherspool_20_3e_37',['PoolFactory&lt; OthersFactory, dom::OthersBase, dom::OthersPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
   ['poolfactory_3c_20textsfactory_2c_20dom_3a_3atextsbase_2c_20dom_3a_3atextspool_20_3e_38',['PoolFactory&lt; TextsFactory, dom::TextsBase, dom::TextsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
   ['positioningmode_39',['positioningMode',['../classmusx_1_1dom_1_1others_1_1Measure.html#aad487f03c201f552c5b47007fd334376',1,'musx::dom::others::Measure']]],
-  ['positioningstyle_40',['PositioningStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6',1,'musx::dom::options::TupletOptions']]],
+  ['positioningstyle_40',['positioningstyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6',1,'musx::dom::options::TupletOptions::PositioningStyle'],['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a7ea2241fe5b7e1f7f50d5529bdce04ab',1,'musx::dom::details::TupletDef::PositioningStyle']]],
   ['positioningtype_41',['PositioningType',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88f',1,'musx::dom::others::Measure']]],
-  ['posstyle_42',['posStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ab49a3155e543397c4c7bfd2855beff69',1,'musx::dom::options::TupletOptions']]],
+  ['posstyle_42',['posstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#af1594038b518530e42c5985efdad0d44',1,'musx::dom::details::TupletDef::posStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ab49a3155e543397c4c7bfd2855beff69',1,'musx::dom::options::TupletOptions::posStyle']]],
   ['prefix_43',['prefix',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a40e1cb47a848d40286b94b7ed1c2f9ba',1,'musx::dom::others::MeasureNumberRegion']]],
   ['psuldepth_44',['psUlDepth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#aa73f5b5b66b72438d9670504179fad69',1,'musx::dom::options::LineCurveOptions']]],
   ['psulwidth_45',['psUlWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#ae67127c98f19abfbbaf2cf4c1b33e495',1,'musx::dom::options::LineCurveOptions']]]

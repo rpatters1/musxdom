@@ -33,9 +33,9 @@ var searchData=
   ['numberfont_30',['numberFont',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#afd5fcceb53abce7485ddf8d0ad42e570',1,'musx::dom::others::MarkingCategory']]],
   ['numberoffset_31',['numberOffset',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#ac5aca26cc324acc33a8cc34b8a3a0674',1,'musx::dom::others::MeasureNumberRegion']]],
   ['numbers_32',['Numbers',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cacbebfa21dbe8e87e788d94a76f073807',1,'musx::dom::others']]],
-  ['numberstyle_33',['NumberStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcd',1,'musx::dom::options::TupletOptions']]],
+  ['numberstyle_33',['numberstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a0673c89558c893162964c5ea4bd652d5',1,'musx::dom::details::TupletDef::NumberStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcd',1,'musx::dom::options::TupletOptions::NumberStyle']]],
   ['numcompositedecimalplaces_34',['numCompositeDecimalPlaces',['../classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html#a6bb2fc74b2ad812559ab02ed3c99f39d',1,'musx::dom::options::TimeSignatureOptions']]],
   ['numnotes_35',['numNotes',['../classmusx_1_1dom_1_1Entry.html#ab528469b556bcfba86cc0d5fe79955f1',1,'musx::dom::Entry']]],
   ['numstart_36',['numStart',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ab6d157e089a94a4a63eefed7e58315e1',1,'musx::dom::options::MultimeasureRestOptions']]],
-  ['numstyle_37',['numStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a8348203034a4c11f23c6a2b947064615',1,'musx::dom::options::TupletOptions']]]
+  ['numstyle_37',['numstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#aabf043233a1e800a7c54ab945f20096a',1,'musx::dom::details::TupletDef::numStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a8348203034a4c11f23c6a2b947064615',1,'musx::dom::options::TupletOptions::numStyle']]]
 ];
