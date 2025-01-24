@@ -212,7 +212,8 @@ using RegisteredOthers = TypeRegistry <
  * These types are maintained in the order in which Finale serializes them.
  */
 using RegisteredDetails = TypeRegistry <
-    dom::details::GFrameHold
+    dom::details::GFrameHold,
+    dom::details::TupletDef
 >;
 
 /**

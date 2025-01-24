@@ -24,6 +24,7 @@
 #include <filesystem>
 #include <sstream>
 #include <functional>
+#include <numeric>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -242,17 +243,60 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     return retval;
 }
 
+// *****************
+// ***** Frame *****
+// *****************
+
+std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries()
+{
+    std::vector<std::shared_ptr<const Entry>> retval;
+    auto firstEntry = startEntry ? getDocument()->getEntries()->get<Entry>(startEntry) : nullptr;
+    if (!firstEntry) {
+        MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1)) + " is not iterable.");
+        return retval;
+    }
+    for (auto entry = firstEntry; entry; entry = entry->getNext()) {
+        retval.emplace_back(entry);
+        if (entry->getEntryNumber() == endEntry) {
+            break;
+        }
+    }
+    return retval;
+}
+
 // **********************
 // ***** GFrameHold *****
 // **********************
 
-bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+struct TupletState
+{
+    util::Fraction remainingSymbolicDuration;         // The remaining symbolic duration
+    util::Fraction ratio;             // The remaining actual duration
+    std::shared_ptr<const details::TupletDef> tuplet; // The tuplet.
+
+    void accountFor(util::Fraction actual)
+    {
+        remainingSymbolicDuration -= (actual / ratio);
+    }
+
+    TupletState(const std::shared_ptr<details::TupletDef>& t)
+        : remainingSymbolicDuration(t->displayNumber * t->displayDuration, int(Entry::NoteType::Whole)),
+          ratio(t->referenceNumber * t->referenceDuration, t->displayNumber * t->displayDuration),
+          tuplet(t)
+    {
+    }
+};
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerIndex layerIndex) const
 {
     if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
-    if (!frames[layerIndex]) return true; // nothing here
-    auto frameIncis = getDocument()->getOthers()->getArray<others::Frame>(getPartId(), frames[layerIndex]);
+    if (!frames[layerIndex]) return nullptr; // nothing here
+    auto document = getDocument();
+    auto frameIncis = document->getOthers()->getArray<others::Frame>(getPartId(), frames[layerIndex]);
     auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
         for (const auto& frame : frameIncis) {
             if (frame->startEntry) {
@@ -261,25 +305,81 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
         }
         return nullptr;
     }();
+    std::shared_ptr<EntryFrame> retval;
     if (frame) {
-        auto firstEntry = getDocument()->getEntries()->get<Entry>(frame->startEntry);
-        if (!firstEntry) {
-            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
-            return true; // we won't get here if we are throwing; otherwise it is just a warning and we can continue
+        retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);        auto entries = frame->getEntries();
+        std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
+        std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
+        util::Fraction v1ActualElapsedDuration = 0;
+        for (const auto& f : frameIncis) {
+            v1ActualElapsedDuration += util::Fraction(f->startTime, int(Entry::NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
         }
-        for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
-            auto entryInfo = std::make_shared<EntryInfo>(getStaff(), getMeasure(), layerIndex, nextEntry);
-            // @todo: calculate and add running values (clef, elapsed duration, actual duration)
-            if (!iterator(entryInfo)) {
-                return false;
+        util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
+        for (size_t i = 0; i < entries.size(); i++) {
+            const auto& entry = entries[i];
+            auto entryInfo = std::make_shared<EntryInfo>(layerIndex, entry);
+            if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
+                entryInfo->v2Launch = true;
             }
-            if (nextEntry->getEntryNumber() == frame->endEntry) {
-                break;
+            if (entryInfo->v2Launch) {
+                // Note: v1 tuplets do not appear to affect v2 entries. If they did this would be correct:
+                //      v2ActiveTuplets = v1ActiveTuplets;
+                // But since they do not:
+                v2ActiveTuplets.clear();
+                v2ActualElapsedDuration = v1ActualElapsedDuration;
+            }
+            std::vector<TupletState>& activeTuplets = entry->voice2 ? v2ActiveTuplets : v1ActiveTuplets;
+            util::Fraction& actualElapsedDuration = entry->voice2 ? v2ActualElapsedDuration : v1ActualElapsedDuration;
+            entryInfo->elapsedDuration = actualElapsedDuration;
+            util::Fraction cumulativeRatio = 1;
+            if (!entry->graceNote) {
+                auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
+                std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
+                    return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
+                    });
+                for (const auto& tuplet : tuplets) {
+                    activeTuplets.emplace_back(tuplet);
+                }
+
+                // @todo: calculate and add running values (clef, key)
+                for (const auto& t : activeTuplets) {
+                    cumulativeRatio *= t.ratio;
+                }
+                util::Fraction actualDuration = entry->calcFraction() * cumulativeRatio;
+                entryInfo->actualDuration = actualDuration;
+            }
+
+            retval->addEntry(entryInfo);
+
+            actualElapsedDuration += entryInfo->actualDuration;
+            if (!entry->graceNote) {
+                for (auto it = activeTuplets.rbegin(); it != activeTuplets.rend(); ++it) {
+                    it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
+                    cumulativeRatio /= it->ratio;
+                }
+                activeTuplets.erase(
+                    std::remove_if(activeTuplets.begin(), activeTuplets.end(),
+                        [](const TupletState& t) { return t.remainingSymbolicDuration <= 0; }),
+                    activeTuplets.end()
+                );
             }
         }
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
+    }
+    return retval;
+}
+
+bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
+{
+    auto entryFrame = createEntryFrame(layerIndex);
+    if (entryFrame) {
+        for (const auto& entryInfo : entryFrame->getEntries()) {
+            if (!iterator(entryInfo)) {
+                return false;
+            }
+        }
     }
     return true;
 }

@@ -65,6 +65,7 @@
 
 #pragma once
 
+#include "util/Fraction.h"
 #include "util/EnigmaString.h"
 #include "util/Logger.h"
 #include "xml/XmlInterface.h"

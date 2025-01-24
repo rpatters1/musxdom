@@ -183,27 +183,32 @@ public:
     template <typename T>
     std::vector<std::shared_ptr<T>> getArrayForPart(const ObjectKey& key) const
     {
-        if (key.partId == SCORE_PARTID) {
-            return getArray<T>(key);
+        Base::ShareMode forShareMode = Base::ShareMode::All;
+        if (key.partId != SCORE_PARTID) {
+            auto it = m_shareMode.find(key.nodeId);
+            if (it == m_shareMode.end()) {
+                throw std::invalid_argument("Share mode not found for node " + key.nodeString());
+            }
+            forShareMode = it->second;
+            if (forShareMode == Base::ShareMode::Partial) {
+                if constexpr (std::is_base_of_v<OthersBase, T>) {
+                    if (!key.cmper1.has_value()) {
+                        throw std::invalid_argument("Array searches on partially shared Others must supply a cmper.");
+                    }
+                } else if constexpr (std::is_base_of_v<DetailsBase, T>) {
+                    if (!key.cmper1.has_value() || !key.cmper2.has_value()) {
+                        throw std::invalid_argument("Array searches on partially shared Details must supply both cmpers.");
+                    }
+                }
+            }
         }
-        auto it = m_shareMode.find(key.nodeId);
-        if (it == m_shareMode.end()) {
-            throw std::invalid_argument("Share mode not found for node " + key.nodeString());
+        auto keyResult = getArray<T>(key);
+        if (!keyResult.empty() || key.partId == SCORE_PARTID || forShareMode == Base::ShareMode::None) {
+            return keyResult;
         }
-        switch (it->second) {
-        default:
-        case Base::ShareMode::All: {
-            ObjectKey scoreKey(key);
-            scoreKey.partId = SCORE_PARTID;
-            return getArray<T>(scoreKey);
-        }
-        case Base::ShareMode::None:
-            return getArray<T>(key);
-        case Base::ShareMode::Partial:
-            // it appears that all partially shareable nodes are created for each part, even if there is nothing in them.
-            // that means we will create an entire copy of the score values as needed, so here we can just return them.
-            return getArray<T>(key);
-        }
+        ObjectKey scoreKey(key);
+        scoreKey.partId = SCORE_PARTID;
+        return getArray<T>(scoreKey);
     }
 
     /**
@@ -334,20 +339,30 @@ public:
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
     /** @brief DetailsPool version of #ObjectPool::getArray */
-    template <typename T>
-    std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper1 = std::nullopt, std::optional<Cmper> cmper2 = std::nullopt) const
+    template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
     { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 }); }
 
+    /** @brief EntryDetailsPool version of #ObjectPool::getArray */
+    template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId, EntryNumber entnum) const
+    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) }); }
+
     /** @brief DetailsPool version of #ObjectPool::get */
-    template <typename T>
+    template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     std::shared_ptr<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
     { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper1, cmper2, inci}); }
+
+    /** @brief EntryDetailsPool version of #ObjectPool::get */
+    template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
+    std::shared_ptr<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
+    { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci}); }
 };
 /** @brief Shared `DetailsPool` pointer */
 using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
 
 /** @brief Entry pool */
-class EntryPool : public ObjectPool<Entry, EntryNumber>
+class EntryPool : protected ObjectPool<Entry, EntryNumber>
 {
 public:
     /** @brief EntryPool version of #ObjectPool::add */
@@ -363,7 +378,7 @@ public:
 using EntryPoolPtr = std::shared_ptr<EntryPool>;
 
 /** @brief Text pool */
-class TextsPool : public ObjectPool<TextsBase>
+class TextsPool : protected ObjectPool<TextsBase>
 {
 public:
     /** @brief Texts version of #ObjectPool::add */

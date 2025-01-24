@@ -25,6 +25,7 @@
 #include "test_utils.h"
 
 using namespace musx::dom;
+using namespace musx::util;
 
 TEST(GFrameHoldTest, PopulateFields)
 {
@@ -217,6 +218,135 @@ TEST(GFrameHold, IterationTest)
         EXPECT_TRUE(entryInfo->getLayerIndex() == 2) << "unexpected layer index " << entryInfo->getLayerIndex();
         EXPECT_EQ(entry->duration, Edu(Entry::NoteType::Whole)) << "unexpected note duration " << entry->duration;
         EXPECT_TRUE(entry->isNote) << "layerIndex 0 entry is not a note";
+        return true;
+    });
+}
+
+TEST(GFrameHold, QuintupletTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "quintuplet.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    std::vector<Fraction> expectedValues = {
+      Fraction(1, 10), Fraction(1, 10), Fraction(1, 10), Fraction(1, 10), Fraction(1, 10), Fraction(1, 2)
+    };
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    size_t x = 0;
+    Fraction total = 0;
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+        if (x >= expectedValues.size()) return false;
+        EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
+        EXPECT_EQ(total, entryInfo->elapsedDuration);
+        total += expectedValues[x++];
+        return true;
+    });
+}
+
+TEST(GFrameHold, TripletTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "triplet.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    std::vector<Fraction> expectedValues = {
+      Fraction(1, 6), Fraction(1, 6), Fraction(1, 6), Fraction(1, 2)
+    };
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    size_t x = 0;
+    Fraction total = 0;
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+        if (x >= expectedValues.size()) return false;
+        EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
+        EXPECT_EQ(total, entryInfo->elapsedDuration);
+        total += expectedValues[x++];
+        return true;
+    });
+}
+
+TEST(GFrameHold, NestedTupletTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "nested_tuplets.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    std::vector<Fraction> expectedValues = {
+        Fraction(1, 2),
+        Fraction(1, 18), Fraction(1, 18), Fraction(1, 18),
+        Fraction(1, 18), Fraction(1, 18), Fraction(1, 18),
+        Fraction(1, 12), Fraction(1, 12)
+    };
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    size_t x = 0;
+    Fraction total = 0;
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+        if (x >= expectedValues.size()) return false;
+        EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
+        EXPECT_EQ(total, entryInfo->elapsedDuration);
+        total += expectedValues[x++];
+        return true;
+    });
+}
+
+TEST(GFrameHold, V1V2TupletTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "v1v2tuplets.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    std::vector<Fraction> expectedValues = {
+        Fraction(1, 3),
+        Fraction(1, 12), Fraction(1, 12), Fraction(1, 12), Fraction(1, 8), Fraction(1, 8),
+        Fraction(0), Fraction(1, 6),
+        Fraction(1, 6), Fraction(1, 3),
+        Fraction(0), Fraction(1, 12), Fraction(1, 12), Fraction(1, 12), Fraction(1, 4),
+    };
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    size_t x = 0;
+    Fraction v1Total = 0;
+    Fraction v2Total = 0;
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+        if (x >= expectedValues.size()) return false;
+        EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
+        if (entryInfo->v2Launch) {
+          v2Total = v1Total;
+        }
+        Fraction& total = entryInfo->getEntry()->voice2 ? v2Total : v1Total;
+        EXPECT_EQ(total, entryInfo->elapsedDuration);
+        total += expectedValues[x++];
+    /*
+        std::cout << entryInfo->elapsedDuration << '\t' << entryInfo->actualDuration << '\t'
+                        << std::to_string(entryInfo->elapsedDuration.calcDuration()) << '\t'
+                        << std::to_string(entryInfo->actualDuration.calcDuration()) << std::endl;
+    */
         return true;
     });
 }

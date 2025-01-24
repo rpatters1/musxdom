@@ -62,12 +62,13 @@ public:
 };
 
 using Cmper = uint16_t;             ///< Enigma "comperator" key type
-using Inci = int16_t;               ///< Enigma "incidend" key type
+using Inci = int16_t;               ///< Enigma "incident" key type
 using Evpu = int32_t;               ///< EVPU value (288 per inch)
 using EvpuFloat = double;           ///< EVPU fractional value (288.0 per inch)
 using Evpu16ths = int32_t;          ///< 1/16 of an EVPU.
 using Efix = int32_t;               ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
-using Edu = int32_t;                ///< "Elapsed Durational Units" value (1024 per quarter note)
+using Edu = int32_t;                ///< "Enigma Durational Units" value (1024 per quarter note)
+using EduFloat = double;            ///< "Enigma Durational Units" floating point value (1024.0 per quarter note)
 
 using MeasCmper = int16_t;          ///< Enigma meas Cmper (may be negative when not applicable)
 using InstCmper = int16_t;          ///< Enigma staff (inst) Cmper (may be negative when not applicable)
@@ -237,25 +238,11 @@ public:
     Cmper getCmper() const { return m_cmper; }
 
     /**
-     * @brief Sets the `cmper` key value.
-     * 
-     * @param cmper The new `cmper` value.
-     */
-    void setCmper(Cmper cmper) { m_cmper = cmper; }
-
-    /**
      * @brief Gets the optional array index (`inci`).
      * 
      * @return The `inci` value.
      */
     std::optional<Inci> getInci() const { return m_inci; }
-
-    /**
-     * @brief Sets the array index (`inci`).
-     * 
-     * @param inci The new `inci` value.
-     */
-    void setInci(std::optional<Inci> inci) { m_inci = inci; }
 
 private:
     Cmper m_cmper;                  ///< Common attribute: cmper (key value).
@@ -296,32 +283,43 @@ public:
     Cmper getCmper2() const { return m_cmper2; }
 
     /**
-     * @brief Sets the `cmper1` key value.
-     * @param cmper The new `cmper` value.
-     */
-    void setCmper1(Cmper cmper) { m_cmper1 = cmper; }
-
-    /**
-     * @brief Sets the `cmper2` key value.
-     * @param cmper The new `cmper` value.
-     */
-    void setCmper2(Cmper cmper) { m_cmper2 = cmper; }
-
-    /**
      * @brief Gets the optional array index (`inci`).
      */
     std::optional<Inci> getInci() const { return m_inci; }
-
-    /**
-     * @brief Sets the array index (`inci`).
-     * @param inci The new `inci` value.
-     */
-    void setInci(std::optional<Inci> inci) { m_inci = inci; }
 
 private:
     Cmper m_cmper1;                  ///< Common attribute: cmper1 (key value).
     Cmper m_cmper2;                  ///< Common attribute: cmper2 (key value).
     std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
+};
+
+/**
+ * @brief Base class for all "details" types that use `entnum` rather than `cmper` and `cmper`.
+ */
+class EntryDetailsBase : public DetailsBase
+{
+protected:
+    /**
+     * @brief Constructs a EntryDetailsBase object.
+     * 
+     * @param document A weak pointer to the parent document
+     * @param partId The part Id for this Detail, or zero if for score.
+     * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
+     * @param entnum The `EntryNumber` key value.
+     * @param inci The array index (`Inci`).
+     */
+    EntryDetailsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, std::optional<Inci> inci = std::nullopt)
+        : DetailsBase(document, partId, shareMode, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci) {}
+
+public:
+    /**
+     * @brief Gets the `entnum` key value.
+     */
+    EntryNumber getEntryNumber() const { return EntryNumber(getCmper1()) << 16 | EntryNumber(getCmper2()); }
+
+private:
+    using DetailsBase::getCmper1;
+    using DetailsBase::getCmper2;
 };
 
 class FontInfo;
