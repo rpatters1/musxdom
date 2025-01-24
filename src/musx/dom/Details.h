@@ -142,9 +142,13 @@ public:
     {
     }
 
+    /// @brief see @ref options::TupletOptions::AutoBracketStyle
     using AutoBracketStyle = options::TupletOptions::AutoBracketStyle;
+    /// @brief see @ref options::TupletOptions::NumberStyle
     using NumberStyle = options::TupletOptions::NumberStyle;
+    /// @brief see @ref options::TupletOptions::PositioningStyle
     using PositioningStyle = options::TupletOptions::PositioningStyle;
+    /// @brief see @ref options::TupletOptions::BracketStyle
     using BracketStyle = options::TupletOptions::BracketStyle;
 
     int displayNumber{};                    ///< The number of notes to display (xml node is `<symbolicNum>`)
@@ -175,10 +179,10 @@ public:
     Evpu rightHookExt{};                    ///< Extension of the right hook beyond the tuplet bracket.
     Evpu manualSlopeAdj{};                  ///< "Manual Slope Adjustment" in @ref Evpu. (xml node is `<slope>`)
 
-    /** @brief return the reference duration as a @ref Fraction of a whole note */
+    /** @brief return the reference duration as a @ref util::Fraction of a whole note */
     util::Fraction calcReferenceDuration() const { return util::Fraction(referenceNumber * referenceDuration, Edu(Entry::NoteType::Whole)); }
 
-    /** @brief return the display duration as a @ref Fraction of a whole note */
+    /** @brief return the display duration as a @ref util::Fraction of a whole note */
     util::Fraction calcDisplayDuration() const { return util::Fraction(displayNumber * displayDuration, Edu(Entry::NoteType::Whole)); }
 
     /** @brief return the tuplet ratio (reference / display) */

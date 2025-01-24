@@ -132,7 +132,7 @@ public:
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
     std::shared_ptr<Entry> getNext() const;
-    
+
     /// @brief Gets the previous entry in this list or nullptr if none
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
@@ -147,7 +147,7 @@ public:
     NoteType calcNoteType() const;
 
     /**
-     * @brief Calculates the duration as a @ref Fraction of a whole note
+     * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
     util::Fraction calcFraction() const { return util::Fraction(duration, int(NoteType::Whole));  }
 
@@ -196,9 +196,9 @@ public:
     explicit EntryInfo(LayerIndex layerIndex, const std::shared_ptr<const Entry>& entry)
         : m_layerIndex(layerIndex), m_entry(entry) {}
 
-    util::Fraction elapsedDuration{};
-    util::Fraction actualDuration{};
-    bool v2Launch{};
+    util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
+    util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
+    bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
 
     /// @brief Get the layer index (0..3) of the entry
     LayerIndex getLayerIndex() const { return m_layerIndex; }
@@ -230,8 +230,8 @@ class EntryFrame
 public:
     /** @brief Constructor function
      *
-     * @param staff The @ref Staff of the entry
-     * @param measure The @ref Measure of the entry
+     * @param staff The Cmper for the @ref others::Staff of the entry
+     * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
     */
     explicit EntryFrame(InstCmper staff, MeasCmper measure, LayerIndex layerIndex)
