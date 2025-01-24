@@ -243,6 +243,27 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     return retval;
 }
 
+// *****************
+// ***** Frame *****
+// *****************
+
+std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries()
+{
+    std::vector<std::shared_ptr<const Entry>> retval;
+    auto firstEntry = startEntry ? getDocument()->getEntries()->get<Entry>(startEntry) : nullptr;
+    if (!firstEntry) {
+        MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1)) + " is not iterable.");
+        return retval;
+    }
+    for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
+        retval.emplace_back(nextEntry);
+        if (nextEntry->getEntryNumber() == endEntry) {
+            break;
+        }
+    }
+    return retval;
+}
+
 // **********************
 // ***** GFrameHold *****
 // **********************
@@ -268,12 +289,12 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
+std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerIndex layerIndex) const
 {
     if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
-    if (!frames[layerIndex]) return true; // nothing here
+    if (!frames[layerIndex]) return nullptr; // nothing here
     auto document = getDocument();
     auto frameIncis = document->getOthers()->getArray<others::Frame>(getPartId(), frames[layerIndex]);
     auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
@@ -284,19 +305,16 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
         }
         return nullptr;
     }();
+    std::shared_ptr<EntryFrame> retval;
     if (frame) {
-        auto firstEntry = document->getEntries()->get<Entry>(frame->startEntry);
-        if (!firstEntry) {
-            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure " + std::to_string(getMeasure()) + " is not iterable.");
-            return true; // we won't get here if we are throwing; otherwise it is just a warning and we can continue
-        }
+        retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);        auto entries = frame->getEntries();
         std::vector<TupletState> activeTuplets; // List of active tuplets
         util::Fraction actualElapsedDuration = 0;
         for (const auto& f : frameIncis) {
             actualElapsedDuration += util::Fraction(f->startTime, int(Entry::NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
         }
-        for (auto nextEntry = firstEntry; nextEntry; nextEntry = nextEntry->getNext()) {
-            auto entryInfo = std::make_shared<EntryInfo>(getStaff(), getMeasure(), layerIndex, nextEntry);
+        for (const auto& nextEntry : entries) {
+            auto entryInfo = std::make_shared<EntryInfo>(layerIndex, nextEntry);
             entryInfo->elapsedDuration = actualElapsedDuration;
             util::Fraction cumulativeRatio = 1;
             if (!nextEntry->graceNote) {
@@ -316,13 +334,7 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
                 entryInfo->actualDuration = actualDuration;
             }
 
-            if (!iterator(entryInfo)) {
-                return false;
-            }
-
-            if (nextEntry->getEntryNumber() == frame->endEntry) {
-                break;
-            }
+            retval->addEntry(entryInfo);
 
             actualElapsedDuration += entryInfo->actualDuration;
             if (!nextEntry->graceNote) {
@@ -340,6 +352,19 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
+    }
+    return retval;
+}
+
+bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
+{
+    auto entryFrame = createEntryFrame(layerIndex);
+    if (entryFrame) {
+        for (const auto& entryInfo : entryFrame->getEntries()) {
+            if (!iterator(entryInfo)) {
+                return false;
+            }
+        }
     }
     return true;
 }

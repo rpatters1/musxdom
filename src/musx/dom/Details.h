@@ -30,6 +30,8 @@
 namespace musx {
 namespace dom {
 
+class EntryFrame;
+
 namespace options {
 
 class TupletOptions;
@@ -87,6 +89,13 @@ public:
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
+    /** @brief Returns the @ref EntryFrame for all entries in the given layer.
+     *
+     * @param layerIndex The layer index (0..3) to iterate.
+     * @return EntryFrame for layer or nullptr if none.
+     */
+    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex) const;
+    
     /**
      * @brief iterates the entries for the specified layer in this #GFrameHold from left to right
      * @param layerIndex The layer index (0..3) to iterate.

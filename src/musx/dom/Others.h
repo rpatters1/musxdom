@@ -34,6 +34,8 @@
 namespace musx {
 namespace dom {
 
+class Entry;
+
 /**
  * @namespace musx::dom::others
  * @brief Classes in the @ref OthersPool.
@@ -87,6 +89,12 @@ public:
     EntryNumber startEntry{}; ///< Start entry number for this frame. (Appears to be zero when #startTime is supplied.)
     EntryNumber endEntry{};   ///< End entry number for this frame. (Appears to be zero when #startTime is supplied.)
     Edu startTime{};          ///< The starting position within the measure. (Appears to be zero when #startEntry and #endEntry are supplied.)
+
+    /** @brief Returns a vector of entries contained in the frame.
+     *
+     * These are raw entries. Use #detail::GFrameHold::createEntryFrame for a vector of entries with computed values.
+     */
+    std::vector<std::shared_ptr<const Entry>> getEntries();
 
     void integrityCheck() const override
     {
