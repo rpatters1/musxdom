@@ -527,22 +527,27 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 // ***** Staff *****
 // *****************
 
-std::string others::Staff::getFullName() const
+std::string others::Staff::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), fullNameTextId, true); // true: strip enigma tags
+    return others::TextBlock::getText(getDocument(), fullNameTextId, true, accidentalStyle); // true: strip enigma tags
+}
+
+std::string others::Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    return others::TextBlock::getText(getDocument(), abbrvNameTextId, true, accidentalStyle); // true: strip enigma tags
 }
 
 // *********************
 // ***** TextBlock *****
 // *********************
 
-std::string others::TextBlock::getText(bool trimTags) const
+std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     auto document = getDocument();
     auto getText = [&](const auto& block) -> std::string {
         if (!block) return {};
         if (!trimTags) return block->text;
-        auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text);
+        auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
         return musx::util::EnigmaString::trimTags(retval);
     };
     switch (textType) {
@@ -554,11 +559,11 @@ std::string others::TextBlock::getText(bool trimTags) const
     }
 }
 
-std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags)
+std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
 {
     auto textBlock = document->getOthers()->get<others::TextBlock>(SCORE_PARTID, textId);
     if (textBlock) {
-        return textBlock->getText(trimTags);
+        return textBlock->getText(trimTags, accidentalStyle);
     }
     return {};
 }

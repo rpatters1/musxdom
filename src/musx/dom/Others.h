@@ -673,7 +673,12 @@ public:
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
 
     /// @brief Get the full staff name without Enigma tags
-    std::string getFullName() const;
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Get the abbreviated staff name without Enigma tags
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     bool requireAllFields() const override { return false; }
 
@@ -756,10 +761,11 @@ public:
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
 
     /** @brief return display text with Enigma tags removed */
-    std::string getText(bool trimTags = false) const;
+    std::string getText(bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /** @brief return display text with Enigma tags removed */
-    static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false);
+    static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false,
+        util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii);
 
     bool requireAllFields() const override { return false; }
 

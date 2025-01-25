@@ -176,9 +176,36 @@ std::string EnigmaString::trimTags(const std::string& input)
     return output;
 }
 
-std::string EnigmaString::replaceAccidentalTags(const std::string& input) {
+std::string EnigmaString::replaceAccidentalTags(const std::string& input, AccidentalStyle style)
+{
     // Define regex for ^flat() and ^sharp()
-    std::regex accidentalTagRegex(R"(\^(flat|sharp)\(\))");
+    std::regex accidentalTagRegex(R"(\^(flat|sharp|natural)\(\))");
+
+    // Maps for SMuFL and plain text accidentals
+    const std::unordered_map<std::string, std::string> smuflAccidentals = {
+        {"flat", "\uE260"},    // SMuFL character for flat
+        {"sharp", "\uE262"},   // SMuFL character for sharp
+        {"natural", "\uE261"}  // SMuFL character for natural
+    };
+    const std::unordered_map<std::string, std::string> unicodeAccidentals = {
+        {"flat", "\u266D"},    // Text flat: ♭
+        {"sharp", "\u266F"},   // Text sharp: ♯
+        {"natural", "\u266E"}  // Text natural: ♮
+    };
+    const std::unordered_map<std::string, std::string> asciiAccidentals = {
+        {"flat", "b"},         // Plain text representation for flat
+        {"sharp", "#"},        // Plain text representation for sharp
+        {"natural", ""},       // Plain text representation for natural (none)
+    };
+    const auto& accidentalMap = [&]() {
+        switch (style) {
+            default:            
+            case AccidentalStyle::Ascii: return asciiAccidentals;
+            case AccidentalStyle::Unicode: return unicodeAccidentals;
+            case AccidentalStyle::Smufl: return smuflAccidentals;
+        }
+    }();
+
     std::string output;
     std::sregex_iterator currentMatch(input.begin(), input.end(), accidentalTagRegex);
     std::sregex_iterator endMatch;
@@ -193,10 +220,10 @@ std::string EnigmaString::replaceAccidentalTags(const std::string& input) {
         output.append(input, lastPos, match.position() - lastPos);
 
         // Replace the match based on the captured group
-        if (match[1] == "flat") {
-            output += 'b'; // Replace ^flat() with 'b'
-        } else if (match[1] == "sharp") {
-            output += '#'; // Replace ^sharp() with '#'
+        const auto& accidental = match[1].str();
+        auto it = accidentalMap.find(accidental);
+        if (it != accidentalMap.end()) {
+            output += it->second;  // Append the replacement character
         }
 
         // Update last processed position
