@@ -192,6 +192,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::InstrumentUsed,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
+    dom::others::MultimeasureRest,
     dom::others::Measure,
     dom::others::TextBlock,
     dom::others::Page,

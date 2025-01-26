@@ -487,9 +487,9 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 // ***** PartDefinition *****
 // **************************
 
-std::string others::PartDefinition::getName() const
+std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return TextBlock::getText(getDocument(), nameId, true); // true: trim tags
+    return TextBlock::getText(getDocument(), nameId, true, accidentalStyle); // true: trim tags
 }
 
 // ********************

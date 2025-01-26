@@ -552,6 +552,54 @@ public:
 };
 
 /**
+ * @class MultimeasureRest
+ * @brief Represents the attributes of a multimeasure rest in the page layout.
+ *
+ * The Cmper is the first measure of the multimeasure rest.
+ *
+ * This class is identified by the XML node name "mmRest".
+ */
+class MultimeasureRest : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit MultimeasureRest(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper startMeasure)
+        : OthersBase(document, partId, shareMode, startMeasure) {}
+
+    Evpu measWidth{};           ///< Width of the multemeasure rest "measure" in Evpu. (xml node is `<meaSpace>`)
+    MeasCmper nextMeas{};       ///< Next measure after the multimeasure west.
+    Evpu numVertAdj{};          ///< Vertical number adjustment, sign-revered from Finale UI. (xml node is `<numdec>`)
+    Cmper shapeDef{};           ///< Cmper of Shape Designer shape that specifies the H-bar.
+    int numStart{};             ///< Number start value. If the number of measures in the multimeasure rest is fewer than this
+                                ///< number, no number appears on the multimeasure rest.
+    int symbolThreshold{};      ///< If the number of rests is less than this value, symbols are used when #useSymbols is true. (xml node is `<threshold>`)
+    Evpu symbolSpacing{};       ///< Spacing between symbols in Evpu. (xml node is `<spacing>`)
+    Evpu numHorzAdj{};          ///< Horizontal number adjustment in Evpu. (xml node is `<numAdjX>`)
+    Evpu shapeStartAdjust{};    ///< Start adjustment for the H-bar shape in Evpu. (xml node is `<startAdjust>`)
+    Evpu shapeEndAdjust{};      ///< End adjustment for the shape in Evpu. (xml node is `<endAdjust>`)
+    bool useSymbols{};          ///< Use symbols instead of an H-bar, based on #symbolThreshold. (xml node is `<useCharRestStyle>`)
+
+    /// @brief Get the start measure of this multimeasure rest
+    MeasCmper getStartMeasure() const { return getCmper(); }
+
+    /// @brief Calculates the number of measures spanned by this multimeasure rest
+    int calcNumberOfMeasures() const { return (std::max)(nextMeas - getStartMeasure(), 0); }
+    
+    /// @brief Calculates if the number on this multimeasure rest is visible.
+    bool calcIsNumberVisible() const { return calcNumberOfMeasures() >= numStart; }
+
+    void integrityCheck() const override
+    {
+        this->OthersBase::integrityCheck();
+        if (nextMeas <= getStartMeasure()) {
+            MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getPartId()) + " spans 0 or fewer measures.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "mmRest"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MultimeasureRest> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class Page
  * @brief Represents the attributes of a page in the page layout.
  *
@@ -606,7 +654,10 @@ public:
     int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
 
     /** @brief Get the part name if any */
-    std::string getName() const;
+    std::string getName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /** @brief Return true if this part corresponds to the score */
+    bool isScore() const { return getCmper() == SCORE_PARTID; }
 
     bool requireAllFields() const override { return false; }
 

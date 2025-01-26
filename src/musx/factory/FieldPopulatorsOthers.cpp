@@ -362,6 +362,20 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
     {"hidePage", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hidePage = true; }}
 });
 
+MUSX_XML_ELEMENT_ARRAY(MultimeasureRest, {
+    {"meaSpace", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->measWidth = e->getTextAs<Evpu>(); }},
+    {"nextMeas", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->nextMeas = e->getTextAs<MeasCmper>(); }},
+    {"numdec", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->numVertAdj = e->getTextAs<Evpu>(); }},
+    {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
+    {"numStart", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->numStart = e->getTextAs<int>(); }},
+    {"threshold", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->symbolThreshold = e->getTextAs<int>(); }},
+    {"spacing", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->symbolSpacing = e->getTextAs<Evpu>(); }},
+    {"numAdjX", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->numHorzAdj = e->getTextAs<Evpu>(); }},
+    {"startAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->shapeStartAdjust = e->getTextAs<Evpu>(); }},
+    {"endAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->shapeEndAdjust = e->getTextAs<Evpu>(); }},
+    {"useCharRestStyle", [](const XmlElementPtr&, const std::shared_ptr<MultimeasureRest>& i) { i->useSymbols = true; }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Page, {
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->width = e->getTextAs<Evpu>(); }},

@@ -73,6 +73,7 @@ add_executable(musxdomtests
 	others/instrument_used.cpp
     others/measure.cpp
     others/measure_number_region.cpp
+    others/mmrest.cpp
     others/page.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
