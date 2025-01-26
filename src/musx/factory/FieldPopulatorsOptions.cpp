@@ -279,12 +279,12 @@ MUSX_XML_ENUM_MAPPING(TupletOptions::NumberStyle, {
 });
 
 MUSX_XML_ENUM_MAPPING(TupletOptions::PositioningStyle, {
-    //{"manual", TupletOptions::PositioningStyle::Manual}, this is the default and is not known to occur in the xml
+    {"manual", TupletOptions::PositioningStyle::Manual}, //this is the default and occurs in the xml for tupetDef
     {"beamSide", TupletOptions::PositioningStyle::BeamSide},
     {"noteSide", TupletOptions::PositioningStyle::NoteSide},
     {"above", TupletOptions::PositioningStyle::Above},
     {"below", TupletOptions::PositioningStyle::Below},
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TupletOptions::BracketStyle, {
     //{"nothing", TupletOptions::BracketStyle::Nothing}, this is the default and is not known to occur in the xml

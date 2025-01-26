@@ -204,7 +204,9 @@ using RegisteredOthers = TypeRegistry <
     dom::others::PartDefinition,
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
-    dom::others::MarkingCategoryName
+    dom::others::MarkingCategoryName,
+    dom::others::MultiStaffInstrumentGroup,
+    dom::others::MultiStaffGroupId
 >;
 
 /**

@@ -376,6 +376,17 @@ MUSX_XML_ELEMENT_ARRAY(MultimeasureRest, {
     {"useCharRestStyle", [](const XmlElementPtr&, const std::shared_ptr<MultimeasureRest>& i) { i->useSymbols = true; }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(MultiStaffGroupId, {
+    {"staffGroupID", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffGroupId>& i) { i->staffGroupId = e->getTextAs<Cmper>(); }},
+});
+
+// NOTE: zero values are not exported in the xml, so this mapping only pushes non-zero values to the vector of staffNums.
+MUSX_XML_ELEMENT_ARRAY(MultiStaffInstrumentGroup, {
+    {"staffNum1", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
+    {"staffNum2", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
+    {"staffNum3", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Page, {
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->width = e->getTextAs<Evpu>(); }},

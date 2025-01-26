@@ -600,6 +600,75 @@ public:
 };
 
 /**
+ * @class MultiStaffGroupId
+ * @brief Represents a group ID for a multi-staff setup.
+ *
+ * This class is identified by the XML node name "multiStaffGroupID".
+ */
+class MultiStaffGroupId : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit MultiStaffGroupId(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    Cmper staffGroupId{}; ///< Cmper of @ref StaffGroup that has the instrument's full and abbreviated names.
+
+    constexpr static std::string_view XmlNodeName = "multiStaffGroupID"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MultiStaffGroupId> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class MultiStaffInstrumentGroup
+ * @brief Represents a group of instruments spanning multiple staves.
+ *
+ * This class is identified by the XML node name "multiStaffInstGroup".
+ */
+class MultiStaffInstrumentGroup : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit MultiStaffInstrumentGroup(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    std::vector<InstCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
+
+    /**
+     * @brief Checks if a given staff number is contained in the staffNums vector.
+     * @param staffNum The staff number to check.
+     * @return True if the staff number is in the vector, otherwise false.
+     */
+    bool containsStaffNum(const InstCmper staffNum) const {
+        return std::find(staffNums.begin(), staffNums.end(), staffNum) != staffNums.end();
+    }
+
+    /**
+     * @brief Finds the MultiStaffInstrumentGroup containing #staffNum.
+     * @param groups The vector to check.
+     * @param staffNum The staff number to check.
+     * @return The MultiStaffInstrumentGroup containing #staffNum or nullptr if none.
+     */
+    static std::shared_ptr<MultiStaffInstrumentGroup> findStaffNum(const std::vector<std::shared_ptr<MultiStaffInstrumentGroup>>& groups, const InstCmper staffNum) {
+        for (const auto& group : groups) {
+            if (group->containsStaffNum(staffNum)) {
+                return group;
+            }
+        }
+        return nullptr;
+    }
+
+    void integrityCheck() const
+    {
+        if (staffNums.empty()) {
+            MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
+        } else if (staffNums.size() > 3) {
+            MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains more than 3 staves.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "multiStaffInstGroup"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MultiStaffInstrumentGroup> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class Page
  * @brief Represents the attributes of a page in the page layout.
  *
