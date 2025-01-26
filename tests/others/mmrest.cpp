@@ -49,7 +49,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(MultimeasureRestTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -67,4 +67,32 @@ TEST(MultimeasureRestTest, PopulateFields)
     EXPECT_EQ(mmRest->shapeStartAdjust, 1);
     EXPECT_EQ(mmRest->shapeEndAdjust, 2);
     EXPECT_TRUE(mmRest->useSymbols);
+}
+
+
+TEST(MultimeasureRestTest, IntegrityCheckFailure)
+{
+
+  constexpr static musxtest::string_view xmlBadMmRest = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <mmRest cmper="7" part="1" shared="false">
+      <meaSpace>288</meaSpace>
+      <nextMeas>7</nextMeas>
+      <numdec>-28</numdec>
+      <shapeDef>119</shapeDef>
+      <numStart>1</numStart>
+      <threshold>2</threshold>
+      <spacing>48</spacing>
+      <useCharRestStyle/>
+    </mmRest>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xmlBadMmRest),
+        musx::dom::integrity_error
+    ) << "mmRest spans 0 bars should cause integrity error";
 }

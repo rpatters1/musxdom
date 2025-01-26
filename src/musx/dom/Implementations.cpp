@@ -405,7 +405,7 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
 
 std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
 {
-    if (index > iuArray.size()) return nullptr;
+    if (index >= iuArray.size()) return nullptr;
     auto iuItem = iuArray[index];
     return iuItem->getStaff();
 }
