@@ -398,11 +398,16 @@ bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_pt
 // ***** InstrumentUsed *****
 // **************************
 
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
+{
+    return getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
+}
+
 std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
 {
     if (index > iuArray.size()) return nullptr;
     auto iuItem = iuArray[index];
-    return iuItem->getDocument()->getOthers()->get<others::Staff>(iuItem->getPartId(), iuItem->staffId);
+    return iuItem->getStaff();
 }
 
 // ****************************
