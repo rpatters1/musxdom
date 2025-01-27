@@ -532,14 +532,136 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 // ***** Staff *****
 // *****************
 
+std::optional<int> others::Staff::getAutoNumberValue() const
+{
+    if (!useAutoNumbering || instUuid.empty()) {
+        return std::nullopt;
+    }
+    
+    // Get all staves for counting occurrences of instUuid
+    auto scrollViewStaves = getDocument()->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, SCROLLVIEW_IULIST);
+
+    // Count occurrences of each instUuid
+    std::unordered_map<std::string, int> instUuidCounts;
+    for (const auto& slot : scrollViewStaves) {
+        auto staff = slot->getStaff();
+        if (staff && !staff->instUuid.empty()) {
+            instUuidCounts[staff->instUuid]++;
+        }
+    }
+
+    // Check how many occurrences exist for the current instUuid
+    if (instUuidCounts[instUuid] <= 1) {
+        return std::nullopt; // No numbering needed if there's only one or none
+    }
+
+    // Assign numbers to each staff with the same instUuid
+    std::unordered_map<std::string, int> instUuidNumbers;
+    for (const auto& slot : scrollViewStaves) {
+        auto staff = slot->getStaff();
+        if (staff && staff->instUuid == instUuid) {
+            instUuidNumbers[staff->instUuid]++;
+            if (staff.get() == this) {
+                return instUuidNumbers[instUuid];
+            }
+        }
+    }
+
+    return std::nullopt; // Fallback, should not normally occur
+}
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+static std::string intToRoman(int num)
+{
+    if (num <= 0 || num > 3999) {
+        throw std::out_of_range("Number out of range for Roman numerals (1-3999)");
+    }
+
+    const std::vector<std::pair<int, std::string>> romanMap = {
+        {1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
+        {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"},
+        {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}
+    };
+
+    std::string result;
+    for (const auto& [value, symbol] : romanMap) {
+        while (num >= value) {
+            result += symbol;
+            num -= value;
+        }
+    }
+    return result;
+}
+
+std::string intToAlphabetic(int num) {
+    if (num <= 0) {
+        throw std::out_of_range("Number must be greater than 0");
+    }
+
+    std::string result;
+    while (num > 0) {
+        --num; // Convert to 0-based index
+        result.insert(result.begin(), 'A' + (num % 26));
+        num /= 26;
+    }
+
+    return result;
+}
+
+std::string ordinalPrefix(int num)
+{
+    if (num <= 0) {
+        throw std::out_of_range("Number must be greater than 0");
+    }
+
+    int lastTwoDigits = num % 100;
+    int lastDigit = num % 10;
+
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+        return std::to_string(num) + "th";
+    }
+
+    switch (lastDigit) {
+        case 1: return std::to_string(num) + "st";
+        case 2: return std::to_string(num) + "nd";
+        case 3: return std::to_string(num) + "rd";
+        default: return std::to_string(num) + "th";
+    }
+}
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+std::string others::Staff::addAutoNumbering(const std::string& plainName) const
+{
+    auto numberOpt = getAutoNumberValue();
+    if (!numberOpt) {
+        return plainName; // No numbering needed
+    }
+
+    int number = *numberOpt;
+    switch (autoNumbering) {
+        default:
+        case AutoNumberingStyle::ArabicSuffix:
+            return plainName + " " + std::to_string(number);
+        case AutoNumberingStyle::RomanSuffix:
+            return plainName + " " + intToRoman(number);
+        case AutoNumberingStyle::OrdinalPrefix:
+            return ordinalPrefix(number) + " " + plainName;
+        case AutoNumberingStyle::AlphaSuffix:
+            return plainName + " " + intToAlphabetic(number);
+        case AutoNumberingStyle::ArabicPrefix:
+            return std::to_string(number) + ". " + plainName;
+    }
+}
+
+
 std::string others::Staff::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), fullNameTextId, true, accidentalStyle); // true: strip enigma tags
+    return addAutoNumbering(others::TextBlock::getText(getDocument(), fullNameTextId, true, accidentalStyle)); // true: strip enigma tags
 }
 
 std::string others::Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), abbrvNameTextId, true, accidentalStyle); // true: strip enigma tags
+    return addAutoNumbering(others::TextBlock::getText(getDocument(), abbrvNameTextId, true, accidentalStyle)); // true: strip enigma tags
 }
 
 // *********************

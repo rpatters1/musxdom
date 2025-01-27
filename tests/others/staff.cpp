@@ -35,6 +35,7 @@ TEST(StaffTest, PopulateFields)
     <staffSpec cmper="15">
       <staffLines>5</staffLines>
       <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
       <defaultClef>1</defaultClef>
       <transposedClef>2</transposedClef>
       <dwRestOffset>-4</dwRestOffset>
@@ -51,6 +52,7 @@ TEST(StaffTest, PopulateFields)
     <staffSpec cmper="16">
       <staffLines>5</staffLines>
       <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
       <defaultClef>3</defaultClef>
       <transposedClef>4</transposedClef>
       <dwRestOffset>-4</dwRestOffset>
@@ -63,6 +65,8 @@ TEST(StaffTest, PopulateFields)
       <topRepeatDotOff>-2</topRepeatDotOff>
       <botRepeatDotOff>-6</botRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
+      <autoNum>arabicPrefix</autoNum>
+      <useAutoNum/>
     </staffSpec>
   </others>
 </finale>
@@ -77,6 +81,7 @@ TEST(StaffTest, PopulateFields)
 
         EXPECT_EQ(staff1->staffLines, 5);
         EXPECT_EQ(staff1->lineSpace, 24);
+        EXPECT_EQ(staff1->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
         EXPECT_EQ(staff1->defaultClef, 1);
         EXPECT_EQ(staff1->transposedClef, 2);
         EXPECT_EQ(staff1->dwRestOffset, -4);
@@ -89,12 +94,15 @@ TEST(StaffTest, PopulateFields)
         EXPECT_EQ(staff1->topRepeatDotOff, -3);
         EXPECT_EQ(staff1->botRepeatDotOff, -5);
         EXPECT_EQ(staff1->vertTabNumOff, -1024);
+        EXPECT_EQ(staff1->autoNumbering, others::Staff::AutoNumberingStyle::ArabicSuffix);
+        EXPECT_EQ(staff1->useAutoNumbering, false);
 
         auto staff2 = others->get<others::Staff>(SCORE_PARTID, 16);
         ASSERT_TRUE(staff2) << "Staff with cmper 16 not found";
 
         EXPECT_EQ(staff2->staffLines, 5);
         EXPECT_EQ(staff2->lineSpace, 24);
+        EXPECT_EQ(staff1->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
         EXPECT_EQ(staff2->defaultClef, 3);
         EXPECT_EQ(staff2->transposedClef, 4);
         EXPECT_EQ(staff2->dwRestOffset, -4);
@@ -107,5 +115,7 @@ TEST(StaffTest, PopulateFields)
         EXPECT_EQ(staff2->topRepeatDotOff, -2);
         EXPECT_EQ(staff2->botRepeatDotOff, -6);
         EXPECT_EQ(staff2->vertTabNumOff, -1024);
+        EXPECT_EQ(staff2->autoNumbering, others::Staff::AutoNumberingStyle::ArabicPrefix);
+        EXPECT_EQ(staff2->useAutoNumbering, true);
     }
 }

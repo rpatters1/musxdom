@@ -773,6 +773,16 @@ public:
 class Staff : public OthersBase
 {
 public:
+    /** @brief Enum for auto-numbering style. Auto-numbering is based on #instUuid. */
+    enum class AutoNumberingStyle
+    {
+        ArabicSuffix,       ///< Arabic numeral suffix (default). May not appear in xml.
+        RomanSuffix,        ///< Roman numeral suffix.
+        OrdinalPrefix,      ///< Ordinal number prefix: 1st 2nd 3rd, ...
+        AlphaSuffix,        ///< Alphabetic suffix.
+        ArabicPrefix        ///< Arabic numeral prefix (with dot): 1. 2. 3. ...
+    };
+
     /** @brief Constructor function */
     explicit Staff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
@@ -780,28 +790,50 @@ public:
     // Public properties corresponding to the XML structure
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff.
+    int staffLines{};               ///< Number of lines in the staff.
     Evpu lineSpace{};               ///< Distance between staff lines.
+    std::string instUuid;           ///< Unique identifier for the type of instrument.
     Evpu topBarlineOffset{};        ///< Offset for the top barline.
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
     Evpu dwRestOffset{};            ///< Offset for downstem rests.
     Evpu wRestOffset{};             ///< Offset for whole rests.
     Evpu hRestOffset{};             ///< Offset for half rests.
     Evpu otherRestOffset{};         ///< Offset for other rests.
-    Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
-    Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
-    int staffLines{};               ///< Number of lines in the staff.
     int stemReversal{};             ///< Stem reversal value.
     Cmper fullNameTextId{};         ///< Full name @ref TextBlock ID. (xml node is `<fullName>`)
     Cmper abbrvNameTextId{};        ///< Abbreviated name @ref TextBlock ID. (xml node is `<abbrvName>`)
+    Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
+    Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
+    AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
+    bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
 
-    /// @brief Get the full staff name without Enigma tags
+    /// @brief Get the full staff name without Enigma tags and with autonumbering (if any)
+    /// @note Ordinal prefix numbering is currently supported only for English.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /// @brief Get the abbreviated staff name without Enigma tags
+    /// @note Ordinal prefix numbering is currently supported only for English.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /**
+     * @brief Get the auto-numbering value for this staff, if applicable.
+     * 
+     * Determines the numbering value based on the occurrences of the instrument UUID
+     * and the current staff instance. If numbering is not applicable (e.g., auto numbering
+     * is disabled, the UUID is empty, or there is only one instance), returns an empty optional.
+     * 
+     * @return std::optional<int> The numbering value if auto numbering is applicable, otherwise std::nullopt.
+     * @todo Handle multistaff instruments.
+     */
+    std::optional<int> getAutoNumberValue() const;
+
+    /// @brief Add auto numbering as a prefix or suffix, if needed
+    /// @param plainName The name (full or abbreviated) to which to add the auto numbering
+    /// @return Auto numbered name.
+    std::string addAutoNumbering(const std::string& plainName) const;
 
     bool requireAllFields() const override { return false; }
 
