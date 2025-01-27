@@ -84,6 +84,24 @@ MUSX_RESOLVER_ARRAY(MarkingCategory, {
     }
 });
 
+MUSX_RESOLVER_ARRAY(MultiStaffInstrumentGroup, {
+    [](const dom::DocumentPtr& document) {
+        auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);
+        for (const auto& instance : instGroups) {
+            for (size_t x = 0; x < instance->staffNums.size(); x++) {
+                auto staff = instance->getStaffAtIndex(x);
+                if (staff) {
+                    if (staff->multiStaffInstId) {
+                        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
+                    } else {
+                        staff->multiStaffInstId = instance->getCmper();
+                    }
+                }
+            }
+        }
+    }
+});
+
 MUSX_RESOLVER_ARRAY(TextExpressionDef, {
     [](const dom::DocumentPtr& document) {
         auto exps = document->getOthers()->getArray<TextExpressionDef>(SCORE_PARTID);

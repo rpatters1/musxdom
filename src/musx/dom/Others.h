@@ -36,6 +36,10 @@ namespace dom {
 
 class Entry;
 
+namespace details {
+class StaffGroup;
+}
+
 /**
  * @namespace musx::dom::others
  * @brief Classes in the @ref OthersPool.
@@ -655,6 +659,13 @@ public:
         return nullptr;
     }
 
+    /// @brief Returns the staff at the index position or null if out of range or not found.
+    /// @param x the 0-based index to find
+    std::shared_ptr<Staff> getStaffAtIndex(size_t x) const;
+
+    /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
+    std::shared_ptr<details::StaffGroup> getStaffGroup() const;
+
     void integrityCheck() const
     {
         if (staffNums.empty()) {
@@ -808,15 +819,29 @@ public:
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
 
-    /// @brief Get the full staff name without Enigma tags and with autonumbering (if any)
-    /// @note Ordinal prefix numbering is currently supported only for English.
+    Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
+                                    ///< It is set by the factory with a Resolver function.
+
+    /// @brief Returns the full staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
-    /// @brief Get the abbreviated staff name without Enigma tags
-    /// @note Ordinal prefix numbering is currently supported only for English.
+    /// @brief Returns the abbreviated staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one. Otherwise nullptr.
+    std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
+
+    /// @brief Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)
+    /// @note Ordinal prefix numbering is currently supported only for English.
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    std::string getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns the abbreviated instrument name for this staff without Enigma tags and with autonumbering (if any)
+    /// @note Ordinal prefix numbering is currently supported only for English.
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /**
      * @brief Get the auto-numbering value for this staff, if applicable.

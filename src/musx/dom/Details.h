@@ -128,6 +128,115 @@ public:
 };
 
 /**
+ * @class StaffGroup
+ * @brief Represents the attributes of a Finale staff group that brackets staves
+ *
+ * This class is identified by the XML node name "staffGroup".
+ */
+class StaffGroup : public DetailsBase {
+public:
+    /** @brief Constructor
+     *
+     * @param document The document owner of this instance
+     * @param partId The part that owns this staff group
+     * @param shareMode The sharing mode deduced from xml attributes
+     * @param cmper1 In modern Finale files, all groups have 0 for cmper1. In legacy files this was a cmper for an @ref others::InstrumentUsed list.
+     * @param cmper2 The identifier for the StaffGroup.
+     */
+    StaffGroup(const DocumentWeakPtr& document, Cmper partId, Base::ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2) {}
+
+    /** @brief Enum for barline justification */
+    enum class BarlineStyle
+    {
+        Final,
+        Mensurstriche
+    };
+
+    /** @brief Enum for horizontal alignment */
+    using AlignJustify = others::NamePositioning::AlignJustify;
+
+    /** @brief Enum for optimization options */
+    enum class HideStaves
+    {
+        AsGroup,
+        Individually
+    };
+
+    /** @brief Bracket style enum for StaffGroup */
+    enum class BracketStyle : int
+    {
+        Undefined,
+        one,
+        two,
+        PianoBrace,
+        four,
+        five,
+        ThickBracket
+    };
+
+    /** @brief Embedded class to represent the "bracket" node */
+    class Bracket
+    {
+    public:
+        BracketStyle style{};       ///< Bracket style (xml node is `<id>`)
+        Evpu horzAdjLeft{};         ///< "Distance from Left Edge of Staff" (xml node is `<bracPos>`)
+        Evpu vertAdjTop{};          ///< "Vertical Adjust (Top of Bracket)" (xml node is `<bracTop>`)
+        Evpu vertAdjBot{};          ///< "Vertical Adjust (Bottom of Bracket)" (xml node is `<bracBot>`)
+        bool showOnSingleStaff{};   ///< "Show Bracket If Group Contains Only One Staff" (xml node is `<onSingle>`)
+    };
+
+    // Public properties corresponding to the XML structure, ordered as they appear in the XML
+    InstCmper startInst{};                    ///< Starting staff ID
+    InstCmper endInst{};                      ///< Ending staff ID
+    MeasCmper startMeas{};                    ///< Starting measure number
+    MeasCmper endMeas{};                      ///< Ending measure number
+    Cmper fullNameId{};                       ///< Full name TextBlock cmper (xml node is `<fullID>`)
+    int fullNameXadj{};                       ///< Horizontal adjustment for full name (xml node is `<fullXadj>`)
+    int fullNameYadj{};                       ///< Vertical adjustment for full name (xml node is `<fullYadj>`)
+    std::shared_ptr<Bracket> bracket{};       ///< Bracket Options
+    BarlineStyle barlineStyle{};              ///< Group barline style (xml node is `<barline>`)
+    AlignJustify fullNameJustify{};           ///< Full name justification (xml node is `<fullJustify>`)
+    AlignJustify abbrvNameJustify{};          ///< Abbreviated name justification (xml node is `<abbrvJustify>`)
+    Cmper abbrvNameId{};                      ///< Abbreviated name TextBlock cmper (xml node is `<abbrvID>`)
+    int abbrvNameXadj{};                      ///< Horizontal adjustment for abbreviated name (xml node is `<abbrvXadj>`)
+    int abbrvNameYadj{};                      ///< Vertical adjustment for abbreviated name (xml node is `<abbrvYadj>`)
+    AlignJustify fullNameAlign{};             ///< Full name horizontal alignment (xml node is `<fullHAlign>`)
+    AlignJustify abbrvNameAlign{};            ///< Abbreviated name horizontal alignment (xml node is `<abbrvHAlign>`)
+    bool ownBarline{};                        ///< "Use Alternate Group Barline"
+    bool fullNameIndivPos{};                  ///< Indicates if full name has individual position (xml node is `<fullIndivPos>`)
+    bool abbrvNameIndivPos{};                 ///< Indicates if abbreviated name has individual position (xml node is `<abbrvIndivPos>`)
+    bool fullNameExpand{};                    ///< "Expand Single Word" for full name (xml node is `<fullExpand>`)
+    bool abbrvNameExpand{};                   ///< "Expand Single Word" for abbreviated name (xml node is `<abbrvExpand>`)
+    HideStaves hideStaves{};                  ///< "When Hiding Empty Staves" option (xml node is `<optimize>`)
+
+    /// @brief Get the full staff name without Enigma tags
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Get the abbreviated staff name without Enigma tags
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    bool isAllMeasures() const
+    {
+        return (startMeas == 1 && endMeas == (std::numeric_limits<MeasCmper>::max)());
+    }
+
+    void integrityCheck() const override
+    {
+        this->DetailsBase::integrityCheck();
+        if (endMeas <= startMeas || startMeas <= 0) {
+            MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getPartId())
+                + " starts at measure " + std::to_string(startMeas) + " and ends at measure " + std::to_string(endMeas));
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "staffGroup"; ///< XML node name for this type.
+    static const xml::XmlElementArray<StaffGroup> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class TupletDef
  * @brief Options controlling the appearance of tuplets.
  *

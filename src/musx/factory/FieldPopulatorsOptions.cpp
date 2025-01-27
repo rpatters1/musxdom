@@ -290,7 +290,7 @@ MUSX_XML_ENUM_MAPPING(TupletOptions::BracketStyle, {
     //{"nothing", TupletOptions::BracketStyle::Nothing}, this is the default and is not known to occur in the xml
     {"slur", TupletOptions::BracketStyle::Slur},
     {"bracket", TupletOptions::BracketStyle::Bracket},
-    });
+});
 
 } // namespace factory
 

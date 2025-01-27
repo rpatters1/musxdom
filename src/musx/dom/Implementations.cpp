@@ -423,6 +423,34 @@ std::string others::MarkingCategory::getName() const
     return {};
 }
 
+// *************************************
+// ***** MultiStaffInstrumentGroup *****
+// *************************************
+
+std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffAtIndex(size_t x) const
+{
+    if (x >= staffNums.size()) return nullptr;
+    auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffNums[x]);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staffNums[x])
+            + " not found for multiple staff instrument " + std::to_string(getCmper()));
+    }
+    return retval;
+}
+
+std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup() const
+{
+    auto document = getDocument();
+    auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(getPartId(), getCmper());
+    if (!groupIdRecord) return nullptr;
+    auto retval = document->getDetails()->get<details::StaffGroup>(getPartId(), SCROLLVIEW_IULIST, groupIdRecord->staffGroupId);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(groupIdRecord->staffGroupId)
+            + " not found for multiple staff instrument " + std::to_string(getCmper()));
+    }
+    return retval;
+}
+
 // *****************************
 // ***** PageFormatOptions *****
 // *****************************
@@ -490,42 +518,6 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     return TextBlock::getText(getDocument(), nameId, true, accidentalStyle); // true: trim tags
-}
-
-// ********************
-// ***** TextBase *****
-// ********************
-
-std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
-{
-    std::string searchText = this->text;
-    auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
-    bool foundTag = false;
-
-    while (true) {
-        if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
-            break;
-        }
-
-        size_t endOfTag = searchText.find_first_of(')');
-        if (endOfTag == std::string::npos) {
-            break;
-        }
-
-        std::string fontTag = searchText.substr(0, endOfTag + 1);
-        if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
-            return nullptr;
-        }
-
-        searchText.erase(0, endOfTag + 1);
-        foundTag = true;
-    }
-
-    if (foundTag) {
-        return fontInfo;
-    }
-
-    return nullptr;
 }
 
 // *****************
@@ -653,15 +645,103 @@ std::string others::Staff::addAutoNumbering(const std::string& plainName) const
     }
 }
 
-
 std::string others::Staff::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return addAutoNumbering(others::TextBlock::getText(getDocument(), fullNameTextId, true, accidentalStyle)); // true: strip enigma tags
+    return others::TextBlock::getText(getDocument(), fullNameTextId, true, accidentalStyle); // true: strip enigma tags
 }
 
 std::string others::Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return addAutoNumbering(others::TextBlock::getText(getDocument(), abbrvNameTextId, true, accidentalStyle)); // true: strip enigma tags
+    return others::TextBlock::getText(getDocument(), abbrvNameTextId, true, accidentalStyle); // true: strip enigma tags
+}
+
+std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffInstGroup() const
+{
+    if (multiStaffInstId) {
+        if (auto retval = getDocument()->getOthers()->get<others::MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffInstId)) {
+            return retval;
+        }
+        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffInstId));
+    }
+    return nullptr;
+}
+
+std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    auto name = [&]() -> std::string {
+        if (auto multiInstGroup = getMultiStaffInstGroup()) {
+            if (auto group = multiInstGroup->getStaffGroup()) {
+                return group->getFullName(accidentalStyle);
+            }
+        }
+        return getFullName(accidentalStyle);
+    }();
+    if (name.empty()) return name;
+    return addAutoNumbering(name);
+}
+
+std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    auto name = [&]() -> std::string {
+        if (auto multiInstGroup = getMultiStaffInstGroup()) {
+            if (auto group = multiInstGroup->getStaffGroup()) {
+                return group->getAbbreviatedName(accidentalStyle);
+            }
+        }
+        return getAbbreviatedName(accidentalStyle);
+    }();
+    if (name.empty()) return name;
+    return addAutoNumbering(name);
+}
+
+// **********************
+// ***** StaffGroup *****
+// **********************
+
+std::string details::StaffGroup::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    return others::TextBlock::getText(getDocument(), fullNameId, true, accidentalStyle); // true: strip enigma tags
+}
+
+std::string details::StaffGroup::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    return others::TextBlock::getText(getDocument(), abbrvNameId, true, accidentalStyle); // true: strip enigma tags
+}
+
+// ********************
+// ***** TextBase *****
+// ********************
+
+std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
+{
+    std::string searchText = this->text;
+    auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
+    bool foundTag = false;
+
+    while (true) {
+        if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
+            break;
+        }
+
+        size_t endOfTag = searchText.find_first_of(')');
+        if (endOfTag == std::string::npos) {
+            break;
+        }
+
+        std::string fontTag = searchText.substr(0, endOfTag + 1);
+        if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
+            return nullptr;
+        }
+
+        searchText.erase(0, endOfTag + 1);
+        foundTag = true;
+    }
+
+    if (foundTag) {
+        return fontInfo;
+    }
+
+    return nullptr;
 }
 
 // *********************
