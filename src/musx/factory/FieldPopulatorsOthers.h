@@ -60,7 +60,7 @@ struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
     using FieldPopulator<Enclosure>::populate;
 };
 
-MUSX_RESOLVER_ARRAY(LayerAttributes, {
+MUSX_RESOLVER_ENTRY(LayerAttributes, {
     [](const dom::DocumentPtr& document) {
         auto layers = document->getOthers()->getArray<LayerAttributes>(SCORE_PARTID);
         if (layers.size() != 4) {
@@ -74,7 +74,7 @@ MUSX_RESOLVER_ARRAY(LayerAttributes, {
     }
 });
 
-MUSX_RESOLVER_ARRAY(MarkingCategory, {
+MUSX_RESOLVER_ENTRY(MarkingCategory, {
     [](const dom::DocumentPtr& document) {
         auto cats = document->getOthers()->getArray<MarkingCategory>(SCORE_PARTID);
         for (const auto& cat : cats) {
@@ -85,7 +85,7 @@ MUSX_RESOLVER_ARRAY(MarkingCategory, {
     }
 });
 
-MUSX_RESOLVER_ARRAY(MultiStaffInstrumentGroup, {
+MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
     [](const dom::DocumentPtr& document) {
         auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);
         for (const auto& instance : instGroups) {
@@ -103,7 +103,7 @@ MUSX_RESOLVER_ARRAY(MultiStaffInstrumentGroup, {
     }
 });
 
-MUSX_RESOLVER_ARRAY(TextExpressionDef, {
+MUSX_RESOLVER_ENTRY(TextExpressionDef, {
     [](const dom::DocumentPtr& document) {
         auto exps = document->getOthers()->getArray<TextExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {

@@ -83,16 +83,15 @@ public:
      * Optionally, a unique key can be provided to ensure that the resolver is only added once.
      *
      * @param resolver A callable object that resolves a relationship when invoked.
-     * @param key An optional unique key for the resolver. If provided, the resolver is added only once per key.
+     * @param key An unique key for the resolver. Each resolver is added only once per key.
      */
-    void addResolver(Resolver resolver, const std::string_view& key = {})
+    void addResolver(Resolver resolver, const std::string_view& key)
     {
-        if (!key.empty()) {
-            if (registeredResolvers.count(key) > 0) {
-                return; // Skip adding if the resolver with the same key is already registered
-            }
-            registeredResolvers.insert(key);
+        assert(!key.empty());
+        if (registeredResolvers.count(key) > 0) {
+            return; // Skip adding if the resolver with the same key is already registered
         }
+        registeredResolvers.insert(key);
         resolvers.emplace_back(std::move(resolver));
     }
 
@@ -244,17 +243,17 @@ EnumClass toEnum(const FromClass& value)
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
 const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__
 
-using ResolverList = std::vector<ElementLinker::Resolver>;
+using ResolverEntry = std::optional<ElementLinker::Resolver>;
 template <typename T>
-struct ResolverArray
+struct ResolverContainer
 {
-    inline static const ResolverList value = {};
+    inline static const ResolverEntry resolver = {};
 };
 
-#define MUSX_RESOLVER_ARRAY(Type, ...) \
+#define MUSX_RESOLVER_ENTRY(Type, ...) \
 template <> \
-struct ResolverArray<Type> { \
-    inline static const ResolverList value = __VA_ARGS__; \
+struct ResolverContainer<Type> { \
+    inline static const ResolverEntry resolver = ElementLinker::Resolver(__VA_ARGS__); \
 };
 
 template <typename T>
@@ -287,8 +286,8 @@ struct FieldPopulator : public FactoryBase
     static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element, ElementLinker& elementLinker)
     {
         populate(instance, element);
-        for (const auto& resolver : ResolverArray<T>::value) {
-            elementLinker.addResolver(resolver, element->getTagName());
+        if (ResolverContainer<T>::resolver.has_value()) {
+            elementLinker.addResolver(ResolverContainer<T>::resolver.value(), element->getTagName());
         }
     }
 
