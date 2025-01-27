@@ -42,6 +42,12 @@
 #define MUSX_INTEGRITY_ERROR(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
 #endif
 
+#ifdef MUSX_THROW_ON_UNKNOWN_XML
+#define MUSX_UNKNOWN_XML(S) throw ::musx::factory::unknown_xml_error(S)
+#else
+#define MUSX_UNKNOWN_XML(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
+#endif
+
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {

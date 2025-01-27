@@ -33,10 +33,12 @@ namespace dom {
 class EntryFrame;
 
 namespace options {
-
 class TupletOptions;
-
 } // namespace options
+
+namespace others {
+class Measure;
+} // namespace others
 
 /**
  * @namespace musx::dom::details
@@ -147,32 +149,39 @@ public:
         : DetailsBase(document, partId, shareMode, cmper1, cmper2) {}
 
     /** @brief Enum for barline justification */
-    enum class BarlineStyle
-    {
-        Final,
-        Mensurstriche
-    };
+    using BarlineType = others::Measure::BarlineType;
 
     /** @brief Enum for horizontal alignment */
     using AlignJustify = others::NamePositioning::AlignJustify;
 
+    /** @brief Enum for how to draw group barlines */
+    enum class DrawBarlineStyle
+    {
+        OnlyOnStaves,       ///< Default value (may not appear in xml)
+        ThroughStaves,      ///< Draw barlines through staves (xml value is "group")
+        Mensurstriche       ///< Draw barlines between staves (xml value is "Mensurstriche" with capitalization)
+    };
+
     /** @brief Enum for optimization options */
     enum class HideStaves
     {
-        AsGroup,
-        Individually
+        Normally,       ///< Hide staves as if there were no StaffGroup (this is the default and may not appear in the xml)
+        AsGroup,        ///< Hide staves only if all staves are empty
+        None            ///< Never hide the staves in this StaffGroup
     };
 
     /** @brief Bracket style enum for StaffGroup */
     enum class BracketStyle : int
     {
-        Undefined,
-        one,
-        two,
-        PianoBrace,
-        four,
-        five,
-        ThickBracket
+        None = 0,                   ///< No bracket (the default)
+        ThickLine = 1,              ///< Thick line, no hooks
+        BracketStraightHooks = 2,   ///< Thick bracket with straight hooks
+        PianoBrace = 3,             ///< Piano brace
+        Unknown4,                   ///< Possibly never used
+        Unknown5,                   ///< Possibly never used
+        BracketCurvedHooks = 6,     ///< Thick bracket with curved hooks
+        Unknown7,                   ///< Possibly never used
+        DeskBracket = 8             ///< Thin bracket with horizontal hook lines
     };
 
     /** @brief Embedded class to represent the "bracket" node */
@@ -195,9 +204,10 @@ public:
     int fullNameXadj{};                       ///< Horizontal adjustment for full name (xml node is `<fullXadj>`)
     int fullNameYadj{};                       ///< Vertical adjustment for full name (xml node is `<fullYadj>`)
     std::shared_ptr<Bracket> bracket{};       ///< Bracket Options
-    BarlineStyle barlineStyle{};              ///< Group barline style (xml node is `<barline>`)
+    BarlineType barlineType{};                ///< Group barline type (xml node is `<barline>`)
     AlignJustify fullNameJustify{};           ///< Full name justification (xml node is `<fullJustify>`)
     AlignJustify abbrvNameJustify{};          ///< Abbreviated name justification (xml node is `<abbrvJustify>`)
+    DrawBarlineStyle drawBarlines;            ///< "Draw Barlines" option (xml node is `<groupBarlineStyle>`)
     Cmper abbrvNameId{};                      ///< Abbreviated name TextBlock cmper (xml node is `<abbrvID>`)
     int abbrvNameXadj{};                      ///< Horizontal adjustment for abbreviated name (xml node is `<abbrvXadj>`)
     int abbrvNameYadj{};                      ///< Vertical adjustment for abbreviated name (xml node is `<abbrvYadj>`)

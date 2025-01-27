@@ -44,7 +44,8 @@ inline Enclosure::Shape toEnum<Enclosure::Shape>(const uint8_t& value)
         value <= static_cast<uint8_t>(Enclosure::Shape::Octogon)) {
         return static_cast<Enclosure::Shape>(value);
     }
-    throw std::invalid_argument("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
+    MUSX_UNKNOWN_XML("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
+    return {};
 }
 
 template <>

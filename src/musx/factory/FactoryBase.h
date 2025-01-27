@@ -226,12 +226,8 @@ public:
                 return "Invalid enum value from xml: " + std::string(value);
             }
         }();
-#ifdef MUSX_THROW_ON_UNKNOWN_XML
-        throw unknown_xml_error(msg);
-#else
-        util::Logger::log(util::Logger::LogLevel::Warning, msg);
+        MUSX_UNKNOWN_XML(msg);
         return {};
-#endif
     }
 };
 
@@ -279,12 +275,7 @@ struct FieldPopulator : public FactoryBase
                     }
                 }();
                 if (requireFields) {
-                    std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.";
-#ifdef MUSX_THROW_ON_UNKNOWN_XML
-                    throw unknown_xml_error(msg);
-#else
-                    util::Logger::log(util::Logger::LogLevel::Warning, msg);
-#endif
+                    MUSX_UNKNOWN_XML("xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.");
                 }
             }
         }
