@@ -35,6 +35,7 @@
 #include "musx/xml/XmlInterface.h"
 #include "FieldPopulatorsOptions.h"
 #include "FieldPopulatorsOthers.h"
+#include "FieldPopulatorsDetails.h"
 #include "FieldPopulatorsTexts.h"
 
 namespace musx {
@@ -216,6 +217,7 @@ using RegisteredOthers = TypeRegistry <
  */
 using RegisteredDetails = TypeRegistry <
     dom::details::GFrameHold,
+    dom::details::StaffGroup,
     dom::details::TupletDef
 >;
 

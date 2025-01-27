@@ -288,7 +288,7 @@ struct FieldPopulator : public FactoryBase
     {
         populate(instance, element);
         for (const auto& resolver : ResolverArray<T>::value) {
-            elementLinker.addResolver(resolver);
+            elementLinker.addResolver(resolver, element->getTagName());
         }
     }
 

@@ -193,6 +193,13 @@ public:
         Evpu vertAdjTop{};          ///< "Vertical Adjust (Top of Bracket)" (xml node is `<bracTop>`)
         Evpu vertAdjBot{};          ///< "Vertical Adjust (Bottom of Bracket)" (xml node is `<bracBot>`)
         bool showOnSingleStaff{};   ///< "Show Bracket If Group Contains Only One Staff" (xml node is `<onSingle>`)
+
+        /**
+         * @brief Default constructor for Bracket.
+         */
+        Bracket() = default;
+
+        static const xml::XmlElementArray<Bracket> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
     };
 
     // Public properties corresponding to the XML structure, ordered as they appear in the XML
@@ -208,14 +215,15 @@ public:
     AlignJustify fullNameJustify{};           ///< Full name justification (xml node is `<fullJustify>`)
     AlignJustify abbrvNameJustify{};          ///< Abbreviated name justification (xml node is `<abbrvJustify>`)
     DrawBarlineStyle drawBarlines;            ///< "Draw Barlines" option (xml node is `<groupBarlineStyle>`)
+    bool ownBarline{};                        ///< "Use Alternate Group Barline"
+    bool fullNameIndivPos{};                  ///< Indicates if full name has individual position (xml node is `<fullIndivPos>`)
+    bool abbrvNameIndivPos{};                 ///< Indicates if abbreviated name has individual position (xml node is `<abbrvIndivPos>`)
+    bool hideName{};                          ///< Inverse of "Show Group Name"
     Cmper abbrvNameId{};                      ///< Abbreviated name TextBlock cmper (xml node is `<abbrvID>`)
     int abbrvNameXadj{};                      ///< Horizontal adjustment for abbreviated name (xml node is `<abbrvXadj>`)
     int abbrvNameYadj{};                      ///< Vertical adjustment for abbreviated name (xml node is `<abbrvYadj>`)
     AlignJustify fullNameAlign{};             ///< Full name horizontal alignment (xml node is `<fullHAlign>`)
     AlignJustify abbrvNameAlign{};            ///< Abbreviated name horizontal alignment (xml node is `<abbrvHAlign>`)
-    bool ownBarline{};                        ///< "Use Alternate Group Barline"
-    bool fullNameIndivPos{};                  ///< Indicates if full name has individual position (xml node is `<fullIndivPos>`)
-    bool abbrvNameIndivPos{};                 ///< Indicates if abbreviated name has individual position (xml node is `<abbrvIndivPos>`)
     bool fullNameExpand{};                    ///< "Expand Single Word" for full name (xml node is `<fullExpand>`)
     bool abbrvNameExpand{};                   ///< "Expand Single Word" for abbreviated name (xml node is `<abbrvExpand>`)
     HideStaves hideStaves{};                  ///< "When Hiding Empty Staves" option (xml node is `<optimize>`)
