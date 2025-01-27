@@ -527,7 +527,7 @@ public:
     bool hideCaution{};         ///< "Hide Cautionary Clefs, Key, and Time Signature"
     bool showFullNames{};       ///< "Show Full Staff & Group Names"
     bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
-    bool groupBarlineOverride{}; ///< Override the barline specified by a @ref StaffGroup (if any)
+    bool groupBarlineOverride{}; ///< Override the barline specified by a @ref details::StaffGroup (if any)
     Cmper customBarShape{};     ///< Cmper of Shape Designer shape for custom right barline
     Cmper customLeftBarShape{}; ///< Cmper of Shape Designer shape for custom left barline
     ShowKeySigMode showKey{};   ///< Show mode for key signatures
@@ -615,7 +615,7 @@ public:
     explicit MultiStaffGroupId(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    Cmper staffGroupId{}; ///< Cmper of @ref StaffGroup that has the instrument's full and abbreviated names.
+    Cmper staffGroupId{}; ///< Cmper of @ref details::StaffGroup that has the instrument's full and abbreviated names.
 
     constexpr static std::string_view XmlNodeName = "multiStaffGroupID"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MultiStaffGroupId> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
@@ -645,10 +645,10 @@ public:
     }
 
     /**
-     * @brief Finds the MultiStaffInstrumentGroup containing #staffNum.
+     * @brief Finds the MultiStaffInstrumentGroup containing @p staffNum.
      * @param groups The vector to check.
      * @param staffNum The staff number to check.
-     * @return The MultiStaffInstrumentGroup containing #staffNum or nullptr if none.
+     * @return The MultiStaffInstrumentGroup containing @p staffNum or nullptr if none.
      */
     static std::shared_ptr<MultiStaffInstrumentGroup> findStaffNum(const std::vector<std::shared_ptr<MultiStaffInstrumentGroup>>& groups, const InstCmper staffNum) {
         for (const auto& group : groups) {

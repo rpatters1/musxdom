@@ -236,10 +236,9 @@ public:
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
+    /// @brief Returns true if this group spans all measures. 
     bool isAllMeasures() const
-    {
-        return (startMeas == 1 && endMeas == (std::numeric_limits<MeasCmper>::max)());
-    }
+    { return (startMeas == 1 && endMeas == (std::numeric_limits<MeasCmper>::max)()); }
 
     void integrityCheck() const override
     {

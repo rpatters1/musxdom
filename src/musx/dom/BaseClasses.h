@@ -528,7 +528,7 @@ public:
  * @brief Contains horizontal and vertical offsets, alignment, and expansion settings for name positioning.
  * 
  * This class is used both for default names as well as name positioning @ref Staff, @ref StaffStyle,
- * and @ref StaffGroup.
+ * and @ref details::StaffGroup.
  */
 class NamePositioning : public OthersBase
 {
