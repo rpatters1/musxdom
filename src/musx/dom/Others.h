@@ -720,6 +720,12 @@ public:
     /** @brief Return true if this part corresponds to the score */
     bool isScore() const { return getCmper() == SCORE_PARTID; }
 
+    /** @brief Return the scroll view @ref InstrumentUsed cmper for this part */
+    Cmper calcScrollViewIuList() const;
+
+    /** @brief Return the instance for the score */
+    static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
+
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "partDef"; ///< The XML node name for this type.
@@ -802,7 +808,7 @@ public:
 
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
-    std::optional<int> autoNumberValue; ///< Calculatied autonumbering value. It is computed by #calcAutoNumberValues.
+    std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAutoNumberValues.
 
     /// @brief Returns the full staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".

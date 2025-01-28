@@ -556,6 +556,26 @@ std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle 
     return {};
 }
 
+Cmper others::PartDefinition::calcScrollViewIuList() const
+{
+    if (auto partGlobs = getDocument()->getOthers()->get<others::PartGlobals>(getCmper(), MUSX_GLOBALS_CMPER)) {
+        if (partGlobs->specialPartExtractionIUList) {
+            return partGlobs->specialPartExtractionIUList;
+        }
+        return partGlobs->scrollViewIUlist;
+    }
+    return SCROLLVIEW_IULIST;
+}
+
+std::shared_ptr<others::PartDefinition> others::PartDefinition::getScore(const DocumentPtr& document)
+{
+    if (auto score = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, SCORE_PARTID)) {
+        return score;
+    }
+    MUSX_INTEGRITY_ERROR("The document contains no instance of PartDefinition for the score.");
+    return nullptr;
+}
+
 // *****************
 // ***** Staff *****
 // *****************
