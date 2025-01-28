@@ -554,6 +554,10 @@ public:
     bool compositeDispNumerator{};  ///< Indicates a composite numerator for the display time signature. (xml node is `<displayAltNumTsig>`)
     bool compositeDispDenominator{}; ///< Indicates a composite denominator for the display time signature. (xml node is `<displayAltDenTsig>`)
 
+    /// @brief Calculates if a measure should show full names vs. abbreviated names
+    bool calcShouldShowFullNames() const
+    { return getCmper() == 1 || showFullNames; }
+
     bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
 
     constexpr static std::string_view XmlNodeName = "measSpec"; ///< The XML node name for this type.
@@ -646,6 +650,15 @@ public:
 
     /// @brief Returns the first staff (with integrity check)
     std::shared_ptr<Staff> getFirstStaff() const;
+
+    /// @brief Returns the index of the input staffId or std::nullopt if not found
+    std::optional<size_t> getIndexOf(InstCmper staffId) const
+    {
+        for (size_t x = 0; x < staffNums.size(); x++) {
+            if (staffNums[x] == staffId) return x;        
+        }
+        return std::nullopt;
+    }
 
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     std::shared_ptr<details::StaffGroup> getStaffGroup() const;
