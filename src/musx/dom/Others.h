@@ -138,10 +138,15 @@ public:
     /// @brief Returns the @ref Staff instance for this element
     std::shared_ptr<Staff> getStaff() const;
 
-    /// @brief Returns the @ref Staff instance at a specified index of iuArray
+    /// @brief Returns the @ref Staff instance at a specified index of iuArray or nullptr if not found
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
-    /// @param index The index to find.
+    /// @param index The 0-based index to find.
     static std::shared_ptr<Staff> getStaffAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
+
+    /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
+    /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
+    /// @param staffId The @ref Staff cmper value to find.
+    static std::optional<size_t> getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId);
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
     static const xml::XmlElementArray<InstrumentUsed> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.

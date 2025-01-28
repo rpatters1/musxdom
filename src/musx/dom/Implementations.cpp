@@ -40,6 +40,19 @@ namespace musx {
 namespace dom {
 
 // *****************
+// ***** Base *****
+// *****************
+
+std::shared_ptr<others::PartDefinition> Base::getPartDefinition() const
+{
+    if (auto retval = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, getPartId())) {
+        return retval;
+    }
+    MUSX_INTEGRITY_ERROR("PartDefinition for part id " + std::to_string(getPartId()) + " does not exist.");
+    return nullptr;
+}
+
+// *****************
 // ***** Entry *****
 // *****************
 
@@ -418,6 +431,16 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std
     if (index >= iuArray.size()) return nullptr;
     auto iuItem = iuArray[index];
     return iuItem->getStaff();
+}
+
+std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId)
+{
+    for (size_t x = 0; x < iuArray.size(); x++) {
+        if (iuArray[x]->staffId == staffId) {
+            return x;
+        }
+    }
+    return std::nullopt;
 }
 
 // ****************************

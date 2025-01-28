@@ -58,6 +58,10 @@ namespace musx {
  */
 namespace dom {
 
+namespace others {
+class PartDefinition;
+}
+
 /**
  * @brief Exception for integrity errors. (Used when `MUSX_THROW_ON_INTEGRITY_CHECK_FAIL` is defined.)
  */
@@ -136,6 +140,9 @@ public:
      * @brief Gets the partId for this instance (or 0 for score)
      */
     Cmper getPartId() const { return m_partId; }
+
+    /** @brief Gets the @ref others::PartDefinition corresponding to #getPartId */
+    std::shared_ptr<others::PartDefinition> getPartDefinition() const;
 
     /**
      * @brief Gets the sharing mode for this instance.
