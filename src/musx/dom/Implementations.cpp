@@ -178,16 +178,16 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
             return homeEnv;
         }
         uid_t uid = getuid(); // Get the current user's UID
-        struct passwd *pw = getpwuid(uid); // Fetch the password entry for the UID
+        struct passwd* pw = getpwuid(uid); // Fetch the password entry for the UID
         if (pw) {
             return pw->pw_dir;
         }
         return "";
-    };
+        };
 #else
     auto getHomePath = []() -> void {};
 #endif
-    
+
     auto getBasePaths = [getHomePath](const std::string& envVariable) -> std::vector<std::string> {
         std::vector<std::string> paths;
 #if defined(MUSX_RUNNING_ON_WINDOWS)
@@ -196,13 +196,15 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         if (_dupenv_s(&buffer, &bufferSize, envVariable.c_str()) == 0 && buffer != nullptr) {
             paths.emplace_back(buffer);
             free(buffer);
-        } else {
+        }
+        else {
             return {};
         }
 #else
         if (envVariable == "HOME") {
             paths.emplace_back(getHomePath());
-        } else if (!envVariable.empty()) {
+        }
+        else if (!envVariable.empty()) {
             if (auto envValue = getenv(envVariable.c_str())) {
                 std::stringstream ss(envValue);
                 std::string path;
@@ -210,13 +212,16 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
                     paths.push_back(path);
                 }
 #if defined(MUSX_RUNNING_ON_LINUX_UNIX)
-            } else if (envVariable == "XDG_DATA_HOME") {
+            }
+            else if (envVariable == "XDG_DATA_HOME") {
                 paths.emplace_back(getHomePath() + "/.local/share");
-            } else if (envVariable == "XDG_DATA_DIRS") {
+            }
+            else if (envVariable == "XDG_DATA_DIRS") {
                 paths.emplace_back("/usr/local/share");
                 paths.emplace_back("/usr/share");
 #endif         
-            } else {
+            }
+            else {
                 return {};
             }
         }
@@ -225,12 +230,12 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         }
 #endif
         return paths;
-    };
+        };
     auto paths = getBasePaths(userEnv);
     auto temp = getBasePaths(systemEnv);
     paths.insert(paths.end(),
-                 std::make_move_iterator(temp.begin()),
-                 std::make_move_iterator(temp.end()));
+        std::make_move_iterator(temp.begin()),
+        std::make_move_iterator(temp.end()));
     std::vector<std::filesystem::path> retval;
     for (const auto& next : paths) {
         std::filesystem::path path = next;
@@ -281,9 +286,9 @@ struct TupletState
     }
 
     TupletState(const std::shared_ptr<details::TupletDef>& t)
-        : remainingSymbolicDuration(t->displayNumber * t->displayDuration, int(Entry::NoteType::Whole)),
-          ratio(t->referenceNumber * t->referenceDuration, t->displayNumber * t->displayDuration),
-          tuplet(t)
+        : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(Entry::NoteType::Whole)),
+        ratio(t->referenceNumber* t->referenceDuration, t->displayNumber* t->displayDuration),
+        tuplet(t)
     {
     }
 };
@@ -304,7 +309,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
         return nullptr;
-    }();
+        }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
         retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);        auto entries = frame->getEntries();
@@ -364,7 +369,8 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 );
             }
         }
-    } else {
+    }
+    else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
     }
@@ -400,7 +406,11 @@ bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_pt
 
 std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
 {
-    return getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
+    auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staffId) + " not found for InstrumentUsed list " + std::to_string(getCmper()));
+    }
+    return retval;
 }
 
 std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
@@ -480,7 +490,7 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
     }
     if (page3) {
         if (retval->facingPages || page3->margTop != page2->margTop || page3->margLeft != page2->margLeft
-               || page3->margBottom != page2->margBottom || page3->margRight != page2->margRight) {
+            || page3->margBottom != page2->margBottom || page3->margRight != page2->margRight) {
             retval->facingPages = true;
             retval->rightPageMarginTop = page3->margTop;
             retval->rightPageMarginLeft = page3->margLeft;
@@ -524,42 +534,83 @@ std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle 
 // ***** Staff *****
 // *****************
 
-std::optional<int> others::Staff::getAutoNumberValue() const
+void others::Staff::calcAutoNumberValues(const DocumentPtr& document)
 {
-    if (!useAutoNumbering || instUuid.empty()) {
-        return std::nullopt;
-    }
-    
-    // Get all staves for counting occurrences of instUuid
-    auto scrollViewStaves = getDocument()->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, SCROLLVIEW_IULIST);
+    auto scrollViewList = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, SCROLLVIEW_IULIST);
 
-    // Count occurrences of each instUuid
+    // Map to track counts for instUuid
     std::unordered_map<std::string, int> instUuidCounts;
-    for (const auto& slot : scrollViewStaves) {
-        auto staff = slot->getStaff();
-        if (staff && !staff->instUuid.empty()) {
-            instUuidCounts[staff->instUuid]++;
+    std::unordered_set<Cmper> countedMultistaffGroups;
+
+    // Pass 1: Check if any instUuid has auto-numbering disabled
+    std::unordered_set<std::string> disabledInstUuids;
+    for (const auto& instrumentUsed : scrollViewList) {
+        auto staff = instrumentUsed->getStaff();
+        if (staff && !staff->useAutoNumbering) {
+            disabledInstUuids.insert(staff->instUuid);
         }
     }
 
-    // Check how many occurrences exist for the current instUuid
-    if (instUuidCounts[instUuid] <= 1) {
-        return std::nullopt; // No numbering needed if there's only one or none
-    }
+    // Pass 2: Count occurrences of instUuid, considering multistaff instruments
+    for (const auto& instrumentUsed : scrollViewList) {
+        auto staff = instrumentUsed->getStaff();
+        if (!staff || staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
+            continue;
+        }
 
-    // Assign numbers to each staff with the same instUuid
-    std::unordered_map<std::string, int> instUuidNumbers;
-    for (const auto& slot : scrollViewStaves) {
-        auto staff = slot->getStaff();
-        if (staff && staff->instUuid == instUuid) {
-            instUuidNumbers[staff->instUuid]++;
-            if (staff.get() == this) {
-                return instUuidNumbers[instUuid];
+        // Check if the staff is part of a multistaff instrument
+        auto multiStaffGroup = staff->getMultiStaffInstGroup();
+        if (multiStaffGroup) {
+            if (countedMultistaffGroups.find(multiStaffGroup->getCmper()) != countedMultistaffGroups.end()) {
+                continue; // Skip already-counted multistaff groups
             }
+            countedMultistaffGroups.insert(multiStaffGroup->getCmper());
+        }
+        instUuidCounts[staff->instUuid]++;
+    }
+
+    // Pass 2.1: Remove singleton or empty instUuid counts, including single multistaff instruments
+    for (const auto& count : instUuidCounts) {
+        if (count.second <= 1) {
+            disabledInstUuids.insert(count.first);
         }
     }
 
-    return std::nullopt; // Fallback, should not normally occur
+    // Pass 3: Assign auto-numbering values
+    std::unordered_map<std::string, int> instUuidNumbers;
+    countedMultistaffGroups.clear(); // Reset for numbering
+
+    for (const auto& instrumentUsed : scrollViewList) {
+        auto staff = instrumentUsed->getStaff();
+        if (!staff) continue;
+        if (staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
+            staff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
+            continue;
+        }
+
+        // Check if the staff is part of a multistaff instrument
+        auto multiStaffGroup = staff->getMultiStaffInstGroup();
+        if (multiStaffGroup) {
+            if (countedMultistaffGroups.find(multiStaffGroup->getCmper()) == countedMultistaffGroups.end()) {
+                // Assign a number for this multistaff group
+                countedMultistaffGroups.insert(multiStaffGroup->getCmper());
+                instUuidNumbers[staff->instUuid]++;
+            }
+            // Assign the same number to all staves in the group
+            auto groupNumber = instUuidNumbers[staff->instUuid];
+            for (size_t x = 0; x < multiStaffGroup->staffNums.size(); x++) {
+                auto groupStaff = multiStaffGroup->getStaffAtIndex(x);
+                if (groupStaff) {
+                    groupStaff->autoNumberValue = groupNumber;
+                }
+            }
+            continue; // Skip further processing for the current staff
+        }
+
+        // Assign a number for single staves
+        instUuidNumbers[staff->instUuid]++;
+        staff->autoNumberValue = instUuidNumbers[staff->instUuid];
+    }
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -624,12 +675,11 @@ std::string ordinalPrefix(int num)
 
 std::string others::Staff::addAutoNumbering(const std::string& plainName) const
 {
-    auto numberOpt = getAutoNumberValue();
-    if (!numberOpt) {
+    if (!autoNumberValue.has_value()) {
         return plainName; // No numbering needed
     }
 
-    int number = *numberOpt;
+    int number = *autoNumberValue;
     switch (autoNumbering) {
         default:
         case AutoNumberingStyle::ArabicSuffix:

@@ -100,6 +100,7 @@ MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
                 }
             }
         }
+        others::Staff::calcAutoNumberValues(document);
     }
 });
 

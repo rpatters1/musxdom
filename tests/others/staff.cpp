@@ -179,10 +179,11 @@ TEST(StaffTest, AutoNumbering)
     auto staff1 = others->get<others::Staff>(SCORE_PARTID, 15);
     ASSERT_TRUE(staff1) << "Staff with cmper 15 not found";
 
-    EXPECT_FALSE(staff1->getAutoNumberValue().has_value());
+    EXPECT_FALSE(staff1->autoNumberValue.has_value());
     EXPECT_EQ(staff1->addAutoNumbering("Name"), "Name");
     staff1->useAutoNumbering = true;
-    EXPECT_EQ(staff1->getAutoNumberValue().value_or(-1), 1);
+    others::Staff::calcAutoNumberValues(doc);
+    EXPECT_EQ(staff1->autoNumberValue.value_or(-1), 1);
     EXPECT_EQ(staff1->addAutoNumbering("Name"), "Name 1");
     staff1->autoNumbering = others::Staff::AutoNumberingStyle::RomanSuffix;
     EXPECT_EQ(staff1->addAutoNumbering("Name"), "Name I");
@@ -196,7 +197,7 @@ TEST(StaffTest, AutoNumbering)
     auto staff2 = others->get<others::Staff>(SCORE_PARTID, 16);
     ASSERT_TRUE(staff2) << "Staff with cmper 16 not found";
 
-    EXPECT_EQ(staff2->getAutoNumberValue().value_or(-1), 2);
+    EXPECT_EQ(staff2->autoNumberValue.value_or(-1), 2);
     EXPECT_EQ(staff2->addAutoNumbering("Name"), "2. Name");
     staff2->autoNumbering = others::Staff::AutoNumberingStyle::RomanSuffix;
     EXPECT_EQ(staff2->addAutoNumbering("Name"), "Name II");
@@ -210,7 +211,7 @@ TEST(StaffTest, AutoNumbering)
     auto staff3 = others->get<others::Staff>(SCORE_PARTID, 11);
     ASSERT_TRUE(staff3) << "Staff with cmper 11 not found";
 
-    EXPECT_EQ(staff3->getAutoNumberValue().value_or(-1), 3);
+    EXPECT_EQ(staff3->autoNumberValue.value_or(-1), 3);
     EXPECT_EQ(staff3->addAutoNumbering("Name"), "Name 3");
     staff3->autoNumbering = others::Staff::AutoNumberingStyle::RomanSuffix;
     EXPECT_EQ(staff3->addAutoNumbering("Name"), "Name III");

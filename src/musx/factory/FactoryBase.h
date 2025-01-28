@@ -88,11 +88,11 @@ public:
     void addResolver(Resolver resolver, const std::string_view& key)
     {
         assert(!key.empty());
-        if (registeredResolvers.count(key) > 0) {
-            return; // Skip adding if the resolver with the same key is already registered
+        if (resolvers.count(std::string(key)) > 0) {
+            return; // Skip if already registered
         }
-        registeredResolvers.insert(key);
-        resolvers.emplace_back(std::move(resolver));
+
+        resolvers[std::string(key)] = std::move(resolver);
     }
 
     /**
@@ -102,27 +102,24 @@ public:
      * Clears the internal storage of resolvers and registered keys after execution.
      *
      * @param document The document in which relationships are resolved.
-     * @throws std::runtime_error If any resolver function encounters an error.
      */
     void resolveAll(const dom::DocumentPtr& document)
     {
-        for (auto& resolver : resolvers) {
+        for (const auto& [key, resolver] : resolvers) {
             resolver(document);
         }
+
         resolvers.clear(); ///< Clear resolvers after execution
-        registeredResolvers.clear(); ///< Clear registered keys after execution
     }
 
 private:
-    /// @brief A collection of resolver functions.
-    std::vector<Resolver> resolvers;
-
     /**
-     * @brief Tracks registered resolver keys to ensure uniqueness.
+     * @brief A collection of resolver functions, ordered by key.
      *
-     * This set stores keys for resolvers that have already been added, preventing duplicate registrations.
+     * The map stores resolver functions associated with their unique keys, ensuring
+     * that they execute in lexicographical order of keys.
      */
-    std::unordered_set<std::string_view> registeredResolvers;
+    std::map<std::string, Resolver> resolvers;
 };
 
 

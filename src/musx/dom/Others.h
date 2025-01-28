@@ -821,6 +821,7 @@ public:
 
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
                                     ///< It is set by the factory with a Resolver function.
+    std::optional<int> autoNumberValue; ///< Calculatied autonumbering value. It is computed by #calcAutoNumberValues.
 
     /// @brief Returns the full staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
@@ -846,14 +847,13 @@ public:
     /**
      * @brief Get the auto-numbering value for this staff, if applicable.
      * 
-     * Determines the numbering value based on the occurrences of the instrument UUID
-     * and the current staff instance. If numbering is not applicable (e.g., auto numbering
-     * is disabled, the UUID is empty, or there is only one instance), returns an empty optional.
-     * 
-     * @return std::optional<int> The numbering value if auto numbering is applicable, otherwise std::nullopt.
-     * @todo Handle multistaff instruments.
+     * Calculates #autoNumberValue for every staff based on the occurrences of the instrument UUID
+     * and in each staff instance. If numbering is not applicable (e.g., auto numbering
+     * is disabled, the UUID is empty, or there is only one instance), #autoNumberValue has no value.
+     *
+     * This function is called by the DocumentFactory when the document is created.
      */
-    std::optional<int> getAutoNumberValue() const;
+    static void calcAutoNumberValues(const DocumentPtr& document);
 
     /// @brief Add auto numbering as a prefix or suffix, if needed
     /// @param plainName The name (full or abbreviated) to which to add the auto numbering
