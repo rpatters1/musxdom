@@ -228,6 +228,9 @@ public:
     bool abbrvNameExpand{};                   ///< "Expand Single Word" for abbreviated name (xml node is `<abbrvExpand>`)
     HideStaves hideStaves{};                  ///< "When Hiding Empty Staves" option (xml node is `<optimize>`)
 
+    Cmper multiStaffGroupId{};      ///< Calculated cmper for @ref others::MultiStaffGroupId, if any. This value is not in the xml.
+                                    ///< It is set by the factory with the Resolver function for @ref others::MultiStaffGroupId.
+
     /// @brief Get the full staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
@@ -235,6 +238,21 @@ public:
     /// @brief Get the abbreviated staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns the @ref others::MultiStaffInstrumentGroup for this group if it is part of one. Otherwise nullptr.
+    std::shared_ptr<others::MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
+
+    /// @brief Returns the full instrument name for this group without Enigma tags and with autonumbering (if any).
+    /// @note Ordinal prefix numbering is currently supported only for English.
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    /// @return Full instrument name if this group is associated with a @ref others::MultiStaffInstrumentGroup. Otherwise #getFullName.
+    std::string getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns the abbreviated instrument name for this group without Enigma tags and with autonumbering (if any)
+    /// @note Ordinal prefix numbering is currently supported only for English.
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    /// @return Abbreviated instrument name if this group is associated with a @ref others::MultiStaffInstrumentGroup. Otherwise #getAbbreviatedName.
+    std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /// @brief Returns true if this group spans all measures. 
     bool isAllMeasures() const

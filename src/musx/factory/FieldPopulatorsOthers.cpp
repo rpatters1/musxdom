@@ -415,6 +415,8 @@ MUSX_XML_ELEMENT_ARRAY(PartDefinition, {
     {"needsRecalc", [](const XmlElementPtr&, const std::shared_ptr<PartDefinition>& i) { i->needsRecalc = true; }},
     {"useAsSmpInst", [](const XmlElementPtr&, const std::shared_ptr<PartDefinition>& i) { i->useAsSmpInst = true; }},
     {"smartMusicInst", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->smartMusicInst = e->getTextAs<int>(); }},
+    {"defaultNameStaff", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->defaultNameStaff = e->getTextAs<Cmper>(); }},
+    {"defaultNameGroup", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->defaultNameGroup = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PartGlobals, {

@@ -635,33 +635,12 @@ public:
 
     std::vector<InstCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
 
-    /**
-     * @brief Checks if a given staff number is contained in the staffNums vector.
-     * @param staffNum The staff number to check.
-     * @return True if the staff number is in the vector, otherwise false.
-     */
-    bool containsStaffNum(const InstCmper staffNum) const {
-        return std::find(staffNums.begin(), staffNums.end(), staffNum) != staffNums.end();
-    }
-
-    /**
-     * @brief Finds the MultiStaffInstrumentGroup containing @p staffNum.
-     * @param groups The vector to check.
-     * @param staffNum The staff number to check.
-     * @return The MultiStaffInstrumentGroup containing @p staffNum or nullptr if none.
-     */
-    static std::shared_ptr<MultiStaffInstrumentGroup> findStaffNum(const std::vector<std::shared_ptr<MultiStaffInstrumentGroup>>& groups, const InstCmper staffNum) {
-        for (const auto& group : groups) {
-            if (group->containsStaffNum(staffNum)) {
-                return group;
-            }
-        }
-        return nullptr;
-    }
-
     /// @brief Returns the staff at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
     std::shared_ptr<Staff> getStaffAtIndex(size_t x) const;
+
+    /// @brief Returns the first staff (with integrity check)
+    std::shared_ptr<Staff> getFirstStaff() const;
 
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     std::shared_ptr<details::StaffGroup> getStaffGroup() const;
@@ -731,7 +710,9 @@ public:
     bool extractPart{};                ///< Indicates if the part should be extracted.
     bool needsRecalc{};                ///< Indicates if the part needs update layout.
     bool useAsSmpInst{};               ///< Indicates if the part is used as a SmartMusic instrument.
-    int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
+    int smartMusicInst{};              ///< SmartMusic instrument ID (-1 if not used).
+    Cmper defaultNameStaff{};          ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
+    Cmper defaultNameGroup{};          ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
 
     /** @brief Get the part name if any */
     std::string getName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
@@ -820,7 +801,7 @@ public:
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
 
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
-                                    ///< It is set by the factory with a Resolver function.
+                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
     std::optional<int> autoNumberValue; ///< Calculatied autonumbering value. It is computed by #calcAutoNumberValues.
 
     /// @brief Returns the full staff name without Enigma tags

@@ -448,6 +448,15 @@ std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffAtInde
     return retval;
 }
 
+std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaff() const
+{
+    if (staffNums.empty()) {
+        MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
+        return nullptr;
+    }
+    return getStaffAtIndex(0);
+}
+
 std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup() const
 {
     auto document = getDocument();
@@ -455,8 +464,8 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
     if (!groupIdRecord) return nullptr;
     auto retval = document->getDetails()->get<details::StaffGroup>(getPartId(), SCROLLVIEW_IULIST, groupIdRecord->staffGroupId);
     if (!retval) {
-        MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(groupIdRecord->staffGroupId)
-            + " not found for multiple staff instrument " + std::to_string(getCmper()));
+        MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(groupIdRecord->staffGroupId)
+            + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
     }
     return retval;
 }
@@ -527,7 +536,24 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 
 std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return TextBlock::getText(getDocument(), nameId, true, accidentalStyle); // true: trim tags
+    if (nameId) {
+        return TextBlock::getText(getDocument(), nameId, true, accidentalStyle); // true: trim tags
+    }
+    if (defaultNameStaff) {
+        if (auto staff = getDocument()->getOthers()->get<others::Staff>(SCORE_PARTID, defaultNameStaff)) {
+            return staff->getFullInstrumentName();
+        } else {
+            MUSX_INTEGRITY_ERROR("Part " + std::to_string(getCmper()) + " uses nonexistent Staff " + std::to_string(defaultNameStaff) + " for part name.");
+        }
+    }
+    if (defaultNameGroup) {
+        if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, SCROLLVIEW_IULIST, defaultNameGroup)) {
+            return group->getFullInstrumentName();
+        } else {
+            MUSX_INTEGRITY_ERROR("Part " + std::to_string(getCmper()) + " uses nonexistent StaffGroup " + std::to_string(defaultNameGroup) + " for part name.");
+        }
+    }
+    return {};
 }
 
 // *****************
@@ -756,6 +782,37 @@ std::string details::StaffGroup::getFullName(util::EnigmaString::AccidentalStyle
 std::string details::StaffGroup::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     return others::TextBlock::getText(getDocument(), abbrvNameId, true, accidentalStyle); // true: strip enigma tags
+}
+
+std::shared_ptr<others::MultiStaffInstrumentGroup> details::StaffGroup::getMultiStaffInstGroup() const
+{
+    if (multiStaffGroupId) {
+        if (auto retval = getDocument()->getOthers()->get<others::MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffGroupId)) {
+            return retval;
+        }
+        MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(getCmper2()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffGroupId));
+    }
+    return nullptr;
+}
+
+std::string details::StaffGroup::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    if (auto multiStaffGroup = getMultiStaffInstGroup()) {
+        if (auto staff = multiStaffGroup->getFirstStaff()) {
+            return staff->getFullInstrumentName(accidentalStyle);
+        }
+    }
+    return getFullName(accidentalStyle);
+}
+
+std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    if (auto multiStaffGroup = getMultiStaffInstGroup()) {
+        if (auto staff = multiStaffGroup->getFirstStaff()) {
+            return staff->getAbbreviatedInstrumentName(accidentalStyle);
+        }
+    }
+    return getAbbreviatedName(accidentalStyle);
 }
 
 // ********************

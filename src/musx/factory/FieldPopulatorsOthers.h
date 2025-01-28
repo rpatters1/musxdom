@@ -85,6 +85,24 @@ MUSX_RESOLVER_ENTRY(MarkingCategory, {
     }
 });
 
+MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
+    [](const dom::DocumentPtr& document) {
+        auto parts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
+        for (const auto& part : parts) {
+            auto instGroups = document->getOthers()->getArray<MultiStaffGroupId>(part->getCmper());
+            for (const auto& instance : instGroups) {
+                if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), SCROLLVIEW_IULIST, instance->staffGroupId)) {
+                    group->multiStaffGroupId = instance->getCmper();
+                }
+                else {
+                    MUSX_INTEGRITY_ERROR("Group " + std::to_string(instance->staffGroupId) + " appears in MultiStaffGroupId "
+                        + std::to_string(instance->getCmper()) + " but does not exist.");
+                }
+            }
+        }
+    }
+});
+
 MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
     [](const dom::DocumentPtr& document) {
         auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);
@@ -101,6 +119,16 @@ MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
             }
         }
         others::Staff::calcAutoNumberValues(document);
+    }
+});
+
+MUSX_RESOLVER_ENTRY(Staff, {
+    [](const dom::DocumentPtr& document) {
+        auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);
+        // If no MultiStaffInstrumentGroup records exist, then we need to do this here.
+        if (instGroups.empty()) {
+            others::Staff::calcAutoNumberValues(document);
+        }
     }
 });
 
