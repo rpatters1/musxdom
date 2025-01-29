@@ -805,6 +805,14 @@ public:
         ArabicPrefix        ///< Arabic numeral prefix (with dot): 1. 2. 3. ...
     };
 
+    /** @brief Enum for staff-level stem direction override. */
+    enum class StemDirection
+    {
+        Default,            ///< the default (may not occur in xml)
+        AlwaysUp,           ///< stems are always up on this staff
+        AlwaysDown          ///< stems are always down on this staff
+    };
+
     /** @brief Constructor function */
     explicit Staff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
@@ -831,6 +839,7 @@ public:
     Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
     Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
+    StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
 

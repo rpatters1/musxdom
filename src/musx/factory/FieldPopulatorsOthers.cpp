@@ -91,6 +91,12 @@ MUSX_XML_ENUM_MAPPING(Staff::AutoNumberingStyle, {
     {"arabicPrefix", Staff::AutoNumberingStyle::ArabicPrefix},
 });
 
+MUSX_XML_ENUM_MAPPING(Staff::StemDirection, {
+    // {"default", Staff::StemDirection::Default}, // this is the default and may not occur in the XML
+    {"alwaysUp", Staff::StemDirection::AlwaysUp},
+    {"alwaysDown", Staff::StemDirection::AlwaysDown},
+});
+
 MUSX_XML_ENUM_MAPPING(TextBlock::TextType, {
     {"block", TextBlock::TextType::Block},
     {"expression", TextBlock::TextType::Expression}
@@ -447,6 +453,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"botRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
+    {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection= toEnum<Staff::StemDirection>(e->getTextTrimmed()); }},
     {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e->getTextTrimmed()); }},
     {"useAutoNum", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->useAutoNumbering = true; }},
 });

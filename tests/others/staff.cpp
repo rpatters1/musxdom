@@ -98,6 +98,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <topRepeatDotOff>-3</topRepeatDotOff>
       <botRepeatDotOff>-5</botRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
+      <stemDir>alwaysUp</stemDir>
     </staffSpec>
     <staffSpec cmper="16">
       <staffLines>5</staffLines>
@@ -116,6 +117,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <topRepeatDotOff>-2</topRepeatDotOff>
       <botRepeatDotOff>-6</botRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
+      <stemDir>alwaysDown</stemDir>
       <autoNum>arabicPrefix</autoNum>
       <useAutoNum/>
     </staffSpec>
@@ -149,6 +151,7 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff1->topRepeatDotOff, -3);
     EXPECT_EQ(staff1->botRepeatDotOff, -5);
     EXPECT_EQ(staff1->vertTabNumOff, -1024);
+    EXPECT_EQ(staff1->stemDirection, others::Staff::StemDirection::AlwaysUp);
     EXPECT_EQ(staff1->autoNumbering, others::Staff::AutoNumberingStyle::ArabicSuffix);
     EXPECT_EQ(staff1->useAutoNumbering, false);
 
@@ -157,7 +160,7 @@ TEST(StaffTest, PopulateFields)
 
     EXPECT_EQ(staff2->staffLines, 5);
     EXPECT_EQ(staff2->lineSpace, 24);
-    EXPECT_EQ(staff1->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
+    EXPECT_EQ(staff2->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
     EXPECT_EQ(staff2->defaultClef, 3);
     EXPECT_FALSE(staff2->showNameInParts);
     EXPECT_EQ(staff2->transposedClef, 4);
@@ -172,8 +175,14 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff2->topRepeatDotOff, -2);
     EXPECT_EQ(staff2->botRepeatDotOff, -6);
     EXPECT_EQ(staff2->vertTabNumOff, -1024);
+    EXPECT_EQ(staff2->stemDirection, others::Staff::StemDirection::AlwaysDown);
     EXPECT_EQ(staff2->autoNumbering, others::Staff::AutoNumberingStyle::ArabicPrefix);
     EXPECT_EQ(staff2->useAutoNumbering, true);
+    
+    auto staff3 = others->get<others::Staff>(SCORE_PARTID, 11);
+    ASSERT_TRUE(staff2) << "Staff with cmper 11 not found";
+
+    EXPECT_EQ(staff3->stemDirection, others::Staff::StemDirection::Default);
 }
 
 TEST(StaffTest, AutoNumbering)
