@@ -699,6 +699,8 @@ public:
     Evpu margBottom{};          ///< Bottom margin in Evpu.
     Evpu margRight{};           ///< Right margin in Evpu. (Sign reversed in Finale UI.)
 
+    std::optional<SystemCmper> lastSystem; ///< Computed by the Resolver function. This value is not in the xml.
+
     /** @brief is this a blank page */
     bool isBlank() const { return firstSystem < 0; }
 

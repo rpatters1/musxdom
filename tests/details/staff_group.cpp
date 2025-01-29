@@ -42,9 +42,9 @@ constexpr static musxtest::string_view xml = R"xml(
       </range>
     </instUsed>
     <instUsed cmper="0" inci="1">
-      <inst>2</inst>
+      <inst>3</inst>
       <trackType>staff</trackType>
-      <distFromTop>-288</distFromTop>
+      <distFromTop>-264</distFromTop>
       <range>
         <startMeas>1</startMeas>
         <startEdu>0</startEdu>
@@ -52,6 +52,34 @@ constexpr static musxtest::string_view xml = R"xml(
         <endEdu>2147483647</endEdu>
       </range>
     </instUsed>
+    <instUsed cmper="0" inci="2">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-528</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="3">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-956</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <partDef cmper="0">
+      <nameID>1</nameID>
+      <partOrder>0</partOrder>
+      <copies>1</copies>
+      <printPart/>
+    </partDef>
   </others>
   <details>
     <staffGroup cmper1="0" cmper2="1">
@@ -130,4 +158,10 @@ TEST(StaffGroupTest, PopulateFields)
     EXPECT_TRUE(staffGroup->abbrvNameExpand);
     EXPECT_EQ(staffGroup->hideStaves, details::StaffGroup::HideStaves::None);
     EXPECT_TRUE(staffGroup->hideName);
+
+    EXPECT_EQ(staffGroup->staves.size(), 3) << "group has 3 staves";
+    EXPECT_NE(staffGroup->staves.find(1), staffGroup->staves.end()) << "group contains staff 1";
+    EXPECT_NE(staffGroup->staves.find(2), staffGroup->staves.end()) << "group contains staff 2";
+    EXPECT_NE(staffGroup->staves.find(3), staffGroup->staves.end()) << "group contains staff 3";
+    EXPECT_EQ(staffGroup->staves.find(4), staffGroup->staves.end()) << "group does not contain staff 4";
 }

@@ -93,8 +93,7 @@ MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
             for (const auto& instance : instGroups) {
                 if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), BASE_SYSTEM_ID, instance->staffGroupId)) {
                     group->multiStaffGroupId = instance->getCmper();
-                }
-                else {
+                } else {
                     MUSX_INTEGRITY_ERROR("Group " + std::to_string(instance->staffGroupId) + " appears in MultiStaffGroupId "
                         + std::to_string(instance->getCmper()) + " but does not exist.");
                 }
@@ -119,6 +118,36 @@ MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
             }
         }
         others::Staff::calcAutoNumberValues(document);
+    }
+});
+
+MUSX_RESOLVER_ENTRY(Page, {
+    [](const dom::DocumentPtr& document) {
+        auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
+        for (const auto& part : linkedParts) {
+            auto pages = document->getOthers()->getArray<Page>(part->getCmper());
+            auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
+            for (size_t x = 0; x < pages.size(); x++) {
+                auto page = pages[x];
+                if (!page->isBlank()) {
+                    page->lastSystem = [&]() -> SystemCmper {
+                        size_t nextIndex = x + 1;
+                        while (nextIndex < pages.size()) {
+                            auto nextPage = pages[nextIndex++];
+                            if (!nextPage->isBlank()) {
+                                return nextPage->firstSystem - 1;
+                            }
+                        }
+                        return SystemCmper(systems.size());
+                    }();
+                    if (*page->lastSystem < page->firstSystem) {
+                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                            + " has a last system smaller than the first system.");
+                        page->lastSystem = std::nullopt;
+                    }
+                }
+            }
+        }
     }
 });
 
