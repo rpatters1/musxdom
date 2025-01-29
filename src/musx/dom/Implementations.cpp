@@ -485,7 +485,7 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
     auto document = getDocument();
     auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(getPartId(), getCmper());
     if (!groupIdRecord) return nullptr;
-    auto retval = document->getDetails()->get<details::StaffGroup>(getPartId(), SCROLLVIEW_IULIST, groupIdRecord->staffGroupId);
+    auto retval = document->getDetails()->get<details::StaffGroup>(getPartId(), BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(groupIdRecord->staffGroupId)
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
@@ -570,7 +570,7 @@ std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle 
         }
     }
     if (defaultNameGroup) {
-        if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, SCROLLVIEW_IULIST, defaultNameGroup)) {
+        if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, defaultNameGroup)) {
             return group->getFullInstrumentName();
         } else {
             MUSX_INTEGRITY_ERROR("Part " + std::to_string(getCmper()) + " uses nonexistent StaffGroup " + std::to_string(defaultNameGroup) + " for part name.");
@@ -579,15 +579,14 @@ std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle 
     return {};
 }
 
-Cmper others::PartDefinition::calcScrollViewIuList() const
+Cmper others::PartDefinition::calcSystemIuList(Cmper systemId) const
 {
     if (auto partGlobs = getDocument()->getOthers()->get<others::PartGlobals>(getCmper(), MUSX_GLOBALS_CMPER)) {
         if (partGlobs->specialPartExtractionIUList) {
             return partGlobs->specialPartExtractionIUList;
         }
-        return partGlobs->scrollViewIUlist;
     }
-    return SCROLLVIEW_IULIST;
+    return systemId;
 }
 
 std::shared_ptr<others::PartDefinition> others::PartDefinition::getScore(const DocumentPtr& document)
@@ -605,7 +604,7 @@ std::shared_ptr<others::PartDefinition> others::PartDefinition::getScore(const D
 
 void others::Staff::calcAutoNumberValues(const DocumentPtr& document)
 {
-    auto scrollViewList = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, SCROLLVIEW_IULIST);
+    auto scrollViewList = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
 
     // Map to track counts for instUuid
     std::unordered_map<std::string, int> instUuidCounts;

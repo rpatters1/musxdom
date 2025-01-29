@@ -100,7 +100,7 @@ public:
      */
     std::vector<std::shared_ptr<const Entry>> getEntries();
 
-    void integrityCheck() const override
+    void integrityCheck() override
     {
         this->OthersBase::integrityCheck();
         if (startTime && (startEntry || endEntry)) {
@@ -600,7 +600,7 @@ public:
     /// @brief Calculates if the number on this multimeasure rest is visible.
     bool calcIsNumberVisible() const { return calcNumberOfMeasures() >= numStart; }
 
-    void integrityCheck() const override
+    void integrityCheck() override
     {
         this->OthersBase::integrityCheck();
         if (nextMeas <= getStartMeasure()) {
@@ -663,8 +663,9 @@ public:
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     std::shared_ptr<details::StaffGroup> getStaffGroup() const;
 
-    void integrityCheck() const
+    void integrityCheck() override
     {
+        OthersBase::integrityCheck();
         if (staffNums.empty()) {
             MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
         } else if (staffNums.size() > 3) {
@@ -738,8 +739,13 @@ public:
     /** @brief Return true if this part corresponds to the score */
     bool isScore() const { return getCmper() == SCORE_PARTID; }
 
-    /** @brief Return the scroll view @ref InstrumentUsed cmper for this part */
-    Cmper calcScrollViewIuList() const;
+    /** @brief Return the @ref InstrumentUsed cmper by this part for the specified system.
+     *
+     * This function either returns the input @p systemId or the Special Part Extraction cmper.
+     *
+     * @param systemId The staff system to find.
+    */
+    Cmper calcSystemIuList(Cmper systemId) const;
 
     /** @brief Return the instance for the score */
     static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
@@ -809,6 +815,10 @@ public:
     int staffLines{};               ///< Number of lines in the staff.
     Evpu lineSpace{};               ///< Distance between staff lines.
     std::string instUuid;           ///< Unique identifier for the type of instrument.
+    //noteFont
+    bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
+    //transposition
+    bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
     Evpu topBarlineOffset{};        ///< Offset for the top barline.
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
     Evpu dwRestOffset{};            ///< Offset for downstem rests.
@@ -848,6 +858,10 @@ public:
     /// @note Ordinal prefix numbering is currently supported only for English.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns if names should be shown for the specified part
+    bool showNamesForPart(Cmper partId) const
+    { return partId == SCORE_PARTID ? !hideNameInScore : showNameInParts; }
 
     /**
      * @brief Get the auto-numbering value for this staff, if applicable.

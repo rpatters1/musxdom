@@ -29,6 +29,30 @@ using namespace musx::dom;
 constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
+  <others>
+    <instUsed cmper="0" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="1">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-288</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+  </others>
   <details>
     <staffGroup cmper1="0" cmper2="1">
       <startInst>1</startInst>
@@ -72,7 +96,7 @@ TEST(StaffGroupTest, PopulateFields)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    auto staffGroup = details->get<details::StaffGroup>(SCORE_PARTID, SCROLLVIEW_IULIST, 1);
+    auto staffGroup = details->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, 1);
     ASSERT_TRUE(staffGroup) << "StaffGroup with cmper1 0 and cmper2 1 not found";
 
     EXPECT_EQ(staffGroup->startInst, 1);

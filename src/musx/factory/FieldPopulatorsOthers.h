@@ -91,7 +91,7 @@ MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
         for (const auto& part : parts) {
             auto instGroups = document->getOthers()->getArray<MultiStaffGroupId>(part->getCmper());
             for (const auto& instance : instGroups) {
-                if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), SCROLLVIEW_IULIST, instance->staffGroupId)) {
+                if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), BASE_SYSTEM_ID, instance->staffGroupId)) {
                     group->multiStaffGroupId = instance->getCmper();
                 }
                 else {

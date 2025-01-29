@@ -158,7 +158,7 @@ public:
      */
     int calcAugmentationDots() const;
 
-    void integrityCheck() const override
+    void integrityCheck() override
     {
         this->Base::integrityCheck();
         if (numNotes != notes.size()) {

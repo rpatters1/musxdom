@@ -91,7 +91,7 @@ using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
 constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
-constexpr Cmper SCROLLVIEW_IULIST = 0; ///< The InstrumentUsed cmper for scroll view in any part.
+constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::InstrumentUsed cmper)
 
 class Document;
 /** @brief Shared `Document` pointer */
@@ -163,13 +163,14 @@ public:
     }
 
     /**
-     * @brief Allows a class to determine if it has been properly contructed by the factory.
+     * @brief Allows a class to determine if it has been properly contructed by the factory and fix issues that it can,
+     * such as creating default instances of contained classes.
      *
-     * The defauly implementation does nothing.
+     * The default implementation should always be called inside an overridden implementation.
      *
      * @throws #musx::dom::integrity_error if there is a problem.
      */
-    virtual void integrityCheck() const { }
+    virtual void integrityCheck() { }
 
     /**
      * @brief Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.

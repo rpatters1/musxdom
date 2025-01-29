@@ -508,7 +508,7 @@ MUSX_XML_ELEMENT_ARRAY(LineCurveOptions, {
 
 MUSX_XML_ELEMENT_ARRAY(MiscOptions, {
     {"showRepeatsForParts", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->showRepeatsForParts = true;}},
-    {"retainOctaveTransInConcertPitch", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->keepOctaveTransInConcertPitch = true;}},
+    {"retainOctaveTransInConcertPitch", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->showSoundingOctaveInConcertPitch = true;}},
     {"showCurrentLayerOnly", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->showActiveLayerOnly = true;}},
     {"combineRestsAcrossLayers", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->consolidateRestsAcrossLayers = true;}},
     {"sdDashOn", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->shapeDesignerDashLength = e->getTextAs<Evpu>();}},

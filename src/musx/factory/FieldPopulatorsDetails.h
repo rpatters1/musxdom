@@ -48,6 +48,24 @@ inline StaffGroup::BracketStyle toEnum<StaffGroup::BracketStyle>(const int& valu
     return {};
 }
 
+MUSX_RESOLVER_ENTRY(StaffGroup, {
+    [](const dom::DocumentPtr& document) {
+        auto groups = document->getDetails()->getArray<StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID);
+        auto baseList = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+        for (const auto& instance : groups) {
+            auto startIndex = others::InstrumentUsed::getIndexForStaff(baseList, instance->startInst);
+            auto endIndex = others::InstrumentUsed::getIndexForStaff(baseList, instance->endInst);
+            if (!startIndex || !endIndex) {
+                MUSX_INTEGRITY_ERROR("Group " + std::to_string(instance->getCmper2()) + " has non-existent start or end staff cmpers");
+                continue;
+            }
+            for (size_t x = *startIndex; x <= *endIndex && x < baseList.size(); x++) {
+                instance->staves.insert(baseList[x]->staffId);
+            }
+        }
+    }
+});
+
 } // namespace factory
 } // namespace musx
 

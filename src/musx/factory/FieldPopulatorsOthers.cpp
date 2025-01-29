@@ -432,6 +432,8 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
     {"instUuid", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->instUuid = e->getTextTrimmed(); }},
+    {"showNameParts", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->showNameInParts = true; }},
+    {"hideStfNameInScore", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hideNameInScore = true; }},
     {"topBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topBarlineOffset = e->getTextAs<Evpu>(); }},
     {"botBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botBarlineOffset = e->getTextAs<Evpu>(); }},
     {"dwRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->dwRestOffset = e->getTextAs<Evpu>(); }},

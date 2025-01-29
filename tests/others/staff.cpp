@@ -85,6 +85,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <staffLines>5</staffLines>
       <lineSpace>24</lineSpace>
       <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <showNameParts/>
       <defaultClef>1</defaultClef>
       <transposedClef>2</transposedClef>
       <dwRestOffset>-4</dwRestOffset>
@@ -104,6 +105,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
       <defaultClef>3</defaultClef>
       <transposedClef>4</transposedClef>
+      <hideStfNameInScore/>
       <dwRestOffset>-4</dwRestOffset>
       <wRestOffset>-4</wRestOffset>
       <hRestOffset>-4</hRestOffset>
@@ -134,7 +136,9 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff1->lineSpace, 24);
     EXPECT_EQ(staff1->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
     EXPECT_EQ(staff1->defaultClef, 1);
+    EXPECT_TRUE(staff1->showNameInParts);
     EXPECT_EQ(staff1->transposedClef, 2);
+    EXPECT_FALSE(staff1->hideNameInScore);
     EXPECT_EQ(staff1->dwRestOffset, -4);
     EXPECT_EQ(staff1->wRestOffset, -4);
     EXPECT_EQ(staff1->hRestOffset, -4);
@@ -155,7 +159,9 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff2->lineSpace, 24);
     EXPECT_EQ(staff1->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
     EXPECT_EQ(staff2->defaultClef, 3);
+    EXPECT_FALSE(staff2->showNameInParts);
     EXPECT_EQ(staff2->transposedClef, 4);
+    EXPECT_TRUE(staff2->hideNameInScore);
     EXPECT_EQ(staff2->dwRestOffset, -4);
     EXPECT_EQ(staff2->wRestOffset, -4);
     EXPECT_EQ(staff2->hRestOffset, -4);

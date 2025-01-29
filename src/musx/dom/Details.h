@@ -22,6 +22,7 @@
 #pragma once
 #include <functional>
 #include <vector>
+#include <unordered_set>
 
 #include "BaseClasses.h"
 
@@ -114,7 +115,7 @@ public:
      */
     bool iterateEntries(std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator);
 
-    void integrityCheck() const override
+    void integrityCheck() override
     {
         this->DetailsBase::integrityCheck();
         if (clefListId && clefId.has_value()) {
@@ -210,7 +211,7 @@ public:
     Cmper fullNameId{};                       ///< Full name TextBlock cmper (xml node is `<fullID>`)
     int fullNameXadj{};                       ///< Horizontal adjustment for full name (xml node is `<fullXadj>`)
     int fullNameYadj{};                       ///< Vertical adjustment for full name (xml node is `<fullYadj>`)
-    std::shared_ptr<Bracket> bracket{};       ///< Bracket Options
+    std::shared_ptr<Bracket> bracket{};       ///< Bracket Options. The factory guarantees this value to exist.
     BarlineType barlineType{};                ///< Group barline type (xml node is `<barline>`)
     AlignJustify fullNameJustify{};           ///< Full name justification (xml node is `<fullJustify>`)
     AlignJustify abbrvNameJustify{};          ///< Abbreviated name justification (xml node is `<abbrvJustify>`)
@@ -230,6 +231,7 @@ public:
 
     Cmper multiStaffGroupId{};      ///< Calculated cmper for @ref others::MultiStaffGroupId, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref others::MultiStaffGroupId.
+    std::unordered_set<InstCmper> staves; ///< Calculated list of staves in the group
 
     /// @brief Get the full staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
@@ -258,12 +260,16 @@ public:
     bool isAllMeasures() const
     { return (startMeas == 1 && endMeas == (std::numeric_limits<MeasCmper>::max)()); }
 
-    void integrityCheck() const override
+    void integrityCheck() override
     {
         this->DetailsBase::integrityCheck();
         if (endMeas <= startMeas || startMeas <= 0) {
             MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getPartId())
                 + " starts at measure " + std::to_string(startMeas) + " and ends at measure " + std::to_string(endMeas));
+        }
+        if (!bracket) {
+            // this is not an error. Finale omits the bracket node for groups with entirely default bracket info.
+            bracket = std::make_shared<Bracket>();
         }
     }
 
