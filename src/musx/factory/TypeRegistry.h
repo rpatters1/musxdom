@@ -199,6 +199,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::Page,
     dom::others::StaffSystem,
     dom::others::Staff,
+    dom::others::StaffStyle,
+    dom::others::StaffStyleAssign,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,

@@ -512,16 +512,19 @@ public:
 class MusicRange : public OthersBase
 {
 public:
-
     /**
      * @brief Constructs a MusicRange object.
      * @param document Shared pointer to the document.
      * @param partId The part ID if this range is unlinked, otherwise 0.
      * @param shareMode The share mode if this range is unlinked.
      * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::InstrumentUsed.
+     * @param inci incident value, for subclasses that have them.
      */
-    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
-        : OthersBase(document, partId, shareMode, cmper) {}
+    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All,
+            Cmper cmper = 0, std::optional<Inci> inci = std::nullopt)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
 
     MeasCmper startMeas{};      ///< Starting measure in the range.
     Edu startEdu{};             ///< Starting EDU (Elapsed Durational Unit) in the range.

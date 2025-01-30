@@ -28,8 +28,11 @@
 #include <stdexcept>
 #include <map>
 
+#include "musx/util/EnigmaString.h"
+#include "musx/util/Logger.h"
+
 #include "BaseClasses.h"
-// do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
+// do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -826,6 +829,7 @@ public:
     Evpu lineSpace{};               ///< Distance between staff lines.
     std::string instUuid;           ///< Unique identifier for the type of instrument.
     //noteFont
+    bool hasStyles{};               ///< Indicates that this staff has staff style assignments
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
     //transposition
     bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
@@ -841,6 +845,7 @@ public:
     Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
     Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
+    bool hideStems{};               ///< Inverse of "Display Stems"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
@@ -894,6 +899,93 @@ public:
 
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Staff> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffStyle
+ * @brief Represents a Finale staff style.
+ *
+ * The cmper is a 1-based staff style ID (not necessarily sequential).
+ * This class is identified by the XML node name "staffStyle".
+ */
+class StaffStyle : public Staff
+{
+public:
+    /** @brief Constructor function */
+    explicit StaffStyle(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : Staff(document, partId, shareMode, cmper) {}
+
+    /// @brief lists the masks that deterimine if this staff style overrides the staff settings
+    /// @todo add masks as needed. If we ever add them all, remove Base inheritance and #requireAllFields function.
+    class Masks : public Base // Base inheritance needed for requireAllFields
+    {
+    public:
+        /**
+         * @brief Default constructor
+         * @param document A weak pointer to the document object.
+         */
+        explicit Masks(const DocumentWeakPtr& document)
+            : Base(document, SCORE_PARTID, ShareMode::All) {}
+
+        bool negNameScore{};        ///< overrides #hideNameInScore.
+        bool fullName{};            ///< overrides #fullNameTextId.
+        bool abrvName{};            ///< overrides #abbrvNameTextId.
+        bool showStems{};           ///< overrides #hideStems and #stemDirection
+        bool showNameParts{};       ///< overrided #showNameInParts
+
+        bool requireAllFields() const override { return false; }
+
+        static const xml::XmlElementArray<Masks> XmlMappingArray;    ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::string styleName;              ///< name of staff style
+    bool addToMenu;                     ///< add this staff style to the context menu for staff styles
+    std::shared_ptr<Masks> masks;       ///< override masks: guaranteed to exist by #integrityCheck, which is called by the factory
+                                        ///< (xml node is `<mask>`)
+
+    bool requireAllFields() const override { return false; }
+
+    void integrityCheck() override
+    {
+        if (!masks) {
+            // Finale allows creation of staff styles with no masks, so this is just a verbose comment
+            util::Logger::log(util::Logger::LogLevel::Verbose, "StaffStyle " + styleName
+                + " (" + std::to_string(getCmper()) + ") does not override anything.");
+            masks = std::make_shared<Masks>(getDocument());
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "staffStyle"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffStyle> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffStyleAssign
+ * @brief Represents an assignment
+ *
+ * The cmper is the staff ID. This class is identified by the XML node name "staffStyleAssign".
+ */
+class StaffStyleAssign : public MusicRange
+{
+public:
+    /** @brief Constructor function */
+    explicit StaffStyleAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : MusicRange(document, partId, shareMode, cmper, inci) {}
+
+    Cmper styleId{};        ///< The cmper of the assigned @ref StaffStyle.
+
+    void integrityCheck() override
+    {
+        if (!styleId) {
+            MUSX_INTEGRITY_ERROR(std::string("Staff style assignment has no staff style id:")
+                + " Part " + std::to_string(getPartId())
+                + " Staff " + std::to_string(getCmper())
+            );
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "staffStyleAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffStyleAssign> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
