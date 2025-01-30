@@ -531,6 +531,15 @@ public:
     MeasCmper endMeas{};        ///< Ending measure in the range.
     Edu endEdu{};               ///< Ending EDU (Elapsed Durational Unit) in the range.
 
+    /// @brief Returns true of the given metric location is contained in this MusicRange instance.
+    /// @param measId The measure ID to search for.
+    /// @param eduPosition The Edu position within the measure to search for.
+    bool contains(MeasCmper measId, Edu eduPosition) const
+    {
+        return (startMeas < measId || (startMeas == measId && startEdu <= eduPosition)) &&
+               (endMeas > measId || (endMeas == measId && endEdu >= eduPosition));
+    }
+
     static const xml::XmlElementArray<MusicRange> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 

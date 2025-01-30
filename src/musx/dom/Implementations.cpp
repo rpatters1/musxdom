@@ -857,6 +857,41 @@ std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString
     return getAbbreviatedName(accidentalStyle);
 }
 
+// ****************************
+// ***** StaffStyleAssign *****
+// ****************************
+
+std::vector<std::shared_ptr<others::StaffStyleAssign>> others::StaffStyleAssign::findOverlappingRanges(
+    const std::vector<std::shared_ptr<others::StaffStyleAssign>>& ranges, MeasCmper measId, Edu eduPosition)
+{
+    std::vector<std::shared_ptr<others::StaffStyleAssign>> result;
+    std::copy_if(ranges.begin(), ranges.end(), std::back_inserter(result),
+        [measId, eduPosition](const std::shared_ptr<others::StaffStyleAssign>& range) { return range->contains(measId, eduPosition); });
+    return result;
+}
+
+std::vector<std::shared_ptr<others::StaffStyleAssign>> others::StaffStyleAssign::findAllOverlappingRanges(const DocumentPtr& document,
+    Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition)
+{
+    auto staffStyleAssignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
+    if (staffStyleAssignments.empty()) {
+        return {};
+    }
+    return findOverlappingRanges(staffStyleAssignments, measId, eduPosition);
+}
+
+std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() const
+{
+    auto result = getDocument()->getOthers()->get<others::StaffStyle>(getPartId(), styleId);
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("Staff style assignment has invalid staff style ID " + std::to_string(styleId)
+            + ": Part " + std::to_string(getPartId())
+            + " Staff " + std::to_string(getCmper())
+        );
+    }
+    return result;
+}
+
 // ********************
 // ***** TextBase *****
 // ********************

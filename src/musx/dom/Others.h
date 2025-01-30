@@ -974,6 +974,28 @@ public:
 
     Cmper styleId{};        ///< The cmper of the assigned @ref StaffStyle.
 
+    /// @brief Finds a subset of StaffStyleAssign instances that overlap with the specified metric position.
+    /// @param ranges A set of StaffStyleAssign instances to search
+    /// @param measId The MeasCmper of the measure position
+    /// @param eduPosition The Edu position within the measure specified by @p measId.
+    static std::vector<std::shared_ptr<StaffStyleAssign>> findOverlappingRanges(
+        const std::vector<std::shared_ptr<StaffStyleAssign>>& ranges, MeasCmper measId, Edu eduPosition);
+
+    /// @brief Finds a subset from all StaffStyleAssign instances that overlap with the specified
+    /// metric position on a given staff in a give linked part or score.
+    /// @param document The document to search
+    /// @param partId The linked part id to search
+    /// @param staffId The staff to search
+    /// @param measId The MeasCmper of the measure position
+    /// @param eduPosition The Edu position within the measure specified by @p measId.
+    static std::vector<std::shared_ptr<StaffStyleAssign>> findAllOverlappingRanges(const DocumentPtr& document,
+        Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
+
+    /// @brief Returns the @ref StaffStyle instance for this assignment
+    /// @return Can return nullptr only in the case when there is an itegrity error
+    /// @throws musx::dom::integrity_error if compiled to throw integrity errors
+    std::shared_ptr<StaffStyle> getStaffStyle() const;
+
     void integrityCheck() override
     {
         if (!styleId) {
