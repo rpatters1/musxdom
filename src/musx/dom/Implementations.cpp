@@ -812,6 +812,55 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     return addAutoNumbering(name);
 }
 
+// **************************
+// ***** StaffComposite *****
+// **************************
+
+void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle>& staffStyle)
+{
+    auto srcMasks = staffStyle->masks;
+
+    /// @todo the rest of the masks as we discover/create them
+    if (srcMasks->negNameScore) {
+        hideNameInScore = staffStyle->hideNameInScore;
+        masks->negNameScore = true;
+    }
+    if (srcMasks->fullName) {
+        fullNameTextId = staffStyle->fullNameTextId;
+        masks->fullName = true;
+    }
+    if (srcMasks->abrvName) {
+        abbrvNameTextId = staffStyle->abbrvNameTextId;
+        masks->abrvName = true;
+    }
+    if (srcMasks->showStems) {
+        hideStems = staffStyle->hideStems;
+        stemDirection = staffStyle->stemDirection;
+        masks->showStems = true;
+    }
+    if (srcMasks->showNameParts) {
+        showNameInParts = staffStyle->showNameInParts;
+        masks->showNameParts = true;
+    }
+}
+
+std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
+    InstCmper staffId, MeasCmper measId, Edu eduPosition)
+{
+    auto rawStaff = document->getOthers()->get<others::Staff>(partId, staffId);
+    if (!rawStaff) return nullptr;
+
+    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff));
+    if (result->hasStyles) {
+        auto styles = others::StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
+        for (const auto& style : styles) {
+            result->applyStyle(style);
+        }
+    }
+
+    return result;
+}
+
 // **********************
 // ***** StaffGroup *****
 // **********************
@@ -857,28 +906,33 @@ std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString
     return getAbbreviatedName(accidentalStyle);
 }
 
+// **********************
+// ***** StaffStyle *****
+// **********************
+
+ std::vector<std::shared_ptr<others::StaffStyle>> others::StaffStyle::findAllOverlappingStyles(const DocumentPtr& document,
+        Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition)
+{
+    auto staffStyleAssignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
+    std::vector<std::shared_ptr<others::StaffStyleAssign>> applicableAssignments;
+    std::copy_if(staffStyleAssignments.begin(), staffStyleAssignments.end(), std::back_inserter(applicableAssignments),
+        [measId, eduPosition](const std::shared_ptr<others::StaffStyleAssign>& range) {
+            return range->contains(measId, eduPosition);
+        });
+
+    std::vector<std::shared_ptr<others::StaffStyle>> result;
+    result.reserve(applicableAssignments.size());
+    for (const auto& assign : applicableAssignments) {
+        if (auto style = assign->getStaffStyle()) {
+            result.emplace_back(style);
+        }
+    }
+    return result;
+ }
+
 // ****************************
 // ***** StaffStyleAssign *****
 // ****************************
-
-std::vector<std::shared_ptr<others::StaffStyleAssign>> others::StaffStyleAssign::findOverlappingRanges(
-    const std::vector<std::shared_ptr<others::StaffStyleAssign>>& ranges, MeasCmper measId, Edu eduPosition)
-{
-    std::vector<std::shared_ptr<others::StaffStyleAssign>> result;
-    std::copy_if(ranges.begin(), ranges.end(), std::back_inserter(result),
-        [measId, eduPosition](const std::shared_ptr<others::StaffStyleAssign>& range) { return range->contains(measId, eduPosition); });
-    return result;
-}
-
-std::vector<std::shared_ptr<others::StaffStyleAssign>> others::StaffStyleAssign::findAllOverlappingRanges(const DocumentPtr& document,
-    Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition)
-{
-    auto staffStyleAssignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
-    if (staffStyleAssignments.empty()) {
-        return {};
-    }
-    return findOverlappingRanges(staffStyleAssignments, measId, eduPosition);
-}
 
 std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() const
 {

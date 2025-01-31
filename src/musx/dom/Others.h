@@ -791,6 +791,7 @@ public:
     static const xml::XmlElementArray<PartGlobals> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
+class StaffStyle;
 /**
  * @class Staff
  * @brief Represents the definition of a Finale staff.
@@ -910,6 +911,11 @@ public:
  */
 class StaffStyle : public Staff
 {
+protected:
+    /** @brief protected constructor for @ref StaffComposite */
+    explicit StaffStyle(const std::shared_ptr<Staff>& staff)
+        : Staff(*staff), masks(std::make_shared<Masks>(staff->getDocument())) {}
+
 public:
     /** @brief Constructor function */
     explicit StaffStyle(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
@@ -931,7 +937,7 @@ public:
         bool fullName{};            ///< overrides #fullNameTextId.
         bool abrvName{};            ///< overrides #abbrvNameTextId.
         bool showStems{};           ///< overrides #hideStems and #stemDirection
-        bool showNameParts{};       ///< overrided #showNameInParts
+        bool showNameParts{};       ///< overrides #showNameInParts
 
         bool requireAllFields() const override { return false; }
 
@@ -942,6 +948,16 @@ public:
     bool addToMenu;                     ///< add this staff style to the context menu for staff styles
     std::shared_ptr<Masks> masks;       ///< override masks: guaranteed to exist by #integrityCheck, which is called by the factory
                                         ///< (xml node is `<mask>`)
+
+    /// @brief Finds a subset from all StaffStyle instances that overlap with the specified
+    /// metric position on a given staff in a give linked part or score.
+    /// @param document The document to search
+    /// @param partId The linked part id to search
+    /// @param staffId The staff to search
+    /// @param measId The MeasCmper of the measure position
+    /// @param eduPosition The Edu position within the measure specified by @p measId.
+    static std::vector<std::shared_ptr<StaffStyle>> findAllOverlappingStyles(const DocumentPtr& document,
+        Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
 
     bool requireAllFields() const override { return false; }
 
@@ -974,23 +990,6 @@ public:
 
     Cmper styleId{};        ///< The cmper of the assigned @ref StaffStyle.
 
-    /// @brief Finds a subset of StaffStyleAssign instances that overlap with the specified metric position.
-    /// @param ranges A set of StaffStyleAssign instances to search
-    /// @param measId The MeasCmper of the measure position
-    /// @param eduPosition The Edu position within the measure specified by @p measId.
-    static std::vector<std::shared_ptr<StaffStyleAssign>> findOverlappingRanges(
-        const std::vector<std::shared_ptr<StaffStyleAssign>>& ranges, MeasCmper measId, Edu eduPosition);
-
-    /// @brief Finds a subset from all StaffStyleAssign instances that overlap with the specified
-    /// metric position on a given staff in a give linked part or score.
-    /// @param document The document to search
-    /// @param partId The linked part id to search
-    /// @param staffId The staff to search
-    /// @param measId The MeasCmper of the measure position
-    /// @param eduPosition The Edu position within the measure specified by @p measId.
-    static std::vector<std::shared_ptr<StaffStyleAssign>> findAllOverlappingRanges(const DocumentPtr& document,
-        Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
-
     /// @brief Returns the @ref StaffStyle instance for this assignment
     /// @return Can return nullptr only in the case when there is an itegrity error
     /// @throws musx::dom::integrity_error if compiled to throw integrity errors
@@ -1008,6 +1007,39 @@ public:
 
     constexpr static std::string_view XmlNodeName = "staffStyleAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StaffStyleAssign> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffComposite
+ * @brief Represents a composite of an underlying @ref Staff instance with any applicable @ref StaffStyle instances applied.
+ *
+ * Instances of StaffComposite are not part of the document structure and cannot be created directly.
+ * Use #createCurrent to create an instance.
+ */
+class StaffComposite : public StaffStyle
+{
+private:
+    /** @brief private constructor */
+    explicit StaffComposite(const std::shared_ptr<Staff>& staff)
+        : StaffStyle(staff) {}
+
+public:
+    /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
+    /// @param staffStyle The @ref StaffStyle to apply.
+    void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
+
+    /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
+    ///
+    /// Note that the Finale app has logic to assure that no two assigments modify the same staff properties at the same metric
+    /// position. If this occurs despite Finale's code, the last one processed is the one that takes effect.
+    ///
+    /// @param document The document to search
+    /// @param partId The ID of the linked part or score
+    /// @param staffId The @ref Staff cmper of the base staff for which to apply staff styles
+    /// @param measId The measure location to search
+    /// @param eduPosition The Edu position within the measure to search
+    /// @return The composite result or null if @p staffId is not valid.
+    static std::shared_ptr<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
 };
 
 /**
