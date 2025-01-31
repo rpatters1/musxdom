@@ -354,7 +354,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
                 std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
-                    });
+                });
                 for (const auto& tuplet : tuplets) {
                     activeTuplets.emplace_back(tuplet);
                 }
@@ -825,6 +825,11 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     auto srcMasks = staffStyle->masks;
 
     /// @todo the rest of the masks as we discover/create them
+    if (srcMasks->staffType) {
+        staffLines = staffStyle->staffLines;
+        customStaff = staffStyle->customStaff;
+        masks->staffType = true;
+    }
     if (srcMasks->negNameScore) {
         hideNameInScore = staffStyle->hideNameInScore;
         masks->negNameScore = true;

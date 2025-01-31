@@ -9,7 +9,10 @@ constexpr static musxtest::string_view xml = R"xml(
 <finale>
   <others>
     <staffStyle cmper="1">
-      <staffLines>5</staffLines>
+      <customStaff>
+        <staffLine>13</staffLine>
+        <staffLine>11</staffLine>
+      </customStaff>
       <lineSpace>24</lineSpace>
       <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
       <showNameParts/>
@@ -27,6 +30,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <styleName>Names and Stems</styleName>
       <addToMenu/>
       <mask>
+        <staffType/>
         <negNameScore/>
         <fullName/>
         <abrvName/>
@@ -55,7 +59,11 @@ TEST(StaffStyleTest, PopulateFields)
     auto staffStyle = others->get<others::StaffStyle>(SCORE_PARTID, 1);
     ASSERT_TRUE(staffStyle) << "StaffStyle with cmper 1 not found";
 
-    EXPECT_EQ(staffStyle->staffLines, 5);
+    EXPECT_FALSE(staffStyle->staffLines);
+    ASSERT_TRUE(staffStyle->customStaff);
+    ASSERT_EQ(staffStyle->customStaff.value().size(), 2);
+    EXPECT_EQ(staffStyle->customStaff.value()[0], 11) << "factory did not sort customStaff elements";
+    EXPECT_EQ(staffStyle->customStaff.value()[1], 13) << "factory did not sort customStaff elements";
     EXPECT_EQ(staffStyle->lineSpace, 24);
     EXPECT_EQ(staffStyle->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
     EXPECT_TRUE(staffStyle->showNameInParts);

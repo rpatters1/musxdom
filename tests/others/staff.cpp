@@ -101,7 +101,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <stemDir>alwaysUp</stemDir>
     </staffSpec>
     <staffSpec cmper="16">
-      <staffLines>5</staffLines>
+      <staffLines>0</staffLines>
       <lineSpace>24</lineSpace>
       <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
       <defaultClef>3</defaultClef>
@@ -134,7 +134,7 @@ TEST(StaffTest, PopulateFields)
     auto staff1 = others->get<others::Staff>(SCORE_PARTID, 15);
     ASSERT_TRUE(staff1) << "Staff with cmper 15 not found";
 
-    EXPECT_EQ(staff1->staffLines, 5);
+    EXPECT_EQ(staff1->staffLines.value_or(-1), 5);
     EXPECT_EQ(staff1->lineSpace, 24);
     EXPECT_EQ(staff1->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
     EXPECT_EQ(staff1->defaultClef, 1);
@@ -158,7 +158,7 @@ TEST(StaffTest, PopulateFields)
     auto staff2 = others->get<others::Staff>(SCORE_PARTID, 16);
     ASSERT_TRUE(staff2) << "Staff with cmper 16 not found";
 
-    EXPECT_EQ(staff2->staffLines, 5);
+    EXPECT_EQ(staff2->staffLines.value_or(-1), 0);
     EXPECT_EQ(staff2->lineSpace, 24);
     EXPECT_EQ(staff2->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
     EXPECT_EQ(staff2->defaultClef, 3);

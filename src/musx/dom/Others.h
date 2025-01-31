@@ -826,7 +826,8 @@ public:
     // Public properties corresponding to the XML structure
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff.
-    int staffLines{};               ///< Number of lines in the staff.
+    std::optional<int> staffLines{}; ///< Number of lines in the staff (if no custom staff)
+    std::optional<std::vector<int>> customStaff; ///< A list of stafflines from 0..26 where a standard 5-line staff is values 11, 12, 13, 14, 15.
     Evpu lineSpace{};               ///< Distance between staff lines.
     std::string instUuid;           ///< Unique identifier for the type of instrument.
     //noteFont
@@ -898,6 +899,20 @@ public:
     /// @return Auto numbered name.
     std::string addAutoNumbering(const std::string& plainName) const;
 
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (!staffLines && !customStaff) {
+            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has neither a standard nor a custom staff definition.");
+        } else if (staffLines && customStaff) {
+            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has both a standard and a custom staff definition.");            
+        }
+        if (customStaff) { // guarantee ascending order of staves.
+            std::sort(customStaff.value().begin(), customStaff.value().end(),
+                [](const auto& a, const auto& b) { return a < b; });
+        }
+    }
+
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
@@ -935,6 +950,7 @@ public:
         explicit Masks(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
+        bool staffType{};           ///< overrides #staffLines and #customStaff.
         bool negNameScore{};        ///< overrides #hideNameInScore.
         bool fullName{};            ///< overrides #fullNameTextId.
         bool abrvName{};            ///< overrides #abbrvNameTextId.
@@ -965,6 +981,7 @@ public:
 
     void integrityCheck() override
     {
+        Staff::integrityCheck();
         if (!masks) {
             // Finale allows creation of staff styles with no masks, so this is just a verbose comment
             util::Logger::log(util::Logger::LogLevel::Verbose, "StaffStyle " + styleName
@@ -999,6 +1016,7 @@ public:
 
     void integrityCheck() override
     {
+        MusicRange::integrityCheck();
         if (!styleId) {
             MUSX_INTEGRITY_ERROR(std::string("Staff style assignment has no staff style id:")
                 + " Part " + std::to_string(getPartId())

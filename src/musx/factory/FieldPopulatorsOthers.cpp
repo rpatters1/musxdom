@@ -436,6 +436,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
     {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},
     {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
+    {"customStaff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->customStaff = populateEmbeddedArray<int>(e, "staffLine"); }},
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
     {"instUuid", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->instUuid = e->getTextTrimmed(); }},
     {"hasStyles", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hasStyles = true; }},
@@ -461,6 +462,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
+    {"staffType", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->staffType = true; }},
     {"negNameScore", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->negNameScore = true; }},
     {"fullName", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullName = true; }},
     {"abrvName", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvName = true; }},

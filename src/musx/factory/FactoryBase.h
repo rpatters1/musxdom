@@ -328,6 +328,20 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
     listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
 }
 
+template <typename T>
+static std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::string_view& elementNodeName)
+{
+    std::vector<T> result;
+    for (auto child = e->getFirstChildElement(); child; child = child->getNextSibling()) {
+        if (child->getTagName() != elementNodeName) {
+            MUSX_UNKNOWN_XML("Unknown tag <" + child->getTagName() + "> while processing embedded xml array <" + e->getTagName() + ">");
+            continue;
+        }
+        result.push_back(child->getTextAs<T>());
+    }
+    return result;
+}
+
 template <>
 template <typename... Args>
 inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(const XmlElementPtr& element, Args&&... args)
