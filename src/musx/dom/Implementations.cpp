@@ -564,14 +564,14 @@ std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle 
     }
     if (defaultNameStaff) {
         if (auto staff = getDocument()->getOthers()->get<others::Staff>(SCORE_PARTID, defaultNameStaff)) {
-            return staff->getFullInstrumentName();
+            return staff->getFullInstrumentName(accidentalStyle, true); // true: prefer staff name
         } else {
             MUSX_INTEGRITY_ERROR("Part " + std::to_string(getCmper()) + " uses nonexistent Staff " + std::to_string(defaultNameStaff) + " for part name.");
         }
     }
     if (defaultNameGroup) {
         if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, defaultNameGroup)) {
-            return group->getFullInstrumentName();
+            return group->getFullInstrumentName(accidentalStyle);
         } else {
             MUSX_INTEGRITY_ERROR("Part " + std::to_string(getCmper()) + " uses nonexistent StaffGroup " + std::to_string(defaultNameGroup) + " for part name.");
         }
@@ -784,12 +784,14 @@ std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffI
     return nullptr;
 }
 
-std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
 {
     auto name = [&]() -> std::string {
-        if (auto multiInstGroup = getMultiStaffInstGroup()) {
-            if (auto group = multiInstGroup->getStaffGroup()) {
-                return group->getFullName(accidentalStyle);
+        if (!preferStaffName || !fullNameTextId) {
+            if (auto multiInstGroup = getMultiStaffInstGroup()) {
+                if (auto group = multiInstGroup->getStaffGroup()) {
+                    return group->getFullName(accidentalStyle);
+                }
             }
         }
         return getFullName(accidentalStyle);
@@ -798,12 +800,14 @@ std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalS
     return addAutoNumbering(name);
 }
 
-std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
 {
     auto name = [&]() -> std::string {
-        if (auto multiInstGroup = getMultiStaffInstGroup()) {
-            if (auto group = multiInstGroup->getStaffGroup()) {
-                return group->getAbbreviatedName(accidentalStyle);
+        if (!preferStaffName || !abbrvNameTextId) {
+            if (auto multiInstGroup = getMultiStaffInstGroup()) {
+                if (auto group = multiInstGroup->getStaffGroup()) {
+                    return group->getAbbreviatedName(accidentalStyle);
+                }
             }
         }
         return getAbbreviatedName(accidentalStyle);

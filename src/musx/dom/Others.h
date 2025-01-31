@@ -869,12 +869,14 @@ public:
     /// @brief Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)
     /// @note Ordinal prefix numbering is currently supported only for English.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
-    std::string getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+    /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
+    std::string getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
 
     /// @brief Returns the abbreviated instrument name for this staff without Enigma tags and with autonumbering (if any)
     /// @note Ordinal prefix numbering is currently supported only for English.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
-    std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+    /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
+    std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
 
     /// @brief Returns if names should be shown for the specified part
     bool showNamesForPart(Cmper partId) const
