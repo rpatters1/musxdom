@@ -141,9 +141,9 @@ MUSX_RESOLVER_ENTRY(Page, {
                         return SystemCmper(systems.size());
                     }();
                     if (*page->lastSystem < page->firstSystem) {
+                        page->lastSystem = std::nullopt;
                         MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
                             + " has a last system smaller than the first system.");
-                        page->lastSystem = std::nullopt;
                     }
                 }
             }
