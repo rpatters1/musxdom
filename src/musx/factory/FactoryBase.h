@@ -318,6 +318,11 @@ private:
     }
 };
 
+/// @brief creates and populates a shared pointer to an embedded class and adds it to an a unordered_map
+/// @tparam EnumClass The enum class that is used as the key in the unordered_map
+/// @tparam EmbeddedClass The class to be created an populated
+/// @param e The xml node containing the class members
+/// @param listArray The unordred_map to which to add the new instance.
 template <typename EnumClass, typename EmbeddedClass>
 static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray)
 {
@@ -328,6 +333,11 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
     listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
 }
 
+/// @brief creates a vector of type T from a set of nodes with identical tags within a parent tag. (See the `<customStaff>` node in @ref others::Staff)
+/// @tparam T the type of the vector. Currently only fundamental types are supported.
+/// @param e The xml node containing the array.
+/// @param elementNodeName The nodename for each element. In the case of `<customStaff>` this nodename is "staffLine".
+/// @return The populated array.
 template <typename T>
 static std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::string_view& elementNodeName)
 {

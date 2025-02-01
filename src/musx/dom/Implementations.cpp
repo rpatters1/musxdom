@@ -828,6 +828,18 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->staffType) {
         staffLines = staffStyle->staffLines;
         customStaff = staffStyle->customStaff;
+        lineSpace = staffStyle->lineSpace;
+        topBarlineOffset = staffStyle->topBarlineOffset;
+        botBarlineOffset = staffStyle->botBarlineOffset;
+        dwRestOffset = staffStyle->dwRestOffset;
+        wRestOffset = staffStyle->wRestOffset;
+        hRestOffset = staffStyle->hRestOffset;
+        otherRestOffset = staffStyle->otherRestOffset;
+        botRepeatDotOff = staffStyle->botRepeatDotOff;
+        topRepeatDotOff = staffStyle->topRepeatDotOff;
+        stemReversal = staffStyle->stemReversal;
+        // hideTopRepeatDot
+        // hideBotRepeatDot
         masks->staffType = true;
     }
     if (srcMasks->negNameScore) {
@@ -845,6 +857,16 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->showStems) {
         hideStems = staffStyle->hideStems;
         stemDirection = staffStyle->stemDirection;
+        // showBeams
+        // stemsFixedStart
+        // stemdFixedEnd
+        // stemStartFromStaff
+        // horzStemOffUp
+        // horzStemOffDown
+        // vertStemStartOffUp
+        // vertStemStartOffDown
+        // vertStemEndOffUp
+        // vertStemEndOffDown
         masks->showStems = true;
     }
     if (srcMasks->showNameParts) {

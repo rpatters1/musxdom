@@ -950,11 +950,11 @@ public:
         explicit Masks(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
-        bool staffType{};           ///< overrides #staffLines and #customStaff.
+        bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
         bool negNameScore{};        ///< overrides #hideNameInScore.
         bool fullName{};            ///< overrides #fullNameTextId.
         bool abrvName{};            ///< overrides #abbrvNameTextId.
-        bool showStems{};           ///< overrides #hideStems and #stemDirection
+        bool showStems{};           ///< overrides stem properties (see #StaffComposite::applyStyle)
         bool showNameParts{};       ///< overrides #showNameInParts
 
         bool requireAllFields() const override { return false; }
