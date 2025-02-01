@@ -29,6 +29,7 @@ var classmusx_1_1dom_1_1others_1_1Measure =
       [ "Never", "classmusx_1_1dom_1_1others_1_1Measure.html#a9ddff943859253bd689e6c0a93c543b6a6e7b34fa59e1bd229b207892956dc41c", null ]
     ] ],
     [ "Measure", "classmusx_1_1dom_1_1others_1_1Measure.html#ad05b328fcda211b8f40931f69bcf4b08", null ],
+    [ "calcShouldShowFullNames", "classmusx_1_1dom_1_1others_1_1Measure.html#a9ff1882e9350038250970527105eebc1", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1Measure.html#a205d8bf3a0e7dec6d304b59dba0f9245", null ],
     [ "abbrvTime", "classmusx_1_1dom_1_1others_1_1Measure.html#a318bcc072af3523e0fb53f2f6900db4a", null ],
     [ "allowSplitPoints", "classmusx_1_1dom_1_1others_1_1Measure.html#acf85afbd9bc5bb5fd8aa886791728cb6", null ],

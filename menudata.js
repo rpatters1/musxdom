@@ -29,6 +29,7 @@ var menudata={children:[
 {text:"Namespace List",url:"namespaces.html"},
 {text:"Namespace Members",url:"namespacemembers.html",children:[
 {text:"All",url:"namespacemembers.html",children:[
+{text:"b",url:"namespacemembers.html#index_b"},
 {text:"c",url:"namespacemembers.html#index_c"},
 {text:"d",url:"namespacemembers.html#index_d"},
 {text:"e",url:"namespacemembers.html#index_e"},
@@ -146,6 +147,7 @@ var menudata={children:[
 {text:"d",url:"functions_enum.html#index_d"},
 {text:"f",url:"functions_enum.html#index_f"},
 {text:"g",url:"functions_enum.html#index_g"},
+{text:"h",url:"functions_enum.html#index_h"},
 {text:"i",url:"functions_enum.html#index_i"},
 {text:"l",url:"functions_enum.html#index_l"},
 {text:"m",url:"functions_enum.html#index_m"},

@@ -4,5 +4,6 @@ var searchData=
   ['base_1',['Base',['../classmusx_1_1dom_1_1Base.html',1,'musx::dom']]],
   ['beamoptions_2',['BeamOptions',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html',1,'musx::dom::options']]],
   ['blocktext_3',['BlockText',['../classmusx_1_1dom_1_1texts_1_1BlockText.html',1,'musx::dom::texts']]],
-  ['bookmarktext_4',['BookmarkText',['../classmusx_1_1dom_1_1texts_1_1BookmarkText.html',1,'musx::dom::texts']]]
+  ['bookmarktext_4',['BookmarkText',['../classmusx_1_1dom_1_1texts_1_1BookmarkText.html',1,'musx::dom::texts']]],
+  ['bracket_5',['Bracket',['../classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html',1,'musx::dom::details::StaffGroup']]]
 ];

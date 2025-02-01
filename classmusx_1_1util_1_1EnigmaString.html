@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1util_1_1EnigmaString.html
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classmusx_1_1util_1_1EnigmaString-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::util::EnigmaString Class Reference</div></div>
@@ -104,6 +105,15 @@ $(document).ready(function(){initNavTree('classmusx_1_1util_1_1EnigmaString.html
 
 <p><code>#include &lt;<a class="el" href="EnigmaString_8h_source.html">EnigmaString.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a4692b7b51e78c89ee59a2871fee34455" id="r_a4692b7b51e78c89ee59a2871fee34455"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">AccidentalStyle</a> { <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">Ascii</a>
+, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541">Unicode</a>
+, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a3368a26ba25b44f3a9cebc6814624127">Smufl</a>
+ }</td></tr>
+<tr class="memdesc:a4692b7b51e78c89ee59a2871fee34455"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration to specify the type of accidental replacement.  <a href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">More...</a><br /></td></tr>
+<tr class="separator:a4692b7b51e78c89ee59a2871fee34455"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3b5fae91351629aeff9b1f526a46af6d" id="r_a3b5fae91351629aeff9b1f526a46af6d"><td class="memItemLeft" align="right" valign="top"><a id="a3b5fae91351629aeff9b1f526a46af6d" name="a3b5fae91351629aeff9b1f526a46af6d"></a>
@@ -124,14 +134,66 @@ static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>trimFon
 static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>trimTags</b> (const std::string &amp;input)</td></tr>
 <tr class="memdesc:a0613f33d67f174d1901dd935232a74b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trims all enigma tags from an enigma string, leaving just the plain text. <br /></td></tr>
 <tr class="separator:a0613f33d67f174d1901dd935232a74b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ca05dd7c596a0481e2eb9d347624f67" id="r_a2ca05dd7c596a0481e2eb9d347624f67"><td class="memItemLeft" align="right" valign="top"><a id="a2ca05dd7c596a0481e2eb9d347624f67" name="a2ca05dd7c596a0481e2eb9d347624f67"></a>
-static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>replaceAccidentalTags</b> (const std::string &amp;input)</td></tr>
-<tr class="memdesc:a2ca05dd7c596a0481e2eb9d347624f67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces ^flat() and ^sharp() inserts with 'b' and '#'. <br /></td></tr>
-<tr class="separator:a2ca05dd7c596a0481e2eb9d347624f67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8c51bab47cef8fdb8763ae9895c5eec" id="r_ad8c51bab47cef8fdb8763ae9895c5eec"><td class="memItemLeft" align="right" valign="top"><a id="ad8c51bab47cef8fdb8763ae9895c5eec" name="ad8c51bab47cef8fdb8763ae9895c5eec"></a>
+static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>replaceAccidentalTags</b> (const std::string &amp;input, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">AccidentalStyle</a> style=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">AccidentalStyle::Ascii</a>)</td></tr>
+<tr class="memdesc:ad8c51bab47cef8fdb8763ae9895c5eec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces ^flat() and ^sharp() inserts with 'b' and '#'. <br /></td></tr>
+<tr class="separator:ad8c51bab47cef8fdb8763ae9895c5eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Static class that provides utilties to extract information from enigma strings. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a4692b7b51e78c89ee59a2871fee34455" name="a4692b7b51e78c89ee59a2871fee34455"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4692b7b51e78c89ee59a2871fee34455">&#9670;&#160;</a></span>AccidentalStyle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">musx::util::EnigmaString::AccidentalStyle</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enumeration to specify the type of accidental replacement. </p>
+<p>This enum class is used to choose between different representations of musical accidentals when processing text. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31" name="a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31"></a>Ascii&#160;</td><td class="fielddoc"><p>Use ASCII substitutions for accidentals. </p>
+<ul>
+<li>Flat: 'b'</li>
+<li>Sharp: '#'</li>
+<li>Natural: (empty string)</li>
+</ul>
+<p>Suitable for environments where Unicode or SMuFL support is unavailable. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541" name="a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541"></a>Unicode&#160;</td><td class="fielddoc"><p>Use Unicode text accidentals. </p>
+<ul>
+<li>Flat: ♭ (U+266D)</li>
+<li>Sharp: ♯ (U+266F)</li>
+<li>Natural: ♮ (U+266E)</li>
+</ul>
+<p>Suitable for inline text representations like "Clarinet in B♭." </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a4692b7b51e78c89ee59a2871fee34455a3368a26ba25b44f3a9cebc6814624127" name="a4692b7b51e78c89ee59a2871fee34455a3368a26ba25b44f3a9cebc6814624127"></a>Smufl&#160;</td><td class="fielddoc"><p>Use SMuFL notation-specific accidentals. </p>
+<ul>
+<li>Flat: (U+E260)</li>
+<li>Sharp: (U+E262)</li>
+<li>Natural: (U+E261)</li>
+</ul>
+<p>Suitable for musical notation systems or specialized fonts that support SMuFL. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a4915c595b19dbc70f2793a73368382bb" name="a4915c595b19dbc70f2793a73368382bb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4915c595b19dbc70f2793a73368382bb">&#9670;&#160;</a></span>parseComponents()</h2>
 

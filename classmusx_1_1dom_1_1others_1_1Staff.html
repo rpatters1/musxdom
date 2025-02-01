@@ -93,7 +93,9 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1Staff.ht
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classmusx_1_1dom_1_1others_1_1Staff-members.html">List of all members</a>  </div>
@@ -113,21 +115,76 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1Staff.ht
  <div class="center">
   <img src="classmusx_1_1dom_1_1others_1_1Staff.png" usemap="#musx::dom::others::Staff_map" alt=""/>
   <map id="musx::dom::others::Staff_map" name="musx::dom::others::Staff_map">
-<area href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types." alt="musx::dom::OthersBase" shape="rect" coords="0,56,142,80"/>
-<area href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes." alt="musx::dom::Base" shape="rect" coords="0,0,142,24"/>
+<area href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types." alt="musx::dom::OthersBase" shape="rect" coords="0,56,200,80"/>
+<area href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes." alt="musx::dom::Base" shape="rect" coords="0,0,200,24"/>
+<area href="classmusx_1_1dom_1_1others_1_1StaffStyle.html" title="Represents a Finale staff style." alt="musx::dom::others::StaffStyle" shape="rect" coords="0,168,200,192"/>
+<area href="classmusx_1_1dom_1_1others_1_1StaffComposite.html" title="Represents a composite of an underlying Staff instance with any applicable StaffStyle instances appli..." alt="musx::dom::others::StaffComposite" shape="rect" coords="0,224,200,248"/>
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a03805868cff56f8b8e45afcb891e81e1" id="r_a03805868cff56f8b8e45afcb891e81e1"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1">AutoNumberingStyle</a> { <br />
+&#160;&#160;<a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1a059ce5872a2158ce93a9c3320f8acc33">ArabicSuffix</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1abf27d2294ec0049a7e41a1f9fe296e97">RomanSuffix</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1ae1892b548bbf904471fd4f2e03c249bf">OrdinalPrefix</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1ae2cdb5fe6bbb08993bba2998548d6d8d">AlphaSuffix</a>
+, <br />
+&#160;&#160;<a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1a3b84e373841bed8a59dfa4dd06584d26">ArabicPrefix</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a03805868cff56f8b8e45afcb891e81e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for auto-numbering style. Auto-numbering is based on <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#aed8dd51f5f3d7128990113c16925589a" title="Unique identifier for the type of instrument.">instUuid</a>.  <a href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1">More...</a><br /></td></tr>
+<tr class="separator:a03805868cff56f8b8e45afcb891e81e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7be6f16155ed7836b23b0c320e77723a" id="r_a7be6f16155ed7836b23b0c320e77723a"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">StemDirection</a> { <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aa7a1920d61156abc05a60135aefe8bc67">Default</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aae15a1a05181326142cc6422ad1199831">AlwaysUp</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aa2e17ed9e19024a0e0863360470252f70">AlwaysDown</a>
+ }</td></tr>
+<tr class="memdesc:a7be6f16155ed7836b23b0c320e77723a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for staff-level stem direction override.  <a href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">More...</a><br /></td></tr>
+<tr class="separator:a7be6f16155ed7836b23b0c320e77723a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
+<tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
+, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
+, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da6adf97f83acf6453d4a6a4b1070f3754">None</a>
+ }</td></tr>
+<tr class="memdesc:ac50192040fe22fca9805ae4af5d88b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes how this instance is shared between part and score.  <a href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">More...</a><br /></td></tr>
+<tr class="separator:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base" id="r_a8ef0ccef928154f1865d1f693e76ad0a"><td class="memItemLeft" align="right" valign="top">
+using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = std::set&lt; std::string &gt;</td></tr>
+<tr class="memdesc:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The container type for shared nodes. <br /></td></tr>
+<tr class="separator:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6b2463c519cd866520ed2116151334b5" id="r_a6b2463c519cd866520ed2116151334b5"><td class="memItemLeft" align="right" valign="top"><a id="a6b2463c519cd866520ed2116151334b5" name="a6b2463c519cd866520ed2116151334b5"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Staff</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:a6b2463c519cd866520ed2116151334b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a6b2463c519cd866520ed2116151334b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a407c062870293d1c7ff57926c67f4313" id="r_a407c062870293d1c7ff57926c67f4313"><td class="memItemLeft" align="right" valign="top"><a id="a407c062870293d1c7ff57926c67f4313" name="a407c062870293d1c7ff57926c67f4313"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getFullName</b> () const</td></tr>
-<tr class="memdesc:a407c062870293d1c7ff57926c67f4313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the full staff name without Enigma tags. <br /></td></tr>
-<tr class="separator:a407c062870293d1c7ff57926c67f4313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa01ce409746b79ed5a95a205830b6e6a" id="r_aa01ce409746b79ed5a95a205830b6e6a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#aa01ce409746b79ed5a95a205830b6e6a">getFullName</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>) const</td></tr>
+<tr class="memdesc:aa01ce409746b79ed5a95a205830b6e6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the full staff name without Enigma tags.  <br /></td></tr>
+<tr class="separator:aa01ce409746b79ed5a95a205830b6e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3c1793372716cecbf5066470c356690" id="r_aa3c1793372716cecbf5066470c356690"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#aa3c1793372716cecbf5066470c356690">getAbbreviatedName</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>) const</td></tr>
+<tr class="memdesc:aa3c1793372716cecbf5066470c356690"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the abbreviated staff name without Enigma tags.  <br /></td></tr>
+<tr class="separator:aa3c1793372716cecbf5066470c356690"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f03b041570ad99c110abca358d1bd63" id="r_a2f03b041570ad99c110abca358d1bd63"><td class="memItemLeft" align="right" valign="top"><a id="a2f03b041570ad99c110abca358d1bd63" name="a2f03b041570ad99c110abca358d1bd63"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMultiStaffInstGroup</b> () const</td></tr>
+<tr class="memdesc:a2f03b041570ad99c110abca358d1bd63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> for this staff if it is part of one. Otherwise nullptr. <br /></td></tr>
+<tr class="separator:a2f03b041570ad99c110abca358d1bd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45c54bccfd5cb9e66bb1700ec4e91916" id="r_a45c54bccfd5cb9e66bb1700ec4e91916"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a45c54bccfd5cb9e66bb1700ec4e91916">getFullInstrumentName</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>, bool preferStaffName=false) const</td></tr>
+<tr class="memdesc:a45c54bccfd5cb9e66bb1700ec4e91916"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)  <br /></td></tr>
+<tr class="separator:a45c54bccfd5cb9e66bb1700ec4e91916"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1c317f8ad198ae1788ca7a565fbc4b7" id="r_af1c317f8ad198ae1788ca7a565fbc4b7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#af1c317f8ad198ae1788ca7a565fbc4b7">getAbbreviatedInstrumentName</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>, bool preferStaffName=false) const</td></tr>
+<tr class="memdesc:af1c317f8ad198ae1788ca7a565fbc4b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the abbreviated instrument name for this staff without Enigma tags and with autonumbering (if any)  <br /></td></tr>
+<tr class="separator:af1c317f8ad198ae1788ca7a565fbc4b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9c53dc5f21562bebfaf99be4d6d4cd5" id="r_ac9c53dc5f21562bebfaf99be4d6d4cd5"><td class="memItemLeft" align="right" valign="top"><a id="ac9c53dc5f21562bebfaf99be4d6d4cd5" name="ac9c53dc5f21562bebfaf99be4d6d4cd5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>showNamesForPart</b> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId) const</td></tr>
+<tr class="memdesc:ac9c53dc5f21562bebfaf99be4d6d4cd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if names should be shown for the specified part. <br /></td></tr>
+<tr class="separator:ac9c53dc5f21562bebfaf99be4d6d4cd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a428918fb57d8ff9b01b34f953b080904" id="r_a428918fb57d8ff9b01b34f953b080904"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a428918fb57d8ff9b01b34f953b080904">addAutoNumbering</a> (const std::string &amp;plainName) const</td></tr>
+<tr class="memdesc:a428918fb57d8ff9b01b34f953b080904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add auto numbering as a prefix or suffix, if needed.  <br /></td></tr>
+<tr class="separator:a428918fb57d8ff9b01b34f953b080904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8840a265b1ac655e630e97831de86e83" id="r_a8840a265b1ac655e630e97831de86e83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a8840a265b1ac655e630e97831de86e83">integrityCheck</a> () override</td></tr>
+<tr class="memdesc:a8840a265b1ac655e630e97831de86e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:a8840a265b1ac655e630e97831de86e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f42c874aa9a04d761629a6f85317af7" id="r_a8f42c874aa9a04d761629a6f85317af7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a8f42c874aa9a04d761629a6f85317af7">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a8f42c874aa9a04d761629a6f85317af7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a8f42c874aa9a04d761629a6f85317af7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,6 +207,10 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPartId</b> () const</td></tr>
 <tr class="memdesc:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or 0 for score) <br /></td></tr>
 <tr class="separator:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ab82b29d7f2164630dee1f73d8535633d"><td class="memItemLeft" align="right" valign="top">
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartDefinition</b> () const</td></tr>
+<tr class="memdesc:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> corresponding to <a class="el" href="classmusx_1_1dom_1_1Base.html#a2064fc32c5bd6ab123461729d1e90d27" title="Gets the partId for this instance (or 0 for score)">getPartId</a>. <br /></td></tr>
+<tr class="separator:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -162,9 +223,12 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (const std::string &amp;nodeName)</td></tr>
 <tr class="memdesc:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a shared node for this instance. <br /></td></tr>
 <tr class="separator:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ac5d3a21d81415f3f6c1eec9f2365bea1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac5d3a21d81415f3f6c1eec9f2365bea1">integrityCheck</a> () const</td></tr>
-<tr class="memdesc:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory.  <br /></td></tr>
-<tr class="separator:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a8aa2cdf47568291a6764e603621866a0" id="r_a8aa2cdf47568291a6764e603621866a0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a8aa2cdf47568291a6764e603621866a0">calcAutoNumberValues</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document)</td></tr>
+<tr class="memdesc:a8aa2cdf47568291a6764e603621866a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the auto-numbering value for this staff, if applicable.  <br /></td></tr>
+<tr class="separator:a8aa2cdf47568291a6764e603621866a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -176,10 +240,34 @@ Public Attributes</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a79036ddff994d4ce8ebdc6c5275c4385">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>transposedClef</b> {}</td></tr>
 <tr class="memdesc:a84137b810463f8edc4eedb7422e7bce5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of transposed clef for the staff. <br /></td></tr>
 <tr class="separator:a84137b810463f8edc4eedb7422e7bce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b222308ce95e89945c156fd18dca550" id="r_a1b222308ce95e89945c156fd18dca550"><td class="memItemLeft" align="right" valign="top"><a id="a1b222308ce95e89945c156fd18dca550" name="a1b222308ce95e89945c156fd18dca550"></a>
+std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>staffLines</b> {}</td></tr>
+<tr class="memdesc:a1b222308ce95e89945c156fd18dca550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of lines in the staff (if no custom staff) <br /></td></tr>
+<tr class="separator:a1b222308ce95e89945c156fd18dca550"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a212f0ef0993b6787ec486eac857a789b" id="r_a212f0ef0993b6787ec486eac857a789b"><td class="memItemLeft" align="right" valign="top"><a id="a212f0ef0993b6787ec486eac857a789b" name="a212f0ef0993b6787ec486eac857a789b"></a>
+std::optional&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>customStaff</b></td></tr>
+<tr class="memdesc:a212f0ef0993b6787ec486eac857a789b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of stafflines from 0..26 where a standard 5-line staff is values 11, 12, 13, 14, 15. <br /></td></tr>
+<tr class="separator:a212f0ef0993b6787ec486eac857a789b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58b338d0edf7fd8e6fbbb940dcdf4c85" id="r_a58b338d0edf7fd8e6fbbb940dcdf4c85"><td class="memItemLeft" align="right" valign="top"><a id="a58b338d0edf7fd8e6fbbb940dcdf4c85" name="a58b338d0edf7fd8e6fbbb940dcdf4c85"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lineSpace</b> {}</td></tr>
 <tr class="memdesc:a58b338d0edf7fd8e6fbbb940dcdf4c85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distance between staff lines. <br /></td></tr>
 <tr class="separator:a58b338d0edf7fd8e6fbbb940dcdf4c85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed8dd51f5f3d7128990113c16925589a" id="r_aed8dd51f5f3d7128990113c16925589a"><td class="memItemLeft" align="right" valign="top"><a id="aed8dd51f5f3d7128990113c16925589a" name="aed8dd51f5f3d7128990113c16925589a"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>instUuid</b></td></tr>
+<tr class="memdesc:aed8dd51f5f3d7128990113c16925589a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique identifier for the type of instrument. <br /></td></tr>
+<tr class="separator:aed8dd51f5f3d7128990113c16925589a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a333986652e0f7882834d8fdb65b5b7a6" id="r_a333986652e0f7882834d8fdb65b5b7a6"><td class="memItemLeft" align="right" valign="top"><a id="a333986652e0f7882834d8fdb65b5b7a6" name="a333986652e0f7882834d8fdb65b5b7a6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasStyles</b> {}</td></tr>
+<tr class="memdesc:a333986652e0f7882834d8fdb65b5b7a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that this staff has staff style assignments. <br /></td></tr>
+<tr class="separator:a333986652e0f7882834d8fdb65b5b7a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a811d833222c87e8cac8b47310f00e9b0" id="r_a811d833222c87e8cac8b47310f00e9b0"><td class="memItemLeft" align="right" valign="top"><a id="a811d833222c87e8cac8b47310f00e9b0" name="a811d833222c87e8cac8b47310f00e9b0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>showNameInParts</b> {}</td></tr>
+<tr class="memdesc:a811d833222c87e8cac8b47310f00e9b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Display Staff Name in Parts" (xml node is <code>&lt;showNameParts&gt;</code>) <br /></td></tr>
+<tr class="separator:a811d833222c87e8cac8b47310f00e9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed6165003ca9a17e35f5a81284b123ae" id="r_aed6165003ca9a17e35f5a81284b123ae"><td class="memItemLeft" align="right" valign="top"><a id="aed6165003ca9a17e35f5a81284b123ae" name="aed6165003ca9a17e35f5a81284b123ae"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideNameInScore</b> {}</td></tr>
+<tr class="memdesc:aed6165003ca9a17e35f5a81284b123ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Display Staff Name in Score" (xml node is <code>&lt;hideStfNameInScore&gt;</code>) <br /></td></tr>
+<tr class="separator:aed6165003ca9a17e35f5a81284b123ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab951460fbc50b0ab812b74778c13dbc2" id="r_ab951460fbc50b0ab812b74778c13dbc2"><td class="memItemLeft" align="right" valign="top"><a id="ab951460fbc50b0ab812b74778c13dbc2" name="ab951460fbc50b0ab812b74778c13dbc2"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>topBarlineOffset</b> {}</td></tr>
 <tr class="memdesc:ab951460fbc50b0ab812b74778c13dbc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset for the top barline. <br /></td></tr>
@@ -204,18 +292,6 @@ Public Attributes</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>otherRestOffset</b> {}</td></tr>
 <tr class="memdesc:a444cb61121b8bad9b69992bb9efc4633"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset for other rests. <br /></td></tr>
 <tr class="separator:a444cb61121b8bad9b69992bb9efc4633"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1d8d8b6db81f5b43c81d1528c42492d" id="r_ab1d8d8b6db81f5b43c81d1528c42492d"><td class="memItemLeft" align="right" valign="top"><a id="ab1d8d8b6db81f5b43c81d1528c42492d" name="ab1d8d8b6db81f5b43c81d1528c42492d"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>topRepeatDotOff</b> {}</td></tr>
-<tr class="memdesc:ab1d8d8b6db81f5b43c81d1528c42492d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset for top repeat dots. <br /></td></tr>
-<tr class="separator:ab1d8d8b6db81f5b43c81d1528c42492d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdfba4264d70af28de4891e14283f405" id="r_acdfba4264d70af28de4891e14283f405"><td class="memItemLeft" align="right" valign="top"><a id="acdfba4264d70af28de4891e14283f405" name="acdfba4264d70af28de4891e14283f405"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>botRepeatDotOff</b> {}</td></tr>
-<tr class="memdesc:acdfba4264d70af28de4891e14283f405"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset for bottom repeat dots. <br /></td></tr>
-<tr class="separator:acdfba4264d70af28de4891e14283f405"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73e9a79ef4658ed81d1faad18d0f459b" id="r_a73e9a79ef4658ed81d1faad18d0f459b"><td class="memItemLeft" align="right" valign="top"><a id="a73e9a79ef4658ed81d1faad18d0f459b" name="a73e9a79ef4658ed81d1faad18d0f459b"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>staffLines</b> {}</td></tr>
-<tr class="memdesc:a73e9a79ef4658ed81d1faad18d0f459b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of lines in the staff. <br /></td></tr>
-<tr class="separator:a73e9a79ef4658ed81d1faad18d0f459b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc0e2d774cb55b264c35dfba16f2eef1" id="r_acc0e2d774cb55b264c35dfba16f2eef1"><td class="memItemLeft" align="right" valign="top"><a id="acc0e2d774cb55b264c35dfba16f2eef1" name="acc0e2d774cb55b264c35dfba16f2eef1"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>stemReversal</b> {}</td></tr>
 <tr class="memdesc:acc0e2d774cb55b264c35dfba16f2eef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stem reversal value. <br /></td></tr>
@@ -228,10 +304,40 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>stemReversal</b> {}</t
 <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>abbrvNameTextId</b> {}</td></tr>
 <tr class="memdesc:aa33a3c157327823a02f0f3a5e69fd76d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abbreviated name <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html">TextBlock</a> ID. (xml node is <code>&lt;abbrvName&gt;</code>) <br /></td></tr>
 <tr class="separator:aa33a3c157327823a02f0f3a5e69fd76d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdfba4264d70af28de4891e14283f405" id="r_acdfba4264d70af28de4891e14283f405"><td class="memItemLeft" align="right" valign="top"><a id="acdfba4264d70af28de4891e14283f405" name="acdfba4264d70af28de4891e14283f405"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>botRepeatDotOff</b> {}</td></tr>
+<tr class="memdesc:acdfba4264d70af28de4891e14283f405"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset for bottom repeat dots. <br /></td></tr>
+<tr class="separator:acdfba4264d70af28de4891e14283f405"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1d8d8b6db81f5b43c81d1528c42492d" id="r_ab1d8d8b6db81f5b43c81d1528c42492d"><td class="memItemLeft" align="right" valign="top"><a id="ab1d8d8b6db81f5b43c81d1528c42492d" name="ab1d8d8b6db81f5b43c81d1528c42492d"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>topRepeatDotOff</b> {}</td></tr>
+<tr class="memdesc:ab1d8d8b6db81f5b43c81d1528c42492d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset for top repeat dots. <br /></td></tr>
+<tr class="separator:ab1d8d8b6db81f5b43c81d1528c42492d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2175e3535a969442e3917ff587f9533" id="r_ad2175e3535a969442e3917ff587f9533"><td class="memItemLeft" align="right" valign="top"><a id="ad2175e3535a969442e3917ff587f9533" name="ad2175e3535a969442e3917ff587f9533"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>vertTabNumOff</b> {}</td></tr>
 <tr class="memdesc:ad2175e3535a969442e3917ff587f9533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vertical offset for tab number. <br /></td></tr>
 <tr class="separator:ad2175e3535a969442e3917ff587f9533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43a8a4d6e40a765ac43c63205336a494" id="r_a43a8a4d6e40a765ac43c63205336a494"><td class="memItemLeft" align="right" valign="top"><a id="a43a8a4d6e40a765ac43c63205336a494" name="a43a8a4d6e40a765ac43c63205336a494"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideStems</b> {}</td></tr>
+<tr class="memdesc:a43a8a4d6e40a765ac43c63205336a494"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Display Stems". <br /></td></tr>
+<tr class="separator:a43a8a4d6e40a765ac43c63205336a494"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43918594fcfadee25e19bbce250847e6" id="r_a43918594fcfadee25e19bbce250847e6"><td class="memItemLeft" align="right" valign="top"><a id="a43918594fcfadee25e19bbce250847e6" name="a43918594fcfadee25e19bbce250847e6"></a>
+<a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">StemDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>stemDirection</b> {}</td></tr>
+<tr class="memdesc:a43918594fcfadee25e19bbce250847e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">stem direction for staff (xml node is <code>&lt;stemDir&gt;</code>) <br /></td></tr>
+<tr class="separator:a43918594fcfadee25e19bbce250847e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aead4ebf9e886f480d21eee9e0a8c1125" id="r_aead4ebf9e886f480d21eee9e0a8c1125"><td class="memItemLeft" align="right" valign="top"><a id="aead4ebf9e886f480d21eee9e0a8c1125" name="aead4ebf9e886f480d21eee9e0a8c1125"></a>
+<a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1">AutoNumberingStyle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>autoNumbering</b> {}</td></tr>
+<tr class="memdesc:aead4ebf9e886f480d21eee9e0a8c1125"><td class="mdescLeft">&#160;</td><td class="mdescRight">Autonumbering style if <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7c07ed90fd3480834690bcfdaa3a3865" title="Whether names should be auto-numbered. (xml node is &lt;useAutoNum&gt;)">useAutoNumbering</a> is true. (xml node is <code>&lt;autoNum&gt;</code>) <br /></td></tr>
+<tr class="separator:aead4ebf9e886f480d21eee9e0a8c1125"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c07ed90fd3480834690bcfdaa3a3865" id="r_a7c07ed90fd3480834690bcfdaa3a3865"><td class="memItemLeft" align="right" valign="top"><a id="a7c07ed90fd3480834690bcfdaa3a3865" name="a7c07ed90fd3480834690bcfdaa3a3865"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>useAutoNumbering</b> {}</td></tr>
+<tr class="memdesc:a7c07ed90fd3480834690bcfdaa3a3865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether names should be auto-numbered. (xml node is <code>&lt;useAutoNum&gt;</code>) <br /></td></tr>
+<tr class="separator:a7c07ed90fd3480834690bcfdaa3a3865"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1be91c741b22c61b0184d8f255733764" id="r_a1be91c741b22c61b0184d8f255733764"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a1be91c741b22c61b0184d8f255733764">multiStaffInstId</a> {}</td></tr>
+<tr class="separator:a1be91c741b22c61b0184d8f255733764"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4836d6d1ebe25d08f36b6530b25d8dd1" id="r_a4836d6d1ebe25d08f36b6530b25d8dd1"><td class="memItemLeft" align="right" valign="top"><a id="a4836d6d1ebe25d08f36b6530b25d8dd1" name="a4836d6d1ebe25d08f36b6530b25d8dd1"></a>
+std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>autoNumberValue</b></td></tr>
+<tr class="memdesc:a4836d6d1ebe25d08f36b6530b25d8dd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculated autonumbering value. It is computed by <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a8aa2cdf47568291a6764e603621866a0" title="Get the auto-numbering value for this staff, if applicable.">calcAutoNumberValues</a>. <br /></td></tr>
+<tr class="separator:a4836d6d1ebe25d08f36b6530b25d8dd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -246,17 +352,6 @@ static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
-<tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
-, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
-, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da6adf97f83acf6453d4a6a4b1070f3754">None</a>
- }</td></tr>
-<tr class="memdesc:ac50192040fe22fca9805ae4af5d88b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes how this instance is shared between part and score.  <a href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">More...</a><br /></td></tr>
-<tr class="separator:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base" id="r_a8ef0ccef928154f1865d1f693e76ad0a"><td class="memItemLeft" align="right" valign="top">
-using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = std::set&lt; std::string &gt;</td></tr>
-<tr class="memdesc:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The container type for shared nodes. <br /></td></tr>
-<tr class="separator:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classmusx_1_1dom_1_1OthersBase"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmusx_1_1dom_1_1OthersBase')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">musx::dom::OthersBase</a></td></tr>
 <tr class="memitem:a7e3b6d56599db00e0a7d19a40fcfe399 inherit pro_methods_classmusx_1_1dom_1_1OthersBase" id="r_a7e3b6d56599db00e0a7d19a40fcfe399"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1OthersBase.html#a7e3b6d56599db00e0a7d19a40fcfe399">OthersBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt; inci=std::nullopt)</td></tr>
 <tr class="memdesc:a7e3b6d56599db00e0a7d19a40fcfe399 inherit pro_methods_classmusx_1_1dom_1_1OthersBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a> object.  <br /></td></tr>
@@ -273,7 +368,299 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the definition of a Finale staff. </p>
 <p>The cmper is the staff ID. This class is identified by the XML node name "staffSpec". </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a03805868cff56f8b8e45afcb891e81e1" name="a03805868cff56f8b8e45afcb891e81e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03805868cff56f8b8e45afcb891e81e1">&#9670;&#160;</a></span>AutoNumberingStyle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1">musx::dom::others::Staff::AutoNumberingStyle</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enum for auto-numbering style. Auto-numbering is based on <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#aed8dd51f5f3d7128990113c16925589a" title="Unique identifier for the type of instrument.">instUuid</a>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a03805868cff56f8b8e45afcb891e81e1a059ce5872a2158ce93a9c3320f8acc33" name="a03805868cff56f8b8e45afcb891e81e1a059ce5872a2158ce93a9c3320f8acc33"></a>ArabicSuffix&#160;</td><td class="fielddoc"><p>Arabic numeral suffix (default). May not appear in xml. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a03805868cff56f8b8e45afcb891e81e1abf27d2294ec0049a7e41a1f9fe296e97" name="a03805868cff56f8b8e45afcb891e81e1abf27d2294ec0049a7e41a1f9fe296e97"></a>RomanSuffix&#160;</td><td class="fielddoc"><p>Roman numeral suffix. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a03805868cff56f8b8e45afcb891e81e1ae1892b548bbf904471fd4f2e03c249bf" name="a03805868cff56f8b8e45afcb891e81e1ae1892b548bbf904471fd4f2e03c249bf"></a>OrdinalPrefix&#160;</td><td class="fielddoc"><p>Ordinal number prefix: 1st 2nd 3rd, ... </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a03805868cff56f8b8e45afcb891e81e1ae2cdb5fe6bbb08993bba2998548d6d8d" name="a03805868cff56f8b8e45afcb891e81e1ae2cdb5fe6bbb08993bba2998548d6d8d"></a>AlphaSuffix&#160;</td><td class="fielddoc"><p>Alphabetic suffix. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a03805868cff56f8b8e45afcb891e81e1a3b84e373841bed8a59dfa4dd06584d26" name="a03805868cff56f8b8e45afcb891e81e1a3b84e373841bed8a59dfa4dd06584d26"></a>ArabicPrefix&#160;</td><td class="fielddoc"><p>Arabic numeral prefix (with dot): 1. 2. 3. ... </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a7be6f16155ed7836b23b0c320e77723a" name="a7be6f16155ed7836b23b0c320e77723a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7be6f16155ed7836b23b0c320e77723a">&#9670;&#160;</a></span>StemDirection</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">musx::dom::others::Staff::StemDirection</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enum for staff-level stem direction override. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7be6f16155ed7836b23b0c320e77723aa7a1920d61156abc05a60135aefe8bc67" name="a7be6f16155ed7836b23b0c320e77723aa7a1920d61156abc05a60135aefe8bc67"></a>Default&#160;</td><td class="fielddoc"><p>the default (may not occur in xml) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7be6f16155ed7836b23b0c320e77723aae15a1a05181326142cc6422ad1199831" name="a7be6f16155ed7836b23b0c320e77723aae15a1a05181326142cc6422ad1199831"></a>AlwaysUp&#160;</td><td class="fielddoc"><p>stems are always up on this staff </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a7be6f16155ed7836b23b0c320e77723aa2e17ed9e19024a0e0863360470252f70" name="a7be6f16155ed7836b23b0c320e77723aa2e17ed9e19024a0e0863360470252f70"></a>AlwaysDown&#160;</td><td class="fielddoc"><p>stems are always down on this staff </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a428918fb57d8ff9b01b34f953b080904" name="a428918fb57d8ff9b01b34f953b080904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a428918fb57d8ff9b01b34f953b080904">&#9670;&#160;</a></span>addAutoNumbering()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string musx::dom::others::Staff::addAutoNumbering </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>plainName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add auto numbering as a prefix or suffix, if needed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">plainName</td><td>The name (full or abbreviated) to which to add the auto numbering </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Auto numbered name. </dd></dl>
+
+</div>
+</div>
+<a id="a8aa2cdf47568291a6764e603621866a0" name="a8aa2cdf47568291a6764e603621866a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aa2cdf47568291a6764e603621866a0">&#9670;&#160;</a></span>calcAutoNumberValues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::others::Staff::calcAutoNumberValues </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the auto-numbering value for this staff, if applicable. </p>
+<p>Calculates <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a4836d6d1ebe25d08f36b6530b25d8dd1" title="Calculated autonumbering value. It is computed by calcAutoNumberValues.">autoNumberValue</a> for every staff based on the occurrences of the instrument UUID and in each staff instance. If numbering is not applicable (e.g., auto numbering is disabled, the UUID is empty, or there is only one instance), <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a4836d6d1ebe25d08f36b6530b25d8dd1" title="Calculated autonumbering value. It is computed by calcAutoNumberValues.">autoNumberValue</a> has no value.</p>
+<p>This function is called by the DocumentFactory when the document is created. </p>
+
+</div>
+</div>
+<a id="af1c317f8ad198ae1788ca7a565fbc4b7" name="af1c317f8ad198ae1788ca7a565fbc4b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1c317f8ad198ae1788ca7a565fbc4b7">&#9670;&#160;</a></span>getAbbreviatedInstrumentName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string musx::dom::others::Staff::getAbbreviatedInstrumentName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a>&#160;</td>
+          <td class="paramname"><em>accidentalStyle</em> = <code><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>preferStaffName</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the abbreviated instrument name for this staff without Enigma tags and with autonumbering (if any) </p>
+<dl class="section note"><dt>Note</dt><dd>Ordinal prefix numbering is currently supported only for English. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">accidentalStyle</td><td>The style for accidental subsitution in names like "Clarinet in Bb". </td></tr>
+    <tr><td class="paramname">preferStaffName</td><td>When true, use the staff name if there is one (rather than the multi-instrument group name) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa3c1793372716cecbf5066470c356690" name="aa3c1793372716cecbf5066470c356690"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3c1793372716cecbf5066470c356690">&#9670;&#160;</a></span>getAbbreviatedName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string musx::dom::others::Staff::getAbbreviatedName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a>&#160;</td>
+          <td class="paramname"><em>accidentalStyle</em> = <code><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a></code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the abbreviated staff name without Enigma tags. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">accidentalStyle</td><td>The style for accidental subsitution in names like "Clarinet in Bb". </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a45c54bccfd5cb9e66bb1700ec4e91916" name="a45c54bccfd5cb9e66bb1700ec4e91916"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45c54bccfd5cb9e66bb1700ec4e91916">&#9670;&#160;</a></span>getFullInstrumentName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string musx::dom::others::Staff::getFullInstrumentName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a>&#160;</td>
+          <td class="paramname"><em>accidentalStyle</em> = <code><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>preferStaffName</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any) </p>
+<dl class="section note"><dt>Note</dt><dd>Ordinal prefix numbering is currently supported only for English. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">accidentalStyle</td><td>The style for accidental subsitution in names like "Clarinet in Bb". </td></tr>
+    <tr><td class="paramname">preferStaffName</td><td>When true, use the staff name if there is one (rather than the multi-instrument group name) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa01ce409746b79ed5a95a205830b6e6a" name="aa01ce409746b79ed5a95a205830b6e6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa01ce409746b79ed5a95a205830b6e6a">&#9670;&#160;</a></span>getFullName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string musx::dom::others::Staff::getFullName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a>&#160;</td>
+          <td class="paramname"><em>accidentalStyle</em> = <code><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a></code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the full staff name without Enigma tags. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">accidentalStyle</td><td>The style for accidental subsitution in names like "Clarinet in Bb". </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8840a265b1ac655e630e97831de86e83" name="a8840a265b1ac655e630e97831de86e83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8840a265b1ac655e630e97831de86e83">&#9670;&#160;</a></span>integrityCheck()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::others::Staff::integrityCheck </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes. </p>
+<p>The default implementation should always be called inside an overridden implementation.</p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html" title="Exception for integrity errors. (Used when MUSX_THROW_ON_INTEGRITY_CHECK_FAIL is defined....">musx::dom::integrity_error</a></td><td>if there is a problem. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html#a59c7790989426dee10ee6ed7da0a8796">musx::dom::others::StaffStyle</a>.</p>
+
+</div>
+</div>
 <a id="a8f42c874aa9a04d761629a6f85317af7" name="a8f42c874aa9a04d761629a6f85317af7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8f42c874aa9a04d761629a6f85317af7">&#9670;&#160;</a></span>requireAllFields()</h2>
 
@@ -302,6 +689,24 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <dl class="section remark"><dt>Remarks</dt><dd>This value only escapes errors on fields. Enum values must still have all values provided to avoid error messages or exceptions. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">musx::dom::Base</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html#a44e1a27667cfec6ab3b16265cc925c11">musx::dom::others::StaffStyle</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a1be91c741b22c61b0184d8f255733764" name="a1be91c741b22c61b0184d8f255733764"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1be91c741b22c61b0184d8f255733764">&#9670;&#160;</a></span>multiStaffInstId</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::others::Staff::multiStaffInstId {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculated cmper for <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>, if any. This value is not in the xml. It is set by the factory with the Resolver function for <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>. </p>
 
 </div>
 </div>

@@ -41,5 +41,6 @@ var searchData=
   ['cresclinewidth_38',['crescLineWidth',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#ae7d6a4ef9413915e8db231afa8b8a1b5',1,'musx::dom::options::SmartShapeOptions']]],
   ['crosslayerpositioning_39',['crossLayerPositioning',['../classmusx_1_1dom_1_1options_1_1AccidentalOptions.html#a00b0eb809f8bc9e751269557704255da',1,'musx::dom::options::AccidentalOptions']]],
   ['custombarshape_40',['customBarShape',['../classmusx_1_1dom_1_1others_1_1Measure.html#a60eda34ee5260cbf9b887991b04d2e36',1,'musx::dom::others::Measure']]],
-  ['customleftbarshape_41',['customLeftBarShape',['../classmusx_1_1dom_1_1others_1_1Measure.html#a9bbe3b6f012fbb13d49dc8cea28f8081',1,'musx::dom::others::Measure']]]
+  ['customleftbarshape_41',['customLeftBarShape',['../classmusx_1_1dom_1_1others_1_1Measure.html#a9bbe3b6f012fbb13d49dc8cea28f8081',1,'musx::dom::others::Measure']]],
+  ['customstaff_42',['customStaff',['../classmusx_1_1dom_1_1others_1_1Staff.html#a212f0ef0993b6787ec486eac857a789b',1,'musx::dom::others::Staff']]]
 ];

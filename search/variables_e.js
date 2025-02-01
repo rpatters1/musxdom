@@ -9,5 +9,6 @@ var searchData=
   ['outerbodyh_6',['outerBodyH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ae39b6ff982a19e6743b8592b5ce34a90',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['outerbodyv_7',['outerBodyV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#aa64904a9a9bec585ae21ef1eb6b22dc5',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['outertiph_8',['outerTipH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a83b4f737373614e967d2cec0e96061f1',1,'musx::dom::options::PianoBraceBracketOptions']]],
-  ['outertipv_9',['outerTipV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a0e0cab4661c4f4dbc8321d76b1aef688',1,'musx::dom::options::PianoBraceBracketOptions']]]
+  ['outertipv_9',['outerTipV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a0e0cab4661c4f4dbc8321d76b1aef688',1,'musx::dom::options::PianoBraceBracketOptions']]],
+  ['ownbarline_10',['ownBarline',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1cc6fb87b6b097c49e22644cad80b875',1,'musx::dom::details::StaffGroup']]]
 ];

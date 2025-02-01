@@ -145,10 +145,10 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TextBlock</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:af09b4d22b57a426c4f2bd2e7c5f8a9d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:af09b4d22b57a426c4f2bd2e7c5f8a9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b81fb50365a855b8be0b8b7681e1ab6" id="r_a3b81fb50365a855b8be0b8b7681e1ab6"><td class="memItemLeft" align="right" valign="top"><a id="a3b81fb50365a855b8be0b8b7681e1ab6" name="a3b81fb50365a855b8be0b8b7681e1ab6"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> (bool trimTags=false) const</td></tr>
-<tr class="memdesc:a3b81fb50365a855b8be0b8b7681e1ab6"><td class="mdescLeft">&#160;</td><td class="mdescRight">return display text with Enigma tags removed <br /></td></tr>
-<tr class="separator:a3b81fb50365a855b8be0b8b7681e1ab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c4b52aa9d9d1a8eae2c658109fdd933" id="r_a9c4b52aa9d9d1a8eae2c658109fdd933"><td class="memItemLeft" align="right" valign="top"><a id="a9c4b52aa9d9d1a8eae2c658109fdd933" name="a9c4b52aa9d9d1a8eae2c658109fdd933"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> (bool trimTags=false, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>) const</td></tr>
+<tr class="memdesc:a9c4b52aa9d9d1a8eae2c658109fdd933"><td class="mdescLeft">&#160;</td><td class="mdescRight">return display text with Enigma tags removed <br /></td></tr>
+<tr class="separator:a9c4b52aa9d9d1a8eae2c658109fdd933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57f6336f95a9b1099216e44fec3bfe4d" id="r_a57f6336f95a9b1099216e44fec3bfe4d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a57f6336f95a9b1099216e44fec3bfe4d">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a57f6336f95a9b1099216e44fec3bfe4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a57f6336f95a9b1099216e44fec3bfe4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,6 +171,10 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPartId</b> () const</td></tr>
 <tr class="memdesc:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or 0 for score) <br /></td></tr>
 <tr class="separator:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ab82b29d7f2164630dee1f73d8535633d"><td class="memItemLeft" align="right" valign="top">
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartDefinition</b> () const</td></tr>
+<tr class="memdesc:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> corresponding to <a class="el" href="classmusx_1_1dom_1_1Base.html#a2064fc32c5bd6ab123461729d1e90d27" title="Gets the partId for this instance (or 0 for score)">getPartId</a>. <br /></td></tr>
+<tr class="separator:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -183,16 +187,16 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (const std::string &amp;nodeName)</td></tr>
 <tr class="memdesc:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a shared node for this instance. <br /></td></tr>
 <tr class="separator:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ac5d3a21d81415f3f6c1eec9f2365bea1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac5d3a21d81415f3f6c1eec9f2365bea1">integrityCheck</a> () const</td></tr>
-<tr class="memdesc:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory.  <br /></td></tr>
-<tr class="separator:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a368bf85332ce10bac71833627f858905"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">integrityCheck</a> ()</td></tr>
+<tr class="memdesc:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a803eba9fd6033f00e167b68089da738f" id="r_a803eba9fd6033f00e167b68089da738f"><td class="memItemLeft" align="right" valign="top"><a id="a803eba9fd6033f00e167b68089da738f" name="a803eba9fd6033f00e167b68089da738f"></a>
-static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, const <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#ac5d18a958e3d69ea80e8a3ab8bb014b0">textId</a>, bool trimTags=false)</td></tr>
-<tr class="memdesc:a803eba9fd6033f00e167b68089da738f"><td class="mdescLeft">&#160;</td><td class="mdescRight">return display text with Enigma tags removed <br /></td></tr>
-<tr class="separator:a803eba9fd6033f00e167b68089da738f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5330cbade677d450bfbb7726f2076845" id="r_a5330cbade677d450bfbb7726f2076845"><td class="memItemLeft" align="right" valign="top"><a id="a5330cbade677d450bfbb7726f2076845" name="a5330cbade677d450bfbb7726f2076845"></a>
+static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, const <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#ac5d18a958e3d69ea80e8a3ab8bb014b0">textId</a>, bool trimTags=false, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>)</td></tr>
+<tr class="memdesc:a5330cbade677d450bfbb7726f2076845"><td class="mdescLeft">&#160;</td><td class="mdescRight">return display text with Enigma tags removed <br /></td></tr>
+<tr class="separator:a5330cbade677d450bfbb7726f2076845"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -269,7 +273,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the attributes of a Finale "textBlock". </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>After identifying all possible fields, remove the override of <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a57f6336f95a9b1099216e44fec3bfe4d" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">TextBlock::requireAllFields</a>.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>After identifying all possible fields, remove the override of <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a57f6336f95a9b1099216e44fec3bfe4d" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">TextBlock::requireAllFields</a>.</dd></dl>
 <p>The cmper is the textBlock ID, representing unique text blocks in the Finale document. This class is identified by the XML node name "textBlock". </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a532d8e8f86ade9e69fc3384ebbbeb775" name="a532d8e8f86ade9e69fc3384ebbbeb775"></a>

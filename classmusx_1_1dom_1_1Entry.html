@@ -180,9 +180,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9d9448ac8cd42278cefcf96559bb3de1" id="r_a9d9448ac8cd42278cefcf96559bb3de1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a9d9448ac8cd42278cefcf96559bb3de1">calcAugmentationDots</a> () const</td></tr>
 <tr class="memdesc:a9d9448ac8cd42278cefcf96559bb3de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of augmentation dots in the duration.  <br /></td></tr>
 <tr class="separator:a9d9448ac8cd42278cefcf96559bb3de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a446f4fc7bfc139eb60340d47db498018" id="r_a446f4fc7bfc139eb60340d47db498018"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a446f4fc7bfc139eb60340d47db498018">integrityCheck</a> () const override</td></tr>
-<tr class="memdesc:a446f4fc7bfc139eb60340d47db498018"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory.  <br /></td></tr>
-<tr class="separator:a446f4fc7bfc139eb60340d47db498018"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a413c78242c3f9f486a2b37d38d28c03b" id="r_a413c78242c3f9f486a2b37d38d28c03b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a413c78242c3f9f486a2b37d38d28c03b">integrityCheck</a> () override</td></tr>
+<tr class="memdesc:a413c78242c3f9f486a2b37d38d28c03b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:a413c78242c3f9f486a2b37d38d28c03b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61440b0b4e54c1019e98d1b58d75f2e9" id="r_a61440b0b4e54c1019e98d1b58d75f2e9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a61440b0b4e54c1019e98d1b58d75f2e9">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a61440b0b4e54c1019e98d1b58d75f2e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a61440b0b4e54c1019e98d1b58d75f2e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +198,10 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPartId</b> () const</td></tr>
 <tr class="memdesc:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or 0 for score) <br /></td></tr>
 <tr class="separator:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ab82b29d7f2164630dee1f73d8535633d"><td class="memItemLeft" align="right" valign="top">
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartDefinition</b> () const</td></tr>
+<tr class="memdesc:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> corresponding to <a class="el" href="classmusx_1_1dom_1_1Base.html#a2064fc32c5bd6ab123461729d1e90d27" title="Gets the partId for this instance (or 0 for score)">getPartId</a>. <br /></td></tr>
+<tr class="separator:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -483,8 +487,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a446f4fc7bfc139eb60340d47db498018" name="a446f4fc7bfc139eb60340d47db498018"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a446f4fc7bfc139eb60340d47db498018">&#9670;&#160;</a></span>integrityCheck()</h2>
+<a id="a413c78242c3f9f486a2b37d38d28c03b" name="a413c78242c3f9f486a2b37d38d28c03b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a413c78242c3f9f486a2b37d38d28c03b">&#9670;&#160;</a></span>integrityCheck()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -496,7 +500,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void musx::dom::Entry::integrityCheck </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -506,8 +510,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Allows a class to determine if it has been properly contructed by the factory. </p>
-<p>The defauly implementation does nothing.</p>
+<p>Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes. </p>
+<p>The default implementation should always be called inside an overridden implementation.</p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html" title="Exception for integrity errors. (Used when MUSX_THROW_ON_INTEGRITY_CHECK_FAIL is defined....">musx::dom::integrity_error</a></td><td>if there is a problem. </td></tr>
@@ -515,7 +519,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#ac5d3a21d81415f3f6c1eec9f2365bea1">musx::dom::Base</a>.</p>
+<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
 
 </div>
 </div>

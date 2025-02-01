@@ -13,5 +13,7 @@ var searchData=
   ['bigendian_10',['BigEndian',['../namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9a2ce7a92ae43763828ac4acb4560c2a5b',1,'musx::dom::header']]],
   ['block_11',['Block',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a532d8e8f86ade9e69fc3384ebbbeb775ae1e4c8c9ccd9fc39c391da4bcd093fb2',1,'musx::dom::others::TextBlock']]],
   ['bottomnote_12',['BottomNote',['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371a6d110e8e8a97bf03ffaac649605e4ff5',1,'musx::dom::others']]],
-  ['bracket_13',['Bracket',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a0520ad11e6b380aafe8a9be9ce72f0a5ab5c644787d66a37b2d0e7eefaf11506b',1,'musx::dom::options::TupletOptions']]]
+  ['bracket_13',['Bracket',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a0520ad11e6b380aafe8a9be9ce72f0a5ab5c644787d66a37b2d0e7eefaf11506b',1,'musx::dom::options::TupletOptions']]],
+  ['bracketcurvedhooks_14',['BracketCurvedHooks',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672a01c53b33e8bdf1e4befc4bab8167e527',1,'musx::dom::details::StaffGroup']]],
+  ['bracketstraighthooks_15',['BracketStraightHooks',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672aca5eab656107c764b7f624914be4e039',1,'musx::dom::details::StaffGroup']]]
 ];

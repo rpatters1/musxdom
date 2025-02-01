@@ -9,7 +9,7 @@ var classmusx_1_1dom_1_1details_1_1GFrameHold =
     [ "createEntryFrame", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#ad7ac8893ad2da958963da0cf6c25c10e", null ],
     [ "getMeasure", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#aafb1a25712ba546799697c43dbdf81ba", null ],
     [ "getStaff", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a3971ceeb23aa0c1dba04faa86765e811", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a6c2c3986f4fb97e6e015abb779f38996", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#adc0f3bd7cad4179819fde0a675d8d74c", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#adae8c0d893cf0562d4d347d06586900e", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#ae4eba104443d3c462b924b0a20890715", null ],
     [ "clefId", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a4299d95db06924be18c150b93a2310d9", null ],

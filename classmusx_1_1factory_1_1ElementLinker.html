@@ -113,9 +113,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acf185a236fd3fe404375c42512ff1535" id="r_acf185a236fd3fe404375c42512ff1535"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1ElementLinker.html#acf185a236fd3fe404375c42512ff1535">addResolver</a> (<a class="el" href="classmusx_1_1factory_1_1ElementLinker.html#a0fbe9d4f8b3eda391d25f44d22713ee1">Resolver</a> resolver, const std::string_view &amp;key={})</td></tr>
-<tr class="memdesc:acf185a236fd3fe404375c42512ff1535"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a resolver function to the linker.  <br /></td></tr>
-<tr class="separator:acf185a236fd3fe404375c42512ff1535"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a915e2cf07b3f5d45f06249c7caaeaf9f" id="r_a915e2cf07b3f5d45f06249c7caaeaf9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1ElementLinker.html#a915e2cf07b3f5d45f06249c7caaeaf9f">addResolver</a> (<a class="el" href="classmusx_1_1factory_1_1ElementLinker.html#a0fbe9d4f8b3eda391d25f44d22713ee1">Resolver</a> resolver, const std::string_view &amp;key)</td></tr>
+<tr class="memdesc:a915e2cf07b3f5d45f06249c7caaeaf9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a resolver function to the linker.  <br /></td></tr>
+<tr class="separator:a915e2cf07b3f5d45f06249c7caaeaf9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bb1f28f858ea9c65dab5ac41565886e" id="r_a4bb1f28f858ea9c65dab5ac41565886e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1ElementLinker.html#a4bb1f28f858ea9c65dab5ac41565886e">resolveAll</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">dom::DocumentPtr</a> &amp;document)</td></tr>
 <tr class="memdesc:a4bb1f28f858ea9c65dab5ac41565886e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves all deferred relationships.  <br /></td></tr>
 <tr class="separator:a4bb1f28f858ea9c65dab5ac41565886e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,8 +142,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="acf185a236fd3fe404375c42512ff1535" name="acf185a236fd3fe404375c42512ff1535"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf185a236fd3fe404375c42512ff1535">&#9670;&#160;</a></span>addResolver()</h2>
+<a id="a915e2cf07b3f5d45f06249c7caaeaf9f" name="a915e2cf07b3f5d45f06249c7caaeaf9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a915e2cf07b3f5d45f06249c7caaeaf9f">&#9670;&#160;</a></span>addResolver()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -161,7 +161,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>key</em> = <code>{}</code>&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -181,7 +181,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">resolver</td><td>A callable object that resolves a relationship when invoked. </td></tr>
-    <tr><td class="paramname">key</td><td>An optional unique key for the resolver. If provided, the resolver is added only once per key. </td></tr>
+    <tr><td class="paramname">key</td><td>An unique key for the resolver. Each resolver is added only once per key. </td></tr>
   </table>
   </dd>
 </dl>
@@ -220,14 +220,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::runtime_error</td><td>If any resolver function encounters an error. </td></tr>
-  </table>
-  </dd>
-</dl>
 <p>&lt; Clear resolvers after execution</p>
-<p>&lt; Clear registered keys after execution</p>
 
 </div>
 </div>

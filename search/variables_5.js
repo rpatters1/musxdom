@@ -27,5 +27,13 @@ var searchData=
   ['frontspaceextra_24',['frontSpaceExtra',['../classmusx_1_1dom_1_1others_1_1Measure.html#a809fb9908533a86729c984a0267bb526',1,'musx::dom::others::Measure']]],
   ['fronttiesepar_25',['frontTieSepar',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa2e43b5f5401cb4d6e52276f2193e8df',1,'musx::dom::options::TieOptions']]],
   ['fulldura_26',['fulldura',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a65ecefa0b98208ef05274a352b3c28a1',1,'musx::dom::details::TupletDef::fullDura'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a1b89db38d501187137dbe74f25878dd1',1,'musx::dom::options::TupletOptions::fullDura']]],
-  ['fullnametextid_27',['fullNameTextId',['../classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af',1,'musx::dom::others::Staff']]]
+  ['fullname_27',['fullName',['../classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a36ed9a3508fb65a3d10ea424a53fa352',1,'musx::dom::others::StaffStyle::Masks']]],
+  ['fullnamealign_28',['fullNameAlign',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9385b8af4ff9501f06de107b557f6cdb',1,'musx::dom::details::StaffGroup']]],
+  ['fullnameexpand_29',['fullNameExpand',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1781192a5d31e17d12f0fca3cce61af6',1,'musx::dom::details::StaffGroup']]],
+  ['fullnameid_30',['fullNameId',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9aa46e9520be5e59854097f421003f8e',1,'musx::dom::details::StaffGroup']]],
+  ['fullnameindivpos_31',['fullNameIndivPos',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#af08da49316f9ce3156432a7299b2eae1',1,'musx::dom::details::StaffGroup']]],
+  ['fullnamejustify_32',['fullNameJustify',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a547c9e3b4793d675eeff6ebbdf7edf78',1,'musx::dom::details::StaffGroup']]],
+  ['fullnametextid_33',['fullNameTextId',['../classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af',1,'musx::dom::others::Staff']]],
+  ['fullnamexadj_34',['fullNameXadj',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a3c9be7efc002d3d687b5a144c6eca141',1,'musx::dom::details::StaffGroup']]],
+  ['fullnameyadj_35',['fullNameYadj',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a818a56f77bc86e1d52daf7bb36c34ea4',1,'musx::dom::details::StaffGroup']]]
 ];

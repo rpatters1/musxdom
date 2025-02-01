@@ -8,5 +8,6 @@ var searchData=
   ['showtimesigmode_5',['ShowTimeSigMode',['../classmusx_1_1dom_1_1others_1_1Measure.html#a9ddff943859253bd689e6c0a93c543b6',1,'musx::dom::others::Measure']]],
   ['slurconnectstyletype_6',['SlurConnectStyleType',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a78f888825940c384ecf6cf636de520b8',1,'musx::dom::options::SmartShapeOptions']]],
   ['slurcontrolstyletype_7',['SlurControlStyleType',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a05b8443a71ed569f9a290d6f22931e4a',1,'musx::dom::options::SmartShapeOptions']]],
-  ['specialposmode_8',['SpecialPosMode',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad53e3cd44d59908f22715495cab187bc',1,'musx::dom::options::TieOptions']]]
+  ['specialposmode_8',['SpecialPosMode',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad53e3cd44d59908f22715495cab187bc',1,'musx::dom::options::TieOptions']]],
+  ['stemdirection_9',['StemDirection',['../classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a',1,'musx::dom::others::Staff']]]
 ];

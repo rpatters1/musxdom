@@ -10,10 +10,11 @@ var classmusx_1_1dom_1_1Base =
     [ "Base", "classmusx_1_1dom_1_1Base.html#a57d15e8a530fbfb694e4d3fbd5ae2dd5", null ],
     [ "addUnlinkedNode", "classmusx_1_1dom_1_1Base.html#ab65d4a6942a09ecc3a2b6ae5c96d434a", null ],
     [ "getDocument", "classmusx_1_1dom_1_1Base.html#a3284dc2e34ac0e59c06847587fe7201a", null ],
+    [ "getPartDefinition", "classmusx_1_1dom_1_1Base.html#ab82b29d7f2164630dee1f73d8535633d", null ],
     [ "getPartId", "classmusx_1_1dom_1_1Base.html#a2064fc32c5bd6ab123461729d1e90d27", null ],
     [ "getShareMode", "classmusx_1_1dom_1_1Base.html#a67e14feb232232fb0d2f395079f26c3c", null ],
     [ "getUnlinkedNodes", "classmusx_1_1dom_1_1Base.html#a9bb9442bd1fafb778a180eb1eaaedf4e", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1Base.html#ac5d3a21d81415f3f6c1eec9f2365bea1", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905", null ],
     [ "operator=", "classmusx_1_1dom_1_1Base.html#a562f33f6f491f61b9dc14822779600ef", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e", null ]
 ];

@@ -5,7 +5,8 @@ var hierarchy =
         [ "musx::dom::EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", [
           [ "musx::dom::details::TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", null ]
         ] ],
-        [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ]
+        [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ],
+        [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ]
       ] ],
       [ "musx::dom::Entry", "classmusx_1_1dom_1_1Entry.html", null ],
       [ "musx::dom::FontInfo", "classmusx_1_1dom_1_1FontInfo.html", null ],
@@ -48,12 +49,21 @@ var hierarchy =
         [ "musx::dom::others::MarkingCategoryName", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName.html", null ],
         [ "musx::dom::others::Measure", "classmusx_1_1dom_1_1others_1_1Measure.html", null ],
         [ "musx::dom::others::MeasureNumberRegion", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html", null ],
-        [ "musx::dom::others::MusicRange", "classmusx_1_1dom_1_1others_1_1MusicRange.html", null ],
+        [ "musx::dom::others::MultiStaffGroupId", "classmusx_1_1dom_1_1others_1_1MultiStaffGroupId.html", null ],
+        [ "musx::dom::others::MultiStaffInstrumentGroup", "classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html", null ],
+        [ "musx::dom::others::MultimeasureRest", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html", null ],
+        [ "musx::dom::others::MusicRange", "classmusx_1_1dom_1_1others_1_1MusicRange.html", [
+          [ "musx::dom::others::StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", null ]
+        ] ],
         [ "musx::dom::others::NamePositioning", "classmusx_1_1dom_1_1others_1_1NamePositioning.html", null ],
         [ "musx::dom::others::Page", "classmusx_1_1dom_1_1others_1_1Page.html", null ],
         [ "musx::dom::others::PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", null ],
         [ "musx::dom::others::PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", null ],
-        [ "musx::dom::others::Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", null ],
+        [ "musx::dom::others::Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", [
+          [ "musx::dom::others::StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", [
+            [ "musx::dom::others::StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", null ]
+          ] ]
+        ] ],
         [ "musx::dom::others::StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", null ],
         [ "musx::dom::others::TextBlock", "classmusx_1_1dom_1_1others_1_1TextBlock.html", null ],
         [ "musx::dom::others::TextExpressionDef", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html", null ]
@@ -69,8 +79,10 @@ var hierarchy =
         [ "musx::dom::texts::SmartShapeText", "classmusx_1_1dom_1_1texts_1_1SmartShapeText.html", null ]
       ] ],
       [ "musx::dom::options::ClefOptions::ClefDef", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html", null ],
-      [ "musx::dom::others::MeasureNumberRegion::ScorePartData", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html", null ]
+      [ "musx::dom::others::MeasureNumberRegion::ScorePartData", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html", null ],
+      [ "musx::dom::others::StaffStyle::Masks", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html", null ]
     ] ],
+    [ "musx::dom::details::StaffGroup::Bracket", "classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html", null ],
     [ "musx::dom::options::SmartShapeOptions::ConnectionStyle", "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ConnectionStyle.html", null ],
     [ "musx::dom::options::TieOptions::ConnectStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html", null ],
     [ "musx::dom::options::TieOptions::ControlPoint", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html", null ],

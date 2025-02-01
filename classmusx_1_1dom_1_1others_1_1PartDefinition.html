@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1PartDefi
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classmusx_1_1dom_1_1others_1_1PartDefinition-members.html">List of all members</a>  </div>
@@ -124,10 +125,17 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>PartDefinition</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:ab40117d77eb4a5b281a92e47c14d3871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:ab40117d77eb4a5b281a92e47c14d3871"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f973637c8f3c2f2e79c41241426d6e2" id="r_a2f973637c8f3c2f2e79c41241426d6e2"><td class="memItemLeft" align="right" valign="top"><a id="a2f973637c8f3c2f2e79c41241426d6e2" name="a2f973637c8f3c2f2e79c41241426d6e2"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> () const</td></tr>
-<tr class="memdesc:a2f973637c8f3c2f2e79c41241426d6e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the part name if any. <br /></td></tr>
-<tr class="separator:a2f973637c8f3c2f2e79c41241426d6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc5b21e3ca829c176bf419756232f65b" id="r_adc5b21e3ca829c176bf419756232f65b"><td class="memItemLeft" align="right" valign="top"><a id="adc5b21e3ca829c176bf419756232f65b" name="adc5b21e3ca829c176bf419756232f65b"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>) const</td></tr>
+<tr class="memdesc:adc5b21e3ca829c176bf419756232f65b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the part name if any. <br /></td></tr>
+<tr class="separator:adc5b21e3ca829c176bf419756232f65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef38a46b8dbac91906cd353ea2ef2830" id="r_aef38a46b8dbac91906cd353ea2ef2830"><td class="memItemLeft" align="right" valign="top"><a id="aef38a46b8dbac91906cd353ea2ef2830" name="aef38a46b8dbac91906cd353ea2ef2830"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isScore</b> () const</td></tr>
+<tr class="memdesc:aef38a46b8dbac91906cd353ea2ef2830"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this part corresponds to the score. <br /></td></tr>
+<tr class="separator:aef38a46b8dbac91906cd353ea2ef2830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e05a8343a39405509fa0ab4f0f268e6" id="r_a0e05a8343a39405509fa0ab4f0f268e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#a0e05a8343a39405509fa0ab4f0f268e6">calcSystemIuList</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> systemId) const</td></tr>
+<tr class="memdesc:a0e05a8343a39405509fa0ab4f0f268e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">InstrumentUsed</a> cmper by this part for the specified system.  <br /></td></tr>
+<tr class="separator:a0e05a8343a39405509fa0ab4f0f268e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb5d246fd2a159690116898934390167" id="r_adb5d246fd2a159690116898934390167"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#adb5d246fd2a159690116898934390167">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:adb5d246fd2a159690116898934390167"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:adb5d246fd2a159690116898934390167"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,6 +158,10 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPartId</b> () const</td></tr>
 <tr class="memdesc:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or 0 for score) <br /></td></tr>
 <tr class="separator:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ab82b29d7f2164630dee1f73d8535633d"><td class="memItemLeft" align="right" valign="top">
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartDefinition</b> () const</td></tr>
+<tr class="memdesc:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> corresponding to <a class="el" href="classmusx_1_1dom_1_1Base.html#a2064fc32c5bd6ab123461729d1e90d27" title="Gets the partId for this instance (or 0 for score)">getPartId</a>. <br /></td></tr>
+<tr class="separator:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -162,9 +174,16 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (const std::string &amp;nodeName)</td></tr>
 <tr class="memdesc:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a shared node for this instance. <br /></td></tr>
 <tr class="separator:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ac5d3a21d81415f3f6c1eec9f2365bea1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac5d3a21d81415f3f6c1eec9f2365bea1">integrityCheck</a> () const</td></tr>
-<tr class="memdesc:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory.  <br /></td></tr>
-<tr class="separator:ac5d3a21d81415f3f6c1eec9f2365bea1 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a368bf85332ce10bac71833627f858905"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">integrityCheck</a> ()</td></tr>
+<tr class="memdesc:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aae068cf4878cfa132b79558af2a9c01a" id="r_aae068cf4878cfa132b79558af2a9c01a"><td class="memItemLeft" align="right" valign="top"><a id="aae068cf4878cfa132b79558af2a9c01a" name="aae068cf4878cfa132b79558af2a9c01a"></a>
+static std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getScore</b> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document)</td></tr>
+<tr class="memdesc:aae068cf4878cfa132b79558af2a9c01a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the instance for the score. <br /></td></tr>
+<tr class="separator:aae068cf4878cfa132b79558af2a9c01a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -196,6 +215,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>useAsSmpInst</b> {}</
 int&#160;</td><td class="memItemRight" valign="bottom"><b>smartMusicInst</b> {}</td></tr>
 <tr class="memdesc:a2196083a94f56555b95331ddd206ff2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">SmartMusic instrument ID (-1 if not used). <br /></td></tr>
 <tr class="separator:a2196083a94f56555b95331ddd206ff2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c77d176d5bc01c5f5531a27c899987e" id="r_a8c77d176d5bc01c5f5531a27c899987e"><td class="memItemLeft" align="right" valign="top"><a id="a8c77d176d5bc01c5f5531a27c899987e" name="a8c77d176d5bc01c5f5531a27c899987e"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>defaultNameStaff</b> {}</td></tr>
+<tr class="memdesc:a8c77d176d5bc01c5f5531a27c899987e"><td class="mdescLeft">&#160;</td><td class="mdescRight">If non-zero, this points to the <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">Staff</a> that has the default name (if unspecified by <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#a0bf08d6f99a555bd17b80be7e8236723" title="Cmper of the part name TextBlock. (xml tag is &lt;nameID&gt;)">nameId</a>.) <br /></td></tr>
+<tr class="separator:a8c77d176d5bc01c5f5531a27c899987e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb554e7b209b5ea450f1b165fb0356e7" id="r_abb554e7b209b5ea450f1b165fb0356e7"><td class="memItemLeft" align="right" valign="top"><a id="abb554e7b209b5ea450f1b165fb0356e7" name="abb554e7b209b5ea450f1b165fb0356e7"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>defaultNameGroup</b> {}</td></tr>
+<tr class="memdesc:abb554e7b209b5ea450f1b165fb0356e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">If non-zero, this points to the <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> that has the default name (if unspecified by <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#a0bf08d6f99a555bd17b80be7e8236723" title="Cmper of the part name TextBlock. (xml tag is &lt;nameID&gt;)">nameId</a>.) <br /></td></tr>
+<tr class="separator:abb554e7b209b5ea450f1b165fb0356e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -236,9 +263,36 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the attributes of a Finale "partDef". </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>After identifying all possible fields, remove the override of <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#adb5d246fd2a159690116898934390167" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">PartDefinition::requireAllFields</a>.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>After identifying all possible fields, remove the override of <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#adb5d246fd2a159690116898934390167" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">PartDefinition::requireAllFields</a>.</dd></dl>
 <p>The cmper is the part definition ID, representing unique part definitions in the Finale document. This class is identified by the XML node name "partDef". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0e05a8343a39405509fa0ab4f0f268e6" name="a0e05a8343a39405509fa0ab4f0f268e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e05a8343a39405509fa0ab4f0f268e6">&#9670;&#160;</a></span>calcSystemIuList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::others::PartDefinition::calcSystemIuList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>systemId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">InstrumentUsed</a> cmper by this part for the specified system. </p>
+<p>This function either returns the input <code>systemId</code> or the Special Part Extraction cmper.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">systemId</td><td>The staff system to find. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="adb5d246fd2a159690116898934390167" name="adb5d246fd2a159690116898934390167"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adb5d246fd2a159690116898934390167">&#9670;&#160;</a></span>requireAllFields()</h2>
 

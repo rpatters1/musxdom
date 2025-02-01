@@ -5,7 +5,7 @@ var classmusx_1_1dom_1_1others_1_1TextBlock =
       [ "Expression", "classmusx_1_1dom_1_1others_1_1TextBlock.html#a532d8e8f86ade9e69fc3384ebbbeb775aa1a6657be79cc0fc1e9b23b9e108f043", null ]
     ] ],
     [ "TextBlock", "classmusx_1_1dom_1_1others_1_1TextBlock.html#af09b4d22b57a426c4f2bd2e7c5f8a9d6", null ],
-    [ "getText", "classmusx_1_1dom_1_1others_1_1TextBlock.html#a3b81fb50365a855b8be0b8b7681e1ab6", null ],
+    [ "getText", "classmusx_1_1dom_1_1others_1_1TextBlock.html#a9c4b52aa9d9d1a8eae2c658109fdd933", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1TextBlock.html#a57f6336f95a9b1099216e44fec3bfe4d", null ],
     [ "cornerRadius", "classmusx_1_1dom_1_1others_1_1TextBlock.html#a5f966712b81192cedcf104788c82b959", null ],
     [ "height", "classmusx_1_1dom_1_1others_1_1TextBlock.html#ab8e19bab2325cbccfa82c87690428d37", null ],

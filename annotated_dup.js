@@ -4,6 +4,7 @@ var annotated_dup =
       [ "dom", "namespacemusx_1_1dom.html", [
         [ "details", "namespacemusx_1_1dom_1_1details.html", [
           [ "GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", "classmusx_1_1dom_1_1details_1_1GFrameHold" ],
+          [ "StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", "classmusx_1_1dom_1_1details_1_1StaffGroup" ],
           [ "TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", "classmusx_1_1dom_1_1details_1_1TupletDef" ]
         ] ],
         [ "header", "namespacemusx_1_1dom_1_1header.html", [
@@ -46,12 +47,18 @@ var annotated_dup =
           [ "MarkingCategoryName", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName.html", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName" ],
           [ "Measure", "classmusx_1_1dom_1_1others_1_1Measure.html", "classmusx_1_1dom_1_1others_1_1Measure" ],
           [ "MeasureNumberRegion", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion" ],
+          [ "MultimeasureRest", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html", "classmusx_1_1dom_1_1others_1_1MultimeasureRest" ],
+          [ "MultiStaffGroupId", "classmusx_1_1dom_1_1others_1_1MultiStaffGroupId.html", "classmusx_1_1dom_1_1others_1_1MultiStaffGroupId" ],
+          [ "MultiStaffInstrumentGroup", "classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html", "classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup" ],
           [ "MusicRange", "classmusx_1_1dom_1_1others_1_1MusicRange.html", "classmusx_1_1dom_1_1others_1_1MusicRange" ],
           [ "NamePositioning", "classmusx_1_1dom_1_1others_1_1NamePositioning.html", "classmusx_1_1dom_1_1others_1_1NamePositioning" ],
           [ "Page", "classmusx_1_1dom_1_1others_1_1Page.html", "classmusx_1_1dom_1_1others_1_1Page" ],
           [ "PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", "classmusx_1_1dom_1_1others_1_1PartDefinition" ],
           [ "PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", "classmusx_1_1dom_1_1others_1_1PartGlobals" ],
           [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", "classmusx_1_1dom_1_1others_1_1Staff" ],
+          [ "StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", "classmusx_1_1dom_1_1others_1_1StaffComposite" ],
+          [ "StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", "classmusx_1_1dom_1_1others_1_1StaffStyle" ],
+          [ "StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign" ],
           [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", "classmusx_1_1dom_1_1others_1_1StaffSystem" ],
           [ "TextBlock", "classmusx_1_1dom_1_1others_1_1TextBlock.html", "classmusx_1_1dom_1_1others_1_1TextBlock" ],
           [ "TextExpressionDef", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html", "classmusx_1_1dom_1_1others_1_1TextExpressionDef" ],
@@ -103,7 +110,7 @@ var annotated_dup =
         [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ]
       ] ],
       [ "util", null, [
-        [ "EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", null ],
+        [ "EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", "classmusx_1_1util_1_1EnigmaString" ],
         [ "Fraction", "classmusx_1_1util_1_1Fraction.html", "classmusx_1_1util_1_1Fraction" ],
         [ "Logger", "classmusx_1_1util_1_1Logger.html", "classmusx_1_1util_1_1Logger" ]
       ] ],

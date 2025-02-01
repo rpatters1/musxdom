@@ -24,7 +24,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "getEntryNumber", "classmusx_1_1dom_1_1Entry.html#a0d3cc0d02d7768f4153b0741d0a238ca", null ],
     [ "getNext", "classmusx_1_1dom_1_1Entry.html#af6ad38939066bbbfe7e64403919375a1", null ],
     [ "getPrevious", "classmusx_1_1dom_1_1Entry.html#af99dd422bdcc42b63a4986eda7b18d42", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1Entry.html#a446f4fc7bfc139eb60340d47db498018", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1Entry.html#a413c78242c3f9f486a2b37d38d28c03b", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1Entry.html#a61440b0b4e54c1019e98d1b58d75f2e9", null ],
     [ "articDetail", "classmusx_1_1dom_1_1Entry.html#a0e99f4aa18165386218038d02a013b0f", null ],
     [ "beam", "classmusx_1_1dom_1_1Entry.html#ad829caa4f42eee2a016822e76d04f44c", null ],

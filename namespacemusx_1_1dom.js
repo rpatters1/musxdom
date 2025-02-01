@@ -46,6 +46,7 @@ var namespacemusx_1_1dom =
     [ "OthersPoolPtr", "namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e", null ],
     [ "SystemCmper", "namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237", null ],
     [ "TextsPoolPtr", "namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4", null ],
+    [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],
     [ "MAX_LAYERS", "namespacemusx_1_1dom.html#a83d296c53df0e81b30707dfd6210b77b", null ],
     [ "MUSX_GLOBALS_CMPER", "namespacemusx_1_1dom.html#a484882ede2c8bb64570f45fce4c0edef", null ],
     [ "SCORE_PARTID", "namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0", null ]

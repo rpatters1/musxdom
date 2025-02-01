@@ -17,10 +17,11 @@ var searchData=
   ['insetfixed_14',['insetFixed',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76',1,'musx::dom::options::TieOptions::ControlPoint']]],
   ['insetratio_15',['insetRatio',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521',1,'musx::dom::options::TieOptions::ControlPoint']]],
   ['insetstyle_16',['insetStyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions']]],
-  ['interpolateallotments_17',['interpolateAllotments',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#ad55a6666bb6174e0550843e314b99dac',1,'musx::dom::options::MusicSpacingOptions']]],
-  ['ishidden_18',['isHidden',['../classmusx_1_1dom_1_1Entry.html#aa140b2bc34357eee1085828bae9c9bae',1,'musx::dom::Entry']]],
-  ['isnote_19',['isNote',['../classmusx_1_1dom_1_1Entry.html#a1b7183f1bc2716b5eb961a2beab9e3c9',1,'musx::dom::Entry']]],
-  ['isshape_20',['isShape',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#aafb0704b240bf7675074b1eb4879487b',1,'musx::dom::options::ClefOptions::ClefDef']]],
-  ['isvalid_21',['isvalid',['../classmusx_1_1dom_1_1Note.html#a3e9ab0528cef1b53791ad277da67b26b',1,'musx::dom::Note::isValid'],['../classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b',1,'musx::dom::Entry::isValid']]],
-  ['italic_22',['italic',['../classmusx_1_1dom_1_1FontInfo.html#ace55cebaa51ad5c68f5e177301938e2f',1,'musx::dom::FontInfo']]]
+  ['instuuid_17',['instUuid',['../classmusx_1_1dom_1_1others_1_1Staff.html#aed8dd51f5f3d7128990113c16925589a',1,'musx::dom::others::Staff']]],
+  ['interpolateallotments_18',['interpolateAllotments',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#ad55a6666bb6174e0550843e314b99dac',1,'musx::dom::options::MusicSpacingOptions']]],
+  ['ishidden_19',['isHidden',['../classmusx_1_1dom_1_1Entry.html#aa140b2bc34357eee1085828bae9c9bae',1,'musx::dom::Entry']]],
+  ['isnote_20',['isNote',['../classmusx_1_1dom_1_1Entry.html#a1b7183f1bc2716b5eb961a2beab9e3c9',1,'musx::dom::Entry']]],
+  ['isshape_21',['isShape',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#aafb0704b240bf7675074b1eb4879487b',1,'musx::dom::options::ClefOptions::ClefDef']]],
+  ['isvalid_22',['isvalid',['../classmusx_1_1dom_1_1Note.html#a3e9ab0528cef1b53791ad277da67b26b',1,'musx::dom::Note::isValid'],['../classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b',1,'musx::dom::Entry::isValid']]],
+  ['italic_23',['italic',['../classmusx_1_1dom_1_1FontInfo.html#ace55cebaa51ad5c68f5e177301938e2f',1,'musx::dom::FontInfo']]]
 ];

@@ -12,5 +12,6 @@ var searchData=
   ['rests_9',['Rests',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa7904ec4d979d5fe9b4a61bc691359cf1',1,'musx::dom::options::FontOptions']]],
   ['right_10',['right',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#a2cc1bbb5cec26423d5c9e74331c16203a92b09c7c48c520c3c55e497875da437c',1,'musx::dom::others::NamePositioning::Right'],['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a38d4a6a6f163ef2b55c680bc5bd79699a92b09c7c48c520c3c55e497875da437c',1,'musx::dom::others::MeasureNumberRegion::Right'],['../namespacemusx_1_1dom_1_1others.html#a1bfdb7e0ef5d0cbbec786ca77d713b12a92b09c7c48c520c3c55e497875da437c',1,'musx::dom::others::Right']]],
   ['rightbarline_11',['RightBarline',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea1c1d38f2cecf469e41f461d784f6d82c',1,'musx::dom::others']]],
-  ['rightofallnoteheads_12',['RightOfAllNoteheads',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea482795a43e0653dca29409b8940ebfee',1,'musx::dom::others']]]
+  ['rightofallnoteheads_12',['RightOfAllNoteheads',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea482795a43e0653dca29409b8940ebfee',1,'musx::dom::others']]],
+  ['romansuffix_13',['RomanSuffix',['../classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1abf27d2294ec0049a7e41a1f9fe296e97',1,'musx::dom::others::Staff']]]
 ];
