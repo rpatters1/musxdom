@@ -42,6 +42,12 @@
 #define MUSX_INTEGRITY_ERROR(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
 #endif
 
+#ifdef MUSX_THROW_ON_UNKNOWN_XML
+#define MUSX_UNKNOWN_XML(S) throw ::musx::factory::unknown_xml_error(S)
+#else
+#define MUSX_UNKNOWN_XML(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
+#endif
+
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
@@ -51,6 +57,10 @@ namespace musx {
  * @brief The DOM (document object model) for musx files.
  */
 namespace dom {
+
+namespace others {
+class PartDefinition;
+}
 
 /**
  * @brief Exception for integrity errors. (Used when `MUSX_THROW_ON_INTEGRITY_CHECK_FAIL` is defined.)
@@ -81,6 +91,7 @@ using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
 constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
+constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::InstrumentUsed cmper)
 
 class Document;
 /** @brief Shared `Document` pointer */
@@ -130,6 +141,9 @@ public:
      */
     Cmper getPartId() const { return m_partId; }
 
+    /** @brief Gets the @ref others::PartDefinition corresponding to #getPartId */
+    std::shared_ptr<others::PartDefinition> getPartDefinition() const;
+
     /**
      * @brief Gets the sharing mode for this instance.
      */
@@ -149,13 +163,14 @@ public:
     }
 
     /**
-     * @brief Allows a class to determine if it has been properly contructed by the factory.
+     * @brief Allows a class to determine if it has been properly contructed by the factory and fix issues that it can,
+     * such as creating default instances of contained classes.
      *
-     * The defauly implementation does nothing.
+     * The default implementation should always be called inside an overridden implementation.
      *
      * @throws #musx::dom::integrity_error if there is a problem.
      */
-    virtual void integrityCheck() const { }
+    virtual void integrityCheck() { }
 
     /**
      * @brief Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.
@@ -497,21 +512,33 @@ public:
 class MusicRange : public OthersBase
 {
 public:
-
     /**
      * @brief Constructs a MusicRange object.
      * @param document Shared pointer to the document.
      * @param partId The part ID if this range is unlinked, otherwise 0.
      * @param shareMode The share mode if this range is unlinked.
      * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::InstrumentUsed.
+     * @param inci incident value, for subclasses that have them.
      */
-    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
-        : OthersBase(document, partId, shareMode, cmper) {}
+    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All,
+            Cmper cmper = 0, std::optional<Inci> inci = std::nullopt)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
 
     MeasCmper startMeas{};      ///< Starting measure in the range.
     Edu startEdu{};             ///< Starting EDU (Elapsed Durational Unit) in the range.
     MeasCmper endMeas{};        ///< Ending measure in the range.
     Edu endEdu{};               ///< Ending EDU (Elapsed Durational Unit) in the range.
+
+    /// @brief Returns true of the given metric location is contained in this MusicRange instance.
+    /// @param measId The measure ID to search for.
+    /// @param eduPosition The Edu position within the measure to search for.
+    bool contains(MeasCmper measId, Edu eduPosition) const
+    {
+        return (startMeas < measId || (startMeas == measId && startEdu <= eduPosition)) &&
+               (endMeas > measId || (endMeas == measId && endEdu >= eduPosition));
+    }
 
     static const xml::XmlElementArray<MusicRange> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
@@ -521,7 +548,7 @@ public:
  * @brief Contains horizontal and vertical offsets, alignment, and expansion settings for name positioning.
  * 
  * This class is used both for default names as well as name positioning @ref Staff, @ref StaffStyle,
- * and @ref StaffGroup.
+ * and @ref details::StaffGroup.
  */
 class NamePositioning : public OthersBase
 {

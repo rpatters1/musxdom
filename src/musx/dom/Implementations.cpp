@@ -40,6 +40,19 @@ namespace musx {
 namespace dom {
 
 // *****************
+// ***** Base *****
+// *****************
+
+std::shared_ptr<others::PartDefinition> Base::getPartDefinition() const
+{
+    if (auto retval = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, getPartId())) {
+        return retval;
+    }
+    MUSX_INTEGRITY_ERROR("PartDefinition for part id " + std::to_string(getPartId()) + " does not exist.");
+    return nullptr;
+}
+
+// *****************
 // ***** Entry *****
 // *****************
 
@@ -178,16 +191,16 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
             return homeEnv;
         }
         uid_t uid = getuid(); // Get the current user's UID
-        struct passwd *pw = getpwuid(uid); // Fetch the password entry for the UID
+        struct passwd* pw = getpwuid(uid); // Fetch the password entry for the UID
         if (pw) {
             return pw->pw_dir;
         }
         return "";
-    };
+        };
 #else
     auto getHomePath = []() -> void {};
 #endif
-    
+
     auto getBasePaths = [getHomePath](const std::string& envVariable) -> std::vector<std::string> {
         std::vector<std::string> paths;
 #if defined(MUSX_RUNNING_ON_WINDOWS)
@@ -196,13 +209,15 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         if (_dupenv_s(&buffer, &bufferSize, envVariable.c_str()) == 0 && buffer != nullptr) {
             paths.emplace_back(buffer);
             free(buffer);
-        } else {
+        }
+        else {
             return {};
         }
 #else
         if (envVariable == "HOME") {
             paths.emplace_back(getHomePath());
-        } else if (!envVariable.empty()) {
+        }
+        else if (!envVariable.empty()) {
             if (auto envValue = getenv(envVariable.c_str())) {
                 std::stringstream ss(envValue);
                 std::string path;
@@ -210,13 +225,16 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
                     paths.push_back(path);
                 }
 #if defined(MUSX_RUNNING_ON_LINUX_UNIX)
-            } else if (envVariable == "XDG_DATA_HOME") {
+            }
+            else if (envVariable == "XDG_DATA_HOME") {
                 paths.emplace_back(getHomePath() + "/.local/share");
-            } else if (envVariable == "XDG_DATA_DIRS") {
+            }
+            else if (envVariable == "XDG_DATA_DIRS") {
                 paths.emplace_back("/usr/local/share");
                 paths.emplace_back("/usr/share");
 #endif         
-            } else {
+            }
+            else {
                 return {};
             }
         }
@@ -225,12 +243,12 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         }
 #endif
         return paths;
-    };
+        };
     auto paths = getBasePaths(userEnv);
     auto temp = getBasePaths(systemEnv);
     paths.insert(paths.end(),
-                 std::make_move_iterator(temp.begin()),
-                 std::make_move_iterator(temp.end()));
+        std::make_move_iterator(temp.begin()),
+        std::make_move_iterator(temp.end()));
     std::vector<std::filesystem::path> retval;
     for (const auto& next : paths) {
         std::filesystem::path path = next;
@@ -281,9 +299,9 @@ struct TupletState
     }
 
     TupletState(const std::shared_ptr<details::TupletDef>& t)
-        : remainingSymbolicDuration(t->displayNumber * t->displayDuration, int(Entry::NoteType::Whole)),
-          ratio(t->referenceNumber * t->referenceDuration, t->displayNumber * t->displayDuration),
-          tuplet(t)
+        : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(Entry::NoteType::Whole)),
+        ratio(t->referenceNumber* t->referenceDuration, t->displayNumber* t->displayDuration),
+        tuplet(t)
     {
     }
 };
@@ -304,7 +322,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
         return nullptr;
-    }();
+        }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
         retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);        auto entries = frame->getEntries();
@@ -336,7 +354,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
                 std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
-                    });
+                });
                 for (const auto& tuplet : tuplets) {
                     activeTuplets.emplace_back(tuplet);
                 }
@@ -364,7 +382,8 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 );
             }
         }
-    } else {
+    }
+    else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
     }
@@ -398,11 +417,30 @@ bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_pt
 // ***** InstrumentUsed *****
 // **************************
 
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
+{
+    auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staffId) + " not found for InstrumentUsed list " + std::to_string(getCmper()));
+    }
+    return retval;
+}
+
 std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
 {
-    if (index > iuArray.size()) return nullptr;
+    if (index >= iuArray.size()) return nullptr;
     auto iuItem = iuArray[index];
-    return iuItem->getDocument()->getOthers()->get<others::Staff>(iuItem->getPartId(), iuItem->staffId);
+    return iuItem->getStaff();
+}
+
+std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId)
+{
+    for (size_t x = 0; x < iuArray.size(); x++) {
+        if (iuArray[x]->staffId == staffId) {
+            return x;
+        }
+    }
+    return std::nullopt;
 }
 
 // ****************************
@@ -416,6 +454,43 @@ std::string others::MarkingCategory::getName() const
         return catName->name;
     }
     return {};
+}
+
+// *************************************
+// ***** MultiStaffInstrumentGroup *****
+// *************************************
+
+std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffAtIndex(size_t x) const
+{
+    if (x >= staffNums.size()) return nullptr;
+    auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffNums[x]);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staffNums[x])
+            + " not found for multiple staff instrument " + std::to_string(getCmper()));
+    }
+    return retval;
+}
+
+std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaff() const
+{
+    if (staffNums.empty()) {
+        MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
+        return nullptr;
+    }
+    return getStaffAtIndex(0);
+}
+
+std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup() const
+{
+    auto document = getDocument();
+    auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(getPartId(), getCmper());
+    if (!groupIdRecord) return nullptr;
+    auto retval = document->getDetails()->get<details::StaffGroup>(getPartId(), BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(groupIdRecord->staffGroupId)
+            + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
+    }
+    return retval;
 }
 
 // *****************************
@@ -447,7 +522,7 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
     }
     if (page3) {
         if (retval->facingPages || page3->margTop != page2->margTop || page3->margLeft != page2->margLeft
-               || page3->margBottom != page2->margBottom || page3->margRight != page2->margRight) {
+            || page3->margBottom != page2->margBottom || page3->margRight != page2->margRight) {
             retval->facingPages = true;
             retval->rightPageMarginTop = page3->margTop;
             retval->rightPageMarginLeft = page3->margLeft;
@@ -482,9 +557,424 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 // ***** PartDefinition *****
 // **************************
 
-std::string others::PartDefinition::getName() const
+std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return TextBlock::getText(getDocument(), nameId, true); // true: trim tags
+    if (nameId) {
+        return TextBlock::getText(getDocument(), nameId, true, accidentalStyle); // true: trim tags
+    }
+    if (defaultNameStaff) {
+        if (auto staff = getDocument()->getOthers()->get<others::Staff>(SCORE_PARTID, defaultNameStaff)) {
+            return staff->getFullInstrumentName(accidentalStyle, true); // true: prefer staff name
+        } else {
+            MUSX_INTEGRITY_ERROR("Part " + std::to_string(getCmper()) + " uses nonexistent Staff " + std::to_string(defaultNameStaff) + " for part name.");
+        }
+    }
+    if (defaultNameGroup) {
+        if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, defaultNameGroup)) {
+            return group->getFullInstrumentName(accidentalStyle);
+        } else {
+            MUSX_INTEGRITY_ERROR("Part " + std::to_string(getCmper()) + " uses nonexistent StaffGroup " + std::to_string(defaultNameGroup) + " for part name.");
+        }
+    }
+    return {};
+}
+
+Cmper others::PartDefinition::calcSystemIuList(Cmper systemId) const
+{
+    if (auto partGlobs = getDocument()->getOthers()->get<others::PartGlobals>(getCmper(), MUSX_GLOBALS_CMPER)) {
+        if (partGlobs->specialPartExtractionIUList) {
+            return partGlobs->specialPartExtractionIUList;
+        }
+    }
+    return systemId;
+}
+
+std::shared_ptr<others::PartDefinition> others::PartDefinition::getScore(const DocumentPtr& document)
+{
+    if (auto score = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, SCORE_PARTID)) {
+        return score;
+    }
+    MUSX_INTEGRITY_ERROR("The document contains no instance of PartDefinition for the score.");
+    return nullptr;
+}
+
+// *****************
+// ***** Staff *****
+// *****************
+
+void others::Staff::calcAutoNumberValues(const DocumentPtr& document)
+{
+    auto scrollViewList = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+
+    // Map to track counts for instUuid
+    std::unordered_map<std::string, int> instUuidCounts;
+    std::unordered_set<Cmper> countedMultistaffGroups;
+
+    // Pass 1: Check if any instUuid has auto-numbering disabled
+    std::unordered_set<std::string> disabledInstUuids;
+    for (const auto& instrumentUsed : scrollViewList) {
+        auto staff = instrumentUsed->getStaff();
+        if (staff && !staff->useAutoNumbering) {
+            disabledInstUuids.insert(staff->instUuid);
+        }
+    }
+
+    // Pass 2: Count occurrences of instUuid, considering multistaff instruments
+    for (const auto& instrumentUsed : scrollViewList) {
+        auto staff = instrumentUsed->getStaff();
+        if (!staff || staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
+            continue;
+        }
+
+        // Check if the staff is part of a multistaff instrument
+        auto multiStaffGroup = staff->getMultiStaffInstGroup();
+        if (multiStaffGroup) {
+            if (countedMultistaffGroups.find(multiStaffGroup->getCmper()) != countedMultistaffGroups.end()) {
+                continue; // Skip already-counted multistaff groups
+            }
+            countedMultistaffGroups.insert(multiStaffGroup->getCmper());
+        }
+        instUuidCounts[staff->instUuid]++;
+    }
+
+    // Pass 2.1: Remove singleton or empty instUuid counts, including single multistaff instruments
+    for (const auto& count : instUuidCounts) {
+        if (count.second <= 1) {
+            disabledInstUuids.insert(count.first);
+        }
+    }
+
+    // Pass 3: Assign auto-numbering values
+    std::unordered_map<std::string, int> instUuidNumbers;
+    countedMultistaffGroups.clear(); // Reset for numbering
+
+    for (const auto& instrumentUsed : scrollViewList) {
+        auto staff = instrumentUsed->getStaff();
+        if (!staff) continue;
+        if (staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
+            staff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
+            continue;
+        }
+
+        // Check if the staff is part of a multistaff instrument
+        auto multiStaffGroup = staff->getMultiStaffInstGroup();
+        if (multiStaffGroup) {
+            if (countedMultistaffGroups.find(multiStaffGroup->getCmper()) == countedMultistaffGroups.end()) {
+                // Assign a number for this multistaff group
+                countedMultistaffGroups.insert(multiStaffGroup->getCmper());
+                instUuidNumbers[staff->instUuid]++;
+            }
+            // Assign the same number to all staves in the group
+            auto groupNumber = instUuidNumbers[staff->instUuid];
+            for (size_t x = 0; x < multiStaffGroup->staffNums.size(); x++) {
+                auto groupStaff = multiStaffGroup->getStaffAtIndex(x);
+                if (groupStaff) {
+                    groupStaff->autoNumberValue = groupNumber;
+                }
+            }
+            continue; // Skip further processing for the current staff
+        }
+
+        // Assign a number for single staves
+        instUuidNumbers[staff->instUuid]++;
+        staff->autoNumberValue = instUuidNumbers[staff->instUuid];
+    }
+}
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+static std::string intToRoman(int num)
+{
+    if (num <= 0 || num > 3999) {
+        throw std::out_of_range("Number out of range for Roman numerals (1-3999)");
+    }
+
+    const std::vector<std::pair<int, std::string>> romanMap = {
+        {1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
+        {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"},
+        {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}
+    };
+
+    std::string result;
+    for (const auto& [value, symbol] : romanMap) {
+        while (num >= value) {
+            result += symbol;
+            num -= value;
+        }
+    }
+    return result;
+}
+
+std::string intToAlphabetic(int num) {
+    if (num <= 0) {
+        throw std::out_of_range("Number must be greater than 0");
+    }
+
+    std::string result;
+    while (num > 0) {
+        --num; // Convert to 0-based index
+        result.insert(result.begin(), 'A' + (num % 26));
+        num /= 26;
+    }
+
+    return result;
+}
+
+std::string ordinalPrefix(int num)
+{
+    if (num <= 0) {
+        throw std::out_of_range("Number must be greater than 0");
+    }
+
+    int lastTwoDigits = num % 100;
+    int lastDigit = num % 10;
+
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+        return std::to_string(num) + "th";
+    }
+
+    switch (lastDigit) {
+        case 1: return std::to_string(num) + "st";
+        case 2: return std::to_string(num) + "nd";
+        case 3: return std::to_string(num) + "rd";
+        default: return std::to_string(num) + "th";
+    }
+}
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+std::string others::Staff::addAutoNumbering(const std::string& plainName) const
+{
+    if (!autoNumberValue.has_value()) {
+        return plainName; // No numbering needed
+    }
+
+    int number = *autoNumberValue;
+    switch (autoNumbering) {
+        default:
+        case AutoNumberingStyle::ArabicSuffix:
+            return plainName + " " + std::to_string(number);
+        case AutoNumberingStyle::RomanSuffix:
+            return plainName + " " + intToRoman(number);
+        case AutoNumberingStyle::OrdinalPrefix:
+            return ordinalPrefix(number) + " " + plainName;
+        case AutoNumberingStyle::AlphaSuffix:
+            return plainName + " " + intToAlphabetic(number);
+        case AutoNumberingStyle::ArabicPrefix:
+            return std::to_string(number) + ". " + plainName;
+    }
+}
+
+std::string others::Staff::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    return others::TextBlock::getText(getDocument(), fullNameTextId, true, accidentalStyle); // true: strip enigma tags
+}
+
+std::string others::Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    return others::TextBlock::getText(getDocument(), abbrvNameTextId, true, accidentalStyle); // true: strip enigma tags
+}
+
+std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffInstGroup() const
+{
+    if (multiStaffInstId) {
+        if (auto retval = getDocument()->getOthers()->get<others::MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffInstId)) {
+            return retval;
+        }
+        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffInstId));
+    }
+    return nullptr;
+}
+
+std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
+{
+    auto name = [&]() -> std::string {
+        if (!preferStaffName || !fullNameTextId) {
+            if (auto multiInstGroup = getMultiStaffInstGroup()) {
+                if (auto group = multiInstGroup->getStaffGroup()) {
+                    return group->getFullName(accidentalStyle);
+                }
+            }
+        }
+        return getFullName(accidentalStyle);
+    }();
+    if (name.empty()) return name;
+    return addAutoNumbering(name);
+}
+
+std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
+{
+    auto name = [&]() -> std::string {
+        if (!preferStaffName || !abbrvNameTextId) {
+            if (auto multiInstGroup = getMultiStaffInstGroup()) {
+                if (auto group = multiInstGroup->getStaffGroup()) {
+                    return group->getAbbreviatedName(accidentalStyle);
+                }
+            }
+        }
+        return getAbbreviatedName(accidentalStyle);
+    }();
+    if (name.empty()) return name;
+    return addAutoNumbering(name);
+}
+
+// **************************
+// ***** StaffComposite *****
+// **************************
+
+void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle>& staffStyle)
+{
+    auto srcMasks = staffStyle->masks;
+
+    /// @todo the rest of the masks as we discover/create them
+    if (srcMasks->staffType) {
+        staffLines = staffStyle->staffLines;
+        customStaff = staffStyle->customStaff;
+        lineSpace = staffStyle->lineSpace;
+        topBarlineOffset = staffStyle->topBarlineOffset;
+        botBarlineOffset = staffStyle->botBarlineOffset;
+        dwRestOffset = staffStyle->dwRestOffset;
+        wRestOffset = staffStyle->wRestOffset;
+        hRestOffset = staffStyle->hRestOffset;
+        otherRestOffset = staffStyle->otherRestOffset;
+        botRepeatDotOff = staffStyle->botRepeatDotOff;
+        topRepeatDotOff = staffStyle->topRepeatDotOff;
+        stemReversal = staffStyle->stemReversal;
+        // hideTopRepeatDot
+        // hideBotRepeatDot
+        masks->staffType = true;
+    }
+    if (srcMasks->negNameScore) {
+        hideNameInScore = staffStyle->hideNameInScore;
+        masks->negNameScore = true;
+    }
+    if (srcMasks->fullName) {
+        fullNameTextId = staffStyle->fullNameTextId;
+        masks->fullName = true;
+    }
+    if (srcMasks->abrvName) {
+        abbrvNameTextId = staffStyle->abbrvNameTextId;
+        masks->abrvName = true;
+    }
+    if (srcMasks->showStems) {
+        hideStems = staffStyle->hideStems;
+        stemDirection = staffStyle->stemDirection;
+        // showBeams
+        // stemsFixedStart
+        // stemdFixedEnd
+        // stemStartFromStaff
+        // horzStemOffUp
+        // horzStemOffDown
+        // vertStemStartOffUp
+        // vertStemStartOffDown
+        // vertStemEndOffUp
+        // vertStemEndOffDown
+        masks->showStems = true;
+    }
+    if (srcMasks->showNameParts) {
+        showNameInParts = staffStyle->showNameInParts;
+        masks->showNameParts = true;
+    }
+}
+
+std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
+    InstCmper staffId, MeasCmper measId, Edu eduPosition)
+{
+    auto rawStaff = document->getOthers()->get<others::Staff>(partId, staffId);
+    if (!rawStaff) return nullptr;
+
+    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff));
+    if (result->hasStyles) {
+        auto styles = others::StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
+        for (const auto& style : styles) {
+            result->applyStyle(style);
+        }
+    }
+
+    return result;
+}
+
+// **********************
+// ***** StaffGroup *****
+// **********************
+
+std::string details::StaffGroup::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    return others::TextBlock::getText(getDocument(), fullNameId, true, accidentalStyle); // true: strip enigma tags
+}
+
+std::string details::StaffGroup::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    return others::TextBlock::getText(getDocument(), abbrvNameId, true, accidentalStyle); // true: strip enigma tags
+}
+
+std::shared_ptr<others::MultiStaffInstrumentGroup> details::StaffGroup::getMultiStaffInstGroup() const
+{
+    if (multiStaffGroupId) {
+        if (auto retval = getDocument()->getOthers()->get<others::MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffGroupId)) {
+            return retval;
+        }
+        MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(getCmper2()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffGroupId));
+    }
+    return nullptr;
+}
+
+std::string details::StaffGroup::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    if (auto multiStaffGroup = getMultiStaffInstGroup()) {
+        if (auto staff = multiStaffGroup->getFirstStaff()) {
+            return staff->getFullInstrumentName(accidentalStyle);
+        }
+    }
+    return getFullName(accidentalStyle);
+}
+
+std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    if (auto multiStaffGroup = getMultiStaffInstGroup()) {
+        if (auto staff = multiStaffGroup->getFirstStaff()) {
+            return staff->getAbbreviatedInstrumentName(accidentalStyle);
+        }
+    }
+    return getAbbreviatedName(accidentalStyle);
+}
+
+// **********************
+// ***** StaffStyle *****
+// **********************
+
+ std::vector<std::shared_ptr<others::StaffStyle>> others::StaffStyle::findAllOverlappingStyles(const DocumentPtr& document,
+        Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition)
+{
+    auto staffStyleAssignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
+    std::vector<std::shared_ptr<others::StaffStyleAssign>> applicableAssignments;
+    std::copy_if(staffStyleAssignments.begin(), staffStyleAssignments.end(), std::back_inserter(applicableAssignments),
+        [measId, eduPosition](const std::shared_ptr<others::StaffStyleAssign>& range) {
+            return range->contains(measId, eduPosition);
+        });
+
+    std::vector<std::shared_ptr<others::StaffStyle>> result;
+    result.reserve(applicableAssignments.size());
+    for (const auto& assign : applicableAssignments) {
+        if (auto style = assign->getStaffStyle()) {
+            result.emplace_back(style);
+        }
+    }
+    return result;
+ }
+
+// ****************************
+// ***** StaffStyleAssign *****
+// ****************************
+
+std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() const
+{
+    auto result = getDocument()->getOthers()->get<others::StaffStyle>(getPartId(), styleId);
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("Staff style assignment has invalid staff style ID " + std::to_string(styleId)
+            + ": Part " + std::to_string(getPartId())
+            + " Staff " + std::to_string(getCmper())
+        );
+    }
+    return result;
 }
 
 // ********************
@@ -523,26 +1013,17 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
     return nullptr;
 }
 
-// *****************
-// ***** Staff *****
-// *****************
-
-std::string others::Staff::getFullName() const
-{
-    return others::TextBlock::getText(getDocument(), fullNameTextId, true); // true: strip enigma tags
-}
-
 // *********************
 // ***** TextBlock *****
 // *********************
 
-std::string others::TextBlock::getText(bool trimTags) const
+std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     auto document = getDocument();
     auto getText = [&](const auto& block) -> std::string {
         if (!block) return {};
         if (!trimTags) return block->text;
-        auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text);
+        auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
         return musx::util::EnigmaString::trimTags(retval);
     };
     switch (textType) {
@@ -554,11 +1035,11 @@ std::string others::TextBlock::getText(bool trimTags) const
     }
 }
 
-std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags)
+std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
 {
     auto textBlock = document->getOthers()->get<others::TextBlock>(SCORE_PARTID, textId);
     if (textBlock) {
-        return textBlock->getText(trimTags);
+        return textBlock->getText(trimTags, accidentalStyle);
     }
     return {};
 }

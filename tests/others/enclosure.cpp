@@ -125,7 +125,7 @@ TEST(EnclosureTest, InvalidShape)
     {
         EXPECT_THROW(
             auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
-            std::invalid_argument
+            ::musx::factory::unknown_xml_error
         );
     }
 }

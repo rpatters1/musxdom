@@ -28,13 +28,20 @@
 #include <stdexcept>
 #include <map>
 
+#include "musx/util/EnigmaString.h"
+#include "musx/util/Logger.h"
+
 #include "BaseClasses.h"
-// do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
+// do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
 namespace dom {
 
 class Entry;
+
+namespace details {
+class StaffGroup;
+}
 
 /**
  * @namespace musx::dom::others
@@ -96,7 +103,7 @@ public:
      */
     std::vector<std::shared_ptr<const Entry>> getEntries();
 
-    void integrityCheck() const override
+    void integrityCheck() override
     {
         this->OthersBase::integrityCheck();
         if (startTime && (startEntry || endEntry)) {
@@ -131,10 +138,18 @@ public:
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
     std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
-    /// @brief Returns the @ref Staff instance at a specified index of iuArray
+    /// @brief Returns the @ref Staff instance for this element
+    std::shared_ptr<Staff> getStaff() const;
+
+    /// @brief Returns the @ref Staff instance at a specified index of iuArray or nullptr if not found
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
-    /// @param index The index to finc.
+    /// @param index The 0-based index to find.
     static std::shared_ptr<Staff> getStaffAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
+
+    /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
+    /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
+    /// @param staffId The @ref Staff cmper value to find.
+    static std::optional<size_t> getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId);
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
     static const xml::XmlElementArray<InstrumentUsed> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
@@ -520,7 +535,7 @@ public:
     bool hideCaution{};         ///< "Hide Cautionary Clefs, Key, and Time Signature"
     bool showFullNames{};       ///< "Show Full Staff & Group Names"
     bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
-    bool groupBarlineOverride{}; ///< Override the barline specified by a @ref StaffGroup (if any)
+    bool groupBarlineOverride{}; ///< Override the barline specified by a @ref details::StaffGroup (if any)
     Cmper customBarShape{};     ///< Cmper of Shape Designer shape for custom right barline
     Cmper customLeftBarShape{}; ///< Cmper of Shape Designer shape for custom left barline
     ShowKeySigMode showKey{};   ///< Show mode for key signatures
@@ -542,10 +557,127 @@ public:
     bool compositeDispNumerator{};  ///< Indicates a composite numerator for the display time signature. (xml node is `<displayAltNumTsig>`)
     bool compositeDispDenominator{}; ///< Indicates a composite denominator for the display time signature. (xml node is `<displayAltDenTsig>`)
 
+    /// @brief Calculates if a measure should show full names vs. abbreviated names
+    bool calcShouldShowFullNames() const
+    { return getCmper() == 1 || showFullNames; }
+
     bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
 
     constexpr static std::string_view XmlNodeName = "measSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Measure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class MultimeasureRest
+ * @brief Represents the attributes of a multimeasure rest in the page layout.
+ *
+ * The Cmper is the first measure of the multimeasure rest.
+ *
+ * This class is identified by the XML node name "mmRest".
+ */
+class MultimeasureRest : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit MultimeasureRest(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper startMeasure)
+        : OthersBase(document, partId, shareMode, startMeasure) {}
+
+    Evpu measWidth{};           ///< Width of the multemeasure rest "measure" in Evpu. (xml node is `<meaSpace>`)
+    MeasCmper nextMeas{};       ///< Next measure after the multimeasure west.
+    Evpu numVertAdj{};          ///< Vertical number adjustment, sign-revered from Finale UI. (xml node is `<numdec>`)
+    Cmper shapeDef{};           ///< Cmper of Shape Designer shape that specifies the H-bar.
+    int numStart{};             ///< Number start value. If the number of measures in the multimeasure rest is fewer than this
+                                ///< number, no number appears on the multimeasure rest.
+    int symbolThreshold{};      ///< If the number of rests is less than this value, symbols are used when #useSymbols is true. (xml node is `<threshold>`)
+    Evpu symbolSpacing{};       ///< Spacing between symbols in Evpu. (xml node is `<spacing>`)
+    Evpu numHorzAdj{};          ///< Horizontal number adjustment in Evpu. (xml node is `<numAdjX>`)
+    Evpu shapeStartAdjust{};    ///< Start adjustment for the H-bar shape in Evpu. (xml node is `<startAdjust>`)
+    Evpu shapeEndAdjust{};      ///< End adjustment for the shape in Evpu. (xml node is `<endAdjust>`)
+    bool useSymbols{};          ///< Use symbols instead of an H-bar, based on #symbolThreshold. (xml node is `<useCharRestStyle>`)
+
+    /// @brief Get the start measure of this multimeasure rest
+    MeasCmper getStartMeasure() const { return getCmper(); }
+
+    /// @brief Calculates the number of measures spanned by this multimeasure rest
+    int calcNumberOfMeasures() const { return (std::max)(nextMeas - getStartMeasure(), 0); }
+    
+    /// @brief Calculates if the number on this multimeasure rest is visible.
+    bool calcIsNumberVisible() const { return calcNumberOfMeasures() >= numStart; }
+
+    void integrityCheck() override
+    {
+        this->OthersBase::integrityCheck();
+        if (nextMeas <= getStartMeasure()) {
+            MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getPartId()) + " spans 0 or fewer measures.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "mmRest"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MultimeasureRest> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class MultiStaffGroupId
+ * @brief Represents a group ID for a multi-staff setup.
+ *
+ * This class is identified by the XML node name "multiStaffGroupID".
+ */
+class MultiStaffGroupId : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit MultiStaffGroupId(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    Cmper staffGroupId{}; ///< Cmper of @ref details::StaffGroup that has the instrument's full and abbreviated names.
+
+    constexpr static std::string_view XmlNodeName = "multiStaffGroupID"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MultiStaffGroupId> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class MultiStaffInstrumentGroup
+ * @brief Represents a group of instruments spanning multiple staves.
+ *
+ * This class is identified by the XML node name "multiStaffInstGroup".
+ */
+class MultiStaffInstrumentGroup : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit MultiStaffInstrumentGroup(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    std::vector<InstCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
+
+    /// @brief Returns the staff at the index position or null if out of range or not found.
+    /// @param x the 0-based index to find
+    std::shared_ptr<Staff> getStaffAtIndex(size_t x) const;
+
+    /// @brief Returns the first staff (with integrity check)
+    std::shared_ptr<Staff> getFirstStaff() const;
+
+    /// @brief Returns the index of the input staffId or std::nullopt if not found
+    std::optional<size_t> getIndexOf(InstCmper staffId) const
+    {
+        for (size_t x = 0; x < staffNums.size(); x++) {
+            if (staffNums[x] == staffId) return x;        
+        }
+        return std::nullopt;
+    }
+
+    /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
+    std::shared_ptr<details::StaffGroup> getStaffGroup() const;
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (staffNums.empty()) {
+            MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
+        } else if (staffNums.size() > 3) {
+            MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains more than 3 staves.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "multiStaffInstGroup"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MultiStaffInstrumentGroup> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -569,6 +701,8 @@ public:
     Evpu margLeft{};            ///< Left margin in Evpu.
     Evpu margBottom{};          ///< Bottom margin in Evpu.
     Evpu margRight{};           ///< Right margin in Evpu. (Sign reversed in Finale UI.)
+
+    std::optional<SystemCmper> lastSystem; ///< Computed by the Resolver function. This value is not in the xml.
 
     /** @brief is this a blank page */
     bool isBlank() const { return firstSystem < 0; }
@@ -600,10 +734,26 @@ public:
     bool extractPart{};                ///< Indicates if the part should be extracted.
     bool needsRecalc{};                ///< Indicates if the part needs update layout.
     bool useAsSmpInst{};               ///< Indicates if the part is used as a SmartMusic instrument.
-    int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
+    int smartMusicInst{};              ///< SmartMusic instrument ID (-1 if not used).
+    Cmper defaultNameStaff{};          ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
+    Cmper defaultNameGroup{};          ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
 
     /** @brief Get the part name if any */
-    std::string getName() const;
+    std::string getName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /** @brief Return true if this part corresponds to the score */
+    bool isScore() const { return getCmper() == SCORE_PARTID; }
+
+    /** @brief Return the @ref InstrumentUsed cmper by this part for the specified system.
+     *
+     * This function either returns the input @p systemId or the Special Part Extraction cmper.
+     *
+     * @param systemId The staff system to find.
+    */
+    Cmper calcSystemIuList(Cmper systemId) const;
+
+    /** @brief Return the instance for the score */
+    static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
 
     bool requireAllFields() const override { return false; }
 
@@ -641,6 +791,7 @@ public:
     static const xml::XmlElementArray<PartGlobals> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
 };
 
+class StaffStyle;
 /**
  * @class Staff
  * @brief Represents the definition of a Finale staff.
@@ -650,6 +801,24 @@ public:
 class Staff : public OthersBase
 {
 public:
+    /** @brief Enum for auto-numbering style. Auto-numbering is based on #instUuid. */
+    enum class AutoNumberingStyle
+    {
+        ArabicSuffix,       ///< Arabic numeral suffix (default). May not appear in xml.
+        RomanSuffix,        ///< Roman numeral suffix.
+        OrdinalPrefix,      ///< Ordinal number prefix: 1st 2nd 3rd, ...
+        AlphaSuffix,        ///< Alphabetic suffix.
+        ArabicPrefix        ///< Arabic numeral prefix (with dot): 1. 2. 3. ...
+    };
+
+    /** @brief Enum for staff-level stem direction override. */
+    enum class StemDirection
+    {
+        Default,            ///< the default (may not occur in xml)
+        AlwaysUp,           ///< stems are always up on this staff
+        AlwaysDown          ///< stems are always down on this staff
+    };
+
     /** @brief Constructor function */
     explicit Staff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
@@ -657,28 +826,240 @@ public:
     // Public properties corresponding to the XML structure
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff.
+    std::optional<int> staffLines{}; ///< Number of lines in the staff (if no custom staff)
+    std::optional<std::vector<int>> customStaff; ///< A list of stafflines from 0..26 where a standard 5-line staff is values 11, 12, 13, 14, 15.
     Evpu lineSpace{};               ///< Distance between staff lines.
+    std::string instUuid;           ///< Unique identifier for the type of instrument.
+    //noteFont
+    bool hasStyles{};               ///< Indicates that this staff has staff style assignments
+    bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
+    //transposition
+    bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
     Evpu topBarlineOffset{};        ///< Offset for the top barline.
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
     Evpu dwRestOffset{};            ///< Offset for downstem rests.
     Evpu wRestOffset{};             ///< Offset for whole rests.
     Evpu hRestOffset{};             ///< Offset for half rests.
     Evpu otherRestOffset{};         ///< Offset for other rests.
-    Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
-    Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
-    int staffLines{};               ///< Number of lines in the staff.
     int stemReversal{};             ///< Stem reversal value.
     Cmper fullNameTextId{};         ///< Full name @ref TextBlock ID. (xml node is `<fullName>`)
     Cmper abbrvNameTextId{};        ///< Abbreviated name @ref TextBlock ID. (xml node is `<abbrvName>`)
+    Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
+    Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
+    bool hideStems{};               ///< Inverse of "Display Stems"
+    StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
+    AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
+    bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
 
-    /// @brief Get the full staff name without Enigma tags
-    std::string getFullName() const;
+    Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
+                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
+    std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAutoNumberValues.
+
+    /// @brief Returns the full staff name without Enigma tags
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns the abbreviated staff name without Enigma tags
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one. Otherwise nullptr.
+    std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
+
+    /// @brief Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)
+    /// @note Ordinal prefix numbering is currently supported only for English.
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
+    std::string getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
+
+    /// @brief Returns the abbreviated instrument name for this staff without Enigma tags and with autonumbering (if any)
+    /// @note Ordinal prefix numbering is currently supported only for English.
+    /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
+    /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
+    std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
+
+    /// @brief Returns if names should be shown for the specified part
+    bool showNamesForPart(Cmper partId) const
+    { return partId == SCORE_PARTID ? !hideNameInScore : showNameInParts; }
+
+    /**
+     * @brief Get the auto-numbering value for this staff, if applicable.
+     * 
+     * Calculates #autoNumberValue for every staff based on the occurrences of the instrument UUID
+     * and in each staff instance. If numbering is not applicable (e.g., auto numbering
+     * is disabled, the UUID is empty, or there is only one instance), #autoNumberValue has no value.
+     *
+     * This function is called by the DocumentFactory when the document is created.
+     */
+    static void calcAutoNumberValues(const DocumentPtr& document);
+
+    /// @brief Add auto numbering as a prefix or suffix, if needed
+    /// @param plainName The name (full or abbreviated) to which to add the auto numbering
+    /// @return Auto numbered name.
+    std::string addAutoNumbering(const std::string& plainName) const;
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (!staffLines && !customStaff) {
+            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has neither a standard nor a custom staff definition.");
+        } else if (staffLines && customStaff) {
+            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has both a standard and a custom staff definition.");            
+        }
+        if (customStaff) { // guarantee ascending order of staves.
+            std::sort(customStaff.value().begin(), customStaff.value().end(),
+                [](const auto& a, const auto& b) { return a < b; });
+        }
+    }
 
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Staff> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffStyle
+ * @brief Represents a Finale staff style.
+ *
+ * The cmper is a 1-based staff style ID (not necessarily sequential).
+ * This class is identified by the XML node name "staffStyle".
+ */
+class StaffStyle : public Staff
+{
+protected:
+    /** @brief protected constructor for @ref StaffComposite */
+    explicit StaffStyle(const std::shared_ptr<Staff>& staff)
+        : Staff(*staff), masks(std::make_shared<Masks>(staff->getDocument())) {}
+
+public:
+    /** @brief Constructor function */
+    explicit StaffStyle(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : Staff(document, partId, shareMode, cmper) {}
+
+    /// @brief lists the masks that deterimine if this staff style overrides the staff settings
+    /// @todo add masks as needed. If we ever add them all, remove Base inheritance and #requireAllFields function.
+    class Masks : public Base // Base inheritance needed for requireAllFields
+    {
+    public:
+        /**
+         * @brief Default constructor
+         * @param document A weak pointer to the document object.
+         */
+        explicit Masks(const DocumentWeakPtr& document)
+            : Base(document, SCORE_PARTID, ShareMode::All) {}
+
+        bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
+        bool negNameScore{};        ///< overrides #hideNameInScore.
+        bool fullName{};            ///< overrides #fullNameTextId.
+        bool abrvName{};            ///< overrides #abbrvNameTextId.
+        bool showStems{};           ///< overrides stem properties (see #StaffComposite::applyStyle)
+        bool showNameParts{};       ///< overrides #showNameInParts
+
+        bool requireAllFields() const override { return false; }
+
+        static const xml::XmlElementArray<Masks> XmlMappingArray;    ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::string styleName;              ///< name of staff style
+    bool addToMenu;                     ///< add this staff style to the context menu for staff styles
+    std::shared_ptr<Masks> masks;       ///< override masks: guaranteed to exist by #integrityCheck, which is called by the factory
+                                        ///< (xml node is `<mask>`)
+
+    /// @brief Finds a subset from all StaffStyle instances that overlap with the specified
+    /// metric position on a given staff in a give linked part or score.
+    /// @param document The document to search
+    /// @param partId The linked part id to search
+    /// @param staffId The staff to search
+    /// @param measId The MeasCmper of the measure position
+    /// @param eduPosition The Edu position within the measure specified by @p measId.
+    static std::vector<std::shared_ptr<StaffStyle>> findAllOverlappingStyles(const DocumentPtr& document,
+        Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
+
+    bool requireAllFields() const override { return false; }
+
+    void integrityCheck() override
+    {
+        Staff::integrityCheck();
+        if (!masks) {
+            // Finale allows creation of staff styles with no masks, so this is just a verbose comment
+            util::Logger::log(util::Logger::LogLevel::Verbose, "StaffStyle " + styleName
+                + " (" + std::to_string(getCmper()) + ") does not override anything.");
+            masks = std::make_shared<Masks>(getDocument());
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "staffStyle"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffStyle> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffStyleAssign
+ * @brief Represents an assignment
+ *
+ * The cmper is the staff ID. This class is identified by the XML node name "staffStyleAssign".
+ */
+class StaffStyleAssign : public MusicRange
+{
+public:
+    /** @brief Constructor function */
+    explicit StaffStyleAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : MusicRange(document, partId, shareMode, cmper, inci) {}
+
+    Cmper styleId{};        ///< The cmper of the assigned @ref StaffStyle.
+
+    /// @brief Returns the @ref StaffStyle instance for this assignment
+    /// @return Can return nullptr only in the case when there is an itegrity error
+    /// @throws musx::dom::integrity_error if compiled to throw integrity errors
+    std::shared_ptr<StaffStyle> getStaffStyle() const;
+
+    void integrityCheck() override
+    {
+        MusicRange::integrityCheck();
+        if (!styleId) {
+            MUSX_INTEGRITY_ERROR(std::string("Staff style assignment has no staff style id:")
+                + " Part " + std::to_string(getPartId())
+                + " Staff " + std::to_string(getCmper())
+            );
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "staffStyleAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffStyleAssign> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffComposite
+ * @brief Represents a composite of an underlying @ref Staff instance with any applicable @ref StaffStyle instances applied.
+ *
+ * Instances of StaffComposite are not part of the document structure and cannot be created directly.
+ * Use #createCurrent to create an instance.
+ */
+class StaffComposite : public StaffStyle
+{
+private:
+    /** @brief private constructor */
+    explicit StaffComposite(const std::shared_ptr<Staff>& staff)
+        : StaffStyle(staff) {}
+
+public:
+    /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
+    /// @param staffStyle The @ref StaffStyle to apply.
+    void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
+
+    /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
+    ///
+    /// Note that the Finale app has logic to assure that no two assigments modify the same staff properties at the same metric
+    /// position. If this occurs despite Finale's code, the last one processed is the one that takes effect.
+    ///
+    /// @param document The document to search
+    /// @param partId The ID of the linked part or score
+    /// @param staffId The @ref Staff cmper of the base staff for which to apply staff styles
+    /// @param measId The measure location to search
+    /// @param eduPosition The Edu position within the measure to search
+    /// @return The composite result or null if @p staffId is not valid.
+    static std::shared_ptr<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
 };
 
 /**
@@ -756,10 +1137,11 @@ public:
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
 
     /** @brief return display text with Enigma tags removed */
-    std::string getText(bool trimTags = false) const;
+    std::string getText(bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /** @brief return display text with Enigma tags removed */
-    static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false);
+    static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false,
+        util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii);
 
     bool requireAllFields() const override { return false; }
 

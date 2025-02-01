@@ -35,6 +35,7 @@
 #include "musx/xml/XmlInterface.h"
 #include "FieldPopulatorsOptions.h"
 #include "FieldPopulatorsOthers.h"
+#include "FieldPopulatorsDetails.h"
 #include "FieldPopulatorsTexts.h"
 
 namespace musx {
@@ -192,18 +193,23 @@ using RegisteredOthers = TypeRegistry <
     dom::others::InstrumentUsed,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
+    dom::others::MultimeasureRest,
     dom::others::Measure,
     dom::others::TextBlock,
     dom::others::Page,
     dom::others::StaffSystem,
     dom::others::Staff,
+    dom::others::StaffStyle,
+    dom::others::StaffStyleAssign,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,
     dom::others::PartDefinition,
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
-    dom::others::MarkingCategoryName
+    dom::others::MarkingCategoryName,
+    dom::others::MultiStaffInstrumentGroup,
+    dom::others::MultiStaffGroupId
 >;
 
 /**
@@ -213,6 +219,7 @@ using RegisteredOthers = TypeRegistry <
  */
 using RegisteredDetails = TypeRegistry <
     dom::details::GFrameHold,
+    dom::details::StaffGroup,
     dom::details::TupletDef
 >;
 

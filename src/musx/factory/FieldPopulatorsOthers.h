@@ -44,7 +44,8 @@ inline Enclosure::Shape toEnum<Enclosure::Shape>(const uint8_t& value)
         value <= static_cast<uint8_t>(Enclosure::Shape::Octogon)) {
         return static_cast<Enclosure::Shape>(value);
     }
-    throw std::invalid_argument("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
+    MUSX_UNKNOWN_XML("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
+    return {};
 }
 
 template <>
@@ -59,7 +60,7 @@ struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
     using FieldPopulator<Enclosure>::populate;
 };
 
-MUSX_RESOLVER_ARRAY(LayerAttributes, {
+MUSX_RESOLVER_ENTRY(LayerAttributes, {
     [](const dom::DocumentPtr& document) {
         auto layers = document->getOthers()->getArray<LayerAttributes>(SCORE_PARTID);
         if (layers.size() != 4) {
@@ -73,7 +74,7 @@ MUSX_RESOLVER_ARRAY(LayerAttributes, {
     }
 });
 
-MUSX_RESOLVER_ARRAY(MarkingCategory, {
+MUSX_RESOLVER_ENTRY(MarkingCategory, {
     [](const dom::DocumentPtr& document) {
         auto cats = document->getOthers()->getArray<MarkingCategory>(SCORE_PARTID);
         for (const auto& cat : cats) {
@@ -84,7 +85,83 @@ MUSX_RESOLVER_ARRAY(MarkingCategory, {
     }
 });
 
-MUSX_RESOLVER_ARRAY(TextExpressionDef, {
+MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
+    [](const dom::DocumentPtr& document) {
+        auto parts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
+        for (const auto& part : parts) {
+            auto instGroups = document->getOthers()->getArray<MultiStaffGroupId>(part->getCmper());
+            for (const auto& instance : instGroups) {
+                if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), BASE_SYSTEM_ID, instance->staffGroupId)) {
+                    group->multiStaffGroupId = instance->getCmper();
+                } else {
+                    MUSX_INTEGRITY_ERROR("Group " + std::to_string(instance->staffGroupId) + " appears in MultiStaffGroupId "
+                        + std::to_string(instance->getCmper()) + " but does not exist.");
+                }
+            }
+        }
+    }
+});
+
+MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
+    [](const dom::DocumentPtr& document) {
+        auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);
+        for (const auto& instance : instGroups) {
+            for (size_t x = 0; x < instance->staffNums.size(); x++) {
+                auto staff = instance->getStaffAtIndex(x);
+                if (staff) {
+                    if (staff->multiStaffInstId) {
+                        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
+                    } else {
+                        staff->multiStaffInstId = instance->getCmper();
+                    }
+                }
+            }
+        }
+        others::Staff::calcAutoNumberValues(document);
+    }
+});
+
+MUSX_RESOLVER_ENTRY(Page, {
+    [](const dom::DocumentPtr& document) {
+        auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
+        for (const auto& part : linkedParts) {
+            auto pages = document->getOthers()->getArray<Page>(part->getCmper());
+            auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
+            for (size_t x = 0; x < pages.size(); x++) {
+                auto page = pages[x];
+                if (!page->isBlank()) {
+                    page->lastSystem = [&]() -> SystemCmper {
+                        size_t nextIndex = x + 1;
+                        while (nextIndex < pages.size()) {
+                            auto nextPage = pages[nextIndex++];
+                            if (!nextPage->isBlank()) {
+                                return nextPage->firstSystem - 1;
+                            }
+                        }
+                        return SystemCmper(systems.size());
+                    }();
+                    if (*page->lastSystem < page->firstSystem) {
+                        page->lastSystem = std::nullopt;
+                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                            + " has a last system smaller than the first system.");
+                    }
+                }
+            }
+        }
+    }
+});
+
+MUSX_RESOLVER_ENTRY(Staff, {
+    [](const dom::DocumentPtr& document) {
+        auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);
+        // If no MultiStaffInstrumentGroup records exist, then we need to do this here.
+        if (instGroups.empty()) {
+            others::Staff::calcAutoNumberValues(document);
+        }
+    }
+});
+
+MUSX_RESOLVER_ENTRY(TextExpressionDef, {
     [](const dom::DocumentPtr& document) {
         auto exps = document->getOthers()->getArray<TextExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {

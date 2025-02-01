@@ -34,7 +34,7 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::options;
 
-MUSX_RESOLVER_ARRAY(ClefOptions, {
+MUSX_RESOLVER_ENTRY(ClefOptions, {
     [](const dom::DocumentPtr& document) {
         auto clefOptions = document->getOptions()->get<ClefOptions>();
         for (size_t i = 0; i < clefOptions->clefDefs.size(); i++) {

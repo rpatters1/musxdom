@@ -83,17 +83,16 @@ public:
      * Optionally, a unique key can be provided to ensure that the resolver is only added once.
      *
      * @param resolver A callable object that resolves a relationship when invoked.
-     * @param key An optional unique key for the resolver. If provided, the resolver is added only once per key.
+     * @param key An unique key for the resolver. Each resolver is added only once per key.
      */
-    void addResolver(Resolver resolver, const std::string_view& key = {})
+    void addResolver(Resolver resolver, const std::string_view& key)
     {
-        if (!key.empty()) {
-            if (registeredResolvers.count(key) > 0) {
-                return; // Skip adding if the resolver with the same key is already registered
-            }
-            registeredResolvers.insert(key);
+        assert(!key.empty());
+        if (resolvers.count(std::string(key)) > 0) {
+            return; // Skip if already registered
         }
-        resolvers.emplace_back(std::move(resolver));
+
+        resolvers[std::string(key)] = std::move(resolver);
     }
 
     /**
@@ -103,27 +102,24 @@ public:
      * Clears the internal storage of resolvers and registered keys after execution.
      *
      * @param document The document in which relationships are resolved.
-     * @throws std::runtime_error If any resolver function encounters an error.
      */
     void resolveAll(const dom::DocumentPtr& document)
     {
-        for (auto& resolver : resolvers) {
+        for (const auto& [key, resolver] : resolvers) {
             resolver(document);
         }
+
         resolvers.clear(); ///< Clear resolvers after execution
-        registeredResolvers.clear(); ///< Clear registered keys after execution
     }
 
 private:
-    /// @brief A collection of resolver functions.
-    std::vector<Resolver> resolvers;
-
     /**
-     * @brief Tracks registered resolver keys to ensure uniqueness.
+     * @brief A collection of resolver functions, ordered by key.
      *
-     * This set stores keys for resolvers that have already been added, preventing duplicate registrations.
+     * The map stores resolver functions associated with their unique keys, ensuring
+     * that they execute in lexicographical order of keys.
      */
-    std::unordered_set<std::string_view> registeredResolvers;
+    std::map<std::string, Resolver> resolvers;
 };
 
 
@@ -226,12 +222,8 @@ public:
                 return "Invalid enum value from xml: " + std::string(value);
             }
         }();
-#ifdef MUSX_THROW_ON_UNKNOWN_XML
-        throw unknown_xml_error(msg);
-#else
-        util::Logger::log(util::Logger::LogLevel::Warning, msg);
+        MUSX_UNKNOWN_XML(msg);
         return {};
-#endif
     }
 };
 
@@ -248,17 +240,17 @@ EnumClass toEnum(const FromClass& value)
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
 const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__
 
-using ResolverList = std::vector<ElementLinker::Resolver>;
+using ResolverEntry = std::optional<ElementLinker::Resolver>;
 template <typename T>
-struct ResolverArray
+struct ResolverContainer
 {
-    inline static const ResolverList value = {};
+    inline static const ResolverEntry resolver = {};
 };
 
-#define MUSX_RESOLVER_ARRAY(Type, ...) \
+#define MUSX_RESOLVER_ENTRY(Type, ...) \
 template <> \
-struct ResolverArray<Type> { \
-    inline static const ResolverList value = __VA_ARGS__; \
+struct ResolverContainer<Type> { \
+    inline static const ResolverEntry resolver = ElementLinker::Resolver(__VA_ARGS__); \
 };
 
 template <typename T>
@@ -279,12 +271,7 @@ struct FieldPopulator : public FactoryBase
                     }
                 }();
                 if (requireFields) {
-                    std::string msg = "xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.";
-#ifdef MUSX_THROW_ON_UNKNOWN_XML
-                    throw unknown_xml_error(msg);
-#else
-                    util::Logger::log(util::Logger::LogLevel::Warning, msg);
-#endif
+                    MUSX_UNKNOWN_XML("xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.");
                 }
             }
         }
@@ -296,8 +283,8 @@ struct FieldPopulator : public FactoryBase
     static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element, ElementLinker& elementLinker)
     {
         populate(instance, element);
-        for (const auto& resolver : ResolverArray<T>::value) {
-            elementLinker.addResolver(resolver);
+        if (ResolverContainer<T>::resolver.has_value()) {
+            elementLinker.addResolver(ResolverContainer<T>::resolver.value(), element->getTagName());
         }
     }
 
@@ -331,6 +318,11 @@ private:
     }
 };
 
+/// @brief creates and populates a shared pointer to an embedded class and adds it to an a unordered_map
+/// @tparam EnumClass The enum class that is used as the key in the unordered_map
+/// @tparam EmbeddedClass The class to be created an populated
+/// @param e The xml node containing the class members
+/// @param listArray The unordred_map to which to add the new instance.
 template <typename EnumClass, typename EmbeddedClass>
 static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray)
 {
@@ -339,6 +331,25 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
         throw std::invalid_argument("<" + e->getTagName() + "> element has no type attribute");
     }
     listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
+}
+
+/// @brief creates a vector of type T from a set of nodes with identical tags within a parent tag. (See the `<customStaff>` node in @ref others::Staff)
+/// @tparam T the type of the vector. Currently only fundamental types are supported.
+/// @param e The xml node containing the array.
+/// @param elementNodeName The nodename for each element. In the case of `<customStaff>` this nodename is "staffLine".
+/// @return The populated array.
+template <typename T>
+static std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::string_view& elementNodeName)
+{
+    std::vector<T> result;
+    for (auto child = e->getFirstChildElement(); child; child = child->getNextSibling()) {
+        if (child->getTagName() != elementNodeName) {
+            MUSX_UNKNOWN_XML("Unknown tag <" + child->getTagName() + "> while processing embedded xml array <" + e->getTagName() + ">");
+            continue;
+        }
+        result.push_back(child->getTextAs<T>());
+    }
+    return result;
 }
 
 template <>

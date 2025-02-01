@@ -216,3 +216,24 @@ TEST(DocumentTest, MalformedXml)
         musx::xml::load_error
     );
 }
+
+TEST(DocumentText, UnknownXml)
+{
+    constexpr static musxtest::string_view unknownTag = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <partGlobals cmper="65534">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+      <unknownTag/>
+    </partGlobals>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(unknownTag),
+        musx::factory::unknown_xml_error
+    );
+}

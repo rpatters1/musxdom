@@ -52,7 +52,7 @@ TEST(MiscOptionsTest, PropertiesTest)
 
     // Test all properties of MiscOptions
     EXPECT_TRUE(miscOptions->showRepeatsForParts);
-    EXPECT_TRUE(miscOptions->keepOctaveTransInConcertPitch);
+    EXPECT_TRUE(miscOptions->showSoundingOctaveInConcertPitch);
     EXPECT_TRUE(miscOptions->showActiveLayerOnly);
     EXPECT_TRUE(miscOptions->consolidateRestsAcrossLayers);
     EXPECT_EQ(miscOptions->shapeDesignerDashLength, 18);

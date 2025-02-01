@@ -73,16 +73,20 @@ add_executable(musxdomtests
 	others/instrument_used.cpp
     others/measure.cpp
     others/measure_number_region.cpp
+    others/mmrest.cpp
+    others/multistaff_inst.cpp
     others/page.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
     others/staff.cpp
+    others/staff_style.cpp
     others/staff_system.cpp
     others/text_block.cpp
     others/text.cpp
     # details
 	details/gfhold.cpp
-    details/tuplet_defs.cpp
+	details/staff_group.cpp
+    details/tuplet_def.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")

@@ -38,7 +38,50 @@ namespace util {
 class EnigmaString
 {
 public:
+    /**
+     * @brief Enumeration to specify the type of accidental replacement.
+     *
+     * This enum class is used to choose between different representations
+     * of musical accidentals when processing text.
+     */
+    enum class AccidentalStyle
+    {
+        /**
+         * @brief Use ASCII substitutions for accidentals.
+         *
+         * - Flat: 'b'
+         * - Sharp: '#'
+         * - Natural: (empty string)
+         *
+         * Suitable for environments where Unicode or SMuFL support is unavailable.
+         */
+        Ascii,
+
+        /**
+         * @brief Use Unicode text accidentals.
+         *
+         * - Flat: ♭ (U+266D)
+         * - Sharp: ♯ (U+266F)
+         * - Natural: ♮ (U+266E)
+         *
+         * Suitable for inline text representations like "Clarinet in B♭."
+         */
+        Unicode,
+
+        /**
+         * @brief Use SMuFL notation-specific accidentals.
+         *
+         * - Flat: (U+E260)
+         * - Sharp: (U+E262)
+         * - Natural: (U+E261)
+         *
+         * Suitable for musical notation systems or specialized fonts that support SMuFL.
+         */
+        Smufl
+    };
+
     /** @brief Returns true if the enigma string starts with a font command. */
+
     static bool startsWithFontCommand(const std::string& text);
     
     /**
@@ -80,7 +123,7 @@ public:
     static std::string trimTags(const std::string& input);
 
     /** @brief Replaces ^flat() and ^sharp() inserts with 'b' and '#'. */
-    static std::string replaceAccidentalTags(const std::string& input);
+    static std::string replaceAccidentalTags(const std::string& input, AccidentalStyle style = AccidentalStyle::Ascii);
 };
 
 } // namespace util

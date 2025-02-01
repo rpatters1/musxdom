@@ -279,18 +279,18 @@ MUSX_XML_ENUM_MAPPING(TupletOptions::NumberStyle, {
 });
 
 MUSX_XML_ENUM_MAPPING(TupletOptions::PositioningStyle, {
-    //{"manual", TupletOptions::PositioningStyle::Manual}, this is the default and is not known to occur in the xml
+    {"manual", TupletOptions::PositioningStyle::Manual}, //this is the default and occurs in the xml for tupetDef
     {"beamSide", TupletOptions::PositioningStyle::BeamSide},
     {"noteSide", TupletOptions::PositioningStyle::NoteSide},
     {"above", TupletOptions::PositioningStyle::Above},
     {"below", TupletOptions::PositioningStyle::Below},
-    });
+});
 
 MUSX_XML_ENUM_MAPPING(TupletOptions::BracketStyle, {
     //{"nothing", TupletOptions::BracketStyle::Nothing}, this is the default and is not known to occur in the xml
     {"slur", TupletOptions::BracketStyle::Slur},
     {"bracket", TupletOptions::BracketStyle::Bracket},
-    });
+});
 
 } // namespace factory
 
@@ -508,7 +508,7 @@ MUSX_XML_ELEMENT_ARRAY(LineCurveOptions, {
 
 MUSX_XML_ELEMENT_ARRAY(MiscOptions, {
     {"showRepeatsForParts", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->showRepeatsForParts = true;}},
-    {"retainOctaveTransInConcertPitch", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->keepOctaveTransInConcertPitch = true;}},
+    {"retainOctaveTransInConcertPitch", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->showSoundingOctaveInConcertPitch = true;}},
     {"showCurrentLayerOnly", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->showActiveLayerOnly = true;}},
     {"combineRestsAcrossLayers", [](const XmlElementPtr&, const std::shared_ptr<MiscOptions>& i) {i->consolidateRestsAcrossLayers = true;}},
     {"sdDashOn", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->shapeDesignerDashLength = e->getTextAs<Evpu>();}},

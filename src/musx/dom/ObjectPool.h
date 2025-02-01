@@ -186,10 +186,11 @@ public:
         Base::ShareMode forShareMode = Base::ShareMode::All;
         if (key.partId != SCORE_PARTID) {
             auto it = m_shareMode.find(key.nodeId);
-            if (it == m_shareMode.end()) {
-                throw std::invalid_argument("Share mode not found for node " + key.nodeString());
+            // If the nodeId is not found in m_shareMode, it means the document contains no instances,
+            // and every path will return an empty vector. We can safely ignore this case.
+            if (it != m_shareMode.end()) {
+                forShareMode = it->second;
             }
-            forShareMode = it->second;
             if (forShareMode == Base::ShareMode::Partial) {
                 if constexpr (std::is_base_of_v<OthersBase, T>) {
                     if (!key.cmper1.has_value()) {

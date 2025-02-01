@@ -83,6 +83,20 @@ MUSX_XML_ENUM_MAPPING(Measure::ShowTimeSigMode, {
     {"ignoreTime", Measure::ShowTimeSigMode::Never},
 });
 
+MUSX_XML_ENUM_MAPPING(Staff::AutoNumberingStyle, {
+    {"arabicSuffix", Staff::AutoNumberingStyle::ArabicSuffix}, //this is the default and may not occur in the xml, but the string is in Finale
+    {"romanSuffix", Staff::AutoNumberingStyle::RomanSuffix},
+    {"ordinalPrefix", Staff::AutoNumberingStyle::OrdinalPrefix},
+    {"alphaSuffix", Staff::AutoNumberingStyle::AlphaSuffix},
+    {"arabicPrefix", Staff::AutoNumberingStyle::ArabicPrefix},
+});
+
+MUSX_XML_ENUM_MAPPING(Staff::StemDirection, {
+    // {"default", Staff::StemDirection::Default}, // this is the default and may not occur in the XML
+    {"alwaysUp", Staff::StemDirection::AlwaysUp},
+    {"alwaysDown", Staff::StemDirection::AlwaysDown},
+});
+
 MUSX_XML_ENUM_MAPPING(TextBlock::TextType, {
     {"block", TextBlock::TextType::Block},
     {"expression", TextBlock::TextType::Expression}
@@ -362,6 +376,31 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
     {"hidePage", [](const XmlElementPtr&, const std::shared_ptr<MeasureNumberRegion>& i) { i->hidePage = true; }}
 });
 
+MUSX_XML_ELEMENT_ARRAY(MultimeasureRest, {
+    {"meaSpace", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->measWidth = e->getTextAs<Evpu>(); }},
+    {"nextMeas", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->nextMeas = e->getTextAs<MeasCmper>(); }},
+    {"numdec", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->numVertAdj = e->getTextAs<Evpu>(); }},
+    {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
+    {"numStart", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->numStart = e->getTextAs<int>(); }},
+    {"threshold", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->symbolThreshold = e->getTextAs<int>(); }},
+    {"spacing", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->symbolSpacing = e->getTextAs<Evpu>(); }},
+    {"numAdjX", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->numHorzAdj = e->getTextAs<Evpu>(); }},
+    {"startAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->shapeStartAdjust = e->getTextAs<Evpu>(); }},
+    {"endAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->shapeEndAdjust = e->getTextAs<Evpu>(); }},
+    {"useCharRestStyle", [](const XmlElementPtr&, const std::shared_ptr<MultimeasureRest>& i) { i->useSymbols = true; }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(MultiStaffGroupId, {
+    {"staffGroupID", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffGroupId>& i) { i->staffGroupId = e->getTextAs<Cmper>(); }},
+});
+
+// NOTE: zero values are not exported in the xml, so this mapping only pushes non-zero values to the vector of staffNums.
+MUSX_XML_ELEMENT_ARRAY(MultiStaffInstrumentGroup, {
+    {"staffNum1", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
+    {"staffNum2", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
+    {"staffNum3", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Page, {
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->width = e->getTextAs<Evpu>(); }},
@@ -382,6 +421,8 @@ MUSX_XML_ELEMENT_ARRAY(PartDefinition, {
     {"needsRecalc", [](const XmlElementPtr&, const std::shared_ptr<PartDefinition>& i) { i->needsRecalc = true; }},
     {"useAsSmpInst", [](const XmlElementPtr&, const std::shared_ptr<PartDefinition>& i) { i->useAsSmpInst = true; }},
     {"smartMusicInst", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->smartMusicInst = e->getTextAs<int>(); }},
+    {"defaultNameStaff", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->defaultNameStaff = e->getTextAs<Cmper>(); }},
+    {"defaultNameGroup", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->defaultNameGroup = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
@@ -394,21 +435,73 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
 MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
     {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},
+    {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
+    {"customStaff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->customStaff = populateEmbeddedArray<int>(e, "staffLine"); }},
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
+    {"instUuid", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->instUuid = e->getTextTrimmed(); }},
+    {"hasStyles", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hasStyles = true; }},
+    {"showNameParts", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->showNameInParts = true; }},
+    {"hideStfNameInScore", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hideNameInScore = true; }},
     {"topBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topBarlineOffset = e->getTextAs<Evpu>(); }},
     {"botBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botBarlineOffset = e->getTextAs<Evpu>(); }},
     {"dwRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->dwRestOffset = e->getTextAs<Evpu>(); }},
     {"wRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->wRestOffset = e->getTextAs<Evpu>(); }},
     {"hRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hRestOffset = e->getTextAs<Evpu>(); }},
     {"otherRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->otherRestOffset = e->getTextAs<Evpu>(); }},
-    {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
-    {"botRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botRepeatDotOff = e->getTextAs<Evpu>(); }},
-    {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
     {"stemReversal", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemReversal = e->getTextAs<int>(); }},
     {"fullName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fullNameTextId = e->getTextAs<Cmper>(); }},
     {"abbrvName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->abbrvNameTextId = e->getTextAs<Cmper>(); }},
+    {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
+    {"botRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botRepeatDotOff = e->getTextAs<Evpu>(); }},
+    {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
+    {"hideStems", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hideStems = true; }},
+    {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection= toEnum<Staff::StemDirection>(e->getTextTrimmed()); }},
+    {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e->getTextTrimmed()); }},
+    {"useAutoNum", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->useAutoNumbering = true; }},
 });
+
+MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
+    {"staffType", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->staffType = true; }},
+    {"negNameScore", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->negNameScore = true; }},
+    {"fullName", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullName = true; }},
+    {"abrvName", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvName = true; }},
+    {"showStems", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->showStems = true; }},
+    {"showNameParts", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->showNameParts = true; }},
+});
+
+// NOTE: this must come after MUSX_XML_ELEMENT_ARRAY(Staff, ...) so that
+//       Staff::XmlMappingArray is already initialized when this StaffStyle::XmlMappingArray initialized.
+MUSX_XML_ELEMENT_ARRAY(StaffStyle, []() {
+    xml::XmlElementArray<StaffStyle> additionalFields = {
+        {"styleName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->styleName = e->getText(); }},
+        {"addToMenu", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle>& i) { i->addToMenu = true; }},
+        {"mask", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) {
+            i->masks = FieldPopulator<StaffStyle::Masks>::createAndPopulate(e, i->getDocument()); }},
+    };
+    xml::XmlElementArray<StaffStyle> retval(Staff::XmlMappingArray.size() + additionalFields.size());
+    // add to retval in order that it has been observed to appear in xml
+    // copy: DO NOT move, because Staff::XmlElementArray is used by Staff as well.
+    std::copy(Staff::XmlMappingArray.begin(), Staff::XmlMappingArray.end(), std::back_inserter(retval));
+    // move is okay because additionalFields is a local scratch variable.
+    std::move(std::make_move_iterator(additionalFields.begin()), std::make_move_iterator(additionalFields.end()), std::back_inserter(retval));
+    return retval;
+}());
+
+// NOTE: this must come after MUSX_XML_ELEMENT_ARRAY(MusicRange, ...) so that
+//       MusicRange::XmlMappingArray is already initialized when this StaffStyleAssign::XmlMappingArray initialized.
+MUSX_XML_ELEMENT_ARRAY(StaffStyleAssign, []() {
+    xml::XmlElementArray<StaffStyleAssign> additionalFields = {
+        {"style", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyleAssign>& i) { i->styleId = e->getTextAs<Cmper>(); }},
+    };
+    xml::XmlElementArray<StaffStyleAssign> retval(MusicRange::XmlMappingArray.size() + additionalFields.size());
+    // add to retval in order that it has been observed to appear in xml
+    // move is okay because additionalFields is a local scratch variable.
+    std::move(std::make_move_iterator(additionalFields.begin()), std::make_move_iterator(additionalFields.end()), std::back_inserter(retval));
+    // copy: DO NOT move, because Staff::XmlElementArray is used by Staff as well.
+    std::copy(MusicRange::XmlMappingArray.begin(), MusicRange::XmlMappingArray.end(), std::back_inserter(retval));
+    return retval;
+}());
 
 MUSX_XML_ELEMENT_ARRAY(StaffSystem, {
     {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
