@@ -12,7 +12,7 @@ Document object model for the EnigmaXml format in Finale musx files. It is compa
 
 ### Documentation
 
-[MUSX Document Model](https://rpatters1.github.io/musx-object-model/)
+[MUSX Document Model](https://rpatters1.github.io/musxdom/)
 
 ### Setup Instructions
 
