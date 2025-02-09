@@ -35,7 +35,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(musx)
 
 # Also add somewhere:
-target_link_libraries(project PRIVATE musx) # replace "your_project" with your actual project name
+target_link_libraries(project PRIVATE musx) # replace "project" with your actual project name
 ```
 
 You will also need an xml parser. This repository provides implementations for [tinyxml](https://github.com/leethomason/tinyxml2), [rapidxml](https://rapidxml.sourceforge.net/), and [pugixml](https://github.com/zeux/pugixml). If you wish to use one of these, define one and/or the other in your project's CMakeLists.txt file:
