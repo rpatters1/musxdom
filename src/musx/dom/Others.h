@@ -755,6 +755,9 @@ public:
     /** @brief Return the instance for the score */
     static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
 
+    /** @brief Return the linked parts sorted in UI order by #partOrder */
+    static std::vector<std::shared_ptr<PartDefinition>> getInUserOrder(const DocumentPtr& document);
+
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "partDef"; ///< The XML node name for this type.
