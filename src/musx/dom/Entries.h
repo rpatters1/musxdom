@@ -81,7 +81,7 @@ public:
      */
     enum class NoteType : Edu {
         Maxima = 0x8000,
-        Long = 0x4000,
+        Longa = 0x4000,
         Breve = 0x2000,
         Whole = 0x1000,
         Half = 0x0800,
