@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -295,32 +295,6 @@ MUSX_XML_ENUM_MAPPING(TupletOptions::BracketStyle, {
 } // namespace factory
 
 namespace dom {
-
-using namespace musx::xml;
-
-MUSX_XML_ELEMENT_ARRAY(FontInfo, {
-    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
-    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
-    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) {
-            for (auto efxChild = e->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
-                auto efxName = efxChild->getTagName();
-                if (efxName == "bold") {
-                    i->bold = true;
-                } else if (efxName == "italic") {
-                    i->italic = true;
-                } else if (efxName == "underline") {
-                    i->underline = true;
-                } else if (efxName == "strikeout") {
-                    i->strikeout = true;
-                } else if (efxName == "absolute") {
-                    i->absolute = true;
-                } else if (efxName == "hidden") {
-                    i->hidden = true;
-                }
-            }        
-        }
-    },
-});
 
 namespace options {
 

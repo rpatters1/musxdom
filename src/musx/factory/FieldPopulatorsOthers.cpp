@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,12 +31,6 @@ using namespace ::musx::dom::others;
 
 // Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
-
-MUSX_XML_ENUM_MAPPING(NamePositioning::AlignJustify, {
-    //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
-    {"center", NamePositioning::AlignJustify::Center},
-    {"right", NamePositioning::AlignJustify::Right},
-});
 
 MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
     //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
@@ -184,23 +178,6 @@ namespace others {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
-// Classes from BaseClasses.h
-
-MUSX_XML_ELEMENT_ARRAY(Enclosure, {
-    {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
-    {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
-    {"xMargin", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xMargin = e->getTextAs<Evpu>(); }},
-    {"yMargin", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yMargin = e->getTextAs<Evpu>(); }},
-    {"lineWidth", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->lineWidth = e->getTextAs<Efix>(); }},
-    {"sides", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->shape = toEnum<Enclosure::Shape>(e->getTextAs<uint8_t>()); }},
-    {"cornerRadius", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
-    {"fixedSize", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->fixedSize = true; }},
-    {"equalAspect", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->equalAspect = true; }},
-    {"notTall", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->notTall = true; }},
-    {"opaque", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->opaque = true; }},
-    {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->roundCorners = true; }},
-});
-
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
     {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
     {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},
@@ -214,24 +191,6 @@ MUSX_XML_ELEMENT_ARRAY(Frame, {
     {"endEntry", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->endEntry = e->getTextAs<EntryNumber>(); }},
     {"startTime", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->startTime = e->getTextAs<Edu>(); }},
 });
-
-MUSX_XML_ELEMENT_ARRAY(MusicRange, {
-    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
-    {"startEdu", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->startEdu = e->getTextAs<Edu>(); }},
-    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
-    {"endEdu", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->endEdu = e->getTextAs<Edu>(); }},
-});
-
-MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
-    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
-    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
-    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
-    {"indivPos", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->indivPos = true; }},
-    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
-    {"expand", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->expand = true; }},
-});
-
-// Classes from Others.h
 
 MUSX_XML_ELEMENT_ARRAY(InstrumentUsed, {
     {"inst", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
@@ -500,6 +459,9 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyleAssign, []() {
     std::move(std::make_move_iterator(additionalFields.begin()), std::make_move_iterator(additionalFields.end()), std::back_inserter(retval));
     // copy: DO NOT move, because Staff::XmlElementArray is used by Staff as well.
     std::copy(MusicRange::XmlMappingArray.begin(), MusicRange::XmlMappingArray.end(), std::back_inserter(retval));
+    for (const auto& elt : retval) {
+        std::cout << std::string(std::get<0>(elt)) << std::endl;
+    }
     return retval;
 }());
 

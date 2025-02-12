@@ -25,8 +25,8 @@
 
 #include "Header.h"
 #include "ObjectPool.h"
-#
- /**
+
+/**
  * @namespace musx
  * @brief object model for musx file (enigmaxml)
  */

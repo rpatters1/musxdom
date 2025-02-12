@@ -28,6 +28,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsEntries.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsCommon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsDetails.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOptions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOthers.cpp

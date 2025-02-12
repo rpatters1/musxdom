@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@
 #include "musx/util/Logger.h"
 
 #include "BaseClasses.h"
+#include "CommonClasses.h"
 // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
