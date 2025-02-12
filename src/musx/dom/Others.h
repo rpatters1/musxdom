@@ -526,6 +526,7 @@ public:
     };
 
     Evpu width{};               ///< "Ideal" measure width in Evpu. Page layout determines actual width.
+    std::shared_ptr<KeySignature> keySignature; ///< the key signature on this measure. Guaranteed to be non-null. (xml node is `<keySig>`)
     Cmper beats{};              ///< Number of beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
     Cmper divBeat{};            ///< Divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
     Cmper dispBeats{};          ///< Displayed beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
@@ -561,6 +562,13 @@ public:
     /// @brief Calculates if a measure should show full names vs. abbreviated names
     bool calcShouldShowFullNames() const
     { return getCmper() == 1 || showFullNames; }
+
+    void integrityCheck() override
+    {
+        if (!keySignature) {
+            keySignature = std::make_shared<KeySignature>(getDocument());
+        }
+    }
 
     bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
 

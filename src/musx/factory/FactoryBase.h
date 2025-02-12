@@ -241,7 +241,7 @@ const ::musx::xml::XmlElementArray<Type>& Type::xmlMappingArray() { \
     static const ::musx::xml::XmlElementArray<Type> instance = __VA_ARGS__; \
     return instance; \
 } \
-static_assert(true, "") // require semi-colon after macro
+static_assert(true, "") // require semicolon after macro
 
 using ResolverEntry = std::optional<ElementLinker::Resolver>;
 template <typename T>

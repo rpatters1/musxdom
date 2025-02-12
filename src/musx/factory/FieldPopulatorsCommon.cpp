@@ -68,7 +68,13 @@ MUSX_XML_ELEMENT_ARRAY(FontInfo, {
         }
     },
 });
-    
+
+MUSX_XML_ELEMENT_ARRAY(KeySignature, {
+    {"key", [](const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->key = e->getTextAs<Cmper>(); }},
+    {"keyless", [](const XmlElementPtr&, const std::shared_ptr<KeySignature>& i) { i->keyless = true; }},
+    {"hideKeySigShowAccis", [](const XmlElementPtr&, const std::shared_ptr<KeySignature>& i) { i->hideKeySigShowAccis = true; }},
+});
+
 namespace others {
 
 MUSX_XML_ELEMENT_ARRAY(Enclosure, {

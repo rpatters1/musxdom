@@ -31,6 +31,9 @@ constexpr static musxtest::string_view xml = R"xml(
   <others>
     <measSpec cmper="1">
       <width>600</width>
+      <keySig>
+        <keyless/>
+      </keySig>
       <beats>2</beats>
       <divbeat>2</divbeat>
       <dispBeats>4</dispBeats>
@@ -48,6 +51,10 @@ constexpr static musxtest::string_view xml = R"xml(
     </measSpec>
     <measSpec cmper="2">
       <width>600</width>
+      <keySig>
+        <key>4</key>
+        <hideKeySigShowAccis/>
+      </keySig>
       <beats>4</beats>
       <divbeat>1024</divbeat>
       <dispBeats>6</dispBeats>
@@ -104,6 +111,9 @@ TEST(MeasureTest, PopulateScore)
     ASSERT_TRUE(measure1) << "Measure for score with cmper 1 not found";
 
     EXPECT_EQ(measure1->width, Evpu(600));
+    EXPECT_EQ(measure1->keySignature->key, 0);
+    EXPECT_TRUE(measure1->keySignature->keyless);
+    EXPECT_FALSE(measure1->keySignature->hideKeySigShowAccis);
     EXPECT_EQ(measure1->beats, Cmper(2));
     EXPECT_EQ(measure1->divBeat, Cmper(2));
     EXPECT_EQ(measure1->dispBeats, Cmper(4));
@@ -123,6 +133,9 @@ TEST(MeasureTest, PopulateScore)
     ASSERT_TRUE(measure2) << "Measure 2 for score not found";
 
     EXPECT_EQ(measure2->width, Evpu(600));
+    EXPECT_EQ(measure2->keySignature->key, 4);
+    EXPECT_FALSE(measure2->keySignature->keyless);
+    EXPECT_TRUE(measure2->keySignature->hideKeySigShowAccis);
     EXPECT_EQ(measure2->beats, Cmper(4));
     EXPECT_EQ(measure2->divBeat, Cmper(1024));
     EXPECT_EQ(measure2->dispBeats, Cmper(6));
@@ -140,6 +153,9 @@ TEST(MeasureTest, PopulateScore)
     ASSERT_TRUE(measure3) << "Measure 3 for score not found";
 
     EXPECT_EQ(measure3->width, Evpu(600));
+    EXPECT_EQ(measure3->keySignature->key, 0);
+    EXPECT_FALSE(measure3->keySignature->keyless);
+    EXPECT_FALSE(measure3->keySignature->hideKeySigShowAccis);
     EXPECT_EQ(measure3->beats, Cmper(4));
     EXPECT_EQ(measure3->divBeat, Cmper(4));
     EXPECT_EQ(measure3->dispBeats, Cmper(4));
