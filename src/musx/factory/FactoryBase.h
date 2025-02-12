@@ -236,9 +236,12 @@ EnumClass toEnum(const FromClass& value)
         return EnumMapper<EnumClass, FromClass>::xmlToEnum(value);
     }
 }
-
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
-const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__
+const ::musx::xml::XmlElementArray<Type>& Type::xmlMappingArray() { \
+    static const ::musx::xml::XmlElementArray<Type> instance = __VA_ARGS__; \
+    return instance; \
+} \
+static_assert(true, "") // require semi-colon after macro
 
 using ResolverEntry = std::optional<ElementLinker::Resolver>;
 template <typename T>
@@ -300,8 +303,9 @@ private:
         static const std::unordered_map<std::string_view, XmlElementPopulator<T>> xref = []()
             {
                 std::unordered_map<std::string_view, XmlElementPopulator<T>> retval;
-                for (std::size_t i = 0; i < T::XmlMappingArray.size(); i++) {
-                    const XmlElementDescriptor<T> descriptor = T::XmlMappingArray[i];
+                auto mappingArray = T::xmlMappingArray();
+                for (std::size_t i = 0; i < mappingArray.size(); i++) {
+                    const XmlElementDescriptor<T> descriptor = mappingArray[i];
                     retval[std::get<0>(descriptor)] = std::get<1>(descriptor);
                 }
                 return retval;

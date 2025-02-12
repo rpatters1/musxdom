@@ -438,10 +438,10 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle, []() {
         {"mask", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) {
             i->masks = FieldPopulator<StaffStyle::Masks>::createAndPopulate(e, i->getDocument()); }},
     };
-    xml::XmlElementArray<StaffStyle> retval(Staff::XmlMappingArray.size() + additionalFields.size());
+    xml::XmlElementArray<StaffStyle> retval(Staff::xmlMappingArray().size() + additionalFields.size());
     // add to retval in order that it has been observed to appear in xml
     // copy: DO NOT move, because Staff::XmlElementArray is used by Staff as well.
-    std::copy(Staff::XmlMappingArray.begin(), Staff::XmlMappingArray.end(), std::back_inserter(retval));
+    std::copy(Staff::xmlMappingArray().begin(), Staff::xmlMappingArray().end(), std::back_inserter(retval));
     // move is okay because additionalFields is a local scratch variable.
     std::move(std::make_move_iterator(additionalFields.begin()), std::make_move_iterator(additionalFields.end()), std::back_inserter(retval));
     return retval;
@@ -453,12 +453,12 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyleAssign, []() {
     xml::XmlElementArray<StaffStyleAssign> additionalFields = {
         {"style", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyleAssign>& i) { i->styleId = e->getTextAs<Cmper>(); }},
     };
-    xml::XmlElementArray<StaffStyleAssign> retval(MusicRange::XmlMappingArray.size() + additionalFields.size());
+    xml::XmlElementArray<StaffStyleAssign> retval(MusicRange::xmlMappingArray().size() + additionalFields.size());
     // add to retval in order that it has been observed to appear in xml
     // move is okay because additionalFields is a local scratch variable.
     std::move(std::make_move_iterator(additionalFields.begin()), std::make_move_iterator(additionalFields.end()), std::back_inserter(retval));
     // copy: DO NOT move, because Staff::XmlElementArray is used by Staff as well.
-    std::copy(MusicRange::XmlMappingArray.begin(), MusicRange::XmlMappingArray.end(), std::back_inserter(retval));
+    std::copy(MusicRange::xmlMappingArray().begin(), MusicRange::xmlMappingArray().end(), std::back_inserter(retval));
     for (const auto& elt : retval) {
         std::cout << std::string(std::get<0>(elt)) << std::endl;
     }

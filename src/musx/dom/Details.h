@@ -127,7 +127,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<GFrameHold> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -200,7 +200,7 @@ public:
          */
         Bracket() = default;
 
-        static const xml::XmlElementArray<Bracket> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<Bracket>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     // Public properties corresponding to the XML structure, ordered as they appear in the XML
@@ -274,7 +274,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "staffGroup"; ///< XML node name for this type.
-    static const xml::XmlElementArray<StaffGroup> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -339,7 +339,7 @@ public:
     util::Fraction calcRatio() const { return util::Fraction(referenceNumber * referenceDuration, displayNumber * displayDuration); }
         
     constexpr static std::string_view XmlNodeName = "tupletDef";    ///< The XML node name for this type.
-    static const xml::XmlElementArray<TupletDef> XmlMappingArray;   ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TupletDef>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };
 
 } // namespace details

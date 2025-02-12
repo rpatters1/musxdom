@@ -60,7 +60,7 @@ public:
     Evpu acciAcciSpace{};                   ///< Space between accidentals.
 
     constexpr static std::string_view XmlNodeName = "accidentalOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<AccidentalOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<AccidentalOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -84,7 +84,7 @@ public:
     Evpu twoMeasNumLift{};      ///< Vertical offset for two-bar repeat numbers in @ref Evpu.
 
     constexpr static std::string_view XmlNodeName = "alternateNotationOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<AlternateNotationOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<AlternateNotationOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -117,7 +117,7 @@ public:
     bool useLegacyFlippedStemPositioning{};
 
     constexpr static std::string_view XmlNodeName = "augmentationDotOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<AugmentationDotOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<AugmentationDotOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -148,7 +148,7 @@ public:
     Evpu barlineDashOff{};                  ///< Dash space for dashed barlines in @ref Evpu.
 
     constexpr static std::string_view XmlNodeName = "barlineOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<BarlineOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<BarlineOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -188,7 +188,7 @@ public:
     Efix beamWidth{};                        ///< Thickness of beams in @ref Efix.
 
     constexpr static std::string_view XmlNodeName = "beamOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<BeamOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<BeamOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -228,7 +228,7 @@ public:
         bool useOwnFont{};              ///< Indicates if the clef has its own font.
         std::shared_ptr<FontInfo> font; ///< When `useOwnFont` is true, this is the clef's font. Otherwise `nullptr`.
 
-        static const xml::XmlElementArray<ClefDef> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<ClefDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     ClefIndex defaultClef{};            ///< Default clef identifier. An index into `clefDefs`.
@@ -250,7 +250,7 @@ public:
      * @brief The XML node name for this type.
      */
     constexpr static std::string_view XmlNodeName = "clefOptions";
-    static const xml::XmlElementArray<ClefOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<ClefOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -287,7 +287,7 @@ public:
     Evpu secondaryGroupAdj{};               ///< "Secondary Group Adjust" in @ref Evpu. (xml node is `<extra>`)
 
     constexpr static std::string_view XmlNodeName = "flagOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<FlagOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<FlagOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -393,7 +393,7 @@ public:
      * @brief The XML node name for this type.
      */
     constexpr static std::string_view XmlNodeName = "fontOptions";
-    static const xml::XmlElementArray<FontOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<FontOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -416,7 +416,7 @@ public:
     Efix graceSlashWidth{};          ///< Width (thickness) of grace note slashes in @ref Efix.
 
     constexpr static std::string_view XmlNodeName = "graceNoteOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<GraceNoteOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<GraceNoteOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -445,7 +445,7 @@ public:
     bool doKeyCancelBetweenSharpsFlats{};      ///< "When Switching Between Sharps and Flats"
 
     constexpr static std::string_view XmlNodeName = "keySignatureOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<KeySignatureOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<KeySignatureOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -475,7 +475,7 @@ public:
     EvpuFloat pathSlurTipWidth{};        ///< Width of slur tip path in fractional @ref EvpuFloat.
 
     constexpr static std::string_view XmlNodeName = "lineCurveOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<LineCurveOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<LineCurveOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -499,7 +499,7 @@ public:
     bool alignMeasureNumbersWithBarlines{}; ///< "Align Measure Numbers With Barlines" (xml node is `<drawMeasureNumbersOverBarlines>`)
 
     constexpr static std::string_view XmlNodeName = "miscOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MiscOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MiscOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -527,7 +527,7 @@ public:
     bool autoUpdateMmRests{};    ///< Automatically update multimeasure rests when the user changes these options.
 
     constexpr static std::string_view XmlNodeName = "multimeasureRestOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MultimeasureRestOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MultimeasureRestOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -595,7 +595,7 @@ public:
     Evpu musBack{};                         ///< Additional spacing after the last note in @ref Evpu. (From Notes & Rests window.)
 
     constexpr static std::string_view XmlNodeName = "musicSpacingOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MusicSpacingOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MusicSpacingOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -658,7 +658,7 @@ public:
          */
         PageFormat() = default;
 
-        static const xml::XmlElementArray<PageFormat> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<PageFormat>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     // Properties
@@ -695,7 +695,7 @@ public:
      * @brief The XML node name for this type.
      */
     constexpr static std::string_view XmlNodeName = "pageFormatOptions";
-    static const xml::XmlElementArray<PageFormatOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<PageFormatOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -724,7 +724,7 @@ public:
     EvpuFloat innerBodyH{};                 ///< Horizontal position of the inner body in fractional @ref EvpuFloat. (xml node is `<innerWingX>`)
 
     constexpr static std::string_view XmlNodeName = "pianoBraceBracketOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<PianoBraceBracketOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<PianoBraceBracketOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -783,7 +783,7 @@ public:
     Cmper showOnStaffListNumber{};         ///< Staff list number (0 if none). @ref Cmper links to associated "repeatStaffList..." xml nodes.
 
     constexpr static std::string_view XmlNodeName = "repeatOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<RepeatOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<RepeatOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -959,7 +959,7 @@ public:
         Evpu xOffset{};                ///< Horizontal offset
         Evpu yOffset{};                ///< Vertical offset
 
-        static const xml::XmlElementArray<ConnectionStyle> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<ConnectionStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     /// @brief defines the slur contours for short, medium, long, and extra long slurs
@@ -968,7 +968,7 @@ public:
         Efix inset{};                 ///< Inset value
         Evpu height{};               ///< Height of the span
 
-        static const xml::XmlElementArray<ControlStyle> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<ControlStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     std::unordered_map<SlurConnectStyleType, std::shared_ptr<ConnectionStyle>> slurConnectStyles; ///< Slur connections
@@ -978,7 +978,7 @@ public:
     std::unordered_map<BendCurveConnectStyleType, std::shared_ptr<ConnectionStyle>> bendCurveConnectStyles; ///< Benx curve connections
 
     constexpr static std::string_view XmlNodeName = "smartShapeOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<SmartShapeOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<SmartShapeOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1005,7 +1005,7 @@ public:
     std::shared_ptr<NamePositioning> groupNameAbbrvPos; ///< Default abbreviated name positioning for staff groups.
 
     constexpr static std::string_view XmlNodeName = "staffOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StaffOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1030,7 +1030,7 @@ public:
     bool useStemConnections{}; ///< "Use Stem Connections"
 
     constexpr static std::string_view XmlNodeName = "stemOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StemOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StemOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1134,7 +1134,7 @@ public:
         Evpu offsetX{}; ///< Horizontal offset
         Evpu offsetY{}; ///< Vertical offset
 
-        static const xml::XmlElementArray<ConnectStyle> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<ConnectStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     /** @brief Tie connect styles */
@@ -1146,7 +1146,7 @@ public:
         Evpu height{}; ///< Height
         Evpu insetFixed{}; ///< Fixed inset
 
-        static const xml::XmlElementArray<ControlPoint> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<ControlPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     /** @brief Struct for tie control style */
@@ -1155,14 +1155,14 @@ public:
         std::shared_ptr<ControlPoint> cp1; ///< Control point 1
         std::shared_ptr<ControlPoint> cp2; ///< Control point 2
 
-        static const xml::XmlElementArray<ControlStyle> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<ControlStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     /** @brief Tie control styles */
     std::unordered_map<ControlStyleType, std::shared_ptr<ControlStyle>> tieControlStyles;
 
     constexpr static std::string_view XmlNodeName = "tieOptions"; ///< The XML node name for this type
-    static const xml::XmlElementArray<TieOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TieOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1194,7 +1194,7 @@ public:
     Evpu timeAbrvLift{};            ///< "Vertical Adjustment: Abbreviated Symbol, Score"
 
     constexpr static std::string_view XmlNodeName = "timeSignatureOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TimeSignatureOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TimeSignatureOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1278,7 +1278,7 @@ public:
     Evpu tupNDownstemOffset{};              ///< Offset for downstem tuplet numbers.
 
     constexpr static std::string_view XmlNodeName = "tupletOptions"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TupletOptions> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TupletOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 } // namespace options

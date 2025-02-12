@@ -72,7 +72,7 @@ public:
     std::string name;           ///< The font name e.g., "Broadway Copyist Text".
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<FontDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<FontDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -119,7 +119,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "frameSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Frame> XmlMappingArray;    ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Frame>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
 class Staff;
@@ -153,7 +153,7 @@ public:
     static std::optional<size_t> getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId);
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<InstrumentUsed> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -185,7 +185,7 @@ public:
     bool hideLayer{};                   ///< "Hide Layer when Inactive"
 
     constexpr static std::string_view XmlNodeName = "layerAtts"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<LayerAttributes> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<LayerAttributes>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -258,7 +258,7 @@ public:
         AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
         AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
 
-        static const xml::XmlElementArray<ScorePartData> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<ScorePartData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     // Public properties
@@ -286,7 +286,7 @@ public:
     bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
 
     constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MeasureNumberRegion> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MeasureNumberRegion>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -446,7 +446,7 @@ public:
     std::string getName() const;
 
     constexpr static std::string_view XmlNodeName = "markingsCategory"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MarkingCategory> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MarkingCategory>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -466,7 +466,7 @@ public:
     std::string name; ///< The name of the marking category.
 
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MarkingCategoryName> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MarkingCategoryName>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -565,7 +565,7 @@ public:
     bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
 
     constexpr static std::string_view XmlNodeName = "measSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Measure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Measure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -613,7 +613,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "mmRest"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MultimeasureRest> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MultimeasureRest>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -631,7 +631,7 @@ public:
     Cmper staffGroupId{}; ///< Cmper of @ref details::StaffGroup that has the instrument's full and abbreviated names.
 
     constexpr static std::string_view XmlNodeName = "multiStaffGroupID"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MultiStaffGroupId> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MultiStaffGroupId>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -678,7 +678,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "multiStaffInstGroup"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MultiStaffInstrumentGroup> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MultiStaffInstrumentGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -709,7 +709,7 @@ public:
     bool isBlank() const { return firstSystem < 0; }
 
     constexpr static std::string_view XmlNodeName = "pageSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Page> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Page>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -762,7 +762,7 @@ public:
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "partDef"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<PartDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<PartDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -792,7 +792,7 @@ public:
     Cmper specialPartExtractionIUList{};    ///< If non-zero, Special Part Extraction is in effect and this is the iuList @ref Cmper. 
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<PartGlobals> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<PartGlobals>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 class StaffStyle;
@@ -920,7 +920,7 @@ public:
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Staff> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Staff>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -963,7 +963,7 @@ public:
 
         bool requireAllFields() const override { return false; }
 
-        static const xml::XmlElementArray<Masks> XmlMappingArray;    ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<Masks>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
     };
 
     std::string styleName;              ///< name of staff style
@@ -995,7 +995,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "staffStyle"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StaffStyle> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1030,7 +1030,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "staffStyleAssign"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StaffStyleAssign> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffStyleAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1101,7 +1101,7 @@ public:
     Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
 
     constexpr static std::string_view XmlNodeName = "staffSystemSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StaffSystem> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffSystem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1150,7 +1150,7 @@ public:
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextBlock> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextBlock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1196,7 +1196,7 @@ public:
     std::shared_ptr<Enclosure> getEnclosure() const;
 
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextExpressionDef> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1212,7 +1212,7 @@ public:
     using Enclosure::Enclosure;
 
     constexpr static std::string_view XmlNodeName = "textExpressionEnclosure"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextExpressionEnclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextExpressionEnclosure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1228,7 +1228,7 @@ public:
     using Enclosure::Enclosure;
 
     constexpr static std::string_view XmlNodeName = "textRepeatEnclosure"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextRepeatEnclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextRepeatEnclosure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 } // namespace others

@@ -53,7 +53,7 @@ public:
 
     bool requireAllFields() const override { return false; }
 
-    static const xml::XmlElementArray<Note> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Note>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
     NoteNumber m_noteId{}; ///< Unique identifier for the note.
@@ -169,7 +169,7 @@ public:
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "entry"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Entry> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
     EntryNumber m_entnum;   ///< Entry number.

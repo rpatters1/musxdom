@@ -95,7 +95,7 @@ public:
      */
     static std::vector<std::filesystem::path> calcSMuFLPaths();
 
-    static const xml::XmlElementArray<FontInfo> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<FontInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -155,7 +155,7 @@ public:
         }
     }
 
-    static const xml::XmlElementArray<KeySignature> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    //static const xml::XmlElementArray<KeySignature>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 namespace others {
@@ -208,7 +208,7 @@ public:
     bool opaque{};            ///< Whether the enclosure is opaque.
     bool roundCorners{};      ///< Whether the enclosure has rounded corners.
 
-    static const xml::XmlElementArray<Enclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Enclosure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -249,7 +249,7 @@ public:
                (endMeas > measId || (endMeas == measId && endEdu >= eduPosition));
     }
 
-    static const xml::XmlElementArray<MusicRange> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -288,7 +288,7 @@ public:
     AlignJustify hAlign{};      ///< Horizontal alignment for the name text. (xml node is `<halign>`)
     bool expand{};              ///< "Expand Single Word"
 
-    static const xml::XmlElementArray<NamePositioning> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<NamePositioning>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 } // namespace others
