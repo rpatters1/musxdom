@@ -456,6 +456,55 @@ std::string others::MarkingCategory::getName() const
     return {};
 }
 
+// *******************
+// ***** Measure *****
+// *******************
+
+int others::Measure::calcDisplayNumber() const
+{
+    if (noMeasNum) {
+        return getCmper();
+    }
+    if (const auto region = others::MeasureNumberRegion::findMeasure(getDocument(), getCmper())) {
+        return region->calcDisplayNumberFor(getCmper());
+    }
+    return getCmper();
+}
+
+// *******************************
+// ***** MeasureNumberRegion *****
+// *******************************
+
+std::shared_ptr<others::MeasureNumberRegion> others::MeasureNumberRegion::findMeasure(const DocumentPtr& document, MeasCmper measureId)
+{
+    auto regions = document->getOthers()->getArray<others::MeasureNumberRegion>(SCORE_PARTID);
+    for (const auto& region : regions) {
+        if (region->calcIncludesMeasure(measureId)) {
+            return region;
+        }
+    }
+    return nullptr;
+}
+
+int others::MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
+{
+    if (!calcIncludesMeasure(measureId)) {
+        throw std::logic_error("Measure id " + std::to_string(measureId) + " is not contained in measure number region " + std::to_string(getCmper()));
+    }
+    int result = int(measureId) - int(startMeas) + getStartNumber();
+    for (MeasCmper next = startMeas; next <= measureId; next++) {
+        if (auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), next)) {
+            if (measure->noMeasNum) {
+                if (measure->getCmper() == measureId) {
+                    return measureId;
+                }
+                result--;
+            }
+        }
+    }
+    return result;
+}
+
 // *************************************
 // ***** MultiStaffInstrumentGroup *****
 // *************************************

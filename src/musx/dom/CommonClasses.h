@@ -142,16 +142,21 @@ public:
     /// @return Number of sharps/flats for linear keys or std::nullopt for non-linear or invalid keys
     std::optional<int> getAlteration() const { return isLinear() ? std::optional<int>(int8_t(key & 0xff)) : std::nullopt; }
 
-    bool isLinear() const { return (key & 0xC000) == 0; }                   ///< returns if this is a linear key
-    bool isNonLinear() const { return (key & 0xC000) != 0; }                ///< returns if this is a non-linear key
-    bool isBuiltIn() const { return isLinear() && getKeyMode() <= 1; }      ///< returns if this is a built-in key
-    bool isMajor() const { return getKeyMode() == 0; }                      ///< returns if this is a built-in major key
-    bool isMinor() const { return getKeyMode() == 0; }                      ///< returns if this is a built-in minor key
+    bool isLinear() const { return (key & 0xC000) == 0; }                   ///< whether this is a linear key
+    bool isNonLinear() const { return (key & 0xC000) != 0; }                ///< whether this is a non-linear key
+    bool isBuiltIn() const { return isLinear() && getKeyMode() <= 1; }      ///< whether this is a built-in key
+    bool isMajor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in major key
+    bool isMinor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in minor key
+
+    bool isSameKey(const KeySignature& src)                                 ///< whether the two key signatures represent the same key signature
+    {
+        return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
+    }
 
     void integrityCheck() override
     {
         if (key >= 0x8000) {
-            MUSX_INTEGRITY_ERROR("Key signature has invalid value: " + std::to_string(key));
+            MUSX_INTEGRITY_ERROR("Key signature has invalid key value: " + std::to_string(key));
         }
     }
 

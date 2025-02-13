@@ -266,7 +266,7 @@ public:
     std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
 
     MeasCmper startMeas{};      ///< Starting measure number for the region.
-    MeasCmper endMeas{};        ///< Ending measure number for the region.
+    MeasCmper endMeas{};        ///< Ending measure number for the region (non-inclusive).
     char32_t startChar{};       ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
     int base{};                 ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
     int numberOffset{};         ///< This value is 1 less than the "Starting Number" field in the Finale UI. (xml node is `<offset>`)
@@ -284,6 +284,26 @@ public:
     TimePrecision timePrecision{}; ///< Precision for real-time sequences.
     bool hideScroll{};          ///< Indicates if numbers are hidden in Scroll View and Studio View.
     bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
+
+    /// @brief Calculates whether the input measure is covered by this measure number region
+    /// @param measureId The measure id to check.
+    bool calcIncludesMeasure(MeasCmper measureId) const
+    {
+        return measureId >= startMeas && measureId < endMeas; // endMeas is non-inclusive!
+    }
+
+    /// @brief Returns the starting measure number for this region.
+    int getStartNumber() const { return int(numberOffset + 1); }
+
+    /// @brief Returns the visible number for a measure id with respect to the region.
+    /// @throw std::logic_error if measureId is not contained in the region
+    int calcDisplayNumberFor(MeasCmper measureId) const;
+
+    /// @brief Finds the measure number region containing a measure
+    /// @param document The document to search
+    /// @param measureId The measure Id to search for
+    /// @return The first MeasureNumberRegion instance that contains the @p measureId, or nullptr if not found.
+    static std::shared_ptr<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
 
     constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureNumberRegion>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -562,6 +582,12 @@ public:
     /// @brief Calculates if a measure should show full names vs. abbreviated names
     bool calcShouldShowFullNames() const
     { return getCmper() == 1 || showFullNames; }
+
+    /// @brief Calculates the visible number of the measure, based on the first MeasureNumberRegion that contains it.
+    ///
+    /// Depending on the display options of the found MeasureNumberRegion, the number may or may not appear in the score.
+    /// And if it does, it may not appear as a number.
+    int calcDisplayNumber() const;
 
     void integrityCheck() override
     {
