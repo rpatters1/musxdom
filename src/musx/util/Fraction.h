@@ -67,6 +67,10 @@ public:
         reduce();
     }
 
+    /// @brief Constructs a Fraction from edu
+    /// @param edu
+    static Fraction fromEdu(int edu);
+
     /**
      * @brief Gets the numerator of the fraction.
      * @return The numerator.

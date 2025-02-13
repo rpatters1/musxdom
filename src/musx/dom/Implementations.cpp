@@ -76,7 +76,7 @@ std::shared_ptr<Entry> Entry::getPrevious() const
     return retval;
 }
 
-Entry::NoteType Entry::calcNoteType() const
+NoteType calcNoteTypeFromEdu(Edu duration)
 {
     if (duration <= 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
@@ -90,13 +90,13 @@ Entry::NoteType Entry::calcNoteType() const
         msb <<= 1;
     }
 
-    return static_cast<Entry::NoteType>(msb);
+    return static_cast<NoteType>(msb);
 }
 
-int Entry::calcAugmentationDots() const
+int calcAugmentationDotsFromEdu(Edu duration)
 {
     int count = 0;
-    for (Edu msb = Edu(calcNoteType()) >> 1; duration & msb; msb >>= 1) {
+    for (Edu msb = Edu(calcNoteTypeFromEdu(duration)) >> 1; duration & msb; msb >>= 1) {
         count++;
     }
     return count;
@@ -299,7 +299,7 @@ struct TupletState
     }
 
     TupletState(const std::shared_ptr<details::TupletDef>& t)
-        : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(Entry::NoteType::Whole)),
+        : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(NoteType::Whole)),
         ratio(t->referenceNumber* t->referenceDuration, t->displayNumber* t->displayDuration),
         tuplet(t)
     {
@@ -330,7 +330,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
         util::Fraction v1ActualElapsedDuration = 0;
         for (const auto& f : frameIncis) {
-            v1ActualElapsedDuration += util::Fraction(f->startTime, int(Entry::NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
+            v1ActualElapsedDuration += util::Fraction(f->startTime, int(NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
         }
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         for (size_t i = 0; i < entries.size(); i++) {
@@ -469,6 +469,18 @@ int others::Measure::calcDisplayNumber() const
         return region->calcDisplayNumberFor(getCmper());
     }
     return getCmper();
+}
+
+// *****************************
+// ***** MeasureExprAssign *****
+// *****************************
+
+std::shared_ptr<others::TextExpressionDef> others::MeasureExprAssign::getTextExpression() const
+{
+    if (!textExprId) {
+        return nullptr;
+    }
+    return getDocument()->getOthers()->get<others::TextExpressionDef>(getPartId(), textExprId);
 }
 
 // *******************************

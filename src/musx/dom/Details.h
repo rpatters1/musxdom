@@ -330,10 +330,10 @@ public:
     Evpu manualSlopeAdj{};                  ///< "Manual Slope Adjustment" in @ref Evpu. (xml node is `<slope>`)
 
     /** @brief return the reference duration as a @ref util::Fraction of a whole note */
-    util::Fraction calcReferenceDuration() const { return util::Fraction(referenceNumber * referenceDuration, Edu(Entry::NoteType::Whole)); }
+    util::Fraction calcReferenceDuration() const { return util::Fraction(referenceNumber * referenceDuration, Edu(NoteType::Whole)); }
 
     /** @brief return the display duration as a @ref util::Fraction of a whole note */
-    util::Fraction calcDisplayDuration() const { return util::Fraction(displayNumber * displayDuration, Edu(Entry::NoteType::Whole)); }
+    util::Fraction calcDisplayDuration() const { return util::Fraction(displayNumber * displayDuration, Edu(NoteType::Whole)); }
 
     /** @brief return the tuplet ratio (reference / display) */
     util::Fraction calcRatio() const { return util::Fraction(referenceNumber * referenceDuration, displayNumber * displayDuration); }

@@ -49,7 +49,7 @@ class StaffGroup;
  * @brief Classes in the @ref OthersPool.
  */
 namespace others {
-
+        
 /**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained.
@@ -186,127 +186,6 @@ public:
 
     constexpr static std::string_view XmlNodeName = "layerAtts"; ///< The XML node name for this type.
     static const xml::XmlElementArray<LayerAttributes>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-};
-
-/**
- * @class MeasureNumberRegion
- * @brief Represents the Measure Number Region with detailed font and enclosure settings for score and part data.
- *
- * This class is identified by the XML node name "measNumbRegion".
- */
-class MeasureNumberRegion : public OthersBase {
-public:
-    /** @brief Constructor function */
-    explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
-
-    /// @brief Alignment and justification options for measure numbers.
-    enum class AlignJustify
-    {
-        Left,   ///< Left alignment or justification (the default value.)
-        Right,  ///< Right alignment.
-        Center  ///< Center alignment.
-    };
-
-    /// @brief Precision for time display
-    enum class TimePrecision
-    {
-        WholeSeconds,   ///< the default value
-        Tenths,
-        Hundredths,
-        Thousandths,
-    };
-
-    /// @brief Measure number data that can differ in score or part.
-    class ScorePartData : public Base
-    {
-    public:
-        /** @brief Constructor */
-        explicit ScorePartData(const DocumentWeakPtr& document) : Base(document, 0, ShareMode::All) {}
-
-        std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
-        std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
-        std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.
-        std::shared_ptr<Enclosure> startEnclosure;    ///< Enclosure settings for numbers at start of system.
-        std::shared_ptr<Enclosure> multipleEnclosure; ///< Enclosure settings for mid-system numbers.
-
-        Evpu startXdisp{};         ///< Horizontal offset for numbers at start of system.
-        Evpu startYdisp{};         ///< Vertical offset for numbers at start of system.
-        Evpu multipleXdisp{};      ///< Horizontal offset for mid-system numbers.
-        Evpu multipleYdisp{};      ///< Vertical offset for mid-system numbers.
-        Evpu mmRestXdisp{};        ///< Horizontal offset for multi-measure rest ranges.
-        Evpu mmRestYdisp{};        ///< Vertical offset for multi-measure rest ranges.
-        char32_t leftMmBracketChar{};  ///< UTF-32 code for the left bracket of multi-measure rest ranges.
-        char32_t rightMmBracketChar{}; ///< UTF-32 code for the right bracket of multi-measure rest ranges.
-        int startWith{};           ///< "Beginning with" value. (This value is 0-based. The Finale UI adds 1 for user display.)
-        int incidence{};           ///< "Show on Every" value.
-        AlignJustify startAlign{};  ///< Alignment of numbers at the start of system
-        AlignJustify multipleAlign{}; ///< Alignment for mid-system numbers.
-        AlignJustify mmRestAlign{}; ///< Alignment for multi-measure ranges.
-        bool showOnStart{};        ///< "Show On Start of Staff System" (xml node is `<startOfLine>`)
-        bool showOnEvery{};        ///< "Show on Every" activates mid-system numbers. (xml node is `<multipleOf>`)
-        bool hideFirstMeasure{};   ///< "Hide First Measure Number in Region." (xml node is `<exceptFirstMeas>`)
-        bool showMmRange{};        ///< "Show Measure Ranges on Multimeasure Rests" (xml node is `<mmRestRange>`)
-        bool showOnMmRest{};       ///< "Show on Multimeasure Rests"  (xml node is `<mmRestRangeForce>`)
-        bool useStartEncl{};       ///< Use enclosure for start-of-system settings.
-        bool useMultipleEncl{};    ///< Use enclosure for mid-system settings.
-        bool showOnTop{};          ///< Show measure numbers on the top staff.
-        bool showOnBottom{};       ///< Show measure numbers on the bottom staff.
-        bool excludeOthers{};      ///< Exclude other staves.
-        bool breakMmRest{};        ///< Mid-system numbers break multimeasure rests.
-        AlignJustify startJustify{}; ///< Justification for numbers at the start of system.
-        AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
-        AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
-
-        static const xml::XmlElementArray<ScorePartData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-
-    // Public properties
-    std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
-    std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
-
-    MeasCmper startMeas{};      ///< Starting measure number for the region.
-    MeasCmper endMeas{};        ///< Ending measure number for the region (non-inclusive).
-    char32_t startChar{};       ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
-    int base{};                 ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
-    int numberOffset{};         ///< This value is 1 less than the "Starting Number" field in the Finale UI. (xml node is `<offset>`)
-    std::string prefix;         ///< Text prefix for measure numbers (encoded UTF-8).
-    std::string suffix;         ///< Text suffix for measure numbers (encoded UTF-8).
-
-    bool countFromOne{};        ///< Start counting from 1 rather than 0, e.g., "1, 2, 3, 4" numbering style (in conjuction with base 10)
-    bool noZero;                ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences
-    bool doubleUp{};            ///< Indicates "a, b, c...aa, bb, cc" number style: the symbols are repeated when they exceed the base.
-    bool time{};                ///< Display real time sequences rather than numbers or letters.
-    bool includeHours{};        ///< Display hours (when showing real time measure numbers)
-    bool smpteFrames{};         ///< SMPTE frames (when showing real time measure numbers). This option supercedes `timePrecision`.
-    bool useScoreInfoForPart{}; ///< Use score-wide settings for parts.
-    int region{};               ///< The region ID. This 1-based value is set by Finale and never changes, whereas the @ref Cmper may change when Finale sorts the regions.
-    TimePrecision timePrecision{}; ///< Precision for real-time sequences.
-    bool hideScroll{};          ///< Indicates if numbers are hidden in Scroll View and Studio View.
-    bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
-
-    /// @brief Calculates whether the input measure is covered by this measure number region
-    /// @param measureId The measure id to check.
-    bool calcIncludesMeasure(MeasCmper measureId) const
-    {
-        return measureId >= startMeas && measureId < endMeas; // endMeas is non-inclusive!
-    }
-
-    /// @brief Returns the starting measure number for this region.
-    int getStartNumber() const { return int(numberOffset + 1); }
-
-    /// @brief Returns the visible number for a measure id with respect to the region.
-    /// @throw std::logic_error if measureId is not contained in the region
-    int calcDisplayNumberFor(MeasCmper measureId) const;
-
-    /// @brief Finds the measure number region containing a measure
-    /// @param document The document to search
-    /// @param measureId The measure Id to search for
-    /// @return The first MeasureNumberRegion instance that contains the @p measureId, or nullptr if not found.
-    static std::shared_ptr<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
-
-    constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MeasureNumberRegion>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -569,7 +448,7 @@ public:
     BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
     bool hasSmartShape{};       ///< Indicates if the measure has a smart shape.
     bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
-    bool hasExpression{};       ///< Indicates if the measure has expressions. (xml node is `<hasExpr>`)
+    bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
     bool compositeNumerator{};  ///< Indicates a composite numerator for the time signature. (xml node is `<altNumTsig>`)
     bool compositeDenominator{}; ///< Indicates a composite denominator for the time signature. (xml node is `<altDenTsig>`)
     bool abbrvTime{};           ///< Indicates abbreviated time signature (e.g., Common or Cut time.) Applies to the display time signature only.
@@ -591,6 +470,7 @@ public:
 
     void integrityCheck() override
     {
+        this->OthersBase::integrityCheck();
         if (!keySignature) {
             keySignature = std::make_shared<KeySignature>(getDocument());
         }
@@ -600,6 +480,176 @@ public:
 
     constexpr static std::string_view XmlNodeName = "measSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Measure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class MeasureExprAssign
+ * @brief Assigns a @ref TextExpressionDef or @ref ShapeExpressionDef to a measure
+ *
+ * Only one of #textExprId or #shapeExprId is non-zero.
+ *
+ * The Cmper for a MeasureExprAssign is the cmper of the Measure to which it is attached.
+ */
+class MeasureExprAssign : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MeasureExprAssign(const DocumentWeakPtr& document, Cmper ID, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, ID, shareMode, cmper, inci) {}
+
+    // Public properties corresponding to the XML structure
+    Cmper textExprId{};         ///< The @ref Cmper of a text expression (xml node is `<textExprID>`)
+    Cmper shapeExprId{};        ///< The @ref Cmper of a shape expression (xml node is `<shapeExprID>`)
+    Evpu horzEvpuOff{};         ///< Horizontal Evpu offset from the default position.
+    Edu eduPosition{};          ///< Horizontal Edu position (xml node is `<horzEduOff>`)
+    Evpu vertEvpuOff{};         ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
+    InstCmper staffAssign{};    ///< The staff to which this expression is assigned, or -1 if it uses #staffList.
+    int layer{};                ///< The 1-based layer number to which this expression is assigned. (0 means all)
+    bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
+    Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
+    Cmper staffList{};          ///< The cmper of the staff list to use if #staffAssign is negative.
+
+    /// @brief Gets the assigned text expression.
+    /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
+    std::shared_ptr<TextExpressionDef> getTextExpression() const;
+
+    void integrityCheck() override
+    {
+        this->OthersBase::integrityCheck();
+        if (!textExprId && !shapeExprId) {
+            MUSX_INTEGRITY_ERROR("Expression assignment at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1))
+                + " has no expression definition ID.");
+        } else if (textExprId && shapeExprId) {
+            MUSX_INTEGRITY_ERROR("Expression assignment at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1))
+                + " has both text expr ID " + std::to_string(textExprId) + " and shape expr ID " + std::to_string(shapeExprId));
+        }
+    }
+
+    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
+
+    constexpr static std::string_view XmlNodeName = "measExprAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureExprAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class MeasureNumberRegion
+ * @brief Represents the Measure Number Region with detailed font and enclosure settings for score and part data.
+ *
+ * This class is identified by the XML node name "measNumbRegion".
+ */
+class MeasureNumberRegion : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /// @brief Alignment and justification options for measure numbers.
+    enum class AlignJustify
+    {
+        Left,   ///< Left alignment or justification (the default value.)
+        Right,  ///< Right alignment.
+        Center  ///< Center alignment.
+    };
+
+    /// @brief Precision for time display
+    enum class TimePrecision
+    {
+        WholeSeconds,   ///< the default value
+        Tenths,
+        Hundredths,
+        Thousandths,
+    };
+
+    /// @brief Measure number data that can differ in score or part.
+    class ScorePartData : public Base
+    {
+    public:
+        /** @brief Constructor */
+        explicit ScorePartData(const DocumentWeakPtr& document) : Base(document, 0, ShareMode::All) {}
+
+        std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
+        std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
+        std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.
+        std::shared_ptr<Enclosure> startEnclosure;    ///< Enclosure settings for numbers at start of system.
+        std::shared_ptr<Enclosure> multipleEnclosure; ///< Enclosure settings for mid-system numbers.
+
+        Evpu startXdisp{};         ///< Horizontal offset for numbers at start of system.
+        Evpu startYdisp{};         ///< Vertical offset for numbers at start of system.
+        Evpu multipleXdisp{};      ///< Horizontal offset for mid-system numbers.
+        Evpu multipleYdisp{};      ///< Vertical offset for mid-system numbers.
+        Evpu mmRestXdisp{};        ///< Horizontal offset for multi-measure rest ranges.
+        Evpu mmRestYdisp{};        ///< Vertical offset for multi-measure rest ranges.
+        char32_t leftMmBracketChar{};  ///< UTF-32 code for the left bracket of multi-measure rest ranges.
+        char32_t rightMmBracketChar{}; ///< UTF-32 code for the right bracket of multi-measure rest ranges.
+        int startWith{};           ///< "Beginning with" value. (This value is 0-based. The Finale UI adds 1 for user display.)
+        int incidence{};           ///< "Show on Every" value.
+        AlignJustify startAlign{};  ///< Alignment of numbers at the start of system
+        AlignJustify multipleAlign{}; ///< Alignment for mid-system numbers.
+        AlignJustify mmRestAlign{}; ///< Alignment for multi-measure ranges.
+        bool showOnStart{};        ///< "Show On Start of Staff System" (xml node is `<startOfLine>`)
+        bool showOnEvery{};        ///< "Show on Every" activates mid-system numbers. (xml node is `<multipleOf>`)
+        bool hideFirstMeasure{};   ///< "Hide First Measure Number in Region." (xml node is `<exceptFirstMeas>`)
+        bool showMmRange{};        ///< "Show Measure Ranges on Multimeasure Rests" (xml node is `<mmRestRange>`)
+        bool showOnMmRest{};       ///< "Show on Multimeasure Rests"  (xml node is `<mmRestRangeForce>`)
+        bool useStartEncl{};       ///< Use enclosure for start-of-system settings.
+        bool useMultipleEncl{};    ///< Use enclosure for mid-system settings.
+        bool showOnTop{};          ///< Show measure numbers on the top staff.
+        bool showOnBottom{};       ///< Show measure numbers on the bottom staff.
+        bool excludeOthers{};      ///< Exclude other staves.
+        bool breakMmRest{};        ///< Mid-system numbers break multimeasure rests.
+        AlignJustify startJustify{}; ///< Justification for numbers at the start of system.
+        AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
+        AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
+
+        static const xml::XmlElementArray<ScorePartData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    // Public properties
+    std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
+    std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
+
+    MeasCmper startMeas{};      ///< Starting measure number for the region.
+    MeasCmper endMeas{};        ///< Ending measure number for the region (non-inclusive).
+    char32_t startChar{};       ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
+    int base{};                 ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
+    int numberOffset{};         ///< This value is 1 less than the "Starting Number" field in the Finale UI. (xml node is `<offset>`)
+    std::string prefix;         ///< Text prefix for measure numbers (encoded UTF-8).
+    std::string suffix;         ///< Text suffix for measure numbers (encoded UTF-8).
+
+    bool countFromOne{};        ///< Start counting from 1 rather than 0, e.g., "1, 2, 3, 4" numbering style (in conjuction with base 10)
+    bool noZero;                ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences
+    bool doubleUp{};            ///< Indicates "a, b, c...aa, bb, cc" number style: the symbols are repeated when they exceed the base.
+    bool time{};                ///< Display real time sequences rather than numbers or letters.
+    bool includeHours{};        ///< Display hours (when showing real time measure numbers)
+    bool smpteFrames{};         ///< SMPTE frames (when showing real time measure numbers). This option supercedes `timePrecision`.
+    bool useScoreInfoForPart{}; ///< Use score-wide settings for parts.
+    int region{};               ///< The region ID. This 1-based value is set by Finale and never changes, whereas the @ref Cmper may change when Finale sorts the regions.
+    TimePrecision timePrecision{}; ///< Precision for real-time sequences.
+    bool hideScroll{};          ///< Indicates if numbers are hidden in Scroll View and Studio View.
+    bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
+
+    /// @brief Calculates whether the input measure is covered by this measure number region
+    /// @param measureId The measure id to check.
+    bool calcIncludesMeasure(MeasCmper measureId) const
+    {
+        return measureId >= startMeas && measureId < endMeas; // endMeas is non-inclusive!
+    }
+
+    /// @brief Returns the starting measure number for this region.
+    int getStartNumber() const { return int(numberOffset + 1); }
+
+    /// @brief Returns the visible number for a measure id with respect to the region.
+    /// @throw std::logic_error if measureId is not contained in the region
+    int calcDisplayNumberFor(MeasCmper measureId) const;
+
+    /// @brief Finds the measure number region containing a measure
+    /// @param document The document to search
+    /// @param measureId The measure Id to search for
+    /// @return The first MeasureNumberRegion instance that contains the @p measureId, or nullptr if not found.
+    static std::shared_ptr<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
+
+    constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureNumberRegion>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

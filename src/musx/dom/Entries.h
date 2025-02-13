@@ -29,6 +29,32 @@ namespace musx {
 namespace dom {
 
 /**
+ * @brief Enum class representing note types based on EDU values.
+ *
+ * The values are expressed in hexadecimal.
+ */
+enum class NoteType : Edu {
+    Maxima = 0x8000,
+    Longa = 0x4000,
+    Breve = 0x2000,
+    Whole = 0x1000,
+    Half = 0x0800,
+    Quarter = 0x0400,
+    Eighth = 0x0200,
+    Note16th = 0x0100,
+    Note32nd = 0x0080,
+    Note64th = 0x0040,
+    Note128th = 0x0020,
+    Note256th = 0x0010,
+    Note512th = 0x0008,
+    Note1024th = 0x0004,
+    Note2048th = 0x0002
+};
+
+int calcAugmentationDotsFromEdu(Edu duration);
+NoteType calcNoteTypeFromEdu(Edu duration);
+
+/**
  * @class Note
  * @brief Represents a single note element in an entry.
  *
@@ -73,29 +99,6 @@ public:
     */
     explicit Entry(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, EntryNumber prev, EntryNumber next)
         : Base(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next) {}
-
-    /**
-     * @brief Enum class representing note types based on EDU values.
-     *
-     * The values are expressed in hexadecimal.
-     */
-    enum class NoteType : Edu {
-        Maxima = 0x8000,
-        Longa = 0x4000,
-        Breve = 0x2000,
-        Whole = 0x1000,
-        Half = 0x0800,
-        Quarter = 0x0400,
-        Eighth = 0x0200,
-        Note16th = 0x0100,
-        Note32nd = 0x0080,
-        Note64th = 0x0040,
-        Note128th = 0x0020,
-        Note256th = 0x0010,
-        Note512th = 0x0008,
-        Note1024th = 0x0004,
-        Note2048th = 0x0002
-    };
 
     /**
      * @brief Duration of the entry, not taking into account tuplets.
@@ -144,19 +147,19 @@ public:
      * @return NoteType corresponding to the most significant bit of the duration.
      * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
      */
-    NoteType calcNoteType() const;
+    NoteType calcNoteType() const { return calcNoteTypeFromEdu(duration); }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
-    util::Fraction calcFraction() const { return util::Fraction(duration, int(NoteType::Whole));  }
+    util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration);  }
 
     /**
      * @brief Calculates the number of augmentation dots in the duration.
      *
      * @return The number of augmentation dots.
      */
-    int calcAugmentationDots() const;
+    int calcAugmentationDots() const { return calcAugmentationDotsFromEdu(duration); }
 
     void integrityCheck() override
     {

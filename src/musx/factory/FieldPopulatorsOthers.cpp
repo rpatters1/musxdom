@@ -178,6 +178,19 @@ namespace others {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
+MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
+    {"textExprID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->textExprId = e->getTextAs<Cmper>(); }},
+    {"shapeExprID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->shapeExprId = e->getTextAs<Cmper>(); }},
+    {"horzEvpuOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->horzEvpuOff = e->getTextAs<Evpu>(); }},
+    {"horzEduOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
+    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->vertEvpuOff = e->getTextAs<Evpu>(); }},
+    {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<InstCmper>(); }},
+    {"layer", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->layer = e->getTextAs<int>(); }},
+    {"dontScaleWithEntry", [](const XmlElementPtr&, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = true; }},
+    {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
     {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
     {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},

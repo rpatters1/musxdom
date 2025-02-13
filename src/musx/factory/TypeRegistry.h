@@ -195,6 +195,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::MeasureNumberRegion,
     dom::others::MultimeasureRest,
     dom::others::Measure,
+    dom::others::MeasureExprAssign,
     dom::others::TextBlock,
     dom::others::Page,
     dom::others::StaffSystem,

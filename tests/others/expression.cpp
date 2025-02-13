@@ -92,7 +92,6 @@ TEST(TextExpressionDefTest, ValidExpression)
     ASSERT_TRUE(it->second.lock());
 }
 
-
 TEST(TextExpressionDefTest, InvalidPlaybackType)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -268,4 +267,66 @@ TEST(MarkingCategoryTest, MissingCategoryType)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
         std::invalid_argument
     );
+}
+
+TEST(MeasureExprAssign, Populate)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measExprAssign cmper="1" inci="0">
+      <textExprID>24</textExprID>
+      <horzEvpuOff>1</horzEvpuOff>
+      <vertOff>2</vertOff>
+      <staffAssign>-1</staffAssign>
+      <layer>1</layer>
+      <channelSwitch>toL1</channelSwitch>
+      <dontScaleWithEntry/>
+      <staffGroup>1</staffGroup>
+      <staffList>1</staffList>
+    </measExprAssign>
+    <measExprAssign cmper="2" inci="0">
+      <shapeExprID>1</shapeExprID>
+      <horzEduOff>1024</horzEduOff>
+      <horzEvpuOff>11</horzEvpuOff>
+      <vertOff>73</vertOff>
+      <staffAssign>1</staffAssign>
+    </measExprAssign>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others) << "Others node not found in XML";
+
+    // Check first expression assignment (cmper=1)
+    auto expr1 = others->get<others::MeasureExprAssign>(SCORE_PARTID, 1, 0);
+    ASSERT_TRUE(expr1) << "MeasureExprAssign with cmper=1 not found but does exist";
+    EXPECT_EQ(expr1->textExprId, 24);  // From XML
+    EXPECT_EQ(expr1->horzEvpuOff, 1);  // From XML
+    EXPECT_EQ(expr1->vertEvpuOff, 2);  // From XML
+    EXPECT_EQ(expr1->staffAssign, -1); // From XML
+    EXPECT_EQ(expr1->layer, 1);        // From XML
+    EXPECT_TRUE(expr1->dontScaleWithEntry); // From XML
+    EXPECT_EQ(expr1->staffGroup, 1);   // From XML
+    EXPECT_EQ(expr1->staffList, 1);    // From XML
+
+    // Check second expression assignment (cmper=2)
+    auto expr2 = others->get<others::MeasureExprAssign>(SCORE_PARTID, 2, 0);
+    ASSERT_TRUE(expr2) << "MeasureExprAssign with cmper=2 not found but does exist";
+    EXPECT_EQ(expr2->shapeExprId, 1);  // From XML
+    EXPECT_EQ(expr2->eduPosition, 1024); // From XML
+    EXPECT_EQ(expr2->horzEvpuOff, 11);  // From XML
+    EXPECT_EQ(expr2->vertEvpuOff, 73);  // From XML
+    EXPECT_EQ(expr2->layer, 0);        // From XML
+    EXPECT_FALSE(expr2->dontScaleWithEntry); // From XML
+    EXPECT_EQ(expr2->staffAssign, 1);   // From XML
+    EXPECT_EQ(expr2->staffGroup, 0);   // From XML
+    EXPECT_EQ(expr2->staffList, 0);    // From XML
+
+    // Ensure that an invalid MeasureExprAssign isn't found
+    auto exprInvalid = others->get<others::MeasureExprAssign>(SCORE_PARTID, 3);
+    EXPECT_FALSE(exprInvalid) << "MeasureExprAssign with cmper=3 found but does not exist";
 }

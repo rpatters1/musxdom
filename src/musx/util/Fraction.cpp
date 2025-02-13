@@ -25,9 +25,15 @@ using namespace musx::dom;
 
 namespace musx {
 namespace util {
+
+Fraction Fraction::fromEdu(int edu)
+{
+    return Fraction(edu, int(NoteType::Whole));
+}
+
 double Fraction::calcDuration() const
 {
-    return EduFloat(numerator * int(Entry::NoteType::Whole)) / EduFloat(denominator);
+    return EduFloat(numerator * int(NoteType::Whole)) / EduFloat(denominator);
 }
 
 } // namespace util
