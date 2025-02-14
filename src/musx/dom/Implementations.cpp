@@ -1065,7 +1065,7 @@ int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
         throw std::logic_error("Tempo change at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value())
             + " is a relative tempo change.");
     }
-    double result = (ratio * unit) >> 16;          
+    double result = (ratio * unit) / 65536.0; 
     /* The value here is relative to 60 BPM == 1024 */
     result *= 60.0;            
     result /= double(noteType);            
