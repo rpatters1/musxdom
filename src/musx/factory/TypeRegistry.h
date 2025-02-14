@@ -202,6 +202,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::Staff,
     dom::others::StaffStyle,
     dom::others::StaffStyleAssign,
+    dom::others::ShapeExpressionDef,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,

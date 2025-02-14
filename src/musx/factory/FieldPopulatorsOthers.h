@@ -151,6 +151,21 @@ MUSX_RESOLVER_ENTRY(Page, {
     }
 });
 
+MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
+    [](const dom::DocumentPtr& document) {
+        auto exps = document->getOthers()->getArray<ShapeExpressionDef>(SCORE_PARTID);
+        for (const auto& instance : exps) {
+            if (instance->categoryId) {
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
+                if (!markingCat) {
+                    throw std::invalid_argument("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
+                }
+                markingCat->shapeExpressions.emplace(instance->getCmper(), instance);
+            }
+        }
+    }
+});
+
 MUSX_RESOLVER_ENTRY(Staff, {
     [](const dom::DocumentPtr& document) {
         auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);

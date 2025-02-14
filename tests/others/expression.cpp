@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-TEST(TextExpressionDefTest, ValidExpression)
+TEST(TextExpressionDef, ValidExpression)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -92,7 +92,7 @@ TEST(TextExpressionDefTest, ValidExpression)
     ASSERT_TRUE(it->second.lock());
 }
 
-TEST(TextExpressionDefTest, InvalidPlaybackType)
+TEST(TextExpressionDef, InvalidPlaybackType)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -214,7 +214,7 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     EXPECT_EQ(markingCategory->getName(), markingCategoryName->name);  // Should match the name from MarkingCategoryName
 }
 
-TEST(TextExpressionDefTest, EnumDefaults)
+TEST(TextExpressionDef, EnumDefaults)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -249,7 +249,7 @@ TEST(TextExpressionDefTest, EnumDefaults)
     EXPECT_EQ(expression->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaff);
 }
 
-TEST(MarkingCategoryTest, MissingCategoryType)
+TEST(MarkingCategory, MissingCategoryType)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -329,4 +329,75 @@ TEST(MeasureExprAssign, Populate)
     // Ensure that an invalid MeasureExprAssign isn't found
     auto exprInvalid = others->get<others::MeasureExprAssign>(SCORE_PARTID, 3);
     EXPECT_FALSE(exprInvalid) << "MeasureExprAssign with cmper=3 found but does not exist";
+}
+
+TEST(ShapeExpressionDef, Populate)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <shapeExprDef cmper="4">
+      <shapeDef>22</shapeDef>
+      <categoryID>12</categoryID>
+      <value>121</value>
+      <auxdata1>1024</auxdata1>
+      <playPass>2</playPass>
+      <breakMmRest/>
+      <useAuxData/>
+      <masterShape/>
+      <noPrint/>
+      <noHorzStretch/>
+      <playType>time</playType>
+      <horzMeasExprAlign>centerOverMusic</horzMeasExprAlign>
+      <horzExprAlign>center</horzExprAlign>
+      <measXAdjust>1</measXAdjust>
+      <vertMeasExprAlign>aboveStaffOrEntry</vertMeasExprAlign>
+      <yAdjustBaseline>2</yAdjustBaseline>
+      <yAdjustEntry>3</yAdjustEntry>
+      <descStr>Weird Number</descStr>
+    </shapeExprDef>
+    <markingsCategory cmper="12">
+      <categoryType>dynamics</categoryType>
+    </markingsCategory>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others) << "Others node not found in XML";
+
+    // Check the ShapeExpressionDef with cmper=4
+    auto shapeExpr = others->get<others::ShapeExpressionDef>(SCORE_PARTID, 4);
+    ASSERT_TRUE(shapeExpr) << "ShapeExpressionDef with cmper=4 not found but does exist";
+    EXPECT_EQ(shapeExpr->shapeDef, 22);
+    EXPECT_EQ(shapeExpr->categoryId, 12);
+    EXPECT_EQ(shapeExpr->value, 121);
+    EXPECT_EQ(shapeExpr->auxData1, 1024);
+    EXPECT_EQ(shapeExpr->playPass, 2);
+    EXPECT_TRUE(shapeExpr->breakMmRest);
+    EXPECT_TRUE(shapeExpr->useAuxData);
+    EXPECT_TRUE(shapeExpr->masterShape);
+    EXPECT_TRUE(shapeExpr->noPrint);
+    EXPECT_TRUE(shapeExpr->noHorzStretch);
+    EXPECT_EQ(shapeExpr->playbackType, others::PlaybackType::Tempo);
+    EXPECT_EQ(shapeExpr->horzMeasExprAlign, others::HorizontalMeasExprAlign::CenterOverMusic);
+    EXPECT_EQ(shapeExpr->horzExprJustification, others::HorizontalExprJustification::Center);
+    EXPECT_EQ(shapeExpr->measXAdjust, 1);
+    EXPECT_EQ(shapeExpr->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaffOrEntry);
+    EXPECT_EQ(shapeExpr->yAdjustBaseline, 2);
+    EXPECT_EQ(shapeExpr->yAdjustEntry, 3);
+    EXPECT_EQ(shapeExpr->description, "Weird Number");
+
+    // Ensure that a ShapeExpressionDef with a non-existent cmper isn't found.
+    auto exprInvalid = others->get<others::ShapeExpressionDef>(SCORE_PARTID, 3);
+    EXPECT_FALSE(exprInvalid) << "ShapeExpressionDef with cmper=3 found but does not exist";
+
+    // Check marking cat
+    auto cat = others->get<others::MarkingCategory>(SCORE_PARTID, shapeExpr->categoryId);
+    ASSERT_TRUE(cat);
+    auto it = cat->shapeExpressions.find(shapeExpr->getCmper());
+    ASSERT_NE(it, cat->shapeExpressions.end());
+    ASSERT_TRUE(it->second.lock());
 }

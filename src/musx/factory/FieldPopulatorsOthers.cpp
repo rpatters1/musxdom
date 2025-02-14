@@ -406,6 +406,29 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
     {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
+    {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
+    {"categoryID", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->categoryId = e->getTextAs<Cmper>(); }},
+    {"rehearsalMarkStyle", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->rehearsalMarkStyle = toEnum<RehearsalMarkStyle>(e->getTextTrimmed()); }},
+    {"value", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->value = e->getTextAs<int>(); }},
+    {"auxdata1", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->auxData1 = e->getTextAs<int>(); }},
+    {"playPass", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->playPass = e->getTextAs<int>(); }},
+    {"breakMmRest", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->breakMmRest = true; }},
+    {"useAuxData", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->useAuxData = true; }},
+    {"masterShape", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->masterShape = true; }},
+    {"noPrint", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->noPrint = true; }},
+    {"noHorzStretch", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->noHorzStretch = true; }},
+    {"playType", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->playbackType = toEnum<PlaybackType>(e->getTextTrimmed()); }},
+    {"horzMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->horzMeasExprAlign = toEnum<HorizontalMeasExprAlign>(e->getTextTrimmed()); }},
+    {"vertMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->vertMeasExprAlign = toEnum<VerticalMeasExprAlign>(e->getTextTrimmed()); }},
+    {"horzExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->horzExprJustification = toEnum<HorizontalExprJustification>(e->getTextTrimmed()); }},
+    {"measXAdjust", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->measXAdjust = e->getTextAs<Evpu>(); }},
+    {"yAdjustEntry", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustEntry = e->getTextAs<Evpu>(); }},
+    {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
+    {"useCategoryPos", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->useCategoryPos = true; }},
+    {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
     {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},

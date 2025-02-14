@@ -100,7 +100,7 @@ public:
 
 /**
  * @class KeySignature
- * @brief Shared key signature class that is contained in other classes. (See @ref Measure)
+ * @brief Shared key signature class that is contained in other classes. (See @ref others::Measure)
  */
 class KeySignature : public Base
 {
@@ -148,7 +148,8 @@ public:
     bool isMajor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in major key
     bool isMinor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in minor key
 
-    bool isSameKey(const KeySignature& src)                                 ///< whether the two key signatures represent the same key signature
+    /// @brief whether the two key signatures represent the same key signature
+    bool isSameKey(const KeySignature& src)
     {
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }
@@ -195,7 +196,7 @@ public:
      * @param document Shared pointer to the document.
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
      * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
-     * @param cmper Comperator parameter. This value is zero for enclosures taken from @ref MeasureNumberRegion.
+     * @param cmper Comperator parameter. This value is zero for enclosures taken from @ref others::MeasureNumberRegion.
      */
     explicit Enclosure(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
         : OthersBase(document, partId, shareMode, cmper) {}

@@ -51,8 +51,8 @@ enum class NoteType : Edu {
     Note2048th = 0x0002
 };
 
-int calcAugmentationDotsFromEdu(Edu duration);
-NoteType calcNoteTypeFromEdu(Edu duration);
+int calcAugmentationDotsFromEdu(Edu duration);      ///< Calculates the number of dots from an @ref Edu value.
+NoteType calcNoteTypeFromEdu(Edu duration);         ///< Calculates the @ref NoteType from an @ref Edu value.
 
 /**
  * @class Note

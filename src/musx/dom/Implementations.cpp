@@ -483,6 +483,14 @@ std::shared_ptr<others::TextExpressionDef> others::MeasureExprAssign::getTextExp
     return getDocument()->getOthers()->get<others::TextExpressionDef>(getPartId(), textExprId);
 }
 
+std::shared_ptr<others::ShapeExpressionDef> others::MeasureExprAssign::getShapeExpression() const
+{
+    if (!shapeExprId) {
+        return nullptr;
+    }
+    return getDocument()->getOthers()->get<others::ShapeExpressionDef>(getPartId(), shapeExprId);
+}
+
 // *******************************
 // ***** MeasureNumberRegion *****
 // *******************************

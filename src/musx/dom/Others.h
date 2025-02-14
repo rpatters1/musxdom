@@ -279,6 +279,7 @@ enum class HorizontalExprJustification
     Right    ///< Justified right.
 };
 
+class ShapeExpressionDef;
 class TextExpressionDef;
 
 /**
@@ -334,6 +335,12 @@ public:
 
     // Staff list represented as an integer
     Cmper staffList{};        ///< The staff list if `useStaffList` is true
+
+    /** @brief A list of shape expressions in this category.
+     *
+     * (This in not in the xml but is created by the factory.)
+     */
+    std::map<Cmper, std::weak_ptr<ShapeExpressionDef>> shapeExpressions;
 
     /** @brief A list of text expressions in this category.
      *
@@ -512,6 +519,10 @@ public:
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
     std::shared_ptr<TextExpressionDef> getTextExpression() const;
+
+    /// @brief Gets the assigned shape expression.
+    /// @return The shape expression or nullptr if this assignment is for a text expression or #shapeExprId not found.
+    std::shared_ptr<ShapeExpressionDef> getShapeExpression() const;
 
     void integrityCheck() override
     {
@@ -879,6 +890,49 @@ public:
     static const xml::XmlElementArray<PartGlobals>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class ShapeExpressionDef
+ * @brief Stores the properties and behaviors of shape expressions.
+ *
+ * This class is identified by the XML node name "shapeExprDef".
+ */
+class ShapeExpressionDef : public OthersBase {
+public:
+    /**
+     * @brief Constructor.
+     *
+     * Initializes all fields to their default values.
+     */
+    explicit ShapeExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    Cmper shapeDef{};                               ///< Identifier for the Shape Designer Shape associated with this expression.
+    Cmper categoryId{};                             ///< Identifier for the category of the text expression. (xml node is "categoryID")
+    RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
+    int value{};                                    ///< Value associated with the expression (e.g., velocity).
+    int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
+    int playPass{};                                 ///< "Play Only on Pass" value.
+    bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
+    bool useAuxData{};                              ///< Whether auxiliary data is used.
+    bool masterShape{};                             ///< Whether this expression references the master copy of the shape.
+    bool noPrint{};                                 ///< Inverse of "Hidden" checkbox.
+    bool noHorzStretch{};                           ///< Inverse of "Allow Horizontal Stretching" checkbox.
+    PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
+    HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
+    VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
+    HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
+    Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
+    Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
+    bool useCategoryPos{};                          ///< Whether to use category position.
+    std::string description;                        ///< Description of the text expression. (xml node is "descStr")
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 class StaffStyle;
 /**
  * @class Staff
