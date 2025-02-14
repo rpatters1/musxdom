@@ -1055,6 +1055,23 @@ std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() co
     return result;
 }
 
+// ***********************
+// ***** TempoChange *****
+// ***********************
+
+int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
+{
+    if (isRelative) {
+        throw std::logic_error("Tempo change at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value())
+            + " is a relative tempo change.");
+    }
+    double result = (ratio * unit) >> 16;          
+    /* The value here is relative to 60 BPM == 1024 */
+    result *= 60.0;            
+    result /= double(noteType);            
+    return int(std::lround(result));
+}
+
 // ********************
 // ***** TextBase *****
 // ********************

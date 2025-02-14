@@ -29,6 +29,29 @@ namespace dom {
 // This file contains common classes that are shared among Options, Others, and Details.
 
 /**
+ * @brief Enum class representing note types based on EDU values.
+ *
+ * The values are expressed in hexadecimal.
+ */
+enum class NoteType : Edu {
+    Maxima = 0x8000,
+    Longa = 0x4000,
+    Breve = 0x2000,
+    Whole = 0x1000,
+    Half = 0x0800,
+    Quarter = 0x0400,
+    Eighth = 0x0200,
+    Note16th = 0x0100,
+    Note32nd = 0x0080,
+    Note64th = 0x0040,
+    Note128th = 0x0020,
+    Note256th = 0x0010,
+    Note512th = 0x0008,
+    Note1024th = 0x0004,
+    Note2048th = 0x0002
+};
+
+/**
  * @struct FontInfo
  * @brief Represents the default font settings for a particular element type.
  *

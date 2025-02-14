@@ -517,6 +517,15 @@ MUSX_XML_ELEMENT_ARRAY(StaffSystem, {
     {"extraEndSystemSpace", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->extraEndSystemSpace = e->getTextAs<Evpu>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(TempoChange, {
+    {"relativeRatio", [](const XmlElementPtr& e, const std::shared_ptr<TempoChange>& i)
+        { i->ratio = e->getTextAs<int>(); i->isRelative = true; }},
+    {"absoluteRatio", [](const XmlElementPtr& e, const std::shared_ptr<TempoChange>& i)
+        { i->ratio = e->getTextAs<int>(); i->isRelative = false; }},
+    {"eldur", [](const XmlElementPtr& e, const std::shared_ptr<TempoChange>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
+    {"unit", [](const XmlElementPtr& e, const std::shared_ptr<TempoChange>& i) { i->unit = e->getTextAs<int>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(TextBlock, {
     {"textID", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textId = e->getTextAs<Cmper>(); }},
     {"lineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},

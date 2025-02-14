@@ -203,6 +203,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::StaffStyle,
     dom::others::StaffStyleAssign,
     dom::others::ShapeExpressionDef,
+    dom::others::TempoChange,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
     dom::others::TextRepeatEnclosure,

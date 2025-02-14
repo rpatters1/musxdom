@@ -23,33 +23,11 @@
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
+#include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
 namespace dom {
-
-/**
- * @brief Enum class representing note types based on EDU values.
- *
- * The values are expressed in hexadecimal.
- */
-enum class NoteType : Edu {
-    Maxima = 0x8000,
-    Longa = 0x4000,
-    Breve = 0x2000,
-    Whole = 0x1000,
-    Half = 0x0800,
-    Quarter = 0x0400,
-    Eighth = 0x0200,
-    Note16th = 0x0100,
-    Note32nd = 0x0080,
-    Note64th = 0x0040,
-    Note128th = 0x0020,
-    Note256th = 0x0010,
-    Note512th = 0x0008,
-    Note1024th = 0x0004,
-    Note2048th = 0x0002
-};
 
 int calcAugmentationDotsFromEdu(Edu duration);      ///< Calculates the number of dots from an @ref Edu value.
 NoteType calcNoteTypeFromEdu(Edu duration);         ///< Calculates the @ref NoteType from an @ref Edu value.

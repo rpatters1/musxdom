@@ -27,6 +27,7 @@
 #include <memory>
 #include <stdexcept>
 #include <map>
+#include <tuple>
 
 #include "musx/util/EnigmaString.h"
 #include "musx/util/Logger.h"
@@ -1242,6 +1243,50 @@ public:
     static const xml::XmlElementArray<StaffSystem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class TempoChange
+ * @brief A single tempo change value entered with Finale's Tempo tool.
+ *
+ * Although the Finale UI dropped the Tempo tool around 2010, the notation engine
+ * still supported them. It was always possible (even as late as Finale 27.4) to add tempo
+ * changes using third-pary plugins.
+ *
+ * The most common tool for creating TempoChange instances was the plugin JW Tempo.
+ * It only ever used absolute ratios, so the focus of this class is on them.
+ *
+ * The cmper is the measure number, and incis should be stored in order by #eduPosition. 
+ *
+ * This class is identified by the XML node name "tempoDef".
+ */
+class TempoChange : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TempoChange(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    int ratio{};                    ///< Absolute or relative ratio.
+                                    ///< Relative ratios are are a percent value * 10. 100% would have a value of 1000.
+                                    ///< See #getAbsoluteTempo for how to use absolute ratios.
+                                    ///< The xml provides one of two nodes for this field: `<relativeRatio>` or `<absoluteRatio>`.
+    Edu eduPosition{};              ///< The position within the measure. (xml node is `<eldur>`)
+    int unit{};                     ///< Hardware ticks/sec. For Macs this is 1000.
+    bool isRelative;                ///< A computed value that determines if #ratio is relative or absolute.
+                                    ///< This value is not represented in the xml but instead captures whether the #ratio
+                                    ///< property was populated from `<relativeRatio>` or `<absoluteRatio>`.
+
+    /// @brief Computes the absolute tempo represented by the TempoChange Instance.
+    /// @param noteType optional note type for which to get the beats per minute. (The default is NoteType::Quarter.)
+    /// @return The per minute value.
+    /// @throws std::logic_error if this instance represents a relative tempo.
+    int getAbsoluteTempo(NoteType noteType = NoteType::Quarter) const;
+
+    constexpr static std::string_view XmlNodeName = "tempoDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TempoChange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 /**
  * @class TextBlock
  * @brief Represents the attributes of a Finale "textBlock".
