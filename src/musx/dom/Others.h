@@ -1460,8 +1460,7 @@ public:
         static const xml::XmlElementArray<CompositeItem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
-    /// Collection of composite items
-    std::vector<std::shared_ptr<CompositeItem>> items;
+    std::vector<std::shared_ptr<CompositeItem>> items;  ///< composite items collection
 
     constexpr static std::string_view XmlNodeName = "timeLower"; ///< XML node name.
     static const xml::XmlElementArray<TimeCompositeLower>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1491,14 +1490,17 @@ public:
     {
     public:
         Edu beats{};                ///< The number of beats in this item. (xml node is `<integer>`)
-        util::Fraction fraction{};  ///< Fraction of beats (between 0, 1)
+        util::Fraction fraction{};  ///< Fraction of beats (between 0 <= fraction < 1)
         bool startGroup{};          ///< Indicates the start of a group.
+
+        /// @brief Return the beats as a complete fraction
+        util::Fraction fullFraction() const { return fraction + beats; }
 
         static const xml::XmlElementArray<CompositeItem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     /// Collection of composite items
-    std::vector<std::shared_ptr<CompositeItem>> items;
+    std::vector<std::shared_ptr<CompositeItem>> items;  ///< composite items collection
 
     constexpr static std::string_view XmlNodeName = "timeUpper"; ///< XML node name.
     static const xml::XmlElementArray<TimeCompositeUpper>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

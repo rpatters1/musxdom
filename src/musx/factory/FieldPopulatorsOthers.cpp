@@ -579,8 +579,8 @@ MUSX_XML_ELEMENT_ARRAY(TimeCompositeLower, {
 MUSX_XML_ELEMENT_ARRAY(TimeCompositeUpper::CompositeItem, {
     {"integer", [](const XmlElementPtr& e, const std::shared_ptr<TimeCompositeUpper::CompositeItem>& i) { i->beats = e->getTextAs<Edu>(); }},
     {"frac", [](const XmlElementPtr& e, const std::shared_ptr<TimeCompositeUpper::CompositeItem>& i) {
-        auto frac = e->getTextAs<uint32_t>();
-        i->fraction = util::Fraction(frac >> 16, frac & 0xff);
+        auto frac = e->getTextAs<uint16_t>();
+        i->fraction = util::Fraction(frac >> 8, frac & 0xff);
     }},
     {"startGroup", [](const XmlElementPtr&, const std::shared_ptr<TimeCompositeUpper::CompositeItem>& i) { i->startGroup = true; }},
 });

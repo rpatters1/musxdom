@@ -1157,12 +1157,51 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, bool abbreviate)
     : Base(document, SCORE_PARTID, ShareMode::All), m_abbreviate(abbreviate)
 {
-    if (!hasCompositeTop && !hasCompositeBottom) {
-        m_timeSig.push_back({ { beats }, { unit } });
-        return;
+    auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
+        if (hasCompositeTop) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeUpper>(SCORE_PARTID, beats)) {
+                std::vector<std::vector<util::Fraction>> result;
+                for (const auto& nextItem : comps->items) {
+                    if (nextItem->startGroup || result.empty()) {
+                        result.push_back({});
+                    }
+                    result[result.size() - 1].push_back(nextItem->fullFraction());
+                }
+                return result;
+            } else {
+                return {};
+            }
+        }
+        return { {beats} };
+    }();
+    auto bots = [&]() -> std::vector<std::vector<Edu>> {
+        if (hasCompositeBottom) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeLower>(SCORE_PARTID, beats)) {
+                std::vector<std::vector<Edu>>result;
+                for (const auto& nextItem : comps->items) {
+                    if (nextItem->startGroup || result.empty()) {
+                        result.push_back({});
+                    }
+                    result[result.size() - 1].push_back(nextItem->unit);
+                }
+                return result;
+            } else {
+                return {};
+            }
+        }
+        return { {unit} };
+    }();
+
+    if (tops.empty() || bots.empty()) {
+        throw std::invalid_argument("Time signature is missing composite top array or composite bottom array.");
     }
-    throw std::logic_error("Composite time signatures not yet supported");
-    /// @todo composite time signatures
+    if (tops.size() != bots.size()) {
+        MUSX_INTEGRITY_ERROR("Composite top group for time signature does not match composite bottom group.");
+    }
+    for (size_t x = 0; x < std::min(tops.size(), bots.size()); x++)
+    {
+        m_timeSig.push_back({ tops[x], bots[x] });
+    }
 }
 
 std::pair<int, NoteType> TimeSignature::calcSimplified() const
@@ -1203,7 +1242,7 @@ std::pair<int, NoteType> TimeSignature::calcSimplified() const
     }
 
     finalUnit /= totalBeats.getDenominator();
-    int finalBeats = totalBeats.getNumerator() * totalBeats.getDenominator();
+    int finalBeats = totalBeats.getNumerator();
 
     int power2 = 0;
     int otherPrimes = finalUnit;
