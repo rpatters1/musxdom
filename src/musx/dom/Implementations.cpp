@@ -25,6 +25,7 @@
 #include <sstream>
 #include <functional>
 #include <numeric>
+#include <algorithm>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -1147,6 +1148,71 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 {
     if (!hasEnclosure) return nullptr;
     return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getPartId(), getCmper());
+}
+
+// *************************
+// ***** TimeSignature *****
+// *************************
+
+TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, bool abbreviate)
+    : Base(document, SCORE_PARTID, ShareMode::All), m_abbreviate(abbreviate)
+{
+    if (!hasCompositeTop && !hasCompositeBottom) {
+        m_timeSig.push_back({ { beats }, { unit } });
+        return;
+    }
+    throw std::logic_error("Composite time signatures not yet supported");
+    /// @todo composite time signatures
+}
+
+std::pair<int, NoteType> TimeSignature::calcSimplified() const
+{
+    // Lambda to compute the sum of a vector
+    auto sumVector = [](const auto& vec) {
+        using T = typename std::decay<decltype(vec.front())>::type;
+        return std::accumulate(vec.begin(), vec.end(), T{});
+    };
+
+    // Lambda to compute GCD of a vector
+    auto computeGCD = [](const std::vector<Edu>& values) {
+        return values.empty() ? 1 : std::reduce(values.begin() + 1, values.end(), values[0], std::gcd<Edu, Edu>);
+    };
+    
+    std::vector<Edu> allUnits;
+    std::vector<std::pair<util::Fraction, Edu>> summedUnits;
+
+    for (const auto& ts : m_timeSig) {
+        Edu totalUnit = sumVector(ts.units);
+        summedUnits.emplace_back(sumVector(ts.counts), totalUnit);
+        allUnits.push_back(totalUnit);
+    }
+
+    Edu finalUnit = computeGCD(allUnits); // The final unit size
+
+    // Compute final beats relative to finalUnit
+    auto totalBeats = std::accumulate(summedUnits.begin(), summedUnits.end(), util::Fraction{}, [finalUnit](auto acc, const auto& p) {
+        return acc + p.first * (p.second / finalUnit);
+    });
+
+    if (!finalUnit) {
+        throw std::logic_error("The beat size is zero.");
+    }
+
+    if (finalUnit % totalBeats.getDenominator()) {
+        util::Logger::log(util::Logger::LogLevel::Warning, "Time signature cannot be reduced to a unit note value. Precision is lost in the simplified version.");
+    }
+
+    finalUnit /= totalBeats.getDenominator();
+    int finalBeats = totalBeats.getNumerator() * totalBeats.getDenominator();
+
+    int power2 = 0;
+    int otherPrimes = finalUnit;
+    while ((otherPrimes & 0x01) == 0) {
+        otherPrimes >>= 1;
+        power2++;
+    }
+    /// @todo adjust for fraction
+    return { otherPrimes * finalBeats, NoteType(1 << power2) };
 }
 
 } // namespace dom    

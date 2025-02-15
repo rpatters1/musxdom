@@ -28,7 +28,7 @@
 namespace musx {
 namespace util {
 
- /**
+/**
  * @class Fraction
  * @brief A class to represent fractions with integer numerator and denominator, automatically reduced to simplest form.
  */

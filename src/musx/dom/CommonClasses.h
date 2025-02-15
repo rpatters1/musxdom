@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include "musx/util/Fraction.h"
 #include "BaseClasses.h"
 
 namespace musx {
@@ -171,20 +172,64 @@ public:
     bool isMajor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in major key
     bool isMinor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in minor key
 
-    /// @brief whether the two key signatures represent the same key signature
-    bool isSameKey(const KeySignature& src)
+    /// @brief returns whether the two key signatures represent the same key signature
+    bool isSame(const KeySignature& src)
     {
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }
 
     void integrityCheck() override
     {
+        Base::integrityCheck();
         if (key >= 0x8000) {
             MUSX_INTEGRITY_ERROR("Key signature has invalid key value: " + std::to_string(key));
         }
     }
 
     static const xml::XmlElementArray<KeySignature>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+namespace others {
+class Measure; // forward delcaration
+} // namespace others
+
+/**
+ * @class TimeSignature
+ * @brief Shared time signature class that is derived from other classes. (See @ref others::Measure)
+ */
+class TimeSignature : public Base
+{
+public:
+    /// @brief Calculates the simplest form of of this time signature, expressed as a count of NoteType units.
+    /// @return 
+    std::pair<int, NoteType> calcSimplified() const;
+
+    /// @brief returns whether the two time signatures represent the same time signature
+    bool isSame(const TimeSignature& src)
+    {
+        return m_timeSig == src.m_timeSig;
+    }
+
+
+private:
+    /**
+     * @brief Constructor for measures.
+     * @param measure An instance of 
+     */
+    explicit TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, bool abbreviate = false);
+
+    struct TimeSigUnit
+    {
+        std::vector<util::Fraction> counts;
+        std::vector<Edu> units;
+
+        bool operator==(const TimeSigUnit& src) const
+        { return counts == src.counts && units == src.units; }
+    };
+    std::vector<TimeSigUnit> m_timeSig;
+    bool m_abbreviate;
+
+    friend class others::Measure;
 };
 
 namespace others {

@@ -31,6 +31,7 @@
 
 #include "musx/util/EnigmaString.h"
 #include "musx/util/Logger.h"
+#include "musx/util/Fraction.h"
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
@@ -475,6 +476,22 @@ public:
     /// Depending on the display options of the found MeasureNumberRegion, the number may or may not appear in the score.
     /// And if it does, it may not appear as a number.
     int calcDisplayNumber() const;
+
+    /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure
+    std::shared_ptr<TimeSignature> createTimeSignature() const
+    {
+        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
+    }
+
+    /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure
+    /// @return The diplay time signature if there is one, otherwise `nullptr`.
+    std::shared_ptr<TimeSignature> createDisplayTimeSignature() const
+    {
+        if (!useDisplayTimesig) {
+            return nullptr;
+        }
+        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
+    }
 
     void integrityCheck() override
     {
@@ -1414,6 +1431,79 @@ public:
     static const xml::XmlElementArray<TextRepeatEnclosure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class TimeCompositeLower
+ * @brief Represents the lower composite time signature array.
+ *
+ * The cmper taken from the `unit` value when `hasCompositeBottom` is true. (See @ref TimeSignature.)
+ * 
+ * This class is identified by the XML node name "timeLower".
+ */
+class TimeCompositeLower : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TimeCompositeLower(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    /** @class CompositeItem
+     *  @brief Represents an individual lower composite item in the time signature.
+     */
+    class CompositeItem
+    {
+    public:
+        Edu unit{};             ///< The size of the unit for this item. (xml node is `<integer>`)
+        bool startGroup{};      ///< Indicates the start of a group.
+
+        static const xml::XmlElementArray<CompositeItem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    /// Collection of composite items
+    std::vector<std::shared_ptr<CompositeItem>> items;
+
+    constexpr static std::string_view XmlNodeName = "timeLower"; ///< XML node name.
+    static const xml::XmlElementArray<TimeCompositeLower>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TimeCompositeUpper
+ * @brief Represents the upper composite time signature structure.
+ *
+ * The cmper taken from the `beats` value when `hasCompositeTop` is true. (See @ref TimeSignature.)
+ * 
+ * This class is identified by the XML node name "timeUpper".
+ */
+class TimeCompositeUpper : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TimeCompositeUpper(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    /** @class CompositeItem
+     *  @brief Represents an individual composite item in the time signature.
+     */
+    class CompositeItem
+    {
+    public:
+        Edu beats{};                ///< The number of beats in this item. (xml node is `<integer>`)
+        util::Fraction fraction{};  ///< Fraction of beats (between 0, 1)
+        bool startGroup{};          ///< Indicates the start of a group.
+
+        static const xml::XmlElementArray<CompositeItem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    /// Collection of composite items
+    std::vector<std::shared_ptr<CompositeItem>> items;
+
+    constexpr static std::string_view XmlNodeName = "timeUpper"; ///< XML node name.
+    static const xml::XmlElementArray<TimeCompositeUpper>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 } // namespace others
 } // namespace dom
 } // namespace musx

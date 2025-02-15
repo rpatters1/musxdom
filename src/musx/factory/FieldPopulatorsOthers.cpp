@@ -565,6 +565,32 @@ MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->description = e->getText(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(TimeCompositeLower::CompositeItem, {
+    {"integer", [](const XmlElementPtr& e, const std::shared_ptr<TimeCompositeLower::CompositeItem>& i) { i->unit = e->getTextAs<Edu>(); }},
+    {"startGroup", [](const XmlElementPtr&, const std::shared_ptr<TimeCompositeLower::CompositeItem>& i) { i->startGroup = true; }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TimeCompositeLower, {
+    {"tldata", [](const XmlElementPtr& e, const std::shared_ptr<TimeCompositeLower>& i) {
+        i->items.push_back(FieldPopulator<TimeCompositeLower::CompositeItem>::createAndPopulate(e));
+    }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TimeCompositeUpper::CompositeItem, {
+    {"integer", [](const XmlElementPtr& e, const std::shared_ptr<TimeCompositeUpper::CompositeItem>& i) { i->beats = e->getTextAs<Edu>(); }},
+    {"frac", [](const XmlElementPtr& e, const std::shared_ptr<TimeCompositeUpper::CompositeItem>& i) {
+        auto frac = e->getTextAs<uint32_t>();
+        i->fraction = util::Fraction(frac >> 16, frac & 0xff);
+    }},
+    {"startGroup", [](const XmlElementPtr&, const std::shared_ptr<TimeCompositeUpper::CompositeItem>& i) { i->startGroup = true; }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TimeCompositeUpper, {
+    {"tudata", [](const XmlElementPtr& e, const std::shared_ptr<TimeCompositeUpper>& i) {
+        i->items.push_back(FieldPopulator<TimeCompositeUpper::CompositeItem>::createAndPopulate(e));
+    }},
+});
+    
 } // namespace others
 } // namespace dom
 } // namespace musx

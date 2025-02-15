@@ -185,7 +185,7 @@ using RegisteredOptions = TypeRegistry <
 /**
  * @brief The type registery for `<others>`.
  *
- * These types are maintained in the order in which Finale serializes them.
+ * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredOthers = TypeRegistry <
     dom::others::FontDefinition,
@@ -203,6 +203,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::StaffStyle,
     dom::others::StaffStyleAssign,
     dom::others::ShapeExpressionDef,
+    dom::others::TimeCompositeLower,
+    dom::others::TimeCompositeUpper,
     dom::others::TempoChange,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
