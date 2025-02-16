@@ -74,6 +74,7 @@ add_executable(musxdomtests
 	others/instrument_used.cpp
     others/measure.cpp
     others/measure_number_region.cpp
+    others/miscellaneous.cpp
     others/mmrest.cpp
     others/multistaff_inst.cpp
     others/page.cpp
