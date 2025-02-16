@@ -1154,7 +1154,7 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 // ***** TimeSignature *****
 // *************************
 
-TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, bool abbreviate)
+TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, std::optional<bool> abbreviate)
     : Base(document, SCORE_PARTID, ShareMode::All), m_abbreviate(abbreviate)
 {
     auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
@@ -1198,13 +1198,51 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
     if (tops.size() != bots.size()) {
         MUSX_INTEGRITY_ERROR("Composite top group for time signature does not match composite bottom group.");
     }
-    for (size_t x = 0; x < std::min(tops.size(), bots.size()); x++)
-    {
+    for (size_t x = 0; x < std::min(tops.size(), bots.size()); x++) {
         m_timeSig.push_back({ tops[x], bots[x] });
     }
 }
 
-std::pair<int, NoteType> TimeSignature::calcSimplified() const
+std::optional<char32_t> TimeSignature::getAbbreviatedSymbol() const
+{
+    auto musicChars = getDocument()->getOptions()->get<options::MusicSymbolOptions>();
+    const char32_t commonTimeSymbol = musicChars ? musicChars->timeSigAbrvCommon : U'\U0000E08A';   // SMuFL common time symbol default
+    const char32_t cutTimeSymbol = musicChars ? musicChars->timeSigAbrvCut : U'\U0000E08B';         // SMuFL cut time symbol default
+    if (m_abbreviate.has_value()) {
+        if (m_abbreviate.value()) {
+            if (isCutTime()) {
+                return cutTimeSymbol;
+            } else if (isCommonTime()) {
+                return commonTimeSymbol;
+            }
+        }
+    } else if (auto options = getDocument()->getOptions()->get<options::TimeSignatureOptions>()) {
+        if (options->timeSigDoAbrvCut && isCutTime()) {
+            return cutTimeSymbol;
+        } else if (options->timeSigDoAbrvCommon && isCommonTime()) {
+            return commonTimeSymbol;
+        }
+    }
+    return std::nullopt;
+}
+
+bool TimeSignature::isCommonTime() const
+{
+    if (m_timeSig.size() != 1 || m_timeSig[0].counts.size() != 1 || m_timeSig[0].units.size() != 1) {
+        return false;
+    }
+    return m_timeSig[0].counts[0] == 4 && m_timeSig[0].units[0] == Edu(NoteType::Quarter);
+}
+
+bool TimeSignature::isCutTime() const
+{
+    if (m_timeSig.size() != 1 || m_timeSig[0].counts.size() != 1 || m_timeSig[0].units.size() != 1) {
+        return false;
+    }
+    return m_timeSig[0].counts[0] == 2 && m_timeSig[0].units[0] == Edu(NoteType::Half);
+}
+
+std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
 {
     // Lambda to compute the sum of a vector
     auto sumVector = [](const auto& vec) {
@@ -1237,21 +1275,14 @@ std::pair<int, NoteType> TimeSignature::calcSimplified() const
         throw std::logic_error("The beat size is zero.");
     }
 
-    if (finalUnit % totalBeats.getDenominator()) {
-        util::Logger::log(util::Logger::LogLevel::Warning, "Time signature cannot be reduced to a unit note value. Precision is lost in the simplified version.");
-    }
-
-    finalUnit /= totalBeats.getDenominator();
-    int finalBeats = totalBeats.getNumerator();
-
     int power2 = 0;
     int otherPrimes = finalUnit;
     while ((otherPrimes & 0x01) == 0) {
         otherPrimes >>= 1;
         power2++;
     }
-    /// @todo adjust for fraction
-    return { otherPrimes * finalBeats, NoteType(1 << power2) };
+
+    return { totalBeats * otherPrimes, NoteType(1 << power2) };
 }
 
 } // namespace dom    

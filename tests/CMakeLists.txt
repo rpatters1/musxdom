@@ -55,6 +55,7 @@ add_executable(musxdomtests
     options/misc_options.cpp
     options/multimeasure_rest_options.cpp
     options/music_spacing_options.cpp
+    options/music_symbol_options.cpp
     options/page_options.cpp
     options/piano_brace_bracket_options.cpp
     options/repeat_options.cpp

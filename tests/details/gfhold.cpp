@@ -344,8 +344,8 @@ TEST(GFrameHold, V1V2TupletTest)
         total += expectedValues[x++];
     /*
         std::cout << entryInfo->elapsedDuration << '\t' << entryInfo->actualDuration << '\t'
-                        << std::to_string(entryInfo->elapsedDuration.calcDuration()) << '\t'
-                        << std::to_string(entryInfo->actualDuration.calcDuration()) << std::endl;
+                        << std::to_string(entryInfo->elapsedDuration.calcEduDuration()) << '\t'
+                        << std::to_string(entryInfo->actualDuration.calcEduDuration()) << std::endl;
     */
         return true;
     });

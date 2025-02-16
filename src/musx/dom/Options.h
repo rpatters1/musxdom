@@ -599,6 +599,94 @@ public:
 };
 
 /**
+ * @class MusicSymbolOptions
+ * @brief Options specifying the charactes for musical symbols.
+ *
+ * These are values are the character codes from the default music font. If the default music font is
+ * SMuFL-compliant, they will be SMuFL glyph values. Otherwise, they are most likely Maestro font values.
+ *
+ * This class is identified by the XML node name "musicSymbolOptions".
+ */
+class MusicSymbolOptions : public OptionsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MusicSymbolOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode)
+    {
+    }
+
+    char32_t noteheadQuarter{};       ///< Unicode for quarter notehead
+    char32_t noteheadHalf{};          ///< Unicode for half notehead
+    char32_t noteheadWhole{};         ///< Unicode for whole notehead
+    char32_t noteheadDblWhole{};      ///< Unicode for double whole notehead
+    char32_t natural{};               ///< Unicode for natural sign
+    char32_t flat{};                  ///< Unicode for flat sign
+    char32_t sharp{};                 ///< Unicode for sharp sign
+    char32_t dblFlat{};               ///< Unicode for double flat sign
+    char32_t dblSharp{};              ///< Unicode for double sharp sign
+    char32_t parenNatural{};          ///< Unicode for parenthesized natural
+    char32_t parenFlat{};             ///< Unicode for parenthesized flat
+    char32_t parenSharp{};            ///< Unicode for parenthesized sharp
+    char32_t parenDblFlat{};          ///< Unicode for parenthesized double flat
+    char32_t parenDblSharp{};         ///< Unicode for parenthesized double sharp
+    char32_t chordNatural{};          ///< Unicode for chord natural sign
+    char32_t chordFlat{};             ///< Unicode for chord flat sign
+    char32_t chordSharp{};            ///< Unicode for chord sharp sign
+    char32_t chordDblFlat{};          ///< Unicode for chord double flat sign
+    char32_t chordDblSharp{};         ///< Unicode for chord double sharp sign
+    char32_t keySigNatural{};         ///< Unicode for key signature natural
+    char32_t keySigFlat{};            ///< Unicode for key signature flat
+    char32_t keySigSharp{};           ///< Unicode for key signature sharp
+    char32_t keySigDblFlat{};         ///< Unicode for key signature double flat
+    char32_t keySigDblSharp{};        ///< Unicode for key signature double sharp
+    char32_t restLonga{};             ///< Unicode for longa rest
+    char32_t restDblWhole{};          ///< Unicode for double whole rest
+    char32_t restWhole{};             ///< Unicode for whole rest
+    char32_t restHalf{};              ///< Unicode for half rest
+    char32_t restQuarter{};           ///< Unicode for quarter rest
+    char32_t restEighth{};            ///< Unicode for eighth rest
+    char32_t rest16th{};              ///< Unicode for 16th rest
+    char32_t rest32nd{};              ///< Unicode for 32nd rest
+    char32_t rest64th{};              ///< Unicode for 64th rest
+    char32_t rest128th{};             ///< Unicode for 128th rest
+    char32_t restDefMeas{};           ///< Unicode for default measure rest
+    char32_t oneBarRepeat{};          ///< Unicode for one-bar repeat
+    char32_t twoBarRepeat{};          ///< Unicode for two-bar repeat
+    char32_t slashBar{};              ///< Unicode for slash bar
+    char32_t quarterSlash{};          ///< Unicode for quarter slash
+    char32_t halfSlash{};             ///< Unicode for half slash
+    char32_t wholeSlash{};            ///< Unicode for whole slash
+    char32_t dblWholeSlash{};         ///< Unicode for double whole slash
+    char32_t timeSigPlus{};           ///< Unicode for time signature plus sign
+    char32_t timeSigPlusParts{};      ///< Unicode for time signature plus (parts)
+    char32_t timeSigAbrvCommon{};     ///< Unicode for common time abbreviation
+    char32_t timeSigAbrvCut{};        ///< Unicode for cut time abbreviation
+    char32_t timeSigAbrvCommonParts{}; ///< Unicode for common time abbreviation (parts)
+    char32_t timeSigAbrvCutParts{};   ///< Unicode for cut time abbreviation (parts)
+    char32_t augDot{};                ///< Unicode for augmentation dot
+    char32_t forwardRepeatDot{};      ///< Unicode for forward repeat dot
+    char32_t backRepeatDot{};         ///< Unicode for backward repeat dot
+    char32_t eightVaUp{};             ///< Unicode for 8va (ottava) up
+    char32_t eightVbDown{};           ///< Unicode for 8vb (ottava) down
+    char32_t fifteenMaUp{};           ///< Unicode for 15ma (quindicesima) up
+    char32_t fifteenMbDown{};         ///< Unicode for 15mb (quindicesima) down
+    char32_t trillChar{};             ///< Unicode for trill symbol
+    char32_t wiggleChar{};            ///< Unicode for wiggle (trill line) symbol
+    char32_t flagUp{};                ///< Unicode for upward flag
+    char32_t flagDown{};              ///< Unicode for downward flag
+    char32_t flag16Up{};              ///< Unicode for 16th note upward flag
+    char32_t flag16Down{};            ///< Unicode for 16th note downward flag
+    char32_t flag2Up{};               ///< Unicode for 32nd note upward flag
+    char32_t flag2Down{};             ///< Unicode for 32nd note downward flag
+    char32_t flagStraightUp{};        ///< Unicode for straight upward flag
+    char32_t flagStraightDown{};      ///< Unicode for straight downward flag
+
+    constexpr static std::string_view XmlNodeName = "musicSymbolOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MusicSymbolOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class PageFormatOptions
  * @brief Options for page formatting in the document.
  * 

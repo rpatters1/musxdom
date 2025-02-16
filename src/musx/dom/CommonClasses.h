@@ -200,9 +200,11 @@ class Measure; // forward delcaration
 class TimeSignature : public Base
 {
 public:
-    /// @brief Calculates the simplest form of of this time signature, expressed as a count of NoteType units.
-    /// @return 
-    std::pair<int, NoteType> calcSimplified() const;
+    /// @brief Calculates the simplest form of of this time signature, expressed as a fractional count of @ref NoteType units.
+    ///
+    /// In typical cases, the returned @ref util::Fraction has a denominator of 1, but Finale supports other kinds of fractions.
+    /// Use #util::Fraction::quotient to get the integer value and #util::Fraction::remainder to get the residual fractional component.
+    std::pair<util::Fraction, NoteType> calcSimplified() const;
 
     /// @brief returns whether the two time signatures represent the same time signature
     bool isSame(const TimeSignature& src)
@@ -211,12 +213,24 @@ public:
     }
 
 
+    /// @brief Returns the abbreviated symbol for this time signature, or std::nullopt if none.
+    ///
+    /// If the musx document lacks music symbol options but abbreviation was requested, the SMuFL values
+    /// are returned as default substitute values.
+    std::optional<char32_t> getAbbreviatedSymbol() const;
+
+    /// @brief Returns if this time signature is common time
+    bool isCommonTime() const;
+    /// @brief Returns if this time signature is cut time
+    bool isCutTime() const;
+
 private:
     /**
      * @brief Constructor for measures.
      * @param measure An instance of 
      */
-    explicit TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, bool abbreviate = false);
+    explicit TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom,
+        std::optional<bool> abbreviate = std::nullopt);
 
     struct TimeSigUnit
     {
@@ -227,7 +241,7 @@ private:
         { return counts == src.counts && units == src.units; }
     };
     std::vector<TimeSigUnit> m_timeSig;
-    bool m_abbreviate;
+    std::optional<bool> m_abbreviate;
 
     friend class others::Measure;
 };

@@ -31,9 +31,9 @@ Fraction Fraction::fromEdu(int edu)
     return Fraction(edu, int(NoteType::Whole));
 }
 
-double Fraction::calcDuration() const
+double Fraction::calcEduDuration() const
 {
-    return EduFloat(numerator * int(NoteType::Whole)) / EduFloat(denominator);
+    return EduFloat(numerator() * int(NoteType::Whole)) / EduFloat(denominator());
 }
 
 } // namespace util
