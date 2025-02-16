@@ -128,6 +128,15 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_TRUE(measure1->useDisplayTimesig);
     EXPECT_EQ(measure1->leftBarlineType, others::Measure::BarlineType::OptionsDefault);
 
+    {
+        auto timeSig = measure1->createDisplayTimeSignature();
+        ASSERT_TRUE(timeSig);
+        ASSERT_EQ(timeSig->components.size(), 1);
+        auto [count, unit] = timeSig->calcSimplified();
+        EXPECT_EQ(count, 4);
+        EXPECT_EQ(unit, NoteType::Quarter);
+  }
+
     // Measure 2 (Score)
     auto measure2 = others->get<others::Measure>(SCORE_PARTID, 2);
     ASSERT_TRUE(measure2) << "Measure 2 for score not found";
@@ -147,6 +156,15 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::None);
     EXPECT_TRUE(measure2->compositeDispNumerator);
     EXPECT_TRUE(measure2->compositeDispDenominator);
+
+    {
+        auto timeSig = measure2->createTimeSignature();
+        ASSERT_TRUE(timeSig);
+        ASSERT_EQ(timeSig->components.size(), 1);
+        auto [count, unit] = timeSig->calcSimplified();
+        EXPECT_EQ(count, 4);
+        EXPECT_EQ(unit, NoteType::Quarter);
+    }
 
     // Measure 3 (Score)
     auto measure3 = others->get<others::Measure>(SCORE_PARTID, 3);
@@ -249,7 +267,7 @@ TEST(MeasureTest, PopulatePart)
 
 TEST(MeasureTest, UnlinkedNodes)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -296,4 +314,120 @@ TEST(MeasureTest, UnlinkedNodes)
     // Check linked nodes
     EXPECT_EQ(unlinkedNodes.find("barline"), unlinkedNodes.end()) << "Barline should be linked in Measure 3 Part 1";
     EXPECT_EQ(unlinkedNodes.find("compositeNumerator"), unlinkedNodes.end()) << "CompositeNumerator should be linked in Measure 3 Part 1";
+}
+
+TEST(MeasureTest, CompositTimeSig1)
+{
+  constexpr static musxtest::string_view testXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+      <beats>8</beats>
+      <divbeat>8</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <altNumTsig/>
+      <altDenTsig/>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <timeLower cmper="8">
+      <tldata>
+        <integer>2048</integer>
+        <startGroup/>
+      </tldata>
+      <tldata>
+        <integer>1024</integer>
+      </tldata>
+      <tldata>
+        <integer>256</integer>
+        <startGroup/>
+      </tldata>
+      <tldata>
+        <integer>512</integer>
+        <startGroup/>
+      </tldata>
+      <tldata>
+        <integer>256</integer>
+      </tldata>
+    </timeLower>
+    <timeUpper cmper="8">
+      <tudata>
+        <integer>1</integer>
+        <startGroup/>
+      </tudata>
+      <tudata>
+        <integer>2</integer>
+        <frac>15480</frac>
+      </tudata>
+      <tudata>
+        <integer>3</integer>
+        <startGroup/>
+      </tudata>
+      <tudata>
+        <integer>2</integer>
+      </tudata>
+      <tudata>
+        <integer>1</integer>
+        <frac>15480</frac>
+        <startGroup/>
+      </tudata>
+      <tudata>
+        <integer>5</integer>
+      </tudata>
+    </timeUpper>
+  </others>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(testXml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+
+    // Measure 1 (Score)
+    auto measure = others->get<others::Measure>(SCORE_PARTID, 1);
+    ASSERT_TRUE(measure) << "Measure for score with cmper 1 not found";
+
+    EXPECT_FALSE(measure->useDisplayTimesig);
+    EXPECT_FALSE(measure->createDisplayTimeSignature());
+
+    auto timeSig = measure->createTimeSignature();
+    ASSERT_TRUE(timeSig);
+    ASSERT_EQ(timeSig->components.size(), 3);
+    {
+        auto [count, unit] = timeSig->calcSimplified();
+        EXPECT_EQ(count, musx::util::Fraction(133, 2));
+        EXPECT_EQ(unit, NoteType::Note16th);
+    }
+    {
+        auto component = timeSig->createComponent(0);
+        ASSERT_TRUE(component);
+        auto [count, unit] = component->calcSimplified();
+        EXPECT_EQ(count, musx::util::Fraction(21, 2));
+        EXPECT_EQ(count.quotient(), 10);
+        EXPECT_EQ(count.remainder(), musx::util::Fraction(1, 2));
+        EXPECT_EQ(unit, NoteType::Quarter);
+    }
+    {
+        auto component = timeSig->createComponent(1);
+        ASSERT_TRUE(component);
+        auto [count, unit] = component->calcSimplified();
+        EXPECT_EQ(count, 5);
+        EXPECT_EQ(count.quotient(), 5);
+        EXPECT_EQ(count.remainder(), 0);
+        EXPECT_EQ(unit, NoteType::Note16th);
+    }
+    {
+        auto component = timeSig->createComponent(2);
+        ASSERT_TRUE(component);
+        auto [count, unit] = component->calcSimplified();
+        EXPECT_EQ(count, musx::util::Fraction(39, 2));
+        EXPECT_EQ(count.quotient(), 19);
+        EXPECT_EQ(count.remainder(), musx::util::Fraction(1, 2));
+        EXPECT_EQ(unit, NoteType::Note16th);
+    }
 }

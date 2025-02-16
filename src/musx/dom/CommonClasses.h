@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <numeric>
+
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
 
@@ -200,6 +202,23 @@ class Measure; // forward delcaration
 class TimeSignature : public Base
 {
 public:
+
+    /// @brief A single time signature component
+    struct TimeSigComponent
+    {
+        std::vector<util::Fraction> counts; ///< The array of counts in this component.
+                                            ///< For simple time signatures this is a single value, and it is an integer like 4/1.
+        std::vector<Edu> units;             ///< The array of beat values in this component.
+                                            ///< For simple time signatures this is a single value, and it is a note value like 1024 (quarter note)
+                                            ///< For straightforward compound time it may be a single dotted value like 1536 (dotted quarter)
+
+        /// @brief Test if two TimeSigComponent values are the same.
+        bool operator==(const TimeSigComponent& src) const
+        { return counts == src.counts && units == src.units; }
+    };
+
+    std::vector<TimeSigComponent> components;     ///< the components in the time signature
+
     /// @brief Calculates the simplest form of of this time signature, expressed as a fractional count of @ref NoteType units.
     ///
     /// In typical cases, the returned @ref util::Fraction has a denominator of 1, but Finale supports other kinds of fractions.
@@ -209,9 +228,17 @@ public:
     /// @brief returns whether the two time signatures represent the same time signature
     bool isSame(const TimeSignature& src)
     {
-        return m_timeSig == src.m_timeSig;
+        return components == src.components && m_abbreviate == src.m_abbreviate;
     }
 
+    /// @brief Creates a time signature corresponding to the component at @p index
+    /// @param index The 0-based component index
+    /// @throw std::invalid_argument if @p index is out of range
+    std::shared_ptr<TimeSignature> createComponent(size_t index) const
+    {
+        checkIndex(index);
+        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviate));
+    }
 
     /// @brief Returns the abbreviated symbol for this time signature, or std::nullopt if none.
     ///
@@ -225,22 +252,31 @@ public:
     bool isCutTime() const;
 
 private:
+    void checkIndex(size_t index) const
+    {
+        if (index > components.size()) {
+            throw std::invalid_argument("Index out of range. The time signature has " + std::to_string(components.size())
+                + " elements. The index requested was " + std::to_string(index) + ".");
+        }
+    }
+
     /**
-     * @brief Constructor for measures.
+     * @brief Constructor for measures and independent time signature records.
      * @param measure An instance of 
      */
     explicit TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom,
         std::optional<bool> abbreviate = std::nullopt);
 
-    struct TimeSigUnit
+    /**
+     * @brief Constructor for components
+     * @param measure An instance of 
+     */
+    explicit TimeSignature(const DocumentWeakPtr& document, const TimeSigComponent& timeSigUnit, std::optional<bool> abbreviate)
+        : Base(document, SCORE_PARTID, ShareMode::All), m_abbreviate(abbreviate)
     {
-        std::vector<util::Fraction> counts;
-        std::vector<Edu> units;
+        components.push_back(timeSigUnit);
+    }
 
-        bool operator==(const TimeSigUnit& src) const
-        { return counts == src.counts && units == src.units; }
-    };
-    std::vector<TimeSigUnit> m_timeSig;
     std::optional<bool> m_abbreviate;
 
     friend class others::Measure;

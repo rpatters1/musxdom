@@ -1199,7 +1199,7 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
         MUSX_INTEGRITY_ERROR("Composite top group for time signature does not match composite bottom group.");
     }
     for (size_t x = 0; x < std::min(tops.size(), bots.size()); x++) {
-        m_timeSig.push_back({ tops[x], bots[x] });
+        components.push_back({ tops[x], bots[x] });
     }
 }
 
@@ -1228,18 +1228,18 @@ std::optional<char32_t> TimeSignature::getAbbreviatedSymbol() const
 
 bool TimeSignature::isCommonTime() const
 {
-    if (m_timeSig.size() != 1 || m_timeSig[0].counts.size() != 1 || m_timeSig[0].units.size() != 1) {
+    if (components.size() != 1 || components[0].counts.size() != 1 || components[0].units.size() != 1) {
         return false;
     }
-    return m_timeSig[0].counts[0] == 4 && m_timeSig[0].units[0] == Edu(NoteType::Quarter);
+    return components[0].counts[0] == 4 && components[0].units[0] == Edu(NoteType::Quarter);
 }
 
 bool TimeSignature::isCutTime() const
 {
-    if (m_timeSig.size() != 1 || m_timeSig[0].counts.size() != 1 || m_timeSig[0].units.size() != 1) {
+    if (components.size() != 1 || components[0].counts.size() != 1 || components[0].units.size() != 1) {
         return false;
     }
-    return m_timeSig[0].counts[0] == 2 && m_timeSig[0].units[0] == Edu(NoteType::Half);
+    return components[0].counts[0] == 2 && components[0].units[0] == Edu(NoteType::Half);
 }
 
 std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
@@ -1258,7 +1258,7 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
     std::vector<Edu> allUnits;
     std::vector<std::pair<util::Fraction, Edu>> summedUnits;
 
-    for (const auto& ts : m_timeSig) {
+    for (const auto& ts : components) {
         Edu totalUnit = sumVector(ts.units);
         summedUnits.emplace_back(sumVector(ts.counts), totalUnit);
         allUnits.push_back(totalUnit);
