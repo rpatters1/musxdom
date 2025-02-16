@@ -316,7 +316,7 @@ TEST(MeasureTest, UnlinkedNodes)
     EXPECT_EQ(unlinkedNodes.find("compositeNumerator"), unlinkedNodes.end()) << "CompositeNumerator should be linked in Measure 3 Part 1";
 }
 
-TEST(MeasureTest, CompositTimeSig1)
+TEST(MeasureTest, CompositeTimeSig1)
 {
   constexpr static musxtest::string_view testXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -431,3 +431,55 @@ TEST(MeasureTest, CompositTimeSig1)
         EXPECT_EQ(unit, NoteType::Note16th);
     }
 }
+
+
+TEST(MeasureTest, CompositeTimeSig2)
+{
+  constexpr static musxtest::string_view testXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+      <beats>19</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <altNumTsig/>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <timeUpper cmper="19">
+      <tudata>
+        <integer>2</integer>
+        <frac>10360</frac>
+        <startGroup/>
+      </tudata>
+    </timeUpper>
+  </others>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(testXml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+
+    // Measure 1 (Score)
+    auto measure = others->get<others::Measure>(SCORE_PARTID, 1);
+    ASSERT_TRUE(measure) << "Measure for score with cmper 1 not found";
+
+    EXPECT_FALSE(measure->useDisplayTimesig);
+    EXPECT_FALSE(measure->createDisplayTimeSignature());
+
+    auto timeSig = measure->createTimeSignature();
+    ASSERT_TRUE(timeSig);
+    ASSERT_EQ(timeSig->components.size(), 1);
+    {
+        auto [count, unit] = timeSig->calcSimplified();
+        EXPECT_EQ(count, musx::util::Fraction(7, 3));
+        EXPECT_EQ(unit, NoteType::Quarter);
+    }
+}
+
