@@ -912,6 +912,69 @@ public:
 };
 
 /**
+ * @enum RepeatActionType
+ * @brief Enum for the possible values of the `<action>` element.
+ */
+enum class RepeatActionType
+{
+    JumpAuto,               ///< Automatically Jump. (the default). The targetValue is meaningless for this action.
+    JumpAbsolute,           ///< Jump to the measure number specified in the targetValue field.
+    JumpRelative,           ///< Jump relative to the current measure. The targetValue field specifies how many measures to jump.
+                            ///< The targetValue may be positive or negative for forward or backward relative jumps.
+    JumpToMark,             ///< Jump to a specified repeat number (used by text repeats).
+    Stop,                   ///< Legacy value not used in late Finale.
+    NoJump                  ///< Do not jump. The targetValue is meaningless for this action.
+};
+
+/**
+ * @enum RepeatTriggerType
+ * @brief Enum for the possible values of the `<trigger>` element.
+ */
+enum class RepeatTriggerType
+{
+    Always,                 ///< Always jump (the default)
+    OnPass,                 ///< Jump on a sepecified pass number.
+    UntilPass               ///< Jump until a specified pass number is reached.
+};
+
+/**
+ * @class RepeatEndingStart
+ * @brief Represents a repeat ending start marker in the document.
+ *
+ * The cmper is the cmper of the @ref Measure that has this item.
+ *
+ * This class is identified by the XML node name "repeatEndingStart".
+ */
+class RepeatEndingStart : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit RepeatEndingStart(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    int targetValue{};              ///< Absolute or relative measure number, depending on #jumpAction. (xml tag is `<nextEnd>`)
+    Evpu textHPos{};                ///< The horizontal position of the text relative to #leftHPos. (xml tag is `<textPos>`)
+    Evpu leftHPos{};                ///< The horizontal position of the lower left bracket, relative to the default. (xml tag is `<pos1>`)
+    Evpu leftVPos{};                ///< The vertical position of the lower left bracket, relative to the default. (xml tag is `<line1>`)
+    bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
+    bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    RepeatActionType jumpAction{};  ///< The jump action for this repeat ending. The automatic jump is to the next ending. (xml tag is `<action>`)
+    RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
+                                    ///< For `RepeatEndingStart` this value is always `OnPass`, and it seems to mean that
+                                    ///< it jumps when the current pass exceeds the final ending number.
+    bool jumpIfIgnoring{};          ///< "Skip Ending if Ignoring Repeats" (xml tag is `<jmpIgnore>`)
+    Evpu endLineVPos{};             ///< The vertical offset of the final bracket, relative to #rightVPos or 0 if the ending is open. (xml tag is `<endLine>`)
+    Evpu textVPos{};                ///< The vertical position of the text relative to #leftVPos. (xml tag is `<textLine>`)
+    Evpu rightHPos{};               ///< The horizontal position of the upper right bracket, relative to the default. (xml tag is `<pos2>`)
+    Evpu rightVPos{};               ///< The vertical position of the upper right bracket, relative to the default. (xml tag is `<line2>`)
+
+    constexpr static std::string_view XmlNodeName = "repeatEndingStart"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatEndingStart>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ShapeExpressionDef
  * @brief Stores the properties and behaviors of shape expressions.
  *

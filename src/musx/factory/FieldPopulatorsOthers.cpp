@@ -105,6 +105,21 @@ MUSX_XML_ENUM_MAPPING(RehearsalMarkStyle, {
     {"measNum", RehearsalMarkStyle::MeasureNumber}
 });
 
+MUSX_XML_ENUM_MAPPING(RepeatActionType, {
+    {"jumpAuto", RepeatActionType::JumpAuto}, // This is the default and is not known to occur in the XML, but the string exists in Finale
+    {"jumpAbsolute", RepeatActionType::JumpAbsolute},
+    {"jumpRelative", RepeatActionType::JumpRelative},
+    {"jumpToMark", RepeatActionType::JumpToMark},
+    {"stop", RepeatActionType::Stop},
+    {"noJump", RepeatActionType::NoJump},
+});
+
+MUSX_XML_ENUM_MAPPING(RepeatTriggerType, {
+    // {"always", RepeatTriggerType::Always}, // This is the default and is not known to occur in the XML.
+    {"onPass", RepeatTriggerType::OnPass},
+    {"untilPass", RepeatTriggerType::UntilPass},
+});
+
 MUSX_XML_ENUM_MAPPING(PlaybackType, {
     {"none", PlaybackType::None},
     {"time", PlaybackType::Tempo},
@@ -407,6 +422,22 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
     {"scrollViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->scrollViewIUlist = e->getTextAs<Cmper>(); }},
     {"studioViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->studioViewIUlist = e->getTextAs<Cmper>(); }},
     {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(RepeatEndingStart, {
+    {"nextEnd", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->targetValue = e->getTextAs<int>(); }},
+    {"textPos", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->textHPos = e->getTextAs<Evpu>(); }},
+    {"pos1", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->leftHPos = e->getTextAs<Evpu>(); }},
+    {"line1", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->leftVPos = e->getTextAs<Evpu>(); }},
+    {"indivPlac", [](const XmlElementPtr&, const std::shared_ptr<RepeatEndingStart>& i) { i->individualPlacement = true; }},
+    {"topStaffOnly", [](const XmlElementPtr&, const std::shared_ptr<RepeatEndingStart>& i) { i->topStaffOnly = true; }},
+    {"action", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->jumpAction = toEnum<RepeatActionType>(e->getTextTrimmed()); }},
+    {"trigger", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->trigger = toEnum<RepeatTriggerType>(e->getTextTrimmed()); }},
+    {"jmpIgnore", [](const XmlElementPtr&, const std::shared_ptr<RepeatEndingStart>& i) { i->jumpIfIgnoring = true; }},
+    {"endLine", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->endLineVPos = e->getTextAs<Evpu>(); }},
+    {"textLine", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->textVPos = e->getTextAs<Evpu>(); }},
+    {"pos2", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->rightHPos = e->getTextAs<Evpu>(); }},
+    {"line2", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->rightVPos = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
