@@ -42,6 +42,9 @@ constexpr static musxtest::string_view xml = R"xml(
       <altDenTsig/>
       <posMode>timesigPlusPos</posMode>
       <barline>normal</barline>
+      <forRepBar/>
+      <bacRepBar/>
+      <barEnding/>
       <abbrvTime/>
       <useDisplayTimesig/>
       <leftBarline>default</leftBarline>
@@ -124,6 +127,9 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_TRUE(measure1->compositeDenominator);
     EXPECT_EQ(measure1->positioningMode, others::Measure::PositioningType::TimeSigPlusPositioning);
     EXPECT_EQ(measure1->barlineType, others::Measure::BarlineType::Normal);
+    EXPECT_TRUE(measure1->forwardRepeatBar);
+    EXPECT_TRUE(measure1->backwardsRepeatBar);
+    EXPECT_TRUE(measure1->hasEnding);
     EXPECT_TRUE(measure1->abbrvTime);
     EXPECT_TRUE(measure1->useDisplayTimesig);
     EXPECT_EQ(measure1->leftBarlineType, others::Measure::BarlineType::OptionsDefault);
