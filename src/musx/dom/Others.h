@@ -938,6 +938,40 @@ enum class RepeatTriggerType
 };
 
 /**
+ * @class RepeatBack
+ * @brief Represents a repeat-backward marker with positioning and behavior properties.
+ *
+ * The cmper is the cmper of the @ref Measure that has this item.
+ *
+ * This class is identified by the XML node name "repeatBack".
+ */
+class RepeatBack : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit RepeatBack(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    int passNumber{};               ///< Specifies the pass number for the trigger and depends on the value of #trigger. (xml tag is `<actuate>`)
+                                    ///< If #trigger is `UntilPass`, this specifies the number of times to play the section.
+                                    ///< If #trigger is `OnPass`, this specifies the pass on which to jump.
+    int targetValue{};              ///< Absolute or relative measure number, depending on #jumpAction. (xml tag is `<target>`)
+    Evpu leftHPos{};                ///< The horizontal position of the left bracket, relative to the default. (xml tag is `<pos1>`)
+    Evpu leftVPos{};                ///< The vertical position of the lower left bracket, relative to the default. (xml tag is `<line1>`)
+    bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
+    bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    bool resetOnAction{};           ///< "Reset on Repeat Action" (xml tag is `<clrOnChange>`)
+    RepeatActionType jumpAction{};  ///< The jump action for this repeat ending. The automatic jump is to the next ending. (xml tag is `<action>`)
+    RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
+    Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
+    Evpu rightHPos{};               ///< The horizontal position of the upper right bracket, relative to the default. (xml tag is `<pos2>`)
+    Evpu rightVPos{};               ///< The vertical position of the upper right bracket, relative to the default. (xml tag is `<line2>`)
+    
+    constexpr static std::string_view XmlNodeName = "repeatBack"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatBack>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
  * @class RepeatEndingStart
  * @brief Represents a repeat ending start marker in the document.
  *
@@ -954,6 +988,7 @@ public:
     {
     }
 
+    Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
     int targetValue{};              ///< Absolute or relative measure number, depending on #jumpAction. (xml tag is `<nextEnd>`)
     Evpu textHPos{};                ///< The horizontal position of the text relative to #leftHPos. (xml tag is `<textPos>`)
     Evpu leftHPos{};                ///< The horizontal position of the lower left bracket, relative to the default. (xml tag is `<pos1>`)
@@ -970,8 +1005,49 @@ public:
     Evpu rightHPos{};               ///< The horizontal position of the upper right bracket, relative to the default. (xml tag is `<pos2>`)
     Evpu rightVPos{};               ///< The vertical position of the upper right bracket, relative to the default. (xml tag is `<line2>`)
 
+    /// @brief Calculates the number of measures in the ending based on #jumpAction.
+    int calcEndingLength() const;
+
+    /// @brief Calculates if the ending is open or closed, based on a number of factors.
+    ///
+    /// Openness is a visual feature. If true, it means that the ending bracket has a downward stroke on the right.
+    bool calcIsOpen() const;
+
+
+    void integrityCheck()
+    {
+        OthersBase::integrityCheck();
+        if (trigger != RepeatTriggerType::OnPass) {
+            MUSX_INTEGRITY_ERROR("RepeatEndingStart at measure " + std::to_string(getCmper()) + " has an unexpected trigger value " +
+                std::to_string(int(trigger)));
+        }
+    }
+
     constexpr static std::string_view XmlNodeName = "repeatEndingStart"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatEndingStart>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class RepeatPassList
+ * @brief Represents a list of repeat ending numbers for a @ref RepeatEndingStart instance.
+ *
+ * The cmper is the cmper of the @ref Measure that has this item.
+ *
+ * This class is identified by the XML node name "repeatPassList".
+ */
+class RepeatPassList : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit RepeatPassList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<int> m_endingNumbers; ///< List of repeat ending numbers extracted from xml `<act>` elements.
+
+    constexpr static std::string_view XmlNodeName = "repeatPassList"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatPassList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

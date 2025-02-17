@@ -677,6 +677,71 @@ std::vector<std::shared_ptr<others::PartDefinition>> others::PartDefinition::get
     return result;
 }
 
+// *****************************
+// ***** RepeatEndingStart *****
+// *****************************
+
+int others::RepeatEndingStart::calcEndingLength() const
+{
+    int maxLength = std::numeric_limits<int>::max();
+
+    switch (jumpAction) {
+        case RepeatActionType::JumpAuto:
+            break;
+        case RepeatActionType::JumpAbsolute:
+            maxLength = targetValue - getCmper();
+            break;
+        case RepeatActionType::JumpRelative:
+            maxLength = targetValue;
+            break;
+        default:
+            return 1;
+    }
+    if (maxLength <= 0) {
+        return 1;
+    }
+    Cmper x = getCmper() + 1;
+    while (true) {
+        auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), x);
+        if (!measure) {
+            return 1;
+        }
+        if (measure->hasEnding && getDocument()->getOthers()->get<others::RepeatEndingStart>(getPartId(), x)) {
+            break;
+        }
+        if (--maxLength <= 0) {
+            break;
+        }
+        x++;
+    }
+    return x - getCmper();
+}
+
+bool others::RepeatEndingStart::calcIsOpen() const
+{
+    if (endLineVPos < 0) {
+        return false;
+    }
+    if (jumpAction == others::RepeatActionType::NoJump) {
+        return true;
+    }
+    for (Cmper x = getCmper(); true; x++) {
+        auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), x);
+        if (!measure) {
+            break;
+        }
+        if (measure->backwardsRepeatBar) {
+            if (auto backRepeat = getDocument()->getOthers()->get<others::RepeatBack>(getPartId(), x)) {
+                if (auto repeatOptions = getDocument()->getOptions()->get<options::RepeatOptions>()) {
+                    return (backRepeat->leftVPos - backRepeat->rightVPos) == repeatOptions->bracketHookLen;
+                }
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 // *****************
 // ***** Staff *****
 // *****************

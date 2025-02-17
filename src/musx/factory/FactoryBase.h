@@ -338,7 +338,7 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
 }
 
 /// @brief creates a vector of type T from a set of nodes with identical tags within a parent tag. (See the `<customStaff>` node in @ref others::Staff)
-/// @tparam T the type of the vector. Currently only fundamental types are supported.
+/// @tparam T the type of the vector.
 /// @param e The xml node containing the array.
 /// @param elementNodeName The nodename for each element. In the case of `<customStaff>` this nodename is "staffLine".
 /// @return The populated array.
@@ -351,7 +351,11 @@ static std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::s
             MUSX_UNKNOWN_XML("Unknown tag <" + child->getTagName() + "> while processing embedded xml array <" + e->getTagName() + ">");
             continue;
         }
-        result.push_back(child->getTextAs<T>());
+        if constexpr (std::is_fundamental_v<T> || std::is_same_v<T, std::string>) {
+            result.push_back(child->getTextAs<T>());
+        } else {
+            result.push_back(FieldPopulator<T>::createAndPopulate(child));
+        }
     }
     return result;
 }

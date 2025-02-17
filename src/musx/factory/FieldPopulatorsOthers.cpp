@@ -424,7 +424,23 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
     {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(RepeatBack, {
+    {"actuate", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->passNumber = e->getTextAs<int>(); }},
+    {"target", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->targetValue = e->getTextAs<int>(); }},
+    {"pos1", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->leftHPos = e->getTextAs<Evpu>(); }},
+    {"line1", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->leftVPos = e->getTextAs<Evpu>(); }},
+    {"indivPlac", [](const XmlElementPtr&, const std::shared_ptr<RepeatBack>& i) { i->individualPlacement = true; }},
+    {"topStaffOnly", [](const XmlElementPtr&, const std::shared_ptr<RepeatBack>& i) { i->topStaffOnly = true; }},
+    {"clrOnChange", [](const XmlElementPtr&, const std::shared_ptr<RepeatBack>& i) { i->resetOnAction = true; }},
+    {"action", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->jumpAction = toEnum<RepeatActionType>(e->getTextTrimmed()); }},
+    {"trigger", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->trigger = toEnum<RepeatTriggerType>(e->getTextTrimmed()); }},
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+    {"pos2", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->rightHPos = e->getTextAs<Evpu>(); }},
+    {"line2", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->rightVPos = e->getTextAs<Evpu>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(RepeatEndingStart, {
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->staffList = e->getTextAs<Cmper>(); }},
     {"nextEnd", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->targetValue = e->getTextAs<int>(); }},
     {"textPos", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->textHPos = e->getTextAs<Evpu>(); }},
     {"pos1", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->leftHPos = e->getTextAs<Evpu>(); }},
@@ -438,6 +454,10 @@ MUSX_XML_ELEMENT_ARRAY(RepeatEndingStart, {
     {"textLine", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->textVPos = e->getTextAs<Evpu>(); }},
     {"pos2", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->rightHPos = e->getTextAs<Evpu>(); }},
     {"line2", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->rightVPos = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
+    {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->m_endingNumbers.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
