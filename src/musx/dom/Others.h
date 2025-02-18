@@ -1028,6 +1028,28 @@ public:
 };
 
 /**
+ * @class RepeatEndingText
+ * @brief Represents the text associated with a @ref RepeatEndingStart.
+ *
+ * This is an optional value. If it is omitted, the ending shows a standard number list.
+ *
+ * This class has the same #Cmper as its @ref RepeatEndingStart and is the @ref MeasCmper of the ending.
+ *
+ * This class is identified by the XML node name "repeatEndingText".
+ */
+class RepeatEndingText : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit RepeatEndingText(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    std::string text; ///< The text 
+
+    constexpr static std::string_view XmlNodeName = "repeatEndingText"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatEndingText>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class RepeatPassList
  * @brief Represents a list of repeat ending numbers for a @ref RepeatEndingStart instance.
  *

@@ -102,9 +102,9 @@ MUSX_XML_ELEMENT_ARRAY(MusicRange, {
 MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
-    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e); }},
     {"indivPos", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->indivPos = true; }},
-    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e->getTextTrimmed()); }},
+    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e); }},
     {"expand", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->expand = true; }},
 });
     

@@ -236,6 +236,13 @@ EnumClass toEnum(const FromClass& value)
         return EnumMapper<EnumClass, FromClass>::xmlToEnum(value);
     }
 }
+
+template<typename EnumClass>
+EnumClass toEnum(const ::musx::xml::XmlElementPtr& e)
+{
+    return toEnum<EnumClass>(e->getTextTrimmed());
+}
+
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
 const ::musx::xml::XmlElementArray<Type>& Type::xmlMappingArray() { \
     static const ::musx::xml::XmlElementArray<Type> instance = __VA_ARGS__; \

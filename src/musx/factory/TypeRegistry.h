@@ -201,6 +201,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::Page,
     dom::others::RepeatBack,
     dom::others::RepeatEndingStart,
+    dom::others::RepeatEndingText,
     dom::others::RepeatPassList,
     dom::others::StaffSystem,
     dom::others::Staff,
