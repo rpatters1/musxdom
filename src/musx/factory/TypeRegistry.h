@@ -213,6 +213,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TempoChange,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
+    dom::others::TextRepeatDef,
     dom::others::TextRepeatEnclosure,
     dom::others::PartDefinition,
     dom::others::PartGlobals,

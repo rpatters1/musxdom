@@ -170,10 +170,10 @@ MUSX_XML_ENUM_MAPPING(VerticalMeasExprAlign, {
     {"belowStaffOrEntry", VerticalMeasExprAlign::BelowStaffOrEntry}
 });
 
-MUSX_XML_ENUM_MAPPING(HorizontalExprJustification, {
-    {"left", HorizontalExprJustification::Left},
-    {"center", HorizontalExprJustification::Center},
-    {"right", HorizontalExprJustification::Right}
+MUSX_XML_ENUM_MAPPING(HorizontalTextJustification, {
+    {"left", HorizontalTextJustification::Left},
+    {"center", HorizontalTextJustification::Center},
+    {"right", HorizontalTextJustification::Right}
 });
 
 MUSX_XML_ENUM_MAPPING(MarkingCategory::CategoryType, {
@@ -184,6 +184,12 @@ MUSX_XML_ENUM_MAPPING(MarkingCategory::CategoryType, {
     {"techniqueText", MarkingCategory::CategoryType::TechniqueText},
     {"rehearsalMarks", MarkingCategory::CategoryType::RehearsalMarks},
     {"misc", MarkingCategory::CategoryType::Misc}
+});
+
+MUSX_XML_ENUM_MAPPING(TextRepeatDef::PoundReplaceOption, {
+    {"passes", TextRepeatDef::PoundReplaceOption::Passes}, // This is the default and may not appear in the XML, but the string in the Finale app binary
+    {"repeatID", TextRepeatDef::PoundReplaceOption::RepeatID},
+    {"measNum", TextRepeatDef::PoundReplaceOption::MeasurNumber},
 });
 
 } // namespace factory
@@ -252,7 +258,7 @@ MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
         { i->numberFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
     {"horzAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzAlign = toEnum<HorizontalMeasExprAlign>(e); }},
     {"vertAlign", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertAlign = toEnum<VerticalMeasExprAlign>(e); }},
-    {"justification", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->justification = toEnum<HorizontalExprJustification>(e); }},
+    {"justification", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->justification = toEnum<HorizontalTextJustification>(e); }},
     {"horzOffset", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
     {"vertOffsetBaseline", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertOffsetBaseline = e->getTextAs<Evpu>(); }},
     {"vertOffsetEntry", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->vertOffsetEntry = e->getTextAs<Evpu>(); }},
@@ -479,7 +485,7 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"playType", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->playbackType = toEnum<PlaybackType>(e); }},
     {"horzMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->horzMeasExprAlign = toEnum<HorizontalMeasExprAlign>(e); }},
     {"vertMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->vertMeasExprAlign = toEnum<VerticalMeasExprAlign>(e); }},
-    {"horzExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->horzExprJustification = toEnum<HorizontalExprJustification>(e); }},
+    {"horzExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->horzExprJustification = toEnum<HorizontalTextJustification>(e); }},
     {"measXAdjust", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->measXAdjust = e->getTextAs<Evpu>(); }},
     {"yAdjustEntry", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustEntry = e->getTextAs<Evpu>(); }},
     {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
@@ -613,7 +619,7 @@ MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
     {"createdByHp", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->createdByHp = true; }},
     {"playType", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->playbackType = toEnum<PlaybackType>(e); }},
     {"horzMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->horzMeasExprAlign = toEnum<HorizontalMeasExprAlign>(e); }},
-    {"horzExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->horzExprJustification = toEnum<HorizontalExprJustification>(e); }},
+    {"horzExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->horzExprJustification = toEnum<HorizontalTextJustification>(e); }},
     {"vertMeasExprAlign", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->vertMeasExprAlign = toEnum<VerticalMeasExprAlign>(e); }},
     {"measXAdjust", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->measXAdjust = e->getTextAs<Evpu>(); }},
     {"yAdjustEntry", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->yAdjustEntry = e->getTextAs<Evpu>(); }},
@@ -621,6 +627,16 @@ MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
     {"useCategoryFonts", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->useCategoryFonts = true; }},
     {"useCategoryPos", [](const XmlElementPtr&, const std::shared_ptr<TextExpressionDef>& i) { i->useCategoryPos = true; }},
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->description = e->getText(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TextRepeatDef, {
+    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    {"newEnclosure", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->hasEnclosure = true; }},
+    {"useThisFont", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->useThisFont = true; }},
+    {"poundReplace", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->poundReplace = toEnum<TextRepeatDef::PoundReplaceOption>(e); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->justification = toEnum<HorizontalTextJustification>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TimeCompositeLower::CompositeItem, {

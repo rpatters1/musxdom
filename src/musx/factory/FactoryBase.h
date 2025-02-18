@@ -266,24 +266,29 @@ struct ResolverContainer<Type> { \
 template <typename T>
 struct FieldPopulator : public FactoryBase
 {
+    static void populateField(const std::shared_ptr<T>& instance, const XmlElementPtr& fieldElement)
+    {
+        auto it = elementXref().find(fieldElement->getTagName());
+        if (it != elementXref().end()) {
+            std::get<1>(*it)(fieldElement, instance);
+        } else {
+            const bool requireFields = [instance]() {
+                if constexpr (std::is_base_of_v<Base, T>) {
+                    return instance->requireAllFields();
+                } else {
+                    return true;
+                }
+            }();
+            if (requireFields) {
+                MUSX_UNKNOWN_XML("xml element <" + fieldElement->getParent()->getTagName() + "> has child <" + fieldElement->getTagName() + "> which is not in the element list.");
+            }
+        }    
+    }
+
     static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element)
     {
         for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
-            auto it = elementXref().find(child->getTagName());
-            if (it != elementXref().end()) {
-                std::get<1>(*it)(child, instance);
-            } else {
-                const bool requireFields = [instance]() {
-                    if constexpr (std::is_base_of_v<Base, T>) {
-                        return instance->requireAllFields();
-                    } else {
-                        return true;
-                    }
-                }();
-                if (requireFields) {
-                    MUSX_UNKNOWN_XML("xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.");
-                }
-            }
+            populateField(instance, child);
         }
         if constexpr (std::is_base_of_v<Base, T>) {
             instance->integrityCheck();
@@ -358,8 +363,10 @@ static std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::s
             MUSX_UNKNOWN_XML("Unknown tag <" + child->getTagName() + "> while processing embedded xml array <" + e->getTagName() + ">");
             continue;
         }
-        if constexpr (std::is_fundamental_v<T> || std::is_same_v<T, std::string>) {
+        if constexpr (std::is_fundamental_v<T>) {
             result.push_back(child->getTextAs<T>());
+        } else if constexpr (std::is_same_v<T, std::string>) {
+            result.push_back(child->getText());
         } else {
             result.push_back(FieldPopulator<T>::createAndPopulate(child));
         }

@@ -271,10 +271,10 @@ enum class VerticalMeasExprAlign
 };
 
 /**
- * @enum HorizontalExprJustification
+ * @enum HorizontalTextJustification
  * @brief Specifies the horizontal alignment for text expressions and marking categories.
  */
-enum class HorizontalExprJustification
+enum class HorizontalTextJustification
 {
     Left,    ///< Justified left.
     Center,  ///< Justified center.
@@ -318,7 +318,7 @@ public:
 
     HorizontalMeasExprAlign horzAlign{};     ///< Horizontal alignment for the marking
     VerticalMeasExprAlign vertAlign{};       ///< Vertical alignment for the marking
-    HorizontalExprJustification justification{}; ///< Justification for the text within the marking
+    HorizontalTextJustification justification{}; ///< Justification for the text within the marking
 
     // Vertical and horizontal offsets for positioning adjustments
     Evpu horzOffset{};         ///< Additional horizontal offset
@@ -1102,7 +1102,7 @@ public:
     PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
     HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
     VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
-    HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    HorizontalTextJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
     Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
     Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
@@ -1540,7 +1540,7 @@ public:
     PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
     HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
     VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
-    HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    HorizontalTextJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
     Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
     Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
@@ -1580,10 +1580,48 @@ public:
 };
 
 /**
+ * @class TextRepeatDef
+ * @brief Defines text repeat elements with font styling and justification.
+ *
+ * Text repeat elements are indications like "D.S. al Fine", "Segno", or "To Coda" that
+ * have playback jumps associated with them.
+ *
+ * The cmper is the unique identifier used in the document.
+ *
+ * This class is identified by the XML node name "textRepeatDef".
+ */
+class TextRepeatDef : public OthersBase {
+public:
+    /** @brief Enum for poundReplace options */
+    enum class PoundReplaceOption
+    {
+        Passes,             ///< "Number of Times Played" (the default: may never appear in xml)
+        RepeatID,           ///< "Text Repeat ID in Target" (xml value is "repeatID")
+        MeasurNumber        ///< "Measure Number in Target" (xml value is "measNum")
+    };
+
+    /** @brief Constructor function */
+    explicit TextRepeatDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper), font(new FontInfo(document)) {}
+
+    // Public properties corresponding to the XML structure
+    std::shared_ptr<FontInfo> font;                 ///< The font for this text repeat. (xml nodes `<fontID>`, `<fontSize>`, and `<efx>`)
+    bool hasEnclosure{};                            ///< Whether the text repeat has an enclosure. (xml node is `<newEnclosure>`)
+    bool useThisFont{};                             ///< "Use This Font" (for the `#` substitution)
+    PoundReplaceOption poundReplace{};              ///< "Replace # With" choice.
+    HorizontalTextJustification justification{};    ///< Although called "justification" in Finale's U.I, this value is used
+                                                    ///< for both the alignment of the text within the measure as well as its justification.
+                                                    ///< (xml node is `<justify >`)
+
+    constexpr static std::string_view XmlNodeName = "textRepeatDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextRepeatDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class TextRepeatEnclosure
  * @brief The enclosure for a text expression (if it exists)
  *
- * The cmper is the same as for @ref TextRepeateDef.
+ * The cmper is the same as for @ref TextRepeatDef.
  *
  * This class is identified by the XML node name "textRepeatEnclosure".
  */
