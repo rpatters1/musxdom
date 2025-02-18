@@ -26,6 +26,7 @@
 #include <functional>
 #include <numeric>
 #include <algorithm>
+#include <cmath>
 
  // This header includes method implementations that need to see all the classes in the dom
 
