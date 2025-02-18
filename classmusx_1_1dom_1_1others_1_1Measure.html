@@ -95,6 +95,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1Measure.
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classmusx_1_1dom_1_1others_1_1Measure-members.html">List of all members</a>  </div>
@@ -182,6 +183,19 @@ Public Member Functions</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShouldShowFullNames</b> () const</td></tr>
 <tr class="memdesc:a9ff1882e9350038250970527105eebc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if a measure should show full names vs. abbreviated names. <br /></td></tr>
 <tr class="separator:a9ff1882e9350038250970527105eebc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b892fb2143602bcbb3e21be8b4a9e46" id="r_a7b892fb2143602bcbb3e21be8b4a9e46"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a7b892fb2143602bcbb3e21be8b4a9e46">calcDisplayNumber</a> () const</td></tr>
+<tr class="memdesc:a7b892fb2143602bcbb3e21be8b4a9e46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the visible number of the measure, based on the first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> that contains it.  <br /></td></tr>
+<tr class="separator:a7b892fb2143602bcbb3e21be8b4a9e46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76e611f8b3a5802f4f9f1bcc503e338d" id="r_a76e611f8b3a5802f4f9f1bcc503e338d"><td class="memItemLeft" align="right" valign="top"><a id="a76e611f8b3a5802f4f9f1bcc503e338d" name="a76e611f8b3a5802f4f9f1bcc503e338d"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createTimeSignature</b> () const</td></tr>
+<tr class="memdesc:a76e611f8b3a5802f4f9f1bcc503e338d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a shared pointer to an instance of the <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> for this measure. <br /></td></tr>
+<tr class="separator:a76e611f8b3a5802f4f9f1bcc503e338d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e4e4d80cd5e5ceba68d746a9564298a" id="r_a4e4e4d80cd5e5ceba68d746a9564298a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a4e4e4d80cd5e5ceba68d746a9564298a">createDisplayTimeSignature</a> () const</td></tr>
+<tr class="memdesc:a4e4e4d80cd5e5ceba68d746a9564298a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a shared pointer to an instance of the display <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> for this measure.  <br /></td></tr>
+<tr class="separator:a4e4e4d80cd5e5ceba68d746a9564298a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6da7a3c1d85a2118427af940b352cffe" id="r_a6da7a3c1d85a2118427af940b352cffe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a6da7a3c1d85a2118427af940b352cffe">integrityCheck</a> () override</td></tr>
+<tr class="memdesc:a6da7a3c1d85a2118427af940b352cffe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:a6da7a3c1d85a2118427af940b352cffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a205d8bf3a0e7dec6d304b59dba0f9245" id="r_a205d8bf3a0e7dec6d304b59dba0f9245"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a205d8bf3a0e7dec6d304b59dba0f9245">requireAllFields</a> () const override</td></tr>
 <tr class="separator:a205d8bf3a0e7dec6d304b59dba0f9245"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1OthersBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1OthersBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">musx::dom::OthersBase</a></td></tr>
@@ -219,9 +233,13 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (const std::string &amp;nodeName)</td></tr>
 <tr class="memdesc:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a shared node for this instance. <br /></td></tr>
 <tr class="separator:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a368bf85332ce10bac71833627f858905"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">integrityCheck</a> ()</td></tr>
-<tr class="memdesc:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
-<tr class="separator:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ac582ef13d3e8e32836116b698a42fbea" id="r_ac582ef13d3e8e32836116b698a42fbea"><td class="memItemLeft" align="right" valign="top"><a id="ac582ef13d3e8e32836116b698a42fbea" name="ac582ef13d3e8e32836116b698a42fbea"></a>
+static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
+<tr class="memdesc:ac582ef13d3e8e32836116b698a42fbea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
+<tr class="separator:ac582ef13d3e8e32836116b698a42fbea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -229,6 +247,10 @@ Public Attributes</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>width</b> {}</td></tr>
 <tr class="memdesc:a1902e527f91f6a490c30d41c69ad5aa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Ideal" measure width in Evpu. <a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html" title="Represents the attributes of a page in the page layout.">Page</a> layout determines actual width. <br /></td></tr>
 <tr class="separator:a1902e527f91f6a490c30d41c69ad5aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a977c8eb5fadec06c6c2210945223ef52" id="r_a977c8eb5fadec06c6c2210945223ef52"><td class="memItemLeft" align="right" valign="top"><a id="a977c8eb5fadec06c6c2210945223ef52" name="a977c8eb5fadec06c6c2210945223ef52"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>keySignature</b></td></tr>
+<tr class="memdesc:a977c8eb5fadec06c6c2210945223ef52"><td class="mdescLeft">&#160;</td><td class="mdescRight">the key signature on this measure. Guaranteed to be non-null. (xml node is <code>&lt;keySig&gt;</code>) <br /></td></tr>
+<tr class="separator:a977c8eb5fadec06c6c2210945223ef52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1aa6f964196daa170dc9e875368376ad" id="r_a1aa6f964196daa170dc9e875368376ad"><td class="memItemLeft" align="right" valign="top"><a id="a1aa6f964196daa170dc9e875368376ad" name="a1aa6f964196daa170dc9e875368376ad"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>beats</b> {}</td></tr>
 <tr class="memdesc:a1aa6f964196daa170dc9e875368376ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of beats in the measure or the Cmper to a <code>timesigUpper</code> composite numerator list. <br /></td></tr>
@@ -319,8 +341,24 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>evenlyAcrossMeasure</
 <tr class="separator:a5781a46eeda907460083218b14a76892"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0e6f062a3acd0b2f9588302bb435fc9" id="r_aa0e6f062a3acd0b2f9588302bb435fc9"><td class="memItemLeft" align="right" valign="top"><a id="aa0e6f062a3acd0b2f9588302bb435fc9" name="aa0e6f062a3acd0b2f9588302bb435fc9"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasExpression</b> {}</td></tr>
-<tr class="memdesc:aa0e6f062a3acd0b2f9588302bb435fc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates if the measure has expressions. (xml node is <code>&lt;hasExpr&gt;</code>) <br /></td></tr>
+<tr class="memdesc:aa0e6f062a3acd0b2f9588302bb435fc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates if the measure has an expression assigned. See <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html">MeasureExprAssign</a>. (xml node is <code>&lt;hasExpr&gt;</code>) <br /></td></tr>
 <tr class="separator:aa0e6f062a3acd0b2f9588302bb435fc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8fd92ae051498119c444c7552714ba9" id="r_ab8fd92ae051498119c444c7552714ba9"><td class="memItemLeft" align="right" valign="top"><a id="ab8fd92ae051498119c444c7552714ba9" name="ab8fd92ae051498119c444c7552714ba9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>forwardRepeatBar</b></td></tr>
+<tr class="memdesc:ab8fd92ae051498119c444c7552714ba9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates a forward repeat bar on this measure. (xml node is <code>&lt;forRepBar&gt;</code>) <br /></td></tr>
+<tr class="separator:ab8fd92ae051498119c444c7552714ba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6017f85a0661773313e0d2a639cddc2" id="r_af6017f85a0661773313e0d2a639cddc2"><td class="memItemLeft" align="right" valign="top"><a id="af6017f85a0661773313e0d2a639cddc2" name="af6017f85a0661773313e0d2a639cddc2"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>backwardsRepeatBar</b></td></tr>
+<tr class="memdesc:af6017f85a0661773313e0d2a639cddc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates a forward repeat bar on this measure. (xml node is <code>&lt;bacRepBar&gt;</code>) <br /></td></tr>
+<tr class="separator:af6017f85a0661773313e0d2a639cddc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43a88792d526bd407cb70c8864f173c7" id="r_a43a88792d526bd407cb70c8864f173c7"><td class="memItemLeft" align="right" valign="top"><a id="a43a88792d526bd407cb70c8864f173c7" name="a43a88792d526bd407cb70c8864f173c7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasEnding</b></td></tr>
+<tr class="memdesc:a43a88792d526bd407cb70c8864f173c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates the presence of a repeat ending. (xml node is <code>&lt;barEnding&gt;</code>) <br /></td></tr>
+<tr class="separator:a43a88792d526bd407cb70c8864f173c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab953b604b91d28d8b813730637f4723f" id="r_ab953b604b91d28d8b813730637f4723f"><td class="memItemLeft" align="right" valign="top"><a id="ab953b604b91d28d8b813730637f4723f" name="ab953b604b91d28d8b813730637f4723f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTextRepeat</b></td></tr>
+<tr class="memdesc:ab953b604b91d28d8b813730637f4723f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates the presence of one or more text repeat assigments. (xml node is <code>&lt;txtRepeats&gt;</code>) <br /></td></tr>
+<tr class="separator:ab953b604b91d28d8b813730637f4723f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51c4c7aeee163eeffceaf01e42d7646e" id="r_a51c4c7aeee163eeffceaf01e42d7646e"><td class="memItemLeft" align="right" valign="top"><a id="a51c4c7aeee163eeffceaf01e42d7646e" name="a51c4c7aeee163eeffceaf01e42d7646e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>compositeNumerator</b> {}</td></tr>
 <tr class="memdesc:a51c4c7aeee163eeffceaf01e42d7646e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates a composite numerator for the time signature. (xml node is <code>&lt;altNumTsig&gt;</code>) <br /></td></tr>
@@ -354,10 +392,6 @@ Static Public Attributes</h2></td></tr>
 static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>XmlNodeName</b> = &quot;measSpec&quot;</td></tr>
 <tr class="memdesc:a846c096ed3c3ae70eba2a4e4404ac94d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The XML node name for this type. <br /></td></tr>
 <tr class="separator:a846c096ed3c3ae70eba2a4e4404ac94d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebd8235f9ceae13f399d7753c786609f" id="r_aebd8235f9ceae13f399d7753c786609f"><td class="memItemLeft" align="right" valign="top"><a id="aebd8235f9ceae13f399d7753c786609f" name="aebd8235f9ceae13f399d7753c786609f"></a>
-static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>XmlMappingArray</b></td></tr>
-<tr class="memdesc:aebd8235f9ceae13f399d7753c786609f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
-<tr class="separator:aebd8235f9ceae13f399d7753c786609f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -523,6 +557,90 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7b892fb2143602bcbb3e21be8b4a9e46" name="a7b892fb2143602bcbb3e21be8b4a9e46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b892fb2143602bcbb3e21be8b4a9e46">&#9670;&#160;</a></span>calcDisplayNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::others::Measure::calcDisplayNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the visible number of the measure, based on the first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> that contains it. </p>
+<p>Depending on the display options of the found <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a>, the number may or may not appear in the score. And if it does, it may not appear as a number. </p>
+
+</div>
+</div>
+<a id="a4e4e4d80cd5e5ceba68d746a9564298a" name="a4e4e4d80cd5e5ceba68d746a9564298a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e4e4d80cd5e5ceba68d746a9564298a">&#9670;&#160;</a></span>createDisplayTimeSignature()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> &gt; musx::dom::others::Measure::createDisplayTimeSignature </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a shared pointer to an instance of the display <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> for this measure. </p>
+<dl class="section return"><dt>Returns</dt><dd>The diplay time signature if there is one, otherwise <code>nullptr</code>. </dd></dl>
+
+</div>
+</div>
+<a id="a6da7a3c1d85a2118427af940b352cffe" name="a6da7a3c1d85a2118427af940b352cffe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6da7a3c1d85a2118427af940b352cffe">&#9670;&#160;</a></span>integrityCheck()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::others::Measure::integrityCheck </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes. </p>
+<p>The default implementation should always be called inside an overridden implementation.</p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html" title="Exception for integrity errors. (Used when MUSX_THROW_ON_INTEGRITY_CHECK_FAIL is defined....">musx::dom::integrity_error</a></td><td>if there is a problem. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
+
+</div>
+</div>
 <a id="a205d8bf3a0e7dec6d304b59dba0f9245" name="a205d8bf3a0e7dec6d304b59dba0f9245"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a205d8bf3a0e7dec6d304b59dba0f9245">&#9670;&#160;</a></span>requireAllFields()</h2>
 

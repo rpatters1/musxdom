@@ -10,6 +10,7 @@ var hierarchy =
       ] ],
       [ "musx::dom::Entry", "classmusx_1_1dom_1_1Entry.html", null ],
       [ "musx::dom::FontInfo", "classmusx_1_1dom_1_1FontInfo.html", null ],
+      [ "musx::dom::KeySignature", "classmusx_1_1dom_1_1KeySignature.html", null ],
       [ "musx::dom::Note", "classmusx_1_1dom_1_1Note.html", null ],
       [ "musx::dom::OptionsBase", "classmusx_1_1dom_1_1OptionsBase.html", [
         [ "musx::dom::options::AccidentalOptions", "classmusx_1_1dom_1_1options_1_1AccidentalOptions.html", null ],
@@ -26,6 +27,7 @@ var hierarchy =
         [ "musx::dom::options::MiscOptions", "classmusx_1_1dom_1_1options_1_1MiscOptions.html", null ],
         [ "musx::dom::options::MultimeasureRestOptions", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html", null ],
         [ "musx::dom::options::MusicSpacingOptions", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html", null ],
+        [ "musx::dom::options::MusicSymbolOptions", "classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html", null ],
         [ "musx::dom::options::PageFormatOptions", "classmusx_1_1dom_1_1options_1_1PageFormatOptions.html", null ],
         [ "musx::dom::options::PianoBraceBracketOptions", "classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html", null ],
         [ "musx::dom::options::RepeatOptions", "classmusx_1_1dom_1_1options_1_1RepeatOptions.html", null ],
@@ -48,6 +50,7 @@ var hierarchy =
         [ "musx::dom::others::MarkingCategory", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html", null ],
         [ "musx::dom::others::MarkingCategoryName", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName.html", null ],
         [ "musx::dom::others::Measure", "classmusx_1_1dom_1_1others_1_1Measure.html", null ],
+        [ "musx::dom::others::MeasureExprAssign", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html", null ],
         [ "musx::dom::others::MeasureNumberRegion", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html", null ],
         [ "musx::dom::others::MultiStaffGroupId", "classmusx_1_1dom_1_1others_1_1MultiStaffGroupId.html", null ],
         [ "musx::dom::others::MultiStaffInstrumentGroup", "classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html", null ],
@@ -59,14 +62,25 @@ var hierarchy =
         [ "musx::dom::others::Page", "classmusx_1_1dom_1_1others_1_1Page.html", null ],
         [ "musx::dom::others::PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", null ],
         [ "musx::dom::others::PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", null ],
+        [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
+        [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
+        [ "musx::dom::others::RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", null ],
+        [ "musx::dom::others::RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", null ],
+        [ "musx::dom::others::ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", null ],
         [ "musx::dom::others::Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", [
           [ "musx::dom::others::StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", [
             [ "musx::dom::others::StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", null ]
           ] ]
         ] ],
         [ "musx::dom::others::StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", null ],
+        [ "musx::dom::others::TempoChange", "classmusx_1_1dom_1_1others_1_1TempoChange.html", null ],
         [ "musx::dom::others::TextBlock", "classmusx_1_1dom_1_1others_1_1TextBlock.html", null ],
-        [ "musx::dom::others::TextExpressionDef", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html", null ]
+        [ "musx::dom::others::TextExpressionDef", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html", null ],
+        [ "musx::dom::others::TextRepeatAssign", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html", null ],
+        [ "musx::dom::others::TextRepeatDef", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html", null ],
+        [ "musx::dom::others::TextRepeatText", "classmusx_1_1dom_1_1others_1_1TextRepeatText.html", null ],
+        [ "musx::dom::others::TimeCompositeLower", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower.html", null ],
+        [ "musx::dom::others::TimeCompositeUpper", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html", null ]
       ] ],
       [ "musx::dom::TextsBase", "classmusx_1_1dom_1_1TextsBase.html", [
         [ "musx::dom::texts::BlockText", "classmusx_1_1dom_1_1texts_1_1BlockText.html", null ],
@@ -78,11 +92,14 @@ var hierarchy =
         [ "musx::dom::texts::LyricsVerse", "classmusx_1_1dom_1_1texts_1_1LyricsVerse.html", null ],
         [ "musx::dom::texts::SmartShapeText", "classmusx_1_1dom_1_1texts_1_1SmartShapeText.html", null ]
       ] ],
+      [ "musx::dom::TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", null ],
       [ "musx::dom::options::ClefOptions::ClefDef", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html", null ],
       [ "musx::dom::others::MeasureNumberRegion::ScorePartData", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html", null ],
       [ "musx::dom::others::StaffStyle::Masks", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html", null ]
     ] ],
     [ "musx::dom::details::StaffGroup::Bracket", "classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html", null ],
+    [ "musx::dom::others::TimeCompositeLower::CompositeItem", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower_1_1CompositeItem.html", null ],
+    [ "musx::dom::others::TimeCompositeUpper::CompositeItem", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html", null ],
     [ "musx::dom::options::SmartShapeOptions::ConnectionStyle", "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ConnectionStyle.html", null ],
     [ "musx::dom::options::TieOptions::ConnectStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html", null ],
     [ "musx::dom::options::TieOptions::ControlPoint", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html", null ],
@@ -156,5 +173,6 @@ var hierarchy =
       [ "musx::factory::unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
       [ "musx::xml::load_error", "classmusx_1_1xml_1_1load__error.html", null ]
     ] ],
+    [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
     [ "musx::factory::TypeRegistry< Types >", "classmusx_1_1factory_1_1TypeRegistry.html", null ]
 ];

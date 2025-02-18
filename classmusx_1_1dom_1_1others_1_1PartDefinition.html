@@ -184,6 +184,14 @@ Static Public Member Functions</h2></td></tr>
 static std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getScore</b> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document)</td></tr>
 <tr class="memdesc:aae068cf4878cfa132b79558af2a9c01a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the instance for the score. <br /></td></tr>
 <tr class="separator:aae068cf4878cfa132b79558af2a9c01a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cd187d1fb4c77b3df98c7a51e51a8cb" id="r_a1cd187d1fb4c77b3df98c7a51e51a8cb"><td class="memItemLeft" align="right" valign="top"><a id="a1cd187d1fb4c77b3df98c7a51e51a8cb" name="a1cd187d1fb4c77b3df98c7a51e51a8cb"></a>
+static std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getInUserOrder</b> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document)</td></tr>
+<tr class="memdesc:a1cd187d1fb4c77b3df98c7a51e51a8cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the linked parts sorted in UI order by <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#a905607c86784a417ba48bbd86cc01f4a" title="Value that determines the order of listed parts in Finale&#39;s UI.">partOrder</a>. <br /></td></tr>
+<tr class="separator:a1cd187d1fb4c77b3df98c7a51e51a8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ea20a43041224fe8848a646df25b59e" id="r_a7ea20a43041224fe8848a646df25b59e"><td class="memItemLeft" align="right" valign="top"><a id="a7ea20a43041224fe8848a646df25b59e" name="a7ea20a43041224fe8848a646df25b59e"></a>
+static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
+<tr class="memdesc:a7ea20a43041224fe8848a646df25b59e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
+<tr class="separator:a7ea20a43041224fe8848a646df25b59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -230,10 +238,6 @@ Static Public Attributes</h2></td></tr>
 static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>XmlNodeName</b> = &quot;partDef&quot;</td></tr>
 <tr class="memdesc:a52a14446ade4b657c96b9f2f83da809f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The XML node name for this type. <br /></td></tr>
 <tr class="separator:a52a14446ade4b657c96b9f2f83da809f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27090ecb6a722a53d5218e3c30c1a38d" id="r_a27090ecb6a722a53d5218e3c30c1a38d"><td class="memItemLeft" align="right" valign="top"><a id="a27090ecb6a722a53d5218e3c30c1a38d" name="a27090ecb6a722a53d5218e3c30c1a38d"></a>
-static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>XmlMappingArray</b></td></tr>
-<tr class="memdesc:a27090ecb6a722a53d5218e3c30c1a38d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
-<tr class="separator:a27090ecb6a722a53d5218e3c30c1a38d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>

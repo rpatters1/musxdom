@@ -94,13 +94,14 @@ $(document).ready(function(){initNavTree('classmusx_1_1util_1_1Fraction.html',''
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classmusx_1_1util_1_1Fraction-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::util::Fraction Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>A class to represent fractions with integer numerator and denominator, automatically reduced to simplest form.  
+<p>A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to simplest form.  
  <a href="classmusx_1_1util_1_1Fraction.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Fraction_8h_source.html">Fraction.h</a>&gt;</code></p>
@@ -108,18 +109,24 @@ $(document).ready(function(){initNavTree('classmusx_1_1util_1_1Fraction.html',''
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3a95749410ef64c078d957fc4d659900" id="r_a3a95749410ef64c078d957fc4d659900"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a3a95749410ef64c078d957fc4d659900">Fraction</a> (int num=0, int den=1)</td></tr>
-<tr class="memdesc:a3a95749410ef64c078d957fc4d659900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer numerator and denominator, automatically reduced to simpl...">Fraction</a> object.  <br /></td></tr>
+<tr class="memdesc:a3a95749410ef64c078d957fc4d659900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> object.  <br /></td></tr>
 <tr class="separator:a3a95749410ef64c078d957fc4d659900"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68692ebe00cecbbf5bafb35ce9b0517b" id="r_a68692ebe00cecbbf5bafb35ce9b0517b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a68692ebe00cecbbf5bafb35ce9b0517b">getNumerator</a> () const</td></tr>
-<tr class="memdesc:a68692ebe00cecbbf5bafb35ce9b0517b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the numerator of the fraction.  <br /></td></tr>
-<tr class="separator:a68692ebe00cecbbf5bafb35ce9b0517b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39f0a0a92193bc4df8de355344a50935" id="r_a39f0a0a92193bc4df8de355344a50935"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a39f0a0a92193bc4df8de355344a50935">getDenominator</a> () const</td></tr>
-<tr class="memdesc:a39f0a0a92193bc4df8de355344a50935"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the denominator of the fraction.  <br /></td></tr>
-<tr class="separator:a39f0a0a92193bc4df8de355344a50935"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3921976d4181277d4ce007819499c2fe" id="r_a3921976d4181277d4ce007819499c2fe"><td class="memItemLeft" align="right" valign="top"><a id="a3921976d4181277d4ce007819499c2fe" name="a3921976d4181277d4ce007819499c2fe"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>calcDuration</b> () const</td></tr>
-<tr class="memdesc:a3921976d4181277d4ce007819499c2fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates duration as a fraction of a whole note. <br /></td></tr>
-<tr class="separator:a3921976d4181277d4ce007819499c2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1723645e98a12e8521ee2e3947f5c9d3" id="r_a1723645e98a12e8521ee2e3947f5c9d3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a1723645e98a12e8521ee2e3947f5c9d3">numerator</a> () const</td></tr>
+<tr class="memdesc:a1723645e98a12e8521ee2e3947f5c9d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the m_numerator of the fraction.  <br /></td></tr>
+<tr class="separator:a1723645e98a12e8521ee2e3947f5c9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af53e537bc24e3db971832947180f2842" id="r_af53e537bc24e3db971832947180f2842"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#af53e537bc24e3db971832947180f2842">denominator</a> () const</td></tr>
+<tr class="memdesc:af53e537bc24e3db971832947180f2842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the m_denominator of the fraction.  <br /></td></tr>
+<tr class="separator:af53e537bc24e3db971832947180f2842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ee9dfe752d220d2e549347326a6338d" id="r_a1ee9dfe752d220d2e549347326a6338d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a1ee9dfe752d220d2e549347326a6338d">quotient</a> () const</td></tr>
+<tr class="memdesc:a1ee9dfe752d220d2e549347326a6338d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the integer (whole number) part of the fraction.  <br /></td></tr>
+<tr class="separator:a1ee9dfe752d220d2e549347326a6338d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13dccd0b177ec18d649c0457efaa2a4e" id="r_a13dccd0b177ec18d649c0457efaa2a4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a13dccd0b177ec18d649c0457efaa2a4e">remainder</a> () const</td></tr>
+<tr class="memdesc:a13dccd0b177ec18d649c0457efaa2a4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the fractional part of the fraction.  <br /></td></tr>
+<tr class="separator:a13dccd0b177ec18d649c0457efaa2a4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8d32afbde20b6f76d2d507e73e7690d" id="r_ab8d32afbde20b6f76d2d507e73e7690d"><td class="memItemLeft" align="right" valign="top"><a id="ab8d32afbde20b6f76d2d507e73e7690d" name="ab8d32afbde20b6f76d2d507e73e7690d"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>calcEduDuration</b> () const</td></tr>
+<tr class="memdesc:ab8d32afbde20b6f76d2d507e73e7690d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates duration as a fraction of a whole note. <br /></td></tr>
+<tr class="separator:ab8d32afbde20b6f76d2d507e73e7690d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b0737b8a8a7e9fc91747cc60ef1b896" id="r_a2b0737b8a8a7e9fc91747cc60ef1b896"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a2b0737b8a8a7e9fc91747cc60ef1b896">operator+</a> (const <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a> &amp;other) const</td></tr>
 <tr class="memdesc:a2b0737b8a8a7e9fc91747cc60ef1b896"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds two fractions.  <br /></td></tr>
 <tr class="separator:a2b0737b8a8a7e9fc91747cc60ef1b896"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,6 +169,15 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>calcDuration</b> ()
 <tr class="memitem:a5a6ba1071971b3a7ede960aa259e5586" id="r_a5a6ba1071971b3a7ede960aa259e5586"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a5a6ba1071971b3a7ede960aa259e5586">operator&gt;=</a> (const <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a> &amp;other) const</td></tr>
 <tr class="memdesc:a5a6ba1071971b3a7ede960aa259e5586"><td class="mdescLeft">&#160;</td><td class="mdescRight">Greater-than-or-equal-to comparison operator.  <br /></td></tr>
 <tr class="separator:a5a6ba1071971b3a7ede960aa259e5586"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65fbf6388d24754200a0b06ed7939d59" id="r_a65fbf6388d24754200a0b06ed7939d59"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a65fbf6388d24754200a0b06ed7939d59">operator bool</a> () const</td></tr>
+<tr class="memdesc:a65fbf6388d24754200a0b06ed7939d59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the fraction is nonzero.  <br /></td></tr>
+<tr class="separator:a65fbf6388d24754200a0b06ed7939d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a5153046569e5a7afecef882fbb11b1ff" id="r_a5153046569e5a7afecef882fbb11b1ff"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a5153046569e5a7afecef882fbb11b1ff">fromEdu</a> (int edu)</td></tr>
+<tr class="memdesc:a5153046569e5a7afecef882fbb11b1ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> from edu.  <br /></td></tr>
+<tr class="separator:a5153046569e5a7afecef882fbb11b1ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -173,7 +189,7 @@ Friends</h2></td></tr>
 <tr class="separator:a9fa0caf55fd2ad525456fc28040185ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A class to represent fractions with integer numerator and denominator, automatically reduced to simplest form. </p>
+<div class="textblock"><p>A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to simplest form. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3a95749410ef64c078d957fc4d659900" name="a3a95749410ef64c078d957fc4d659900"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3a95749410ef64c078d957fc4d659900">&#9670;&#160;</a></span>Fraction()</h2>
@@ -209,17 +225,17 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer numerator and denominator, automatically reduced to simpl...">Fraction</a> object. </p>
+<p>Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">num</td><td>The numerator of the fraction. </td></tr>
-    <tr><td class="paramname">den</td><td>The denominator of the fraction. Defaults to 1. </td></tr>
+    <tr><td class="paramname">num</td><td>The m_numerator of the fraction. </td></tr>
+    <tr><td class="paramname">den</td><td>The m_denominator of the fraction. Defaults to 1. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>if the denominator is zero. </td></tr>
+    <tr><td class="paramname">std::invalid_argument</td><td>if the m_denominator is zero. </td></tr>
   </table>
   </dd>
 </dl>
@@ -227,8 +243,8 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a39f0a0a92193bc4df8de355344a50935" name="a39f0a0a92193bc4df8de355344a50935"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39f0a0a92193bc4df8de355344a50935">&#9670;&#160;</a></span>getDenominator()</h2>
+<a id="af53e537bc24e3db971832947180f2842" name="af53e537bc24e3db971832947180f2842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af53e537bc24e3db971832947180f2842">&#9670;&#160;</a></span>denominator()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -237,7 +253,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int musx::util::Fraction::getDenominator </td>
+          <td class="memname">int musx::util::Fraction::denominator </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -250,13 +266,13 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Gets the denominator of the fraction. </p>
-<dl class="section return"><dt>Returns</dt><dd>The denominator. </dd></dl>
+<p>Gets the m_denominator of the fraction. </p>
+<dl class="section return"><dt>Returns</dt><dd>The m_denominator. </dd></dl>
 
 </div>
 </div>
-<a id="a68692ebe00cecbbf5bafb35ce9b0517b" name="a68692ebe00cecbbf5bafb35ce9b0517b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68692ebe00cecbbf5bafb35ce9b0517b">&#9670;&#160;</a></span>getNumerator()</h2>
+<a id="a5153046569e5a7afecef882fbb11b1ff" name="a5153046569e5a7afecef882fbb11b1ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5153046569e5a7afecef882fbb11b1ff">&#9670;&#160;</a></span>fromEdu()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -265,7 +281,41 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int musx::util::Fraction::getNumerator </td>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a> musx::util::Fraction::fromEdu </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edu</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> from edu. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">edu</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1723645e98a12e8521ee2e3947f5c9d3" name="a1723645e98a12e8521ee2e3947f5c9d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1723645e98a12e8521ee2e3947f5c9d3">&#9670;&#160;</a></span>numerator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::util::Fraction::numerator </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -278,8 +328,36 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Gets the numerator of the fraction. </p>
-<dl class="section return"><dt>Returns</dt><dd>The numerator. </dd></dl>
+<p>Gets the m_numerator of the fraction. </p>
+<dl class="section return"><dt>Returns</dt><dd>The m_numerator. </dd></dl>
+
+</div>
+</div>
+<a id="a65fbf6388d24754200a0b06ed7939d59" name="a65fbf6388d24754200a0b06ed7939d59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65fbf6388d24754200a0b06ed7939d59">&#9670;&#160;</a></span>operator bool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">musx::util::Fraction::operator bool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if the fraction is nonzero. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if the fraction is nonzero, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -562,7 +640,7 @@ Friends</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The resulting fraction after division. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>if attempting to divide by a fraction with a zero numerator. </td></tr>
+    <tr><td class="paramname">std::invalid_argument</td><td>if attempting to divide by a fraction with a zero m_numerator. </td></tr>
   </table>
   </dd>
 </dl>
@@ -603,7 +681,7 @@ Friends</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the updated fraction. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>if attempting to divide by a fraction with a zero numerator. </td></tr>
+    <tr><td class="paramname">std::invalid_argument</td><td>if attempting to divide by a fraction with a zero m_numerator. </td></tr>
   </table>
   </dd>
 </dl>
@@ -785,6 +863,62 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a1ee9dfe752d220d2e549347326a6338d" name="a1ee9dfe752d220d2e549347326a6338d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ee9dfe752d220d2e549347326a6338d">&#9670;&#160;</a></span>quotient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::util::Fraction::quotient </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the integer (whole number) part of the fraction. </p>
+<dl class="section return"><dt>Returns</dt><dd>The integer part of the fraction. </dd></dl>
+
+</div>
+</div>
+<a id="a13dccd0b177ec18d649c0457efaa2a4e" name="a13dccd0b177ec18d649c0457efaa2a4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13dccd0b177ec18d649c0457efaa2a4e">&#9670;&#160;</a></span>remainder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a> musx::util::Fraction::remainder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the fractional part of the fraction. </p>
+<dl class="section return"><dt>Returns</dt><dd>The remainder as a fraction, satisfying -1 &lt; remainder &lt; 1. </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Friends And Related Symbol Documentation</h2>
 <a id="a8ac0bd6d4e4b51fd98127667311124e1" name="a8ac0bd6d4e4b51fd98127667311124e1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8ac0bd6d4e4b51fd98127667311124e1">&#9670;&#160;</a></span>operator&lt;&lt;</h2>
@@ -877,7 +1011,7 @@ Friends</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the input stream. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>if the input format is invalid or the denominator is zero. </td></tr>
+    <tr><td class="paramname">std::invalid_argument</td><td>if the input format is invalid or the m_denominator is zero. </td></tr>
   </table>
   </dd>
 </dl>

@@ -30,6 +30,7 @@ var NAVTREE =
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
         [ "Enumerations", "namespacemembers_enum.html", null ]
@@ -57,19 +58,21 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "BaseClasses_8h_source.html",
-"classmusx_1_1dom_1_1FontInfo.html#ab7780442c860877cb3e329df96d3e49b",
-"classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html#aa61b84d7d0d53119c4f871454bc52db0",
-"classmusx_1_1dom_1_1options_1_1FlagOptions.html",
-"classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ab6d157e089a94a4a63eefed7e58315e1",
-"classmusx_1_1dom_1_1options_1_1RepeatOptions.html#ac189ed8718746f60ec5dcacc7ffdbf2d",
-"classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aaff1cea140b40412884990309ba6f60fa3613a3232318cd676fa0dbe420acd430",
-"classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6a5b469fd01889ec12f1e84c6e66829fc1",
-"classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ac5c5df5abf04583a5bfc03c0fc51fd3f",
-"classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#aae79f49d4bee676244bee1b28f5c3a5a",
-"classmusx_1_1dom_1_1others_1_1Staff.html#aa33a3c157327823a02f0f3a5e69fd76d",
-"classmusx_1_1dom_1_1texts_1_1SmartShapeText.html",
-"functions_func_m.html",
-"structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html"
+"classmusx_1_1dom_1_1KeySignature.html#abaa1f32c8341eb8893b4334596121518",
+"classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cda660698f3fef98974df950c25aae1381c",
+"classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#aa2ef51da199d9528e46156b19efcb928",
+"classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a361418a9dd78bbc1b60806fa9c731e30",
+"classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2a0a5af731ec07aec61842c5d911f2e47f",
+"classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a430b6745fe44164e4c3115ac9d4567df",
+"classmusx_1_1dom_1_1options_1_1TieOptions.html#a6ca3ddcea30621fa17fb9a27e9d548a3",
+"classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256a125e13c182697c5a282e4de6d7999eb0",
+"classmusx_1_1dom_1_1others_1_1Measure.html#a7b892fb2143602bcbb3e21be8b4a9e46",
+"classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a55623e7e6112656fa12d1db860306cc6",
+"classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#accd41925bdc61978a38c9dda60047825",
+"classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a4ef5de9791a40b3918b3e5a2e3686521",
+"classmusx_1_1util_1_1Logger.html#a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf",
+"namespacemembers_type.html",
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#a15c4ceea7ebe34998c32b3487835c231"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

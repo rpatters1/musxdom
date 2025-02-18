@@ -1,14 +1,17 @@
 var searchData=
 [
-  ['mac_0',['mac',['../namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391a1748c0644a50090814d3e170723ccc5c',1,'musx::dom::header::Mac'],['../namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133a1748c0644a50090814d3e170723ccc5c',1,'musx::dom::header::Mac']]],
-  ['manual_1',['manual',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6ae1ba155a9f2e8c3be94020eef32a0301',1,'musx::dom::options::TupletOptions::Manual'],['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fae1ba155a9f2e8c3be94020eef32a0301',1,'musx::dom::others::Measure::Manual'],['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eae1ba155a9f2e8c3be94020eef32a0301',1,'musx::dom::others::Manual'],['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371ae1ba155a9f2e8c3be94020eef32a0301',1,'musx::dom::others::Manual']]],
-  ['measnumb_2',['MeasNumb',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa77a3e8254e5bf7042744cd862e7f6cdd',1,'musx::dom::options::FontOptions']]],
-  ['measurenumber_3',['MeasureNumber',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2ca178e6466c9bc242b36af7aaff7f70923',1,'musx::dom::others']]],
-  ['mensurstriche_4',['Mensurstriche',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a2cf0e2aae310990f7858de64aa3d7cc5a8ed800433922167dd366147f74eef031',1,'musx::dom::details::StaffGroup']]],
-  ['midicontroller_5',['MidiController',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea956fdf889ee22aef997718cf184df533',1,'musx::dom::others']]],
-  ['midipatchchange_6',['MidiPatchChange',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea97afbf6294dafa5f19284fdaaf17d31b',1,'musx::dom::others']]],
-  ['midipitchwheel_7',['MidiPitchWheel',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea79c47475eb13fa4d048eb869c9f7d2e1',1,'musx::dom::others']]],
-  ['misc_8',['Misc',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa74248c725e00bf9fe04df4e35b249a19',1,'musx::dom::others::MarkingCategory']]],
-  ['multimeasrest_9',['MultiMeasRest',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa4be43c50e31a6d791c9fcf20ba698660',1,'musx::dom::options::FontOptions']]],
-  ['music_10',['Music',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa47dcbd834e669233d7eb8a51456ed217',1,'musx::dom::options::FontOptions']]]
+  ['left_0',['left',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#a2cc1bbb5cec26423d5c9e74331c16203a945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::NamePositioning::Left'],['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a38d4a6a6f163ef2b55c680bc5bd79699a945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::MeasureNumberRegion::Left'],['../namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::Left']]],
+  ['leftbarline_1',['LeftBarline',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea5398156d08432d407c11a5f8c200caa4',1,'musx::dom::others']]],
+  ['leftofallnoteheads_2',['LeftOfAllNoteheads',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eabc55b6028fc1941b241fcdb9affe5d30',1,'musx::dom::others']]],
+  ['leftofprimarynotehead_3',['LeftOfPrimaryNotehead',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eabe4cb5775c5080ebd794be39d8a6bb05',1,'musx::dom::others']]],
+  ['leftorright_4',['LeftOrRight',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2ae2019ef175492eabd5e3891c9a3d3398',1,'musx::dom::options::PageFormatOptions']]],
+  ['letternumbers_5',['LetterNumbers',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2ca93be409ac7c9c027ce0a4b75b532bd00',1,'musx::dom::others']]],
+  ['letters_6',['Letters',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cacd8d64cdb20ce5679ebe747747c3cc4c',1,'musx::dom::others']]],
+  ['letterslowercase_7',['LettersLowerCase',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cadc8ea808f0be554472d0f923e5d81f6e',1,'musx::dom::others']]],
+  ['lettersnumberslowercase_8',['LettersNumbersLowerCase',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cab1bd9fa27efd0a1bee5095b30adaf958',1,'musx::dom::others']]],
+  ['littleendian_9',['LittleEndian',['../namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9a3c0ba6b22b526d7fd50c3026435a8c02',1,'musx::dom::header']]],
+  ['lyricchorus_10',['LyricChorus',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa73facf9e257b0adc9a4c9ff2d9368b03',1,'musx::dom::options::FontOptions']]],
+  ['lyricist_11',['Lyricist',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa169f3b62d96188e20330c8d460f5152f',1,'musx::dom::texts::FileInfoText']]],
+  ['lyricsection_12',['LyricSection',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa5976a83fe44aae224342c7172b052b30',1,'musx::dom::options::FontOptions']]],
+  ['lyricverse_13',['LyricVerse',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aaf30266545d18be864d96e014309c764d',1,'musx::dom::options::FontOptions']]]
 ];

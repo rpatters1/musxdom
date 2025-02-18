@@ -96,6 +96,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1MeasureN
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion-members.html">List of all members</a>  </div>
@@ -159,6 +160,16 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>MeasureNumberRegion</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:a57dfd3a9dce3b9ce49a76aa75813f04f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a57dfd3a9dce3b9ce49a76aa75813f04f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79f5f20ebb6da4fea2c176af966c6d38" id="r_a79f5f20ebb6da4fea2c176af966c6d38"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a79f5f20ebb6da4fea2c176af966c6d38">calcIncludesMeasure</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId) const</td></tr>
+<tr class="memdesc:a79f5f20ebb6da4fea2c176af966c6d38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether the input measure is covered by this measure number region.  <br /></td></tr>
+<tr class="separator:a79f5f20ebb6da4fea2c176af966c6d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9553ec7ab9cefff863ce5d9bb1c3bc5" id="r_ac9553ec7ab9cefff863ce5d9bb1c3bc5"><td class="memItemLeft" align="right" valign="top"><a id="ac9553ec7ab9cefff863ce5d9bb1c3bc5" name="ac9553ec7ab9cefff863ce5d9bb1c3bc5"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getStartNumber</b> () const</td></tr>
+<tr class="memdesc:ac9553ec7ab9cefff863ce5d9bb1c3bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the starting measure number for this region. <br /></td></tr>
+<tr class="separator:ac9553ec7ab9cefff863ce5d9bb1c3bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0223c3c51f5f2e600341b9c208496713" id="r_a0223c3c51f5f2e600341b9c208496713"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a0223c3c51f5f2e600341b9c208496713">calcDisplayNumberFor</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId) const</td></tr>
+<tr class="memdesc:a0223c3c51f5f2e600341b9c208496713"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the visible number for a measure id with respect to the region.  <br /></td></tr>
+<tr class="separator:a0223c3c51f5f2e600341b9c208496713"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1OthersBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1OthersBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">musx::dom::OthersBase</a></td></tr>
 <tr class="memitem:a9e07522e2ff27550170838acc995a1b8 inherit pub_methods_classmusx_1_1dom_1_1OthersBase" id="r_a9e07522e2ff27550170838acc995a1b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1OthersBase.html#a9e07522e2ff27550170838acc995a1b8">getCmper</a> () const</td></tr>
 <tr class="memdesc:a9e07522e2ff27550170838acc995a1b8 inherit pub_methods_classmusx_1_1dom_1_1OthersBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <code>cmper</code> key value.  <br /></td></tr>
@@ -201,6 +212,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 <tr class="memdesc:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab2b24fab0700be7611c99e9d37e24fd8" id="r_ab2b24fab0700be7611c99e9d37e24fd8"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">MeasureNumberRegion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#ab2b24fab0700be7611c99e9d37e24fd8">findMeasure</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId)</td></tr>
+<tr class="memdesc:ab2b24fab0700be7611c99e9d37e24fd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the measure number region containing a measure.  <br /></td></tr>
+<tr class="separator:ab2b24fab0700be7611c99e9d37e24fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a335224f209860754bfb02d9bba052e74" id="r_a335224f209860754bfb02d9bba052e74"><td class="memItemLeft" align="right" valign="top"><a id="a335224f209860754bfb02d9bba052e74" name="a335224f209860754bfb02d9bba052e74"></a>
+static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">MeasureNumberRegion</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
+<tr class="memdesc:a335224f209860754bfb02d9bba052e74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
+<tr class="separator:a335224f209860754bfb02d9bba052e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a2709967ac4817b19bfbae408108aaf55" id="r_a2709967ac4817b19bfbae408108aaf55"><td class="memItemLeft" align="right" valign="top"><a id="a2709967ac4817b19bfbae408108aaf55" name="a2709967ac4817b19bfbae408108aaf55"></a>
@@ -217,7 +238,7 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNum
 <tr class="separator:a99a4182a19b8f5659cd8039d5b8327d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab963e84b7d2072b6e2b66d7b050e814f" id="r_ab963e84b7d2072b6e2b66d7b050e814f"><td class="memItemLeft" align="right" valign="top"><a id="ab963e84b7d2072b6e2b66d7b050e814f" name="ab963e84b7d2072b6e2b66d7b050e814f"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>endMeas</b> {}</td></tr>
-<tr class="memdesc:ab963e84b7d2072b6e2b66d7b050e814f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ending measure number for the region. <br /></td></tr>
+<tr class="memdesc:ab963e84b7d2072b6e2b66d7b050e814f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ending measure number for the region (non-inclusive). <br /></td></tr>
 <tr class="separator:ab963e84b7d2072b6e2b66d7b050e814f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a933d775524ee1d232a61b6dbaa8e94bf" id="r_a933d775524ee1d232a61b6dbaa8e94bf"><td class="memItemLeft" align="right" valign="top"><a id="a933d775524ee1d232a61b6dbaa8e94bf" name="a933d775524ee1d232a61b6dbaa8e94bf"></a>
 char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>startChar</b> {}</td></tr>
@@ -290,10 +311,6 @@ Static Public Attributes</h2></td></tr>
 static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>XmlNodeName</b> = &quot;measNumbRegion&quot;</td></tr>
 <tr class="memdesc:ad7ebe873a0558dd60a700d0c7a819ecf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The XML node name for this type. <br /></td></tr>
 <tr class="separator:ad7ebe873a0558dd60a700d0c7a819ecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93a0e1ca983d4a2104a95dcc8b9a02f3" id="r_a93a0e1ca983d4a2104a95dcc8b9a02f3"><td class="memItemLeft" align="right" valign="top"><a id="a93a0e1ca983d4a2104a95dcc8b9a02f3" name="a93a0e1ca983d4a2104a95dcc8b9a02f3"></a>
-static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">MeasureNumberRegion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>XmlMappingArray</b></td></tr>
-<tr class="memdesc:a93a0e1ca983d4a2104a95dcc8b9a02f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
-<tr class="separator:a93a0e1ca983d4a2104a95dcc8b9a02f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -371,6 +388,113 @@ Additional Inherited Members</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7f9e41dc1e40505990951abfcf894cd1ae4c12a21d171cc5d2ce906a4e3344fcc" name="a7f9e41dc1e40505990951abfcf894cd1ae4c12a21d171cc5d2ce906a4e3344fcc"></a>WholeSeconds&#160;</td><td class="fielddoc"><p>the default value </p>
 </td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0223c3c51f5f2e600341b9c208496713" name="a0223c3c51f5f2e600341b9c208496713"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0223c3c51f5f2e600341b9c208496713">&#9670;&#160;</a></span>calcDisplayNumberFor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::others::MeasureNumberRegion::calcDisplayNumberFor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the visible number for a measure id with respect to the region. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::logic_error</td><td>if measureId is not contained in the region </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a79f5f20ebb6da4fea2c176af966c6d38" name="a79f5f20ebb6da4fea2c176af966c6d38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79f5f20ebb6da4fea2c176af966c6d38">&#9670;&#160;</a></span>calcIncludesMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::MeasureNumberRegion::calcIncludesMeasure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates whether the input measure is covered by this measure number region. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">measureId</td><td>The measure id to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab2b24fab0700be7611c99e9d37e24fd8" name="ab2b24fab0700be7611c99e9d37e24fd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2b24fab0700be7611c99e9d37e24fd8">&#9670;&#160;</a></span>findMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">others::MeasureNumberRegion</a> &gt; musx::dom::others::MeasureNumberRegion::findMeasure </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Finds the measure number region containing a measure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>The document to search </td></tr>
+    <tr><td class="paramname">measureId</td><td>The measure Id to search for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> instance that contains the <code>measureId</code>, or nullptr if not found. </dd></dl>
 
 </div>
 </div>

@@ -8,6 +8,7 @@ var namespacemusx_1_1dom_1_1others =
     [ "MarkingCategory", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html", "classmusx_1_1dom_1_1others_1_1MarkingCategory" ],
     [ "MarkingCategoryName", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName.html", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName" ],
     [ "Measure", "classmusx_1_1dom_1_1others_1_1Measure.html", "classmusx_1_1dom_1_1others_1_1Measure" ],
+    [ "MeasureExprAssign", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign" ],
     [ "MeasureNumberRegion", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion" ],
     [ "MultimeasureRest", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html", "classmusx_1_1dom_1_1others_1_1MultimeasureRest" ],
     [ "MultiStaffGroupId", "classmusx_1_1dom_1_1others_1_1MultiStaffGroupId.html", "classmusx_1_1dom_1_1others_1_1MultiStaffGroupId" ],
@@ -17,20 +18,26 @@ var namespacemusx_1_1dom_1_1others =
     [ "Page", "classmusx_1_1dom_1_1others_1_1Page.html", "classmusx_1_1dom_1_1others_1_1Page" ],
     [ "PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", "classmusx_1_1dom_1_1others_1_1PartDefinition" ],
     [ "PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", "classmusx_1_1dom_1_1others_1_1PartGlobals" ],
+    [ "RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", "classmusx_1_1dom_1_1others_1_1RepeatBack" ],
+    [ "RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart" ],
+    [ "RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", "classmusx_1_1dom_1_1others_1_1RepeatEndingText" ],
+    [ "RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", "classmusx_1_1dom_1_1others_1_1RepeatPassList" ],
+    [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef" ],
     [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", "classmusx_1_1dom_1_1others_1_1Staff" ],
     [ "StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", "classmusx_1_1dom_1_1others_1_1StaffComposite" ],
     [ "StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", "classmusx_1_1dom_1_1others_1_1StaffStyle" ],
     [ "StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign" ],
     [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", "classmusx_1_1dom_1_1others_1_1StaffSystem" ],
+    [ "TempoChange", "classmusx_1_1dom_1_1others_1_1TempoChange.html", "classmusx_1_1dom_1_1others_1_1TempoChange" ],
     [ "TextBlock", "classmusx_1_1dom_1_1others_1_1TextBlock.html", "classmusx_1_1dom_1_1others_1_1TextBlock" ],
     [ "TextExpressionDef", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html", "classmusx_1_1dom_1_1others_1_1TextExpressionDef" ],
     [ "TextExpressionEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html", "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure" ],
+    [ "TextRepeatAssign", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign" ],
+    [ "TextRepeatDef", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html", "classmusx_1_1dom_1_1others_1_1TextRepeatDef" ],
     [ "TextRepeatEnclosure", "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html", "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure" ],
-    [ "HorizontalExprJustification", "namespacemusx_1_1dom_1_1others.html#a1bfdb7e0ef5d0cbbec786ca77d713b12", [
-      [ "Left", "namespacemusx_1_1dom_1_1others.html#a1bfdb7e0ef5d0cbbec786ca77d713b12a945d5e233cf7d6240f6b783b36a374ff", null ],
-      [ "Center", "namespacemusx_1_1dom_1_1others.html#a1bfdb7e0ef5d0cbbec786ca77d713b12a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
-      [ "Right", "namespacemusx_1_1dom_1_1others.html#a1bfdb7e0ef5d0cbbec786ca77d713b12a92b09c7c48c520c3c55e497875da437c", null ]
-    ] ],
+    [ "TextRepeatText", "classmusx_1_1dom_1_1others_1_1TextRepeatText.html", "classmusx_1_1dom_1_1others_1_1TextRepeatText" ],
+    [ "TimeCompositeLower", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower.html", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower" ],
+    [ "TimeCompositeUpper", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper" ],
     [ "HorizontalMeasExprAlign", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8e", [
       [ "LeftBarline", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea5398156d08432d407c11a5f8c200caa4", null ],
       [ "Manual", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eae1ba155a9f2e8c3be94020eef32a0301", null ],
@@ -46,6 +53,11 @@ var namespacemusx_1_1dom_1_1others =
       [ "CenterOverBarlines", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea6535aba8781467eb4f849e48cd5a7891", null ],
       [ "CenterOverMusic", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eaa520875f5e831f5487362ba2ab5d56d7", null ],
       [ "RightBarline", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea1c1d38f2cecf469e41f461d784f6d82c", null ]
+    ] ],
+    [ "HorizontalTextJustification", "namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60c", [
+      [ "Left", "namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca945d5e233cf7d6240f6b783b36a374ff", null ],
+      [ "Center", "namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
+      [ "Right", "namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca92b09c7c48c520c3c55e497875da437c", null ]
     ] ],
     [ "PlaybackType", "namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfe", [
       [ "None", "namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea6adf97f83acf6453d4a6a4b1070f3754", null ],
@@ -74,6 +86,19 @@ var namespacemusx_1_1dom_1_1others =
       [ "LettersNumbersLowerCase", "namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cab1bd9fa27efd0a1bee5095b30adaf958", null ],
       [ "Numbers", "namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cacbebfa21dbe8e87e788d94a76f073807", null ],
       [ "MeasureNumber", "namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2ca178e6466c9bc242b36af7aaff7f70923", null ]
+    ] ],
+    [ "RepeatActionType", "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852da", [
+      [ "JumpAuto", "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa6497fe1ebf1760a20c550e565fe8e4b7", null ],
+      [ "JumpAbsolute", "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa875cab9f80513cc89f4fea437df0c454", null ],
+      [ "JumpRelative", "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa9eb45a4f158352a6aebdd16dcdf20282", null ],
+      [ "JumpToMark", "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa22f13a32c813cf29226f54503c6e48d2", null ],
+      [ "Stop", "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa11a755d598c0c417f9a36758c3da7481", null ],
+      [ "NoJump", "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daafd576995aea5af8c5fa9e675ac8f1c7b", null ]
+    ] ],
+    [ "RepeatTriggerType", "namespacemusx_1_1dom_1_1others.html#aeecd954125aace2233c1d1320a910f3c", [
+      [ "Always", "namespacemusx_1_1dom_1_1others.html#aeecd954125aace2233c1d1320a910f3ca68eec46437c384d8dad18d5464ebc35c", null ],
+      [ "OnPass", "namespacemusx_1_1dom_1_1others.html#aeecd954125aace2233c1d1320a910f3cad1f31dce2bf8bac3eb9947caf1774616", null ],
+      [ "UntilPass", "namespacemusx_1_1dom_1_1others.html#aeecd954125aace2233c1d1320a910f3cae70900d6d341d1555b4f9430522537e2", null ]
     ] ],
     [ "VerticalMeasExprAlign", "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371", [
       [ "AboveStaff", "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371af5ab2acc0e349eb227ba55a391986647", null ],

@@ -1,0 +1,25 @@
+var classmusx_1_1dom_1_1others_1_1ShapeExpressionDef =
+[
+    [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#ab0266e213ac598c09cd07c1faf308eaf", null ],
+    [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a2167c3cc2135191d548f84f7d9770b38", null ],
+    [ "auxData1", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a0a07cc9fa9bd3d839c1c978ccf364e62", null ],
+    [ "breakMmRest", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a1971654a73f4d730511130a7a276cdac", null ],
+    [ "categoryId", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a13f2061288fa15a54abef3cd212956f8", null ],
+    [ "description", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a3eb33310221bde902596c9dae45acfa8", null ],
+    [ "horzExprJustification", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a6bab0d97ab08035515a79008243e646c", null ],
+    [ "horzMeasExprAlign", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a6e3e92258ef45ec1b11b2f9f8669166b", null ],
+    [ "masterShape", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a0d4d312ef89a4e29beab6b951fd39abd", null ],
+    [ "measXAdjust", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#accd41925bdc61978a38c9dda60047825", null ],
+    [ "noHorzStretch", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#af1b75802c3545136cec63b8751c96226", null ],
+    [ "noPrint", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a2af41b53143e9d03c92dad2dfd7502b4", null ],
+    [ "playbackType", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a0f68b11f52930e045665c21ddc0489a7", null ],
+    [ "playPass", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a1346c5b78afdac8ae61f97a19e085bdf", null ],
+    [ "rehearsalMarkStyle", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a8bc04f437e50caf6290359bc3ff3c549", null ],
+    [ "shapeDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a4f842e2e9c41060ed2ce04526e2bd478", null ],
+    [ "useAuxData", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a51eda214dd890e253e0e56e4d5595b51", null ],
+    [ "useCategoryPos", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a915b5fd65f33a87b6d3ba0ed9616a448", null ],
+    [ "value", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a2e2a1f41cad06f04e8981bbfdd81ace0", null ],
+    [ "vertMeasExprAlign", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#aa943461f2bcdc8ec5166b4de2abf2183", null ],
+    [ "yAdjustBaseline", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#af634df1de5fe7c712a057a623ab220cf", null ],
+    [ "yAdjustEntry", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a74d2a76ae21916d198036175def2126f", null ]
+];

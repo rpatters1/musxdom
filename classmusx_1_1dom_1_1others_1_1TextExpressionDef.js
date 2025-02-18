@@ -9,7 +9,7 @@ var classmusx_1_1dom_1_1others_1_1TextExpressionDef =
     [ "description", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a8f224e9a49e51d763f1dc9f3450712d5", null ],
     [ "hasEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a9ba76845bcfbba2956e56a31237fc748", null ],
     [ "hideMeasureNum", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a203d2da849aa2ce8f0695ca26ce22a85", null ],
-    [ "horzExprJustification", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a096838ca3f144b4f9bfa30308fcbcef8", null ],
+    [ "horzExprJustification", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#aea7a05e0e5282961b5a8bddc1c0903c3", null ],
     [ "horzMeasExprAlign", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#aded24c306f72565f5360e3f729a325f6", null ],
     [ "matchPlayback", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a1b22dd5b0cb6dc1d10398b6839524ce3", null ],
     [ "measXAdjust", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a4ef5de9791a40b3918b3e5a2e3686521", null ],

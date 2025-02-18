@@ -96,6 +96,8 @@ $(document).ready(function(){initNavTree('namespacemusx_1_1dom.html',''); initRe
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">musx::dom Namespace Reference</div></div>
 </div><!--header-->
@@ -157,6 +159,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html">integrity_error</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception for integrity errors. (Used when <code>MUSX_THROW_ON_INTEGRITY_CHECK_FAIL</code> is defined.)  <a href="classmusx_1_1dom_1_1integrity__error.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared key signature class that is contained in other classes. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">others::Measure</a>)  <a href="classmusx_1_1dom_1_1KeySignature.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html">Note</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a single note element in an entry.  <a href="classmusx_1_1dom_1_1Note.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,6 +185,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1TextsPool.html">TextsPool</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Text pool.  <a href="classmusx_1_1dom_1_1TextsPool.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared time signature class that is derived from other classes. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">others::Measure</a>)  <a href="classmusx_1_1dom_1_1TimeSignature.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
@@ -273,6 +281,43 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>TextsPoolPtr</b> = s
 <tr class="memdesc:a8da452175665b93e3cf051de6c5a08b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared <code><a class="el" href="classmusx_1_1dom_1_1OthersPool.html" title="A pool that manages collections of OthersBase objects.">OthersPool</a></code> pointer. <br /></td></tr>
 <tr class="separator:a8da452175665b93e3cf051de6c5a08b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a3c91ee84b72cc27a2899191d6baee312" id="r_a3c91ee84b72cc27a2899191d6baee312"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> : Edu { <br />
+&#160;&#160;<b>Maxima</b> = 0x8000
+, <b>Longa</b> = 0x4000
+, <b>Breve</b> = 0x2000
+, <b>Whole</b> = 0x1000
+, <br />
+&#160;&#160;<b>Half</b> = 0x0800
+, <b>Quarter</b> = 0x0400
+, <b>Eighth</b> = 0x0200
+, <b>Note16th</b> = 0x0100
+, <br />
+&#160;&#160;<b>Note32nd</b> = 0x0080
+, <b>Note64th</b> = 0x0040
+, <b>Note128th</b> = 0x0020
+, <b>Note256th</b> = 0x0010
+, <br />
+&#160;&#160;<b>Note512th</b> = 0x0008
+, <b>Note1024th</b> = 0x0004
+, <b>Note2048th</b> = 0x0002
+<br />
+ }</td></tr>
+<tr class="memdesc:a3c91ee84b72cc27a2899191d6baee312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum class representing note types based on EDU values.  <a href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">More...</a><br /></td></tr>
+<tr class="separator:a3c91ee84b72cc27a2899191d6baee312"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:acca707f7c264c8121f35a5055f5cbba3" id="r_acca707f7c264c8121f35a5055f5cbba3"><td class="memItemLeft" align="right" valign="top"><a id="acca707f7c264c8121f35a5055f5cbba3" name="acca707f7c264c8121f35a5055f5cbba3"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>calcAugmentationDotsFromEdu</b> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
+<tr class="memdesc:acca707f7c264c8121f35a5055f5cbba3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of dots from an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value. <br /></td></tr>
+<tr class="separator:acca707f7c264c8121f35a5055f5cbba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9150f4c3ced57bc126c3c2d0e7a2b575" id="r_a9150f4c3ced57bc126c3c2d0e7a2b575"><td class="memItemLeft" align="right" valign="top"><a id="a9150f4c3ced57bc126c3c2d0e7a2b575" name="a9150f4c3ced57bc126c3c2d0e7a2b575"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcNoteTypeFromEdu</b> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
+<tr class="memdesc:a9150f4c3ced57bc126c3c2d0e7a2b575"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> from an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value. <br /></td></tr>
+<tr class="separator:a9150f4c3ced57bc126c3c2d0e7a2b575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a484882ede2c8bb64570f45fce4c0edef" id="r_a484882ede2c8bb64570f45fce4c0edef"><td class="memItemLeft" align="right" valign="top"><a id="a484882ede2c8bb64570f45fce4c0edef" name="a484882ede2c8bb64570f45fce4c0edef"></a>
@@ -295,7 +340,33 @@ constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The DOM (document object model) for musx files. </p>
 <p>classes representing the musx document </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a3c91ee84b72cc27a2899191d6baee312" name="a3c91ee84b72cc27a2899191d6baee312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c91ee84b72cc27a2899191d6baee312">&#9670;&#160;</a></span>NoteType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">musx::dom::NoteType</a> : <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enum class representing note types based on EDU values. </p>
+<p>The values are expressed in hexadecimal. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

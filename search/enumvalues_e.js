@@ -1,10 +1,14 @@
 var searchData=
 [
-  ['pagerange_0',['PageRange',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2a0a5af731ec07aec61842c5d911f2e47f',1,'musx::dom::options::PageFormatOptions']]],
-  ['partial_1',['Partial',['../classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27',1,'musx::dom::Base']]],
-  ['pentagon_2',['Pentagon',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256a09fcf42bcab804addc759acce8ec9051',1,'musx::dom::others::Enclosure']]],
-  ['percussion_3',['Percussion',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aacb5c10c0b488ed4f3826ba628d18ca6a',1,'musx::dom::options::FontOptions']]],
-  ['percussionmidimap_4',['PercussionMidiMap',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea9886936a49e92031e21d52724cb2e0de',1,'musx::dom::others']]],
-  ['pianobrace_5',['PianoBrace',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672aaf8f1f518c9abfade56624f83e4d399c',1,'musx::dom::details::StaffGroup']]],
-  ['playtempotoolchanges_6',['PlayTempoToolChanges',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaa0cbb728784176e49dae513294122965',1,'musx::dom::others']]]
+  ['octogon_0',['Octogon',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256aa9a626f4a3f3747e5a2acc8efa20dc41',1,'musx::dom::others::Enclosure']]],
+  ['onendnotes_1',['OnEndNotes',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a2541087e462f18f756e654dea7089ed9',1,'musx::dom::options::BeamOptions']]],
+  ['onextremenote_2',['OnExtremeNote',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a1d9842eee97b7379c537a45fa78ed80e',1,'musx::dom::options::BeamOptions']]],
+  ['onlyonstaves_3',['OnlyOnStaves',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a2cf0e2aae310990f7858de64aa3d7cc5ae5d09867326aa5589d1585b7d49de225',1,'musx::dom::details::StaffGroup']]],
+  ['onpass_4',['OnPass',['../namespacemusx_1_1dom_1_1others.html#aeecd954125aace2233c1d1320a910f3cad1f31dce2bf8bac3eb9947caf1774616',1,'musx::dom::others']]],
+  ['onstandardnote_5',['OnStandardNote',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a4610c7fa0ee41e919877d7cae3011c72',1,'musx::dom::options::BeamOptions']]],
+  ['oppositefirst_6',['OppositeFirst',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aaceacef983669122a11ea7986681a0edaf220fdef512b8e20c4b8fd6271b0dcc0',1,'musx::dom::options::TieOptions']]],
+  ['optionsdefault_7',['OptionsDefault',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117aa92deda61e5101f6c17e7fb660ff17a8',1,'musx::dom::others::Measure']]],
+  ['ordinalprefix_8',['OrdinalPrefix',['../classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1ae1892b548bbf904471fd4f2e03c249bf',1,'musx::dom::others::Staff']]],
+  ['other_9',['other',['../namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391a6311ae17c1ee52b36e68aaf4ad066387',1,'musx::dom::header::Other'],['../namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133a6311ae17c1ee52b36e68aaf4ad066387',1,'musx::dom::header::Other']]],
+  ['outsideinside_10',['OutsideInside',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa18b7c5400f904c5ebe1f2501f87e526e',1,'musx::dom::options::TieOptions']]]
 ];

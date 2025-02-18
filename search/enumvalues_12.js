@@ -1,9 +1,23 @@
 var searchData=
 [
-  ['unbeamedonly_0',['UnbeamedOnly',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a6934b666a5a0ee40f9b20cac9f0f9fcaac309ef90f7b9602fb6be73eb81f3f47e',1,'musx::dom::options::TupletOptions']]],
-  ['unicode_1',['Unicode',['../classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541',1,'musx::util::EnigmaString']]],
-  ['unknown4_2',['Unknown4',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672a5adad30d647e2e10b57045c5b488d77e',1,'musx::dom::details::StaffGroup']]],
-  ['unknown5_3',['Unknown5',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672a9438fee56697232b35b5fddd839f5557',1,'musx::dom::details::StaffGroup']]],
-  ['unknown7_4',['Unknown7',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672a5d0feb5e862d1330b3932ebc38be7d40',1,'musx::dom::details::StaffGroup']]],
-  ['useratio_5',['UseRatio',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1',1,'musx::dom::options::TupletOptions']]]
+  ['tablature_0',['Tablature',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa2bcbcf8fa5e77f260b3475e80c3f80d6',1,'musx::dom::options::FontOptions']]],
+  ['techniquetext_1',['TechniqueText',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa6069d91daf122d174f94d24dd782ed30',1,'musx::dom::others::MarkingCategory']]],
+  ['tempo_2',['Tempo',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfead65dabf567cb1c43358066ab02217611',1,'musx::dom::others']]],
+  ['tempoalterations_3',['TempoAlterations',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aaccf76ee4037068159869619c57b3d63f',1,'musx::dom::others::MarkingCategory']]],
+  ['tempomarks_4',['TempoMarks',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa7ce20fd7047cba7f41aa314967db8052',1,'musx::dom::others::MarkingCategory']]],
+  ['textblock_5',['TextBlock',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aabc4bb2d2fad6e5a8adb545d18a300b78',1,'musx::dom::options::FontOptions']]],
+  ['thickline_6',['ThickLine',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672a002975c2d46a9f7e8699886a6e89a824',1,'musx::dom::details::StaffGroup']]],
+  ['throughstaves_7',['ThroughStaves',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a2cf0e2aae310990f7858de64aa3d7cc5abbc817a45cc154580ab55d5ca984d6ad',1,'musx::dom::details::StaffGroup']]],
+  ['tick_8',['Tick',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117a0b3516a5bbb77566f904f9d3877f4710',1,'musx::dom::others::Measure']]],
+  ['time_9',['Time',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aaa76d4ef5f3f6a672bbfab2865563e530',1,'musx::dom::options::FontOptions']]],
+  ['timeparts_10',['TimeParts',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aae257d6d78590dbf89b0710198bbdec71',1,'musx::dom::options::FontOptions']]],
+  ['timeplus_11',['TimePlus',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aaab1456e58e874857692fcc28d833c4cf',1,'musx::dom::options::FontOptions']]],
+  ['timeplusparts_12',['TimePlusParts',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aac597505b18dc52412c38199ab8999bec',1,'musx::dom::options::FontOptions']]],
+  ['timesignature_13',['TimeSignature',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fab257862f6113a65ca9c23ad50d8676a6',1,'musx::dom::others::Measure']]],
+  ['timesigpluspositioning_14',['TimeSigPlusPositioning',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fac23c5ff7432156275a4927a6e0bbba26',1,'musx::dom::others::Measure']]],
+  ['title_15',['Title',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aab78a3223503896721cca1303f776159b',1,'musx::dom::texts::FileInfoText']]],
+  ['topnote_16',['TopNote',['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371ab1a05c4a10b09f21b56525156ff36d2b',1,'musx::dom::others']]],
+  ['transpose_17',['Transpose',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaaf70b1ac863830a4e1ce6268c8399f54',1,'musx::dom::others']]],
+  ['triangle_18',['Triangle',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256a5e5500cb2b82eb72d550de644bd1b64b',1,'musx::dom::others::Enclosure']]],
+  ['tuplet_19',['Tuplet',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa8ca42e11a227a95e2289f16898c05e98',1,'musx::dom::options::FontOptions']]]
 ];

@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('FactoryBase_8h_source.html',''); initR
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * Copyright (C) 2024, Robert Patterson</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * Copyright (C) 2025, Robert Patterson</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
@@ -293,123 +293,145 @@ $(document).ready(function(){initNavTree('FactoryBase_8h_source.html',''); initR
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    }</div>
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>}</div>
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="preprocessor">#define MUSX_XML_ELEMENT_ARRAY(Type, ...) \</span></div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span><span class="preprocessor">const ::musx::xml::XmlElementArray&lt;Type&gt; Type::XmlMappingArray = __VA_ARGS__</span></div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="keyword">using </span>ResolverEntry = std::optional&lt;ElementLinker::Resolver&gt;;</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="keyword">struct </span>ResolverContainer</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>{</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keyword">const</span> ResolverEntry resolver = {};</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>};</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="preprocessor">#define MUSX_RESOLVER_ENTRY(Type, ...) \</span></div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="preprocessor">template &lt;&gt; \</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="preprocessor">struct ResolverContainer&lt;Type&gt; { \</span></div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="preprocessor">    inline static const ResolverEntry resolver = ElementLinker::Resolver(__VA_ARGS__); \</span></div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="preprocessor">};</span></div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span> </div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="keyword">struct </span>FieldPopulator : <span class="keyword">public</span> FactoryBase</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>{</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> populate(<span class="keyword">const</span> std::shared_ptr&lt;T&gt;&amp; instance, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element)</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    {</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> child = element-&gt;getFirstChildElement(); child; child = child-&gt;getNextSibling()) {</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            <span class="keyword">auto</span> it = elementXref().find(child-&gt;getTagName());</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            <span class="keywordflow">if</span> (it != elementXref().end()) {</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>                std::get&lt;1&gt;(*it)(child, instance);</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>                <span class="keyword">const</span> <span class="keywordtype">bool</span> requireFields = [instance]() {</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>                    <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_base_of_v&lt;Base, T&gt;) {</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>                        <span class="keywordflow">return</span> instance-&gt;requireAllFields();</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                    }</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                }();</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                <span class="keywordflow">if</span> (requireFields) {</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                    MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;xml element &lt;&quot;</span> + element-&gt;getTagName() + <span class="stringliteral">&quot;&gt; has child &lt;&quot;</span> + child-&gt;getTagName() + <span class="stringliteral">&quot;&gt; which is not in the element list.&quot;</span>);</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                }</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>            }</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>        }</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>        <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_base_of_v&lt;Base, T&gt;) {</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>            instance-&gt;integrityCheck();</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        }</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    }</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span> </div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> populate(<span class="keyword">const</span> std::shared_ptr&lt;T&gt;&amp; instance, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, ElementLinker&amp; elementLinker)</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    {</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        populate(instance, element);</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        <span class="keywordflow">if</span> (ResolverContainer&lt;T&gt;::resolver.has_value()) {</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>            elementLinker.addResolver(ResolverContainer&lt;T&gt;::resolver.value(), element-&gt;getTagName());</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        }</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    }</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="keyword">static</span> std::shared_ptr&lt;T&gt; createAndPopulate(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, Args&amp;&amp;... args)</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    {</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>       <span class="keywordflow">return</span> FieldPopulator&lt;T&gt;::createAndPopulateImpl(element, std::forward&lt;Args&gt;(args)...);</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    }</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="keyword">static</span> <span class="keyword">const</span> std::unordered_map&lt;std::string_view, XmlElementPopulator&lt;T&gt;&gt;&amp; elementXref()</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> EnumClass&gt;</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>EnumClass toEnum(const ::musx::xml::XmlElementPtr&amp; e)</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>{</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="keywordflow">return</span> toEnum&lt;EnumClass&gt;(e-&gt;getTextTrimmed());</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>}</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="preprocessor">#define MUSX_XML_ELEMENT_ARRAY(Type, ...) \</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="preprocessor">const ::musx::xml::XmlElementArray&lt;Type&gt;&amp; Type::xmlMappingArray() { \</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="preprocessor">    static const ::musx::xml::XmlElementArray&lt;Type&gt; instance = __VA_ARGS__; \</span></div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="preprocessor">    return instance; \</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="preprocessor">} \</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="preprocessor">static_assert(true, &quot;&quot;) </span><span class="comment">// require semicolon after macro</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="keyword">using </span>ResolverEntry = std::optional&lt;ElementLinker::Resolver&gt;;</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="keyword">struct </span>ResolverContainer</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>{</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keyword">const</span> ResolverEntry resolver = {};</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>};</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="preprocessor">#define MUSX_RESOLVER_ENTRY(Type, ...) \</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="preprocessor">template &lt;&gt; \</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="preprocessor">struct ResolverContainer&lt;Type&gt; { \</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="preprocessor">    inline static const ResolverEntry resolver = ElementLinker::Resolver(__VA_ARGS__); \</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span><span class="preprocessor">};</span></div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span><span class="keyword">struct </span>FieldPopulator : <span class="keyword">public</span> FactoryBase</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>{</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> populateField(<span class="keyword">const</span> std::shared_ptr&lt;T&gt;&amp; instance, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; fieldElement)</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    {</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        <span class="keyword">auto</span> it = elementXref().find(fieldElement-&gt;getTagName());</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        <span class="keywordflow">if</span> (it != elementXref().end()) {</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>            std::get&lt;1&gt;(*it)(fieldElement, instance);</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>            <span class="keyword">const</span> <span class="keywordtype">bool</span> requireFields = [instance]() {</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_base_of_v&lt;Base, T&gt;) {</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>                    <span class="keywordflow">return</span> instance-&gt;requireAllFields();</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>                    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>                }</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>            }();</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>            <span class="keywordflow">if</span> (requireFields) {</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>                MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;xml element &lt;&quot;</span> + fieldElement-&gt;getParent()-&gt;getTagName() + <span class="stringliteral">&quot;&gt; has child &lt;&quot;</span> + fieldElement-&gt;getTagName() + <span class="stringliteral">&quot;&gt; which is not in the element list.&quot;</span>);</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>            }</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        }    </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    }</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> populate(<span class="keyword">const</span> std::shared_ptr&lt;T&gt;&amp; instance, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element)</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    {</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> child = element-&gt;getFirstChildElement(); child; child = child-&gt;getNextSibling()) {</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>            populateField(instance, child);</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        }</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_base_of_v&lt;Base, T&gt;) {</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>            instance-&gt;integrityCheck();</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        }</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    }</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> populate(<span class="keyword">const</span> std::shared_ptr&lt;T&gt;&amp; instance, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, ElementLinker&amp; elementLinker)</div>
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    {</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        <span class="keyword">static</span> <span class="keyword">const</span> std::unordered_map&lt;std::string_view, XmlElementPopulator&lt;T&gt;&gt; xref = []()</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>            {</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>                std::unordered_map&lt;std::string_view, XmlElementPopulator&lt;T&gt;&gt; retval;</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>                <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; T::XmlMappingArray.size(); i++) {</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>                    <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a0e5401fa2c29d3ec62427c2b1dd9fab4">XmlElementDescriptor&lt;T&gt;</a> descriptor = T::XmlMappingArray[i];</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>                    retval[std::get&lt;0&gt;(descriptor)] = std::get&lt;1&gt;(descriptor);</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>                }</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>                <span class="keywordflow">return</span> retval;</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>            }();</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        <span class="keywordflow">return</span> xref;</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        populate(instance, element);</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>        <span class="keywordflow">if</span> (ResolverContainer&lt;T&gt;::resolver.has_value()) {</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            elementLinker.addResolver(ResolverContainer&lt;T&gt;::resolver.value(), element-&gt;getTagName());</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>        }</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    }</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span> </div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    <span class="keyword">static</span> std::shared_ptr&lt;T&gt; createAndPopulate(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, Args&amp;&amp;... args)</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    {</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>       <span class="keywordflow">return</span> FieldPopulator&lt;T&gt;::createAndPopulateImpl(element, std::forward&lt;Args&gt;(args)...);</div>
 <div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    }</div>
 <div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    <span class="keyword">static</span> std::shared_ptr&lt;T&gt; createAndPopulateImpl(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, Args&amp;&amp;... args)</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    <span class="keyword">static</span> <span class="keyword">const</span> std::unordered_map&lt;std::string_view, XmlElementPopulator&lt;T&gt;&gt;&amp; elementXref()</div>
 <div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    {</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        <span class="keyword">auto</span> instance = std::make_shared&lt;T&gt;(std::forward&lt;Args&gt;(args)...);</div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>        FieldPopulator&lt;T&gt;::populate(instance, element);</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        <span class="keywordflow">return</span> instance;</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    }</div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>};</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> EnumClass, <span class="keyword">typename</span> EmbeddedClass&gt;</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span><span class="keyword">static</span> <span class="keywordtype">void</span> populateEmbeddedClass(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; e, std::unordered_map&lt;EnumClass, std::shared_ptr&lt;EmbeddedClass&gt;&gt;&amp; listArray)</div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>{</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    <span class="keyword">auto</span> typeAttr = e-&gt;findAttribute(<span class="stringliteral">&quot;type&quot;</span>);</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    <span class="keywordflow">if</span> (!typeAttr) {</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        <span class="keywordflow">throw</span> std::invalid_argument(<span class="stringliteral">&quot;&lt;&quot;</span> + e-&gt;getTagName() + <span class="stringliteral">&quot;&gt; element has no type attribute&quot;</span>);</div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>    }</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    listArray.emplace(toEnum&lt;EnumClass&gt;(typeAttr-&gt;getValueTrimmed()), FieldPopulator&lt;EmbeddedClass&gt;::createAndPopulate(e));</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>}</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span> </div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span><span class="keyword">static</span> std::vector&lt;T&gt; populateEmbeddedArray(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; e, <span class="keyword">const</span> std::string_view&amp; elementNodeName)</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>{</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    std::vector&lt;T&gt; result;</div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> child = e-&gt;getFirstChildElement(); child; child = child-&gt;getNextSibling()) {</div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>        <span class="keywordflow">if</span> (child-&gt;getTagName() != elementNodeName) {</div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>            MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;Unknown tag &lt;&quot;</span> + child-&gt;getTagName() + <span class="stringliteral">&quot;&gt; while processing embedded xml array &lt;&quot;</span> + e-&gt;getTagName() + <span class="stringliteral">&quot;&gt;&quot;</span>);</div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>            <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        }</div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>        result.push_back(child-&gt;getTextAs&lt;T&gt;());</div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>    }</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>}</div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span> </div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span><span class="keyword">template</span> &lt;&gt;</div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span><span class="keyword">inline</span> std::shared_ptr&lt;FontInfo&gt; FieldPopulator&lt;FontInfo&gt;::createAndPopulate(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, Args&amp;&amp;... args)</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>{</div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    <span class="keywordflow">if</span> (!element-&gt;getFirstChildElement()) <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordflow">return</span> FieldPopulator&lt;FontInfo&gt;::createAndPopulateImpl(element, std::forward&lt;Args&gt;(args)...);</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>}</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span> </div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span><span class="preprocessor">#endif </span><span class="comment">// DOXYGEN_SHOULD_IGNORE_THIS</span></div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span> </div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>} <span class="comment">// namespace factory</span></div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>} <span class="comment">// namespace musx</span></div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        <span class="keyword">static</span> <span class="keyword">const</span> std::unordered_map&lt;std::string_view, XmlElementPopulator&lt;T&gt;&gt; xref = []()</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>            {</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>                std::unordered_map&lt;std::string_view, XmlElementPopulator&lt;T&gt;&gt; retval;</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>                <span class="keyword">auto</span> mappingArray = T::xmlMappingArray();</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>                <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; mappingArray.size(); i++) {</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>                    <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a0e5401fa2c29d3ec62427c2b1dd9fab4">XmlElementDescriptor&lt;T&gt;</a> descriptor = mappingArray[i];</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>                    retval[std::get&lt;0&gt;(descriptor)] = std::get&lt;1&gt;(descriptor);</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>                }</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>                <span class="keywordflow">return</span> retval;</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>            }();</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>        <span class="keywordflow">return</span> xref;</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    }</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span> </div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    <span class="keyword">static</span> std::shared_ptr&lt;T&gt; createAndPopulateImpl(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, Args&amp;&amp;... args)</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    {</div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        <span class="keyword">auto</span> instance = std::make_shared&lt;T&gt;(std::forward&lt;Args&gt;(args)...);</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>        FieldPopulator&lt;T&gt;::populate(instance, element);</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>        <span class="keywordflow">return</span> instance;</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    }</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>};</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> EnumClass, <span class="keyword">typename</span> EmbeddedClass&gt;</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span><span class="keyword">static</span> <span class="keywordtype">void</span> populateEmbeddedClass(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; e, std::unordered_map&lt;EnumClass, std::shared_ptr&lt;EmbeddedClass&gt;&gt;&amp; listArray)</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>{</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="keyword">auto</span> typeAttr = e-&gt;findAttribute(<span class="stringliteral">&quot;type&quot;</span>);</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>    <span class="keywordflow">if</span> (!typeAttr) {</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>        <span class="keywordflow">throw</span> std::invalid_argument(<span class="stringliteral">&quot;&lt;&quot;</span> + e-&gt;getTagName() + <span class="stringliteral">&quot;&gt; element has no type attribute&quot;</span>);</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    }</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>    listArray.emplace(toEnum&lt;EnumClass&gt;(typeAttr-&gt;getValueTrimmed()), FieldPopulator&lt;EmbeddedClass&gt;::createAndPopulate(e));</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>}</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span> </div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span><span class="keyword">static</span> std::vector&lt;T&gt; populateEmbeddedArray(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; e, <span class="keyword">const</span> std::string_view&amp; elementNodeName)</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>{</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    std::vector&lt;T&gt; result;</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> child = e-&gt;getFirstChildElement(); child; child = child-&gt;getNextSibling()) {</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>        <span class="keywordflow">if</span> (child-&gt;getTagName() != elementNodeName) {</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>            MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;Unknown tag &lt;&quot;</span> + child-&gt;getTagName() + <span class="stringliteral">&quot;&gt; while processing embedded xml array &lt;&quot;</span> + e-&gt;getTagName() + <span class="stringliteral">&quot;&gt;&quot;</span>);</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>            <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        }</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>        <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_fundamental_v&lt;T&gt;) {</div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>            result.push_back(child-&gt;getTextAs&lt;T&gt;());</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same_v&lt;T, std::string&gt;) {</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>            result.push_back(child-&gt;getText());</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>            result.push_back(FieldPopulator&lt;T&gt;::createAndPopulate(child));</div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>        }</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    }</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>}</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span> </div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span><span class="keyword">template</span> &lt;&gt;</div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span><span class="keyword">inline</span> std::shared_ptr&lt;FontInfo&gt; FieldPopulator&lt;FontInfo&gt;::createAndPopulate(<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, Args&amp;&amp;... args)</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>{</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>    <span class="keywordflow">if</span> (!element-&gt;getFirstChildElement()) <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>    <span class="keywordflow">return</span> FieldPopulator&lt;FontInfo&gt;::createAndPopulateImpl(element, std::forward&lt;Args&gt;(args)...);</div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>}</div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span> </div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span><span class="preprocessor">#endif </span><span class="comment">// DOXYGEN_SHOULD_IGNORE_THIS</span></div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span> </div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>} <span class="comment">// namespace factory</span></div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>} <span class="comment">// namespace musx</span></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1ElementLinker_html"><div class="ttname"><a href="classmusx_1_1factory_1_1ElementLinker.html">musx::factory::ElementLinker</a></div><div class="ttdoc">A utility class for managing deferred relationships between elements during document construction.</div><div class="ttdef"><b>Definition</b> FactoryBase.h:68</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1ElementLinker_html_a0fbe9d4f8b3eda391d25f44d22713ee1"><div class="ttname"><a href="classmusx_1_1factory_1_1ElementLinker.html#a0fbe9d4f8b3eda391d25f44d22713ee1">musx::factory::ElementLinker::Resolver</a></div><div class="ttdeci">std::function&lt; void(const dom::DocumentPtr &amp;)&gt; Resolver</div><div class="ttdoc">A callable type representing a deferred relationship resolver.</div><div class="ttdef"><b>Definition</b> FactoryBase.h:77</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1ElementLinker_html_a4bb1f28f858ea9c65dab5ac41565886e"><div class="ttname"><a href="classmusx_1_1factory_1_1ElementLinker.html#a4bb1f28f858ea9c65dab5ac41565886e">musx::factory::ElementLinker::resolveAll</a></div><div class="ttdeci">void resolveAll(const dom::DocumentPtr &amp;document)</div><div class="ttdoc">Resolves all deferred relationships.</div><div class="ttdef"><b>Definition</b> FactoryBase.h:106</div></div>

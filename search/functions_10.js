@@ -1,12 +1,19 @@
 var searchData=
 [
-  ['textblock_0',['TextBlock',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#af09b4d22b57a426c4f2bd2e7c5f8a9d6',1,'musx::dom::others::TextBlock']]],
-  ['textexpressiondef_1',['TextExpressionDef',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a956b0b29607bfd745671f25a408150c9',1,'musx::dom::others::TextExpressionDef']]],
-  ['textsbase_2',['textsbase',['../classmusx_1_1dom_1_1TextsBase.html#aba62017f8e8a23f2657322d1d245c1a1',1,'musx::dom::TextsBase::TextsBase()'],['../classmusx_1_1dom_1_1texts_1_1LyricsVerse.html#aba62017f8e8a23f2657322d1d245c1a1',1,'musx::dom::texts::LyricsVerse::TextsBase()'],['../classmusx_1_1dom_1_1texts_1_1LyricsChorus.html#aba62017f8e8a23f2657322d1d245c1a1',1,'musx::dom::texts::LyricsChorus::TextsBase()'],['../classmusx_1_1dom_1_1texts_1_1LyricsSection.html#aba62017f8e8a23f2657322d1d245c1a1',1,'musx::dom::texts::LyricsSection::TextsBase()'],['../classmusx_1_1dom_1_1texts_1_1BlockText.html#aba62017f8e8a23f2657322d1d245c1a1',1,'musx::dom::texts::BlockText::TextsBase()'],['../classmusx_1_1dom_1_1texts_1_1SmartShapeText.html#aba62017f8e8a23f2657322d1d245c1a1',1,'musx::dom::texts::SmartShapeText::TextsBase()'],['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html#aba62017f8e8a23f2657322d1d245c1a1',1,'musx::dom::texts::ExpressionText::TextsBase()'],['../classmusx_1_1dom_1_1texts_1_1BookmarkText.html#aba62017f8e8a23f2657322d1d245c1a1',1,'musx::dom::texts::BookmarkText::TextsBase()']]],
-  ['tieoptions_3',['TieOptions',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a73e7c9c84ec308e06ec3f02e8212694f',1,'musx::dom::options::TieOptions']]],
-  ['timesignatureoptions_4',['TimeSignatureOptions',['../classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html#a9fb522d4e6a09b44a93bc94aebb2c6f6',1,'musx::dom::options::TimeSignatureOptions']]],
-  ['trimfonttags_5',['trimFontTags',['../classmusx_1_1util_1_1EnigmaString.html#a6973476856fe97c708c61f92dde3d820',1,'musx::util::EnigmaString']]],
-  ['trimtags_6',['trimTags',['../classmusx_1_1util_1_1EnigmaString.html#a0613f33d67f174d1901dd935232a74b9',1,'musx::util::EnigmaString']]],
-  ['tupletdef_7',['TupletDef',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a92caadc2a2773e781568727763c87621',1,'musx::dom::details::TupletDef']]],
-  ['tupletoptions_8',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a2cacc300b9d29984c4568b26bb60ca7e',1,'musx::dom::options::TupletOptions']]]
+  ['scorepartdata_0',['ScorePartData',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a64967877e1703e39d902974ab6e06f50',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
+  ['setcallback_1',['setCallback',['../classmusx_1_1util_1_1Logger.html#a4e71b53f8cee5f4e28df8d31c7101c93',1,'musx::util::Logger']]],
+  ['setenigmastyles_2',['setEnigmaStyles',['../classmusx_1_1dom_1_1FontInfo.html#ab482bb76fdb37df80d5eba5a8b0006b0',1,'musx::dom::FontInfo']]],
+  ['setfontidbyname_3',['setFontIdByName',['../classmusx_1_1dom_1_1FontInfo.html#a7342806d12d9d725edcb9b897f784e07',1,'musx::dom::FontInfo']]],
+  ['settextnumber_4',['setTextNumber',['../classmusx_1_1dom_1_1TextsBase.html#af0d5de0c546af7b5954b05a44c728802',1,'musx::dom::TextsBase']]],
+  ['shapeexpressiondef_5',['ShapeExpressionDef',['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#ab0266e213ac598c09cd07c1faf308eaf',1,'musx::dom::others::ShapeExpressionDef']]],
+  ['shownamesforpart_6',['showNamesForPart',['../classmusx_1_1dom_1_1others_1_1Staff.html#ac9c53dc5f21562bebfaf99be4d6d4cd5',1,'musx::dom::others::Staff']]],
+  ['smartshapeoptions_7',['SmartShapeOptions',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a56cd4e97b860e30b3a8eaf383b972932',1,'musx::dom::options::SmartShapeOptions']]],
+  ['staff_8',['Staff',['../classmusx_1_1dom_1_1others_1_1Staff.html#a6b2463c519cd866520ed2116151334b5',1,'musx::dom::others::Staff']]],
+  ['staffgroup_9',['StaffGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9cc08eb744c1b6ac9087f16ff99dbcfd',1,'musx::dom::details::StaffGroup']]],
+  ['staffoptions_10',['StaffOptions',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#af1602f801dd9ee76f7f64a9dbd687413',1,'musx::dom::options::StaffOptions']]],
+  ['staffstyle_11',['staffstyle',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a4198715586ac656f96e634f82b3fb3d2',1,'musx::dom::others::StaffStyle::StaffStyle(const std::shared_ptr&lt; Staff &gt; &amp;staff)'],['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a5762f50554830a25eb185acc5808dcbf',1,'musx::dom::others::StaffStyle::StaffStyle(const DocumentWeakPtr &amp;document, Cmper partId, ShareMode shareMode, Cmper cmper)']]],
+  ['staffstyleassign_12',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd',1,'musx::dom::others::StaffStyleAssign']]],
+  ['staffsystem_13',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440',1,'musx::dom::others::StaffSystem']]],
+  ['startswithfontcommand_14',['startsWithFontCommand',['../classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d',1,'musx::util::EnigmaString']]],
+  ['stemoptions_15',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a5c48c35393259a1e2ff79abcd5495acf',1,'musx::dom::options::StemOptions']]]
 ];

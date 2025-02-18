@@ -14,6 +14,7 @@ var namespacemusx_1_1dom_1_1options =
     [ "MiscOptions", "classmusx_1_1dom_1_1options_1_1MiscOptions.html", "classmusx_1_1dom_1_1options_1_1MiscOptions" ],
     [ "MultimeasureRestOptions", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions" ],
     [ "MusicSpacingOptions", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions" ],
+    [ "MusicSymbolOptions", "classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html", "classmusx_1_1dom_1_1options_1_1MusicSymbolOptions" ],
     [ "PageFormatOptions", "classmusx_1_1dom_1_1options_1_1PageFormatOptions.html", "classmusx_1_1dom_1_1options_1_1PageFormatOptions" ],
     [ "PianoBraceBracketOptions", "classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html", "classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions" ],
     [ "RepeatOptions", "classmusx_1_1dom_1_1options_1_1RepeatOptions.html", "classmusx_1_1dom_1_1options_1_1RepeatOptions" ],

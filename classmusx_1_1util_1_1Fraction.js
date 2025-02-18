@@ -1,9 +1,10 @@
 var classmusx_1_1util_1_1Fraction =
 [
     [ "Fraction", "classmusx_1_1util_1_1Fraction.html#a3a95749410ef64c078d957fc4d659900", null ],
-    [ "calcDuration", "classmusx_1_1util_1_1Fraction.html#a3921976d4181277d4ce007819499c2fe", null ],
-    [ "getDenominator", "classmusx_1_1util_1_1Fraction.html#a39f0a0a92193bc4df8de355344a50935", null ],
-    [ "getNumerator", "classmusx_1_1util_1_1Fraction.html#a68692ebe00cecbbf5bafb35ce9b0517b", null ],
+    [ "calcEduDuration", "classmusx_1_1util_1_1Fraction.html#ab8d32afbde20b6f76d2d507e73e7690d", null ],
+    [ "denominator", "classmusx_1_1util_1_1Fraction.html#af53e537bc24e3db971832947180f2842", null ],
+    [ "numerator", "classmusx_1_1util_1_1Fraction.html#a1723645e98a12e8521ee2e3947f5c9d3", null ],
+    [ "operator bool", "classmusx_1_1util_1_1Fraction.html#a65fbf6388d24754200a0b06ed7939d59", null ],
     [ "operator!=", "classmusx_1_1util_1_1Fraction.html#aada760c85369980cd702f1369f535726", null ],
     [ "operator*", "classmusx_1_1util_1_1Fraction.html#a828c64522d3fbb26ceda512df4aa792d", null ],
     [ "operator*=", "classmusx_1_1util_1_1Fraction.html#aa6c87ea2e1a5319d6f9d6ecf6bbf516c", null ],
@@ -18,6 +19,8 @@ var classmusx_1_1util_1_1Fraction =
     [ "operator==", "classmusx_1_1util_1_1Fraction.html#a75c8baa888f70007748b77669c2088c9", null ],
     [ "operator>", "classmusx_1_1util_1_1Fraction.html#a547d35fe338bf1d18ae7d1e8e1bf2881", null ],
     [ "operator>=", "classmusx_1_1util_1_1Fraction.html#a5a6ba1071971b3a7ede960aa259e5586", null ],
+    [ "quotient", "classmusx_1_1util_1_1Fraction.html#a1ee9dfe752d220d2e549347326a6338d", null ],
+    [ "remainder", "classmusx_1_1util_1_1Fraction.html#a13dccd0b177ec18d649c0457efaa2a4e", null ],
     [ "operator<<", "classmusx_1_1util_1_1Fraction.html#a8ac0bd6d4e4b51fd98127667311124e1", null ],
     [ "operator>>", "classmusx_1_1util_1_1Fraction.html#a9fa0caf55fd2ad525456fc28040185ed", null ]
 ];

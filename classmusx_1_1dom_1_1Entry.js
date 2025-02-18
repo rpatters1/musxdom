@@ -1,26 +1,9 @@
 var classmusx_1_1dom_1_1Entry =
 [
-    [ "NoteType", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37", [
-      [ "Maxima", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37abc3292567552688d69e5ddc95781245b", null ],
-      [ "Long", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37a8394f0347c184cf156ac5924dccb773b", null ],
-      [ "Breve", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37a201a42b1660aae58d38bd0ef2d5082f5", null ],
-      [ "Whole", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37ac8d2fc8ed10b21e647d7f58d4436b050", null ],
-      [ "Half", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37ac48615a1bc4197056d522af276aa5a85", null ],
-      [ "Quarter", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37ab25cde1e74f3d27f678c2e309e06102e", null ],
-      [ "Eighth", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37a454165bf233bafb701ab35d62383576e", null ],
-      [ "Note16th", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37ae78a96c9481ac5ed150a3b999e0ae0e8", null ],
-      [ "Note32nd", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37ae9100497560a5b26e5cee946af914f2d", null ],
-      [ "Note64th", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37a842855bd38469fffaaf9d907b985a7ed", null ],
-      [ "Note128th", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37ad2eaf8f388daf3f90867c33651c72835", null ],
-      [ "Note256th", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37aca40b218e470ce49ebf572641a95b6c2", null ],
-      [ "Note512th", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37a9f5075212d3850bc0698dc1d2a09f1ed", null ],
-      [ "Note1024th", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37aabc5e88dc0cc3dd0969d578e686fba1f", null ],
-      [ "Note2048th", "classmusx_1_1dom_1_1Entry.html#a8c1ec5db367637573e60a34731a2dd37a63e3a214703146dacc03d8cded7d770d", null ]
-    ] ],
     [ "Entry", "classmusx_1_1dom_1_1Entry.html#a0d0212e38649a2376155155c477a138c", null ],
     [ "calcAugmentationDots", "classmusx_1_1dom_1_1Entry.html#a9d9448ac8cd42278cefcf96559bb3de1", null ],
     [ "calcFraction", "classmusx_1_1dom_1_1Entry.html#a8964412efe44b6569c970cecc4b4631f", null ],
-    [ "calcNoteType", "classmusx_1_1dom_1_1Entry.html#a79deb0edf2ef7d67014d67b64fa00a81", null ],
+    [ "calcNoteType", "classmusx_1_1dom_1_1Entry.html#a6b6dad4846b54c9bc9c0933e4d14176a", null ],
     [ "getEntryNumber", "classmusx_1_1dom_1_1Entry.html#a0d3cc0d02d7768f4153b0741d0a238ca", null ],
     [ "getNext", "classmusx_1_1dom_1_1Entry.html#af6ad38939066bbbfe7e64403919375a1", null ],
     [ "getPrevious", "classmusx_1_1dom_1_1Entry.html#af99dd422bdcc42b63a4986eda7b18d42", null ],

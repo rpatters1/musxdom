@@ -14,7 +14,7 @@ var namespacemusx_1_1factory =
     [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
     [ "RegisteredDetails", "namespacemusx_1_1factory.html#a10327f92fc429421bd3c97a320d29ba5", null ],
     [ "RegisteredEntries", "namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b", null ],
-    [ "RegisteredOptions", "namespacemusx_1_1factory.html#a67c0a9c4e9daee0e1b55a0c2b8f2c700", null ],
-    [ "RegisteredOthers", "namespacemusx_1_1factory.html#a67cff7468b00be766cb53ca106f5830e", null ],
+    [ "RegisteredOptions", "namespacemusx_1_1factory.html#a50bc1132db2ba80ef7fe98705890270b", null ],
+    [ "RegisteredOthers", "namespacemusx_1_1factory.html#a92483af864def1abb8dadca8676649c6", null ],
     [ "RegisteredTexts", "namespacemusx_1_1factory.html#ab4b3b01a07b2ca81d2786686aeb69dd5", null ]
 ];
