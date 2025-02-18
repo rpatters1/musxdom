@@ -80,6 +80,7 @@ add_executable(musxdomtests
     others/page.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
+    others/repeats.cpp
     others/staff.cpp
     others/staff_style.cpp
     others/staff_system.cpp

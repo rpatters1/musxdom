@@ -64,6 +64,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <dispDivbeat>6</dispDivbeat>
       <mnSepPlace/>
       <barline>normal</barline>
+      <txtRepeats/>
       <useDisplayTimesig/>
       <displayAltNumTsig/>
       <displayAltDenTsig/>
@@ -158,6 +159,8 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_FALSE(measure2->compositeNumerator);
     EXPECT_FALSE(measure2->compositeDenominator);
     EXPECT_EQ(measure2->barlineType, others::Measure::BarlineType::Normal);
+    EXPECT_FALSE(measure2->hasExpression);
+    EXPECT_TRUE(measure2->hasTextRepeat);
     EXPECT_TRUE(measure2->useDisplayTimesig);
     EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::None);
     EXPECT_TRUE(measure2->compositeDispNumerator);

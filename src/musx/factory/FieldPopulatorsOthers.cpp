@@ -189,7 +189,7 @@ MUSX_XML_ENUM_MAPPING(MarkingCategory::CategoryType, {
 MUSX_XML_ENUM_MAPPING(TextRepeatDef::PoundReplaceOption, {
     {"passes", TextRepeatDef::PoundReplaceOption::Passes}, // This is the default and may not appear in the XML, but the string in the Finale app binary
     {"repeatID", TextRepeatDef::PoundReplaceOption::RepeatID},
-    {"measNum", TextRepeatDef::PoundReplaceOption::MeasurNumber},
+    {"measNum", TextRepeatDef::PoundReplaceOption::MeasureNumber},
 });
 
 } // namespace factory
@@ -306,6 +306,7 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"forRepBar", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->forwardRepeatBar= true; }},
     {"bacRepBar", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->backwardsRepeatBar = true; }},
     {"barEnding", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasEnding= true; }},
+    {"txtRepeats", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasTextRepeat = true; }},
     {"hasExpr", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasExpression = true; }},
     {"altNumTsig", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->compositeNumerator = true; }},
     {"altDenTsig", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->compositeDenominator = true; }},
@@ -467,7 +468,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatEndingText, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
-    {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->m_endingNumbers.push_back(e->getTextAs<int>()); }},
+    {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->endingNumbers.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
@@ -629,6 +630,23 @@ MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->description = e->getText(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(TextRepeatAssign, {
+    {"horzPos", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->horzPos = e->getTextAs<Evpu>(); }},
+    {"actuate", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->passNumber = e->getTextAs<int>(); }},
+    {"target", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->targetValue = e->getTextAs<int>(); }},
+    {"repnum", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->textRepeatId = e->getTextAs<Cmper>(); }},
+    {"vertPos", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->vertPos = e->getTextAs<Evpu>(); }},
+    {"indivPlac", [](const XmlElementPtr&, const std::shared_ptr<TextRepeatAssign>& i) { i->individualPlacement = true; }},
+    {"topStaffOnly", [](const XmlElementPtr&, const std::shared_ptr<TextRepeatAssign>& i) { i->topStaffOnly = true; }},
+    {"clrOnChange", [](const XmlElementPtr&, const std::shared_ptr<TextRepeatAssign>& i) { i->resetOnAction = true; }},
+    {"multiActuate", [](const XmlElementPtr&, const std::shared_ptr<TextRepeatAssign>& i) { i->jumpOnMultiplePasses = true; }},
+    {"action", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->jumpAction = toEnum<RepeatActionType>(e); }},
+    {"autoUpdate", [](const XmlElementPtr&, const std::shared_ptr<TextRepeatAssign>& i) { i->autoUpdate = true; }},
+    {"trigger", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->trigger = toEnum<RepeatTriggerType>(e); }},
+    {"jmpIgnore", [](const XmlElementPtr&, const std::shared_ptr<TextRepeatAssign>& i) { i->jumpIfIgnoring = true; }},
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(TextRepeatDef, {
     {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
     {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
@@ -637,6 +655,11 @@ MUSX_XML_ELEMENT_ARRAY(TextRepeatDef, {
     {"useThisFont", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->useThisFont = true; }},
     {"poundReplace", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->poundReplace = toEnum<TextRepeatDef::PoundReplaceOption>(e); }},
     {"justify", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->justification = toEnum<HorizontalTextJustification>(e); }},
+    {"act", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->passList.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TextRepeatText, {
+    {"rptText", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatText>& i) { i->text = e->getText(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TimeCompositeLower::CompositeItem, {

@@ -461,6 +461,7 @@ public:
     bool forwardRepeatBar;      ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
     bool backwardsRepeatBar;    ///< Indicates a forward repeat bar on this measure. (xml node is `<bacRepBar>`)
     bool hasEnding;             ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
+    bool hasTextRepeat;         ///< Indicates the presence of one or more text repeat assigments. (xml node is `<txtRepeats>`)
     bool compositeNumerator{};  ///< Indicates a composite numerator for the time signature. (xml node is `<altNumTsig>`)
     bool compositeDenominator{}; ///< Indicates a composite denominator for the time signature. (xml node is `<altDenTsig>`)
     bool abbrvTime{};           ///< Indicates abbreviated time signature (e.g., Common or Cut time.) Applies to the display time signature only.
@@ -922,7 +923,7 @@ enum class RepeatActionType
     JumpRelative,           ///< Jump relative to the current measure. The targetValue field specifies how many measures to jump.
                             ///< The targetValue may be positive or negative for forward or backward relative jumps.
     JumpToMark,             ///< Jump to a specified repeat number (used by text repeats).
-    Stop,                   ///< Legacy value not used in late Finale.
+    Stop,                   ///< Stops playback after a number of passes (e.g. "Fine")
     NoJump                  ///< Do not jump. The targetValue is meaningless for this action.
 };
 
@@ -1066,7 +1067,7 @@ public:
     {
     }
 
-    std::vector<int> m_endingNumbers; ///< List of repeat ending numbers extracted from xml `<act>` elements.
+    std::vector<int> endingNumbers; ///< List of repeat ending numbers extracted from xml `<act>` elements.
 
     constexpr static std::string_view XmlNodeName = "repeatPassList"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatPassList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1580,6 +1581,43 @@ public:
 };
 
 /**
+ * @class TextRepeatAssign
+ * @brief Represents a text repeat assignment with positioning and behavior properties.
+ *
+ * The cmper is the cmper of the @ref Measure that has this item.
+ *
+ * This class is identified by the XML node name "textRepeatAssign".
+ */
+class TextRepeatAssign : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TextRepeatAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    // Public properties corresponding to the XML structure
+    Evpu horzPos{};                 ///< The horizontal offset from default of the text repeat marker.
+    int passNumber{};               ///< Play Section N Times, Jump on Pass, Stop on Pass value, depending on #jumpAction and #trigger. (xml tag is `<actuate>`)
+    int targetValue{};              ///< Measure number, TextRepeatDef ID, or offset, depending on #jumpAction. (xml tag is `<target>`)
+    Cmper textRepeatId{};           ///< The Cmper of the assigned @ref TextRepeatDef. (xml tag is `<repnum>`)
+    Evpu vertPos{};                 ///< The vertical offset from default of the text repeat marker.
+    bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
+    bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    bool resetOnAction{};           ///< "Reset on Repeat Action" (xml tag is `<clrOnChange>`)
+    bool jumpOnMultiplePasses{};    ///< If true, use #TextRepeatDef::passList to get the passes and ignore #passNumber. (xml tag is `<multiActuate>`)
+    RepeatActionType jumpAction{};  ///< The jump action for this repeat assignment. (xml tag is `<action>`)
+    bool autoUpdate{};              ///< "Auto-Update Target"
+    RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
+    bool jumpIfIgnoring{};          ///< "Jump if Ignoring Repeats" (xml tag is `<jmpIgnore>`)
+    Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
+
+    constexpr static std::string_view XmlNodeName = "textRepeatAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextRepeatAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
  * @class TextRepeatDef
  * @brief Defines text repeat elements with font styling and justification.
  *
@@ -1597,7 +1635,7 @@ public:
     {
         Passes,             ///< "Number of Times Played" (the default: may never appear in xml)
         RepeatID,           ///< "Text Repeat ID in Target" (xml value is "repeatID")
-        MeasurNumber        ///< "Measure Number in Target" (xml value is "measNum")
+        MeasureNumber       ///< "Measure Number in Target" (xml value is "measNum")
     };
 
     /** @brief Constructor function */
@@ -1612,6 +1650,7 @@ public:
     HorizontalTextJustification justification{};    ///< Although called "justification" in Finale's U.I, this value is used
                                                     ///< for both the alignment of the text within the measure as well as its justification.
                                                     ///< (xml node is `<justify >`)
+    std::vector<int> passList;                      ///< If this vector contains elements, they define the repeat passes that apply to this instance.
 
     constexpr static std::string_view XmlNodeName = "textRepeatDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextRepeatDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1633,6 +1672,26 @@ public:
     static const xml::XmlElementArray<TextRepeatEnclosure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class TextRepeatText
+ * @brief Represents the text associated with a @ref TextRepeatDef
+ *
+ * The cmper is the same as for @ref TextRepeatDef.
+ *
+ * This class is identified by the XML node name "textRepeatText".
+ */
+class TextRepeatText : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit TextRepeatText(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    std::string text; ///< The text 
+
+    constexpr static std::string_view XmlNodeName = "textRepeatText"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextRepeatText>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 /**
  * @class TimeCompositeLower
  * @brief Represents the lower composite time signature array.
