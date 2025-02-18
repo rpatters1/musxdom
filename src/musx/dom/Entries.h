@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,14 @@
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
+#include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
 namespace dom {
+
+int calcAugmentationDotsFromEdu(Edu duration);      ///< Calculates the number of dots from an @ref Edu value.
+NoteType calcNoteTypeFromEdu(Edu duration);         ///< Calculates the @ref NoteType from an @ref Edu value.
 
 /**
  * @class Note
@@ -53,7 +57,7 @@ public:
 
     bool requireAllFields() const override { return false; }
 
-    static const xml::XmlElementArray<Note> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Note>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
     NoteNumber m_noteId{}; ///< Unique identifier for the note.
@@ -73,29 +77,6 @@ public:
     */
     explicit Entry(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, EntryNumber prev, EntryNumber next)
         : Base(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next) {}
-
-    /**
-     * @brief Enum class representing note types based on EDU values.
-     *
-     * The values are expressed in hexadecimal.
-     */
-    enum class NoteType : Edu {
-        Maxima = 0x8000,
-        Long = 0x4000,
-        Breve = 0x2000,
-        Whole = 0x1000,
-        Half = 0x0800,
-        Quarter = 0x0400,
-        Eighth = 0x0200,
-        Note16th = 0x0100,
-        Note32nd = 0x0080,
-        Note64th = 0x0040,
-        Note128th = 0x0020,
-        Note256th = 0x0010,
-        Note512th = 0x0008,
-        Note1024th = 0x0004,
-        Note2048th = 0x0002
-    };
 
     /**
      * @brief Duration of the entry, not taking into account tuplets.
@@ -144,19 +125,19 @@ public:
      * @return NoteType corresponding to the most significant bit of the duration.
      * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
      */
-    NoteType calcNoteType() const;
+    NoteType calcNoteType() const { return calcNoteTypeFromEdu(duration); }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
-    util::Fraction calcFraction() const { return util::Fraction(duration, int(NoteType::Whole));  }
+    util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration);  }
 
     /**
      * @brief Calculates the number of augmentation dots in the duration.
      *
      * @return The number of augmentation dots.
      */
-    int calcAugmentationDots() const;
+    int calcAugmentationDots() const { return calcAugmentationDotsFromEdu(duration); }
 
     void integrityCheck() override
     {
@@ -169,7 +150,7 @@ public:
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "entry"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Entry> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
     EntryNumber m_entnum;   ///< Entry number.

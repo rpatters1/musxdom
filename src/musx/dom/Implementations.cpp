@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,8 @@
 #include <sstream>
 #include <functional>
 #include <numeric>
+#include <algorithm>
+#include <cmath>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -76,7 +78,7 @@ std::shared_ptr<Entry> Entry::getPrevious() const
     return retval;
 }
 
-Entry::NoteType Entry::calcNoteType() const
+NoteType calcNoteTypeFromEdu(Edu duration)
 {
     if (duration <= 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
@@ -90,13 +92,13 @@ Entry::NoteType Entry::calcNoteType() const
         msb <<= 1;
     }
 
-    return static_cast<Entry::NoteType>(msb);
+    return static_cast<NoteType>(msb);
 }
 
-int Entry::calcAugmentationDots() const
+int calcAugmentationDotsFromEdu(Edu duration)
 {
     int count = 0;
-    for (Edu msb = Edu(calcNoteType()) >> 1; duration & msb; msb >>= 1) {
+    for (Edu msb = Edu(calcNoteTypeFromEdu(duration)) >> 1; duration & msb; msb >>= 1) {
         count++;
     }
     return count;
@@ -299,7 +301,7 @@ struct TupletState
     }
 
     TupletState(const std::shared_ptr<details::TupletDef>& t)
-        : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(Entry::NoteType::Whole)),
+        : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(NoteType::Whole)),
         ratio(t->referenceNumber* t->referenceDuration, t->displayNumber* t->displayDuration),
         tuplet(t)
     {
@@ -330,7 +332,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
         util::Fraction v1ActualElapsedDuration = 0;
         for (const auto& f : frameIncis) {
-            v1ActualElapsedDuration += util::Fraction(f->startTime, int(Entry::NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
+            v1ActualElapsedDuration += util::Fraction(f->startTime, int(NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
         }
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         for (size_t i = 0; i < entries.size(); i++) {
@@ -454,6 +456,75 @@ std::string others::MarkingCategory::getName() const
         return catName->name;
     }
     return {};
+}
+
+// *******************
+// ***** Measure *****
+// *******************
+
+int others::Measure::calcDisplayNumber() const
+{
+    if (noMeasNum) {
+        return getCmper();
+    }
+    if (const auto region = others::MeasureNumberRegion::findMeasure(getDocument(), getCmper())) {
+        return region->calcDisplayNumberFor(getCmper());
+    }
+    return getCmper();
+}
+
+// *****************************
+// ***** MeasureExprAssign *****
+// *****************************
+
+std::shared_ptr<others::TextExpressionDef> others::MeasureExprAssign::getTextExpression() const
+{
+    if (!textExprId) {
+        return nullptr;
+    }
+    return getDocument()->getOthers()->get<others::TextExpressionDef>(getPartId(), textExprId);
+}
+
+std::shared_ptr<others::ShapeExpressionDef> others::MeasureExprAssign::getShapeExpression() const
+{
+    if (!shapeExprId) {
+        return nullptr;
+    }
+    return getDocument()->getOthers()->get<others::ShapeExpressionDef>(getPartId(), shapeExprId);
+}
+
+// *******************************
+// ***** MeasureNumberRegion *****
+// *******************************
+
+std::shared_ptr<others::MeasureNumberRegion> others::MeasureNumberRegion::findMeasure(const DocumentPtr& document, MeasCmper measureId)
+{
+    auto regions = document->getOthers()->getArray<others::MeasureNumberRegion>(SCORE_PARTID);
+    for (const auto& region : regions) {
+        if (region->calcIncludesMeasure(measureId)) {
+            return region;
+        }
+    }
+    return nullptr;
+}
+
+int others::MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
+{
+    if (!calcIncludesMeasure(measureId)) {
+        throw std::logic_error("Measure id " + std::to_string(measureId) + " is not contained in measure number region " + std::to_string(getCmper()));
+    }
+    int result = int(measureId) - int(startMeas) + getStartNumber();
+    for (MeasCmper next = startMeas; next <= measureId; next++) {
+        if (auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), next)) {
+            if (measure->noMeasNum) {
+                if (measure->getCmper() == measureId) {
+                    return measureId;
+                }
+                result--;
+            }
+        }
+    }
+    return result;
 }
 
 // *************************************
@@ -596,6 +667,80 @@ std::shared_ptr<others::PartDefinition> others::PartDefinition::getScore(const D
     }
     MUSX_INTEGRITY_ERROR("The document contains no instance of PartDefinition for the score.");
     return nullptr;
+}
+
+std::vector<std::shared_ptr<others::PartDefinition>> others::PartDefinition::getInUserOrder(const DocumentPtr& document)
+{
+    auto result = document->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
+    std::sort(result.begin(), result.end(), [](const auto& lhs, const auto& rhs) {
+        return lhs->partOrder < rhs->partOrder;
+    });
+    return result;
+}
+
+// *****************************
+// ***** RepeatEndingStart *****
+// *****************************
+
+int others::RepeatEndingStart::calcEndingLength() const
+{
+    int maxLength = std::numeric_limits<int>::max();
+
+    switch (jumpAction) {
+        case RepeatActionType::JumpAuto:
+            break;
+        case RepeatActionType::JumpAbsolute:
+            maxLength = targetValue - getCmper();
+            break;
+        case RepeatActionType::JumpRelative:
+            maxLength = targetValue;
+            break;
+        default:
+            return 1;
+    }
+    if (maxLength <= 0) {
+        return 1;
+    }
+    Cmper x = getCmper() + 1;
+    while (true) {
+        auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), x);
+        if (!measure) {
+            return 1;
+        }
+        if (measure->hasEnding && getDocument()->getOthers()->get<others::RepeatEndingStart>(getPartId(), x)) {
+            break;
+        }
+        if (--maxLength <= 0) {
+            break;
+        }
+        x++;
+    }
+    return x - getCmper();
+}
+
+bool others::RepeatEndingStart::calcIsOpen() const
+{
+    if (endLineVPos < 0) {
+        return false;
+    }
+    if (jumpAction == others::RepeatActionType::NoJump) {
+        return true;
+    }
+    for (Cmper x = getCmper(); true; x++) {
+        auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), x);
+        if (!measure) {
+            break;
+        }
+        if (measure->backwardsRepeatBar) {
+            if (auto backRepeat = getDocument()->getOthers()->get<others::RepeatBack>(getPartId(), x)) {
+                if (auto repeatOptions = getDocument()->getOptions()->get<options::RepeatOptions>()) {
+                    return (backRepeat->leftVPos - backRepeat->rightVPos) == repeatOptions->bracketHookLen;
+                }
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 // *****************
@@ -977,6 +1122,23 @@ std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() co
     return result;
 }
 
+// ***********************
+// ***** TempoChange *****
+// ***********************
+
+int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
+{
+    if (isRelative) {
+        throw std::logic_error("Tempo change at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value())
+            + " is a relative tempo change.");
+    }
+    double result = (ratio * unit) / 65536.0; 
+    /* The value here is relative to 60 BPM == 1024 */
+    result *= 60.0;            
+    result /= double(noteType);            
+    return int(std::lround(result));
+}
+
 // ********************
 // ***** TextBase *****
 // ********************
@@ -1052,6 +1214,141 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 {
     if (!hasEnclosure) return nullptr;
     return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getPartId(), getCmper());
+}
+
+// *************************
+// ***** TimeSignature *****
+// *************************
+
+TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, std::optional<bool> abbreviate)
+    : Base(document, SCORE_PARTID, ShareMode::All), m_abbreviate(abbreviate)
+{
+    auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
+        if (hasCompositeTop) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeUpper>(SCORE_PARTID, beats)) {
+                std::vector<std::vector<util::Fraction>> result;
+                for (const auto& nextItem : comps->items) {
+                    if (nextItem->startGroup || result.empty()) {
+                        result.push_back({});
+                    }
+                    result[result.size() - 1].push_back(nextItem->fullFraction());
+                }
+                return result;
+            } else {
+                return {};
+            }
+        }
+        return { {beats} };
+    }();
+    auto bots = [&]() -> std::vector<std::vector<Edu>> {
+        if (hasCompositeBottom) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeLower>(SCORE_PARTID, beats)) {
+                std::vector<std::vector<Edu>>result;
+                for (const auto& nextItem : comps->items) {
+                    if (nextItem->startGroup || result.empty()) {
+                        result.push_back({});
+                    }
+                    result[result.size() - 1].push_back(nextItem->unit);
+                }
+                return result;
+            } else {
+                return {};
+            }
+        }
+        return { {unit} };
+    }();
+
+    if (tops.empty() || bots.empty()) {
+        throw std::invalid_argument("Time signature is missing composite top array or composite bottom array.");
+    }
+    if (tops.size() != bots.size()) {
+        MUSX_INTEGRITY_ERROR("Composite top group for time signature does not match composite bottom group.");
+    }
+    for (size_t x = 0; x < std::min(tops.size(), bots.size()); x++) {
+        components.push_back({ tops[x], bots[x] });
+    }
+}
+
+std::optional<char32_t> TimeSignature::getAbbreviatedSymbol() const
+{
+    auto musicChars = getDocument()->getOptions()->get<options::MusicSymbolOptions>();
+    const char32_t commonTimeSymbol = musicChars ? musicChars->timeSigAbrvCommon : U'\U0000E08A';   // SMuFL common time symbol default
+    const char32_t cutTimeSymbol = musicChars ? musicChars->timeSigAbrvCut : U'\U0000E08B';         // SMuFL cut time symbol default
+    if (m_abbreviate.has_value()) {
+        if (m_abbreviate.value()) {
+            if (isCutTime()) {
+                return cutTimeSymbol;
+            } else if (isCommonTime()) {
+                return commonTimeSymbol;
+            }
+        }
+    } else if (auto options = getDocument()->getOptions()->get<options::TimeSignatureOptions>()) {
+        if (options->timeSigDoAbrvCut && isCutTime()) {
+            return cutTimeSymbol;
+        } else if (options->timeSigDoAbrvCommon && isCommonTime()) {
+            return commonTimeSymbol;
+        }
+    }
+    return std::nullopt;
+}
+
+bool TimeSignature::isCommonTime() const
+{
+    if (components.size() != 1 || components[0].counts.size() != 1 || components[0].units.size() != 1) {
+        return false;
+    }
+    return components[0].counts[0] == 4 && components[0].units[0] == Edu(NoteType::Quarter);
+}
+
+bool TimeSignature::isCutTime() const
+{
+    if (components.size() != 1 || components[0].counts.size() != 1 || components[0].units.size() != 1) {
+        return false;
+    }
+    return components[0].counts[0] == 2 && components[0].units[0] == Edu(NoteType::Half);
+}
+
+std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
+{
+    // Lambda to compute the sum of a vector
+    auto sumVector = [](const auto& vec) {
+        using T = typename std::decay<decltype(vec.front())>::type;
+        return std::accumulate(vec.begin(), vec.end(), T{});
+    };
+
+    // Lambda to compute GCD of a vector
+    auto computeGCD = [](const std::vector<Edu>& values) {
+        return values.empty() ? 1 : std::reduce(values.begin() + 1, values.end(), values[0], std::gcd<Edu, Edu>);
+    };
+    
+    std::vector<Edu> allUnits;
+    std::vector<std::pair<util::Fraction, Edu>> summedUnits;
+
+    for (const auto& ts : components) {
+        Edu totalUnit = sumVector(ts.units);
+        summedUnits.emplace_back(sumVector(ts.counts), totalUnit);
+        allUnits.push_back(totalUnit);
+    }
+
+    Edu finalUnit = computeGCD(allUnits); // The final unit size
+
+    // Compute final beats relative to finalUnit
+    auto totalBeats = std::accumulate(summedUnits.begin(), summedUnits.end(), util::Fraction{}, [finalUnit](auto acc, const auto& p) {
+        return acc + p.first * (p.second / finalUnit);
+    });
+
+    if (!finalUnit) {
+        throw std::logic_error("The beat size is zero.");
+    }
+
+    int power2 = 0;
+    int otherPrimes = finalUnit;
+    while ((otherPrimes & 0x01) == 0) {
+        otherPrimes >>= 1;
+        power2++;
+    }
+
+    return { totalBeats * otherPrimes, NoteType(1 << power2) };
 }
 
 } // namespace dom    

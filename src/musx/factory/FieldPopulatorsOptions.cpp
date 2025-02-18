@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -296,32 +296,6 @@ MUSX_XML_ENUM_MAPPING(TupletOptions::BracketStyle, {
 
 namespace dom {
 
-using namespace musx::xml;
-
-MUSX_XML_ELEMENT_ARRAY(FontInfo, {
-    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
-    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
-    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) {
-            for (auto efxChild = e->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
-                auto efxName = efxChild->getTagName();
-                if (efxName == "bold") {
-                    i->bold = true;
-                } else if (efxName == "italic") {
-                    i->italic = true;
-                } else if (efxName == "underline") {
-                    i->underline = true;
-                } else if (efxName == "strikeout") {
-                    i->strikeout = true;
-                } else if (efxName == "absolute") {
-                    i->absolute = true;
-                } else if (efxName == "hidden") {
-                    i->hidden = true;
-                }
-            }        
-        }
-    },
-});
-
 namespace options {
 
 using namespace ::musx::xml;
@@ -380,7 +354,7 @@ MUSX_XML_ELEMENT_ARRAY(BeamOptions, {
     {"maxSlope", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->maxSlope = e->getTextAs<Evpu>(); }},
     {"beamSepar", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamSepar = e->getTextAs<Evpu>(); }},
     {"hmBeamTip", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->maxFromMiddle = e->getTextAs<Evpu>(); }},
-    {"beamingStyle", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamingStyle = toEnum<BeamOptions::FlattenStyle>(e->getTextTrimmed()); }},
+    {"beamingStyle", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamingStyle = toEnum<BeamOptions::FlattenStyle>(e); }},
     {"incEdgeRestsInBeamGroups", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->extendBeamsOverRests = true; }},
     {"incRestsInClassicBeams", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->incRestsInFourGroups = true; }},
     {"beamFourEighthsInCommonTime", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->beamFourEighthsInCommonTime = true; }},
@@ -543,9 +517,9 @@ MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
     {"avoidColClefs", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->avoidColClefs = true; }},
     {"avoidColSeconds", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->avoidColSeconds = true; }},
     {"avoidColStems", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->avoidColStems = true; }},
-    {"avoidColUnisons", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->avoidColUnisons = toEnum<MusicSpacingOptions::ColUnisonsChoice>(e->getTextTrimmed()); }},
+    {"avoidColUnisons", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->avoidColUnisons = toEnum<MusicSpacingOptions::ColUnisonsChoice>(e); }},
     {"avoidColLedgers", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->avoidColLedgers = true; }},
-    {"manualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->manualPositioning = toEnum<MusicSpacingOptions::ManualPositioning>(e->getTextTrimmed()); }},
+    {"manualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->manualPositioning = toEnum<MusicSpacingOptions::ManualPositioning>(e); }},
     {"ignoreHidden", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->ignoreHidden = true; }},
     {"interpolateAllotments", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->interpolateAllotments = true; }},
     {"usePrinter", [](const XmlElementPtr&, const std::shared_ptr<MusicSpacingOptions>& i) { i->usePrinter = true; }},
@@ -555,9 +529,77 @@ MUSX_XML_ELEMENT_ARRAY(MusicSpacingOptions, {
     {"scalingFactor", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->scalingFactor = e->getTextAs<double>(); }},
     {"defaultAllotment", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->defaultAllotment = e->getTextAs<Evpu>(); }},
     {"minDistGrace", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->minDistGrace = e->getTextAs<Evpu>(); }},
-    {"graceNoteManualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->graceNoteSpacing = toEnum<MusicSpacingOptions::GraceNoteSpacing>(e->getTextTrimmed()); }},
+    {"graceNoteManualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->graceNoteSpacing = toEnum<MusicSpacingOptions::GraceNoteSpacing>(e); }},
     {"musFront", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->musFront = e->getTextAs<Evpu>(); }},
     {"musBack", [](const XmlElementPtr& e, const std::shared_ptr<MusicSpacingOptions>& i) { i->musBack = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(MusicSymbolOptions, {
+    {"noteheadQuarter", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->noteheadQuarter = e->getTextAs<char32_t>(); }},
+    {"noteheadHalf", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->noteheadHalf = e->getTextAs<char32_t>(); }},
+    {"noteheadWhole", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->noteheadWhole = e->getTextAs<char32_t>(); }},
+    {"noteheadDblWhole", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->noteheadDblWhole = e->getTextAs<char32_t>(); }},
+    {"natural", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->natural = e->getTextAs<char32_t>(); }},
+    {"flat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flat = e->getTextAs<char32_t>(); }},
+    {"sharp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->sharp = e->getTextAs<char32_t>(); }},
+    {"dblFlat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->dblFlat = e->getTextAs<char32_t>(); }},
+    {"dblSharp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->dblSharp = e->getTextAs<char32_t>(); }},
+    {"parenNatural", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->parenNatural = e->getTextAs<char32_t>(); }},
+    {"parenFlat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->parenFlat = e->getTextAs<char32_t>(); }},
+    {"parenSharp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->parenSharp = e->getTextAs<char32_t>(); }},
+    {"parenDblFlat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->parenDblFlat = e->getTextAs<char32_t>(); }},
+    {"parenDblSharp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->parenDblSharp = e->getTextAs<char32_t>(); }},
+    {"chordNatural", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->chordNatural = e->getTextAs<char32_t>(); }},
+    {"chordFlat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->chordFlat = e->getTextAs<char32_t>(); }},
+    {"chordSharp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->chordSharp = e->getTextAs<char32_t>(); }},
+    {"chordDblFlat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->chordDblFlat = e->getTextAs<char32_t>(); }},
+    {"chordDblSharp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->chordDblSharp = e->getTextAs<char32_t>(); }},
+    {"keySigNatural", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->keySigNatural = e->getTextAs<char32_t>(); }},
+    {"keySigFlat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->keySigFlat = e->getTextAs<char32_t>(); }},
+    {"keySigSharp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->keySigSharp = e->getTextAs<char32_t>(); }},
+    {"keySigDblFlat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->keySigDblFlat = e->getTextAs<char32_t>(); }},
+    {"keySigDblSharp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->keySigDblSharp = e->getTextAs<char32_t>(); }},
+    {"restLonga", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->restLonga = e->getTextAs<char32_t>(); }},
+    {"restDblWhole", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->restDblWhole = e->getTextAs<char32_t>(); }},
+    {"restWhole", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->restWhole = e->getTextAs<char32_t>(); }},
+    {"restHalf", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->restHalf = e->getTextAs<char32_t>(); }},
+    {"restQuarter", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->restQuarter = e->getTextAs<char32_t>(); }},
+    {"restEighth", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->restEighth = e->getTextAs<char32_t>(); }},
+    {"rest16th", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->rest16th = e->getTextAs<char32_t>(); }},
+    {"rest32nd", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->rest32nd = e->getTextAs<char32_t>(); }},
+    {"rest64th", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->rest64th = e->getTextAs<char32_t>(); }},
+    {"rest128th", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->rest128th = e->getTextAs<char32_t>(); }},
+    {"restDefMeas", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->restDefMeas = e->getTextAs<char32_t>(); }},
+    {"oneBarRepeat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->oneBarRepeat = e->getTextAs<char32_t>(); }},
+    {"twoBarRepeat", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->twoBarRepeat = e->getTextAs<char32_t>(); }},
+    {"slashBar", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->slashBar = e->getTextAs<char32_t>(); }},
+    {"quarterSlash", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->quarterSlash = e->getTextAs<char32_t>(); }},
+    {"halfSlash", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->halfSlash = e->getTextAs<char32_t>(); }},
+    {"wholeSlash", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->wholeSlash = e->getTextAs<char32_t>(); }},
+    {"dblWholeSlash", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->dblWholeSlash = e->getTextAs<char32_t>(); }},
+    {"timeSigPlus", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->timeSigPlus = e->getTextAs<char32_t>(); }},
+    {"timeSigPlusParts", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->timeSigPlusParts = e->getTextAs<char32_t>(); }},
+    {"timeSigAbrvCommon", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->timeSigAbrvCommon = e->getTextAs<char32_t>(); }},
+    {"timeSigAbrvCut", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->timeSigAbrvCut = e->getTextAs<char32_t>(); }},
+    {"timeSigAbrvCommonParts", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->timeSigAbrvCommonParts = e->getTextAs<char32_t>(); }},
+    {"timeSigAbrvCutParts", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->timeSigAbrvCutParts = e->getTextAs<char32_t>(); }},
+    {"augDot", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->augDot = e->getTextAs<char32_t>(); }},
+    {"forwardRepeatDot", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->forwardRepeatDot = e->getTextAs<char32_t>(); }},
+    {"backRepeatDot", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->backRepeatDot = e->getTextAs<char32_t>(); }},
+    {"eightVaUp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->eightVaUp = e->getTextAs<char32_t>(); }},
+    {"eightVbDown", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->eightVbDown = e->getTextAs<char32_t>(); }},
+    {"fifteenMaUp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->fifteenMaUp = e->getTextAs<char32_t>(); }},
+    {"fifteenMbDown", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->fifteenMbDown = e->getTextAs<char32_t>(); }},
+    {"trillChar", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->trillChar = e->getTextAs<char32_t>(); }},
+    {"wiggleChar", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->wiggleChar = e->getTextAs<char32_t>(); }},
+    {"flagUp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flagUp = e->getTextAs<char32_t>(); }},
+    {"flagDown", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flagDown = e->getTextAs<char32_t>(); }},
+    {"flag16Up", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flag16Up = e->getTextAs<char32_t>(); }},
+    {"flag16Down", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flag16Down = e->getTextAs<char32_t>(); }},
+    {"flag2Up", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flag2Up = e->getTextAs<char32_t>(); }},
+    {"flag2Down", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flag2Down = e->getTextAs<char32_t>(); }},
+    {"flagStraightUp", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flagStraightUp = e->getTextAs<char32_t>(); }},
+    {"flagStraightDown", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flagStraightDown = e->getTextAs<char32_t>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PageFormatOptions::PageFormat, {
@@ -592,7 +634,7 @@ MUSX_XML_ELEMENT_ARRAY(PageFormatOptions, {
     {"pageFormatScore", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i){ i->pageFormatScore = FieldPopulator<PageFormatOptions::PageFormat>::createAndPopulate(e); }},
     {"pageFormatParts", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i) { i->pageFormatParts = FieldPopulator<PageFormatOptions::PageFormat>::createAndPopulate(e); }},
     {"avoidSystemMarginCollisions", [](const XmlElementPtr&, const std::shared_ptr<PageFormatOptions>& i) { i->avoidSystemMarginCollisions = true; }},
-    {"adjustPageScope", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i) { i->adjustPageScope = toEnum<PageFormatOptions::AdjustPageScope>(e->getTextTrimmed()); }},
+    {"adjustPageScope", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions>& i) { i->adjustPageScope = toEnum<PageFormatOptions::AdjustPageScope>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PianoBraceBracketOptions, {
@@ -617,12 +659,12 @@ MUSX_XML_ELEMENT_ARRAY(RepeatOptions, {
     {"thickLineWidth", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->thickLineWidth = e->getTextAs<Efix>(); }},
     {"thinLineWidth", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->thinLineWidth = e->getTextAs<Efix>(); }},
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->lineSpace = e->getTextAs<Efix>(); }},
-    {"backToBackStyle", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->backToBackStyle = toEnum<RepeatOptions::BackToBackStyle>(e->getTextTrimmed()); }},
+    {"backToBackStyle", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->backToBackStyle = toEnum<RepeatOptions::BackToBackStyle>(e); }},
     {"forwardDotHPos", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->forwardDotHPos = e->getTextAs<Evpu>(); }},
     {"backwardDotHPos", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->backwardDotHPos = e->getTextAs<Evpu>(); }},
     {"upperDotVPos", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->upperDotVPos = e->getTextAs<Evpu>(); }},
     {"lowerDotVPos", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->lowerDotVPos = e->getTextAs<Evpu>(); }},
-    {"wingStyle", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->wingStyle = toEnum<RepeatOptions::WingStyle>(e->getTextTrimmed()); }},
+    {"wingStyle", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->wingStyle = toEnum<RepeatOptions::WingStyle>(e); }},
     {"afterClefSpace", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->afterClefSpace = e->getTextAs<Evpu>(); }},
     {"afterKeySpace", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->afterKeySpace = e->getTextAs<Evpu>(); }},
     {"afterTimeSpace", [](const XmlElementPtr& e, const std::shared_ptr<RepeatOptions>& i) { i->afterTimeSpace = e->getTextAs<Evpu>(); }},
@@ -639,7 +681,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatOptions, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeOptions::ConnectionStyle, {
-    {"connectIndex", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->connectIndex = toEnum<SmartShapeOptions::ConnectionIndex>(e->getTextTrimmed()); }},
+    {"connectIndex", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->connectIndex = toEnum<SmartShapeOptions::ConnectionIndex>(e); }},
     {"xOffset", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
     {"yOffset", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions::ConnectionStyle>& i) { i->yOffset = e->getTextAs<Evpu>(); }}
 });
@@ -661,7 +703,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShapeOptions, {
     {"smartDashOn", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->smartDashOn = e->getTextAs<Evpu>(); }},
     {"smartDashOff", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->smartDashOff = e->getTextAs<Evpu>(); }},
     {"crescHorizontal", [](const XmlElementPtr&, const std::shared_ptr<SmartShapeOptions>& i) { i->crescHorizontal = true; }},
-    {"direction", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->direction = toEnum<SmartShapeOptions::DefaultDirection>(e->getTextTrimmed()); }},
+    {"direction", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->direction = toEnum<SmartShapeOptions::DefaultDirection>(e); }},
     {"slurThicknessCp1X", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp1X = e->getTextAs<Evpu>(); }},
     {"slurThicknessCp1Y", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp1Y = e->getTextAs<Evpu>(); }},
     {"slurThicknessCp2X", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp2X = e->getTextAs<Evpu>(); }},
@@ -755,16 +797,16 @@ MUSX_XML_ELEMENT_ARRAY(TieOptions, {
     {"sysBreakLeftHAdj", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->sysBreakLeftHAdj = e->getTextAs<Evpu>(); }},
     {"sysBreakRightHAdj", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->sysBreakRightHAdj = e->getTextAs<Evpu>(); }},
     {"useOuterPlacement", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->useOuterPlacement = true; }},
-    {"secondsPlacement", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->secondsPlacement = toEnum<TieOptions::SecondsPlacement>(e->getTextTrimmed()); }},
-    {"chordTieDirType", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->chordTieDirType = toEnum<TieOptions::ChordTieDirType>(e->getTextTrimmed()); }},
+    {"secondsPlacement", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->secondsPlacement = toEnum<TieOptions::SecondsPlacement>(e); }},
+    {"chordTieDirType", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->chordTieDirType = toEnum<TieOptions::ChordTieDirType>(e); }},
     {"chordTieDirOpposingSeconds", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->chordTieDirOpposingSeconds = true; }},
-    {"mixedStemDirection", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->mixedStemDirection = toEnum<TieOptions::MixedStemDirection>(e->getTextTrimmed()); }},
+    {"mixedStemDirection", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->mixedStemDirection = toEnum<TieOptions::MixedStemDirection>(e); }},
     {"afterSingleDot", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->afterSingleDot = true; }},
     {"afterMultipleDots", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->afterMultipleDots = true; }},
     {"beforeAcciSingleNote", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->beforeAcciSingleNote = true; }},
-    {"specialPosMode", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->specialPosMode = toEnum<TieOptions::SpecialPosMode>(e->getTextTrimmed()); }},
+    {"specialPosMode", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->specialPosMode = toEnum<TieOptions::SpecialPosMode>(e); }},
     {"avoidStaffLinesDistance", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->avoidStaffLinesDistance = e->getTextAs<Evpu>(); }},
-    {"insetStyle", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->insetStyle = toEnum<TieOptions::InsetStyle>(e->getTextTrimmed()); }},
+    {"insetStyle", [](const XmlElementPtr& e, const std::shared_ptr<TieOptions>& i) { i->insetStyle = toEnum<TieOptions::InsetStyle>(e); }},
     {"useInterpolation", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->useInterpolation = true; }},
     {"useTieEndCtlStyle", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->useTieEndCtlStyle = true; }},
     {"avoidStaffLinesOnly", [](const XmlElementPtr&, const std::shared_ptr<TieOptions>& i) { i->avoidStaffLinesOnly = true; }},
@@ -795,19 +837,19 @@ MUSX_XML_ELEMENT_ARRAY(TupletOptions, {
     {"fullDura", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->fullDura = true; }},
     {"metricCenter", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->metricCenter = true; }},
     {"avoidStaff", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->avoidStaff = true; }},
-    {"autoBracketStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->autoBracketStyle = toEnum<TupletOptions::AutoBracketStyle>(e->getTextTrimmed()); }},
+    {"autoBracketStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->autoBracketStyle = toEnum<TupletOptions::AutoBracketStyle>(e); }},
     {"tupOffX", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupOffX = e->getTextAs<Evpu>(); }},
     {"tupOffY", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->tupOffY = e->getTextAs<Evpu>(); }},
     {"brackOffX", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->brackOffX = e->getTextAs<Evpu>(); }},
     {"brackOffY", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->brackOffY = e->getTextAs<Evpu>(); }},
-    {"numStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->numStyle = toEnum<TupletOptions::NumberStyle>(e->getTextTrimmed()); }},
-    {"posStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->posStyle = toEnum<TupletOptions::PositioningStyle>(e->getTextTrimmed()); }},
+    {"numStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->numStyle = toEnum<TupletOptions::NumberStyle>(e); }},
+    {"posStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->posStyle = toEnum<TupletOptions::PositioningStyle>(e); }},
     {"allowHorz", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->allowHorz = true; }},
     {"ignoreGlOffs", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->ignoreHorzNumOffset = true; }},
     {"breakBracket", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->breakBracket = true; }},
     {"matchHooks", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->matchHooks = true; }},
     {"noteBelow", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->useBottomNote = true; }},
-    {"brackStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->brackStyle = toEnum<TupletOptions::BracketStyle>(e->getTextTrimmed()); }},
+    {"brackStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->brackStyle = toEnum<TupletOptions::BracketStyle>(e); }},
     {"smartTuplet", [](const XmlElementPtr&, const std::shared_ptr<TupletOptions>& i) { i->smartTuplet = true; }},
     {"leftHookLen", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->leftHookLen = e->getTextAs<Evpu>(); }},
     {"leftHookExt", [](const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->leftHookExt = e->getTextAs<Evpu>(); }},

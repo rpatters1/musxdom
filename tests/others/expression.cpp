@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-TEST(TextExpressionDefTest, ValidExpression)
+TEST(TextExpressionDef, ValidExpression)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -75,7 +75,7 @@ TEST(TextExpressionDefTest, ValidExpression)
     EXPECT_FALSE(expression->breakMmRest);  // Default
     EXPECT_EQ(expression->playbackType, others::PlaybackType::MidiController);  // From XML
     EXPECT_EQ(expression->horzMeasExprAlign, others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead);  // From XML
-    EXPECT_EQ(expression->horzExprJustification, others::HorizontalExprJustification::Right);  // From XML
+    EXPECT_EQ(expression->horzExprJustification, others::HorizontalTextJustification::Right);  // From XML
     EXPECT_EQ(expression->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaff);  // Default
     EXPECT_EQ(expression->measXAdjust, 0);  // Default
     EXPECT_EQ(expression->yAdjustEntry, -54);  // From XML
@@ -92,8 +92,7 @@ TEST(TextExpressionDefTest, ValidExpression)
     ASSERT_TRUE(it->second.lock());
 }
 
-
-TEST(TextExpressionDefTest, InvalidPlaybackType)
+TEST(TextExpressionDef, InvalidPlaybackType)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -188,7 +187,7 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     EXPECT_EQ(markingCategory->numberFont, nullptr) << "NumberFont should be nullptr but is not";
 
     // Other properties
-    EXPECT_EQ(markingCategory->justification, others::HorizontalExprJustification::Right);  // From XML
+    EXPECT_EQ(markingCategory->justification, others::HorizontalTextJustification::Right);  // From XML
     EXPECT_EQ(markingCategory->horzAlign, others::HorizontalMeasExprAlign::LeftOfAllNoteheads);  // From XML
     EXPECT_EQ(markingCategory->horzOffset, 12);  // From XML
     EXPECT_EQ(markingCategory->vertAlign, others::VerticalMeasExprAlign::AboveStaffOrEntry);  // From XML
@@ -215,7 +214,7 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     EXPECT_EQ(markingCategory->getName(), markingCategoryName->name);  // Should match the name from MarkingCategoryName
 }
 
-TEST(TextExpressionDefTest, EnumDefaults)
+TEST(TextExpressionDef, EnumDefaults)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -246,11 +245,11 @@ TEST(TextExpressionDefTest, EnumDefaults)
     EXPECT_EQ(expression->rehearsalMarkStyle, others::RehearsalMarkStyle::None);
     EXPECT_EQ(expression->playbackType, others::PlaybackType::None);
     EXPECT_EQ(expression->horzMeasExprAlign, others::HorizontalMeasExprAlign::LeftBarline);
-    EXPECT_EQ(expression->horzExprJustification, others::HorizontalExprJustification::Left);
+    EXPECT_EQ(expression->horzExprJustification, others::HorizontalTextJustification::Left);
     EXPECT_EQ(expression->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaff);
 }
 
-TEST(MarkingCategoryTest, MissingCategoryType)
+TEST(MarkingCategory, MissingCategoryType)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -268,4 +267,137 @@ TEST(MarkingCategoryTest, MissingCategoryType)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
         std::invalid_argument
     );
+}
+
+TEST(MeasureExprAssign, Populate)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measExprAssign cmper="1" inci="0">
+      <textExprID>24</textExprID>
+      <horzEvpuOff>1</horzEvpuOff>
+      <vertOff>2</vertOff>
+      <staffAssign>-1</staffAssign>
+      <layer>1</layer>
+      <channelSwitch>toL1</channelSwitch>
+      <dontScaleWithEntry/>
+      <staffGroup>1</staffGroup>
+      <staffList>1</staffList>
+    </measExprAssign>
+    <measExprAssign cmper="2" inci="0">
+      <shapeExprID>1</shapeExprID>
+      <horzEduOff>1024</horzEduOff>
+      <horzEvpuOff>11</horzEvpuOff>
+      <vertOff>73</vertOff>
+      <staffAssign>1</staffAssign>
+    </measExprAssign>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others) << "Others node not found in XML";
+
+    // Check first expression assignment (cmper=1)
+    auto expr1 = others->get<others::MeasureExprAssign>(SCORE_PARTID, 1, 0);
+    ASSERT_TRUE(expr1) << "MeasureExprAssign with cmper=1 not found but does exist";
+    EXPECT_EQ(expr1->textExprId, 24);  // From XML
+    EXPECT_EQ(expr1->horzEvpuOff, 1);  // From XML
+    EXPECT_EQ(expr1->vertEvpuOff, 2);  // From XML
+    EXPECT_EQ(expr1->staffAssign, -1); // From XML
+    EXPECT_EQ(expr1->layer, 1);        // From XML
+    EXPECT_TRUE(expr1->dontScaleWithEntry); // From XML
+    EXPECT_EQ(expr1->staffGroup, 1);   // From XML
+    EXPECT_EQ(expr1->staffList, 1);    // From XML
+
+    // Check second expression assignment (cmper=2)
+    auto expr2 = others->get<others::MeasureExprAssign>(SCORE_PARTID, 2, 0);
+    ASSERT_TRUE(expr2) << "MeasureExprAssign with cmper=2 not found but does exist";
+    EXPECT_EQ(expr2->shapeExprId, 1);  // From XML
+    EXPECT_EQ(expr2->eduPosition, 1024); // From XML
+    EXPECT_EQ(expr2->horzEvpuOff, 11);  // From XML
+    EXPECT_EQ(expr2->vertEvpuOff, 73);  // From XML
+    EXPECT_EQ(expr2->layer, 0);        // From XML
+    EXPECT_FALSE(expr2->dontScaleWithEntry); // From XML
+    EXPECT_EQ(expr2->staffAssign, 1);   // From XML
+    EXPECT_EQ(expr2->staffGroup, 0);   // From XML
+    EXPECT_EQ(expr2->staffList, 0);    // From XML
+
+    // Ensure that an invalid MeasureExprAssign isn't found
+    auto exprInvalid = others->get<others::MeasureExprAssign>(SCORE_PARTID, 3);
+    EXPECT_FALSE(exprInvalid) << "MeasureExprAssign with cmper=3 found but does not exist";
+}
+
+TEST(ShapeExpressionDef, Populate)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <shapeExprDef cmper="4">
+      <shapeDef>22</shapeDef>
+      <categoryID>12</categoryID>
+      <value>121</value>
+      <auxdata1>1024</auxdata1>
+      <playPass>2</playPass>
+      <breakMmRest/>
+      <useAuxData/>
+      <masterShape/>
+      <noPrint/>
+      <noHorzStretch/>
+      <playType>time</playType>
+      <horzMeasExprAlign>centerOverMusic</horzMeasExprAlign>
+      <horzExprAlign>center</horzExprAlign>
+      <measXAdjust>1</measXAdjust>
+      <vertMeasExprAlign>aboveStaffOrEntry</vertMeasExprAlign>
+      <yAdjustBaseline>2</yAdjustBaseline>
+      <yAdjustEntry>3</yAdjustEntry>
+      <descStr>Weird Number</descStr>
+    </shapeExprDef>
+    <markingsCategory cmper="12">
+      <categoryType>dynamics</categoryType>
+    </markingsCategory>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others) << "Others node not found in XML";
+
+    // Check the ShapeExpressionDef with cmper=4
+    auto shapeExpr = others->get<others::ShapeExpressionDef>(SCORE_PARTID, 4);
+    ASSERT_TRUE(shapeExpr) << "ShapeExpressionDef with cmper=4 not found but does exist";
+    EXPECT_EQ(shapeExpr->shapeDef, 22);
+    EXPECT_EQ(shapeExpr->categoryId, 12);
+    EXPECT_EQ(shapeExpr->value, 121);
+    EXPECT_EQ(shapeExpr->auxData1, 1024);
+    EXPECT_EQ(shapeExpr->playPass, 2);
+    EXPECT_TRUE(shapeExpr->breakMmRest);
+    EXPECT_TRUE(shapeExpr->useAuxData);
+    EXPECT_TRUE(shapeExpr->masterShape);
+    EXPECT_TRUE(shapeExpr->noPrint);
+    EXPECT_TRUE(shapeExpr->noHorzStretch);
+    EXPECT_EQ(shapeExpr->playbackType, others::PlaybackType::Tempo);
+    EXPECT_EQ(shapeExpr->horzMeasExprAlign, others::HorizontalMeasExprAlign::CenterOverMusic);
+    EXPECT_EQ(shapeExpr->horzExprJustification, others::HorizontalTextJustification::Center);
+    EXPECT_EQ(shapeExpr->measXAdjust, 1);
+    EXPECT_EQ(shapeExpr->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaffOrEntry);
+    EXPECT_EQ(shapeExpr->yAdjustBaseline, 2);
+    EXPECT_EQ(shapeExpr->yAdjustEntry, 3);
+    EXPECT_EQ(shapeExpr->description, "Weird Number");
+
+    // Ensure that a ShapeExpressionDef with a non-existent cmper isn't found.
+    auto exprInvalid = others->get<others::ShapeExpressionDef>(SCORE_PARTID, 3);
+    EXPECT_FALSE(exprInvalid) << "ShapeExpressionDef with cmper=3 found but does not exist";
+
+    // Check marking cat
+    auto cat = others->get<others::MarkingCategory>(SCORE_PARTID, shapeExpr->categoryId);
+    ASSERT_TRUE(cat);
+    auto it = cat->shapeExpressions.find(shapeExpr->getCmper());
+    ASSERT_NE(it, cat->shapeExpressions.end());
+    ASSERT_TRUE(it->second.lock());
 }

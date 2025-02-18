@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -203,10 +203,10 @@ TEST(GFrameHold, IterationTest)
         auto entry = entryInfo->getEntry();
         EXPECT_TRUE(entryInfo->getLayerIndex() == 0 || entryInfo->getLayerIndex() == 1) << "unexpected layer index " << entryInfo->getLayerIndex();
         if (entryInfo->getLayerIndex() == 0) {
-            EXPECT_EQ(entry->duration, Edu(Entry::NoteType::Whole)) << "unexpected note duration " << entry->duration;
+            EXPECT_EQ(entry->duration, Edu(NoteType::Whole)) << "unexpected note duration " << entry->duration;
             EXPECT_TRUE(entry->isNote) << "layerIndex 0 entry is not a note";
         } else {
-            EXPECT_EQ(entry->duration, Edu(Entry::NoteType::Half)) << "unexpected note duration " << entry->duration;
+            EXPECT_EQ(entry->duration, Edu(NoteType::Half)) << "unexpected note duration " << entry->duration;
         }
         return true;
     });
@@ -216,7 +216,7 @@ TEST(GFrameHold, IterationTest)
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
         auto entry = entryInfo->getEntry();
         EXPECT_TRUE(entryInfo->getLayerIndex() == 2) << "unexpected layer index " << entryInfo->getLayerIndex();
-        EXPECT_EQ(entry->duration, Edu(Entry::NoteType::Whole)) << "unexpected note duration " << entry->duration;
+        EXPECT_EQ(entry->duration, Edu(NoteType::Whole)) << "unexpected note duration " << entry->duration;
         EXPECT_TRUE(entry->isNote) << "layerIndex 0 entry is not a note";
         return true;
     });
@@ -344,8 +344,8 @@ TEST(GFrameHold, V1V2TupletTest)
         total += expectedValues[x++];
     /*
         std::cout << entryInfo->elapsedDuration << '\t' << entryInfo->actualDuration << '\t'
-                        << std::to_string(entryInfo->elapsedDuration.calcDuration()) << '\t'
-                        << std::to_string(entryInfo->actualDuration.calcDuration()) << std::endl;
+                        << std::to_string(entryInfo->elapsedDuration.calcEduDuration()) << '\t'
+                        << std::to_string(entryInfo->actualDuration.calcEduDuration()) << std::endl;
     */
         return true;
     });

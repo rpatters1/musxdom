@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -146,6 +146,21 @@ MUSX_RESOLVER_ENTRY(Page, {
                             + " has a last system smaller than the first system.");
                     }
                 }
+            }
+        }
+    }
+});
+
+MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
+    [](const dom::DocumentPtr& document) {
+        auto exps = document->getOthers()->getArray<ShapeExpressionDef>(SCORE_PARTID);
+        for (const auto& instance : exps) {
+            if (instance->categoryId) {
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
+                if (!markingCat) {
+                    throw std::invalid_argument("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
+                }
+                markingCat->shapeExpressions.emplace(instance->getCmper(), instance);
             }
         }
     }

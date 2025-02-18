@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +97,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(note->showAcci);
         EXPECT_TRUE(note->freezeAcci);
 
-        EXPECT_EQ(entry->calcNoteType(), Entry::NoteType::Eighth);
+        EXPECT_EQ(entry->calcNoteType(), NoteType::Eighth);
         EXPECT_EQ(entry->calcAugmentationDots(), 2);
     }
 
@@ -117,7 +117,7 @@ TEST(EntryTest, PopulateFields)
 
         EXPECT_EQ(entry->notes.size(), 0);
 
-        EXPECT_EQ(entry->calcNoteType(), Entry::NoteType::Note16th);
+        EXPECT_EQ(entry->calcNoteType(), NoteType::Note16th);
         EXPECT_EQ(entry->calcAugmentationDots(), 0);
     }
 }

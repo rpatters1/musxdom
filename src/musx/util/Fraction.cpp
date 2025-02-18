@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,15 @@ using namespace musx::dom;
 
 namespace musx {
 namespace util {
-double Fraction::calcDuration() const
+
+Fraction Fraction::fromEdu(int edu)
 {
-    return EduFloat(numerator * int(Entry::NoteType::Whole)) / EduFloat(denominator);
+    return Fraction(edu, int(NoteType::Whole));
+}
+
+double Fraction::calcEduDuration() const
+{
+    return EduFloat(numerator() * int(NoteType::Whole)) / EduFloat(denominator());
 }
 
 } // namespace util

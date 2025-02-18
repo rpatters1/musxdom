@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 #include <unordered_set>
 
 #include "BaseClasses.h"
-
+#include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
@@ -127,7 +127,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<GFrameHold> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -200,7 +200,7 @@ public:
          */
         Bracket() = default;
 
-        static const xml::XmlElementArray<Bracket> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<Bracket>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     // Public properties corresponding to the XML structure, ordered as they appear in the XML
@@ -274,7 +274,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "staffGroup"; ///< XML node name for this type.
-    static const xml::XmlElementArray<StaffGroup> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -330,16 +330,16 @@ public:
     Evpu manualSlopeAdj{};                  ///< "Manual Slope Adjustment" in @ref Evpu. (xml node is `<slope>`)
 
     /** @brief return the reference duration as a @ref util::Fraction of a whole note */
-    util::Fraction calcReferenceDuration() const { return util::Fraction(referenceNumber * referenceDuration, Edu(Entry::NoteType::Whole)); }
+    util::Fraction calcReferenceDuration() const { return util::Fraction(referenceNumber * referenceDuration, Edu(NoteType::Whole)); }
 
     /** @brief return the display duration as a @ref util::Fraction of a whole note */
-    util::Fraction calcDisplayDuration() const { return util::Fraction(displayNumber * displayDuration, Edu(Entry::NoteType::Whole)); }
+    util::Fraction calcDisplayDuration() const { return util::Fraction(displayNumber * displayDuration, Edu(NoteType::Whole)); }
 
     /** @brief return the tuplet ratio (reference / display) */
     util::Fraction calcRatio() const { return util::Fraction(referenceNumber * referenceDuration, displayNumber * displayDuration); }
         
     constexpr static std::string_view XmlNodeName = "tupletDef";    ///< The XML node name for this type.
-    static const xml::XmlElementArray<TupletDef> XmlMappingArray;   ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TupletDef>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };
 
 } // namespace details

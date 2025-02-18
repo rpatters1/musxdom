@@ -55,6 +55,7 @@ add_executable(musxdomtests
     options/misc_options.cpp
     options/multimeasure_rest_options.cpp
     options/music_spacing_options.cpp
+    options/music_symbol_options.cpp
     options/page_options.cpp
     options/piano_brace_bracket_options.cpp
     options/repeat_options.cpp
@@ -73,11 +74,13 @@ add_executable(musxdomtests
 	others/instrument_used.cpp
     others/measure.cpp
     others/measure_number_region.cpp
+    others/miscellaneous.cpp
     others/mmrest.cpp
     others/multistaff_inst.cpp
     others/page.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
+    others/repeats.cpp
     others/staff.cpp
     others/staff_style.cpp
     others/staff_system.cpp

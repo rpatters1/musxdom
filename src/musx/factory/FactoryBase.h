@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -237,8 +237,18 @@ EnumClass toEnum(const FromClass& value)
     }
 }
 
+template<typename EnumClass>
+EnumClass toEnum(const ::musx::xml::XmlElementPtr& e)
+{
+    return toEnum<EnumClass>(e->getTextTrimmed());
+}
+
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
-const ::musx::xml::XmlElementArray<Type> Type::XmlMappingArray = __VA_ARGS__
+const ::musx::xml::XmlElementArray<Type>& Type::xmlMappingArray() { \
+    static const ::musx::xml::XmlElementArray<Type> instance = __VA_ARGS__; \
+    return instance; \
+} \
+static_assert(true, "") // require semicolon after macro
 
 using ResolverEntry = std::optional<ElementLinker::Resolver>;
 template <typename T>
@@ -256,24 +266,29 @@ struct ResolverContainer<Type> { \
 template <typename T>
 struct FieldPopulator : public FactoryBase
 {
+    static void populateField(const std::shared_ptr<T>& instance, const XmlElementPtr& fieldElement)
+    {
+        auto it = elementXref().find(fieldElement->getTagName());
+        if (it != elementXref().end()) {
+            std::get<1>(*it)(fieldElement, instance);
+        } else {
+            const bool requireFields = [instance]() {
+                if constexpr (std::is_base_of_v<Base, T>) {
+                    return instance->requireAllFields();
+                } else {
+                    return true;
+                }
+            }();
+            if (requireFields) {
+                MUSX_UNKNOWN_XML("xml element <" + fieldElement->getParent()->getTagName() + "> has child <" + fieldElement->getTagName() + "> which is not in the element list.");
+            }
+        }    
+    }
+
     static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element)
     {
         for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
-            auto it = elementXref().find(child->getTagName());
-            if (it != elementXref().end()) {
-                std::get<1>(*it)(child, instance);
-            } else {
-                const bool requireFields = [instance]() {
-                    if constexpr (std::is_base_of_v<Base, T>) {
-                        return instance->requireAllFields();
-                    } else {
-                        return true;
-                    }
-                }();
-                if (requireFields) {
-                    MUSX_UNKNOWN_XML("xml element <" + element->getTagName() + "> has child <" + child->getTagName() + "> which is not in the element list.");
-                }
-            }
+            populateField(instance, child);
         }
         if constexpr (std::is_base_of_v<Base, T>) {
             instance->integrityCheck();
@@ -300,8 +315,9 @@ private:
         static const std::unordered_map<std::string_view, XmlElementPopulator<T>> xref = []()
             {
                 std::unordered_map<std::string_view, XmlElementPopulator<T>> retval;
-                for (std::size_t i = 0; i < T::XmlMappingArray.size(); i++) {
-                    const XmlElementDescriptor<T> descriptor = T::XmlMappingArray[i];
+                auto mappingArray = T::xmlMappingArray();
+                for (std::size_t i = 0; i < mappingArray.size(); i++) {
+                    const XmlElementDescriptor<T> descriptor = mappingArray[i];
                     retval[std::get<0>(descriptor)] = std::get<1>(descriptor);
                 }
                 return retval;
@@ -334,7 +350,7 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
 }
 
 /// @brief creates a vector of type T from a set of nodes with identical tags within a parent tag. (See the `<customStaff>` node in @ref others::Staff)
-/// @tparam T the type of the vector. Currently only fundamental types are supported.
+/// @tparam T the type of the vector.
 /// @param e The xml node containing the array.
 /// @param elementNodeName The nodename for each element. In the case of `<customStaff>` this nodename is "staffLine".
 /// @return The populated array.
@@ -347,7 +363,13 @@ static std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::s
             MUSX_UNKNOWN_XML("Unknown tag <" + child->getTagName() + "> while processing embedded xml array <" + e->getTagName() + ">");
             continue;
         }
-        result.push_back(child->getTextAs<T>());
+        if constexpr (std::is_fundamental_v<T>) {
+            result.push_back(child->getTextAs<T>());
+        } else if constexpr (std::is_same_v<T, std::string>) {
+            result.push_back(child->getText());
+        } else {
+            result.push_back(FieldPopulator<T>::createAndPopulate(child));
+        }
     }
     return result;
 }

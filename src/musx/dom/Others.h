@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,11 +27,14 @@
 #include <memory>
 #include <stdexcept>
 #include <map>
+#include <tuple>
 
 #include "musx/util/EnigmaString.h"
 #include "musx/util/Logger.h"
+#include "musx/util/Fraction.h"
 
 #include "BaseClasses.h"
+#include "CommonClasses.h"
 // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
@@ -48,7 +51,7 @@ class StaffGroup;
  * @brief Classes in the @ref OthersPool.
  */
 namespace others {
-
+        
 /**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained.
@@ -71,7 +74,7 @@ public:
     std::string name;           ///< The font name e.g., "Broadway Copyist Text".
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<FontDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<FontDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -118,7 +121,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "frameSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Frame> XmlMappingArray;    ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Frame>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
 class Staff;
@@ -152,7 +155,7 @@ public:
     static std::optional<size_t> getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId);
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<InstrumentUsed> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -184,108 +187,7 @@ public:
     bool hideLayer{};                   ///< "Hide Layer when Inactive"
 
     constexpr static std::string_view XmlNodeName = "layerAtts"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<LayerAttributes> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
-};
-
-/**
- * @class MeasureNumberRegion
- * @brief Represents the Measure Number Region with detailed font and enclosure settings for score and part data.
- *
- * This class is identified by the XML node name "measNumbRegion".
- */
-class MeasureNumberRegion : public OthersBase {
-public:
-    /** @brief Constructor function */
-    explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
-
-    /// @brief Alignment and justification options for measure numbers.
-    enum class AlignJustify
-    {
-        Left,   ///< Left alignment or justification (the default value.)
-        Right,  ///< Right alignment.
-        Center  ///< Center alignment.
-    };
-
-    /// @brief Precision for time display
-    enum class TimePrecision
-    {
-        WholeSeconds,   ///< the default value
-        Tenths,
-        Hundredths,
-        Thousandths,
-    };
-
-    /// @brief Measure number data that can differ in score or part.
-    class ScorePartData : public Base
-    {
-    public:
-        /** @brief Constructor */
-        explicit ScorePartData(const DocumentWeakPtr& document) : Base(document, 0, ShareMode::All) {}
-
-        std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
-        std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
-        std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.
-        std::shared_ptr<Enclosure> startEnclosure;    ///< Enclosure settings for numbers at start of system.
-        std::shared_ptr<Enclosure> multipleEnclosure; ///< Enclosure settings for mid-system numbers.
-
-        Evpu startXdisp{};         ///< Horizontal offset for numbers at start of system.
-        Evpu startYdisp{};         ///< Vertical offset for numbers at start of system.
-        Evpu multipleXdisp{};      ///< Horizontal offset for mid-system numbers.
-        Evpu multipleYdisp{};      ///< Vertical offset for mid-system numbers.
-        Evpu mmRestXdisp{};        ///< Horizontal offset for multi-measure rest ranges.
-        Evpu mmRestYdisp{};        ///< Vertical offset for multi-measure rest ranges.
-        char32_t leftMmBracketChar{};  ///< UTF-32 code for the left bracket of multi-measure rest ranges.
-        char32_t rightMmBracketChar{}; ///< UTF-32 code for the right bracket of multi-measure rest ranges.
-        int startWith{};           ///< "Beginning with" value. (This value is 0-based. The Finale UI adds 1 for user display.)
-        int incidence{};           ///< "Show on Every" value.
-        AlignJustify startAlign{};  ///< Alignment of numbers at the start of system
-        AlignJustify multipleAlign{}; ///< Alignment for mid-system numbers.
-        AlignJustify mmRestAlign{}; ///< Alignment for multi-measure ranges.
-        bool showOnStart{};        ///< "Show On Start of Staff System" (xml node is `<startOfLine>`)
-        bool showOnEvery{};        ///< "Show on Every" activates mid-system numbers. (xml node is `<multipleOf>`)
-        bool hideFirstMeasure{};   ///< "Hide First Measure Number in Region." (xml node is `<exceptFirstMeas>`)
-        bool showMmRange{};        ///< "Show Measure Ranges on Multimeasure Rests" (xml node is `<mmRestRange>`)
-        bool showOnMmRest{};       ///< "Show on Multimeasure Rests"  (xml node is `<mmRestRangeForce>`)
-        bool useStartEncl{};       ///< Use enclosure for start-of-system settings.
-        bool useMultipleEncl{};    ///< Use enclosure for mid-system settings.
-        bool showOnTop{};          ///< Show measure numbers on the top staff.
-        bool showOnBottom{};       ///< Show measure numbers on the bottom staff.
-        bool excludeOthers{};      ///< Exclude other staves.
-        bool breakMmRest{};        ///< Mid-system numbers break multimeasure rests.
-        AlignJustify startJustify{}; ///< Justification for numbers at the start of system.
-        AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
-        AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
-
-        static const xml::XmlElementArray<ScorePartData> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
-    };
-
-    // Public properties
-    std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
-    std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
-
-    MeasCmper startMeas{};      ///< Starting measure number for the region.
-    MeasCmper endMeas{};        ///< Ending measure number for the region.
-    char32_t startChar{};       ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
-    int base{};                 ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
-    int numberOffset{};         ///< This value is 1 less than the "Starting Number" field in the Finale UI. (xml node is `<offset>`)
-    std::string prefix;         ///< Text prefix for measure numbers (encoded UTF-8).
-    std::string suffix;         ///< Text suffix for measure numbers (encoded UTF-8).
-
-    bool countFromOne{};        ///< Start counting from 1 rather than 0, e.g., "1, 2, 3, 4" numbering style (in conjuction with base 10)
-    bool noZero;                ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences
-    bool doubleUp{};            ///< Indicates "a, b, c...aa, bb, cc" number style: the symbols are repeated when they exceed the base.
-    bool time{};                ///< Display real time sequences rather than numbers or letters.
-    bool includeHours{};        ///< Display hours (when showing real time measure numbers)
-    bool smpteFrames{};         ///< SMPTE frames (when showing real time measure numbers). This option supercedes `timePrecision`.
-    bool useScoreInfoForPart{}; ///< Use score-wide settings for parts.
-    int region{};               ///< The region ID. This 1-based value is set by Finale and never changes, whereas the @ref Cmper may change when Finale sorts the regions.
-    TimePrecision timePrecision{}; ///< Precision for real-time sequences.
-    bool hideScroll{};          ///< Indicates if numbers are hidden in Scroll View and Studio View.
-    bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
-
-    constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MeasureNumberRegion> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<LayerAttributes>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -369,16 +271,17 @@ enum class VerticalMeasExprAlign
 };
 
 /**
- * @enum HorizontalExprJustification
+ * @enum HorizontalTextJustification
  * @brief Specifies the horizontal alignment for text expressions and marking categories.
  */
-enum class HorizontalExprJustification
+enum class HorizontalTextJustification
 {
     Left,    ///< Justified left.
     Center,  ///< Justified center.
     Right    ///< Justified right.
 };
 
+class ShapeExpressionDef;
 class TextExpressionDef;
 
 /**
@@ -415,7 +318,7 @@ public:
 
     HorizontalMeasExprAlign horzAlign{};     ///< Horizontal alignment for the marking
     VerticalMeasExprAlign vertAlign{};       ///< Vertical alignment for the marking
-    HorizontalExprJustification justification{}; ///< Justification for the text within the marking
+    HorizontalTextJustification justification{}; ///< Justification for the text within the marking
 
     // Vertical and horizontal offsets for positioning adjustments
     Evpu horzOffset{};         ///< Additional horizontal offset
@@ -435,6 +338,12 @@ public:
     // Staff list represented as an integer
     Cmper staffList{};        ///< The staff list if `useStaffList` is true
 
+    /** @brief A list of shape expressions in this category.
+     *
+     * (This in not in the xml but is created by the factory.)
+     */
+    std::map<Cmper, std::weak_ptr<ShapeExpressionDef>> shapeExpressions;
+
     /** @brief A list of text expressions in this category.
      *
      * (This in not in the xml but is created by the factory.)
@@ -445,7 +354,7 @@ public:
     std::string getName() const;
 
     constexpr static std::string_view XmlNodeName = "markingsCategory"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MarkingCategory> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MarkingCategory>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -465,7 +374,7 @@ public:
     std::string name; ///< The name of the marking category.
 
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MarkingCategoryName> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MarkingCategoryName>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -525,6 +434,7 @@ public:
     };
 
     Evpu width{};               ///< "Ideal" measure width in Evpu. Page layout determines actual width.
+    std::shared_ptr<KeySignature> keySignature; ///< the key signature on this measure. Guaranteed to be non-null. (xml node is `<keySig>`)
     Cmper beats{};              ///< Number of beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
     Cmper divBeat{};            ///< Divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
     Cmper dispBeats{};          ///< Displayed beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
@@ -547,7 +457,11 @@ public:
     BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
     bool hasSmartShape{};       ///< Indicates if the measure has a smart shape.
     bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
-    bool hasExpression{};       ///< Indicates if the measure has expressions. (xml node is `<hasExpr>`)
+    bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
+    bool forwardRepeatBar;      ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
+    bool backwardsRepeatBar;    ///< Indicates a forward repeat bar on this measure. (xml node is `<bacRepBar>`)
+    bool hasEnding;             ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
+    bool hasTextRepeat;         ///< Indicates the presence of one or more text repeat assigments. (xml node is `<txtRepeats>`)
     bool compositeNumerator{};  ///< Indicates a composite numerator for the time signature. (xml node is `<altNumTsig>`)
     bool compositeDenominator{}; ///< Indicates a composite denominator for the time signature. (xml node is `<altDenTsig>`)
     bool abbrvTime{};           ///< Indicates abbreviated time signature (e.g., Common or Cut time.) Applies to the display time signature only.
@@ -561,10 +475,214 @@ public:
     bool calcShouldShowFullNames() const
     { return getCmper() == 1 || showFullNames; }
 
+    /// @brief Calculates the visible number of the measure, based on the first MeasureNumberRegion that contains it.
+    ///
+    /// Depending on the display options of the found MeasureNumberRegion, the number may or may not appear in the score.
+    /// And if it does, it may not appear as a number.
+    int calcDisplayNumber() const;
+
+    /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure
+    std::shared_ptr<TimeSignature> createTimeSignature() const
+    {
+        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
+    }
+
+    /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure
+    /// @return The diplay time signature if there is one, otherwise `nullptr`.
+    std::shared_ptr<TimeSignature> createDisplayTimeSignature() const
+    {
+        if (!useDisplayTimesig) {
+            return nullptr;
+        }
+        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
+    }
+
+    void integrityCheck() override
+    {
+        this->OthersBase::integrityCheck();
+        if (!keySignature) {
+            keySignature = std::make_shared<KeySignature>(getDocument());
+        }
+    }
+
     bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
 
     constexpr static std::string_view XmlNodeName = "measSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Measure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Measure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class MeasureExprAssign
+ * @brief Assigns a @ref TextExpressionDef or @ref ShapeExpressionDef to a measure
+ *
+ * Only one of #textExprId or #shapeExprId is non-zero.
+ *
+ * The Cmper for a MeasureExprAssign is the cmper of the Measure to which it is attached.
+ */
+class MeasureExprAssign : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MeasureExprAssign(const DocumentWeakPtr& document, Cmper ID, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, ID, shareMode, cmper, inci) {}
+
+    // Public properties corresponding to the XML structure
+    Cmper textExprId{};         ///< The @ref Cmper of a text expression (xml node is `<textExprID>`)
+    Cmper shapeExprId{};        ///< The @ref Cmper of a shape expression (xml node is `<shapeExprID>`)
+    Evpu horzEvpuOff{};         ///< Horizontal Evpu offset from the default position.
+    Edu eduPosition{};          ///< Horizontal Edu position (xml node is `<horzEduOff>`)
+    Evpu vertEvpuOff{};         ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
+    InstCmper staffAssign{};    ///< The staff to which this expression is assigned, or -1 if it uses #staffList.
+    int layer{};                ///< The 1-based layer number to which this expression is assigned. (0 means all)
+    bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
+    Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
+    Cmper staffList{};          ///< The cmper of the staff list to use if #staffAssign is negative.
+
+    /// @brief Gets the assigned text expression.
+    /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
+    std::shared_ptr<TextExpressionDef> getTextExpression() const;
+
+    /// @brief Gets the assigned shape expression.
+    /// @return The shape expression or nullptr if this assignment is for a text expression or #shapeExprId not found.
+    std::shared_ptr<ShapeExpressionDef> getShapeExpression() const;
+
+    void integrityCheck() override
+    {
+        this->OthersBase::integrityCheck();
+        if (!textExprId && !shapeExprId) {
+            MUSX_INTEGRITY_ERROR("Expression assignment at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1))
+                + " has no expression definition ID.");
+        } else if (textExprId && shapeExprId) {
+            MUSX_INTEGRITY_ERROR("Expression assignment at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1))
+                + " has both text expr ID " + std::to_string(textExprId) + " and shape expr ID " + std::to_string(shapeExprId));
+        }
+    }
+
+    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
+
+    constexpr static std::string_view XmlNodeName = "measExprAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureExprAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class MeasureNumberRegion
+ * @brief Represents the Measure Number Region with detailed font and enclosure settings for score and part data.
+ *
+ * This class is identified by the XML node name "measNumbRegion".
+ */
+class MeasureNumberRegion : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /// @brief Alignment and justification options for measure numbers.
+    enum class AlignJustify
+    {
+        Left,   ///< Left alignment or justification (the default value.)
+        Right,  ///< Right alignment.
+        Center  ///< Center alignment.
+    };
+
+    /// @brief Precision for time display
+    enum class TimePrecision
+    {
+        WholeSeconds,   ///< the default value
+        Tenths,
+        Hundredths,
+        Thousandths,
+    };
+
+    /// @brief Measure number data that can differ in score or part.
+    class ScorePartData : public Base
+    {
+    public:
+        /** @brief Constructor */
+        explicit ScorePartData(const DocumentWeakPtr& document) : Base(document, 0, ShareMode::All) {}
+
+        std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
+        std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
+        std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.
+        std::shared_ptr<Enclosure> startEnclosure;    ///< Enclosure settings for numbers at start of system.
+        std::shared_ptr<Enclosure> multipleEnclosure; ///< Enclosure settings for mid-system numbers.
+
+        Evpu startXdisp{};         ///< Horizontal offset for numbers at start of system.
+        Evpu startYdisp{};         ///< Vertical offset for numbers at start of system.
+        Evpu multipleXdisp{};      ///< Horizontal offset for mid-system numbers.
+        Evpu multipleYdisp{};      ///< Vertical offset for mid-system numbers.
+        Evpu mmRestXdisp{};        ///< Horizontal offset for multi-measure rest ranges.
+        Evpu mmRestYdisp{};        ///< Vertical offset for multi-measure rest ranges.
+        char32_t leftMmBracketChar{};  ///< UTF-32 code for the left bracket of multi-measure rest ranges.
+        char32_t rightMmBracketChar{}; ///< UTF-32 code for the right bracket of multi-measure rest ranges.
+        int startWith{};           ///< "Beginning with" value. (This value is 0-based. The Finale UI adds 1 for user display.)
+        int incidence{};           ///< "Show on Every" value.
+        AlignJustify startAlign{};  ///< Alignment of numbers at the start of system
+        AlignJustify multipleAlign{}; ///< Alignment for mid-system numbers.
+        AlignJustify mmRestAlign{}; ///< Alignment for multi-measure ranges.
+        bool showOnStart{};        ///< "Show On Start of Staff System" (xml node is `<startOfLine>`)
+        bool showOnEvery{};        ///< "Show on Every" activates mid-system numbers. (xml node is `<multipleOf>`)
+        bool hideFirstMeasure{};   ///< "Hide First Measure Number in Region." (xml node is `<exceptFirstMeas>`)
+        bool showMmRange{};        ///< "Show Measure Ranges on Multimeasure Rests" (xml node is `<mmRestRange>`)
+        bool showOnMmRest{};       ///< "Show on Multimeasure Rests"  (xml node is `<mmRestRangeForce>`)
+        bool useStartEncl{};       ///< Use enclosure for start-of-system settings.
+        bool useMultipleEncl{};    ///< Use enclosure for mid-system settings.
+        bool showOnTop{};          ///< Show measure numbers on the top staff.
+        bool showOnBottom{};       ///< Show measure numbers on the bottom staff.
+        bool excludeOthers{};      ///< Exclude other staves.
+        bool breakMmRest{};        ///< Mid-system numbers break multimeasure rests.
+        AlignJustify startJustify{}; ///< Justification for numbers at the start of system.
+        AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
+        AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
+
+        static const xml::XmlElementArray<ScorePartData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    // Public properties
+    std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
+    std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
+
+    MeasCmper startMeas{};      ///< Starting measure number for the region.
+    MeasCmper endMeas{};        ///< Ending measure number for the region (non-inclusive).
+    char32_t startChar{};       ///< UTF-32 code for the first character in the sequence. (Frequently '0', 'a', or 'A')
+    int base{};                 ///< The base used for measure number calculations. (Frequently 10 for numeric or 26 for alpha)
+    int numberOffset{};         ///< This value is 1 less than the "Starting Number" field in the Finale UI. (xml node is `<offset>`)
+    std::string prefix;         ///< Text prefix for measure numbers (encoded UTF-8).
+    std::string suffix;         ///< Text suffix for measure numbers (encoded UTF-8).
+
+    bool countFromOne{};        ///< Start counting from 1 rather than 0, e.g., "1, 2, 3, 4" numbering style (in conjuction with base 10)
+    bool noZero;                ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences
+    bool doubleUp{};            ///< Indicates "a, b, c...aa, bb, cc" number style: the symbols are repeated when they exceed the base.
+    bool time{};                ///< Display real time sequences rather than numbers or letters.
+    bool includeHours{};        ///< Display hours (when showing real time measure numbers)
+    bool smpteFrames{};         ///< SMPTE frames (when showing real time measure numbers). This option supercedes `timePrecision`.
+    bool useScoreInfoForPart{}; ///< Use score-wide settings for parts.
+    int region{};               ///< The region ID. This 1-based value is set by Finale and never changes, whereas the @ref Cmper may change when Finale sorts the regions.
+    TimePrecision timePrecision{}; ///< Precision for real-time sequences.
+    bool hideScroll{};          ///< Indicates if numbers are hidden in Scroll View and Studio View.
+    bool hidePage{};            ///< Indicates if numbers are hidden in Page View.
+
+    /// @brief Calculates whether the input measure is covered by this measure number region
+    /// @param measureId The measure id to check.
+    bool calcIncludesMeasure(MeasCmper measureId) const
+    {
+        return measureId >= startMeas && measureId < endMeas; // endMeas is non-inclusive!
+    }
+
+    /// @brief Returns the starting measure number for this region.
+    int getStartNumber() const { return int(numberOffset + 1); }
+
+    /// @brief Returns the visible number for a measure id with respect to the region.
+    /// @throw std::logic_error if measureId is not contained in the region
+    int calcDisplayNumberFor(MeasCmper measureId) const;
+
+    /// @brief Finds the measure number region containing a measure
+    /// @param document The document to search
+    /// @param measureId The measure Id to search for
+    /// @return The first MeasureNumberRegion instance that contains the @p measureId, or nullptr if not found.
+    static std::shared_ptr<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
+
+    constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureNumberRegion>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -612,7 +730,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "mmRest"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MultimeasureRest> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MultimeasureRest>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -630,7 +748,7 @@ public:
     Cmper staffGroupId{}; ///< Cmper of @ref details::StaffGroup that has the instrument's full and abbreviated names.
 
     constexpr static std::string_view XmlNodeName = "multiStaffGroupID"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MultiStaffGroupId> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MultiStaffGroupId>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -677,7 +795,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "multiStaffInstGroup"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MultiStaffInstrumentGroup> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<MultiStaffInstrumentGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -708,7 +826,7 @@ public:
     bool isBlank() const { return firstSystem < 0; }
 
     constexpr static std::string_view XmlNodeName = "pageSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Page> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Page>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -755,10 +873,13 @@ public:
     /** @brief Return the instance for the score */
     static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
 
+    /** @brief Return the linked parts sorted in UI order by #partOrder */
+    static std::vector<std::shared_ptr<PartDefinition>> getInUserOrder(const DocumentPtr& document);
+
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "partDef"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<PartDefinition> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<PartDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -788,9 +909,213 @@ public:
     Cmper specialPartExtractionIUList{};    ///< If non-zero, Special Part Extraction is in effect and this is the iuList @ref Cmper. 
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<PartGlobals> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<PartGlobals>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @enum RepeatActionType
+ * @brief Enum for the possible values of the `<action>` element.
+ */
+enum class RepeatActionType
+{
+    JumpAuto,               ///< Automatically Jump. (the default). The targetValue is meaningless for this action.
+    JumpAbsolute,           ///< Jump to the measure number specified in the targetValue field.
+    JumpRelative,           ///< Jump relative to the current measure. The targetValue field specifies how many measures to jump.
+                            ///< The targetValue may be positive or negative for forward or backward relative jumps.
+    JumpToMark,             ///< Jump to a specified repeat number (used by text repeats).
+    Stop,                   ///< Stops playback after a number of passes (e.g. "Fine")
+    NoJump                  ///< Do not jump. The targetValue is meaningless for this action.
+};
+
+/**
+ * @enum RepeatTriggerType
+ * @brief Enum for the possible values of the `<trigger>` element.
+ */
+enum class RepeatTriggerType
+{
+    Always,                 ///< Always jump (the default)
+    OnPass,                 ///< Jump on a sepecified pass number.
+    UntilPass               ///< Jump until a specified pass number is reached.
+};
+
+/**
+ * @class RepeatBack
+ * @brief Represents a repeat-backward marker with positioning and behavior properties.
+ *
+ * The cmper is the cmper of the @ref Measure that has this item.
+ *
+ * This class is identified by the XML node name "repeatBack".
+ */
+class RepeatBack : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit RepeatBack(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    int passNumber{};               ///< Specifies the pass number for the trigger and depends on the value of #trigger. (xml tag is `<actuate>`)
+                                    ///< If #trigger is `UntilPass`, this specifies the number of times to play the section.
+                                    ///< If #trigger is `OnPass`, this specifies the pass on which to jump.
+    int targetValue{};              ///< Absolute or relative measure number, depending on #jumpAction. (xml tag is `<target>`)
+    Evpu leftHPos{};                ///< The horizontal position of the left bracket, relative to the default. (xml tag is `<pos1>`)
+    Evpu leftVPos{};                ///< The vertical position of the lower left bracket, relative to the default. (xml tag is `<line1>`)
+    bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
+    bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    bool resetOnAction{};           ///< "Reset on Repeat Action" (xml tag is `<clrOnChange>`)
+    RepeatActionType jumpAction{};  ///< The jump action for this repeat ending. The automatic jump is to the next ending. (xml tag is `<action>`)
+    RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
+    Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
+    Evpu rightHPos{};               ///< The horizontal position of the upper right bracket, relative to the default. (xml tag is `<pos2>`)
+    Evpu rightVPos{};               ///< The vertical position of the upper right bracket, relative to the default. (xml tag is `<line2>`)
+    
+    constexpr static std::string_view XmlNodeName = "repeatBack"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatBack>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
+ * @class RepeatEndingStart
+ * @brief Represents a repeat ending start marker in the document.
+ *
+ * The cmper is the cmper of the @ref Measure that has this item.
+ *
+ * This class is identified by the XML node name "repeatEndingStart".
+ */
+class RepeatEndingStart : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit RepeatEndingStart(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
+    int targetValue{};              ///< Absolute or relative measure number, depending on #jumpAction. (xml tag is `<nextEnd>`)
+    Evpu textHPos{};                ///< The horizontal position of the text relative to #leftHPos. (xml tag is `<textPos>`)
+    Evpu leftHPos{};                ///< The horizontal position of the lower left bracket, relative to the default. (xml tag is `<pos1>`)
+    Evpu leftVPos{};                ///< The vertical position of the lower left bracket, relative to the default. (xml tag is `<line1>`)
+    bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
+    bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    RepeatActionType jumpAction{};  ///< The jump action for this repeat ending. The automatic jump is to the next ending. (xml tag is `<action>`)
+    RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
+                                    ///< For `RepeatEndingStart` this value is always `OnPass`, and it seems to mean that
+                                    ///< it jumps when the current pass exceeds the final ending number.
+    bool jumpIfIgnoring{};          ///< "Skip Ending if Ignoring Repeats" (xml tag is `<jmpIgnore>`)
+    Evpu endLineVPos{};             ///< The vertical offset of the final bracket, relative to #rightVPos or 0 if the ending is open. (xml tag is `<endLine>`)
+    Evpu textVPos{};                ///< The vertical position of the text relative to #leftVPos. (xml tag is `<textLine>`)
+    Evpu rightHPos{};               ///< The horizontal position of the upper right bracket, relative to the default. (xml tag is `<pos2>`)
+    Evpu rightVPos{};               ///< The vertical position of the upper right bracket, relative to the default. (xml tag is `<line2>`)
+
+    /// @brief Calculates the number of measures in the ending based on #jumpAction.
+    int calcEndingLength() const;
+
+    /// @brief Calculates if the ending is open or closed, based on a number of factors.
+    ///
+    /// Openness is a visual feature. If true, it means that the ending bracket has a downward stroke on the right.
+    bool calcIsOpen() const;
+
+
+    void integrityCheck()
+    {
+        OthersBase::integrityCheck();
+        if (trigger != RepeatTriggerType::OnPass) {
+            MUSX_INTEGRITY_ERROR("RepeatEndingStart at measure " + std::to_string(getCmper()) + " has an unexpected trigger value " +
+                std::to_string(int(trigger)));
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "repeatEndingStart"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatEndingStart>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class RepeatEndingText
+ * @brief Represents the text associated with a @ref RepeatEndingStart.
+ *
+ * This is an optional value. If it is omitted, the ending shows a standard number list.
+ *
+ * This class has the same #Cmper as its @ref RepeatEndingStart and is the @ref MeasCmper of the ending.
+ *
+ * This class is identified by the XML node name "repeatEndingText".
+ */
+class RepeatEndingText : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit RepeatEndingText(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    std::string text; ///< The text 
+
+    constexpr static std::string_view XmlNodeName = "repeatEndingText"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatEndingText>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class RepeatPassList
+ * @brief Represents a list of repeat ending numbers for a @ref RepeatEndingStart instance.
+ *
+ * The cmper is the cmper of the @ref Measure that has this item.
+ *
+ * This class is identified by the XML node name "repeatPassList".
+ */
+class RepeatPassList : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit RepeatPassList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<int> endingNumbers; ///< List of repeat ending numbers extracted from xml `<act>` elements.
+
+    constexpr static std::string_view XmlNodeName = "repeatPassList"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<RepeatPassList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class ShapeExpressionDef
+ * @brief Stores the properties and behaviors of shape expressions.
+ *
+ * This class is identified by the XML node name "shapeExprDef".
+ */
+class ShapeExpressionDef : public OthersBase {
+public:
+    /**
+     * @brief Constructor.
+     *
+     * Initializes all fields to their default values.
+     */
+    explicit ShapeExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    Cmper shapeDef{};                               ///< Identifier for the Shape Designer Shape associated with this expression.
+    Cmper categoryId{};                             ///< Identifier for the category of the text expression. (xml node is "categoryID")
+    RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
+    int value{};                                    ///< Value associated with the expression (e.g., velocity).
+    int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
+    int playPass{};                                 ///< "Play Only on Pass" value.
+    bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
+    bool useAuxData{};                              ///< Whether auxiliary data is used.
+    bool masterShape{};                             ///< Whether this expression references the master copy of the shape.
+    bool noPrint{};                                 ///< Inverse of "Hidden" checkbox.
+    bool noHorzStretch{};                           ///< Inverse of "Allow Horizontal Stretching" checkbox.
+    PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
+    HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
+    VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
+    HorizontalTextJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
+    Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
+    Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
+    bool useCategoryPos{};                          ///< Whether to use category position.
+    std::string description;                        ///< Description of the text expression. (xml node is "descStr")
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 class StaffStyle;
 /**
  * @class Staff
@@ -916,7 +1241,7 @@ public:
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<Staff> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<Staff>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -959,7 +1284,7 @@ public:
 
         bool requireAllFields() const override { return false; }
 
-        static const xml::XmlElementArray<Masks> XmlMappingArray;    ///< Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<Masks>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
     };
 
     std::string styleName;              ///< name of staff style
@@ -991,7 +1316,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "staffStyle"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StaffStyle> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1026,7 +1351,7 @@ public:
     }
 
     constexpr static std::string_view XmlNodeName = "staffStyleAssign"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StaffStyleAssign> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffStyleAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1097,9 +1422,53 @@ public:
     Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
 
     constexpr static std::string_view XmlNodeName = "staffSystemSpec"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StaffSystem> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffSystem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class TempoChange
+ * @brief A single tempo change value entered with Finale's Tempo tool.
+ *
+ * Although the Finale UI dropped the Tempo tool around 2010, the notation engine
+ * still supported them. It was always possible (even as late as Finale 27.4) to add tempo
+ * changes using third-pary plugins.
+ *
+ * The most common tool for creating TempoChange instances was the plugin JW Tempo.
+ * It only ever used absolute ratios, so the focus of this class is on them.
+ *
+ * The cmper is the measure number, and incis should be stored in order by #eduPosition. 
+ *
+ * This class is identified by the XML node name "tempoDef".
+ */
+class TempoChange : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TempoChange(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    int ratio{};                    ///< Absolute or relative ratio.
+                                    ///< Relative ratios are are a percent value * 10. 100% would have a value of 1000.
+                                    ///< See #getAbsoluteTempo for how to use absolute ratios.
+                                    ///< The xml provides one of two nodes for this field: `<relativeRatio>` or `<absoluteRatio>`.
+    Edu eduPosition{};              ///< The position within the measure. (xml node is `<eldur>`)
+    int unit{};                     ///< Hardware ticks/sec. For Macs this is 1000.
+    bool isRelative;                ///< A computed value that determines if #ratio is relative or absolute.
+                                    ///< This value is not represented in the xml but instead captures whether the #ratio
+                                    ///< property was populated from `<relativeRatio>` or `<absoluteRatio>`.
+
+    /// @brief Computes the absolute tempo represented by the TempoChange Instance.
+    /// @param noteType optional note type for which to get the beats per minute. (The default is NoteType::Quarter.)
+    /// @return The per minute value.
+    /// @throws std::logic_error if this instance represents a relative tempo.
+    int getAbsoluteTempo(NoteType noteType = NoteType::Quarter) const;
+
+    constexpr static std::string_view XmlNodeName = "tempoDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TempoChange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 /**
  * @class TextBlock
  * @brief Represents the attributes of a Finale "textBlock".
@@ -1146,7 +1515,7 @@ public:
     bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextBlock> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextBlock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1172,7 +1541,7 @@ public:
     PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
     HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
     VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
-    HorizontalExprJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    HorizontalTextJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
     Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
     Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
@@ -1192,7 +1561,7 @@ public:
     std::shared_ptr<Enclosure> getEnclosure() const;
 
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextExpressionDef> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1208,14 +1577,90 @@ public:
     using Enclosure::Enclosure;
 
     constexpr static std::string_view XmlNodeName = "textExpressionEnclosure"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextExpressionEnclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextExpressionEnclosure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TextRepeatAssign
+ * @brief Represents a text repeat assignment with positioning and behavior properties.
+ *
+ * The cmper is the cmper of the @ref Measure that has this item.
+ *
+ * This class is identified by the XML node name "textRepeatAssign".
+ */
+class TextRepeatAssign : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TextRepeatAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    // Public properties corresponding to the XML structure
+    Evpu horzPos{};                 ///< The horizontal offset from default of the text repeat marker.
+    int passNumber{};               ///< Play Section N Times, Jump on Pass, Stop on Pass value, depending on #jumpAction and #trigger. (xml tag is `<actuate>`)
+    int targetValue{};              ///< Measure number, TextRepeatDef ID, or offset, depending on #jumpAction. (xml tag is `<target>`)
+    Cmper textRepeatId{};           ///< The Cmper of the assigned @ref TextRepeatDef. (xml tag is `<repnum>`)
+    Evpu vertPos{};                 ///< The vertical offset from default of the text repeat marker.
+    bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
+    bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    bool resetOnAction{};           ///< "Reset on Repeat Action" (xml tag is `<clrOnChange>`)
+    bool jumpOnMultiplePasses{};    ///< If true, use #TextRepeatDef::passList to get the passes and ignore #passNumber. (xml tag is `<multiActuate>`)
+    RepeatActionType jumpAction{};  ///< The jump action for this repeat assignment. (xml tag is `<action>`)
+    bool autoUpdate{};              ///< "Auto-Update Target"
+    RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
+    bool jumpIfIgnoring{};          ///< "Jump if Ignoring Repeats" (xml tag is `<jmpIgnore>`)
+    Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
+
+    constexpr static std::string_view XmlNodeName = "textRepeatAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextRepeatAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
+ * @class TextRepeatDef
+ * @brief Defines text repeat elements with font styling and justification.
+ *
+ * Text repeat elements are indications like "D.S. al Fine", "Segno", or "To Coda" that
+ * have playback jumps associated with them.
+ *
+ * The cmper is the unique identifier used in the document.
+ *
+ * This class is identified by the XML node name "textRepeatDef".
+ */
+class TextRepeatDef : public OthersBase {
+public:
+    /** @brief Enum for poundReplace options */
+    enum class PoundReplaceOption
+    {
+        Passes,             ///< "Number of Times Played" (the default: may never appear in xml)
+        RepeatID,           ///< "Text Repeat ID in Target" (xml value is "repeatID")
+        MeasureNumber       ///< "Measure Number in Target" (xml value is "measNum")
+    };
+
+    /** @brief Constructor function */
+    explicit TextRepeatDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper), font(new FontInfo(document)) {}
+
+    // Public properties corresponding to the XML structure
+    std::shared_ptr<FontInfo> font;                 ///< The font for this text repeat. (xml nodes `<fontID>`, `<fontSize>`, and `<efx>`)
+    bool hasEnclosure{};                            ///< Whether the text repeat has an enclosure. (xml node is `<newEnclosure>`)
+    bool useThisFont{};                             ///< "Use This Font" (for the `#` substitution)
+    PoundReplaceOption poundReplace{};              ///< "Replace # With" choice.
+    HorizontalTextJustification justification{};    ///< Although called "justification" in Finale's U.I, this value is used
+                                                    ///< for both the alignment of the text within the measure as well as its justification.
+                                                    ///< (xml node is `<justify >`)
+    std::vector<int> passList;                      ///< If this vector contains elements, they define the repeat passes that apply to this instance.
+
+    constexpr static std::string_view XmlNodeName = "textRepeatDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextRepeatDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
  * @class TextRepeatEnclosure
  * @brief The enclosure for a text expression (if it exists)
  *
- * The cmper is the same as for @ref TextRepeateDef.
+ * The cmper is the same as for @ref TextRepeatDef.
  *
  * This class is identified by the XML node name "textRepeatEnclosure".
  */
@@ -1224,9 +1669,104 @@ public:
     using Enclosure::Enclosure;
 
     constexpr static std::string_view XmlNodeName = "textRepeatEnclosure"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<TextRepeatEnclosure> XmlMappingArray; ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<TextRepeatEnclosure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class TextRepeatText
+ * @brief Represents the text associated with a @ref TextRepeatDef
+ *
+ * The cmper is the same as for @ref TextRepeatDef.
+ *
+ * This class is identified by the XML node name "textRepeatText".
+ */
+class TextRepeatText : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit TextRepeatText(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    std::string text; ///< The text 
+
+    constexpr static std::string_view XmlNodeName = "textRepeatText"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextRepeatText>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
+ * @class TimeCompositeLower
+ * @brief Represents the lower composite time signature array.
+ *
+ * The cmper taken from the `unit` value when `hasCompositeBottom` is true. (See @ref TimeSignature.)
+ * 
+ * This class is identified by the XML node name "timeLower".
+ */
+class TimeCompositeLower : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TimeCompositeLower(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    /** @class CompositeItem
+     *  @brief Represents an individual lower composite item in the time signature.
+     */
+    class CompositeItem
+    {
+    public:
+        Edu unit{};             ///< The size of the unit for this item. (xml node is `<integer>`)
+        bool startGroup{};      ///< Indicates the start of a group.
+
+        static const xml::XmlElementArray<CompositeItem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::vector<std::shared_ptr<CompositeItem>> items;  ///< composite items collection
+
+    constexpr static std::string_view XmlNodeName = "timeLower"; ///< XML node name.
+    static const xml::XmlElementArray<TimeCompositeLower>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TimeCompositeUpper
+ * @brief Represents the upper composite time signature structure.
+ *
+ * The cmper taken from the `beats` value when `hasCompositeTop` is true. (See @ref TimeSignature.)
+ * 
+ * This class is identified by the XML node name "timeUpper".
+ */
+class TimeCompositeUpper : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TimeCompositeUpper(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    /** @class CompositeItem
+     *  @brief Represents an individual composite item in the time signature.
+     */
+    class CompositeItem
+    {
+    public:
+        Edu beats{};                ///< The number of beats in this item. (xml node is `<integer>`)
+        util::Fraction fraction{};  ///< Fraction of beats (between 0 <= fraction < 1)
+        bool startGroup{};          ///< Indicates the start of a group.
+
+        /// @brief Return the beats as a complete fraction
+        util::Fraction fullFraction() const { return fraction + beats; }
+
+        static const xml::XmlElementArray<CompositeItem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    /// Collection of composite items
+    std::vector<std::shared_ptr<CompositeItem>> items;  ///< composite items collection
+
+    constexpr static std::string_view XmlNodeName = "timeUpper"; ///< XML node name.
+    static const xml::XmlElementArray<TimeCompositeUpper>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 } // namespace others
 } // namespace dom
 } // namespace musx

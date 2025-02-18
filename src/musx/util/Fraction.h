@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,62 +28,82 @@
 namespace musx {
 namespace util {
 
- /**
+/**
  * @class Fraction
- * @brief A class to represent fractions with integer numerator and denominator, automatically reduced to simplest form.
+ * @brief A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to simplest form.
  */
 class Fraction {
 private:
-    int numerator; ///< The numerator of the fraction.
-    int denominator; ///< The denominator of the fraction.
+    int m_numerator; ///< The m_numerator of the fraction.
+    int m_denominator; ///< The m_denominator of the fraction.
 
     /**
      * @brief Reduces the fraction to its simplest form.
-     * Ensures the denominator is always positive.
+     * Ensures the m_denominator is always positive.
      */
     void reduce() {
-        int gcd = std::gcd(numerator, denominator);
-        numerator /= gcd;
-        denominator /= gcd;
+        int gcd = std::gcd(m_numerator, m_denominator);
+        m_numerator /= gcd;
+        m_denominator /= gcd;
 
-        // Ensure the denominator is always positive
-        if (denominator < 0) {
-            numerator = -numerator;
-            denominator = -denominator;
+        // Ensure the m_denominator is always positive
+        if (m_denominator < 0) {
+            m_numerator = -m_numerator;
+            m_denominator = -m_denominator;
         }
     }
 
 public:
     /**
      * @brief Constructs a Fraction object.
-     * @param num The numerator of the fraction.
-     * @param den The denominator of the fraction. Defaults to 1.
-     * @throws std::invalid_argument if the denominator is zero.
+     * @param num The m_numerator of the fraction.
+     * @param den The m_denominator of the fraction. Defaults to 1.
+     * @throws std::invalid_argument if the m_denominator is zero.
      */
-    Fraction(int num = 0, int den = 1) : numerator(num), denominator(den) {
-        if (denominator == 0) {
+    Fraction(int num = 0, int den = 1) : m_numerator(num), m_denominator(den) {
+        if (m_denominator == 0) {
             throw std::invalid_argument("Denominator cannot be zero.");
         }
         reduce();
     }
 
-    /**
-     * @brief Gets the numerator of the fraction.
-     * @return The numerator.
-     */
-    int getNumerator() const { return numerator; }
+    /// @brief Constructs a Fraction from edu
+    /// @param edu
+    static Fraction fromEdu(int edu);
 
     /**
-     * @brief Gets the denominator of the fraction.
-     * @return The denominator.
+     * @brief Gets the m_numerator of the fraction.
+     * @return The m_numerator.
      */
-    int getDenominator() const { return denominator; }
+    int numerator() const { return m_numerator; }
+
+    /**
+     * @brief Gets the m_denominator of the fraction.
+     * @return The m_denominator.
+     */
+    int denominator() const { return m_denominator; }
+
+    /**
+     * @brief Returns the integer (whole number) part of the fraction.
+     * @return The integer part of the fraction.
+     */
+    int quotient() const {
+        return m_numerator / m_denominator;
+    }
+
+    /**
+     * @brief Returns the fractional part of the fraction.
+     * @return The remainder as a fraction, satisfying -1 < remainder < 1.
+     */
+    Fraction remainder() const {
+        return Fraction(m_numerator % m_denominator, m_denominator);
+    }
 
     /**
      * @brief Calculates duration as a fraction of a whole note
      */
     // use `double` rather than `EduFloat` to manage circular header dependency
-    double calcDuration() const;
+    double calcEduDuration() const;
 
     /**
      * @brief Adds two fractions.
@@ -92,8 +112,8 @@ public:
      */
     Fraction operator+(const Fraction& other) const {
         return Fraction(
-            numerator * other.denominator + other.numerator * denominator,
-            denominator * other.denominator
+            m_numerator * other.m_denominator + other.m_numerator * m_denominator,
+            m_denominator * other.m_denominator
         );
     }
 
@@ -104,8 +124,8 @@ public:
      */
     Fraction operator-(const Fraction& other) const {
         return Fraction(
-            numerator * other.denominator - other.numerator * denominator,
-            denominator * other.denominator
+            m_numerator * other.m_denominator - other.m_numerator * m_denominator,
+            m_denominator * other.m_denominator
         );
     }
 
@@ -116,8 +136,8 @@ public:
      */
     Fraction operator*(const Fraction& other) const {
         return Fraction(
-            numerator * other.numerator,
-            denominator * other.denominator
+            m_numerator * other.m_numerator,
+            m_denominator * other.m_denominator
         );
     }
 
@@ -125,15 +145,15 @@ public:
      * @brief Divides one fraction by another.
      * @param other The other fraction to divide by.
      * @return The resulting fraction after division.
-     * @throws std::invalid_argument if attempting to divide by a fraction with a zero numerator.
+     * @throws std::invalid_argument if attempting to divide by a fraction with a zero m_numerator.
      */
     Fraction operator/(const Fraction& other) const {
-        if (other.numerator == 0) {
+        if (other.m_numerator == 0) {
             throw std::invalid_argument("Cannot divide by zero fraction.");
         }
         return Fraction(
-            numerator * other.denominator,
-            denominator * other.numerator
+            m_numerator * other.m_denominator,
+            m_denominator * other.m_numerator
         );
     }
 
@@ -171,7 +191,7 @@ public:
      * @brief Compound division assignment operator.
      * @param other The other fraction to divide by.
      * @return A reference to the updated fraction.
-     * @throws std::invalid_argument if attempting to divide by a fraction with a zero numerator.
+     * @throws std::invalid_argument if attempting to divide by a fraction with a zero m_numerator.
      */
     Fraction& operator/=(const Fraction& other) {
         *this = *this / other;
@@ -188,7 +208,7 @@ public:
         Fraction rhs = other;
         lhs.reduce();
         rhs.reduce();
-        return lhs.numerator == rhs.numerator && lhs.denominator == rhs.denominator;
+        return lhs.m_numerator == rhs.m_numerator && lhs.m_denominator == rhs.m_denominator;
     }
 
     /**
@@ -206,8 +226,8 @@ public:
      * @return True if this fraction is less than the other, false otherwise.
      */
     bool operator<(const Fraction& other) const {
-        double lhs = static_cast<double>(numerator) / denominator;
-        double rhs = static_cast<double>(other.numerator) / other.denominator;
+        double lhs = static_cast<double>(m_numerator) / m_denominator;
+        double rhs = static_cast<double>(other.m_numerator) / other.m_denominator;
         return lhs < rhs;
     }
 
@@ -239,15 +259,23 @@ public:
     }
 
     /**
+     * @brief Checks if the fraction is nonzero.
+     * @return True if the fraction is nonzero, false otherwise.
+     */
+    explicit operator bool() const {
+        return m_numerator != 0;
+    }
+
+    /**
      * @brief Stream output operator.
      * @param os The output stream.
      * @param frac The fraction to output.
      * @return A reference to the output stream.
      */
     friend std::ostream& operator<<(std::ostream& os, const Fraction& frac) {
-        os << frac.numerator;
-        if (frac.denominator != 1) {
-            os << "/" << frac.denominator;
+        os << frac.m_numerator;
+        if (frac.m_denominator != 1) {
+            os << "/" << frac.m_denominator;
         }
         return os;
     }
@@ -257,14 +285,14 @@ public:
      * @param is The input stream.
      * @param frac The fraction to populate.
      * @return A reference to the input stream.
-     * @throws std::invalid_argument if the input format is invalid or the denominator is zero.
+     * @throws std::invalid_argument if the input format is invalid or the m_denominator is zero.
      */
     friend std::istream& operator>>(std::istream& is, Fraction& frac) {
         int num, den;
         char sep;
         is >> num >> sep >> den;
         if (sep != '/' || den == 0) {
-            throw std::invalid_argument("Invalid fraction format or zero denominator.");
+            throw std::invalid_argument("Invalid fraction format or zero m_denominator.");
         }
         frac = Fraction(num, den);
         return is;

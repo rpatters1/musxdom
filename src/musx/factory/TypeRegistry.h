@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Robert Patterson
+ * Copyright (C) 2025, Robert Patterson
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -171,6 +171,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::MiscOptions,
     dom::options::MultimeasureRestOptions,
     dom::options::MusicSpacingOptions,
+    dom::options::MusicSymbolOptions,
     dom::options::PageFormatOptions,
     dom::options::PianoBraceBracketOptions,
     dom::options::RepeatOptions,
@@ -185,7 +186,7 @@ using RegisteredOptions = TypeRegistry <
 /**
  * @brief The type registery for `<others>`.
  *
- * These types are maintained in the order in which Finale serializes them.
+ * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredOthers = TypeRegistry <
     dom::others::FontDefinition,
@@ -195,15 +196,27 @@ using RegisteredOthers = TypeRegistry <
     dom::others::MeasureNumberRegion,
     dom::others::MultimeasureRest,
     dom::others::Measure,
+    dom::others::MeasureExprAssign,
     dom::others::TextBlock,
     dom::others::Page,
+    dom::others::RepeatBack,
+    dom::others::RepeatEndingStart,
+    dom::others::RepeatEndingText,
+    dom::others::RepeatPassList,
     dom::others::StaffSystem,
     dom::others::Staff,
     dom::others::StaffStyle,
     dom::others::StaffStyleAssign,
+    dom::others::ShapeExpressionDef,
+    dom::others::TimeCompositeLower,
+    dom::others::TimeCompositeUpper,
+    dom::others::TempoChange,
     dom::others::TextExpressionDef,
     dom::others::TextExpressionEnclosure,
+    dom::others::TextRepeatAssign,
+    dom::others::TextRepeatDef,
     dom::others::TextRepeatEnclosure,
+    dom::others::TextRepeatText,
     dom::others::PartDefinition,
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
