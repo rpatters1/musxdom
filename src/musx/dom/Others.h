@@ -89,7 +89,12 @@ public:
     int family{};                   ///< Represents the `<family>` element, e.g., 0. (use unknown)
     std::string name;               ///< The font name e.g., "Broadway Copyist Text".
 
-    /**  @brief Calculates if this font is a symbol font.
+    /**
+     * @brief Calculates if this font is a symbol font.
+     *
+     * The code points in symbol fonts
+     * are mapped directly to the glyph index of the font without any attempt at
+     * linguistic mapping.
      *
      * Many legacy symbol fonts in Finale were music fonts following more-or-less the layout
      * of Adobe Sonata font, so this may be an appropriate proxy for telling if the font is a legacy

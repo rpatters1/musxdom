@@ -118,7 +118,7 @@ public:
     bool calcIsDefaultMusic() const
     { return fontId == 0; }
 
-    /// @brief Calculates if this is a symbol font.
+    /// @brief Calculates if this is a symbol font. (See #others::FontDefinition::calcIsSymbolFont.)
     bool calcIsSymbolFont() const;
 
     /**
