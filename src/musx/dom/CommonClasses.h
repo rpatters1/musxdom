@@ -222,6 +222,14 @@ public:
         /// @brief Test if two TimeSigComponent values are the same.
         bool operator==(const TimeSigComponent& src) const
         { return counts == src.counts && units == src.units; }
+
+        /// @brief Compute the sum of all counts.
+        util::Fraction sumCounts() const
+        { return std::accumulate(counts.begin(), counts.end(), util::Fraction{}); }
+
+        /// @brief Compute the sum of all units.
+        Edu sumUnits() const
+        { return std::accumulate(units.begin(), units.end(), Edu{}); }
     };
 
     std::vector<TimeSigComponent> components;     ///< the components in the time signature
@@ -231,6 +239,16 @@ public:
     /// In typical cases, the returned @ref util::Fraction has a denominator of 1, but Finale supports other kinds of fractions.
     /// Use #util::Fraction::quotient to get the integer value and #util::Fraction::remainder to get the residual fractional component.
     std::pair<util::Fraction, NoteType> calcSimplified() const;
+
+    /// @brief Calculates the total duration of the time signature as a fraction of a whole note.
+    util::Fraction calcTotalDuration() const
+    {
+        util::Fraction result = std::accumulate(components.begin(), components.end(), util::Fraction{},
+            [](const util::Fraction& acc, const TimeSigComponent& comp)
+            { return acc + (comp.sumCounts() * comp.sumUnits()); }
+        );
+        return result / Edu(NoteType::Whole);
+    }
 
     /// @brief returns whether the two time signatures represent the same time signature
     bool isSame(const TimeSignature& src)
@@ -247,7 +265,7 @@ public:
         return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviate));
     }
 
-    /// @brief Returns the abbreviated symbol for this time signature, or std::nullopt if none.
+    /// @brief Returns the abbreviated symbol (code point) for this time signature, or std::nullopt if none.
     ///
     /// If the musx document lacks music symbol options but abbreviation was requested, the SMuFL values
     /// are returned as default substitute values.

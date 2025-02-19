@@ -1317,12 +1317,6 @@ bool TimeSignature::isCutTime() const
 
 std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
 {
-    // Lambda to compute the sum of a vector
-    auto sumVector = [](const auto& vec) {
-        using T = typename std::decay<decltype(vec.front())>::type;
-        return std::accumulate(vec.begin(), vec.end(), T{});
-    };
-
     // Lambda to compute GCD of a vector
     auto computeGCD = [](const std::vector<Edu>& values) {
         return values.empty() ? 1 : std::reduce(values.begin() + 1, values.end(), values[0], std::gcd<Edu, Edu>);
@@ -1332,8 +1326,8 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
     std::vector<std::pair<util::Fraction, Edu>> summedUnits;
 
     for (const auto& ts : components) {
-        Edu totalUnit = sumVector(ts.units);
-        summedUnits.emplace_back(sumVector(ts.counts), totalUnit);
+        Edu totalUnit = ts.sumUnits();
+        summedUnits.emplace_back(ts.sumCounts(), totalUnit);
         allUnits.push_back(totalUnit);
     }
 
