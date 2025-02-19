@@ -129,7 +129,7 @@ TEST(GFrameHoldTest, IntegrityCheck)
     )xml";
 
     EXPECT_THROW(
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlBothClefs),
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xmlBothClefs),
         musx::dom::integrity_error
     ) << "clef and clef list both specified";
 
@@ -147,7 +147,7 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
     )xml";
 
     EXPECT_THROW(
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xmlNoClefs),
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlNoClefs),
         musx::dom::integrity_error
     ) << "neither clef nor clef list specified";
 
@@ -199,7 +199,9 @@ TEST(GFrameHold, IterationTest)
 
     auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
     ASSERT_TRUE(gfhold);
+    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        enteredLoop = true;
         auto entry = entryInfo->getEntry();
         EXPECT_TRUE(entryInfo->getLayerIndex() == 0 || entryInfo->getLayerIndex() == 1) << "unexpected layer index " << entryInfo->getLayerIndex();
         if (entryInfo->getLayerIndex() == 0) {
@@ -210,16 +212,20 @@ TEST(GFrameHold, IterationTest)
         }
         return true;
     });
+    EXPECT_TRUE(enteredLoop);
 
     gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 2, 1);
     ASSERT_TRUE(gfhold);
+    enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        enteredLoop = true;
         auto entry = entryInfo->getEntry();
         EXPECT_TRUE(entryInfo->getLayerIndex() == 2) << "unexpected layer index " << entryInfo->getLayerIndex();
         EXPECT_EQ(entry->duration, Edu(NoteType::Whole)) << "unexpected note duration " << entry->duration;
         EXPECT_TRUE(entry->isNote) << "layerIndex 0 entry is not a note";
         return true;
     });
+    EXPECT_TRUE(enteredLoop);
 }
 
 TEST(GFrameHold, QuintupletTest)
@@ -240,7 +246,9 @@ TEST(GFrameHold, QuintupletTest)
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
+    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
@@ -248,13 +256,14 @@ TEST(GFrameHold, QuintupletTest)
         total += expectedValues[x++];
         return true;
     });
+    EXPECT_TRUE(enteredLoop);
 }
 
 TEST(GFrameHold, TripletTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "triplet.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -268,7 +277,9 @@ TEST(GFrameHold, TripletTest)
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
+    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
@@ -276,13 +287,14 @@ TEST(GFrameHold, TripletTest)
         total += expectedValues[x++];
         return true;
     });
+    EXPECT_TRUE(enteredLoop);
 }
 
 TEST(GFrameHold, NestedTupletTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "nested_tuplets.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -299,7 +311,9 @@ TEST(GFrameHold, NestedTupletTest)
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
+    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
@@ -307,6 +321,7 @@ TEST(GFrameHold, NestedTupletTest)
         total += expectedValues[x++];
         return true;
     });
+    EXPECT_TRUE(enteredLoop);
 }
 
 TEST(GFrameHold, V1V2TupletTest)
@@ -332,7 +347,9 @@ TEST(GFrameHold, V1V2TupletTest)
     size_t x = 0;
     Fraction v1Total = 0;
     Fraction v2Total = 0;
+    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
@@ -349,4 +366,34 @@ TEST(GFrameHold, V1V2TupletTest)
     */
         return true;
     });
+    EXPECT_TRUE(enteredLoop);
+}
+
+TEST(GFrameHold, GraceNoteIndexTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "grace_notes.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    std::vector<unsigned> expectedValues = { 0, 1, 2, 3, 4, 5, 0 };
+    std::vector<unsigned> expectedReverseValues = { 0, 5, 4, 3, 2, 1, 0 };
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    bool enteredLoop = false;
+    size_t x = 0;
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        enteredLoop = true;
+        EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+        if (x >= expectedValues.size()) return false;
+        EXPECT_EQ(expectedValues[x], entryInfo->graceIndex);
+        EXPECT_EQ(expectedReverseValues[x], entryInfo->calcReverseGraceIndex());
+        x++;
+        return true;
+    });
+    EXPECT_TRUE(enteredLoop);
 }

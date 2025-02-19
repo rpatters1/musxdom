@@ -104,6 +104,31 @@ int calcAugmentationDotsFromEdu(Edu duration)
     return count;
 }
 
+// *********************
+// ***** EntryInfo *****
+// *********************
+
+unsigned EntryInfo::calcReverseGraceIndex() const
+{
+    unsigned result = graceIndex;
+    if (result) {
+        if (result == 1) {
+            for (auto next = getNext(); next && next->graceIndex; next = next->getNext()) {
+                result++;
+            }
+        } else {
+            for (auto prev = getPrevious(); prev && prev->graceIndex; prev = prev->getPrevious()) {
+                if (prev->graceIndex == 1) {
+                    unsigned largest = prev->calcReverseGraceIndex();
+                    result = largest - result + 1;
+                    break;
+                }
+            }
+        }
+    }
+    return result;
+}
+
 // ***********************
 // ***** FontOptions *****
 // ***********************
@@ -342,9 +367,10 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             v1ActualElapsedDuration += util::Fraction(f->startTime, int(NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
         }
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
+        int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
-            auto entryInfo = std::make_shared<EntryInfo>(layerIndex, entry);
+            auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry, retval, i));
             if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
                 entryInfo->v2Launch = true;
             }
@@ -360,6 +386,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             entryInfo->elapsedDuration = actualElapsedDuration;
             util::Fraction cumulativeRatio = 1;
             if (!entry->graceNote) {
+                graceIndex = 0;
                 auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
                 std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
@@ -374,6 +401,8 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 }
                 util::Fraction actualDuration = entry->calcFraction() * cumulativeRatio;
                 entryInfo->actualDuration = actualDuration;
+            } else {
+                entryInfo->graceIndex = ++graceIndex;
             }
 
             retval->addEntry(entryInfo);
@@ -391,8 +420,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 );
             }
         }
-    }
-    else {
+    } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
     }

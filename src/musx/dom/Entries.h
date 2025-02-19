@@ -38,12 +38,14 @@ NoteType calcNoteTypeFromEdu(Edu duration);         ///< Calculates the @ref Not
  *
  * This class is identified by the XML node name "note".
  */
-class Note : public Base 
+class Note : public Base
 {
 public:
     /** @brief Constructor function */
     explicit Note(const DocumentWeakPtr& document, NoteNumber noteId)
-        : Base(document, 0, ShareMode::All), m_noteId(noteId) {}
+        : Base(document, 0, ShareMode::All), m_noteId(noteId)
+    {
+    }
 
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
@@ -69,14 +71,17 @@ private:
  *
  * This class is identified by the XML node name "entry".
  */
-class Entry : public Base {
+class Entry : public Base
+{
 public:
     /** @brief Constructor function
      *
      * The partId and shareMode values should always be 0 and ShareMode::All, but they are required by the factory function.
     */
     explicit Entry(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, EntryNumber prev, EntryNumber next)
-        : Base(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next) {}
+        : Base(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next)
+    {
+    }
 
     /**
      * @brief Duration of the entry, not taking into account tuplets.
@@ -130,7 +135,7 @@ public:
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
-    util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration);  }
+    util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration); }
 
     /**
      * @brief Calculates the number of augmentation dots in the duration.
@@ -158,48 +163,7 @@ private:
     EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
 };
 
-/**
- * @class EntryInfo
- * @brief Information an entry along with the entry.
- *
- * This class is used in iteration functions to supply information about the entry along with the entry itself.
- *
- * @todo compute current clef index.
- */
-class EntryInfo
-{
-public:
-    /** @brief Constructor function
-     *
-     * @param layerIndex The @ref LayerIndex (0..3) of the entry
-     * @param entry The entry.
-    */
-    explicit EntryInfo(LayerIndex layerIndex, const std::shared_ptr<const Entry>& entry)
-        : m_layerIndex(layerIndex), m_entry(entry) {}
-
-    util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
-    util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
-    bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
-
-    /// @brief Get the layer index (0..3) of the entry
-    LayerIndex getLayerIndex() const { return m_layerIndex; }
-
-    /// @brief Get the entry
-    /// @throws std::logic_error if the entry pointer is no longer valid 
-    std::shared_ptr<const Entry> getEntry() const
-    {
-        auto retval = m_entry.lock();
-        if (!retval) {
-            throw std::logic_error("Entry pointer is no longer valid");
-        }
-        return retval;
-    }
-
-private:
-    LayerIndex m_layerIndex;
-    std::weak_ptr<const Entry> m_entry;
-};
-
+class EntryInfo;
 
 /**
  * @class EntryFrame
@@ -243,6 +207,80 @@ private:
     LayerIndex m_layerIndex;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
+};
+
+namespace details {
+class GFrameHold;
+} // namespace details
+
+/**
+ * @class EntryInfo
+ * @brief Information an entry along with the entry.
+ *
+ * This class is used in iteration functions to supply information about the entry along with the entry itself.
+ *
+ * @todo compute current clef index.
+ */
+class EntryInfo
+{
+    /** @brief Constructor function
+     *
+     * @param layerIndex The @ref LayerIndex (0..3) of the entry
+     * @param entry The entry.
+    */
+    explicit EntryInfo(const std::shared_ptr<const Entry>& entry, const std::shared_ptr<EntryFrame>& entryFrame, size_t indexInFrame)
+        : m_entry(entry), m_entryFrame(entryFrame), m_indexInFrame(indexInFrame) {}
+
+    friend details::GFrameHold;
+
+public:
+    util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
+    util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
+    bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
+    unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
+                                        ///< the main note has a grace index of zero.
+
+    /// @brief Get the layer index (0..3) of the entry
+    LayerIndex getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
+
+
+    /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
+    unsigned calcReverseGraceIndex() const;
+
+    /// @brief Get the entry
+    /// @throws std::logic_error if the entry pointer is no longer valid 
+    std::shared_ptr<const Entry> getEntry() const
+    {
+        auto retval = m_entry.lock();
+        if (!retval) {
+            throw std::logic_error("Entry pointer is no longer valid");
+        }
+        return retval;
+    }
+
+    /// @brief Get the next entry in the frame
+    std::shared_ptr<const EntryInfo> getNext() const
+    {
+        size_t nextIndex = m_indexInFrame + 1;
+        if (nextIndex < m_entryFrame->getEntries().size()) {
+            return m_entryFrame->getEntries()[nextIndex];
+        }
+        return nullptr;
+    }
+
+    /// @brief Get the previous entry in the frame
+    std::shared_ptr<const EntryInfo> getPrevious() const
+    {
+        if (m_indexInFrame > 0) {
+            return m_entryFrame->getEntries()[m_indexInFrame - 1];
+        }
+        return nullptr;
+    }
+
+private:
+    std::weak_ptr<const Entry> m_entry;
+    size_t m_indexInFrame;
+    std::shared_ptr<EntryFrame> m_entryFrame;
 };
 
 } // namespace dom
