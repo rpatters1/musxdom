@@ -60,18 +60,53 @@ namespace others {
  *
  * This class is identified by the XML node name "fontName".
  */
-class FontDefinition : public OthersBase {
+class FontDefinition : public OthersBase
+{
+    static constexpr uint32_t SYMBOL_CHARSET_MAC = 0xfff; // (4095)
+    static constexpr uint32_t SYMBOL_CHARSET_WIN = 2;
+
 public:
     /** @brief Constructor function */
     explicit FontDefinition(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    /// @enum CharacterSetBank
+    /// @brief The character set for the bank
+    enum class CharacterSetBank
+    {
+        MacOS,          /// xml value is "Mac"
+        Windows         /// xml value is "Win"
+    };
+
     // Public properties corresponding to the XML structure
-    std::string charsetBank;    ///< probably only "Mac" or "Win"
-    int charsetVal{};           ///< A value specifying the character set, usually 4095 or 0
-    int pitch{};                ///< Represents the `<pitch>` element, e.g., 0. (use unknown)
-    int family{};               ///< Represents the `<family>` element, e.g., 0. (use unknown)
-    std::string name;           ///< The font name e.g., "Broadway Copyist Text".
+    CharacterSetBank charsetBank{}; ///< The character set bank.
+    int charsetVal{};               ///< A value specifying the character set. The meaning is dependent on #charsetBank.
+                                    ///< A value of 0 indicates ANSI character set for Windows and MacRoman for macOS.
+                                    ///< A value of 2 (`SYMBOL_CHARSET`) indicates a symbol font for Windows.
+                                    ///< A value of 4095 (0xfff) indicates a symbol font for macOS.
+                                    ///< Other values are possible but less likely.
+    int pitch{};                    ///< Represents the `<pitch>` element, e.g., 0. (use unknown)
+    int family{};                   ///< Represents the `<family>` element, e.g., 0. (use unknown)
+    std::string name;               ///< The font name e.g., "Broadway Copyist Text".
+
+    /**  @brief Calculates if this font is a symbol font.
+     *
+     * Many legacy symbol fonts in Finale were music fonts following more-or-less the layout
+     * of Adobe Sonata font, so this may be an appropriate proxy for telling if the font is a legacy
+     * music font, at least in some contexts. The same font face (e.g., Engraver) may appear as
+     * either a Windows symbol font or a macOS symbol font, depending on the origin of the font
+     * and of the document.
+    */
+    bool calcIsSymbolFont() const
+    {
+        if (charsetBank == CharacterSetBank::MacOS && charsetVal == SYMBOL_CHARSET_MAC) {
+            return true;
+        }
+        if (charsetBank == CharacterSetBank::Windows && charsetVal == SYMBOL_CHARSET_WIN) {
+            return true;
+        }
+        return false;
+    }
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FontDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

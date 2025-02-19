@@ -136,8 +136,7 @@ std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& d
 
 std::string FontInfo::getName() const
 {
-    auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId);
-    if (fontDef) {
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId)) {
         return fontDef->name;
     }
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
@@ -169,6 +168,14 @@ bool FontInfo::calcIsSMuFL() const
         }
     }
     return false;
+}
+
+bool FontInfo::calcIsSymbolFont() const
+{
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId)) {
+        return fontDef->calcIsSymbolFont();
+    }
+    throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
 }
 
 std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()

@@ -604,6 +604,8 @@ public:
  *
  * These are values are the character codes from the default music font. If the default music font is
  * SMuFL-compliant, they will be SMuFL glyph values. Otherwise, they are most likely Maestro font values.
+ * Note that Maestro font values are MacRoman code points, not Unicode. Use #FontInfo::calcIsSymbolFont to
+ * check if the current non-SMuFL music font is using MacRoman code points.
  *
  * This class is identified by the XML node name "musicSymbolOptions".
  */

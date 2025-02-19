@@ -114,6 +114,13 @@ public:
      */
     bool calcIsSMuFL() const;
 
+    /// @brief Calculates if this is the default music font.
+    bool calcIsDefaultMusic() const
+    { return fontId == 0; }
+
+    /// @brief Calculates if this is a symbol font.
+    bool calcIsSymbolFont() const;
+
     /**
      * @brief Returns the standard SMuFL font folder.
      *

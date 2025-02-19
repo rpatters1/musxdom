@@ -29,9 +29,6 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::others;
 
-// Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
-// The goal is that this may facilitate serialization in the future.
-
 MUSX_XML_ENUM_MAPPING(NamePositioning::AlignJustify, {
     //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", NamePositioning::AlignJustify::Center},

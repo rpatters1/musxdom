@@ -32,6 +32,11 @@ using namespace ::musx::dom::others;
 // Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
 
+MUSX_XML_ENUM_MAPPING(FontDefinition::CharacterSetBank, {
+    {"Mac", FontDefinition::CharacterSetBank::MacOS},
+    {"Win", FontDefinition::CharacterSetBank::Windows},
+});
+
 MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
     //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", MeasureNumberRegion::AlignJustify::Center},
@@ -213,7 +218,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
-    {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
+    {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = toEnum<FontDefinition::CharacterSetBank>(e); }},
     {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},
     {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->pitch = e->getTextAs<int>(); }},
     {"family", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->family = e->getTextAs<int>(); }},
