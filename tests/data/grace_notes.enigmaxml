@@ -1544,7 +1544,7 @@
     </frameSpec>
     <frameSpec cmper="2" inci="0">
       <startEntry>5</startEntry>
-      <endEntry>9</endEntry>
+      <endEntry>14</endEntry>
     </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
@@ -3077,7 +3077,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="9" prev="11" next="0">
+    <entry entnum="9" prev="11" next="12">
       <dura>2048</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -3116,6 +3116,50 @@
       <freezeBeam/>
       <note id="1">
         <harmLev>10</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="12" prev="9" next="13">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <graceNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>9</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="13" prev="12" next="14">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <graceNote/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>10</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="14" prev="13" next="0">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <graceNote/>
+      <upStem/>
+      <sorted/>
+      <freezeBeam/>
+      <note id="1">
+        <harmLev>11</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>

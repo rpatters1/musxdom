@@ -112,19 +112,10 @@ unsigned EntryInfo::calcReverseGraceIndex() const
 {
     unsigned result = graceIndex;
     if (result) {
-        if (result == 1) {
-            for (auto next = getNext(); next && next->graceIndex; next = next->getNext()) {
-                result++;
-            }
-        } else {
-            for (auto prev = getPrevious(); prev && prev->graceIndex; prev = prev->getPrevious()) {
-                if (prev->graceIndex == 1) {
-                    unsigned largest = prev->calcReverseGraceIndex();
-                    result = largest - result + 1;
-                    break;
-                }
-            }
+        for (auto next = getNext(); next && next->graceIndex; next = next->getNext()) {
+            result++;
         }
+        result = result - graceIndex + 1;
     }
     return result;
 }

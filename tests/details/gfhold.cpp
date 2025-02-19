@@ -246,9 +246,7 @@ TEST(GFrameHold, QuintupletTest)
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
-        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
@@ -256,7 +254,7 @@ TEST(GFrameHold, QuintupletTest)
         total += expectedValues[x++];
         return true;
     });
-    EXPECT_TRUE(enteredLoop);
+    EXPECT_EQ(x, expectedValues.size());
 }
 
 TEST(GFrameHold, TripletTest)
@@ -277,9 +275,7 @@ TEST(GFrameHold, TripletTest)
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
-        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
@@ -287,7 +283,7 @@ TEST(GFrameHold, TripletTest)
         total += expectedValues[x++];
         return true;
     });
-    EXPECT_TRUE(enteredLoop);
+    EXPECT_EQ(x, expectedValues.size());
 }
 
 TEST(GFrameHold, NestedTupletTest)
@@ -311,9 +307,7 @@ TEST(GFrameHold, NestedTupletTest)
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
-        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
@@ -321,7 +315,7 @@ TEST(GFrameHold, NestedTupletTest)
         total += expectedValues[x++];
         return true;
     });
-    EXPECT_TRUE(enteredLoop);
+    EXPECT_EQ(x, expectedValues.size());
 }
 
 TEST(GFrameHold, V1V2TupletTest)
@@ -347,9 +341,7 @@ TEST(GFrameHold, V1V2TupletTest)
     size_t x = 0;
     Fraction v1Total = 0;
     Fraction v2Total = 0;
-    bool enteredLoop = false;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
-        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
@@ -366,7 +358,7 @@ TEST(GFrameHold, V1V2TupletTest)
     */
         return true;
     });
-    EXPECT_TRUE(enteredLoop);
+    EXPECT_EQ(x, expectedValues.size());
 }
 
 TEST(GFrameHold, GraceNoteIndexTest)
@@ -379,15 +371,13 @@ TEST(GFrameHold, GraceNoteIndexTest)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    std::vector<unsigned> expectedValues = { 0, 1, 2, 3, 4, 5, 0 };
-    std::vector<unsigned> expectedReverseValues = { 0, 5, 4, 3, 2, 1, 0 };
+    std::vector<unsigned> expectedValues = { 0, 1, 2, 3, 4, 5, 0, 1, 2, 3 };
+    std::vector<unsigned> expectedReverseValues = { 0, 5, 4, 3, 2, 1, 0, 3, 2, 1 };
 
     auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
-    bool enteredLoop = false;
     size_t x = 0;
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
-        enteredLoop = true;
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->graceIndex);
@@ -395,5 +385,5 @@ TEST(GFrameHold, GraceNoteIndexTest)
         x++;
         return true;
     });
-    EXPECT_TRUE(enteredLoop);
+    EXPECT_EQ(x, expectedValues.size());
 }
