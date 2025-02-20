@@ -22,6 +22,7 @@
 #pragma once
 
 #include <numeric>
+#include <filesystem>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -119,17 +120,20 @@ public:
         hidden = efx & 0x80;       // FONT_EFX_HIDDEN
     }
 
-    /**
-     * @brief Calculates whether this is a SMuFL font.
-     */
-    bool calcIsSMuFL() const;
-
     /// @brief Calculates if this is the default music font.
     bool calcIsDefaultMusic() const
     { return fontId == 0; }
 
     /// @brief Calculates if this is a symbol font. (See #others::FontDefinition::calcIsSymbolFont.)
     bool calcIsSymbolFont() const;
+
+    /// @brief Returns the filepath of the SMuFL font's metadata json file, if any
+    std::optional<std::filesystem::path> calcSMuFLMetaDataPath() const;
+
+    /**
+     * @brief Calculates whether this is a SMuFL font.
+     */
+    bool calcIsSMuFL() const  { return calcSMuFLMetaDataPath().has_value(); }
 
     /**
      * @brief Returns the standard SMuFL font folder.

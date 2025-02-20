@@ -170,7 +170,7 @@ void FontInfo::setFontIdByName(const std::string& name)
     throw std::invalid_argument("font definition not found for font \"" + name + "\"");
 }
 
-bool FontInfo::calcIsSMuFL() const
+std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath() const
 {
     auto name = getName();
     auto standardFontPaths = calcSMuFLPaths();
@@ -179,11 +179,11 @@ bool FontInfo::calcIsSMuFL() const
             std::filesystem::path metaFilePath(path / name / name);
             metaFilePath.replace_extension(".json");
             if (std::filesystem::is_regular_file(metaFilePath)) {
-                return true;
+                return metaFilePath;
             }
         }
     }
-    return false;
+    return std::nullopt;
 }
 
 bool FontInfo::calcIsSymbolFont() const
