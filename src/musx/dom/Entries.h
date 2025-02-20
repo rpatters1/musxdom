@@ -29,6 +29,10 @@
 namespace musx {
 namespace dom {
 
+namespace details {
+class TupletDef;
+} // namespace details;
+
 int calcAugmentationDotsFromEdu(Edu duration);      ///< Calculates the number of dots from an @ref Edu value.
 NoteType calcNoteTypeFromEdu(Edu duration);         ///< Calculates the @ref NoteType from an @ref Edu value.
 
@@ -183,6 +187,23 @@ public:
         : m_staff(staff), m_measure(measure), m_layerIndex(layerIndex)
     {
     }
+
+    /// @brief class to track tuplets in the frame
+    struct TupletInfo
+    {
+        std::shared_ptr<const details::TupletDef> tuplet;   ///< the tuplet
+        size_t startIndex;                                  ///< the index of the first entry in the tuplet
+        size_t endIndex;                                    ///< the index of the last entry in the tuplet
+        util::Fraction startDura;                           ///< the actual duration where the tuplet starts
+        util::Fraction endDura;                             ///< the actual duration where the tuplet ends
+
+        TupletInfo(const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start)
+            : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
+                startDura(start), endDura(-1)
+        {}
+    };
+
+    std::vector<TupletInfo> tupletInfo;             ///< a list of the tuplets in the frame and their information
 
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }

@@ -317,16 +317,17 @@ struct TupletState
     util::Fraction remainingSymbolicDuration;         // The remaining symbolic duration
     util::Fraction ratio;             // The remaining actual duration
     std::shared_ptr<const details::TupletDef> tuplet; // The tuplet.
+    size_t infoIndex;               // the index of this tuplet in EntryFrame::tupletInfo
 
     void accountFor(util::Fraction actual)
     {
         remainingSymbolicDuration -= (actual / ratio);
     }
 
-    TupletState(const std::shared_ptr<details::TupletDef>& t)
+    TupletState(const std::shared_ptr<details::TupletDef>& t, size_t i)
         : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(NoteType::Whole)),
         ratio(t->referenceNumber* t->referenceDuration, t->displayNumber* t->displayDuration),
-        tuplet(t)
+        tuplet(t), infoIndex(i)
     {
     }
 };
@@ -355,7 +356,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
         util::Fraction v1ActualElapsedDuration = 0;
         for (const auto& f : frameIncis) {
-            v1ActualElapsedDuration += util::Fraction(f->startTime, int(NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
+            v1ActualElapsedDuration += util::Fraction::fromEdu(f->startTime); // if there is an old-skool pickup, this accounts for it
         }
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         int graceIndex = 0;
@@ -383,7 +384,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
                 });
                 for (const auto& tuplet : tuplets) {
-                    activeTuplets.emplace_back(tuplet);
+                    size_t index = retval->tupletInfo.size();
+                    retval->tupletInfo.emplace_back(tuplet, i, actualElapsedDuration);
+                    activeTuplets.emplace_back(tuplet, index);
                 }
 
                 // @todo: calculate and add running values (clef, key)
@@ -404,11 +407,17 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                     it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
                     cumulativeRatio /= it->ratio;
                 }
-                activeTuplets.erase(
-                    std::remove_if(activeTuplets.begin(), activeTuplets.end(),
-                        [](const TupletState& t) { return t.remainingSymbolicDuration <= 0; }),
-                    activeTuplets.end()
-                );
+                auto removeIt = std::partition(activeTuplets.begin(), activeTuplets.end(), [](const TupletState& t) {
+                    return t.remainingSymbolicDuration > 0;
+                });
+                std::vector<TupletState> removedTuplets;
+                removedTuplets.assign(removeIt, activeTuplets.end());
+                activeTuplets.erase(removeIt, activeTuplets.end());
+                for (const auto& removed : removedTuplets) {
+                    auto& tuplInf = retval->tupletInfo[removed.infoIndex];
+                    tuplInf.endIndex = i;
+                    tuplInf.endDura = actualElapsedDuration;
+                }
             }
         }
     } else {
