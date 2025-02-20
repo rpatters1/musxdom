@@ -55,6 +55,16 @@ enum class NoteType : Edu {
 };
 
 /**
+ * @brief Enum representing the clef display mode for a frame.
+ */
+enum class ShowClefMode
+{
+    WhenNeeded, ///< Clef is displayed only when needed (the default).
+    Never,      ///< Clef is never displayed. (xml value is "hidden")
+    Always      ///< Clef is always displayed. (xml value is "forced")
+};
+
+/**
  * @struct FontInfo
  * @brief Represents the default font settings for a particular element type.
  *

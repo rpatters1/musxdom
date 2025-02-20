@@ -69,7 +69,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
         EXPECT_EQ(gfhold->clefId.value_or(-1), 0); // Default to -1 if not set
         EXPECT_EQ(gfhold->clefListId, 0); // Default to zero
-        EXPECT_EQ(gfhold->showClefMode, details::GFrameHold::ShowClefMode::Always);
+        EXPECT_EQ(gfhold->showClefMode, ShowClefMode::Always);
         EXPECT_EQ(gfhold->clefPercent, 75);
         EXPECT_FALSE(gfhold->mirrorFrame);
         EXPECT_EQ(gfhold->frames[0], 21240);
@@ -85,7 +85,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
         EXPECT_EQ(gfhold->clefId.value_or(-1), 3); // Default to -1 if not set
         EXPECT_EQ(gfhold->clefListId, 0); // Default to zero
-        EXPECT_EQ(gfhold->showClefMode, details::GFrameHold::ShowClefMode::Never);
+        EXPECT_EQ(gfhold->showClefMode, ShowClefMode::Never);
         EXPECT_EQ(gfhold->clefPercent, 75);
         EXPECT_FALSE(gfhold->mirrorFrame);
         EXPECT_EQ(gfhold->frames[0], 22464);
@@ -101,7 +101,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
         EXPECT_FALSE(gfhold->clefId.has_value());
         EXPECT_EQ(gfhold->clefListId, 1234); // Default to zero
-        EXPECT_EQ(gfhold->showClefMode, details::GFrameHold::ShowClefMode::WhenNeeded);
+        EXPECT_EQ(gfhold->showClefMode, ShowClefMode::WhenNeeded);
         EXPECT_EQ(gfhold->clefPercent, 75);
         EXPECT_TRUE(gfhold->mirrorFrame);
         EXPECT_EQ(gfhold->frames[0], 0);  // Not present, should be default

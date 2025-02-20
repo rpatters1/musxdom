@@ -43,6 +43,7 @@ namespace dom {
 class Entry;
 
 namespace details {
+class GFrameHold;
 class StaffGroup;
 }
 
@@ -51,7 +52,36 @@ class StaffGroup;
  * @brief Classes in the @ref OthersPool.
  */
 namespace others {
+
+/**
+ * @class ClefList
+ * @brief Represents an element in multimeasure clef list with its positioning and percentage values.
+ *
+ * The cmper is obtained from the @ref details::GFrameHold instance for the staff and measure. Inci 0
+ * is the initial clef at the barline.
+ *
+ * This class is identified by the XML node name "clefEnum".
+ */
+class ClefList : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit ClefList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
         
+    // Public properties corresponding to the XML structure, in the same order as in the XML.
+    ClefIndex clefIndex{};  ///< The 0-based clef index from the <clef> element.
+    Edu xEduPos{};          ///< The xEduPos value from the <xEduPos> element.
+    Evpu yEvpuPos{};        ///< The yEvpuPos value from the <yEvpuPos> element.
+    int percent{};          ///< The percentage value from the <percent> element.
+    int xEvpuOffset{};      ///< The xEvpuOffset value from the <xEvpuOffset> element.
+    ShowClefMode clefMode{}; ///< The clef mode from the <clefMode> element.
+    bool unlockVert{};      ///< "Allow Vertical Drag"
+    bool afterBarline{};    ///< "Place Clef After Barline"
+    
+    constexpr static std::string_view XmlNodeName = "clefEnum"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ClefList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 /**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained.
@@ -1264,6 +1294,9 @@ public:
     /// @return Auto numbered name.
     std::string addAutoNumbering(const std::string& plainName) const;
 
+    /// @brief Returns the first clef in this staff
+    ClefIndex calcFirstClefIndex() const;
+
     void integrityCheck() override
     {
         OthersBase::integrityCheck();
@@ -1315,7 +1348,9 @@ public:
         explicit Masks(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
+        bool defaultClef{};         ///< overrides default clef
         bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
+        bool transposition{};       ///< overrides transposition fields
         bool negNameScore{};        ///< overrides #hideNameInScore.
         bool fullName{};            ///< overrides #fullNameTextId.
         bool abrvName{};            ///< overrides #abbrvNameTextId.
@@ -1408,11 +1443,11 @@ private:
     explicit StaffComposite(const std::shared_ptr<Staff>& staff)
         : StaffStyle(staff) {}
 
-public:
     /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
     /// @param staffStyle The @ref StaffStyle to apply.
     void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
 
+public:
     /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
     ///
     /// Note that the Finale app has logic to assure that no two assigments modify the same staff properties at the same metric

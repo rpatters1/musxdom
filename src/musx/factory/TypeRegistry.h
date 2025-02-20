@@ -189,6 +189,7 @@ using RegisteredOptions = TypeRegistry <
  * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredOthers = TypeRegistry <
+    dom::others::ClefList,
     dom::others::FontDefinition,
     dom::others::Frame,
     dom::others::InstrumentUsed,

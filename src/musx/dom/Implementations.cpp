@@ -441,6 +441,22 @@ bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_pt
     return true;
 }
 
+ClefIndex details::GFrameHold::calcFirstClefIndex() const
+{
+    if (clefId.has_value()) {
+        return clefId.value();
+    }
+    ClefIndex result = 0;
+    auto clefList = getDocument()->getOthers()->getArray<others::ClefList>(getPartId(), clefListId);
+    if (clefList.empty()) {
+        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
+            + std::to_string(getMeasure()) + " has non-existent clef list [" + std::to_string(clefListId) + "]");
+    } else {
+        result = clefList[0]->clefIndex;
+    }
+    return result;
+}
+
 // **************************
 // ***** InstrumentUsed *****
 // **************************
@@ -987,6 +1003,14 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     return addAutoNumbering(name);
 }
 
+ClefIndex others::Staff::calcFirstClefIndex() const
+{
+    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), 1)) {
+        return gfhold->calcFirstClefIndex();
+    }
+    return defaultClef;
+}
+
 // **************************
 // ***** StaffComposite *****
 // **************************
@@ -996,6 +1020,10 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     auto srcMasks = staffStyle->masks;
 
     /// @todo the rest of the masks as we discover/create them
+    if (srcMasks->defaultClef) {
+        defaultClef = staffStyle->defaultClef;
+        masks->defaultClef = true;
+    }
     if (srcMasks->staffType) {
         staffLines = staffStyle->staffLines;
         customStaff = staffStyle->customStaff;
@@ -1012,6 +1040,11 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         // hideTopRepeatDot
         // hideBotRepeatDot
         masks->staffType = true;
+    }
+    if (srcMasks->transposition) {
+        transposedClef = staffStyle->transposedClef;
+        // other transposition fields
+        masks->transposition = true;
     }
     if (srcMasks->negNameScore) {
         hideNameInScore = staffStyle->hideNameInScore;

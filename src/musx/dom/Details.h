@@ -32,6 +32,7 @@ namespace musx {
 namespace dom {
 
 class EntryFrame;
+class EntryInfo;
 
 namespace options {
 class TupletOptions;
@@ -68,16 +69,6 @@ public:
     explicit GFrameHold(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas)
         : DetailsBase(document, partId, shareMode, inst, meas), frames(MAX_LAYERS) {}
 
-    /**
-     * @brief Enum representing the clef mode for the frame.
-     */
-    enum class ShowClefMode
-    {
-        WhenNeeded, ///< Clef is displayed only when needed (the default).
-        Never,      ///< Clef is never displayed. (xml value is "hidden")
-        Always      ///< Clef is always displayed. (xml value is "forced")
-    };
-
     // Public properties corresponding to the XML structure
     std::optional<ClefIndex> clefId;        ///< clef index when there are no mid-measure clef changes. (xml tag is `<clefID>`).
     Cmper clefListId{};                     ///< The clef list ID when there are mid-measure clef changes, if non-zero. (xml tag is `<clefListID>`).
@@ -91,6 +82,9 @@ public:
 
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
+
+    /// @brief Returns the first clef index in effect for this instance. (Either the clef or the first in the clef list.)
+    ClefIndex calcFirstClefIndex() const;
 
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
