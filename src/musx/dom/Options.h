@@ -220,7 +220,7 @@ public:
             
         int middleCPos{};               ///< Staff position of middle-C for this clef (from top staffline). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
-        int staffPositon{};             ///< Staff position of the clef symbol's baseline (from top staffline). (xml node is `<clefYDisp>`)
+        int staffPositon{};             ///< Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is `<clefYDisp>`)
         Efix baselineAdjust{};          ///< Additional baseline adjustment in Efix. (xml node is `<baseAdjust>`)
         Cmper shapeId{};                ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
         bool isShape{};                 ///< Indicates if the clef is a shape.

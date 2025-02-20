@@ -1297,6 +1297,15 @@ public:
     /// @brief Returns the first clef in this staff
     ClefIndex calcFirstClefIndex() const;
 
+    /// @brief Returns the first clef in the specified staff in the document
+    /// @param document the document to search
+    /// @param partId the linked part to search
+    /// @param staffCmper the staff cmper to search
+    static ClefIndex calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper);
+
+    /// @brief Returns the middle staff position. For staves with even numbers of lines, it is the middle space.
+    int calcMiddleStaffPosition() const;
+
     void integrityCheck() override
     {
         OthersBase::integrityCheck();

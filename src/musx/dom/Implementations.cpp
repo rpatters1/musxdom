@@ -1011,6 +1011,30 @@ ClefIndex others::Staff::calcFirstClefIndex() const
     return defaultClef;
 }
 
+ClefIndex others::Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper)
+{
+    if (auto staff = others::StaffComposite::createCurrent(document, partId, staffCmper, 1, 0)) {
+        return staff->calcFirstClefIndex();
+    } else {
+        throw std::logic_error("Unable to find StaffComposite instance for staff " + std::to_string(staffCmper));
+    }
+}
+
+int others::Staff::calcMiddleStaffPosition() const
+{
+    if (staffLines.has_value()) {
+        return -(staffLines.value() - 1);
+    } else if (customStaff.has_value()) {
+        const auto& lines = customStaff.value();
+        if (!lines.empty()) {
+            int numStaves = lines[lines.size() - 1] - lines[0] + 1;
+            int referenceOffset = 2 * (11 - lines[0]);
+            return referenceOffset - (numStaves - 1);
+        }
+    }
+    return 0;
+}
+
 // **************************
 // ***** StaffComposite *****
 // **************************
