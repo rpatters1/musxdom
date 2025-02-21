@@ -390,6 +390,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 }
 
                 // @todo: calculate and add running values (clef, key)
+
+                // It appears that Finale allows exactly one entry per 0-length tuplet, no matter
+                // what the symbolic duration of the tuplet is. This makes life *much* easier.
                 bool zeroLengthTuplet = false;
                 for (const auto& t : activeTuplets) {
                     if (t.ratio != 0) {
