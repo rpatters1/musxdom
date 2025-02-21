@@ -408,6 +408,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                     cumulativeRatio /= it->ratio;
                 }
                 // always update all end positions, in case we run out of notes before the actual end
+                // WARNING: Finale handles incomplete v2 tuplets in a different and buggy manner.
+                //          It appears that Finale extends incomplete v2 tuplets to the end of the bar in many cases.
+                //          This code only extends them to the end of the v2 sequence. This is by design.
                 for (const auto& tuplet : activeTuplets) {
                     auto& tuplInf = retval->tupletInfo[tuplet.infoIndex];
                     tuplInf.endIndex = i;
