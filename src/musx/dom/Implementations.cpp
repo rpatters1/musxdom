@@ -424,6 +424,12 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
     }
+    for (auto& tuplInf : retval->tupletInfo) {
+        if (tuplInf.endDura < 0) {
+            tuplInf.endIndex = retval->getEntries().size() - 1;
+            tuplInf.endDura = retval->getEntries()[tuplInf.endIndex]->elapsedDuration + retval->getEntries()[tuplInf.endIndex]->actualDuration;
+        }
+    }
     return retval;
 }
 

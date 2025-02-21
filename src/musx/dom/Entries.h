@@ -203,7 +203,13 @@ public:
         {}
     };
 
-    std::vector<TupletInfo> tupletInfo;             ///< a list of the tuplets in the frame and their information
+    /** @brief A list of the tuplets in the frame and their calculated starting and ending information.
+     *
+     * @note Tuplets that start on grace notes are omitted from this list. Finale does not display them, and
+     * it is not possible to calculate their endpoints correctly in the general case. (Which is probably why
+     * Finale does not display them.)
+    */
+    std::vector<TupletInfo> tupletInfo;
 
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }
@@ -249,7 +255,7 @@ class EntryInfo
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
      * @param entry The entry.
     */
-    explicit EntryInfo(const std::shared_ptr<const Entry>& entry, const std::shared_ptr<EntryFrame>& entryFrame, size_t indexInFrame)
+    explicit EntryInfo(const std::shared_ptr<const Entry>& entry, const std::weak_ptr<const EntryFrame>& entryFrame, size_t indexInFrame)
         : m_entry(entry), m_entryFrame(entryFrame), m_indexInFrame(indexInFrame) {}
 
     friend details::GFrameHold;
@@ -262,7 +268,7 @@ public:
                                         ///< the main note has a grace index of zero.
 
     /// @brief Get the layer index (0..3) of the entry
-    LayerIndex getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
+    LayerIndex getLayerIndex() const { return getFrame()->getLayerIndex(); }
 
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
@@ -283,8 +289,9 @@ public:
     std::shared_ptr<const EntryInfo> getNext() const
     {
         size_t nextIndex = m_indexInFrame + 1;
-        if (nextIndex < m_entryFrame->getEntries().size()) {
-            return m_entryFrame->getEntries()[nextIndex];
+        auto frame = getFrame();
+        if (nextIndex < frame->getEntries().size()) {
+            return frame->getEntries()[nextIndex];
         }
         return nullptr;
     }
@@ -293,15 +300,26 @@ public:
     std::shared_ptr<const EntryInfo> getPrevious() const
     {
         if (m_indexInFrame > 0) {
-            return m_entryFrame->getEntries()[m_indexInFrame - 1];
+            return getFrame()->getEntries()[m_indexInFrame - 1];
         }
         return nullptr;
+    }
+
+    /// @brief Get the EntryFrame for this EntryInfo
+    std::shared_ptr<const EntryFrame> getFrame() const
+    {
+        auto locked = m_entryFrame.lock();
+        assert(locked); // program bug if this pointer goes out of scope.
+        if (!locked) {
+            throw std::logic_error("Entry frame is no longer valid.");
+        }
+        return locked;
     }
 
 private:
     std::weak_ptr<const Entry> m_entry;
     size_t m_indexInFrame;
-    std::shared_ptr<EntryFrame> m_entryFrame;
+    std::weak_ptr<const EntryFrame> m_entryFrame;
 };
 
 } // namespace dom
