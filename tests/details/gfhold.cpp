@@ -586,6 +586,56 @@ TEST(GFrameHold, IncompleteTupletV2)
     EXPECT_EQ(x, expectedValues.size());
 }
 
+TEST(GFrameHold, ZeroTuplet)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "zero_tuplet.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    std::vector<Fraction> expectedValues = {
+      Fraction(1, 2), Fraction(1, 3), Fraction(0, 1), Fraction(1, 6)
+    };
+
+    std::vector<size_t> expectedStarts = { 1, 2 };
+    std::vector<size_t> expectedEnds = { 3, 2 };
+    std::vector<Fraction> expectedStartDuras = { Fraction(1, 2), Fraction(5, 6) };
+    std::vector<Fraction> expectedEndDuras = { Fraction(1, 1), Fraction(5, 6) };
+
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    size_t x = 0;
+    Fraction total = 0;
+    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+        EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+        if (x >= expectedValues.size()) return false;
+        if (x == 0) {
+            const auto frame = entryInfo->getFrame();
+            EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
+            if (frame->tupletInfo.size() == expectedStarts.size()) {
+                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
+                    const auto& tuplInf = frame->tupletInfo[x];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                }
+            }
+        }
+        EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
+        EXPECT_EQ(total, entryInfo->elapsedDuration);
+        total += expectedValues[x++];
+        std::cout << entryInfo->elapsedDuration << '\t' << entryInfo->actualDuration << '\t'
+                        << std::to_string(entryInfo->elapsedDuration.calcEduDuration()) << '\t'
+                        << std::to_string(entryInfo->actualDuration.calcEduDuration()) << std::endl;
+        return true;
+    });
+    EXPECT_EQ(x, expectedValues.size());
+}
+
 TEST(GFrameHold, GraceNoteIndexTest)
 {
     std::vector<char> xml;

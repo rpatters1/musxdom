@@ -348,7 +348,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
         return nullptr;
-        }();
+    }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
         retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);        auto entries = frame->getEntries();
@@ -390,10 +390,15 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 }
 
                 // @todo: calculate and add running values (clef, key)
+                bool zeroLengthTuplet = false;
                 for (const auto& t : activeTuplets) {
-                    cumulativeRatio *= t.ratio;
+                    if (t.ratio != 0) {
+                        cumulativeRatio *= t.ratio;
+                    } else {
+                        zeroLengthTuplet = true;
+                    }
                 }
-                util::Fraction actualDuration = entry->calcFraction() * cumulativeRatio;
+                util::Fraction actualDuration = zeroLengthTuplet ? 0 : entry->calcFraction() * cumulativeRatio;
                 entryInfo->actualDuration = actualDuration;
             } else {
                 entryInfo->graceIndex = ++graceIndex;
@@ -404,8 +409,10 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             actualElapsedDuration += entryInfo->actualDuration;
             if (!entry->graceNote) {
                 for (auto it = activeTuplets.rbegin(); it != activeTuplets.rend(); ++it) {
-                    it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
-                    cumulativeRatio /= it->ratio;
+                    if (it->ratio != 0) {
+                        it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
+                        cumulativeRatio /= it->ratio;
+                    }
                 }
                 // always update all end positions, in case we run out of notes before the actual end
                 // WARNING: Finale handles incomplete v2 tuplets in a different and buggy manner.
@@ -418,7 +425,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 }
                 activeTuplets.erase(
                     std::remove_if(activeTuplets.begin(), activeTuplets.end(),
-                        [](const TupletState& t) { return t.remainingSymbolicDuration <= 0; }),
+                        [](const TupletState& t) { return t.remainingSymbolicDuration <= 0 || t.ratio == 0; }),
                     activeTuplets.end()
                 );
             }
