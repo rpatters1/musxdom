@@ -407,28 +407,22 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                     it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
                     cumulativeRatio /= it->ratio;
                 }
-                auto removeIt = std::partition(activeTuplets.begin(), activeTuplets.end(), [](const TupletState& t) {
-                    return t.remainingSymbolicDuration > 0;
-                });
-                std::vector<TupletState> removedTuplets;
-                removedTuplets.assign(removeIt, activeTuplets.end());
-                activeTuplets.erase(removeIt, activeTuplets.end());
-                for (const auto& removed : removedTuplets) {
-                    auto& tuplInf = retval->tupletInfo[removed.infoIndex];
+                // always update all end positions, in case we run out of notes before the actual end
+                for (const auto& tuplet : activeTuplets) {
+                    auto& tuplInf = retval->tupletInfo[tuplet.infoIndex];
                     tuplInf.endIndex = i;
                     tuplInf.endDura = actualElapsedDuration;
                 }
+                activeTuplets.erase(
+                    std::remove_if(activeTuplets.begin(), activeTuplets.end(),
+                        [](const TupletState& t) { return t.remainingSymbolicDuration <= 0; }),
+                    activeTuplets.end()
+                );
             }
         }
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
-    }
-    for (auto& tuplInf : retval->tupletInfo) {
-        if (tuplInf.endDura < 0) {
-            tuplInf.endIndex = retval->getEntries().size() - 1;
-            tuplInf.endDura = retval->getEntries()[tuplInf.endIndex]->elapsedDuration + retval->getEntries()[tuplInf.endIndex]->actualDuration;
-        }
     }
     return retval;
 }
