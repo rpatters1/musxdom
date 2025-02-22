@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <tuple>
+
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
@@ -51,6 +53,18 @@ public:
     {
     }
 
+    /// @brief The available note names, in array order.
+    enum class NoteName : int
+    {
+        C = 0,
+        D = 1,
+        E = 2,
+        F = 3,
+        G = 4,
+        A = 5,
+        B = 6
+    };
+    
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
     bool isValid{};     ///< Should always be true but otherwise appears to be used internally by Finale.
@@ -60,6 +74,17 @@ public:
     /// @brief Gets the note id for this note. This value does not change, even if the notes
     /// in a chord are rearranged (which affects the order of #Entry::notes.)
     NoteNumber getNoteId() const { return m_noteId; }
+
+    /**
+     * @brief Calculates the note name, octave number, and actual alteration.
+     * @param keyFifths The number of fifths from C in the key signature (e.g., C=0, G=1, D=2, etc.).
+     * @return A tuple containing:
+     *         - NoteName: The note name (C, D, E, F, G, A, B)
+     *         - int: The octave number (where 4 is the middle C octave)
+     *         - int: The actual alteration (in semitones, relative to natural)
+     */
+    std::tuple<NoteName, int, int> calcNoteProperties(int keyFifths) const;
+
 
     bool requireAllFields() const override { return false; }
 
@@ -105,6 +130,8 @@ public:
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
+    bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
+    bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
     bool stemDetail{};       ///< Indicates there are stem modification.
     bool sorted{};           ///< Sorted flag.
     bool lyricDetail{};      ///< Indicates there is a lyric assignment on the entry.
@@ -266,6 +293,7 @@ public:
     bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
+    std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
 
     /// @brief Get the layer index (0..3) of the entry
     LayerIndex getLayerIndex() const { return getFrame()->getLayerIndex(); }

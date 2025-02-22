@@ -53,6 +53,8 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"v2", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->voice2 = true; }},
     {"articDetail", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->articDetail = true; }},
     {"beam", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->beam = true; }},
+    {"freezeStem", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->freezeStem = true; }},
+    {"upStem", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->upStem = true; }},
     {"stemDetail", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->stemDetail = true; }},
     {"sorted", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->sorted = true; }},
     {"lyricDetail", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->lyricDetail = true; }},

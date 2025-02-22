@@ -351,7 +351,12 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
     }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
-        retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);        auto entries = frame->getEntries();
+        retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);
+        const auto& measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), getMeasure());
+        if (!measure) {
+            throw std::invalid_argument("Meaure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
+        }
+        auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
         util::Fraction v1ActualElapsedDuration = 0;
@@ -363,6 +368,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
             auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry, retval, i));
+            entryInfo->keySignature = measure->keySignature;
             if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
                 entryInfo->v2Launch = true;
             }
@@ -626,6 +632,45 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
     }
     return retval;
+}
+
+// ****************
+// ***** Note *****
+// ****************
+
+std::tuple<Note::NoteName, int, int> Note::calcNoteProperties(int keyFifths) const
+{
+    static constexpr std::array<Note::NoteName, 7> noteNames = {
+        Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
+    };
+
+    // Determine the base note and octave
+    int octave = (harmLev / 7) + 4; // Middle C (C4) is the reference
+    int step = harmLev % 7;
+    if (step < 0) {
+        step += 7;
+        octave -= 1;
+    }
+
+    // Key signature alteration: Based on the circle of fifths
+    static constexpr std::array<int, 7> fifthsOffsets = {0, 2, 4, -1, 1, 3, 5}; // C, D, E, F, G, A, B
+    int keySigAlteration = 0;
+
+    if (keyFifths != 0) {
+        int absFifths = std::abs(keyFifths);
+        int sign = (keyFifths > 0) ? 1 : -1;
+
+        for (int i = 0; i < absFifths; ++i)  {
+            if (step == fifthsOffsets[i % 7]) {
+                keySigAlteration += sign;
+            }
+        }
+    }
+
+    // Calculate the actual alteration
+    int actualAlteration = harmAlt + keySigAlteration;
+
+    return {noteNames[step], octave, actualAlteration};
 }
 
 // *****************************

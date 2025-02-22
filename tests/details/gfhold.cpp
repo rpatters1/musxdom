@@ -159,6 +159,26 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
       <startEntry>1</startEntry>
       <endEntry>2</endEntry>
     </frameSpec>
+    <measSpec cmper="915">
+      <width>600</width>
+      <keySig>
+        <keyless/>
+      </keySig>
+      <beats>2</beats>
+      <divbeat>2</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <altNumTsig/>
+      <altDenTsig/>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <forRepBar/>
+      <bacRepBar/>
+      <barEnding/>
+      <abbrvTime/>
+      <useDisplayTimesig/>
+      <leftBarline>default</leftBarline>
+    </measSpec>
   </others>
   <details>
     <gfhold cmper1="3" cmper2="915">
