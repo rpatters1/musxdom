@@ -1309,16 +1309,17 @@ public:
 
     /** @brief Number style options.
      * 
-     * @warning Finale appears to have implemented `RatioPlusBothNotes` and `RatioPlusDenominatorNote`
-     * backwards from how they are named. It is probably a long-standing bug that was never worth fixing.
+     * @note Finale appears to have implemented `RatioPlusBothNotes` and `RatioPlusDenominatorNote`
+     * backwards from how they are named in the xml. It is probably a long-standing bug that was never worth fixing.
+     * This DOM corrects the mistake by reversing their mapping in the enum mapping.
     */
     enum class NumberStyle
     {
         Nothing,                    ///< The default
         Number,                     ///< Number only
         UseRatio,                   ///< Ratio X:Y
-        RatioPlusBothNotes,         ///< @warning displays a note value on the denominator
-        RatioPlusDenominatorNote,   ///< @warning display notes on both values (xml value is "ratioPlusDenNote")
+        RatioPlusDenominatorNote,   ///< displays a note value only on the denominator (xml value is "ratioPlusBothNotes")
+        RatioPlusBothNotes,         ///< display notes on both values (xml value is "ratioPlusDenNote")
     };
 
     /** @brief Positioning style options. */

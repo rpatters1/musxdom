@@ -274,8 +274,8 @@ MUSX_XML_ENUM_MAPPING(TupletOptions::NumberStyle, {
     //{"nothing", TupletOptions::NumberStyle::Nothing}, this is the default and is not known to occur in the xml
     {"number", TupletOptions::NumberStyle::Number},
     {"useRatio", TupletOptions::NumberStyle::UseRatio},
-    {"ratioPlusBothNotes", TupletOptions::NumberStyle::RatioPlusBothNotes},
-    {"ratioPlusDenNote", TupletOptions::NumberStyle::RatioPlusDenominatorNote},
+    {"ratioPlusDenNote", TupletOptions::NumberStyle::RatioPlusBothNotes},           // Finale appears to have inverted the meanings of `ratioPlusDenNote`
+    {"ratioPlusBothNotes", TupletOptions::NumberStyle::RatioPlusDenominatorNote},   //              and `ratioPlusBothNotes`
 });
 
 MUSX_XML_ENUM_MAPPING(TupletOptions::PositioningStyle, {
