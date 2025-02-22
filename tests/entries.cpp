@@ -97,8 +97,9 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(note->showAcci);
         EXPECT_TRUE(note->freezeAcci);
 
-        EXPECT_EQ(entry->calcNoteType(), NoteType::Eighth);
-        EXPECT_EQ(entry->calcAugmentationDots(), 2);
+        auto [noteType, numDots] = entry->calcNoteInfo();
+        EXPECT_EQ(noteType, NoteType::Eighth);
+        EXPECT_EQ(numDots, 2);
     }
 
     // Test Entry 1002
@@ -117,8 +118,9 @@ TEST(EntryTest, PopulateFields)
 
         EXPECT_EQ(entry->notes.size(), 0);
 
-        EXPECT_EQ(entry->calcNoteType(), NoteType::Note16th);
-        EXPECT_EQ(entry->calcAugmentationDots(), 0);
+        auto [noteType, numDots] = entry->calcNoteInfo();
+        EXPECT_EQ(noteType, NoteType::Note16th);
+        EXPECT_EQ(numDots, 0);
     }
 }
 

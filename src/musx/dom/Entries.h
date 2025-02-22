@@ -35,8 +35,16 @@ namespace details {
 class TupletDef;
 } // namespace details;
 
-int calcAugmentationDotsFromEdu(Edu duration);      ///< Calculates the number of dots from an @ref Edu value.
-NoteType calcNoteTypeFromEdu(Edu duration);         ///< Calculates the @ref NoteType from an @ref Edu value.
+/**
+ * @brief Calculates the @ref NoteType and number of dots in an @ref Edu value.
+ *
+ * @param duration The Edu duration to check.
+ * @return A std::pair containing:
+ *         - NoteType: The note type (Whole, Quarter, Eighth, etc.)
+ *         - unsigned: The number of augmentation dots
+ * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
+ */
+std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration);
 
 /**
  * @class Note
@@ -156,24 +164,14 @@ public:
     std::shared_ptr<Entry> getPrevious() const;
 
     /**
-     * @brief Calculates the NoteType based on the most significant bit of the duration field.
-     *
-     * @return NoteType corresponding to the most significant bit of the duration.
-     * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
+     * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
      */
-    NoteType calcNoteType() const { return calcNoteTypeFromEdu(duration); }
+    std::pair<NoteType, int> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
     util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration); }
-
-    /**
-     * @brief Calculates the number of augmentation dots in the duration.
-     *
-     * @return The number of augmentation dots.
-     */
-    int calcAugmentationDots() const { return calcAugmentationDotsFromEdu(duration); }
 
     void integrityCheck() override
     {

@@ -78,7 +78,7 @@ std::shared_ptr<Entry> Entry::getPrevious() const
     return retval;
 }
 
-NoteType calcNoteTypeFromEdu(Edu duration)
+std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 {
     if (duration <= 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
@@ -86,22 +86,18 @@ NoteType calcNoteTypeFromEdu(Edu duration)
 
     // Find the most significant bit position
     Edu value = duration;
-    Edu msb = 1;
+    Edu noteValueMsb = 1;
     while (value > 1) {
         value >>= 1;
-        msb <<= 1;
+        noteValueMsb <<= 1;
     }
 
-    return static_cast<NoteType>(msb);
-}
-
-int calcAugmentationDotsFromEdu(Edu duration)
-{
-    int count = 0;
-    for (Edu msb = Edu(calcNoteTypeFromEdu(duration)) >> 1; duration & msb; msb >>= 1) {
+    unsigned count = 0;
+    for (Edu dotMsb = noteValueMsb >> 1; duration & dotMsb; dotMsb >>= 1) {
         count++;
     }
-    return count;
+
+    return std::make_pair(NoteType(noteValueMsb), count);
 }
 
 // *********************
