@@ -151,6 +151,16 @@ public:
  */
 class KeySignature : public Base
 {
+private:
+    int calcBaseTonalCenterIndex() const
+    {
+        if (isMinor()) {
+            return 5;
+        }
+        /// @todo search TonalCenters array for non-standard key sigs
+        return 0; // major and default
+    }
+
 public:
     /**
      * @brief Default constructor
@@ -193,12 +203,24 @@ public:
     bool isNonLinear() const { return (key & 0xC000) != 0; }                ///< whether this is a non-linear key
     bool isBuiltIn() const { return isLinear() && getKeyMode() <= 1; }      ///< whether this is a built-in key
     bool isMajor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in major key
-    bool isMinor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in minor key
+    bool isMinor() const { return getKeyMode() == 1; }                      ///< whether this is a built-in minor key
 
     /// @brief returns whether the two key signatures represent the same key signature
     bool isSame(const KeySignature& src)
     {
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
+    }
+    
+    int calcTonalCenterIndex() const
+    {
+        static constexpr int circleOfFifths[7] = {0, 4, 1, 5, 2, 6, 3};
+        const int baseIndex = calcBaseTonalCenterIndex();
+        const int alteration = getAlteration().value_or(0);
+        const int add7s = ((std::abs(alteration) / 7) + 1) * 7; /// this avoids negative checking
+
+        // Adjust using keyFifths along the circle of fifths
+        int adjustedIndex = (baseIndex + add7s + alteration) % 7;
+        return circleOfFifths[adjustedIndex];
     }
 
     void integrityCheck() override

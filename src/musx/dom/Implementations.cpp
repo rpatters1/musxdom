@@ -116,6 +116,22 @@ unsigned EntryInfo::calcReverseGraceIndex() const
     return result;
 }
 
+std::optional<size_t> EntryInfo::calcNextTupletIndex(std::optional<size_t> currentIndex) const
+{
+    size_t firstIndex = currentIndex ? *currentIndex + 1 : 0;
+    const auto frame = getFrame();
+    for (size_t x = firstIndex; x < frame->tupletInfo.size(); x++) {
+        const auto& tuplInf = frame->tupletInfo[x];
+        if (tuplInf.startIndex == indexInFrame) {
+            return x;
+        }
+        if (tuplInf.startIndex > indexInFrame) {
+            break;
+        }
+    }
+    return std::nullopt;
+}
+
 // ***********************
 // ***** FontOptions *****
 // ***********************
@@ -352,6 +368,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         if (!measure) {
             throw std::invalid_argument("Meaure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
         }
+        retval->keySignature = measure->keySignature;
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
@@ -364,7 +381,6 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
             auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry, retval, i));
-            entryInfo->keySignature = measure->keySignature;
             if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
                 entryInfo->v2Launch = true;
             }
@@ -378,6 +394,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             std::vector<TupletState>& activeTuplets = entry->voice2 ? v2ActiveTuplets : v1ActiveTuplets;
             util::Fraction& actualElapsedDuration = entry->voice2 ? v2ActualElapsedDuration : v1ActualElapsedDuration;
             entryInfo->elapsedDuration = actualElapsedDuration;
+            entryInfo->clefIndex = calcClefIndexAt(actualElapsedDuration);
             util::Fraction cumulativeRatio = 1;
             if (!entry->graceNote) {
                 graceIndex = 0;
@@ -465,7 +482,7 @@ bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_pt
     return true;
 }
 
-ClefIndex details::GFrameHold::calcFirstClefIndex() const
+ClefIndex details::GFrameHold::calcClefIndexAt(Edu position) const
 {
     if (clefId.has_value()) {
         return clefId.value();
@@ -476,7 +493,14 @@ ClefIndex details::GFrameHold::calcFirstClefIndex() const
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " has non-existent clef list [" + std::to_string(clefListId) + "]");
     } else {
-        result = clefList[0]->clefIndex;
+        auto& lastClef = clefList[0];
+        for (const auto& clef : clefList) {
+            if (clef->xEduPos > position) {
+                break; // Stop as soon as we pass the position
+            }
+            lastClef = clef;
+        }
+        result = lastClef->clefIndex;
     }
     return result;
 }
@@ -634,15 +658,16 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
 // ***** Note *****
 // ****************
 
-std::tuple<Note::NoteName, int, int> Note::calcNoteProperties(int keyFifths) const
+std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex) const
 {
     static constexpr std::array<Note::NoteName, 7> noteNames = {
         Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
     };
 
     // Determine the base note and octave
-    int octave = (harmLev / 7) + 4; // Middle C (C4) is the reference
-    int step = harmLev % 7;
+    int adjustedLev = key->calcTonalCenterIndex() + harmLev;
+    int octave = (adjustedLev / 7) + 4; // Middle C (C4) is the reference
+    int step = adjustedLev % 7;
     if (step < 0) {
         step += 7;
         octave -= 1;
@@ -652,6 +677,7 @@ std::tuple<Note::NoteName, int, int> Note::calcNoteProperties(int keyFifths) con
     static constexpr std::array<int, 7> fifthsOffsets = {0, 2, 4, -1, 1, 3, 5}; // C, D, E, F, G, A, B
     int keySigAlteration = 0;
 
+    int keyFifths = key->getAlteration().value_or(0);
     if (keyFifths != 0) {
         int absFifths = std::abs(keyFifths);
         int sign = (keyFifths > 0) ? 1 : -1;
@@ -666,7 +692,17 @@ std::tuple<Note::NoteName, int, int> Note::calcNoteProperties(int keyFifths) con
     // Calculate the actual alteration
     int actualAlteration = harmAlt + keySigAlteration;
 
-    return {noteNames[step], octave, actualAlteration};
+    // Calculate the staff line
+    const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
+    if (!clefOptions) {
+        throw std::invalid_argument("Document contains no clef options!");
+    }
+    if (clefIndex >= clefOptions->clefDefs.size()) {
+        throw std::invalid_argument("Clef index " + std::to_string(clefIndex) + " does not exist in document.`");
+    }
+    int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
+
+    return {noteNames[step], octave, actualAlteration, adjustedLev + middleCLine};
 }
 
 // *****************************
@@ -1069,7 +1105,7 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
 ClefIndex others::Staff::calcFirstClefIndex() const
 {
     if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), 1)) {
-        return gfhold->calcFirstClefIndex();
+        return gfhold->calcClefIndexAt(0);
     }
     return defaultClef;
 }

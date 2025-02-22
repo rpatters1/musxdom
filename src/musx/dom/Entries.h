@@ -84,14 +84,16 @@ public:
     NoteNumber getNoteId() const { return m_noteId; }
 
     /**
-     * @brief Calculates the note name, octave number, and actual alteration.
-     * @param keyFifths The number of fifths from C in the key signature (e.g., C=0, G=1, D=2, etc.).
+     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @param key The key signature in effect.
+     * @param clefIndex The index of the clef in effect.
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
      *         - int: The actual alteration (in semitones, relative to natural)
+     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
-    std::tuple<NoteName, int, int> calcNoteProperties(int keyFifths) const;
+    std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex) const;
 
 
     bool requireAllFields() const override { return false; }
@@ -235,6 +237,8 @@ public:
      * Finale does not display them.)
     */
     std::vector<TupletInfo> tupletInfo;
+    std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
+                                                ///< @todo This must be adjusted based on concert or transposed pitch.
 
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }
@@ -280,25 +284,38 @@ class EntryInfo
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
      * @param entry The entry.
     */
-    explicit EntryInfo(const std::shared_ptr<const Entry>& entry, const std::weak_ptr<const EntryFrame>& entryFrame, size_t indexInFrame)
-        : m_entry(entry), m_entryFrame(entryFrame), m_indexInFrame(indexInFrame) {}
+    explicit EntryInfo(const std::shared_ptr<const Entry>& entry, const std::weak_ptr<const EntryFrame>& entryFrame, size_t index)
+        : m_entry(entry), m_entryFrame(entryFrame), indexInFrame(index) {}
 
     friend details::GFrameHold;
 
 public:
+    size_t indexInFrame{};              ///< the index of this item in the frame.
     util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
     util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
     bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
-    std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
+    ClefIndex clefIndex{};              ///< the clef index in effect for the entry.
+                                        ///< @todo This must be adjusted based on concert or transposed pitch.
 
     /// @brief Get the layer index (0..3) of the entry
     LayerIndex getLayerIndex() const { return getFrame()->getLayerIndex(); }
 
+    /// @brief Get the staff cmper
+    InstCmper getStaff() const { return getFrame()->getStaff(); }
+
+    /// @brief Get the measure cmper
+    MeasCmper getMeasure() const { return getFrame()->getMeasure(); }
+
+    /// @brief Get the key signature of the entry
+    auto getKeySignature() const { return getFrame()->keySignature; }
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
     unsigned calcReverseGraceIndex() const;
+
+    /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
+    std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex) const;
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid 
@@ -314,7 +331,7 @@ public:
     /// @brief Get the next entry in the frame
     std::shared_ptr<const EntryInfo> getNext() const
     {
-        size_t nextIndex = m_indexInFrame + 1;
+        size_t nextIndex = indexInFrame + 1;
         auto frame = getFrame();
         if (nextIndex < frame->getEntries().size()) {
             return frame->getEntries()[nextIndex];
@@ -322,13 +339,51 @@ public:
         return nullptr;
     }
 
+    /// @brief Get the next entry in the frame in the same voice
+    ///
+    /// For V2, it stops at the current V2 launch sequence.
+    std::shared_ptr<const EntryInfo> getNextSameV() const
+    {
+        auto next = getNext();
+        if (getEntry()->voice2) {
+            if (next && next->getEntry()->voice2) {
+                return next;
+            }
+            return nullptr;
+        }
+        if (v2Launch) {
+            while (next && next->getEntry()->voice2) {
+                next = next->getNext();
+            }
+        }
+        return next;
+    }
+
     /// @brief Get the previous entry in the frame
     std::shared_ptr<const EntryInfo> getPrevious() const
     {
-        if (m_indexInFrame > 0) {
-            return getFrame()->getEntries()[m_indexInFrame - 1];
+        if (indexInFrame > 0) {
+            return getFrame()->getEntries()[indexInFrame - 1];
         }
         return nullptr;
+    }
+
+    /// @brief Get the previous entry in the frame in the same voice
+    ///
+    /// For V2, it stops at the current V2 launch sequence.
+    std::shared_ptr<const EntryInfo> getPreviousSameV() const
+    {
+        auto prev = getPrevious();
+        if (getEntry()->voice2) {
+            if (prev && prev->getEntry()->voice2) {
+                return prev;
+            }
+            return nullptr;
+        }
+        while (prev && prev->getEntry()->voice2) {
+            prev = prev->getPrevious();
+        }
+        return prev;
     }
 
     /// @brief Get the EntryFrame for this EntryInfo
@@ -344,7 +399,6 @@ public:
 
 private:
     std::weak_ptr<const Entry> m_entry;
-    size_t m_indexInFrame;
     std::weak_ptr<const EntryFrame> m_entryFrame;
 };
 

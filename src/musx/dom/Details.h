@@ -83,8 +83,14 @@ public:
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
-    /// @brief Returns the first clef index in effect for this instance. (Either the clef or the first in the clef list.)
-    ClefIndex calcFirstClefIndex() const;
+    /// @brief Returns the clef index in effect for at the specified @ref Edu position.
+    /// @todo This function will need to be augmented for transposing staves.
+    ClefIndex calcClefIndexAt(Edu position) const;
+
+    /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
+    /// @todo This function will need to be augmented for transposing staves.
+    ClefIndex calcClefIndexAt(util::Fraction position) const
+    { return calcClefIndexAt(position.calcEduDuration()); }
 
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
