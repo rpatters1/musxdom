@@ -663,7 +663,7 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
     static constexpr std::array<Note::NoteName, 7> noteNames = {
         Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
     };
-
+    
     // Determine the base note and octave
     int adjustedLev = key->calcTonalCenterIndex() + harmLev;
     int octave = (adjustedLev / 7) + 4; // Middle C (C4) is the reference
@@ -678,17 +678,26 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
     int keySigAlteration = 0;
 
     int keyFifths = key->getAlteration().value_or(0);
-    if (keyFifths != 0) {
+    if (keyFifths > 0) {
+        // Sharps: Order: F, C, G, D, A, E, B -> indices: 3, 0, 4, 1, 5, 2, 6.
+        static constexpr std::array<int, 7> sharpsOffsets = { 3, 0, 4, 1, 5, 2, 6 };
+        for (int i = 0; i < keyFifths && i < static_cast<int>(sharpsOffsets.size()); ++i) {
+            if (step == sharpsOffsets[i]) {
+                keySigAlteration += 1;
+            }
+        }
+    } else if (keyFifths < 0) {
+        // Flats: Order: B, E, A, D, G, C, F -> indices: 6, 2, 5, 1, 4, 0, 3.
+        static constexpr std::array<int, 7> flatsOffsets = { 6, 2, 5, 1, 4, 0, 3 };
         int absFifths = std::abs(keyFifths);
-        int sign = (keyFifths > 0) ? 1 : -1;
-
-        for (int i = 0; i < absFifths; ++i)  {
-            if (step == fifthsOffsets[i % 7]) {
-                keySigAlteration += sign;
+        for (int i = 0; i < absFifths && i < static_cast<int>(flatsOffsets.size()); ++i) {
+            if (step == flatsOffsets[i]) {
+                keySigAlteration -= 1;
+                break;
             }
         }
     }
-
+ 
     // Calculate the actual alteration
     int actualAlteration = harmAlt + keySigAlteration;
 
