@@ -224,6 +224,7 @@ public:
         util::Fraction startDura;                           ///< the actual duration where the tuplet starts
         util::Fraction endDura;                             ///< the actual duration where the tuplet ends
 
+        /// @brief Constructor
         TupletInfo(const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start)
             : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
                 startDura(start), endDura(-1)
@@ -287,7 +288,9 @@ class EntryInfo
     explicit EntryInfo(const std::shared_ptr<const Entry>& entry, const std::weak_ptr<const EntryFrame>& entryFrame, size_t index)
         : m_entry(entry), m_entryFrame(entryFrame), indexInFrame(index) {}
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
     friend details::GFrameHold;
+#endif
 
 public:
     size_t indexInFrame{};              ///< the index of this item in the frame.

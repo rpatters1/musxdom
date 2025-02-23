@@ -69,12 +69,12 @@ public:
         : OthersBase(document, partId, shareMode, cmper, inci) {}
         
     // Public properties corresponding to the XML structure, in the same order as in the XML.
-    ClefIndex clefIndex{};  ///< The 0-based clef index from the <clef> element.
-    Edu xEduPos{};          ///< The xEduPos value from the <xEduPos> element.
-    Evpu yEvpuPos{};        ///< The yEvpuPos value from the <yEvpuPos> element.
-    int percent{};          ///< The percentage value from the <percent> element.
-    int xEvpuOffset{};      ///< The xEvpuOffset value from the <xEvpuOffset> element.
-    ShowClefMode clefMode{}; ///< The clef mode from the <clefMode> element.
+    ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
+    Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
+    Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
+    int percent{};          ///< The percentage value from the `<percent>` element.
+    int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
+    ShowClefMode clefMode{}; ///< The clef mode from the `<clefMode>` element.
     bool unlockVert{};      ///< "Allow Vertical Drag"
     bool afterBarline{};    ///< "Place Clef After Barline"
     
