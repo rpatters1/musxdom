@@ -100,6 +100,26 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
     return std::make_pair(NoteType(noteValueMsb), count);
 }
 
+// **********************
+// ***** EntryFrame *****
+// **********************
+
+std::shared_ptr<const EntryInfo> EntryFrame::getFirstInVoice(int voice) const
+{
+    bool forV2 = voice == 2;
+    auto firstEntry = m_entries[0];
+    if (firstEntry->getEntry()->voice2) {
+        MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(m_staff) + " measure " + std::to_string(m_measure)
+            + " layer " + std::to_string(m_layerIndex + 1) + " starts with voice2.");
+        if (!forV2) {
+            firstEntry = firstEntry->getNextInVoice(voice);
+        }
+    } else if (forV2) {
+        firstEntry = firstEntry->getNextInVoice(voice);
+    }
+    return firstEntry;
+}
+
 // *********************
 // ***** EntryInfo *****
 // *********************
@@ -130,6 +150,66 @@ std::optional<size_t> EntryInfo::calcNextTupletIndex(std::optional<size_t> curre
         }
     }
     return std::nullopt;
+}
+
+std::shared_ptr<const EntryInfo> EntryInfo::getNext() const
+{
+    size_t nextIndex = indexInFrame + 1;
+    auto frame = getFrame();
+    if (nextIndex < frame->getEntries().size()) {
+        return frame->getEntries()[nextIndex];
+    }
+    return nullptr;
+}
+
+std::shared_ptr<const EntryInfo> EntryInfo::getNextSameV() const
+{
+    auto next = getNext();
+    if (getEntry()->voice2) {
+        if (next && next->getEntry()->voice2) {
+            return next;
+        }
+        return nullptr;
+    }
+    if (v2Launch) {
+        while (next && next->getEntry()->voice2) {
+            next = next->getNext();
+        }
+    }
+    return next;
+}
+
+std::shared_ptr<const EntryInfo> EntryInfo::getPrevious() const
+{
+    if (indexInFrame > 0) {
+        return getFrame()->getEntries()[indexInFrame - 1];
+    }
+    return nullptr;
+}
+
+std::shared_ptr<const EntryInfo> EntryInfo::getPreviousSameV() const
+{
+    auto prev = getPrevious();
+    if (getEntry()->voice2) {
+        if (prev && prev->getEntry()->voice2) {
+            return prev;
+        }
+        return nullptr;
+    }
+    while (prev && prev->getEntry()->voice2) {
+        prev = prev->getPrevious();
+    }
+    return prev;
+}
+
+std::shared_ptr<const EntryInfo> EntryInfo::getNextInVoice(int voice) const
+{
+    bool forV2 = voice == 2;
+    auto next = getNext();
+    while (next && next->getEntry()->voice2 != forV2) {
+        next = next->getNext();
+    }
+    return next;
 }
 
 // ***********************

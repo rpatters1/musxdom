@@ -254,6 +254,11 @@ public:
     const std::vector<std::shared_ptr<const EntryInfo>>& getEntries() const
     { return m_entries; }
 
+    /// @brief Returns the first entry in the specified v1/v2 or null if none.
+    ///
+    /// @param voice 1 or 2
+    std::shared_ptr<const EntryInfo> getFirstInVoice(int voice) const;
+
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)
     { m_entries.emplace_back(entry); }
@@ -332,62 +337,27 @@ public:
     }
 
     /// @brief Get the next entry in the frame
-    std::shared_ptr<const EntryInfo> getNext() const
-    {
-        size_t nextIndex = indexInFrame + 1;
-        auto frame = getFrame();
-        if (nextIndex < frame->getEntries().size()) {
-            return frame->getEntries()[nextIndex];
-        }
-        return nullptr;
-    }
+    std::shared_ptr<const EntryInfo> getNext() const;
 
     /// @brief Get the next entry in the frame in the same voice
     ///
     /// For V2, it stops at the current V2 launch sequence.
-    std::shared_ptr<const EntryInfo> getNextSameV() const
-    {
-        auto next = getNext();
-        if (getEntry()->voice2) {
-            if (next && next->getEntry()->voice2) {
-                return next;
-            }
-            return nullptr;
-        }
-        if (v2Launch) {
-            while (next && next->getEntry()->voice2) {
-                next = next->getNext();
-            }
-        }
-        return next;
-    }
+    std::shared_ptr<const EntryInfo> getNextSameV() const;
 
     /// @brief Get the previous entry in the frame
-    std::shared_ptr<const EntryInfo> getPrevious() const
-    {
-        if (indexInFrame > 0) {
-            return getFrame()->getEntries()[indexInFrame - 1];
-        }
-        return nullptr;
-    }
+    std::shared_ptr<const EntryInfo> getPrevious() const;
 
     /// @brief Get the previous entry in the frame in the same voice
     ///
     /// For V2, it stops at the current V2 launch sequence.
-    std::shared_ptr<const EntryInfo> getPreviousSameV() const
-    {
-        auto prev = getPrevious();
-        if (getEntry()->voice2) {
-            if (prev && prev->getEntry()->voice2) {
-                return prev;
-            }
-            return nullptr;
-        }
-        while (prev && prev->getEntry()->voice2) {
-            prev = prev->getPrevious();
-        }
-        return prev;
-    }
+    std::shared_ptr<const EntryInfo> getPreviousSameV() const;
+
+    /// @brief Returns the next entry in the specified v1/v2 or null if none.
+    ///
+    /// Unlike #getNextSameV, this returns the next v2 entry in any v2 launch sequence.
+    ///
+    /// @param voice 1 or 2
+    std::shared_ptr<const EntryInfo> getNextInVoice(int voice) const;
 
     /// @brief Get the EntryFrame for this EntryInfo
     std::shared_ptr<const EntryFrame> getFrame() const
