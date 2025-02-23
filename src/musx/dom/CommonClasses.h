@@ -23,6 +23,7 @@
 
 #include <numeric>
 #include <filesystem>
+#include <array>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -213,13 +214,24 @@ public:
     
     int calcTonalCenterIndex() const
     {
-        static constexpr int circleOfFifths[7] = {0, 4, 1, 5, 2, 6, 3};
+        static constexpr int CIRCLE_SIZE = 7;
+        static constexpr std::array<int, CIRCLE_SIZE> circleOfFifths = { 0, 4, 1, 5, 2, 6, 3 };
         const int baseIndex = calcBaseTonalCenterIndex();
         const int alteration = getAlteration().value_or(0);
-        const int add7s = ((std::abs(alteration) / 7) + 1) * 7; /// this avoids negative checking
+        // Compute enough circles (multiples of circleSize) to ensure a positive sum even when alteration is negative.
+        const int addCircles = ((std::abs(alteration) / CIRCLE_SIZE) + 1) * CIRCLE_SIZE;
+
+        // Find the base index's position in the circle.
+        int basePosInCircle = 0;
+        for (int i = 0; i < circleOfFifths.size(); ++i) {
+            if (circleOfFifths[i] == baseIndex) {
+                basePosInCircle = i;
+                break;
+            }
+        }
 
         // Adjust using keyFifths along the circle of fifths
-        int adjustedIndex = (baseIndex + add7s + alteration) % 7;
+        int adjustedIndex = (basePosInCircle + addCircles + alteration) % CIRCLE_SIZE;
         return circleOfFifths[adjustedIndex];
     }
 
