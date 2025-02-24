@@ -124,7 +124,7 @@ public:
  *
  * This class is identified by the XML node name "acciAmountFlats".
  */
-class AcciOrderFlats : public OthersArray<int, 7>
+class AcciOrderFlats : public OthersArray<unsigned, 7>
 {
     std::string_view xmlTag() const override { return XmlNodeName; }
 
@@ -155,7 +155,7 @@ public:
  *
  * This class is identified by the XML node name "acciAmountFlats".
  */
-class AcciOrderSharps : public OthersArray<int, 7>
+class AcciOrderSharps : public OthersArray<unsigned, 7>
 {
     std::string_view xmlTag() const override { return XmlNodeName; }
 

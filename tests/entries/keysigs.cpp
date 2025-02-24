@@ -20,13 +20,13 @@
  * THE SOFTWARE.
  */
 
- #include "gtest/gtest.h"
- #include "musx/musx.h"
- #include "test_utils.h"
+#include "gtest/gtest.h"
+#include "musx/musx.h"
+#include "test_utils.h"
+
+using namespace musx::dom;
  
- using namespace musx::dom;
- 
-TEST(KeySigs, MajorMinorTest)
+TEST(KeySigs, Test12EDO)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "keysigs.enigmaxml", xml);
@@ -58,6 +58,60 @@ TEST(KeySigs, MajorMinorTest)
         EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
         EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measures[i]->getCmper());
+        ASSERT_TRUE(gfhold);
+        size_t x = 0;
+        gfhold->iterateEntries([&](const std::shared_ptr<const EntryInfo>& entryInfo) -> bool {
+            EXPECT_LT(x, expectedNotes.size()) << "too few expected values";
+            if (x >= expectedNotes.size()) return false;
+            //ASSERT_GE(entryInfo->getEntry()->notes.size(), 1);
+            auto note = entryInfo->getEntry()->notes[0];
+            auto [noteName, octave, alter, position] = note->calcNoteProperties(key, entryInfo->clefIndex);
+            EXPECT_EQ(expectedOctaves[x], octave);
+            EXPECT_EQ(expectedAlters[x], alter);
+            EXPECT_EQ(expectedPositions[x], position);
+            x++;
+            return true;
+        });
+        EXPECT_EQ(x, expectedNotes.size());            
+    }
+}
+
+ 
+TEST(KeySigs, Test31EDO)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "keysigs.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    std::vector<std::optional<int>> expectedKeyAlters = { 4, -5 };
+    std::vector<unsigned> expectedIndices = { 2, 1 }; // EMaj, DbMaj
+    EXPECT_EQ(expectedKeyAlters.size(), expectedIndices.size());
+
+    std::vector<Note::NoteName> expectedNotes = {
+        Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A,
+        Note::NoteName::B, Note::NoteName::C, Note::NoteName::D, Note::NoteName::E };
+    std::vector<int> expectedOctaves = { 4, 4, 4, 4, 4, 5, 5, 5 };
+    std::vector<int> expectedAlters = { 0, 2, 0, -2, -2, 3, 0, -1 };
+    std::vector<int> expectedPositions = { -8, -7, -6, -5, -4, -3, -2, -1 };
+
+    static constexpr size_t FIRST_31EDO_MEASURE_INDEX = 5;
+
+    auto measures = others->getArray<others::Measure>(SCORE_PARTID);
+    ASSERT_GE(measures.size(), expectedKeyAlters.size() + FIRST_31EDO_MEASURE_INDEX);
+
+    for (size_t i = 0; i < expectedKeyAlters.size(); i++) {
+        auto measure = measures[i + FIRST_31EDO_MEASURE_INDEX];
+        auto key = measure->keySignature;
+        EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
+        EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measure->getCmper());
         ASSERT_TRUE(gfhold);
         size_t x = 0;
         gfhold->iterateEntries([&](const std::shared_ptr<const EntryInfo>& entryInfo) -> bool {

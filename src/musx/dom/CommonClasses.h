@@ -153,7 +153,9 @@ public:
 class KeySignature : public Base
 {
 private:
-    std::vector<unsigned> calcBaseTonalCenterArray() const;
+    std::vector<unsigned> calcTonalCenterArray() const;
+    std::vector<int> calcAcciAmountsArray() const;
+    std::vector<unsigned> calcAcciOrderArray() const;
 
 public:
     /**
@@ -205,12 +207,16 @@ public:
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }
 
-    /// @brief Returns the tonal center index for the key, where C=0, D=1, E=2, ...
+    /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
     /// 
     /// This is the modal tonal center, so a minor key with no sharps or flats returns 5 (=A).
     /// 
     /// @todo extend this to support other modes besides major and minor.
     int calcTonalCenterIndex() const;
+
+    /// @brief Calculates the amount of alteration on a note int the key.
+    /// @param noteIndex note index, where C=0, D=1, E=3, F=3, G=4, A=5, B=6
+    int calcAlterationOnNote(unsigned noteIndex) const;
 
     void integrityCheck() override
     {

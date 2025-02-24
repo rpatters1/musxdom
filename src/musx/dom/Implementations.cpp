@@ -114,7 +114,8 @@ std::shared_ptr<const EntryInfo> EntryFrame::getFirstInVoice(int voice) const
         if (!forV2) {
             firstEntry = firstEntry->getNextInVoice(voice);
         }
-    } else if (forV2) {
+    }
+    else if (forV2) {
         firstEntry = firstEntry->getNextInVoice(voice);
     }
     return firstEntry;
@@ -440,7 +441,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
         return nullptr;
-    }();
+        }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
         retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);
@@ -481,7 +482,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
                 std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
-                });
+                    });
                 for (const auto& tuplet : tuplets) {
                     size_t index = retval->tupletInfo.size();
                     retval->tupletInfo.emplace_back(tuplet, i, actualElapsedDuration);
@@ -496,13 +497,15 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 for (const auto& t : activeTuplets) {
                     if (t.ratio != 0) {
                         cumulativeRatio *= t.ratio;
-                    } else {
+                    }
+                    else {
                         zeroLengthTuplet = true;
                     }
                 }
                 util::Fraction actualDuration = zeroLengthTuplet ? 0 : entry->calcFraction() * cumulativeRatio;
                 entryInfo->actualDuration = actualDuration;
-            } else {
+            }
+            else {
                 entryInfo->graceIndex = ++graceIndex;
             }
 
@@ -532,7 +535,8 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 );
             }
         }
-    } else {
+    }
+    else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
     }
@@ -572,7 +576,8 @@ ClefIndex details::GFrameHold::calcClefIndexAt(Edu position) const
     if (clefList.empty()) {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " has non-existent clef list [" + std::to_string(clefListId) + "]");
-    } else {
+    }
+    else {
         auto& lastClef = clefList[0];
         for (const auto& clef : clefList) {
             if (clef->xEduPos > position) {
@@ -619,15 +624,16 @@ std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector
 // ***** KeySignature *****
 // ************************
 
-std::vector<unsigned> KeySignature::calcBaseTonalCenterArray() const
+std::vector<unsigned> KeySignature::calcTonalCenterArray() const
 {
     int alter = getAlteration().value_or(0);
 
     if (isMinor()) {
         if (alter >= 0) {
             return { 5, 2, 6, 3, 0, 4, 1, 5 };
-        } else {
-            return { 5, 1, 4, 0, 3, 6, 2, 5 };            
+        }
+        else {
+            return { 5, 1, 4, 0, 3, 6, 2, 5 };
         }
     }
 
@@ -636,7 +642,8 @@ std::vector<unsigned> KeySignature::calcBaseTonalCenterArray() const
             if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
                 return centers->values;
             }
-        } else {
+        }
+        else {
             if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
                 return centers->values;
             }
@@ -646,8 +653,61 @@ std::vector<unsigned> KeySignature::calcBaseTonalCenterArray() const
     // Major or default
     if (alter >= 0) {
         return { 0, 4, 1, 5, 2, 6, 3, 0 };
-    } else {
+    }
+    else {
         return { 0, 3, 6, 2, 5, 1, 4, 0 };
+    }
+}
+
+std::vector<int> KeySignature::calcAcciAmountsArray() const
+{
+    int alter = getAlteration().value_or(0);
+
+    if (!isBuiltIn()) {
+        if (alter >= 0) {
+            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(getPartId(), getKeyMode())) {
+                return amounts->values;
+            }
+        }
+        else {
+            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountFlats>(getPartId(), getKeyMode())) {
+                return amounts->values;
+            }
+        }
+    }
+
+    // Major/minor or default
+    if (alter >= 0) {
+        return std::vector<int>(7, 1);
+    }
+    else {
+        return std::vector<int>(7, -1);
+    }
+}
+
+std::vector<unsigned> KeySignature::calcAcciOrderArray() const
+{
+    int alter = getAlteration().value_or(0);
+
+    if (!isBuiltIn()) {
+        if (alter >= 0) {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(getPartId(), getKeyMode())) {
+                return order->values;
+            }
+        }
+        else {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderFlats>(getPartId(), getKeyMode())) {
+                return order->values;
+            }
+        }
+    }
+
+    // Major/minor or default
+    if (alter >= 0) {
+        return { 3, 0, 4, 1, 5, 2, 6 };
+    }
+    else {
+        return { 6, 2, 5, 1, 4, 0, 3 };
     }
 }
 
@@ -658,8 +718,40 @@ int KeySignature::calcTonalCenterIndex() const
     }
 
     int alter = getAlteration().value_or(0);
-    auto centers = calcBaseTonalCenterArray();
+    auto centers = calcTonalCenterArray();
     return centers[std::abs(alter) % centers.size()];
+}
+
+int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
+{
+    if (!isNonLinear() && !isLinear()) {
+        MUSX_INTEGRITY_ERROR("Key signature mode " + std::to_string(getKeyMode()) + " is neither linear nor non-linear. It is invalid.");
+    }
+
+    auto amounts = calcAcciAmountsArray();
+    auto order = calcAcciOrderArray();
+
+    int keySigAlteration = 0;
+    
+    if (isNonLinear()) {
+        for (size_t i = 0; i < amounts.size() && i < order.size(); i++) {
+            if (amounts[i] == 0) {
+                break;
+            }
+            if (noteIndex == order[i]) {
+                keySigAlteration += amounts[i];
+            }
+        }
+    } else {
+        int keyFifths = std::abs(getAlteration().value_or(0));
+        for (int i = 0; i < keyFifths && i < amounts.size() && i < order.size(); ++i) {
+            if (noteIndex == order[i % order.size()]) {
+                keySigAlteration += amounts[i];
+            }
+        }
+    }
+    
+    return keySigAlteration;
 }
 
 // ****************************
@@ -800,45 +892,8 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
         octave -= 1;
     }
 
-    int keySigAlteration = 0;
-    if (key->isLinear()) {
-        int keyFifths = key->getAlteration().value_or(0);
-        if (keyFifths > 0) {
-            // Sharps: Order: F, C, G, D, A, E, B -> indices: 3, 0, 4, 1, 5, 2, 6.
-            static constexpr std::array<int, 7> sharpsOffsets = { 3, 0, 4, 1, 5, 2, 6 };
-            for (int i = 0; i < keyFifths && i < static_cast<int>(sharpsOffsets.size()); ++i) {
-                if (step == sharpsOffsets[i]) {
-                    keySigAlteration += 1;
-                }
-            }
-        } else if (keyFifths < 0) {
-            // Flats: Order: B, E, A, D, G, C, F -> indices: 6, 2, 5, 1, 4, 0, 3.
-            static constexpr std::array<int, 7> flatsOffsets = { 6, 2, 5, 1, 4, 0, 3 };
-            int absFifths = std::abs(keyFifths);
-            for (int i = 0; i < absFifths && i < static_cast<int>(flatsOffsets.size()); ++i) {
-                if (step == flatsOffsets[i]) {
-                    keySigAlteration -= 1;
-                    break;
-                }
-            }
-        }
-    } else if (key->isNonLinear()) {
-        if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(getPartId(), key->getKeyMode())) {
-            if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(getPartId(), key->getKeyMode())) {
-                for (size_t i = 0; i < amounts->values.size() && i < order->values.size(); i++) {
-                    if (amounts->values[i] == 0) {
-                        break;
-                    }
-                    if (step == order->values[i]) {
-                        keySigAlteration += amounts->values[i];
-                    }
-                }
-            }
-        }
-    }
-
     // Calculate the actual alteration
-    int actualAlteration = harmAlt + keySigAlteration;
+    int actualAlteration = harmAlt + key->calcAlterationOnNote(step);
 
     // Calculate the staff line
     const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
@@ -850,7 +905,7 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
     }
     int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
 
-    return {noteNames[step], octave, actualAlteration, adjustedLev + middleCLine};
+    return { noteNames[step], octave, actualAlteration, adjustedLev + middleCLine };
 }
 
 // *****************************
