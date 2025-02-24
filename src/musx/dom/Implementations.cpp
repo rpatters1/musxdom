@@ -619,60 +619,47 @@ std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector
 // ***** KeySignature *****
 // ************************
 
-int KeySignature::calcBaseTonalCenterIndex() const
+std::vector<unsigned> KeySignature::calcBaseTonalCenterArray() const
 {
-    if (isBuiltIn()) {
-        return isMinor() ? 5 : 0;
+    int alter = getAlteration().value_or(0);
+
+    if (isMinor()) {
+        if (alter >= 0) {
+            return { 5, 2, 6, 3, 0, 4, 1, 5 };
+        } else {
+            return { 5, 1, 4, 0, 3, 6, 2, 5 };            
+        }
     }
-    if (auto sharpsCenters = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
-        return sharpsCenters->values[0];
+
+    if (!isBuiltIn()) {
+        if (alter >= 0) {
+            if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
+                return centers->values;
+            }
+        } else {
+            if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
+                return centers->values;
+            }
+        }
     }
-    return 0; // default to C
+
+    // Major or default
+    if (alter >= 0) {
+        return { 0, 4, 1, 5, 2, 6, 3, 0 };
+    } else {
+        return { 0, 3, 6, 2, 5, 1, 4, 0 };
+    }
 }
 
 int KeySignature::calcTonalCenterIndex() const
 {
-    if (isNonLinear()) {
-        return calcBaseTonalCenterIndex();
-    } else if (!isLinear()) {
+    if (!isNonLinear() && !isLinear()) {
         MUSX_INTEGRITY_ERROR("Key signature mode " + std::to_string(getKeyMode()) + " is neither linear nor non-linear. It is invalid.");
     }
-    if (!isLinear()) { // separate if statement in case MUSX_INTEGRITY_ERROR throws. This avoids a warning.
-        return 0;
-    }
 
-    const int alteration = getAlteration().value_or(0);
-
-    if (!isBuiltIn()) {
-        if (alteration >= 0) {
-            if (auto sharpsCenters = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
-                return sharpsCenters->values[alteration % 8];
-            }
-        } else {
-            if (auto flatsCenters = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
-                return flatsCenters->values[std::abs(alteration) % 8];
-            }
-        }
-    }
-
-    static constexpr int CIRCLE_SIZE = 7;
-    static constexpr std::array<int, CIRCLE_SIZE> circleOfFifths = { 0, 4, 1, 5, 2, 6, 3 };
-    const int baseIndex = calcBaseTonalCenterIndex();
-    // Compute enough circles (multiples of circleSize) to ensure a positive sum even when alteration is negative.
-    const int addCircles = ((std::abs(alteration) / CIRCLE_SIZE) + 1) * CIRCLE_SIZE;
-
-    // Find the base index's position in the circle.
-    int basePosInCircle = 0;
-    for (int i = 0; i < circleOfFifths.size(); ++i) {
-        if (circleOfFifths[i] == baseIndex) {
-            basePosInCircle = i;
-            break;
-        }
-    }
-
-    // Adjust using keyFifths along the circle of fifths
-    int adjustedIndex = (basePosInCircle + addCircles + alteration) % CIRCLE_SIZE;
-    return circleOfFifths[adjustedIndex];
+    int alter = getAlteration().value_or(0);
+    auto centers = calcBaseTonalCenterArray();
+    return centers[std::abs(alter) % centers.size()];
 }
 
 // ****************************

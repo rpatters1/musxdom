@@ -153,7 +153,7 @@ public:
 class KeySignature : public Base
 {
 private:
-    int calcBaseTonalCenterIndex() const;
+    std::vector<unsigned> calcBaseTonalCenterArray() const;
 
 public:
     /**
