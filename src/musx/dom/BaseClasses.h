@@ -267,6 +267,39 @@ private:
     std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
 };
 
+/// @brief Template pattern for OthersBase items consisting of an array of a single item.
+/// @tparam ElementType The type of the elements in the array
+/// @tparam REQUIRED_SIZE If non-zero, the required size of the array.
+template <typename ElementType, size_t REQUIRED_SIZE = 0>
+class OthersArray : public OthersBase
+{
+private:
+    virtual std::string_view xmlTag() const = 0;
+
+public:
+    /** @brief Constructor function */
+    explicit OthersArray(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<ElementType> values;    ///< Values in the array
+                                        ///< Guaranteed to have REQUIRED_SIZE elements.
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if constexpr (REQUIRED_SIZE) {
+            if (values.size() < REQUIRED_SIZE) {
+                MUSX_INTEGRITY_ERROR("Array with xml tag " + std::string(xmlTag()) + " and cmper " + std::to_string(getCmper())
+                    + " has fewer than " + std::to_string(REQUIRED_SIZE) + " elements.");
+                values.resize(REQUIRED_SIZE);
+            }
+            values.resize(REQUIRED_SIZE);
+        }
+    }
+};
+
 /**
  * @brief Base class for all "details" types.
  * 

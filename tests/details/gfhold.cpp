@@ -648,10 +648,12 @@ TEST(GFrameHold, ZeroTuplet)
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
         EXPECT_EQ(total, entryInfo->elapsedDuration);
         total += expectedValues[x++];
+    /*
         std::cout << entryInfo->elapsedDuration << '\t' << entryInfo->actualDuration << '\t'
                         << std::to_string(entryInfo->elapsedDuration.calcEduDuration()) << '\t'
                         << std::to_string(entryInfo->actualDuration.calcEduDuration()) << std::endl;
-        return true;
+    */
+       return true;
     });
     EXPECT_EQ(x, expectedValues.size());
 }

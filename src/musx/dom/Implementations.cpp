@@ -624,8 +624,8 @@ int KeySignature::calcBaseTonalCenterIndex() const
     if (isBuiltIn()) {
         return isMinor() ? 5 : 0;
     }
-    if (auto sharps = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
-        return sharps->tonalCenters[0];
+    if (auto sharpsCenters = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
+        return sharpsCenters->values[0];
     }
     return 0; // default to C
 }
@@ -645,12 +645,12 @@ int KeySignature::calcTonalCenterIndex() const
 
     if (!isBuiltIn()) {
         if (alteration >= 0) {
-            if (auto sharps = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
-                return sharps->tonalCenters[alteration % 8];
+            if (auto sharpsCenters = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
+                return sharpsCenters->values[alteration % 8];
             }
         } else {
-            if (auto flats = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
-                return flats->tonalCenters[std::abs(alteration) % 8];
+            if (auto flatsCenters = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
+                return flatsCenters->values[std::abs(alteration) % 8];
             }
         }
     }
@@ -812,7 +812,7 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
         step += 7;
         octave -= 1;
     }
-    
+
     int keySigAlteration = 0;
     if (key->isLinear()) {
         int keyFifths = key->getAlteration().value_or(0);
@@ -838,12 +838,12 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
     } else if (key->isNonLinear()) {
         if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(getPartId(), key->getKeyMode())) {
             if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(getPartId(), key->getKeyMode())) {
-                for (size_t i = 0; i < amounts->acciAmounts.size() && i < order->acciIndices.size(); i++) {
-                    if (amounts->acciAmounts[i] == 0) {
+                for (size_t i = 0; i < amounts->values.size() && i < order->values.size(); i++) {
+                    if (amounts->values[i] == 0) {
                         break;
                     }
-                    if (step == order->acciIndices[i]) {
-                        keySigAlteration += amounts->acciAmounts[i];
+                    if (step == order->values[i]) {
+                        keySigAlteration += amounts->values[i];
                     }
                 }
             }

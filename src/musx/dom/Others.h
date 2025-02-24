@@ -68,26 +68,12 @@ namespace others {
  *
  * This class is identified by the XML node name "acciAmountFlats".
  */
-class AcciAmountFlats : public OthersBase
+class AcciAmountFlats : public OthersArray<int, 7>
 {
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
 public:
-    /** @brief Constructor function */
-    explicit AcciAmountFlats(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
-
-    std::vector<unsigned> acciAmounts;  ///< List of tonal centers in order of the number of flats.
-                                        ///< Guaranteed to have at least 7 elements, but any elements above 7 are meaningless and probably 0.
-
-    void integrityCheck() override
-    {
-        OthersBase::integrityCheck();
-        if (acciAmounts.size() < 7) {
-            acciAmounts.resize(7);
-            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 7 elements for flats acci amount.");
-        }
-    }
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "acciAmountFlats"; ///< The XML node name for this type.
     static const xml::XmlElementArray<AcciAmountFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -112,26 +98,12 @@ public:
  *
  * This class is identified by the XML node name "acciAmountFlats".
  */
-class AcciAmountSharps : public OthersBase
+class AcciAmountSharps : public OthersArray<int, 7>
 {
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
 public:
-    /** @brief Constructor function */
-    explicit AcciAmountSharps(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
-
-    std::vector<int> acciAmounts;       ///< List of tonal centers in order of the number of flats.
-                                        ///< Guaranteed to have at least 7 elements, but any elements above 7 are meaningless and probably 0.
-
-    void integrityCheck() override
-    {
-        OthersBase::integrityCheck();
-        if (acciAmounts.size() < 7) {
-            acciAmounts.resize(7);
-            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 7 elements for sharps acci amounts.");
-        }
-    }
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "acciAmountSharps"; ///< The XML node name for this type.
     static const xml::XmlElementArray<AcciAmountSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -152,26 +124,12 @@ public:
  *
  * This class is identified by the XML node name "acciAmountFlats".
  */
-class AcciOrderFlats : public OthersBase
+class AcciOrderFlats : public OthersArray<int, 7>
 {
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
 public:
-    /** @brief Constructor function */
-    explicit AcciOrderFlats(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
-
-    std::vector<unsigned> acciIndices;  ///< List of tonal centers in order of the number of flats.
-                                        ///< Guaranteed to have at least 7 elements, but any elements above 7 are meaningless and probably 0.
-
-    void integrityCheck() override
-    {
-        OthersBase::integrityCheck();
-        if (acciIndices.size() < 7) {
-            acciIndices.resize(7);
-            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 7 elements for flats acci order.");
-        }
-    }
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "acciOrderFlats"; ///< The XML node name for this type.
     static const xml::XmlElementArray<AcciOrderFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -197,26 +155,12 @@ public:
  *
  * This class is identified by the XML node name "acciAmountFlats".
  */
-class AcciOrderSharps : public OthersBase
+class AcciOrderSharps : public OthersArray<int, 7>
 {
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
 public:
-    /** @brief Constructor function */
-    explicit AcciOrderSharps(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
-
-    std::vector<unsigned> acciIndices;  ///< List of tonal centers in order of the number of flats.
-                                        ///< Guaranteed to have at least 7 elements, but any elements above 7 are meaningless and probably 0.
-
-    void integrityCheck() override
-    {
-        OthersBase::integrityCheck();
-        if (acciIndices.size() < 7) {
-            acciIndices.resize(7);
-            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 8 elements for sharps acci order.");
-        }
-    }
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "acciOrderSharps"; ///< The XML node name for this type.
     static const xml::XmlElementArray<AcciOrderSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1297,16 +1241,12 @@ public:
  *
  * This class is identified by the XML node name "repeatPassList".
  */
-class RepeatPassList : public OthersBase
+class RepeatPassList : public OthersArray<int>
 {
-public:
-    /** @brief Constructor function */
-    explicit RepeatPassList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
+    std::string_view xmlTag() const override { return XmlNodeName; }
 
-    std::vector<int> endingNumbers; ///< List of repeat ending numbers extracted from xml `<act>` elements.
+public:
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "repeatPassList"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatPassList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2023,8 +1963,8 @@ public:
 /**
  * @class TonalCenterFlats
  * @brief Maps the number of flats to a tonal center for a linear custom key. If there are zero flats or sharps,
- * do not use this table. Use @ref TonalCenterSharps or zero. If the key has flats, the number is returned as a negative
- * number from #KeySignature::getAlteration. Use the absolute value of that number to index this table.
+ * do not use this table. Use @ref TonalCenterSharps for zero. If the key has flats, the number is returned as a negative
+ * number (-1..-7) from #KeySignature::getAlteration. Use the absolute value of that number to index this table.
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
@@ -2032,27 +1972,12 @@ public:
  *
  * This class is identified by the XML node name "fstKeyFlats".
  */
-class TonalCenterFlats : public OthersBase
+class TonalCenterFlats : public OthersArray<unsigned, 8>
 {
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
 public:
-    /** @brief Constructor function */
-    explicit TonalCenterFlats(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
-
-    std::vector<unsigned> tonalCenters; ///< List of tonal centers in order of the number of flats.
-                                        ///< Guaranteed to have at least 8 elements, but any elements above 8 are meaningless and probably 0.
-                                        ///< Element 0 is meaningless (usually 0) and should not be used.
-
-    void integrityCheck() override
-    {
-        OthersBase::integrityCheck();
-        if (tonalCenters.size() < 8) {
-            tonalCenters.resize(8);
-            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 8 elements for flats tonal centers.");
-        }
-    }
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "fstKeyFlats"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TonalCenterFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2060,7 +1985,7 @@ public:
 
 /**
  * @class TonalCenterSharps
- * @brief Maps number of sharps to a tonal center for a linear custom key. Also maps 0 sharps or flats.
+ * @brief Maps number of sharps (0..7) to a tonal center for a linear custom key. Also maps 0 sharps or flats.
  * For a non-linear key, the first element is the tonal center and the rest are meaningless.
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
@@ -2069,26 +1994,12 @@ public:
  *
  * This class is identified by the XML node name "fstKeySharps".
  */
-class TonalCenterSharps : public OthersBase
+class TonalCenterSharps : public OthersArray<unsigned, 8>
 {
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
 public:
-    /** @brief Constructor function */
-    explicit TonalCenterSharps(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
-
-    std::vector<unsigned> tonalCenters; ///< List of tonal centers in order of the number of sharps (including zero).
-                                        ///< Guaranteed to have at least 8 elements, but any elements above 8 are meaningless and probably 0.
-
-    void integrityCheck() override
-    {
-        OthersBase::integrityCheck();
-        if (tonalCenters.size() < 8) {
-            tonalCenters.resize(8);
-            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 8 elements for sharps tonal centers.");
-        }
-    }
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "fstKeySharps"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TonalCenterSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

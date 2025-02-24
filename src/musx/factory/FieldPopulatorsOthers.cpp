@@ -207,19 +207,19 @@ using namespace ::musx::xml;
 using namespace ::musx::factory;
 
 MUSX_XML_ELEMENT_ARRAY(AcciAmountFlats, {
-    {"amount", [](const XmlElementPtr& e, const std::shared_ptr<AcciAmountFlats>& i) { i->acciAmounts.push_back(e->getTextAs<int>()); }},
+    {"amount", [](const XmlElementPtr& e, const std::shared_ptr<AcciAmountFlats>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(AcciAmountSharps, {
-    {"amount", [](const XmlElementPtr& e, const std::shared_ptr<AcciAmountSharps>& i) { i->acciAmounts.push_back(e->getTextAs<int>()); }},
+    {"amount", [](const XmlElementPtr& e, const std::shared_ptr<AcciAmountSharps>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(AcciOrderFlats, {
-    {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderFlats>& i) { i->acciIndices.push_back(e->getTextAs<int>()); }},
+    {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderFlats>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(AcciOrderSharps, {
-    {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderSharps>& i) { i->acciIndices.push_back(e->getTextAs<int>()); }},
+    {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderSharps>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ClefList, {
@@ -502,7 +502,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatEndingText, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
-    {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->endingNumbers.push_back(e->getTextAs<int>()); }},
+    {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
@@ -725,11 +725,11 @@ MUSX_XML_ELEMENT_ARRAY(TimeCompositeUpper, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(TonalCenterFlats, {
-    {"tcent", [](const XmlElementPtr& e, const std::shared_ptr<TonalCenterFlats>& i) { i->tonalCenters.push_back(e->getTextAs<unsigned>()); }},
+    {"tcent", [](const XmlElementPtr& e, const std::shared_ptr<TonalCenterFlats>& i) { i->values.push_back(e->getTextAs<unsigned>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TonalCenterSharps, {
-    {"tcent", [](const XmlElementPtr& e, const std::shared_ptr<TonalCenterSharps>& i) { i->tonalCenters.push_back(e->getTextAs<unsigned>()); }},
+    {"tcent", [](const XmlElementPtr& e, const std::shared_ptr<TonalCenterSharps>& i) { i->values.push_back(e->getTextAs<unsigned>()); }},
 });
 
 } // namespace others
