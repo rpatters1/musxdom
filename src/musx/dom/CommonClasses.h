@@ -53,7 +53,8 @@ enum class NoteType : Edu {
     Note256th = 0x0010,
     Note512th = 0x0008,
     Note1024th = 0x0004,
-    Note2048th = 0x0002
+    Note2048th = 0x0002,
+    Note4096th = 0x0001
 };
 
 /**
