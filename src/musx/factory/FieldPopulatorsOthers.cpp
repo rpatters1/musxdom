@@ -206,6 +206,22 @@ namespace others {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
+MUSX_XML_ELEMENT_ARRAY(AcciAmountFlats, {
+    {"amount", [](const XmlElementPtr& e, const std::shared_ptr<AcciAmountFlats>& i) { i->acciAmounts.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(AcciAmountSharps, {
+    {"amount", [](const XmlElementPtr& e, const std::shared_ptr<AcciAmountSharps>& i) { i->acciAmounts.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(AcciOrderFlats, {
+    {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderFlats>& i) { i->acciIndices.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(AcciOrderSharps, {
+    {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderSharps>& i) { i->acciIndices.push_back(e->getTextAs<int>()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(ClefList, {
     {"clef", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->clefIndex = e->getTextAs<ClefIndex>(); }},
     {"xEduPos", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->xEduPos = e->getTextAs<Edu>(); }},
@@ -707,7 +723,15 @@ MUSX_XML_ELEMENT_ARRAY(TimeCompositeUpper, {
         i->items.push_back(FieldPopulator<TimeCompositeUpper::CompositeItem>::createAndPopulate(e));
     }},
 });
-    
+
+MUSX_XML_ELEMENT_ARRAY(TonalCenterFlats, {
+    {"tcent", [](const XmlElementPtr& e, const std::shared_ptr<TonalCenterFlats>& i) { i->tonalCenters.push_back(e->getTextAs<unsigned>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TonalCenterSharps, {
+    {"tcent", [](const XmlElementPtr& e, const std::shared_ptr<TonalCenterSharps>& i) { i->tonalCenters.push_back(e->getTextAs<unsigned>()); }},
+});
+
 } // namespace others
 } // namespace dom
 } // namespace musx

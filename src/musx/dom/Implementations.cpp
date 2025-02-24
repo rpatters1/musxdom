@@ -615,6 +615,66 @@ std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector
     return std::nullopt;
 }
 
+// ************************
+// ***** KeySignature *****
+// ************************
+
+int KeySignature::calcBaseTonalCenterIndex() const
+{
+    if (isBuiltIn()) {
+        return isMinor() ? 5 : 0;
+    }
+    if (auto sharps = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
+        return sharps->tonalCenters[0];
+    }
+    return 0; // default to C
+}
+
+int KeySignature::calcTonalCenterIndex() const
+{
+    if (isNonLinear()) {
+        return calcBaseTonalCenterIndex();
+    } else if (!isLinear()) {
+        MUSX_INTEGRITY_ERROR("Key signature mode " + std::to_string(getKeyMode()) + " is neither linear nor non-linear. It is invalid.");
+    }
+    if (!isLinear()) { // separate if statement in case MUSX_INTEGRITY_ERROR throws. This avoids a warning.
+        return 0;
+    }
+
+    const int alteration = getAlteration().value_or(0);
+
+    if (!isBuiltIn()) {
+        if (alteration >= 0) {
+            if (auto sharps = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
+                return sharps->tonalCenters[alteration % 8];
+            }
+        } else {
+            if (auto flats = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
+                return flats->tonalCenters[std::abs(alteration) % 8];
+            }
+        }
+    }
+
+    static constexpr int CIRCLE_SIZE = 7;
+    static constexpr std::array<int, CIRCLE_SIZE> circleOfFifths = { 0, 4, 1, 5, 2, 6, 3 };
+    const int baseIndex = calcBaseTonalCenterIndex();
+    // Compute enough circles (multiples of circleSize) to ensure a positive sum even when alteration is negative.
+    const int addCircles = ((std::abs(alteration) / CIRCLE_SIZE) + 1) * CIRCLE_SIZE;
+
+    // Find the base index's position in the circle.
+    int basePosInCircle = 0;
+    for (int i = 0; i < circleOfFifths.size(); ++i) {
+        if (circleOfFifths[i] == baseIndex) {
+            basePosInCircle = i;
+            break;
+        }
+    }
+
+    // Adjust using keyFifths along the circle of fifths
+    int adjustedIndex = (basePosInCircle + addCircles + alteration) % CIRCLE_SIZE;
+    return circleOfFifths[adjustedIndex];
+}
+
 // ****************************
 // ***** MarkingCategiory *****
 // ****************************
@@ -752,32 +812,44 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
         step += 7;
         octave -= 1;
     }
-
-    // Key signature alteration: Based on the circle of fifths
-    static constexpr std::array<int, 7> fifthsOffsets = {0, 2, 4, -1, 1, 3, 5}; // C, D, E, F, G, A, B
+    
     int keySigAlteration = 0;
-
-    int keyFifths = key->getAlteration().value_or(0);
-    if (keyFifths > 0) {
-        // Sharps: Order: F, C, G, D, A, E, B -> indices: 3, 0, 4, 1, 5, 2, 6.
-        static constexpr std::array<int, 7> sharpsOffsets = { 3, 0, 4, 1, 5, 2, 6 };
-        for (int i = 0; i < keyFifths && i < static_cast<int>(sharpsOffsets.size()); ++i) {
-            if (step == sharpsOffsets[i]) {
-                keySigAlteration += 1;
+    if (key->isLinear()) {
+        int keyFifths = key->getAlteration().value_or(0);
+        if (keyFifths > 0) {
+            // Sharps: Order: F, C, G, D, A, E, B -> indices: 3, 0, 4, 1, 5, 2, 6.
+            static constexpr std::array<int, 7> sharpsOffsets = { 3, 0, 4, 1, 5, 2, 6 };
+            for (int i = 0; i < keyFifths && i < static_cast<int>(sharpsOffsets.size()); ++i) {
+                if (step == sharpsOffsets[i]) {
+                    keySigAlteration += 1;
+                }
+            }
+        } else if (keyFifths < 0) {
+            // Flats: Order: B, E, A, D, G, C, F -> indices: 6, 2, 5, 1, 4, 0, 3.
+            static constexpr std::array<int, 7> flatsOffsets = { 6, 2, 5, 1, 4, 0, 3 };
+            int absFifths = std::abs(keyFifths);
+            for (int i = 0; i < absFifths && i < static_cast<int>(flatsOffsets.size()); ++i) {
+                if (step == flatsOffsets[i]) {
+                    keySigAlteration -= 1;
+                    break;
+                }
             }
         }
-    } else if (keyFifths < 0) {
-        // Flats: Order: B, E, A, D, G, C, F -> indices: 6, 2, 5, 1, 4, 0, 3.
-        static constexpr std::array<int, 7> flatsOffsets = { 6, 2, 5, 1, 4, 0, 3 };
-        int absFifths = std::abs(keyFifths);
-        for (int i = 0; i < absFifths && i < static_cast<int>(flatsOffsets.size()); ++i) {
-            if (step == flatsOffsets[i]) {
-                keySigAlteration -= 1;
-                break;
+    } else if (key->isNonLinear()) {
+        if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(getPartId(), key->getKeyMode())) {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(getPartId(), key->getKeyMode())) {
+                for (size_t i = 0; i < amounts->acciAmounts.size() && i < order->acciIndices.size(); i++) {
+                    if (amounts->acciAmounts[i] == 0) {
+                        break;
+                    }
+                    if (step == order->acciIndices[i]) {
+                        keySigAlteration += amounts->acciAmounts[i];
+                    }
+                }
             }
         }
     }
- 
+
     // Calculate the actual alteration
     int actualAlteration = harmAlt + keySigAlteration;
 

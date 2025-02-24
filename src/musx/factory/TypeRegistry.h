@@ -189,9 +189,15 @@ using RegisteredOptions = TypeRegistry <
  * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredOthers = TypeRegistry <
+    dom::others::AcciAmountFlats,
+    dom::others::AcciAmountSharps,
+    dom::others::AcciOrderFlats,
+    dom::others::AcciOrderSharps,
     dom::others::ClefList,
     dom::others::FontDefinition,
     dom::others::Frame,
+    dom::others::TonalCenterFlats,
+    dom::others::TonalCenterSharps,
     dom::others::InstrumentUsed,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,

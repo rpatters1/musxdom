@@ -153,14 +153,7 @@ public:
 class KeySignature : public Base
 {
 private:
-    int calcBaseTonalCenterIndex() const
-    {
-        if (isMinor()) {
-            return 5;
-        }
-        /// @todo search TonalCenters array for non-standard key sigs
-        return 0; // major and default
-    }
+    int calcBaseTonalCenterIndex() const;
 
 public:
     /**
@@ -217,28 +210,7 @@ public:
     /// This is the modal tonal center, so a minor key with no sharps or flats returns 5 (=A).
     /// 
     /// @todo extend this to support other modes besides major and minor.
-    int calcTonalCenterIndex() const
-    {
-        static constexpr int CIRCLE_SIZE = 7;
-        static constexpr std::array<int, CIRCLE_SIZE> circleOfFifths = { 0, 4, 1, 5, 2, 6, 3 };
-        const int baseIndex = calcBaseTonalCenterIndex();
-        const int alteration = getAlteration().value_or(0);
-        // Compute enough circles (multiples of circleSize) to ensure a positive sum even when alteration is negative.
-        const int addCircles = ((std::abs(alteration) / CIRCLE_SIZE) + 1) * CIRCLE_SIZE;
-
-        // Find the base index's position in the circle.
-        int basePosInCircle = 0;
-        for (int i = 0; i < circleOfFifths.size(); ++i) {
-            if (circleOfFifths[i] == baseIndex) {
-                basePosInCircle = i;
-                break;
-            }
-        }
-
-        // Adjust using keyFifths along the circle of fifths
-        int adjustedIndex = (basePosInCircle + addCircles + alteration) % CIRCLE_SIZE;
-        return circleOfFifths[adjustedIndex];
-    }
+    int calcTonalCenterIndex() const;
 
     void integrityCheck() override
     {

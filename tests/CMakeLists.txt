@@ -38,9 +38,11 @@ enable_testing()
 add_executable(musxdomtests
 	musxdomtests.cpp
 	document.cpp
-    entries.cpp
 	header.cpp
 	pool.cpp
+    # entries
+    entries/entries.cpp
+    entries/keysigs.cpp
     # options
     options/accidental_options.cpp
     options/alternate_notation_options.cpp

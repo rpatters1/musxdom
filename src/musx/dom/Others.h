@@ -54,6 +54,175 @@ class StaffGroup;
 namespace others {
 
 /**
+ * @class AcciAmountFlats
+ * @brief Lists the aleration values of each nth flat in a custom key signature.
+ * Note that while flats are numbered from 1-7, this table is indexed 0-6.
+ *
+ * AcciAmountFlats is primarily useful with microtone systems that use standard key
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
+ * need to specify acci alteration amounts with magnitude larger than 1.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "acciAmountFlats".
+ */
+class AcciAmountFlats : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit AcciAmountFlats(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<unsigned> acciAmounts;  ///< List of tonal centers in order of the number of flats.
+                                        ///< Guaranteed to have at least 7 elements, but any elements above 7 are meaningless and probably 0.
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (acciAmounts.size() < 7) {
+            acciAmounts.resize(7);
+            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 7 elements for flats acci amount.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "acciAmountFlats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AcciAmountFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class AcciAmountSharps
+ * @brief Lists the aleration values of each nth sharp in a custom key signature.
+ * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
+ *
+ * AcciAmountSharps is required for non-linear key signatures. It specifies whether a slot
+ * is sharp or flat with a positive or negative value. The first zero value in the table
+ * terminates the sequence of sharps or flats.
+ *
+ * AcciAmountSharps is also useful with microtone systems that use standard key
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
+ * need to specify acci alteration amounts with magnitude larger than 1.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "acciAmountFlats".
+ */
+class AcciAmountSharps : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit AcciAmountSharps(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<int> acciAmounts;       ///< List of tonal centers in order of the number of flats.
+                                        ///< Guaranteed to have at least 7 elements, but any elements above 7 are meaningless and probably 0.
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (acciAmounts.size() < 7) {
+            acciAmounts.resize(7);
+            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 7 elements for sharps acci amounts.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "acciAmountSharps"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AcciAmountSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class AcciOrderFlats
+ * @brief Lists the order of flats by pitch class index (0..6 = C..B) in a custom key signature.
+ * Note that while flats are numbered from 1-7, this table is indexed 0-6.
+ *
+ * AcciOrderFlats is primarily useful with microtone systems that use standard key
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
+ * will need to supply and #AcciAmountFlats table, and this is here to match it.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "acciAmountFlats".
+ */
+class AcciOrderFlats : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit AcciOrderFlats(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<unsigned> acciIndices;  ///< List of tonal centers in order of the number of flats.
+                                        ///< Guaranteed to have at least 7 elements, but any elements above 7 are meaningless and probably 0.
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (acciIndices.size() < 7) {
+            acciIndices.resize(7);
+            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 7 elements for flats acci order.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "acciOrderFlats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AcciOrderFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class AcciOrderSharps
+ * @brief Lists the order of sharps by pitch class index (0..6 = C..B) in a custom key signature.
+ * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
+ *
+ * AcciOrderSharps is required for non-linear key signatures. It specifies the order of
+ * pitch class indices for corresponding sharps and flats in #AcciAmountSharps, which can be mixed in any order.
+ * The first zero value in the #AcciAmountSharps table terminates the sequence of sharps or flats, and the rest
+ * of the values here are meaningless.
+ *
+ * AcciOrderSharps is also useful with microtone systems that use standard key
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
+ * will need to supply an #AcciAmountFlats table, and this should have values that correspond.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "acciAmountFlats".
+ */
+class AcciOrderSharps : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit AcciOrderSharps(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<unsigned> acciIndices;  ///< List of tonal centers in order of the number of flats.
+                                        ///< Guaranteed to have at least 7 elements, but any elements above 7 are meaningless and probably 0.
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (acciIndices.size() < 7) {
+            acciIndices.resize(7);
+            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 8 elements for sharps acci order.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "acciOrderSharps"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AcciOrderSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ClefList
  * @brief Represents an element in multimeasure clef list with its positioning and percentage values.
  *
@@ -63,25 +232,25 @@ namespace others {
  * This class is identified by the XML node name "clefEnum".
  */
 class ClefList : public OthersBase {
-public:
-    /** @brief Constructor function */
-    explicit ClefList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
-        : OthersBase(document, partId, shareMode, cmper, inci) {}
+    public:
+        /** @brief Constructor function */
+        explicit ClefList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+            : OthersBase(document, partId, shareMode, cmper, inci) {}
+            
+        // Public properties corresponding to the XML structure, in the same order as in the XML.
+        ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
+        Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
+        Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
+        int percent{};          ///< The percentage value from the `<percent>` element.
+        int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
+        ShowClefMode clefMode{}; ///< The clef mode from the `<clefMode>` element.
+        bool unlockVert{};      ///< "Allow Vertical Drag"
+        bool afterBarline{};    ///< "Place Clef After Barline"
         
-    // Public properties corresponding to the XML structure, in the same order as in the XML.
-    ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
-    Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
-    Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
-    int percent{};          ///< The percentage value from the `<percent>` element.
-    int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
-    ShowClefMode clefMode{}; ///< The clef mode from the `<clefMode>` element.
-    bool unlockVert{};      ///< "Allow Vertical Drag"
-    bool afterBarline{};    ///< "Place Clef After Barline"
+        constexpr static std::string_view XmlNodeName = "clefEnum"; ///< The XML node name for this type.
+        static const xml::XmlElementArray<ClefList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
     
-    constexpr static std::string_view XmlNodeName = "clefEnum"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<ClefList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-};
-
 /**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained.
@@ -1850,7 +2019,81 @@ public:
     constexpr static std::string_view XmlNodeName = "timeUpper"; ///< XML node name.
     static const xml::XmlElementArray<TimeCompositeUpper>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
+/**
+ * @class TonalCenterFlats
+ * @brief Maps the number of flats to a tonal center for a linear custom key. If there are zero flats or sharps,
+ * do not use this table. Use @ref TonalCenterSharps or zero. If the key has flats, the number is returned as a negative
+ * number from #KeySignature::getAlteration. Use the absolute value of that number to index this table.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "fstKeyFlats".
+ */
+class TonalCenterFlats : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TonalCenterFlats(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<unsigned> tonalCenters; ///< List of tonal centers in order of the number of flats.
+                                        ///< Guaranteed to have at least 8 elements, but any elements above 8 are meaningless and probably 0.
+                                        ///< Element 0 is meaningless (usually 0) and should not be used.
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (tonalCenters.size() < 8) {
+            tonalCenters.resize(8);
+            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 8 elements for flats tonal centers.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "fstKeyFlats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TonalCenterFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TonalCenterSharps
+ * @brief Maps number of sharps to a tonal center for a linear custom key. Also maps 0 sharps or flats.
+ * For a non-linear key, the first element is the tonal center and the rest are meaningless.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "fstKeySharps".
+ */
+class TonalCenterSharps : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TonalCenterSharps(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<unsigned> tonalCenters; ///< List of tonal centers in order of the number of sharps (including zero).
+                                        ///< Guaranteed to have at least 8 elements, but any elements above 8 are meaningless and probably 0.
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (tonalCenters.size() < 8) {
+            tonalCenters.resize(8);
+            MUSX_INTEGRITY_ERROR("Custom Key Signature " + std::to_string(getCmper()) + " has fewer than 8 elements for sharps tonal centers.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "fstKeySharps"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TonalCenterSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 } // namespace others
 } // namespace dom
 } // namespace musx
