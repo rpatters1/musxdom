@@ -169,7 +169,7 @@ unsigned EntryInfoPtr::calcReverseGraceIndex() const
 {
     unsigned result = (*this)->graceIndex;
     if (result) {
-        for (auto next = getNext(); next && next->graceIndex; next = next.getNext()) {
+        for (auto next = getNextInFrame(); next && next->graceIndex; next = next.getNextInFrame()) {
             result++;
         }
         result = result - (*this)->graceIndex + 1;
@@ -192,7 +192,7 @@ std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> cu
     return std::nullopt;
 }
 
-EntryInfoPtr EntryInfoPtr::getNext() const
+EntryInfoPtr EntryInfoPtr::getNextInFrame() const
 {
     if (m_indexInFrame < m_entryFrame->getEntries().size() - 1) {
         return EntryInfoPtr(m_entryFrame, m_indexInFrame + 1);
@@ -202,7 +202,7 @@ EntryInfoPtr EntryInfoPtr::getNext() const
 
 EntryInfoPtr EntryInfoPtr::getNextSameV() const
 {
-    auto next = getNext();
+    auto next = getNextInFrame();
     if ((*this)->getEntry()->voice2) {
         if (next && next->getEntry()->voice2) {
             return next;
@@ -211,13 +211,13 @@ EntryInfoPtr EntryInfoPtr::getNextSameV() const
     }
     if ((*this)->v2Launch) {
         while (next && next->getEntry()->voice2) {
-            next = next.getNext();
+            next = next.getNextInFrame();
         }
     }
     return next;
 }
 
-EntryInfoPtr EntryInfoPtr::getPrevious() const
+EntryInfoPtr EntryInfoPtr::getPreviousInFrame() const
 {
     if (m_indexInFrame > 0) {
         return EntryInfoPtr(m_entryFrame, m_indexInFrame - 1);
@@ -227,7 +227,7 @@ EntryInfoPtr EntryInfoPtr::getPrevious() const
 
 EntryInfoPtr EntryInfoPtr::getPreviousSameV() const
 {
-    auto prev = getPrevious();
+    auto prev = getPreviousInFrame();
     if ((*this)->getEntry()->voice2) {
         if (prev && prev->getEntry()->voice2) {
             return prev;
@@ -235,7 +235,7 @@ EntryInfoPtr EntryInfoPtr::getPreviousSameV() const
         return EntryInfoPtr();
     }
     while (prev && prev->getEntry()->voice2) {
-        prev = prev.getPrevious();
+        prev = prev.getPreviousInFrame();
     }
     return prev;
 }
@@ -243,9 +243,9 @@ EntryInfoPtr EntryInfoPtr::getPreviousSameV() const
 EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
 {
     bool forV2 = voice == 2;
-    auto next = getNext();
+    auto next = getNextInFrame();
     while (next && next->getEntry()->voice2 != forV2) {
-        next = next.getNext();
+        next = next.getNextInFrame();
     }
     return next;
 }

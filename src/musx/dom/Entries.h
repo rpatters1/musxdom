@@ -246,7 +246,7 @@ public:
     std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex) const;
 
     /// @brief Get the next entry in the frame
-    EntryInfoPtr getNext() const;
+    EntryInfoPtr getNextInFrame() const;
 
     /// @brief Get the next entry in the frame in the same voice
     ///
@@ -254,7 +254,7 @@ public:
     EntryInfoPtr getNextSameV() const;
 
     /// @brief Get the previous entry in the frame
-    EntryInfoPtr getPrevious() const;
+    EntryInfoPtr getPreviousInFrame() const;
 
     /// @brief Get the previous entry in the frame in the same voice
     ///
