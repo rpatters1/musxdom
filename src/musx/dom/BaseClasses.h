@@ -286,6 +286,7 @@ public:
     std::vector<ElementType> values;    ///< Values in the array
                                         ///< Guaranteed to have REQUIRED_SIZE elements.
 
+    /// @brief Override of #Base::integrityCheck
     void integrityCheck() override
     {
         OthersBase::integrityCheck();

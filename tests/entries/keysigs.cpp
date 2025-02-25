@@ -60,7 +60,7 @@ TEST(KeySigs, Test12EDO)
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measures[i]->getCmper());
         ASSERT_TRUE(gfhold);
         size_t x = 0;
-        gfhold->iterateEntries([&](const std::shared_ptr<const EntryInfo>& entryInfo) -> bool {
+        gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) -> bool {
             EXPECT_LT(x, expectedNotes.size()) << "too few expected values";
             if (x >= expectedNotes.size()) return false;
             //ASSERT_GE(entryInfo->getEntry()->notes.size(), 1);
@@ -114,7 +114,7 @@ TEST(KeySigs, Test31EDO)
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measure->getCmper());
         ASSERT_TRUE(gfhold);
         size_t x = 0;
-        gfhold->iterateEntries([&](const std::shared_ptr<const EntryInfo>& entryInfo) -> bool {
+        gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) -> bool {
             EXPECT_LT(x, expectedNotes.size()) << "too few expected values";
             if (x >= expectedNotes.size()) return false;
             //ASSERT_GE(entryInfo->getEntry()->notes.size(), 1);

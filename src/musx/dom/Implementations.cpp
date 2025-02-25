@@ -112,19 +112,19 @@ EntryFrame::EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasC
 {
 }
 
-std::shared_ptr<const EntryInfo> EntryFrame::getFirstInVoice(int voice) const
+EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 {
     bool forV2 = voice == 2;
-    auto firstEntry = m_entries[0];
+    auto firstEntry = EntryInfoPtr(shared_from_this(), 0);
     if (firstEntry->getEntry()->voice2) {
         MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(m_staff) + " measure " + std::to_string(m_measure)
             + " layer " + std::to_string(m_layerIndex + 1) + " starts with voice2.");
         if (!forV2) {
-            firstEntry = firstEntry->getNextInVoice(voice);
+            firstEntry = firstEntry.getNextInVoice(voice);
         }
     }
     else if (forV2) {
-        firstEntry = firstEntry->getNextInVoice(voice);
+        firstEntry = firstEntry.getNextInVoice(voice);
     }
     return firstEntry;
 }
@@ -147,94 +147,105 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
     return nullptr;
 }
 
-// *********************
-// ***** EntryInfo *****
-// *********************
+// ************************
+// ***** EntryInfoPtr *****
+// ************************
 
-unsigned EntryInfo::calcReverseGraceIndex() const
+const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
+{ return m_entryFrame->getEntries()[m_indexInFrame]; }
+
+EntryInfoPtr::operator bool() const
+{ return m_entryFrame && !m_entryFrame->getEntries().empty(); }
+
+LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
+
+InstCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
+
+MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); }
+
+std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
+
+unsigned EntryInfoPtr::calcReverseGraceIndex() const
 {
-    unsigned result = graceIndex;
+    unsigned result = (*this)->graceIndex;
     if (result) {
-        for (auto next = getNext(); next && next->graceIndex; next = next->getNext()) {
+        for (auto next = getNext(); next && next->graceIndex; next = next.getNext()) {
             result++;
         }
-        result = result - graceIndex + 1;
+        result = result - (*this)->graceIndex + 1;
     }
     return result;
 }
 
-std::optional<size_t> EntryInfo::calcNextTupletIndex(std::optional<size_t> currentIndex) const
+std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> currentIndex) const
 {
     size_t firstIndex = currentIndex ? *currentIndex + 1 : 0;
-    const auto frame = getFrame();
-    for (size_t x = firstIndex; x < frame->tupletInfo.size(); x++) {
-        const auto& tuplInf = frame->tupletInfo[x];
-        if (tuplInf.startIndex == indexInFrame) {
+    for (size_t x = firstIndex; x < m_entryFrame->tupletInfo.size(); x++) {
+        const auto& tuplInf = m_entryFrame->tupletInfo[x];
+        if (tuplInf.startIndex == m_indexInFrame) {
             return x;
         }
-        if (tuplInf.startIndex > indexInFrame) {
+        if (tuplInf.startIndex > m_indexInFrame) {
             break;
         }
     }
     return std::nullopt;
 }
 
-std::shared_ptr<const EntryInfo> EntryInfo::getNext() const
+EntryInfoPtr EntryInfoPtr::getNext() const
 {
-    size_t nextIndex = indexInFrame + 1;
-    auto frame = getFrame();
-    if (nextIndex < frame->getEntries().size()) {
-        return frame->getEntries()[nextIndex];
+    if (m_indexInFrame < m_entryFrame->getEntries().size() - 1) {
+        return EntryInfoPtr(m_entryFrame, m_indexInFrame + 1);
     }
-    return nullptr;
+    return EntryInfoPtr();
 }
 
-std::shared_ptr<const EntryInfo> EntryInfo::getNextSameV() const
+EntryInfoPtr EntryInfoPtr::getNextSameV() const
 {
     auto next = getNext();
-    if (getEntry()->voice2) {
+    if ((*this)->getEntry()->voice2) {
         if (next && next->getEntry()->voice2) {
             return next;
         }
-        return nullptr;
+        return EntryInfoPtr();
     }
-    if (v2Launch) {
+    if ((*this)->v2Launch) {
         while (next && next->getEntry()->voice2) {
-            next = next->getNext();
+            next = next.getNext();
         }
     }
     return next;
 }
 
-std::shared_ptr<const EntryInfo> EntryInfo::getPrevious() const
+EntryInfoPtr EntryInfoPtr::getPrevious() const
 {
-    if (indexInFrame > 0) {
-        return getFrame()->getEntries()[indexInFrame - 1];
+    if (m_indexInFrame > 0) {
+        return EntryInfoPtr(m_entryFrame, m_indexInFrame - 1);
     }
-    return nullptr;
+    return EntryInfoPtr();
 }
 
-std::shared_ptr<const EntryInfo> EntryInfo::getPreviousSameV() const
+EntryInfoPtr EntryInfoPtr::getPreviousSameV() const
 {
     auto prev = getPrevious();
-    if (getEntry()->voice2) {
+    if ((*this)->getEntry()->voice2) {
         if (prev && prev->getEntry()->voice2) {
             return prev;
         }
-        return nullptr;
+        return EntryInfoPtr();
     }
     while (prev && prev->getEntry()->voice2) {
-        prev = prev->getPrevious();
+        prev = prev.getPrevious();
     }
     return prev;
 }
 
-std::shared_ptr<const EntryInfo> EntryInfo::getNextInVoice(int voice) const
+EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
 {
     bool forV2 = voice == 2;
     auto next = getNext();
     while (next && next->getEntry()->voice2 != forV2) {
-        next = next->getNext();
+        next = next.getNext();
     }
     return next;
 }
@@ -487,7 +498,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
-            auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry, retval, i));
+            auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry));
             if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
                 entryInfo->v2Launch = true;
             }
@@ -569,12 +580,12 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
     return retval;
 }
 
-bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
+bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
 {
     auto entryFrame = createEntryFrame(layerIndex);
     if (entryFrame) {
-        for (const auto& entryInfo : entryFrame->getEntries()) {
-            if (!iterator(entryInfo)) {
+        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
+            if (!iterator(EntryInfoPtr(entryFrame, x))) {
                 return false;
             }
         }
@@ -582,7 +593,7 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
     return true;
 }
 
-bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
+bool details::GFrameHold::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator)
 {
     for (LayerIndex layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
         if (!iterateEntries(layerIndex, iterator)) {

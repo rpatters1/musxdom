@@ -196,17 +196,95 @@ private:
 };
 
 class EntryInfo;
+class EntryFrame;
+
+/// @brief Wraps a frame of shared_ptr<const EntryInfo> and an index for per entry access.
+/// This class manages ownership of the frame so that any instance of it keeps the frame alive
+/// without the need for circular references.
+class EntryInfoPtr
+{
+public:
+    /** @brief Default constructor */
+    EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
+    
+    /** @brief Constructor function
+     *
+     * @param entryFrame The entry frame.
+     * @param index The index of this instance within the frame. 
+    */
+    EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
+        : m_entryFrame(entryFrame), m_indexInFrame(index) {}
+
+    /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
+    const std::shared_ptr<const EntryInfo> operator->() const;
+
+    /// @brief Provides a boolean conversion based on whether the frame is valid and contains entries.
+    operator bool() const;
+
+    /// @brief Returns the frame.
+    std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
+
+    /// @brief Returns the index within the frame.
+    size_t getIndexInFrame() const { return m_indexInFrame; }
+
+    /// @brief Get the layer index (0..3) of the entry
+    LayerIndex getLayerIndex() const;
+
+    /// @brief Get the staff cmper
+    InstCmper getStaff() const;
+
+    /// @brief Get the measure cmper
+    MeasCmper getMeasure() const;
+
+    /// @brief Get the key signature of the entry
+    std::shared_ptr<KeySignature> getKeySignature() const;
+
+    /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
+    unsigned calcReverseGraceIndex() const;
+
+    /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
+    std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex) const;
+
+    /// @brief Get the next entry in the frame
+    EntryInfoPtr getNext() const;
+
+    /// @brief Get the next entry in the frame in the same voice
+    ///
+    /// For V2, it stops at the current V2 launch sequence.
+    EntryInfoPtr getNextSameV() const;
+
+    /// @brief Get the previous entry in the frame
+    EntryInfoPtr getPrevious() const;
+
+    /// @brief Get the previous entry in the frame in the same voice
+    ///
+    /// For V2, it stops at the current V2 launch sequence.
+    EntryInfoPtr getPreviousSameV() const;
+
+    /// @brief Returns the next entry in the specified v1/v2 or null if none.
+    ///
+    /// Unlike #getNextSameV, this returns the next v2 entry in any v2 launch sequence.
+    ///
+    /// @param voice 1 or 2
+    EntryInfoPtr getNextInVoice(int voice) const;
+
+private:
+    std::shared_ptr<const EntryFrame> m_entryFrame;
+    size_t m_indexInFrame{};              ///< the index of this item in the frame.
+};
 
 /**
  * @class EntryFrame
- * @brief Returns a vector of @ref EntryInfo instances for a given frame, along with computed information.
- * @todo Possibly compute current key
+ * @brief Represents a vector of @ref EntryInfo instances for a given frame, along with computed information.
+ *
+ * Its pointers are owned by @ref EntryInfoPtr
  */
-class EntryFrame : Base
+class EntryFrame : public Base, public std::enable_shared_from_this<EntryFrame>
 {
 public:
     /** @brief Constructor function
      *
+     * @param gfhold The @ref details::GFrameHold instance creating this EntryFrame
      * @param staff The Cmper for the @ref others::Staff of the entry
      * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
@@ -255,7 +333,7 @@ public:
     /// @brief Returns the first entry in the specified v1/v2 or null if none.
     ///
     /// @param voice 1 or 2
-    std::shared_ptr<const EntryInfo> getFirstInVoice(int voice) const;
+    EntryInfoPtr getFirstInVoice(int voice) const;
 
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)
@@ -287,24 +365,24 @@ class GFrameHold;
  *
  * This class is used in iteration functions to supply information about the entry along with the entry itself.
  *
+ * Its pointers are owned by @ref EntryFrame.
+ *
  * @todo compute current clef index.
  */
 class EntryInfo
 {
     /** @brief Constructor function
      *
-     * @param layerIndex The @ref LayerIndex (0..3) of the entry
      * @param entry The entry.
     */
-    explicit EntryInfo(const std::shared_ptr<const Entry>& entry, const std::weak_ptr<const EntryFrame>& entryFrame, size_t index)
-        : m_entry(entry), m_entryFrame(entryFrame), indexInFrame(index) {}
+    explicit EntryInfo(const std::shared_ptr<const Entry>& entry)
+        : m_entry(entry) {}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
     friend details::GFrameHold;
 #endif
 
 public:
-    size_t indexInFrame{};              ///< the index of this item in the frame.
     util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
     util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
     bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
@@ -312,24 +390,6 @@ public:
                                         ///< the main note has a grace index of zero.
     ClefIndex clefIndex{};              ///< the clef index in effect for the entry.
                                         ///< @todo This must be adjusted based on concert or transposed pitch.
-
-    /// @brief Get the layer index (0..3) of the entry
-    LayerIndex getLayerIndex() const { return getFrame()->getLayerIndex(); }
-
-    /// @brief Get the staff cmper
-    InstCmper getStaff() const { return getFrame()->getStaff(); }
-
-    /// @brief Get the measure cmper
-    MeasCmper getMeasure() const { return getFrame()->getMeasure(); }
-
-    /// @brief Get the key signature of the entry
-    auto getKeySignature() const { return getFrame()->keySignature; }
-
-    /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
-    unsigned calcReverseGraceIndex() const;
-
-    /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
-    std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex) const;
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid 
@@ -342,43 +402,8 @@ public:
         return retval;
     }
 
-    /// @brief Get the next entry in the frame
-    std::shared_ptr<const EntryInfo> getNext() const;
-
-    /// @brief Get the next entry in the frame in the same voice
-    ///
-    /// For V2, it stops at the current V2 launch sequence.
-    std::shared_ptr<const EntryInfo> getNextSameV() const;
-
-    /// @brief Get the previous entry in the frame
-    std::shared_ptr<const EntryInfo> getPrevious() const;
-
-    /// @brief Get the previous entry in the frame in the same voice
-    ///
-    /// For V2, it stops at the current V2 launch sequence.
-    std::shared_ptr<const EntryInfo> getPreviousSameV() const;
-
-    /// @brief Returns the next entry in the specified v1/v2 or null if none.
-    ///
-    /// Unlike #getNextSameV, this returns the next v2 entry in any v2 launch sequence.
-    ///
-    /// @param voice 1 or 2
-    std::shared_ptr<const EntryInfo> getNextInVoice(int voice) const;
-
-    /// @brief Get the EntryFrame for this EntryInfo
-    std::shared_ptr<const EntryFrame> getFrame() const
-    {
-        auto locked = m_entryFrame.lock();
-        assert(locked); // program bug if this pointer goes out of scope.
-        if (!locked) {
-            throw std::logic_error("Entry frame is no longer valid.");
-        }
-        return locked;
-    }
-
 private:
     std::weak_ptr<const Entry> m_entry;
-    std::weak_ptr<const EntryFrame> m_entryFrame;
 };
 
 } // namespace dom

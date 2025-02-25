@@ -223,8 +223,8 @@ TEST(GFrameHold, IterationTest)
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
         enteredLoop = true;
         auto entry = entryInfo->getEntry();
-        EXPECT_TRUE(entryInfo->getLayerIndex() == 0 || entryInfo->getLayerIndex() == 1) << "unexpected layer index " << entryInfo->getLayerIndex();
-        if (entryInfo->getLayerIndex() == 0) {
+        EXPECT_TRUE(entryInfo.getLayerIndex() == 0 || entryInfo.getLayerIndex() == 1) << "unexpected layer index " << entryInfo.getLayerIndex();
+        if (entryInfo.getLayerIndex() == 0) {
             EXPECT_EQ(entry->duration, Edu(NoteType::Whole)) << "unexpected note duration " << entry->duration;
             EXPECT_TRUE(entry->isNote) << "layerIndex 0 entry is not a note";
         } else {
@@ -240,7 +240,7 @@ TEST(GFrameHold, IterationTest)
     gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
         enteredLoop = true;
         auto entry = entryInfo->getEntry();
-        EXPECT_TRUE(entryInfo->getLayerIndex() == 2) << "unexpected layer index " << entryInfo->getLayerIndex();
+        EXPECT_TRUE(entryInfo.getLayerIndex() == 2) << "unexpected layer index " << entryInfo.getLayerIndex();
         EXPECT_EQ(entry->duration, Edu(NoteType::Whole)) << "unexpected note duration " << entry->duration;
         EXPECT_TRUE(entry->isNote) << "layerIndex 0 entry is not a note";
         return true;
@@ -271,11 +271,11 @@ TEST(GFrameHold, QuintupletTest)
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    gfhold->iterateEntries([&](const std::shared_ptr<const EntryInfo>& entryInfo) -> bool {
+    gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
-            const auto frame = entryInfo->getFrame();
+            const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
                 for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
@@ -322,7 +322,7 @@ TEST(GFrameHold, TripletTest)
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
-            const auto frame = entryInfo->getFrame();
+            const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
                 for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
@@ -372,7 +372,7 @@ TEST(GFrameHold, NestedTupletTest)
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
-            const auto frame = entryInfo->getFrame();
+            const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
                 for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
@@ -424,7 +424,7 @@ TEST(GFrameHold, V1V2TupletTest)
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
-            const auto frame = entryInfo->getFrame();
+            const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
                 for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
@@ -484,7 +484,7 @@ TEST(GFrameHold, NestedEndTuplets)
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
-            const auto frame = entryInfo->getFrame();
+            const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
                 for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
@@ -535,7 +535,7 @@ TEST(GFrameHold, IncompleteTuplet)
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
-            const auto frame = entryInfo->getFrame();
+            const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
                 for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
@@ -583,7 +583,7 @@ TEST(GFrameHold, IncompleteTupletV2)
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
-            const auto frame = entryInfo->getFrame();
+            const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
                 for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
@@ -633,7 +633,7 @@ TEST(GFrameHold, ZeroTuplet)
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
-            const auto frame = entryInfo->getFrame();
+            const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
                 for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
@@ -678,7 +678,7 @@ TEST(GFrameHold, GraceNoteIndexTest)
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->graceIndex);
-        EXPECT_EQ(expectedReverseValues[x], entryInfo->calcReverseGraceIndex());
+        EXPECT_EQ(expectedReverseValues[x], entryInfo.calcReverseGraceIndex());
         x++;
         return true;
     });

@@ -31,6 +31,7 @@
 namespace musx {
 namespace dom {
 
+class EntryInfoPtr;
 class EntryFrame;
 class EntryInfo;
 
@@ -106,14 +107,14 @@ public:
      * @return true if higher-level iteration should continue. false if it should halt.
      * @throws std::invalid_argument if the layer index is out of range
      */
-    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator);
+    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
 
     /**
      * @brief iterates the entries for this #GFrameHold from left to right for each layer in order
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
      */
-    bool iterateEntries(std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator);
+    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
 
     void integrityCheck() override
     {

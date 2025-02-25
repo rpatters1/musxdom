@@ -116,7 +116,7 @@ public:
  *
  * AcciOrderFlats is primarily useful with microtone systems that use standard key
  * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
- * will need to supply and #AcciAmountFlats table, and this is here to match it.
+ * will need to supply and @ref AcciAmountFlats table, and this is here to match it.
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
@@ -141,13 +141,13 @@ public:
  * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciOrderSharps is required for non-linear key signatures. It specifies the order of
- * pitch class indices for corresponding sharps and flats in #AcciAmountSharps, which can be mixed in any order.
- * The first zero value in the #AcciAmountSharps table terminates the sequence of sharps or flats, and the rest
+ * pitch class indices for corresponding sharps and flats in @ref AcciAmountSharps, which can be mixed in any order.
+ * The first zero value in the @ref AcciAmountSharps table terminates the sequence of sharps or flats, and the rest
  * of the values here are meaningless.
  *
  * AcciOrderSharps is also useful with microtone systems that use standard key
  * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
- * will need to supply an #AcciAmountFlats table, and this should have values that correspond.
+ * will need to supply an @ref AcciAmountFlats table, and this should have values that correspond.
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
