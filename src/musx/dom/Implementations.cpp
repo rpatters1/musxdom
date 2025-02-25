@@ -104,6 +104,14 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // ***** EntryFrame *****
 // **********************
 
+EntryFrame::EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex) :
+    Base(gfhold.getDocument(), gfhold.getPartId(), gfhold.getShareMode()),
+    m_staff(staff),
+    m_measure(measure),
+    m_layerIndex(layerIndex)
+{
+}
+
 std::shared_ptr<const EntryInfo> EntryFrame::getFirstInVoice(int voice) const
 {
     bool forV2 = voice == 2;
@@ -119,6 +127,24 @@ std::shared_ptr<const EntryInfo> EntryFrame::getFirstInVoice(int voice) const
         firstEntry = firstEntry->getNextInVoice(voice);
     }
     return firstEntry;
+}
+
+std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
+{
+    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure + 1)) {
+        return gfhold->createEntryFrame(m_layerIndex);
+    }
+    return nullptr;
+}
+
+std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
+{
+    if (m_measure > 1) {
+        if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure - 1)) {
+            return gfhold->createEntryFrame(m_layerIndex);
+        }
+    }
+    return nullptr;
 }
 
 // *********************
@@ -441,10 +467,10 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
         return nullptr;
-        }();
+    }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
-        retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);
+        retval = std::make_shared<EntryFrame>(*this, getStaff(), getMeasure(), layerIndex);
         const auto& measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), getMeasure());
         if (!measure) {
             throw std::invalid_argument("Meaure instance for measure " + std::to_string(getMeasure()) + " does not exist.");

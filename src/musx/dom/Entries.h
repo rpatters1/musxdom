@@ -33,6 +33,7 @@ namespace dom {
 
 namespace details {
 class TupletDef;
+class GFrameHold;
 } // namespace details;
 
 /**
@@ -201,7 +202,7 @@ class EntryInfo;
  * @brief Returns a vector of @ref EntryInfo instances for a given frame, along with computed information.
  * @todo Possibly compute current key
  */
-class EntryFrame
+class EntryFrame : Base
 {
 public:
     /** @brief Constructor function
@@ -210,10 +211,7 @@ public:
      * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
     */
-    explicit EntryFrame(InstCmper staff, MeasCmper measure, LayerIndex layerIndex)
-        : m_staff(staff), m_measure(measure), m_layerIndex(layerIndex)
-    {
-    }
+    explicit EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex);
 
     /// @brief class to track tuplets in the frame
     struct TupletInfo
@@ -262,6 +260,14 @@ public:
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)
     { m_entries.emplace_back(entry); }
+
+    /// @brief Gets the entry frame for the next measure with the same staff and layer.
+    /// @return Frame or nullpter if the next measure has no matching frame.
+    std::shared_ptr<const EntryFrame> getNext() const;
+
+    /// @brief Gets the entry frame for the previous measure with the same staff and layer.
+    /// @return Frame or nullpter if the previous measure has no matching frame,
+    std::shared_ptr<const EntryFrame> getPrevious() const;
 
 private:
     InstCmper m_staff;
