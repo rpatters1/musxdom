@@ -152,7 +152,12 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 // ************************
 
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
-{ return m_entryFrame->getEntries()[m_indexInFrame]; }
+{
+    MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size()) {
+        throw std::logic_error("Entry index is too large for entries array.");
+    }
+    return m_entryFrame->getEntries()[m_indexInFrame];
+}
 
 EntryInfoPtr::operator bool() const
 { return m_entryFrame && !m_entryFrame->getEntries().empty(); }
@@ -192,9 +197,20 @@ std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> cu
     return std::nullopt;
 }
 
+EntryInfoPtr EntryInfoPtr::getNext() const
+{
+    if (auto resultInFrame = getNextInFrame()) {
+        return resultInFrame;
+    }
+    if (auto nextFrame = m_entryFrame->getNext()) {
+        return EntryInfoPtr(nextFrame, 0);
+    }
+    return EntryInfoPtr();
+}
+
 EntryInfoPtr EntryInfoPtr::getNextInFrame() const
 {
-    if (m_indexInFrame < m_entryFrame->getEntries().size() - 1) {
+    if (m_entryFrame && m_indexInFrame < m_entryFrame->getEntries().size() - 1) {
         return EntryInfoPtr(m_entryFrame, m_indexInFrame + 1);
     }
     return EntryInfoPtr();
@@ -217,9 +233,20 @@ EntryInfoPtr EntryInfoPtr::getNextSameV() const
     return next;
 }
 
+EntryInfoPtr EntryInfoPtr::getPrevious() const
+{
+    if (auto resultInFrame = getPreviousInFrame()) {
+        return resultInFrame;
+    }
+    if (auto prevFrame = m_entryFrame->getPrevious()) {
+        return EntryInfoPtr(prevFrame, prevFrame->getEntries().size() - 1);
+    }
+    return EntryInfoPtr();
+}
+
 EntryInfoPtr EntryInfoPtr::getPreviousInFrame() const
 {
-    if (m_indexInFrame > 0) {
+    if (m_entryFrame && m_indexInFrame > 0) {
         return EntryInfoPtr(m_entryFrame, m_indexInFrame - 1);
     }
     return EntryInfoPtr();
@@ -248,6 +275,19 @@ EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
         next = next.getNextInFrame();
     }
     return next;
+}
+
+NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
+{
+    auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNoteProperties();
+    for (size_t x = 0; x < (*this)->getEntry()->notes.size(); x++) {
+        auto note = NoteInfoPtr(*this, x);
+        auto [pitch, octave, alter, staffPos] = note.calcNoteProperties();
+        if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
+            return note;
+        }
+    }
+    return NoteInfoPtr();
 }
 
 // ***********************
@@ -943,6 +983,26 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
     int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
 
     return { noteNames[step], octave, actualAlteration, adjustedLev + middleCLine };
+}
+
+// ***********************
+// ***** NoteInfoPtr *****
+// ***********************
+
+NoteInfoPtr::operator bool() const
+{ return m_entry && m_noteIndex < m_entry->getEntry()->notes.size(); }
+
+std::shared_ptr<const Note> NoteInfoPtr::operator->() const
+{
+    MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
+        throw std::logic_error("Note index is too large for notes array.");
+    }
+    return m_entry->getEntry()->notes[m_noteIndex];
+}
+
+std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() const
+{
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), m_entry->clefIndex);
 }
 
 // *****************************

@@ -197,6 +197,7 @@ private:
 
 class EntryInfo;
 class EntryFrame;
+class NoteInfoPtr;
 
 /// @brief Wraps a frame of shared_ptr<const EntryInfo> and an index for per entry access.
 /// This class manages ownership of the frame so that any instance of it keeps the frame alive
@@ -248,10 +249,18 @@ public:
     /// @brief Get the next entry in the frame
     EntryInfoPtr getNextInFrame() const;
 
+    /// @brief Get the next entry in the same layer and staff. This can be in the next measure.
+    /// @return  The next continguous entry. Returns nullptr if it encounters an empty frame or end of file.
+    EntryInfoPtr getNext() const;
+
     /// @brief Get the next entry in the frame in the same voice
     ///
     /// For V2, it stops at the current V2 launch sequence.
     EntryInfoPtr getNextSameV() const;
+
+    /// @brief Get the previous entry in the same layer and staff. This can be in the previous measure.
+    /// @return  The previous continguous entry. Returns nullptr if it encounters an empty frame or the beginning of the file.
+    EntryInfoPtr getPrevious() const;
 
     /// @brief Get the previous entry in the frame
     EntryInfoPtr getPreviousInFrame() const;
@@ -261,16 +270,56 @@ public:
     /// For V2, it stops at the current V2 launch sequence.
     EntryInfoPtr getPreviousSameV() const;
 
-    /// @brief Returns the next entry in the specified v1/v2 or null if none.
+    /// @brief Returns the next entry int the frame in the specified v1/v2 or null if none.
     ///
     /// Unlike #getNextSameV, this returns the next v2 entry in any v2 launch sequence.
     ///
     /// @param voice 1 or 2
     EntryInfoPtr getNextInVoice(int voice) const;
 
+    /// @brief Finds a note with the same pitch in the current entry
+    /// @param src the pitch to search for
+    /// @return The found note or an null instance of NoteInfoPtr.
+    NoteInfoPtr findEqualPitch(const NoteInfoPtr& src) const;
+
 private:
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
+};
+
+/// @brief Wraps an @ref EntryInfo instance and a note index.
+class NoteInfoPtr
+{
+public:
+    /// @brief Default constructor
+    NoteInfoPtr() : m_entry(), m_noteIndex(0) {}
+
+    /// @brief Constructor
+    /// @param entryInfo 
+    /// @param noteIndex 
+    NoteInfoPtr(const EntryInfoPtr& entryInfo, size_t noteIndex)
+        : m_entry(entryInfo), m_noteIndex(noteIndex)
+    {}
+
+    /// @brief Provides a boolean conversion based on whether the EntryInfoPtr is valid and the note index is valid.
+    operator bool() const;
+
+    /// @brief Allows `->` access to the underlying @ref Note instance.
+    std::shared_ptr<const Note> operator->() const;
+
+    /**
+     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @return A tuple containing:
+     *         - NoteName: The note name (C, D, E, F, G, A, B)
+     *         - int: The octave number (where 4 is the middle C octave)
+     *         - int: The actual alteration (in semitones, relative to natural)
+     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     */
+    std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const;
+    
+private:
+    EntryInfoPtr m_entry;
+    size_t m_noteIndex;
 };
 
 /**

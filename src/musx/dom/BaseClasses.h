@@ -48,6 +48,12 @@
 #define MUSX_UNKNOWN_XML(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
 #endif
 
+
+#define MUSX_ASSERT_IF(TEST) \
+assert(!(TEST)); \
+if (TEST)
+
+
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
