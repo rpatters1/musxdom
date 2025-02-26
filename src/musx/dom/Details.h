@@ -279,6 +279,83 @@ public:
 };
 
 /**
+ * @class TieAlterBase
+ * @brief Base class for tie alteration properties. (Used for both ties and tie ends.)
+ */
+class TieAlterBase : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TieAlterBase(const DocumentWeakPtr& document, Cmper partId, Base::ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};                   ///< Note ID associated with the tie alteration. (xml node is `<noteID>`)
+    Evpu xStart{};                         ///< Horizontal start position of the tie.
+    Evpu xEnd{};                           ///< Horizontal end position of the tie.
+    Evpu yStart{};                         ///< Vertical start position of the tie.
+    Evpu yEnd{};                           ///< Vertical end position of the tie.
+    bool outerLocal{};                     ///< Local setting for "Outer Tie".
+    bool afterSingleDotLocal{};            ///< Local setting for "After Single Dot".
+    bool afterSingleDotOn{};               ///< Enable "After Single Dot".
+    bool afterMultiDotsLocal{};            ///< Local setting for "After Multiple Dots".
+    bool afterMultiDotsOn{};               ///< Enable "After Multiple Dots".
+    bool shiftForSecondsLocal{};           ///< Local setting for "Shift for Seconds".
+    bool shiftForSecondsOn{};              ///< Enable "Shift for Seconds".
+    bool beforeSingleAcciLocal{};          ///< Local setting for "Before Single Accidental".
+    bool beforeSingleAcciOn{};             ///< Enable "Before Single Accidental".
+    bool down{};                           ///< Downward tie. Only applicable if #freeze is true. (False freezes the tie up.)
+    bool breakTimeLocal{};                 ///< Local setting for "Break at Time Signature".
+    bool breakTimeOn{};                    ///< Enable "Break at Time Signature".
+    bool breakKeyLocal{};                  ///< Local setting for "Break at Key Signature".
+    bool breakKeyOn{};                     ///< Enable "Break at Key Signature".
+    bool freezeDirection{};                ///< Freeze tie direction. (xml node is `<freeze>`)
+    bool stPtAdjOn{};                      ///< Enable start point adjustment.
+    bool enPtAdjOn{};                      ///< Enable end point adjustment.
+    Evpu insetRatio1{};                    ///< Inset ratio for the first control point.
+    Evpu height1{};                        ///< Height of the first control point.
+    Evpu insetRatio2{};                    ///< Inset ratio for the second control point.
+    Evpu height2{};                        ///< Height of the second control point.
+    bool ctlPtAdjOn{};                     ///< Enable control point adjustment.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    bool requireAllFields() const override { return false; } ///< Unless we decide to figure out connection types, this will stay here.
+    static const xml::XmlElementArray<TieAlterBase>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TieAlterEnd
+ * @brief Alterations for tie ends.
+ *
+ * This class is identified by the XML node name "tieAlterEnd".
+ */
+class TieAlterEnd : public TieAlterBase
+{
+public:
+    using TieAlterBase::TieAlterBase;
+
+    constexpr static std::string_view XmlNodeName = "tieAlterEnd"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TieAlterEnd>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TieAlterStart
+ * @brief Alterations for tie starts. (Tie starts are normal ties.)
+ *
+ * This class is identified by the XML node name "tieAlterStart".
+ */
+class TieAlterStart : public TieAlterBase
+{
+public:
+    using TieAlterBase::TieAlterBase;
+
+    constexpr static std::string_view XmlNodeName = "tieAlterStart"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TieAlterStart>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
  * @class TupletDef
  * @brief Options controlling the appearance of tuplets.
  *

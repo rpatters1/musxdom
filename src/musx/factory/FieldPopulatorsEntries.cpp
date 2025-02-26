@@ -37,6 +37,8 @@ MUSX_XML_ELEMENT_ARRAY(Note, {
     {"harmLev", [](const XmlElementPtr& e, const std::shared_ptr<Note>& i) { i->harmLev = e->getTextAs<int>(); }},
     {"harmAlt", [](const XmlElementPtr& e, const std::shared_ptr<Note>& i) { i->harmAlt = e->getTextAs<int>(); }},
     {"isValid", [](const XmlElementPtr&, const std::shared_ptr<Note>& i) { i->isValid = true; }},
+    {"tieStart", [](const XmlElementPtr&, const std::shared_ptr<Note>& i) { i->tieStart = true; }},
+    {"tieEnd", [](const XmlElementPtr&, const std::shared_ptr<Note>& i) { i->tieEnd = true; }},
     {"showAcci", [](const XmlElementPtr&, const std::shared_ptr<Note>& i) { i->showAcci = true; }},
     {"freezeAcci", [](const XmlElementPtr&, const std::shared_ptr<Note>& i) { i->freezeAcci = true; }},
 });

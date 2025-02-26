@@ -77,6 +77,8 @@ public:
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
     bool isValid{};     ///< Should always be true but otherwise appears to be used internally by Finale.
+    bool tieStart{};    ///< Indicates a tie starts on this note.
+    bool tieEnd{};      ///< Indicates a tie ends on this note.
     bool showAcci{};    ///< True if the note has an accidental. (Dynamically changed by Finale unless `freezeAcci` is set.)
     bool freezeAcci{};  ///< True if the accidental should be forced on or off (based on `showAcci`.)
 
@@ -95,7 +97,6 @@ public:
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
     std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex) const;
-
 
     bool requireAllFields() const override { return false; }
 
@@ -287,41 +288,6 @@ private:
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
 };
 
-/// @brief Wraps an @ref EntryInfo instance and a note index.
-class NoteInfoPtr
-{
-public:
-    /// @brief Default constructor
-    NoteInfoPtr() : m_entry(), m_noteIndex(0) {}
-
-    /// @brief Constructor
-    /// @param entryInfo 
-    /// @param noteIndex 
-    NoteInfoPtr(const EntryInfoPtr& entryInfo, size_t noteIndex)
-        : m_entry(entryInfo), m_noteIndex(noteIndex)
-    {}
-
-    /// @brief Provides a boolean conversion based on whether the EntryInfoPtr is valid and the note index is valid.
-    operator bool() const;
-
-    /// @brief Allows `->` access to the underlying @ref Note instance.
-    std::shared_ptr<const Note> operator->() const;
-
-    /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position.
-     * @return A tuple containing:
-     *         - NoteName: The note name (C, D, E, F, G, A, B)
-     *         - int: The octave number (where 4 is the middle C octave)
-     *         - int: The actual alteration (in semitones, relative to natural)
-     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
-     */
-    std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const;
-    
-private:
-    EntryInfoPtr m_entry;
-    size_t m_noteIndex;
-};
-
 /**
  * @class EntryFrame
  * @brief Represents a vector of @ref EntryInfo instances for a given frame, along with computed information.
@@ -453,6 +419,63 @@ public:
 
 private:
     std::weak_ptr<const Entry> m_entry;
+};
+
+/// @brief Wraps an @ref EntryInfo instance and a note index.
+class NoteInfoPtr
+{
+public:
+    /// @brief Default constructor
+    NoteInfoPtr() : m_entry(), m_noteIndex(0) {}
+
+    /// @brief Constructor
+    /// @param entryInfo 
+    /// @param noteIndex 
+    NoteInfoPtr(const EntryInfoPtr& entryInfo, size_t noteIndex)
+        : m_entry(entryInfo), m_noteIndex(noteIndex)
+    {}
+
+    /// @brief Provides a boolean conversion based on whether the EntryInfoPtr is valid and the note index is valid.
+    operator bool() const
+    { return m_entry && m_noteIndex < m_entry->getEntry()->notes.size(); }
+
+    /// @brief Allows `->` access to the underlying @ref Note instance.
+    std::shared_ptr<const Note> operator->() const
+    {
+        MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
+            throw std::logic_error("Note index is too large for notes array.");
+        }
+        return m_entry->getEntry()->notes[m_noteIndex];
+    }
+
+    /// @brief Gets the entry info for this note
+    EntryInfoPtr getEntryInfo() const
+    { return m_entry; }
+
+    /**
+     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @return A tuple containing:
+     *         - NoteName: The note name (C, D, E, F, G, A, B)
+     *         - int: The octave number (where 4 is the middle C octave)
+     *         - int: The actual alteration (in semitones, relative to natural)
+     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     */
+    std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const
+    { return (*this)->calcNoteProperties(m_entry.getKeySignature(), m_entry->clefIndex); }
+
+    /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
+    /// to see if there is actually a tie end.
+    /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
+    NoteInfoPtr calcTieTo() const;
+
+    /// @brief Calculates the note that this note could tie from. Check the return value's #Note::tieStart
+    /// to see if there is actually a tie.
+    /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
+    NoteInfoPtr calcTieFrom() const;
+
+private:
+    EntryInfoPtr m_entry;
+    size_t m_noteIndex;
 };
 
 } // namespace dom

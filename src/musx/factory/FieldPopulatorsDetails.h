@@ -34,8 +34,17 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::details;
 
-// Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
-// The goal is that this may facilitate serialization in the future.
+template <>
+struct FieldPopulator<TieAlterEnd> : private FieldPopulator<TieAlterBase>
+{
+    using FieldPopulator<TieAlterBase>::populate;
+};
+
+template <>
+struct FieldPopulator<TieAlterStart> : private FieldPopulator<TieAlterBase>
+{
+    using FieldPopulator<TieAlterBase>::populate;
+};
 
 template <>
 inline StaffGroup::BracketStyle toEnum<StaffGroup::BracketStyle>(const int& value)

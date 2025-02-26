@@ -240,6 +240,8 @@ using RegisteredOthers = TypeRegistry <
 using RegisteredDetails = TypeRegistry <
     dom::details::GFrameHold,
     dom::details::StaffGroup,
+    dom::details::TieAlterEnd,
+    dom::details::TieAlterStart,
     dom::details::TupletDef
 >;
 

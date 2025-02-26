@@ -91,7 +91,7 @@ using InstCmper = int16_t;          ///< Enigma staff (inst) Cmper (may be negat
 using SystemCmper = int16_t;        ///< Enigma systems Cmper (may be negative when not applicable)
 using ClefIndex = uint16_t;         ///< Index into @ref options::ClefOptions::clefDefs.
 using EntryNumber = int32_t;        ///< Entry identifier.
-using NoteNumber = int16_t;         ///< Note identifier.
+using NoteNumber = uint16_t;        ///< Note identifier.
 using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
@@ -378,6 +378,18 @@ public:
 private:
     using DetailsBase::getCmper1;
     using DetailsBase::getCmper2;
+};
+
+class NoteInfoPtr;
+
+class NoteDetailsBase : public EntryDetailsBase
+{
+public:
+    /// @brief Required virtual function that returns the note id.
+    virtual NoteNumber getNoteId() const = 0;
+
+protected:
+    using EntryDetailsBase::EntryDetailsBase;
 };
 
 class FontInfo;

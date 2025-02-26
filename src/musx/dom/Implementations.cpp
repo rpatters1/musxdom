@@ -246,7 +246,7 @@ EntryInfoPtr EntryInfoPtr::getPrevious() const
 
 EntryInfoPtr EntryInfoPtr::getPreviousInFrame() const
 {
-    if (m_entryFrame && m_indexInFrame > 0) {
+    if (m_entryFrame && m_indexInFrame <= m_entryFrame->getEntries().size() && m_indexInFrame > 0) {
         return EntryInfoPtr(m_entryFrame, m_indexInFrame - 1);
     }
     return EntryInfoPtr();
@@ -279,12 +279,14 @@ EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
 
 NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
 {
-    auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNoteProperties();
-    for (size_t x = 0; x < (*this)->getEntry()->notes.size(); x++) {
-        auto note = NoteInfoPtr(*this, x);
-        auto [pitch, octave, alter, staffPos] = note.calcNoteProperties();
-        if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
-            return note;
+    if ((*this)->getEntry()->isNote && src.getEntryInfo()->getEntry()->isNote) {
+        auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNoteProperties();
+        for (size_t x = 0; x < (*this)->getEntry()->notes.size(); x++) {
+            auto note = NoteInfoPtr(*this, x);
+            auto [pitch, octave, alter, staffPos] = note.calcNoteProperties();
+            if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
+                return note;
+            }
         }
     }
     return NoteInfoPtr();
@@ -989,20 +991,49 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
 // ***** NoteInfoPtr *****
 // ***********************
 
-NoteInfoPtr::operator bool() const
-{ return m_entry && m_noteIndex < m_entry->getEntry()->notes.size(); }
-
-std::shared_ptr<const Note> NoteInfoPtr::operator->() const
+NoteInfoPtr NoteInfoPtr::calcTieTo() const
 {
-    MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
-        throw std::logic_error("Note index is too large for notes array.");
+    if (m_entry->getEntry()->isNote) {
+        if (auto nextEntry = m_entry) {
+            if (nextEntry->v2Launch) {
+                nextEntry = nextEntry.getNextSameV();
+                if (!nextEntry) {
+                    if (auto nextFrame = m_entry.getFrame()->getNext()) {
+                        nextEntry = nextFrame->getFirstInVoice(1); // v2Launch entries are always voice 1
+                    }
+                }
+            } else {
+                nextEntry = nextEntry.getNext(); // getNext search the next frame already
+            }
+            if (auto result = nextEntry.findEqualPitch(*this)) {
+                return result;
+            }
+            if (nextEntry->v2Launch) {
+                nextEntry = nextEntry.getNext();
+                return nextEntry.findEqualPitch(*this);
+            }
+        }
     }
-    return m_entry->getEntry()->notes[m_noteIndex];
+    return NoteInfoPtr();
 }
 
-std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() const
+NoteInfoPtr NoteInfoPtr::calcTieFrom() const
 {
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), m_entry->clefIndex);
+    if (m_entry->getEntry()->isNote) {
+        bool checkedPreviousMeasure = false;
+        for (auto nextEntry = m_entry.getPrevious(); nextEntry; nextEntry = nextEntry.getPrevious()) {
+            if (m_entry.getMeasure() != nextEntry.getMeasure()) {
+                if (checkedPreviousMeasure) {
+                    break;
+                }
+                checkedPreviousMeasure = true;
+            }
+            if (auto result = nextEntry.findEqualPitch(*this)) {
+                return result;
+            }
+        }
+    }
+    return NoteInfoPtr();
 }
 
 // *****************************

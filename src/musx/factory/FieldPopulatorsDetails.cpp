@@ -104,6 +104,36 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"optimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideStaves = toEnum<StaffGroup::HideStaves>(e); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"xStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xStart = e->getTextAs<Evpu>(); }},
+    {"xEnd", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xEnd = e->getTextAs<Evpu>(); }},
+    {"yStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yStart = e->getTextAs<Evpu>(); }},
+    {"yEnd", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yEnd = e->getTextAs<Evpu>(); }},
+    {"outerLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->outerLocal = true; }},
+    {"afterSingleDotLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotLocal = true; }},
+    {"afterSingleDotOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotOn = true; }},
+    {"afterMultiDotsLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsLocal = true; }},
+    {"afterMultiDotsOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsOn = true; }},
+    {"shiftForSecondsLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->shiftForSecondsLocal = true; }},
+    {"shiftForSecondsOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->shiftForSecondsOn = true; }},
+    {"beforeSingleAcciLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->beforeSingleAcciLocal = true; }},
+    {"beforeSingleAcciOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->beforeSingleAcciOn = true; }},
+    {"down", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->down = true; }},
+    {"breakTimeLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->breakTimeLocal = true; }},
+    {"breakTimeOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->breakTimeOn = true; }},
+    {"breakKeyLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyLocal = true; }},
+    {"breakKeyOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyOn = true; }},
+    {"freeze", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->freezeDirection = true; }},
+    {"stPtAdjOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->stPtAdjOn = true; }},
+    {"enPtAdjOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->enPtAdjOn = true; }},
+    {"insetRatio1", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio1 = e->getTextAs<Evpu>(); }},
+    {"height1", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height1 = e->getTextAs<Evpu>(); }},
+    {"insetRatio2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio2 = e->getTextAs<Evpu>(); }},
+    {"height2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height2 = e->getTextAs<Evpu>(); }},
+    {"ctlPtAdjOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtAdjOn = true; }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(TupletDef, {
     {"symbolicNum", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->displayNumber = e->getTextAs<int>(); }},
     {"symbolicDur", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->displayDuration = e->getTextAs<Edu>(); }},

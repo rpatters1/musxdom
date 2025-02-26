@@ -49,6 +49,8 @@ TEST(EntryTest, PopulateFields)
         <harmLev>-2</harmLev>
         <harmAlt>1</harmAlt>
         <isValid/>
+        <tieStart/>
+        <tieEnd/>
         <showAcci/>
         <freezeAcci/>
       </note>
@@ -94,6 +96,8 @@ TEST(EntryTest, PopulateFields)
         EXPECT_EQ(note->harmLev, -2);
         EXPECT_EQ(note->harmAlt, 1);
         EXPECT_TRUE(note->isValid);
+        EXPECT_TRUE(note->tieStart);
+        EXPECT_TRUE(note->tieEnd);
         EXPECT_TRUE(note->showAcci);
         EXPECT_TRUE(note->freezeAcci);
 
