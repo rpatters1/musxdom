@@ -41,6 +41,7 @@ add_executable(musxdomtests
 	header.cpp
 	pool.cpp
     # entries
+    entries/beam_detection.cpp
     entries/entries.cpp
     entries/keysigs.cpp
     # options

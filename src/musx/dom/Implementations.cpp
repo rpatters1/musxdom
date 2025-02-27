@@ -316,6 +316,105 @@ bool EntryInfoPtr::canBeBeamed() const
     return true;
 }
 
+EntryInfoPtr EntryInfoPtr::findBeamEnd() const
+{
+    if (!canBeBeamed()) return EntryInfoPtr();
+    auto next = getNextInBeamGroup();
+    if (!next) {
+        if (getPreviousInBeamGroup()) return *this;
+        return EntryInfoPtr();
+    }
+    while (true) {
+        if (auto tryNext = next.getNextInBeamGroup()) {
+            next = tryNext;
+        } else {
+            break;
+        }
+    }
+    return next;
+}
+
+template<EntryInfoPtr(EntryInfoPtr::*Iterator)() const>
+EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
+{
+    EntryInfoPtr result = (this->*Iterator)();
+    if (!result || !result.canBeBeamed()) {
+        return EntryInfoPtr();
+    }
+    auto thisEntry = (*this)->getEntry();
+    auto resultEntry = result->getEntry();
+    // a grace can't beam past a non grace note
+    if (thisEntry->graceNote && !resultEntry->graceNote) {
+        return EntryInfoPtr();
+    }
+    // a non grace should skip grace notes
+    if (!thisEntry->graceNote && resultEntry->graceNote) {
+        do {
+            if (result->getEntry()->beam || !result.canBeBeamed()) {
+                return EntryInfoPtr();
+            }
+            result = (result.*Iterator)();
+        } while (result && result->getEntry()->graceNote);
+    }
+    return result;
+}
+
+EntryInfoPtr EntryInfoPtr::nextPotentialInBeam() const
+{
+    auto next = iteratePotentialEntryInBeam<&EntryInfoPtr::getNextSameV>();
+    if (!next || next->getEntry()->beam) {
+        return EntryInfoPtr();
+    }
+    return next;
+}
+
+EntryInfoPtr EntryInfoPtr::previousPotentialInBeam() const
+{
+    if ((*this)->getEntry()->beam) {
+        return EntryInfoPtr();
+    }
+    return iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
+}
+
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)() const>
+EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
+{
+    if (!canBeBeamed()) {
+        return EntryInfoPtr();
+    }
+    EntryInfoPtr result = (this->*Iterator)(); // either nextPotentialInBeam or previousPotentialInBeam
+    if (result) {
+        auto thisEntry = (*this)->getEntry();
+        auto resultEntry = result->getEntry();
+        if (thisEntry->calcDisplaysAsRest() || resultEntry->calcDisplaysAsRest()) {
+            auto beamOpts = getFrame()->getDocument()->getOptions()->get<options::BeamOptions>();
+            MUSX_ASSERT_IF(!beamOpts) {
+                throw std::logic_error("Document has no BeamOptions.");
+            }
+            auto searchForNoteFrom = [](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)() const) -> bool {
+                for (auto next = from; next; next = (next.*iterator)()) {
+                    if (!next->getEntry()->calcDisplaysAsRest()) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            bool noteFound = searchForNoteFrom(result, Iterator);
+            if (!noteFound && !beamOpts->extendBeamsOverRests) {
+                return EntryInfoPtr();
+            }
+            bool reverseNoteFound = searchForNoteFrom(*this, ReverseIterator);
+            if (!reverseNoteFound && !beamOpts->extendBeamsOverRests) {
+                return EntryInfoPtr();
+            }
+            if (beamOpts->extendBeamsOverRests && !noteFound && !reverseNoteFound) {
+                return EntryInfoPtr();
+            }
+        }
+    }
+    return result;
+}
+
 // ***********************
 // ***** FontOptions *****
 // ***********************

@@ -191,7 +191,7 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
 </finale>
     )xml";
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xmlNotIterable);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlNotIterable);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -211,7 +211,7 @@ TEST(GFrameHold, IterationTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "layers.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -252,7 +252,7 @@ TEST(GFrameHold, QuintupletTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "quintuplet.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -299,7 +299,7 @@ TEST(GFrameHold, TripletTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "triplet.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -346,7 +346,7 @@ TEST(GFrameHold, NestedTupletTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "nested_tuplets.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -396,7 +396,7 @@ TEST(GFrameHold, V1V2TupletTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "v1v2tuplets.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -559,7 +559,7 @@ TEST(GFrameHold, IncompleteTupletV2)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "incomplete_tupletv2.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -610,7 +610,7 @@ TEST(GFrameHold, ZeroTuplet)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "zero_tuplet.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();

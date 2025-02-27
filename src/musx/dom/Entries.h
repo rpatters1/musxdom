@@ -283,12 +283,39 @@ public:
     /// For V2, it stops at the current V2 launch sequence.
     EntryInfoPtr getPreviousSameV() const;
 
-    /// @brief Returns the next entry int the frame in the specified v1/v2 or null if none.
+    /// @brief Returns the next entry in the frame in the specified v1/v2 or null if none.
     ///
     /// Unlike #getNextSameV, this returns the next v2 entry in any v2 launch sequence.
     ///
     /// @param voice 1 or 2
     EntryInfoPtr getNextInVoice(int voice) const;
+
+    /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
+    EntryInfoPtr getNextInBeamGroup() const
+    { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(); }
+
+    /// @brief Gets the prevsiou entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
+    EntryInfoPtr getPreviousInBeamGroup() const
+    { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(); }
+
+    /// @brief Returns whether this is an unbeamed entry
+    /// @return 
+    bool calcUnbeamed() const
+    {
+        if (!canBeBeamed()) return true;
+        return (!getNextInBeamGroup() && !getPreviousInBeamGroup());
+    }
+
+    /// @brief Returns whether this is the start of a primary beam
+    bool calcIsBeamStart() const
+    {
+        if (!canBeBeamed()) return false;
+        return (!getPreviousInBeamGroup() && getNextInBeamGroup());
+    }
+
+    /// @brief Finds the end entry of a beamed group.
+    /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
+    EntryInfoPtr findBeamEnd() const;
 
     /// @brief Finds a note with the same pitch in the current entry
     /// @param src the pitch to search for
@@ -297,6 +324,16 @@ public:
 
 private:
     bool canBeBeamed() const;
+    
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+    EntryInfoPtr iteratePotentialEntryInBeam() const;
+
+    EntryInfoPtr nextPotentialInBeam() const;
+
+    EntryInfoPtr previousPotentialInBeam() const;
+
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)() const>
+    EntryInfoPtr iterateBeamGroup() const;
 
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
