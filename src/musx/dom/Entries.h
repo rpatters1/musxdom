@@ -172,6 +172,10 @@ public:
      */
     std::pair<NoteType, int> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
 
+    /// @brief Calculates if an entry displays as a rest.
+    /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
+    bool calcDisplaysAsRest() const { return !isNote; }
+
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
