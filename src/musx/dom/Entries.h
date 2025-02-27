@@ -31,10 +31,14 @@
 namespace musx {
 namespace dom {
 
+namespace others {
+class StaffComposite;
+} // namespace others
+
 namespace details {
 class TupletDef;
 class GFrameHold;
-} // namespace details;
+} // namespace details
 
 /**
  * @brief Calculates the @ref NoteType and number of dots in an @ref Edu value.
@@ -194,10 +198,11 @@ public:
     constexpr static std::string_view XmlNodeName = "entry"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
-private:
+private:    
     EntryNumber m_entnum;   ///< Entry number.
     EntryNumber m_prev;     ///< Previous entry number in the list. (0 if none)
     EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
+    
 };
 
 class EntryInfo;
@@ -241,6 +246,9 @@ public:
 
     /// @brief Get the measure cmper
     MeasCmper getMeasure() const;
+
+    /// @brief Creates the current StaffComposite for the entry
+    std::shared_ptr<others::StaffComposite> createCurrentStaff() const;
 
     /// @brief Get the key signature of the entry
     std::shared_ptr<KeySignature> getKeySignature() const;
@@ -288,6 +296,8 @@ public:
     NoteInfoPtr findEqualPitch(const NoteInfoPtr& src) const;
 
 private:
+    bool canBeBeamed() const;
+
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
 };

@@ -305,7 +305,7 @@ public:
     bool shiftForSecondsOn{};              ///< Enable "Shift for Seconds".
     bool beforeSingleAcciLocal{};          ///< Local setting for "Before Single Accidental".
     bool beforeSingleAcciOn{};             ///< Enable "Before Single Accidental".
-    bool down{};                           ///< Downward tie. Only applicable if #freeze is true. (False freezes the tie up.)
+    bool down{};                           ///< Downward tie. Only applicable if #freezeDirection is true. (False freezes the tie up.)
     bool breakTimeLocal{};                 ///< Local setting for "Break at Time Signature".
     bool breakTimeOn{};                    ///< Enable "Break at Time Signature".
     bool breakKeyLocal{};                  ///< Local setting for "Break at Key Signature".

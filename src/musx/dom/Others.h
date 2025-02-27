@@ -1327,6 +1327,9 @@ public:
     explicit Staff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    // WARNING: Any fields added here must have a mask added in StaffStyle (if it does not already exist)
+    //          and must be added to StaffComposite::applyStyle.
+
     // Public properties corresponding to the XML structure
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff.
@@ -1352,6 +1355,7 @@ public:
     Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
     bool hideStems{};               ///< Inverse of "Display Stems"
+    bool hideBeams{};               ///< Inverse of "Show Beams"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)

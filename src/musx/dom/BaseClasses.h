@@ -382,6 +382,7 @@ private:
 
 class NoteInfoPtr;
 
+/// @brief Base class note details. Note details are entry details associated with a note ID.
 class NoteDetailsBase : public EntryDetailsBase
 {
 public:

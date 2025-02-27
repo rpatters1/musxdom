@@ -98,6 +98,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <topRepeatDotOff>-3</topRepeatDotOff>
       <botRepeatDotOff>-5</botRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
+      <hideStems/>
       <stemDir>alwaysUp</stemDir>
     </staffSpec>
     <staffSpec cmper="16">
@@ -117,6 +118,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <topRepeatDotOff>-2</topRepeatDotOff>
       <botRepeatDotOff>-6</botRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
+      <hideBeams/>
       <stemDir>alwaysDown</stemDir>
       <autoNum>arabicPrefix</autoNum>
       <useAutoNum/>
@@ -151,6 +153,8 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff1->topRepeatDotOff, -3);
     EXPECT_EQ(staff1->botRepeatDotOff, -5);
     EXPECT_EQ(staff1->vertTabNumOff, -1024);
+    EXPECT_TRUE(staff1->hideStems);
+    EXPECT_FALSE(staff1->hideBeams);
     EXPECT_EQ(staff1->stemDirection, others::Staff::StemDirection::AlwaysUp);
     EXPECT_EQ(staff1->autoNumbering, others::Staff::AutoNumberingStyle::ArabicSuffix);
     EXPECT_EQ(staff1->useAutoNumbering, false);
@@ -175,6 +179,8 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff2->topRepeatDotOff, -2);
     EXPECT_EQ(staff2->botRepeatDotOff, -6);
     EXPECT_EQ(staff2->vertTabNumOff, -1024);
+    EXPECT_FALSE(staff2->hideStems);
+    EXPECT_TRUE(staff2->hideBeams);
     EXPECT_EQ(staff2->stemDirection, others::Staff::StemDirection::AlwaysDown);
     EXPECT_EQ(staff2->autoNumbering, others::Staff::AutoNumberingStyle::ArabicPrefix);
     EXPECT_EQ(staff2->useAutoNumbering, true);

@@ -552,6 +552,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
     {"hideStems", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hideStems = true; }},
+    {"hideBeams", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hideBeams = true; }},
     {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection= toEnum<Staff::StemDirection>(e); }},
     {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e); }},
     {"useAutoNum", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->useAutoNumbering = true; }},

@@ -153,7 +153,11 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 {
-    MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size()) {
+    MUSX_ASSERT_IF(!m_entryFrame) {
+        throw std::logic_error("EntryInfoPtr has no frame.");        
+    }
+    MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size())
+    {
         throw std::logic_error("Entry index is too large for entries array.");
     }
     return m_entryFrame->getEntries()[m_indexInFrame];
@@ -169,6 +173,13 @@ InstCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
 MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); }
 
 std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
+
+std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff() const
+{
+    auto entry = (*this)->getEntry();
+    return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), getStaff(), getMeasure(),
+        std::lround((*this)->elapsedDuration.calcEduDuration()));
+}
 
 unsigned EntryInfoPtr::calcReverseGraceIndex() const
 {
@@ -290,6 +301,19 @@ NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
         }
     }
     return NoteInfoPtr();
+}
+
+bool EntryInfoPtr::canBeBeamed() const
+{
+    if ((*this)->getEntry()->duration >= Edu(NoteType::Quarter)) {
+        return false;
+    }
+    if (auto staff = createCurrentStaff()) {
+        if (staff->hideStems || staff->hideBeams) {
+            return false;
+        }
+    }
+    return true;
 }
 
 // ***********************
@@ -1514,8 +1538,8 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     }
     if (srcMasks->showStems) {
         hideStems = staffStyle->hideStems;
+        hideBeams = staffStyle->hideBeams;
         stemDirection = staffStyle->stemDirection;
-        // showBeams
         // stemsFixedStart
         // stemdFixedEnd
         // stemStartFromStaff
