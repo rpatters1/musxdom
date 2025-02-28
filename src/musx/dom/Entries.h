@@ -322,6 +322,9 @@ public:
     /// @return The found note or an null instance of NoteInfoPtr.
     NoteInfoPtr findEqualPitch(const NoteInfoPtr& src) const;
 
+    /// @brief Calculates the number of beams or flags on the entry.
+    unsigned calcNumberOfBeams() const;
+
 private:
     bool canBeBeamed() const;
     

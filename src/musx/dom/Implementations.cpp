@@ -332,6 +332,21 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
         }
     }
     return next;
+
+}
+
+unsigned EntryInfoPtr::calcNumberOfBeams() const
+{
+    unsigned result = 0;
+    unsigned edus = (*this)->getEntry()->duration;
+    MUSX_ASSERT_IF (!edus) {
+        throw std::logic_error("Entry has no duration.");
+    }
+    while (edus < Edu(NoteType::Quarter)) {
+        result++;
+        edus <<= 1;
+    }
+    return result;
 }
 
 template<EntryInfoPtr(EntryInfoPtr::*Iterator)() const>
