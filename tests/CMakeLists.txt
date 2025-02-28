@@ -91,6 +91,7 @@ add_executable(musxdomtests
     others/text.cpp
     # details
 	details/gfhold.cpp
+	details/secondary_beams.cpp
 	details/staff_group.cpp
     details/tuplet_def.cpp
 )

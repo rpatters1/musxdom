@@ -155,13 +155,13 @@ public:
     ///
     /// @return A @ref BeamNumber value (minimum 2) for the lowest beam number that should be broken.
     /// Returns 0 if the #mask is invalid.
-        BeamNumber calcLowestBreak() const
+    BeamNumber calcLowestBreak() const
     {
         MUSX_ASSERT_IF(!mask || mask >= unsigned(NoteType::Eighth)) {
             return 0; // invalid mask values have already been flagged and supposedly corrected by #integrityCheck.
         }
         for (unsigned shift = 0; true; shift++) {
-            if ((mask >> shift) & (unsigned(NoteType::Note16th) >> shift)) {
+            if (mask & (unsigned(NoteType::Note16th) >> shift)) {
                 return shift + 2; // the 2nd beam is the 16th beam and the first one we checked.
             }
         }
