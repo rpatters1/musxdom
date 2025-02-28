@@ -38,7 +38,8 @@ namespace dom {
  *
  * The values are expressed in hexadecimal.
  */
-enum class NoteType : Edu {
+enum class NoteType : Edu
+{
     Maxima = 0x8000,
     Longa = 0x4000,
     Breve = 0x2000,

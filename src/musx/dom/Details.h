@@ -132,6 +132,61 @@ public:
 };
 
 /**
+ * @class SecondaryBeamBreak
+ * @brief Specifies which secondary beams break and restart on the associated entry.
+ *
+ * This class is identified by the XML node name "secBeamBreak".
+ */
+class SecondaryBeamBreak : public EntryDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit SecondaryBeamBreak(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum)
+    {
+    }
+
+    unsigned mask{};        ///< Composite mask of beam breaks, derived from `<do16th>` through `<do4096th>` tags.
+    bool breakThrough{};    ///< True if the beam should be broken through to the largest specified beam value.
+
+    /// @brief Calculates the lowest (largest note-value) beam specified for a secondary beam break.
+    ///
+    /// This function ignores #breakThrough, since it is nearly meaningless even in Finale.
+    ///
+    /// @return A @ref BeamNumber value (minimum 2) for the lowest beam number that should be broken.
+    /// Returns 0 if the #mask is invalid.
+        BeamNumber calcLowestBreak() const
+    {
+        MUSX_ASSERT_IF(!mask || mask >= unsigned(NoteType::Eighth)) {
+            return 0; // invalid mask values have already been flagged and supposedly corrected by #integrityCheck.
+        }
+        for (unsigned shift = 0; true; shift++) {
+            if ((mask >> shift) & (unsigned(NoteType::Note16th) >> shift)) {
+                return shift + 2; // the 2nd beam is the 16th beam and the first one we checked.
+            }
+        }
+        assert(false); // should not be able to get here
+        return 0;
+    }
+
+    void integrityCheck() override
+    {
+        EntryDetailsBase::integrityCheck();
+        if (!mask) {
+            mask = unsigned(NoteType::Note4096th);
+            MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " has no breaks.");
+        }
+        if (mask >= unsigned(NoteType::Eighth)) {
+            mask = unsigned(NoteType::Eighth) - 1;
+            MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " specifies a value that cannot be a secondary beam.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "secBeamBreak"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SecondaryBeamBreak>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class StaffGroup
  * @brief Represents the attributes of a Finale staff group that brackets staves
  *

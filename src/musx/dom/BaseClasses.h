@@ -93,6 +93,7 @@ using ClefIndex = uint16_t;         ///< Index into @ref options::ClefOptions::c
 using EntryNumber = int32_t;        ///< Entry identifier.
 using NoteNumber = uint16_t;        ///< Note identifier.
 using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
+using BeamNumber = unsigned int;    ///< A number where 1 corresponds to the primary (8th note) beam, 2 the 16th beam, 3 the 32nd beam, etc.
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.

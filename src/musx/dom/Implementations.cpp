@@ -164,7 +164,7 @@ const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 }
 
 EntryInfoPtr::operator bool() const
-{ return m_entryFrame && !m_entryFrame->getEntries().empty(); }
+{ return m_entryFrame && m_indexInFrame < m_entryFrame->getEntries().size(); }
 
 LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
@@ -335,19 +335,21 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
 
 }
 
-unsigned EntryInfoPtr::calcNumberOfBeams() const
+unsigned calcNumberOfBeamsInEdu(Edu duration)
 {
     unsigned result = 0;
-    unsigned edus = (*this)->getEntry()->duration;
-    MUSX_ASSERT_IF (!edus) {
-        throw std::logic_error("Entry has no duration.");
+    MUSX_ASSERT_IF (!duration) {
+        throw std::logic_error("Edu duration value is zero.");
     }
-    while (edus < Edu(NoteType::Quarter)) {
+    while (duration < Edu(NoteType::Quarter)) {
         result++;
-        edus <<= 1;
+        duration <<= 1;
     }
     return result;
 }
+
+unsigned EntryInfoPtr::calcNumberOfBeams() const
+{ return calcNumberOfBeamsInEdu((*this)->getEntry()->duration); }
 
 template<EntryInfoPtr(EntryInfoPtr::*Iterator)() const>
 EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const

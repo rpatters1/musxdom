@@ -51,6 +51,9 @@ class GFrameHold;
  */
 std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration);
 
+/// @brief Calculates the number of beams or flags in the @ref Edu value.
+unsigned calcNumberOfBeamsFromEdu(Edu duration);
+
 /**
  * @class Note
  * @brief Represents a single note element in an entry.

@@ -239,6 +239,7 @@ using RegisteredOthers = TypeRegistry <
  */
 using RegisteredDetails = TypeRegistry <
     dom::details::GFrameHold,
+    dom::details::SecondaryBeamBreak,
     dom::details::StaffGroup,
     dom::details::TieAlterEnd,
     dom::details::TieAlterStart,
