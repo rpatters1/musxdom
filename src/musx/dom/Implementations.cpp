@@ -1177,35 +1177,32 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
 {
     // grace notes cannot tie backwards; only forwards (see grace note comment above)
     if (m_entry->getEntry()->isNote && !m_entry->getEntry()->graceNote) {
-        bool checkedPreviousMeasure = false;
-        for (auto nextEntry = m_entry.getPrevious(); nextEntry; nextEntry = nextEntry.getPrevious()) {
-            if (m_entry.getMeasure() != nextEntry.getMeasure()) {
-                if (checkedPreviousMeasure) {
-                    break;
-                }
-                checkedPreviousMeasure = true;
+        auto lastEntry = m_entry;
+        bool skippedV2Launch = false;
+        for (auto currEntry = m_entry.getPrevious(); currEntry; lastEntry = currEntry, currEntry = currEntry.getPrevious()) {
+            if (!skippedV2Launch && currEntry->v2Launch && lastEntry->getEntry()->voice2) {
+                skippedV2Launch = true;
+                continue;
             }
-            if (auto result = nextEntry.findEqualPitch(*this)) {
-                if (nextEntry->v2Launch && m_entry->getEntry()->voice2) {
-                    continue;
-                }
+            if (auto result = currEntry.findEqualPitch(*this)) {
                 return result;
             }
-            if (!nextEntry->getEntry()->graceNote) {
-                if (m_entry->getEntry()->voice2) {
-                    break;
-                }
-                if (nextEntry->getEntry()->voice2) {
-                    while (nextEntry) {
-                        auto testEntry = nextEntry.getPrevious();
-                        if (!testEntry || !testEntry->getEntry()->voice2) {
-                            break;
-                        }
-                        nextEntry = testEntry;
+            if (currEntry->getEntry()->graceNote) {
+                continue;
+            }
+            if (lastEntry->getEntry()->voice2) {
+                break;
+            }
+            if (currEntry->getEntry()->voice2) {
+                while (currEntry) {
+                    auto testEntry = currEntry.getPrevious();
+                    if (!testEntry || !testEntry->getEntry()->voice2) {
+                        break;
                     }
-                } else {
-                    break;
+                    currEntry = testEntry;
                 }
+            } else {
+                break;
             }
         }
     }

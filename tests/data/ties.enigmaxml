@@ -1816,10 +1816,6 @@
       <startEntry>33</startEntry>
       <endEntry>36</endEntry>
     </frameSpec>
-    <frameSpec cmper="16" inci="0">
-      <startEntry>37</startEntry>
-      <endEntry>40</endEntry>
-    </frameSpec>
     <frameSpec cmper="17" inci="0">
       <startEntry>41</startEntry>
       <endEntry>44</endEntry>
@@ -1859,6 +1855,10 @@
     <frameSpec cmper="34" inci="0">
       <startEntry>87</startEntry>
       <endEntry>93</endEntry>
+    </frameSpec>
+    <frameSpec cmper="35" inci="0">
+      <startEntry>98</startEntry>
+      <endEntry>100</endEntry>
     </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
@@ -3488,7 +3488,7 @@
     <gfhold cmper1="1" cmper2="5">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
-      <frame1>16</frame1>
+      <frame1>35</frame1>
     </gfhold>
     <gfhold cmper1="1" cmper2="6">
       <clefID>0</clefID>
@@ -3568,12 +3568,6 @@
       <upVertAdjust>12</upVertAdjust>
     </stemAdjust>
     <stemAdjust entnum="36">
-      <downVertAdjust>-12</downVertAdjust>
-    </stemAdjust>
-    <stemAdjust entnum="37">
-      <upVertAdjust>12</upVertAdjust>
-    </stemAdjust>
-    <stemAdjust entnum="38">
       <downVertAdjust>-12</downVertAdjust>
     </stemAdjust>
     <stemAdjust entnum="51">
@@ -4040,16 +4034,11 @@
     </entry>
     <entry entnum="34" prev="33" next="35">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="35" prev="34" next="36">
       <dura>1024</dura>
@@ -4068,7 +4057,7 @@
         <tieStart/>
       </note>
     </entry>
-    <entry entnum="36" prev="35" next="37">
+    <entry entnum="36" prev="35" next="98">
       <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -4082,65 +4071,6 @@
         <harmAlt>0</harmAlt>
         <isValid/>
         <tieStart/>
-      </note>
-    </entry>
-    <entry entnum="37" prev="36" next="38">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <controller/>
-      <beam/>
-      <stemDetail/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>8</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-        <tieEnd/>
-      </note>
-    </entry>
-    <entry entnum="38" prev="37" next="39">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <v2/>
-      <beam/>
-      <stemDetail/>
-      <sorted/>
-      <note id="1">
-        <harmLev>4</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-        <tieEnd/>
-      </note>
-    </entry>
-    <entry entnum="39" prev="38" next="40">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <floatRest/>
-      <beam/>
-      <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="40" prev="39" next="49">
-      <dura>2048</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <floatRest/>
-      <sorted/>
-      <freezeBeam/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
       </note>
     </entry>
     <entry entnum="41" prev="28" next="42">
@@ -4239,31 +4169,21 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="49" prev="40" next="50">
+    <entry entnum="49" prev="100" next="50">
       <dura>2048</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="50" prev="49" next="51">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="51" prev="50" next="52">
       <dura>1024</dura>
@@ -4737,6 +4657,53 @@
         <harmLev>6</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
+      </note>
+    </entry>
+    <entry entnum="98" prev="36" next="101">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <controller/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>4</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+        <tieEnd/>
+      </note>
+    </entry>
+    <entry entnum="99" prev="101" next="100">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="100" prev="99" next="49">
+      <dura>2048</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="101" prev="98" next="99">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <v2/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+        <tieEnd/>
       </note>
     </entry>
   </entries>

@@ -122,4 +122,11 @@ TEST(TieDetection, V1V2TiesAcrossMeasure)
     checkTie(createNoteInfo(entryFrame3, 2, 0), createNoteInfo(entryFrame4, 0, 0));
     checkTie(createNoteInfo(entryFrame3, 3, 0), createNoteInfo(entryFrame4, 0, 1));
 
+    auto gfhold5 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 5);
+    ASSERT_TRUE(gfhold5) << " gfhold not found for 1, 5";
+    auto entryFrame5 = gfhold5->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame5);
+
+    checkTie(createNoteInfo(entryFrame4, 2, 0), createNoteInfo(entryFrame5, 1, 0));
+    checkTie(createNoteInfo(entryFrame4, 3, 0), createNoteInfo(entryFrame5, 0, 0));
 }
