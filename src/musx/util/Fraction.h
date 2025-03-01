@@ -25,6 +25,8 @@
 #include <numeric>
 #include <stdexcept>
 
+#include "musx/dom/Fundamentals.h"
+
 namespace musx {
 namespace util {
 
@@ -102,8 +104,7 @@ public:
     /**
      * @brief Calculates duration as a fraction of a whole note
      */
-    // use `double` rather than `EduFloat` to manage circular header dependency
-    double calcEduDuration() const;
+    dom::Edu calcEduDuration() const;
 
     /**
      * @brief Adds two fractions.

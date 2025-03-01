@@ -186,7 +186,7 @@ std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff() const
 {
     auto entry = (*this)->getEntry();
     return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), getStaff(), getMeasure(),
-        std::lround((*this)->elapsedDuration.calcEduDuration()));
+        (*this)->elapsedDuration.calcEduDuration());
 }
 
 unsigned EntryInfoPtr::calcReverseGraceIndex() const

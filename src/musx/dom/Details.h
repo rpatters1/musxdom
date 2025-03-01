@@ -92,7 +92,7 @@ public:
     /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
     /// @todo This function will need to be augmented for transposing staves.
     ClefIndex calcClefIndexAt(util::Fraction position) const
-    { return calcClefIndexAt(ClefIndex(std::lround(position.calcEduDuration()))); }
+    { return calcClefIndexAt(position.calcEduDuration()); }
 
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *

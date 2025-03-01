@@ -21,39 +21,11 @@
  */
 #pragma once
 
-#include <cstdint>
 #include <cassert>
 #include <filesystem>
 #include <set>
 
-#if defined(_WIN32)
-#define MUSX_RUNNING_ON_WINDOWS
-#elif defined(__APPLE__) && defined(__MACH__)
-#define MUSX_RUNNING_ON_MACOS
-#elif defined(__unix__) || defined(__linux__)
-#define MUSX_RUNNING_ON_LINUX_UNIX
-#else
-#error "Unable to detect operating system platform."
-#endif
-
-#ifdef MUSX_THROW_ON_INTEGRITY_CHECK_FAIL
-#define MUSX_INTEGRITY_ERROR(S) throw ::musx::dom::integrity_error(S)
-#else
-#define MUSX_INTEGRITY_ERROR(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
-#endif
-
-#ifdef MUSX_THROW_ON_UNKNOWN_XML
-#define MUSX_UNKNOWN_XML(S) throw ::musx::factory::unknown_xml_error(S)
-#else
-#define MUSX_UNKNOWN_XML(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
-#endif
-
-
-#define MUSX_ASSERT_IF(TEST) \
-assert(!(TEST)); \
-if (TEST)
-
-
+#include "musx/dom/Fundamentals.h"
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
@@ -76,29 +48,6 @@ class integrity_error : public std::runtime_error
 public:
     using std::runtime_error::runtime_error;
 };
-
-using Cmper = uint16_t;             ///< Enigma "comperator" key type
-using Inci = int16_t;               ///< Enigma "incident" key type
-using Evpu = int32_t;               ///< EVPU value (288 per inch)
-using EvpuFloat = double;           ///< EVPU fractional value (288.0 per inch)
-using Evpu16ths = int32_t;          ///< 1/16 of an EVPU.
-using Efix = int32_t;               ///< EFIX value (64 per EVPU, 64*288=18432 per inch)
-using Edu = int32_t;                ///< "Enigma Durational Units" value (1024 per quarter note)
-using EduFloat = double;            ///< "Enigma Durational Units" floating point value (1024.0 per quarter note)
-
-using MeasCmper = int16_t;          ///< Enigma meas Cmper (may be negative when not applicable)
-using InstCmper = int16_t;          ///< Enigma staff (inst) Cmper (may be negative when not applicable)
-using SystemCmper = int16_t;        ///< Enigma systems Cmper (may be negative when not applicable)
-using ClefIndex = uint16_t;         ///< Index into @ref options::ClefOptions::clefDefs.
-using EntryNumber = int32_t;        ///< Entry identifier.
-using NoteNumber = uint16_t;        ///< Note identifier.
-using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
-using BeamNumber = unsigned int;    ///< A number where 1 corresponds to the primary (8th note) beam, 2 the 16th beam, 3 the 32nd beam, etc.
-
-constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
-constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
-constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
-constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::InstrumentUsed cmper)
 
 class Document;
 /** @brief Shared `Document` pointer */
