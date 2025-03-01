@@ -23,6 +23,7 @@
 #include <functional>
 #include <vector>
 #include <unordered_set>
+#include <cmath>
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
