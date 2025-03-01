@@ -29,18 +29,13 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::details;
 
+extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<others::Measure::BarlineType> XmlEnumMapping<others::Measure::BarlineType>::mapping;
 extern template const XmlEnumMappingElement<others::NamePositioning::AlignJustify> XmlEnumMapping<others::NamePositioning::AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::AutoBracketStyle> XmlEnumMapping<options::TupletOptions::AutoBracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::BracketStyle> XmlEnumMapping<options::TupletOptions::BracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::NumberStyle> XmlEnumMapping<options::TupletOptions::NumberStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::PositioningStyle> XmlEnumMapping<options::TupletOptions::PositioningStyle>::mapping;
-
-MUSX_XML_ENUM_MAPPING(GFrameHold::ShowClefMode, {
-    // {"whenNeeded", GFrameHold::ShowClefMode::WhenNeeded}, this is the default and may never appear in the xml
-    {"hidden", GFrameHold::ShowClefMode::Never},
-    {"forced", GFrameHold::ShowClefMode::Always}
-});
 
 MUSX_XML_ENUM_MAPPING(StaffGroup::HideStaves, {
     // {"Normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
@@ -65,13 +60,27 @@ using namespace ::musx::factory;
 MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"clefID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefId = e->getTextAs<ClefIndex>(); }},
     {"clefListID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefListId = e->getTextAs<Cmper>(); }},
-    {"clefMode", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->showClefMode = toEnum<GFrameHold::ShowClefMode>(e); }},
+    {"clefMode", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->showClefMode = toEnum<ShowClefMode>(e); }},
     {"mirrorFrame", [](const XmlElementPtr&, const std::shared_ptr<GFrameHold>& i) { i->mirrorFrame = true; }},
     {"clefPercent", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefPercent = e->getTextAs<int>(); }},
     {"frame1", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[0] = e->getTextAs<Cmper>(); }},
     {"frame2", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[1] = e->getTextAs<Cmper>(); }},
     {"frame3", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[2] = e->getTextAs<Cmper>(); }},
     {"frame4", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[3] = e->getTextAs<Cmper>(); }},
+    });
+
+// XML mappings for the SecondaryBeamBreak class
+MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
+    {"do16th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note16th); }},
+    {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
+    {"do64th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note64th); }},
+    {"do128th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note128th); }},
+    {"do256th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note256th); }},
+    {"do512th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note512th); }},
+    {"do1024th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
+    {"do2048th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
+    {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
+    {"beamThrough", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->breakThrough = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffGroup::Bracket, {
@@ -107,6 +116,36 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"fullExpand", [](const XmlElementPtr&, const std::shared_ptr<StaffGroup>& i) { i->fullNameExpand = true; }},
     {"abbrvExpand", [](const XmlElementPtr&, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameExpand = true; }},
     {"optimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideStaves = toEnum<StaffGroup::HideStaves>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"xStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xStart = e->getTextAs<Evpu>(); }},
+    {"xEnd", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xEnd = e->getTextAs<Evpu>(); }},
+    {"yStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yStart = e->getTextAs<Evpu>(); }},
+    {"yEnd", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yEnd = e->getTextAs<Evpu>(); }},
+    {"outerLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->outerLocal = true; }},
+    {"afterSingleDotLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotLocal = true; }},
+    {"afterSingleDotOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotOn = true; }},
+    {"afterMultiDotsLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsLocal = true; }},
+    {"afterMultiDotsOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsOn = true; }},
+    {"shiftForSecondsLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->shiftForSecondsLocal = true; }},
+    {"shiftForSecondsOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->shiftForSecondsOn = true; }},
+    {"beforeSingleAcciLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->beforeSingleAcciLocal = true; }},
+    {"beforeSingleAcciOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->beforeSingleAcciOn = true; }},
+    {"down", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->down = true; }},
+    {"breakTimeLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->breakTimeLocal = true; }},
+    {"breakTimeOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->breakTimeOn = true; }},
+    {"breakKeyLocal", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyLocal = true; }},
+    {"breakKeyOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyOn = true; }},
+    {"freeze", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->freezeDirection = true; }},
+    {"stPtAdjOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->stPtAdjOn = true; }},
+    {"enPtAdjOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->enPtAdjOn = true; }},
+    {"insetRatio1", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio1 = e->getTextAs<Evpu>(); }},
+    {"height1", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height1 = e->getTextAs<Evpu>(); }},
+    {"insetRatio2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio2 = e->getTextAs<Evpu>(); }},
+    {"height2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height2 = e->getTextAs<Evpu>(); }},
+    {"ctlPtAdjOn", [](const XmlElementPtr&, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtAdjOn = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TupletDef, {

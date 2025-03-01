@@ -29,8 +29,15 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::others;
 
+extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
+
 // Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
+
+MUSX_XML_ENUM_MAPPING(FontDefinition::CharacterSetBank, {
+    {"Mac", FontDefinition::CharacterSetBank::MacOS},
+    {"Win", FontDefinition::CharacterSetBank::Windows},
+});
 
 MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
     //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
@@ -91,12 +98,12 @@ MUSX_XML_ENUM_MAPPING(Staff::StemDirection, {
     {"alwaysDown", Staff::StemDirection::AlwaysDown},
 });
 
-MUSX_XML_ENUM_MAPPING(TextBlock::TextType, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::TextBlock::TextType, {
     {"block", TextBlock::TextType::Block},
     {"expression", TextBlock::TextType::Expression}
 });
 
-MUSX_XML_ENUM_MAPPING(RehearsalMarkStyle, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::RehearsalMarkStyle, {
     {"letters", RehearsalMarkStyle::Letters},
     {"letNum", RehearsalMarkStyle::LetterNumbers},
     {"lettersLc", RehearsalMarkStyle::LettersLowerCase},
@@ -105,7 +112,7 @@ MUSX_XML_ENUM_MAPPING(RehearsalMarkStyle, {
     {"measNum", RehearsalMarkStyle::MeasureNumber}
 });
 
-MUSX_XML_ENUM_MAPPING(RepeatActionType, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::RepeatActionType, {
     {"jumpAuto", RepeatActionType::JumpAuto}, // This is the default and is not known to occur in the XML, but the string exists in Finale
     {"jumpAbsolute", RepeatActionType::JumpAbsolute},
     {"jumpRelative", RepeatActionType::JumpRelative},
@@ -114,13 +121,13 @@ MUSX_XML_ENUM_MAPPING(RepeatActionType, {
     {"noJump", RepeatActionType::NoJump},
 });
 
-MUSX_XML_ENUM_MAPPING(RepeatTriggerType, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::RepeatTriggerType, {
     // {"always", RepeatTriggerType::Always}, // This is the default and is not known to occur in the XML.
     {"onPass", RepeatTriggerType::OnPass},
     {"untilPass", RepeatTriggerType::UntilPass},
 });
 
-MUSX_XML_ENUM_MAPPING(PlaybackType, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::PlaybackType, {
     {"none", PlaybackType::None},
     {"time", PlaybackType::Tempo},
     {"midiController", PlaybackType::MidiController},
@@ -140,7 +147,7 @@ MUSX_XML_ENUM_MAPPING(PlaybackType, {
     {"hpOff", PlaybackType::SmartPlaybackOff}
 });
 
-MUSX_XML_ENUM_MAPPING(HorizontalMeasExprAlign, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::HorizontalMeasExprAlign, {
     {"manual", HorizontalMeasExprAlign::Manual},
     {"leftOfAllNoteheads", HorizontalMeasExprAlign::LeftOfAllNoteheads},
     {"leftOfPrimaryNotehead", HorizontalMeasExprAlign::LeftOfPrimaryNotehead},
@@ -157,7 +164,7 @@ MUSX_XML_ENUM_MAPPING(HorizontalMeasExprAlign, {
     {"rightEdge", HorizontalMeasExprAlign::RightBarline}
 });
 
-MUSX_XML_ENUM_MAPPING(VerticalMeasExprAlign, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::VerticalMeasExprAlign, {
     {"manual", VerticalMeasExprAlign::Manual},
     {"refLine", VerticalMeasExprAlign::RefLine},
     {"aboveStaff", VerticalMeasExprAlign::AboveStaff},
@@ -170,13 +177,13 @@ MUSX_XML_ENUM_MAPPING(VerticalMeasExprAlign, {
     {"belowStaffOrEntry", VerticalMeasExprAlign::BelowStaffOrEntry}
 });
 
-MUSX_XML_ENUM_MAPPING(HorizontalTextJustification, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::HorizontalTextJustification, {
     {"left", HorizontalTextJustification::Left},
     {"center", HorizontalTextJustification::Center},
     {"right", HorizontalTextJustification::Right}
 });
 
-MUSX_XML_ENUM_MAPPING(MarkingCategory::CategoryType, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::MarkingCategory::CategoryType, {
     {"dynamics", MarkingCategory::CategoryType::Dynamics},
     {"tempoMarks", MarkingCategory::CategoryType::TempoMarks},
     {"tempoAlts", MarkingCategory::CategoryType::TempoAlterations},
@@ -186,7 +193,7 @@ MUSX_XML_ENUM_MAPPING(MarkingCategory::CategoryType, {
     {"misc", MarkingCategory::CategoryType::Misc}
 });
 
-MUSX_XML_ENUM_MAPPING(TextRepeatDef::PoundReplaceOption, {
+MUSX_XML_ENUM_MAPPING(musx::dom::others::TextRepeatDef::PoundReplaceOption, {
     {"passes", TextRepeatDef::PoundReplaceOption::Passes}, // This is the default and may not appear in the XML, but the string in the Finale app binary
     {"repeatID", TextRepeatDef::PoundReplaceOption::RepeatID},
     {"measNum", TextRepeatDef::PoundReplaceOption::MeasureNumber},
@@ -199,21 +206,35 @@ namespace others {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
-MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
-    {"textExprID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->textExprId = e->getTextAs<Cmper>(); }},
-    {"shapeExprID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->shapeExprId = e->getTextAs<Cmper>(); }},
-    {"horzEvpuOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->horzEvpuOff = e->getTextAs<Evpu>(); }},
-    {"horzEduOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
-    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->vertEvpuOff = e->getTextAs<Evpu>(); }},
-    {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<InstCmper>(); }},
-    {"layer", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->layer = e->getTextAs<int>(); }},
-    {"dontScaleWithEntry", [](const XmlElementPtr&, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = true; }},
-    {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
-    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+MUSX_XML_ELEMENT_ARRAY(AcciAmountFlats, {
+    {"amount", [](const XmlElementPtr& e, const std::shared_ptr<AcciAmountFlats>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(AcciAmountSharps, {
+    {"amount", [](const XmlElementPtr& e, const std::shared_ptr<AcciAmountSharps>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(AcciOrderFlats, {
+    {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderFlats>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(AcciOrderSharps, {
+    {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderSharps>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ClefList, {
+    {"clef", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->clefIndex = e->getTextAs<ClefIndex>(); }},
+    {"xEduPos", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->xEduPos = e->getTextAs<Edu>(); }},
+    {"yEvpuPos", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->yEvpuPos = e->getTextAs<Evpu>(); }},
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->percent = e->getTextAs<int>(); }},
+    {"xEvpuOffset", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->xEvpuOffset = e->getTextAs<int>(); }},
+    {"clefMode", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->clefMode = toEnum<ShowClefMode>(e); }},
+    {"unlockVert", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->unlockVert = true; }},
+    {"afterBarline", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->afterBarline = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
-    {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = e->getText(); }},
+    {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = toEnum<FontDefinition::CharacterSetBank>(e); }},
     {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},
     {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->pitch = e->getTextAs<int>(); }},
     {"family", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->family = e->getTextAs<int>(); }},
@@ -315,6 +336,19 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"leftBarline", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->leftBarlineType = toEnum<Measure::BarlineType>(e); }},
     {"displayAltNumTsig", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->compositeDispNumerator = true; }},
     {"displayAltDenTsig", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->compositeDispDenominator = true; }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
+    {"textExprID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->textExprId = e->getTextAs<Cmper>(); }},
+    {"shapeExprID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->shapeExprId = e->getTextAs<Cmper>(); }},
+    {"horzEvpuOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->horzEvpuOff = e->getTextAs<Evpu>(); }},
+    {"horzEduOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
+    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->vertEvpuOff = e->getTextAs<Evpu>(); }},
+    {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<InstCmper>(); }},
+    {"layer", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->layer = e->getTextAs<int>(); }},
+    {"dontScaleWithEntry", [](const XmlElementPtr&, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = true; }},
+    {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
@@ -468,7 +502,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatEndingText, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
-    {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->endingNumbers.push_back(e->getTextAs<int>()); }},
+    {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
@@ -518,13 +552,16 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
     {"hideStems", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hideStems = true; }},
+    {"hideBeams", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hideBeams = true; }},
     {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection= toEnum<Staff::StemDirection>(e); }},
     {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e); }},
     {"useAutoNum", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->useAutoNumbering = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
+    {"defaultClef", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->defaultClef = true; }},
     {"staffType", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->staffType = true; }},
+    {"transposition", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->transposition = true; }},
     {"negNameScore", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->negNameScore = true; }},
     {"fullName", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullName = true; }},
     {"abrvName", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvName = true; }},
@@ -687,7 +724,15 @@ MUSX_XML_ELEMENT_ARRAY(TimeCompositeUpper, {
         i->items.push_back(FieldPopulator<TimeCompositeUpper::CompositeItem>::createAndPopulate(e));
     }},
 });
-    
+
+MUSX_XML_ELEMENT_ARRAY(TonalCenterFlats, {
+    {"tcent", [](const XmlElementPtr& e, const std::shared_ptr<TonalCenterFlats>& i) { i->values.push_back(e->getTextAs<unsigned>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TonalCenterSharps, {
+    {"tcent", [](const XmlElementPtr& e, const std::shared_ptr<TonalCenterSharps>& i) { i->values.push_back(e->getTextAs<unsigned>()); }},
+});
+
 } // namespace others
 } // namespace dom
 } // namespace musx

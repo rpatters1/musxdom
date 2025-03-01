@@ -358,7 +358,22 @@ public:
     template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     std::shared_ptr<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
     { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci}); }
+
+    /// @brief Returns the detail for a particular note
+    template <typename T, typename std::enable_if_t<std::is_base_of_v<NoteDetailsBase, T>, int> = 0>
+    std::shared_ptr<T> getForNote(const NoteInfoPtr noteInfo)
+    {
+        auto entry = noteInfo.getEntryInfo()->getEntry();
+        auto details = getArray<T>(entry->getPartId(), entry->getEntryNumber());
+        for (const auto& detail : details) {
+            if (detail->getNoteId() == noteInfo->getNoteId()) {
+                return detail;
+            }
+        }
+        return nullptr;
+    }
 };
+
 /** @brief Shared `DetailsPool` pointer */
 using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
 

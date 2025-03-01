@@ -98,6 +98,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <topRepeatDotOff>-3</topRepeatDotOff>
       <botRepeatDotOff>-5</botRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
+      <hideStems/>
       <stemDir>alwaysUp</stemDir>
     </staffSpec>
     <staffSpec cmper="16">
@@ -117,6 +118,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <topRepeatDotOff>-2</topRepeatDotOff>
       <botRepeatDotOff>-6</botRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
+      <hideBeams/>
       <stemDir>alwaysDown</stemDir>
       <autoNum>arabicPrefix</autoNum>
       <useAutoNum/>
@@ -151,6 +153,8 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff1->topRepeatDotOff, -3);
     EXPECT_EQ(staff1->botRepeatDotOff, -5);
     EXPECT_EQ(staff1->vertTabNumOff, -1024);
+    EXPECT_TRUE(staff1->hideStems);
+    EXPECT_FALSE(staff1->hideBeams);
     EXPECT_EQ(staff1->stemDirection, others::Staff::StemDirection::AlwaysUp);
     EXPECT_EQ(staff1->autoNumbering, others::Staff::AutoNumberingStyle::ArabicSuffix);
     EXPECT_EQ(staff1->useAutoNumbering, false);
@@ -175,6 +179,8 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff2->topRepeatDotOff, -2);
     EXPECT_EQ(staff2->botRepeatDotOff, -6);
     EXPECT_EQ(staff2->vertTabNumOff, -1024);
+    EXPECT_FALSE(staff2->hideStems);
+    EXPECT_TRUE(staff2->hideBeams);
     EXPECT_EQ(staff2->stemDirection, others::Staff::StemDirection::AlwaysDown);
     EXPECT_EQ(staff2->autoNumbering, others::Staff::AutoNumberingStyle::ArabicPrefix);
     EXPECT_EQ(staff2->useAutoNumbering, true);
@@ -236,4 +242,124 @@ TEST(StaffTest, AutoNumbering)
     EXPECT_EQ(staff3->addAutoNumbering("Name"), "Name C");
     staff3->autoNumbering = others::Staff::AutoNumberingStyle::ArabicPrefix;
     EXPECT_EQ(staff3->addAutoNumbering("Name"), "3. Name");
+}
+
+TEST(StaffText, StaffLines)
+{
+  constexpr static musxtest::string_view staffLinesXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+  <finale>
+    <others>
+      <staffSpec cmper="1">
+        <staffLines>5</staffLines>
+        <lineSpace>24</lineSpace>
+        <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+        <dwRestOffset>-4</dwRestOffset>
+        <wRestOffset>-4</wRestOffset>
+        <hRestOffset>-4</hRestOffset>
+        <otherRestOffset>-4</otherRestOffset>
+        <stemReversal>-4</stemReversal>
+        <botRepeatDotOff>-5</botRepeatDotOff>
+        <topRepeatDotOff>-3</topRepeatDotOff>
+        <vertTabNumOff>-1024</vertTabNumOff>
+      </staffSpec>
+      <staffSpec cmper="2">
+        <customStaff>
+          <staffLine>13</staffLine>
+        </customStaff>
+        <lineSpace>24</lineSpace>
+        <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+        <botBarlineOffset>-24</botBarlineOffset>
+        <topBarlineOffset>24</topBarlineOffset>
+        <dwRestOffset>-5</dwRestOffset>
+        <wRestOffset>-6</wRestOffset>
+        <hRestOffset>-4</hRestOffset>
+        <otherRestOffset>-4</otherRestOffset>
+        <stemReversal>-4</stemReversal>
+        <botRepeatDotOff>-5</botRepeatDotOff>
+        <topRepeatDotOff>-3</topRepeatDotOff>
+        <vertTabNumOff>-1024</vertTabNumOff>
+      </staffSpec>
+      <staffSpec cmper="3">
+        <staffLines>1</staffLines>
+        <lineSpace>24</lineSpace>
+        <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+        <dwRestOffset>-4</dwRestOffset>
+        <wRestOffset>-4</wRestOffset>
+        <hRestOffset>-4</hRestOffset>
+        <otherRestOffset>-4</otherRestOffset>
+        <stemReversal>-4</stemReversal>
+        <botRepeatDotOff>-5</botRepeatDotOff>
+        <topRepeatDotOff>-3</topRepeatDotOff>
+        <vertTabNumOff>-1024</vertTabNumOff>
+      </staffSpec>
+      <staffSpec cmper="4">
+        <customStaff>
+          <staffLine>11</staffLine>
+          <staffLine>12</staffLine>
+          <staffLine>13</staffLine>
+          <staffLine>14</staffLine>
+          <staffLine>15</staffLine>
+          <staffLine>18</staffLine>
+        </customStaff>
+        <lineSpace>24</lineSpace>
+        <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+        <dwRestOffset>-4</dwRestOffset>
+        <wRestOffset>-4</wRestOffset>
+        <hRestOffset>-4</hRestOffset>
+        <otherRestOffset>-4</otherRestOffset>
+        <stemReversal>-4</stemReversal>
+        <botRepeatDotOff>-5</botRepeatDotOff>
+        <topRepeatDotOff>-3</topRepeatDotOff>
+        <vertTabNumOff>-1024</vertTabNumOff>
+      </staffSpec>
+      <staffSpec cmper="5">
+        <staffLines>3</staffLines>
+        <lineSpace>24</lineSpace>
+        <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+        <dwRestOffset>-4</dwRestOffset>
+        <wRestOffset>-4</wRestOffset>
+        <hRestOffset>-4</hRestOffset>
+        <otherRestOffset>-4</otherRestOffset>
+        <stemReversal>-4</stemReversal>
+        <botRepeatDotOff>-5</botRepeatDotOff>
+        <topRepeatDotOff>-3</topRepeatDotOff>
+        <vertTabNumOff>-1024</vertTabNumOff>
+      </staffSpec>
+      <staffSpec cmper="6">
+        <customStaff>
+          <staffLine>12</staffLine>
+          <staffLine>13</staffLine>
+          <staffLine>14</staffLine>
+        </customStaff>
+        <lineSpace>24</lineSpace>
+        <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+        <dwRestOffset>-4</dwRestOffset>
+        <wRestOffset>-4</wRestOffset>
+        <hRestOffset>-4</hRestOffset>
+        <otherRestOffset>-4</otherRestOffset>
+        <stemReversal>-4</stemReversal>
+        <botRepeatDotOff>-5</botRepeatDotOff>
+        <topRepeatDotOff>-3</topRepeatDotOff>
+        <vertTabNumOff>-1024</vertTabNumOff>
+      </staffSpec>
+    </others>
+  </finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(staffLinesXml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto staves = others->getArray<others::Staff>(SCORE_PARTID);
+
+    const std::vector<int> expectedValues = { -4, -4, 0, -7, -2, -4 };
+    size_t x = 0;
+    for (; x < staves.size(); x++) {
+      EXPECT_LT(x, expectedValues.size()) << "too few expected values";
+      if (x >= expectedValues.size()) break;
+      const auto& staff = staves[x];
+      EXPECT_EQ(staff->calcMiddleStaffPosition(), expectedValues[x]);
+    }
+    EXPECT_EQ(x, staves.size());
 }

@@ -220,7 +220,7 @@ public:
             
         int middleCPos{};               ///< Staff position of middle-C for this clef (from top staffline). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
-        int staffPositon{};             ///< Staff position of the clef symbol's baseline (from top staffline). (xml node is `<clefYDisp>`)
+        int staffPositon{};             ///< Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is `<clefYDisp>`)
         Efix baselineAdjust{};          ///< Additional baseline adjustment in Efix. (xml node is `<baseAdjust>`)
         Cmper shapeId{};                ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
         bool isShape{};                 ///< Indicates if the clef is a shape.
@@ -602,8 +602,10 @@ public:
  * @class MusicSymbolOptions
  * @brief Options specifying the charactes for musical symbols.
  *
- * These are values are the character codes from the default music font. If the default music font is
- * SMuFL-compliant, they will be SMuFL glyph values. Otherwise, they are most likely Maestro font values.
+ * These values are code points from the default music font. If the default music font is
+ * SMuFL-compliant, they are SMuFL glyph values. Otherwise, they are most likely Maestro font values.
+ * Note that Maestro font values are symbol code points, not Unicode. Use #FontInfo::calcIsSymbolFont to
+ * check if the current non-SMuFL music font is using symbol code points.
  *
  * This class is identified by the XML node name "musicSymbolOptions".
  */
@@ -616,71 +618,71 @@ public:
     {
     }
 
-    char32_t noteheadQuarter{};       ///< Unicode for quarter notehead
-    char32_t noteheadHalf{};          ///< Unicode for half notehead
-    char32_t noteheadWhole{};         ///< Unicode for whole notehead
-    char32_t noteheadDblWhole{};      ///< Unicode for double whole notehead
-    char32_t natural{};               ///< Unicode for natural sign
-    char32_t flat{};                  ///< Unicode for flat sign
-    char32_t sharp{};                 ///< Unicode for sharp sign
-    char32_t dblFlat{};               ///< Unicode for double flat sign
-    char32_t dblSharp{};              ///< Unicode for double sharp sign
-    char32_t parenNatural{};          ///< Unicode for parenthesized natural
-    char32_t parenFlat{};             ///< Unicode for parenthesized flat
-    char32_t parenSharp{};            ///< Unicode for parenthesized sharp
-    char32_t parenDblFlat{};          ///< Unicode for parenthesized double flat
-    char32_t parenDblSharp{};         ///< Unicode for parenthesized double sharp
-    char32_t chordNatural{};          ///< Unicode for chord natural sign
-    char32_t chordFlat{};             ///< Unicode for chord flat sign
-    char32_t chordSharp{};            ///< Unicode for chord sharp sign
-    char32_t chordDblFlat{};          ///< Unicode for chord double flat sign
-    char32_t chordDblSharp{};         ///< Unicode for chord double sharp sign
-    char32_t keySigNatural{};         ///< Unicode for key signature natural
-    char32_t keySigFlat{};            ///< Unicode for key signature flat
-    char32_t keySigSharp{};           ///< Unicode for key signature sharp
-    char32_t keySigDblFlat{};         ///< Unicode for key signature double flat
-    char32_t keySigDblSharp{};        ///< Unicode for key signature double sharp
-    char32_t restLonga{};             ///< Unicode for longa rest
-    char32_t restDblWhole{};          ///< Unicode for double whole rest
-    char32_t restWhole{};             ///< Unicode for whole rest
-    char32_t restHalf{};              ///< Unicode for half rest
-    char32_t restQuarter{};           ///< Unicode for quarter rest
-    char32_t restEighth{};            ///< Unicode for eighth rest
-    char32_t rest16th{};              ///< Unicode for 16th rest
-    char32_t rest32nd{};              ///< Unicode for 32nd rest
-    char32_t rest64th{};              ///< Unicode for 64th rest
-    char32_t rest128th{};             ///< Unicode for 128th rest
-    char32_t restDefMeas{};           ///< Unicode for default measure rest
-    char32_t oneBarRepeat{};          ///< Unicode for one-bar repeat
-    char32_t twoBarRepeat{};          ///< Unicode for two-bar repeat
-    char32_t slashBar{};              ///< Unicode for slash bar
-    char32_t quarterSlash{};          ///< Unicode for quarter slash
-    char32_t halfSlash{};             ///< Unicode for half slash
-    char32_t wholeSlash{};            ///< Unicode for whole slash
-    char32_t dblWholeSlash{};         ///< Unicode for double whole slash
-    char32_t timeSigPlus{};           ///< Unicode for time signature plus sign
-    char32_t timeSigPlusParts{};      ///< Unicode for time signature plus (parts)
-    char32_t timeSigAbrvCommon{};     ///< Unicode for common time abbreviation
-    char32_t timeSigAbrvCut{};        ///< Unicode for cut time abbreviation
-    char32_t timeSigAbrvCommonParts{}; ///< Unicode for common time abbreviation (parts)
-    char32_t timeSigAbrvCutParts{};   ///< Unicode for cut time abbreviation (parts)
-    char32_t augDot{};                ///< Unicode for augmentation dot
-    char32_t forwardRepeatDot{};      ///< Unicode for forward repeat dot
-    char32_t backRepeatDot{};         ///< Unicode for backward repeat dot
-    char32_t eightVaUp{};             ///< Unicode for 8va (ottava) up
-    char32_t eightVbDown{};           ///< Unicode for 8vb (ottava) down
-    char32_t fifteenMaUp{};           ///< Unicode for 15ma (quindicesima) up
-    char32_t fifteenMbDown{};         ///< Unicode for 15mb (quindicesima) down
-    char32_t trillChar{};             ///< Unicode for trill symbol
-    char32_t wiggleChar{};            ///< Unicode for wiggle (trill line) symbol
-    char32_t flagUp{};                ///< Unicode for upward flag
-    char32_t flagDown{};              ///< Unicode for downward flag
-    char32_t flag16Up{};              ///< Unicode for 16th note upward flag
-    char32_t flag16Down{};            ///< Unicode for 16th note downward flag
-    char32_t flag2Up{};               ///< Unicode for 32nd note upward flag
-    char32_t flag2Down{};             ///< Unicode for 32nd note downward flag
-    char32_t flagStraightUp{};        ///< Unicode for straight upward flag
-    char32_t flagStraightDown{};      ///< Unicode for straight downward flag
+    char32_t noteheadQuarter{};       ///< Code point for quarter notehead
+    char32_t noteheadHalf{};          ///< Code point for half notehead
+    char32_t noteheadWhole{};         ///< Code point for whole notehead
+    char32_t noteheadDblWhole{};      ///< Code point for double whole notehead
+    char32_t natural{};               ///< Code point for natural sign
+    char32_t flat{};                  ///< Code point for flat sign
+    char32_t sharp{};                 ///< Code point for sharp sign
+    char32_t dblFlat{};               ///< Code point for double flat sign
+    char32_t dblSharp{};              ///< Code point for double sharp sign
+    char32_t parenNatural{};          ///< Code point for parenthesized natural
+    char32_t parenFlat{};             ///< Code point for parenthesized flat
+    char32_t parenSharp{};            ///< Code point for parenthesized sharp
+    char32_t parenDblFlat{};          ///< Code point for parenthesized double flat
+    char32_t parenDblSharp{};         ///< Code point for parenthesized double sharp
+    char32_t chordNatural{};          ///< Code point for chord natural sign
+    char32_t chordFlat{};             ///< Code point for chord flat sign
+    char32_t chordSharp{};            ///< Code point for chord sharp sign
+    char32_t chordDblFlat{};          ///< Code point for chord double flat sign
+    char32_t chordDblSharp{};         ///< Code point for chord double sharp sign
+    char32_t keySigNatural{};         ///< Code point for key signature natural
+    char32_t keySigFlat{};            ///< Code point for key signature flat
+    char32_t keySigSharp{};           ///< Code point for key signature sharp
+    char32_t keySigDblFlat{};         ///< Code point for key signature double flat
+    char32_t keySigDblSharp{};        ///< Code point for key signature double sharp
+    char32_t restLonga{};             ///< Code point for longa rest
+    char32_t restDblWhole{};          ///< Code point for double whole rest
+    char32_t restWhole{};             ///< Code point for whole rest
+    char32_t restHalf{};              ///< Code point for half rest
+    char32_t restQuarter{};           ///< Code point for quarter rest
+    char32_t restEighth{};            ///< Code point for eighth rest
+    char32_t rest16th{};              ///< Code point for 16th rest
+    char32_t rest32nd{};              ///< Code point for 32nd rest
+    char32_t rest64th{};              ///< Code point for 64th rest
+    char32_t rest128th{};             ///< Code point for 128th rest
+    char32_t restDefMeas{};           ///< Code point for default measure rest
+    char32_t oneBarRepeat{};          ///< Code point for one-bar repeat
+    char32_t twoBarRepeat{};          ///< Code point for two-bar repeat
+    char32_t slashBar{};              ///< Code point for slash bar
+    char32_t quarterSlash{};          ///< Code point for quarter slash
+    char32_t halfSlash{};             ///< Code point for half slash
+    char32_t wholeSlash{};            ///< Code point for whole slash
+    char32_t dblWholeSlash{};         ///< Code point for double whole slash
+    char32_t timeSigPlus{};           ///< Code point for time signature plus sign
+    char32_t timeSigPlusParts{};      ///< Code point for time signature plus (parts)
+    char32_t timeSigAbrvCommon{};     ///< Code point for common time abbreviation
+    char32_t timeSigAbrvCut{};        ///< Code point for cut time abbreviation
+    char32_t timeSigAbrvCommonParts{}; ///< Code point for common time abbreviation (parts)
+    char32_t timeSigAbrvCutParts{};   ///< Code point for cut time abbreviation (parts)
+    char32_t augDot{};                ///< Code point for augmentation dot
+    char32_t forwardRepeatDot{};      ///< Code point for forward repeat dot
+    char32_t backRepeatDot{};         ///< Code point for backward repeat dot
+    char32_t eightVaUp{};             ///< Code point for 8va (ottava) up
+    char32_t eightVbDown{};           ///< Code point for 8vb (ottava) down
+    char32_t fifteenMaUp{};           ///< Code point for 15ma (quindicesima) up
+    char32_t fifteenMbDown{};         ///< Code point for 15mb (quindicesima) down
+    char32_t trillChar{};             ///< Code point for trill symbol
+    char32_t wiggleChar{};            ///< Code point for wiggle (trill line) symbol
+    char32_t flagUp{};                ///< Code point for upward flag
+    char32_t flagDown{};              ///< Code point for downward flag
+    char32_t flag16Up{};              ///< Code point for 16th note upward flag
+    char32_t flag16Down{};            ///< Code point for 16th note downward flag
+    char32_t flag2Up{};               ///< Code point for 32nd note upward flag
+    char32_t flag2Down{};             ///< Code point for 32nd note downward flag
+    char32_t flagStraightUp{};        ///< Code point for straight upward flag
+    char32_t flagStraightDown{};      ///< Code point for straight downward flag
 
     constexpr static std::string_view XmlNodeName = "musicSymbolOptions"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MusicSymbolOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1307,16 +1309,17 @@ public:
 
     /** @brief Number style options.
      * 
-     * @warning Finale appears to have implemented `RatioPlusBothNotes` and `RatioPlusDenominatorNote`
-     * backwards from how they are named. It is probably a long-standing bug that was never worth fixing.
+     * @note Finale appears to have implemented `RatioPlusBothNotes` and `RatioPlusDenominatorNote`
+     * backwards from how they are named in the xml. It is probably a long-standing bug that was never worth fixing.
+     * This DOM corrects the mistake by reversing their mapping in the enum mapping.
     */
     enum class NumberStyle
     {
         Nothing,                    ///< The default
         Number,                     ///< Number only
         UseRatio,                   ///< Ratio X:Y
-        RatioPlusBothNotes,         ///< @warning displays a note value on the denominator
-        RatioPlusDenominatorNote,   ///< @warning display notes on both values (xml value is "ratioPlusDenNote")
+        RatioPlusDenominatorNote,   ///< displays a note value only on the denominator (xml value is "ratioPlusBothNotes")
+        RatioPlusBothNotes,         ///< display notes on both values (xml value is "ratioPlusDenNote")
     };
 
     /** @brief Positioning style options. */

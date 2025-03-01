@@ -38,9 +38,13 @@ enable_testing()
 add_executable(musxdomtests
 	musxdomtests.cpp
 	document.cpp
-    entries.cpp
 	header.cpp
 	pool.cpp
+    # entries
+    entries/beam_detection.cpp
+    entries/entries.cpp
+    entries/keysigs.cpp
+    entries/ties.cpp
     # options
     options/accidental_options.cpp
     options/alternate_notation_options.cpp
@@ -88,7 +92,9 @@ add_executable(musxdomtests
     others/text.cpp
     # details
 	details/gfhold.cpp
+	details/secondary_beams.cpp
 	details/staff_group.cpp
+    details/tie_alter.cpp
     details/tuplet_def.cpp
 )
 

@@ -78,7 +78,7 @@ std::shared_ptr<Entry> Entry::getPrevious() const
     return retval;
 }
 
-NoteType calcNoteTypeFromEdu(Edu duration)
+std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 {
     if (duration <= 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
@@ -86,22 +86,358 @@ NoteType calcNoteTypeFromEdu(Edu duration)
 
     // Find the most significant bit position
     Edu value = duration;
-    Edu msb = 1;
+    Edu noteValueMsb = 1;
     while (value > 1) {
         value >>= 1;
-        msb <<= 1;
+        noteValueMsb <<= 1;
     }
 
-    return static_cast<NoteType>(msb);
-}
-
-int calcAugmentationDotsFromEdu(Edu duration)
-{
-    int count = 0;
-    for (Edu msb = Edu(calcNoteTypeFromEdu(duration)) >> 1; duration & msb; msb >>= 1) {
+    unsigned count = 0;
+    for (Edu dotMsb = noteValueMsb >> 1; duration & dotMsb; dotMsb >>= 1) {
         count++;
     }
-    return count;
+
+    return std::make_pair(NoteType(noteValueMsb), count);
+}
+
+// **********************
+// ***** EntryFrame *****
+// **********************
+
+EntryFrame::EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex) :
+    Base(gfhold.getDocument(), gfhold.getPartId(), gfhold.getShareMode()),
+    m_staff(staff),
+    m_measure(measure),
+    m_layerIndex(layerIndex)
+{
+}
+
+EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
+{
+    bool forV2 = voice == 2;
+    auto firstEntry = EntryInfoPtr(shared_from_this(), 0);
+    if (firstEntry->getEntry()->voice2) {
+        MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(m_staff) + " measure " + std::to_string(m_measure)
+            + " layer " + std::to_string(m_layerIndex + 1) + " starts with voice2.");
+        if (!forV2) {
+            firstEntry = firstEntry.getNextInVoice(voice);
+        }
+    }
+    else if (forV2) {
+        firstEntry = firstEntry.getNextInVoice(voice);
+    }
+    return firstEntry;
+}
+
+std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
+{
+    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure + 1)) {
+        return gfhold->createEntryFrame(m_layerIndex);
+    }
+    return nullptr;
+}
+
+std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
+{
+    if (m_measure > 1) {
+        if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure - 1)) {
+            return gfhold->createEntryFrame(m_layerIndex);
+        }
+    }
+    return nullptr;
+}
+
+// ************************
+// ***** EntryInfoPtr *****
+// ************************
+
+const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
+{
+    MUSX_ASSERT_IF(!m_entryFrame) {
+        throw std::logic_error("EntryInfoPtr has no frame.");        
+    }
+    MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size())
+    {
+        throw std::logic_error("Entry index is too large for entries array.");
+    }
+    return m_entryFrame->getEntries()[m_indexInFrame];
+}
+
+EntryInfoPtr::operator bool() const
+{ return m_entryFrame && m_indexInFrame < m_entryFrame->getEntries().size(); }
+
+bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    return (*this)->getEntry()->getEntryNumber() == src->getEntry()->getEntryNumber();
+}
+
+LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
+
+InstCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
+
+MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); }
+
+std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
+
+std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff() const
+{
+    auto entry = (*this)->getEntry();
+    return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), getStaff(), getMeasure(),
+        std::lround((*this)->elapsedDuration.calcEduDuration()));
+}
+
+unsigned EntryInfoPtr::calcReverseGraceIndex() const
+{
+    unsigned result = (*this)->graceIndex;
+    if (result) {
+        for (auto next = getNextInFrame(); next && next->graceIndex; next = next.getNextInFrame()) {
+            result++;
+        }
+        result = result - (*this)->graceIndex + 1;
+    }
+    return result;
+}
+
+std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> currentIndex) const
+{
+    size_t firstIndex = currentIndex ? *currentIndex + 1 : 0;
+    for (size_t x = firstIndex; x < m_entryFrame->tupletInfo.size(); x++) {
+        const auto& tuplInf = m_entryFrame->tupletInfo[x];
+        if (tuplInf.startIndex == m_indexInFrame) {
+            return x;
+        }
+        if (tuplInf.startIndex > m_indexInFrame) {
+            break;
+        }
+    }
+    return std::nullopt;
+}
+
+EntryInfoPtr EntryInfoPtr::getNextInLayer() const
+{
+    if (auto resultInFrame = getNextInFrame()) {
+        return resultInFrame;
+    }
+    if (auto nextFrame = m_entryFrame->getNext()) {
+        return EntryInfoPtr(nextFrame, 0);
+    }
+    return EntryInfoPtr();
+}
+
+EntryInfoPtr EntryInfoPtr::getNextInFrame() const
+{
+    if (m_entryFrame && m_indexInFrame < m_entryFrame->getEntries().size() - 1) {
+        return EntryInfoPtr(m_entryFrame, m_indexInFrame + 1);
+    }
+    return EntryInfoPtr();
+}
+
+EntryInfoPtr EntryInfoPtr::getNextSameV() const
+{
+    auto next = getNextInFrame();
+    if ((*this)->getEntry()->voice2) {
+        if (next && next->getEntry()->voice2) {
+            return next;
+        }
+        return EntryInfoPtr();
+    }
+    if ((*this)->v2Launch) {
+        while (next && next->getEntry()->voice2) {
+            next = next.getNextInFrame();
+        }
+    }
+    return next;
+}
+
+EntryInfoPtr EntryInfoPtr::getPreviousInLayer() const
+{
+    if (auto resultInFrame = getPreviousInFrame()) {
+        return resultInFrame;
+    }
+    if (auto prevFrame = m_entryFrame->getPrevious()) {
+        return EntryInfoPtr(prevFrame, prevFrame->getEntries().size() - 1);
+    }
+    return EntryInfoPtr();
+}
+
+EntryInfoPtr EntryInfoPtr::getPreviousInFrame() const
+{
+    if (m_entryFrame && m_indexInFrame <= m_entryFrame->getEntries().size() && m_indexInFrame > 0) {
+        return EntryInfoPtr(m_entryFrame, m_indexInFrame - 1);
+    }
+    return EntryInfoPtr();
+}
+
+EntryInfoPtr EntryInfoPtr::getPreviousSameV() const
+{
+    auto prev = getPreviousInFrame();
+    if ((*this)->getEntry()->voice2) {
+        if (prev && prev->getEntry()->voice2) {
+            return prev;
+        }
+        return EntryInfoPtr();
+    }
+    while (prev && prev->getEntry()->voice2) {
+        prev = prev.getPreviousInFrame();
+    }
+    return prev;
+}
+
+EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
+{
+    bool forV2 = voice == 2;
+    auto next = getNextInFrame();
+    while (next && next->getEntry()->voice2 != forV2) {
+        next = next.getNextInFrame();
+    }
+    return next;
+}
+
+NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
+{
+    if ((*this)->getEntry()->isNote && src.getEntryInfo()->getEntry()->isNote) {
+        auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNoteProperties();
+        for (size_t x = 0; x < (*this)->getEntry()->notes.size(); x++) {
+            auto note = NoteInfoPtr(*this, x);
+            auto [pitch, octave, alter, staffPos] = note.calcNoteProperties();
+            if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
+                return note;
+            }
+        }
+    }
+    return NoteInfoPtr();
+}
+
+bool EntryInfoPtr::canBeBeamed() const
+{
+    if ((*this)->getEntry()->duration >= Edu(NoteType::Quarter)) {
+        return false;
+    }
+    if (auto staff = createCurrentStaff()) {
+        if (staff->hideStems || staff->hideBeams) {
+            return false;
+        }
+    }
+    return true;
+}
+
+EntryInfoPtr EntryInfoPtr::findBeamEnd() const
+{
+    if (!canBeBeamed()) return EntryInfoPtr();
+    auto next = getNextInBeamGroup();
+    if (!next) {
+        if (getPreviousInBeamGroup()) return *this;
+        return EntryInfoPtr();
+    }
+    while (true) {
+        if (auto tryNext = next.getNextInBeamGroup()) {
+            next = tryNext;
+        } else {
+            break;
+        }
+    }
+    return next;
+
+}
+
+unsigned calcNumberOfBeamsInEdu(Edu duration)
+{
+    unsigned result = 0;
+    MUSX_ASSERT_IF (!duration) {
+        throw std::logic_error("Edu duration value is zero.");
+    }
+    while (duration < Edu(NoteType::Quarter)) {
+        result++;
+        duration <<= 1;
+    }
+    return result;
+}
+
+unsigned EntryInfoPtr::calcNumberOfBeams() const
+{ return calcNumberOfBeamsInEdu((*this)->getEntry()->duration); }
+
+template<EntryInfoPtr(EntryInfoPtr::*Iterator)() const>
+EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
+{
+    EntryInfoPtr result = (this->*Iterator)();
+    if (!result || !result.canBeBeamed()) {
+        return EntryInfoPtr();
+    }
+    auto thisRawEntry = (*this)->getEntry();
+    auto resultEntry = result->getEntry();
+    // a grace can't beam past a non grace note
+    if (thisRawEntry->graceNote && !resultEntry->graceNote) {
+        return EntryInfoPtr();
+    }
+    // a non grace should skip grace notes
+    if (!thisRawEntry->graceNote && resultEntry->graceNote) {
+        do {
+            if (result->getEntry()->beam || !result.canBeBeamed()) {
+                return EntryInfoPtr();
+            }
+            result = (result.*Iterator)();
+        } while (result && result->getEntry()->graceNote);
+    }
+    return result;
+}
+
+EntryInfoPtr EntryInfoPtr::nextPotentialInBeam() const
+{
+    auto next = iteratePotentialEntryInBeam<&EntryInfoPtr::getNextSameV>();
+    if (!next || next->getEntry()->beam) {
+        return EntryInfoPtr();
+    }
+    return next;
+}
+
+EntryInfoPtr EntryInfoPtr::previousPotentialInBeam() const
+{
+    if ((*this)->getEntry()->beam) {
+        return EntryInfoPtr();
+    }
+    return iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
+}
+
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)() const>
+EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
+{
+    if (!canBeBeamed()) {
+        return EntryInfoPtr();
+    }
+    EntryInfoPtr result = (this->*Iterator)(); // either nextPotentialInBeam or previousPotentialInBeam
+    if (result) {
+        auto thisRawEntry = (*this)->getEntry();
+        auto resultEntry = result->getEntry();
+        if (thisRawEntry->calcDisplaysAsRest() || resultEntry->calcDisplaysAsRest()) {
+            auto beamOpts = getFrame()->getDocument()->getOptions()->get<options::BeamOptions>();
+            MUSX_ASSERT_IF(!beamOpts) {
+                throw std::logic_error("Document has no BeamOptions.");
+            }
+            auto searchForNoteFrom = [](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)() const) -> bool {
+                for (auto next = from; next; next = (next.*iterator)()) {
+                    if (!next->getEntry()->calcDisplaysAsRest()) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            bool noteFound = searchForNoteFrom(result, Iterator);
+            if (!noteFound && !beamOpts->extendBeamsOverRests) {
+                return EntryInfoPtr();
+            }
+            bool reverseNoteFound = searchForNoteFrom(*this, ReverseIterator);
+            if (!reverseNoteFound && !beamOpts->extendBeamsOverRests) {
+                return EntryInfoPtr();
+            }
+            if (beamOpts->extendBeamsOverRests && !noteFound && !reverseNoteFound) {
+                return EntryInfoPtr();
+            }
+        }
+    }
+    return result;
 }
 
 // ***********************
@@ -136,8 +472,7 @@ std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& d
 
 std::string FontInfo::getName() const
 {
-    auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId);
-    if (fontDef) {
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId)) {
         return fontDef->name;
     }
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
@@ -155,7 +490,7 @@ void FontInfo::setFontIdByName(const std::string& name)
     throw std::invalid_argument("font definition not found for font \"" + name + "\"");
 }
 
-bool FontInfo::calcIsSMuFL() const
+std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath() const
 {
     auto name = getName();
     auto standardFontPaths = calcSMuFLPaths();
@@ -164,11 +499,19 @@ bool FontInfo::calcIsSMuFL() const
             std::filesystem::path metaFilePath(path / name / name);
             metaFilePath.replace_extension(".json");
             if (std::filesystem::is_regular_file(metaFilePath)) {
-                return true;
+                return metaFilePath;
             }
         }
     }
-    return false;
+    return std::nullopt;
+}
+
+bool FontInfo::calcIsSymbolFont() const
+{
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId)) {
+        return fontDef->calcIsSymbolFont();
+    }
+    throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
 }
 
 std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
@@ -294,16 +637,17 @@ struct TupletState
     util::Fraction remainingSymbolicDuration;         // The remaining symbolic duration
     util::Fraction ratio;             // The remaining actual duration
     std::shared_ptr<const details::TupletDef> tuplet; // The tuplet.
+    size_t infoIndex;               // the index of this tuplet in EntryFrame::tupletInfo
 
     void accountFor(util::Fraction actual)
     {
         remainingSymbolicDuration -= (actual / ratio);
     }
 
-    TupletState(const std::shared_ptr<details::TupletDef>& t)
+    TupletState(const std::shared_ptr<details::TupletDef>& t, size_t i)
         : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(NoteType::Whole)),
         ratio(t->referenceNumber* t->referenceDuration, t->displayNumber* t->displayDuration),
-        tuplet(t)
+        tuplet(t), infoIndex(i)
     {
     }
 };
@@ -324,20 +668,27 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
         return nullptr;
-        }();
+    }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
-        retval = std::make_shared<EntryFrame>(getStaff(), getMeasure(), layerIndex);        auto entries = frame->getEntries();
+        retval = std::make_shared<EntryFrame>(*this, getStaff(), getMeasure(), layerIndex);
+        const auto& measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), getMeasure());
+        if (!measure) {
+            throw std::invalid_argument("Meaure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
+        }
+        retval->keySignature = measure->keySignature;
+        auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
         util::Fraction v1ActualElapsedDuration = 0;
         for (const auto& f : frameIncis) {
-            v1ActualElapsedDuration += util::Fraction(f->startTime, int(NoteType::Whole)); // if there is an old-skool pickup, this accounts for it
+            v1ActualElapsedDuration += util::Fraction::fromEdu(f->startTime); // if there is an old-skool pickup, this accounts for it
         }
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
+        int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
-            auto entryInfo = std::make_shared<EntryInfo>(layerIndex, entry);
+            auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry));
             if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
                 entryInfo->v2Launch = true;
             }
@@ -351,22 +702,38 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             std::vector<TupletState>& activeTuplets = entry->voice2 ? v2ActiveTuplets : v1ActiveTuplets;
             util::Fraction& actualElapsedDuration = entry->voice2 ? v2ActualElapsedDuration : v1ActualElapsedDuration;
             entryInfo->elapsedDuration = actualElapsedDuration;
+            entryInfo->clefIndex = calcClefIndexAt(actualElapsedDuration);
             util::Fraction cumulativeRatio = 1;
             if (!entry->graceNote) {
+                graceIndex = 0;
                 auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
                 std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
-                });
+                    });
                 for (const auto& tuplet : tuplets) {
-                    activeTuplets.emplace_back(tuplet);
+                    size_t index = retval->tupletInfo.size();
+                    retval->tupletInfo.emplace_back(tuplet, i, actualElapsedDuration);
+                    activeTuplets.emplace_back(tuplet, index);
                 }
 
                 // @todo: calculate and add running values (clef, key)
+
+                // It appears that Finale allows exactly one entry per 0-length tuplet, no matter
+                // what the symbolic duration of the tuplet is. This makes life *much* easier.
+                bool zeroLengthTuplet = false;
                 for (const auto& t : activeTuplets) {
-                    cumulativeRatio *= t.ratio;
+                    if (t.ratio != 0) {
+                        cumulativeRatio *= t.ratio;
+                    }
+                    else {
+                        zeroLengthTuplet = true;
+                    }
                 }
-                util::Fraction actualDuration = entry->calcFraction() * cumulativeRatio;
+                util::Fraction actualDuration = zeroLengthTuplet ? 0 : entry->calcFraction() * cumulativeRatio;
                 entryInfo->actualDuration = actualDuration;
+            }
+            else {
+                entryInfo->graceIndex = ++graceIndex;
             }
 
             retval->addEntry(entryInfo);
@@ -374,12 +741,23 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             actualElapsedDuration += entryInfo->actualDuration;
             if (!entry->graceNote) {
                 for (auto it = activeTuplets.rbegin(); it != activeTuplets.rend(); ++it) {
-                    it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
-                    cumulativeRatio /= it->ratio;
+                    if (it->ratio != 0) {
+                        it->remainingSymbolicDuration -= entryInfo->actualDuration / cumulativeRatio;
+                        cumulativeRatio /= it->ratio;
+                    }
+                }
+                // always update all end positions, in case we run out of notes before the actual end
+                // WARNING: Finale handles incomplete v2 tuplets in a different and buggy manner.
+                //          It appears that Finale extends incomplete v2 tuplets to the end of the bar in many cases.
+                //          This code only extends them to the end of the v2 sequence. This is by design.
+                for (const auto& tuplet : activeTuplets) {
+                    auto& tuplInf = retval->tupletInfo[tuplet.infoIndex];
+                    tuplInf.endIndex = i;
+                    tuplInf.endDura = actualElapsedDuration;
                 }
                 activeTuplets.erase(
                     std::remove_if(activeTuplets.begin(), activeTuplets.end(),
-                        [](const TupletState& t) { return t.remainingSymbolicDuration <= 0; }),
+                        [](const TupletState& t) { return t.remainingSymbolicDuration <= 0 || t.ratio == 0; }),
                     activeTuplets.end()
                 );
             }
@@ -392,12 +770,12 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
     return retval;
 }
 
-bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
+bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
 {
     auto entryFrame = createEntryFrame(layerIndex);
     if (entryFrame) {
-        for (const auto& entryInfo : entryFrame->getEntries()) {
-            if (!iterator(entryInfo)) {
+        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
+            if (!iterator(EntryInfoPtr(entryFrame, x))) {
                 return false;
             }
         }
@@ -405,7 +783,7 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
     return true;
 }
 
-bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator)
+bool details::GFrameHold::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator)
 {
     for (LayerIndex layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
         if (!iterateEntries(layerIndex, iterator)) {
@@ -413,6 +791,30 @@ bool details::GFrameHold::iterateEntries(std::function<bool(const std::shared_pt
         }
     }
     return true;
+}
+
+ClefIndex details::GFrameHold::calcClefIndexAt(Edu position) const
+{
+    if (clefId.has_value()) {
+        return clefId.value();
+    }
+    ClefIndex result = 0;
+    auto clefList = getDocument()->getOthers()->getArray<others::ClefList>(getPartId(), clefListId);
+    if (clefList.empty()) {
+        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
+            + std::to_string(getMeasure()) + " has non-existent clef list [" + std::to_string(clefListId) + "]");
+    }
+    else {
+        auto& lastClef = clefList[0];
+        for (const auto& clef : clefList) {
+            if (clef->xEduPos > position) {
+                break; // Stop as soon as we pass the position
+            }
+            lastClef = clef;
+        }
+        result = lastClef->clefIndex;
+    }
+    return result;
 }
 
 // **************************
@@ -443,6 +845,140 @@ std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector
         }
     }
     return std::nullopt;
+}
+
+// ************************
+// ***** KeySignature *****
+// ************************
+
+std::vector<unsigned> KeySignature::calcTonalCenterArray() const
+{
+    int alter = getAlteration().value_or(0);
+
+    if (isMinor()) {
+        if (alter >= 0) {
+            return { 5, 2, 6, 3, 0, 4, 1, 5 };
+        }
+        else {
+            return { 5, 1, 4, 0, 3, 6, 2, 5 };
+        }
+    }
+
+    if (!isBuiltIn()) {
+        if (alter >= 0) {
+            if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
+                return centers->values;
+            }
+        }
+        else {
+            if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
+                return centers->values;
+            }
+        }
+    }
+
+    // Major or default
+    if (alter >= 0) {
+        return { 0, 4, 1, 5, 2, 6, 3, 0 };
+    }
+    else {
+        return { 0, 3, 6, 2, 5, 1, 4, 0 };
+    }
+}
+
+std::vector<int> KeySignature::calcAcciAmountsArray() const
+{
+    int alter = getAlteration().value_or(0);
+
+    if (!isBuiltIn()) {
+        if (alter >= 0) {
+            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(getPartId(), getKeyMode())) {
+                return amounts->values;
+            }
+        }
+        else {
+            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountFlats>(getPartId(), getKeyMode())) {
+                return amounts->values;
+            }
+        }
+    }
+
+    // Major/minor or default
+    if (alter >= 0) {
+        return std::vector<int>(7, 1);
+    }
+    else {
+        return std::vector<int>(7, -1);
+    }
+}
+
+std::vector<unsigned> KeySignature::calcAcciOrderArray() const
+{
+    int alter = getAlteration().value_or(0);
+
+    if (!isBuiltIn()) {
+        if (alter >= 0) {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(getPartId(), getKeyMode())) {
+                return order->values;
+            }
+        }
+        else {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderFlats>(getPartId(), getKeyMode())) {
+                return order->values;
+            }
+        }
+    }
+
+    // Major/minor or default
+    if (alter >= 0) {
+        return { 3, 0, 4, 1, 5, 2, 6 };
+    }
+    else {
+        return { 6, 2, 5, 1, 4, 0, 3 };
+    }
+}
+
+int KeySignature::calcTonalCenterIndex() const
+{
+    if (!isNonLinear() && !isLinear()) {
+        MUSX_INTEGRITY_ERROR("Key signature mode " + std::to_string(getKeyMode()) + " is neither linear nor non-linear. It is invalid.");
+    }
+
+    int alter = getAlteration().value_or(0);
+    auto centers = calcTonalCenterArray();
+    return centers[std::abs(alter) % centers.size()];
+}
+
+int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
+{
+    if (!isNonLinear() && !isLinear()) {
+        MUSX_INTEGRITY_ERROR("Key signature mode " + std::to_string(getKeyMode()) + " is neither linear nor non-linear. It is invalid.");
+    }
+
+    auto amounts = calcAcciAmountsArray();
+    auto order = calcAcciOrderArray();
+
+    int keySigAlteration = 0;
+    
+    if (isNonLinear()) {
+        for (size_t i = 0; i < amounts.size() && i < order.size(); i++) {
+            if (amounts[i] == 0) {
+                break;
+            }
+            if (noteIndex == order[i]) {
+                keySigAlteration += amounts[i];
+            }
+        }
+    } else {
+        int keyFifths = std::abs(getAlteration().value_or(0));
+        for (int i = 0; i < keyFifths && i < amounts.size() && i < order.size(); ++i) {
+            if (noteIndex == order[i % order.size()]) {
+                keySigAlteration += amounts[i];
+            }
+        }
+    }
+    
+    return keySigAlteration;
 }
 
 // ****************************
@@ -562,6 +1098,113 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
     }
     return retval;
+}
+
+// ****************
+// ***** Note *****
+// ****************
+
+std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex) const
+{
+    static constexpr std::array<Note::NoteName, 7> noteNames = {
+        Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
+    };
+    
+    // Determine the base note and octave
+    int adjustedLev = key->calcTonalCenterIndex() + harmLev;
+    int octave = (adjustedLev / 7) + 4; // Middle C (C4) is the reference
+    int step = adjustedLev % 7;
+    if (step < 0) {
+        step += 7;
+        octave -= 1;
+    }
+
+    // Calculate the actual alteration
+    int actualAlteration = harmAlt + key->calcAlterationOnNote(step);
+
+    // Calculate the staff line
+    const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
+    if (!clefOptions) {
+        throw std::invalid_argument("Document contains no clef options!");
+    }
+    if (clefIndex >= clefOptions->clefDefs.size()) {
+        throw std::invalid_argument("Clef index " + std::to_string(clefIndex) + " does not exist in document.`");
+    }
+    int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
+
+    return { noteNames[step], octave, actualAlteration, adjustedLev + middleCLine };
+}
+
+// ***********************
+// ***** NoteInfoPtr *****
+// ***********************
+
+NoteInfoPtr NoteInfoPtr::calcTieTo() const
+{
+    if (m_entry->getEntry()->isNote) {
+        auto nextEntry = m_entry;
+        while (nextEntry) {
+            if (nextEntry->v2Launch) {
+                nextEntry = nextEntry.getNextSameV();
+                if (!nextEntry) {
+                    if (auto nextFrame = m_entry.getFrame()->getNext()) {
+                        nextEntry = nextFrame->getFirstInVoice(1); // v2Launch entries are always voice 1
+                    }
+                }
+            } else {
+                nextEntry = nextEntry.getNextInLayer();
+            }
+            if (!nextEntry) {
+                break;
+            }
+            if (nextEntry->getEntry()->graceNote) { // grace note tie to the next non grace entry, if there is a note there to tie to
+                continue;
+            }
+            if (auto result = nextEntry.findEqualPitch(*this)) {
+                return result;
+            }
+            if (nextEntry->v2Launch) {
+                nextEntry = nextEntry.getNextInLayer();
+                return nextEntry.findEqualPitch(*this);
+            }
+            break;
+        }
+    }
+    return NoteInfoPtr();
+}
+
+NoteInfoPtr NoteInfoPtr::calcTieFrom() const
+{
+    // grace notes cannot tie backwards; only forwards (see grace note comment above)
+    auto thisRawEntry = m_entry->getEntry();
+    if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
+        for (auto currEntry = m_entry.getPreviousInLayer(); currEntry; currEntry = currEntry.getPreviousInLayer()) {
+            if (currEntry->v2Launch && m_entry.isSameEntry(currEntry.getNextInFrame())) {
+                continue;
+            }
+            auto currRawEntry = currEntry->getEntry();
+            if (auto result = currEntry.findEqualPitch(*this)) {
+                return result;
+            }
+            if (currRawEntry->graceNote) {
+                continue;
+            }
+            bool skipBackToV1 = !thisRawEntry->voice2
+                              || currRawEntry->voice2 && currEntry.getPreviousInFrame()->v2Launch;
+            if (skipBackToV1 && currRawEntry->voice2) {
+                while (currEntry) {
+                    auto testEntry = currEntry.getPreviousInLayer();
+                    if (!testEntry || !testEntry->getEntry()->voice2) {
+                        break;
+                    }
+                    currEntry = testEntry;
+                }
+            } else {
+                break;
+            }
+        }
+    }
+    return NoteInfoPtr();
 }
 
 // *****************************
@@ -961,6 +1604,38 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     return addAutoNumbering(name);
 }
 
+ClefIndex others::Staff::calcFirstClefIndex() const
+{
+    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), 1)) {
+        return gfhold->calcClefIndexAt(0);
+    }
+    return defaultClef;
+}
+
+ClefIndex others::Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper)
+{
+    if (auto staff = others::StaffComposite::createCurrent(document, partId, staffCmper, 1, 0)) {
+        return staff->calcFirstClefIndex();
+    } else {
+        throw std::logic_error("Unable to find StaffComposite instance for staff " + std::to_string(staffCmper));
+    }
+}
+
+int others::Staff::calcMiddleStaffPosition() const
+{
+    if (staffLines.has_value()) {
+        return -(staffLines.value() - 1);
+    } else if (customStaff.has_value()) {
+        const auto& lines = customStaff.value();
+        if (!lines.empty()) {
+            int numStaves = lines[lines.size() - 1] - lines[0] + 1;
+            int referenceOffset = 2 * (11 - lines[0]);
+            return referenceOffset - (numStaves - 1);
+        }
+    }
+    return 0;
+}
+
 // **************************
 // ***** StaffComposite *****
 // **************************
@@ -970,6 +1645,10 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     auto srcMasks = staffStyle->masks;
 
     /// @todo the rest of the masks as we discover/create them
+    if (srcMasks->defaultClef) {
+        defaultClef = staffStyle->defaultClef;
+        masks->defaultClef = true;
+    }
     if (srcMasks->staffType) {
         staffLines = staffStyle->staffLines;
         customStaff = staffStyle->customStaff;
@@ -987,6 +1666,11 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         // hideBotRepeatDot
         masks->staffType = true;
     }
+    if (srcMasks->transposition) {
+        transposedClef = staffStyle->transposedClef;
+        // other transposition fields
+        masks->transposition = true;
+    }
     if (srcMasks->negNameScore) {
         hideNameInScore = staffStyle->hideNameInScore;
         masks->negNameScore = true;
@@ -1001,8 +1685,8 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     }
     if (srcMasks->showStems) {
         hideStems = staffStyle->hideStems;
+        hideBeams = staffStyle->hideBeams;
         stemDirection = staffStyle->stemDirection;
-        // showBeams
         // stemsFixedStart
         // stemdFixedEnd
         // stemStartFromStaff
@@ -1310,12 +1994,6 @@ bool TimeSignature::isCutTime() const
 
 std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
 {
-    // Lambda to compute the sum of a vector
-    auto sumVector = [](const auto& vec) {
-        using T = typename std::decay<decltype(vec.front())>::type;
-        return std::accumulate(vec.begin(), vec.end(), T{});
-    };
-
     // Lambda to compute GCD of a vector
     auto computeGCD = [](const std::vector<Edu>& values) {
         return values.empty() ? 1 : std::reduce(values.begin() + 1, values.end(), values[0], std::gcd<Edu, Edu>);
@@ -1325,8 +2003,8 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
     std::vector<std::pair<util::Fraction, Edu>> summedUnits;
 
     for (const auto& ts : components) {
-        Edu totalUnit = sumVector(ts.units);
-        summedUnits.emplace_back(sumVector(ts.counts), totalUnit);
+        Edu totalUnit = ts.sumUnits();
+        summedUnits.emplace_back(ts.sumCounts(), totalUnit);
         allUnits.push_back(totalUnit);
     }
 

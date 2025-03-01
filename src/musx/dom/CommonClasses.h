@@ -22,6 +22,8 @@
 #pragma once
 
 #include <numeric>
+#include <filesystem>
+#include <array>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -36,7 +38,8 @@ namespace dom {
  *
  * The values are expressed in hexadecimal.
  */
-enum class NoteType : Edu {
+enum class NoteType : Edu
+{
     Maxima = 0x8000,
     Longa = 0x4000,
     Breve = 0x2000,
@@ -51,7 +54,18 @@ enum class NoteType : Edu {
     Note256th = 0x0010,
     Note512th = 0x0008,
     Note1024th = 0x0004,
-    Note2048th = 0x0002
+    Note2048th = 0x0002,
+    Note4096th = 0x0001
+};
+
+/**
+ * @brief Enum representing the clef display mode for a frame.
+ */
+enum class ShowClefMode
+{
+    WhenNeeded, ///< Clef is displayed only when needed (the default).
+    Never,      ///< Clef is never displayed. (xml value is "hidden")
+    Always      ///< Clef is always displayed. (xml value is "forced")
 };
 
 /**
@@ -109,10 +123,20 @@ public:
         hidden = efx & 0x80;       // FONT_EFX_HIDDEN
     }
 
+    /// @brief Calculates if this is the default music font.
+    bool calcIsDefaultMusic() const
+    { return fontId == 0; }
+
+    /// @brief Calculates if this is a symbol font. (See #others::FontDefinition::calcIsSymbolFont.)
+    bool calcIsSymbolFont() const;
+
+    /// @brief Returns the filepath of the SMuFL font's metadata json file, if any
+    std::optional<std::filesystem::path> calcSMuFLMetaDataPath() const;
+
     /**
      * @brief Calculates whether this is a SMuFL font.
      */
-    bool calcIsSMuFL() const;
+    bool calcIsSMuFL() const  { return calcSMuFLMetaDataPath().has_value(); }
 
     /**
      * @brief Returns the standard SMuFL font folder.
@@ -130,6 +154,11 @@ public:
  */
 class KeySignature : public Base
 {
+private:
+    std::vector<unsigned> calcTonalCenterArray() const;
+    std::vector<int> calcAcciAmountsArray() const;
+    std::vector<unsigned> calcAcciOrderArray() const;
+
 public:
     /**
      * @brief Default constructor
@@ -172,13 +201,24 @@ public:
     bool isNonLinear() const { return (key & 0xC000) != 0; }                ///< whether this is a non-linear key
     bool isBuiltIn() const { return isLinear() && getKeyMode() <= 1; }      ///< whether this is a built-in key
     bool isMajor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in major key
-    bool isMinor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in minor key
+    bool isMinor() const { return getKeyMode() == 1; }                      ///< whether this is a built-in minor key
 
     /// @brief returns whether the two key signatures represent the same key signature
     bool isSame(const KeySignature& src)
     {
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }
+
+    /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
+    /// 
+    /// This is the modal tonal center, so a minor key with no sharps or flats returns 5 (=A).
+    /// 
+    /// @todo extend this to support other modes besides major and minor.
+    int calcTonalCenterIndex() const;
+
+    /// @brief Calculates the amount of alteration on a note int the key.
+    /// @param noteIndex note index, where C=0, D=1, E=3, F=3, G=4, A=5, B=6
+    int calcAlterationOnNote(unsigned noteIndex) const;
 
     void integrityCheck() override
     {
@@ -215,6 +255,14 @@ public:
         /// @brief Test if two TimeSigComponent values are the same.
         bool operator==(const TimeSigComponent& src) const
         { return counts == src.counts && units == src.units; }
+
+        /// @brief Compute the sum of all counts.
+        util::Fraction sumCounts() const
+        { return std::accumulate(counts.begin(), counts.end(), util::Fraction{}); }
+
+        /// @brief Compute the sum of all units.
+        Edu sumUnits() const
+        { return std::accumulate(units.begin(), units.end(), Edu{}); }
     };
 
     std::vector<TimeSigComponent> components;     ///< the components in the time signature
@@ -224,6 +272,16 @@ public:
     /// In typical cases, the returned @ref util::Fraction has a denominator of 1, but Finale supports other kinds of fractions.
     /// Use #util::Fraction::quotient to get the integer value and #util::Fraction::remainder to get the residual fractional component.
     std::pair<util::Fraction, NoteType> calcSimplified() const;
+
+    /// @brief Calculates the total duration of the time signature as a fraction of a whole note.
+    util::Fraction calcTotalDuration() const
+    {
+        util::Fraction result = std::accumulate(components.begin(), components.end(), util::Fraction{},
+            [](const util::Fraction& acc, const TimeSigComponent& comp)
+            { return acc + (comp.sumCounts() * comp.sumUnits()); }
+        );
+        return result / Edu(NoteType::Whole);
+    }
 
     /// @brief returns whether the two time signatures represent the same time signature
     bool isSame(const TimeSignature& src)
@@ -240,7 +298,7 @@ public:
         return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviate));
     }
 
-    /// @brief Returns the abbreviated symbol for this time signature, or std::nullopt if none.
+    /// @brief Returns the abbreviated symbol (code point) for this time signature, or std::nullopt if none.
     ///
     /// If the musx document lacks music symbol options but abbreviation was requested, the SMuFL values
     /// are returned as default substitute values.

@@ -128,10 +128,10 @@ TEST(RepeatEndingStart, Populate)
     auto repeatPassList = others->get<others::RepeatPassList>(SCORE_PARTID, 4);
     ASSERT_TRUE(repeatPassList) << "RepeatPassList with cmper 4 not found";
 
-    ASSERT_EQ(repeatPassList->endingNumbers.size(), 3);
-    EXPECT_EQ(repeatPassList->endingNumbers[0], 2);
-    EXPECT_EQ(repeatPassList->endingNumbers[1], 4);
-    EXPECT_EQ(repeatPassList->endingNumbers[2], 7);
+    ASSERT_EQ(repeatPassList->values.size(), 3);
+    EXPECT_EQ(repeatPassList->values[0], 2);
+    EXPECT_EQ(repeatPassList->values[1], 4);
+    EXPECT_EQ(repeatPassList->values[2], 7);
 }
 
 TEST(TextRepeatDef, Populate)

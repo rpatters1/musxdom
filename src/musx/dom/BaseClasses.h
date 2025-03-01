@@ -48,6 +48,12 @@
 #define MUSX_UNKNOWN_XML(S) ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning, (S))
 #endif
 
+
+#define MUSX_ASSERT_IF(TEST) \
+assert(!(TEST)); \
+if (TEST)
+
+
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
@@ -83,10 +89,11 @@ using EduFloat = double;            ///< "Enigma Durational Units" floating poin
 using MeasCmper = int16_t;          ///< Enigma meas Cmper (may be negative when not applicable)
 using InstCmper = int16_t;          ///< Enigma staff (inst) Cmper (may be negative when not applicable)
 using SystemCmper = int16_t;        ///< Enigma systems Cmper (may be negative when not applicable)
-using ClefIndex = int16_t;          ///< Index into @ref options::ClefOptions::clefDefs.
+using ClefIndex = uint16_t;         ///< Index into @ref options::ClefOptions::clefDefs.
 using EntryNumber = int32_t;        ///< Entry identifier.
-using NoteNumber = int16_t;         ///< Note identifier.
+using NoteNumber = uint16_t;        ///< Note identifier.
 using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
+using BeamNumber = unsigned int;    ///< A number where 1 corresponds to the primary (8th note) beam, 2 the 16th beam, 3 the 32nd beam, etc.
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
@@ -133,6 +140,9 @@ public:
     {
         auto document = m_document.lock();
         assert(document); // program bug if this pointer goes out of scope.
+        if (!document) {
+            throw std::logic_error("Document pointer is no longer valid.");
+        }
         return document;
     }
 
@@ -264,6 +274,40 @@ private:
     std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
 };
 
+/// @brief Template pattern for OthersBase items consisting of an array of a single item.
+/// @tparam ElementType The type of the elements in the array
+/// @tparam REQUIRED_SIZE If non-zero, the required size of the array.
+template <typename ElementType, size_t REQUIRED_SIZE = 0>
+class OthersArray : public OthersBase
+{
+private:
+    virtual std::string_view xmlTag() const = 0;
+
+public:
+    /** @brief Constructor function */
+    explicit OthersArray(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<ElementType> values;    ///< Values in the array
+                                        ///< Guaranteed to have REQUIRED_SIZE elements.
+
+    /// @brief Override of #Base::integrityCheck
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if constexpr (REQUIRED_SIZE) {
+            const size_t originalSize = values.size();
+            values.resize(REQUIRED_SIZE); // resize first, in case MUSX_INTEGRITY_ERROR throws. (Avoid unreachable code warning.)
+            if (originalSize < REQUIRED_SIZE) {
+                MUSX_INTEGRITY_ERROR("Array with xml tag " + std::string(xmlTag()) + " and cmper " + std::to_string(getCmper())
+                    + " has fewer than " + std::to_string(REQUIRED_SIZE) + " elements.");
+            }
+        }
+    }
+};
+
 /**
  * @brief Base class for all "details" types.
  * 
@@ -335,6 +379,19 @@ public:
 private:
     using DetailsBase::getCmper1;
     using DetailsBase::getCmper2;
+};
+
+class NoteInfoPtr;
+
+/// @brief Base class note details. Note details are entry details associated with a note ID.
+class NoteDetailsBase : public EntryDetailsBase
+{
+public:
+    /// @brief Required virtual function that returns the note id.
+    virtual NoteNumber getNoteId() const = 0;
+
+protected:
+    using EntryDetailsBase::EntryDetailsBase;
 };
 
 class FontInfo;

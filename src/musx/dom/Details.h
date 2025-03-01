@@ -23,6 +23,7 @@
 #include <functional>
 #include <vector>
 #include <unordered_set>
+#include <cmath>
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
@@ -31,7 +32,9 @@
 namespace musx {
 namespace dom {
 
+class EntryInfoPtr;
 class EntryFrame;
+class EntryInfo;
 
 namespace options {
 class TupletOptions;
@@ -68,16 +71,6 @@ public:
     explicit GFrameHold(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas)
         : DetailsBase(document, partId, shareMode, inst, meas), frames(MAX_LAYERS) {}
 
-    /**
-     * @brief Enum representing the clef mode for the frame.
-     */
-    enum class ShowClefMode
-    {
-        WhenNeeded, ///< Clef is displayed only when needed (the default).
-        Never,      ///< Clef is never displayed. (xml value is "hidden")
-        Always      ///< Clef is always displayed. (xml value is "forced")
-    };
-
     // Public properties corresponding to the XML structure
     std::optional<ClefIndex> clefId;        ///< clef index when there are no mid-measure clef changes. (xml tag is `<clefID>`).
     Cmper clefListId{};                     ///< The clef list ID when there are mid-measure clef changes, if non-zero. (xml tag is `<clefListID>`).
@@ -91,6 +84,15 @@ public:
 
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
+
+    /// @brief Returns the clef index in effect for at the specified @ref Edu position.
+    /// @todo This function will need to be augmented for transposing staves.
+    ClefIndex calcClefIndexAt(Edu position) const;
+
+    /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
+    /// @todo This function will need to be augmented for transposing staves.
+    ClefIndex calcClefIndexAt(util::Fraction position) const
+    { return calcClefIndexAt(ClefIndex(std::lround(position.calcEduDuration()))); }
 
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
@@ -106,14 +108,14 @@ public:
      * @return true if higher-level iteration should continue. false if it should halt.
      * @throws std::invalid_argument if the layer index is out of range
      */
-    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator);
+    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
 
     /**
      * @brief iterates the entries for this #GFrameHold from left to right for each layer in order
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
      */
-    bool iterateEntries(std::function<bool(const std::shared_ptr<const EntryInfo>&)> iterator);
+    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
 
     void integrityCheck() override
     {
@@ -128,6 +130,61 @@ public:
 
     constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
     static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class SecondaryBeamBreak
+ * @brief Specifies which secondary beams break and restart on the associated entry.
+ *
+ * This class is identified by the XML node name "secBeamBreak".
+ */
+class SecondaryBeamBreak : public EntryDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit SecondaryBeamBreak(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum)
+    {
+    }
+
+    unsigned mask{};        ///< Composite mask of beam breaks, derived from `<do16th>` through `<do4096th>` tags.
+    bool breakThrough{};    ///< True if the beam should be broken through to the largest specified beam value.
+
+    /// @brief Calculates the lowest (largest note-value) beam specified for a secondary beam break.
+    ///
+    /// This function ignores #breakThrough, since it is nearly meaningless even in Finale.
+    ///
+    /// @return A @ref BeamNumber value (minimum 2) for the lowest beam number that should be broken.
+    /// Returns 0 if the #mask is invalid.
+    BeamNumber calcLowestBreak() const
+    {
+        MUSX_ASSERT_IF(!mask || mask >= unsigned(NoteType::Eighth)) {
+            return 0; // invalid mask values have already been flagged and supposedly corrected by #integrityCheck.
+        }
+        for (unsigned shift = 0; true; shift++) {
+            if (mask & (unsigned(NoteType::Note16th) >> shift)) {
+                return shift + 2; // the 2nd beam is the 16th beam and the first one we checked.
+            }
+        }
+        assert(false); // should not be able to get here
+        return 0;
+    }
+
+    void integrityCheck() override
+    {
+        EntryDetailsBase::integrityCheck();
+        if (!mask) {
+            mask = unsigned(NoteType::Note4096th);
+            MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " has no breaks.");
+        }
+        if (mask >= unsigned(NoteType::Eighth)) {
+            mask = unsigned(NoteType::Eighth) - 1;
+            MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " specifies a value that cannot be a secondary beam.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "secBeamBreak"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SecondaryBeamBreak>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -277,6 +334,83 @@ public:
     static const xml::XmlElementArray<StaffGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class TieAlterBase
+ * @brief Base class for tie alteration properties. (Used for both ties and tie ends.)
+ */
+class TieAlterBase : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TieAlterBase(const DocumentWeakPtr& document, Cmper partId, Base::ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};                   ///< Note ID associated with the tie alteration. (xml node is `<noteID>`)
+    Evpu xStart{};                         ///< Horizontal start position of the tie.
+    Evpu xEnd{};                           ///< Horizontal end position of the tie.
+    Evpu yStart{};                         ///< Vertical start position of the tie.
+    Evpu yEnd{};                           ///< Vertical end position of the tie.
+    bool outerLocal{};                     ///< Local setting for "Outer Tie".
+    bool afterSingleDotLocal{};            ///< Local setting for "After Single Dot".
+    bool afterSingleDotOn{};               ///< Enable "After Single Dot".
+    bool afterMultiDotsLocal{};            ///< Local setting for "After Multiple Dots".
+    bool afterMultiDotsOn{};               ///< Enable "After Multiple Dots".
+    bool shiftForSecondsLocal{};           ///< Local setting for "Shift for Seconds".
+    bool shiftForSecondsOn{};              ///< Enable "Shift for Seconds".
+    bool beforeSingleAcciLocal{};          ///< Local setting for "Before Single Accidental".
+    bool beforeSingleAcciOn{};             ///< Enable "Before Single Accidental".
+    bool down{};                           ///< Downward tie. Only applicable if #freezeDirection is true. (False freezes the tie up.)
+    bool breakTimeLocal{};                 ///< Local setting for "Break at Time Signature".
+    bool breakTimeOn{};                    ///< Enable "Break at Time Signature".
+    bool breakKeyLocal{};                  ///< Local setting for "Break at Key Signature".
+    bool breakKeyOn{};                     ///< Enable "Break at Key Signature".
+    bool freezeDirection{};                ///< Freeze tie direction. (xml node is `<freeze>`)
+    bool stPtAdjOn{};                      ///< Enable start point adjustment.
+    bool enPtAdjOn{};                      ///< Enable end point adjustment.
+    Evpu insetRatio1{};                    ///< Inset ratio for the first control point.
+    Evpu height1{};                        ///< Height of the first control point.
+    Evpu insetRatio2{};                    ///< Inset ratio for the second control point.
+    Evpu height2{};                        ///< Height of the second control point.
+    bool ctlPtAdjOn{};                     ///< Enable control point adjustment.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    bool requireAllFields() const override { return false; } ///< Unless we decide to figure out connection types, this will stay here.
+    static const xml::XmlElementArray<TieAlterBase>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TieAlterEnd
+ * @brief Alterations for tie ends.
+ *
+ * This class is identified by the XML node name "tieAlterEnd".
+ */
+class TieAlterEnd : public TieAlterBase
+{
+public:
+    using TieAlterBase::TieAlterBase;
+
+    constexpr static std::string_view XmlNodeName = "tieAlterEnd"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TieAlterEnd>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TieAlterStart
+ * @brief Alterations for tie starts. (Tie starts are normal ties.)
+ *
+ * This class is identified by the XML node name "tieAlterStart".
+ */
+class TieAlterStart : public TieAlterBase
+{
+public:
+    using TieAlterBase::TieAlterBase;
+
+    constexpr static std::string_view XmlNodeName = "tieAlterStart"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TieAlterStart>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 /**
  * @class TupletDef
  * @brief Options controlling the appearance of tuplets.

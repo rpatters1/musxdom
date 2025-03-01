@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <tuple>
+
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
@@ -29,8 +31,28 @@
 namespace musx {
 namespace dom {
 
-int calcAugmentationDotsFromEdu(Edu duration);      ///< Calculates the number of dots from an @ref Edu value.
-NoteType calcNoteTypeFromEdu(Edu duration);         ///< Calculates the @ref NoteType from an @ref Edu value.
+namespace others {
+class StaffComposite;
+} // namespace others
+
+namespace details {
+class TupletDef;
+class GFrameHold;
+} // namespace details
+
+/**
+ * @brief Calculates the @ref NoteType and number of dots in an @ref Edu value.
+ *
+ * @param duration The Edu duration to check.
+ * @return A std::pair containing:
+ *         - NoteType: The note type (Whole, Quarter, Eighth, etc.)
+ *         - unsigned: The number of augmentation dots
+ * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
+ */
+std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration);
+
+/// @brief Calculates the number of beams or flags in the @ref Edu value.
+unsigned calcNumberOfBeamsInEdu(Edu duration);
 
 /**
  * @class Note
@@ -38,22 +60,50 @@ NoteType calcNoteTypeFromEdu(Edu duration);         ///< Calculates the @ref Not
  *
  * This class is identified by the XML node name "note".
  */
-class Note : public Base 
+class Note : public Base
 {
 public:
     /** @brief Constructor function */
     explicit Note(const DocumentWeakPtr& document, NoteNumber noteId)
-        : Base(document, 0, ShareMode::All), m_noteId(noteId) {}
+        : Base(document, 0, ShareMode::All), m_noteId(noteId)
+    {
+    }
 
+    /// @brief The available note names, in array order.
+    enum class NoteName : int
+    {
+        C = 0,
+        D = 1,
+        E = 2,
+        F = 3,
+        G = 4,
+        A = 5,
+        B = 6
+    };
+    
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
     bool isValid{};     ///< Should always be true but otherwise appears to be used internally by Finale.
+    bool tieStart{};    ///< Indicates a tie starts on this note.
+    bool tieEnd{};      ///< Indicates a tie ends on this note.
     bool showAcci{};    ///< True if the note has an accidental. (Dynamically changed by Finale unless `freezeAcci` is set.)
     bool freezeAcci{};  ///< True if the accidental should be forced on or off (based on `showAcci`.)
 
     /// @brief Gets the note id for this note. This value does not change, even if the notes
     /// in a chord are rearranged (which affects the order of #Entry::notes.)
     NoteNumber getNoteId() const { return m_noteId; }
+
+    /**
+     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @param key The key signature in effect.
+     * @param clefIndex The index of the clef in effect.
+     * @return A tuple containing:
+     *         - NoteName: The note name (C, D, E, F, G, A, B)
+     *         - int: The octave number (where 4 is the middle C octave)
+     *         - int: The actual alteration (in semitones, relative to natural)
+     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     */
+    std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex) const;
 
     bool requireAllFields() const override { return false; }
 
@@ -69,14 +119,17 @@ private:
  *
  * This class is identified by the XML node name "entry".
  */
-class Entry : public Base {
+class Entry : public Base
+{
 public:
     /** @brief Constructor function
      *
      * The partId and shareMode values should always be 0 and ShareMode::All, but they are required by the factory function.
     */
     explicit Entry(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, EntryNumber prev, EntryNumber next)
-        : Base(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next) {}
+        : Base(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next)
+    {
+    }
 
     /**
      * @brief Duration of the entry, not taking into account tuplets.
@@ -96,6 +149,8 @@ public:
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
+    bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
+    bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
     bool stemDetail{};       ///< Indicates there are stem modification.
     bool sorted{};           ///< Sorted flag.
     bool lyricDetail{};      ///< Indicates there is a lyric assignment on the entry.
@@ -120,24 +175,18 @@ public:
     std::shared_ptr<Entry> getPrevious() const;
 
     /**
-     * @brief Calculates the NoteType based on the most significant bit of the duration field.
-     *
-     * @return NoteType corresponding to the most significant bit of the duration.
-     * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
+     * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
      */
-    NoteType calcNoteType() const { return calcNoteTypeFromEdu(duration); }
+    std::pair<NoteType, int> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
+
+    /// @brief Calculates if an entry displays as a rest.
+    /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
+    bool calcDisplaysAsRest() const { return !isNote; }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
-    util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration);  }
-
-    /**
-     * @brief Calculates the number of augmentation dots in the duration.
-     *
-     * @return The number of augmentation dots.
-     */
-    int calcAugmentationDots() const { return calcAugmentationDotsFromEdu(duration); }
+    util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration); }
 
     void integrityCheck() override
     {
@@ -152,73 +201,197 @@ public:
     constexpr static std::string_view XmlNodeName = "entry"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
-private:
+private:    
     EntryNumber m_entnum;   ///< Entry number.
     EntryNumber m_prev;     ///< Previous entry number in the list. (0 if none)
     EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
+    
 };
 
-/**
- * @class EntryInfo
- * @brief Information an entry along with the entry.
- *
- * This class is used in iteration functions to supply information about the entry along with the entry itself.
- *
- * @todo compute current clef index.
- */
-class EntryInfo
+class EntryInfo;
+class EntryFrame;
+class NoteInfoPtr;
+
+/// @brief Wraps a frame of shared_ptr<const EntryInfo> and an index for per entry access.
+/// This class manages ownership of the frame so that any instance of it keeps the frame alive
+/// without the need for circular references.
+class EntryInfoPtr
 {
 public:
+    /** @brief Default constructor */
+    EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
+    
     /** @brief Constructor function
      *
-     * @param layerIndex The @ref LayerIndex (0..3) of the entry
-     * @param entry The entry.
+     * @param entryFrame The entry frame.
+     * @param index The index of this instance within the frame. 
     */
-    explicit EntryInfo(LayerIndex layerIndex, const std::shared_ptr<const Entry>& entry)
-        : m_layerIndex(layerIndex), m_entry(entry) {}
+    EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
+        : m_entryFrame(entryFrame), m_indexInFrame(index) {}
 
-    util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
-    util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
-    bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
+    /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
+    const std::shared_ptr<const EntryInfo> operator->() const;
+
+    /// @brief Provides a boolean conversion based on whether the frame is valid and contains entries.
+    operator bool() const;
+
+    /// @brief Returns whether the input and the current instance refer to the same entry.
+    /// @return false if either this or src is null and true if they are both non null and refer to the same entry.
+    bool isSameEntry(const EntryInfoPtr& src) const;
+
+    /// @brief Returns the frame.
+    std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
+
+    /// @brief Returns the index within the frame.
+    size_t getIndexInFrame() const { return m_indexInFrame; }
 
     /// @brief Get the layer index (0..3) of the entry
-    LayerIndex getLayerIndex() const { return m_layerIndex; }
+    LayerIndex getLayerIndex() const;
 
-    /// @brief Get the entry
-    /// @throws std::logic_error if the entry pointer is no longer valid 
-    std::shared_ptr<const Entry> getEntry() const
+    /// @brief Get the staff cmper
+    InstCmper getStaff() const;
+
+    /// @brief Get the measure cmper
+    MeasCmper getMeasure() const;
+
+    /// @brief Creates the current StaffComposite for the entry
+    std::shared_ptr<others::StaffComposite> createCurrentStaff() const;
+
+    /// @brief Get the key signature of the entry
+    std::shared_ptr<KeySignature> getKeySignature() const;
+
+    /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
+    unsigned calcReverseGraceIndex() const;
+
+    /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
+    std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex) const;
+
+    /// @brief Get the next entry in the frame
+    EntryInfoPtr getNextInFrame() const;
+
+    /// @brief Get the next entry in the same layer and staff. This can be in the next measure.
+    /// @return  The next continguous entry. Returns nullptr if it encounters an empty frame or end of file.
+    EntryInfoPtr getNextInLayer() const;
+
+    /// @brief Get the next entry in the frame in the same voice
+    ///
+    /// For V2, it returns null after the current V2 launch sequence.
+    EntryInfoPtr getNextSameV() const;
+
+    /// @brief Get the previous entry in the same layer and staff. This can be in the previous measure.
+    /// @return  The previous continguous entry. Returns nullptr if it encounters an empty frame or the beginning of the file.
+    EntryInfoPtr getPreviousInLayer() const;
+
+    /// @brief Get the previous entry in the frame
+    EntryInfoPtr getPreviousInFrame() const;
+
+    /// @brief Get the previous entry in the frame in the same voice
+    ///
+    /// For V2, it returns null when it hits the v2Launch note for the current V2 launch sequence.
+    EntryInfoPtr getPreviousSameV() const;
+
+    /// @brief Returns the next entry in the frame in the specified v1/v2 or null if none.
+    ///
+    /// Unlike #getNextSameV, this returns the next v2 entry in any v2 launch sequence.
+    ///
+    /// @param voice 1 or 2
+    EntryInfoPtr getNextInVoice(int voice) const;
+
+    /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
+    EntryInfoPtr getNextInBeamGroup() const
+    { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(); }
+
+    /// @brief Gets the prevsiou entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
+    EntryInfoPtr getPreviousInBeamGroup() const
+    { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(); }
+
+    /// @brief Returns whether this is an unbeamed entry
+    /// @return 
+    bool calcUnbeamed() const
     {
-        auto retval = m_entry.lock();
-        if (!retval) {
-            throw std::logic_error("Entry pointer is no longer valid");
-        }
-        return retval;
+        if (!canBeBeamed()) return true;
+        return (!getNextInBeamGroup() && !getPreviousInBeamGroup());
     }
 
-private:
-    LayerIndex m_layerIndex;
-    std::weak_ptr<const Entry> m_entry;
-};
+    /// @brief Returns whether this is the start of a primary beam
+    bool calcIsBeamStart() const
+    {
+        if (!canBeBeamed()) return false;
+        return (!getPreviousInBeamGroup() && getNextInBeamGroup());
+    }
 
+    /// @brief Finds the end entry of a beamed group.
+    /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
+    EntryInfoPtr findBeamEnd() const;
+
+    /// @brief Finds a note with the same pitch in the current entry
+    /// @param src the pitch to search for
+    /// @return The found note or an null instance of NoteInfoPtr.
+    NoteInfoPtr findEqualPitch(const NoteInfoPtr& src) const;
+
+    /// @brief Calculates the number of beams or flags on the entry.
+    unsigned calcNumberOfBeams() const;
+
+private:
+    bool canBeBeamed() const;
+    
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+    EntryInfoPtr iteratePotentialEntryInBeam() const;
+
+    EntryInfoPtr nextPotentialInBeam() const;
+
+    EntryInfoPtr previousPotentialInBeam() const;
+
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)() const>
+    EntryInfoPtr iterateBeamGroup() const;
+
+    std::shared_ptr<const EntryFrame> m_entryFrame;
+    size_t m_indexInFrame{};              ///< the index of this item in the frame.
+};
 
 /**
  * @class EntryFrame
- * @brief Returns a vector of @ref EntryInfo instances for a given frame, along with computed information.
- * @todo Possibly compute current key
+ * @brief Represents a vector of @ref EntryInfo instances for a given frame, along with computed information.
+ *
+ * Its pointers are owned by @ref EntryInfoPtr
  */
-class EntryFrame
+class EntryFrame : public Base, public std::enable_shared_from_this<EntryFrame>
 {
 public:
     /** @brief Constructor function
      *
+     * @param gfhold The @ref details::GFrameHold instance creating this EntryFrame
      * @param staff The Cmper for the @ref others::Staff of the entry
      * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
     */
-    explicit EntryFrame(InstCmper staff, MeasCmper measure, LayerIndex layerIndex)
-        : m_staff(staff), m_measure(measure), m_layerIndex(layerIndex)
+    explicit EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex);
+
+    /// @brief class to track tuplets in the frame
+    struct TupletInfo
     {
-    }
+        std::shared_ptr<const details::TupletDef> tuplet;   ///< the tuplet
+        size_t startIndex;                                  ///< the index of the first entry in the tuplet
+        size_t endIndex;                                    ///< the index of the last entry in the tuplet
+        util::Fraction startDura;                           ///< the actual duration where the tuplet starts
+        util::Fraction endDura;                             ///< the actual duration where the tuplet ends
+
+        /// @brief Constructor
+        TupletInfo(const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start)
+            : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
+                startDura(start), endDura(-1)
+        {}
+    };
+
+    /** @brief A list of the tuplets in the frame and their calculated starting and ending information.
+     *
+     * @note Tuplets that start on grace notes are omitted from this list. Finale does not display them, and
+     * it is not possible to calculate their endpoints correctly in the general case. (Which is probably why
+     * Finale does not display them.)
+    */
+    std::vector<TupletInfo> tupletInfo;
+    std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
+                                                ///< @todo This must be adjusted based on concert or transposed pitch.
 
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }
@@ -233,9 +406,22 @@ public:
     const std::vector<std::shared_ptr<const EntryInfo>>& getEntries() const
     { return m_entries; }
 
+    /// @brief Returns the first entry in the specified v1/v2 or null if none.
+    ///
+    /// @param voice 1 or 2
+    EntryInfoPtr getFirstInVoice(int voice) const;
+
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)
     { m_entries.emplace_back(entry); }
+
+    /// @brief Gets the entry frame for the next measure with the same staff and layer.
+    /// @return Frame or nullpter if the next measure has no matching frame.
+    std::shared_ptr<const EntryFrame> getNext() const;
+
+    /// @brief Gets the entry frame for the previous measure with the same staff and layer.
+    /// @return Frame or nullpter if the previous measure has no matching frame,
+    std::shared_ptr<const EntryFrame> getPrevious() const;
 
 private:
     InstCmper m_staff;
@@ -243,6 +429,118 @@ private:
     LayerIndex m_layerIndex;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
+};
+
+namespace details {
+class GFrameHold;
+} // namespace details
+
+/**
+ * @class EntryInfo
+ * @brief Information an entry along with the entry.
+ *
+ * This class is used in iteration functions to supply information about the entry along with the entry itself.
+ *
+ * Its pointers are owned by @ref EntryFrame.
+ *
+ * @todo compute current clef index.
+ */
+class EntryInfo
+{
+    /** @brief Constructor function
+     *
+     * @param entry The entry.
+    */
+    explicit EntryInfo(const std::shared_ptr<const Entry>& entry)
+        : m_entry(entry) {}
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+    friend details::GFrameHold;
+#endif
+
+public:
+    util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
+    util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
+    bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
+    unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
+                                        ///< the main note has a grace index of zero.
+    ClefIndex clefIndex{};              ///< the clef index in effect for the entry.
+                                        ///< @todo This must be adjusted based on concert or transposed pitch.
+
+    /// @brief Get the entry
+    /// @throws std::logic_error if the entry pointer is no longer valid 
+    std::shared_ptr<const Entry> getEntry() const
+    {
+        auto retval = m_entry.lock();
+        if (!retval) {
+            throw std::logic_error("Entry pointer is no longer valid");
+        }
+        return retval;
+    }
+
+private:
+    std::weak_ptr<const Entry> m_entry;
+};
+
+/// @brief Wraps an @ref EntryInfo instance and a note index.
+class NoteInfoPtr
+{
+public:
+    /// @brief Default constructor
+    NoteInfoPtr() : m_entry(), m_noteIndex(0) {}
+
+    /// @brief Constructor
+    /// @param entryInfo 
+    /// @param noteIndex 
+    NoteInfoPtr(const EntryInfoPtr& entryInfo, size_t noteIndex)
+        : m_entry(entryInfo), m_noteIndex(noteIndex)
+    {}
+
+    /// @brief Provides a boolean conversion based on whether the EntryInfoPtr is valid and the note index is valid.
+    operator bool() const
+    { return m_entry && m_noteIndex < m_entry->getEntry()->notes.size(); }
+
+    /// @brief Returns whether the input and the current instance refer to the same note.
+    bool isSameNote(const NoteInfoPtr& src) const
+    { return m_entry.isSameEntry(src.m_entry) && m_noteIndex == src.m_noteIndex; }
+
+    /// @brief Allows `->` access to the underlying @ref Note instance.
+    std::shared_ptr<const Note> operator->() const
+    {
+        MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
+            throw std::logic_error("Note index is too large for notes array.");
+        }
+        return m_entry->getEntry()->notes[m_noteIndex];
+    }
+
+    /// @brief Gets the entry info for this note
+    EntryInfoPtr getEntryInfo() const
+    { return m_entry; }
+
+    /**
+     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @return A tuple containing:
+     *         - NoteName: The note name (C, D, E, F, G, A, B)
+     *         - int: The octave number (where 4 is the middle C octave)
+     *         - int: The actual alteration (in semitones, relative to natural)
+     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     */
+    std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const
+    { return (*this)->calcNoteProperties(m_entry.getKeySignature(), m_entry->clefIndex); }
+
+    /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
+    /// to see if there is actually a tie end.
+    /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
+    NoteInfoPtr calcTieTo() const;
+
+    /// @brief Calculates the note that this note could tie from. Check the return value's #Note::tieStart
+    /// to see if there is actually a tie.
+    /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
+    NoteInfoPtr calcTieFrom() const;
+
+private:
+    EntryInfoPtr m_entry;
+    size_t m_noteIndex;
 };
 
 } // namespace dom

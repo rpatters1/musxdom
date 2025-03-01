@@ -43,6 +43,7 @@ namespace dom {
 class Entry;
 
 namespace details {
+class GFrameHold;
 class StaffGroup;
 }
 
@@ -51,7 +52,149 @@ class StaffGroup;
  * @brief Classes in the @ref OthersPool.
  */
 namespace others {
+
+/**
+ * @class AcciAmountFlats
+ * @brief Lists the aleration values of each nth flat in a custom key signature.
+ * Note that while flats are numbered from 1-7, this table is indexed 0-6.
+ *
+ * AcciAmountFlats is primarily useful with microtone systems that use standard key
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
+ * need to specify acci alteration amounts with magnitude larger than 1.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "acciAmountFlats".
+ */
+class AcciAmountFlats : public OthersArray<int, 7>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "acciAmountFlats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AcciAmountFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class AcciAmountSharps
+ * @brief Lists the aleration values of each nth sharp in a custom key signature.
+ * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
+ *
+ * AcciAmountSharps is required for non-linear key signatures. It specifies whether a slot
+ * is sharp or flat with a positive or negative value. The first zero value in the table
+ * terminates the sequence of sharps or flats.
+ *
+ * AcciAmountSharps is also useful with microtone systems that use standard key
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
+ * need to specify acci alteration amounts with magnitude larger than 1.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "acciAmountFlats".
+ */
+class AcciAmountSharps : public OthersArray<int, 7>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "acciAmountSharps"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AcciAmountSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class AcciOrderFlats
+ * @brief Lists the order of flats by pitch class index (0..6 = C..B) in a custom key signature.
+ * Note that while flats are numbered from 1-7, this table is indexed 0-6.
+ *
+ * AcciOrderFlats is primarily useful with microtone systems that use standard key
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
+ * will need to supply and @ref AcciAmountFlats table, and this is here to match it.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "acciAmountFlats".
+ */
+class AcciOrderFlats : public OthersArray<unsigned, 7>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "acciOrderFlats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AcciOrderFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class AcciOrderSharps
+ * @brief Lists the order of sharps by pitch class index (0..6 = C..B) in a custom key signature.
+ * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
+ *
+ * AcciOrderSharps is required for non-linear key signatures. It specifies the order of
+ * pitch class indices for corresponding sharps and flats in @ref AcciAmountSharps, which can be mixed in any order.
+ * The first zero value in the @ref AcciAmountSharps table terminates the sequence of sharps or flats, and the rest
+ * of the values here are meaningless.
+ *
+ * AcciOrderSharps is also useful with microtone systems that use standard key
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
+ * will need to supply an @ref AcciAmountFlats table, and this should have values that correspond.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "acciAmountFlats".
+ */
+class AcciOrderSharps : public OthersArray<unsigned, 7>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "acciOrderSharps"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<AcciOrderSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class ClefList
+ * @brief Represents an element in multimeasure clef list with its positioning and percentage values.
+ *
+ * The cmper is obtained from the @ref details::GFrameHold instance for the staff and measure. Inci 0
+ * is the initial clef at the barline.
+ *
+ * This class is identified by the XML node name "clefEnum".
+ */
+class ClefList : public OthersBase {
+    public:
+        /** @brief Constructor function */
+        explicit ClefList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+            : OthersBase(document, partId, shareMode, cmper, inci) {}
+            
+        // Public properties corresponding to the XML structure, in the same order as in the XML.
+        ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
+        Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
+        Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
+        int percent{};          ///< The percentage value from the `<percent>` element.
+        int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
+        ShowClefMode clefMode{}; ///< The clef mode from the `<clefMode>` element.
+        bool unlockVert{};      ///< "Allow Vertical Drag"
+        bool afterBarline{};    ///< "Place Clef After Barline"
         
+        constexpr static std::string_view XmlNodeName = "clefEnum"; ///< The XML node name for this type.
+        static const xml::XmlElementArray<ClefList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+    
 /**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained.
@@ -60,18 +203,58 @@ namespace others {
  *
  * This class is identified by the XML node name "fontName".
  */
-class FontDefinition : public OthersBase {
+class FontDefinition : public OthersBase
+{
+    static constexpr uint32_t SYMBOL_CHARSET_MAC = 0xfff; // (4095)
+    static constexpr uint32_t SYMBOL_CHARSET_WIN = 2;
+
 public:
     /** @brief Constructor function */
     explicit FontDefinition(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    /// @enum CharacterSetBank
+    /// @brief The character set for the bank
+    enum class CharacterSetBank
+    {
+        MacOS,          /// xml value is "Mac"
+        Windows         /// xml value is "Win"
+    };
+
     // Public properties corresponding to the XML structure
-    std::string charsetBank;    ///< probably only "Mac" or "Win"
-    int charsetVal{};           ///< A value specifying the character set, usually 4095 or 0
-    int pitch{};                ///< Represents the `<pitch>` element, e.g., 0. (use unknown)
-    int family{};               ///< Represents the `<family>` element, e.g., 0. (use unknown)
-    std::string name;           ///< The font name e.g., "Broadway Copyist Text".
+    CharacterSetBank charsetBank{}; ///< The character set bank.
+    int charsetVal{};               ///< A value specifying the character set. The meaning is dependent on #charsetBank.
+                                    ///< A value of 0 indicates ANSI character set for Windows and MacRoman for macOS.
+                                    ///< A value of 2 (`SYMBOL_CHARSET`) indicates a symbol font for Windows.
+                                    ///< A value of 4095 (0xfff) indicates a symbol font for macOS.
+                                    ///< Other values are possible but less likely.
+    int pitch{};                    ///< Represents the `<pitch>` element, e.g., 0. (use unknown)
+    int family{};                   ///< Represents the `<family>` element, e.g., 0. (use unknown)
+    std::string name;               ///< The font name e.g., "Broadway Copyist Text".
+
+    /**
+     * @brief Calculates if this font is a symbol font.
+     *
+     * The code points in symbol fonts
+     * are mapped directly to the glyph index of the font without any attempt at
+     * linguistic mapping.
+     *
+     * Many legacy symbol fonts in Finale were music fonts following more-or-less the layout
+     * of Adobe Sonata font, so this may be an appropriate proxy for telling if the font is a legacy
+     * music font, at least in some contexts. The same font face (e.g., Engraver) may appear as
+     * either a Windows symbol font or a macOS symbol font, depending on the origin of the font
+     * and of the document.
+    */
+    bool calcIsSymbolFont() const
+    {
+        if (charsetBank == CharacterSetBank::MacOS && charsetVal == SYMBOL_CHARSET_MAC) {
+            return true;
+        }
+        if (charsetBank == CharacterSetBank::Windows && charsetVal == SYMBOL_CHARSET_WIN) {
+            return true;
+        }
+        return false;
+    }
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FontDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1058,16 +1241,12 @@ public:
  *
  * This class is identified by the XML node name "repeatPassList".
  */
-class RepeatPassList : public OthersBase
+class RepeatPassList : public OthersArray<int>
 {
-public:
-    /** @brief Constructor function */
-    explicit RepeatPassList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
+    std::string_view xmlTag() const override { return XmlNodeName; }
 
-    std::vector<int> endingNumbers; ///< List of repeat ending numbers extracted from xml `<act>` elements.
+public:
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "repeatPassList"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatPassList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1148,6 +1327,9 @@ public:
     explicit Staff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    // WARNING: Any fields added here must have a mask added in StaffStyle (if it does not already exist)
+    //          and must be added to StaffComposite::applyStyle.
+
     // Public properties corresponding to the XML structure
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff.
@@ -1173,6 +1355,7 @@ public:
     Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
     bool hideStems{};               ///< Inverse of "Display Stems"
+    bool hideBeams{};               ///< Inverse of "Show Beams"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
@@ -1223,6 +1406,18 @@ public:
     /// @param plainName The name (full or abbreviated) to which to add the auto numbering
     /// @return Auto numbered name.
     std::string addAutoNumbering(const std::string& plainName) const;
+
+    /// @brief Returns the first clef in this staff
+    ClefIndex calcFirstClefIndex() const;
+
+    /// @brief Returns the first clef in the specified staff in the document
+    /// @param document the document to search
+    /// @param partId the linked part to search
+    /// @param staffCmper the staff cmper to search
+    static ClefIndex calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper);
+
+    /// @brief Returns the middle staff position. For staves with even numbers of lines, it is the middle space.
+    int calcMiddleStaffPosition() const;
 
     void integrityCheck() override
     {
@@ -1275,7 +1470,9 @@ public:
         explicit Masks(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
+        bool defaultClef{};         ///< overrides default clef
         bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
+        bool transposition{};       ///< overrides transposition fields
         bool negNameScore{};        ///< overrides #hideNameInScore.
         bool fullName{};            ///< overrides #fullNameTextId.
         bool abrvName{};            ///< overrides #abbrvNameTextId.
@@ -1368,11 +1565,11 @@ private:
     explicit StaffComposite(const std::shared_ptr<Staff>& staff)
         : StaffStyle(staff) {}
 
-public:
     /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
     /// @param staffStyle The @ref StaffStyle to apply.
     void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
 
+public:
     /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
     ///
     /// Note that the Finale app has logic to assure that no two assigments modify the same staff properties at the same metric
@@ -1766,7 +1963,52 @@ public:
     constexpr static std::string_view XmlNodeName = "timeUpper"; ///< XML node name.
     static const xml::XmlElementArray<TimeCompositeUpper>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
+/**
+ * @class TonalCenterFlats
+ * @brief Maps the number of flats to a tonal center for a linear custom key. If there are zero flats or sharps,
+ * do not use this table. Use @ref TonalCenterSharps for zero. If the key has flats, the number is returned as a negative
+ * number (-1..-7) from #KeySignature::getAlteration. Use the absolute value of that number to index this table.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "fstKeyFlats".
+ */
+class TonalCenterFlats : public OthersArray<unsigned, 8>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "fstKeyFlats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TonalCenterFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class TonalCenterSharps
+ * @brief Maps number of sharps (0..7) to a tonal center for a linear custom key. Also maps 0 sharps or flats.
+ * For a non-linear key, the first element is the tonal center and the rest are meaningless.
+ *
+ * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
+ * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
+ * anything is possible.)
+ *
+ * This class is identified by the XML node name "fstKeySharps".
+ */
+class TonalCenterSharps : public OthersArray<unsigned, 8>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "fstKeySharps"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TonalCenterSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 } // namespace others
 } // namespace dom
 } // namespace musx

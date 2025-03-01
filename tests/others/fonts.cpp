@@ -92,7 +92,7 @@ TEST(FontTest, FontDefinitionProperties)
     ASSERT_TRUE(others);
     auto fontDef = others->get<others::FontDefinition>(SCORE_PARTID, 1);
     ASSERT_TRUE(fontDef);
-    EXPECT_EQ(fontDef->charsetBank, "Mac");
+    EXPECT_EQ(fontDef->charsetBank, others::FontDefinition::CharacterSetBank::MacOS);
     EXPECT_EQ(fontDef->charsetVal, 1);
     EXPECT_EQ(fontDef->pitch, 2);
     EXPECT_EQ(fontDef->family, 3);
