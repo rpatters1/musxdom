@@ -1152,7 +1152,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                     }
                 }
             } else {
-                nextEntry = nextEntry.getNextInLayer(); // getNextInLayer searches the next frame already
+                nextEntry = nextEntry.getNextInLayer();
             }
             if (!nextEntry) {
                 break;
