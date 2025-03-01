@@ -366,14 +366,14 @@ EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
     if (!result || !result.canBeBeamed()) {
         return EntryInfoPtr();
     }
-    auto thisEntry = (*this)->getEntry();
+    auto thisRawEntry = (*this)->getEntry();
     auto resultEntry = result->getEntry();
     // a grace can't beam past a non grace note
-    if (thisEntry->graceNote && !resultEntry->graceNote) {
+    if (thisRawEntry->graceNote && !resultEntry->graceNote) {
         return EntryInfoPtr();
     }
     // a non grace should skip grace notes
-    if (!thisEntry->graceNote && resultEntry->graceNote) {
+    if (!thisRawEntry->graceNote && resultEntry->graceNote) {
         do {
             if (result->getEntry()->beam || !result.canBeBeamed()) {
                 return EntryInfoPtr();
@@ -409,9 +409,9 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
     }
     EntryInfoPtr result = (this->*Iterator)(); // either nextPotentialInBeam or previousPotentialInBeam
     if (result) {
-        auto thisEntry = (*this)->getEntry();
+        auto thisRawEntry = (*this)->getEntry();
         auto resultEntry = result->getEntry();
-        if (thisEntry->calcDisplaysAsRest() || resultEntry->calcDisplaysAsRest()) {
+        if (thisRawEntry->calcDisplaysAsRest() || resultEntry->calcDisplaysAsRest()) {
             auto beamOpts = getFrame()->getDocument()->getOptions()->get<options::BeamOptions>();
             MUSX_ASSERT_IF(!beamOpts) {
                 throw std::logic_error("Document has no BeamOptions.");
@@ -689,12 +689,8 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
             auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry));
-            if (!entry->voice2) {
-                if ((i + 1) < entries.size() && entries[i + 1]->voice2) {
-                    entryInfo->v2Launch = true;                    
-                } else if (i > 0 && entries[i - 1]->voice2) {
-                    entryInfo->v1Continuation = true;
-                }
+            if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
+                entryInfo->v2Launch = true;
             }
             if (entryInfo->v2Launch) {
                 // Note: v1 tuplets do not appear to affect v2 entries. If they did this would be correct:
@@ -1180,18 +1176,22 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
 NoteInfoPtr NoteInfoPtr::calcTieFrom() const
 {
     // grace notes cannot tie backwards; only forwards (see grace note comment above)
-    if (m_entry->getEntry()->isNote && !m_entry->getEntry()->graceNote) {
+    auto thisRawEntry = m_entry->getEntry();
+    if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
         for (auto currEntry = m_entry.getPrevious(); currEntry; currEntry = currEntry.getPrevious()) {
             if (currEntry->v2Launch && m_entry.isSameEntry(currEntry.getNextInFrame())) {
                 continue;
             }
+            auto currRawEntry = currEntry->getEntry();
             if (auto result = currEntry.findEqualPitch(*this)) {
                 return result;
             }
-            if (currEntry->getEntry()->graceNote) {
+            if (currRawEntry->graceNote) {
                 continue;
             }
-            if (currEntry->getEntry()->voice2) {
+            bool skipBackToV1 = !thisRawEntry->voice2
+                              || currRawEntry->voice2 && currEntry.getPreviousInFrame()->v2Launch;
+            if (skipBackToV1 && currRawEntry->voice2) {
                 while (currEntry) {
                     auto testEntry = currEntry.getPrevious();
                     if (!testEntry || !testEntry->getEntry()->voice2) {

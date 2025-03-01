@@ -27,7 +27,7 @@
 using namespace musx::dom;
 
 
-static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpected)
+static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpected, const std::optional<NoteInfoPtr>& backNoteExpected = std::nullopt)
 {
     ASSERT_TRUE(fromNote || toNoteExpected) << " null passed for both fromNote and toNoteExpected";
 
@@ -45,7 +45,11 @@ static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpec
             ASSERT_TRUE(toNote) << msg << " unexpected tied to note";
             auto expectedFromNote = toNote.calcTieFrom();
             ASSERT_TRUE(expectedFromNote) << msg << " expected from note was null";
-            EXPECT_TRUE(fromNote.isSameNote(expectedFromNote)) << msg << " unexpected tied from note";
+            if (backNoteExpected) {
+                EXPECT_TRUE(backNoteExpected.value().isSameNote(expectedFromNote)) << msg << " unexpected tied from note";
+            } else {
+                EXPECT_TRUE(fromNote.isSameNote(expectedFromNote)) << msg << " unexpected tied from note";
+            }
         }
     } else {
         auto fromNoteExpected = toNoteExpected.calcTieFrom();
@@ -81,11 +85,11 @@ TEST(TieDetection, TiesInMeasure)
     checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 5, 3));
 }
 
-TEST(TieDetection, V1V2TiesInMeasure)
+TEST(TieDetection, V1V2TiesInMeasure2)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
@@ -102,11 +106,11 @@ TEST(TieDetection, V1V2TiesInMeasure)
     checkTie(createNoteInfo(entryFrame, 4, 1), NoteInfoPtr());
 }
 
-TEST(TieDetection, V1V2TiesAcrossMeasure)
+TEST(TieDetection, V1V2TiesAcrossMeasure3_5)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto gfhold3 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 3);
@@ -129,4 +133,91 @@ TEST(TieDetection, V1V2TiesAcrossMeasure)
 
     checkTie(createNoteInfo(entryFrame4, 2, 0), createNoteInfo(entryFrame5, 1, 0));
     checkTie(createNoteInfo(entryFrame4, 3, 0), createNoteInfo(entryFrame5, 0, 0));
+}
+
+TEST(TieDetection, V1V2TiesAcrossMeasure6_7)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold6 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 6);
+    ASSERT_TRUE(gfhold6) << " gfhold not found for 1, 6";
+    auto entryFrame6 = gfhold6->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame6);
+
+    auto gfhold7 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 7);
+    ASSERT_TRUE(gfhold7) << " gfhold not found for 1, 7";
+    auto entryFrame7 = gfhold7->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame7);
+
+    checkTie(createNoteInfo(entryFrame6, 2, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame6, 3, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame6, 4, 0), createNoteInfo(entryFrame7, 1, 0));
+
+    checkTie(createNoteInfo(entryFrame7, 3, 0), createNoteInfo(entryFrame7, 5, 0));
+    checkTie(createNoteInfo(entryFrame7, 4, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame7, 6, 0), NoteInfoPtr());
+}
+
+TEST(TieDetection, V1V2TiesAcrossMeasure8_9)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold8 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 8);
+    ASSERT_TRUE(gfhold8) << " gfhold not found for 1, 8";
+    auto entryFrame8 = gfhold8->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame8);
+
+    auto gfhold9 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 9);
+    ASSERT_TRUE(gfhold9) << " gfhold not found for 1, 9";
+    auto entryFrame9 = gfhold9->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame9);
+
+    checkTie(createNoteInfo(entryFrame8, 2, 0), createNoteInfo(entryFrame9, 0, 0));
+    checkTie(createNoteInfo(entryFrame8, 3, 0), NoteInfoPtr());
+    checkTie(NoteInfoPtr(), createNoteInfo(entryFrame8, 3, 0));
+}
+
+TEST(TieDetection, V1V2TiesInMeasure10)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 10);
+    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 10";
+    auto entryFrame = gfhold->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+
+    checkTie(createNoteInfo(entryFrame, 0, 0), createNoteInfo(entryFrame, 4, 0), createNoteInfo(entryFrame, 3, 0));
+    checkTie(createNoteInfo(entryFrame, 1, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame, 3, 0), createNoteInfo(entryFrame, 4, 0));
+    checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 3, 0));
+}
+
+TEST(TieDetection, NoTiesInMeasure11)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 11);
+    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 11";
+    auto entryFrame = gfhold->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+
+    checkTie(createNoteInfo(entryFrame, 1, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame, 2, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame, 3, 0), NoteInfoPtr());
+    checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 3, 0));
+    checkTie(createNoteInfo(entryFrame, 3, 0), NoteInfoPtr());
+    checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 4, 0));
+    checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 5, 0));
 }
