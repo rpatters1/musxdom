@@ -235,6 +235,10 @@ public:
     /// @brief Provides a boolean conversion based on whether the frame is valid and contains entries.
     operator bool() const;
 
+    /// @brief Returns whether the input and the current instance refer to the same entry.
+    /// @return false if either this or src is null and true if they are both non null and refer to the same entry.
+    bool isSameEntry(const EntryInfoPtr& src) const;
+
     /// @brief Returns the frame.
     std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
 
@@ -495,6 +499,10 @@ public:
     /// @brief Provides a boolean conversion based on whether the EntryInfoPtr is valid and the note index is valid.
     operator bool() const
     { return m_entry && m_noteIndex < m_entry->getEntry()->notes.size(); }
+
+    /// @brief Returns whether the input and the current instance refer to the same note.
+    bool isSameNote(const NoteInfoPtr& src) const
+    { return m_entry.isSameEntry(src.m_entry) && m_noteIndex == src.m_noteIndex; }
 
     /// @brief Allows `->` access to the underlying @ref Note instance.
     std::shared_ptr<const Note> operator->() const

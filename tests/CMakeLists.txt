@@ -44,6 +44,7 @@ add_executable(musxdomtests
     entries/beam_detection.cpp
     entries/entries.cpp
     entries/keysigs.cpp
+    entries/ties.cpp
     # options
     options/accidental_options.cpp
     options/alternate_notation_options.cpp
@@ -93,6 +94,7 @@ add_executable(musxdomtests
 	details/gfhold.cpp
 	details/secondary_beams.cpp
 	details/staff_group.cpp
+    details/tie_alter.cpp
     details/tuplet_def.cpp
 )
 

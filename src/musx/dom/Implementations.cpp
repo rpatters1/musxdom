@@ -166,6 +166,14 @@ const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 EntryInfoPtr::operator bool() const
 { return m_entryFrame && m_indexInFrame < m_entryFrame->getEntries().size(); }
 
+bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    return (*this)->getEntry()->getEntryNumber() == src->getEntry()->getEntryNumber();
+}
+
 LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
 InstCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
@@ -1134,7 +1142,8 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
 NoteInfoPtr NoteInfoPtr::calcTieTo() const
 {
     if (m_entry->getEntry()->isNote) {
-        if (auto nextEntry = m_entry) {
+        auto nextEntry = m_entry;
+        while (nextEntry) {
             if (nextEntry->v2Launch) {
                 nextEntry = nextEntry.getNextSameV();
                 if (!nextEntry) {
@@ -1143,7 +1152,13 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                     }
                 }
             } else {
-                nextEntry = nextEntry.getNext(); // getNext search the next frame already
+                nextEntry = nextEntry.getNext(); // getNext searches the next frame already
+            }
+            if (!nextEntry) {
+                break;
+            }
+            if (nextEntry->getEntry()->graceNote) { // grace note tie to the next non grace entry, if there is a note there to tie to
+                continue;
             }
             if (auto result = nextEntry.findEqualPitch(*this)) {
                 return result;
@@ -1159,7 +1174,8 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
 
 NoteInfoPtr NoteInfoPtr::calcTieFrom() const
 {
-    if (m_entry->getEntry()->isNote) {
+    // grace notes cannot tie backwards; only forwards (see grace note comment above)
+    if (m_entry->getEntry()->isNote && !m_entry->getEntry()->graceNote) {
         bool checkedPreviousMeasure = false;
         for (auto nextEntry = m_entry.getPrevious(); nextEntry; nextEntry = nextEntry.getPrevious()) {
             if (m_entry.getMeasure() != nextEntry.getMeasure()) {
@@ -1170,6 +1186,11 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
             }
             if (auto result = nextEntry.findEqualPitch(*this)) {
                 return result;
+            }
+            if (!nextEntry->getEntry()->graceNote) {
+                if (m_entry->getEntry()->voice2 || !nextEntry->getEntry()->voice2) {
+                    break;
+                }
             }
         }
     }
