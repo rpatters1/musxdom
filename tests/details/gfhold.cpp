@@ -278,12 +278,12 @@ TEST(GFrameHold, QuintupletTest)
             const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
-                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
-                    const auto& tuplInf = frame->tupletInfo[x];
-                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
-                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
-                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
-                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                for (size_t y = 0; y < frame->tupletInfo.size(); y++) {
+                    const auto& tuplInf = frame->tupletInfo[y];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[y]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[y]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[y]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[y]);
                 }
             }
         }
@@ -325,12 +325,12 @@ TEST(GFrameHold, TripletTest)
             const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
-                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
-                    const auto& tuplInf = frame->tupletInfo[x];
-                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
-                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
-                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
-                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                for (size_t y = 0; y < frame->tupletInfo.size(); y++) {
+                    const auto& tuplInf = frame->tupletInfo[y];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[y]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[y]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[y]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[y]);
                 }
             }
         }
@@ -375,12 +375,12 @@ TEST(GFrameHold, NestedTupletTest)
             const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
-                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
-                    const auto& tuplInf = frame->tupletInfo[x];
-                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
-                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
-                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
-                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                for (size_t y = 0; y < frame->tupletInfo.size(); y++) {
+                    const auto& tuplInf = frame->tupletInfo[y];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[y]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[y]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[y]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[y]);
                 }
             }
         }
@@ -427,12 +427,12 @@ TEST(GFrameHold, V1V2TupletTest)
             const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
-                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
-                    const auto& tuplInf = frame->tupletInfo[x];
-                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
-                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
-                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
-                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                for (size_t y = 0; y < frame->tupletInfo.size(); y++) {
+                    const auto& tuplInf = frame->tupletInfo[y];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[y]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[y]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[y]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[y]);
                 }
             }
         }
@@ -487,12 +487,12 @@ TEST(GFrameHold, NestedEndTuplets)
             const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
-                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
-                    const auto& tuplInf = frame->tupletInfo[x];
-                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
-                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
-                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
-                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                for (size_t y = 0; y < frame->tupletInfo.size(); y++) {
+                    const auto& tuplInf = frame->tupletInfo[y];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[y]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[y]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[y]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[y]);
                 }
             }
         }
@@ -538,12 +538,12 @@ TEST(GFrameHold, IncompleteTuplet)
             const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
-                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
-                    const auto& tuplInf = frame->tupletInfo[x];
-                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
-                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
-                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
-                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                for (size_t y = 0; y < frame->tupletInfo.size(); y++) {
+                    const auto& tuplInf = frame->tupletInfo[y];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[y]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[y]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[y]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[y]);
                 }
             }
         }
@@ -586,12 +586,12 @@ TEST(GFrameHold, IncompleteTupletV2)
             const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
-                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
-                    const auto& tuplInf = frame->tupletInfo[x];
-                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
-                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
-                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
-                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                for (size_t y = 0; y < frame->tupletInfo.size(); y++) {
+                    const auto& tuplInf = frame->tupletInfo[y];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[y]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[y]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[y]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[y]);
                 }
             }
         }
@@ -636,12 +636,12 @@ TEST(GFrameHold, ZeroTuplet)
             const auto frame = entryInfo.getFrame();
             EXPECT_EQ(frame->tupletInfo.size(), expectedStarts.size());
             if (frame->tupletInfo.size() == expectedStarts.size()) {
-                for (size_t x = 0; x < frame->tupletInfo.size(); x++) {
-                    const auto& tuplInf = frame->tupletInfo[x];
-                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[x]);
-                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[x]);
-                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[x]);
-                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[x]);
+                for (size_t y = 0; y < frame->tupletInfo.size(); y++) {
+                    const auto& tuplInf = frame->tupletInfo[y];
+                    EXPECT_EQ(tuplInf.startIndex, expectedStarts[y]);
+                    EXPECT_EQ(tuplInf.startDura, expectedStartDuras[y]);
+                    EXPECT_EQ(tuplInf.endIndex, expectedEnds[y]);
+                    EXPECT_EQ(tuplInf.endDura, expectedEndDuras[y]);
                 }
             }
         }
