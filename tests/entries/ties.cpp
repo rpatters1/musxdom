@@ -58,7 +58,7 @@ static NoteInfoPtr createNoteInfo(const std::shared_ptr<const EntryFrame>& entry
     return NoteInfoPtr(EntryInfoPtr(entryFrame, entryIndex), noteIndex);
 }
 
-TEST(BeamDetection, TiesInMeasure)
+TEST(TieDetection, TiesInMeasure)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
@@ -81,7 +81,7 @@ TEST(BeamDetection, TiesInMeasure)
     checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 5, 3));
 }
 
-TEST(BeamDetection, V1V2TiesInMeasure)
+TEST(TieDetection, V1V2TiesInMeasure)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
@@ -100,4 +100,26 @@ TEST(BeamDetection, V1V2TiesInMeasure)
     checkTie(createNoteInfo(entryFrame, 3, 0), createNoteInfo(entryFrame, 4, 2));
 
     checkTie(createNoteInfo(entryFrame, 4, 1), NoteInfoPtr());
+}
+
+TEST(TieDetection, V1V2TiesAcrossMeasure)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "ties.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold3 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 3);
+    ASSERT_TRUE(gfhold3) << " gfhold not found for 1, 2";
+    auto entryFrame3 = gfhold3->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame3);
+
+    auto gfhold4 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 4);
+    ASSERT_TRUE(gfhold4) << " gfhold not found for 1, 4";
+    auto entryFrame4 = gfhold4->createEntryFrame(0);
+    ASSERT_TRUE(entryFrame4);
+
+    checkTie(createNoteInfo(entryFrame3, 2, 0), createNoteInfo(entryFrame4, 0, 0));
+    checkTie(createNoteInfo(entryFrame3, 3, 0), createNoteInfo(entryFrame4, 0, 1));
+
 }

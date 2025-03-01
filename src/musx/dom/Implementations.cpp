@@ -1167,6 +1167,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                 nextEntry = nextEntry.getNext();
                 return nextEntry.findEqualPitch(*this);
             }
+            break;
         }
     }
     return NoteInfoPtr();
@@ -1185,10 +1186,24 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
                 checkedPreviousMeasure = true;
             }
             if (auto result = nextEntry.findEqualPitch(*this)) {
+                if (nextEntry->v2Launch && m_entry->getEntry()->voice2) {
+                    continue;
+                }
                 return result;
             }
             if (!nextEntry->getEntry()->graceNote) {
-                if (m_entry->getEntry()->voice2 || !nextEntry->getEntry()->voice2) {
+                if (m_entry->getEntry()->voice2) {
+                    break;
+                }
+                if (nextEntry->getEntry()->voice2) {
+                    while (nextEntry) {
+                        auto testEntry = nextEntry.getPrevious();
+                        if (!testEntry || !testEntry->getEntry()->voice2) {
+                            break;
+                        }
+                        nextEntry = testEntry;
+                    }
+                } else {
                     break;
                 }
             }

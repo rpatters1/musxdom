@@ -1605,25 +1605,38 @@
     <beatChart cmper="7" inci="0">
       <control>
         <totalDur>4096</totalDur>
-        <totalWidth>304</totalWidth>
-        <minWidth>129</minWidth>
-        <allotWidth>152</allotWidth>
+        <totalWidth>356</totalWidth>
+        <minWidth>253</minWidth>
+        <allotWidth>343</allotWidth>
       </control>
     </beatChart>
     <beatChart cmper="7" inci="1">
       <endPos>84</endPos>
+      <minPos>8</minPos>
     </beatChart>
     <beatChart cmper="7" inci="2">
       <dur>1024</dur>
       <pos>84</pos>
       <endPos>168</endPos>
-      <minPos>43</minPos>
+      <minPos>51</minPos>
     </beatChart>
     <beatChart cmper="7" inci="3">
       <dur>2048</dur>
       <pos>168</pos>
+      <endPos>252</endPos>
+      <minPos>88</minPos>
+    </beatChart>
+    <beatChart cmper="7" inci="4">
+      <dur>3072</dur>
+      <pos>252</pos>
       <endPos>304</endPos>
-      <minPos>83</minPos>
+      <minPos>167</minPos>
+    </beatChart>
+    <beatChart cmper="7" inci="5">
+      <dur>3584</dur>
+      <pos>304</pos>
+      <endPos>356</endPos>
+      <minPos>210</minPos>
     </beatChart>
     <beatChart cmper="8" inci="0">
       <control>
@@ -1821,7 +1834,7 @@
     </frameSpec>
     <frameSpec cmper="20" inci="0">
       <startEntry>54</startEntry>
-      <endEntry>57</endEntry>
+      <endEntry>97</endEntry>
     </frameSpec>
     <frameSpec cmper="21" inci="0">
       <startEntry>58</startEntry>
@@ -2254,7 +2267,7 @@
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="7">
-      <width>336</width>
+      <width>396</width>
       <beats>4</beats>
       <divbeat>1024</divbeat>
       <dispBeats>4</dispBeats>
@@ -2941,7 +2954,7 @@
     <staffSystemSpec cmper="5">
       <startMeas>7</startMeas>
       <endMeas>8</endMeas>
-      <horzPercent>72440</horzPercent>
+      <horzPercent>61465</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-68</top>
@@ -3447,6 +3460,11 @@
       <context>onStandardNote</context>
       <beamWidth>-1</beamWidth>
     </beamAltPrimDownStem>
+    <beamAltPrimUpStem entnum="96">
+      <syAdd>-6</syAdd>
+      <context>onStandardNote</context>
+      <beamWidth>-1</beamWidth>
+    </beamAltPrimUpStem>
     <gfhold cmper1="1" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
@@ -3575,6 +3593,9 @@
     </stemAdjust>
     <stemAdjust entnum="74">
       <upVertAdjust>12</upVertAdjust>
+    </stemAdjust>
+    <stemAdjust entnum="95">
+      <downVertAdjust>-6</downVertAdjust>
     </stemAdjust>
     <tieAlterStart entnum="9" inci="0">
       <noteID>1</noteID>
@@ -4321,21 +4342,8 @@
         <tieEnd/>
       </note>
     </entry>
-    <entry entnum="56" prev="55" next="57">
+    <entry entnum="56" prev="55" next="94">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <floatRest/>
-      <beam/>
-      <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="57" prev="56" next="70">
-      <dura>2048</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <floatRest/>
@@ -4443,31 +4451,21 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="70" prev="57" next="71">
+    <entry entnum="70" prev="97" next="71">
       <dura>2048</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="71" prev="70" next="72">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="72" prev="71" next="73">
       <dura>1024</dura>
@@ -4679,6 +4677,67 @@
       <floatRest/>
       <beam/>
       <sorted/>
+    </entry>
+    <entry entnum="94" prev="56" next="95">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>5</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+        <tieStart/>
+      </note>
+    </entry>
+    <entry entnum="95" prev="94" next="96">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <controller/>
+      <beam/>
+      <stemDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>3</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="96" prev="95" next="97">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <v2/>
+      <beam/>
+      <stemDetail/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>5</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+        <tieEnd/>
+      </note>
+    </entry>
+    <entry entnum="97" prev="96" next="70">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <v2/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
   </entries>
   <texts>
