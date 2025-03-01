@@ -84,6 +84,7 @@ public:
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
     bool isValid{};     ///< Should always be true but otherwise appears to be used internally by Finale.
+    bool crossStaff{};  ///< Signifies that the note has a @ref CrossStaff note detail.
     bool tieStart{};    ///< Indicates a tie starts on this note.
     bool tieEnd{};      ///< Indicates a tie ends on this note.
     bool showAcci{};    ///< True if the note has an accidental. (Dynamically changed by Finale unless `freezeAcci` is set.)
@@ -149,6 +150,7 @@ public:
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
+    bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
     bool stemDetail{};       ///< Indicates there are stem modification.

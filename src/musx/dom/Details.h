@@ -51,6 +51,30 @@ class Measure;
 namespace details {
 
 /**
+ * @class CrossStaff
+ * @brief Represents a cross-staff assignment for the note, if any.
+ *
+ * This class is identified by the XML node name "crossStaff".
+ */
+class CrossStaff : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit CrossStaff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};    ///< The ID of the note being assigned to a different staff (XML node: `<noteID>`)
+    InstCmper staff{};      ///< The target staff (XML node: `<instrument>`)
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "crossStaff";    ///< The XML node name for this type.
+    static const xml::XmlElementArray<CrossStaff>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class GFrameHold
  * @brief Represents the attributes of a Finale frame holder.
  *
