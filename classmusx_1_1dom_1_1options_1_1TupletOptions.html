@@ -132,9 +132,9 @@ Public Types</h2></td></tr>
 &#160;&#160;<a class="el" href="classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcdaf80a4ad87fee7c9fdc19b7769495fdb5">Nothing</a>
 , <a class="el" href="classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcdab2ee912b91d69b435159c7c3f6df7f5f">Number</a>
 , <a class="el" href="classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1">UseRatio</a>
-, <a class="el" href="classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda23570cf20221ad2560fad59b4b56615b">RatioPlusBothNotes</a>
+, <a class="el" href="classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda948cf28200b790eff3d80e8df36fc16c">RatioPlusDenominatorNote</a>
 , <br />
-&#160;&#160;<a class="el" href="classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda948cf28200b790eff3d80e8df36fc16c">RatioPlusDenominatorNote</a>
+&#160;&#160;<a class="el" href="classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda23570cf20221ad2560fad59b4b56615b">RatioPlusBothNotes</a>
 <br />
  }</td></tr>
 <tr class="memdesc:aceb460d1216337d6419b5662a2d0afcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number style options.  <a href="classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcd">More...</a><br /></td></tr>
@@ -438,7 +438,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Number style options. </p>
-<dl class="section warning"><dt>Warning</dt><dd>Finale appears to have implemented <code>RatioPlusBothNotes</code> and <code>RatioPlusDenominatorNote</code> backwards from how they are named. It is probably a long-standing bug that was never worth fixing. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Finale appears to have implemented <code>RatioPlusBothNotes</code> and <code>RatioPlusDenominatorNote</code> backwards from how they are named in the xml. It is probably a long-standing bug that was never worth fixing. This DOM corrects the mistake by reversing their mapping in the enum mapping. </dd></dl>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aceb460d1216337d6419b5662a2d0afcdaf80a4ad87fee7c9fdc19b7769495fdb5" name="aceb460d1216337d6419b5662a2d0afcdaf80a4ad87fee7c9fdc19b7769495fdb5"></a>Nothing&#160;</td><td class="fielddoc"><p>The default. </p>
 </td></tr>
@@ -446,9 +446,9 @@ Additional Inherited Members</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1" name="aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1"></a>UseRatio&#160;</td><td class="fielddoc"><p>Ratio X:Y. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aceb460d1216337d6419b5662a2d0afcda23570cf20221ad2560fad59b4b56615b" name="aceb460d1216337d6419b5662a2d0afcda23570cf20221ad2560fad59b4b56615b"></a>RatioPlusBothNotes&#160;</td><td class="fielddoc"><dl class="section warning"><dt>Warning</dt><dd>displays a note value on the denominator </dd></dl>
+<tr><td class="fieldname"><a id="aceb460d1216337d6419b5662a2d0afcda948cf28200b790eff3d80e8df36fc16c" name="aceb460d1216337d6419b5662a2d0afcda948cf28200b790eff3d80e8df36fc16c"></a>RatioPlusDenominatorNote&#160;</td><td class="fielddoc"><p>displays a note value only on the denominator (xml value is "ratioPlusBothNotes") </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aceb460d1216337d6419b5662a2d0afcda948cf28200b790eff3d80e8df36fc16c" name="aceb460d1216337d6419b5662a2d0afcda948cf28200b790eff3d80e8df36fc16c"></a>RatioPlusDenominatorNote&#160;</td><td class="fielddoc"><dl class="section warning"><dt>Warning</dt><dd>display notes on both values (xml value is "ratioPlusDenNote") </dd></dl>
+<tr><td class="fieldname"><a id="aceb460d1216337d6419b5662a2d0afcda23570cf20221ad2560fad59b4b56615b" name="aceb460d1216337d6419b5662a2d0afcda23570cf20221ad2560fad59b4b56615b"></a>RatioPlusBothNotes&#160;</td><td class="fielddoc"><p>display notes on both values (xml value is "ratioPlusDenNote") </p>
 </td></tr>
 </table>
 

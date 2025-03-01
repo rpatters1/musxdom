@@ -182,6 +182,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>showNamesForPart</b> 
 <tr class="memitem:a428918fb57d8ff9b01b34f953b080904" id="r_a428918fb57d8ff9b01b34f953b080904"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a428918fb57d8ff9b01b34f953b080904">addAutoNumbering</a> (const std::string &amp;plainName) const</td></tr>
 <tr class="memdesc:a428918fb57d8ff9b01b34f953b080904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add auto numbering as a prefix or suffix, if needed.  <br /></td></tr>
 <tr class="separator:a428918fb57d8ff9b01b34f953b080904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fbc48d196476e86ae9272b57360f58b" id="r_a1fbc48d196476e86ae9272b57360f58b"><td class="memItemLeft" align="right" valign="top"><a id="a1fbc48d196476e86ae9272b57360f58b" name="a1fbc48d196476e86ae9272b57360f58b"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcFirstClefIndex</b> () const</td></tr>
+<tr class="memdesc:a1fbc48d196476e86ae9272b57360f58b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first clef in this staff. <br /></td></tr>
+<tr class="separator:a1fbc48d196476e86ae9272b57360f58b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a4e8f3326884d02be7b00d5b956748f" id="r_a8a4e8f3326884d02be7b00d5b956748f"><td class="memItemLeft" align="right" valign="top"><a id="a8a4e8f3326884d02be7b00d5b956748f" name="a8a4e8f3326884d02be7b00d5b956748f"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>calcMiddleStaffPosition</b> () const</td></tr>
+<tr class="memdesc:a8a4e8f3326884d02be7b00d5b956748f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the middle staff position. For staves with even numbers of lines, it is the middle space. <br /></td></tr>
+<tr class="separator:a8a4e8f3326884d02be7b00d5b956748f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8840a265b1ac655e630e97831de86e83" id="r_a8840a265b1ac655e630e97831de86e83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a8840a265b1ac655e630e97831de86e83">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:a8840a265b1ac655e630e97831de86e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a8840a265b1ac655e630e97831de86e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -229,6 +237,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a8aa2cdf47568291a6764e603621866a0" id="r_a8aa2cdf47568291a6764e603621866a0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a8aa2cdf47568291a6764e603621866a0">calcAutoNumberValues</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document)</td></tr>
 <tr class="memdesc:a8aa2cdf47568291a6764e603621866a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the auto-numbering value for this staff, if applicable.  <br /></td></tr>
 <tr class="separator:a8aa2cdf47568291a6764e603621866a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f8d569efacf40bd5325d46a5577b099" id="r_a1f8d569efacf40bd5325d46a5577b099"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a1f8d569efacf40bd5325d46a5577b099">calcFirstClefIndex</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> staffCmper)</td></tr>
+<tr class="memdesc:a1f8d569efacf40bd5325d46a5577b099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first clef in the specified staff in the document.  <br /></td></tr>
+<tr class="separator:a1f8d569efacf40bd5325d46a5577b099"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7ccccac17d4724e508b314a924d373a" id="r_ad7ccccac17d4724e508b314a924d373a"><td class="memItemLeft" align="right" valign="top"><a id="ad7ccccac17d4724e508b314a924d373a" name="ad7ccccac17d4724e508b314a924d373a"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">Staff</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:ad7ccccac17d4724e508b314a924d373a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -237,11 +248,11 @@ static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a09c189bda4c52d01552788d264218b48" id="r_a09c189bda4c52d01552788d264218b48"><td class="memItemLeft" align="right" valign="top"><a id="a09c189bda4c52d01552788d264218b48" name="a09c189bda4c52d01552788d264218b48"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a79036ddff994d4ce8ebdc6c5275c4385">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>defaultClef</b> {}</td></tr>
+<a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>defaultClef</b> {}</td></tr>
 <tr class="memdesc:a09c189bda4c52d01552788d264218b48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of default clef for the staff. <br /></td></tr>
 <tr class="separator:a09c189bda4c52d01552788d264218b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84137b810463f8edc4eedb7422e7bce5" id="r_a84137b810463f8edc4eedb7422e7bce5"><td class="memItemLeft" align="right" valign="top"><a id="a84137b810463f8edc4eedb7422e7bce5" name="a84137b810463f8edc4eedb7422e7bce5"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a79036ddff994d4ce8ebdc6c5275c4385">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>transposedClef</b> {}</td></tr>
+<a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>transposedClef</b> {}</td></tr>
 <tr class="memdesc:a84137b810463f8edc4eedb7422e7bce5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of transposed clef for the staff. <br /></td></tr>
 <tr class="separator:a84137b810463f8edc4eedb7422e7bce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b222308ce95e89945c156fd18dca550" id="r_a1b222308ce95e89945c156fd18dca550"><td class="memItemLeft" align="right" valign="top"><a id="a1b222308ce95e89945c156fd18dca550" name="a1b222308ce95e89945c156fd18dca550"></a>
@@ -324,6 +335,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>stemReversal</b> {}</t
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideStems</b> {}</td></tr>
 <tr class="memdesc:a43a8a4d6e40a765ac43c63205336a494"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Display Stems". <br /></td></tr>
 <tr class="separator:a43a8a4d6e40a765ac43c63205336a494"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf34de6cef2f1925161fdc23ede80da3" id="r_abf34de6cef2f1925161fdc23ede80da3"><td class="memItemLeft" align="right" valign="top"><a id="abf34de6cef2f1925161fdc23ede80da3" name="abf34de6cef2f1925161fdc23ede80da3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideBeams</b> {}</td></tr>
+<tr class="memdesc:abf34de6cef2f1925161fdc23ede80da3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Show Beams". <br /></td></tr>
+<tr class="separator:abf34de6cef2f1925161fdc23ede80da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43918594fcfadee25e19bbce250847e6" id="r_a43918594fcfadee25e19bbce250847e6"><td class="memItemLeft" align="right" valign="top"><a id="a43918594fcfadee25e19bbce250847e6" name="a43918594fcfadee25e19bbce250847e6"></a>
 <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">StemDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>stemDirection</b> {}</td></tr>
 <tr class="memdesc:a43918594fcfadee25e19bbce250847e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">stem direction for staff (xml node is <code>&lt;stemDir&gt;</code>) <br /></td></tr>
@@ -492,6 +507,58 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the auto-numbering value for this staff, if applicable. </p>
 <p>Calculates <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a4836d6d1ebe25d08f36b6530b25d8dd1" title="Calculated autonumbering value. It is computed by calcAutoNumberValues.">autoNumberValue</a> for every staff based on the occurrences of the instrument UUID and in each staff instance. If numbering is not applicable (e.g., auto numbering is disabled, the UUID is empty, or there is only one instance), <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a4836d6d1ebe25d08f36b6530b25d8dd1" title="Calculated autonumbering value. It is computed by calcAutoNumberValues.">autoNumberValue</a> has no value.</p>
 <p>This function is called by the DocumentFactory when the document is created. </p>
+
+</div>
+</div>
+<a id="a1f8d569efacf40bd5325d46a5577b099" name="a1f8d569efacf40bd5325d46a5577b099"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f8d569efacf40bd5325d46a5577b099">&#9670;&#160;</a></span>calcFirstClefIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> musx::dom::others::Staff::calcFirstClefIndex </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&#160;</td>
+          <td class="paramname"><em>staffCmper</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the first clef in the specified staff in the document. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>the document to search </td></tr>
+    <tr><td class="paramname">partId</td><td>the linked part to search </td></tr>
+    <tr><td class="paramname">staffCmper</td><td>the staff cmper to search </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

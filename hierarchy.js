@@ -3,12 +3,20 @@ var hierarchy =
     [ "musx::dom::Base", "classmusx_1_1dom_1_1Base.html", [
       [ "musx::dom::DetailsBase", "classmusx_1_1dom_1_1DetailsBase.html", [
         [ "musx::dom::EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", [
+          [ "musx::dom::NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", [
+            [ "musx::dom::details::TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html", [
+              [ "musx::dom::details::TieAlterEnd", "classmusx_1_1dom_1_1details_1_1TieAlterEnd.html", null ],
+              [ "musx::dom::details::TieAlterStart", "classmusx_1_1dom_1_1details_1_1TieAlterStart.html", null ]
+            ] ]
+          ] ],
+          [ "musx::dom::details::SecondaryBeamBreak", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html", null ],
           [ "musx::dom::details::TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", null ]
         ] ],
         [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ],
         [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ]
       ] ],
       [ "musx::dom::Entry", "classmusx_1_1dom_1_1Entry.html", null ],
+      [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ],
       [ "musx::dom::FontInfo", "classmusx_1_1dom_1_1FontInfo.html", null ],
       [ "musx::dom::KeySignature", "classmusx_1_1dom_1_1KeySignature.html", null ],
       [ "musx::dom::Note", "classmusx_1_1dom_1_1Note.html", null ],
@@ -39,6 +47,23 @@ var hierarchy =
         [ "musx::dom::options::TupletOptions", "classmusx_1_1dom_1_1options_1_1TupletOptions.html", null ]
       ] ],
       [ "musx::dom::OthersBase", "classmusx_1_1dom_1_1OthersBase.html", [
+        [ "musx::dom::OthersArray< int, 7 >", "classmusx_1_1dom_1_1OthersArray.html", [
+          [ "musx::dom::others::AcciAmountFlats", "classmusx_1_1dom_1_1others_1_1AcciAmountFlats.html", null ],
+          [ "musx::dom::others::AcciAmountSharps", "classmusx_1_1dom_1_1others_1_1AcciAmountSharps.html", null ]
+        ] ],
+        [ "musx::dom::OthersArray< unsigned, 7 >", "classmusx_1_1dom_1_1OthersArray.html", [
+          [ "musx::dom::others::AcciOrderFlats", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats.html", null ],
+          [ "musx::dom::others::AcciOrderSharps", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps.html", null ]
+        ] ],
+        [ "musx::dom::OthersArray< int >", "classmusx_1_1dom_1_1OthersArray.html", [
+          [ "musx::dom::others::RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", null ]
+        ] ],
+        [ "musx::dom::OthersArray< unsigned, 8 >", "classmusx_1_1dom_1_1OthersArray.html", [
+          [ "musx::dom::others::TonalCenterFlats", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html", null ],
+          [ "musx::dom::others::TonalCenterSharps", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html", null ]
+        ] ],
+        [ "musx::dom::OthersArray< ElementType, REQUIRED_SIZE >", "classmusx_1_1dom_1_1OthersArray.html", null ],
+        [ "musx::dom::others::ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", null ],
         [ "musx::dom::others::Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", [
           [ "musx::dom::others::TextExpressionEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html", null ],
           [ "musx::dom::others::TextRepeatEnclosure", "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html", null ]
@@ -65,7 +90,6 @@ var hierarchy =
         [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
         [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
         [ "musx::dom::others::RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", null ],
-        [ "musx::dom::others::RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", null ],
         [ "musx::dom::others::ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", null ],
         [ "musx::dom::others::Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", [
           [ "musx::dom::others::StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", [
@@ -107,9 +131,12 @@ var hierarchy =
     [ "musx::dom::options::TieOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html", null ],
     [ "musx::dom::Document", "classmusx_1_1dom_1_1Document.html", null ],
     [ "musx::factory::ElementLinker", "classmusx_1_1factory_1_1ElementLinker.html", null ],
+    [ "std::enable_shared_from_this", null, [
+      [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ]
+    ] ],
     [ "musx::util::EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", null ],
-    [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ],
     [ "musx::dom::EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", null ],
+    [ "musx::dom::EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html", null ],
     [ "musx::factory::FactoryBase", "classmusx_1_1factory_1_1FactoryBase.html", [
       [ "musx::factory::PoolFactory< DetailsFactory, dom::DetailsBase, dom::DetailsPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
         [ "musx::factory::DetailsFactory", "classmusx_1_1factory_1_1DetailsFactory.html", null ]
@@ -150,6 +177,7 @@ var hierarchy =
       [ "musx::xml::tinyxml2::Element", "classmusx_1_1xml_1_1tinyxml2_1_1Element.html", null ]
     ] ],
     [ "musx::util::Logger", "classmusx_1_1util_1_1Logger.html", null ],
+    [ "musx::dom::NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType, TopKeyElementType >::ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType, TopKeyElementType >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
     [ "musx::dom::ObjectPool< DetailsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
@@ -174,5 +202,6 @@ var hierarchy =
       [ "musx::xml::load_error", "classmusx_1_1xml_1_1load__error.html", null ]
     ] ],
     [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
+    [ "musx::dom::EntryFrame::TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html", null ],
     [ "musx::factory::TypeRegistry< Types >", "classmusx_1_1factory_1_1TypeRegistry.html", null ]
 ];

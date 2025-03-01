@@ -14,8 +14,8 @@ var classmusx_1_1dom_1_1options_1_1TupletOptions =
       [ "Nothing", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcdaf80a4ad87fee7c9fdc19b7769495fdb5", null ],
       [ "Number", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcdab2ee912b91d69b435159c7c3f6df7f5f", null ],
       [ "UseRatio", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1", null ],
-      [ "RatioPlusBothNotes", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda23570cf20221ad2560fad59b4b56615b", null ],
-      [ "RatioPlusDenominatorNote", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda948cf28200b790eff3d80e8df36fc16c", null ]
+      [ "RatioPlusDenominatorNote", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda948cf28200b790eff3d80e8df36fc16c", null ],
+      [ "RatioPlusBothNotes", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda23570cf20221ad2560fad59b4b56615b", null ]
     ] ],
     [ "PositioningStyle", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6", [
       [ "Manual", "classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6ae1ba155a9f2e8c3be94020eef32a0301", null ],

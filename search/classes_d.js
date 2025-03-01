@@ -10,7 +10,12 @@ var searchData=
   ['optionsbase_7',['OptionsBase',['../classmusx_1_1dom_1_1OptionsBase.html',1,'musx::dom']]],
   ['optionsfactory_8',['OptionsFactory',['../classmusx_1_1factory_1_1OptionsFactory.html',1,'musx::factory']]],
   ['optionspool_9',['OptionsPool',['../classmusx_1_1dom_1_1OptionsPool.html',1,'musx::dom']]],
-  ['othersbase_10',['OthersBase',['../classmusx_1_1dom_1_1OthersBase.html',1,'musx::dom']]],
-  ['othersfactory_11',['OthersFactory',['../classmusx_1_1factory_1_1OthersFactory.html',1,'musx::factory']]],
-  ['otherspool_12',['OthersPool',['../classmusx_1_1dom_1_1OthersPool.html',1,'musx::dom']]]
+  ['othersarray_10',['OthersArray',['../classmusx_1_1dom_1_1OthersArray.html',1,'musx::dom']]],
+  ['othersarray_3c_20int_20_3e_11',['OthersArray&lt; int &gt;',['../classmusx_1_1dom_1_1OthersArray.html',1,'musx::dom']]],
+  ['othersarray_3c_20int_2c_207_20_3e_12',['OthersArray&lt; int, 7 &gt;',['../classmusx_1_1dom_1_1OthersArray.html',1,'musx::dom']]],
+  ['othersarray_3c_20unsigned_2c_207_20_3e_13',['OthersArray&lt; unsigned, 7 &gt;',['../classmusx_1_1dom_1_1OthersArray.html',1,'musx::dom']]],
+  ['othersarray_3c_20unsigned_2c_208_20_3e_14',['OthersArray&lt; unsigned, 8 &gt;',['../classmusx_1_1dom_1_1OthersArray.html',1,'musx::dom']]],
+  ['othersbase_15',['OthersBase',['../classmusx_1_1dom_1_1OthersBase.html',1,'musx::dom']]],
+  ['othersfactory_16',['OthersFactory',['../classmusx_1_1factory_1_1OthersFactory.html',1,'musx::factory']]],
+  ['otherspool_17',['OthersPool',['../classmusx_1_1dom_1_1OthersPool.html',1,'musx::dom']]]
 ];

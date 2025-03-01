@@ -4,5 +4,6 @@ var classmusx_1_1dom_1_1DetailsPool =
     [ "get", "classmusx_1_1dom_1_1DetailsPool.html#a62844cd7b9425c5373a9a4155a1ed611", null ],
     [ "get", "classmusx_1_1dom_1_1DetailsPool.html#afea2bf0b61b6aa1098b41b879e278fba", null ],
     [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#a375ed8c2e4309c3869a63cea9a4d4f98", null ],
-    [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#af9479bf552c6d55cb2c1e903ce040049", null ]
+    [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#af9479bf552c6d55cb2c1e903ce040049", null ],
+    [ "getForNote", "classmusx_1_1dom_1_1DetailsPool.html#ad3c4f3712e3d4874c95ee5b8479541c2", null ]
 ];

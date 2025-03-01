@@ -1,9 +1,9 @@
 var classmusx_1_1dom_1_1Entry =
 [
     [ "Entry", "classmusx_1_1dom_1_1Entry.html#a0d0212e38649a2376155155c477a138c", null ],
-    [ "calcAugmentationDots", "classmusx_1_1dom_1_1Entry.html#a9d9448ac8cd42278cefcf96559bb3de1", null ],
+    [ "calcDisplaysAsRest", "classmusx_1_1dom_1_1Entry.html#ae8a23f9f7e817262263917a1fb12a218", null ],
     [ "calcFraction", "classmusx_1_1dom_1_1Entry.html#a8964412efe44b6569c970cecc4b4631f", null ],
-    [ "calcNoteType", "classmusx_1_1dom_1_1Entry.html#a6b6dad4846b54c9bc9c0933e4d14176a", null ],
+    [ "calcNoteInfo", "classmusx_1_1dom_1_1Entry.html#a09381dad98251a4112cc9c48d9d5c8cc", null ],
     [ "getEntryNumber", "classmusx_1_1dom_1_1Entry.html#a0d3cc0d02d7768f4153b0741d0a238ca", null ],
     [ "getNext", "classmusx_1_1dom_1_1Entry.html#af6ad38939066bbbfe7e64403919375a1", null ],
     [ "getPrevious", "classmusx_1_1dom_1_1Entry.html#af99dd422bdcc42b63a4986eda7b18d42", null ],
@@ -14,6 +14,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "duration", "classmusx_1_1dom_1_1Entry.html#aa04e0b02dbbe2ec0142ac832fab5138e", null ],
     [ "floatRest", "classmusx_1_1dom_1_1Entry.html#a9c47ab65cc891239e20462fa381e18ff", null ],
     [ "freezeBeam", "classmusx_1_1dom_1_1Entry.html#aeb7ecc28f468574c224acf57e4555841", null ],
+    [ "freezeStem", "classmusx_1_1dom_1_1Entry.html#a2053136682ff832921d71dc11bbcd7d4", null ],
     [ "graceNote", "classmusx_1_1dom_1_1Entry.html#af7fd31e1ab6653f7834729fafdd0933c", null ],
     [ "isHidden", "classmusx_1_1dom_1_1Entry.html#aa140b2bc34357eee1085828bae9c9bae", null ],
     [ "isNote", "classmusx_1_1dom_1_1Entry.html#a1b7183f1bc2716b5eb961a2beab9e3c9", null ],
@@ -25,5 +26,6 @@ var classmusx_1_1dom_1_1Entry =
     [ "smartShapeDetail", "classmusx_1_1dom_1_1Entry.html#aa04b08c5cb6dbde8e24b7ff5be524c04", null ],
     [ "sorted", "classmusx_1_1dom_1_1Entry.html#ab76162a84d2dc54af058a611af01d51a", null ],
     [ "stemDetail", "classmusx_1_1dom_1_1Entry.html#a42b417cdb28ed1de83c586fb7c365069", null ],
+    [ "upStem", "classmusx_1_1dom_1_1Entry.html#a0a80d84ecac51e22cb87cfe7db9ceaa6", null ],
     [ "voice2", "classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41", null ]
 ];

@@ -133,16 +133,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af99dd422bdcc42b63a4986eda7b18d42" id="r_af99dd422bdcc42b63a4986eda7b18d42"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#af99dd422bdcc42b63a4986eda7b18d42">getPrevious</a> () const</td></tr>
 <tr class="memdesc:af99dd422bdcc42b63a4986eda7b18d42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the previous entry in this list or nullptr if none.  <br /></td></tr>
 <tr class="separator:af99dd422bdcc42b63a4986eda7b18d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b6dad4846b54c9bc9c0933e4d14176a" id="r_a6b6dad4846b54c9bc9c0933e4d14176a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a6b6dad4846b54c9bc9c0933e4d14176a">calcNoteType</a> () const</td></tr>
-<tr class="memdesc:a6b6dad4846b54c9bc9c0933e4d14176a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the NoteType based on the most significant bit of the duration field.  <br /></td></tr>
-<tr class="separator:a6b6dad4846b54c9bc9c0933e4d14176a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09381dad98251a4112cc9c48d9d5c8cc" id="r_a09381dad98251a4112cc9c48d9d5c8cc"><td class="memItemLeft" align="right" valign="top"><a id="a09381dad98251a4112cc9c48d9d5c8cc" name="a09381dad98251a4112cc9c48d9d5c8cc"></a>
+std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcNoteInfo</b> () const</td></tr>
+<tr class="memdesc:a09381dad98251a4112cc9c48d9d5c8cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the NoteType and number of augmentation dots. (See <a class="el" href="namespacemusx_1_1dom.html#aa215062b953a2a9a8e0062df4d991cdd" title="Calculates the NoteType and number of dots in an Edu value.">calcNoteInfoFromEdu</a>.) <br /></td></tr>
+<tr class="separator:a09381dad98251a4112cc9c48d9d5c8cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8a23f9f7e817262263917a1fb12a218" id="r_ae8a23f9f7e817262263917a1fb12a218"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#ae8a23f9f7e817262263917a1fb12a218">calcDisplaysAsRest</a> () const</td></tr>
+<tr class="memdesc:ae8a23f9f7e817262263917a1fb12a218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if an entry displays as a rest.  <br /></td></tr>
+<tr class="separator:ae8a23f9f7e817262263917a1fb12a218"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8964412efe44b6569c970cecc4b4631f" id="r_a8964412efe44b6569c970cecc4b4631f"><td class="memItemLeft" align="right" valign="top"><a id="a8964412efe44b6569c970cecc4b4631f" name="a8964412efe44b6569c970cecc4b4631f"></a>
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcFraction</b> () const</td></tr>
 <tr class="memdesc:a8964412efe44b6569c970cecc4b4631f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the duration as a <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> of a whole note. <br /></td></tr>
 <tr class="separator:a8964412efe44b6569c970cecc4b4631f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d9448ac8cd42278cefcf96559bb3de1" id="r_a9d9448ac8cd42278cefcf96559bb3de1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a9d9448ac8cd42278cefcf96559bb3de1">calcAugmentationDots</a> () const</td></tr>
-<tr class="memdesc:a9d9448ac8cd42278cefcf96559bb3de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of augmentation dots in the duration.  <br /></td></tr>
-<tr class="separator:a9d9448ac8cd42278cefcf96559bb3de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a413c78242c3f9f486a2b37d38d28c03b" id="r_a413c78242c3f9f486a2b37d38d28c03b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a413c78242c3f9f486a2b37d38d28c03b">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:a413c78242c3f9f486a2b37d38d28c03b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a413c78242c3f9f486a2b37d38d28c03b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,6 +227,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>articDetail</b> {}</t
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>beam</b> {}</td></tr>
 <tr class="memdesc:ad829caa4f42eee2a016822e76d04f44c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.) <br /></td></tr>
 <tr class="separator:ad829caa4f42eee2a016822e76d04f44c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2053136682ff832921d71dc11bbcd7d4" id="r_a2053136682ff832921d71dc11bbcd7d4"><td class="memItemLeft" align="right" valign="top"><a id="a2053136682ff832921d71dc11bbcd7d4" name="a2053136682ff832921d71dc11bbcd7d4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>freezeStem</b> {}</td></tr>
+<tr class="memdesc:a2053136682ff832921d71dc11bbcd7d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Freeze stem flag (<a class="el" href="classmusx_1_1dom_1_1Entry.html#a0a80d84ecac51e22cb87cfe7db9ceaa6" title="Whether a stem is up or down. (Only reliable when freezeStem is true.)">upStem</a> gives the direction.) <br /></td></tr>
+<tr class="separator:a2053136682ff832921d71dc11bbcd7d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a80d84ecac51e22cb87cfe7db9ceaa6" id="r_a0a80d84ecac51e22cb87cfe7db9ceaa6"><td class="memItemLeft" align="right" valign="top"><a id="a0a80d84ecac51e22cb87cfe7db9ceaa6" name="a0a80d84ecac51e22cb87cfe7db9ceaa6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>upStem</b> {}</td></tr>
+<tr class="memdesc:a0a80d84ecac51e22cb87cfe7db9ceaa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a stem is up or down. (Only reliable when <a class="el" href="classmusx_1_1dom_1_1Entry.html#a2053136682ff832921d71dc11bbcd7d4" title="Freeze stem flag (upStem gives the direction.)">freezeStem</a> is true.) <br /></td></tr>
+<tr class="separator:a0a80d84ecac51e22cb87cfe7db9ceaa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42b417cdb28ed1de83c586fb7c365069" id="r_a42b417cdb28ed1de83c586fb7c365069"><td class="memItemLeft" align="right" valign="top"><a id="a42b417cdb28ed1de83c586fb7c365069" name="a42b417cdb28ed1de83c586fb7c365069"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>stemDetail</b> {}</td></tr>
 <tr class="memdesc:a42b417cdb28ed1de83c586fb7c365069"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates there are stem modification. <br /></td></tr>
@@ -352,8 +361,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9d9448ac8cd42278cefcf96559bb3de1" name="a9d9448ac8cd42278cefcf96559bb3de1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d9448ac8cd42278cefcf96559bb3de1">&#9670;&#160;</a></span>calcAugmentationDots()</h2>
+<a id="ae8a23f9f7e817262263917a1fb12a218" name="ae8a23f9f7e817262263917a1fb12a218"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8a23f9f7e817262263917a1fb12a218">&#9670;&#160;</a></span>calcDisplaysAsRest()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -362,7 +371,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int musx::dom::Entry::calcAugmentationDots </td>
+          <td class="memname">bool musx::dom::Entry::calcDisplaysAsRest </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -375,42 +384,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </table>
 </div><div class="memdoc">
 
-<p>Calculates the number of augmentation dots in the duration. </p>
-<dl class="section return"><dt>Returns</dt><dd>The number of augmentation dots. </dd></dl>
-
-</div>
-</div>
-<a id="a6b6dad4846b54c9bc9c0933e4d14176a" name="a6b6dad4846b54c9bc9c0933e4d14176a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b6dad4846b54c9bc9c0933e4d14176a">&#9670;&#160;</a></span>calcNoteType()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> musx::dom::Entry::calcNoteType </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Calculates the NoteType based on the most significant bit of the duration field. </p>
-<dl class="section return"><dt>Returns</dt><dd>NoteType corresponding to the most significant bit of the duration. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>if the duration is out of valid range (&gt; 1 and &lt; 0x10000). </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Calculates if an entry displays as a rest. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
 
 </div>
 </div>

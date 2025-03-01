@@ -152,6 +152,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMinor</b> () const<
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &amp;src)</td></tr>
 <tr class="memdesc:abaa1f32c8341eb8893b4334596121518"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same key signature <br /></td></tr>
 <tr class="separator:abaa1f32c8341eb8893b4334596121518"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae17675c61d076e236952c9bcfbe25ffc" id="r_ae17675c61d076e236952c9bcfbe25ffc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#ae17675c61d076e236952c9bcfbe25ffc">calcTonalCenterIndex</a> () const</td></tr>
+<tr class="memdesc:ae17675c61d076e236952c9bcfbe25ffc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the tonal center index for the key, where C=0, D=1, E=2, ...  <br /></td></tr>
+<tr class="separator:ae17675c61d076e236952c9bcfbe25ffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5452f8d0cb4cb0f3066ad8fd24957d33" id="r_a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a5452f8d0cb4cb0f3066ad8fd24957d33">calcAlterationOnNote</a> (unsigned noteIndex) const</td></tr>
+<tr class="memdesc:a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the amount of alteration on a note int the key.  <br /></td></tr>
+<tr class="separator:a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6d83554fe3fac8e89bd2933880ab5f4" id="r_aa6d83554fe3fac8e89bd2933880ab5f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#aa6d83554fe3fac8e89bd2933880ab5f4">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:aa6d83554fe3fac8e89bd2933880ab5f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:aa6d83554fe3fac8e89bd2933880ab5f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,6 +274,53 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5452f8d0cb4cb0f3066ad8fd24957d33" name="a5452f8d0cb4cb0f3066ad8fd24957d33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5452f8d0cb4cb0f3066ad8fd24957d33">&#9670;&#160;</a></span>calcAlterationOnNote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::KeySignature::calcAlterationOnNote </td>
+          <td>(</td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>noteIndex</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the amount of alteration on a note int the key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteIndex</td><td>note index, where C=0, D=1, E=3, F=3, G=4, A=5, B=6 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae17675c61d076e236952c9bcfbe25ffc" name="ae17675c61d076e236952c9bcfbe25ffc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae17675c61d076e236952c9bcfbe25ffc">&#9670;&#160;</a></span>calcTonalCenterIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::KeySignature::calcTonalCenterIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the tonal center index for the key, where C=0, D=1, E=2, ... </p>
+<p>This is the modal tonal center, so a minor key with no sharps or flats returns 5 (=A).</p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>extend this to support other modes besides major and minor. </dd></dl>
+
+</div>
+</div>
 <a id="a0b5bf3174d83fa4a41eb1dbe75ecd9e3" name="a0b5bf3174d83fa4a41eb1dbe75ecd9e3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b5bf3174d83fa4a41eb1dbe75ecd9e3">&#9670;&#160;</a></span>getAlteration()</h2>
 

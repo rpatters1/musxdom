@@ -9,7 +9,8 @@ var searchData=
   ['otherrestoffset_6',['otherRestOffset',['../classmusx_1_1dom_1_1others_1_1Staff.html#a444cb61121b8bad9b69992bb9efc4633',1,'musx::dom::others::Staff']]],
   ['outerbodyh_7',['outerBodyH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ae39b6ff982a19e6743b8592b5ce34a90',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['outerbodyv_8',['outerBodyV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#aa64904a9a9bec585ae21ef1eb6b22dc5',1,'musx::dom::options::PianoBraceBracketOptions']]],
-  ['outertiph_9',['outerTipH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a83b4f737373614e967d2cec0e96061f1',1,'musx::dom::options::PianoBraceBracketOptions']]],
-  ['outertipv_10',['outerTipV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a0e0cab4661c4f4dbc8321d76b1aef688',1,'musx::dom::options::PianoBraceBracketOptions']]],
-  ['ownbarline_11',['ownBarline',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1cc6fb87b6b097c49e22644cad80b875',1,'musx::dom::details::StaffGroup']]]
+  ['outerlocal_9',['outerLocal',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a1fa415fa6d27451e9f5be35bd082c3f2',1,'musx::dom::details::TieAlterBase']]],
+  ['outertiph_10',['outerTipH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a83b4f737373614e967d2cec0e96061f1',1,'musx::dom::options::PianoBraceBracketOptions']]],
+  ['outertipv_11',['outerTipV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a0e0cab4661c4f4dbc8321d76b1aef688',1,'musx::dom::options::PianoBraceBracketOptions']]],
+  ['ownbarline_12',['ownBarline',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1cc6fb87b6b097c49e22644cad80b875',1,'musx::dom::details::StaffGroup']]]
 ];

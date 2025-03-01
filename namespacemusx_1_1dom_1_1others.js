@@ -1,5 +1,10 @@
 var namespacemusx_1_1dom_1_1others =
 [
+    [ "AcciAmountFlats", "classmusx_1_1dom_1_1others_1_1AcciAmountFlats.html", "classmusx_1_1dom_1_1others_1_1AcciAmountFlats" ],
+    [ "AcciAmountSharps", "classmusx_1_1dom_1_1others_1_1AcciAmountSharps.html", "classmusx_1_1dom_1_1others_1_1AcciAmountSharps" ],
+    [ "AcciOrderFlats", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats.html", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats" ],
+    [ "AcciOrderSharps", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps.html", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps" ],
+    [ "ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", "classmusx_1_1dom_1_1others_1_1ClefList" ],
     [ "Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", "classmusx_1_1dom_1_1others_1_1Enclosure" ],
     [ "FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", "classmusx_1_1dom_1_1others_1_1FontDefinition" ],
     [ "Frame", "classmusx_1_1dom_1_1others_1_1Frame.html", "classmusx_1_1dom_1_1others_1_1Frame" ],
@@ -24,7 +29,7 @@ var namespacemusx_1_1dom_1_1others =
     [ "RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", "classmusx_1_1dom_1_1others_1_1RepeatPassList" ],
     [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef" ],
     [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", "classmusx_1_1dom_1_1others_1_1Staff" ],
-    [ "StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", "classmusx_1_1dom_1_1others_1_1StaffComposite" ],
+    [ "StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", null ],
     [ "StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", "classmusx_1_1dom_1_1others_1_1StaffStyle" ],
     [ "StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign" ],
     [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", "classmusx_1_1dom_1_1others_1_1StaffSystem" ],
@@ -38,6 +43,8 @@ var namespacemusx_1_1dom_1_1others =
     [ "TextRepeatText", "classmusx_1_1dom_1_1others_1_1TextRepeatText.html", "classmusx_1_1dom_1_1others_1_1TextRepeatText" ],
     [ "TimeCompositeLower", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower.html", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower" ],
     [ "TimeCompositeUpper", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper" ],
+    [ "TonalCenterFlats", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats" ],
+    [ "TonalCenterSharps", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps" ],
     [ "HorizontalMeasExprAlign", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8e", [
       [ "LeftBarline", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea5398156d08432d407c11a5f8c200caa4", null ],
       [ "Manual", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eae1ba155a9f2e8c3be94020eef32a0301", null ],

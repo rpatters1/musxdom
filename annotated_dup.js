@@ -4,7 +4,11 @@ var annotated_dup =
       [ "dom", "namespacemusx_1_1dom.html", [
         [ "details", "namespacemusx_1_1dom_1_1details.html", [
           [ "GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", "classmusx_1_1dom_1_1details_1_1GFrameHold" ],
+          [ "SecondaryBeamBreak", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak" ],
           [ "StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", "classmusx_1_1dom_1_1details_1_1StaffGroup" ],
+          [ "TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html", "classmusx_1_1dom_1_1details_1_1TieAlterBase" ],
+          [ "TieAlterEnd", "classmusx_1_1dom_1_1details_1_1TieAlterEnd.html", "classmusx_1_1dom_1_1details_1_1TieAlterEnd" ],
+          [ "TieAlterStart", "classmusx_1_1dom_1_1details_1_1TieAlterStart.html", "classmusx_1_1dom_1_1details_1_1TieAlterStart" ],
           [ "TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", "classmusx_1_1dom_1_1details_1_1TupletDef" ]
         ] ],
         [ "header", "namespacemusx_1_1dom_1_1header.html", [
@@ -39,6 +43,11 @@ var annotated_dup =
           [ "TupletOptions", "classmusx_1_1dom_1_1options_1_1TupletOptions.html", "classmusx_1_1dom_1_1options_1_1TupletOptions" ]
         ] ],
         [ "others", "namespacemusx_1_1dom_1_1others.html", [
+          [ "AcciAmountFlats", "classmusx_1_1dom_1_1others_1_1AcciAmountFlats.html", "classmusx_1_1dom_1_1others_1_1AcciAmountFlats" ],
+          [ "AcciAmountSharps", "classmusx_1_1dom_1_1others_1_1AcciAmountSharps.html", "classmusx_1_1dom_1_1others_1_1AcciAmountSharps" ],
+          [ "AcciOrderFlats", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats.html", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats" ],
+          [ "AcciOrderSharps", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps.html", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps" ],
+          [ "ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", "classmusx_1_1dom_1_1others_1_1ClefList" ],
           [ "Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", "classmusx_1_1dom_1_1others_1_1Enclosure" ],
           [ "FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", "classmusx_1_1dom_1_1others_1_1FontDefinition" ],
           [ "Frame", "classmusx_1_1dom_1_1others_1_1Frame.html", "classmusx_1_1dom_1_1others_1_1Frame" ],
@@ -63,7 +72,7 @@ var annotated_dup =
           [ "RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", "classmusx_1_1dom_1_1others_1_1RepeatPassList" ],
           [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef" ],
           [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", "classmusx_1_1dom_1_1others_1_1Staff" ],
-          [ "StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", "classmusx_1_1dom_1_1others_1_1StaffComposite" ],
+          [ "StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", null ],
           [ "StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", "classmusx_1_1dom_1_1others_1_1StaffStyle" ],
           [ "StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign" ],
           [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", "classmusx_1_1dom_1_1others_1_1StaffSystem" ],
@@ -76,7 +85,9 @@ var annotated_dup =
           [ "TextRepeatEnclosure", "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html", "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure" ],
           [ "TextRepeatText", "classmusx_1_1dom_1_1others_1_1TextRepeatText.html", "classmusx_1_1dom_1_1others_1_1TextRepeatText" ],
           [ "TimeCompositeLower", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower.html", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower" ],
-          [ "TimeCompositeUpper", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper" ]
+          [ "TimeCompositeUpper", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper" ],
+          [ "TonalCenterFlats", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats" ],
+          [ "TonalCenterSharps", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps" ]
         ] ],
         [ "texts", "namespacemusx_1_1dom_1_1texts.html", [
           [ "BlockText", "classmusx_1_1dom_1_1texts_1_1BlockText.html", "classmusx_1_1dom_1_1texts_1_1BlockText" ],
@@ -96,14 +107,18 @@ var annotated_dup =
         [ "EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", "classmusx_1_1dom_1_1EntryDetailsBase" ],
         [ "EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", "classmusx_1_1dom_1_1EntryFrame" ],
         [ "EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", "classmusx_1_1dom_1_1EntryInfo" ],
+        [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html", "classmusx_1_1dom_1_1EntryInfoPtr" ],
         [ "EntryPool", "classmusx_1_1dom_1_1EntryPool.html", "classmusx_1_1dom_1_1EntryPool" ],
         [ "FontInfo", "classmusx_1_1dom_1_1FontInfo.html", "classmusx_1_1dom_1_1FontInfo" ],
         [ "integrity_error", "classmusx_1_1dom_1_1integrity__error.html", null ],
         [ "KeySignature", "classmusx_1_1dom_1_1KeySignature.html", "classmusx_1_1dom_1_1KeySignature" ],
         [ "Note", "classmusx_1_1dom_1_1Note.html", "classmusx_1_1dom_1_1Note" ],
+        [ "NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", "classmusx_1_1dom_1_1NoteDetailsBase" ],
+        [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", "classmusx_1_1dom_1_1NoteInfoPtr" ],
         [ "ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html", "classmusx_1_1dom_1_1ObjectPool" ],
         [ "OptionsBase", "classmusx_1_1dom_1_1OptionsBase.html", "classmusx_1_1dom_1_1OptionsBase" ],
         [ "OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", "classmusx_1_1dom_1_1OptionsPool" ],
+        [ "OthersArray", "classmusx_1_1dom_1_1OthersArray.html", "classmusx_1_1dom_1_1OthersArray" ],
         [ "OthersBase", "classmusx_1_1dom_1_1OthersBase.html", "classmusx_1_1dom_1_1OthersBase" ],
         [ "OthersPool", "classmusx_1_1dom_1_1OthersPool.html", "classmusx_1_1dom_1_1OthersPool" ],
         [ "TextsBase", "classmusx_1_1dom_1_1TextsBase.html", "classmusx_1_1dom_1_1TextsBase" ],

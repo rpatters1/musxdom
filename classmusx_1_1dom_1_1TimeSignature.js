@@ -2,6 +2,7 @@ var classmusx_1_1dom_1_1TimeSignature =
 [
     [ "TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent" ],
     [ "calcSimplified", "classmusx_1_1dom_1_1TimeSignature.html#ae650d3d6438b2ecdeb178235277da0cf", null ],
+    [ "calcTotalDuration", "classmusx_1_1dom_1_1TimeSignature.html#a9f7a4dc4f0448257da332c0e789a6af4", null ],
     [ "createComponent", "classmusx_1_1dom_1_1TimeSignature.html#afac7cdb4fd7724b76b5edd6a40a8983b", null ],
     [ "getAbbreviatedSymbol", "classmusx_1_1dom_1_1TimeSignature.html#ab09d98ccff15a50ac6df458440ef15e0", null ],
     [ "isCommonTime", "classmusx_1_1dom_1_1TimeSignature.html#ac07419f0f6ee39abfa8ee17c020d2a31", null ],

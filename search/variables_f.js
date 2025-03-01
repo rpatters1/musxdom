@@ -16,7 +16,7 @@ var searchData=
   ['passlist_13',['passList',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a512dc7bfe908183a1cdf60d113709044',1,'musx::dom::others::TextRepeatDef']]],
   ['passnumber_14',['passnumber',['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#a6826e7b065b66012fbe3147f6fb73ae2',1,'musx::dom::others::RepeatBack::passNumber'],['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a7c57a85174a105cba6449df99534f81e',1,'musx::dom::others::TextRepeatAssign::passNumber']]],
   ['pathslurtipwidth_15',['pathSlurTipWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#a730ed2648165ab9cad9ed079740e56b8',1,'musx::dom::options::LineCurveOptions']]],
-  ['percent_16',['percent',['../classmusx_1_1dom_1_1others_1_1Page.html#a68057e9d8f3b0db45983dd0c029a1bf3',1,'musx::dom::others::Page']]],
+  ['percent_16',['percent',['../classmusx_1_1dom_1_1others_1_1Page.html#a68057e9d8f3b0db45983dd0c029a1bf3',1,'musx::dom::others::Page::percent'],['../classmusx_1_1dom_1_1others_1_1ClefList.html#acce1718aaea67bdab4982ad15e88bdb8',1,'musx::dom::others::ClefList::percent']]],
   ['performancedata_17',['performanceData',['../classmusx_1_1dom_1_1Entry.html#addbada32311803e48b2b05238332c83c',1,'musx::dom::Entry']]],
   ['pitch_18',['pitch',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#af762ba4f6477051d106eb142ae9265dd',1,'musx::dom::others::FontDefinition']]],
   ['placeendspacebeforebarline_19',['placeEndSpaceBeforeBarline',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a660f81113aba8c791ef40fa33e0f720b',1,'musx::dom::others::StaffSystem']]],

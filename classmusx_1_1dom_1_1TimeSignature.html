@@ -129,6 +129,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae650d3d6438b2ecdeb178235277da0cf" id="r_ae650d3d6438b2ecdeb178235277da0cf"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>, <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1TimeSignature.html#ae650d3d6438b2ecdeb178235277da0cf">calcSimplified</a> () const</td></tr>
 <tr class="memdesc:ae650d3d6438b2ecdeb178235277da0cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the simplest form of of this time signature, expressed as a fractional count of <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> units.  <br /></td></tr>
 <tr class="separator:ae650d3d6438b2ecdeb178235277da0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f7a4dc4f0448257da332c0e789a6af4" id="r_a9f7a4dc4f0448257da332c0e789a6af4"><td class="memItemLeft" align="right" valign="top"><a id="a9f7a4dc4f0448257da332c0e789a6af4" name="a9f7a4dc4f0448257da332c0e789a6af4"></a>
+<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcTotalDuration</b> () const</td></tr>
+<tr class="memdesc:a9f7a4dc4f0448257da332c0e789a6af4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the total duration of the time signature as a fraction of a whole note. <br /></td></tr>
+<tr class="separator:a9f7a4dc4f0448257da332c0e789a6af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81bb63d77b0bbced77d5a4dc6c5b0298" id="r_a81bb63d77b0bbced77d5a4dc6c5b0298"><td class="memItemLeft" align="right" valign="top"><a id="a81bb63d77b0bbced77d5a4dc6c5b0298" name="a81bb63d77b0bbced77d5a4dc6c5b0298"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> &amp;src)</td></tr>
 <tr class="memdesc:a81bb63d77b0bbced77d5a4dc6c5b0298"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two time signatures represent the same time signature <br /></td></tr>
@@ -137,7 +141,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a 
 <tr class="memdesc:afac7cdb4fd7724b76b5edd6a40a8983b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a time signature corresponding to the component at <code>index</code>.  <br /></td></tr>
 <tr class="separator:afac7cdb4fd7724b76b5edd6a40a8983b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab09d98ccff15a50ac6df458440ef15e0" id="r_ab09d98ccff15a50ac6df458440ef15e0"><td class="memItemLeft" align="right" valign="top">std::optional&lt; char32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1TimeSignature.html#ab09d98ccff15a50ac6df458440ef15e0">getAbbreviatedSymbol</a> () const</td></tr>
-<tr class="memdesc:ab09d98ccff15a50ac6df458440ef15e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the abbreviated symbol for this time signature, or std::nullopt if none.  <br /></td></tr>
+<tr class="memdesc:ab09d98ccff15a50ac6df458440ef15e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the abbreviated symbol (code point) for this time signature, or std::nullopt if none.  <br /></td></tr>
 <tr class="separator:ab09d98ccff15a50ac6df458440ef15e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac07419f0f6ee39abfa8ee17c020d2a31" id="r_ac07419f0f6ee39abfa8ee17c020d2a31"><td class="memItemLeft" align="right" valign="top"><a id="ac07419f0f6ee39abfa8ee17c020d2a31" name="ac07419f0f6ee39abfa8ee17c020d2a31"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCommonTime</b> () const</td></tr>
@@ -295,7 +299,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
       </table>
 </div><div class="memdoc">
 
-<p>Returns the abbreviated symbol for this time signature, or std::nullopt if none. </p>
+<p>Returns the abbreviated symbol (code point) for this time signature, or std::nullopt if none. </p>
 <p>If the musx document lacks music symbol options but abbreviation was requested, the SMuFL values are returned as default substitute values. </p>
 
 </div>

@@ -9,6 +9,7 @@ var searchData=
   ['entryfactory_6',['EntryFactory',['../classmusx_1_1factory_1_1EntryFactory.html',1,'musx::factory']]],
   ['entryframe_7',['EntryFrame',['../classmusx_1_1dom_1_1EntryFrame.html',1,'musx::dom']]],
   ['entryinfo_8',['EntryInfo',['../classmusx_1_1dom_1_1EntryInfo.html',1,'musx::dom']]],
-  ['entrypool_9',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
-  ['expressiontext_10',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]]
+  ['entryinfoptr_9',['EntryInfoPtr',['../classmusx_1_1dom_1_1EntryInfoPtr.html',1,'musx::dom']]],
+  ['entrypool_10',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
+  ['expressiontext_11',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]]
 ];

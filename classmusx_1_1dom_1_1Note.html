@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1Note.html',''); in
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
@@ -117,16 +118,46 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1Note.html',''); in
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ac6c4b810183b6ae6695ea7856a24632e" id="r_ac6c4b810183b6ae6695ea7856a24632e"><td class="memItemLeft" align="right" valign="top"><a id="ac6c4b810183b6ae6695ea7856a24632e" name="ac6c4b810183b6ae6695ea7856a24632e"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">NoteName</a> : int { <br />
+&#160;&#160;<b>C</b> = 0
+, <b>D</b> = 1
+, <b>E</b> = 2
+, <b>F</b> = 3
+, <br />
+&#160;&#160;<b>G</b> = 4
+, <b>A</b> = 5
+, <b>B</b> = 6
+<br />
+ }</td></tr>
+<tr class="memdesc:ac6c4b810183b6ae6695ea7856a24632e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The available note names, in array order. <br /></td></tr>
+<tr class="separator:ac6c4b810183b6ae6695ea7856a24632e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
+<tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
+, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
+, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da6adf97f83acf6453d4a6a4b1070f3754">None</a>
+ }</td></tr>
+<tr class="memdesc:ac50192040fe22fca9805ae4af5d88b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes how this instance is shared between part and score.  <a href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">More...</a><br /></td></tr>
+<tr class="separator:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base" id="r_a8ef0ccef928154f1865d1f693e76ad0a"><td class="memItemLeft" align="right" valign="top">
+using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = std::set&lt; std::string &gt;</td></tr>
+<tr class="memdesc:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The container type for shared nodes. <br /></td></tr>
+<tr class="separator:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7b5fc7c3dd8fe22c524c311b8eae5463" id="r_a7b5fc7c3dd8fe22c524c311b8eae5463"><td class="memItemLeft" align="right" valign="top"><a id="a7b5fc7c3dd8fe22c524c311b8eae5463" name="a7b5fc7c3dd8fe22c524c311b8eae5463"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Note</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#ac2cf4aba3b1d8b1e87e637752cfa6d3d">NoteNumber</a> noteId)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Note</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a> noteId)</td></tr>
 <tr class="memdesc:a7b5fc7c3dd8fe22c524c311b8eae5463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a7b5fc7c3dd8fe22c524c311b8eae5463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f0f8b7fc1ce284954140b26b2774d14" id="r_a6f0f8b7fc1ce284954140b26b2774d14"><td class="memItemLeft" align="right" valign="top"><a id="a6f0f8b7fc1ce284954140b26b2774d14" name="a6f0f8b7fc1ce284954140b26b2774d14"></a>
-<a class="el" href="namespacemusx_1_1dom.html#ac2cf4aba3b1d8b1e87e637752cfa6d3d">NoteNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteId</b> () const</td></tr>
+<a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteId</b> () const</td></tr>
 <tr class="memdesc:a6f0f8b7fc1ce284954140b26b2774d14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the note id for this note. This value does not change, even if the notes in a chord are rearranged (which affects the order of <a class="el" href="classmusx_1_1dom_1_1Entry.html#a533b919d0efa81b9d26fb16ade0b7773" title="Collection of notes that comprise the entry. These are in order from lowest to highest.">Entry::notes</a>.) <br /></td></tr>
 <tr class="separator:a6f0f8b7fc1ce284954140b26b2774d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab67d3da82a9c90ae7780e803b7d425d6" id="r_ab67d3da82a9c90ae7780e803b7d425d6"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">NoteName</a>, int, int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#ab67d3da82a9c90ae7780e803b7d425d6">calcNoteProperties</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex) const</td></tr>
+<tr class="memdesc:ab67d3da82a9c90ae7780e803b7d425d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position.  <br /></td></tr>
+<tr class="separator:ab67d3da82a9c90ae7780e803b7d425d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36dc7428581bf94502b9e3a8ab2f0db1" id="r_a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a36dc7428581bf94502b9e3a8ab2f0db1">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,6 +214,14 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>harmAlt</b> {}</td></t
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> {}</td></tr>
 <tr class="memdesc:a3e9ab0528cef1b53791ad277da67b26b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should always be true but otherwise appears to be used internally by Finale. <br /></td></tr>
 <tr class="separator:a3e9ab0528cef1b53791ad277da67b26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8020db4ad0f674e86e386af23a6d0eca" id="r_a8020db4ad0f674e86e386af23a6d0eca"><td class="memItemLeft" align="right" valign="top"><a id="a8020db4ad0f674e86e386af23a6d0eca" name="a8020db4ad0f674e86e386af23a6d0eca"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>tieStart</b> {}</td></tr>
+<tr class="memdesc:a8020db4ad0f674e86e386af23a6d0eca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates a tie starts on this note. <br /></td></tr>
+<tr class="separator:a8020db4ad0f674e86e386af23a6d0eca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f312eed82f216e8b14500319fa36549" id="r_a6f312eed82f216e8b14500319fa36549"><td class="memItemLeft" align="right" valign="top"><a id="a6f312eed82f216e8b14500319fa36549" name="a6f312eed82f216e8b14500319fa36549"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>tieEnd</b> {}</td></tr>
+<tr class="memdesc:a6f312eed82f216e8b14500319fa36549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates a tie ends on this note. <br /></td></tr>
+<tr class="separator:a6f312eed82f216e8b14500319fa36549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af07df87315ac74c605c9a6bb06c0c882" id="r_af07df87315ac74c605c9a6bb06c0c882"><td class="memItemLeft" align="right" valign="top"><a id="af07df87315ac74c605c9a6bb06c0c882" name="af07df87315ac74c605c9a6bb06c0c882"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>showAcci</b> {}</td></tr>
 <tr class="memdesc:af07df87315ac74c605c9a6bb06c0c882"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the note has an accidental. (Dynamically changed by Finale unless <code>freezeAcci</code> is set.) <br /></td></tr>
@@ -194,17 +233,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>freezeAcci</b> {}</td
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
-<tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
-, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
-, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da6adf97f83acf6453d4a6a4b1070f3754">None</a>
- }</td></tr>
-<tr class="memdesc:ac50192040fe22fca9805ae4af5d88b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes how this instance is shared between part and score.  <a href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">More...</a><br /></td></tr>
-<tr class="separator:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base" id="r_a8ef0ccef928154f1865d1f693e76ad0a"><td class="memItemLeft" align="right" valign="top">
-using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = std::set&lt; std::string &gt;</td></tr>
-<tr class="memdesc:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The container type for shared nodes. <br /></td></tr>
-<tr class="separator:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
 <tr class="memitem:a57d15e8a530fbfb694e4d3fbd5ae2dd5 inherit pro_methods_classmusx_1_1dom_1_1Base" id="r_a57d15e8a530fbfb694e4d3fbd5ae2dd5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a57d15e8a530fbfb694e4d3fbd5ae2dd5">Base</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode)</td></tr>
 <tr class="memdesc:a57d15e8a530fbfb694e4d3fbd5ae2dd5 inherit pro_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the base class and enforces the static constexpr XmlNodeName.  <br /></td></tr>
@@ -218,6 +246,50 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <div class="textblock"><p>Represents a single note element in an entry. </p>
 <p>This class is identified by the XML node name "note". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab67d3da82a9c90ae7780e803b7d425d6" name="ab67d3da82a9c90ae7780e803b7d425d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab67d3da82a9c90ae7780e803b7d425d6">&#9670;&#160;</a></span>calcNoteProperties()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">Note::NoteName</a>, int, int, int &gt; musx::dom::Note::calcNoteProperties </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td>
+          <td class="paramname"><em>clefIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the note name, octave number, actual alteration, and staff position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key signature in effect. </td></tr>
+    <tr><td class="paramname">clefIndex</td><td>The index of the clef in effect. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A tuple containing:<ul>
+<li>NoteName: The note name (C, D, E, F, G, A, B)</li>
+<li>int: The octave number (where 4 is the middle C octave)</li>
+<li>int: The actual alteration (in semitones, relative to natural)</li>
+<li>int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.) </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
 <a id="a36dc7428581bf94502b9e3a8ab2f0db1" name="a36dc7428581bf94502b9e3a8ab2f0db1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a36dc7428581bf94502b9e3a8ab2f0db1">&#9670;&#160;</a></span>requireAllFields()</h2>
 
