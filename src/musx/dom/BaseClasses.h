@@ -298,12 +298,11 @@ public:
     {
         OthersBase::integrityCheck();
         if constexpr (REQUIRED_SIZE) {
-            const bool notEnoughMembers = values.size() < REQUIRED_SIZE;
-            values.resize(REQUIRED_SIZE);
-            if (notEnoughMembers) {
+            const size_t originalSize = values.size();
+            values.resize(REQUIRED_SIZE); // resize first, in case MUSX_INTEGRITY_ERROR throws. (Avoid unreachable code warning.)
+            if (originalSize < REQUIRED_SIZE) {
                 MUSX_INTEGRITY_ERROR("Array with xml tag " + std::string(xmlTag()) + " and cmper " + std::to_string(getCmper())
                     + " has fewer than " + std::to_string(REQUIRED_SIZE) + " elements.");
-                values.resize(REQUIRED_SIZE);
             }
         }
     }
