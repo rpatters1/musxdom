@@ -246,7 +246,7 @@ TEST(StaffTest, AutoNumbering)
 
 TEST(StaffText, StaffLines)
 {
-  constexpr static musxtest::string_view xml = R"xml(
+  constexpr static musxtest::string_view staffLinesXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
   <finale>
     <others>
@@ -347,7 +347,7 @@ TEST(StaffText, StaffLines)
   </finale>
     )xml";
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(staffLinesXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
