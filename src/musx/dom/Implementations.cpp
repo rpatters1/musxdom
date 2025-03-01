@@ -689,8 +689,12 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
             auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry));
-            if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
-                entryInfo->v2Launch = true;
+            if (!entry->voice2) {
+                if ((i + 1) < entries.size() && entries[i + 1]->voice2) {
+                    entryInfo->v2Launch = true;                    
+                } else if (i > 0 && entries[i - 1]->voice2) {
+                    entryInfo->v1Continuation = true;
+                }
             }
             if (entryInfo->v2Launch) {
                 // Note: v1 tuplets do not appear to affect v2 entries. If they did this would be correct:
@@ -1177,11 +1181,8 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
 {
     // grace notes cannot tie backwards; only forwards (see grace note comment above)
     if (m_entry->getEntry()->isNote && !m_entry->getEntry()->graceNote) {
-        auto lastEntry = m_entry;
-        bool skippedV2Launch = false;
-        for (auto currEntry = m_entry.getPrevious(); currEntry; lastEntry = currEntry, currEntry = currEntry.getPrevious()) {
-            if (!skippedV2Launch && currEntry->v2Launch && lastEntry->getEntry()->voice2) {
-                skippedV2Launch = true;
+        for (auto currEntry = m_entry.getPrevious(); currEntry; currEntry = currEntry.getPrevious()) {
+            if (currEntry->v2Launch && m_entry.isSameEntry(currEntry.getNextInFrame())) {
                 continue;
             }
             if (auto result = currEntry.findEqualPitch(*this)) {
@@ -1189,9 +1190,6 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
             }
             if (currEntry->getEntry()->graceNote) {
                 continue;
-            }
-            if (lastEntry->getEntry()->voice2) {
-                break;
             }
             if (currEntry->getEntry()->voice2) {
                 while (currEntry) {

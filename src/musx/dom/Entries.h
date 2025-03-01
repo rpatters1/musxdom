@@ -462,6 +462,7 @@ public:
     util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
     util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
     bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
+    bool v1Continuation{};              ///< indicates that this entry (which is voice1) is a continuation of voice1 after a series of 1 or more voice 2 entries.
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
     ClefIndex clefIndex{};              ///< the clef index in effect for the entry.
