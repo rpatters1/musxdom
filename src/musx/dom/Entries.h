@@ -271,23 +271,23 @@ public:
 
     /// @brief Get the next entry in the same layer and staff. This can be in the next measure.
     /// @return  The next continguous entry. Returns nullptr if it encounters an empty frame or end of file.
-    EntryInfoPtr getNext() const;
+    EntryInfoPtr getNextInLayer() const;
 
     /// @brief Get the next entry in the frame in the same voice
     ///
-    /// For V2, it stops at the current V2 launch sequence.
+    /// For V2, it returns null after the current V2 launch sequence.
     EntryInfoPtr getNextSameV() const;
 
     /// @brief Get the previous entry in the same layer and staff. This can be in the previous measure.
     /// @return  The previous continguous entry. Returns nullptr if it encounters an empty frame or the beginning of the file.
-    EntryInfoPtr getPrevious() const;
+    EntryInfoPtr getPreviousInLayer() const;
 
     /// @brief Get the previous entry in the frame
     EntryInfoPtr getPreviousInFrame() const;
 
     /// @brief Get the previous entry in the frame in the same voice
     ///
-    /// For V2, it stops at the current V2 launch sequence.
+    /// For V2, it returns null when it hits the v2Launch note for the current V2 launch sequence.
     EntryInfoPtr getPreviousSameV() const;
 
     /// @brief Returns the next entry in the frame in the specified v1/v2 or null if none.

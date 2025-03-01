@@ -216,7 +216,7 @@ std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> cu
     return std::nullopt;
 }
 
-EntryInfoPtr EntryInfoPtr::getNext() const
+EntryInfoPtr EntryInfoPtr::getNextInLayer() const
 {
     if (auto resultInFrame = getNextInFrame()) {
         return resultInFrame;
@@ -252,7 +252,7 @@ EntryInfoPtr EntryInfoPtr::getNextSameV() const
     return next;
 }
 
-EntryInfoPtr EntryInfoPtr::getPrevious() const
+EntryInfoPtr EntryInfoPtr::getPreviousInLayer() const
 {
     if (auto resultInFrame = getPreviousInFrame()) {
         return resultInFrame;
@@ -1152,7 +1152,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                     }
                 }
             } else {
-                nextEntry = nextEntry.getNext(); // getNext searches the next frame already
+                nextEntry = nextEntry.getNextInLayer(); // getNextInLayer searches the next frame already
             }
             if (!nextEntry) {
                 break;
@@ -1164,7 +1164,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                 return result;
             }
             if (nextEntry->v2Launch) {
-                nextEntry = nextEntry.getNext();
+                nextEntry = nextEntry.getNextInLayer();
                 return nextEntry.findEqualPitch(*this);
             }
             break;
@@ -1178,7 +1178,7 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
     // grace notes cannot tie backwards; only forwards (see grace note comment above)
     auto thisRawEntry = m_entry->getEntry();
     if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
-        for (auto currEntry = m_entry.getPrevious(); currEntry; currEntry = currEntry.getPrevious()) {
+        for (auto currEntry = m_entry.getPreviousInLayer(); currEntry; currEntry = currEntry.getPreviousInLayer()) {
             if (currEntry->v2Launch && m_entry.isSameEntry(currEntry.getNextInFrame())) {
                 continue;
             }
@@ -1193,7 +1193,7 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
                               || currRawEntry->voice2 && currEntry.getPreviousInFrame()->v2Launch;
             if (skipBackToV1 && currRawEntry->voice2) {
                 while (currEntry) {
-                    auto testEntry = currEntry.getPrevious();
+                    auto testEntry = currEntry.getPreviousInLayer();
                     if (!testEntry || !testEntry->getEntry()->voice2) {
                         break;
                     }
