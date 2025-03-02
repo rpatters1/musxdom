@@ -1407,8 +1407,14 @@ public:
     /// @return Auto numbered name.
     std::string addAutoNumbering(const std::string& plainName) const;
 
+    /// @brief Returns the clef in this staff at the specified location
+    /// @param measureId The measure of the location
+    /// @param position The Edu elapsed time with the measure
+    ClefIndex calcClefIndexAt(MeasCmper measureId, Edu position) const;
+
     /// @brief Returns the first clef in this staff
-    ClefIndex calcFirstClefIndex() const;
+    ClefIndex calcFirstClefIndex() const
+    { return calcClefIndexAt(1, 0); }
 
     /// @brief Returns the first clef in the specified staff in the document
     /// @param document the document to search

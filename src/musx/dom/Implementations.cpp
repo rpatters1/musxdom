@@ -182,11 +182,11 @@ MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); 
 
 std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
 
-std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff() const
+std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<InstCmper>& forStaffId) const
 {
     auto entry = (*this)->getEntry();
-    return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), getStaff(), getMeasure(),
-        (*this)->elapsedDuration.calcEduDuration());
+    return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), forStaffId.value_or(getStaff()),
+        getMeasure(), (*this)->elapsedDuration.calcEduDuration());
 }
 
 unsigned EntryInfoPtr::calcReverseGraceIndex() const
@@ -1207,6 +1207,33 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
     return NoteInfoPtr();
 }
 
+InstCmper NoteInfoPtr::calcStaff() const
+{
+    if ((*this)->crossStaff) {
+        if (auto crossStaff = m_entry->getEntry()->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
+            return crossStaff->staff;
+        }
+    }
+    return m_entry.getStaff();
+}
+
+std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() const
+{
+    ClefIndex clefIndex = [&]() {
+        if ((*this)->crossStaff) {
+            InstCmper staffId = calcStaff();
+            if (staffId != m_entry.getStaff()) {
+                if (auto staff = m_entry.createCurrentStaff(staffId)) {
+                    return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration());
+                }
+            }
+        }
+        return m_entry->clefIndex;
+    }();
+
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex);
+}
+
 // *****************************
 // ***** PageFormatOptions *****
 // *****************************
@@ -1604,10 +1631,15 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     return addAutoNumbering(name);
 }
 
-ClefIndex others::Staff::calcFirstClefIndex() const
+ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const
 {
-    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), 1)) {
-        return gfhold->calcClefIndexAt(0);
+    /// @todo Take into accound clef changes caused by transposition.
+    for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
+        if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), tryMeasure)) {
+            return gfhold->calcClefIndexAt(position);
+        }
+        // after the first iteration, we are looking for the clef at the end of the measure
+        position = std::numeric_limits<Edu>::max();
     }
     return defaultClef;
 }

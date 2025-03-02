@@ -257,7 +257,8 @@ public:
     MeasCmper getMeasure() const;
 
     /// @brief Creates the current StaffComposite for the entry
-    std::shared_ptr<others::StaffComposite> createCurrentStaff() const;
+    /// @param Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Usefule when notes are cross-staffed.)
+    std::shared_ptr<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the key signature of the entry
     std::shared_ptr<KeySignature> getKeySignature() const;
@@ -527,8 +528,7 @@ public:
      *         - int: The actual alteration (in semitones, relative to natural)
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
-    std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const
-    { return (*this)->calcNoteProperties(m_entry.getKeySignature(), m_entry->clefIndex); }
+    std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end.
@@ -539,6 +539,9 @@ public:
     /// to see if there is actually a tie.
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
     NoteInfoPtr calcTieFrom() const;
+
+    /// @brief Calculates the staff number, taking into account cross staffing
+    InstCmper calcStaff() const;
 
 private:
     EntryInfoPtr m_entry;

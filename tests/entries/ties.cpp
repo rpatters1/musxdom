@@ -26,7 +26,6 @@
 
 using namespace musx::dom;
 
-
 static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpected, const std::optional<NoteInfoPtr>& backNoteExpected = std::nullopt)
 {
     ASSERT_TRUE(fromNote || toNoteExpected) << " null passed for both fromNote and toNoteExpected";
