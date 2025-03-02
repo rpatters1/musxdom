@@ -114,10 +114,13 @@ TEST(MeasureTest, PopulateScore)
     auto measure1 = others->get<others::Measure>(SCORE_PARTID, 1);
     ASSERT_TRUE(measure1) << "Measure for score with cmper 1 not found";
 
+    auto keySignature = measure1->calcKeySignature();
+    ASSERT_TRUE(keySignature);
+
     EXPECT_EQ(measure1->width, Evpu(600));
-    EXPECT_EQ(measure1->keySignature->key, 0);
-    EXPECT_TRUE(measure1->keySignature->keyless);
-    EXPECT_FALSE(measure1->keySignature->hideKeySigShowAccis);
+    EXPECT_EQ(keySignature->key, 0);
+    EXPECT_TRUE(keySignature->keyless);
+    EXPECT_FALSE(keySignature->hideKeySigShowAccis);
     EXPECT_EQ(measure1->beats, Cmper(2));
     EXPECT_EQ(measure1->divBeat, Cmper(2));
     EXPECT_EQ(measure1->dispBeats, Cmper(4));
@@ -142,16 +145,19 @@ TEST(MeasureTest, PopulateScore)
         auto [count, unit] = timeSig->calcSimplified();
         EXPECT_EQ(count, 4);
         EXPECT_EQ(unit, NoteType::Quarter);
-  }
+    }
 
     // Measure 2 (Score)
     auto measure2 = others->get<others::Measure>(SCORE_PARTID, 2);
     ASSERT_TRUE(measure2) << "Measure 2 for score not found";
 
+    keySignature = measure2->calcKeySignature();
+    ASSERT_TRUE(keySignature);
+
     EXPECT_EQ(measure2->width, Evpu(600));
-    EXPECT_EQ(measure2->keySignature->key, 4);
-    EXPECT_FALSE(measure2->keySignature->keyless);
-    EXPECT_TRUE(measure2->keySignature->hideKeySigShowAccis);
+    EXPECT_EQ(keySignature->key, 4);
+    EXPECT_FALSE(keySignature->keyless);
+    EXPECT_TRUE(keySignature->hideKeySigShowAccis);
     EXPECT_EQ(measure2->beats, Cmper(4));
     EXPECT_EQ(measure2->divBeat, Cmper(1024));
     EXPECT_EQ(measure2->dispBeats, Cmper(6));
@@ -179,10 +185,13 @@ TEST(MeasureTest, PopulateScore)
     auto measure3 = others->get<others::Measure>(SCORE_PARTID, 3);
     ASSERT_TRUE(measure3) << "Measure 3 for score not found";
 
+    keySignature = measure3->calcKeySignature();
+    ASSERT_TRUE(keySignature);
+
     EXPECT_EQ(measure3->width, Evpu(600));
-    EXPECT_EQ(measure3->keySignature->key, 0);
-    EXPECT_FALSE(measure3->keySignature->keyless);
-    EXPECT_FALSE(measure3->keySignature->hideKeySigShowAccis);
+    EXPECT_EQ(keySignature->key, 0);
+    EXPECT_FALSE(keySignature->keyless);
+    EXPECT_FALSE(keySignature->hideKeySigShowAccis);
     EXPECT_EQ(measure3->beats, Cmper(4));
     EXPECT_EQ(measure3->divBeat, Cmper(4));
     EXPECT_EQ(measure3->dispBeats, Cmper(4));
@@ -402,7 +411,7 @@ TEST(MeasureTest, CompositeTimeSig1)
     ASSERT_TRUE(measure) << "Measure for score with cmper 1 not found";
 
     EXPECT_FALSE(measure->useDisplayTimesig);
-    EXPECT_FALSE(measure->createDisplayTimeSignature());
+    EXPECT_TRUE(measure->createTimeSignature()->isSame(*measure->createDisplayTimeSignature().get()));
 
     auto timeSig = measure->createTimeSignature();
     ASSERT_TRUE(timeSig);
@@ -480,7 +489,7 @@ TEST(MeasureTest, CompositeTimeSig2)
     ASSERT_TRUE(measure) << "Measure for score with cmper 1 not found";
 
     EXPECT_FALSE(measure->useDisplayTimesig);
-    EXPECT_FALSE(measure->createDisplayTimeSignature());
+    EXPECT_TRUE(measure->createTimeSignature()->isSame(*measure->createDisplayTimeSignature().get()));
 
     auto timeSig = measure->createTimeSignature();
     ASSERT_TRUE(timeSig);

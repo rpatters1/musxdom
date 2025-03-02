@@ -617,7 +617,7 @@ public:
     };
 
     Evpu width{};               ///< "Ideal" measure width in Evpu. Page layout determines actual width.
-    std::shared_ptr<KeySignature> keySignature; ///< the key signature on this measure. Guaranteed to be non-null. (xml node is `<keySig>`)
+    std::shared_ptr<KeySignature> globalKeySig; ///< the key global signature on this measure. Guaranteed to be non-null. (xml node is `<keySig>`)
     Cmper beats{};              ///< Number of beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
     Cmper divBeat{};            ///< Divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
     Cmper dispBeats{};          ///< Displayed beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
@@ -664,18 +664,31 @@ public:
     /// And if it does, it may not appear as a number.
     int calcDisplayNumber() const;
 
-    /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure
-    std::shared_ptr<TimeSignature> createTimeSignature() const
+    /// @brief Calculates and returns the shared pointer to an instance of the @ref KeySignature for this measure and staff.
+    /// @param forStaff If present, specifies the specific staff for which to create the key signature.
+    std::shared_ptr<KeySignature> calcKeySignature([[maybe_unused]] const std::optional<InstCmper>& forStaff = std::nullopt) const
     {
+        /// @todo Get the independent key signature for the staff, if there is one.
+        return globalKeySig;
+    }
+
+    /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
+    /// @param forStaff If present, specifies the specific staff for which to create the time signature.
+    std::shared_ptr<TimeSignature> createTimeSignature([[maybe_unused]]const std::optional<InstCmper>& forStaff = std::nullopt) const
+    {
+        /// @todo Get the independent time signature for the staff, if there is one.
         return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
     }
 
-    /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure
-    /// @return The diplay time signature if there is one, otherwise `nullptr`.
-    std::shared_ptr<TimeSignature> createDisplayTimeSignature() const
+    /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
+    /// @param forStaff If present, specifies the specific staff for which to create the time signature.
+    /// @return The display time signature if there is one, otherwise the actual time signature.
+    std::shared_ptr<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const
     {
+        /// @todo Get the independent display time signature for the staff, if there is one.
+        /// (Note that the independent key sig may have a different useDisplay boolean than the global key sig.)
         if (!useDisplayTimesig) {
-            return nullptr;
+            return createTimeSignature(forStaff);
         }
         return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
     }
@@ -683,8 +696,8 @@ public:
     void integrityCheck() override
     {
         this->OthersBase::integrityCheck();
-        if (!keySignature) {
-            keySignature = std::make_shared<KeySignature>(getDocument());
+        if (!globalKeySig) {
+            globalKeySig = std::make_shared<KeySignature>(getDocument());
         }
     }
 

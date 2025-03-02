@@ -301,7 +301,7 @@ MUSX_XML_ELEMENT_ARRAY(MarkingCategoryName, {
 MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->width = e->getTextAs<Evpu>(); }},
     {"keySig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) {
-        i->keySignature = FieldPopulator<KeySignature>::createAndPopulate(e, i->getDocument()); }},
+        i->globalKeySig = FieldPopulator<KeySignature>::createAndPopulate(e, i->getDocument()); }},
     {"beats", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->beats = e->getTextAs<Cmper>(); }},
     {"divbeat", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->divBeat = e->getTextAs<Cmper>(); }},
     {"dispBeats", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->dispBeats = e->getTextAs<Cmper>(); }},

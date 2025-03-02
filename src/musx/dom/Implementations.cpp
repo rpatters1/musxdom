@@ -676,7 +676,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         if (!measure) {
             throw std::invalid_argument("Meaure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
         }
-        retval->keySignature = measure->keySignature;
+        retval->keySignature = measure->calcKeySignature(getStaff());
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
