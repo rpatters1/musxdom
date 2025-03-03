@@ -1015,7 +1015,7 @@ void texts::LyricsTextBase::createSyllableInfo()
     }
 
     if (!current.empty()) {
-        syllables.push_back(std::shared_ptr<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, false)));
+        syllables.push_back(std::shared_ptr<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
     }
 }
 

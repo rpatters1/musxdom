@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
@@ -368,9 +370,8 @@ www.greatrivermusic.com</blockText>
 
 TEST(TextsTest, FileInfoText)
 {
-    using FileInfoText = musx::dom::texts::FileInfoText;
-    using Type = FileInfoText::TextType;
-    using musx::dom::Cmper;
+    using texts::FileInfoText;
+    using Type = texts::FileInfoText::TextType;
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto texts = doc->getTexts();
@@ -433,10 +434,9 @@ TEST(TextsTest, FileInfoText)
 
 TEST(TextsTest, LyricsText)
 {
-    using musx::dom::texts::LyricsVerse;
-    using musx::dom::texts::LyricsChorus;
-    using musx::dom::texts::LyricsSection;
-    using musx::dom::Cmper;
+    using texts::LyricsVerse;
+    using texts::LyricsChorus;
+    using texts::LyricsSection;
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto texts = doc->getTexts();
@@ -472,11 +472,10 @@ TEST(TextsTest, LyricsText)
 
 TEST(TextsTest, OtherText)
 {
-    using musx::dom::texts::BlockText;
-    using musx::dom::texts::SmartShapeText;
-    using musx::dom::texts::ExpressionText;
-    using musx::dom::texts::BookmarkText;
-    using musx::dom::Cmper;
+    using texts::BlockText;
+    using texts::SmartShapeText;
+    using texts::ExpressionText;
+    using texts::BookmarkText;
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto texts = doc->getTexts();
@@ -540,7 +539,7 @@ TEST(TextsTest, EnigmaComponents)
 
 TEST(TextsTest, FontFromEnigma)
 {
-    using musx::dom::texts::ExpressionText;
+    using texts::ExpressionText;
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto texts = doc->getTexts();
@@ -593,6 +592,8 @@ TEST(TextsTest, EnigmaParsing)
 
 TEST(TextsTest, LyricSyllableParsing)
 {
+    using texts::LyricsVerse;
+
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "syllables.enigmaxml", xml);
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
@@ -601,13 +602,31 @@ TEST(TextsTest, LyricSyllableParsing)
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
-    auto lyrics = texts->getArray<musx::dom::texts::LyricsVerse>();
-    for (const auto& lyr : lyrics) {
-        for (size_t x = 0; x < lyr->syllables.size(); x++) {
-            const auto& syl = lyr->syllables[x];
-            std::cout << lyr->getTextNumber() << '\t' << x + 1 << '\t' << syl->syllable << '\t' << syl->hasHyphenBefore << '\t' << syl->hasHyphenAfter << std::endl;
-        }
-        std::cout << "=========" << std::endl;
-    }
+    auto checkSyllable = [&](const std::shared_ptr<LyricsVerse>& lyr, size_t index, const std::string& expSyl, bool expBefore, bool expAfter) -> void {
+        ASSERT_GT(lyr->syllables.size(), index);
+        const auto& syl = lyr->syllables[index];
+        ASSERT_TRUE(syl);
+        EXPECT_EQ(syl->syllable, expSyl);
+        EXPECT_EQ(syl->hasHyphenBefore, expBefore);
+        EXPECT_EQ(syl->hasHyphenAfter, expAfter);
+    };
 
+    auto lyrics = texts->getArray<LyricsVerse>();
+    ASSERT_GE(lyrics.size(), 4);
+
+    checkSyllable(lyrics[0], 0, "fi@#", false, false);
+    checkSyllable(lyrics[0], 1, "na", false, false);
+    checkSyllable(lyrics[0], 2, "le", false, false);
+
+    checkSyllable(lyrics[1], 0, "fi", true, true);
+    checkSyllable(lyrics[1], 1, "na.;—", true, false);
+    checkSyllable(lyrics[1], 2, "le", false, true);
+
+    checkSyllable(lyrics[2], 0, "fi", false, true);
+    checkSyllable(lyrics[2], 1, "na", true, true);
+    checkSyllable(lyrics[2], 2, "le", true, false);
+
+    checkSyllable(lyrics[3], 0, "fi", false, false);
+    checkSyllable(lyrics[3], 1, "na", false, true);
+    checkSyllable(lyrics[3], 2, "le", true, true);
 }
