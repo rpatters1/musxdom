@@ -34,62 +34,32 @@ using namespace dom::texts;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
-template <>
-struct FieldPopulator<TextsBase> : public FactoryBase
-{
-    static void populate(const std::shared_ptr<TextsBase>& instance, const XmlElementPtr& element, ElementLinker&)
-    {
-        instance->text = element->getText();
+MUSX_RESOLVER_ENTRY(LyricsVerse, {
+    [](const dom::DocumentPtr& document) {
+        auto lyricsTexts = document->getTexts()->getArray<LyricsVerse>();
+        for (auto& text : lyricsTexts) {
+            text->createSyllableInfo();
+        }
     }
-};
+});
 
-template <>
-struct FieldPopulator<FileInfoText> : public FieldPopulator<TextsBase>
-{
-    using FieldPopulator<TextsBase>::populate;
-};
+MUSX_RESOLVER_ENTRY(LyricsChorus, {
+    [](const dom::DocumentPtr& document) {
+        auto lyricsTexts = document->getTexts()->getArray<LyricsChorus>();
+        for (auto& text : lyricsTexts) {
+            text->createSyllableInfo();
+        }
+    }
+});
 
-template <>
-struct FieldPopulator<LyricsVerse> : public FieldPopulator<TextsBase>
-{
-    using FieldPopulator<TextsBase>::populate;
-};
-
-template <>
-struct FieldPopulator<LyricsChorus> : public FieldPopulator<TextsBase>
-{
-    using FieldPopulator<TextsBase>::populate;
-};
-
-template <>
-struct FieldPopulator<LyricsSection> : public FieldPopulator<TextsBase>
-{
-    using FieldPopulator<TextsBase>::populate;
-};
-
-template <>
-struct FieldPopulator<BlockText> : public FieldPopulator<TextsBase>
-{
-    using FieldPopulator<TextsBase>::populate;
-};
-
-template <>
-struct FieldPopulator<SmartShapeText> : public FieldPopulator<TextsBase>
-{
-    using FieldPopulator<TextsBase>::populate;
-};
-
-template <>
-struct FieldPopulator<ExpressionText> : public FieldPopulator<TextsBase>
-{
-    using FieldPopulator<TextsBase>::populate;
-};
-
-template <>
-struct FieldPopulator<BookmarkText> : public FieldPopulator<TextsBase>
-{
-    using FieldPopulator<TextsBase>::populate;
-};
+MUSX_RESOLVER_ENTRY(LyricsSection, {
+    [](const dom::DocumentPtr& document) {
+        auto lyricsTexts = document->getTexts()->getArray<LyricsSection>();
+        for (auto& text : lyricsTexts) {
+            text->createSyllableInfo();
+        }
+    }
+});
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 

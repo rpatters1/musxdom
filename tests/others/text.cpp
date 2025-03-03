@@ -590,3 +590,24 @@ TEST(TextsTest, EnigmaParsing)
     result = EnigmaString::trimTags("^font(New York)^sharp()The composer tag is ^^composer()");
     EXPECT_EQ(result, "The composer tag is ^composer()");
 }
+
+TEST(TextsTest, LyricSyllableParsing)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "syllables.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    auto lyrics = texts->getArray<musx::dom::texts::LyricsVerse>();
+    for (const auto& lyr : lyrics) {
+        for (size_t x = 0; x < lyr->syllables.size(); x++) {
+            const auto& syl = lyr->syllables[x];
+            std::cout << lyr->getTextNumber() << '\t' << x + 1 << '\t' << syl->syllable << '\t' << syl->hasHyphenBefore << '\t' << syl->hasHyphenAfter << std::endl;
+        }
+        std::cout << "=========" << std::endl;
+    }
+
+}

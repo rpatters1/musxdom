@@ -28,6 +28,7 @@
 #include <stdexcept>
 
 #include "BaseClasses.h"
+#include "CommonClasses.h"
 // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
@@ -110,13 +111,28 @@ public:
 };
 
 /**
- * @class LyricsVerse
- * @brief Contains verse text for lyrics
+ * @class LyricsTextBase
+ * @brief Base class for lyrics text
  */
-class LyricsVerse : public TextsBase
+class LyricsTextBase : public TextsBase
 {
 public:
     using TextsBase::TextsBase;
+
+    std::vector<std::shared_ptr<LyricsSyllableInfo>> syllables; ///< the syllable info for the lyric text, constructed by the factory
+
+    /// @brief Creates the syllables array. Used by the factory but available at any time.
+    void createSyllableInfo();
+};
+
+/**
+ * @class LyricsVerse
+ * @brief Contains verse text for lyrics
+ */
+class LyricsVerse : public LyricsTextBase
+{
+public:
+    using LyricsTextBase::LyricsTextBase;
 
     /**
      * @brief The XML node name for this type.
@@ -128,10 +144,10 @@ public:
  * @class LyricsChorus
  * @brief Contains chorus text for lyrics
  */
-class LyricsChorus : public TextsBase
+class LyricsChorus : public LyricsTextBase
 {
 public:
-    using TextsBase::TextsBase;
+    using LyricsTextBase::LyricsTextBase;
 
     /**
      * @brief The XML node name for this type.
@@ -143,10 +159,10 @@ public:
  * @class LyricsSection
  * @brief Contains section text for lyrics
  */
-class LyricsSection : public TextsBase
+class LyricsSection : public LyricsTextBase
 {
 public:
-    using TextsBase::TextsBase;
+    using LyricsTextBase::LyricsTextBase;
 
     /**
      * @brief The XML node name for this type.

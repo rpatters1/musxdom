@@ -28,12 +28,14 @@
 #include <functional>
 #include <unordered_set>
 #include <unordered_map>
+#include <map>
 #include <tuple>
 #include <sstream>
 
 #include "musx/util/Logger.h"
 #include "musx/xml/XmlInterface.h"
 #include "musx/dom/BaseClasses.h"
+#include "musx/dom/Document.h"
 
 namespace musx {
 
@@ -287,8 +289,12 @@ struct FieldPopulator : public FactoryBase
 
     static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element)
     {
-        for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
-            populateField(instance, child);
+        if constexpr (std::is_base_of_v<TextsBase, T>) {
+            instance->text = element->getText();
+        } else {
+            for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
+                populateField(instance, child);
+            }
         }
         if constexpr (std::is_base_of_v<Base, T>) {
             instance->integrityCheck();

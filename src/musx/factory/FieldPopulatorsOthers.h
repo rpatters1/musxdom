@@ -23,6 +23,7 @@
 
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/Others.h"
+#include "musx/dom/Details.h"
 #include "musx/xml/XmlInterface.h"
 #include "FactoryBase.h"
 

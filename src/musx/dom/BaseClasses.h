@@ -27,6 +27,7 @@
 
 #include "musx/dom/Fundamentals.h"
 #include "musx/xml/XmlInterface.h"
+#include "musx/util/Logger.h"
 
 namespace musx {
 
@@ -162,6 +163,33 @@ private:
     const Cmper m_partId;
     const ShareMode m_shareMode;
     SharedNodes m_unlinkedNodes;
+};
+
+/**
+ * @class CommonClassBase
+ * @brief Base class for classes that are commonly used among others, details, entries, and/or texts.
+ * They can be constructed in atypical contexts, so their Part and Sharing info is not meaningful.
+ */
+class CommonClassBase : public Base
+{
+public:
+    /**
+     * @brief Constructs a CommonClassBase object.
+     * 
+     * @param document A weak pointer to the parent document.
+     */
+    CommonClassBase(const DocumentWeakPtr& document)
+        : Base(document, SCORE_PARTID, ShareMode::All) {}
+
+protected:
+    // Because the part ID and share mode are hard-coded for this category of classes,
+    // these Base functions do not return useful results. However, we allow our subclasses
+    // to use their own versions of these functions (esp. `getPartId`) to avoid promiscuous
+    // hard-coding of SCORE_PARTID. The rules may change in the future.
+    using Base::getPartDefinition;
+    using Base::getPartId;
+    using Base::getShareMode;
+    using Base::getUnlinkedNodes;
 };
 
 /**

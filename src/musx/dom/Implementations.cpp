@@ -981,6 +981,44 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
     return keySigAlteration;
 }
 
+// **************************
+// ***** LyricsTextBase *****
+// **************************
+
+void texts::LyricsTextBase::createSyllableInfo()
+{
+    std::string current;
+    bool inSeparator = false;
+    bool currSeparatorHasHyphen = false;
+    bool lastSeparatorHadHyphen = false;
+
+    auto plainText = util::EnigmaString::trimTags(text);
+    syllables.clear();
+    for (auto c : plainText) {
+        if (c == '-' || isspace(c)) {
+            if (c == '-') {
+                currSeparatorHasHyphen = true;
+            }
+            inSeparator = true;
+        } else {
+            if (inSeparator) {
+                if (!current.empty()) {
+                    syllables.push_back(std::shared_ptr<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
+                    current.clear();
+                }
+                lastSeparatorHadHyphen = currSeparatorHasHyphen;
+                currSeparatorHasHyphen = false;
+                inSeparator = false;
+            }
+            current += c;
+        }
+    }
+
+    if (!current.empty()) {
+        syllables.push_back(std::shared_ptr<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, false)));
+    }
+}
+
 // ****************************
 // ***** MarkingCategiory *****
 // ****************************
@@ -1937,7 +1975,7 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 // *************************
 
 TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, std::optional<bool> abbreviate)
-    : Base(document, SCORE_PARTID, ShareMode::All), m_abbreviate(abbreviate)
+    : CommonClassBase(document), m_abbreviate(abbreviate)
 {
     auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
         if (hasCompositeTop) {
