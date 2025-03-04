@@ -61,7 +61,7 @@
       <modified>
         <year>2025</year>
         <month>3</month>
-        <day>3</day>
+        <day>4</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -3490,7 +3490,7 @@
     </lyrDataVerse>
     <activeLyric cmper1="1" cmper2="1">
       <assignmentTag>verse</assignmentTag>
-      <lyricNumber>3</lyricNumber>
+      <lyricNumber>5</lyricNumber>
       <syll>1</syll>
     </activeLyric>
   </details>
@@ -3966,7 +3966,7 @@ na ---
 
 -le --
 </verse>
-    <verse number="5"/>
+    <verse number="5">^fontid(1)^size(12)^nfx(0) - </verse>
     <verse number="6"/>
     <blockText number="1">^fontid(1)^size(12)^nfx(0)Score</blockText>
   </texts>
