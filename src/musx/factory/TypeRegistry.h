@@ -247,7 +247,10 @@ using RegisteredDetails = TypeRegistry <
     dom::details::StaffGroup,
     dom::details::TieAlterEnd,
     dom::details::TieAlterStart,
-    dom::details::TupletDef
+    dom::details::TupletDef,
+    dom::details::LyricAssignChorus,
+    dom::details::LyricAssignSection,
+    dom::details::LyricAssignVerse
 >;
 
 /**

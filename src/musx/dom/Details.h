@@ -227,6 +227,80 @@ public:
 };
 
 /**
+ * @class LyricAssign
+ * @brief Contains assignment data for a lyric assignment (a single syllable)
+ */
+class LyricAssign : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor function
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this #GFrameHold (probably always #ShareMode::All)
+     * @param entnum The entry number of this assignment.
+     * @param inci The 0-based inci. Each lyric text block has a separate instance, if assigned.
+     */
+    explicit LyricAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci) {}
+
+    Cmper lyricNumber{};            ///< the text number of the lyric.
+    unsigned syllable{};            ///< the 1-based syllable number. Subtract 1 to get the index. (xml node is `<syll>`)
+    Evpu horzOffset{};              ///< horizontal offset from default position. (xml node is `<horzOff>`)
+    Evpu vertOffset{};              ///< horizontal offset from default position. (xml node is `<vertOff>`)
+    Evpu floatingHorzOff{};         ///< This appears to have something to do with note spacing. It may simply be a cache that Finale changes as needed.
+    int wext{};                     ///< Somehow indicates a word extension, but its meaning is uncertain. It does not appear to be a smart shape cmper.
+    bool displayVerseNum{};         ///< If set, the text block number displays to the left of the syllable. (E.g., when numbering verses in a hymn.)
+
+    static const xml::XmlElementArray<LyricAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class LyricAssignChorus
+ * @brief Contains the syllable assignments for lyrics chorus blocks.
+ */
+class LyricAssignChorus : public LyricAssign
+{
+public:
+    using LyricAssign::LyricAssign;
+
+    /**
+     * @brief The XML node name for this type.
+     */
+    constexpr static std::string_view XmlNodeName = "lyrDataChorus";
+};
+
+/**
+ * @class LyricAssignSection
+ * @brief Contains the syllable assignments for lyrics section blocks.
+ */
+class LyricAssignSection : public LyricAssign
+{
+public:
+    using LyricAssign::LyricAssign;
+
+    /**
+     * @brief The XML node name for this type.
+     */
+    constexpr static std::string_view XmlNodeName = "lyrDataSection";
+};
+
+/**
+ * @class LyricAssignVerse
+ * @brief Contains the syllable assignments for lyrics verse blocks.
+ */
+class LyricAssignVerse : public LyricAssign
+{
+public:
+    using LyricAssign::LyricAssign;
+
+    /**
+     * @brief The XML node name for this type.
+     */
+    constexpr static std::string_view XmlNodeName = "lyrDataVerse";
+};
+
+/**
  * @class SecondaryBeamBreak
  * @brief Specifies which secondary beams break and restart on the associated entry.
  *

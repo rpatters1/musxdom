@@ -79,6 +79,16 @@ MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"frame4", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[3] = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
+    {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
+    {"syll", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->syllable = e->getTextAs<unsigned>(); }},
+    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"floatingHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->floatingHorzOff = e->getTextAs<Evpu>(); }},
+    {"wext", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->wext = e->getTextAs<int>(); }},
+    {"displayVerseNum", [](const XmlElementPtr&, const std::shared_ptr<LyricAssign>& i) { i->displayVerseNum = true; }},
+});
+
 // XML mappings for the SecondaryBeamBreak class
 MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
     {"do16th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note16th); }},

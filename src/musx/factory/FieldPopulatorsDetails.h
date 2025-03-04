@@ -55,6 +55,24 @@ struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
 };
 
 template <>
+struct FieldPopulator<LyricAssignChorus> : private FieldPopulator<LyricAssign>
+{
+    using FieldPopulator<LyricAssign>::populate;
+};
+
+template <>
+struct FieldPopulator<LyricAssignSection> : private FieldPopulator<LyricAssign>
+{
+    using FieldPopulator<LyricAssign>::populate;
+};
+
+template <>
+struct FieldPopulator<LyricAssignVerse> : private FieldPopulator<LyricAssign>
+{
+    using FieldPopulator<LyricAssign>::populate;
+};
+
+template <>
 struct FieldPopulator<TieAlterEnd> : private FieldPopulator<TieAlterBase>
 {
     using FieldPopulator<TieAlterBase>::populate;
