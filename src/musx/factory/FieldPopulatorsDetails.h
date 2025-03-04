@@ -37,6 +37,24 @@ using namespace ::musx::xml;
 using namespace ::musx::dom::details;
 
 template <>
+struct FieldPopulator<BaselineLyricsChorus> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineLyricsSection> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
 struct FieldPopulator<TieAlterEnd> : private FieldPopulator<TieAlterBase>
 {
     using FieldPopulator<TieAlterBase>::populate;

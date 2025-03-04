@@ -57,6 +57,11 @@ namespace details {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
+MUSX_XML_ELEMENT_ARRAY(Baseline, {
+    {"basedisp", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->baselineDisplacement = e->getTextAs<Evpu>(); }},
+    {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
     {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
     {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<InstCmper>(); }},

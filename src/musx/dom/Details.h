@@ -51,6 +51,76 @@ class Measure;
 namespace details {
 
 /**
+ * @class Baseline
+ * @brief Contains the baseline information for all baseline types
+ */
+class Baseline : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor function
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this #GFrameHold (probably always #ShareMode::All)
+     * @param system For system baselines, the system number. For global baselines, 0.
+     * @param staff For staff-level baselines, the staff number. For global baselines, 0.
+     * @param inci The 0-based inci, if needed. (Lyrics baselines have multiple instances per #lyricNumber.)
+     */
+    explicit Baseline(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff, std::optional<Inci> inci = std::nullopt)
+        : DetailsBase(document, partId, shareMode, system, staff, inci) {}
+
+    Evpu baselineDisplacement{};    ///< the displacment of the baseline from default position. (xml node is `<basedisp`>)
+    Cmper lyricNumber{};            ///< the text number of the lyric, if this is a lyrics baseline. Otherwise unused and should be zero.
+
+    static const xml::XmlElementArray<Baseline>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class BaselineLyricsChorus
+ * @brief Contains the baseline offsets for lyrics chorus records.
+ */
+class BaselineLyricsChorus : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    /**
+     * @brief The XML node name for this type.
+     */
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsChorus";
+};
+
+/**
+ * @class BaselineLyricsSection
+ * @brief Contains the baseline offsets for lyrics chorus records.
+ */
+class BaselineLyricsSection : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    /**
+     * @brief The XML node name for this type.
+     */
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsSection";
+};
+
+/**
+ * @class BaselineLyricsVerse
+ * @brief Contains the baseline offsets for lyrics verse records.
+ */
+class BaselineLyricsVerse : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    /**
+     * @brief The XML node name for this type.
+     */
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsVerse";
+};
+
+/**
  * @class CrossStaff
  * @brief Represents a cross-staff assignment for the note, if any.
  *
