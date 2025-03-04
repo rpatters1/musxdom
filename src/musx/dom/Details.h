@@ -44,6 +44,12 @@ namespace others {
 class Measure;
 } // namespace others
 
+namespace texts {
+    class LyricsChorus;
+    class LyricsSection;
+    class LyricsVerse;
+} // namespace others
+
 /**
  * @namespace musx::dom::details
  * @brief Classes in the @ref DetailsPool.
@@ -84,10 +90,9 @@ class BaselineLyricsChorus : public Baseline
 public:
     using Baseline::Baseline;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "baselinesLyricsChorus";
+
+    using TextType = texts::LyricsChorus; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsChorus"; ///< The XML node name for this type.
 };
 
 /**
@@ -99,10 +104,8 @@ class BaselineLyricsSection : public Baseline
 public:
     using Baseline::Baseline;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "baselinesLyricsSection";
+    using TextType = texts::LyricsSection; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsSection"; ///< The XML node name for this type.
 };
 
 /**
@@ -114,10 +117,8 @@ class BaselineLyricsVerse : public Baseline
 public:
     using Baseline::Baseline;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "baselinesLyricsVerse";
+    using TextType = texts::LyricsVerse; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsVerse"; ///< The XML node name for this type.
 };
 
 /**
@@ -264,10 +265,8 @@ class LyricAssignChorus : public LyricAssign
 public:
     using LyricAssign::LyricAssign;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "lyrDataChorus";
+    using TextType = texts::LyricsChorus; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "lyrDataChorus"; ///< The XML node name for this type.
 };
 
 /**
@@ -279,10 +278,8 @@ class LyricAssignSection : public LyricAssign
 public:
     using LyricAssign::LyricAssign;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "lyrDataSection";
+    using TextType = texts::LyricsSection; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "lyrDataSection"; ///< The XML node name for this type.
 };
 
 /**
@@ -294,10 +291,8 @@ class LyricAssignVerse : public LyricAssign
 public:
     using LyricAssign::LyricAssign;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "lyrDataVerse";
+    using TextType = texts::LyricsVerse; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "lyrDataVerse"; ///< The XML node name for this type.
 };
 
 /**
