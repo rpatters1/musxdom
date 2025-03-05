@@ -85,7 +85,60 @@ enum class SmartShapeType : int
     DashContouSlurAuto, ///< Contoured line dashed slur with direction automatically determined.
 };
 
+/**
+ * @class SmartShapeMeasureAssign
+ * @brief Assigns a smart shape or center shape to a measure.
+ *
+ * Note that *every smart shape* has a measure assignment. This includes entry-assigned smart shapes that
+ * *additionally* have an entry assignment.
+ *
+ * The cmper value is the measure Id.
+ *
+ * This class is identified by the XML node name "smartShapeMeasMark".
+ */
+class SmartShapeMeasureAssign : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit SmartShapeMeasureAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    Cmper shapeNum{};       ///< The @ref Cmper of the @ref SmartShape that is being assigned.
+    Cmper centerShapeNum{}; ///< If non-zero, the 2nd @ref Cmper of the @ref CenterShape.
+    ///< Zero if this measure starts or ends the smart shape.
+
+    constexpr static std::string_view XmlNodeName = "smartShapeMeasMark"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SmartShapeMeasureAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 } // namespace others
+
+namespace details {
+
+/**
+ * @class SmartShapeEntryAssign
+ * @brief Assigns a smart shape to an entry.
+ *
+ * This class is identified by the XML node name "smartShapeEntryMark".
+ */
+class SmartShapeEntryAssign : public EntryDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit SmartShapeEntryAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    Cmper shapeNum{};       ///< The @ref Cmper of the @ref SmartShape that is being assigned.
+
+    constexpr static std::string_view XmlNodeName = "smartShapeEntryMark"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SmartShapeEntryAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+} // namespace details
 
 } // namespace dom
 } // namespace musx

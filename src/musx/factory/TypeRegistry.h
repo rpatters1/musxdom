@@ -27,9 +27,11 @@
 #include <tuple>
 
 #include "musx/dom/BaseClasses.h"
+#include "musx/dom/CommonClasses.h"
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
 #include "musx/dom/Details.h"
+#include "musx/dom/SmartShape.h"
 #include "musx/dom/Entries.h"
 #include "musx/dom/Texts.h"
 #include "musx/xml/XmlInterface.h"

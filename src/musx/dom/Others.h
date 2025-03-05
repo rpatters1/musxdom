@@ -1307,34 +1307,6 @@ public:
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-
-/**
- * @class SmartShapeMeasureAssign
- * @brief Assigns a smart shape or center shape to a measure.
- *
- * Note that *every smart shape* has a measure assignment. This includes entry-assigned smart shapes that
- * *additionally* have an entry assignment.
- *
- * The cmper value is the measure Id.
- *
- * This class is identified by the XML node name "smartShapeMeasMark".
- */
-class SmartShapeMeasureAssign : public OthersBase
-{
-public:
-    /** @brief Constructor function */
-    explicit SmartShapeMeasureAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
-        : OthersBase(document, partId, shareMode, cmper, inci)
-    {
-    }
-
-    Cmper shapeNum{};       ///< The @ref Cmper of the @ref SmartShape that is being assigned.
-    Cmper centerShapeNum{}; ///< If non-zero, the 2nd @ref Cmper of the @ref CenterShape.
-    ///< Zero if this measure starts or ends the smart shape.
-
-    constexpr static std::string_view XmlNodeName = "smartShapeMeasMark"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<SmartShapeMeasureAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-};
     
 class StaffStyle;
 /**
