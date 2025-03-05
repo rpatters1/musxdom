@@ -154,10 +154,10 @@ public:
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
     bool stemDetail{};       ///< Indicates there are stem modification.
+    bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool sorted{};           ///< Sorted flag.
     bool lyricDetail{};      ///< Indicates there is a lyric assignment on the entry.
     bool performanceData{};  ///< Indicates there is performance data on the entry.
-    bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool freezeBeam{};       ///< Freeze beam flag (Derived from the presence of `<freezeBeam>` node.)
 
     /** @brief Collection of notes that comprise the entry. These are in order from lowest to highest. */

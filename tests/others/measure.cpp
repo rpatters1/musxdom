@@ -62,6 +62,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <divbeat>1024</divbeat>
       <dispBeats>6</dispBeats>
       <dispDivbeat>6</dispDivbeat>
+      <hasSmartShape/>
       <mnSepPlace/>
       <barline>normal</barline>
       <txtRepeats/>
@@ -126,6 +127,7 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_EQ(measure1->dispBeats, Cmper(4));
     EXPECT_EQ(measure1->dispDivbeat, Cmper(1024));
     EXPECT_FALSE(measure1->hideCaution);
+    EXPECT_FALSE(measure1->hasSmartShape);
     EXPECT_FALSE(measure1->groupBarlineOverride);
     EXPECT_TRUE(measure1->compositeNumerator);
     EXPECT_TRUE(measure1->compositeDenominator);
@@ -162,6 +164,8 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_EQ(measure2->divBeat, Cmper(1024));
     EXPECT_EQ(measure2->dispBeats, Cmper(6));
     EXPECT_EQ(measure2->dispDivbeat, Cmper(6));
+    EXPECT_FALSE(measure2->hideCaution);
+    EXPECT_TRUE(measure2->hasSmartShape);
     EXPECT_FALSE(measure2->compositeNumerator);
     EXPECT_FALSE(measure2->compositeDenominator);
     EXPECT_EQ(measure2->barlineType, others::Measure::BarlineType::Normal);
@@ -199,6 +203,7 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_EQ(measure3->frontSpaceExtra, Evpu(11));
     EXPECT_EQ(measure3->backSpaceExtra, Evpu(13));
     EXPECT_TRUE(measure3->hideCaution);
+    EXPECT_FALSE(measure3->hasSmartShape);
     EXPECT_TRUE(measure3->groupBarlineOverride);
     EXPECT_TRUE(measure3->compositeNumerator);
     EXPECT_TRUE(measure3->compositeDenominator);

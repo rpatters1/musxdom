@@ -111,6 +111,10 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup::Bracket, {
     {"onSingle", [](const XmlElementPtr&, const std::shared_ptr<StaffGroup::Bracket>& i) { i->showOnSingleStaff = true; }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(SmartShapeEntryAssign, {
+    {"shapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeEntryAssign>& i) { i->shapeNum = e->getTextAs<Cmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"startInst", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->startInst = e->getTextAs<InstCmper>(); }},
     {"endInst", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->endInst = e->getTextAs<InstCmper>(); }},

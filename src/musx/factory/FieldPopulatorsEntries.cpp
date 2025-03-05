@@ -60,10 +60,10 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"freezeStem", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->freezeStem = true; }},
     {"upStem", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->upStem = true; }},
     {"stemDetail", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->stemDetail = true; }},
+    {"smartShapeDetail", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->smartShapeDetail = true; }},
     {"sorted", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->sorted = true; }},
     {"lyricDetail", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->lyricDetail = true; }},
     {"performanceData", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->performanceData = true; }},
-    {"smartShapeDetail", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->smartShapeDetail = true; }},
     {"freezeBeam", [](const XmlElementPtr&, const std::shared_ptr<Entry>& i) { i->freezeBeam = true; }},
     {"note", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) {
         auto noteAttr = e->findAttribute("id");

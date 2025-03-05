@@ -38,6 +38,7 @@ TEST(EntryTest, PopulateFields)
       <isValid/>
       <isNote/>
       <crossStaff/>
+      <smartShapeDetail/>
       <graceNote/>
       <floatRest/>
       <sorted/>
@@ -86,6 +87,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(entry->isValid);
         EXPECT_TRUE(entry->isNote);
         EXPECT_TRUE(entry->crossStaff);
+        EXPECT_TRUE(entry->smartShapeDetail);
         EXPECT_TRUE(entry->graceNote);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_FALSE(entry->isHidden);
@@ -121,6 +123,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(entry->isValid);
         EXPECT_FALSE(entry->isNote);
         EXPECT_FALSE(entry->crossStaff);
+        EXPECT_FALSE(entry->smartShapeDetail);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_TRUE(entry->isHidden);
         EXPECT_TRUE(entry->sorted);

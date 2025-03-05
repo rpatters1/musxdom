@@ -310,6 +310,7 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"backSpaceExtra", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->backSpaceExtra = e->getTextAs<Evpu>(); }},
     {"breakWordExt", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->breakWordExt = true; }},
     {"hideCaution", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hideCaution = true; }},
+    {"hasSmartShape", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasSmartShape = true; }},
     {"showFullNames", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->showFullNames = true; }},
     {"allowSplitPoints", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->allowSplitPoints = true; }},
     {"groupBarlineOverride", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->groupBarlineOverride = true; }},
@@ -322,7 +323,6 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"breakRest", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->breakMmRest = true; }},
     {"noMeasNum", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->noMeasNum = true; }},
     {"barline", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->barlineType = toEnum<Measure::BarlineType>(e); }},
-    {"hasSmartShape", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasSmartShape = true; }},
     {"indivPosDef", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->evenlyAcrossMeasure = true; }},
     {"forRepBar", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->forwardRepeatBar= true; }},
     {"bacRepBar", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->backwardsRepeatBar = true; }},
@@ -526,6 +526,11 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
     {"useCategoryPos", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->useCategoryPos = true; }},
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(SmartShapeMeasureAssign, {
+    {"shapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeMeasureAssign>& i) { i->shapeNum = e->getTextAs<Cmper>(); }},
+    {"centerShapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeMeasureAssign>& i) { i->centerShapeNum = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(Staff, {

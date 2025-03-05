@@ -626,6 +626,7 @@ public:
     Evpu backSpaceExtra{};      ///< Extra space at end of bar.
     bool breakWordExt{};        ///< Barline ends word extensions on lyrics.
     bool hideCaution{};         ///< "Hide Cautionary Clefs, Key, and Time Signature"
+    bool hasSmartShape{};       ///< Indicates if the measure has a smart shape.
     bool showFullNames{};       ///< "Show Full Staff & Group Names"
     bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
     bool groupBarlineOverride{}; ///< Override the barline specified by a @ref details::StaffGroup (if any)
@@ -638,7 +639,6 @@ public:
     bool breakMmRest{};         ///< "Break a Multimeasure Rests" (xml node is `<breakRest>`)
     bool noMeasNum{};           ///< Inverse of "Include in Measure Numbering"
     BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
-    bool hasSmartShape{};       ///< Indicates if the measure has a smart shape.
     bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
     bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
     bool forwardRepeatBar;      ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
@@ -1306,6 +1306,34 @@ public:
 
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class SmartShapeMeasureAssign
+ * @brief Assigns a smart shape or center shape to a measure.
+ *
+ * Note that *every smart shape* has a measure assignment. This includes entry-assigned smart shapes that
+ * *additionally* have an entry assignment.
+ *
+ * The cmper value is the measure Id.
+ *
+ * This class is identified by the XML node name "smartShapeMeasMark".
+ */
+class SmartShapeMeasureAssign : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit SmartShapeMeasureAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    Cmper shapeNum{};       ///< The @ref Cmper of the @ref SmartShape that is being assigned.
+    Cmper centerShapeNum{}; ///< If non-zero, the 2nd @ref Cmper of the @ref CenterShape.
+    ///< Zero if this measure starts or ends the smart shape.
+
+    constexpr static std::string_view XmlNodeName = "smartShapeMeasMark"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SmartShapeMeasureAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
     
 class StaffStyle;

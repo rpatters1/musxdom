@@ -351,6 +351,27 @@ public:
 };
 
 /**
+ * @class SmartShapeEntryAssign
+ * @brief Assigns a smart shape to an entry.
+ *
+ * This class is identified by the XML node name "smartShapeEntryMark".
+ */
+class SmartShapeEntryAssign : public EntryDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit SmartShapeEntryAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    Cmper shapeNum{};       ///< The @ref Cmper of the @ref SmartShape that is being assigned.
+
+    constexpr static std::string_view XmlNodeName = "smartShapeEntryMark"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SmartShapeEntryAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
  * @class StaffGroup
  * @brief Represents the attributes of a Finale staff group that brackets staves
  *
