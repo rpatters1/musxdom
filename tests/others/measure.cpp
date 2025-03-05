@@ -342,7 +342,7 @@ TEST(MeasureTest, CompositeTimeSig1)
   <others>
     <measSpec cmper="1">
       <width>600</width>
-      <beats>8</beats>
+      <beats>7</beats>
       <divbeat>8</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
@@ -372,7 +372,7 @@ TEST(MeasureTest, CompositeTimeSig1)
         <integer>256</integer>
       </tldata>
     </timeLower>
-    <timeUpper cmper="8">
+    <timeUpper cmper="7">
       <tudata>
         <integer>1</integer>
         <startGroup/>
