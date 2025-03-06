@@ -185,4 +185,3 @@ TEST(SmartShape, Populate)
         EXPECT_EQ(smartShape->lineStyleId, 3);
     }
 }
- 
