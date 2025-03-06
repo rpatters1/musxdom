@@ -50,6 +50,7 @@ public:
     class EndPoint : public Base
     {
     public:
+        /** @brief Constructor function. */
         explicit EndPoint(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
@@ -67,6 +68,7 @@ public:
     class EndPointAdjustment : public Base
     {
     public:
+        /** @brief Constructor function. */
         explicit EndPointAdjustment(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
@@ -83,6 +85,7 @@ public:
     class TerminationSeg : public Base
     {
     public:
+        /** @brief Constructor function. */
         explicit TerminationSeg(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
@@ -105,7 +108,7 @@ public:
     };
 
     /**
-     * @enum SmartShapeType
+     * @enum ShapeType
      * @brief All the smart shape types supported by Finale
      *
      * The enum values match Finale's internal values. (Note that 24 is skipped.)
@@ -205,7 +208,7 @@ public:
     }
 
     Cmper shapeNum{};       ///< The @ref Cmper of the @ref SmartShape that is being assigned.
-    Cmper centerShapeNum{}; ///< If non-zero, the 2nd @ref Cmper of the @ref CenterShape.
+    Cmper centerShapeNum{}; ///< If non-zero, the 2nd @ref Cmper of the @ref details::CenterShape.
     ///< Zero if this measure starts or ends the smart shape.
 
     constexpr static std::string_view XmlNodeName = "smartShapeMeasMark"; ///< The XML node name for this type.
@@ -231,7 +234,7 @@ public:
     {
     }
 
-    Cmper shapeNum{};       ///< The @ref Cmper of the @ref SmartShape that is being assigned.
+    Cmper shapeNum{};       ///< The @ref Cmper of the @ref others::SmartShape that is being assigned.
 
     constexpr static std::string_view XmlNodeName = "smartShapeEntryMark"; ///< The XML node name for this type.
     static const xml::XmlElementArray<SmartShapeEntryAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

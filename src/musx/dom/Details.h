@@ -67,7 +67,7 @@ public:
      * @brief Constructor function
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for (probably always 0).
-     * @param shareMode The sharing mode for this #GFrameHold (probably always #ShareMode::All)
+     * @param shareMode The sharing mode for this @ref GFrameHold (probably always #ShareMode::All)
      * @param system For system baselines, the system number. For global baselines, 0.
      * @param staff For staff-level baselines, the staff number. For global baselines, 0.
      * @param inci The 0-based inci, if needed. (Lyrics baselines have multiple instances per #lyricNumber.)
@@ -238,7 +238,7 @@ public:
      * @brief Constructor function
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for (probably always 0).
-     * @param shareMode The sharing mode for this #GFrameHold (probably always #ShareMode::All)
+     * @param shareMode The sharing mode for this @ref GFrameHold (probably always #ShareMode::All)
      * @param entnum The entry number of this assignment.
      * @param inci The 0-based inci. Each lyric text block has a separate instance, if assigned.
      */

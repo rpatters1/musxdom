@@ -84,7 +84,7 @@ public:
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
     bool isValid{};     ///< Should always be true but otherwise appears to be used internally by Finale.
-    bool crossStaff{};  ///< Signifies that the note has a @ref CrossStaff note detail.
+    bool crossStaff{};  ///< Signifies that the note has a @ref details::CrossStaff note detail.
     bool tieStart{};    ///< Indicates a tie starts on this note.
     bool tieEnd{};      ///< Indicates a tie ends on this note.
     bool showAcci{};    ///< True if the note has an accidental. (Dynamically changed by Finale unless `freezeAcci` is set.)
@@ -257,7 +257,7 @@ public:
     MeasCmper getMeasure() const;
 
     /// @brief Creates the current StaffComposite for the entry
-    /// @param Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Usefule when notes are cross-staffed.)
+    /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Usefule when notes are cross-staffed.)
     std::shared_ptr<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the key signature of the entry
