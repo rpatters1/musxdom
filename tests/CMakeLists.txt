@@ -42,6 +42,7 @@ add_executable(musxdomtests
 	pool.cpp
     # entries
     entries/beam_detection.cpp
+    entries/cross_staffs.cpp
     entries/entries.cpp
     entries/keysigs.cpp
     entries/ties.cpp
@@ -85,6 +86,7 @@ add_executable(musxdomtests
     others/part_definition.cpp
 	others/part_globals.cpp
     others/repeats.cpp
+    others/smart_shape.cpp
     others/staff.cpp
     others/staff_style.cpp
     others/staff_system.cpp

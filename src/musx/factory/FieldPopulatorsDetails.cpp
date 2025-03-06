@@ -57,6 +57,16 @@ namespace details {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
+MUSX_XML_ELEMENT_ARRAY(Baseline, {
+    {"basedisp", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->baselineDisplacement = e->getTextAs<Evpu>(); }},
+    {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<InstCmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"clefID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefId = e->getTextAs<ClefIndex>(); }},
     {"clefListID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefListId = e->getTextAs<Cmper>(); }},
@@ -67,7 +77,17 @@ MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"frame2", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[1] = e->getTextAs<Cmper>(); }},
     {"frame3", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[2] = e->getTextAs<Cmper>(); }},
     {"frame4", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[3] = e->getTextAs<Cmper>(); }},
-    });
+});
+
+MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
+    {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
+    {"syll", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->syllable = e->getTextAs<unsigned>(); }},
+    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"floatingHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->floatingHorzOff = e->getTextAs<Evpu>(); }},
+    {"wext", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->wext = e->getTextAs<int>(); }},
+    {"displayVerseNum", [](const XmlElementPtr&, const std::shared_ptr<LyricAssign>& i) { i->displayVerseNum = true; }},
+});
 
 // XML mappings for the SecondaryBeamBreak class
 MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
@@ -89,6 +109,10 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup::Bracket, {
     {"bracTop", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->vertAdjTop = e->getTextAs<Evpu>(); }},
     {"bracBot", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->vertAdjBot = e->getTextAs<Evpu>(); }},
     {"onSingle", [](const XmlElementPtr&, const std::shared_ptr<StaffGroup::Bracket>& i) { i->showOnSingleStaff = true; }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(SmartShapeEntryAssign, {
+    {"shapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeEntryAssign>& i) { i->shapeNum = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffGroup, {

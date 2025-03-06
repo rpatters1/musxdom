@@ -27,9 +27,11 @@
 #include <tuple>
 
 #include "musx/dom/BaseClasses.h"
+#include "musx/dom/CommonClasses.h"
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
 #include "musx/dom/Details.h"
+#include "musx/dom/SmartShape.h"
 #include "musx/dom/Entries.h"
 #include "musx/dom/Texts.h"
 #include "musx/xml/XmlInterface.h"
@@ -154,7 +156,7 @@ public:
 /**
  * @brief The type registery for `<options>`.
  *
- * These types are maintained in the order in which Finale serializes them.
+ * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredOptions = TypeRegistry <
     dom::options::AccidentalOptions,
@@ -210,6 +212,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::RepeatEndingStart,
     dom::others::RepeatEndingText,
     dom::others::RepeatPassList,
+    dom::others::SmartShape,
+    dom::others::SmartShapeMeasureAssign,
     dom::others::StaffSystem,
     dom::others::Staff,
     dom::others::StaffStyle,
@@ -235,15 +239,23 @@ using RegisteredOthers = TypeRegistry <
 /**
  * @brief The type registery for `<details>`.
  *
- * These types are maintained in the order in which Finale serializes them.
+ * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredDetails = TypeRegistry <
+    dom::details::BaselineLyricsChorus,
+    dom::details::BaselineLyricsSection,
+    dom::details::BaselineLyricsVerse,
+    dom::details::CrossStaff,
     dom::details::GFrameHold,
-    dom::details::SecondaryBeamBreak,
     dom::details::StaffGroup,
+    dom::details::SecondaryBeamBreak,
+    dom::details::SmartShapeEntryAssign,
     dom::details::TieAlterEnd,
     dom::details::TieAlterStart,
-    dom::details::TupletDef
+    dom::details::TupletDef,
+    dom::details::LyricAssignChorus,
+    dom::details::LyricAssignSection,
+    dom::details::LyricAssignVerse
 >;
 
 /**

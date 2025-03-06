@@ -54,7 +54,7 @@ TEST(KeySigs, Test12EDO)
     ASSERT_GE(measures.size(), expectedKeyAlters.size());
 
     for (size_t i = 0; i < expectedKeyAlters.size(); i++) {
-        auto key = measures[i]->keySignature;
+        auto key = measures[i]->calcKeySignature();
         EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
         EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measures[i]->getCmper());
@@ -108,7 +108,7 @@ TEST(KeySigs, Test31EDO)
 
     for (size_t i = 0; i < expectedKeyAlters.size(); i++) {
         auto measure = measures[i + FIRST_31EDO_MEASURE_INDEX];
-        auto key = measure->keySignature;
+        auto key = measure->calcKeySignature();
         EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
         EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measure->getCmper());

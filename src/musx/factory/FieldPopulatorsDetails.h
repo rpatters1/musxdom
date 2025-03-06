@@ -22,7 +22,9 @@
 #pragma once
 
 #include "musx/dom/BaseClasses.h"
+#include "musx/dom/Others.h"
 #include "musx/dom/Details.h"
+#include "musx/dom/Document.h"
 #include "musx/xml/XmlInterface.h"
 #include "FactoryBase.h"
 
@@ -33,6 +35,42 @@ namespace factory {
 
 using namespace ::musx::xml;
 using namespace ::musx::dom::details;
+
+template <>
+struct FieldPopulator<BaselineLyricsChorus> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineLyricsSection> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<LyricAssignChorus> : private FieldPopulator<LyricAssign>
+{
+    using FieldPopulator<LyricAssign>::populate;
+};
+
+template <>
+struct FieldPopulator<LyricAssignSection> : private FieldPopulator<LyricAssign>
+{
+    using FieldPopulator<LyricAssign>::populate;
+};
+
+template <>
+struct FieldPopulator<LyricAssignVerse> : private FieldPopulator<LyricAssign>
+{
+    using FieldPopulator<LyricAssign>::populate;
+};
 
 template <>
 struct FieldPopulator<TieAlterEnd> : private FieldPopulator<TieAlterBase>

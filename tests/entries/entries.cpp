@@ -37,6 +37,8 @@ TEST(EntryTest, PopulateFields)
       <numNotes>2</numNotes>
       <isValid/>
       <isNote/>
+      <crossStaff/>
+      <smartShapeDetail/>
       <graceNote/>
       <floatRest/>
       <sorted/>
@@ -49,6 +51,7 @@ TEST(EntryTest, PopulateFields)
         <harmLev>-2</harmLev>
         <harmAlt>1</harmAlt>
         <isValid/>
+        <crossStaff/>
         <tieStart/>
         <tieEnd/>
         <showAcci/>
@@ -83,6 +86,8 @@ TEST(EntryTest, PopulateFields)
         EXPECT_EQ(entry->numNotes, 2);
         EXPECT_TRUE(entry->isValid);
         EXPECT_TRUE(entry->isNote);
+        EXPECT_TRUE(entry->crossStaff);
+        EXPECT_TRUE(entry->smartShapeDetail);
         EXPECT_TRUE(entry->graceNote);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_FALSE(entry->isHidden);
@@ -96,6 +101,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_EQ(note->harmLev, -2);
         EXPECT_EQ(note->harmAlt, 1);
         EXPECT_TRUE(note->isValid);
+        EXPECT_TRUE(note->crossStaff);
         EXPECT_TRUE(note->tieStart);
         EXPECT_TRUE(note->tieEnd);
         EXPECT_TRUE(note->showAcci);
@@ -116,6 +122,8 @@ TEST(EntryTest, PopulateFields)
         EXPECT_EQ(entry->numNotes, 0);
         EXPECT_TRUE(entry->isValid);
         EXPECT_FALSE(entry->isNote);
+        EXPECT_FALSE(entry->crossStaff);
+        EXPECT_FALSE(entry->smartShapeDetail);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_TRUE(entry->isHidden);
         EXPECT_TRUE(entry->sorted);

@@ -21,6 +21,8 @@
  */
 #include "musx/musx.h"
 
+#include <cmath>
+
 using namespace musx::dom;
 
 namespace musx {
@@ -31,9 +33,9 @@ Fraction Fraction::fromEdu(int edu)
     return Fraction(edu, int(NoteType::Whole));
 }
 
-double Fraction::calcEduDuration() const
+Edu Fraction::calcEduDuration() const
 {
-    return EduFloat(numerator() * int(NoteType::Whole)) / EduFloat(denominator());
+    return Edu(std::lround(double(numerator() * int(NoteType::Whole)) / double(denominator())));
 }
 
 } // namespace util

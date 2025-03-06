@@ -44,11 +44,106 @@ namespace others {
 class Measure;
 } // namespace others
 
+namespace texts {
+    class LyricsChorus;
+    class LyricsSection;
+    class LyricsVerse;
+} // namespace others
+
 /**
  * @namespace musx::dom::details
  * @brief Classes in the @ref DetailsPool.
  */
 namespace details {
+
+/**
+ * @class Baseline
+ * @brief Contains the baseline information for all baseline types
+ */
+class Baseline : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor function
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this @ref GFrameHold (probably always #ShareMode::All)
+     * @param system For system baselines, the system number. For global baselines, 0.
+     * @param staff For staff-level baselines, the staff number. For global baselines, 0.
+     * @param inci The 0-based inci, if needed. (Lyrics baselines have multiple instances per #lyricNumber.)
+     */
+    explicit Baseline(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff, std::optional<Inci> inci = std::nullopt)
+        : DetailsBase(document, partId, shareMode, system, staff, inci) {}
+
+    Evpu baselineDisplacement{};    ///< the displacment of the baseline from default position. (xml node is `<basedisp`>)
+    Cmper lyricNumber{};            ///< the text number of the lyric, if this is a lyrics baseline. Otherwise unused and should be zero.
+
+    static const xml::XmlElementArray<Baseline>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class BaselineLyricsChorus
+ * @brief Contains the baseline offsets for lyrics chorus records.
+ */
+class BaselineLyricsChorus : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+
+    using TextType = texts::LyricsChorus; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsChorus"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineLyricsSection
+ * @brief Contains the baseline offsets for lyrics chorus records.
+ */
+class BaselineLyricsSection : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    using TextType = texts::LyricsSection; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsSection"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineLyricsVerse
+ * @brief Contains the baseline offsets for lyrics verse records.
+ */
+class BaselineLyricsVerse : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    using TextType = texts::LyricsVerse; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesLyricsVerse"; ///< The XML node name for this type.
+};
+
+/**
+ * @class CrossStaff
+ * @brief Represents a cross-staff assignment for the note, if any.
+ *
+ * This class is identified by the XML node name "crossStaff".
+ */
+class CrossStaff : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit CrossStaff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};    ///< The ID of the note being assigned to a different staff (XML node: `<noteID>`)
+    InstCmper staff{};      ///< The target staff (XML node: `<instrument>`)
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "crossStaff";    ///< The XML node name for this type.
+    static const xml::XmlElementArray<CrossStaff>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
+};
 
 /**
  * @class GFrameHold
@@ -92,7 +187,7 @@ public:
     /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
     /// @todo This function will need to be augmented for transposing staves.
     ClefIndex calcClefIndexAt(util::Fraction position) const
-    { return calcClefIndexAt(ClefIndex(std::lround(position.calcEduDuration()))); }
+    { return calcClefIndexAt(position.calcEduDuration()); }
 
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
@@ -130,6 +225,74 @@ public:
 
     constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
     static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class LyricAssign
+ * @brief Contains assignment data for a lyric assignment (a single syllable)
+ */
+class LyricAssign : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor function
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this @ref GFrameHold (probably always #ShareMode::All)
+     * @param entnum The entry number of this assignment.
+     * @param inci The 0-based inci. Each lyric text block has a separate instance, if assigned.
+     */
+    explicit LyricAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci) {}
+
+    Cmper lyricNumber{};            ///< the text number of the lyric.
+    unsigned syllable{};            ///< the 1-based syllable number. Subtract 1 to get the index. (xml node is `<syll>`)
+    Evpu horzOffset{};              ///< horizontal offset from default position. (xml node is `<horzOff>`)
+    Evpu vertOffset{};              ///< horizontal offset from default position. (xml node is `<vertOff>`)
+    Evpu floatingHorzOff{};         ///< This appears to have something to do with note spacing. It may simply be a cache that Finale changes as needed.
+    int wext{};                     ///< Somehow indicates a word extension, but its meaning is uncertain. It does not appear to be a smart shape cmper.
+    bool displayVerseNum{};         ///< If set, the text block number displays to the left of the syllable. (E.g., when numbering verses in a hymn.)
+
+    static const xml::XmlElementArray<LyricAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class LyricAssignChorus
+ * @brief Contains the syllable assignments for lyrics chorus blocks.
+ */
+class LyricAssignChorus : public LyricAssign
+{
+public:
+    using LyricAssign::LyricAssign;
+
+    using TextType = texts::LyricsChorus; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "lyrDataChorus"; ///< The XML node name for this type.
+};
+
+/**
+ * @class LyricAssignSection
+ * @brief Contains the syllable assignments for lyrics section blocks.
+ */
+class LyricAssignSection : public LyricAssign
+{
+public:
+    using LyricAssign::LyricAssign;
+
+    using TextType = texts::LyricsSection; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "lyrDataSection"; ///< The XML node name for this type.
+};
+
+/**
+ * @class LyricAssignVerse
+ * @brief Contains the syllable assignments for lyrics verse blocks.
+ */
+class LyricAssignVerse : public LyricAssign
+{
+public:
+    using LyricAssign::LyricAssign;
+
+    using TextType = texts::LyricsVerse; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "lyrDataVerse"; ///< The XML node name for this type.
 };
 
 /**
@@ -186,7 +349,7 @@ public:
     constexpr static std::string_view XmlNodeName = "secBeamBreak"; ///< The XML node name for this type.
     static const xml::XmlElementArray<SecondaryBeamBreak>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-
+    
 /**
  * @class StaffGroup
  * @brief Represents the attributes of a Finale staff group that brackets staves

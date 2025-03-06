@@ -75,7 +75,7 @@ enum class ShowClefMode
  * The FontInfo struct holds information about font properties, such as the font ID, size, and styles like
  * bold, italic, underline, strikeout, fixed size, and visibility.
  */
-class FontInfo : public Base
+class FontInfo : public CommonClassBase
 {
 public:
     Cmper fontId{};     ///< Font identifier. This is a Cmper for @ref others::FontDefinition.
@@ -87,12 +87,7 @@ public:
     bool absolute{};    ///< Fixed size effect.
     bool hidden{};      ///< Hidden effect.
 
-    /**
-     * @brief Default constructor
-     * @param document A weak pointer to the document object.
-     */
-    explicit FontInfo(const DocumentWeakPtr& document)
-        : Base(document, SCORE_PARTID, ShareMode::All) {}
+    using CommonClassBase::CommonClassBase;
 
     /**
      * @brief Get the name of the font.
@@ -152,7 +147,7 @@ public:
  * @class KeySignature
  * @brief Shared key signature class that is contained in other classes. (See @ref others::Measure)
  */
-class KeySignature : public Base
+class KeySignature : public CommonClassBase
 {
 private:
     std::vector<unsigned> calcTonalCenterArray() const;
@@ -160,12 +155,7 @@ private:
     std::vector<unsigned> calcAcciOrderArray() const;
 
 public:
-    /**
-     * @brief Default constructor
-     * @param document A weak pointer to the document object.
-     */
-    explicit KeySignature(const DocumentWeakPtr& document)
-        : Base(document, SCORE_PARTID, ShareMode::All) {}
+    using CommonClassBase::CommonClassBase;
 
     /** @brief 16-bit value intepreted as follows:
      * - <b> Linear Keys </b>: top bit is 0, the next 7 bits define the key mode (see #getKeyMode),
@@ -231,6 +221,36 @@ public:
     static const xml::XmlElementArray<KeySignature>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+namespace texts {
+class LyricsTextBase; // forward delcaration
+} // namespace texts
+
+/**
+ * @class LyricsSyllableInfo
+ * @brief Contains the syllable information for a single syllable. (See @ref texts::LyricsTextBase)
+ */
+class LyricsSyllableInfo : CommonClassBase
+{
+public:
+
+    std::string syllable;       ///< the syllable text with no hyphenation or font information.
+    bool hasHyphenBefore;       ///< indicates the syllable is preceded by a hyphen.
+    bool hasHyphenAfter;        ///< indicates the syllable if followed by a hyphen.
+
+private:
+    /// @brief Constructor function
+    /// @param document Shared pointer to the document.
+    /// @param text The syllable text.
+    /// @param before Whether there is a hyphen before the syllable.
+    /// @param after Whether there is a hyphen after the syllable.
+    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after)
+        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after)
+    {
+    }
+
+    friend class texts::LyricsTextBase;
+};
+
 namespace others {
 class Measure; // forward delcaration
 } // namespace others
@@ -239,7 +259,7 @@ class Measure; // forward delcaration
  * @class TimeSignature
  * @brief Shared time signature class that is derived from other classes. (See @ref others::Measure)
  */
-class TimeSignature : public Base
+class TimeSignature : public CommonClassBase
 {
 public:
 
@@ -330,7 +350,7 @@ private:
      * @param measure An instance of 
      */
     explicit TimeSignature(const DocumentWeakPtr& document, const TimeSigComponent& timeSigUnit, std::optional<bool> abbreviate)
-        : Base(document, SCORE_PARTID, ShareMode::All), m_abbreviate(abbreviate)
+        : CommonClassBase(document), m_abbreviate(abbreviate)
     {
         components.push_back(timeSigUnit);
     }
@@ -348,7 +368,8 @@ namespace others {
  * @class Enclosure
  * @brief Represents the enclosure settings for text expressions.
  */
-class Enclosure : public OthersBase {
+class Enclosure : public OthersBase
+{
 public:
     /**
      * @enum Shape

@@ -182,11 +182,11 @@ MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); 
 
 std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
 
-std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff() const
+std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<InstCmper>& forStaffId) const
 {
     auto entry = (*this)->getEntry();
-    return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), getStaff(), getMeasure(),
-        std::lround((*this)->elapsedDuration.calcEduDuration()));
+    return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), forStaffId.value_or(getStaff()),
+        getMeasure(), (*this)->elapsedDuration.calcEduDuration());
 }
 
 unsigned EntryInfoPtr::calcReverseGraceIndex() const
@@ -676,7 +676,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
         if (!measure) {
             throw std::invalid_argument("Meaure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
         }
-        retval->keySignature = measure->keySignature;
+        retval->keySignature = measure->calcKeySignature(getStaff());
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
@@ -970,8 +970,8 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
             }
         }
     } else {
-        int keyFifths = std::abs(getAlteration().value_or(0));
-        for (int i = 0; i < keyFifths && i < amounts.size() && i < order.size(); ++i) {
+        unsigned keyFifths = std::abs(getAlteration().value_or(0));
+        for (size_t i = 0; i < keyFifths && i < amounts.size() && i < order.size(); ++i) {
             if (noteIndex == order[i % order.size()]) {
                 keySigAlteration += amounts[i];
             }
@@ -979,6 +979,44 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
     }
     
     return keySigAlteration;
+}
+
+// **************************
+// ***** LyricsTextBase *****
+// **************************
+
+void texts::LyricsTextBase::createSyllableInfo()
+{
+    std::string current;
+    bool inSeparator = false;
+    bool currSeparatorHasHyphen = false;
+    bool lastSeparatorHadHyphen = false;
+
+    auto plainText = util::EnigmaString::trimTags(text);
+    syllables.clear();
+    for (auto c : plainText) {
+        if (c == '-' || isspace(c)) {
+            if (c == '-') {
+                currSeparatorHasHyphen = true;
+            }
+            inSeparator = true;
+        } else {
+            if (inSeparator) {
+                if (!current.empty()) {
+                    syllables.push_back(std::shared_ptr<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
+                    current.clear();
+                }
+                lastSeparatorHadHyphen = currSeparatorHasHyphen;
+                currSeparatorHasHyphen = false;
+                inSeparator = false;
+            }
+            current += c;
+        }
+    }
+
+    if (!current.empty()) {
+        syllables.push_back(std::shared_ptr<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
+    }
 }
 
 // ****************************
@@ -1205,6 +1243,33 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
         }
     }
     return NoteInfoPtr();
+}
+
+InstCmper NoteInfoPtr::calcStaff() const
+{
+    if ((*this)->crossStaff) {
+        if (auto crossStaff = m_entry->getEntry()->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
+            return crossStaff->staff;
+        }
+    }
+    return m_entry.getStaff();
+}
+
+std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() const
+{
+    ClefIndex clefIndex = [&]() {
+        if ((*this)->crossStaff) {
+            InstCmper staffId = calcStaff();
+            if (staffId != m_entry.getStaff()) {
+                if (auto staff = m_entry.createCurrentStaff(staffId)) {
+                    return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration());
+                }
+            }
+        }
+        return m_entry->clefIndex;
+    }();
+
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex);
 }
 
 // *****************************
@@ -1604,10 +1669,15 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     return addAutoNumbering(name);
 }
 
-ClefIndex others::Staff::calcFirstClefIndex() const
+ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const
 {
-    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), 1)) {
-        return gfhold->calcClefIndexAt(0);
+    /// @todo Take into accound clef changes caused by transposition.
+    for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
+        if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), tryMeasure)) {
+            return gfhold->calcClefIndexAt(position);
+        }
+        // after the first iteration, we are looking for the clef at the end of the measure
+        position = std::numeric_limits<Edu>::max();
     }
     return defaultClef;
 }
@@ -1905,7 +1975,7 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 // *************************
 
 TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, std::optional<bool> abbreviate)
-    : Base(document, SCORE_PARTID, ShareMode::All), m_abbreviate(abbreviate)
+    : CommonClassBase(document), m_abbreviate(abbreviate)
 {
     auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
         if (hasCompositeTop) {
@@ -1926,7 +1996,7 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
     }();
     auto bots = [&]() -> std::vector<std::vector<Edu>> {
         if (hasCompositeBottom) {
-            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeLower>(SCORE_PARTID, beats)) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeLower>(SCORE_PARTID, unit)) {
                 std::vector<std::vector<Edu>>result;
                 for (const auto& nextItem : comps->items) {
                     if (nextItem->startGroup || result.empty()) {
