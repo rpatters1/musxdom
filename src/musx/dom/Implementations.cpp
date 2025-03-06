@@ -970,8 +970,8 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
             }
         }
     } else {
-        int keyFifths = std::abs(getAlteration().value_or(0));
-        for (int i = 0; i < keyFifths && i < amounts.size() && i < order.size(); ++i) {
+        unsigned keyFifths = std::abs(getAlteration().value_or(0));
+        for (size_t i = 0; i < keyFifths && i < amounts.size() && i < order.size(); ++i) {
             if (noteIndex == order[i % order.size()]) {
                 keySigAlteration += amounts[i];
             }

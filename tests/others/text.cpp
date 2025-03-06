@@ -594,9 +594,9 @@ TEST(TextsTest, LyricSyllableParsing)
 {
     using texts::LyricsVerse;
 
-    std::vector<char> xml;
-    musxtest::readFile(musxtest::getInputPath() / "syllables.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    std::vector<char> syllXml;
+    musxtest::readFile(musxtest::getInputPath() / "syllables.enigmaxml", syllXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(syllXml);
     ASSERT_TRUE(doc);
 
     auto texts = doc->getTexts();
