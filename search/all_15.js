@@ -11,9 +11,10 @@ var searchData=
   ['verticalmeasexpralign_8',['VerticalMeasExprAlign',['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371',1,'musx::dom::others']]],
   ['vertmeasexpralign_9',['vertmeasexpralign',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#ad22de376b3c260577796369cfd8261f0',1,'musx::dom::others::TextExpressionDef::vertMeasExprAlign'],['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#aa943461f2bcdc8ec5166b4de2abf2183',1,'musx::dom::others::ShapeExpressionDef::vertMeasExprAlign']]],
   ['vertoff_10',['vertOff',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#af6ee3295c4d84d78c452a3444ced4fc9',1,'musx::dom::others::NamePositioning']]],
-  ['vertoffsetbaseline_11',['vertOffsetBaseline',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a47b6b362dc66c546199cfb55d1be55ea',1,'musx::dom::others::MarkingCategory']]],
-  ['vertoffsetentry_12',['vertOffsetEntry',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a8d5d459054636796379ed6b037e25921',1,'musx::dom::others::MarkingCategory']]],
-  ['vertpos_13',['vertPos',['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a8e9fc4fc7692cba857bfcadadb16d39d',1,'musx::dom::others::TextRepeatAssign']]],
-  ['verttabnumoff_14',['vertTabNumOff',['../classmusx_1_1dom_1_1others_1_1Staff.html#ad2175e3535a969442e3917ff587f9533',1,'musx::dom::others::Staff']]],
-  ['voice2_15',['voice2',['../classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41',1,'musx::dom::Entry']]]
+  ['vertoffset_11',['vertoffset',['../classmusx_1_1dom_1_1details_1_1LyricAssign.html#abb7f3699f6182b546ab916fb6cbe8128',1,'musx::dom::details::LyricAssign::vertOffset'],['../classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPointAdjustment.html#a4d6ef420cb1f41ca76ecb4425c11c464',1,'musx::dom::others::SmartShape::EndPointAdjustment::vertOffset']]],
+  ['vertoffsetbaseline_12',['vertOffsetBaseline',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a47b6b362dc66c546199cfb55d1be55ea',1,'musx::dom::others::MarkingCategory']]],
+  ['vertoffsetentry_13',['vertOffsetEntry',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a8d5d459054636796379ed6b037e25921',1,'musx::dom::others::MarkingCategory']]],
+  ['vertpos_14',['vertPos',['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a8e9fc4fc7692cba857bfcadadb16d39d',1,'musx::dom::others::TextRepeatAssign']]],
+  ['verttabnumoff_15',['vertTabNumOff',['../classmusx_1_1dom_1_1others_1_1Staff.html#ad2175e3535a969442e3917ff587f9533',1,'musx::dom::others::Staff']]],
+  ['voice2_16',['voice2',['../classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41',1,'musx::dom::Entry']]]
 ];

@@ -19,7 +19,7 @@ var searchData=
   ['noteheadhalf_16',['noteheadHalf',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#acd19cda990e9f1bb7ce1cbec721214ae',1,'musx::dom::options::MusicSymbolOptions']]],
   ['noteheadquarter_17',['noteheadQuarter',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a60d77f792ecbbead1d1d083b56f44b38',1,'musx::dom::options::MusicSymbolOptions']]],
   ['noteheadwhole_18',['noteheadWhole',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a9b2a9ec9778b7c40073e8990058fdbed',1,'musx::dom::options::MusicSymbolOptions']]],
-  ['noteid_19',['noteId',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a04af03ac8246c5cbf7038c8deadc0502',1,'musx::dom::details::TieAlterBase']]],
+  ['noteid_19',['noteid',['../classmusx_1_1dom_1_1details_1_1CrossStaff.html#a4747fb25cc57ad2d9f03ef37a8317836',1,'musx::dom::details::CrossStaff::noteId'],['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a04af03ac8246c5cbf7038c8deadc0502',1,'musx::dom::details::TieAlterBase::noteId']]],
   ['notes_20',['notes',['../classmusx_1_1dom_1_1Entry.html#a533b919d0efa81b9d26fb16ade0b7773',1,'musx::dom::Entry']]],
   ['nottall_21',['notTall',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#a0065585cac3d0d21e652d6ae958e3817',1,'musx::dom::others::Enclosure']]],
   ['nozero_22',['noZero',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a86cbaee836938f30869076e21e3d87fa',1,'musx::dom::others::MeasureNumberRegion']]],

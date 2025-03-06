@@ -182,6 +182,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>showNamesForPart</b> 
 <tr class="memitem:a428918fb57d8ff9b01b34f953b080904" id="r_a428918fb57d8ff9b01b34f953b080904"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a428918fb57d8ff9b01b34f953b080904">addAutoNumbering</a> (const std::string &amp;plainName) const</td></tr>
 <tr class="memdesc:a428918fb57d8ff9b01b34f953b080904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add auto numbering as a prefix or suffix, if needed.  <br /></td></tr>
 <tr class="separator:a428918fb57d8ff9b01b34f953b080904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad05ba54e0a5313031613fc66222fcdd2" id="r_ad05ba54e0a5313031613fc66222fcdd2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#ad05ba54e0a5313031613fc66222fcdd2">calcClefIndexAt</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> position) const</td></tr>
+<tr class="memdesc:ad05ba54e0a5313031613fc66222fcdd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the clef in this staff at the specified location.  <br /></td></tr>
+<tr class="separator:ad05ba54e0a5313031613fc66222fcdd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fbc48d196476e86ae9272b57360f58b" id="r_a1fbc48d196476e86ae9272b57360f58b"><td class="memItemLeft" align="right" valign="top"><a id="a1fbc48d196476e86ae9272b57360f58b" name="a1fbc48d196476e86ae9272b57360f58b"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcFirstClefIndex</b> () const</td></tr>
 <tr class="memdesc:a1fbc48d196476e86ae9272b57360f58b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first clef in this staff. <br /></td></tr>
@@ -507,6 +510,44 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the auto-numbering value for this staff, if applicable. </p>
 <p>Calculates <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a4836d6d1ebe25d08f36b6530b25d8dd1" title="Calculated autonumbering value. It is computed by calcAutoNumberValues.">autoNumberValue</a> for every staff based on the occurrences of the instrument UUID and in each staff instance. If numbering is not applicable (e.g., auto numbering is disabled, the UUID is empty, or there is only one instance), <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a4836d6d1ebe25d08f36b6530b25d8dd1" title="Calculated autonumbering value. It is computed by calcAutoNumberValues.">autoNumberValue</a> has no value.</p>
 <p>This function is called by the DocumentFactory when the document is created. </p>
+
+</div>
+</div>
+<a id="ad05ba54e0a5313031613fc66222fcdd2" name="ad05ba54e0a5313031613fc66222fcdd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad05ba54e0a5313031613fc66222fcdd2">&#9670;&#160;</a></span>calcClefIndexAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> musx::dom::others::Staff::calcClefIndexAt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
+          <td class="paramname"><em>position</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the clef in this staff at the specified location. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">measureId</td><td>The measure of the location </td></tr>
+    <tr><td class="paramname">position</td><td>The Edu elapsed time with the measure </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>Take into accound clef changes caused by transposition. </dd></dl>
 
 </div>
 </div>

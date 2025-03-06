@@ -1,10 +1,10 @@
 var classmusx_1_1dom_1_1FontInfo =
 [
-    [ "FontInfo", "classmusx_1_1dom_1_1FontInfo.html#ab7780442c860877cb3e329df96d3e49b", null ],
     [ "calcIsDefaultMusic", "classmusx_1_1dom_1_1FontInfo.html#adcb9621f9e84005074ce09382b7ee865", null ],
     [ "calcIsSMuFL", "classmusx_1_1dom_1_1FontInfo.html#aa2673e6e95e16b3d5cf524dfa2ccc979", null ],
     [ "calcIsSymbolFont", "classmusx_1_1dom_1_1FontInfo.html#a276d28190fb869e1ef6dba4aa6d926c7", null ],
     [ "calcSMuFLMetaDataPath", "classmusx_1_1dom_1_1FontInfo.html#aeb50e62abf2e6c41d9717ab837299b46", null ],
+    [ "CommonClassBase", "classmusx_1_1dom_1_1FontInfo.html#ace51e53d99e83c6ae95d2b89fd1733d7", null ],
     [ "getName", "classmusx_1_1dom_1_1FontInfo.html#aae053f64458e79327a569d25bfd3b814", null ],
     [ "setEnigmaStyles", "classmusx_1_1dom_1_1FontInfo.html#ab482bb76fdb37df80d5eba5a8b0006b0", null ],
     [ "setFontIdByName", "classmusx_1_1dom_1_1FontInfo.html#a7342806d12d9d725edcb9b897f784e07", null ],

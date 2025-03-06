@@ -7,7 +7,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcNumberOfBeams", "classmusx_1_1dom_1_1EntryInfoPtr.html#a8149bc295e394a775747727cf3d9a5c4", null ],
     [ "calcReverseGraceIndex", "classmusx_1_1dom_1_1EntryInfoPtr.html#a284505434c8a4a0b7fe8705062599b30", null ],
     [ "calcUnbeamed", "classmusx_1_1dom_1_1EntryInfoPtr.html#accb023218f8bfd19cd3b3c4b82de530c", null ],
-    [ "createCurrentStaff", "classmusx_1_1dom_1_1EntryInfoPtr.html#ad931a289e666a9d70fa8fa575c5e9bc6", null ],
+    [ "createCurrentStaff", "classmusx_1_1dom_1_1EntryInfoPtr.html#a646ba3b7fbb39724036ae83e3303d5e1", null ],
     [ "findBeamEnd", "classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5", null ],
     [ "findEqualPitch", "classmusx_1_1dom_1_1EntryInfoPtr.html#a24080923c9e8970ddb6d1bb64643df03", null ],
     [ "getFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a87802553e72c2d71f8e23f4cb01f6a56", null ],

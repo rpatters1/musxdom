@@ -1,24 +1,40 @@
 var hierarchy =
 [
     [ "musx::dom::Base", "classmusx_1_1dom_1_1Base.html", [
+      [ "musx::dom::CommonClassBase", "classmusx_1_1dom_1_1CommonClassBase.html", [
+        [ "musx::dom::FontInfo", "classmusx_1_1dom_1_1FontInfo.html", null ],
+        [ "musx::dom::KeySignature", "classmusx_1_1dom_1_1KeySignature.html", null ],
+        [ "musx::dom::LyricsSyllableInfo", "classmusx_1_1dom_1_1LyricsSyllableInfo.html", null ],
+        [ "musx::dom::TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", null ]
+      ] ],
       [ "musx::dom::DetailsBase", "classmusx_1_1dom_1_1DetailsBase.html", [
         [ "musx::dom::EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", [
           [ "musx::dom::NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", [
+            [ "musx::dom::details::CrossStaff", "classmusx_1_1dom_1_1details_1_1CrossStaff.html", null ],
             [ "musx::dom::details::TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html", [
               [ "musx::dom::details::TieAlterEnd", "classmusx_1_1dom_1_1details_1_1TieAlterEnd.html", null ],
               [ "musx::dom::details::TieAlterStart", "classmusx_1_1dom_1_1details_1_1TieAlterStart.html", null ]
             ] ]
           ] ],
+          [ "musx::dom::details::LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html", [
+            [ "musx::dom::details::LyricAssignChorus", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html", null ],
+            [ "musx::dom::details::LyricAssignSection", "classmusx_1_1dom_1_1details_1_1LyricAssignSection.html", null ],
+            [ "musx::dom::details::LyricAssignVerse", "classmusx_1_1dom_1_1details_1_1LyricAssignVerse.html", null ]
+          ] ],
           [ "musx::dom::details::SecondaryBeamBreak", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html", null ],
+          [ "musx::dom::details::SmartShapeEntryAssign", "classmusx_1_1dom_1_1details_1_1SmartShapeEntryAssign.html", null ],
           [ "musx::dom::details::TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", null ]
+        ] ],
+        [ "musx::dom::details::Baseline", "classmusx_1_1dom_1_1details_1_1Baseline.html", [
+          [ "musx::dom::details::BaselineLyricsChorus", "classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html", null ],
+          [ "musx::dom::details::BaselineLyricsSection", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html", null ],
+          [ "musx::dom::details::BaselineLyricsVerse", "classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html", null ]
         ] ],
         [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ],
         [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ]
       ] ],
       [ "musx::dom::Entry", "classmusx_1_1dom_1_1Entry.html", null ],
       [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ],
-      [ "musx::dom::FontInfo", "classmusx_1_1dom_1_1FontInfo.html", null ],
-      [ "musx::dom::KeySignature", "classmusx_1_1dom_1_1KeySignature.html", null ],
       [ "musx::dom::Note", "classmusx_1_1dom_1_1Note.html", null ],
       [ "musx::dom::OptionsBase", "classmusx_1_1dom_1_1OptionsBase.html", [
         [ "musx::dom::options::AccidentalOptions", "classmusx_1_1dom_1_1options_1_1AccidentalOptions.html", null ],
@@ -91,6 +107,8 @@ var hierarchy =
         [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
         [ "musx::dom::others::RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", null ],
         [ "musx::dom::others::ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", null ],
+        [ "musx::dom::others::SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html", null ],
+        [ "musx::dom::others::SmartShapeMeasureAssign", "classmusx_1_1dom_1_1others_1_1SmartShapeMeasureAssign.html", null ],
         [ "musx::dom::others::Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", [
           [ "musx::dom::others::StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", [
             [ "musx::dom::others::StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", null ]
@@ -111,14 +129,18 @@ var hierarchy =
         [ "musx::dom::texts::BookmarkText", "classmusx_1_1dom_1_1texts_1_1BookmarkText.html", null ],
         [ "musx::dom::texts::ExpressionText", "classmusx_1_1dom_1_1texts_1_1ExpressionText.html", null ],
         [ "musx::dom::texts::FileInfoText", "classmusx_1_1dom_1_1texts_1_1FileInfoText.html", null ],
-        [ "musx::dom::texts::LyricsChorus", "classmusx_1_1dom_1_1texts_1_1LyricsChorus.html", null ],
-        [ "musx::dom::texts::LyricsSection", "classmusx_1_1dom_1_1texts_1_1LyricsSection.html", null ],
-        [ "musx::dom::texts::LyricsVerse", "classmusx_1_1dom_1_1texts_1_1LyricsVerse.html", null ],
+        [ "musx::dom::texts::LyricsTextBase", "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html", [
+          [ "musx::dom::texts::LyricsChorus", "classmusx_1_1dom_1_1texts_1_1LyricsChorus.html", null ],
+          [ "musx::dom::texts::LyricsSection", "classmusx_1_1dom_1_1texts_1_1LyricsSection.html", null ],
+          [ "musx::dom::texts::LyricsVerse", "classmusx_1_1dom_1_1texts_1_1LyricsVerse.html", null ]
+        ] ],
         [ "musx::dom::texts::SmartShapeText", "classmusx_1_1dom_1_1texts_1_1SmartShapeText.html", null ]
       ] ],
-      [ "musx::dom::TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", null ],
       [ "musx::dom::options::ClefOptions::ClefDef", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html", null ],
       [ "musx::dom::others::MeasureNumberRegion::ScorePartData", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html", null ],
+      [ "musx::dom::others::SmartShape::EndPoint", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPoint.html", null ],
+      [ "musx::dom::others::SmartShape::EndPointAdjustment", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPointAdjustment.html", null ],
+      [ "musx::dom::others::SmartShape::TerminationSeg", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg.html", null ],
       [ "musx::dom::others::StaffStyle::Masks", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html", null ]
     ] ],
     [ "musx::dom::details::StaffGroup::Bracket", "classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html", null ],

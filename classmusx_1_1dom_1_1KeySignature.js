@@ -1,8 +1,8 @@
 var classmusx_1_1dom_1_1KeySignature =
 [
-    [ "KeySignature", "classmusx_1_1dom_1_1KeySignature.html#abdeb16fd1e094c93c5862802e38e7b82", null ],
     [ "calcAlterationOnNote", "classmusx_1_1dom_1_1KeySignature.html#a5452f8d0cb4cb0f3066ad8fd24957d33", null ],
     [ "calcTonalCenterIndex", "classmusx_1_1dom_1_1KeySignature.html#ae17675c61d076e236952c9bcfbe25ffc", null ],
+    [ "CommonClassBase", "classmusx_1_1dom_1_1KeySignature.html#ace51e53d99e83c6ae95d2b89fd1733d7", null ],
     [ "getAlteration", "classmusx_1_1dom_1_1KeySignature.html#a0b5bf3174d83fa4a41eb1dbe75ecd9e3", null ],
     [ "getKeyMode", "classmusx_1_1dom_1_1KeySignature.html#a08a72c52d3dba53ad96f88b47e2f3d78", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1KeySignature.html#aa6d83554fe3fac8e89bd2933880ab5f4", null ],

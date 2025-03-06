@@ -28,6 +28,8 @@ var namespacemusx_1_1dom_1_1others =
     [ "RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", "classmusx_1_1dom_1_1others_1_1RepeatEndingText" ],
     [ "RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", "classmusx_1_1dom_1_1others_1_1RepeatPassList" ],
     [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef" ],
+    [ "SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html", "classmusx_1_1dom_1_1others_1_1SmartShape" ],
+    [ "SmartShapeMeasureAssign", "classmusx_1_1dom_1_1others_1_1SmartShapeMeasureAssign.html", "classmusx_1_1dom_1_1others_1_1SmartShapeMeasureAssign" ],
     [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", "classmusx_1_1dom_1_1others_1_1Staff" ],
     [ "StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", null ],
     [ "StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", "classmusx_1_1dom_1_1others_1_1StaffStyle" ],

@@ -129,6 +129,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> class to enforce polymorphism across all DOM classes.  <a href="classmusx_1_1dom_1_1Base.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html">CommonClassBase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> class for classes that are commonly used among others, details, entries, and/or texts. They can be constructed in atypical contexts, so their Part and Sharing info is not meaningful.  <a href="classmusx_1_1dom_1_1CommonClassBase.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1DetailsBase.html">DetailsBase</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> class for all "details" types.  <a href="classmusx_1_1dom_1_1DetailsBase.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,6 +167,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared key signature class that is contained in other classes. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">others::Measure</a>)  <a href="classmusx_1_1dom_1_1KeySignature.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html">LyricsSyllableInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the syllable information for a single syllable. (See <a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html">texts::LyricsTextBase</a>)  <a href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html">Note</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a single note element in an entry.  <a href="classmusx_1_1dom_1_1Note.html#details">More...</a><br /></td></tr>
@@ -204,6 +210,14 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:ac52edbaa60f81ba3df76ee77b37e95fd" id="r_ac52edbaa60f81ba3df76ee77b37e95fd"><td class="memItemLeft" align="right" valign="top"><a id="ac52edbaa60f81ba3df76ee77b37e95fd" name="ac52edbaa60f81ba3df76ee77b37e95fd"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentPtr</b> = std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a> &gt;</td></tr>
+<tr class="memdesc:ac52edbaa60f81ba3df76ee77b37e95fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared <code><a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a></code> pointer. <br /></td></tr>
+<tr class="separator:ac52edbaa60f81ba3df76ee77b37e95fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa76356b1ad3580081294898c79615c4d" id="r_aa76356b1ad3580081294898c79615c4d"><td class="memItemLeft" align="right" valign="top"><a id="aa76356b1ad3580081294898c79615c4d" name="aa76356b1ad3580081294898c79615c4d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentWeakPtr</b> = std::weak_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a> &gt;</td></tr>
+<tr class="memdesc:aa76356b1ad3580081294898c79615c4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared weak <code><a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a></code> pointer. <br /></td></tr>
+<tr class="separator:aa76356b1ad3580081294898c79615c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a849c0fb091707be060d840e877486f65" id="r_a849c0fb091707be060d840e877486f65"><td class="memItemLeft" align="right" valign="top"><a id="a849c0fb091707be060d840e877486f65" name="a849c0fb091707be060d840e877486f65"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Cmper</b> = uint16_t</td></tr>
 <tr class="memdesc:a849c0fb091707be060d840e877486f65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enigma "comperator" key type. <br /></td></tr>
@@ -268,14 +282,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>LayerIndex</b> = uns
 using&#160;</td><td class="memItemRight" valign="bottom"><b>BeamNumber</b> = unsigned int</td></tr>
 <tr class="memdesc:af72aa98bddad049ec18ef7858aea2168"><td class="mdescLeft">&#160;</td><td class="mdescRight">A number where 1 corresponds to the primary (8th note) beam, 2 the 16th beam, 3 the 32nd beam, etc. <br /></td></tr>
 <tr class="separator:af72aa98bddad049ec18ef7858aea2168"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac52edbaa60f81ba3df76ee77b37e95fd" id="r_ac52edbaa60f81ba3df76ee77b37e95fd"><td class="memItemLeft" align="right" valign="top"><a id="ac52edbaa60f81ba3df76ee77b37e95fd" name="ac52edbaa60f81ba3df76ee77b37e95fd"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentPtr</b> = std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a> &gt;</td></tr>
-<tr class="memdesc:ac52edbaa60f81ba3df76ee77b37e95fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared <code><a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a></code> pointer. <br /></td></tr>
-<tr class="separator:ac52edbaa60f81ba3df76ee77b37e95fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa76356b1ad3580081294898c79615c4d" id="r_aa76356b1ad3580081294898c79615c4d"><td class="memItemLeft" align="right" valign="top"><a id="aa76356b1ad3580081294898c79615c4d" name="aa76356b1ad3580081294898c79615c4d"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentWeakPtr</b> = std::weak_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a> &gt;</td></tr>
-<tr class="memdesc:aa76356b1ad3580081294898c79615c4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared weak <code><a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a></code> pointer. <br /></td></tr>
-<tr class="separator:aa76356b1ad3580081294898c79615c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a970ba333257a18f1f81abb356b3e6727" id="r_a970ba333257a18f1f81abb356b3e6727"><td class="memItemLeft" align="right" valign="top"><a id="a970ba333257a18f1f81abb356b3e6727" name="a970ba333257a18f1f81abb356b3e6727"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>OptionsPoolPtr</b> = std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1OptionsPool.html">OptionsPool</a> &gt;</td></tr>
 <tr class="memdesc:a970ba333257a18f1f81abb356b3e6727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared <code><a class="el" href="classmusx_1_1dom_1_1OptionsPool.html" title="A pool that manages collections of OptionsBase objects that have no Cmper value.">OptionsPool</a></code> pointer. <br /></td></tr>

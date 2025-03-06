@@ -138,6 +138,10 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
 <tr class="memitem:aaa52156d09836d9bf53b048a317a7829" id="r_aaa52156d09836d9bf53b048a317a7829"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aaa52156d09836d9bf53b048a317a7829">calcTieFrom</a> () const</td></tr>
 <tr class="memdesc:aaa52156d09836d9bf53b048a317a7829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie from. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a8020db4ad0f674e86e386af23a6d0eca" title="Indicates a tie starts on this note.">Note::tieStart</a> to see if there is actually a tie.  <br /></td></tr>
 <tr class="separator:aaa52156d09836d9bf53b048a317a7829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0916f855bc1da7af83577dd7a69c54cc" id="r_a0916f855bc1da7af83577dd7a69c54cc"><td class="memItemLeft" align="right" valign="top"><a id="a0916f855bc1da7af83577dd7a69c54cc" name="a0916f855bc1da7af83577dd7a69c54cc"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcStaff</b> () const</td></tr>
+<tr class="memdesc:a0916f855bc1da7af83577dd7a69c54cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff number, taking into account cross staffing. <br /></td></tr>
+<tr class="separator:a0916f855bc1da7af83577dd7a69c54cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps an <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instance and a note index. </p>
@@ -194,9 +198,6 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">Note::NoteName</a>, int, int, int &gt; musx::dom::NoteInfoPtr::calcNoteProperties </td>
@@ -205,11 +206,6 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Calculates the note name, octave number, actual alteration, and staff position. </p>

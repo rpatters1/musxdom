@@ -19,7 +19,9 @@ var searchData=
   ['legerlinewidth_16',['legerLineWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#a5976d785dfbd20e9c108e6a6cd1d4e84',1,'musx::dom::options::LineCurveOptions']]],
   ['linespace_17',['linespace',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#ab47a8be6af95121918387aa5a9a480d0',1,'musx::dom::options::RepeatOptions::lineSpace'],['../classmusx_1_1dom_1_1others_1_1Staff.html#a58b338d0edf7fd8e6fbbb940dcdf4c85',1,'musx::dom::others::Staff::lineSpace']]],
   ['linespacingpercentage_18',['lineSpacingPercentage',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#ac45a6402d4c9f830a248b2e4d0d94ca5',1,'musx::dom::others::TextBlock']]],
-  ['linewidth_19',['lineWidth',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#a53fe57ad2c4c0f1bf7f2fad9ed524213',1,'musx::dom::others::Enclosure']]],
-  ['lowerdotvpos_20',['lowerDotVPos',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a7f0440863a47eb1e2ca8a7b74b0781d1',1,'musx::dom::options::RepeatOptions']]],
-  ['lyricdetail_21',['lyricDetail',['../classmusx_1_1dom_1_1Entry.html#ab39cf53be02d0856378fd81602a118a2',1,'musx::dom::Entry']]]
+  ['linestyleid_19',['lineStyleId',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a23523cc7e83d6b1821d816590dadca45',1,'musx::dom::others::SmartShape']]],
+  ['linewidth_20',['lineWidth',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#a53fe57ad2c4c0f1bf7f2fad9ed524213',1,'musx::dom::others::Enclosure']]],
+  ['lowerdotvpos_21',['lowerDotVPos',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a7f0440863a47eb1e2ca8a7b74b0781d1',1,'musx::dom::options::RepeatOptions']]],
+  ['lyricdetail_22',['lyricDetail',['../classmusx_1_1dom_1_1Entry.html#ab39cf53be02d0856378fd81602a118a2',1,'musx::dom::Entry']]],
+  ['lyricnumber_23',['lyricnumber',['../classmusx_1_1dom_1_1details_1_1Baseline.html#a3bd522bfd221f6134b27c5954b57e57d',1,'musx::dom::details::Baseline::lyricNumber'],['../classmusx_1_1dom_1_1details_1_1LyricAssign.html#a835b70469f40e850d46e9a0bac78be95',1,'musx::dom::details::LyricAssign::lyricNumber']]]
 ];

@@ -3,6 +3,7 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#af96307ed369138a67d004695055e894d", null ],
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#abafc8ded0db6f072316ecfee838eaa38", null ],
     [ "calcNoteProperties", "classmusx_1_1dom_1_1NoteInfoPtr.html#a736631bb45a807d4f0a86ae3757f4080", null ],
+    [ "calcStaff", "classmusx_1_1dom_1_1NoteInfoPtr.html#a0916f855bc1da7af83577dd7a69c54cc", null ],
     [ "calcTieFrom", "classmusx_1_1dom_1_1NoteInfoPtr.html#aaa52156d09836d9bf53b048a317a7829", null ],
     [ "calcTieTo", "classmusx_1_1dom_1_1NoteInfoPtr.html#ac535914f03c0ac61fe184134c1584d9b", null ],
     [ "getEntryInfo", "classmusx_1_1dom_1_1NoteInfoPtr.html#a274b7e7410c033c60bc818731a9d8598", null ],

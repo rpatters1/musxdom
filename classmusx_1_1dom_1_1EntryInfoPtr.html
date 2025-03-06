@@ -144,10 +144,9 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexInFrame</b>
 <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getMeasure</b> () const</td></tr>
 <tr class="memdesc:af07b2f3513daaca9f26cb8dc0b96489c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the measure cmper. <br /></td></tr>
 <tr class="separator:af07b2f3513daaca9f26cb8dc0b96489c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad931a289e666a9d70fa8fa575c5e9bc6" id="r_ad931a289e666a9d70fa8fa575c5e9bc6"><td class="memItemLeft" align="right" valign="top"><a id="ad931a289e666a9d70fa8fa575c5e9bc6" name="ad931a289e666a9d70fa8fa575c5e9bc6"></a>
-std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createCurrentStaff</b> () const</td></tr>
-<tr class="memdesc:ad931a289e666a9d70fa8fa575c5e9bc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the current StaffComposite for the entry. <br /></td></tr>
-<tr class="separator:ad931a289e666a9d70fa8fa575c5e9bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a646ba3b7fbb39724036ae83e3303d5e1" id="r_a646ba3b7fbb39724036ae83e3303d5e1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a646ba3b7fbb39724036ae83e3303d5e1">createCurrentStaff</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;forStaffId=std::nullopt) const</td></tr>
+<tr class="memdesc:a646ba3b7fbb39724036ae83e3303d5e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the current StaffComposite for the entry.  <br /></td></tr>
+<tr class="separator:a646ba3b7fbb39724036ae83e3303d5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e04878024b42853e4d906b6c602094e" id="r_a2e04878024b42853e4d906b6c602094e"><td class="memItemLeft" align="right" valign="top"><a id="a2e04878024b42853e4d906b6c602094e" name="a2e04878024b42853e4d906b6c602094e"></a>
 std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getKeySignature</b> () const</td></tr>
 <tr class="memdesc:a2e04878024b42853e4d906b6c602094e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the key signature of the entry. <br /></td></tr>
@@ -284,6 +283,32 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 <p>Returns whether this is an unbeamed entry. </p>
 <dl class="section return"><dt>Returns</dt><dd><br  />
  </dd></dl>
+
+</div>
+</div>
+<a id="a646ba3b7fbb39724036ae83e3303d5e1" name="a646ba3b7fbb39724036ae83e3303d5e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a646ba3b7fbb39724036ae83e3303d5e1">&#9670;&#160;</a></span>createCurrentStaff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt; musx::dom::EntryInfoPtr::createCurrentStaff </td>
+          <td>(</td>
+          <td class="paramtype">const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>forStaffId</em> = <code>std::nullopt</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the current StaffComposite for the entry. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forStaffId</td><td>Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Usefule when notes are cross-staffed.) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -110,16 +110,24 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dd><a class="anchor" id="_todo000007"></a>This must be adjusted based on concert or transposed pitch.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#ae17675c61d076e236952c9bcfbe25ffc">musx::dom::KeySignature::calcTonalCenterIndex</a>  () const</dt>
 <dd><a class="anchor" id="_todo000001"></a>extend this to support other modes besides major and minor.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a68d9a099ffa063d165d21e780268aeb9">musx::dom::others::Measure::calcKeySignature</a>  (const std::optional&lt; InstCmper &gt; &amp;forStaff=std::nullopt) const</dt>
+<dd><a class="anchor" id="_todo000012"></a>Get the independent key signature for the staff, if there is one.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a9579a68babbf5008ec3201da1dcc59a7">musx::dom::others::Measure::createDisplayTimeSignature</a>  (const std::optional&lt; InstCmper &gt; &amp;forStaff=std::nullopt) const</dt>
+<dd><a class="anchor" id="_todo000014"></a>Get the independent display time signature for the staff, if there is one. (<a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that the independent key sig may have a different useDisplay boolean than the global key sig.)  </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a421e75f56e610dc35907506ad81f2657">musx::dom::others::Measure::createTimeSignature</a>  (const std::optional&lt; InstCmper &gt; &amp;forStaff=std::nullopt) const</dt>
+<dd><a class="anchor" id="_todo000013"></a>Get the independent time signature for the staff, if there is one.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a205d8bf3a0e7dec6d304b59dba0f9245">musx::dom::others::Measure::requireAllFields</a>  () const override</dt>
-<dd><a class="anchor" id="_todo000011"></a>: remove this override after identifying all fields.  </dd>
+<dd><a class="anchor" id="_todo000015"></a>: remove this override after identifying all fields.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa0014c4adec163f86f76b125dce94c54">musx::dom::others::MeasureExprAssign::requireAllFields</a>  () const override</dt>
-<dd><a class="anchor" id="_todo000012"></a>: remove this override after identifying all fields.  </dd>
+<dd><a class="anchor" id="_todo000016"></a>: remove this override after identifying all fields.  </dd>
 <dt>Class <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">musx::dom::others::PartDefinition</a>  </dt>
-<dd><a class="anchor" id="_todo000009"></a>After identifying all possible fields, remove the override of <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#adb5d246fd2a159690116898934390167" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">PartDefinition::requireAllFields</a>. </dd>
+<dd><a class="anchor" id="_todo000010"></a>After identifying all possible fields, remove the override of <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#adb5d246fd2a159690116898934390167" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">PartDefinition::requireAllFields</a>. </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#ad05ba54e0a5313031613fc66222fcdd2">musx::dom::others::Staff::calcClefIndexAt</a>  (MeasCmper measureId, Edu position) const</dt>
+<dd><a class="anchor" id="_todo000008"></a>Take into accound clef changes caused by transposition.  </dd>
 <dt>Class <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html">musx::dom::others::StaffStyle::Masks</a>  </dt>
-<dd><a class="anchor" id="_todo000013"></a>add masks as needed. If we ever add them all, remove <a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> inheritance and <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a0425bb33be67498a7d4c0915bd3ca25c" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">requireAllFields</a> function.  </dd>
+<dd><a class="anchor" id="_todo000017"></a>add masks as needed. If we ever add them all, remove <a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> inheritance and <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a0425bb33be67498a7d4c0915bd3ca25c" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">requireAllFields</a> function.  </dd>
 <dt>Class <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html">musx::dom::others::TextBlock</a>  </dt>
-<dd><a class="anchor" id="_todo000010"></a>After identifying all possible fields, remove the override of <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a57f6336f95a9b1099216e44fec3bfe4d" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">TextBlock::requireAllFields</a>.</dd>
+<dd><a class="anchor" id="_todo000011"></a>After identifying all possible fields, remove the override of <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a57f6336f95a9b1099216e44fec3bfe4d" title="Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class...">TextBlock::requireAllFields</a>.</dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

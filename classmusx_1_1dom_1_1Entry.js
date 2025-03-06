@@ -11,6 +11,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "requireAllFields", "classmusx_1_1dom_1_1Entry.html#a61440b0b4e54c1019e98d1b58d75f2e9", null ],
     [ "articDetail", "classmusx_1_1dom_1_1Entry.html#a0e99f4aa18165386218038d02a013b0f", null ],
     [ "beam", "classmusx_1_1dom_1_1Entry.html#ad829caa4f42eee2a016822e76d04f44c", null ],
+    [ "crossStaff", "classmusx_1_1dom_1_1Entry.html#a973e08252facadef1e48b3763bef4404", null ],
     [ "duration", "classmusx_1_1dom_1_1Entry.html#aa04e0b02dbbe2ec0142ac832fab5138e", null ],
     [ "floatRest", "classmusx_1_1dom_1_1Entry.html#a9c47ab65cc891239e20462fa381e18ff", null ],
     [ "freezeBeam", "classmusx_1_1dom_1_1Entry.html#aeb7ecc28f468574c224acf57e4555841", null ],

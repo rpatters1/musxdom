@@ -14,6 +14,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     ] ],
     [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html#a6b2463c519cd866520ed2116151334b5", null ],
     [ "addAutoNumbering", "classmusx_1_1dom_1_1others_1_1Staff.html#a428918fb57d8ff9b01b34f953b080904", null ],
+    [ "calcClefIndexAt", "classmusx_1_1dom_1_1others_1_1Staff.html#ad05ba54e0a5313031613fc66222fcdd2", null ],
     [ "calcFirstClefIndex", "classmusx_1_1dom_1_1others_1_1Staff.html#a1fbc48d196476e86ae9272b57360f58b", null ],
     [ "calcMiddleStaffPosition", "classmusx_1_1dom_1_1others_1_1Staff.html#a8a4e8f3326884d02be7b00d5b956748f", null ],
     [ "getAbbreviatedInstrumentName", "classmusx_1_1dom_1_1others_1_1Staff.html#af1c317f8ad198ae1788ca7a565fbc4b7", null ],
