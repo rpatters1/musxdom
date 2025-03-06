@@ -84,6 +84,51 @@ MUSX_XML_ENUM_MAPPING(Measure::ShowTimeSigMode, {
     {"ignoreTime", Measure::ShowTimeSigMode::Never},
 });
 
+MUSX_XML_ENUM_MAPPING(SmartShape::ShapeType, {
+    {"slurDown", SmartShape::ShapeType::SlurDown},
+    {"slurUp", SmartShape::ShapeType::SlurUp},
+    {"decresc", SmartShape::ShapeType::Decrescendo},
+    {"cresc", SmartShape::ShapeType::Crescendo},
+    {"octaveDown", SmartShape::ShapeType::OctaveDown},
+    {"octaveUp", SmartShape::ShapeType::OctaveUp},
+    {"dashLineUp", SmartShape::ShapeType::DashLineUp},
+    {"dashLineDown", SmartShape::ShapeType::DashLineDown},
+    {"dashSlurDown", SmartShape::ShapeType::DashSlurDown},
+    {"dashSlurUp", SmartShape::ShapeType::DashSlurUp},
+    {"dashLine", SmartShape::ShapeType::DashLine},
+    {"solidLine", SmartShape::ShapeType::SolidLine},
+    {"solidLineDown", SmartShape::ShapeType::SolidLineDown},
+    {"solidLineUp", SmartShape::ShapeType::SolidLineUp},
+    {"trill", SmartShape::ShapeType::Trill},
+    {"slurAuto", SmartShape::ShapeType::SlurAuto},
+    {"dashSlurAuto", SmartShape::ShapeType::DashSlurAuto},
+    {"trillExt", SmartShape::ShapeType::TrillExtension},
+    {"solidLineDown2", SmartShape::ShapeType::SolidLineDownBoth},
+    {"solidLineUp2", SmartShape::ShapeType::SolidLineUpBoth},
+    {"twoOctaveDown", SmartShape::ShapeType::TwoOctaveDown},
+    {"twoOctaveUp", SmartShape::ShapeType::TwoOctaveUp},
+    {"dashLineDown2", SmartShape::ShapeType::DashLineDownBoth},
+    {"dashLineUp2", SmartShape::ShapeType::DashLineUpBoth},
+    {"glissando", SmartShape::ShapeType::Glissando},
+    {"tabSlide", SmartShape::ShapeType::TabSlide},
+    {"bendHat", SmartShape::ShapeType::BendHat},
+    {"bendCurve", SmartShape::ShapeType::BendCurve},
+    {"smartLine", SmartShape::ShapeType::CustomLine},
+    {"solidLineUpLeft", SmartShape::ShapeType::SolidLineUpLeft},
+    {"solidLineDownLeft", SmartShape::ShapeType::SolidLineDownLeft},
+    {"dashLineUpLeft", SmartShape::ShapeType::DashLineUpLeft},
+    {"dashLineDownLeft", SmartShape::ShapeType::DashLineDownLeft},
+    {"solidLineUpDown", SmartShape::ShapeType::SolidLineUpDown},
+    {"solidLineDownUp", SmartShape::ShapeType::SolidLineDownUp},
+    {"dashLineUpDown", SmartShape::ShapeType::DashLineUpDown},
+    {"dashLineDownUp", SmartShape::ShapeType::DashLineDownUp},
+    {"hyphen", SmartShape::ShapeType::Hyphen},
+    {"wordExt", SmartShape::ShapeType::WordExtension},
+    {"dashContourSlurDown", SmartShape::ShapeType::DashContourSlurDown},
+    {"dashContourSlurUp", SmartShape::ShapeType::DashContourSlurUp},
+    {"dashContourSlurAuto", SmartShape::ShapeType::DashContouSlurAuto},
+});
+
 MUSX_XML_ENUM_MAPPING(Staff::AutoNumberingStyle, {
     {"arabicSuffix", Staff::AutoNumberingStyle::ArabicSuffix}, //this is the default and may not occur in the xml, but the string is in Finale
     {"romanSuffix", Staff::AutoNumberingStyle::RomanSuffix},
@@ -526,6 +571,36 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
     {"useCategoryPos", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->useCategoryPos = true; }},
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
+    });
+
+MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPoint, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
+    {"meas", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
+    {"entryNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->entryNumber = e->getTextAs<EntryNumber>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPointAdjustment, {
+    {"x", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"y", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
+    {"endPt", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
+        { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getDocument()); }},
+    {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
+        { i->endPointAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(SmartShape, {
+    {"shapeType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->shapeType = toEnum<SmartShape::ShapeType>(e); }},
+    {"entryBased", [](const XmlElementPtr&, const std::shared_ptr<SmartShape>& i) { i->entryBased = true; }},
+    {"startTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
+        { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
+    {"endTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
+        { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
+    {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
+    {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
+    {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeMeasureAssign, {

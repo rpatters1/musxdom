@@ -212,6 +212,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::RepeatEndingStart,
     dom::others::RepeatEndingText,
     dom::others::RepeatPassList,
+    dom::others::SmartShape,
     dom::others::SmartShapeMeasureAssign,
     dom::others::StaffSystem,
     dom::others::Staff,
