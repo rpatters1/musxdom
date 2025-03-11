@@ -80,7 +80,7 @@ std::shared_ptr<Entry> Entry::getPrevious() const
 
 std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 {
-    if (duration <= 1 || duration >= 0x10000) {
+    if (duration < 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
     }
 
