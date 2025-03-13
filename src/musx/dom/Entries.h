@@ -150,6 +150,7 @@ public:
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
+    bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
@@ -335,9 +336,22 @@ public:
     /// @brief Calculates the number of beams or flags on the entry.
     unsigned calcNumberOfBeams() const;
 
+    /// @brief Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
+    /// @return 0 if not beamed or no beam starts this entry; otherwise, the beam number
+    unsigned calcLowestBeamStart() const;
+
+    /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
+    /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
+    unsigned calcLowestBeamEnd() const;
+
 private:
     bool canBeBeamed() const;
-    
+
+    unsigned calcVisibleBeams() const;
+
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+    std::optional<unsigned> iterateFindRestsInSecondaryBeam(const EntryInfoPtr nextOrPrevInBeam) const;
+
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
     EntryInfoPtr iteratePotentialEntryInBeam() const;
 

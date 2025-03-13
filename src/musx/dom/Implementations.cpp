@@ -359,6 +359,95 @@ unsigned calcNumberOfBeamsInEdu(Edu duration)
 unsigned EntryInfoPtr::calcNumberOfBeams() const
 { return calcNumberOfBeamsInEdu((*this)->getEntry()->duration); }
 
+unsigned EntryInfoPtr::calcVisibleBeams() const
+{
+    auto entry = (*this)->getEntry();
+    if (entry->calcDisplaysAsRest()) {
+        if (auto opts = entry->getDocument()->getOptions()->get<options::BeamOptions>()) {
+            if (!opts->extendSecBeamsOverRests) {
+                return 1;
+            }
+        }
+    }
+    return calcNumberOfBeams();
+}
+
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const EntryInfoPtr nextOrPrevInBeam) const
+{
+    auto entry = (*this)->getEntry();
+    if (auto opts = entry->getDocument()->getOptions()->get<options::BeamOptions>()) {
+        if (!opts->extendSecBeamsOverRests) {
+            if (entry->calcDisplaysAsRest()) {
+                return 0; // if *this* is a rest, it can't start or end a secondary beam
+            }
+            auto nextOrPrevInFrame = (this->*Iterator)();
+            while (true) {
+                assert(nextOrPrevInFrame); // should hit nextOrPrevInBeam before null.
+                if (nextOrPrevInFrame->getEntry()->calcDisplaysAsRest()) {
+                    return 2; // rests always cut to 8th beam, so any secondary beam starts or ends
+                }
+                if (nextOrPrevInFrame->getEntry()->getEntryNumber() == nextOrPrevInBeam->getEntry()->getEntryNumber()) {
+                    break;
+                }
+                nextOrPrevInFrame = (nextOrPrevInFrame.*Iterator)();
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+unsigned EntryInfoPtr::calcLowestBeamStart() const
+{
+    if (!canBeBeamed()) return 0;
+    auto prev = getPreviousInBeamGroup();
+    if (!prev) {
+        return getNextInBeamGroup() ? 1 : 0; // if this is the start of the beam, then the lowest is the primary (8th) beam.
+    }
+    if (auto restValue = iterateFindRestsInSecondaryBeam<&EntryInfoPtr::getPreviousSameV>(prev)) {
+        return restValue.value();
+    }
+    auto entry = (*this)->getEntry();
+    unsigned secondaryBreak = 0;
+    if (entry->secBeam) {
+        if (auto beamBreaks = entry->getDocument()->getDetails()->get<details::SecondaryBeamBreak>(entry->getPartId(), entry->getEntryNumber())) {
+            secondaryBreak = beamBreaks->calcLowestBreak();
+            if (secondaryBreak < 2) {
+                secondaryBreak = 0;
+            }
+        }
+    }
+    unsigned prevNumBeams = prev.calcVisibleBeams();
+    if (calcVisibleBeams() > prevNumBeams) {
+        if (!secondaryBreak || secondaryBreak > prevNumBeams + 1) {
+            secondaryBreak = prevNumBeams + 1;
+        }
+    }
+    return secondaryBreak;
+}
+
+unsigned EntryInfoPtr::calcLowestBeamEnd() const
+{
+    if (!canBeBeamed()) return 0;
+    auto next = getNextInBeamGroup();
+    if (!next) {
+        return getPreviousInBeamGroup() ? 1 : 0; // if this is the end of the beam, then the lowest is the primary (8th) beam.
+    }
+    if (auto restValue = iterateFindRestsInSecondaryBeam<&EntryInfoPtr::getNextSameV>(next)) {
+        return restValue.value();
+    }
+    unsigned numBeams = calcVisibleBeams();
+    unsigned nextSecondaryStart = next.calcLowestBeamStart();
+    if (nextSecondaryStart && nextSecondaryStart <= numBeams) {
+        return nextSecondaryStart;
+    }
+    unsigned nextNumBeams = next.calcVisibleBeams();
+    if (numBeams > nextNumBeams) {
+        return nextNumBeams + 1;
+    }
+    return 0;
+}
+
 template<EntryInfoPtr(EntryInfoPtr::*Iterator)() const>
 EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
 {
