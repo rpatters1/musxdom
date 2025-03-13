@@ -1495,6 +1495,53 @@
       <endPos>380</endPos>
       <minPos>384</minPos>
     </beatChart>
+    <beatChart cmper="2" inci="0">
+      <control>
+        <totalDur>4096</totalDur>
+        <totalWidth>363</totalWidth>
+        <minWidth>370</minWidth>
+        <allotWidth>835</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="2" inci="1">
+      <endPos>69</endPos>
+    </beatChart>
+    <beatChart cmper="2" inci="2">
+      <dur>768</dur>
+      <pos>69</pos>
+      <endPos>101</endPos>
+      <minPos>64</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="3">
+      <dur>1024</dur>
+      <pos>101</pos>
+      <endPos>144</endPos>
+      <minPos>107</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="4">
+      <dur>1408</dur>
+      <pos>144</pos>
+      <endPos>164</endPos>
+      <minPos>171</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="5">
+      <dur>1536</dur>
+      <pos>164</pos>
+      <endPos>207</endPos>
+      <minPos>214</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="6">
+      <dur>1920</dur>
+      <pos>207</pos>
+      <endPos>227</endPos>
+      <minPos>278</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="7">
+      <dur>2048</dur>
+      <pos>227</pos>
+      <endPos>363</endPos>
+      <minPos>324</minPos>
+    </beatChart>
     <durAllot cmper="0">
       <allotment>84</allotment>
     </durAllot>
@@ -1611,6 +1658,14 @@
       <startEntry>5</startEntry>
       <endEntry>14</endEntry>
     </frameSpec>
+    <frameSpec cmper="3" inci="0">
+      <startEntry>15</startEntry>
+      <endEntry>18</endEntry>
+    </frameSpec>
+    <frameSpec cmper="4" inci="0">
+      <startEntry>19</startEntry>
+      <endEntry>25</endEntry>
+    </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
       <numStrings>6</numStrings>
@@ -1668,6 +1723,17 @@
       </range>
     </instUsed>
     <instUsed cmper="1" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="2" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
       <distFromTop>0</distFromTop>
@@ -1893,6 +1959,16 @@
     </metaClef>
     <measSpec cmper="1">
       <width>596</width>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <posMode>beatchartPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <measSpec cmper="2">
+      <width>497</width>
       <beats>4</beats>
       <divbeat>1024</divbeat>
       <dispBeats>4</dispBeats>
@@ -2520,6 +2596,18 @@
       <scaleVert/>
       <scaleContentOnly/>
     </staffSystemSpec>
+    <staffSystemSpec cmper="2">
+      <startMeas>2</startMeas>
+      <endMeas>3</endMeas>
+      <horzPercent>48974</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-68</top>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-76</distanceToPrev>
+    </staffSystemSpec>
     <staffPlayData cmper="1">
       <chords>
         <velControlLevel>101</velControlLevel>
@@ -2992,15 +3080,35 @@
       <context>onStandardNote</context>
       <beamWidth>-1</beamWidth>
     </beamAltPrimDownStem>
+    <beamAltPrimDownStem entnum="19">
+      <yAdd>6</yAdd>
+      <context>onStandardNote</context>
+      <beamWidth>-1</beamWidth>
+    </beamAltPrimDownStem>
+    <beamAltPrimDownStem entnum="21">
+      <yAdd>6</yAdd>
+      <context>onStandardNote</context>
+      <beamWidth>-1</beamWidth>
+    </beamAltPrimDownStem>
     <gfhold cmper1="1" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
       <frame1>2</frame1>
     </gfhold>
+    <gfhold cmper1="1" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>4</frame1>
+    </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
       <frame1>1</frame1>
+    </gfhold>
+    <gfhold cmper1="32767" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>3</frame1>
     </gfhold>
     <secBeamBreak entnum="7">
       <do32nd/>
@@ -3026,6 +3134,30 @@
       <beamThrough/>
     </secBeamBreak>
     <secBeamBreak entnum="11">
+      <do32nd/>
+      <do64th/>
+      <do128th/>
+      <do256th/>
+      <do512th/>
+      <do1024th/>
+      <do2048th/>
+      <do4096th/>
+      <beamThrough/>
+    </secBeamBreak>
+    <secBeamBreak entnum="23">
+      <do16th/>
+      <do32nd/>
+      <do64th/>
+      <do128th/>
+      <do256th/>
+      <do512th/>
+      <do1024th/>
+      <do2048th/>
+      <do4096th/>
+      <beamThrough/>
+    </secBeamBreak>
+    <secBeamBreak entnum="24">
+      <do16th/>
       <do32nd/>
       <do64th/>
       <do128th/>
@@ -3074,7 +3206,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="4" prev="3" next="0">
+    <entry entnum="4" prev="3" next="15">
       <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -3189,13 +3321,157 @@
     </entry>
     <entry entnum="13" prev="12" next="14">
       <dura>1024</dura>
-      <numNotes>0</numNotes>
+      <numNotes>1</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
-    <entry entnum="14" prev="13" next="0">
+    <entry entnum="14" prev="13" next="19">
+      <dura>2048</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="15" prev="4" next="16">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="16" prev="15" next="17">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="17" prev="16" next="18">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="18" prev="17" next="0">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="19" prev="14" next="20">
+      <dura>768</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <stemDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="20" prev="19" next="21">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="21" prev="20" next="22">
+      <dura>384</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <stemDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="22" prev="21" next="23">
+      <dura>128</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="23" prev="22" next="24">
+      <dura>384</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <secBeam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="24" prev="23" next="25">
+      <dura>128</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <secBeam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="25" prev="24" next="0">
       <dura>2048</dura>
       <numNotes>0</numNotes>
       <isValid/>

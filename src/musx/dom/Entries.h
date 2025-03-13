@@ -344,6 +344,10 @@ public:
     /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
     unsigned calcLowestBeamEnd() const;
 
+    /// @brief Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc.
+    /// @return 0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number
+    unsigned calcLowestBeamStub() const;
+
 private:
     bool canBeBeamed() const;
 

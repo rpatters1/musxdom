@@ -448,7 +448,17 @@ unsigned EntryInfoPtr::calcLowestBeamEnd() const
     return 0;
 }
 
-template<EntryInfoPtr(EntryInfoPtr::*Iterator)() const>
+unsigned EntryInfoPtr::calcLowestBeamStub() const
+{
+    if (unsigned lowestBeamStart = calcLowestBeamStart()) {
+        if (unsigned lowestBeamEnd = calcLowestBeamEnd()) {
+            return std::max(lowestBeamStart, lowestBeamEnd);
+        }
+    }
+    return 0;
+}
+
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
 EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
 {
     EntryInfoPtr result = (this->*Iterator)();
