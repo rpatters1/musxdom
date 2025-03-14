@@ -245,6 +245,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::BaselineLyricsChorus,
     dom::details::BaselineLyricsSection,
     dom::details::BaselineLyricsVerse,
+    dom::details::BeamStubDirection,
     dom::details::CrossStaff,
     dom::details::GFrameHold,
     dom::details::StaffGroup,
