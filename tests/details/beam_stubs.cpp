@@ -72,3 +72,42 @@ TEST(BeamStubsTest, Populate)
     EXPECT_EQ(beamStub7->mask, 0);
     EXPECT_FALSE(beamStub7->isLeft());
 }
+
+TEST(BeamStubsTest, DetectDirection)
+{
+    std::vector<char> fileXml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_stubs.enigmaxml", fileXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fileXml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto measures = others->getArray<others::Measure>(SCORE_PARTID);
+    EXPECT_EQ(measures.size(), 7);
+    for (const auto& meas : measures) {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, meas->getCmper());
+        EXPECT_TRUE(gfhold);
+        if (gfhold) {
+            gfhold->iterateEntries([](const EntryInfoPtr& entryInfo) {
+                if (entryInfo.calcLowestBeamStub()) {
+                    std::cout << "Measure " << entryInfo.getMeasure() << " entry index " << entryInfo.getIndexInFrame();
+                    std::cout << (entryInfo.calcBeamStubIsLeft() ? " stub left" : " stub right") << std::endl;
+                }
+                return true;
+            });
+        }
+    }
+
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 6);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        auto stub = EntryInfoPtr(frame, 0).calcLowestBeamStub();
+        EXPECT_EQ(stub, 0);
+    }
+
+}

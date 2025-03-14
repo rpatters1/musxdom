@@ -296,6 +296,11 @@ EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
     return next;
 }
 
+bool EntryInfoPtr::calcDisplaysAsRest() const
+{
+    return !(*this)->getEntry()->isNote;
+}
+
 NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
 {
     if ((*this)->getEntry()->isNote && src.getEntryInfo()->getEntry()->isNote) {
@@ -361,9 +366,8 @@ unsigned EntryInfoPtr::calcNumberOfBeams() const
 
 unsigned EntryInfoPtr::calcVisibleBeams() const
 {
-    auto entry = (*this)->getEntry();
-    if (entry->calcDisplaysAsRest()) {
-        if (auto opts = entry->getDocument()->getOptions()->get<options::BeamOptions>()) {
+    if (calcDisplaysAsRest()) {
+        if (auto opts = (*this)->getEntry()->getDocument()->getOptions()->get<options::BeamOptions>()) {
             if (!opts->extendSecBeamsOverRests) {
                 return 1;
             }
@@ -378,14 +382,16 @@ std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const Entr
     auto entry = (*this)->getEntry();
     if (auto opts = entry->getDocument()->getOptions()->get<options::BeamOptions>()) {
         if (!opts->extendSecBeamsOverRests) {
-            if (entry->calcDisplaysAsRest()) {
+            if (calcDisplaysAsRest()) {
                 return 0; // if *this* is a rest, it can't start or end a secondary beam
             }
             auto nextOrPrevInFrame = (this->*Iterator)();
             while (true) {
                 assert(nextOrPrevInFrame); // should hit nextOrPrevInBeam before null.
-                if (nextOrPrevInFrame->getEntry()->calcDisplaysAsRest()) {
-                    return 2; // rests always cut to 8th beam, so any secondary beam starts or ends
+                if (nextOrPrevInFrame.calcDisplaysAsRest()) {
+                    if (calcNumberOfBeams() >= 2) {
+                        return 2; // rests always cut to 8th beam, so any secondary beam starts or ends
+                    }
                 }
                 if (nextOrPrevInFrame->getEntry()->getEntryNumber() == nextOrPrevInBeam->getEntry()->getEntryNumber()) {
                     break;
@@ -458,6 +464,37 @@ unsigned EntryInfoPtr::calcLowestBeamStub() const
     return 0;
 }
 
+bool EntryInfoPtr::calcBeamStubIsLeft() const
+{
+    auto entry = (*this)->getEntry();
+    if (entry->stemDetail) {
+        if (auto manual = entry->getDocument()->getDetails()->get<details::BeamStubDirection>(entry->getPartId(), entry->getEntryNumber())) {
+            return manual->isLeft();
+        }
+    }
+
+    auto prev = getPreviousInBeamGroup();
+    if (!prev) return false;  // beginning of beam points right
+    auto next = getNextInBeamGroup();
+    if (!next) return true;  // end of beam points left
+
+    unsigned lowestStub = calcLowestBeamStub();
+    if (calcLowestBeamStart() + 1 < lowestStub) return false;  // beginning of 2ndary beam points right
+    if (calcLowestBeamEnd() + 1 < lowestStub) return true;     // end of 2ndary beam points left
+
+    auto [prevNoteType, prevDots] = calcNoteInfoFromEdu(prev->actualDuration.calcEduDuration());
+    auto [nextNoteType, nextDots] = calcNoteInfoFromEdu(next->actualDuration.calcEduDuration());
+
+    if (prevDots && nextDots) {
+        return prevDots >= nextDots;
+    }
+
+    unsigned prevDiff = prev->actualDuration.calcEduDuration() - Edu(prevNoteType) ? 1 : 0;
+    unsigned nextDiff = next->actualDuration.calcEduDuration() - Edu(nextNoteType) ? 1 : 0;
+
+    return prevDiff >= nextDiff;
+}
+
 template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
 EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
 {
@@ -481,6 +518,17 @@ EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
         } while (result && result->getEntry()->graceNote);
     }
     return result;
+}
+
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+bool EntryInfoPtr::iterateNotesExistLeftOrRight() const
+{
+    for (auto curr = (this->*Iterator)(); curr; curr = (curr.*Iterator)()) {
+        if (!curr.calcDisplaysAsRest()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 EntryInfoPtr EntryInfoPtr::nextPotentialInBeam() const
@@ -510,14 +558,14 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
     if (result) {
         auto thisRawEntry = (*this)->getEntry();
         auto resultEntry = result->getEntry();
-        if (thisRawEntry->calcDisplaysAsRest() || resultEntry->calcDisplaysAsRest()) {
+        if (calcDisplaysAsRest() || result.calcDisplaysAsRest()) {
             auto beamOpts = getFrame()->getDocument()->getOptions()->get<options::BeamOptions>();
             MUSX_ASSERT_IF(!beamOpts) {
                 throw std::logic_error("Document has no BeamOptions.");
             }
             auto searchForNoteFrom = [](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)() const) -> bool {
                 for (auto next = from; next; next = (next.*iterator)()) {
-                    if (!next->getEntry()->calcDisplaysAsRest()) {
+                    if (!next.calcDisplaysAsRest()) {
                         return true;
                     }
                 }

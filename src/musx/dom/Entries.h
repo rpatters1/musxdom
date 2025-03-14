@@ -182,10 +182,6 @@ public:
      */
     std::pair<NoteType, int> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
 
-    /// @brief Calculates if an entry displays as a rest.
-    /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
-    bool calcDisplaysAsRest() const { return !isNote; }
-
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
@@ -309,6 +305,10 @@ public:
     EntryInfoPtr getPreviousInBeamGroup() const
     { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(); }
 
+    /// @brief Calculates if an entry displays as a rest.
+    /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
+    bool calcDisplaysAsRest() const;
+
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
     bool calcUnbeamed() const
@@ -348,6 +348,21 @@ public:
     /// @return 0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number
     unsigned calcLowestBeamStub() const;
 
+    /// @brief Calculates if a beam stub on this entry would go left or right. It does not check that an entry actually has a beam stub.
+    /// Use #calcLowestBeamStub to discover if the entry has a beam stub.
+    /// @note This is a best approximation of Finale's behavior for default beam stub direction. No doubt there are edge cases
+    /// where it does not match.
+    /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
+    bool calcBeamStubIsLeft() const;
+
+    /// @brief Calculates if the current beam has any non-rests (i.e., notes) to the left of the current entry.
+    bool calcBeamNotesExistLeft() const
+    { return iterateNotesExistLeftOrRight<&EntryInfoPtr::getPreviousInBeamGroup>(); }
+
+    /// @brief Calculates if the current beam has any non-rests (i.e., notes) to the right of the current entry.
+    bool calcBeamNotesExistRight() const
+    { return iterateNotesExistLeftOrRight<&EntryInfoPtr::getNextInBeamGroup>(); }
+
 private:
     bool canBeBeamed() const;
 
@@ -358,6 +373,9 @@ private:
 
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
     EntryInfoPtr iteratePotentialEntryInBeam() const;
+
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+    bool iterateNotesExistLeftOrRight() const;
 
     EntryInfoPtr nextPotentialInBeam() const;
 
