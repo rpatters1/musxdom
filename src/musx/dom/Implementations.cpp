@@ -478,21 +478,21 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
     auto next = getNextInBeamGroup();
     if (!next) return true;  // end of beam points left
 
+    unsigned numBeams = calcNumberOfBeams();
     unsigned lowestStub = calcLowestBeamStub();
-    if (calcLowestBeamStart() + 1 < lowestStub) return false;  // beginning of 2ndary beam points right
-    if (calcLowestBeamEnd() + 1 < lowestStub) return true;     // end of 2ndary beam points left
+    if (numBeams >= lowestStub) {
+        if (calcLowestBeamStart() < numBeams) return false;  // beginning of 2ndary beam points right
+        if (calcLowestBeamEnd() < numBeams) return true;     // end of 2ndary beam points left
+    }
+    
+    auto prevDots = calcNoteInfoFromEdu(prev->actualDuration.calcEduDuration()).second;
+    auto nextDots = calcNoteInfoFromEdu(next->actualDuration.calcEduDuration()).second;
 
-    auto [prevNoteType, prevDots] = calcNoteInfoFromEdu(prev->actualDuration.calcEduDuration());
-    auto [nextNoteType, nextDots] = calcNoteInfoFromEdu(next->actualDuration.calcEduDuration());
-
-    if (prevDots && nextDots) {
+    if (prevDots || nextDots) {
         return prevDots >= nextDots;
     }
 
-    unsigned prevDiff = prev->actualDuration.calcEduDuration() - Edu(prevNoteType) ? 1 : 0;
-    unsigned nextDiff = next->actualDuration.calcEduDuration() - Edu(nextNoteType) ? 1 : 0;
-
-    return prevDiff >= nextDiff;
+    return false;
 }
 
 template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>

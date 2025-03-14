@@ -85,8 +85,9 @@ TEST(BeamStubsTest, DetectDirection)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
+/*
     auto measures = others->getArray<others::Measure>(SCORE_PARTID);
-    EXPECT_EQ(measures.size(), 7);
+    EXPECT_EQ(measures.size(), 9);
     for (const auto& meas : measures) {
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, meas->getCmper());
         EXPECT_TRUE(gfhold);
@@ -100,14 +101,114 @@ TEST(BeamStubsTest, DetectDirection)
             });
         }
     }
+*/
+    
+    auto testStub = [&](const EntryInfoPtr& entryInfo, bool expectLeft, bool expectStub = true) {
+        ASSERT_TRUE(entryInfo);
+        std::string msg = "Staff " + std::to_string(entryInfo.getStaff()) + " measure " + std::to_string(entryInfo.getMeasure())
+        + " entry index " + std::to_string(entryInfo.getIndexInFrame());
+
+        EXPECT_EQ(entryInfo.calcLowestBeamStub() > 0, expectStub) << msg << " stub expected did not match";
+        if (expectStub) {
+            EXPECT_EQ(entryInfo.calcBeamStubIsLeft(), expectLeft) << msg << " stub direction did not match";
+        }
+    };
+    
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 0), false, false);
+        testStub(EntryInfoPtr(frame, 1), true);
+        testStub(EntryInfoPtr(frame, 2), false);
+        testStub(EntryInfoPtr(frame, 3), false);
+        testStub(EntryInfoPtr(frame, 4), false);
+        testStub(EntryInfoPtr(frame, 6), false);
+        testStub(EntryInfoPtr(frame, 8), true);
+        testStub(EntryInfoPtr(frame, 10), false);
+        testStub(EntryInfoPtr(frame, 13), true);
+        testStub(EntryInfoPtr(frame, 14), true);
+    }
+    
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 0), false, false);
+        testStub(EntryInfoPtr(frame, 1), true);
+        testStub(EntryInfoPtr(frame, 2), false, false);
+    }
+
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 0), false, false);
+        testStub(EntryInfoPtr(frame, 1), true);
+        testStub(EntryInfoPtr(frame, 2), false, false);
+    }
+
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 0), false, false);
+        testStub(EntryInfoPtr(frame, 1), true);
+        testStub(EntryInfoPtr(frame, 2), false, false);
+        testStub(EntryInfoPtr(frame, 3), true);
+        testStub(EntryInfoPtr(frame, 5), true);
+    }
+    
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 0), false, false);
+        testStub(EntryInfoPtr(frame, 1), true);
+        testStub(EntryInfoPtr(frame, 2), false, false);
+        testStub(EntryInfoPtr(frame, 3), true);
+        testStub(EntryInfoPtr(frame, 5), true);
+    }
 
     {
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 6);
         ASSERT_TRUE(gfhold);
         auto frame = gfhold->createEntryFrame(0);
         ASSERT_TRUE(frame);
-        auto stub = EntryInfoPtr(frame, 0).calcLowestBeamStub();
-        EXPECT_EQ(stub, 0);
+        testStub(EntryInfoPtr(frame, 0), false, false);
+        testStub(EntryInfoPtr(frame, 2), false);
     }
 
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 7);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 1), true);
+        testStub(EntryInfoPtr(frame, 3), false);
+    }
+
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 8);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 1), false);
+        testStub(EntryInfoPtr(frame, 4), true); // manually overridden
+        testStub(EntryInfoPtr(frame, 7), false);
+        testStub(EntryInfoPtr(frame, 9), false);
+    }
+
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 9);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 1), false);
+    }
 }
