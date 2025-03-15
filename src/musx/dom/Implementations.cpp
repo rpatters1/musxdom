@@ -481,8 +481,26 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
     unsigned numBeams = calcNumberOfBeams();
     unsigned lowestStub = calcLowestBeamStub();
     if (numBeams >= lowestStub) {
-        if (calcLowestBeamStart() < numBeams) return false;  // beginning of 2ndary beam points right
-        if (calcLowestBeamEnd() < numBeams) return true;     // end of 2ndary beam points left
+        auto isSecondaryTerminator = [&](unsigned lowestTerminator, const EntryInfoPtr& neighbor) -> bool {
+            if (lowestTerminator < numBeams) {
+                return true;
+            }
+            if (lowestTerminator == numBeams && neighbor.calcNumberOfBeams() == numBeams) {
+                if (!neighbor->getEntry()->isNote) {
+                    // If we are not extending secondary beams over rests, then rests always cut to the 8th beam.
+                    // That means for this purpose the neighbor rest has only a single beam and therefore cannot be compared to the current.
+                    if (auto beamOpts = (*this)->getEntry()->getDocument()->getOptions()->get<options::BeamOptions>()) {
+                        if (!beamOpts->extendSecBeamsOverRests) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        };
+        if (isSecondaryTerminator(calcLowestBeamStart(), prev)) return false;   // beginning of 2ndary beam points right
+        if (isSecondaryTerminator(calcLowestBeamEnd(), next)) return true;      // end of 2ndary beam points left
     }
     
     auto prevDots = calcNoteInfoFromEdu(prev->actualDuration.calcEduDuration()).second;

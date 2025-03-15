@@ -87,7 +87,7 @@ TEST(BeamStubsTest, DetectDirection)
 
 /*
     auto measures = others->getArray<others::Measure>(SCORE_PARTID);
-    EXPECT_EQ(measures.size(), 9);
+    EXPECT_GE(measures.size(), 10);
     for (const auto& meas : measures) {
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, meas->getCmper());
         EXPECT_TRUE(gfhold);
@@ -210,5 +210,16 @@ TEST(BeamStubsTest, DetectDirection)
         auto frame = gfhold->createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 1), false);
+    }
+
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 10);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(frame);
+        testStub(EntryInfoPtr(frame, 1), false);
+        testStub(EntryInfoPtr(frame, 3), true);
+        testStub(EntryInfoPtr(frame, 5), true); // because of 2ndary beam break
+        testStub(EntryInfoPtr(frame, 6), false);
     }
 }

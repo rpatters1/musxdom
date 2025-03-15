@@ -61,7 +61,7 @@
       <modified>
         <year>2025</year>
         <month>3</month>
-        <day>14</day>
+        <day>15</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -1526,12 +1526,193 @@
       <endPos>485</endPos>
       <minPos>707</minPos>
     </beatChart>
+    <beatChart cmper="2" inci="0">
+      <control>
+        <totalDur>1536</totalDur>
+        <totalWidth>153</totalWidth>
+        <minWidth>150</minWidth>
+        <allotWidth>206</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="2" inci="1">
+      <endPos>69</endPos>
+    </beatChart>
+    <beatChart cmper="2" inci="2">
+      <dur>768</dur>
+      <pos>69</pos>
+      <endPos>101</endPos>
+      <minPos>64</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="3">
+      <dur>1024</dur>
+      <pos>101</pos>
+      <endPos>153</endPos>
+      <minPos>107</minPos>
+    </beatChart>
+    <beatChart cmper="3" inci="0">
+      <control>
+        <totalDur>1536</totalDur>
+        <totalWidth>153</totalWidth>
+        <minWidth>150</minWidth>
+        <allotWidth>206</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="3" inci="1">
+      <endPos>69</endPos>
+    </beatChart>
+    <beatChart cmper="3" inci="2">
+      <dur>768</dur>
+      <pos>69</pos>
+      <endPos>101</endPos>
+      <minPos>64</minPos>
+    </beatChart>
+    <beatChart cmper="3" inci="3">
+      <dur>1024</dur>
+      <pos>101</pos>
+      <endPos>153</endPos>
+      <minPos>107</minPos>
+    </beatChart>
+    <beatChart cmper="4" inci="0">
+      <control>
+        <totalDur>3584</totalDur>
+        <totalWidth>355</totalWidth>
+        <minWidth>364</minWidth>
+        <allotWidth>477</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="4" inci="1">
+      <endPos>69</endPos>
+    </beatChart>
+    <beatChart cmper="4" inci="2">
+      <dur>768</dur>
+      <pos>69</pos>
+      <endPos>101</endPos>
+      <minPos>64</minPos>
+    </beatChart>
+    <beatChart cmper="4" inci="3">
+      <dur>1024</dur>
+      <pos>101</pos>
+      <endPos>170</endPos>
+      <minPos>107</minPos>
+    </beatChart>
+    <beatChart cmper="4" inci="4">
+      <dur>1792</dur>
+      <pos>170</pos>
+      <endPos>202</endPos>
+      <minPos>171</minPos>
+    </beatChart>
+    <beatChart cmper="4" inci="5">
+      <dur>2048</dur>
+      <pos>202</pos>
+      <endPos>271</endPos>
+      <minPos>214</minPos>
+    </beatChart>
+    <beatChart cmper="4" inci="6">
+      <dur>2816</dur>
+      <pos>271</pos>
+      <endPos>303</endPos>
+      <minPos>278</minPos>
+    </beatChart>
+    <beatChart cmper="4" inci="7">
+      <dur>3072</dur>
+      <pos>303</pos>
+      <endPos>355</endPos>
+      <minPos>321</minPos>
+    </beatChart>
+    <beatChart cmper="5" inci="0">
+      <control>
+        <totalDur>3584</totalDur>
+        <totalWidth>355</totalWidth>
+        <minWidth>364</minWidth>
+        <allotWidth>477</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="5" inci="1">
+      <endPos>69</endPos>
+    </beatChart>
+    <beatChart cmper="5" inci="2">
+      <dur>768</dur>
+      <pos>69</pos>
+      <endPos>101</endPos>
+      <minPos>64</minPos>
+    </beatChart>
+    <beatChart cmper="5" inci="3">
+      <dur>1024</dur>
+      <pos>101</pos>
+      <endPos>170</endPos>
+      <minPos>107</minPos>
+    </beatChart>
+    <beatChart cmper="5" inci="4">
+      <dur>1792</dur>
+      <pos>170</pos>
+      <endPos>202</endPos>
+      <minPos>171</minPos>
+    </beatChart>
+    <beatChart cmper="5" inci="5">
+      <dur>2048</dur>
+      <pos>202</pos>
+      <endPos>271</endPos>
+      <minPos>214</minPos>
+    </beatChart>
+    <beatChart cmper="5" inci="6">
+      <dur>2816</dur>
+      <pos>271</pos>
+      <endPos>303</endPos>
+      <minPos>278</minPos>
+    </beatChart>
+    <beatChart cmper="5" inci="7">
+      <dur>3072</dur>
+      <pos>303</pos>
+      <endPos>355</endPos>
+      <minPos>321</minPos>
+    </beatChart>
+    <beatChart cmper="6" inci="0">
+      <control>
+        <totalDur>3584</totalDur>
+        <totalWidth>321</totalWidth>
+        <minWidth>332</minWidth>
+        <allotWidth>803</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="6" inci="1">
+      <endPos>69</endPos>
+    </beatChart>
+    <beatChart cmper="6" inci="2">
+      <dur>768</dur>
+      <pos>69</pos>
+      <endPos>89</endPos>
+      <minPos>64</minPos>
+    </beatChart>
+    <beatChart cmper="6" inci="3">
+      <dur>896</dur>
+      <pos>89</pos>
+      <endPos>121</endPos>
+      <minPos>114</minPos>
+    </beatChart>
+    <beatChart cmper="6" inci="4">
+      <dur>1152</dur>
+      <pos>121</pos>
+      <endPos>190</endPos>
+      <minPos>157</minPos>
+    </beatChart>
+    <beatChart cmper="6" inci="5">
+      <dur>1920</dur>
+      <pos>190</pos>
+      <endPos>210</endPos>
+      <minPos>221</minPos>
+    </beatChart>
+    <beatChart cmper="6" inci="6">
+      <dur>2048</dur>
+      <pos>210</pos>
+      <endPos>321</endPos>
+      <minPos>271</minPos>
+    </beatChart>
     <beatChart cmper="7" inci="0">
       <control>
         <totalDur>3584</totalDur>
-        <totalWidth>335</totalWidth>
-        <minWidth>339</minWidth>
-        <allotWidth>838</allotWidth>
+        <totalWidth>321</totalWidth>
+        <minWidth>290</minWidth>
+        <allotWidth>803</allotWidth>
       </control>
     </beatChart>
     <beatChart cmper="7" inci="1">
@@ -1570,14 +1751,8 @@
     <beatChart cmper="7" inci="7">
       <dur>1408</dur>
       <pos>179</pos>
-      <endPos>315</endPos>
-      <minPos>293</minPos>
-    </beatChart>
-    <beatChart cmper="7" inci="8">
-      <dur>3456</dur>
-      <pos>315</pos>
-      <endPos>335</endPos>
-      <minPos>339</minPos>
+      <endPos>321</endPos>
+      <minPos>290</minPos>
     </beatChart>
     <beatChart cmper="8" inci="0">
       <control>
@@ -1649,6 +1824,94 @@
       <pos>403</pos>
       <endPos>447</endPos>
       <minPos>514</minPos>
+    </beatChart>
+    <beatChart cmper="9" inci="0">
+      <control>
+        <totalDur>4096</totalDur>
+        <totalWidth>344</totalWidth>
+        <minWidth>250</minWidth>
+        <allotWidth>462</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="9" inci="1">
+      <endPos>52</endPos>
+    </beatChart>
+    <beatChart cmper="9" inci="2">
+      <dur>512</dur>
+      <pos>52</pos>
+      <endPos>84</endPos>
+      <minPos>43</minPos>
+    </beatChart>
+    <beatChart cmper="9" inci="3">
+      <dur>768</dur>
+      <pos>84</pos>
+      <endPos>136</endPos>
+      <minPos>86</minPos>
+    </beatChart>
+    <beatChart cmper="9" inci="4">
+      <dur>1280</dur>
+      <pos>136</pos>
+      <endPos>220</endPos>
+      <minPos>129</minPos>
+    </beatChart>
+    <beatChart cmper="9" inci="5">
+      <dur>2304</dur>
+      <pos>220</pos>
+      <endPos>344</endPos>
+      <minPos>166</minPos>
+    </beatChart>
+    <beatChart cmper="10" inci="0">
+      <control>
+        <totalDur>3072</totalDur>
+        <totalWidth>336</totalWidth>
+        <minWidth>344</minWidth>
+        <allotWidth>452</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="10" inci="1">
+      <endPos>52</endPos>
+    </beatChart>
+    <beatChart cmper="10" inci="2">
+      <dur>512</dur>
+      <pos>52</pos>
+      <endPos>84</endPos>
+      <minPos>43</minPos>
+    </beatChart>
+    <beatChart cmper="10" inci="3">
+      <dur>768</dur>
+      <pos>84</pos>
+      <endPos>136</endPos>
+      <minPos>86</minPos>
+    </beatChart>
+    <beatChart cmper="10" inci="4">
+      <dur>1280</dur>
+      <pos>136</pos>
+      <endPos>168</endPos>
+      <minPos>129</minPos>
+    </beatChart>
+    <beatChart cmper="10" inci="5">
+      <dur>1536</dur>
+      <pos>168</pos>
+      <endPos>220</endPos>
+      <minPos>172</minPos>
+    </beatChart>
+    <beatChart cmper="10" inci="6">
+      <dur>2048</dur>
+      <pos>220</pos>
+      <endPos>252</endPos>
+      <minPos>215</minPos>
+    </beatChart>
+    <beatChart cmper="10" inci="7">
+      <dur>2304</dur>
+      <pos>252</pos>
+      <endPos>284</endPos>
+      <minPos>258</minPos>
+    </beatChart>
+    <beatChart cmper="10" inci="8">
+      <dur>2560</dur>
+      <pos>284</pos>
+      <endPos>336</endPos>
+      <minPos>301</minPos>
     </beatChart>
     <durAllot cmper="0">
       <allotment>84</allotment>
@@ -1730,20 +1993,6 @@
       <family>0</family>
       <name>Broadway Copyist Text</name>
     </fontName>
-    <fontName cmper="11">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Lucida Grande</name>
-    </fontName>
-    <fontName cmper="12">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>4095</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Symbol</name>
-    </fontName>
     <fontName cmper="13">
       <charsetBank>Mac</charsetBank>
       <charsetVal>0</charsetVal>
@@ -1757,6 +2006,20 @@
       <pitch>0</pitch>
       <family>0</family>
       <name>Engraver Text T</name>
+    </fontName>
+    <fontName cmper="15">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Lucida Grande</name>
+    </fontName>
+    <fontName cmper="16">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Symbol</name>
     </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
@@ -1829,6 +2092,14 @@
     <frameSpec cmper="18" inci="0">
       <startEntry>109</startEntry>
       <endEntry>113</endEntry>
+    </frameSpec>
+    <frameSpec cmper="19" inci="0">
+      <startEntry>114</startEntry>
+      <endEntry>115</endEntry>
+    </frameSpec>
+    <frameSpec cmper="20" inci="0">
+      <startEntry>116</startEntry>
+      <endEntry>124</endEntry>
     </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
@@ -1931,6 +2202,17 @@
       </range>
     </instUsed>
     <instUsed cmper="5" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="6" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
       <distFromTop>0</distFromTop>
@@ -2156,12 +2438,12 @@
     </metaClef>
     <metaTimeSig cmper="45">
       <timeSig>
-        <beats>4</beats>
-        <divbeat>1024</divbeat>
+        <beats>2</beats>
+        <divbeat>1536</divbeat>
       </timeSig>
       <dispSig>
-        <beats>4</beats>
-        <divbeat>1024</divbeat>
+        <beats>2</beats>
+        <divbeat>1536</divbeat>
       </dispSig>
     </metaTimeSig>
     <metaTuplet cmper="45">
@@ -2192,60 +2474,60 @@
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="2">
-      <width>600</width>
+      <width>196</width>
       <beats>1</beats>
       <divbeat>1536</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
+      <posMode>beatchartPlusPos</posMode>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="3">
-      <width>600</width>
+      <width>196</width>
       <beats>3</beats>
       <divbeat>512</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
+      <posMode>beatchartPlusPos</posMode>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="4">
-      <width>600</width>
+      <width>420</width>
       <beats>15</beats>
       <divbeat>512</divbeat>
       <dispBeats>7</dispBeats>
       <dispDivbeat>512</dispDivbeat>
       <altNumTsig/>
-      <posMode>timesigPlusPos</posMode>
+      <posMode>beatchartPlusPos</posMode>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="5">
-      <width>600</width>
+      <width>420</width>
       <beats>10</beats>
       <divbeat>512</divbeat>
       <dispBeats>7</dispBeats>
       <dispDivbeat>512</dispDivbeat>
       <altNumTsig/>
-      <posMode>timesigPlusPos</posMode>
+      <posMode>beatchartPlusPos</posMode>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="6">
-      <width>600</width>
+      <width>424</width>
       <beats>1</beats>
       <divbeat>512</divbeat>
       <dispBeats>7</dispBeats>
       <dispDivbeat>512</dispDivbeat>
       <altNumTsig/>
-      <posMode>timesigPlusPos</posMode>
+      <posMode>beatchartPlusPos</posMode>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="7">
-      <width>481</width>
+      <width>464</width>
       <beats>12</beats>
       <divbeat>512</divbeat>
       <dispBeats>7</dispBeats>
@@ -2266,9 +2548,19 @@
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="9">
-      <width>590</width>
+      <width>387</width>
       <beats>4</beats>
       <divbeat>1024</divbeat>
+      <dispBeats>7</dispBeats>
+      <dispDivbeat>512</dispDivbeat>
+      <posMode>beatchartPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
+    <measSpec cmper="10">
+      <width>412</width>
+      <beats>2</beats>
+      <divbeat>1536</divbeat>
       <dispBeats>7</dispBeats>
       <dispDivbeat>512</dispDivbeat>
       <posMode>beatchartPlusPos</posMode>
@@ -2897,7 +3189,7 @@
     <staffSystemSpec cmper="2">
       <startMeas>2</startMeas>
       <endMeas>6</endMeas>
-      <horzPercent>6892</horzPercent>
+      <horzPercent>13425</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-68</top>
@@ -2909,7 +3201,7 @@
     <staffSystemSpec cmper="3">
       <startMeas>6</startMeas>
       <endMeas>8</endMeas>
-      <horzPercent>17909</horzPercent>
+      <horzPercent>21802</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-68</top>
@@ -2933,7 +3225,19 @@
     <staffSystemSpec cmper="5">
       <startMeas>9</startMeas>
       <endMeas>10</endMeas>
-      <horzPercent>41254</horzPercent>
+      <horzPercent>61034</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-68</top>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-76</distanceToPrev>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="6">
+      <startMeas>10</startMeas>
+      <endMeas>11</endMeas>
+      <horzPercent>57330</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-68</top>
@@ -3538,6 +3842,11 @@
       <clefPercent>75</clefPercent>
       <frame1>18</frame1>
     </gfhold>
+    <gfhold cmper1="1" cmper2="10">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>20</frame1>
+    </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
@@ -3583,6 +3892,11 @@
       <clefPercent>75</clefPercent>
       <frame1>17</frame1>
     </gfhold>
+    <gfhold cmper1="32767" cmper2="10">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>19</frame1>
+    </gfhold>
     <secBeamBreak entnum="81">
       <do16th/>
       <do32nd/>
@@ -3608,6 +3922,18 @@
       <beamThrough/>
     </secBeamBreak>
     <secBeamBreak entnum="86">
+      <do16th/>
+      <do32nd/>
+      <do64th/>
+      <do128th/>
+      <do256th/>
+      <do512th/>
+      <do1024th/>
+      <do2048th/>
+      <do4096th/>
+      <beamThrough/>
+    </secBeamBreak>
+    <secBeamBreak entnum="122">
       <do16th/>
       <do32nd/>
       <do64th/>
@@ -4697,7 +5023,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="108" prev="107" next="0">
+    <entry entnum="108" prev="107" next="114">
       <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -4752,11 +5078,134 @@
       <isValid/>
       <floatRest/>
     </entry>
-    <entry entnum="113" prev="112" next="0">
+    <entry entnum="113" prev="112" next="116">
       <dura>1792</dura>
       <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
+    </entry>
+    <entry entnum="114" prev="108" next="115">
+      <dura>1536</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="115" prev="114" next="0">
+      <dura>1536</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="116" prev="113" next="117">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="117" prev="116" next="118">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="118" prev="117" next="119">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="119" prev="118" next="120">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="120" prev="119" next="121">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="121" prev="120" next="122">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="122" prev="121" next="124">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <secBeam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="124" prev="122" next="0">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
   </entries>
   <texts>
