@@ -22,12 +22,15 @@
 #pragma once
 
 #include "musx/util/Logger.h"
+#include "musx/util/Fraction.h"
 
 #include "BaseClasses.h"
 // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
 namespace dom {
+
+class EntryInfoPtr;
 
 namespace others {
 
@@ -56,7 +59,11 @@ public:
 
         InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
         MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
+        Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
         EntryNumber entryNumber{};      ///< Entry number (xml node is `<entryNum>`)
+
+        /// @brief Caculates the edu position of the endpoint, based on whether it is an edu or an entry
+        Edu calcEduPosition() const;
 
         bool requireAllFields() const override { return false; }
         static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -168,6 +175,13 @@ public:
     NoteNumber startNoteId{};                       ///< If non-zero, the specific note with the entry that this shape starts from. (xml node is `<startNoteID>`)
     NoteNumber endNoteId{};                         ///< If non-zero, the specific note with the entry that this shape ends on. (xml node is `<endNoteID>`)
     Cmper lineStyleId{};                            ///< If non-zero, the custom line for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)
+
+    /// @brief Calculates if the smart shape applies to the specified entry.
+    ///
+    /// This function is most useful for shape types like ottavas and hairpins. It does
+    /// not check layers or staves in between start and end staves, so it may be less useful for slurs.
+    /// @param entryInfo The entry to check
+    bool calcAppliesTo(const EntryInfoPtr& entryInfo) const;
 
     void integrityCheck() override
     {

@@ -312,6 +312,7 @@ NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
                 return note;
             }
         }
+        /// @todo check for enharmonic equivalents in separate loop
     }
     return NoteInfoPtr();
 }
@@ -1610,6 +1611,58 @@ bool others::RepeatEndingStart::calcIsOpen() const
                     return (backRepeat->leftVPos - backRepeat->rightVPos) == repeatOptions->bracketHookLen;
                 }
                 return true;
+            }
+        }
+    }
+    return false;
+}
+
+// **********************
+// ***** SmartShape *****
+// **********************
+
+Edu others::SmartShape::EndPoint::calcEduPosition() const
+{
+    if (!entryNumber) return eduPosition;
+    std::optional<Edu> result;
+    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), staffId, measId)) {
+        gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) {
+            if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
+                result = entryInfo->elapsedDuration.calcEduDuration();
+                return false; // stop iterating
+            }
+            return true;
+        });
+    }
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("SmartShape at Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId)
+            + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
+    }
+    return result.value_or(0);
+}
+
+bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
+{
+    auto entry = entryInfo->getEntry();
+    if (entryBased) {
+        if (entry->getEntryNumber() == startTermSeg->endPoint->entryNumber) return true;
+        if (entry->getEntryNumber() == endTermSeg->endPoint->entryNumber) return true;
+    }
+    if (entryInfo.getStaff() != startTermSeg->endPoint->staffId && entryInfo.getStaff() != endTermSeg->endPoint->staffId) {
+        return false;
+    }
+    if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entry->getPartId(), entryInfo.getMeasure())) {
+        if (meas->hasSmartShape) {
+            auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entry->getPartId(), entryInfo.getMeasure());
+            for (const auto& asgn : shapeAssigns) {
+                if (asgn->shapeNum == getCmper()) {
+                    if (asgn->centerShapeNum) return true;
+                    if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
+                        return entryInfo->elapsedDuration.calcEduDuration() >= startTermSeg->endPoint->calcEduPosition();
+                    } else if (entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
+                        return entryInfo->elapsedDuration.calcEduDuration() <= endTermSeg->endPoint->calcEduPosition();
+                    }
+                }
             }
         }
     }

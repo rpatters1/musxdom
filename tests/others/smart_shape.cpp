@@ -184,4 +184,13 @@ TEST(SmartShape, Populate)
         EXPECT_EQ(smartShape->endNoteId, 2);
         EXPECT_EQ(smartShape->lineStyleId, 3);
     }
+    {
+        auto smartShape = others->get<others::SmartShape>(SCORE_PARTID, 3);
+        ASSERT_TRUE(smartShape) << "SmartShape with cmper 3 not found";
+
+        EXPECT_EQ(smartShape->shapeType, others::SmartShape::ShapeType::Crescendo);
+        EXPECT_FALSE(smartShape->entryBased);
+        EXPECT_EQ(smartShape->startTermSeg->endPoint->eduPosition, 0);
+        EXPECT_EQ(smartShape->endTermSeg->endPoint->eduPosition, 2048);
+    }
 }
