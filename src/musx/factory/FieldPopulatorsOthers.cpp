@@ -576,6 +576,7 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
 MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPoint, {
     {"inst", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
     {"meas", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
+    {"edu", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
     {"entryNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->entryNumber = e->getTextAs<EntryNumber>(); }},
 });
 

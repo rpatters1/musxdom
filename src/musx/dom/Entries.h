@@ -150,6 +150,7 @@ public:
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
+    bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
@@ -180,10 +181,6 @@ public:
      * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
      */
     std::pair<NoteType, int> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
-
-    /// @brief Calculates if an entry displays as a rest.
-    /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
-    bool calcDisplaysAsRest() const { return !isNote; }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
@@ -308,6 +305,10 @@ public:
     EntryInfoPtr getPreviousInBeamGroup() const
     { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(); }
 
+    /// @brief Calculates if an entry displays as a rest.
+    /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
+    bool calcDisplaysAsRest() const;
+
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
     bool calcUnbeamed() const
@@ -335,11 +336,46 @@ public:
     /// @brief Calculates the number of beams or flags on the entry.
     unsigned calcNumberOfBeams() const;
 
+    /// @brief Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
+    /// @return 0 if not beamed or no beam starts this entry; otherwise, the beam number
+    unsigned calcLowestBeamStart() const;
+
+    /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
+    /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
+    unsigned calcLowestBeamEnd() const;
+
+    /// @brief Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc.
+    /// @return 0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number
+    unsigned calcLowestBeamStub() const;
+
+    /// @brief Calculates if a beam stub on this entry would go left or right. It does not check that an entry actually has a beam stub.
+    /// Use #calcLowestBeamStub to discover if the entry has a beam stub.
+    /// @note This is a best approximation of Finale's behavior for default beam stub direction. No doubt there are edge cases
+    /// where it does not match.
+    /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
+    bool calcBeamStubIsLeft() const;
+
+    /// @brief Calculates if the current beam has any non-rests (i.e., notes) to the left of the current entry.
+    bool calcBeamNotesExistLeft() const
+    { return iterateNotesExistLeftOrRight<&EntryInfoPtr::getPreviousInBeamGroup>(); }
+
+    /// @brief Calculates if the current beam has any non-rests (i.e., notes) to the right of the current entry.
+    bool calcBeamNotesExistRight() const
+    { return iterateNotesExistLeftOrRight<&EntryInfoPtr::getNextInBeamGroup>(); }
+
 private:
     bool canBeBeamed() const;
-    
+
+    unsigned calcVisibleBeams() const;
+
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+    std::optional<unsigned> iterateFindRestsInSecondaryBeam(const EntryInfoPtr nextOrPrevInBeam) const;
+
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
     EntryInfoPtr iteratePotentialEntryInBeam() const;
+
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+    bool iterateNotesExistLeftOrRight() const;
 
     EntryInfoPtr nextPotentialInBeam() const;
 

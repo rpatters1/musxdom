@@ -80,7 +80,7 @@ std::shared_ptr<Entry> Entry::getPrevious() const
 
 std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 {
-    if (duration <= 1 || duration >= 0x10000) {
+    if (duration < 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
     }
 
@@ -296,6 +296,11 @@ EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
     return next;
 }
 
+bool EntryInfoPtr::calcDisplaysAsRest() const
+{
+    return !(*this)->getEntry()->isNote;
+}
+
 NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
 {
     if ((*this)->getEntry()->isNote && src.getEntryInfo()->getEntry()->isNote) {
@@ -307,6 +312,7 @@ NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
                 return note;
             }
         }
+        /// @todo check for enharmonic equivalents in separate loop
     }
     return NoteInfoPtr();
 }
@@ -359,7 +365,156 @@ unsigned calcNumberOfBeamsInEdu(Edu duration)
 unsigned EntryInfoPtr::calcNumberOfBeams() const
 { return calcNumberOfBeamsInEdu((*this)->getEntry()->duration); }
 
-template<EntryInfoPtr(EntryInfoPtr::*Iterator)() const>
+unsigned EntryInfoPtr::calcVisibleBeams() const
+{
+    if (calcDisplaysAsRest()) {
+        if (auto opts = (*this)->getEntry()->getDocument()->getOptions()->get<options::BeamOptions>()) {
+            if (!opts->extendSecBeamsOverRests) {
+                return 1;
+            }
+        }
+    }
+    return calcNumberOfBeams();
+}
+
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const EntryInfoPtr nextOrPrevInBeam) const
+{
+    auto entry = (*this)->getEntry();
+    if (auto opts = entry->getDocument()->getOptions()->get<options::BeamOptions>()) {
+        if (!opts->extendSecBeamsOverRests) {
+            if (calcDisplaysAsRest()) {
+                return 0; // if *this* is a rest, it can't start or end a secondary beam
+            }
+            auto nextOrPrevInFrame = (this->*Iterator)();
+            while (true) {
+                assert(nextOrPrevInFrame); // should hit nextOrPrevInBeam before null.
+                if (nextOrPrevInFrame.calcDisplaysAsRest()) {
+                    if (calcNumberOfBeams() >= 2) {
+                        return 2; // rests always cut to 8th beam, so any secondary beam starts or ends
+                    }
+                }
+                if (nextOrPrevInFrame->getEntry()->getEntryNumber() == nextOrPrevInBeam->getEntry()->getEntryNumber()) {
+                    break;
+                }
+                nextOrPrevInFrame = (nextOrPrevInFrame.*Iterator)();
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+unsigned EntryInfoPtr::calcLowestBeamStart() const
+{
+    if (!canBeBeamed()) return 0;
+    auto prev = getPreviousInBeamGroup();
+    if (!prev) {
+        return getNextInBeamGroup() ? 1 : 0; // if this is the start of the beam, then the lowest is the primary (8th) beam.
+    }
+    if (auto restValue = iterateFindRestsInSecondaryBeam<&EntryInfoPtr::getPreviousSameV>(prev)) {
+        return restValue.value();
+    }
+    auto entry = (*this)->getEntry();
+    unsigned secondaryBreak = 0;
+    if (entry->secBeam) {
+        if (auto beamBreaks = entry->getDocument()->getDetails()->get<details::SecondaryBeamBreak>(entry->getPartId(), entry->getEntryNumber())) {
+            secondaryBreak = beamBreaks->calcLowestBreak();
+            if (secondaryBreak < 2) {
+                secondaryBreak = 0;
+            }
+        }
+    }
+    unsigned prevNumBeams = prev.calcVisibleBeams();
+    if (calcVisibleBeams() > prevNumBeams) {
+        if (!secondaryBreak || secondaryBreak > prevNumBeams + 1) {
+            secondaryBreak = prevNumBeams + 1;
+        }
+    }
+    return secondaryBreak;
+}
+
+unsigned EntryInfoPtr::calcLowestBeamEnd() const
+{
+    if (!canBeBeamed()) return 0;
+    auto next = getNextInBeamGroup();
+    if (!next) {
+        return getPreviousInBeamGroup() ? 1 : 0; // if this is the end of the beam, then the lowest is the primary (8th) beam.
+    }
+    if (auto restValue = iterateFindRestsInSecondaryBeam<&EntryInfoPtr::getNextSameV>(next)) {
+        return restValue.value();
+    }
+    unsigned numBeams = calcVisibleBeams();
+    unsigned nextSecondaryStart = next.calcLowestBeamStart();
+    if (nextSecondaryStart && nextSecondaryStart <= numBeams) {
+        return nextSecondaryStart;
+    }
+    unsigned nextNumBeams = next.calcVisibleBeams();
+    if (numBeams > nextNumBeams) {
+        return nextNumBeams + 1;
+    }
+    return 0;
+}
+
+unsigned EntryInfoPtr::calcLowestBeamStub() const
+{
+    if (unsigned lowestBeamStart = calcLowestBeamStart()) {
+        if (unsigned lowestBeamEnd = calcLowestBeamEnd()) {
+            return std::max(lowestBeamStart, lowestBeamEnd);
+        }
+    }
+    return 0;
+}
+
+bool EntryInfoPtr::calcBeamStubIsLeft() const
+{
+    auto entry = (*this)->getEntry();
+    if (entry->stemDetail) {
+        if (auto manual = entry->getDocument()->getDetails()->get<details::BeamStubDirection>(entry->getPartId(), entry->getEntryNumber())) {
+            return manual->isLeft();
+        }
+    }
+
+    auto prev = getPreviousInBeamGroup();
+    if (!prev) return false;  // beginning of beam points right
+    auto next = getNextInBeamGroup();
+    if (!next) return true;  // end of beam points left
+
+    unsigned numBeams = calcNumberOfBeams();
+    unsigned lowestStub = calcLowestBeamStub();
+    if (numBeams >= lowestStub) {
+        auto isSecondaryTerminator = [&](unsigned lowestTerminator, const EntryInfoPtr& neighbor) -> bool {
+            if (lowestTerminator < numBeams) {
+                return true;
+            }
+            if (lowestTerminator == numBeams && neighbor.calcNumberOfBeams() == numBeams) {
+                if (!neighbor->getEntry()->isNote) {
+                    // If we are not extending secondary beams over rests, then rests always cut to the 8th beam.
+                    // That means for this purpose the neighbor rest has only a single beam and therefore cannot be compared to the current.
+                    if (auto beamOpts = (*this)->getEntry()->getDocument()->getOptions()->get<options::BeamOptions>()) {
+                        if (!beamOpts->extendSecBeamsOverRests) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        };
+        if (isSecondaryTerminator(calcLowestBeamStart(), prev)) return false;   // beginning of 2ndary beam points right
+        if (isSecondaryTerminator(calcLowestBeamEnd(), next)) return true;      // end of 2ndary beam points left
+    }
+    
+    auto prevDots = calcNoteInfoFromEdu(prev->actualDuration.calcEduDuration()).second;
+    auto nextDots = calcNoteInfoFromEdu(next->actualDuration.calcEduDuration()).second;
+
+    if (prevDots || nextDots) {
+        return prevDots >= nextDots;
+    }
+
+    return false;
+}
+
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
 EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
 {
     EntryInfoPtr result = (this->*Iterator)();
@@ -382,6 +537,17 @@ EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
         } while (result && result->getEntry()->graceNote);
     }
     return result;
+}
+
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+bool EntryInfoPtr::iterateNotesExistLeftOrRight() const
+{
+    for (auto curr = (this->*Iterator)(); curr; curr = (curr.*Iterator)()) {
+        if (!curr.calcDisplaysAsRest()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 EntryInfoPtr EntryInfoPtr::nextPotentialInBeam() const
@@ -411,14 +577,14 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
     if (result) {
         auto thisRawEntry = (*this)->getEntry();
         auto resultEntry = result->getEntry();
-        if (thisRawEntry->calcDisplaysAsRest() || resultEntry->calcDisplaysAsRest()) {
+        if (calcDisplaysAsRest() || result.calcDisplaysAsRest()) {
             auto beamOpts = getFrame()->getDocument()->getOptions()->get<options::BeamOptions>();
             MUSX_ASSERT_IF(!beamOpts) {
                 throw std::logic_error("Document has no BeamOptions.");
             }
             auto searchForNoteFrom = [](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)() const) -> bool {
                 for (auto next = from; next; next = (next.*iterator)()) {
-                    if (!next->getEntry()->calcDisplaysAsRest()) {
+                    if (!next.calcDisplaysAsRest()) {
                         return true;
                     }
                 }
@@ -1445,6 +1611,58 @@ bool others::RepeatEndingStart::calcIsOpen() const
                     return (backRepeat->leftVPos - backRepeat->rightVPos) == repeatOptions->bracketHookLen;
                 }
                 return true;
+            }
+        }
+    }
+    return false;
+}
+
+// **********************
+// ***** SmartShape *****
+// **********************
+
+Edu others::SmartShape::EndPoint::calcEduPosition() const
+{
+    if (!entryNumber) return eduPosition;
+    std::optional<Edu> result;
+    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), staffId, measId)) {
+        gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) {
+            if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
+                result = entryInfo->elapsedDuration.calcEduDuration();
+                return false; // stop iterating
+            }
+            return true;
+        });
+    }
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("SmartShape at Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId)
+            + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
+    }
+    return result.value_or(0);
+}
+
+bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
+{
+    auto entry = entryInfo->getEntry();
+    if (entryBased) {
+        if (entry->getEntryNumber() == startTermSeg->endPoint->entryNumber) return true;
+        if (entry->getEntryNumber() == endTermSeg->endPoint->entryNumber) return true;
+    }
+    if (entryInfo.getStaff() != startTermSeg->endPoint->staffId && entryInfo.getStaff() != endTermSeg->endPoint->staffId) {
+        return false;
+    }
+    if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entry->getPartId(), entryInfo.getMeasure())) {
+        if (meas->hasSmartShape) {
+            auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entry->getPartId(), entryInfo.getMeasure());
+            for (const auto& asgn : shapeAssigns) {
+                if (asgn->shapeNum == getCmper()) {
+                    if (asgn->centerShapeNum) return true;
+                    if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
+                        return entryInfo->elapsedDuration.calcEduDuration() >= startTermSeg->endPoint->calcEduPosition();
+                    } else if (entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
+                        return entryInfo->elapsedDuration.calcEduDuration() <= endTermSeg->endPoint->calcEduPosition();
+                    }
+                }
             }
         }
     }

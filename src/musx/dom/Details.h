@@ -122,6 +122,32 @@ public:
 };
 
 /**
+ * @class BeamStubDirection
+ * @brief Specifies the direction for beam stubs (if they are manually overridden.)
+ *
+ * This class is identified by the XML node name "beamStub".
+ */
+class BeamStubDirection : public EntryDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit BeamStubDirection(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum)
+    {
+    }
+
+    unsigned mask{};        ///< Composite mask of beam stubs, derived from `<do8th>` through `<do4096th>` tags.
+                            ///< A value of `true` means left and a value of `false` means right.
+                            ///< Because the Finale U.I. is a single handle, these masks are generally all on or all off.
+
+    /// @brief True if the beam stub(s) point left.
+    bool isLeft() const { return mask != 0; }
+
+    constexpr static std::string_view XmlNodeName = "beamStub"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<BeamStubDirection>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class CrossStaff
  * @brief Represents a cross-staff assignment for the note, if any.
  *

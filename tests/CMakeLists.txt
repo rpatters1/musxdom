@@ -93,6 +93,7 @@ add_executable(musxdomtests
     others/text_block.cpp
     others/text.cpp
     # details
+	details/beam_stubs.cpp
 	details/gfhold.cpp
 	details/secondary_beams.cpp
 	details/staff_group.cpp

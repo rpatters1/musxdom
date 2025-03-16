@@ -113,3 +113,63 @@ TEST(SecondaryBeamBreakTest, NoBeamsSpecified)
         integrity_error
     );
 }
+
+TEST(SecondaryBeamBreakTest, DetectSecondaryBeams)
+{
+    std::vector<char> fileXml;
+    musxtest::readFile(musxtest::getInputPath() / "secbeams.enigmaxml", fileXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fileXml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    auto frame = gfhold->createEntryFrame(0);
+    ASSERT_TRUE(frame);
+    ASSERT_GE(frame->getEntries().size(), 8);
+
+    auto checkSecBeams = [&](const EntryInfoPtr& entryInfo, unsigned expectedStart, unsigned expectedEnd)
+    {
+        EXPECT_EQ(entryInfo.calcLowestBeamStart(), expectedStart);
+        EXPECT_EQ(entryInfo.calcLowestBeamEnd(), expectedEnd);
+    };
+
+    checkSecBeams(EntryInfoPtr(frame, 0), 1, 0);
+    checkSecBeams(EntryInfoPtr(frame, 1), 0, 3);
+    checkSecBeams(EntryInfoPtr(frame, 2), 3, 0);
+    checkSecBeams(EntryInfoPtr(frame, 3), 0, 2);
+    checkSecBeams(EntryInfoPtr(frame, 4), 2, 0);
+    checkSecBeams(EntryInfoPtr(frame, 5), 0, 3);
+    checkSecBeams(EntryInfoPtr(frame, 6), 3, 0);
+    checkSecBeams(EntryInfoPtr(frame, 7), 0, 1);
+}
+
+TEST(SecondaryBeamBreakTest, DetectBeamStubs)
+{
+    std::vector<char> fileXml;
+    musxtest::readFile(musxtest::getInputPath() / "secbeams.enigmaxml", fileXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fileXml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+    ASSERT_TRUE(gfhold);
+    auto frame = gfhold->createEntryFrame(0);
+    ASSERT_TRUE(frame);
+    ASSERT_GE(frame->getEntries().size(), 6);
+
+    auto checkBeamStubs = [&](const EntryInfoPtr& entryInfo, unsigned expectedStub, unsigned expectedBeams)
+    {
+        EXPECT_EQ(entryInfo.calcLowestBeamStub(), expectedStub);
+        EXPECT_EQ(entryInfo.calcNumberOfBeams(), expectedBeams);
+    };
+
+    checkBeamStubs(EntryInfoPtr(frame, 0), 0, 1);
+    checkBeamStubs(EntryInfoPtr(frame, 1), 2, 2);
+    checkBeamStubs(EntryInfoPtr(frame, 2), 0, 2);
+    checkBeamStubs(EntryInfoPtr(frame, 3), 3, 3);
+    checkBeamStubs(EntryInfoPtr(frame, 4), 2, 2);
+    checkBeamStubs(EntryInfoPtr(frame, 5), 2, 3);
+}
