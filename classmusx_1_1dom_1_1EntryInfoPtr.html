@@ -190,6 +190,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPreviousInBeamGroup</b> () const</td></tr>
 <tr class="memdesc:a02ed261c6800b9db11067074cae23b47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the prevsiou entry in a beamed group or nullptr if the entry is not beamed or is the first in the group. <br /></td></tr>
 <tr class="separator:a02ed261c6800b9db11067074cae23b47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91dd4f09e8c863732cfa52f13275995b" id="r_a91dd4f09e8c863732cfa52f13275995b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b">calcDisplaysAsRest</a> () const</td></tr>
+<tr class="memdesc:a91dd4f09e8c863732cfa52f13275995b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if an entry displays as a rest.  <br /></td></tr>
+<tr class="separator:a91dd4f09e8c863732cfa52f13275995b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accb023218f8bfd19cd3b3c4b82de530c" id="r_accb023218f8bfd19cd3b3c4b82de530c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#accb023218f8bfd19cd3b3c4b82de530c">calcUnbeamed</a> () const</td></tr>
 <tr class="memdesc:accb023218f8bfd19cd3b3c4b82de530c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is an unbeamed entry.  <br /></td></tr>
 <tr class="separator:accb023218f8bfd19cd3b3c4b82de530c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,6 +210,26 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsBeamStart</b> (
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams</b> () const</td></tr>
 <tr class="memdesc:a8149bc295e394a775747727cf3d9a5c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of beams or flags on the entry. <br /></td></tr>
 <tr class="separator:a8149bc295e394a775747727cf3d9a5c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6697471c6b8e1765b3e81e4daf1e66a0" id="r_a6697471c6b8e1765b3e81e4daf1e66a0"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a6697471c6b8e1765b3e81e4daf1e66a0">calcLowestBeamStart</a> () const</td></tr>
+<tr class="memdesc:a6697471c6b8e1765b3e81e4daf1e66a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.  <br /></td></tr>
+<tr class="separator:a6697471c6b8e1765b3e81e4daf1e66a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a732360a72b106e98b7735f3991b9e173" id="r_a732360a72b106e98b7735f3991b9e173"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a732360a72b106e98b7735f3991b9e173">calcLowestBeamEnd</a> () const</td></tr>
+<tr class="memdesc:a732360a72b106e98b7735f3991b9e173"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.  <br /></td></tr>
+<tr class="separator:a732360a72b106e98b7735f3991b9e173"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b2706891a0d330518cc5a85fbf0c8aa" id="r_a5b2706891a0d330518cc5a85fbf0c8aa"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a5b2706891a0d330518cc5a85fbf0c8aa">calcLowestBeamStub</a> () const</td></tr>
+<tr class="memdesc:a5b2706891a0d330518cc5a85fbf0c8aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc.  <br /></td></tr>
+<tr class="separator:a5b2706891a0d330518cc5a85fbf0c8aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf09eb8a3925a1799ff4dad693ed7c5e" id="r_adf09eb8a3925a1799ff4dad693ed7c5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#adf09eb8a3925a1799ff4dad693ed7c5e">calcBeamStubIsLeft</a> () const</td></tr>
+<tr class="memdesc:adf09eb8a3925a1799ff4dad693ed7c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if a beam stub on this entry would go left or right. It does not check that an entry actually has a beam stub. Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a5b2706891a0d330518cc5a85fbf0c8aa" title="Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub,...">calcLowestBeamStub</a> to discover if the entry has a beam stub.  <br /></td></tr>
+<tr class="separator:adf09eb8a3925a1799ff4dad693ed7c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefc066d5cb115c43ffe4c0ddb002044e" id="r_aefc066d5cb115c43ffe4c0ddb002044e"><td class="memItemLeft" align="right" valign="top"><a id="aefc066d5cb115c43ffe4c0ddb002044e" name="aefc066d5cb115c43ffe4c0ddb002044e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamNotesExistLeft</b> () const</td></tr>
+<tr class="memdesc:aefc066d5cb115c43ffe4c0ddb002044e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the current beam has any non-rests (i.e., notes) to the left of the current entry. <br /></td></tr>
+<tr class="separator:aefc066d5cb115c43ffe4c0ddb002044e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a026535f9c3090358c0050efb478f8996" id="r_a026535f9c3090358c0050efb478f8996"><td class="memItemLeft" align="right" valign="top"><a id="a026535f9c3090358c0050efb478f8996" name="a026535f9c3090358c0050efb478f8996"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamNotesExistRight</b> () const</td></tr>
+<tr class="memdesc:a026535f9c3090358c0050efb478f8996"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the current beam has any non-rests (i.e., notes) to the right of the current entry. <br /></td></tr>
+<tr class="separator:a026535f9c3090358c0050efb478f8996"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ownership of the frame so that any instance of it keeps the frame alive without the need for circular references. </p>
@@ -257,6 +280,107 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="adf09eb8a3925a1799ff4dad693ed7c5e" name="adf09eb8a3925a1799ff4dad693ed7c5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf09eb8a3925a1799ff4dad693ed7c5e">&#9670;&#160;</a></span>calcBeamStubIsLeft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcBeamStubIsLeft </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if a beam stub on this entry would go left or right. It does not check that an entry actually has a beam stub. Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a5b2706891a0d330518cc5a85fbf0c8aa" title="Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub,...">calcLowestBeamStub</a> to discover if the entry has a beam stub. </p>
+<dl class="section note"><dt>Note</dt><dd>This is a best approximation of Finale's behavior for default beam stub direction. No doubt there are edge cases where it does not match. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if a beam stub would go left; false if it would go right or if no calculation is possible. </dd></dl>
+
+</div>
+</div>
+<a id="a91dd4f09e8c863732cfa52f13275995b" name="a91dd4f09e8c863732cfa52f13275995b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91dd4f09e8c863732cfa52f13275995b">&#9670;&#160;</a></span>calcDisplaysAsRest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcDisplaysAsRest </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if an entry displays as a rest. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
+
+</div>
+</div>
+<a id="a732360a72b106e98b7735f3991b9e173" name="a732360a72b106e98b7735f3991b9e173"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a732360a72b106e98b7735f3991b9e173">&#9670;&#160;</a></span>calcLowestBeamEnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned musx::dom::EntryInfoPtr::calcLowestBeamEnd </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 if not beamed or no beam ends this entry; otherwise, the beam number </dd></dl>
+
+</div>
+</div>
+<a id="a6697471c6b8e1765b3e81e4daf1e66a0" name="a6697471c6b8e1765b3e81e4daf1e66a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6697471c6b8e1765b3e81e4daf1e66a0">&#9670;&#160;</a></span>calcLowestBeamStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned musx::dom::EntryInfoPtr::calcLowestBeamStart </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 if not beamed or no beam starts this entry; otherwise, the beam number </dd></dl>
+
+</div>
+</div>
+<a id="a5b2706891a0d330518cc5a85fbf0c8aa" name="a5b2706891a0d330518cc5a85fbf0c8aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b2706891a0d330518cc5a85fbf0c8aa">&#9670;&#160;</a></span>calcLowestBeamStub()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned musx::dom::EntryInfoPtr::calcLowestBeamStub </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number </dd></dl>
+
+</div>
+</div>
 <a id="accb023218f8bfd19cd3b3c4b82de530c" name="accb023218f8bfd19cd3b3c4b82de530c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#accb023218f8bfd19cd3b3c4b82de530c">&#9670;&#160;</a></span>calcUnbeamed()</h2>
 
@@ -356,6 +480,7 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The found note or an null instance of <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a>. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>check for enharmonic equivalents in separate loop </dd></dl>
 
 </div>
 </div>

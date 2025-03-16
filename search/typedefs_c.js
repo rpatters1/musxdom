@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['registereddetails_0',['RegisteredDetails',['../namespacemusx_1_1factory.html#a38c71e067aaedc6b6870745ba5ce0280',1,'musx::factory']]],
+  ['registereddetails_0',['RegisteredDetails',['../namespacemusx_1_1factory.html#a4ad806d2902d7e8217f3e059fea90036',1,'musx::factory']]],
   ['registeredentries_1',['RegisteredEntries',['../namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b',1,'musx::factory']]],
   ['registeredoptions_2',['RegisteredOptions',['../namespacemusx_1_1factory.html#a50bc1132db2ba80ef7fe98705890270b',1,'musx::factory']]],
   ['registeredothers_3',['RegisteredOthers',['../namespacemusx_1_1factory.html#a44fbae5b794ed6c0461f376938bfdd82',1,'musx::factory']]],

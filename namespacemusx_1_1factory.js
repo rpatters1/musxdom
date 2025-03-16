@@ -12,7 +12,7 @@ var namespacemusx_1_1factory =
     [ "TextsFactory", "classmusx_1_1factory_1_1TextsFactory.html", null ],
     [ "TypeRegistry", "classmusx_1_1factory_1_1TypeRegistry.html", null ],
     [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
-    [ "RegisteredDetails", "namespacemusx_1_1factory.html#a38c71e067aaedc6b6870745ba5ce0280", null ],
+    [ "RegisteredDetails", "namespacemusx_1_1factory.html#a4ad806d2902d7e8217f3e059fea90036", null ],
     [ "RegisteredEntries", "namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b", null ],
     [ "RegisteredOptions", "namespacemusx_1_1factory.html#a50bc1132db2ba80ef7fe98705890270b", null ],
     [ "RegisteredOthers", "namespacemusx_1_1factory.html#a44fbae5b794ed6c0461f376938bfdd82", null ],

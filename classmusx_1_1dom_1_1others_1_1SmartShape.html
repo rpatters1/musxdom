@@ -210,6 +210,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SmartShape</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:a20fcbbb1d0ad5796cbd5f9ffca84c82a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a20fcbbb1d0ad5796cbd5f9ffca84c82a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43ee2d11faa58c363117cc0cdd843b7c" id="r_a43ee2d11faa58c363117cc0cdd843b7c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a43ee2d11faa58c363117cc0cdd843b7c">calcAppliesTo</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;entryInfo) const</td></tr>
+<tr class="memdesc:a43ee2d11faa58c363117cc0cdd843b7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the smart shape applies to the specified entry.  <br /></td></tr>
+<tr class="separator:a43ee2d11faa58c363117cc0cdd843b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7f42fa6bbef8ea124fb233a3bd7ab2f" id="r_ac7f42fa6bbef8ea124fb233a3bd7ab2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#ac7f42fa6bbef8ea124fb233a3bd7ab2f">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:ac7f42fa6bbef8ea124fb233a3bd7ab2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:ac7f42fa6bbef8ea124fb233a3bd7ab2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -428,6 +431,32 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a43ee2d11faa58c363117cc0cdd843b7c" name="a43ee2d11faa58c363117cc0cdd843b7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43ee2d11faa58c363117cc0cdd843b7c">&#9670;&#160;</a></span>calcAppliesTo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::SmartShape::calcAppliesTo </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>entryInfo</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if the smart shape applies to the specified entry. </p>
+<p>This function is most useful for shape types like ottavas and hairpins. It does not check layers or staves in between start and end staves, so it may be less useful for slurs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entryInfo</td><td>The entry to check </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ac7f42fa6bbef8ea124fb233a3bd7ab2f" name="ac7f42fa6bbef8ea124fb233a3bd7ab2f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7f42fa6bbef8ea124fb233a3bd7ab2f">&#9670;&#160;</a></span>integrityCheck()</h2>
 

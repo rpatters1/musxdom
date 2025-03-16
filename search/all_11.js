@@ -12,7 +12,7 @@ var searchData=
   ['referencewidth_9',['referenceWidth',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#ac2d0e7a15a3c084b4582f6d3e0b5215b',1,'musx::dom::options::MusicSpacingOptions']]],
   ['refline_10',['RefLine',['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371aaccc4ff44a1eeebdae36465ad7bfbe60',1,'musx::dom::others']]],
   ['region_11',['region',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a70042b114ec188eebc96169311c3020b',1,'musx::dom::others::MeasureNumberRegion']]],
-  ['registereddetails_12',['RegisteredDetails',['../namespacemusx_1_1factory.html#a38c71e067aaedc6b6870745ba5ce0280',1,'musx::factory']]],
+  ['registereddetails_12',['RegisteredDetails',['../namespacemusx_1_1factory.html#a4ad806d2902d7e8217f3e059fea90036',1,'musx::factory']]],
   ['registeredentries_13',['RegisteredEntries',['../namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b',1,'musx::factory']]],
   ['registeredoptions_14',['RegisteredOptions',['../namespacemusx_1_1factory.html#a50bc1132db2ba80ef7fe98705890270b',1,'musx::factory']]],
   ['registeredothers_15',['RegisteredOthers',['../namespacemusx_1_1factory.html#a44fbae5b794ed6c0461f376938bfdd82',1,'musx::factory']]],

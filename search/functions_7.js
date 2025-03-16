@@ -7,13 +7,14 @@ var searchData=
   ['isbuiltin_4',['isBuiltIn',['../classmusx_1_1dom_1_1KeySignature.html#a49c630a5adbb73e575424c4678db7c83',1,'musx::dom::KeySignature']]],
   ['iscommontime_5',['isCommonTime',['../classmusx_1_1dom_1_1TimeSignature.html#ac07419f0f6ee39abfa8ee17c020d2a31',1,'musx::dom::TimeSignature']]],
   ['iscuttime_6',['isCutTime',['../classmusx_1_1dom_1_1TimeSignature.html#a549bee9b0147ed3ec67855faa67993c4',1,'musx::dom::TimeSignature']]],
-  ['islinear_7',['isLinear',['../classmusx_1_1dom_1_1KeySignature.html#a3ea0ce268d5f02f11ab41151461b448f',1,'musx::dom::KeySignature']]],
-  ['ismajor_8',['isMajor',['../classmusx_1_1dom_1_1KeySignature.html#acda0305bc2f61b1bf734baa69f6a6d70',1,'musx::dom::KeySignature']]],
-  ['isminor_9',['isMinor',['../classmusx_1_1dom_1_1KeySignature.html#a98167d243969551031f85e34b11a6562',1,'musx::dom::KeySignature']]],
-  ['isnonlinear_10',['isNonLinear',['../classmusx_1_1dom_1_1KeySignature.html#abadbb6a5913f0869fe40f4385f750874',1,'musx::dom::KeySignature']]],
-  ['issame_11',['issame',['../classmusx_1_1dom_1_1KeySignature.html#abaa1f32c8341eb8893b4334596121518',1,'musx::dom::KeySignature::isSame()'],['../classmusx_1_1dom_1_1TimeSignature.html#a81bb63d77b0bbced77d5a4dc6c5b0298',1,'musx::dom::TimeSignature::isSame()']]],
-  ['issameentry_12',['isSameEntry',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795',1,'musx::dom::EntryInfoPtr']]],
-  ['issamenote_13',['isSameNote',['../classmusx_1_1dom_1_1NoteInfoPtr.html#a44670e047067bd603fdb709fa695e2a0',1,'musx::dom::NoteInfoPtr']]],
-  ['isscore_14',['isScore',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aef38a46b8dbac91906cd353ea2ef2830',1,'musx::dom::others::PartDefinition']]],
-  ['iterateentries_15',['iterateentries',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#a1be8c74339c764144105e6ea04804d89',1,'musx::dom::details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)'],['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#ac7a86984e81b22c24f56e8b696388e7b',1,'musx::dom::details::GFrameHold::iterateEntries(std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)']]]
+  ['isleft_7',['isLeft',['../classmusx_1_1dom_1_1details_1_1BeamStubDirection.html#af47834d440253be3df779d98a2cfdbe0',1,'musx::dom::details::BeamStubDirection']]],
+  ['islinear_8',['isLinear',['../classmusx_1_1dom_1_1KeySignature.html#a3ea0ce268d5f02f11ab41151461b448f',1,'musx::dom::KeySignature']]],
+  ['ismajor_9',['isMajor',['../classmusx_1_1dom_1_1KeySignature.html#acda0305bc2f61b1bf734baa69f6a6d70',1,'musx::dom::KeySignature']]],
+  ['isminor_10',['isMinor',['../classmusx_1_1dom_1_1KeySignature.html#a98167d243969551031f85e34b11a6562',1,'musx::dom::KeySignature']]],
+  ['isnonlinear_11',['isNonLinear',['../classmusx_1_1dom_1_1KeySignature.html#abadbb6a5913f0869fe40f4385f750874',1,'musx::dom::KeySignature']]],
+  ['issame_12',['issame',['../classmusx_1_1dom_1_1KeySignature.html#abaa1f32c8341eb8893b4334596121518',1,'musx::dom::KeySignature::isSame()'],['../classmusx_1_1dom_1_1TimeSignature.html#a81bb63d77b0bbced77d5a4dc6c5b0298',1,'musx::dom::TimeSignature::isSame()']]],
+  ['issameentry_13',['isSameEntry',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795',1,'musx::dom::EntryInfoPtr']]],
+  ['issamenote_14',['isSameNote',['../classmusx_1_1dom_1_1NoteInfoPtr.html#a44670e047067bd603fdb709fa695e2a0',1,'musx::dom::NoteInfoPtr']]],
+  ['isscore_15',['isScore',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aef38a46b8dbac91906cd353ea2ef2830',1,'musx::dom::others::PartDefinition']]],
+  ['iterateentries_16',['iterateentries',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#a1be8c74339c764144105e6ea04804d89',1,'musx::dom::details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)'],['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#ac7a86984e81b22c24f56e8b696388e7b',1,'musx::dom::details::GFrameHold::iterateEntries(std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)']]]
 ];

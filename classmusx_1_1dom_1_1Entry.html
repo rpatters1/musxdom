@@ -137,9 +137,6 @@ Public Member Functions</h2></td></tr>
 std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcNoteInfo</b> () const</td></tr>
 <tr class="memdesc:a09381dad98251a4112cc9c48d9d5c8cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the NoteType and number of augmentation dots. (See <a class="el" href="namespacemusx_1_1dom.html#aa215062b953a2a9a8e0062df4d991cdd" title="Calculates the NoteType and number of dots in an Edu value.">calcNoteInfoFromEdu</a>.) <br /></td></tr>
 <tr class="separator:a09381dad98251a4112cc9c48d9d5c8cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8a23f9f7e817262263917a1fb12a218" id="r_ae8a23f9f7e817262263917a1fb12a218"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#ae8a23f9f7e817262263917a1fb12a218">calcDisplaysAsRest</a> () const</td></tr>
-<tr class="memdesc:ae8a23f9f7e817262263917a1fb12a218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if an entry displays as a rest.  <br /></td></tr>
-<tr class="separator:ae8a23f9f7e817262263917a1fb12a218"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8964412efe44b6569c970cecc4b4631f" id="r_a8964412efe44b6569c970cecc4b4631f"><td class="memItemLeft" align="right" valign="top"><a id="a8964412efe44b6569c970cecc4b4631f" name="a8964412efe44b6569c970cecc4b4631f"></a>
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcFraction</b> () const</td></tr>
 <tr class="memdesc:a8964412efe44b6569c970cecc4b4631f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the duration as a <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> of a whole note. <br /></td></tr>
@@ -227,6 +224,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>articDetail</b> {}</t
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>beam</b> {}</td></tr>
 <tr class="memdesc:ad829caa4f42eee2a016822e76d04f44c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.) <br /></td></tr>
 <tr class="separator:ad829caa4f42eee2a016822e76d04f44c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cf3b060d550fbc5d68764087052b97e" id="r_a3cf3b060d550fbc5d68764087052b97e"><td class="memItemLeft" align="right" valign="top"><a id="a3cf3b060d550fbc5d68764087052b97e" name="a3cf3b060d550fbc5d68764087052b97e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>secBeam</b> {}</td></tr>
+<tr class="memdesc:a3cf3b060d550fbc5d68764087052b97e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies a secondary beam break occurs on the entry. <br /></td></tr>
+<tr class="separator:a3cf3b060d550fbc5d68764087052b97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a973e08252facadef1e48b3763bef4404" id="r_a973e08252facadef1e48b3763bef4404"><td class="memItemLeft" align="right" valign="top"><a id="a973e08252facadef1e48b3763bef4404" name="a973e08252facadef1e48b3763bef4404"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>crossStaff</b> {}</td></tr>
 <tr class="memdesc:a973e08252facadef1e48b3763bef4404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies that at least one note in the entry has been cross staffed. <br /></td></tr>
@@ -365,34 +366,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae8a23f9f7e817262263917a1fb12a218" name="ae8a23f9f7e817262263917a1fb12a218"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8a23f9f7e817262263917a1fb12a218">&#9670;&#160;</a></span>calcDisplaysAsRest()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::Entry::calcDisplaysAsRest </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Calculates if an entry displays as a rest. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
-
-</div>
-</div>
 <a id="af6ad38939066bbbfe7e64403919375a1" name="af6ad38939066bbbfe7e64403919375a1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af6ad38939066bbbfe7e64403919375a1">&#9670;&#160;</a></span>getNext()</h2>
 

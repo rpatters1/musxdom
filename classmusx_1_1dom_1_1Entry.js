@@ -1,7 +1,6 @@
 var classmusx_1_1dom_1_1Entry =
 [
     [ "Entry", "classmusx_1_1dom_1_1Entry.html#a0d0212e38649a2376155155c477a138c", null ],
-    [ "calcDisplaysAsRest", "classmusx_1_1dom_1_1Entry.html#ae8a23f9f7e817262263917a1fb12a218", null ],
     [ "calcFraction", "classmusx_1_1dom_1_1Entry.html#a8964412efe44b6569c970cecc4b4631f", null ],
     [ "calcNoteInfo", "classmusx_1_1dom_1_1Entry.html#a09381dad98251a4112cc9c48d9d5c8cc", null ],
     [ "getEntryNumber", "classmusx_1_1dom_1_1Entry.html#a0d3cc0d02d7768f4153b0741d0a238ca", null ],
@@ -24,6 +23,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "notes", "classmusx_1_1dom_1_1Entry.html#a533b919d0efa81b9d26fb16ade0b7773", null ],
     [ "numNotes", "classmusx_1_1dom_1_1Entry.html#ab528469b556bcfba86cc0d5fe79955f1", null ],
     [ "performanceData", "classmusx_1_1dom_1_1Entry.html#addbada32311803e48b2b05238332c83c", null ],
+    [ "secBeam", "classmusx_1_1dom_1_1Entry.html#a3cf3b060d550fbc5d68764087052b97e", null ],
     [ "smartShapeDetail", "classmusx_1_1dom_1_1Entry.html#aa04b08c5cb6dbde8e24b7ff5be524c04", null ],
     [ "sorted", "classmusx_1_1dom_1_1Entry.html#ab76162a84d2dc54af058a611af01d51a", null ],
     [ "stemDetail", "classmusx_1_1dom_1_1Entry.html#a42b417cdb28ed1de83c586fb7c365069", null ],

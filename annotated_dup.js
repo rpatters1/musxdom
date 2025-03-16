@@ -7,6 +7,7 @@ var annotated_dup =
           [ "BaselineLyricsChorus", "classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html", "classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus" ],
           [ "BaselineLyricsSection", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection" ],
           [ "BaselineLyricsVerse", "classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html", "classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse" ],
+          [ "BeamStubDirection", "classmusx_1_1dom_1_1details_1_1BeamStubDirection.html", "classmusx_1_1dom_1_1details_1_1BeamStubDirection" ],
           [ "CrossStaff", "classmusx_1_1dom_1_1details_1_1CrossStaff.html", "classmusx_1_1dom_1_1details_1_1CrossStaff" ],
           [ "GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", "classmusx_1_1dom_1_1details_1_1GFrameHold" ],
           [ "LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html", "classmusx_1_1dom_1_1details_1_1LyricAssign" ],

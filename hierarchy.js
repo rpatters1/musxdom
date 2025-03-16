@@ -16,6 +16,7 @@ var hierarchy =
               [ "musx::dom::details::TieAlterStart", "classmusx_1_1dom_1_1details_1_1TieAlterStart.html", null ]
             ] ]
           ] ],
+          [ "musx::dom::details::BeamStubDirection", "classmusx_1_1dom_1_1details_1_1BeamStubDirection.html", null ],
           [ "musx::dom::details::LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html", [
             [ "musx::dom::details::LyricAssignChorus", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html", null ],
             [ "musx::dom::details::LyricAssignSection", "classmusx_1_1dom_1_1details_1_1LyricAssignSection.html", null ],

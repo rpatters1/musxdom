@@ -48,6 +48,7 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
       [ "DashContouSlurAuto", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa4ed0447d87781cf7c575fa10573baa38", null ]
     ] ],
     [ "SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a20fcbbb1d0ad5796cbd5f9ffca84c82a", null ],
+    [ "calcAppliesTo", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a43ee2d11faa58c363117cc0cdd843b7c", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShape.html#ac7f42fa6bbef8ea124fb233a3bd7ab2f", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1SmartShape.html#ae76cfe3870e5ce9c5b2297d608e35535", null ],
     [ "endNoteId", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a5fa83fc067c41f14b3cc56dc45af82dd", null ],
