@@ -195,6 +195,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::AcciAmountSharps,
     dom::others::AcciOrderFlats,
     dom::others::AcciOrderSharps,
+    dom::others::ArticulationDef,
     dom::others::ClefList,
     dom::others::FontDefinition,
     dom::others::Frame,

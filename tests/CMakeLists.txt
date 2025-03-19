@@ -71,6 +71,7 @@ add_executable(musxdomtests
     options/time_signature_options.cpp
     options/tuplet_options.cpp
     # others
+	others/articulation.cpp
 	others/enclosure.cpp
 	others/expression.cpp
 	others/fonts.cpp

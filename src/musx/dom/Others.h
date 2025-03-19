@@ -167,6 +167,94 @@ public:
 };
 
 /**
+ * @class ArticulationDef
+ * @brief Stores the properties and behaviors of articulation definitions.
+ *
+ * The playback "delta" and "percent" values are alternatives. For each type of playback modification, one or the other
+ * is used. The other is zero.
+ *
+ * This class is identified by the XML node name "articDef".
+ */
+class ArticulationDef : public OthersBase
+{
+public:
+    /**
+     * @brief Defines the interaction mode with slurs.
+     */
+    enum class SlurInteractionMode
+    {
+        Ignore,             ///< default value (may not appear in xml)
+        InsideSlur,
+        AvoidSlur
+    };
+
+    /**
+     * @brief Defines the automatic vertical positioning mode. These values are only meaningful
+     * if #autoVert is true. Otherwise #autoVertMode has the default value but it means "Manual"
+     */
+    enum class AutoVerticalMode
+    {
+        AlwaysNoteheadSide,         ///< default value (may not appear in xml)
+        AutoNoteStem,               ///< "Auto Notehead/Stem Side"
+        StemSide,                   ///< "Always Stem Side"
+        AlwaysOnStem,               ///< "On Stem"
+        AboveEntry,                 ///< "Above Note"
+        BelowEntry,                 ///< "Below Note"
+    };
+
+    /**
+     * @brief Constructor.
+     *
+     * Initializes all fields to their default values.
+     */
+    explicit ArticulationDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper), fontMain(new FontInfo(document)), fontAlt(new FontInfo(document)) {}
+
+    char32_t charMain{};                           ///< Main symbol character (utf32).
+    std::shared_ptr<FontInfo> fontMain;             ///< The font info for the main symbol. (xml nodes `<fontMain>`, `<sizeMain>`, and `<efxMain>`)
+    bool autoHorz{};                               ///< Whether horizontal auto-positioning is enabled.
+    bool autoVert{};                               ///< Whether vertical auto-positioning is enabled.
+    AutoVerticalMode autoVertMode{};               ///< Auto vertical positioning mode.
+    bool aboveSymbolAlt{};                         ///< Whether the alternate symbol is used above. (Otherwise main symbol is used.)
+    bool belowSymbolAlt{};                         ///< Whether the alternate symbol is used below. (Otherwise main symbol is used.)
+    bool insideSlur{};                             ///< Whether the articulation is inside a slur. (Used *in addition* to #AutoVerticalMode::InsideSlur)
+    bool autoStack{};                              ///< Whether automatic stacking is enabled.
+    bool centerOnStem{};                           ///< Whether centering on the stem is enabled.
+    SlurInteractionMode slurInteractionMode{};     ///< Slur interaction mode.
+    char32_t charAlt{};                            ///< Alternate symbol character (utf32).
+    std::shared_ptr<FontInfo> fontAlt;             ///< The font info for the alternate symbol. (xml nodes `<fontAlt>`, `<sizeAlt>`, and `<efxAlt>`)
+    Evpu xOffsetMain{};                            ///< Horizontal offset for the main symbol.
+    Evpu yOffsetMain{};                            ///< Vertical offset for the main symbol.
+    Evpu defVertPos{};                             ///< Default vertical position.
+    bool avoidStaffLines{};                        ///< Whether to avoid staff lines.
+    bool playArtic{};                              ///< Whether playback articulation is enabled.
+    Evpu xOffsetAlt{};                             ///< Horizontal offset for the alternate symbol.
+    Evpu yOffsetAlt{};                             ///< Vertical offset for the alternate symbol.
+    bool mainIsShape{};                            ///< Whether the main symbol is a shape.
+    bool altIsShape{};                             ///< Whether the alternate symbol is a shape.
+    Cmper mainShape{};                             ///< Main shape ID (if applicable).
+    Cmper altShape{};                              ///< Alternate shape ID (if applicable).
+    int startTopNoteDelta{};                       ///< Attack change for the top note.
+    int startBotNoteDelta{};                       ///< Attack change for the bottom note.
+    int startTopNotePercent{};                     ///< Attack change percent for the top note.
+    int startBotNotePercent{};                     ///< Attack change percent for the bottom note.
+    int durTopNoteDelta{};                         ///< Duration change for the top note.
+    int durBotNoteDelta{};                         ///< Duration change for the bottom note.
+    int durTopNotePercent{};                       ///< Duration percent change for the top note.
+    int durBotNotePercent{};                       ///< Duration percent change for the bottom note.
+    int ampTopNoteDelta{};                         ///< Key velocity change for the top note.
+    int ampBotNoteDelta{};                         ///< Key velocity change for the bottom note.
+    int ampTopNotePercent{};                       ///< Key velocity percentage for the top note.
+    int ampBotNotePercent{};                       ///< Key velocity percentage for the bottom note.
+    bool outsideStaff{};                           ///< Whether the articulation is outside the staff.
+
+    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
+
+    constexpr static std::string_view XmlNodeName = "articDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ArticulationDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ClefList
  * @brief Represents an element in multimeasure clef list with its positioning and percentage values.
  *

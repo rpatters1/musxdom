@@ -388,6 +388,8 @@ inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(con
     return FieldPopulator<FontInfo>::createAndPopulateImpl(element, std::forward<Args>(args)...);
 }
 
+void populateFontEfx(const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i);
+
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 } // namespace factory
