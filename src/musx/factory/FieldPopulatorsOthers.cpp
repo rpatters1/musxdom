@@ -394,6 +394,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
     {"dontScaleWithEntry", [](const XmlElementPtr&, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = true; }},
     {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
     {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+    {"hidden", [](const XmlElementPtr&, const std::shared_ptr<MeasureExprAssign>& i) { i->hidden = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {

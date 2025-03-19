@@ -733,6 +733,7 @@ public:
     bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
     Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
     Cmper staffList{};          ///< The cmper of the staff list to use if #staffAssign is negative.
+    bool hidden{};              ///< True if the dynamic is hidden.
 
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
@@ -1721,6 +1722,8 @@ public:
     Efix cornerRadius{};               ///< Corner radius for rounded corners.
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
 
+    std::shared_ptr<TextsBase> getRawTextBlock() const;
+
     /** @brief return display text with Enigma tags removed */
     std::string getText(bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
@@ -1742,6 +1745,14 @@ public:
  */
 class TextExpressionDef : public OthersBase {
 public:
+    /**
+     * @brief Constructor.
+     *
+     * Initializes all fields to their default values.
+     */
+    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
     Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this 
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
@@ -1765,13 +1776,8 @@ public:
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
-    /**
-     * @brief Constructor.
-     *
-     * Initializes all fields to their default values.
-     */
-    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
+    /** @brief Gets the enclosure for this expression, or nullptr if none. */
+    std::shared_ptr<TextBlock> getTextBlock() const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;

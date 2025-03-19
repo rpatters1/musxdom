@@ -2151,22 +2151,23 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 // ***** TextBlock *****
 // *********************
 
+std::shared_ptr<TextsBase> others::TextBlock::getRawTextBlock() const
+{
+    switch (textType) {
+        default:
+        case TextType::Block:
+            return getDocument()->getTexts()->get<texts::BlockText>(textId);
+        case TextType::Expression:
+            return getDocument()->getTexts()->get<texts::ExpressionText>(textId);        
+    }    
+}
+
 std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    auto document = getDocument();
-    auto getText = [&](const auto& block) -> std::string {
-        if (!block) return {};
-        if (!trimTags) return block->text;
-        auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
-        return musx::util::EnigmaString::trimTags(retval);
-    };
-    switch (textType) {
-    default:
-    case TextType::Block:
-        return getText(document->getTexts()->get<texts::BlockText>(textId));
-    case TextType::Expression:
-        return getText(document->getTexts()->get<texts::ExpressionText>(textId));        
-    }
+    auto block = getRawTextBlock();
+    if (!block) return {};
+    auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
+    return musx::util::EnigmaString::trimTags(retval);
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
@@ -2181,6 +2182,11 @@ std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper 
 // *****************************
 // ***** TextExpressionDef *****
 // *****************************
+
+std::shared_ptr<others::TextBlock> others::TextExpressionDef::getTextBlock() const
+{
+    return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), textIdKey);
+}
 
 std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 {
