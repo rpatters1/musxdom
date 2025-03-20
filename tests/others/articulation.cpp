@@ -31,7 +31,7 @@ TEST(ArticulationDefTest, PopulateFields)
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
-<others>
+  <others>
     <articDef cmper="5">
     <charMain>58528</charMain>
     <fontMain>10</fontMain>
@@ -40,6 +40,7 @@ TEST(ArticulationDefTest, PopulateFields)
         <bold/>
         <underline/>
     </efxMain>
+    <copyMode>both</copyMode>
     <autoHorz/>
     <autoVert/>
     <autoVertMode>autoNoteStem</autoVertMode>
@@ -67,7 +68,7 @@ TEST(ArticulationDefTest, PopulateFields)
     <ampTopNoteDelta>125</ampTopNoteDelta>
     <ampBotNoteDelta>125</ampBotNoteDelta>
     </articDef>
-</others>
+  </others>
 </finale>
     )xml";
 
@@ -84,6 +85,7 @@ TEST(ArticulationDefTest, PopulateFields)
     EXPECT_FALSE(articDef->fontMain->italic);
     EXPECT_TRUE(articDef->fontMain->bold);
     EXPECT_TRUE(articDef->fontMain->underline);
+    EXPECT_EQ(articDef->copyMode, others::ArticulationDef::CopyMode::Vertical);
     EXPECT_TRUE(articDef->autoHorz);
     EXPECT_TRUE(articDef->autoVert);
     EXPECT_EQ(articDef->autoVertMode, others::ArticulationDef::AutoVerticalMode::AutoNoteStem);
@@ -109,4 +111,71 @@ TEST(ArticulationDefTest, PopulateFields)
     EXPECT_EQ(articDef->durBotNotePercent, 2);
     EXPECT_EQ(articDef->ampTopNoteDelta, 125);
     EXPECT_EQ(articDef->ampBotNoteDelta, 125);
+}
+
+TEST(ArticulationAssignTest, Populate)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <articAssign entnum="125" inci="0">
+      <articDef>67</articDef>
+      <horzOff>-35</horzOff>
+      <vertOff>-2</vertOff>
+      <vertAdd>-86</vertAdd>
+      <overridePlacement/>
+      <numSlursAvoided>-1</numSlursAvoided>
+    </articAssign>
+    <articAssign entnum="125" inci="1">
+      <articDef>17</articDef>
+      <horzOff>16</horzOff>
+      <horzAdd>204</horzAdd>
+      <vertOff>51</vertOff>
+      <hide/>
+      <neverStack/>
+      <avoidSlur/>
+      <overridePlacement/>
+      <aboveEntry/>
+      <numSlursAvoided>-1</numSlursAvoided>
+    </articAssign>
+  </details>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details) << "Details node not found in XML";
+
+    // Check first articulation assignment
+    auto artic1 = details->get<details::ArticulationAssign>(SCORE_PARTID, 125, 0);
+    ASSERT_TRUE(artic1) << "ArticulationAssign with entnum=125, inci=0 not found but does exist";
+    EXPECT_EQ(artic1->articDef, 67);         // From XML
+    EXPECT_EQ(artic1->horzOffset, -35);      // From XML
+    EXPECT_EQ(artic1->vertOffset, -2);       // From XML
+    EXPECT_EQ(artic1->vertAdd, -86);         // From XML
+    EXPECT_TRUE(artic1->overridePlacement);  // From XML
+    EXPECT_EQ(artic1->numSlursAvoided, -1);  // From XML
+    EXPECT_FALSE(artic1->hide);              // Not present in XML
+    EXPECT_FALSE(artic1->neverStack);        // Not present in XML
+    EXPECT_FALSE(artic1->avoidSlur);         // Not present in XML
+    EXPECT_FALSE(artic1->aboveEntry);        // Not present in XML
+
+    // Check second articulation assignment
+    auto artic2 = details->get<details::ArticulationAssign>(SCORE_PARTID, 125, 1);
+    ASSERT_TRUE(artic2) << "ArticulationAssign with entnum=125, inci=1 not found but does exist";
+    EXPECT_EQ(artic2->articDef, 17);         // From XML
+    EXPECT_EQ(artic2->horzOffset, 16);       // From XML
+    EXPECT_EQ(artic2->horzAdd, 204);         // From XML
+    EXPECT_EQ(artic2->vertOffset, 51);       // From XML
+    EXPECT_TRUE(artic2->hide);               // From XML
+    EXPECT_TRUE(artic2->neverStack);         // From XML
+    EXPECT_TRUE(artic2->avoidSlur);          // From XML
+    EXPECT_TRUE(artic2->overridePlacement);  // From XML
+    EXPECT_TRUE(artic2->aboveEntry);         // From XML
+    EXPECT_EQ(artic2->numSlursAvoided, -1);  // From XML
+
+    // Ensure that an invalid articulation assignment isn't found
+    auto articInvalid = details->get<details::ArticulationAssign>(SCORE_PARTID, 999, 0);
+    EXPECT_FALSE(articInvalid) << "ArticulationAssign with entnum=999 found but does not exist";
 }

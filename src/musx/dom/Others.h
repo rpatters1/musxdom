@@ -179,16 +179,6 @@ class ArticulationDef : public OthersBase
 {
 public:
     /**
-     * @brief Defines the interaction mode with slurs.
-     */
-    enum class SlurInteractionMode
-    {
-        Ignore,             ///< default value (may not appear in xml)
-        InsideSlur,
-        AvoidSlur
-    };
-
-    /**
      * @brief Defines the automatic vertical positioning mode. These values are only meaningful
      * if #autoVert is true. Otherwise #autoVertMode has the default value but it means "Manual"
      */
@@ -203,6 +193,26 @@ public:
     };
 
     /**
+     * @brief Defines the character copy mode (vertical or horizontal)
+     */
+    enum class CopyMode
+    {
+        None,                       ///< default value (may not appear in xml)
+        Vertical,                   ///< Copy symbol vertically (xml value is "both")
+        Horizontal                  ///< Copy symbol horizontally
+    };
+
+    /**
+     * @brief Defines the interaction mode with slurs.
+     */
+    enum class SlurInteractionMode
+    {
+        Ignore,             ///< default value (may not appear in xml)
+        InsideSlur,
+        AvoidSlur
+    };
+
+    /**
      * @brief Constructor.
      *
      * Initializes all fields to their default values.
@@ -211,7 +221,8 @@ public:
         : OthersBase(document, partId, shareMode, cmper), fontMain(new FontInfo(document)), fontAlt(new FontInfo(document)) {}
 
     char32_t charMain{};                           ///< Main symbol character (utf32).
-    std::shared_ptr<FontInfo> fontMain;             ///< The font info for the main symbol. (xml nodes `<fontMain>`, `<sizeMain>`, and `<efxMain>`)
+    std::shared_ptr<FontInfo> fontMain;            ///< The font info for the main symbol. (xml nodes `<fontMain>`, `<sizeMain>`, and `<efxMain>`)
+    CopyMode copyMode{};                           ///< "Copy Main Symbol" option.
     bool autoHorz{};                               ///< Whether horizontal auto-positioning is enabled.
     bool autoVert{};                               ///< Whether vertical auto-positioning is enabled.
     AutoVerticalMode autoVertMode{};               ///< Auto vertical positioning mode.

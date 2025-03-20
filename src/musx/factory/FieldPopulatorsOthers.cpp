@@ -43,6 +43,12 @@ MUSX_XML_ENUM_MAPPING(ArticulationDef::AutoVerticalMode, {
     {"belowEntry", ArticulationDef::AutoVerticalMode::BelowEntry},
 });
 
+MUSX_XML_ENUM_MAPPING(ArticulationDef::CopyMode, {
+    // {"none", ArticulationDef::CopyMode::None}, // Default value, may not appear in XML.
+    {"both", ArticulationDef::CopyMode::Vertical},
+    {"horizontal", ArticulationDef::CopyMode::Horizontal},
+});
+
 MUSX_XML_ENUM_MAPPING(ArticulationDef::SlurInteractionMode, {
     // {"ignore", ArticulationDef::SlurInteractionMode::Ignore}, // Default value, may not appear in XML.
     {"insideSlur", ArticulationDef::SlurInteractionMode::InsideSlur},
@@ -287,6 +293,7 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
     {"fontMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->fontMain->fontId = e->getTextAs<Cmper>(); }},
     {"sizeMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->fontMain->fontSize = e->getTextAs<int>(); }},
     {"efxMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { factory::populateFontEfx(e, i->fontMain); }},
+    {"copyMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->copyMode = toEnum<ArticulationDef::CopyMode>(e); }},
     {"autoHorz", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->autoHorz = true; }},
     {"autoVert", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->autoVert = true; }},
     {"autoVertMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoVertMode = toEnum<ArticulationDef::AutoVerticalMode>(e); }},
