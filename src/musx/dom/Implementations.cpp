@@ -1617,6 +1617,30 @@ bool others::RepeatEndingStart::calcIsOpen() const
     return false;
 }
 
+// ********************
+// ***** ShapeDef *****
+// ********************
+
+void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::InstructionType, std::vector<int>)> callback) const
+{
+    auto insts = getDocument()->getOthers()->get<others::ShapeInstructionList>(getPartId(), instructionList);
+    auto data = getDocument()->getOthers()->get<others::ShapeData>(getPartId(), dataList);
+    if (insts && data) {
+        size_t currentDataIndex = 0;
+        for (const auto& inst : insts->instructions) {
+            if (currentDataIndex + inst->numData > data->data.size()) {
+                throw std::invalid_argument("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
+            }
+            if (!callback(inst->type, { data->data.begin() + currentDataIndex, data->data.begin() + currentDataIndex + inst->numData })) {
+                break;
+            }
+            currentDataIndex += inst->numData;
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) + " is missing instructions and/or data.");
+    }
+}
+
 // **********************
 // ***** SmartShape *****
 // **********************

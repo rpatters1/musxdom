@@ -87,6 +87,7 @@ add_executable(musxdomtests
     others/part_definition.cpp
 	others/part_globals.cpp
     others/repeats.cpp
+    others/shape.cpp
     others/smart_shape.cpp
     others/staff.cpp
     others/staff_style.cpp

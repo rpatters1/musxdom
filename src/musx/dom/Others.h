@@ -729,8 +729,8 @@ public:
     bool showFullNames{};       ///< "Show Full Staff & Group Names"
     bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
     bool groupBarlineOverride{}; ///< Override the barline specified by a @ref details::StaffGroup (if any)
-    Cmper customBarShape{};     ///< Cmper of Shape Designer shape for custom right barline
-    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer shape for custom left barline
+    Cmper customBarShape{};     ///< Cmper of Shape Designer @ref ShapeDef for custom right barline
+    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer @ref ShapeDef for custom left barline
     ShowKeySigMode showKey{};   ///< Show mode for key signatures
     ShowTimeSigMode showTime{}; ///< Show mode for time signatures
     PositioningType positioningMode{}; ///< Positioning type for the measure. (xml node is `<posMode>`)
@@ -998,7 +998,7 @@ public:
     Evpu measWidth{};           ///< Width of the multemeasure rest "measure" in Evpu. (xml node is `<meaSpace>`)
     MeasCmper nextMeas{};       ///< Next measure after the multimeasure west.
     Evpu numVertAdj{};          ///< Vertical number adjustment, sign-revered from Finale UI. (xml node is `<numdec>`)
-    Cmper shapeDef{};           ///< Cmper of Shape Designer shape that specifies the H-bar.
+    Cmper shapeDef{};           ///< Cmper of Shape Designer @ref ShapeDef that specifies the H-bar.
     int numStart{};             ///< Number start value. If the number of measures in the multimeasure rest is fewer than this
                                 ///< number, no number appears on the multimeasure rest.
     int symbolThreshold{};      ///< If the number of rests is less than this value, symbols are used when #useSymbols is true. (xml node is `<threshold>`)
@@ -1366,6 +1366,107 @@ public:
 };
 
 /**
+ * @class ShapeData
+ * @brief Represents the data for instruction associated with a @ref ShapeDef.
+ *
+ * This class is identified by the XML node name "shapeData".
+ */
+class ShapeData : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit ShapeData(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<int> data; ///< The data. See @ref ShapeInstructions for how to interpret it. 
+
+    constexpr static std::string_view XmlNodeName = "shapeData"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+class ShapeInstructionList;
+/**
+ * @class ShapeDef
+ * @brief Represents a shape created in Finale's Shape Designer.
+ *
+ * This class is identified by the XML node name "shapeDef".
+ */
+class ShapeDef : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit ShapeDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+    
+    enum class InstructionType
+    {
+        Undocumented,       ///< catch-all for instruction tags not yet documented
+        Bracket,
+        CloneChar,
+        ClosePath,
+        CurveTo,
+        DrawChar,
+        Ellipse,
+        EndGroup,
+        ExternalGraphic,
+        FillAlt,
+        FillSolid,
+        GoToOrigin,
+        GoToStart,
+        LineWidth,
+        Rectangle,
+        RLineTo,
+        RMoveTo,
+        SetArrowhead,
+        SetBlack,
+        SetDash,
+        SetFont,
+        SetGray,
+        SetWhite,
+        Slur,
+        StartGroup,
+        StartObject,
+        Stroke,
+        VerticalMode
+    };
+
+    /**
+     * @enum ShapeType
+     * @brief Represents different types of shapes in Finale's Shape Designer.
+     */
+    enum class ShapeType
+    {
+        Other = 0,          ///< May Correspond to "other" in XML (but may not appear in XML). All pre-Fin2k shapes use this value.
+        Articulation = 1,   ///< Corresponds to "articulation" in XML.
+        Barline = 2,        ///< Corresponds to "barline" in XML.
+        Executable = 3,     ///< Corresponds to "executable" in XML.
+        Expression = 4,     ///< Corresponds to "expression" in XML.
+        CustomStem = 5,     ///< Corresponds to "note" in XML.
+        Frame = 6,          ///< Corresponds to "frame" in XML.
+        Arrowhead = 7,      ///< Corresponds to "arrowhead" in XML.
+        Fretboard = 8,      ///< Corresponds to "fretboard" in XML.
+        Clef = 9            ///< Corresponds to "clef" in XML.
+    };
+
+    Cmper instructionList;  ///< Instruction list @ref Cmper. (xml node is `<instList>`)
+    Cmper dataList;         ///< Instruction data list @ref Cmper.
+    ShapeType shapeType;    ///< Shape type (specifies which type of entity this shape pertains to)
+
+    /// @brief Iterates through the instructions in the shape
+    /// @param callback The callback function. Returning `false` from this function aborts the iteration loop.
+    void iterateInstructions(std::function<bool(InstructionType, std::vector<int>)> callback) const;
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "shapeDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ShapeExpressionDef
  * @brief Stores the properties and behaviors of shape expressions.
  *
@@ -1381,7 +1482,7 @@ public:
     explicit ShapeExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    Cmper shapeDef{};                               ///< Identifier for the Shape Designer Shape associated with this expression.
+    Cmper shapeDef{};                               ///< Identifier for the Shape Designer @ref ShapeDef associated with this expression.
     Cmper categoryId{};                             ///< Identifier for the category of the text expression. (xml node is "categoryID")
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
@@ -1407,7 +1508,39 @@ public:
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
+
+/**
+ * @class ShapeInstructionList
+ * @brief Represents the data for instruction associated with a @ref ShapeDef.
+ *
+ * This class is identified by the XML node name "shapeList".
+ */
+class ShapeInstructionList : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit ShapeInstructionList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
     
+    /// @brief An instruction in the shape
+    class Instruction
+    {
+    public:
+
+        int numData{};                      ///< the number of data items consumed by this instruction (See @ref ShapeData.)
+        ShapeDef::InstructionType type{};   ///< the type of instruction
+
+        static const xml::XmlElementArray<Instruction>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::vector<std::shared_ptr<Instruction>> instructions; ///< The instructions.
+
+    constexpr static std::string_view XmlNodeName = "shapeList"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeInstructionList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 class StaffStyle;
 /**
  * @class Staff

@@ -105,6 +105,50 @@ MUSX_XML_ENUM_MAPPING(Measure::ShowTimeSigMode, {
     {"ignoreTime", Measure::ShowTimeSigMode::Never},
 });
 
+MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
+    // {"undocumented", ShapeDef::InstructionType::Undocumented}, // Default value does not appear in the xml
+    {"bracket", ShapeDef::InstructionType::Bracket},
+    {"cloneChar", ShapeDef::InstructionType::CloneChar},
+    {"closePath", ShapeDef::InstructionType::ClosePath},
+    {"curveTo", ShapeDef::InstructionType::CurveTo},
+    {"drawChar", ShapeDef::InstructionType::DrawChar},
+    {"ellipse", ShapeDef::InstructionType::Ellipse},
+    {"endGroup", ShapeDef::InstructionType::EndGroup},
+    {"extGraphic", ShapeDef::InstructionType::ExternalGraphic},
+    {"fillAlt", ShapeDef::InstructionType::FillAlt},
+    {"fillSolid", ShapeDef::InstructionType::FillSolid},
+    {"goToOrigin", ShapeDef::InstructionType::GoToOrigin},
+    {"goToStart", ShapeDef::InstructionType::GoToStart},
+    {"lineWidth", ShapeDef::InstructionType::LineWidth},
+    {"rectangle", ShapeDef::InstructionType::Rectangle},
+    {"rLineTo", ShapeDef::InstructionType::RLineTo},
+    {"rMoveTo", ShapeDef::InstructionType::RMoveTo},
+    {"setArrowhead", ShapeDef::InstructionType::SetArrowhead},
+    {"setBlack", ShapeDef::InstructionType::SetBlack},
+    {"setDash", ShapeDef::InstructionType::SetDash},
+    {"setFont", ShapeDef::InstructionType::SetFont},
+    {"setGray", ShapeDef::InstructionType::SetGray},
+    {"setWhite", ShapeDef::InstructionType::SetWhite},
+    {"slur", ShapeDef::InstructionType::Slur},
+    {"startGroup", ShapeDef::InstructionType::StartGroup},
+    {"startObject", ShapeDef::InstructionType::StartObject},
+    {"stroke", ShapeDef::InstructionType::Stroke},
+    {"vertMode", ShapeDef::InstructionType::VerticalMode},
+});
+
+MUSX_XML_ENUM_MAPPING(ShapeDef::ShapeType, {
+    {"other", ShapeDef::ShapeType::Other}, // Default value, may not appear in XML, but the Finale binary contains the string.
+    {"articulation", ShapeDef::ShapeType::Articulation},
+    {"barline", ShapeDef::ShapeType::Barline},
+    {"executable", ShapeDef::ShapeType::Executable},
+    {"expression", ShapeDef::ShapeType::Expression},
+    {"note", ShapeDef::ShapeType::CustomStem},
+    {"frame", ShapeDef::ShapeType::Frame},
+    {"arrowhead", ShapeDef::ShapeType::Arrowhead},
+    {"fretboard", ShapeDef::ShapeType::Fretboard},
+    {"clef", ShapeDef::ShapeType::Clef},
+});
+
 MUSX_XML_ENUM_MAPPING(SmartShape::ShapeType, {
     {"slurDown", SmartShape::ShapeType::SlurDown},
     {"slurUp", SmartShape::ShapeType::SlurUp},
@@ -617,6 +661,16 @@ MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
     {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(ShapeData, {
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ShapeData>& i) { i->data.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ShapeDef, {
+    {"instList", [](const XmlElementPtr& e, const std::shared_ptr<ShapeDef>& i) { i->instructionList = e->getTextAs<Cmper>(); }},
+    {"dataList", [](const XmlElementPtr& e, const std::shared_ptr<ShapeDef>& i) { i->dataList = e->getTextAs<Cmper>(); }},
+    {"shapeType", [](const XmlElementPtr& e, const std::shared_ptr<ShapeDef>& i) { i->shapeType = toEnum<ShapeType>(e); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
     {"categoryID", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->categoryId = e->getTextAs<Cmper>(); }},
@@ -638,8 +692,19 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
     {"useCategoryPos", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->useCategoryPos = true; }},
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
-    });
+});
 
+MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList::Instruction, {
+    {"numData", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::Instruction>& i) { i->numData = e->getTextAs<int>(); }},
+    {"tag", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::Instruction>& i) { i->type = toEnum<ShapeDef::InstructionType, true>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList, {
+    {"instruct", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList>& i) {
+        i->instructions.push_back(FieldPopulator<ShapeInstructionList::Instruction>::createAndPopulate(e));
+    }},
+});
+    
 MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPoint, {
     {"inst", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
     {"meas", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},

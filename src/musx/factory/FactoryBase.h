@@ -205,7 +205,7 @@ struct XmlEnumMapping
 template <> \
 const XmlEnumMappingElement<Type> XmlEnumMapping<Type>::mapping = __VA_ARGS__
 
-template <typename EnumClass, typename FromClass = std::string_view>
+template <typename EnumClass, bool IgnoreUnknown, typename FromClass = std::string_view>
 class EnumMapper
 {
     // If we ever need to, we can create a static lazy-initialize reverse mapping function here
@@ -217,32 +217,35 @@ public:
         if (it != XmlEnumMapping<EnumClass>::mapping.end()) {
             return it->second;
         }
-        std::string msg = [value]() {
-            if constexpr (std::is_arithmetic_v<FromClass>) {
-                return "Invalid enum value from xml: " + std::to_string(value);
-            } else {
-                return "Invalid enum value from xml: " + std::string(value);
-            }
-        }();
-        MUSX_UNKNOWN_XML(msg);
+        if constexpr (!IgnoreUnknown) {
+            std::string msg = [value]() {
+                if constexpr (std::is_arithmetic_v<FromClass>) {
+                    return "Invalid enum value from xml: " + std::to_string(value);
+                }
+                else {
+                    return "Invalid enum value from xml: " + std::string(value);
+                }
+            }();
+            MUSX_UNKNOWN_XML(msg);
+        }
         return {};
     }
 };
 
-template<typename EnumClass, typename FromClass>
+template<typename EnumClass, typename FromClass, bool IgnoreUnknown = false>
 EnumClass toEnum(const FromClass& value)
 {
     if constexpr (std::is_convertible_v<FromClass, std::string_view>) {
-        return EnumMapper<EnumClass, std::string_view>::xmlToEnum(value);
+        return EnumMapper<EnumClass, IgnoreUnknown, std::string_view>::xmlToEnum(value);
     } else {
-        return EnumMapper<EnumClass, FromClass>::xmlToEnum(value);
+        return EnumMapper<EnumClass, IgnoreUnknown, FromClass>::xmlToEnum(value);
     }
 }
 
-template<typename EnumClass>
+template<typename EnumClass, bool IgnoreUnknown = false>
 EnumClass toEnum(const ::musx::xml::XmlElementPtr& e)
 {
-    return toEnum<EnumClass>(e->getTextTrimmed());
+    return toEnum<EnumClass, std::string_view, IgnoreUnknown>(e->getTextTrimmed());
 }
 
 #define MUSX_XML_ELEMENT_ARRAY(Type, ...) \
