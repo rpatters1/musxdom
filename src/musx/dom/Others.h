@@ -228,7 +228,7 @@ public:
     AutoVerticalMode autoVertMode{};               ///< Auto vertical positioning mode.
     bool aboveSymbolAlt{};                         ///< Whether the alternate symbol is used above. (Otherwise main symbol is used.)
     bool belowSymbolAlt{};                         ///< Whether the alternate symbol is used below. (Otherwise main symbol is used.)
-    bool insideSlur{};                             ///< Whether the articulation is inside a slur. (Used *in addition* to #AutoVerticalMode::InsideSlur)
+    bool insideSlur{};                             ///< Whether the articulation is inside a slur. (Used *in addition* to #SlurInteractionMode::InsideSlur)
     bool autoStack{};                              ///< Whether automatic stacking is enabled.
     bool centerOnStem{};                           ///< Whether centering on the stem is enabled.
     SlurInteractionMode slurInteractionMode{};     ///< Slur interaction mode.
@@ -1821,6 +1821,7 @@ public:
     Efix cornerRadius{};               ///< Corner radius for rounded corners.
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
 
+    /// @brief Gets the raw text block (from the `texts` pool) based on #textType.
     std::shared_ptr<TextsBase> getRawTextBlock() const;
 
     /** @brief return display text with Enigma tags removed */

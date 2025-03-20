@@ -27,7 +27,7 @@
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
- // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
+// do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -81,7 +81,7 @@ public:
     Evpu vertAdd{};                 ///< Vertical displacement for character copying. (E.g., arpeggiated chord lines)
     bool overridePlacement{};       ///< Whether the default placement is overridden.
     bool aboveEntry{};              ///< When #overridePlacement is true: whether the articulation is forced above or below the entry.
-    bool hide{};                    ///< Whether the articulation is hidden.
+    bool hide{};                    ///< Inverse of "Show" option.
     bool neverStack{};              ///< Whether the articulation should never stack relative to others.
     bool avoidSlur{};               ///< Whether the articulation should avoid slurs.
     int numSlursAvoided{};          ///< Number of slurs avoided. Used internally by Finale's stacking algorithm.

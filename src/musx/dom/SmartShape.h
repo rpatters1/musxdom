@@ -223,7 +223,7 @@ public:
 
     Cmper shapeNum{};       ///< The @ref Cmper of the @ref SmartShape that is being assigned.
     Cmper centerShapeNum{}; ///< If non-zero, the 2nd @ref Cmper of the @ref details::CenterShape.
-    ///< Zero if this measure starts or ends the smart shape.
+                            ///< Zero if this measure starts or ends the smart shape.
 
     constexpr static std::string_view XmlNodeName = "smartShapeMeasMark"; ///< The XML node name for this type.
     static const xml::XmlElementArray<SmartShapeMeasureAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
