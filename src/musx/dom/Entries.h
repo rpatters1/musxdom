@@ -568,11 +568,13 @@ public:
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end.
+    /// @todo Support ties to enharmonic pitches.
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
     NoteInfoPtr calcTieTo() const;
 
     /// @brief Calculates the note that this note could tie from. Check the return value's #Note::tieStart
     /// to see if there is actually a tie.
+    /// @todo Support ties from enharmonic pitches.
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
     NoteInfoPtr calcTieFrom() const;
 

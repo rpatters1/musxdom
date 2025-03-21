@@ -1380,7 +1380,7 @@ public:
     {
     }
 
-    std::vector<int> data; ///< The data. See @ref ShapeInstructions for how to interpret it. 
+    std::vector<int> data; ///< The data. See @ref ShapeInstructionList for how to interpret it. 
 
     constexpr static std::string_view XmlNodeName = "shapeData"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1401,7 +1401,8 @@ public:
         : OthersBase(document, partId, shareMode, cmper)
     {
     }
-    
+
+    /// @brief Defines the instruction types for Shape Designer shapes.
     enum class InstructionType
     {
         Undocumented,       ///< catch-all for instruction tags not yet documented
