@@ -7,6 +7,7 @@ var classmusx_1_1dom_1_1others_1_1MeasureExprAssign =
     [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa0014c4adec163f86f76b125dce94c54", null ],
     [ "dontScaleWithEntry", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a34aa7c0916fa70a395dabbfe1de3a1c2", null ],
     [ "eduPosition", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#af4390d4f39adc19b2df34638eb531eed", null ],
+    [ "hidden", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a1c6fb02e258b85dcc162a230babd210b", null ],
     [ "horzEvpuOff", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aadc34cdbfefd8fd4f503ded61e55eeb5", null ],
     [ "layer", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa03fd91f34ce3e8c86512e3ec9b5720c", null ],
     [ "shapeExprId", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a69a001d6aa18aa141f2b20d3217eb1f2", null ],

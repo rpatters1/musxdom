@@ -16,6 +16,7 @@ var hierarchy =
               [ "musx::dom::details::TieAlterStart", "classmusx_1_1dom_1_1details_1_1TieAlterStart.html", null ]
             ] ]
           ] ],
+          [ "musx::dom::details::ArticulationAssign", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html", null ],
           [ "musx::dom::details::BeamStubDirection", "classmusx_1_1dom_1_1details_1_1BeamStubDirection.html", null ],
           [ "musx::dom::details::LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html", [
             [ "musx::dom::details::LyricAssignChorus", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html", null ],
@@ -80,6 +81,7 @@ var hierarchy =
           [ "musx::dom::others::TonalCenterSharps", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html", null ]
         ] ],
         [ "musx::dom::OthersArray< ElementType, REQUIRED_SIZE >", "classmusx_1_1dom_1_1OthersArray.html", null ],
+        [ "musx::dom::others::ArticulationDef", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html", null ],
         [ "musx::dom::others::ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", null ],
         [ "musx::dom::others::Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", [
           [ "musx::dom::others::TextExpressionEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html", null ],
@@ -107,7 +109,10 @@ var hierarchy =
         [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
         [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
         [ "musx::dom::others::RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", null ],
+        [ "musx::dom::others::ShapeData", "classmusx_1_1dom_1_1others_1_1ShapeData.html", null ],
+        [ "musx::dom::others::ShapeDef", "classmusx_1_1dom_1_1others_1_1ShapeDef.html", null ],
         [ "musx::dom::others::ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", null ],
+        [ "musx::dom::others::ShapeInstructionList", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList.html", null ],
         [ "musx::dom::others::SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html", null ],
         [ "musx::dom::others::SmartShapeMeasureAssign", "classmusx_1_1dom_1_1others_1_1SmartShapeMeasureAssign.html", null ],
         [ "musx::dom::others::Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", [
@@ -184,6 +189,7 @@ var hierarchy =
     [ "musx::dom::header::FinaleVersion", "structmusx_1_1dom_1_1header_1_1FinaleVersion.html", null ],
     [ "musx::util::Fraction", "classmusx_1_1util_1_1Fraction.html", null ],
     [ "musx::dom::header::Header", "structmusx_1_1dom_1_1header_1_1Header.html", null ],
+    [ "musx::dom::others::ShapeInstructionList::Instruction", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1Instruction.html", null ],
     [ "musx::xml::IXmlAttribute", "classmusx_1_1xml_1_1IXmlAttribute.html", [
       [ "musx::xml::pugi::Attribute", "classmusx_1_1xml_1_1pugi_1_1Attribute.html", null ],
       [ "musx::xml::rapidxml::Attribute", "classmusx_1_1xml_1_1rapidxml_1_1Attribute.html", null ],

@@ -12,5 +12,7 @@ var searchData=
   ['outerlocal_9',['outerLocal',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a1fa415fa6d27451e9f5be35bd082c3f2',1,'musx::dom::details::TieAlterBase']]],
   ['outertiph_10',['outerTipH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a83b4f737373614e967d2cec0e96061f1',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['outertipv_11',['outerTipV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a0e0cab4661c4f4dbc8321d76b1aef688',1,'musx::dom::options::PianoBraceBracketOptions']]],
-  ['ownbarline_12',['ownBarline',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1cc6fb87b6b097c49e22644cad80b875',1,'musx::dom::details::StaffGroup']]]
+  ['outsidestaff_12',['outsideStaff',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ad5e0e1715d6016a179f90a4e2fa8cc03',1,'musx::dom::others::ArticulationDef']]],
+  ['overrideplacement_13',['overridePlacement',['../classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#a8307b13ec8cbb5ce5d2fac06daf05ba2',1,'musx::dom::details::ArticulationAssign']]],
+  ['ownbarline_14',['ownBarline',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1cc6fb87b6b097c49e22644cad80b875',1,'musx::dom::details::StaffGroup']]]
 ];

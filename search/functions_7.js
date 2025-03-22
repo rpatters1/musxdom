@@ -16,5 +16,6 @@ var searchData=
   ['issameentry_13',['isSameEntry',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795',1,'musx::dom::EntryInfoPtr']]],
   ['issamenote_14',['isSameNote',['../classmusx_1_1dom_1_1NoteInfoPtr.html#a44670e047067bd603fdb709fa695e2a0',1,'musx::dom::NoteInfoPtr']]],
   ['isscore_15',['isScore',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aef38a46b8dbac91906cd353ea2ef2830',1,'musx::dom::others::PartDefinition']]],
-  ['iterateentries_16',['iterateentries',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#a1be8c74339c764144105e6ea04804d89',1,'musx::dom::details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)'],['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#ac7a86984e81b22c24f56e8b696388e7b',1,'musx::dom::details::GFrameHold::iterateEntries(std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)']]]
+  ['iterateentries_16',['iterateentries',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#a1be8c74339c764144105e6ea04804d89',1,'musx::dom::details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)'],['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#ac7a86984e81b22c24f56e8b696388e7b',1,'musx::dom::details::GFrameHold::iterateEntries(std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)']]],
+  ['iterateinstructions_17',['iterateInstructions',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#aa03419ba6ed074c201d402c2a21abc80',1,'musx::dom::others::ShapeDef']]]
 ];

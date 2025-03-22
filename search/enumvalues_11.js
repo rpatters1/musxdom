@@ -30,7 +30,8 @@ var searchData=
   ['starttimesig_27',['StartTimeSig',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea5089152b50433cc58e8d31c990fadc74',1,'musx::dom::others']]],
   ['stem_28',['Stem',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eaf546c89d3a37a97fe46aa01fc0d67ed2',1,'musx::dom::others']]],
   ['stemreversal_29',['StemReversal',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa0674e7e4fbd13db5049c5f7b8847bbd2',1,'musx::dom::options::TieOptions']]],
-  ['stop_30',['Stop',['../namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa11a755d598c0c417f9a36758c3da7481',1,'musx::dom::others']]],
-  ['subtitle_31',['Subtitle',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa035f4e29da2d6d31303f7d7cfa1be13b',1,'musx::dom::texts::FileInfoText']]],
-  ['swing_32',['Swing',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea198b44a40aa77f2256886010c7526c0b',1,'musx::dom::others']]]
+  ['stemside_30',['StemSide',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ac7293e071062ccde1f4c6d9de9cecd6ea418289e6b37941d17e803d641bdd21c1',1,'musx::dom::others::ArticulationDef']]],
+  ['stop_31',['Stop',['../namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa11a755d598c0c417f9a36758c3da7481',1,'musx::dom::others']]],
+  ['subtitle_32',['Subtitle',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa035f4e29da2d6d31303f7d7cfa1be13b',1,'musx::dom::texts::FileInfoText']]],
+  ['swing_33',['Swing',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea198b44a40aa77f2256886010c7526c0b',1,'musx::dom::others']]]
 ];

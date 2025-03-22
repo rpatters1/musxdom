@@ -7,6 +7,8 @@ var searchData=
   ['addresolver_4',['addResolver',['../classmusx_1_1factory_1_1ElementLinker.html#a915e2cf07b3f5d45f06249c7caaeaf9f',1,'musx::factory::ElementLinker']]],
   ['addunlinkednode_5',['addUnlinkedNode',['../classmusx_1_1dom_1_1Base.html#ab65d4a6942a09ecc3a2b6ae5c96d434a',1,'musx::dom::Base']]],
   ['alternatenotationoptions_6',['AlternateNotationOptions',['../classmusx_1_1dom_1_1options_1_1AlternateNotationOptions.html#aac0fb2957450455a7f5f6c8dd5e11ecd',1,'musx::dom::options::AlternateNotationOptions']]],
-  ['attribute_7',['attribute',['../classmusx_1_1xml_1_1pugi_1_1Attribute.html#ac6aae4ce8430347115f0eb6ae4f8158a',1,'musx::xml::pugi::Attribute::Attribute()'],['../classmusx_1_1xml_1_1rapidxml_1_1Attribute.html#a9a6808d48d2d483db0823df898cf2362',1,'musx::xml::rapidxml::Attribute::Attribute()'],['../classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a167994db8499f43f36c2649a8ca23e4e',1,'musx::xml::tinyxml2::Attribute::Attribute()']]],
-  ['augmentationdotoptions_8',['AugmentationDotOptions',['../classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html#a18ce60ece02a4ef039f2471678b2a552',1,'musx::dom::options::AugmentationDotOptions']]]
+  ['articulationassign_7',['ArticulationAssign',['../classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#a045264b0f6ff881411fddbb01e546fa6',1,'musx::dom::details::ArticulationAssign']]],
+  ['articulationdef_8',['ArticulationDef',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ade0b281eb1f5ee1edf75b2ef527681f3',1,'musx::dom::others::ArticulationDef']]],
+  ['attribute_9',['attribute',['../classmusx_1_1xml_1_1pugi_1_1Attribute.html#ac6aae4ce8430347115f0eb6ae4f8158a',1,'musx::xml::pugi::Attribute::Attribute()'],['../classmusx_1_1xml_1_1rapidxml_1_1Attribute.html#a9a6808d48d2d483db0823df898cf2362',1,'musx::xml::rapidxml::Attribute::Attribute()'],['../classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a167994db8499f43f36c2649a8ca23e4e',1,'musx::xml::tinyxml2::Attribute::Attribute()']]],
+  ['augmentationdotoptions_10',['AugmentationDotOptions',['../classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html#a18ce60ece02a4ef039f2471678b2a552',1,'musx::dom::options::AugmentationDotOptions']]]
 ];

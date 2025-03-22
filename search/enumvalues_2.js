@@ -11,11 +11,12 @@ var searchData=
   ['chordacci_8',['ChordAcci',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa1fcd02ebc2f2a43c761befe5521ea65d',1,'musx::dom::options::FontOptions']]],
   ['chordsuffix_9',['ChordSuffix',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa549aa0d4314e66a95ff148e7c634fd30',1,'musx::dom::options::FontOptions']]],
   ['clear_10',['Clear',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a8ccf7f18be6c0552e426fbb788b8a402adc30bc0c7914db5918da4263fce93ad2',1,'musx::dom::options::MusicSpacingOptions']]],
-  ['clef_11',['Clef',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa4fb26ab17477cfbc62b748034c0de041',1,'musx::dom::options::FontOptions']]],
+  ['clef_11',['clef',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621a4fb26ab17477cfbc62b748034c0de041',1,'musx::dom::others::ShapeDef::Clef'],['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa4fb26ab17477cfbc62b748034c0de041',1,'musx::dom::options::FontOptions::Clef']]],
   ['composer_12',['Composer',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aabcba235aa0401fd10464df6afbfaab77',1,'musx::dom::texts::FileInfoText']]],
   ['copyright_13',['Copyright',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa6016a2b341113bf496b719905398ecd2',1,'musx::dom::texts::FileInfoText']]],
   ['crescendo_14',['Crescendo',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa196f2bb53e4f9d24eb0d858b15924fe7',1,'musx::dom::others::SmartShape']]],
   ['current_15',['Current',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2a222a267cc5778206b253be35ee3ddab5',1,'musx::dom::options::PageFormatOptions']]],
   ['custom_16',['Custom',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117a90589c47f06eb971d548591f23c285af',1,'musx::dom::others::Measure']]],
-  ['customline_17',['CustomLine',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa132aa8be81626232ff23df91eb3ab3d0',1,'musx::dom::others::SmartShape']]]
+  ['customline_17',['CustomLine',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa132aa8be81626232ff23df91eb3ab3d0',1,'musx::dom::others::SmartShape']]],
+  ['customstem_18',['CustomStem',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621a70ea031182a9d2a8c0f9bb16a767aeb6',1,'musx::dom::others::ShapeDef']]]
 ];

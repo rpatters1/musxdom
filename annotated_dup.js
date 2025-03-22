@@ -3,6 +3,7 @@ var annotated_dup =
     [ "musx", "namespacemusx.html", [
       [ "dom", "namespacemusx_1_1dom.html", [
         [ "details", "namespacemusx_1_1dom_1_1details.html", [
+          [ "ArticulationAssign", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html", "classmusx_1_1dom_1_1details_1_1ArticulationAssign" ],
           [ "Baseline", "classmusx_1_1dom_1_1details_1_1Baseline.html", "classmusx_1_1dom_1_1details_1_1Baseline" ],
           [ "BaselineLyricsChorus", "classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html", "classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus" ],
           [ "BaselineLyricsSection", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection" ],
@@ -58,6 +59,7 @@ var annotated_dup =
           [ "AcciAmountSharps", "classmusx_1_1dom_1_1others_1_1AcciAmountSharps.html", "classmusx_1_1dom_1_1others_1_1AcciAmountSharps" ],
           [ "AcciOrderFlats", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats.html", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats" ],
           [ "AcciOrderSharps", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps.html", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps" ],
+          [ "ArticulationDef", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html", "classmusx_1_1dom_1_1others_1_1ArticulationDef" ],
           [ "ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", "classmusx_1_1dom_1_1others_1_1ClefList" ],
           [ "Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", "classmusx_1_1dom_1_1others_1_1Enclosure" ],
           [ "FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", "classmusx_1_1dom_1_1others_1_1FontDefinition" ],
@@ -81,7 +83,10 @@ var annotated_dup =
           [ "RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart" ],
           [ "RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", "classmusx_1_1dom_1_1others_1_1RepeatEndingText" ],
           [ "RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", "classmusx_1_1dom_1_1others_1_1RepeatPassList" ],
+          [ "ShapeData", "classmusx_1_1dom_1_1others_1_1ShapeData.html", "classmusx_1_1dom_1_1others_1_1ShapeData" ],
+          [ "ShapeDef", "classmusx_1_1dom_1_1others_1_1ShapeDef.html", "classmusx_1_1dom_1_1others_1_1ShapeDef" ],
           [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef" ],
+          [ "ShapeInstructionList", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList.html", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList" ],
           [ "SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html", "classmusx_1_1dom_1_1others_1_1SmartShape" ],
           [ "SmartShapeMeasureAssign", "classmusx_1_1dom_1_1others_1_1SmartShapeMeasureAssign.html", "classmusx_1_1dom_1_1others_1_1SmartShapeMeasureAssign" ],
           [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", "classmusx_1_1dom_1_1others_1_1Staff" ],

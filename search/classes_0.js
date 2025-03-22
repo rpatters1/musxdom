@@ -6,6 +6,8 @@ var searchData=
   ['acciorderflats_3',['AcciOrderFlats',['../classmusx_1_1dom_1_1others_1_1AcciOrderFlats.html',1,'musx::dom::others']]],
   ['acciordersharps_4',['AcciOrderSharps',['../classmusx_1_1dom_1_1others_1_1AcciOrderSharps.html',1,'musx::dom::others']]],
   ['alternatenotationoptions_5',['AlternateNotationOptions',['../classmusx_1_1dom_1_1options_1_1AlternateNotationOptions.html',1,'musx::dom::options']]],
-  ['attribute_6',['attribute',['../classmusx_1_1xml_1_1pugi_1_1Attribute.html',1,'musx::xml::pugi::Attribute'],['../classmusx_1_1xml_1_1rapidxml_1_1Attribute.html',1,'musx::xml::rapidxml::Attribute'],['../classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html',1,'musx::xml::tinyxml2::Attribute']]],
-  ['augmentationdotoptions_7',['AugmentationDotOptions',['../classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html',1,'musx::dom::options']]]
+  ['articulationassign_6',['ArticulationAssign',['../classmusx_1_1dom_1_1details_1_1ArticulationAssign.html',1,'musx::dom::details']]],
+  ['articulationdef_7',['ArticulationDef',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html',1,'musx::dom::others']]],
+  ['attribute_8',['attribute',['../classmusx_1_1xml_1_1pugi_1_1Attribute.html',1,'musx::xml::pugi::Attribute'],['../classmusx_1_1xml_1_1rapidxml_1_1Attribute.html',1,'musx::xml::rapidxml::Attribute'],['../classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html',1,'musx::xml::tinyxml2::Attribute']]],
+  ['augmentationdotoptions_9',['AugmentationDotOptions',['../classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html',1,'musx::dom::options']]]
 ];

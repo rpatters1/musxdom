@@ -1,5 +1,6 @@
 var namespacemusx_1_1dom_1_1details =
 [
+    [ "ArticulationAssign", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html", "classmusx_1_1dom_1_1details_1_1ArticulationAssign" ],
     [ "Baseline", "classmusx_1_1dom_1_1details_1_1Baseline.html", "classmusx_1_1dom_1_1details_1_1Baseline" ],
     [ "BaselineLyricsChorus", "classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html", "classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus" ],
     [ "BaselineLyricsSection", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection" ],

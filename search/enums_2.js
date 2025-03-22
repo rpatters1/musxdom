@@ -6,5 +6,6 @@ var searchData=
   ['colunisonschoice_3',['ColUnisonsChoice',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a96ca65be0c05687b0533cc64bd1fcd49',1,'musx::dom::options::MusicSpacingOptions']]],
   ['connectionindex_4',['ConnectionIndex',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3c',1,'musx::dom::options::SmartShapeOptions']]],
   ['connectstyletype_5',['ConnectStyleType',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59',1,'musx::dom::options::TieOptions']]],
-  ['controlstyletype_6',['ControlStyleType',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555',1,'musx::dom::options::TieOptions']]]
+  ['controlstyletype_6',['ControlStyleType',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555',1,'musx::dom::options::TieOptions']]],
+  ['copymode_7',['CopyMode',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#abf40637f5c0f246bfdfe40603bf9a5cc',1,'musx::dom::others::ArticulationDef']]]
 ];

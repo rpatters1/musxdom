@@ -8,5 +8,7 @@ var searchData=
   ['yevpupos_5',['yEvpuPos',['../classmusx_1_1dom_1_1others_1_1ClefList.html#a98efb469301149e41946674664d5c6ae',1,'musx::dom::others::ClefList']]],
   ['ymargin_6',['yMargin',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#ab680999262e734b01adb450b67c9b2e5',1,'musx::dom::others::Enclosure']]],
   ['yoffset_7',['yOffset',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ConnectionStyle.html#af37f3c3ec09100589d212a51191e7711',1,'musx::dom::options::SmartShapeOptions::ConnectionStyle']]],
-  ['ystart_8',['yStart',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#ae3d7f446649f8ac790f9dea3a9663136',1,'musx::dom::details::TieAlterBase']]]
+  ['yoffsetalt_8',['yOffsetAlt',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a4d975135e6606c8c461a876034cab028',1,'musx::dom::others::ArticulationDef']]],
+  ['yoffsetmain_9',['yOffsetMain',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a098f95e106f3a643c1310d16bdfdd724',1,'musx::dom::others::ArticulationDef']]],
+  ['ystart_10',['yStart',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#ae3d7f446649f8ac790f9dea3a9663136',1,'musx::dom::details::TieAlterBase']]]
 ];
