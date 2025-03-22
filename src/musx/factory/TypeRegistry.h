@@ -195,6 +195,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::AcciAmountSharps,
     dom::others::AcciOrderFlats,
     dom::others::AcciOrderSharps,
+    dom::others::ArticulationDef,
     dom::others::ClefList,
     dom::others::FontDefinition,
     dom::others::Frame,
@@ -212,6 +213,9 @@ using RegisteredOthers = TypeRegistry <
     dom::others::RepeatEndingStart,
     dom::others::RepeatEndingText,
     dom::others::RepeatPassList,
+    dom::others::ShapeData,
+    dom::others::ShapeDef,
+    dom::others::ShapeInstructionList,
     dom::others::SmartShape,
     dom::others::SmartShapeMeasureAssign,
     dom::others::StaffSystem,
@@ -242,6 +246,7 @@ using RegisteredOthers = TypeRegistry <
  * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredDetails = TypeRegistry <
+    dom::details::ArticulationAssign,
     dom::details::BaselineLyricsChorus,
     dom::details::BaselineLyricsSection,
     dom::details::BaselineLyricsVerse,

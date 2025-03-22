@@ -34,6 +34,27 @@ extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowCle
 // Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
 
+MUSX_XML_ENUM_MAPPING(ArticulationDef::AutoVerticalMode, {
+    // {"alwaysNoteheadSide", ArticulationDef::AutoVerticalMode::AlwaysNoteheadSide}, // Default value, may not appear in XML.
+    {"autoNoteStem", ArticulationDef::AutoVerticalMode::AutoNoteStem},
+    {"stemSide", ArticulationDef::AutoVerticalMode::StemSide},
+    {"alwaysOnStem", ArticulationDef::AutoVerticalMode::AlwaysOnStem},
+    {"aboveEntry", ArticulationDef::AutoVerticalMode::AboveEntry},
+    {"belowEntry", ArticulationDef::AutoVerticalMode::BelowEntry},
+});
+
+MUSX_XML_ENUM_MAPPING(ArticulationDef::CopyMode, {
+    // {"none", ArticulationDef::CopyMode::None}, // Default value, may not appear in XML.
+    {"both", ArticulationDef::CopyMode::Vertical},
+    {"horizontal", ArticulationDef::CopyMode::Horizontal},
+});
+
+MUSX_XML_ENUM_MAPPING(ArticulationDef::SlurInteractionMode, {
+    // {"ignore", ArticulationDef::SlurInteractionMode::Ignore}, // Default value, may not appear in XML.
+    {"insideSlur", ArticulationDef::SlurInteractionMode::InsideSlur},
+    {"avoidSlur", ArticulationDef::SlurInteractionMode::AvoidSlur},
+});
+
 MUSX_XML_ENUM_MAPPING(FontDefinition::CharacterSetBank, {
     {"Mac", FontDefinition::CharacterSetBank::MacOS},
     {"Win", FontDefinition::CharacterSetBank::Windows},
@@ -82,6 +103,50 @@ MUSX_XML_ENUM_MAPPING(Measure::ShowTimeSigMode, {
     // {"ifNeeded", Measure::ShowTimeSigMode::IfNeeded}, // This is the default and is not known to occur in the XML.
     {"deltaTime", Measure::ShowTimeSigMode::Always},
     {"ignoreTime", Measure::ShowTimeSigMode::Never},
+});
+
+MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
+    // {"undocumented", ShapeDef::InstructionType::Undocumented}, // Default value does not appear in the xml
+    {"bracket", ShapeDef::InstructionType::Bracket},
+    {"cloneChar", ShapeDef::InstructionType::CloneChar},
+    {"closePath", ShapeDef::InstructionType::ClosePath},
+    {"curveTo", ShapeDef::InstructionType::CurveTo},
+    {"drawChar", ShapeDef::InstructionType::DrawChar},
+    {"ellipse", ShapeDef::InstructionType::Ellipse},
+    {"endGroup", ShapeDef::InstructionType::EndGroup},
+    {"extGraphic", ShapeDef::InstructionType::ExternalGraphic},
+    {"fillAlt", ShapeDef::InstructionType::FillAlt},
+    {"fillSolid", ShapeDef::InstructionType::FillSolid},
+    {"goToOrigin", ShapeDef::InstructionType::GoToOrigin},
+    {"goToStart", ShapeDef::InstructionType::GoToStart},
+    {"lineWidth", ShapeDef::InstructionType::LineWidth},
+    {"rectangle", ShapeDef::InstructionType::Rectangle},
+    {"rLineTo", ShapeDef::InstructionType::RLineTo},
+    {"rMoveTo", ShapeDef::InstructionType::RMoveTo},
+    {"setArrowhead", ShapeDef::InstructionType::SetArrowhead},
+    {"setBlack", ShapeDef::InstructionType::SetBlack},
+    {"setDash", ShapeDef::InstructionType::SetDash},
+    {"setFont", ShapeDef::InstructionType::SetFont},
+    {"setGray", ShapeDef::InstructionType::SetGray},
+    {"setWhite", ShapeDef::InstructionType::SetWhite},
+    {"slur", ShapeDef::InstructionType::Slur},
+    {"startGroup", ShapeDef::InstructionType::StartGroup},
+    {"startObject", ShapeDef::InstructionType::StartObject},
+    {"stroke", ShapeDef::InstructionType::Stroke},
+    {"vertMode", ShapeDef::InstructionType::VerticalMode},
+});
+
+MUSX_XML_ENUM_MAPPING(ShapeDef::ShapeType, {
+    {"other", ShapeDef::ShapeType::Other}, // Default value, may not appear in XML, but the Finale binary contains the string.
+    {"articulation", ShapeDef::ShapeType::Articulation},
+    {"barline", ShapeDef::ShapeType::Barline},
+    {"executable", ShapeDef::ShapeType::Executable},
+    {"expression", ShapeDef::ShapeType::Expression},
+    {"note", ShapeDef::ShapeType::CustomStem},
+    {"frame", ShapeDef::ShapeType::Frame},
+    {"arrowhead", ShapeDef::ShapeType::Arrowhead},
+    {"fretboard", ShapeDef::ShapeType::Fretboard},
+    {"clef", ShapeDef::ShapeType::Clef},
 });
 
 MUSX_XML_ENUM_MAPPING(SmartShape::ShapeType, {
@@ -267,6 +332,51 @@ MUSX_XML_ELEMENT_ARRAY(AcciOrderSharps, {
     {"acci", [](const XmlElementPtr& e, const std::shared_ptr<AcciOrderSharps>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
+    {"charMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->charMain = e->getTextAs<char32_t>(); }},
+    {"fontMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->fontMain->fontId = e->getTextAs<Cmper>(); }},
+    {"sizeMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->fontMain->fontSize = e->getTextAs<int>(); }},
+    {"efxMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { factory::populateFontEfx(e, i->fontMain); }},
+    {"copyMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->copyMode = toEnum<ArticulationDef::CopyMode>(e); }},
+    {"autoHorz", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->autoHorz = true; }},
+    {"autoVert", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->autoVert = true; }},
+    {"autoVertMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoVertMode = toEnum<ArticulationDef::AutoVerticalMode>(e); }},
+    {"aboveSymbolAlt", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->aboveSymbolAlt = true; }},
+    {"belowSymbolAlt", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->belowSymbolAlt = true; }},
+    {"insideSlur", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->insideSlur = true; }},
+    {"autoStack", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->autoStack = true; }},
+    {"centerOnStem", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->centerOnStem = true; }},
+    {"slurInteractionMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->slurInteractionMode = toEnum<ArticulationDef::SlurInteractionMode>(e); }},
+    {"charAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->charAlt = e->getTextAs<char32_t>(); }},
+    {"fontAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->fontAlt->fontId = e->getTextAs<Cmper>(); }},
+    {"sizeAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->fontAlt->fontSize = e->getTextAs<int>(); }},
+    {"efxAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { factory::populateFontEfx(e, i->fontAlt); }},
+    {"xOffsetMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->xOffsetMain = e->getTextAs<Evpu>(); }},
+    {"yOffsetMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->yOffsetMain = e->getTextAs<Evpu>(); }},
+    {"defVertPos", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->defVertPos = e->getTextAs<Evpu>(); }},
+    {"avoidStaffLines", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->avoidStaffLines = true; }},
+    {"playArtic", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->playArtic = true; }},
+    {"xOffsetAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->xOffsetAlt = e->getTextAs<Evpu>(); }},
+    {"yOffsetAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->yOffsetAlt = e->getTextAs<Evpu>(); }},
+    {"mainIsShape", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->mainIsShape = true; }},
+    {"altIsShape", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->altIsShape = true; }},
+    {"mainShape", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->mainShape = e->getTextAs<Cmper>(); }},
+    {"altShape", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->altShape = e->getTextAs<Cmper>(); }},
+    {"startTopNoteDelta", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->startTopNoteDelta = e->getTextAs<int>(); }},
+    {"startBotNoteDelta", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->startBotNoteDelta = e->getTextAs<int>(); }},
+    {"startTopNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->startTopNotePercent = e->getTextAs<int>(); }},
+    {"startBotNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->startBotNotePercent = e->getTextAs<int>(); }},
+    {"durTopNoteDelta", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->durTopNoteDelta = e->getTextAs<int>(); }},
+    {"durBotNoteDelta", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->durBotNoteDelta = e->getTextAs<int>(); }},
+    {"durTopNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->durTopNotePercent = e->getTextAs<int>(); }},
+    {"durBotNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->durBotNotePercent = e->getTextAs<int>(); }},
+    {"ampTopNoteDelta", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampTopNoteDelta = e->getTextAs<int>(); }},
+    {"ampBotNoteDelta", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampBotNoteDelta = e->getTextAs<int>(); }},
+    {"ampTopNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampTopNotePercent = e->getTextAs<int>(); }},
+    {"ampBotNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampBotNotePercent = e->getTextAs<int>(); }},
+    {"outsideStaff", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->outsideStaff = true; }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(ClefList, {
     {"clef", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->clefIndex = e->getTextAs<ClefIndex>(); }},
     {"xEduPos", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->xEduPos = e->getTextAs<Edu>(); }},
@@ -394,6 +504,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
     {"dontScaleWithEntry", [](const XmlElementPtr&, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = true; }},
     {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
     {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+    {"hidden", [](const XmlElementPtr&, const std::shared_ptr<MeasureExprAssign>& i) { i->hidden = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
@@ -550,6 +661,16 @@ MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
     {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(ShapeData, {
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ShapeData>& i) { i->data.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ShapeDef, {
+    {"instList", [](const XmlElementPtr& e, const std::shared_ptr<ShapeDef>& i) { i->instructionList = e->getTextAs<Cmper>(); }},
+    {"dataList", [](const XmlElementPtr& e, const std::shared_ptr<ShapeDef>& i) { i->dataList = e->getTextAs<Cmper>(); }},
+    {"shapeType", [](const XmlElementPtr& e, const std::shared_ptr<ShapeDef>& i) { i->shapeType = toEnum<ShapeType>(e); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
     {"categoryID", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->categoryId = e->getTextAs<Cmper>(); }},
@@ -571,8 +692,19 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
     {"useCategoryPos", [](const XmlElementPtr&, const std::shared_ptr<ShapeExpressionDef>& i) { i->useCategoryPos = true; }},
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
-    });
+});
 
+MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList::Instruction, {
+    {"numData", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::Instruction>& i) { i->numData = e->getTextAs<int>(); }},
+    {"tag", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::Instruction>& i) { i->type = toEnum<ShapeDef::InstructionType, true>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList, {
+    {"instruct", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList>& i) {
+        i->instructions.push_back(FieldPopulator<ShapeInstructionList::Instruction>::createAndPopulate(e));
+    }},
+});
+    
 MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPoint, {
     {"inst", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
     {"meas", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},

@@ -1617,6 +1617,30 @@ bool others::RepeatEndingStart::calcIsOpen() const
     return false;
 }
 
+// ********************
+// ***** ShapeDef *****
+// ********************
+
+void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::InstructionType, std::vector<int>)> callback) const
+{
+    auto insts = getDocument()->getOthers()->get<others::ShapeInstructionList>(getPartId(), instructionList);
+    auto data = getDocument()->getOthers()->get<others::ShapeData>(getPartId(), dataList);
+    if (insts && data) {
+        size_t currentDataIndex = 0;
+        for (const auto& inst : insts->instructions) {
+            if (currentDataIndex + inst->numData > data->data.size()) {
+                throw std::invalid_argument("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
+            }
+            if (!callback(inst->type, { data->data.begin() + currentDataIndex, data->data.begin() + currentDataIndex + inst->numData })) {
+                break;
+            }
+            currentDataIndex += inst->numData;
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) + " is missing instructions and/or data.");
+    }
+}
+
 // **********************
 // ***** SmartShape *****
 // **********************
@@ -2151,22 +2175,23 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 // ***** TextBlock *****
 // *********************
 
+std::shared_ptr<TextsBase> others::TextBlock::getRawTextBlock() const
+{
+    switch (textType) {
+        default:
+        case TextType::Block:
+            return getDocument()->getTexts()->get<texts::BlockText>(textId);
+        case TextType::Expression:
+            return getDocument()->getTexts()->get<texts::ExpressionText>(textId);        
+    }    
+}
+
 std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    auto document = getDocument();
-    auto getText = [&](const auto& block) -> std::string {
-        if (!block) return {};
-        if (!trimTags) return block->text;
-        auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
-        return musx::util::EnigmaString::trimTags(retval);
-    };
-    switch (textType) {
-    default:
-    case TextType::Block:
-        return getText(document->getTexts()->get<texts::BlockText>(textId));
-    case TextType::Expression:
-        return getText(document->getTexts()->get<texts::ExpressionText>(textId));        
-    }
+    auto block = getRawTextBlock();
+    if (!block) return {};
+    auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
+    return musx::util::EnigmaString::trimTags(retval);
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
@@ -2181,6 +2206,11 @@ std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper 
 // *****************************
 // ***** TextExpressionDef *****
 // *****************************
+
+std::shared_ptr<others::TextBlock> others::TextExpressionDef::getTextBlock() const
+{
+    return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), textIdKey);
+}
 
 std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 {

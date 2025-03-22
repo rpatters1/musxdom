@@ -285,6 +285,7 @@ TEST(MeasureExprAssign, Populate)
       <dontScaleWithEntry/>
       <staffGroup>1</staffGroup>
       <staffList>1</staffList>
+      <hidden/>
     </measExprAssign>
     <measExprAssign cmper="2" inci="0">
       <shapeExprID>1</shapeExprID>
@@ -312,6 +313,7 @@ TEST(MeasureExprAssign, Populate)
     EXPECT_TRUE(expr1->dontScaleWithEntry); // From XML
     EXPECT_EQ(expr1->staffGroup, 1);   // From XML
     EXPECT_EQ(expr1->staffList, 1);    // From XML
+    EXPECT_TRUE(expr1->hidden); // From XML
 
     // Check second expression assignment (cmper=2)
     auto expr2 = others->get<others::MeasureExprAssign>(SCORE_PARTID, 2, 0);
@@ -325,6 +327,7 @@ TEST(MeasureExprAssign, Populate)
     EXPECT_EQ(expr2->staffAssign, 1);   // From XML
     EXPECT_EQ(expr2->staffGroup, 0);   // From XML
     EXPECT_EQ(expr2->staffList, 0);    // From XML
+    EXPECT_FALSE(expr2->hidden); // From XML
 
     // Ensure that an invalid MeasureExprAssign isn't found
     auto exprInvalid = others->get<others::MeasureExprAssign>(SCORE_PARTID, 3);

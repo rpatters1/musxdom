@@ -167,6 +167,105 @@ public:
 };
 
 /**
+ * @class ArticulationDef
+ * @brief Stores the properties and behaviors of articulation definitions.
+ *
+ * The playback "delta" and "percent" values are alternatives. For each type of playback modification, one or the other
+ * is used. The other is zero.
+ *
+ * This class is identified by the XML node name "articDef".
+ */
+class ArticulationDef : public OthersBase
+{
+public:
+    /**
+     * @brief Defines the automatic vertical positioning mode. These values are only meaningful
+     * if #autoVert is true. Otherwise #autoVertMode has the default value but it means "Manual"
+     */
+    enum class AutoVerticalMode
+    {
+        AlwaysNoteheadSide,         ///< default value (may not appear in xml)
+        AutoNoteStem,               ///< "Auto Notehead/Stem Side"
+        StemSide,                   ///< "Always Stem Side"
+        AlwaysOnStem,               ///< "On Stem"
+        AboveEntry,                 ///< "Above Note"
+        BelowEntry,                 ///< "Below Note"
+    };
+
+    /**
+     * @brief Defines the character copy mode (vertical or horizontal)
+     */
+    enum class CopyMode
+    {
+        None,                       ///< default value (may not appear in xml)
+        Vertical,                   ///< Copy symbol vertically (xml value is "both")
+        Horizontal                  ///< Copy symbol horizontally
+    };
+
+    /**
+     * @brief Defines the interaction mode with slurs.
+     */
+    enum class SlurInteractionMode
+    {
+        Ignore,             ///< default value (may not appear in xml)
+        InsideSlur,
+        AvoidSlur
+    };
+
+    /**
+     * @brief Constructor.
+     *
+     * Initializes all fields to their default values.
+     */
+    explicit ArticulationDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper), fontMain(new FontInfo(document)), fontAlt(new FontInfo(document)) {}
+
+    char32_t charMain{};                           ///< Main symbol character (utf32).
+    std::shared_ptr<FontInfo> fontMain;            ///< The font info for the main symbol. (xml nodes `<fontMain>`, `<sizeMain>`, and `<efxMain>`)
+    CopyMode copyMode{};                           ///< "Copy Main Symbol" option.
+    bool autoHorz{};                               ///< Whether horizontal auto-positioning is enabled.
+    bool autoVert{};                               ///< Whether vertical auto-positioning is enabled.
+    AutoVerticalMode autoVertMode{};               ///< Auto vertical positioning mode.
+    bool aboveSymbolAlt{};                         ///< Whether the alternate symbol is used above. (Otherwise main symbol is used.)
+    bool belowSymbolAlt{};                         ///< Whether the alternate symbol is used below. (Otherwise main symbol is used.)
+    bool insideSlur{};                             ///< Whether the articulation is inside a slur. (Used *in addition* to #SlurInteractionMode::InsideSlur)
+    bool autoStack{};                              ///< Whether automatic stacking is enabled.
+    bool centerOnStem{};                           ///< Whether centering on the stem is enabled.
+    SlurInteractionMode slurInteractionMode{};     ///< Slur interaction mode.
+    char32_t charAlt{};                            ///< Alternate symbol character (utf32).
+    std::shared_ptr<FontInfo> fontAlt;             ///< The font info for the alternate symbol. (xml nodes `<fontAlt>`, `<sizeAlt>`, and `<efxAlt>`)
+    Evpu xOffsetMain{};                            ///< Horizontal offset for the main symbol.
+    Evpu yOffsetMain{};                            ///< Vertical offset for the main symbol.
+    Evpu defVertPos{};                             ///< Default vertical position.
+    bool avoidStaffLines{};                        ///< Whether to avoid staff lines.
+    bool playArtic{};                              ///< Whether playback articulation is enabled.
+    Evpu xOffsetAlt{};                             ///< Horizontal offset for the alternate symbol.
+    Evpu yOffsetAlt{};                             ///< Vertical offset for the alternate symbol.
+    bool mainIsShape{};                            ///< Whether the main symbol is a shape.
+    bool altIsShape{};                             ///< Whether the alternate symbol is a shape.
+    Cmper mainShape{};                             ///< Main shape ID (if applicable).
+    Cmper altShape{};                              ///< Alternate shape ID (if applicable).
+    int startTopNoteDelta{};                       ///< Attack change for the top note.
+    int startBotNoteDelta{};                       ///< Attack change for the bottom note.
+    int startTopNotePercent{};                     ///< Attack change percent for the top note.
+    int startBotNotePercent{};                     ///< Attack change percent for the bottom note.
+    int durTopNoteDelta{};                         ///< Duration change for the top note.
+    int durBotNoteDelta{};                         ///< Duration change for the bottom note.
+    int durTopNotePercent{};                       ///< Duration percent change for the top note.
+    int durBotNotePercent{};                       ///< Duration percent change for the bottom note.
+    int ampTopNoteDelta{};                         ///< Key velocity change for the top note.
+    int ampBotNoteDelta{};                         ///< Key velocity change for the bottom note.
+    int ampTopNotePercent{};                       ///< Key velocity percentage for the top note.
+    int ampBotNotePercent{};                       ///< Key velocity percentage for the bottom note.
+    bool outsideStaff{};                           ///< Whether the articulation is outside the staff.
+
+    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
+
+    constexpr static std::string_view XmlNodeName = "articDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ArticulationDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ClefList
  * @brief Represents an element in multimeasure clef list with its positioning and percentage values.
  *
@@ -630,8 +729,8 @@ public:
     bool showFullNames{};       ///< "Show Full Staff & Group Names"
     bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
     bool groupBarlineOverride{}; ///< Override the barline specified by a @ref details::StaffGroup (if any)
-    Cmper customBarShape{};     ///< Cmper of Shape Designer shape for custom right barline
-    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer shape for custom left barline
+    Cmper customBarShape{};     ///< Cmper of Shape Designer @ref ShapeDef for custom right barline
+    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer @ref ShapeDef for custom left barline
     ShowKeySigMode showKey{};   ///< Show mode for key signatures
     ShowTimeSigMode showTime{}; ///< Show mode for time signatures
     PositioningType positioningMode{}; ///< Positioning type for the measure. (xml node is `<posMode>`)
@@ -733,6 +832,7 @@ public:
     bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
     Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
     Cmper staffList{};          ///< The cmper of the staff list to use if #staffAssign is negative.
+    bool hidden{};              ///< True if the dynamic is hidden.
 
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
@@ -898,7 +998,7 @@ public:
     Evpu measWidth{};           ///< Width of the multemeasure rest "measure" in Evpu. (xml node is `<meaSpace>`)
     MeasCmper nextMeas{};       ///< Next measure after the multimeasure west.
     Evpu numVertAdj{};          ///< Vertical number adjustment, sign-revered from Finale UI. (xml node is `<numdec>`)
-    Cmper shapeDef{};           ///< Cmper of Shape Designer shape that specifies the H-bar.
+    Cmper shapeDef{};           ///< Cmper of Shape Designer @ref ShapeDef that specifies the H-bar.
     int numStart{};             ///< Number start value. If the number of measures in the multimeasure rest is fewer than this
                                 ///< number, no number appears on the multimeasure rest.
     int symbolThreshold{};      ///< If the number of rests is less than this value, symbols are used when #useSymbols is true. (xml node is `<threshold>`)
@@ -1266,6 +1366,108 @@ public:
 };
 
 /**
+ * @class ShapeData
+ * @brief Represents the data for instruction associated with a @ref ShapeDef.
+ *
+ * This class is identified by the XML node name "shapeData".
+ */
+class ShapeData : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit ShapeData(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::vector<int> data; ///< The data. See @ref ShapeInstructionList for how to interpret it. 
+
+    constexpr static std::string_view XmlNodeName = "shapeData"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+class ShapeInstructionList;
+/**
+ * @class ShapeDef
+ * @brief Represents a shape created in Finale's Shape Designer.
+ *
+ * This class is identified by the XML node name "shapeDef".
+ */
+class ShapeDef : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit ShapeDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    /// @brief Defines the instruction types for Shape Designer shapes.
+    enum class InstructionType
+    {
+        Undocumented,       ///< catch-all for instruction tags not yet documented
+        Bracket,
+        CloneChar,
+        ClosePath,
+        CurveTo,
+        DrawChar,
+        Ellipse,
+        EndGroup,
+        ExternalGraphic,
+        FillAlt,
+        FillSolid,
+        GoToOrigin,
+        GoToStart,
+        LineWidth,
+        Rectangle,
+        RLineTo,
+        RMoveTo,
+        SetArrowhead,
+        SetBlack,
+        SetDash,
+        SetFont,
+        SetGray,
+        SetWhite,
+        Slur,
+        StartGroup,
+        StartObject,
+        Stroke,
+        VerticalMode
+    };
+
+    /**
+     * @enum ShapeType
+     * @brief Represents different types of shapes in Finale's Shape Designer.
+     */
+    enum class ShapeType
+    {
+        Other = 0,          ///< May Correspond to "other" in XML (but may not appear in XML). All pre-Fin2k shapes use this value.
+        Articulation = 1,   ///< Corresponds to "articulation" in XML.
+        Barline = 2,        ///< Corresponds to "barline" in XML.
+        Executable = 3,     ///< Corresponds to "executable" in XML.
+        Expression = 4,     ///< Corresponds to "expression" in XML.
+        CustomStem = 5,     ///< Corresponds to "note" in XML.
+        Frame = 6,          ///< Corresponds to "frame" in XML.
+        Arrowhead = 7,      ///< Corresponds to "arrowhead" in XML.
+        Fretboard = 8,      ///< Corresponds to "fretboard" in XML.
+        Clef = 9            ///< Corresponds to "clef" in XML.
+    };
+
+    Cmper instructionList;  ///< Instruction list @ref Cmper. (xml node is `<instList>`)
+    Cmper dataList;         ///< Instruction data list @ref Cmper.
+    ShapeType shapeType;    ///< Shape type (specifies which type of entity this shape pertains to)
+
+    /// @brief Iterates through the instructions in the shape
+    /// @param callback The callback function. Returning `false` from this function aborts the iteration loop.
+    void iterateInstructions(std::function<bool(InstructionType, std::vector<int>)> callback) const;
+
+    bool requireAllFields() const override { return false; }
+
+    constexpr static std::string_view XmlNodeName = "shapeDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ShapeExpressionDef
  * @brief Stores the properties and behaviors of shape expressions.
  *
@@ -1281,7 +1483,7 @@ public:
     explicit ShapeExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    Cmper shapeDef{};                               ///< Identifier for the Shape Designer Shape associated with this expression.
+    Cmper shapeDef{};                               ///< Identifier for the Shape Designer @ref ShapeDef associated with this expression.
     Cmper categoryId{};                             ///< Identifier for the category of the text expression. (xml node is "categoryID")
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
@@ -1307,7 +1509,39 @@ public:
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
+
+/**
+ * @class ShapeInstructionList
+ * @brief Represents the data for instruction associated with a @ref ShapeDef.
+ *
+ * This class is identified by the XML node name "shapeList".
+ */
+class ShapeInstructionList : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit ShapeInstructionList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
     
+    /// @brief An instruction in the shape
+    class Instruction
+    {
+    public:
+
+        int numData{};                      ///< the number of data items consumed by this instruction (See @ref ShapeData.)
+        ShapeDef::InstructionType type{};   ///< the type of instruction
+
+        static const xml::XmlElementArray<Instruction>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::vector<std::shared_ptr<Instruction>> instructions; ///< The instructions.
+
+    constexpr static std::string_view XmlNodeName = "shapeList"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeInstructionList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 class StaffStyle;
 /**
  * @class Staff
@@ -1721,6 +1955,9 @@ public:
     Efix cornerRadius{};               ///< Corner radius for rounded corners.
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
 
+    /// @brief Gets the raw text block (from the `texts` pool) based on #textType.
+    std::shared_ptr<TextsBase> getRawTextBlock() const;
+
     /** @brief return display text with Enigma tags removed */
     std::string getText(bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
@@ -1742,6 +1979,14 @@ public:
  */
 class TextExpressionDef : public OthersBase {
 public:
+    /**
+     * @brief Constructor.
+     *
+     * Initializes all fields to their default values.
+     */
+    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
     Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this 
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
@@ -1765,13 +2010,8 @@ public:
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
-    /**
-     * @brief Constructor.
-     *
-     * Initializes all fields to their default values.
-     */
-    explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
+    /** @brief Gets the enclosure for this expression, or nullptr if none. */
+    std::shared_ptr<TextBlock> getTextBlock() const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;

@@ -57,6 +57,20 @@ namespace details {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
+MUSX_XML_ELEMENT_ARRAY(ArticulationAssign, {
+    {"articDef", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->articDef = e->getTextAs<Cmper>(); }},
+    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"horzAdd", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->horzAdd = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"vertAdd", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->vertAdd = e->getTextAs<Evpu>(); }},
+    {"overridePlacement", [](const XmlElementPtr&, const std::shared_ptr<ArticulationAssign>& i) { i->overridePlacement = true; }},
+    {"aboveEntry", [](const XmlElementPtr&, const std::shared_ptr<ArticulationAssign>& i) { i->aboveEntry = true; }},
+    {"hide", [](const XmlElementPtr&, const std::shared_ptr<ArticulationAssign>& i) { i->hide = true; }},
+    {"neverStack", [](const XmlElementPtr&, const std::shared_ptr<ArticulationAssign>& i) { i->neverStack = true; }},
+    {"avoidSlur", [](const XmlElementPtr&, const std::shared_ptr<ArticulationAssign>& i) { i->avoidSlur = true; }},
+    {"numSlursAvoided", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->numSlursAvoided = e->getTextAs<int>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Baseline, {
     {"basedisp", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->baselineDisplacement = e->getTextAs<Evpu>(); }},
     {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
