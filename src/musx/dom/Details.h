@@ -667,6 +667,7 @@ public:
     bool metricCenter{};                    ///< "Center Number Using Duration"
     bool avoidStaff{};                      ///< "Avoid Staff"
     AutoBracketStyle autoBracketStyle{};    ///< Autobracket style
+    bool hidden{};                          ///< Inverse of "Show"
     Evpu tupOffX{};                         ///< Horizontal offset.
     Evpu tupOffY{};                         ///< Vertical.
     Evpu brackOffX{};                       ///< Horizontal offset for brackets.

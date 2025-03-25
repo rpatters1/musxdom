@@ -83,6 +83,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <metricCenter/>
       <avoidStaff/>
       <autoBracketStyle>neverBeamSide</autoBracketStyle>
+      <hidden/>
       <tupOffX>1</tupOffX>
       <tupOffY>24</tupOffY>
       <brackOffX>2</brackOffX>
@@ -124,6 +125,7 @@ TEST(TupletDefTest, PopulateFields)
     EXPECT_TRUE(tupletDef->metricCenter);
     EXPECT_TRUE(tupletDef->avoidStaff);
     EXPECT_EQ(tupletDef->autoBracketStyle, options::TupletOptions::AutoBracketStyle::NeverBeamSide);
+    EXPECT_TRUE(tupletDef->hidden);
     EXPECT_EQ(tupletDef->tupOffX, 1);
     EXPECT_EQ(tupletDef->tupOffY, 24);
     EXPECT_EQ(tupletDef->brackOffX, 2);

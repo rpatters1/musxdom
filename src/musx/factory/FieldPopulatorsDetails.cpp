@@ -210,6 +210,7 @@ MUSX_XML_ELEMENT_ARRAY(TupletDef, {
     {"metricCenter", [](const XmlElementPtr&, const std::shared_ptr<TupletDef>& i) { i->metricCenter = true; }},
     {"avoidStaff", [](const XmlElementPtr&, const std::shared_ptr<TupletDef>& i) { i->avoidStaff = true; }},
     {"autoBracketStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->autoBracketStyle = toEnum<TupletDef::AutoBracketStyle>(e); }},
+    {"hidden", [](const XmlElementPtr&, const std::shared_ptr<TupletDef>& i) { i->hidden = true; }},
     {"tupOffX", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->tupOffX = e->getTextAs<Evpu>(); }},
     {"tupOffY", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->tupOffY = e->getTextAs<Evpu>(); }},
     {"brackOffX", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->brackOffX = e->getTextAs<Evpu>(); }},
