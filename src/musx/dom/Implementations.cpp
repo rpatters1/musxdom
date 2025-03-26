@@ -330,6 +330,13 @@ bool EntryInfoPtr::canBeBeamed() const
     return true;
 }
 
+bool EntryInfoPtr::calcIsBeamStart() const
+{
+    if ((*this)->getEntry()->isHidden) return false; // this is just the first step
+    if (!canBeBeamed()) return false;
+    return (!getPreviousInBeamGroup() && getNextInBeamGroup());
+}
+
 EntryInfoPtr EntryInfoPtr::findBeamEnd() const
 {
     if (!canBeBeamed()) return EntryInfoPtr();
@@ -1680,8 +1687,12 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
             auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entry->getPartId(), entryInfo.getMeasure());
             for (const auto& asgn : shapeAssigns) {
                 if (asgn->shapeNum == getCmper()) {
-                    if (asgn->centerShapeNum) return true;
-                    if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
+                    if (entryInfo.getMeasure() > startTermSeg->endPoint->measId && entryInfo.getMeasure() < endTermSeg->endPoint->measId) {
+                        return true;
+                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId && entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
+                        return entryInfo->elapsedDuration.calcEduDuration() >= startTermSeg->endPoint->calcEduPosition()
+                               && entryInfo->elapsedDuration.calcEduDuration() <= endTermSeg->endPoint->calcEduPosition();
+                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
                         return entryInfo->elapsedDuration.calcEduDuration() >= startTermSeg->endPoint->calcEduPosition();
                     } else if (entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
                         return entryInfo->elapsedDuration.calcEduDuration() <= endTermSeg->endPoint->calcEduPosition();

@@ -318,11 +318,8 @@ public:
     }
 
     /// @brief Returns whether this is the start of a primary beam
-    bool calcIsBeamStart() const
-    {
-        if (!canBeBeamed()) return false;
-        return (!getPreviousInBeamGroup() && getNextInBeamGroup());
-    }
+    /// @todo implement this fully and correcly for hidden entries
+    bool calcIsBeamStart() const;
 
     /// @brief Finds the end entry of a beamed group.
     /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
