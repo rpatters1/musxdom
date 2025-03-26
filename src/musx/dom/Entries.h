@@ -318,7 +318,6 @@ public:
     }
 
     /// @brief Returns whether this is the start of a primary beam
-    /// @todo implement this fully and correcly for hidden entries
     bool calcIsBeamStart() const;
 
     /// @brief Finds the end entry of a beamed group.

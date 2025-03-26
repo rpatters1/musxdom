@@ -332,7 +332,7 @@ bool EntryInfoPtr::canBeBeamed() const
 
 bool EntryInfoPtr::calcIsBeamStart() const
 {
-    if ((*this)->getEntry()->isHidden) return false; // this is just the first step
+    if ((*this)->getEntry()->isHidden) return false;
     if (!canBeBeamed()) return false;
     return (!getPreviousInBeamGroup() && getNextInBeamGroup());
 }
@@ -389,23 +389,30 @@ std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const Entr
 {
     auto entry = (*this)->getEntry();
     if (auto opts = entry->getDocument()->getOptions()->get<options::BeamOptions>()) {
-        if (!opts->extendSecBeamsOverRests) {
-            if (calcDisplaysAsRest()) {
-                return 0; // if *this* is a rest, it can't start or end a secondary beam
+        auto cutsBeam = [&](const EntryInfoPtr& entryInfo) -> bool {
+            if (entryInfo->getEntry()->isHidden) {
+                return true;
             }
-            auto nextOrPrevInFrame = (this->*Iterator)();
-            while (true) {
-                assert(nextOrPrevInFrame); // should hit nextOrPrevInBeam before null.
-                if (nextOrPrevInFrame.calcDisplaysAsRest()) {
-                    if (calcNumberOfBeams() >= 2) {
-                        return 2; // rests always cut to 8th beam, so any secondary beam starts or ends
-                    }
-                }
-                if (nextOrPrevInFrame->getEntry()->getEntryNumber() == nextOrPrevInBeam->getEntry()->getEntryNumber()) {
-                    break;
-                }
-                nextOrPrevInFrame = (nextOrPrevInFrame.*Iterator)();
+            if (!opts->extendSecBeamsOverRests && calcDisplaysAsRest()) {
+                return true;
             }
+            return false;
+        };
+        if (cutsBeam(*this)) {
+            return 0; // if *this* is a rest, it can't start or end a secondary beam
+        }
+        auto nextOrPrevInFrame = (this->*Iterator)();
+        while (true) {
+            assert(nextOrPrevInFrame); // should hit nextOrPrevInBeam before null.
+            if (cutsBeam(nextOrPrevInFrame)) {
+                if (calcNumberOfBeams() >= 2) {
+                    return 2; // rests always cut to 8th beam, so any secondary beam starts or ends
+                }
+            }
+            if (nextOrPrevInFrame->getEntry()->getEntryNumber() == nextOrPrevInBeam->getEntry()->getEntryNumber()) {
+                break;
+            }
+            nextOrPrevInFrame = (nextOrPrevInFrame.*Iterator)();
         }
     }
     return std::nullopt;
@@ -413,6 +420,7 @@ std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const Entr
 
 unsigned EntryInfoPtr::calcLowestBeamStart() const
 {
+    if ((*this)->getEntry()->isHidden) return 0;
     if (!canBeBeamed()) return 0;
     auto prev = getPreviousInBeamGroup();
     if (!prev) {
@@ -442,6 +450,7 @@ unsigned EntryInfoPtr::calcLowestBeamStart() const
 
 unsigned EntryInfoPtr::calcLowestBeamEnd() const
 {
+    if ((*this)->getEntry()->isHidden) return 0;
     if (!canBeBeamed()) return 0;
     auto next = getNextInBeamGroup();
     if (!next) {
@@ -563,6 +572,9 @@ EntryInfoPtr EntryInfoPtr::nextPotentialInBeam() const
     if (!next || next->getEntry()->beam) {
         return EntryInfoPtr();
     }
+    if (next && next->getEntry()->isHidden) {
+        return next.nextPotentialInBeam();
+    }
     return next;
 }
 
@@ -571,7 +583,11 @@ EntryInfoPtr EntryInfoPtr::previousPotentialInBeam() const
     if ((*this)->getEntry()->beam) {
         return EntryInfoPtr();
     }
-    return iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
+    auto prev = iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
+    if (prev && prev->getEntry()->isHidden) {
+        return prev.previousPotentialInBeam();
+    }
+    return prev;
 }
 
 template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)() const>

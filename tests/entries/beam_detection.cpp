@@ -126,7 +126,6 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
     }
 }
 
-
 TEST(BeamDetection, PrimaryIncludeRests)
 {
     std::vector<char> xml;
@@ -207,5 +206,57 @@ TEST(BeamDetection, PrimaryIncludeRests)
         checkEntry(entryFrame, 5, true, false, 0);
         checkEntry(entryFrame, 6, false, true, 7);      // start
         checkEntry(entryFrame, 7, false, false, 7);     // end
+    }
+}
+
+
+TEST(BeamDetection, InvisibleEntries)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_invisibles.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto measures = others->getArray<others::Measure>(SCORE_PARTID);
+    EXPECT_GE(measures.size(), 4);
+    for (const auto& meas : measures) {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, meas->getCmper());
+        //EXPECT_TRUE(gfhold);
+        if (gfhold) {
+            std::cout << "Measure " << gfhold->getCmper2() << std::endl;
+            gfhold->iterateEntries([](const EntryInfoPtr& entryInfo) {
+                if (entryInfo.calcIsBeamStart()) {
+                    auto next = entryInfo;
+                    std::cout << "    Beam:";
+                    while (next) {
+                        std::cout << " " << next.getIndexInFrame();
+                        next = next.getNextInBeamGroup();
+                    }
+                    std::cout << std::endl;
+                } else if (entryInfo.calcLowestBeamEnd() == 1) {
+                    auto prev = entryInfo;
+                    std::cout << "    Reverse Beam:";
+                    while (prev) {
+                        std::cout << " " << prev.getIndexInFrame();
+                        prev = prev.getPreviousInBeamGroup();
+                    }
+                    std::cout << std::endl;
+                }
+                if (entryInfo.calcLowestBeamStart() > 1) {
+                    std::cout << "    entry index " << entryInfo.getIndexInFrame();
+                    std::cout << " secondary beam start " << entryInfo.calcLowestBeamStart() << std::endl;
+                }
+                if (entryInfo.calcLowestBeamStub()) {
+                    std::cout << "    entry index " << entryInfo.getIndexInFrame();
+                    std::cout << (entryInfo.calcBeamStubIsLeft() ? " stub left" : " stub right") << std::endl;
+                }
+                return true;
+            });
+        }
     }
 }
