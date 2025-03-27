@@ -301,6 +301,15 @@ bool EntryInfoPtr::calcDisplaysAsRest() const
     return !(*this)->getEntry()->isNote;
 }
 
+bool EntryInfoPtr::calcUnbeamed() const
+{
+    if (!canBeBeamed()) return true;
+    if ((*this)->getEntry()->isHidden) {
+        return (!getNextInBeamGroup() || !getPreviousInBeamGroup());
+    }
+    return (!getNextInBeamGroup() && !getPreviousInBeamGroup());
+}
+
 NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
 {
     if ((*this)->getEntry()->isNote && src.getEntryInfo()->getEntry()->isNote) {
@@ -339,7 +348,7 @@ bool EntryInfoPtr::calcIsBeamStart() const
 
 EntryInfoPtr EntryInfoPtr::findBeamEnd() const
 {
-    if (!canBeBeamed()) return EntryInfoPtr();
+    if (calcUnbeamed()) return EntryInfoPtr();
     auto next = getNextInBeamGroup();
     if (!next) {
         if (getPreviousInBeamGroup()) return *this;
@@ -353,7 +362,6 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
         }
     }
     return next;
-
 }
 
 unsigned calcNumberOfBeamsInEdu(Edu duration)
@@ -553,17 +561,6 @@ EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
         } while (result && result->getEntry()->graceNote);
     }
     return result;
-}
-
-template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
-bool EntryInfoPtr::iterateNotesExistLeftOrRight() const
-{
-    for (auto curr = (this->*Iterator)(); curr; curr = (curr.*Iterator)()) {
-        if (!curr.calcDisplaysAsRest()) {
-            return false;
-        }
-    }
-    return true;
 }
 
 EntryInfoPtr EntryInfoPtr::nextPotentialInBeam() const

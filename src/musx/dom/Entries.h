@@ -311,11 +311,7 @@ public:
 
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
-    bool calcUnbeamed() const
-    {
-        if (!canBeBeamed()) return true;
-        return (!getNextInBeamGroup() && !getPreviousInBeamGroup());
-    }
+    bool calcUnbeamed() const;
 
     /// @brief Returns whether this is the start of a primary beam
     bool calcIsBeamStart() const;
@@ -350,14 +346,6 @@ public:
     /// where it does not match.
     /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
     bool calcBeamStubIsLeft() const;
-
-    /// @brief Calculates if the current beam has any non-rests (i.e., notes) to the left of the current entry.
-    bool calcBeamNotesExistLeft() const
-    { return iterateNotesExistLeftOrRight<&EntryInfoPtr::getPreviousInBeamGroup>(); }
-
-    /// @brief Calculates if the current beam has any non-rests (i.e., notes) to the right of the current entry.
-    bool calcBeamNotesExistRight() const
-    { return iterateNotesExistLeftOrRight<&EntryInfoPtr::getNextInBeamGroup>(); }
 
 private:
     bool canBeBeamed() const;
