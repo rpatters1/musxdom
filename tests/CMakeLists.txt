@@ -101,6 +101,8 @@ add_executable(musxdomtests
 	details/staff_group.cpp
     details/tie_alter.cpp
     details/tuplet_def.cpp
+    # music_theory
+    music_theory/transpose.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")

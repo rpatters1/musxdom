@@ -78,7 +78,6 @@ private:
     static constexpr std::array<int, STANDARD_DIATONIC_STEPS> MINOR_KEYMAP = { 0, 2, 3, 5, 7, 8, 10 };
     int m_displacement; 
     int m_alteration;   ///< alteration from key signature
-    int m_tonalCenter;
     int m_numberOfSteps; // number of steps in the EDO (default 12)
     std::vector<int> m_keyMap; // step map for the EDO
 
@@ -96,14 +95,13 @@ public:
     /// @brief Construction function
     /// @param displacement     ///< the scale step displacement value. 0 signifies the tonic in the C4 (middle-C) octave
     /// @param alteration       ///< the number of chromatic half-step alterations. This is not the same as EDO steps.
-    /// @param tonalCenter      ///< 0..6, signifying C, D, E, F, G, A, B.
     /// @param isMinor          ///< true if the key is a minor key
-    /// @param numberOfSteps    ///< The the number of steps in the EDO. (E.g., 31-EDO would pass 31.)
+    /// @param m_numberOfSteps  ///< The the number of steps in the EDO. (E.g., 31-EDO would pass 31.)
     /// @param keyMap           ///< A 7-element map specifying the starting EDO step of each diatonic step. 12-EDO Major (the default) is { 0, 2, 4, 5, 7, 9, 11 }. 
-    Transposer(int displacement, int alteration, int tonalCenter = 0,
+    Transposer(int displacement, int alteration,
         bool isMinor = false, int numberOfSteps = STANDARD_12EDO_STEPS,
-        const std::optional <std::vector<int>>& keyMap)
-        : m_displacement(displacement), m_alteration(alteration), m_tonalCenter(tonalCenter)
+        const std::optional <std::vector<int>>& keyMap = std::nullopt)
+        : m_displacement(displacement), m_alteration(alteration), m_numberOfSteps(numberOfSteps)
     {
         if (keyMap) {
             if (keyMap.value().size() != STANDARD_DIATONIC_STEPS) {
@@ -111,9 +109,9 @@ public:
             }
             m_keyMap = keyMap.value();
         } else if (isMinor) {
-            m_keyMap.emplace_back(MINOR_KEYMAP.begin(), MINOR_KEYMAP.end());
+            m_keyMap.assign(MINOR_KEYMAP.begin(), MINOR_KEYMAP.end());
         } else {
-            m_keyMap.emplace_back(MAJOR_KEYMAP.begin(), MAJOR_KEYMAP.end());
+            m_keyMap.assign(MAJOR_KEYMAP.begin(), MAJOR_KEYMAP.end());
         }
     }
 
@@ -227,7 +225,7 @@ private:
     {
         // std::log(3.0 / 2.0) / std::log(2.0) is 0.5849625007211562.
         static constexpr double kFifthsMultiplier = 0.5849625007211562;
-        return static_cast<int>(std::floor((double(m_keyMap.size()) * kFifthsMultiplier) + 0.5));
+        return static_cast<int>(std::floor(m_numberOfSteps * kFifthsMultiplier) + 0.5);
     }
     
     int calcScaleDegree(int interval) const
@@ -241,13 +239,13 @@ private:
 
     int calcStepsBetweenScaleDegrees(int firstDisplacement, int secondDisplacement) const
     {
-        const int fifthSteps = calcFifthSteps();
         const int firstScaleDegree = calcScaleDegree(firstDisplacement);
         const int secondScaleDegree = calcScaleDegree(secondDisplacement);
         int result = sign(secondDisplacement - firstDisplacement) * (m_keyMap[secondScaleDegree] - m_keyMap[firstScaleDegree]);
         if (result < 0) {
             result += m_numberOfSteps;
         }
+        return result;
     }
 
     int calcStepsInAlteration(int interval, int alteration) const
