@@ -208,6 +208,20 @@ public:
         simplifySpelling();
     }
 
+    /**
+     * @brief Determines if the given displacement and alteration refer to the same pitch as the current state.
+     *
+     * This compares the total EDO step position derived from the current displacement and alteration
+     * with that of the input values. It accounts for microtonal tuning via the custom key map and EDO size.
+     *
+     * @param displacement The scale step displacement to compare.
+     * @param alteration   The chromatic alteration to compare.
+     * @return true if the given values are enharmonically equivalent to the current values.
+     */
+    bool isEnharmonicEquivalent(int displacement, int alteration) const {
+        return calcAbsoluteStep(displacement, alteration) == calcAbsoluteStep(m_displacement, m_alteration);
+    }
+    
 private:
     int calcFifthSteps() const
     {
@@ -236,7 +250,7 @@ private:
         }
     }
 
-    int calcStepsInAlteration(int interval, int alteration)
+    int calcStepsInAlteration(int interval, int alteration) const
     {
         const int fifthSteps = calcFifthSteps();
         const int plusFifths = sign(interval) * alteration * 7;     // number of fifths to add for a chromatic halfstep alteration (in any EDO)
@@ -253,6 +267,16 @@ private:
         const int minusOctaves = DIATONIC_INTERVAL_ADJUSTMENTS[index][1];  // number of octaves
 
         return sign(intervalNormalized) * ((plusFifths * fifthSteps) + (minusOctaves * m_numberOfSteps));
+    }
+
+    int calcAbsoluteStep(int displacement, int alteration) const {
+        const int scaleDegree = calcScaleDegree(displacement); // 0..6
+        const int baseStep = m_keyMap[scaleDegree];
+    
+        const int octaveSteps = (displacement / STANDARD_DIATONIC_STEPS) * m_numberOfSteps;
+        const int chromaticSteps = calcStepsInAlteration(/*interval=*/+1, alteration);
+    
+        return baseStep + chromaticSteps + octaveSteps;
     }
 };
 
