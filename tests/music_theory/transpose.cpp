@@ -70,15 +70,20 @@
      std::vector<int> edo19Major = {0, 3, 6, 8, 11, 14, 17};
      Transposer t(0, 0, false, 19, edo19Major);
  
-     // D♭ = C
-     EXPECT_TRUE(t.isEnharmonicEquivalent(1, -1));
+     // D♭ != C
+     EXPECT_FALSE(t.isEnharmonicEquivalent(1, -2));
+     // but one more flat is equivalent
+     EXPECT_TRUE(t.isEnharmonicEquivalent(1, -3));
  
      // B♯ = C
-     EXPECT_TRUE(t.isEnharmonicEquivalent(-1, 1));
+     EXPECT_TRUE(t.isEnharmonicEquivalent(-1, 2));
  
-     // C♯ != C
-     EXPECT_FALSE(t.isEnharmonicEquivalent(0, 1));
- }
+     // C♯ != D♭
+     t = Transposer(0, 1, false, 19, edo19Major);
+     EXPECT_FALSE(t.isEnharmonicEquivalent(1, -1));
+     // but one more flat is equivalent
+     EXPECT_TRUE(t.isEnharmonicEquivalent(1, -2));
+}
  
  TEST(TransposerTest, SimplifySpellingWorks) {
      Transposer t(1, -2); // D double flat

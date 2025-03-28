@@ -271,9 +271,12 @@ private:
         const int scaleDegree = calcScaleDegree(displacement); // 0..6
         const int baseStep = m_keyMap[scaleDegree];
     
-        const int octaveSteps = (displacement / STANDARD_DIATONIC_STEPS) * m_numberOfSteps;
+        const int octaveCount = (displacement < 0 && displacement % STANDARD_DIATONIC_STEPS != 0)
+                              ? (displacement / STANDARD_DIATONIC_STEPS) - 1
+                              : (displacement / STANDARD_DIATONIC_STEPS);
+        const int octaveSteps = octaveCount * m_numberOfSteps;
         const int chromaticSteps = calcStepsInAlteration(/*interval=*/+1, alteration);
-    
+
         return baseStep + chromaticSteps + octaveSteps;
     }
 };
