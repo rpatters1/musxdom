@@ -28,6 +28,10 @@
 #include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
+ namespace music_theory {
+    class Transposer;
+} // namespace music_theory
+    
 namespace musx {
 namespace dom {
 
@@ -564,6 +568,10 @@ public:
 
     /// @brief Calculates the staff number, taking into account cross staffing
     InstCmper calcStaff() const;
+
+    /// @brief Creates a transposer for this Note instance.
+    /// @return A unique pointer to a transposer for this Note.
+    std::unique_ptr<music_theory::Transposer> createTransposer() const;
 
 private:
     EntryInfoPtr m_entry;

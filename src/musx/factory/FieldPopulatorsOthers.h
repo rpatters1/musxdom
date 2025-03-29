@@ -61,15 +61,43 @@ struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
     using FieldPopulator<Enclosure>::populate;
 };
 
+MUSX_RESOLVER_ENTRY(KeyMapArray, {
+    [](const dom::DocumentPtr& document) {
+        auto arrays = document->getOthers()->getArray<KeyMapArray>(SCORE_PARTID);
+        for (const auto& array : arrays) {
+            auto trimSteps = [&](size_t newSize) {
+                while (array->steps.size() > newSize) {
+                    const auto& elt = array->steps[array->steps.size() - 1];
+                    if (elt->diatonic || elt->hlevel != 0) {
+                        break; // itegrity check below will catch this error
+                    }
+                    array->steps.pop_back();
+                }
+            };
+            if (auto keyFormat = document->getOthers()->get<others::KeyFormat>(SCORE_PARTID, array->getCmper())) {
+                trimSteps(keyFormat->semitones);
+                if (keyFormat->scaleTones != array->countDiatonicSteps() || keyFormat->semitones != array->steps.size()) {
+                    MUSX_INTEGRITY_ERROR("KeyMapArray " + std::to_string(array->getCmper()) + " does not match KeyFormat.");
+                }
+            } else {
+                trimSteps(12);
+                if (array->countDiatonicSteps() != 7 || array->steps.size() != 12) { // default diatonic
+                    MUSX_INTEGRITY_ERROR("KeyMapArray " + std::to_string(array->getCmper()) + " has no KeyFormat but does not match default values.");
+                }
+            }
+        }
+    }
+});
+
 MUSX_RESOLVER_ENTRY(LayerAttributes, {
     [](const dom::DocumentPtr& document) {
         auto layers = document->getOthers()->getArray<LayerAttributes>(SCORE_PARTID);
         if (layers.size() != 4) {
-            throw std::invalid_argument("Expected exactly 4 <layerAtts> elements.");
+            MUSX_INTEGRITY_ERROR("Expected exactly 4 <layerAtts> elements.");
         }
         for (size_t i = 0; i < layers.size(); i++) {
             if (layers[i]->getCmper() != i) {
-                throw std::invalid_argument("Expected <layerAtts> elements to have cmper values 0, 1, 2, 3 in order.");
+                MUSX_INTEGRITY_ERROR("Expected <layerAtts> elements to have cmper values 0, 1, 2, 3 in order.");
             }
         }
     }
@@ -80,7 +108,7 @@ MUSX_RESOLVER_ENTRY(MarkingCategory, {
         auto cats = document->getOthers()->getArray<MarkingCategory>(SCORE_PARTID);
         for (const auto& cat : cats) {
             if (cat->categoryType == MarkingCategory::CategoryType::Invalid) {
-                throw std::invalid_argument("Encountered <markingsCategory> node (cmper " + std::to_string(cat->getCmper()) + ") with no categoryType");
+                MUSX_INTEGRITY_ERROR("Encountered <markingsCategory> node (cmper " + std::to_string(cat->getCmper()) + ") with no categoryType");
             }
         }
     }
@@ -159,7 +187,7 @@ MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
             if (instance->categoryId) {
                 auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
                 if (!markingCat) {
-                    throw std::invalid_argument("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
+                    MUSX_INTEGRITY_ERROR("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
                 markingCat->shapeExpressions.emplace(instance->getCmper(), instance);
             }
@@ -184,7 +212,7 @@ MUSX_RESOLVER_ENTRY(TextExpressionDef, {
             if (instance->categoryId) {
                 auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
                 if (!markingCat) {
-                    throw std::invalid_argument("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
+                    MUSX_INTEGRITY_ERROR("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
                 markingCat->textExpressions.emplace(instance->getCmper(), instance);
             }

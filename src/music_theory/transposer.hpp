@@ -32,7 +32,7 @@ by including it.
 */
 
 /// @namespace music_theory
-/// @brief A dependency free repository of useful functions for music theory
+/// @brief A dependency-free, header-only collection of useful functions for music theory
 namespace music_theory {
 
 constexpr int STANDARD_DIATONIC_STEPS = 7; ///< currently this is the only supported number of diatonic steps.
@@ -95,9 +95,9 @@ public:
     /// @brief Construction function
     /// @param displacement     ///< the scale step displacement value. 0 signifies the tonic in the C4 (middle-C) octave
     /// @param alteration       ///< the number of chromatic half-step alterations. This is not the same as EDO steps.
-    /// @param isMinor          ///< true if the key is a minor key
-    /// @param m_numberOfSteps  ///< The the number of steps in the EDO. (E.g., 31-EDO would pass 31.)
-    /// @param keyMap           ///< A 7-element map specifying the starting EDO step of each diatonic step. 12-EDO Major (the default) is { 0, 2, 4, 5, 7, 9, 11 }. 
+    /// @param isMinor          ///< true if you wish to use the default keymap for minor mode. (Ignored if @p keyMap is provided.)
+    /// @param m_numberOfSteps  ///< the number of steps in the EDO. (E.g., 31-EDO would pass 31.)
+    /// @param keyMap           ///< a 7-element map specifying the starting EDO step of each diatonic step. 12-EDO Major (the default) is { 0, 2, 4, 5, 7, 9, 11 }. 
     Transposer(int displacement, int alteration,
         bool isMinor = false, int numberOfSteps = STANDARD_12EDO_STEPS,
         const std::optional <std::vector<int>>& keyMap = std::nullopt)

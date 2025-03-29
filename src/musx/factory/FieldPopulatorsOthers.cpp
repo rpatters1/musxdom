@@ -410,6 +410,20 @@ MUSX_XML_ELEMENT_ARRAY(InstrumentUsed, {
         { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(KeyFormat, {
+    {"semitones", [](const XmlElementPtr& e, const std::shared_ptr<KeyFormat>& i) { i->semitones = e->getTextAs<unsigned>(); }},
+    {"scaleTones", [](const XmlElementPtr& e, const std::shared_ptr<KeyFormat>& i) { i->scaleTones = e->getTextAs<unsigned>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(KeyMapArray::StepElement, {
+    {"diatonic", [](const XmlElementPtr&, const std::shared_ptr<KeyMapArray::StepElement>& i) { i->diatonic = true; }},
+    {"hlevel", [](const XmlElementPtr& e, const std::shared_ptr<KeyMapArray::StepElement>& i) { i->hlevel = e->getTextAs<unsigned>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(KeyMapArray, {
+    {"keych", [](const XmlElementPtr& e, const std::shared_ptr<KeyMapArray>& i) { i->steps.push_back(FieldPopulator<KeyMapArray::StepElement>::createAndPopulate(e)); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(LayerAttributes, {
     {"restOffset", [](const XmlElementPtr& e, const std::shared_ptr<LayerAttributes>& i) { i->restOffset = e->getTextAs<int>(); }},
     {"flipTies", [](const XmlElementPtr&, const std::shared_ptr<LayerAttributes>& i) { i->freezTiesToStems = true; }},

@@ -40,7 +40,7 @@ MUSX_RESOLVER_ENTRY(ClefOptions, {
         for (size_t i = 0; i < clefOptions->clefDefs.size(); i++) {
             const auto& def = clefOptions->clefDefs[i];
             if (def->useOwnFont && !def->font) {
-                throw std::invalid_argument("Use own font was specified for clef " + std::to_string(i) + ", but no font was found in the xml.");
+                MUSX_INTEGRITY_ERROR("Use own font was specified for clef " + std::to_string(i) + ", but no font was found in the xml.");
             }
         }
     },

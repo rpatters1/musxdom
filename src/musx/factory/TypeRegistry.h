@@ -202,6 +202,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TonalCenterFlats,
     dom::others::TonalCenterSharps,
     dom::others::InstrumentUsed,
+    dom::others::KeyFormat,
+    dom::others::KeyMapArray,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
     dom::others::MultimeasureRest,

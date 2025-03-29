@@ -441,6 +441,62 @@ public:
 };
 
 /**
+ * @class KeyFormat
+ * @brief The key format for a custom key signature.
+ *
+ * This class is identified by the XML node name "keyFormat".
+ */
+class KeyFormat : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit KeyFormat(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    unsigned semitones{};       ///< Number of semitones in the octave (e.g. 12 for standard keys, 24 for 24-EDO, 31 for 31-EDO, etc.)
+    unsigned scaleTones{};      ///< Number of diatonic steps in the scale (almost always 7).
+
+    constexpr static std::string_view XmlNodeName = "keyFormat"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeyFormat>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class KeyMapArray
+ * @brief An array of step elements from which one can create a key map.
+ *
+ * This class is identified by the XML node name "keyMap".
+ */
+class KeyMapArray : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit KeyMapArray(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /** @class StepElement
+     *  @brief Represents a single `<keych>` element inside the `<keyMap>`.
+     */
+    class StepElement {
+    public:
+        bool diatonic{};    ///< Whether the step is diatonic (true if `<diatonic>` is present).
+        unsigned hlevel{};  ///< Harmonic level (scale degree) of this step. (xml node is `<hlevel>`)
+
+        static const xml::XmlElementArray<StepElement>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::vector<std::shared_ptr<StepElement>> steps; ///< Collection of keych step elements.
+
+    /// @brief Counts the number of diatonic steps in the #steps array
+    unsigned countDiatonicSteps() const
+    {
+        return static_cast<unsigned>(std::count_if(steps.begin(), steps.end(), [](const auto& step) {
+            return step->diatonic;
+        }));
+    }
+
+    constexpr static std::string_view XmlNodeName = "keyMap"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeyMapArray>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
  * @class LayerAttributes
  * @brief Represents the attributes of a Finale "layer".
  *

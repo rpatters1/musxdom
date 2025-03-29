@@ -60,8 +60,8 @@
       </created>
       <modified>
         <year>2025</year>
-        <month>2</month>
-        <day>24</day>
+        <month>3</month>
+        <day>29</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -1810,6 +1810,20 @@
       <tcent>0</tcent>
       <tcent>0</tcent>
     </fstKeyFlats>
+    <fstKeyFlats cmper="5">
+      <tcent>0</tcent>
+      <tcent>1</tcent>
+      <tcent>4</tcent>
+      <tcent>0</tcent>
+      <tcent>3</tcent>
+      <tcent>6</tcent>
+      <tcent>2</tcent>
+      <tcent>5</tcent>
+      <tcent>0</tcent>
+      <tcent>0</tcent>
+      <tcent>0</tcent>
+      <tcent>0</tcent>
+    </fstKeyFlats>
     <fstKeySharps cmper="2">
       <tcent>3</tcent>
       <tcent>0</tcent>
@@ -1833,6 +1847,20 @@
       <tcent>1</tcent>
       <tcent>5</tcent>
       <tcent>2</tcent>
+      <tcent>0</tcent>
+      <tcent>0</tcent>
+      <tcent>0</tcent>
+      <tcent>0</tcent>
+    </fstKeySharps>
+    <fstKeySharps cmper="5">
+      <tcent>5</tcent>
+      <tcent>2</tcent>
+      <tcent>6</tcent>
+      <tcent>3</tcent>
+      <tcent>0</tcent>
+      <tcent>4</tcent>
+      <tcent>1</tcent>
+      <tcent>5</tcent>
       <tcent>0</tcent>
       <tcent>0</tcent>
       <tcent>0</tcent>
@@ -5410,7 +5438,7 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>1</harmLev>
+        <harmLev>-4</harmLev>
         <harmAlt>2</harmAlt>
         <isValid/>
         <showAcci/>
@@ -5424,7 +5452,7 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>2</harmLev>
+        <harmLev>-3</harmLev>
         <harmAlt>2</harmAlt>
         <isValid/>
         <showAcci/>
@@ -5438,7 +5466,7 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>3</harmLev>
+        <harmLev>-2</harmLev>
         <harmAlt>2</harmAlt>
         <isValid/>
       </note>
@@ -5451,7 +5479,7 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>4</harmLev>
+        <harmLev>-1</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
         <showAcci/>
@@ -5466,9 +5494,10 @@
       <stemDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>5</harmLev>
+        <harmLev>0</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
+        <showAcci/>
       </note>
     </entry>
     <entry entnum="102" prev="101" next="103">
@@ -5478,7 +5507,7 @@
       <isNote/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
+        <harmLev>1</harmLev>
         <harmAlt>3</harmAlt>
         <isValid/>
         <showAcci/>
@@ -5491,7 +5520,7 @@
       <isNote/>
       <sorted/>
       <note id="1">
-        <harmLev>7</harmLev>
+        <harmLev>2</harmLev>
         <harmAlt>2</harmAlt>
         <isValid/>
         <showAcci/>
@@ -5505,7 +5534,7 @@
       <dummy/>
       <sorted/>
       <note id="1">
-        <harmLev>8</harmLev>
+        <harmLev>3</harmLev>
         <harmAlt>1</harmAlt>
         <isValid/>
         <showAcci/>
@@ -5520,6 +5549,6 @@
     <expression number="4">^font(Times New Roman,4096)^size(12)^nfx(0)C# Phrygian</expression>
     <expression number="5">^font(Times New Roman,4096)^size(12)^nfx(0)D Freyish (non-linear)</expression>
     <expression number="6">^font(Times New Roman,4096)^size(12)^nfx(0)E Major 31-EDO</expression>
-    <expression number="7">^font(Times New Roman,4096)^size(12)^nfx(0)Db Major 31-EDO</expression>
+    <expression number="7">^font(Times New Roman,4096)^size(12)^nfx(0)Bb major 31-EDO</expression>
   </texts>
 </finale>
