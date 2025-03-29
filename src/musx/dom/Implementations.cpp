@@ -31,7 +31,7 @@
  // This header includes method implementations that need to see all the classes in the dom
 
 #include "musx/musx.h"
-#include "music_theory/transposer.hpp"
+#include "music_theory/music_theory.hpp"
 
 #if ! defined(MUSX_RUNNING_ON_WINDOWS)
 #include <pwd.h>
