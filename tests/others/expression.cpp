@@ -265,7 +265,7 @@ TEST(MarkingCategory, MissingCategoryType)
 
     EXPECT_THROW(
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
-        std::invalid_argument
+        integrity_error
     );
 }
 

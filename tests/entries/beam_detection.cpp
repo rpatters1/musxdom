@@ -43,6 +43,37 @@ static void checkEntry(const std::shared_ptr<const EntryFrame>& entryFrame, size
     }
 }
 
+static void expectEntriesInBeam(const std::shared_ptr<const EntryFrame>& entryFrame, const std::vector<size_t>& expectedIndices)
+{
+    ASSERT_FALSE(expectedIndices.empty());
+    auto next = EntryInfoPtr(entryFrame, expectedIndices[0]);
+    ASSERT_TRUE(next);
+    bool isStart = next.calcIsBeamStart();
+    EXPECT_TRUE(isStart) << "entry is not start of beam";
+    if (!isStart) return;
+    size_t x = 0;
+    while (next) {
+        EXPECT_TRUE(x < expectedIndices.size()) << "number of entries in forward iteration exceeds number of expected values";
+        if (x >= expectedIndices.size()) return;
+        EXPECT_EQ(next.getIndexInFrame(), expectedIndices[x]) << "beam index " << x << " is not the expected value in forward iteration";
+        next = next.getNextInBeamGroup();
+        x++;
+    }
+    EXPECT_EQ(x, expectedIndices.size()) << "forward interation did not find enough values";
+    x = expectedIndices.size() - 1;
+    auto prev = EntryInfoPtr(entryFrame, expectedIndices[x]);
+    ASSERT_TRUE(prev);
+    while (prev) {
+        // decrementing x past 0 causes x > size()
+        EXPECT_TRUE(x < expectedIndices.size()) << "number of entries in backward iteration exceeds number of expected values";
+        if (x >= expectedIndices.size()) return;
+        EXPECT_EQ(prev.getIndexInFrame(), expectedIndices[x]) << "beam index " << x << " is not the expected value in backward iteration";
+        prev = prev.getPreviousInBeamGroup();
+        x--;
+    }
+    EXPECT_EQ(x + 1, 0) << "backward interation did not find enough values";
+}
+
 TEST(BeamDetection, PrimaryNoIncludeRests)
 {
     std::vector<char> xml;
@@ -74,6 +105,12 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
         checkEntry(entryFrame, 15, false, false, 15);   // end
         checkEntry(entryFrame, 16, true, false, 0);
         checkEntry(entryFrame, 17, true, false, 0);
+
+        expectEntriesInBeam(entryFrame, { 0, 7, 11 });
+        expectEntriesInBeam(entryFrame, { 1, 2, 5 });
+        expectEntriesInBeam(entryFrame, { 3, 4 });
+        expectEntriesInBeam(entryFrame, { 8, 9, 10 });
+        expectEntriesInBeam(entryFrame, { 14, 15 });
     }
     {
         auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 2, 2);
@@ -95,6 +132,10 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
         checkEntry(entryFrame, 11, false, false, 11);   // end
         checkEntry(entryFrame, 12, true, false, 0);
         checkEntry(entryFrame, 13, true, false, 0);
+
+        expectEntriesInBeam(entryFrame, { 1, 2 });
+        expectEntriesInBeam(entryFrame, { 4, 5 });
+        expectEntriesInBeam(entryFrame, { 8, 9, 10, 11 });
     }
     {
         auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 3, 1);
@@ -123,9 +164,11 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
         checkEntry(entryFrame, 5, true, false, 0);
         checkEntry(entryFrame, 6, false, true, 7);      // start
         checkEntry(entryFrame, 7, false, false, 7);     // end
+
+        expectEntriesInBeam(entryFrame, { 2, 3 });
+        expectEntriesInBeam(entryFrame, { 6, 7 });
     }
 }
-
 
 TEST(BeamDetection, PrimaryIncludeRests)
 {
@@ -158,6 +201,12 @@ TEST(BeamDetection, PrimaryIncludeRests)
         checkEntry(entryFrame, 15, false, false, 16);
         checkEntry(entryFrame, 16, false, false, 16);   // end
         checkEntry(entryFrame, 17, true, false, 0);
+
+        expectEntriesInBeam(entryFrame, { 0, 7, 11, 12 });
+        expectEntriesInBeam(entryFrame, { 1, 2, 5, 6 });
+        expectEntriesInBeam(entryFrame, { 3, 4 });
+        expectEntriesInBeam(entryFrame, { 8, 9, 10 });
+        expectEntriesInBeam(entryFrame, { 13, 14, 15, 16 });
     }
     {
         auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 2, 2);
@@ -179,6 +228,11 @@ TEST(BeamDetection, PrimaryIncludeRests)
         checkEntry(entryFrame, 11, false, false, 11);   // end
         checkEntry(entryFrame, 12, false, false, 12);   // end
         checkEntry(entryFrame, 13, true, false, 0);
+
+        expectEntriesInBeam(entryFrame, { 0, 1, 2, 3 });
+        expectEntriesInBeam(entryFrame, { 4, 5 });
+        expectEntriesInBeam(entryFrame, { 7, 12 });
+        expectEntriesInBeam(entryFrame, { 8, 9, 10, 11 });
     }
     {
         auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 3, 1);
@@ -207,5 +261,88 @@ TEST(BeamDetection, PrimaryIncludeRests)
         checkEntry(entryFrame, 5, true, false, 0);
         checkEntry(entryFrame, 6, false, true, 7);      // start
         checkEntry(entryFrame, 7, false, false, 7);     // end
+
+        expectEntriesInBeam(entryFrame, { 2, 3 });
+        expectEntriesInBeam(entryFrame, { 6, 7 });
+    }
+}
+
+TEST(BeamDetection, InvisibleEntries)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_invisibles.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto measures = others->getArray<others::Measure>(SCORE_PARTID);
+    EXPECT_GE(measures.size(), 4);
+
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+
+        checkEntry(entryFrame, 0, false, true, 3);              // start
+        checkEntry(entryFrame, 1, false, false, 3);             // invisible (but also part of beam 0..3 beam)
+        checkEntry(entryFrame, 2, true, false, 2);              // v2 rest
+        checkEntry(entryFrame, 3, false, false, 3);             // end of beam
+        expectEntriesInBeam(entryFrame, { 0, 3 });              // invisible entry 1 should not be found
+    }
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 2";
+        auto entryFrame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
+
+        checkEntry(entryFrame, 0, true, false, 0);              // invisible (unbeamed)
+        checkEntry(entryFrame, 1, false, true, 3);              // start
+        checkEntry(entryFrame, 2, false, false, 3);              //
+        checkEntry(entryFrame, 3, false, false, 3);             // end of beam
+        expectEntriesInBeam(entryFrame, { 1, 2, 3 });
+
+        checkEntry(entryFrame, 4, false, true, 6);              // start
+        checkEntry(entryFrame, 5, false, false, 6);             //
+        checkEntry(entryFrame, 6, false, false, 6);             // end of beam
+        checkEntry(entryFrame, 7, true, false, 0);              // invisible (unbeamed)
+        expectEntriesInBeam(entryFrame, { 4, 5, 6 });
+    }
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 3";
+        auto entryFrame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 3";
+
+        checkEntry(entryFrame, 0, true, false, 0);              // visible 8th
+        checkEntry(entryFrame, 1, true, false, 0);              // invisible
+        checkEntry(entryFrame, 2, true, false, 0);              // invisible
+        checkEntry(entryFrame, 3, true, false, 0);              // visible 8th rest
+        checkEntry(entryFrame, 4, true, false, 0);              // invisible
+        checkEntry(entryFrame, 5, true, false, 0);              // invisible
+        checkEntry(entryFrame, 6, true, false, 0);              // invisible
+        checkEntry(entryFrame, 7, true, false, 0);              // visible 8th
+    }
+    {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 4";
+        auto entryFrame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 4";
+
+        checkEntry(entryFrame, 0, false, true, 7);              // start
+        checkEntry(entryFrame, 1, false, false, 7);             //
+        checkEntry(entryFrame, 2, false, false, 7);             //
+        checkEntry(entryFrame, 3, false, false, 7);             // invisible
+        checkEntry(entryFrame, 4, false, false, 7);             //
+        checkEntry(entryFrame, 5, false, false, 7);             //
+        checkEntry(entryFrame, 6, false, false, 7);             //
+        checkEntry(entryFrame, 7, false, false, 7);             // end
+        expectEntriesInBeam(entryFrame, { 0, 1, 2, 4, 5, 6, 7 });
+
+        checkEntry(entryFrame, 8, true, false, 0);              // quarter
     }
 }

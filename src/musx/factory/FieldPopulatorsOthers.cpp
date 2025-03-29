@@ -377,6 +377,22 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
     {"outsideStaff", [](const XmlElementPtr&, const std::shared_ptr<ArticulationDef>& i) { i->outsideStaff = true; }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(BeatChartElement::Control, {
+    {"totalDur", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement::Control>& i) { i->totalDur = e->getTextAs<Edu>(); }},
+    {"totalWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement::Control>& i) { i->totalWidth = e->getTextAs<Evpu>(); }},
+    {"minWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement::Control>& i) { i->minWidth = e->getTextAs<Evpu>(); }},
+    {"allotWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement::Control>& i) { i->allotWidth = e->getTextAs<Evpu>(); }}
+});
+
+MUSX_XML_ELEMENT_ARRAY(BeatChartElement, {
+    {"control", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement>& i)
+        { i->control = FieldPopulator<BeatChartElement::Control>::createAndPopulate(e); }},
+    {"dur", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement>& i) { i->dur = e->getTextAs<Edu>(); }},
+    {"pos", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement>& i) { i->pos = e->getTextAs<Evpu>(); }},
+    {"endPos", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement>& i) { i->endPos = e->getTextAs<Evpu>(); }},
+    {"minPos", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement>& i) { i->minPos = e->getTextAs<Evpu>(); }}
+});
+
 MUSX_XML_ELEMENT_ARRAY(ClefList, {
     {"clef", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->clefIndex = e->getTextAs<ClefIndex>(); }},
     {"xEduPos", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->xEduPos = e->getTextAs<Edu>(); }},
@@ -408,6 +424,20 @@ MUSX_XML_ELEMENT_ARRAY(InstrumentUsed, {
     {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
     {"range", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i)
         { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(KeyFormat, {
+    {"semitones", [](const XmlElementPtr& e, const std::shared_ptr<KeyFormat>& i) { i->semitones = e->getTextAs<unsigned>(); }},
+    {"scaleTones", [](const XmlElementPtr& e, const std::shared_ptr<KeyFormat>& i) { i->scaleTones = e->getTextAs<unsigned>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(KeyMapArray::StepElement, {
+    {"diatonic", [](const XmlElementPtr&, const std::shared_ptr<KeyMapArray::StepElement>& i) { i->diatonic = true; }},
+    {"hlevel", [](const XmlElementPtr& e, const std::shared_ptr<KeyMapArray::StepElement>& i) { i->hlevel = e->getTextAs<unsigned>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(KeyMapArray, {
+    {"keych", [](const XmlElementPtr& e, const std::shared_ptr<KeyMapArray>& i) { i->steps.push_back(FieldPopulator<KeyMapArray::StepElement>::createAndPopulate(e)); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(LayerAttributes, {

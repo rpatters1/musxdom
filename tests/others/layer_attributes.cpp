@@ -142,7 +142,7 @@ TEST(LayerAttributesTest, WrongNumberOfLayers)
 
     EXPECT_THROW(
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
-        std::invalid_argument
+        integrity_error
     );
 
     constexpr static musxtest::string_view xml2 = R"xml(
@@ -160,7 +160,7 @@ TEST(LayerAttributesTest, WrongNumberOfLayers)
 
     EXPECT_THROW(
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml2),
-        std::invalid_argument
+        integrity_error
     );
 }
 
@@ -180,7 +180,7 @@ TEST(LayerAttributesTest, WrongCmperVals)
 
     EXPECT_THROW(
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
-        std::invalid_argument
+        integrity_error
     );
     
     constexpr static musxtest::string_view xml2 = R"xml(
@@ -197,6 +197,6 @@ TEST(LayerAttributesTest, WrongCmperVals)
 
     EXPECT_THROW(
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml2),
-        std::invalid_argument
+        integrity_error
     );
 }

@@ -266,6 +266,97 @@ public:
 };
 
 /**
+ * @class BeatChartElement
+ * @brief A single beat chart element from Finale's music spacing system.
+ *
+ * Beat charts define graphical spacing in measures with custom horizontal layout.
+ * They typically consist of a control element followed by several beat positions,
+ * each indicating its duration, position, and spacing information.
+ *
+ * Each instance corresponds to a `<beatChart>` XML node.
+ * Only one `<control>` is expected per measure (inci = 0), and it must precede other entries.
+ *
+ * The cmper is the 1-based measure number for the beat chart.
+ * The inci is a 0-based index into the list of elements in that measure’s beat chart.
+ * The cmper is shared among all entries for a given measure; inci increases with each new item.
+ *
+ * Only inci 0 has the `Control` instance, but this control data is needed by all subsequent
+ * elements in the same measure. The only data member of interest in inci 0 is the control. Inci 0
+ * is not a member of the list but rather a header.
+ *
+ * After automatic note spacing, the pos / endPos fields contain the “ideal width” for each
+ * duration, based on the Music Spacing settings in Document Options. Any additional space is
+ * represented in the minPos fields.
+ *
+ * For any beat chart array of N elements, the display width for element `n` may be calculated as:
+ *
+ * ```
+ * Evpu16 nextMinPos = (n < N - 1) ? element[n + 1].minPos : control->minWidth;
+ * Evpu16 width = MAX(element[n].endPos - element[n].pos, nextMinPos - element[n].minPos);
+ * ```
+ *
+ * If the user manually edits a beat chart, Finale transitions the array from automatic to manual
+ * as follows: The first pos is set to the first minPos, and then the width value (as calculated
+ * above) is used to determine the rest of the pos and endPos fields. The final endPos value
+ * is stored in totalWidth. Finale also sets the first minPos to 0 and all others (including
+ * control->minWidth) to 1.
+ *
+ * The control->allotWidth member has a purpose and effect, but it has proved elusive to document
+ * exactly how it works.
+ *
+ * This class is identified by the XML node name "beatChart".
+ */
+class BeatChartElement : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit BeatChartElement(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    /** @class Control
+     *  @brief Control settings for a beat chart, only used when inci == 0.
+     *
+     *  These values function as a header for the other incis in the chart (starting with inci == 1).
+     */
+    class Control
+    {
+    public:
+        Edu totalDur{};     ///< Total logical duration of the measure (XML: `<totalDur>`)
+        Evpu totalWidth{};  ///< Total width allocated to the measure (XML: `<totalWidth>`)
+        Evpu minWidth{};    ///< Minimum required width (XML: `<minWidth>`)
+        Evpu allotWidth{};  ///< Allotted width before justification (XML: `<allotWidth>`)
+
+        static const xml::XmlElementArray<Control>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    // Populated only when the XML node includes a <control> element
+    std::shared_ptr<Control> control;  ///< Control data for this beat chart element (only present for inci == 0)
+
+    // Populated for standard beat entries (inci > 0)
+    Edu dur{};         ///< Duration of this beat span
+    Evpu pos{};        ///< Horizontal position within the measure
+    Evpu endPos{};     ///< End position of the beat span
+    Evpu minPos{};     ///< Minimum position (see remarks in the class-level description of @ref BeatChartElement)
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+        if (control && getInci() != 0) {
+            MUSX_INTEGRITY_ERROR("Beat chart for measure " + std::to_string(getCmper()) + " has a control instance in inci " + std::to_string(*getInci()));
+        }
+        if (getInci() == 0 && !control) {
+            control = std::make_shared<Control>();
+            MUSX_INTEGRITY_ERROR("Beat chart for measure " + std::to_string(getCmper()) + " is missing its control instance.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "beatChart"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<BeatChartElement>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ClefList
  * @brief Represents an element in multimeasure clef list with its positioning and percentage values.
  *
@@ -440,6 +531,62 @@ public:
     static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class KeyFormat
+ * @brief The key format for a custom key signature.
+ *
+ * This class is identified by the XML node name "keyFormat".
+ */
+class KeyFormat : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit KeyFormat(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    unsigned semitones{};       ///< Number of semitones in the octave (e.g. 12 for standard keys, 24 for 24-EDO, 31 for 31-EDO, etc.)
+    unsigned scaleTones{};      ///< Number of diatonic steps in the scale (almost always 7).
+
+    constexpr static std::string_view XmlNodeName = "keyFormat"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeyFormat>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class KeyMapArray
+ * @brief An array of step elements from which one can create a key map.
+ *
+ * This class is identified by the XML node name "keyMap".
+ */
+class KeyMapArray : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit KeyMapArray(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /** @class StepElement
+     *  @brief Represents a single `<keych>` element inside the `<keyMap>`.
+     */
+    class StepElement {
+    public:
+        bool diatonic{};    ///< Whether the step is diatonic (true if `<diatonic>` is present).
+        unsigned hlevel{};  ///< Harmonic level (scale degree) of this step. (xml node is `<hlevel>`)
+
+        static const xml::XmlElementArray<StepElement>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::vector<std::shared_ptr<StepElement>> steps; ///< Collection of keych step elements.
+
+    /// @brief Counts the number of diatonic steps in the #steps array
+    unsigned countDiatonicSteps() const
+    {
+        return static_cast<unsigned>(std::count_if(steps.begin(), steps.end(), [](const auto& step) {
+            return step->diatonic;
+        }));
+    }
+
+    constexpr static std::string_view XmlNodeName = "keyMap"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeyMapArray>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
 /**
  * @class LayerAttributes
  * @brief Represents the attributes of a Finale "layer".

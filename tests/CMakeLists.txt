@@ -72,6 +72,7 @@ add_executable(musxdomtests
     options/tuplet_options.cpp
     # others
 	others/articulation.cpp
+	others/beat_chart.cpp
 	others/enclosure.cpp
 	others/expression.cpp
 	others/fonts.cpp
@@ -101,6 +102,8 @@ add_executable(musxdomtests
 	details/staff_group.cpp
     details/tie_alter.cpp
     details/tuplet_def.cpp
+    # music_theory
+    music_theory/transpose.cpp
 )
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")

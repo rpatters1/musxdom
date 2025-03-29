@@ -31,6 +31,7 @@
  // This header includes method implementations that need to see all the classes in the dom
 
 #include "musx/musx.h"
+#include "music_theory/music_theory.hpp"
 
 #if ! defined(MUSX_RUNNING_ON_WINDOWS)
 #include <pwd.h>
@@ -301,8 +302,19 @@ bool EntryInfoPtr::calcDisplaysAsRest() const
     return !(*this)->getEntry()->isNote;
 }
 
+bool EntryInfoPtr::calcUnbeamed() const
+{
+    if (!canBeBeamed()) return true;
+    if ((*this)->getEntry()->isHidden) {
+        return (!getNextInBeamGroup() || !getPreviousInBeamGroup());
+    }
+    return (!getNextInBeamGroup() && !getPreviousInBeamGroup());
+}
+
 NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
 {
+    /// @todo (possibly) figure out which is the correct note when two notes of the same
+    /// pitch exist. We would want to associate the first with the first and the second with the second.
     if ((*this)->getEntry()->isNote && src.getEntryInfo()->getEntry()->isNote) {
         auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNoteProperties();
         for (size_t x = 0; x < (*this)->getEntry()->notes.size(); x++) {
@@ -312,7 +324,7 @@ NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
                 return note;
             }
         }
-        /// @todo check for enharmonic equivalents in separate loop
+        // Finale does not allow ties to enharmonic equivalents, so we can safely ignore enharmonics.
     }
     return NoteInfoPtr();
 }
@@ -330,9 +342,16 @@ bool EntryInfoPtr::canBeBeamed() const
     return true;
 }
 
+bool EntryInfoPtr::calcIsBeamStart() const
+{
+    if ((*this)->getEntry()->isHidden) return false;
+    if (!canBeBeamed()) return false;
+    return (!getPreviousInBeamGroup() && getNextInBeamGroup());
+}
+
 EntryInfoPtr EntryInfoPtr::findBeamEnd() const
 {
-    if (!canBeBeamed()) return EntryInfoPtr();
+    if (calcUnbeamed()) return EntryInfoPtr();
     auto next = getNextInBeamGroup();
     if (!next) {
         if (getPreviousInBeamGroup()) return *this;
@@ -346,7 +365,6 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
         }
     }
     return next;
-
 }
 
 unsigned calcNumberOfBeamsInEdu(Edu duration)
@@ -382,23 +400,30 @@ std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const Entr
 {
     auto entry = (*this)->getEntry();
     if (auto opts = entry->getDocument()->getOptions()->get<options::BeamOptions>()) {
-        if (!opts->extendSecBeamsOverRests) {
-            if (calcDisplaysAsRest()) {
-                return 0; // if *this* is a rest, it can't start or end a secondary beam
+        auto cutsBeam = [&](const EntryInfoPtr& entryInfo) -> bool {
+            if (entryInfo->getEntry()->isHidden) {
+                return true;
             }
-            auto nextOrPrevInFrame = (this->*Iterator)();
-            while (true) {
-                assert(nextOrPrevInFrame); // should hit nextOrPrevInBeam before null.
-                if (nextOrPrevInFrame.calcDisplaysAsRest()) {
-                    if (calcNumberOfBeams() >= 2) {
-                        return 2; // rests always cut to 8th beam, so any secondary beam starts or ends
-                    }
-                }
-                if (nextOrPrevInFrame->getEntry()->getEntryNumber() == nextOrPrevInBeam->getEntry()->getEntryNumber()) {
-                    break;
-                }
-                nextOrPrevInFrame = (nextOrPrevInFrame.*Iterator)();
+            if (!opts->extendSecBeamsOverRests && calcDisplaysAsRest()) {
+                return true;
             }
+            return false;
+        };
+        if (cutsBeam(*this)) {
+            return 0; // if *this* is a rest, it can't start or end a secondary beam
+        }
+        auto nextOrPrevInFrame = (this->*Iterator)();
+        while (true) {
+            assert(nextOrPrevInFrame); // should hit nextOrPrevInBeam before null.
+            if (cutsBeam(nextOrPrevInFrame)) {
+                if (calcNumberOfBeams() >= 2) {
+                    return 2; // rests always cut to 8th beam, so any secondary beam starts or ends
+                }
+            }
+            if (nextOrPrevInFrame->getEntry()->getEntryNumber() == nextOrPrevInBeam->getEntry()->getEntryNumber()) {
+                break;
+            }
+            nextOrPrevInFrame = (nextOrPrevInFrame.*Iterator)();
         }
     }
     return std::nullopt;
@@ -406,6 +431,7 @@ std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const Entr
 
 unsigned EntryInfoPtr::calcLowestBeamStart() const
 {
+    if ((*this)->getEntry()->isHidden) return 0;
     if (!canBeBeamed()) return 0;
     auto prev = getPreviousInBeamGroup();
     if (!prev) {
@@ -435,6 +461,7 @@ unsigned EntryInfoPtr::calcLowestBeamStart() const
 
 unsigned EntryInfoPtr::calcLowestBeamEnd() const
 {
+    if ((*this)->getEntry()->isHidden) return 0;
     if (!canBeBeamed()) return 0;
     auto next = getNextInBeamGroup();
     if (!next) {
@@ -539,22 +566,14 @@ EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
     return result;
 }
 
-template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
-bool EntryInfoPtr::iterateNotesExistLeftOrRight() const
-{
-    for (auto curr = (this->*Iterator)(); curr; curr = (curr.*Iterator)()) {
-        if (!curr.calcDisplaysAsRest()) {
-            return false;
-        }
-    }
-    return true;
-}
-
 EntryInfoPtr EntryInfoPtr::nextPotentialInBeam() const
 {
     auto next = iteratePotentialEntryInBeam<&EntryInfoPtr::getNextSameV>();
     if (!next || next->getEntry()->beam) {
         return EntryInfoPtr();
+    }
+    if (next && next->getEntry()->isHidden) {
+        return next.nextPotentialInBeam();
     }
     return next;
 }
@@ -564,7 +583,11 @@ EntryInfoPtr EntryInfoPtr::previousPotentialInBeam() const
     if ((*this)->getEntry()->beam) {
         return EntryInfoPtr();
     }
-    return iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
+    auto prev = iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
+    if (prev && prev->getEntry()->isHidden) {
+        return prev.previousPotentialInBeam();
+    }
+    return prev;
 }
 
 template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)() const>
@@ -1017,38 +1040,41 @@ std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector
 // ***** KeySignature *****
 // ************************
 
+std::vector<unsigned> KeySignature::calcTonalCenterArrayForSharps() const
+{
+    if (isMinor()) {
+        return { 5, 2, 6, 3, 0, 4, 1, 5 };
+    }
+    if (!isBuiltIn()) {
+        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
+            return centers->values;
+        }
+    }
+    // Major or default
+    return { 0, 4, 1, 5, 2, 6, 3, 0 };
+}
+
+std::vector<unsigned> KeySignature::calcTonalCenterArrayForFlats() const
+{
+    if (isMinor()) {
+        return { 5, 1, 4, 0, 3, 6, 2, 5 };
+    }
+    if (!isBuiltIn()) {
+        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
+            return centers->values;
+        }
+    }
+    // Major or default
+    return { 0, 3, 6, 2, 5, 1, 4, 0 };
+}
+
 std::vector<unsigned> KeySignature::calcTonalCenterArray() const
 {
     int alter = getAlteration().value_or(0);
-
-    if (isMinor()) {
-        if (alter >= 0) {
-            return { 5, 2, 6, 3, 0, 4, 1, 5 };
-        }
-        else {
-            return { 5, 1, 4, 0, 3, 6, 2, 5 };
-        }
-    }
-
-    if (!isBuiltIn()) {
-        if (alter >= 0) {
-            if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
-                return centers->values;
-            }
-        }
-        else {
-            if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
-                return centers->values;
-            }
-        }
-    }
-
-    // Major or default
     if (alter >= 0) {
-        return { 0, 4, 1, 5, 2, 6, 3, 0 };
-    }
-    else {
-        return { 0, 3, 6, 2, 5, 1, 4, 0 };
+        return calcTonalCenterArrayForSharps();
+    } else {
+        return calcTonalCenterArrayForFlats();
     }
 }
 
@@ -1061,8 +1087,7 @@ std::vector<int> KeySignature::calcAcciAmountsArray() const
             if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(getPartId(), getKeyMode())) {
                 return amounts->values;
             }
-        }
-        else {
+        } else {
             if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountFlats>(getPartId(), getKeyMode())) {
                 return amounts->values;
             }
@@ -1071,10 +1096,9 @@ std::vector<int> KeySignature::calcAcciAmountsArray() const
 
     // Major/minor or default
     if (alter >= 0) {
-        return std::vector<int>(7, 1);
-    }
-    else {
-        return std::vector<int>(7, -1);
+        return std::vector<int>(music_theory::STANDARD_DIATONIC_STEPS, 1);
+    } else {
+        return std::vector<int>(music_theory::STANDARD_DIATONIC_STEPS, -1);
     }
 }
 
@@ -1087,8 +1111,7 @@ std::vector<unsigned> KeySignature::calcAcciOrderArray() const
             if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(getPartId(), getKeyMode())) {
                 return order->values;
             }
-        }
-        else {
+        } else {
             if (auto order = getDocument()->getOthers()->get<others::AcciOrderFlats>(getPartId(), getKeyMode())) {
                 return order->values;
             }
@@ -1098,8 +1121,7 @@ std::vector<unsigned> KeySignature::calcAcciOrderArray() const
     // Major/minor or default
     if (alter >= 0) {
         return { 3, 0, 4, 1, 5, 2, 6 };
-    }
-    else {
+    } else {
         return { 6, 2, 5, 1, 4, 0, 3 };
     }
 }
@@ -1145,6 +1167,55 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
     }
     
     return keySigAlteration;
+}
+
+std::optional<std::vector<int>> KeySignature::calcKeyMap() const
+{
+    size_t tonalCenter = static_cast<size_t>(calcTonalCenterArrayForSharps()[0]);
+    auto keyMap = getDocument()->getOthers()->get<others::KeyMapArray>(getPartId(), getKeyMode());
+    if (!keyMap || keyMap->steps.empty()) {
+        return std::nullopt;
+    }
+    unsigned numDiatonicSteps = keyMap->countDiatonicSteps();
+
+    // Find the index of the first step whose diatonic step matches the tonal center
+    auto centerIt = std::find_if(keyMap->steps.begin(), keyMap->steps.end(), [&](const auto& s) {
+        return s->diatonic && s->hlevel == tonalCenter;
+    });
+    if (centerIt == keyMap->steps.end()) {
+        return std::nullopt;
+    }
+    size_t indexOfTonalCenter = std::distance(keyMap->steps.begin(), centerIt);
+
+    // Initialize result
+    std::vector<int> result(numDiatonicSteps, 0);
+    int currDiatonicStep = -1;
+    const size_t stepCount = keyMap->steps.size();
+    for (int i = 0; i < stepCount; ++i) {
+        int wrappedIndex = (indexOfTonalCenter + i) % stepCount;
+        const auto& step = keyMap->steps[wrappedIndex];
+        if (step->diatonic) {
+            ++currDiatonicStep;
+        }
+        for (int diatonicStep = 1; diatonicStep < numDiatonicSteps; ++diatonicStep) {
+            if (diatonicStep > currDiatonicStep) {
+                ++result[diatonicStep];
+            }
+        }
+    }
+
+    return result;
+}
+
+std::unique_ptr<music_theory::Transposer> KeySignature::createTransposer(int displacement, int alteration) const
+{
+    const int numSteps = [&]() {
+        if (auto keyFormat = getDocument()->getOthers()->get<others::KeyFormat>(getPartId(), getKeyMode())) {
+            return static_cast<int>(keyFormat->semitones);
+        }
+        return music_theory::STANDARD_12EDO_STEPS;
+    }();
+    return std::make_unique<music_theory::Transposer>(displacement, alteration, isMinor(), numSteps, calcKeyMap());
 }
 
 // **************************
@@ -1310,16 +1381,16 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
 
 std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex) const
 {
-    static constexpr std::array<Note::NoteName, 7> noteNames = {
+    static constexpr std::array<Note::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
         Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
     };
     
     // Determine the base note and octave
     int adjustedLev = key->calcTonalCenterIndex() + harmLev;
-    int octave = (adjustedLev / 7) + 4; // Middle C (C4) is the reference
-    int step = adjustedLev % 7;
+    int octave = (adjustedLev / music_theory::STANDARD_DIATONIC_STEPS) + 4; // Middle C (C4) is the reference
+    int step = adjustedLev % music_theory::STANDARD_DIATONIC_STEPS;
     if (step < 0) {
-        step += 7;
+        step += music_theory::STANDARD_DIATONIC_STEPS;
         octave -= 1;
     }
 
@@ -1436,6 +1507,11 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() cons
     }();
 
     return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex);
+}
+
+std::unique_ptr<music_theory::Transposer> NoteInfoPtr::createTransposer() const
+{
+    return m_entry.getKeySignature()->createTransposer((*this)->harmLev, (*this)->harmAlt);
 }
 
 // *****************************
@@ -1680,8 +1756,12 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
             auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entry->getPartId(), entryInfo.getMeasure());
             for (const auto& asgn : shapeAssigns) {
                 if (asgn->shapeNum == getCmper()) {
-                    if (asgn->centerShapeNum) return true;
-                    if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
+                    if (entryInfo.getMeasure() > startTermSeg->endPoint->measId && entryInfo.getMeasure() < endTermSeg->endPoint->measId) {
+                        return true;
+                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId && entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
+                        return entryInfo->elapsedDuration.calcEduDuration() >= startTermSeg->endPoint->calcEduPosition()
+                               && entryInfo->elapsedDuration.calcEduDuration() <= endTermSeg->endPoint->calcEduPosition();
+                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
                         return entryInfo->elapsedDuration.calcEduDuration() >= startTermSeg->endPoint->calcEduPosition();
                     } else if (entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
                         return entryInfo->elapsedDuration.calcEduDuration() <= endTermSeg->endPoint->calcEduPosition();

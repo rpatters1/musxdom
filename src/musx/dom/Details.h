@@ -25,6 +25,7 @@
 #include <unordered_set>
 #include <cmath>
 
+#include "musx/util/EnigmaString.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
 // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
@@ -42,6 +43,7 @@ class TupletOptions;
 
 namespace others {
 class Measure;
+class MultiStaffInstrumentGroup;
 } // namespace others
 
 namespace texts {
@@ -667,6 +669,7 @@ public:
     bool metricCenter{};                    ///< "Center Number Using Duration"
     bool avoidStaff{};                      ///< "Avoid Staff"
     AutoBracketStyle autoBracketStyle{};    ///< Autobracket style
+    bool hidden{};                          ///< Inverse of "Show"
     Evpu tupOffX{};                         ///< Horizontal offset.
     Evpu tupOffY{};                         ///< Vertical.
     Evpu brackOffX{};                       ///< Horizontal offset for brackets.

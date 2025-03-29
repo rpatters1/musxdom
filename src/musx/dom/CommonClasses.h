@@ -28,6 +28,10 @@
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
 
+namespace music_theory {
+class Transposer;
+} // namespace music_theory
+
 namespace musx {
 namespace dom {
 
@@ -150,6 +154,8 @@ public:
 class KeySignature : public CommonClassBase
 {
 private:
+    std::vector<unsigned> calcTonalCenterArrayForSharps() const;
+    std::vector<unsigned> calcTonalCenterArrayForFlats() const;
     std::vector<unsigned> calcTonalCenterArray() const;
     std::vector<int> calcAcciAmountsArray() const;
     std::vector<unsigned> calcAcciOrderArray() const;
@@ -209,6 +215,15 @@ public:
     /// @brief Calculates the amount of alteration on a note int the key.
     /// @param noteIndex note index, where C=0, D=1, E=3, F=3, G=4, A=5, B=6
     int calcAlterationOnNote(unsigned noteIndex) const;
+
+    /// @brief Calculates the key's diatonic key map
+    std::optional<std::vector<int>> calcKeyMap() const;
+
+    /// @brief Creates a transposer for this KeySignature instance.
+    /// @param displacement Displacement value (e.g., from @ref Note)
+    /// @param alteration Alteration value (e.g., from @ref Note)
+    /// @return A unique pointer to a transposer for this key.
+    std::unique_ptr<music_theory::Transposer> createTransposer(int displacement, int alteration) const;
 
     void integrityCheck() override
     {

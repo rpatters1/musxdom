@@ -28,6 +28,10 @@
 #include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
+ namespace music_theory {
+    class Transposer;
+} // namespace music_theory
+    
 namespace musx {
 namespace dom {
 
@@ -311,18 +315,10 @@ public:
 
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
-    bool calcUnbeamed() const
-    {
-        if (!canBeBeamed()) return true;
-        return (!getNextInBeamGroup() && !getPreviousInBeamGroup());
-    }
+    bool calcUnbeamed() const;
 
     /// @brief Returns whether this is the start of a primary beam
-    bool calcIsBeamStart() const
-    {
-        if (!canBeBeamed()) return false;
-        return (!getPreviousInBeamGroup() && getNextInBeamGroup());
-    }
+    bool calcIsBeamStart() const;
 
     /// @brief Finds the end entry of a beamed group.
     /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
@@ -354,14 +350,6 @@ public:
     /// where it does not match.
     /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
     bool calcBeamStubIsLeft() const;
-
-    /// @brief Calculates if the current beam has any non-rests (i.e., notes) to the left of the current entry.
-    bool calcBeamNotesExistLeft() const
-    { return iterateNotesExistLeftOrRight<&EntryInfoPtr::getPreviousInBeamGroup>(); }
-
-    /// @brief Calculates if the current beam has any non-rests (i.e., notes) to the right of the current entry.
-    bool calcBeamNotesExistRight() const
-    { return iterateNotesExistLeftOrRight<&EntryInfoPtr::getNextInBeamGroup>(); }
 
 private:
     bool canBeBeamed() const;
@@ -580,6 +568,10 @@ public:
 
     /// @brief Calculates the staff number, taking into account cross staffing
     InstCmper calcStaff() const;
+
+    /// @brief Creates a transposer for this Note instance.
+    /// @return A unique pointer to a transposer for this Note.
+    std::unique_ptr<music_theory::Transposer> createTransposer() const;
 
 private:
     EntryInfoPtr m_entry;

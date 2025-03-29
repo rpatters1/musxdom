@@ -42,6 +42,13 @@ TEST(KeySigs, Test12EDO)
     std::vector<std::optional<int>> expectedKeyAlters = { -4, 5, -2, 3, std::nullopt };
     std::vector<unsigned> expectedIndices = { 5, 4, 2, 0, 1 }; // AbMaj, G#min, Eb Lydian, C# Phrygian, D Freyish (non-linear)
     EXPECT_EQ(expectedKeyAlters.size(), expectedIndices.size());
+    std::vector<std::optional<std::vector<int>>> expectedKeyMaps = {
+        std::nullopt,
+        std::nullopt,
+        std::vector<int>{0, 2, 4, 6, 7, 9, 11},
+        std::vector<int>{0, 1, 3, 5, 7, 8, 10},
+        std::vector<int>{0, 1, 4, 5, 7, 8, 10}
+    };
 
     std::vector<Note::NoteName> expectedNotes = {
         Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A,
@@ -57,6 +64,10 @@ TEST(KeySigs, Test12EDO)
         auto key = measures[i]->calcKeySignature();
         EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
         EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
+        EXPECT_EQ(key->calcKeyMap(), expectedKeyMaps[i]);
+        if (auto keyMap = key->calcKeyMap()) {
+            EXPECT_EQ(keyMap->size(), 7);
+        }
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measures[i]->getCmper());
         ASSERT_TRUE(gfhold);
         size_t x = 0;
@@ -91,8 +102,12 @@ TEST(KeySigs, Test31EDO)
     ASSERT_TRUE(details);
 
     std::vector<std::optional<int>> expectedKeyAlters = { 4, -5 };
-    std::vector<unsigned> expectedIndices = { 2, 1 }; // EMaj, DbMaj
+    std::vector<unsigned> expectedIndices = { 2, 6 }; // EMaj, Bbmin
     EXPECT_EQ(expectedKeyAlters.size(), expectedIndices.size());
+    std::vector<std::optional<std::vector<int>>> expectedKeyMaps = {
+        std::vector<int>{0, 5, 10, 13, 18, 23, 28},
+        std::vector<int>{0, 5, 8, 13, 18, 21, 26}
+    };
 
     std::vector<Note::NoteName> expectedNotes = {
         Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A,
@@ -111,6 +126,10 @@ TEST(KeySigs, Test31EDO)
         auto key = measure->calcKeySignature();
         EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
         EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
+        EXPECT_EQ(key->calcKeyMap(), expectedKeyMaps[i]);
+        if (auto keyMap = key->calcKeyMap()) {
+            EXPECT_EQ(keyMap->size(), 7);
+        }
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measure->getCmper());
         ASSERT_TRUE(gfhold);
         size_t x = 0;
