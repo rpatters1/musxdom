@@ -156,6 +156,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a 
 <tr class="memitem:a5452f8d0cb4cb0f3066ad8fd24957d33" id="r_a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a5452f8d0cb4cb0f3066ad8fd24957d33">calcAlterationOnNote</a> (unsigned noteIndex) const</td></tr>
 <tr class="memdesc:a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the amount of alteration on a note int the key.  <br /></td></tr>
 <tr class="separator:a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad49a2938ad8ab254bb2362a626a06aef" id="r_ad49a2938ad8ab254bb2362a626a06aef"><td class="memItemLeft" align="right" valign="top"><a id="ad49a2938ad8ab254bb2362a626a06aef" name="ad49a2938ad8ab254bb2362a626a06aef"></a>
+std::optional&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcKeyMap</b> () const</td></tr>
+<tr class="memdesc:ad49a2938ad8ab254bb2362a626a06aef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the key's diatonic key map. <br /></td></tr>
+<tr class="separator:ad49a2938ad8ab254bb2362a626a06aef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d5cf39e9f26c653b042251ff4f87f68" id="r_a6d5cf39e9f26c653b042251ff4f87f68"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classmusic__theory_1_1Transposer.html">music_theory::Transposer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a6d5cf39e9f26c653b042251ff4f87f68">createTransposer</a> (int displacement, int alteration) const</td></tr>
+<tr class="memdesc:a6d5cf39e9f26c653b042251ff4f87f68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a transposer for this <a class="el" href="classmusx_1_1dom_1_1KeySignature.html" title="Shared key signature class that is contained in other classes. (See others::Measure)">KeySignature</a> instance.  <br /></td></tr>
+<tr class="separator:a6d5cf39e9f26c653b042251ff4f87f68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6d83554fe3fac8e89bd2933880ab5f4" id="r_aa6d83554fe3fac8e89bd2933880ab5f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#aa6d83554fe3fac8e89bd2933880ab5f4">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:aa6d83554fe3fac8e89bd2933880ab5f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:aa6d83554fe3fac8e89bd2933880ab5f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -339,6 +346,44 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a6d5cf39e9f26c653b042251ff4f87f68" name="a6d5cf39e9f26c653b042251ff4f87f68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d5cf39e9f26c653b042251ff4f87f68">&#9670;&#160;</a></span>createTransposer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classmusic__theory_1_1Transposer.html">music_theory::Transposer</a> &gt; musx::dom::KeySignature::createTransposer </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>displacement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>alteration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a transposer for this <a class="el" href="classmusx_1_1dom_1_1KeySignature.html" title="Shared key signature class that is contained in other classes. (See others::Measure)">KeySignature</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacement</td><td>Displacement value (e.g., from <a class="el" href="classmusx_1_1dom_1_1Note.html">Note</a>) </td></tr>
+    <tr><td class="paramname">alteration</td><td>Alteration value (e.g., from <a class="el" href="classmusx_1_1dom_1_1Note.html">Note</a>) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A unique pointer to a transposer for this key. </dd></dl>
 
 </div>
 </div>

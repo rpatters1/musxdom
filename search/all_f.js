@@ -49,13 +49,14 @@ var searchData=
   ['poolfactory_3c_20optionsfactory_2c_20dom_3a_3aoptionsbase_2c_20dom_3a_3aoptionspool_20_3e_46',['PoolFactory&lt; OptionsFactory, dom::OptionsBase, dom::OptionsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
   ['poolfactory_3c_20othersfactory_2c_20dom_3a_3aothersbase_2c_20dom_3a_3aotherspool_20_3e_47',['PoolFactory&lt; OthersFactory, dom::OthersBase, dom::OthersPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
   ['poolfactory_3c_20textsfactory_2c_20dom_3a_3atextsbase_2c_20dom_3a_3atextspool_20_3e_48',['PoolFactory&lt; TextsFactory, dom::TextsBase, dom::TextsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
-  ['positioningmode_49',['positioningMode',['../classmusx_1_1dom_1_1others_1_1Measure.html#aad487f03c201f552c5b47007fd334376',1,'musx::dom::others::Measure']]],
-  ['positioningstyle_50',['positioningstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a7ea2241fe5b7e1f7f50d5529bdce04ab',1,'musx::dom::details::TupletDef::PositioningStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6',1,'musx::dom::options::TupletOptions::PositioningStyle']]],
-  ['positioningtype_51',['PositioningType',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88f',1,'musx::dom::others::Measure']]],
-  ['posstyle_52',['posstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#af1594038b518530e42c5985efdad0d44',1,'musx::dom::details::TupletDef::posStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ab49a3155e543397c4c7bfd2855beff69',1,'musx::dom::options::TupletOptions::posStyle']]],
-  ['poundreplace_53',['poundReplace',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a08147a3e5e7a5ccceaccde06cfc992c7',1,'musx::dom::others::TextRepeatDef']]],
-  ['poundreplaceoption_54',['PoundReplaceOption',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a24e2fea767899e030dd840a541248473',1,'musx::dom::others::TextRepeatDef']]],
-  ['prefix_55',['prefix',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a40e1cb47a848d40286b94b7ed1c2f9ba',1,'musx::dom::others::MeasureNumberRegion']]],
-  ['psuldepth_56',['psUlDepth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#aa73f5b5b66b72438d9670504179fad69',1,'musx::dom::options::LineCurveOptions']]],
-  ['psulwidth_57',['psUlWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#ae67127c98f19abfbbaf2cf4c1b33e495',1,'musx::dom::options::LineCurveOptions']]]
+  ['pos_49',['pos',['../classmusx_1_1dom_1_1others_1_1BeatChartElement.html#af69d5f923aadb6d68965c41134bc892f',1,'musx::dom::others::BeatChartElement']]],
+  ['positioningmode_50',['positioningMode',['../classmusx_1_1dom_1_1others_1_1Measure.html#aad487f03c201f552c5b47007fd334376',1,'musx::dom::others::Measure']]],
+  ['positioningstyle_51',['positioningstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a7ea2241fe5b7e1f7f50d5529bdce04ab',1,'musx::dom::details::TupletDef::PositioningStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6',1,'musx::dom::options::TupletOptions::PositioningStyle']]],
+  ['positioningtype_52',['PositioningType',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88f',1,'musx::dom::others::Measure']]],
+  ['posstyle_53',['posstyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#af1594038b518530e42c5985efdad0d44',1,'musx::dom::details::TupletDef::posStyle'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ab49a3155e543397c4c7bfd2855beff69',1,'musx::dom::options::TupletOptions::posStyle']]],
+  ['poundreplace_54',['poundReplace',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a08147a3e5e7a5ccceaccde06cfc992c7',1,'musx::dom::others::TextRepeatDef']]],
+  ['poundreplaceoption_55',['PoundReplaceOption',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a24e2fea767899e030dd840a541248473',1,'musx::dom::others::TextRepeatDef']]],
+  ['prefix_56',['prefix',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a40e1cb47a848d40286b94b7ed1c2f9ba',1,'musx::dom::others::MeasureNumberRegion']]],
+  ['psuldepth_57',['psUlDepth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#aa73f5b5b66b72438d9670504179fad69',1,'musx::dom::options::LineCurveOptions']]],
+  ['psulwidth_58',['psUlWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#ae67127c98f19abfbbaf2cf4c1b33e495',1,'musx::dom::options::LineCurveOptions']]]
 ];

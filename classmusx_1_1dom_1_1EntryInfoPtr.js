@@ -2,8 +2,6 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
 [
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html#ad2b5a35a87aa853929fb934aa1d5fbc6", null ],
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0b49081647bf2faa55ae9d0cfc6d8d7e", null ],
-    [ "calcBeamNotesExistLeft", "classmusx_1_1dom_1_1EntryInfoPtr.html#aefc066d5cb115c43ffe4c0ddb002044e", null ],
-    [ "calcBeamNotesExistRight", "classmusx_1_1dom_1_1EntryInfoPtr.html#a026535f9c3090358c0050efb478f8996", null ],
     [ "calcBeamStubIsLeft", "classmusx_1_1dom_1_1EntryInfoPtr.html#adf09eb8a3925a1799ff4dad693ed7c5e", null ],
     [ "calcDisplaysAsRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b", null ],
     [ "calcIsBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#ab127dfae15a3bb5c27b76cbd55c812a1", null ],

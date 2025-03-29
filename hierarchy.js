@@ -82,6 +82,7 @@ var hierarchy =
         ] ],
         [ "musx::dom::OthersArray< ElementType, REQUIRED_SIZE >", "classmusx_1_1dom_1_1OthersArray.html", null ],
         [ "musx::dom::others::ArticulationDef", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html", null ],
+        [ "musx::dom::others::BeatChartElement", "classmusx_1_1dom_1_1others_1_1BeatChartElement.html", null ],
         [ "musx::dom::others::ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", null ],
         [ "musx::dom::others::Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", [
           [ "musx::dom::others::TextExpressionEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html", null ],
@@ -90,6 +91,8 @@ var hierarchy =
         [ "musx::dom::others::FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", null ],
         [ "musx::dom::others::Frame", "classmusx_1_1dom_1_1others_1_1Frame.html", null ],
         [ "musx::dom::others::InstrumentUsed", "classmusx_1_1dom_1_1others_1_1InstrumentUsed.html", null ],
+        [ "musx::dom::others::KeyFormat", "classmusx_1_1dom_1_1others_1_1KeyFormat.html", null ],
+        [ "musx::dom::others::KeyMapArray", "classmusx_1_1dom_1_1others_1_1KeyMapArray.html", null ],
         [ "musx::dom::others::LayerAttributes", "classmusx_1_1dom_1_1others_1_1LayerAttributes.html", null ],
         [ "musx::dom::others::MarkingCategory", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html", null ],
         [ "musx::dom::others::MarkingCategoryName", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName.html", null ],
@@ -154,6 +157,7 @@ var hierarchy =
     [ "musx::dom::others::TimeCompositeUpper::CompositeItem", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html", null ],
     [ "musx::dom::options::SmartShapeOptions::ConnectionStyle", "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ConnectionStyle.html", null ],
     [ "musx::dom::options::TieOptions::ConnectStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html", null ],
+    [ "musx::dom::others::BeatChartElement::Control", "classmusx_1_1dom_1_1others_1_1BeatChartElement_1_1Control.html", null ],
     [ "musx::dom::options::TieOptions::ControlPoint", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html", null ],
     [ "musx::dom::options::SmartShapeOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html", null ],
     [ "musx::dom::options::TieOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html", null ],
@@ -230,7 +234,10 @@ var hierarchy =
       [ "musx::factory::unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
       [ "musx::xml::load_error", "classmusx_1_1xml_1_1load__error.html", null ]
     ] ],
+    [ "musx::dom::others::KeyMapArray::StepElement", "classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html", null ],
     [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
+    [ "Tranposer", "classTranposer.html", null ],
+    [ "music_theory::Transposer", "classmusic__theory_1_1Transposer.html", null ],
     [ "musx::dom::EntryFrame::TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html", null ],
     [ "musx::factory::TypeRegistry< Types >", "classmusx_1_1factory_1_1TypeRegistry.html", null ]
 ];

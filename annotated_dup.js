@@ -1,5 +1,8 @@
 var annotated_dup =
 [
+    [ "music_theory", "namespacemusic__theory.html", [
+      [ "Transposer", "classmusic__theory_1_1Transposer.html", "classmusic__theory_1_1Transposer" ]
+    ] ],
     [ "musx", "namespacemusx.html", [
       [ "dom", "namespacemusx_1_1dom.html", [
         [ "details", "namespacemusx_1_1dom_1_1details.html", [
@@ -60,11 +63,14 @@ var annotated_dup =
           [ "AcciOrderFlats", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats.html", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats" ],
           [ "AcciOrderSharps", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps.html", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps" ],
           [ "ArticulationDef", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html", "classmusx_1_1dom_1_1others_1_1ArticulationDef" ],
+          [ "BeatChartElement", "classmusx_1_1dom_1_1others_1_1BeatChartElement.html", "classmusx_1_1dom_1_1others_1_1BeatChartElement" ],
           [ "ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", "classmusx_1_1dom_1_1others_1_1ClefList" ],
           [ "Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", "classmusx_1_1dom_1_1others_1_1Enclosure" ],
           [ "FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", "classmusx_1_1dom_1_1others_1_1FontDefinition" ],
           [ "Frame", "classmusx_1_1dom_1_1others_1_1Frame.html", "classmusx_1_1dom_1_1others_1_1Frame" ],
           [ "InstrumentUsed", "classmusx_1_1dom_1_1others_1_1InstrumentUsed.html", "classmusx_1_1dom_1_1others_1_1InstrumentUsed" ],
+          [ "KeyFormat", "classmusx_1_1dom_1_1others_1_1KeyFormat.html", "classmusx_1_1dom_1_1others_1_1KeyFormat" ],
+          [ "KeyMapArray", "classmusx_1_1dom_1_1others_1_1KeyMapArray.html", "classmusx_1_1dom_1_1others_1_1KeyMapArray" ],
           [ "LayerAttributes", "classmusx_1_1dom_1_1others_1_1LayerAttributes.html", "classmusx_1_1dom_1_1others_1_1LayerAttributes" ],
           [ "MarkingCategory", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html", "classmusx_1_1dom_1_1others_1_1MarkingCategory" ],
           [ "MarkingCategoryName", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName.html", "classmusx_1_1dom_1_1others_1_1MarkingCategoryName" ],
@@ -186,5 +192,6 @@ var annotated_dup =
         [ "IXmlElement", "classmusx_1_1xml_1_1IXmlElement.html", "classmusx_1_1xml_1_1IXmlElement" ],
         [ "load_error", "classmusx_1_1xml_1_1load__error.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "Tranposer", "classTranposer.html", null ]
 ];

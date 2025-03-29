@@ -19,6 +19,7 @@ var classmusx_1_1dom_1_1details_1_1TupletDef =
     [ "displayDuration", "classmusx_1_1dom_1_1details_1_1TupletDef.html#aa18aa01358e5d5c7f13c4ddbfd006749", null ],
     [ "displayNumber", "classmusx_1_1dom_1_1details_1_1TupletDef.html#ad09458107551d98c48cb3459d50c3a13", null ],
     [ "fullDura", "classmusx_1_1dom_1_1details_1_1TupletDef.html#a65ecefa0b98208ef05274a352b3c28a1", null ],
+    [ "hidden", "classmusx_1_1dom_1_1details_1_1TupletDef.html#a1df783894f990f5e3fa2da7b590227be", null ],
     [ "ignoreHorzNumOffset", "classmusx_1_1dom_1_1details_1_1TupletDef.html#a894ff328c4cf7937f162d4842efb9659", null ],
     [ "leftHookExt", "classmusx_1_1dom_1_1details_1_1TupletDef.html#a7ef1f5d7de5bbda36ce093c798ef8848", null ],
     [ "leftHookLen", "classmusx_1_1dom_1_1details_1_1TupletDef.html#aff5452f7891c41629eb63340063f3df2", null ],

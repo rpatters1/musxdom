@@ -222,14 +222,6 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 <tr class="memitem:adf09eb8a3925a1799ff4dad693ed7c5e" id="r_adf09eb8a3925a1799ff4dad693ed7c5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#adf09eb8a3925a1799ff4dad693ed7c5e">calcBeamStubIsLeft</a> () const</td></tr>
 <tr class="memdesc:adf09eb8a3925a1799ff4dad693ed7c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if a beam stub on this entry would go left or right. It does not check that an entry actually has a beam stub. Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a5b2706891a0d330518cc5a85fbf0c8aa" title="Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub,...">calcLowestBeamStub</a> to discover if the entry has a beam stub.  <br /></td></tr>
 <tr class="separator:adf09eb8a3925a1799ff4dad693ed7c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefc066d5cb115c43ffe4c0ddb002044e" id="r_aefc066d5cb115c43ffe4c0ddb002044e"><td class="memItemLeft" align="right" valign="top"><a id="aefc066d5cb115c43ffe4c0ddb002044e" name="aefc066d5cb115c43ffe4c0ddb002044e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamNotesExistLeft</b> () const</td></tr>
-<tr class="memdesc:aefc066d5cb115c43ffe4c0ddb002044e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the current beam has any non-rests (i.e., notes) to the left of the current entry. <br /></td></tr>
-<tr class="separator:aefc066d5cb115c43ffe4c0ddb002044e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a026535f9c3090358c0050efb478f8996" id="r_a026535f9c3090358c0050efb478f8996"><td class="memItemLeft" align="right" valign="top"><a id="a026535f9c3090358c0050efb478f8996" name="a026535f9c3090358c0050efb478f8996"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamNotesExistRight</b> () const</td></tr>
-<tr class="memdesc:a026535f9c3090358c0050efb478f8996"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the current beam has any non-rests (i.e., notes) to the right of the current entry. <br /></td></tr>
-<tr class="separator:a026535f9c3090358c0050efb478f8996"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ownership of the frame so that any instance of it keeps the frame alive without the need for circular references. </p>
@@ -386,9 +378,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamNotesExistRig
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool musx::dom::EntryInfoPtr::calcUnbeamed </td>
@@ -397,11 +386,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamNotesExistRig
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Returns whether this is an unbeamed entry. </p>
@@ -480,7 +464,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamNotesExistRig
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The found note or an null instance of <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a>. </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000010">Todo:</a></b></dt><dd>check for enharmonic equivalents in separate loop </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000010">Todo:</a></b></dt><dd>(possibly) figure out which is the correct note when two notes of the same pitch exist. We would want to associate the first with the first and the second with the second. </dd></dl>
 
 </div>
 </div>

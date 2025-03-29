@@ -142,6 +142,9 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
 <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcStaff</b> () const</td></tr>
 <tr class="memdesc:a0916f855bc1da7af83577dd7a69c54cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff number, taking into account cross staffing. <br /></td></tr>
 <tr class="separator:a0916f855bc1da7af83577dd7a69c54cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc49802bc77032c3e6990acb8c3a9f9d" id="r_afc49802bc77032c3e6990acb8c3a9f9d"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classmusic__theory_1_1Transposer.html">music_theory::Transposer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#afc49802bc77032c3e6990acb8c3a9f9d">createTransposer</a> () const</td></tr>
+<tr class="memdesc:afc49802bc77032c3e6990acb8c3a9f9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a transposer for this <a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> instance.  <br /></td></tr>
+<tr class="separator:afc49802bc77032c3e6990acb8c3a9f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps an <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instance and a note index. </p>
@@ -258,6 +261,26 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
 <p>Calculates the note that this note could tie to. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> to see if there is actually a tie end. </p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>Support ties to enharmonic pitches. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The candidate note or an empty <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a> if no candidate was found. </dd></dl>
+
+</div>
+</div>
+<a id="afc49802bc77032c3e6990acb8c3a9f9d" name="afc49802bc77032c3e6990acb8c3a9f9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc49802bc77032c3e6990acb8c3a9f9d">&#9670;&#160;</a></span>createTransposer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classmusic__theory_1_1Transposer.html">music_theory::Transposer</a> &gt; musx::dom::NoteInfoPtr::createTransposer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a transposer for this <a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> instance. </p>
+<dl class="section return"><dt>Returns</dt><dd>A unique pointer to a transposer for this <a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a>. </dd></dl>
 
 </div>
 </div>

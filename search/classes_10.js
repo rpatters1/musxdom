@@ -18,5 +18,6 @@ var searchData=
   ['staffstyle_15',['StaffStyle',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html',1,'musx::dom::others']]],
   ['staffstyleassign_16',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html',1,'musx::dom::others']]],
   ['staffsystem_17',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html',1,'musx::dom::others']]],
-  ['stemoptions_18',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html',1,'musx::dom::options']]]
+  ['stemoptions_18',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html',1,'musx::dom::options']]],
+  ['stepelement_19',['StepElement',['../classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html',1,'musx::dom::others::KeyMapArray']]]
 ];
