@@ -72,6 +72,7 @@ add_executable(musxdomtests
     options/tuplet_options.cpp
     # others
 	others/articulation.cpp
+	others/beat_chart.cpp
 	others/enclosure.cpp
 	others/expression.cpp
 	others/fonts.cpp
