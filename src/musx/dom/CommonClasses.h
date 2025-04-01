@@ -208,8 +208,6 @@ public:
     /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
     /// 
     /// This is the modal tonal center, so a minor key with no sharps or flats returns 5 (=A).
-    /// 
-    /// @todo extend this to support other modes besides major and minor.
     int calcTonalCenterIndex() const;
 
     /// @brief Calculates the amount of alteration on a note int the key.
@@ -266,10 +264,14 @@ private:
     friend class texts::LyricsTextBase;
 };
 
-namespace others {
-class Measure; // forward delcaration
-} // namespace others
+namespace details {
+class IndependentStaffDetails; // forward delcaration
+} // namespace details
 
+namespace others {
+    class Measure; // forward delcaration
+    } // namespace others
+    
 /**
  * @class TimeSignature
  * @brief Shared time signature class that is derived from other classes. (See @ref others::Measure)
@@ -373,6 +375,7 @@ private:
     std::optional<bool> m_abbreviate;
 
     friend class others::Measure;
+    friend class details::IndependentStaffDetails;
 };
 
 namespace others {

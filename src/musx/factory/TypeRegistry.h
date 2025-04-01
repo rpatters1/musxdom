@@ -255,6 +255,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::BaselineLyricsVerse,
     dom::details::BeamStubDirection,
     dom::details::CrossStaff,
+    dom::details::IndependentStaffDetails, // "floats" is the xml key
     dom::details::GFrameHold,
     dom::details::StaffGroup,
     dom::details::SecondaryBeamBreak,

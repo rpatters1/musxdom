@@ -107,6 +107,23 @@ MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"frame4", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[3] = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(IndependentStaffDetails, {
+    {"keySig", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i)
+        { i->keySig = FieldPopulator<KeySignature>::createAndPopulate(e, i->getDocument()); }},
+    {"hasKey", [](const XmlElementPtr&, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasKey = true; }},
+    {"beats", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->beats = e->getTextAs<Cmper>(); }},
+    {"divBeat", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->divBeat = e->getTextAs<Cmper>(); }},
+    {"dispBeats", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->dispBeats = e->getTextAs<Cmper>(); }},
+    {"dispDivBeat", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->dispDivBeat = e->getTextAs<Cmper>(); }},
+    {"displayAltNumTsig", [](const XmlElementPtr&, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAltNumTsig = true; }},
+    {"displayAltDenTsig", [](const XmlElementPtr&, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAltDenTsig = true; }},
+    {"altNumTsig", [](const XmlElementPtr&, const std::shared_ptr<IndependentStaffDetails>& i) { i->altNumTsig = true; }},
+    {"altDenTsig", [](const XmlElementPtr&, const std::shared_ptr<IndependentStaffDetails>& i) { i->altDenTsig = true; }},
+    {"displayAbbrvTime", [](const XmlElementPtr&, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAbbrvTime = true; }},
+    {"hasDispTime", [](const XmlElementPtr&, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasDispTime = true; }},
+    {"hasTime", [](const XmlElementPtr&, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasTime = true; }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
     {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
     {"syll", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->syllable = e->getTextAs<unsigned>(); }},

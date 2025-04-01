@@ -154,8 +154,9 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 {
-    MUSX_ASSERT_IF(!m_entryFrame) {
-        throw std::logic_error("EntryInfoPtr has no frame.");        
+    MUSX_ASSERT_IF(!m_entryFrame)
+    {
+        throw std::logic_error("EntryInfoPtr has no frame.");
     }
     MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size())
     {
@@ -165,7 +166,9 @@ const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 }
 
 EntryInfoPtr::operator bool() const
-{ return m_entryFrame && m_indexInFrame < m_entryFrame->getEntries().size(); }
+{
+    return m_entryFrame && m_indexInFrame < m_entryFrame->getEntries().size();
+}
 
 bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
 {
@@ -360,7 +363,8 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
     while (true) {
         if (auto tryNext = next.getNextInBeamGroup()) {
             next = tryNext;
-        } else {
+        }
+        else {
             break;
         }
     }
@@ -370,7 +374,8 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
 unsigned calcNumberOfBeamsInEdu(Edu duration)
 {
     unsigned result = 0;
-    MUSX_ASSERT_IF (!duration) {
+    MUSX_ASSERT_IF(!duration)
+    {
         throw std::logic_error("Edu duration value is zero.");
     }
     while (duration < Edu(NoteType::Quarter)) {
@@ -381,7 +386,9 @@ unsigned calcNumberOfBeamsInEdu(Edu duration)
 }
 
 unsigned EntryInfoPtr::calcNumberOfBeams() const
-{ return calcNumberOfBeamsInEdu((*this)->getEntry()->duration); }
+{
+    return calcNumberOfBeamsInEdu((*this)->getEntry()->duration);
+}
 
 unsigned EntryInfoPtr::calcVisibleBeams() const
 {
@@ -408,7 +415,7 @@ std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const Entr
                 return true;
             }
             return false;
-        };
+            };
         if (cutsBeam(*this)) {
             return 0; // if *this* is a rest, it can't start or end a secondary beam
         }
@@ -526,11 +533,11 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
                 return true;
             }
             return false;
-        };
+            };
         if (isSecondaryTerminator(calcLowestBeamStart(), prev)) return false;   // beginning of 2ndary beam points right
         if (isSecondaryTerminator(calcLowestBeamEnd(), next)) return true;      // end of 2ndary beam points left
     }
-    
+
     auto prevDots = calcNoteInfoFromEdu(prev->actualDuration.calcEduDuration()).second;
     auto nextDots = calcNoteInfoFromEdu(next->actualDuration.calcEduDuration()).second;
 
@@ -602,7 +609,8 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
         auto resultEntry = result->getEntry();
         if (calcDisplaysAsRest() || result.calcDisplaysAsRest()) {
             auto beamOpts = getFrame()->getDocument()->getOptions()->get<options::BeamOptions>();
-            MUSX_ASSERT_IF(!beamOpts) {
+            MUSX_ASSERT_IF(!beamOpts)
+            {
                 throw std::logic_error("Document has no BeamOptions.");
             }
             auto searchForNoteFrom = [](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)() const) -> bool {
@@ -612,7 +620,7 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
                     }
                 }
                 return false;
-            };
+                };
             bool noteFound = searchForNoteFrom(result, Iterator);
             if (!noteFound && !beamOpts->extendBeamsOverRests) {
                 return EntryInfoPtr();
@@ -857,7 +865,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
         return nullptr;
-    }();
+        }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
         retval = std::make_shared<EntryFrame>(*this, getStaff(), getMeasure(), layerIndex);
@@ -1006,6 +1014,23 @@ ClefIndex details::GFrameHold::calcClefIndexAt(Edu position) const
     return result;
 }
 
+// ***********************************
+// ***** IndependentStaffDetails *****
+// ***********************************
+
+std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createTimeSignature() const
+{
+   return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, altNumTsig, altDenTsig));
+}
+
+std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createDisplayTimeSignature() const
+{
+    if (!displayAbbrvTime) {
+        return createTimeSignature();
+    }
+    return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig, displayAbbrvTime));
+}
+
 // **************************
 // ***** InstrumentUsed *****
 // **************************
@@ -1147,7 +1172,7 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
     auto order = calcAcciOrderArray();
 
     int keySigAlteration = 0;
-    
+
     if (isNonLinear()) {
         for (size_t i = 0; i < amounts.size() && i < order.size(); i++) {
             if (amounts[i] == 0) {
@@ -1165,7 +1190,7 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
             }
         }
     }
-    
+
     return keySigAlteration;
 }
 
@@ -1282,6 +1307,57 @@ int others::Measure::calcDisplayNumber() const
         return region->calcDisplayNumberFor(getCmper());
     }
     return getCmper();
+}
+
+std::shared_ptr<KeySignature> others::Measure::calcKeySignature(const std::optional<InstCmper>& forStaff) const
+{
+    if (forStaff) {
+        if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
+            if (staff->floatKeys) {
+                if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
+                    if (floats->hasKey) {
+                        return floats->keySig;
+                    }
+                }
+            }
+        }
+    }
+    return globalKeySig;
+}
+
+std::shared_ptr<TimeSignature> others::Measure::createTimeSignature(const std::optional<InstCmper>& forStaff) const
+{
+    if (forStaff) {
+        if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
+            if (staff->floatKeys) {
+                if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
+                    if (floats->hasTime) {
+                        return floats->createTimeSignature();
+                    }
+                }
+            }
+        }
+    }
+   return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
+}
+
+std::shared_ptr<TimeSignature> others::Measure::createDisplayTimeSignature(const std::optional<InstCmper>& forStaff) const
+{
+    if (forStaff) {
+        if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
+            if (staff->floatKeys) {
+                if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
+                    if (floats->hasTime) {
+                        return floats->createDisplayTimeSignature();
+                    }
+                }
+            }
+        }
+    }
+    if (!useDisplayTimesig) {
+        return createTimeSignature(forStaff);
+    }
+    return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
 }
 
 // *****************************
@@ -2040,6 +2116,14 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->defaultClef) {
         defaultClef = staffStyle->defaultClef;
         masks->defaultClef = true;
+    }
+    if (srcMasks->floatKeys) {
+        floatKeys = staffStyle->floatKeys;
+        masks->floatKeys = true;
+    }
+    if (srcMasks->floatTime) {
+        floatTime = staffStyle->floatTime;
+        masks->floatTime = true;
     }
     if (srcMasks->staffType) {
         staffLines = staffStyle->staffLines;

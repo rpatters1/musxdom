@@ -290,6 +290,68 @@ public:
 };
 
 /**
+ * @class IndependentStaffDetails
+ * @brief Represents independent time and key signature overrides for a staff.
+ *
+ * Cmper1 is the staff (inst) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ * This class is identified by the XML node name "floats".
+ */
+class IndependentStaffDetails : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor function
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this #IndependentStaffDetails (probably always #ShareMode::All).
+     * @param inst The staff ID for this #IndependentStaffDetails.
+     * @param meas The measure ID for this #IndependentStaffDetails.
+     */
+    explicit IndependentStaffDetails(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas)
+        : DetailsBase(document, partId, shareMode, inst, meas)
+    {
+    }
+
+    // Key signature info
+    std::shared_ptr<KeySignature> keySig; ///< The key signature value if present. (xml tag is `<keySig>/<key>`)
+    bool hasKey{};                        ///< If true, this item contains an independent key signature.
+
+    // Time signature info
+    Cmper beats{};                      ///< Time signature numerator or a Cmper to a composite record.
+    Cmper divBeat{};                    ///< Time signature denominator in Edu or a Cmper to a composite record.
+    Cmper dispBeats{};                  ///< Display time signature numerator or a Cmper to a composite record.
+    Cmper dispDivBeat{};                ///< Display time signature denominator in Edu or a Cmper to a composite record.
+
+    bool displayAltNumTsig{};           ///< If true, #dispBeats is the Cmper of a @ref others::TimeCompositeUpper record
+    bool displayAltDenTsig{};           ///< If true, #dispDivBeat is the Cmper of a @ref others::TimeCompositeLower record
+    bool altNumTsig{};                  ///< If true, #beats is the Cmper of a @ref others::TimeCompositeUpper record
+    bool altDenTsig{};                  ///< If true, #divBeat is the Cmper of a @ref others::TimeCompositeLower record
+    bool displayAbbrvTime{};            ///< If true, the display time signature is abbreviated
+    bool hasDispTime{};                 ///< If true, the display time signature is present.
+    bool hasTime{};                     ///< If true, this item contains an independent time signature.
+
+    /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this instance.
+    /// @param forStaff If present, specifies the specific staff for which to create the time signature.
+    std::shared_ptr<TimeSignature> createTimeSignature() const;
+
+    /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
+    /// @param forStaff If present, specifies the specific staff for which to create the time signature.
+    /// @return The display time signature if there is one, otherwise the actual time signature.
+    std::shared_ptr<TimeSignature> createDisplayTimeSignature() const;
+
+    void integrityCheck() override
+    {
+        DetailsBase::integrityCheck();
+        if (hasKey && !keySig) {
+            keySig = std::make_shared<KeySignature>(getDocument());
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "floats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<IndependentStaffDetails>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class LyricAssign
  * @brief Contains assignment data for a lyric assignment (a single syllable)
  */
