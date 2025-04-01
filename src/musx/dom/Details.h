@@ -331,11 +331,9 @@ public:
     bool hasTime{};                     ///< If true, this item contains an independent time signature.
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this instance.
-    /// @param forStaff If present, specifies the specific staff for which to create the time signature.
     std::shared_ptr<TimeSignature> createTimeSignature() const;
 
     /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
-    /// @param forStaff If present, specifies the specific staff for which to create the time signature.
     /// @return The display time signature if there is one, otherwise the actual time signature.
     std::shared_ptr<TimeSignature> createDisplayTimeSignature() const;
 
