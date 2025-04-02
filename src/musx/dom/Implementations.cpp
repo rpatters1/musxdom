@@ -573,37 +573,37 @@ EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
     return result;
 }
 
-EntryInfoPtr EntryInfoPtr::nextPotentialInBeam() const
+EntryInfoPtr EntryInfoPtr::nextPotentialInBeam(bool includeHiddenEntries) const
 {
     auto next = iteratePotentialEntryInBeam<&EntryInfoPtr::getNextSameV>();
     if (!next || next->getEntry()->beam) {
         return EntryInfoPtr();
     }
-    if (next && next->getEntry()->isHidden) {
-        return next.nextPotentialInBeam();
+    if (next && next->getEntry()->isHidden && !includeHiddenEntries) {
+        return next.nextPotentialInBeam(includeHiddenEntries);
     }
     return next;
 }
 
-EntryInfoPtr EntryInfoPtr::previousPotentialInBeam() const
+EntryInfoPtr EntryInfoPtr::previousPotentialInBeam(bool includeHiddenEntries) const
 {
     if ((*this)->getEntry()->beam) {
         return EntryInfoPtr();
     }
     auto prev = iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
-    if (prev && prev->getEntry()->isHidden) {
-        return prev.previousPotentialInBeam();
+    if (prev && prev->getEntry()->isHidden && !includeHiddenEntries) {
+        return prev.previousPotentialInBeam(includeHiddenEntries);
     }
     return prev;
 }
 
-template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)() const>
-EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
+template<EntryInfoPtr(EntryInfoPtr::* Iterator)(bool) const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)(bool) const>
+EntryInfoPtr EntryInfoPtr::iterateBeamGroup(bool includeHiddenEntries) const
 {
     if (!canBeBeamed()) {
         return EntryInfoPtr();
     }
-    EntryInfoPtr result = (this->*Iterator)(); // either nextPotentialInBeam or previousPotentialInBeam
+    EntryInfoPtr result = (this->*Iterator)(includeHiddenEntries); // either nextPotentialInBeam or previousPotentialInBeam
     if (result) {
         auto thisRawEntry = (*this)->getEntry();
         auto resultEntry = result->getEntry();
@@ -613,14 +613,14 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup() const
             {
                 throw std::logic_error("Document has no BeamOptions.");
             }
-            auto searchForNoteFrom = [](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)() const) -> bool {
-                for (auto next = from; next; next = (next.*iterator)()) {
+            auto searchForNoteFrom = [includeHiddenEntries](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)(bool) const) -> bool {
+                for (auto next = from; next; next = (next.*iterator)(includeHiddenEntries)) {
                     if (!next.calcDisplaysAsRest()) {
                         return true;
                     }
                 }
                 return false;
-                };
+            };
             bool noteFound = searchForNoteFrom(result, Iterator);
             if (!noteFound && !beamOpts->extendBeamsOverRests) {
                 return EntryInfoPtr();

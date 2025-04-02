@@ -302,12 +302,12 @@ public:
     EntryInfoPtr getNextInVoice(int voice) const;
 
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
-    EntryInfoPtr getNextInBeamGroup() const
-    { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(); }
+    EntryInfoPtr getNextInBeamGroup(bool includeHiddenEntries = false) const
+    { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(includeHiddenEntries); }
 
-    /// @brief Gets the prevsiou entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
-    EntryInfoPtr getPreviousInBeamGroup() const
-    { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(); }
+    /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
+    EntryInfoPtr getPreviousInBeamGroup(bool includeHiddenEntries = false) const
+    { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(includeHiddenEntries); }
 
     /// @brief Calculates if an entry displays as a rest.
     /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
@@ -365,12 +365,12 @@ private:
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
     bool iterateNotesExistLeftOrRight() const;
 
-    EntryInfoPtr nextPotentialInBeam() const;
+    EntryInfoPtr nextPotentialInBeam(bool includeHiddenEntries) const;
 
-    EntryInfoPtr previousPotentialInBeam() const;
+    EntryInfoPtr previousPotentialInBeam(bool includeHiddenEntries) const;
 
-    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)() const>
-    EntryInfoPtr iterateBeamGroup() const;
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)(bool) const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)(bool) const>
+    EntryInfoPtr iterateBeamGroup(bool includeHiddenEntries) const;
 
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
