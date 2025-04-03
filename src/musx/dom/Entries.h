@@ -191,6 +191,10 @@ public:
      */
     util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration); }
 
+    /// @brief Returns true if the entry's duration has a stem.
+    /// @return True if the entry's duration is less than a whole note, irrespective of whether it is a rest or a note.
+    bool hasStem() const { return duration < Edu(NoteType::Whole); }
+
     void integrityCheck() override
     {
         this->Base::integrityCheck();
