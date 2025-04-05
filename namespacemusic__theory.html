@@ -106,6 +106,7 @@ $(document).ready(function(){initNavTree('namespacemusic__theory.html',''); init
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html">Transposer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides dependency-free transposition utilities that work with any scale that has 7 diatonic steps and an equal number of divisions of the octave (EDO). The most common Western scales use 12 divisions of the octave, .i.e., 12-EDO.  <a href="classmusic__theory_1_1Transposer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -117,9 +118,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a6cb3b3e4883819fd7f9acbca09b7cebe">sign</a> (T n)</td></tr>
 <tr class="memdesc:a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the sign of an integer.  <br /></td></tr>
 <tr class="separator:a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a076277364d5ca3414b0f47881669710b" id="r_a076277364d5ca3414b0f47881669710b"><td class="memTemplParams" colspan="2"><a id="a076277364d5ca3414b0f47881669710b" name="a076277364d5ca3414b0f47881669710b"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a076277364d5ca3414b0f47881669710b"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>signedModulus</b> (T n, T d)</td></tr>
+<tr class="memitem:a076277364d5ca3414b0f47881669710b" id="r_a076277364d5ca3414b0f47881669710b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a076277364d5ca3414b0f47881669710b"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a076277364d5ca3414b0f47881669710b">signedModulus</a> (T n, T d)</td></tr>
+<tr class="memdesc:a076277364d5ca3414b0f47881669710b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the modulus of positive and negative numbers in a predictable manner.  <br /></td></tr>
 <tr class="separator:a076277364d5ca3414b0f47881669710b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -215,7 +216,61 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>-1 for negative; 1 for zero or positive. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>-1 for negative; 1 for non-negative. </dd></dl>
+
+</div>
+</div>
+<a id="a076277364d5ca3414b0f47881669710b" name="a076277364d5ca3414b0f47881669710b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a076277364d5ca3414b0f47881669710b">&#9670;&#160;</a></span>signedModulus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr T music_theory::signedModulus </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>d</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the modulus of positive and negative numbers in a predictable manner. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>an integer type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>The number (positive or negative) for which to calculate the modulus </td></tr>
+    <tr><td class="paramname">d</td><td>The base of the modulus. This must be a positive number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>For non-negative, the result is the same as <code>%</code>. For negative numbers, the result is <code>-1 * (abs(n) % d)</code>. </dd></dl>
 
 </div>
 </div>

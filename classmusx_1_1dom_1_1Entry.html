@@ -141,6 +141,9 @@ std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a289
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcFraction</b> () const</td></tr>
 <tr class="memdesc:a8964412efe44b6569c970cecc4b4631f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the duration as a <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> of a whole note. <br /></td></tr>
 <tr class="separator:a8964412efe44b6569c970cecc4b4631f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9665ee43235cad7e54c82c83abcc5f50" id="r_a9665ee43235cad7e54c82c83abcc5f50"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a9665ee43235cad7e54c82c83abcc5f50">hasStem</a> () const</td></tr>
+<tr class="memdesc:a9665ee43235cad7e54c82c83abcc5f50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the entry's duration has a stem.  <br /></td></tr>
+<tr class="separator:a9665ee43235cad7e54c82c83abcc5f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a413c78242c3f9f486a2b37d38d28c03b" id="r_a413c78242c3f9f486a2b37d38d28c03b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a413c78242c3f9f486a2b37d38d28c03b">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:a413c78242c3f9f486a2b37d38d28c03b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a413c78242c3f9f486a2b37d38d28c03b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -403,6 +406,34 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 <p>Gets the previous entry in this list or nullptr if none. </p>
 <p><a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that the entry list may contain entries that aren't in any frame. These should be ignored. </p>
+
+</div>
+</div>
+<a id="a9665ee43235cad7e54c82c83abcc5f50" name="a9665ee43235cad7e54c82c83abcc5f50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9665ee43235cad7e54c82c83abcc5f50">&#9670;&#160;</a></span>hasStem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::Entry::hasStem </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the entry's duration has a stem. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if the entry's duration is less than a whole note, irrespective of whether it is a rest or a note. </dd></dl>
 
 </div>
 </div>

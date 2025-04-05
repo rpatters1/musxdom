@@ -33,6 +33,8 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "customStaff", "classmusx_1_1dom_1_1others_1_1Staff.html#a212f0ef0993b6787ec486eac857a789b", null ],
     [ "defaultClef", "classmusx_1_1dom_1_1others_1_1Staff.html#a09c189bda4c52d01552788d264218b48", null ],
     [ "dwRestOffset", "classmusx_1_1dom_1_1others_1_1Staff.html#a06d06aeea0febb6063e62f0d8c10772f", null ],
+    [ "floatKeys", "classmusx_1_1dom_1_1others_1_1Staff.html#a79e69fc3ef29191f6ae6f1083c91256b", null ],
+    [ "floatTime", "classmusx_1_1dom_1_1others_1_1Staff.html#a854bc20336492ffbfbe80d07e4a48da7", null ],
     [ "fullNameTextId", "classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af", null ],
     [ "hasStyles", "classmusx_1_1dom_1_1others_1_1Staff.html#a333986652e0f7882834d8fdb65b5b7a6", null ],
     [ "hideBeams", "classmusx_1_1dom_1_1others_1_1Staff.html#abf34de6cef2f1925161fdc23ede80da3", null ],

@@ -4,6 +4,8 @@ var classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks =
     [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a0425bb33be67498a7d4c0915bd3ca25c", null ],
     [ "abrvName", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#aaf776012c904d79bc235de61f6135446", null ],
     [ "defaultClef", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#af08981f6e3887101fa3be913c9a9e20a", null ],
+    [ "floatKeys", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ad38c0c55773959486ab106da821b73be", null ],
+    [ "floatTime", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ae5580d2c0148d3a4d18573beb8ec4714", null ],
     [ "fullName", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a36ed9a3508fb65a3d10ea424a53fa352", null ],
     [ "negNameScore", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a8f948ee4b50fb21222a008fa924d9253", null ],
     [ "showNameParts", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a57908ee817e3570b039a2cb5c82fd8fd", null ],

@@ -98,12 +98,17 @@ $(document).ready(function(){initNavTree('classmusic__theory_1_1Transposer.html'
   <div class="headertitle"><div class="title">music_theory::Transposer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Provides dependency-free transposition utilities that work with any scale that has 7 diatonic steps and an equal number of divisions of the octave (EDO). The most common Western scales use 12 divisions of the octave, .i.e., 12-EDO.  
+ <a href="classmusic__theory_1_1Transposer.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="music__theory_8hpp_source.html">music_theory.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3d4fc218bf7454202664f23d13bbe3ca" id="r_a3d4fc218bf7454202664f23d13bbe3ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a3d4fc218bf7454202664f23d13bbe3ca">Transposer</a> (int <a class="el" href="classmusic__theory_1_1Transposer.html#a0514e0c7d959d81e6c118e58acf7ed08">displacement</a>, int <a class="el" href="classmusic__theory_1_1Transposer.html#a550fc30dbc918d850cd12599248b001c">alteration</a>, bool isMinor=false, int numberOfSteps=<a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a>, const std::optional&lt; std::vector&lt; int &gt; &gt; &amp;keyMap=std::nullopt)</td></tr>
-<tr class="memdesc:a3d4fc218bf7454202664f23d13bbe3ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construction function.  <br /></td></tr>
-<tr class="separator:a3d4fc218bf7454202664f23d13bbe3ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77f3b85e9a4d9cfc42678c236fbd9ef6" id="r_a77f3b85e9a4d9cfc42678c236fbd9ef6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a77f3b85e9a4d9cfc42678c236fbd9ef6">Transposer</a> (int <a class="el" href="classmusic__theory_1_1Transposer.html#a0514e0c7d959d81e6c118e58acf7ed08">displacement</a>, int <a class="el" href="classmusic__theory_1_1Transposer.html#a550fc30dbc918d850cd12599248b001c">alteration</a>, bool isMinor=false, int numberOfEdoDivisions=<a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a>, const std::optional&lt; std::vector&lt; int &gt; &gt; &amp;keyMap=std::nullopt)</td></tr>
+<tr class="memdesc:a77f3b85e9a4d9cfc42678c236fbd9ef6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function.  <br /></td></tr>
+<tr class="separator:a77f3b85e9a4d9cfc42678c236fbd9ef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0514e0c7d959d81e6c118e58acf7ed08" id="r_a0514e0c7d959d81e6c118e58acf7ed08"><td class="memItemLeft" align="right" valign="top"><a id="a0514e0c7d959d81e6c118e58acf7ed08" name="a0514e0c7d959d81e6c118e58acf7ed08"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>displacement</b> () const</td></tr>
 <tr class="memdesc:a0514e0c7d959d81e6c118e58acf7ed08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current displacement value. <br /></td></tr>
@@ -118,22 +123,25 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 <tr class="memitem:aad74d8df8af43667448383acf0652c05" id="r_aad74d8df8af43667448383acf0652c05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#aad74d8df8af43667448383acf0652c05">enharmonicTranspose</a> (int direction)</td></tr>
 <tr class="memdesc:aad74d8df8af43667448383acf0652c05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes enharmonically relative to the current values.  <br /></td></tr>
 <tr class="separator:aad74d8df8af43667448383acf0652c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af15e93274d7b4f3c24639527c3bb3284" id="r_af15e93274d7b4f3c24639527c3bb3284"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#af15e93274d7b4f3c24639527c3bb3284">chromaticTranspose</a> (int interval, int <a class="el" href="classmusic__theory_1_1Transposer.html#a550fc30dbc918d850cd12599248b001c">alteration</a>)</td></tr>
-<tr class="memdesc:af15e93274d7b4f3c24639527c3bb3284"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chromatically transposes by a specified interval and alteration.  <br /></td></tr>
-<tr class="separator:af15e93274d7b4f3c24639527c3bb3284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a316564e5ceb34e7aaa072df6677b1ef3" id="r_a316564e5ceb34e7aaa072df6677b1ef3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a316564e5ceb34e7aaa072df6677b1ef3">chromaticTranspose</a> (int interval, int chromaticAlteration)</td></tr>
+<tr class="memdesc:a316564e5ceb34e7aaa072df6677b1ef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chromatically transposes by a specified chromatic interval.  <br /></td></tr>
+<tr class="separator:a316564e5ceb34e7aaa072df6677b1ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68c73dcb6666ee81d28f3dce979e186f" id="r_a68c73dcb6666ee81d28f3dce979e186f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a68c73dcb6666ee81d28f3dce979e186f">simplifySpelling</a> ()</td></tr>
 <tr class="memdesc:a68c73dcb6666ee81d28f3dce979e186f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplifies the spelling by reducing its alteration while preserving pitch.  <br /></td></tr>
 <tr class="separator:a68c73dcb6666ee81d28f3dce979e186f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a014e42fb5aa94fbf4299a84f39426b7e" id="r_a014e42fb5aa94fbf4299a84f39426b7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a014e42fb5aa94fbf4299a84f39426b7e">stepwiseTranspose</a> (int numberOfSteps)</td></tr>
-<tr class="memdesc:a014e42fb5aa94fbf4299a84f39426b7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes by the given number of EDO steps and simplifies the spelling.  <br /></td></tr>
-<tr class="separator:a014e42fb5aa94fbf4299a84f39426b7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a549005f7f6843171987b3ff128c76152" id="r_a549005f7f6843171987b3ff128c76152"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a549005f7f6843171987b3ff128c76152">stepwiseTranspose</a> (int numberOfEdoDivisions)</td></tr>
+<tr class="memdesc:a549005f7f6843171987b3ff128c76152"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes by the given number of EDO divisions and simplifies the spelling.  <br /></td></tr>
+<tr class="separator:a549005f7f6843171987b3ff128c76152"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a909235472081cc8369dc7a4a2b359ae8" id="r_a909235472081cc8369dc7a4a2b359ae8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a909235472081cc8369dc7a4a2b359ae8">isEnharmonicEquivalent</a> (int <a class="el" href="classmusic__theory_1_1Transposer.html#a0514e0c7d959d81e6c118e58acf7ed08">displacement</a>, int <a class="el" href="classmusic__theory_1_1Transposer.html#a550fc30dbc918d850cd12599248b001c">alteration</a>) const</td></tr>
 <tr class="memdesc:a909235472081cc8369dc7a4a2b359ae8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the given displacement and alteration refer to the same pitch as the current state.  <br /></td></tr>
 <tr class="separator:a909235472081cc8369dc7a4a2b359ae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3d4fc218bf7454202664f23d13bbe3ca" name="a3d4fc218bf7454202664f23d13bbe3ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d4fc218bf7454202664f23d13bbe3ca">&#9670;&#160;</a></span>Transposer()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Provides dependency-free transposition utilities that work with any scale that has 7 diatonic steps and an equal number of divisions of the octave (EDO). The most common Western scales use 12 divisions of the octave, .i.e., 12-EDO. </p>
+<p>The way to use this class is to intialize it in the constructor, run one or more transposition functions, then extract the modified displacement and alteration values. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a77f3b85e9a4d9cfc42678c236fbd9ef6" name="a77f3b85e9a4d9cfc42678c236fbd9ef6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77f3b85e9a4d9cfc42678c236fbd9ef6">&#9670;&#160;</a></span>Transposer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -163,7 +171,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>numberOfSteps</em> = <code><a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a></code>, </td>
+          <td class="paramname"><em>numberOfEdoDivisions</em> = <code><a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -184,14 +192,14 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 </table>
 </div><div class="memdoc">
 
-<p>Construction function. </p>
+<p>Constructor function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">displacement</td><td>///&lt; the scale step displacement value. 0 signifies the tonic in the C4 (middle-C) octave </td></tr>
-    <tr><td class="paramname">alteration</td><td>///&lt; the number of chromatic half-step alterations. This is not the same as EDO steps. </td></tr>
-    <tr><td class="paramname">isMinor</td><td>///&lt; true if you wish to use the default keymap for minor mode. (Ignored if <code>keyMap</code> is provided.) </td></tr>
-    <tr><td class="paramname">m_numberOfSteps</td><td>///&lt; the number of steps in the EDO. (E.g., 31-EDO would pass 31.) </td></tr>
-    <tr><td class="paramname">keyMap</td><td>///&lt; a 7-element map specifying the starting EDO step of each diatonic step. 12-EDO Major (the default) is { 0, 2, 4, 5, 7, 9, 11 }. <br  />
+    <tr><td class="paramname">displacement</td><td>the scale step displacement value. 0 signifies the tonic in the C4 (middle-C) octave. With the default values <code>isMinor</code> = <code>false</code> and <code>keyMap</code> = <code>std::nullopt</code>, 0 is C4. </td></tr>
+    <tr><td class="paramname">alteration</td><td>the number of EDO divisions by which the pitch is altered. This corresponds to the accidental on a note. 0 signifies that the note has no accidental in the key signature. </td></tr>
+    <tr><td class="paramname">isMinor</td><td>true if you wish to use the default keymap for minor mode. (Ignored if <code>keyMap</code> is provided.) </td></tr>
+    <tr><td class="paramname">numberOfEdoDivisions</td><td>the number of divisions in the EDO. (E.g., 31-EDO would pass 31.) </td></tr>
+    <tr><td class="paramname">keyMap</td><td>a 7-element map specifying the starting EDO division of each diatonic step. 12-EDO Major (the default) is { 0, 2, 4, 5, 7, 9, 11 }. <br  />
  </td></tr>
   </table>
   </dd>
@@ -200,8 +208,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af15e93274d7b4f3c24639527c3bb3284" name="af15e93274d7b4f3c24639527c3bb3284"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af15e93274d7b4f3c24639527c3bb3284">&#9670;&#160;</a></span>chromaticTranspose()</h2>
+<a id="a316564e5ceb34e7aaa072df6677b1ef3" name="a316564e5ceb34e7aaa072df6677b1ef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a316564e5ceb34e7aaa072df6677b1ef3">&#9670;&#160;</a></span>chromaticTranspose()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -219,7 +227,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>alteration</em>&#160;</td>
+          <td class="paramname"><em>chromaticAlteration</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -234,9 +242,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 </table>
 </div><div class="memdoc">
 
-<p>Chromatically transposes by a specified interval and alteration. </p>
-<p>This function transposes the note chromatically in any EDO. The chromatic interval is defined by a diatonic displacement (e.g., 0 = unison, 1 = second, 2 = third, etc.) and a chromatic alteration.</p>
+<p>Chromatically transposes by a specified chromatic interval. </p>
+<p>This function transposes the note chromatically in any EDO. The chromatic interval is defined by a diatonic displacement (e.g., 0 = unison, 1 = second, 2 = third, etc.) plus a chromatic alteration.</p>
+<dl class="section note"><dt>Note</dt><dd>Chromatic alterations have the same values in any EDO. That is, the inputs to this functions are the same regardless of EDO number. This function calculates the correct number of EDO divisions in a chromatic half-step using the key map provided when the <a class="el" href="classmusic__theory_1_1Transposer.html" title="Provides dependency-free transposition utilities that work with any scale that has 7 diatonic steps a...">Transposer</a> instance was created.</dd></dl>
 <p>A chromatic alteration of 0 corresponds to major or perfect intervals. For example:</p><ul>
+<li><code>{1, 0}</code> is a major second up</li>
 <li><code>{2, -1}</code> is a minor third up</li>
 <li><code>{3, 0}</code> is a perfect fourth up</li>
 <li><code>{5, 1}</code> is an augmented sixth up</li>
@@ -245,11 +255,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">interval</td><td>The diatonic displacement (negative for downward transposition). </td></tr>
-    <tr><td class="paramname">alteration</td><td>The chromatic half-step alteration that defines the chromatic interval (negative for downward).</td></tr>
+    <tr><td class="paramname">chromaticAlteration</td><td>The chromatic half-step alteration that defines the chromatic interval. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true on success. Always returns true in this implementation, as error conditions are not possible. </dd></dl>
 
 </div>
 </div>
@@ -314,7 +323,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 <p>Transposes enharmonically relative to the current values. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">direction</td><td>negative or positive (usually -1 or 1) </td></tr>
+    <tr><td class="paramname">direction</td><td>negative or non-negative (usually -1 or 1) </td></tr>
   </table>
   </dd>
 </dl>
@@ -356,11 +365,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 </div><div class="memdoc">
 
 <p>Determines if the given displacement and alteration refer to the same pitch as the current state. </p>
-<p>This compares the total EDO step position derived from the current displacement and alteration with that of the input values. It accounts for microtonal tuning via the custom key map and EDO size.</p>
+<p>This compares the total EDO division position derived from the current displacement and alteration with that of the input values. It accounts for microtonal tuning via the custom key map and EDO size.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">displacement</td><td>The scale step displacement to compare. </td></tr>
-    <tr><td class="paramname">alteration</td><td>The chromatic alteration to compare. </td></tr>
+    <tr><td class="paramname">alteration</td><td>The alteration (accidental specified in EDO divisions) to compare. </td></tr>
   </table>
   </dd>
 </dl>
@@ -396,8 +405,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 
 </div>
 </div>
-<a id="a014e42fb5aa94fbf4299a84f39426b7e" name="a014e42fb5aa94fbf4299a84f39426b7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a014e42fb5aa94fbf4299a84f39426b7e">&#9670;&#160;</a></span>stepwiseTranspose()</h2>
+<a id="a549005f7f6843171987b3ff128c76152" name="a549005f7f6843171987b3ff128c76152"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a549005f7f6843171987b3ff128c76152">&#9670;&#160;</a></span>stepwiseTranspose()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -409,7 +418,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
           <td class="memname">void music_theory::Transposer::stepwiseTranspose </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>numberOfSteps</em></td><td>)</td>
+          <td class="paramname"><em>numberOfEdoDivisions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -420,12 +429,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 </table>
 </div><div class="memdoc">
 
-<p>Transposes by the given number of EDO steps and simplifies the spelling. </p>
-<p>In standard key signatures, each step corresponds to a half-step. In microtonal systems, each step is a single division of the octave value.</p>
+<p>Transposes by the given number of EDO divisions and simplifies the spelling. </p>
+<p>In standard key signatures, each division corresponds to a half-step.</p>
 <p>After transposition, the note's spelling is simplified to reduce the alteration while preserving pitch.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numberOfSteps</td><td>The number of diatonic steps to transpose (positive for up, negative for down). </td></tr>
+    <tr><td class="paramname">numberOfEdoDivisions</td><td>The number of EDO divisions to transpose (positive for up, negative for down). </td></tr>
   </table>
   </dd>
 </dl>

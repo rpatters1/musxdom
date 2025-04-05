@@ -182,14 +182,14 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:ac32c7dc63fac40c07b1c4f4cabeca705" id="r_ac32c7dc63fac40c07b1c4f4cabeca705"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ac32c7dc63fac40c07b1c4f4cabeca705">getNextInVoice</a> (int voice) const</td></tr>
 <tr class="memdesc:ac32c7dc63fac40c07b1c4f4cabeca705"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next entry in the frame in the specified v1/v2 or null if none.  <br /></td></tr>
 <tr class="separator:ac32c7dc63fac40c07b1c4f4cabeca705"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a902e4f0c8bd35f9339ec170924ff9e2f" id="r_a902e4f0c8bd35f9339ec170924ff9e2f"><td class="memItemLeft" align="right" valign="top"><a id="a902e4f0c8bd35f9339ec170924ff9e2f" name="a902e4f0c8bd35f9339ec170924ff9e2f"></a>
-<a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNextInBeamGroup</b> () const</td></tr>
-<tr class="memdesc:a902e4f0c8bd35f9339ec170924ff9e2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group. <br /></td></tr>
-<tr class="separator:a902e4f0c8bd35f9339ec170924ff9e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02ed261c6800b9db11067074cae23b47" id="r_a02ed261c6800b9db11067074cae23b47"><td class="memItemLeft" align="right" valign="top"><a id="a02ed261c6800b9db11067074cae23b47" name="a02ed261c6800b9db11067074cae23b47"></a>
-<a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPreviousInBeamGroup</b> () const</td></tr>
-<tr class="memdesc:a02ed261c6800b9db11067074cae23b47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the prevsiou entry in a beamed group or nullptr if the entry is not beamed or is the first in the group. <br /></td></tr>
-<tr class="separator:a02ed261c6800b9db11067074cae23b47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6192cc28f317f8874486401988abbeb5" id="r_a6192cc28f317f8874486401988abbeb5"><td class="memItemLeft" align="right" valign="top"><a id="a6192cc28f317f8874486401988abbeb5" name="a6192cc28f317f8874486401988abbeb5"></a>
+<a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNextInBeamGroup</b> (bool includeHiddenEntries=false) const</td></tr>
+<tr class="memdesc:a6192cc28f317f8874486401988abbeb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group. <br /></td></tr>
+<tr class="separator:a6192cc28f317f8874486401988abbeb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a687a8659229e26eef9febed16eeea460" id="r_a687a8659229e26eef9febed16eeea460"><td class="memItemLeft" align="right" valign="top"><a id="a687a8659229e26eef9febed16eeea460" name="a687a8659229e26eef9febed16eeea460"></a>
+<a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPreviousInBeamGroup</b> (bool includeHiddenEntries=false) const</td></tr>
+<tr class="memdesc:a687a8659229e26eef9febed16eeea460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group. <br /></td></tr>
+<tr class="separator:a687a8659229e26eef9febed16eeea460"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91dd4f09e8c863732cfa52f13275995b" id="r_a91dd4f09e8c863732cfa52f13275995b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b">calcDisplaysAsRest</a> () const</td></tr>
 <tr class="memdesc:a91dd4f09e8c863732cfa52f13275995b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if an entry displays as a rest.  <br /></td></tr>
 <tr class="separator:a91dd4f09e8c863732cfa52f13275995b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -309,7 +309,7 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 </div><div class="memdoc">
 
 <p>Calculates if an entry displays as a rest. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
 
 </div>
 </div>
@@ -464,7 +464,7 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The found note or an null instance of <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a>. </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000010">Todo:</a></b></dt><dd>(possibly) figure out which is the correct note when two notes of the same pitch exist. We would want to associate the first with the first and the second with the second. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>(possibly) figure out which is the correct note when two notes of the same pitch exist. We would want to associate the first with the first and the second with the second. </dd></dl>
 
 </div>
 </div>

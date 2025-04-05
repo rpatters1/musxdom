@@ -6,6 +6,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "getEntryNumber", "classmusx_1_1dom_1_1Entry.html#a0d3cc0d02d7768f4153b0741d0a238ca", null ],
     [ "getNext", "classmusx_1_1dom_1_1Entry.html#af6ad38939066bbbfe7e64403919375a1", null ],
     [ "getPrevious", "classmusx_1_1dom_1_1Entry.html#af99dd422bdcc42b63a4986eda7b18d42", null ],
+    [ "hasStem", "classmusx_1_1dom_1_1Entry.html#a9665ee43235cad7e54c82c83abcc5f50", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1Entry.html#a413c78242c3f9f486a2b37d38d28c03b", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1Entry.html#a61440b0b4e54c1019e98d1b58d75f2e9", null ],
     [ "articDetail", "classmusx_1_1dom_1_1Entry.html#a0e99f4aa18165386218038d02a013b0f", null ],

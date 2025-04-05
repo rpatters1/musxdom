@@ -8,6 +8,7 @@ var namespacemusx_1_1dom_1_1details =
     [ "BeamStubDirection", "classmusx_1_1dom_1_1details_1_1BeamStubDirection.html", "classmusx_1_1dom_1_1details_1_1BeamStubDirection" ],
     [ "CrossStaff", "classmusx_1_1dom_1_1details_1_1CrossStaff.html", "classmusx_1_1dom_1_1details_1_1CrossStaff" ],
     [ "GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", "classmusx_1_1dom_1_1details_1_1GFrameHold" ],
+    [ "IndependentStaffDetails", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails" ],
     [ "LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html", "classmusx_1_1dom_1_1details_1_1LyricAssign" ],
     [ "LyricAssignChorus", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus" ],
     [ "LyricAssignSection", "classmusx_1_1dom_1_1details_1_1LyricAssignSection.html", "classmusx_1_1dom_1_1details_1_1LyricAssignSection" ],
