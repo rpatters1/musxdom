@@ -44,6 +44,7 @@ class Entry;
 
 namespace details {
 class GFrameHold;
+class IndependentStaffDetails;
 class StaffGroup;
 }
 
@@ -912,32 +913,16 @@ public:
 
     /// @brief Calculates and returns the shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
-    std::shared_ptr<KeySignature> calcKeySignature([[maybe_unused]] const std::optional<InstCmper>& forStaff = std::nullopt) const
-    {
-        /// @todo Get the independent key signature for the staff, if there is one.
-        return globalKeySig;
-    }
+    std::shared_ptr<KeySignature> calcKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
-    std::shared_ptr<TimeSignature> createTimeSignature([[maybe_unused]]const std::optional<InstCmper>& forStaff = std::nullopt) const
-    {
-        /// @todo Get the independent time signature for the staff, if there is one.
-        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
-    }
+    std::shared_ptr<TimeSignature> createTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
     /// @return The display time signature if there is one, otherwise the actual time signature.
-    std::shared_ptr<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const
-    {
-        /// @todo Get the independent display time signature for the staff, if there is one.
-        /// (Note that the independent key sig may have a different useDisplay boolean than the global key sig.)
-        if (!useDisplayTimesig) {
-            return createTimeSignature(forStaff);
-        }
-        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
-    }
+    std::shared_ptr<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     void integrityCheck() override
     {
@@ -1731,6 +1716,8 @@ public:
     std::optional<std::vector<int>> customStaff; ///< A list of stafflines from 0..26 where a standard 5-line staff is values 11, 12, 13, 14, 15.
     Evpu lineSpace{};               ///< Distance between staff lines.
     std::string instUuid;           ///< Unique identifier for the type of instrument.
+    bool floatKeys{};               ///< "Independent Key Signature"
+    bool floatTime{};               ///< "Independent Time Signature"
     //noteFont
     bool hasStyles{};               ///< Indicates that this staff has staff style assignments
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
@@ -1871,6 +1858,8 @@ public:
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
         bool defaultClef{};         ///< overrides default clef
+        bool floatKeys{};           ///< overrides "Independent Key Signature" setting
+        bool floatTime{};           ///< overrides "Independent Time Signature" setting
         bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
         bool transposition{};       ///< overrides transposition fields
         bool negNameScore{};        ///< overrides #hideNameInScore.

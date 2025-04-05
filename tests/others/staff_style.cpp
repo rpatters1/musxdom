@@ -52,6 +52,9 @@ constexpr static musxtest::string_view xml = R"xml(
       <styleName>Names and Stems</styleName>
       <addToMenu/>
       <mask>
+        <defaultClef/>
+        <floatKeys/>
+        <floatTime/>
         <staffType/>
         <negNameScore/>
         <fullName/>
@@ -105,6 +108,10 @@ TEST(StaffStyleTest, PopulateFields)
 
     // Verify mask properties
     ASSERT_TRUE(staffStyle->masks) << "Masks object is missing in StaffStyle";
+    EXPECT_TRUE(staffStyle->masks->defaultClef);
+    EXPECT_TRUE(staffStyle->masks->floatKeys);
+    EXPECT_TRUE(staffStyle->masks->floatTime);
+    EXPECT_TRUE(staffStyle->masks->staffType);
     EXPECT_TRUE(staffStyle->masks->negNameScore);
     EXPECT_TRUE(staffStyle->masks->fullName);
     EXPECT_TRUE(staffStyle->masks->abrvName);
