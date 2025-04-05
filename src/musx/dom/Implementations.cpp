@@ -1216,14 +1216,14 @@ std::optional<std::vector<int>> KeySignature::calcKeyMap() const
     std::vector<int> result(numDiatonicSteps, 0);
     int currDiatonicStep = -1;
     const size_t stepCount = keyMap->steps.size();
-    for (int i = 0; i < stepCount; ++i) {
-        int wrappedIndex = (indexOfTonalCenter + i) % stepCount;
+    for (size_t i = 0; i < stepCount; ++i) {
+        size_t wrappedIndex = (indexOfTonalCenter + i) % stepCount;
         const auto& step = keyMap->steps[wrappedIndex];
         if (step->diatonic) {
             ++currDiatonicStep;
         }
-        for (int diatonicStep = 1; diatonicStep < numDiatonicSteps; ++diatonicStep) {
-            if (diatonicStep > currDiatonicStep) {
+        for (size_t diatonicStep = 1; diatonicStep < numDiatonicSteps; ++diatonicStep) {
+            if (int(diatonicStep) > currDiatonicStep) {
                 ++result[diatonicStep];
             }
         }
