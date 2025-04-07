@@ -1797,24 +1797,38 @@ void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::
 // ***** SmartShape *****
 // **********************
 
-Edu others::SmartShape::EndPoint::calcEduPosition() const
+EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
 {
-    if (!entryNumber) return eduPosition;
-    std::optional<Edu> result;
+    EntryInfoPtr result;
     if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), staffId, measId)) {
         gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) {
-            if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
-                result = entryInfo->elapsedDuration.calcEduDuration();
+            if (!entryNumber) {
+                unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
+                if (eduDiff <= 1) {
+                    result = entryInfo;
+                    return false; // stop iterating
+                }
+            } else if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
+                result = entryInfo;
                 return false; // stop iterating
             }
             return true;
         });
     }
-    if (!result) {
+    if (!result && entryNumber != 0) {
         MUSX_INTEGRITY_ERROR("SmartShape at Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId)
             + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
     }
-    return result.value_or(0);
+    return result;
+}
+
+Edu others::SmartShape::EndPoint::calcEduPosition() const
+{
+    if (!entryNumber) return eduPosition;
+    if (auto entryInfo = calcAssociatedEntry()) {
+        return entryInfo->elapsedDuration.calcEduDuration();
+    }
+    return 0;
 }
 
 bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const

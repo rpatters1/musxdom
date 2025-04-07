@@ -60,10 +60,14 @@ public:
         InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
         MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
         Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
-        EntryNumber entryNumber{};      ///< Entry number (xml node is `<entryNum>`)
+        EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
 
-        /// @brief Caculates the edu position of the endpoint, based on whether it is an edu or an entry
+        /// @brief Calculates the edu position of the endpoint, based on whether it is an edu or an entry
         Edu calcEduPosition() const;
+
+        /// @brief Calculates the entry associated with the endpoint.
+        /// @return The entry if the endpoint is entry-attached or within 1 Edu of an entry. Null if not.
+        EntryInfoPtr calcAssociatedEntry() const;
 
         bool requireAllFields() const override { return false; }
         static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
