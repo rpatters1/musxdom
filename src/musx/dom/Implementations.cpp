@@ -2158,8 +2158,12 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     }
     if (srcMasks->transposition) {
         transposedClef = staffStyle->transposedClef;
-        // other transposition fields
+        transposition = staffStyle->transposition;
         masks->transposition = true;
+    }
+    if (srcMasks->hideKeySigsShowAccis) {
+        hideKeySigsShowAccis = staffStyle->hideKeySigsShowAccis;
+        masks->hideKeySigsShowAccis = true;
     }
     if (srcMasks->negNameScore) {
         hideNameInScore = staffStyle->hideNameInScore;
