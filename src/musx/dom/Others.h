@@ -2056,6 +2056,8 @@ public:
     Evpu right{};                   ///< Right margin in Evpu. (Sign reversed in Finale UI.)
     Evpu bottom{};                  ///< Bottom margin in Evpu. This value is 96 (i.e., 1 5-line staff thickness) less than the U.I. value.
                                     ///< That means if you enter 0 in the Finale UI, this value is -96.
+    bool noNames{};                 ///< Suppresses staff & group names along the left system margin. It does not appear to have a UI in Finale 27,
+                                    ///< but it works and it occasionally appears in musx files.
     bool hasStaffScaling{};         ///< Indicates if any individual staff in the system has scaling applied.
     bool placeEndSpaceBeforeBarline{}; ///< Indicates that extra space is placed before the barline.
     bool scaleVert{};               ///< "Resize Vertical Space"

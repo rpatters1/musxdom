@@ -139,7 +139,8 @@ MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
                 auto staff = instance->getStaffAtIndex(x);
                 if (staff) {
                     if (staff->multiStaffInstId) {
-                        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
+                        musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose, 
+                            "Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
                     } else {
                         staff->multiStaffInstId = instance->getCmper();
                     }

@@ -880,6 +880,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffSystem, {
     {"left", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->left = e->getTextAs<Evpu>(); }},
     {"right", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->right = e->getTextAs<Evpu>(); }},
     {"bottom", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->bottom = e->getTextAs<Evpu>(); }},
+    {"noNames", [](const XmlElementPtr&, const std::shared_ptr<StaffSystem>& i) { i->noNames = true; }},
     {"hasStaffScaling", [](const XmlElementPtr&, const std::shared_ptr<StaffSystem>& i) { i->hasStaffScaling = true; }},
     {"placeEndSpaceBeforeBarline", [](const XmlElementPtr&, const std::shared_ptr<StaffSystem>& i) { i->placeEndSpaceBeforeBarline = true; }},
     {"scaleVert", [](const XmlElementPtr&, const std::shared_ptr<StaffSystem>& i) { i->scaleVert = true; }},
