@@ -105,11 +105,12 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // ***** EntryFrame *****
 // **********************
 
-EntryFrame::EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex) :
+EntryFrame::EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch) :
     Base(gfhold.getDocument(), gfhold.getPartId(), gfhold.getShareMode()),
     m_staff(staff),
     m_measure(measure),
-    m_layerIndex(layerIndex)
+    m_layerIndex(layerIndex),
+    m_forWrittenPitch(forWrittenPitch)
 {
 }
 
@@ -133,7 +134,7 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 {
     if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure + 1)) {
-        return gfhold->createEntryFrame(m_layerIndex);
+        return gfhold->createEntryFrame(m_layerIndex, m_forWrittenPitch);
     }
     return nullptr;
 }
@@ -142,7 +143,7 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 {
     if (m_measure > 1) {
         if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure - 1)) {
-            return gfhold->createEntryFrame(m_layerIndex);
+            return gfhold->createEntryFrame(m_layerIndex, m_forWrittenPitch);
         }
     }
     return nullptr;
@@ -850,7 +851,7 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerIndex layerIndex) const
+std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch) const
 {
     if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
@@ -865,15 +866,22 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
         return nullptr;
-        }();
+    }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
-        retval = std::make_shared<EntryFrame>(*this, getStaff(), getMeasure(), layerIndex);
+        retval = std::make_shared<EntryFrame>(*this, getStaff(), getMeasure(), layerIndex, forWrittenPitch);
         const auto& measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), getMeasure());
         if (!measure) {
-            throw std::invalid_argument("Meaure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
+            throw std::invalid_argument("Measure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
         }
-        retval->keySignature = measure->calcKeySignature(getStaff());
+        const auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), getStaff(), getMeasure(), 0);
+        if (!staff) {
+            throw std::invalid_argument("Staff instance for staff " + std::to_string(getStaff()) + " does not exist.");
+        }
+        retval->keySignature = measure->createKeySignature(getStaff());
+        if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
+            retval->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
+        }
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
@@ -899,7 +907,11 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             std::vector<TupletState>& activeTuplets = entry->voice2 ? v2ActiveTuplets : v1ActiveTuplets;
             util::Fraction& actualElapsedDuration = entry->voice2 ? v2ActualElapsedDuration : v1ActualElapsedDuration;
             entryInfo->elapsedDuration = actualElapsedDuration;
-            entryInfo->clefIndex = calcClefIndexAt(actualElapsedDuration);
+            if (forWrittenPitch && staff->transposition && staff->transposition->setToClef) {
+                entryInfo->clefIndex = staff->transposedClef;
+            } else {
+                entryInfo->clefIndex = calcClefIndexAt(actualElapsedDuration);
+            }
             util::Fraction cumulativeRatio = 1;
             if (!entry->graceNote) {
                 graceIndex = 0;
@@ -921,15 +933,13 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 for (const auto& t : activeTuplets) {
                     if (t.ratio != 0) {
                         cumulativeRatio *= t.ratio;
-                    }
-                    else {
+                    } else {
                         zeroLengthTuplet = true;
                     }
                 }
                 util::Fraction actualDuration = zeroLengthTuplet ? 0 : entry->calcFraction() * cumulativeRatio;
                 entryInfo->actualDuration = actualDuration;
-            }
-            else {
+            } else {
                 entryInfo->graceIndex = ++graceIndex;
             }
 
@@ -959,8 +969,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                 );
             }
         }
-    }
-    else {
+    } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
     }
@@ -969,7 +978,11 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
 
 bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
 {
-    auto entryFrame = createEntryFrame(layerIndex);
+    bool forWrittenPitch = false;
+    if (auto partGlobals = getDocument()->getOthers()->get<others::PartGlobals>(getPartId(), MUSX_GLOBALS_CMPER)) {
+        forWrittenPitch = partGlobals->showTransposed;
+    }
+    auto entryFrame = createEntryFrame(layerIndex, forWrittenPitch);
     if (entryFrame) {
         for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
             if (!iterator(EntryInfoPtr(entryFrame, x))) {
@@ -1095,7 +1108,7 @@ std::vector<unsigned> KeySignature::calcTonalCenterArrayForFlats() const
 
 std::vector<unsigned> KeySignature::calcTonalCenterArray() const
 {
-    int alter = getAlteration().value_or(0);
+    int alter = getAlteration();
     if (alter >= 0) {
         return calcTonalCenterArrayForSharps();
     } else {
@@ -1105,7 +1118,7 @@ std::vector<unsigned> KeySignature::calcTonalCenterArray() const
 
 std::vector<int> KeySignature::calcAcciAmountsArray() const
 {
-    int alter = getAlteration().value_or(0);
+    int alter = getAlteration();
 
     if (!isBuiltIn()) {
         if (alter >= 0) {
@@ -1129,7 +1142,7 @@ std::vector<int> KeySignature::calcAcciAmountsArray() const
 
 std::vector<unsigned> KeySignature::calcAcciOrderArray() const
 {
-    int alter = getAlteration().value_or(0);
+    int alter = getAlteration();
 
     if (!isBuiltIn()) {
         if (alter >= 0) {
@@ -1157,9 +1170,14 @@ int KeySignature::calcTonalCenterIndex() const
         MUSX_INTEGRITY_ERROR("Key signature mode " + std::to_string(getKeyMode()) + " is neither linear nor non-linear. It is invalid.");
     }
 
-    int alter = getAlteration().value_or(0);
+    int alter = getAlteration();
     auto centers = calcTonalCenterArray();
-    return centers[std::abs(alter) % centers.size()];
+    int result = int(centers[std::abs(alter) % centers.size()]);
+    if (m_tonalCenterOffset != 0) {
+        result = (result + m_tonalCenterOffset) % music_theory::STANDARD_DIATONIC_STEPS;
+        if (result < 0) result += music_theory::STANDARD_DIATONIC_STEPS;
+    }
+    return result;
 }
 
 int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
@@ -1183,7 +1201,7 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
             }
         }
     } else {
-        unsigned keyFifths = std::abs(getAlteration().value_or(0));
+        unsigned keyFifths = std::abs(getAlteration());
         for (size_t i = 0; i < keyFifths && i < amounts.size() && i < order.size(); ++i) {
             if (noteIndex == order[i % order.size()]) {
                 keySigAlteration += amounts[i];
@@ -1192,6 +1210,30 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
     }
 
     return keySigAlteration;
+}
+
+void KeySignature::setTransposition(int interval, int keyAdjustment, bool simplify)
+{
+    if (!isLinear()) {
+        return;
+    }
+    m_octaveDisplacement = interval / music_theory::STANDARD_DIATONIC_STEPS;
+    m_tonalCenterOffset = 0; // suppresses transposed tone center calc
+    int concertTonalCenterIndex = calcTonalCenterIndex();
+    m_tonalCenterOffset = interval % music_theory::STANDARD_DIATONIC_STEPS;
+    
+    int alteration = getAlteration() + keyAdjustment;
+    int direction = music_theory::sign(alteration);
+    if (simplify) {
+        int edoDivisions = calcEDODivisions();
+        int threshold = (edoDivisions / 2) + 1;
+        while (std::abs(alteration) >= threshold) {
+            alteration -= direction * edoDivisions;
+            m_tonalCenterOffset += direction;
+        }
+    }
+    key = (key & ~0xff) | (uint8_t(alteration));
+    m_octaveDisplacement += (concertTonalCenterIndex + m_tonalCenterOffset) / music_theory::STANDARD_DIATONIC_STEPS;
 }
 
 std::optional<std::vector<int>> KeySignature::calcKeyMap() const
@@ -1232,15 +1274,17 @@ std::optional<std::vector<int>> KeySignature::calcKeyMap() const
     return result;
 }
 
+int KeySignature::calcEDODivisions() const
+{
+    if (auto keyFormat = getDocument()->getOthers()->get<others::KeyFormat>(getPartId(), getKeyMode())) {
+        return static_cast<int>(keyFormat->semitones);
+    }
+    return music_theory::STANDARD_12EDO_STEPS;
+}
+
 std::unique_ptr<music_theory::Transposer> KeySignature::createTransposer(int displacement, int alteration) const
 {
-    const int numSteps = [&]() {
-        if (auto keyFormat = getDocument()->getOthers()->get<others::KeyFormat>(getPartId(), getKeyMode())) {
-            return static_cast<int>(keyFormat->semitones);
-        }
-        return music_theory::STANDARD_12EDO_STEPS;
-    }();
-    return std::make_unique<music_theory::Transposer>(displacement, alteration, isMinor(), numSteps, calcKeyMap());
+    return std::make_unique<music_theory::Transposer>(displacement, alteration, isMinor(), calcEDODivisions(), calcKeyMap());
 }
 
 // **************************
@@ -1309,20 +1353,24 @@ int others::Measure::calcDisplayNumber() const
     return getCmper();
 }
 
-std::shared_ptr<KeySignature> others::Measure::calcKeySignature(const std::optional<InstCmper>& forStaff) const
+std::shared_ptr<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff) const
 {
+    std::shared_ptr<KeySignature> result;
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
             if (staff->floatKeys) {
                 if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
                     if (floats->hasKey) {
-                        return floats->keySig;
+                        result = std::make_shared<KeySignature>(*floats->keySig);
                     }
                 }
             }
         }
     }
-    return globalKeySig;
+    if (!result) {
+        result = std::make_shared<KeySignature>(*globalKeySig);
+    }
+    return result;
 }
 
 std::shared_ptr<TimeSignature> others::Measure::createTimeSignature(const std::optional<InstCmper>& forStaff) const
@@ -1455,23 +1503,34 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
 // ***** Note *****
 // ****************
 
-std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex) const
+std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex,
+    const std::shared_ptr<const others::Staff>& staff) const
 {
     static constexpr std::array<Note::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
         Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
     };
-    
+
+    int transposedLev = harmLev;
+    int transposedAlt = harmAlt;
+    if (staff && staff->transposition && staff->transposition->chromatic) {
+        const auto& chromatic = *staff->transposition->chromatic;
+        auto transposer = key->createTransposer(transposedLev, transposedAlt);
+        transposer->chromaticTranspose(chromatic.diatonic, chromatic.alteration);
+        transposedLev = transposer->displacement();
+        transposedAlt = transposer->alteration();
+    }
+
     // Determine the base note and octave
-    int adjustedLev = key->calcTonalCenterIndex() + harmLev;
-    int octave = (adjustedLev / music_theory::STANDARD_DIATONIC_STEPS) + 4; // Middle C (C4) is the reference
-    int step = adjustedLev % music_theory::STANDARD_DIATONIC_STEPS;
+    int keyAdjustedLev = key->calcTonalCenterIndex() + transposedLev;
+    int octave = (keyAdjustedLev / music_theory::STANDARD_DIATONIC_STEPS) + key->getOctaveDisplacement() + 4; // Middle C (C4) is the reference
+    int step = keyAdjustedLev % music_theory::STANDARD_DIATONIC_STEPS;
     if (step < 0) {
         step += music_theory::STANDARD_DIATONIC_STEPS;
         octave -= 1;
     }
 
     // Calculate the actual alteration
-    int actualAlteration = harmAlt + key->calcAlterationOnNote(step);
+    int actualAlteration = transposedAlt + key->calcAlterationOnNote(step);
 
     // Calculate the staff line
     const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
@@ -1483,7 +1542,7 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
     }
     int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
 
-    return { noteNames[step], octave, actualAlteration, adjustedLev + middleCLine };
+    return { noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
 }
 
 // ***********************
@@ -1581,6 +1640,10 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() cons
         }
         return m_entry->clefIndex;
     }();
+
+    if (getEntryInfo().getFrame()->isForWrittenPitch()) {
+        return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, m_entry.createCurrentStaff());
+    }
 
     return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex);
 }

@@ -115,7 +115,7 @@ TEST(MeasureTest, PopulateScore)
     auto measure1 = others->get<others::Measure>(SCORE_PARTID, 1);
     ASSERT_TRUE(measure1) << "Measure for score with cmper 1 not found";
 
-    auto keySignature = measure1->calcKeySignature();
+    auto keySignature = measure1->createKeySignature();
     ASSERT_TRUE(keySignature);
 
     EXPECT_EQ(measure1->width, Evpu(600));
@@ -153,7 +153,7 @@ TEST(MeasureTest, PopulateScore)
     auto measure2 = others->get<others::Measure>(SCORE_PARTID, 2);
     ASSERT_TRUE(measure2) << "Measure 2 for score not found";
 
-    keySignature = measure2->calcKeySignature();
+    keySignature = measure2->createKeySignature();
     ASSERT_TRUE(keySignature);
 
     EXPECT_EQ(measure2->width, Evpu(600));
@@ -189,7 +189,7 @@ TEST(MeasureTest, PopulateScore)
     auto measure3 = others->get<others::Measure>(SCORE_PARTID, 3);
     ASSERT_TRUE(measure3) << "Measure 3 for score not found";
 
-    keySignature = measure3->calcKeySignature();
+    keySignature = measure3->createKeySignature();
     ASSERT_TRUE(keySignature);
 
     EXPECT_EQ(measure3->width, Evpu(600));

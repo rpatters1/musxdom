@@ -254,9 +254,10 @@ public:
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
      * @param layerIndex The layer index (0..3) to iterate.
+     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
      * @return EntryFrame for layer or nullptr if none.
      */
-    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex) const;
+    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
     
     /**
      * @brief iterates the entries for the specified layer in this #GFrameHold from left to right

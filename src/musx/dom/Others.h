@@ -911,9 +911,10 @@ public:
     /// And if it does, it may not appear as a number.
     int calcDisplayNumber() const;
 
-    /// @brief Calculates and returns the shared pointer to an instance of the @ref KeySignature for this measure and staff.
+    /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
-    std::shared_ptr<KeySignature> calcKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
+    std::shared_ptr<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.

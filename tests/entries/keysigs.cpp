@@ -39,7 +39,7 @@ TEST(KeySigs, Test12EDO)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    std::vector<std::optional<int>> expectedKeyAlters = { -4, 5, -2, 3, std::nullopt };
+    std::vector<std::optional<int>> expectedKeyAlters = { -4, 5, -2, 3, 0 };
     std::vector<unsigned> expectedIndices = { 5, 4, 2, 0, 1 }; // AbMaj, G#min, Eb Lydian, C# Phrygian, D Freyish (non-linear)
     EXPECT_EQ(expectedKeyAlters.size(), expectedIndices.size());
     std::vector<std::optional<std::vector<int>>> expectedKeyMaps = {
@@ -61,7 +61,7 @@ TEST(KeySigs, Test12EDO)
     ASSERT_GE(measures.size(), expectedKeyAlters.size());
 
     for (size_t i = 0; i < expectedKeyAlters.size(); i++) {
-        auto key = measures[i]->calcKeySignature();
+        auto key = measures[i]->createKeySignature();
         EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
         EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
         EXPECT_EQ(key->calcKeyMap(), expectedKeyMaps[i]);
@@ -123,7 +123,7 @@ TEST(KeySigs, Test31EDO)
 
     for (size_t i = 0; i < expectedKeyAlters.size(); i++) {
         auto measure = measures[i + FIRST_31EDO_MEASURE_INDEX];
-        auto key = measure->calcKeySignature();
+        auto key = measure->createKeySignature();
         EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
         EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
         EXPECT_EQ(key->calcKeyMap(), expectedKeyMaps[i]);

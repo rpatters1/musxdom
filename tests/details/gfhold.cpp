@@ -179,6 +179,24 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
       <useDisplayTimesig/>
       <leftBarline>default</leftBarline>
     </measSpec>
+    <staffSpec cmper="3">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <defaultClef>1</defaultClef>
+      <transposedClef>2</transposedClef>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-1</stemReversal>
+      <fullName>75</fullName>
+      <abbrvName>76</abbrvName>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+      <useAutoNum/>
+    </staffSpec>
   </others>
   <details>
     <gfhold cmper1="3" cmper2="915">
