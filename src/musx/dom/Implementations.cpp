@@ -1172,12 +1172,7 @@ int KeySignature::calcTonalCenterIndex() const
 
     int alter = getAlteration();
     auto centers = calcTonalCenterArray();
-    int result = int(centers[std::abs(alter) % centers.size()]);
-    if (m_tonalCenterOffset != 0) {
-        result = (result + m_tonalCenterOffset) % music_theory::STANDARD_DIATONIC_STEPS;
-        if (result < 0) result += music_theory::STANDARD_DIATONIC_STEPS;
-    }
-    return result;
+    return int(centers[std::abs(alter) % centers.size()]);
 }
 
 int KeySignature::calcAlterationOnNote(unsigned noteIndex) const
@@ -1223,8 +1218,8 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
     m_tonalCenterOffset = interval % music_theory::STANDARD_DIATONIC_STEPS;
     
     int alteration = getAlteration() + keyAdjustment;
-    int direction = music_theory::sign(alteration);
     if (simplify) {
+        int direction = music_theory::sign(alteration);
         int edoDivisions = calcEDODivisions();
         int threshold = (edoDivisions / 2) + 1;
         while (std::abs(alteration) >= threshold) {
@@ -1521,8 +1516,8 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
     }
 
     // Determine the base note and octave
-    int keyAdjustedLev = key->calcTonalCenterIndex() + transposedLev;
-    int octave = (keyAdjustedLev / music_theory::STANDARD_DIATONIC_STEPS) + key->getOctaveDisplacement() + 4; // Middle C (C4) is the reference
+    int keyAdjustedLev = key->calcTonalCenterIndex() + transposedLev + (key->getOctaveDisplacement() * music_theory::STANDARD_DIATONIC_STEPS);
+    int octave = (keyAdjustedLev / music_theory::STANDARD_DIATONIC_STEPS) + 4; // Middle C (C4) is the reference
     int step = keyAdjustedLev % music_theory::STANDARD_DIATONIC_STEPS;
     if (step < 0) {
         step += music_theory::STANDARD_DIATONIC_STEPS;

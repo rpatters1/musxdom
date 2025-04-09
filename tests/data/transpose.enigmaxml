@@ -61,7 +61,7 @@
       <modified>
         <year>2025</year>
         <month>4</month>
-        <day>8</day>
+        <day>9</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -3521,8 +3521,8 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>-1</harmAlt>
+        <harmLev>3</harmLev>
+        <harmAlt>0</harmAlt>
         <isValid/>
         <showAcci/>
       </note>
@@ -3536,17 +3536,23 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>3</harmLev>
+        <harmLev>4</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="23" prev="22" next="24">
       <dura>2048</dura>
-      <numNotes>0</numNotes>
+      <numNotes>1</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
     <entry entnum="24" prev="23" next="25">
       <dura>1024</dura>
@@ -3557,8 +3563,8 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>-1</harmAlt>
+        <harmLev>3</harmLev>
+        <harmAlt>0</harmAlt>
         <isValid/>
         <showAcci/>
       </note>
@@ -3572,17 +3578,23 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>3</harmLev>
+        <harmLev>4</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="26" prev="25" next="27">
       <dura>2048</dura>
-      <numNotes>0</numNotes>
+      <numNotes>1</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
     <entry entnum="27" prev="26" next="28">
       <dura>1024</dura>
@@ -3593,8 +3605,8 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>-1</harmAlt>
+        <harmLev>3</harmLev>
+        <harmAlt>0</harmAlt>
         <isValid/>
         <showAcci/>
       </note>
@@ -3608,17 +3620,23 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>3</harmLev>
+        <harmLev>4</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="29" prev="28" next="30">
       <dura>2048</dura>
-      <numNotes>0</numNotes>
+      <numNotes>1</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
     <entry entnum="30" prev="29" next="31">
       <dura>1024</dura>
@@ -3629,8 +3647,8 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>-1</harmAlt>
+        <harmLev>3</harmLev>
+        <harmAlt>0</harmAlt>
         <isValid/>
         <showAcci/>
       </note>
@@ -3644,17 +3662,23 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>3</harmLev>
+        <harmLev>4</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="32" prev="31" next="33">
       <dura>2048</dura>
-      <numNotes>0</numNotes>
+      <numNotes>1</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
     <entry entnum="33" prev="32" next="34">
       <dura>1024</dura>
@@ -3665,8 +3689,8 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>-1</harmAlt>
+        <harmLev>3</harmLev>
+        <harmAlt>0</harmAlt>
         <isValid/>
         <showAcci/>
       </note>
@@ -3680,17 +3704,23 @@
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>3</harmLev>
+        <harmLev>4</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="35" prev="34" next="0">
       <dura>2048</dura>
-      <numNotes>0</numNotes>
+      <numNotes>1</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
   </entries>
   <texts>

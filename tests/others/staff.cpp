@@ -369,3 +369,38 @@ TEST(StaffText, StaffLines)
     }
     EXPECT_EQ(x, staves.size());
 }
+
+TEST(StaffTest, Transposition)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "transpose.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    for (Cmper measId = 3; measId <= 5; measId++) {
+        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measId);
+        ASSERT_TRUE(gfhold);
+        auto writtenEntries = gfhold->createEntryFrame(0, true);
+        ASSERT_TRUE(writtenEntries);
+        ASSERT_GE(writtenEntries->getEntries().size(), 2);
+        auto concertEntries = gfhold->createEntryFrame(0, false);
+        ASSERT_TRUE(concertEntries);
+        ASSERT_GE(concertEntries->getEntries().size(), 2);
+        static constexpr std::array<char, 7> noteNames = { 'C', 'D', 'E', 'F', 'G', 'A', 'B' };
+        for (size_t x = 0; x < 2; x++) {
+            auto writtenNote = NoteInfoPtr(EntryInfoPtr(writtenEntries, x), 0);
+            auto concertNote = NoteInfoPtr(EntryInfoPtr(concertEntries, x), 0);
+            auto [wNote, wOctave, wAlter, wStaff] = writtenNote.calcNoteProperties();
+            auto [cNote, cOctave, cAlter, cStaff] = concertNote.calcNoteProperties();
+            std::cout << "Entry index " << x << " measure " << measId << std::endl;
+            std::cout << "    " << noteNames[int(wNote)] << ", " << wOctave << ", " << wAlter << ", " << wStaff << std::endl;
+            std::cout << "    " << noteNames[int(cNote)] << ", " << cOctave << ", " << cAlter << ", " << cStaff << std::endl;
+        }
+    }
+}
