@@ -217,3 +217,13 @@ TEST(TransposerTest, Non12EDOEquivalentPitch) {
      EXPECT_EQ(t.alteration(), 0);
  }
  
+ TEST(TransposerTest, LargeInterval)
+ {
+     Transposer t(1, -1); // D4 flat
+     t.chromaticTranspose(12, -1); // up a minor 6th plus an octave
+     EXPECT_EQ(t.displacement(), 13);
+     EXPECT_EQ(t.alteration(), -2); // A5 double-flat
+     t.simplifySpelling();
+     EXPECT_EQ(t.displacement(), 12);
+     EXPECT_EQ(t.alteration(), 0);  // G5 natural
+ }

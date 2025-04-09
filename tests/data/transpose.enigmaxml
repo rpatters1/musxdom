@@ -2798,7 +2798,7 @@
         <setToClef/>
         <noKeyOpt/>
         <keysig>
-          <interval>5</interval>
+          <interval>12</interval>
           <adjust>3</adjust>
         </keysig>
       </transposition>
@@ -2810,7 +2810,7 @@
       <botRepeatDotOff>-5</botRepeatDotOff>
       <topRepeatDotOff>-3</topRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
-      <styleName>Transpose Eb No Simplify</styleName>
+      <styleName>Transpose Eb Bari No Simplify</styleName>
       <addToMenu/>
       <mask>
         <transposition/>

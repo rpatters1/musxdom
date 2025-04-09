@@ -383,24 +383,62 @@ TEST(StaffTest, Transposition)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    for (Cmper measId = 3; measId <= 5; measId++) {
+    using Result = std::tuple<int, int, int, int>; // note index, octave, alteration, staff line
+
+    static constexpr std::array<Result, 2> expectedConcertResult = {
+        Result{5, 4, 0, 1}, // A4
+        Result{6, 4, 0, 2}  // B4
+    };
+
+    static const std::array<std::array<Result, 2>, 5> expectedWrittenResults = {{
+        { Result{5, 4, 0, 1}, Result{6, 4, 0, 2} },
+        { Result{0, 5, 0, 3}, Result{1, 5, 0, 4} },
+        { Result{6, 5, 0, 3}, Result{0, 6, 1, 4} },
+        { Result{4, 5, -1, 1}, Result{5, 5, -1, 2} },
+        { Result{3, 6, 1, 7}, Result{4, 6, 1, 8} },
+    }};
+
+    for (Cmper measId = 1; measId <= 5; measId++) {
         auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measId);
         ASSERT_TRUE(gfhold);
+
         auto writtenEntries = gfhold->createEntryFrame(0, true);
         ASSERT_TRUE(writtenEntries);
         ASSERT_GE(writtenEntries->getEntries().size(), 2);
+
         auto concertEntries = gfhold->createEntryFrame(0, false);
         ASSERT_TRUE(concertEntries);
         ASSERT_GE(concertEntries->getEntries().size(), 2);
-        static constexpr std::array<char, 7> noteNames = { 'C', 'D', 'E', 'F', 'G', 'A', 'B' };
+
         for (size_t x = 0; x < 2; x++) {
             auto writtenNote = NoteInfoPtr(EntryInfoPtr(writtenEntries, x), 0);
             auto concertNote = NoteInfoPtr(EntryInfoPtr(concertEntries, x), 0);
+
             auto [wNote, wOctave, wAlter, wStaff] = writtenNote.calcNoteProperties();
             auto [cNote, cOctave, cAlter, cStaff] = concertNote.calcNoteProperties();
+
+            const auto& [expWNote, expWOct, expWAlt, expWStaff] = expectedWrittenResults[measId - 1][x];
+            const auto& [expCNote, expCOct, expCAlt, expCStaff] = expectedConcertResult[x];
+
+            // Written checks
+            EXPECT_EQ(int(wNote), expWNote) << "Written note mismatch at entry " << x << " in measure " << measId;
+            EXPECT_EQ(wOctave, expWOct) << "Written octave mismatch at entry " << x << " in measure " << measId;
+            EXPECT_EQ(wAlter, expWAlt) << "Written alteration mismatch at entry " << x << " in measure " << measId;
+            EXPECT_EQ(wStaff, expWStaff) << "Written staff mismatch at entry " << x << " in measure " << measId;
+
+            // Concert checks
+            EXPECT_EQ(int(cNote), expCNote) << "Concert note mismatch at entry " << x << " in measure " << measId;
+            EXPECT_EQ(cOctave, expCOct) << "Concert octave mismatch at entry " << x << " in measure " << measId;
+            EXPECT_EQ(cAlter, expCAlt) << "Concert alteration mismatch at entry " << x << " in measure " << measId;
+            EXPECT_EQ(cStaff, expCStaff) << "Concert staff mismatch at entry " << x << " in measure " << measId;
+
+    /*
+            // Optional: print results
+            static constexpr std::array<char, 7> noteNames = { 'C', 'D', 'E', 'F', 'G', 'A', 'B' };
             std::cout << "Entry index " << x << " measure " << measId << std::endl;
-            std::cout << "    " << noteNames[int(wNote)] << ", " << wOctave << ", " << wAlter << ", " << wStaff << std::endl;
-            std::cout << "    " << noteNames[int(cNote)] << ", " << cOctave << ", " << cAlter << ", " << cStaff << std::endl;
+            std::cout << "    W: " << noteNames[int(wNote)] << ", " << wOctave << ", " << wAlter << ", " << wStaff << std::endl;
+            std::cout << "    C: " << noteNames[int(cNote)] << ", " << cOctave << ", " << cAlter << ", " << cStaff << std::endl;
+    */
         }
     }
 }

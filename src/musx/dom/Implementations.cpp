@@ -1213,22 +1213,23 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
         return;
     }
     m_octaveDisplacement = interval / music_theory::STANDARD_DIATONIC_STEPS;
-    m_tonalCenterOffset = 0; // suppresses transposed tone center calc
+    m_alterationOffset = 0; // suppresses transposed tone center and alteration calc
+    int concertAlteration = getAlteration();
     int concertTonalCenterIndex = calcTonalCenterIndex();
-    m_tonalCenterOffset = interval % music_theory::STANDARD_DIATONIC_STEPS;
+    int tonalCenterOffset = interval % music_theory::STANDARD_DIATONIC_STEPS;
     
-    int alteration = getAlteration() + keyAdjustment;
-    if (simplify) {
+    int alteration = concertAlteration + keyAdjustment;
+    if (simplify && keyAdjustment) {
         int direction = music_theory::sign(alteration);
         int edoDivisions = calcEDODivisions();
         int threshold = (edoDivisions / 2) + 1;
         while (std::abs(alteration) >= threshold) {
             alteration -= direction * edoDivisions;
-            m_tonalCenterOffset += direction;
+            tonalCenterOffset += direction;
         }
     }
-    key = (key & ~0xff) | (uint8_t(alteration));
-    m_octaveDisplacement += (concertTonalCenterIndex + m_tonalCenterOffset) / music_theory::STANDARD_DIATONIC_STEPS;
+    m_alterationOffset = alteration - concertAlteration;
+    m_octaveDisplacement += (concertTonalCenterIndex + tonalCenterOffset) / music_theory::STANDARD_DIATONIC_STEPS;
 }
 
 std::optional<std::vector<int>> KeySignature::calcKeyMap() const

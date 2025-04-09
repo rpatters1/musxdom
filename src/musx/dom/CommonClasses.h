@@ -161,7 +161,7 @@ private:
     std::vector<unsigned> calcAcciOrderArray() const;
 
     int m_octaveDisplacement{};         ///< Displace notes by this many octaves (for transposed keys)
-    int m_tonalCenterOffset{};          ///< Offset of tonal center (for transposed keys)
+    int m_alterationOffset{};           ///< Offset of tonal center (for transposed keys)
 
 public:
     using CommonClassBase::CommonClassBase;
@@ -194,7 +194,7 @@ public:
 
     /// @brief For linear keys, returns the number of sharps or flats from -7..7.
     /// @return Number of sharps/flats for linear keys or 0 for non-linear or invalid keys
-    int getAlteration() const { return isLinear() ? int(int8_t(key & 0xff)) : 0; }
+    int getAlteration() const { return isLinear() ? int(int8_t(key & 0xff)) + m_alterationOffset : 0; }
 
     bool isLinear() const { return (key & 0xC000) == 0; }                   ///< whether this is a linear key
     bool isNonLinear() const { return (key & 0xC000) != 0; }                ///< whether this is a non-linear key
