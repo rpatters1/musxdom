@@ -176,6 +176,7 @@ public:
     bool entryBased{};                              ///< Whether the shape is entry-based
     std::shared_ptr<TerminationSeg> startTermSeg;   ///< Start termination segment
     std::shared_ptr<TerminationSeg> endTermSeg;     ///< End termination segment
+    bool hidden{};                                  ///< Inverse of "Show" option
     NoteNumber startNoteId{};                       ///< If non-zero, the specific note with the entry that this shape starts from. (xml node is `<startNoteID>`)
     NoteNumber endNoteId{};                         ///< If non-zero, the specific note with the entry that this shape ends on. (xml node is `<endNoteID>`)
     Cmper lineStyleId{};                            ///< If non-zero, the custom line for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)

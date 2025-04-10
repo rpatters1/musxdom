@@ -761,6 +761,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape, {
         { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
     {"endTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
         { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
+    {"hidden", [](const XmlElementPtr&, const std::shared_ptr<SmartShape>& i) { i->hidden = true; }},
     {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
