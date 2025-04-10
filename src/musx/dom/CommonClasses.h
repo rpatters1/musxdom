@@ -208,12 +208,22 @@ public:
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }
 
-    /// @brief Transposes the key by the specified amounts. Set them to zero to remove transposition.
-    /// @note This is used to adjust the key signature for staves that use Key Signature transposition.
-    /// Staves that use Chromatic transposition do not transpose the key. They transpose the pitches directly.
-    /// @param interval The interval by which to transpose.
-    /// @param keyAdjustment The key adjustment (positive for sharps, negative for flats)
-    /// @param simplify If true, enharmonically adjust the key to have 6 or fewer accidentals
+    /**
+     * @brief Transposes the key by the specified amounts. Set them to zero to remove transposition.
+     *
+     * This is used to adjust the key signature for staves that use Key Signature transposition.
+     * Staves that use Chromatic transposition do not transpose the key. They transpose the pitches directly.
+     *
+     * Finale works pretty well with key signature transposition in microtone scales. However, it does not
+     * simplify key signatures usefully. This function simplifies them correctly, provided that the step
+     * values for accidentals are set to cycle through sharps and flats by chromatic half-steps rather than
+     * the default of 1.
+     * See @ref others::AcciAmountSharps and @ref others::AcciAmountFlats.
+     *
+     * @param interval The interval by which to transpose.
+     * @param keyAdjustment The key adjustment (positive for sharps, negative for flats)
+     * @param simplify If true, enharmonically adjust the key to have 6 or fewer accidentals
+     */
     void setTransposition(int interval, int keyAdjustment, bool simplify);
 
     /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...

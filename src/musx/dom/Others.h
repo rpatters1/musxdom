@@ -57,6 +57,8 @@ namespace others {
 /**
  * @class AcciAmountFlats
  * @brief Lists the aleration values of each nth flat in a custom key signature.
+ * Normally these values are all set to the number of EDO divisions in a chromatic half-step.
+ *
  * Note that while flats are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciAmountFlats is primarily useful with microtone systems that use standard key
@@ -83,7 +85,9 @@ public:
 /**
  * @class AcciAmountSharps
  * @brief Lists the aleration values of each nth sharp in a custom key signature.
- * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
+ * Normally these values are all set to the number of EDO divisions in a chromatic half-step.
+ *
+ * Note that while flats are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciAmountSharps is required for non-linear key signatures. It specifies whether a slot
  * is sharp or flat with a positive or negative value. The first zero value in the table

@@ -1220,11 +1220,13 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
     
     int alteration = concertAlteration + keyAdjustment;
     if (simplify && keyAdjustment) {
+        // Finale does not simplify microtonal key sigs correctly.
+        // This simplification *does* work correctly, provided the custom key sig
+        // is set up to increment each key signature accidental by the number of steps
+        // in a chromatic half-step.
         int direction = music_theory::sign(alteration);
-        int edoDivisions = calcEDODivisions();
-        int threshold = (edoDivisions / 2) + 1;
-        while (std::abs(alteration) >= threshold) {
-            alteration -= direction * edoDivisions;
+        while (std::abs(alteration) >= 7) {
+            alteration -= direction * music_theory::STANDARD_12EDO_STEPS;
             tonalCenterOffset += direction;
         }
     }
