@@ -761,6 +761,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape, {
         { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
     {"endTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
         { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
+    {"hidden", [](const XmlElementPtr&, const std::shared_ptr<SmartShape>& i) { i->hidden = true; }},
     {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
@@ -771,9 +772,30 @@ MUSX_XML_ELEMENT_ARRAY(SmartShapeMeasureAssign, {
     {"centerShapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeMeasureAssign>& i) { i->centerShapeNum = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(Staff::KeySigTransposition, {
+    {"interval", [](const XmlElementPtr& e, const std::shared_ptr<Staff::KeySigTransposition>& i) { i->interval = e->getTextAs<int>(); }},
+    {"adjust", [](const XmlElementPtr& e, const std::shared_ptr<Staff::KeySigTransposition>& i) { i->adjust = e->getTextAs<int>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(Staff::ChromaticTransposition, {
+    {"alteration", [](const XmlElementPtr& e, const std::shared_ptr<Staff::ChromaticTransposition>& i) { i->alteration = e->getTextAs<int>(); }},
+    {"diatonic", [](const XmlElementPtr& e, const std::shared_ptr<Staff::ChromaticTransposition>& i) { i->diatonic = e->getTextAs<int>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(Staff::Transposition, {
+    {"setToClef", [](const XmlElementPtr&, const std::shared_ptr<Staff::Transposition>& i) { i->setToClef = true; }},
+    {"noKeyOpt", [](const XmlElementPtr&, const std::shared_ptr<Staff::Transposition>& i) { i->noSimplifyKey = true; }},
+    {"keysig", [](const XmlElementPtr& e, const std::shared_ptr<Staff::Transposition>& i)
+        { i->keysig = FieldPopulator<Staff::KeySigTransposition>::createAndPopulate(e); }},
+    {"chromatic", [](const XmlElementPtr& e, const std::shared_ptr<Staff::Transposition>& i)
+        { i->chromatic = FieldPopulator<Staff::ChromaticTransposition>::createAndPopulate(e); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
     {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},
+    {"transposition", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
+        { i->transposition = FieldPopulator<Staff::Transposition>::createAndPopulate(e); }},
     {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
     {"customStaff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->customStaff = populateEmbeddedArray<int>(e, "staffLine"); }},
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
@@ -801,6 +823,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection= toEnum<Staff::StemDirection>(e); }},
     {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e); }},
     {"useAutoNum", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->useAutoNumbering = true; }},
+    {"hideKeySigsShowAccis", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hideKeySigsShowAccis = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
@@ -809,6 +832,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"floatTime", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatTime = true; }},
     {"staffType", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->staffType = true; }},
     {"transposition", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->transposition = true; }},
+    {"hideKeySigsShowAccis", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideKeySigsShowAccis = true; }},
     {"negNameScore", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->negNameScore = true; }},
     {"fullName", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullName = true; }},
     {"abrvName", [](const XmlElementPtr&, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvName = true; }},
@@ -857,6 +881,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffSystem, {
     {"left", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->left = e->getTextAs<Evpu>(); }},
     {"right", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->right = e->getTextAs<Evpu>(); }},
     {"bottom", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->bottom = e->getTextAs<Evpu>(); }},
+    {"noNames", [](const XmlElementPtr&, const std::shared_ptr<StaffSystem>& i) { i->noNames = true; }},
     {"hasStaffScaling", [](const XmlElementPtr&, const std::shared_ptr<StaffSystem>& i) { i->hasStaffScaling = true; }},
     {"placeEndSpaceBeforeBarline", [](const XmlElementPtr&, const std::shared_ptr<StaffSystem>& i) { i->placeEndSpaceBeforeBarline = true; }},
     {"scaleVert", [](const XmlElementPtr&, const std::shared_ptr<StaffSystem>& i) { i->scaleVert = true; }},

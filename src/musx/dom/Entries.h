@@ -36,6 +36,7 @@ namespace musx {
 namespace dom {
 
 namespace others {
+class Staff;
 class StaffComposite;
 } // namespace others
 
@@ -100,15 +101,27 @@ public:
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     *
+     * Finale does not transpose correctly with microtonal key signatures. This function transposes
+     * mostly correctly for them, which means that microtonal key signatures may have different
+     * results than in Finale. Of particular note is Chromatic Transposition, which produces nonsense
+     * results in Finale but here produces correct results, provided that the alteration value
+     * is understood to be a chromatic half-step alteration rather than a step alteration in EDO divisions.
+     *
+     * See #KeySignature::setTransposition for information about differences in key signature transposition.
+     *
      * @param key The key signature in effect.
      * @param clefIndex The index of the clef in effect.
+     * @param staff If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If
+     * calling #calcNoteProperties for Concert Pitch (sounding pitch) values, omit this parameter.
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
-     *         - int: The actual alteration (in semitones, relative to natural)
+     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
-    std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex) const;
+    std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex,
+        const std::shared_ptr<const others::Staff>& staff = nullptr) const;
 
     bool requireAllFields() const override { return false; }
 
@@ -395,8 +408,9 @@ public:
      * @param staff The Cmper for the @ref others::Staff of the entry
      * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
+     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
     */
-    explicit EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex);
+    explicit EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch);
 
     /// @brief class to track tuplets in the frame
     struct TupletInfo
@@ -433,6 +447,10 @@ public:
     /// @brief Get the layer index (0..3) of the entry
     LayerIndex getLayerIndex() const { return m_layerIndex; }
 
+    /// @brief Returns if this entry frame was created for written pitch.
+    /// @return True if for written pitch, false if for sounding pitch (i.e., concert pitch)
+    bool isForWrittenPitch() const { return m_forWrittenPitch; }
+
     /// @brief Get the entry list.
     const std::vector<std::shared_ptr<const EntryInfo>>& getEntries() const
     { return m_entries; }
@@ -458,6 +476,7 @@ private:
     InstCmper m_staff;
     MeasCmper m_measure;
     LayerIndex m_layerIndex;
+    bool m_forWrittenPitch;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
 };
@@ -551,7 +570,7 @@ public:
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
-     *         - int: The actual alteration (in semitones, relative to natural)
+     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
     std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const;

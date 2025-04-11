@@ -60,10 +60,14 @@ public:
         InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
         MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
         Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
-        EntryNumber entryNumber{};      ///< Entry number (xml node is `<entryNum>`)
+        EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
 
-        /// @brief Caculates the edu position of the endpoint, based on whether it is an edu or an entry
+        /// @brief Calculates the edu position of the endpoint, based on whether it is an edu or an entry
         Edu calcEduPosition() const;
+
+        /// @brief Calculates the entry associated with the endpoint.
+        /// @return The entry if the endpoint is entry-attached or within 1 Edu of an entry. Null if not.
+        EntryInfoPtr calcAssociatedEntry() const;
 
         bool requireAllFields() const override { return false; }
         static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -172,6 +176,7 @@ public:
     bool entryBased{};                              ///< Whether the shape is entry-based
     std::shared_ptr<TerminationSeg> startTermSeg;   ///< Start termination segment
     std::shared_ptr<TerminationSeg> endTermSeg;     ///< End termination segment
+    bool hidden{};                                  ///< Inverse of "Show" option
     NoteNumber startNoteId{};                       ///< If non-zero, the specific note with the entry that this shape starts from. (xml node is `<startNoteID>`)
     NoteNumber endNoteId{};                         ///< If non-zero, the specific note with the entry that this shape ends on. (xml node is `<endNoteID>`)
     Cmper lineStyleId{};                            ///< If non-zero, the custom line for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)

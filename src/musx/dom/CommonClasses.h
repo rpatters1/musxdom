@@ -160,6 +160,9 @@ private:
     std::vector<int> calcAcciAmountsArray() const;
     std::vector<unsigned> calcAcciOrderArray() const;
 
+    int m_octaveDisplacement{};         ///< Displace notes by this many octaves (for transposed keys)
+    int m_alterationOffset{};           ///< Offset of tonal center (for transposed keys)
+
 public:
     using CommonClassBase::CommonClassBase;
 
@@ -190,8 +193,8 @@ public:
     Cmper getKeyMode() const { return isLinear() ? key >> 8 : key;  }
 
     /// @brief For linear keys, returns the number of sharps or flats from -7..7.
-    /// @return Number of sharps/flats for linear keys or std::nullopt for non-linear or invalid keys
-    std::optional<int> getAlteration() const { return isLinear() ? std::optional<int>(int8_t(key & 0xff)) : std::nullopt; }
+    /// @return Number of sharps/flats for linear keys or 0 for non-linear or invalid keys
+    int getAlteration() const { return isLinear() ? int(int8_t(key & 0xff)) + m_alterationOffset : 0; }
 
     bool isLinear() const { return (key & 0xC000) == 0; }                   ///< whether this is a linear key
     bool isNonLinear() const { return (key & 0xC000) != 0; }                ///< whether this is a non-linear key
@@ -199,20 +202,46 @@ public:
     bool isMajor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in major key
     bool isMinor() const { return getKeyMode() == 1; }                      ///< whether this is a built-in minor key
 
-    /// @brief returns whether the two key signatures represent the same key signature
+    /// @brief returns whether the two key signatures represent the same key signature. Does not take into account transposition.
     bool isSame(const KeySignature& src)
     {
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }
+
+    /**
+     * @brief Transposes the key by the specified amounts. Set them to zero to remove transposition.
+     *
+     * This is used to adjust the key signature for staves that use Key Signature transposition.
+     * Staves that use Chromatic transposition do not transpose the key. They transpose the pitches directly.
+     *
+     * Finale works pretty well with key signature transposition in microtone scales. However, it does not
+     * simplify key signatures usefully. This function simplifies them correctly, provided that the step
+     * values for accidentals are set to cycle through sharps and flats by chromatic half-steps rather than
+     * the default of 1.
+     * See @ref others::AcciAmountSharps and @ref others::AcciAmountFlats.
+     *
+     * @param interval The interval by which to transpose.
+     * @param keyAdjustment The key adjustment (positive for sharps, negative for flats)
+     * @param simplify If true, enharmonically adjust the key to have 6 or fewer accidentals
+     */
+    void setTransposition(int interval, int keyAdjustment, bool simplify);
 
     /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
     /// 
     /// This is the modal tonal center, so a minor key with no sharps or flats returns 5 (=A).
     int calcTonalCenterIndex() const;
 
+    /// @brief The octave displacement if this key is a transposed key.
+    /// @return 0 for non-transposing keys or the octave displacement for transposed keys.
+    int getOctaveDisplacement() const
+    { return m_octaveDisplacement; }
+
     /// @brief Calculates the amount of alteration on a note int the key.
     /// @param noteIndex note index, where C=0, D=1, E=3, F=3, G=4, A=5, B=6
     int calcAlterationOnNote(unsigned noteIndex) const;
+
+    /// @brief Calculates the number of EDO division for the key. (The standard value is 12.)
+    int calcEDODivisions() const;
 
     /// @brief Calculates the key's diatonic key map
     std::optional<std::vector<int>> calcKeyMap() const;

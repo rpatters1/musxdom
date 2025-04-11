@@ -57,6 +57,8 @@ namespace others {
 /**
  * @class AcciAmountFlats
  * @brief Lists the aleration values of each nth flat in a custom key signature.
+ * Normally these values are all set to the number of EDO divisions in a chromatic half-step.
+ *
  * Note that while flats are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciAmountFlats is primarily useful with microtone systems that use standard key
@@ -83,7 +85,9 @@ public:
 /**
  * @class AcciAmountSharps
  * @brief Lists the aleration values of each nth sharp in a custom key signature.
- * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
+ * Normally these values are all set to the number of EDO divisions in a chromatic half-step.
+ *
+ * Note that while flats are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciAmountSharps is required for non-linear key signatures. It specifies whether a slot
  * is sharp or flat with a positive or negative value. The first zero value in the table
@@ -911,9 +915,10 @@ public:
     /// And if it does, it may not appear as a number.
     int calcDisplayNumber() const;
 
-    /// @brief Calculates and returns the shared pointer to an instance of the @ref KeySignature for this measure and staff.
+    /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
-    std::shared_ptr<KeySignature> calcKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
+    std::shared_ptr<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
@@ -1702,6 +1707,54 @@ public:
         AlwaysDown          ///< stems are always down on this staff
     };
 
+    /**
+     * @class KeySigTransposition
+     * @brief Represents key signature transposition details.
+     */
+    class KeySigTransposition
+    {
+    public:
+        int interval{};     ///< The diatonic transposition interval.
+        int adjust{};       ///< The adjustment to the number of sharps or flats in the key signature.
+
+        static const xml::XmlElementArray<KeySigTransposition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    /**
+     * @class ChromaticTransposition
+     * @brief Represents chromatic transposition details.
+     */
+    class ChromaticTransposition
+    {
+    public:
+        int alteration{};   ///< The alteration that defines the chromatic interval (in chromatic half-steps). See @ref music_theory::Transposer for more information.
+        int diatonic{};     ///< The diatonic interval. See @ref music_theory::Transposer for more information.
+
+        static const xml::XmlElementArray<ChromaticTransposition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    /**
+     * @class Transposition
+     * @brief Encapsulates transposition options for a staff.
+     *
+     * Contains flags (such as setToClef and noKeyOpt) and shared pointers
+     * to embedded transposition types: key signature and chromatic.
+     */
+    class Transposition
+    {
+    public:
+        bool setToClef{};               ///< If true, forces the clef in #Staff::transposedClef.
+        bool noSimplifyKey{};           ///< Inverse of "Simplify Key" (xml node is `<noKeyOpt>`)
+        
+        /// Shared pointer to the key signature transposition details, if any.
+        std::shared_ptr<KeySigTransposition> keysig;
+        
+        /// Shared pointer to the chromatic transposition details, if any.
+        std::shared_ptr<ChromaticTransposition> chromatic;
+
+        static const xml::XmlElementArray<Transposition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
     /** @brief Constructor function */
     explicit Staff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
@@ -1711,7 +1764,7 @@ public:
 
     // Public properties corresponding to the XML structure
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
-    ClefIndex transposedClef{};     ///< Index of transposed clef for the staff.
+    ClefIndex transposedClef{};     ///< Index of transposed clef for the staff. Only used if #Transposition::setToClef is true.
     std::optional<int> staffLines{}; ///< Number of lines in the staff (if no custom staff)
     std::optional<std::vector<int>> customStaff; ///< A list of stafflines from 0..26 where a standard 5-line staff is values 11, 12, 13, 14, 15.
     Evpu lineSpace{};               ///< Distance between staff lines.
@@ -1721,7 +1774,7 @@ public:
     //noteFont
     bool hasStyles{};               ///< Indicates that this staff has staff style assignments
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
-    //transposition
+    std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
     bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
     Evpu topBarlineOffset{};        ///< Offset for the top barline.
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
@@ -1740,6 +1793,7 @@ public:
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
+    bool hideKeySigsShowAccis{};    ///< "Hide Key Signature and Show Accidentals" transposition option.
 
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
@@ -1818,6 +1872,13 @@ public:
             std::sort(customStaff.value().begin(), customStaff.value().end(),
                 [](const auto& a, const auto& b) { return a < b; });
         }
+        if (transposition) {
+            if (!transposition->chromatic && !transposition->keysig) {
+                MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has transposition with neither keysig nor chromatic transposition defined.");
+            } else if (transposition->chromatic && transposition->keysig) {
+                MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has transposition with both keysig and chromatic transposition defined.");
+            }
+        }
     }
 
     bool requireAllFields() const override { return false; }
@@ -1862,6 +1923,7 @@ public:
         bool floatTime{};           ///< overrides "Independent Time Signature" setting
         bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
         bool transposition{};       ///< overrides transposition fields
+        bool hideKeySigsShowAccis{};///< overrides "Hide Key Signature and Show Accidentals"
         bool negNameScore{};        ///< overrides #hideNameInScore.
         bool fullName{};            ///< overrides #fullNameTextId.
         bool abrvName{};            ///< overrides #abbrvNameTextId.
@@ -1999,6 +2061,8 @@ public:
     Evpu right{};                   ///< Right margin in Evpu. (Sign reversed in Finale UI.)
     Evpu bottom{};                  ///< Bottom margin in Evpu. This value is 96 (i.e., 1 5-line staff thickness) less than the U.I. value.
                                     ///< That means if you enter 0 in the Finale UI, this value is -96.
+    bool noNames{};                 ///< Suppresses staff & group names along the left system margin. It does not appear to have a UI in Finale 27,
+                                    ///< but it works and it occasionally appears in musx files.
     bool hasStaffScaling{};         ///< Indicates if any individual staff in the system has scaling applied.
     bool placeEndSpaceBeforeBarline{}; ///< Indicates that extra space is placed before the barline.
     bool scaleVert{};               ///< "Resize Vertical Space"
