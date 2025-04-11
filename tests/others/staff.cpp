@@ -372,9 +372,9 @@ TEST(StaffText, StaffLines)
 
 TEST(StaffTest, Transposition)
 {
-    std::vector<char> xml;
-    musxtest::readFile(musxtest::getInputPath() / "transpose.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "transpose.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(transposeXml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();
@@ -445,9 +445,9 @@ TEST(StaffTest, Transposition)
 
 TEST(StaffTest, Transposition31Edo)
 {
-    std::vector<char> xml;
-    musxtest::readFile(musxtest::getInputPath() / "transpose_31edo.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "transpose_31edo.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(transposeXml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();
