@@ -24,8 +24,9 @@ var searchData=
   ['tonalcenterflats_21',['TonalCenterFlats',['../classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html',1,'musx::dom::others']]],
   ['tonalcentersharps_22',['TonalCenterSharps',['../classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html',1,'musx::dom::others']]],
   ['transposer_23',['Transposer',['../classmusic__theory_1_1Transposer.html',1,'music_theory']]],
-  ['tupletdef_24',['TupletDef',['../classmusx_1_1dom_1_1details_1_1TupletDef.html',1,'musx::dom::details']]],
-  ['tupletinfo_25',['TupletInfo',['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html',1,'musx::dom::EntryFrame']]],
-  ['tupletoptions_26',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html',1,'musx::dom::options']]],
-  ['typeregistry_27',['TypeRegistry',['../classmusx_1_1factory_1_1TypeRegistry.html',1,'musx::factory']]]
+  ['transposition_24',['Transposition',['../classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html',1,'musx::dom::others::Staff']]],
+  ['tupletdef_25',['TupletDef',['../classmusx_1_1dom_1_1details_1_1TupletDef.html',1,'musx::dom::details']]],
+  ['tupletinfo_26',['TupletInfo',['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html',1,'musx::dom::EntryFrame']]],
+  ['tupletoptions_27',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html',1,'musx::dom::options']]],
+  ['typeregistry_28',['TypeRegistry',['../classmusx_1_1factory_1_1TypeRegistry.html',1,'musx::factory']]]
 ];

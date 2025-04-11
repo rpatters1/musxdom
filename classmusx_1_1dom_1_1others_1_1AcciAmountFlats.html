@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1AcciAmou
 </div><!--header-->
 <div class="contents">
 
-<p>Lists the aleration values of each nth flat in a custom key signature. <a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that while flats are numbered from 1-7, this table is indexed 0-6.  
+<p>Lists the aleration values of each nth flat in a custom key signature. Normally these values are all set to the number of EDO divisions in a chromatic half-step.  
  <a href="classmusx_1_1dom_1_1others_1_1AcciAmountFlats.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Others_8h_source.html">Others.h</a>&gt;</code></p>
@@ -216,8 +216,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <tr class="separator:a562f33f6f491f61b9dc14822779600ef inherit pro_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Lists the aleration values of each nth flat in a custom key signature. <a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that while flats are numbered from 1-7, this table is indexed 0-6. </p>
-<p><a class="el" href="classmusx_1_1dom_1_1others_1_1AcciAmountFlats.html" title="Lists the aleration values of each nth flat in a custom key signature. Note that while flats are numb...">AcciAmountFlats</a> is primarily useful with microtone systems that use standard key signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs need to specify acci alteration amounts with magnitude larger than 1.</p>
+<div class="textblock"><p>Lists the aleration values of each nth flat in a custom key signature. Normally these values are all set to the number of EDO divisions in a chromatic half-step. </p>
+<p><a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that while flats are numbered from 1-7, this table is indexed 0-6.</p>
+<p><a class="el" href="classmusx_1_1dom_1_1others_1_1AcciAmountFlats.html" title="Lists the aleration values of each nth flat in a custom key signature. Normally these values are all ...">AcciAmountFlats</a> is primarily useful with microtone systems that use standard key signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs need to specify acci alteration amounts with magnitude larger than 1.</p>
 <p>The cmper is the value returned by <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a08a72c52d3dba53ad96f88b47e2f3d78" title="Returns the key mode.">KeySignature::getKeyMode</a>. The built-in major and minor cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale anything is possible.)</p>
 <p>This class is identified by the XML node name "acciAmountFlats". </p>
 </div></div><!-- contents -->

@@ -1,5 +1,8 @@
 var classmusx_1_1dom_1_1others_1_1Staff =
 [
+    [ "ChromaticTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html", "classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition" ],
+    [ "KeySigTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html", "classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition" ],
+    [ "Transposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html", "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition" ],
     [ "AutoNumberingStyle", "classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1", [
       [ "ArabicSuffix", "classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1a059ce5872a2158ce93a9c3320f8acc33", null ],
       [ "RomanSuffix", "classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1abf27d2294ec0049a7e41a1f9fe296e97", null ],
@@ -38,6 +41,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "fullNameTextId", "classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af", null ],
     [ "hasStyles", "classmusx_1_1dom_1_1others_1_1Staff.html#a333986652e0f7882834d8fdb65b5b7a6", null ],
     [ "hideBeams", "classmusx_1_1dom_1_1others_1_1Staff.html#abf34de6cef2f1925161fdc23ede80da3", null ],
+    [ "hideKeySigsShowAccis", "classmusx_1_1dom_1_1others_1_1Staff.html#ae71130a8e3c5c4789bc29f8940378681", null ],
     [ "hideNameInScore", "classmusx_1_1dom_1_1others_1_1Staff.html#aed6165003ca9a17e35f5a81284b123ae", null ],
     [ "hideStems", "classmusx_1_1dom_1_1others_1_1Staff.html#a43a8a4d6e40a765ac43c63205336a494", null ],
     [ "hRestOffset", "classmusx_1_1dom_1_1others_1_1Staff.html#a1916a53f15668cca53ecca8d20f48183", null ],
@@ -52,6 +56,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "topBarlineOffset", "classmusx_1_1dom_1_1others_1_1Staff.html#ab951460fbc50b0ab812b74778c13dbc2", null ],
     [ "topRepeatDotOff", "classmusx_1_1dom_1_1others_1_1Staff.html#ab1d8d8b6db81f5b43c81d1528c42492d", null ],
     [ "transposedClef", "classmusx_1_1dom_1_1others_1_1Staff.html#a84137b810463f8edc4eedb7422e7bce5", null ],
+    [ "transposition", "classmusx_1_1dom_1_1others_1_1Staff.html#ae53f27cfa8452c84911a7227649d6b9b", null ],
     [ "useAutoNumbering", "classmusx_1_1dom_1_1others_1_1Staff.html#a7c07ed90fd3480834690bcfdaa3a3865", null ],
     [ "vertTabNumOff", "classmusx_1_1dom_1_1others_1_1Staff.html#ad2175e3535a969442e3917ff587f9533", null ],
     [ "wRestOffset", "classmusx_1_1dom_1_1others_1_1Staff.html#a58bfd410b0e5d3dd368adbd497215b31", null ]

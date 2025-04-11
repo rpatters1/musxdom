@@ -54,6 +54,7 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
     [ "endNoteId", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a5fa83fc067c41f14b3cc56dc45af82dd", null ],
     [ "endTermSeg", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a4e56b4c73aef844dcbdb8753768824a5", null ],
     [ "entryBased", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a25fe8a794c5dc038260311c2a7381683", null ],
+    [ "hidden", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a60c90bf5763c866d6b83100db09e46cd", null ],
     [ "lineStyleId", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a23523cc7e83d6b1821d816590dadca45", null ],
     [ "shapeType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#afa31bfe2cd31267bab0850949664ca0f", null ],
     [ "startNoteId", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a2ea630f2e58899b51ec9d83b213defd7", null ],

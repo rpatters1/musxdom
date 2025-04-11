@@ -10,6 +10,7 @@ var classmusx_1_1dom_1_1others_1_1StaffSystem =
     [ "holdMargins", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a5514179abffe777cf4e682ec7bf4f94b", null ],
     [ "horzPercent", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a58572508b77332051cbe22fe7bac342d", null ],
     [ "left", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2bb9cfd805f4715de22128fbf75ab888", null ],
+    [ "noNames", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#aae3c5d70f71d2326779b1ffbd8e0c78d", null ],
     [ "placeEndSpaceBeforeBarline", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a660f81113aba8c791ef40fa33e0f720b", null ],
     [ "right", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a0321f528ecaa9aca72324b44b0815724", null ],
     [ "scaleVert", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a20c4f4931702f7c3b472c0dacae63fc2", null ],

@@ -256,7 +256,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>addToMenu</b></td></t
 <tr class="separator:a09c189bda4c52d01552788d264218b48 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84137b810463f8edc4eedb7422e7bce5 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a84137b810463f8edc4eedb7422e7bce5"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>transposedClef</b> {}</td></tr>
-<tr class="memdesc:a84137b810463f8edc4eedb7422e7bce5 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of transposed clef for the staff. <br /></td></tr>
+<tr class="memdesc:a84137b810463f8edc4eedb7422e7bce5 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of transposed clef for the staff. Only used if <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html#ad788ef177572da16f598d885e49fabf6" title="If true, forces the clef in Staff::transposedClef.">Transposition::setToClef</a> is true. <br /></td></tr>
 <tr class="separator:a84137b810463f8edc4eedb7422e7bce5 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b222308ce95e89945c156fd18dca550 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a1b222308ce95e89945c156fd18dca550"><td class="memItemLeft" align="right" valign="top">
 std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>staffLines</b> {}</td></tr>
@@ -290,6 +290,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasStyles</b> {}</td>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>showNameInParts</b> {}</td></tr>
 <tr class="memdesc:a811d833222c87e8cac8b47310f00e9b0 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Display Staff Name in Parts" (xml node is <code>&lt;showNameParts&gt;</code>) <br /></td></tr>
 <tr class="separator:a811d833222c87e8cac8b47310f00e9b0 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae53f27cfa8452c84911a7227649d6b9b inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_ae53f27cfa8452c84911a7227649d6b9b"><td class="memItemLeft" align="right" valign="top">
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html">Transposition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>transposition</b></td></tr>
+<tr class="memdesc:ae53f27cfa8452c84911a7227649d6b9b inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html" title="Encapsulates transposition options for a staff.">Transposition</a> details, if non-null. <br /></td></tr>
+<tr class="separator:ae53f27cfa8452c84911a7227649d6b9b inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed6165003ca9a17e35f5a81284b123ae inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_aed6165003ca9a17e35f5a81284b123ae"><td class="memItemLeft" align="right" valign="top">
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideNameInScore</b> {}</td></tr>
 <tr class="memdesc:aed6165003ca9a17e35f5a81284b123ae inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Display Staff Name in Score" (xml node is <code>&lt;hideStfNameInScore&gt;</code>) <br /></td></tr>
@@ -362,6 +366,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideBeams</b> {}</td>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>useAutoNumbering</b> {}</td></tr>
 <tr class="memdesc:a7c07ed90fd3480834690bcfdaa3a3865 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether names should be auto-numbered. (xml node is <code>&lt;useAutoNum&gt;</code>) <br /></td></tr>
 <tr class="separator:a7c07ed90fd3480834690bcfdaa3a3865 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae71130a8e3c5c4789bc29f8940378681 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_ae71130a8e3c5c4789bc29f8940378681"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideKeySigsShowAccis</b> {}</td></tr>
+<tr class="memdesc:ae71130a8e3c5c4789bc29f8940378681 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Hide Key Signature and Show Accidentals" transposition option. <br /></td></tr>
+<tr class="separator:ae71130a8e3c5c4789bc29f8940378681 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1be91c741b22c61b0184d8f255733764 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a1be91c741b22c61b0184d8f255733764"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a1be91c741b22c61b0184d8f255733764">multiStaffInstId</a> {}</td></tr>
 <tr class="separator:a1be91c741b22c61b0184d8f255733764 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4836d6d1ebe25d08f36b6530b25d8dd1 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a4836d6d1ebe25d08f36b6530b25d8dd1"><td class="memItemLeft" align="right" valign="top">

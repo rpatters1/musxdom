@@ -123,9 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a08a72c52d3dba53ad96f88b47e2f3d78" id="r_a08a72c52d3dba53ad96f88b47e2f3d78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a08a72c52d3dba53ad96f88b47e2f3d78">getKeyMode</a> () const</td></tr>
 <tr class="memdesc:a08a72c52d3dba53ad96f88b47e2f3d78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the key mode.  <br /></td></tr>
 <tr class="separator:a08a72c52d3dba53ad96f88b47e2f3d78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b5bf3174d83fa4a41eb1dbe75ecd9e3" id="r_a0b5bf3174d83fa4a41eb1dbe75ecd9e3"><td class="memItemLeft" align="right" valign="top">std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a0b5bf3174d83fa4a41eb1dbe75ecd9e3">getAlteration</a> () const</td></tr>
-<tr class="memdesc:a0b5bf3174d83fa4a41eb1dbe75ecd9e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">For linear keys, returns the number of sharps or flats from -7..7.  <br /></td></tr>
-<tr class="separator:a0b5bf3174d83fa4a41eb1dbe75ecd9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a346cdad8bfda1d21d22363ccbb4ecc6e" id="r_a346cdad8bfda1d21d22363ccbb4ecc6e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a346cdad8bfda1d21d22363ccbb4ecc6e">getAlteration</a> () const</td></tr>
+<tr class="memdesc:a346cdad8bfda1d21d22363ccbb4ecc6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">For linear keys, returns the number of sharps or flats from -7..7.  <br /></td></tr>
+<tr class="separator:a346cdad8bfda1d21d22363ccbb4ecc6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ea0ce268d5f02f11ab41151461b448f" id="r_a3ea0ce268d5f02f11ab41151461b448f"><td class="memItemLeft" align="right" valign="top"><a id="a3ea0ce268d5f02f11ab41151461b448f" name="a3ea0ce268d5f02f11ab41151461b448f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isLinear</b> () const</td></tr>
 <tr class="memdesc:a3ea0ce268d5f02f11ab41151461b448f"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether this is a linear key <br /></td></tr>
@@ -148,14 +148,24 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMinor</b> () const<
 <tr class="separator:a98167d243969551031f85e34b11a6562"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abaa1f32c8341eb8893b4334596121518" id="r_abaa1f32c8341eb8893b4334596121518"><td class="memItemLeft" align="right" valign="top"><a id="abaa1f32c8341eb8893b4334596121518" name="abaa1f32c8341eb8893b4334596121518"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &amp;src)</td></tr>
-<tr class="memdesc:abaa1f32c8341eb8893b4334596121518"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same key signature <br /></td></tr>
+<tr class="memdesc:abaa1f32c8341eb8893b4334596121518"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same key signature. Does not take into account transposition. <br /></td></tr>
 <tr class="separator:abaa1f32c8341eb8893b4334596121518"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87cb3c216ea12c1f911b4b289d3a2920" id="r_a87cb3c216ea12c1f911b4b289d3a2920"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a87cb3c216ea12c1f911b4b289d3a2920">setTransposition</a> (int interval, int keyAdjustment, bool simplify)</td></tr>
+<tr class="memdesc:a87cb3c216ea12c1f911b4b289d3a2920"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes the key by the specified amounts. Set them to zero to remove transposition.  <br /></td></tr>
+<tr class="separator:a87cb3c216ea12c1f911b4b289d3a2920"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae17675c61d076e236952c9bcfbe25ffc" id="r_ae17675c61d076e236952c9bcfbe25ffc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#ae17675c61d076e236952c9bcfbe25ffc">calcTonalCenterIndex</a> () const</td></tr>
 <tr class="memdesc:ae17675c61d076e236952c9bcfbe25ffc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the tonal center index for the key, where C=0, D=1, E=2, ...  <br /></td></tr>
 <tr class="separator:ae17675c61d076e236952c9bcfbe25ffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa29d66ef67f9a7cc87495459df5700d5" id="r_aa29d66ef67f9a7cc87495459df5700d5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#aa29d66ef67f9a7cc87495459df5700d5">getOctaveDisplacement</a> () const</td></tr>
+<tr class="memdesc:aa29d66ef67f9a7cc87495459df5700d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The octave displacement if this key is a transposed key.  <br /></td></tr>
+<tr class="separator:aa29d66ef67f9a7cc87495459df5700d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5452f8d0cb4cb0f3066ad8fd24957d33" id="r_a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a5452f8d0cb4cb0f3066ad8fd24957d33">calcAlterationOnNote</a> (unsigned noteIndex) const</td></tr>
 <tr class="memdesc:a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the amount of alteration on a note int the key.  <br /></td></tr>
 <tr class="separator:a5452f8d0cb4cb0f3066ad8fd24957d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a483682cbfa79240872d9e11dbed6af2e" id="r_a483682cbfa79240872d9e11dbed6af2e"><td class="memItemLeft" align="right" valign="top"><a id="a483682cbfa79240872d9e11dbed6af2e" name="a483682cbfa79240872d9e11dbed6af2e"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>calcEDODivisions</b> () const</td></tr>
+<tr class="memdesc:a483682cbfa79240872d9e11dbed6af2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of EDO division for the key. (The standard value is 12.) <br /></td></tr>
+<tr class="separator:a483682cbfa79240872d9e11dbed6af2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad49a2938ad8ab254bb2362a626a06aef" id="r_ad49a2938ad8ab254bb2362a626a06aef"><td class="memItemLeft" align="right" valign="top"><a id="ad49a2938ad8ab254bb2362a626a06aef" name="ad49a2938ad8ab254bb2362a626a06aef"></a>
 std::optional&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcKeyMap</b> () const</td></tr>
 <tr class="memdesc:ad49a2938ad8ab254bb2362a626a06aef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the key's diatonic key map. <br /></td></tr>
@@ -386,8 +396,8 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 
 </div>
 </div>
-<a id="a0b5bf3174d83fa4a41eb1dbe75ecd9e3" name="a0b5bf3174d83fa4a41eb1dbe75ecd9e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b5bf3174d83fa4a41eb1dbe75ecd9e3">&#9670;&#160;</a></span>getAlteration()</h2>
+<a id="a346cdad8bfda1d21d22363ccbb4ecc6e" name="a346cdad8bfda1d21d22363ccbb4ecc6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a346cdad8bfda1d21d22363ccbb4ecc6e">&#9670;&#160;</a></span>getAlteration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -396,7 +406,7 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt; int &gt; musx::dom::KeySignature::getAlteration </td>
+          <td class="memname">int musx::dom::KeySignature::getAlteration </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -410,7 +420,7 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 </div><div class="memdoc">
 
 <p>For linear keys, returns the number of sharps or flats from -7..7. </p>
-<dl class="section return"><dt>Returns</dt><dd>Number of sharps/flats for linear keys or std::nullopt for non-linear or invalid keys </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of sharps/flats for linear keys or 0 for non-linear or invalid keys </dd></dl>
 
 </div>
 </div>
@@ -441,6 +451,34 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 <p>For linear keys, this is a value from 0..127 where 0 is reserved for built-in major keys and 1 is reserved for built-in minor keys. Values from 2..127 are user-defined linear modes and are a <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> value for finding the custom key signature information related to the key. User-defined linear keys might, for example, represent diatonic jazz modes or church modes. They can also be used to define microtonal scales with key signatures.</p>
 <p>For non-linear keys, this is a value from 0x4000..0x4fff. This is a Cmper that is used to find all the custom key signature information that defines the key. These are sometimes used to define modes like Klezmer Freyish mode, or other modes whose accidentals do not follow the circle of fifths. They can also be used to define microtonal scales without key signatures.</p>
 <p>Values from 0x8000 and higher are invalid. </p>
+
+</div>
+</div>
+<a id="aa29d66ef67f9a7cc87495459df5700d5" name="aa29d66ef67f9a7cc87495459df5700d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa29d66ef67f9a7cc87495459df5700d5">&#9670;&#160;</a></span>getOctaveDisplacement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::KeySignature::getOctaveDisplacement </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The octave displacement if this key is a transposed key. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 for non-transposing keys or the octave displacement for transposed keys. </dd></dl>
 
 </div>
 </div>
@@ -477,6 +515,52 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 </dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
+
+</div>
+</div>
+<a id="a87cb3c216ea12c1f911b4b289d3a2920" name="a87cb3c216ea12c1f911b4b289d3a2920"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87cb3c216ea12c1f911b4b289d3a2920">&#9670;&#160;</a></span>setTransposition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::KeySignature::setTransposition </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>interval</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>keyAdjustment</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>simplify</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Transposes the key by the specified amounts. Set them to zero to remove transposition. </p>
+<p>This is used to adjust the key signature for staves that use Key Signature transposition. Staves that use Chromatic transposition do not transpose the key. They transpose the pitches directly.</p>
+<p>Finale works pretty well with key signature transposition in microtone scales. However, it does not simplify key signatures usefully. This function simplifies them correctly, provided that the step values for accidentals are set to cycle through sharps and flats by chromatic half-steps rather than the default of 1. See <a class="el" href="classmusx_1_1dom_1_1others_1_1AcciAmountSharps.html">others::AcciAmountSharps</a> and <a class="el" href="classmusx_1_1dom_1_1others_1_1AcciAmountFlats.html">others::AcciAmountFlats</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">interval</td><td>The interval by which to transpose. </td></tr>
+    <tr><td class="paramname">keyAdjustment</td><td>The key adjustment (positive for sharps, negative for flats) </td></tr>
+    <tr><td class="paramname">simplify</td><td>If true, enharmonically adjust the key to have 6 or fewer accidentals </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

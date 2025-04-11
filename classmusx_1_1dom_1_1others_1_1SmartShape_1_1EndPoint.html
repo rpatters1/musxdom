@@ -125,8 +125,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a457a4860c3c32df82aa4989ba1a1780d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a335adc90402fe1b0518cdbb907ba9822" id="r_a335adc90402fe1b0518cdbb907ba9822"><td class="memItemLeft" align="right" valign="top"><a id="a335adc90402fe1b0518cdbb907ba9822" name="a335adc90402fe1b0518cdbb907ba9822"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcEduPosition</b> () const</td></tr>
-<tr class="memdesc:a335adc90402fe1b0518cdbb907ba9822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caculates the edu position of the endpoint, based on whether it is an edu or an entry. <br /></td></tr>
+<tr class="memdesc:a335adc90402fe1b0518cdbb907ba9822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the edu position of the endpoint, based on whether it is an edu or an entry. <br /></td></tr>
 <tr class="separator:a335adc90402fe1b0518cdbb907ba9822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85fe4ae39c2c200a4f3f71e698b892fc" id="r_a85fe4ae39c2c200a4f3f71e698b892fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPoint.html#a85fe4ae39c2c200a4f3f71e698b892fc">calcAssociatedEntry</a> () const</td></tr>
+<tr class="memdesc:a85fe4ae39c2c200a4f3f71e698b892fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the endpoint.  <br /></td></tr>
+<tr class="separator:a85fe4ae39c2c200a4f3f71e698b892fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a575acb132954b76e977734fc3518fd32" id="r_a575acb132954b76e977734fc3518fd32"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPoint.html#a575acb132954b76e977734fc3518fd32">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a575acb132954b76e977734fc3518fd32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a575acb132954b76e977734fc3518fd32"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,7 +188,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a99ac6cca4a08d6cdf1b748aa69787cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0c9724ce730e1fe0197dd2631afc67f" id="r_ab0c9724ce730e1fe0197dd2631afc67f"><td class="memItemLeft" align="right" valign="top"><a id="ab0c9724ce730e1fe0197dd2631afc67f" name="ab0c9724ce730e1fe0197dd2631afc67f"></a>
 <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>entryNumber</b> {}</td></tr>
-<tr class="memdesc:ab0c9724ce730e1fe0197dd2631afc67f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> number (xml node is <code>&lt;entryNum&gt;</code>) <br /></td></tr>
+<tr class="memdesc:ab0c9724ce730e1fe0197dd2631afc67f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> number. Zero if the endpoint is not entry-attached. (xml node is <code>&lt;entryNum&gt;</code>) <br /></td></tr>
 <tr class="separator:ab0c9724ce730e1fe0197dd2631afc67f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
@@ -213,6 +216,26 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents an endpoint of the smart shape. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a85fe4ae39c2c200a4f3f71e698b892fc" name="a85fe4ae39c2c200a4f3f71e698b892fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85fe4ae39c2c200a4f3f71e698b892fc">&#9670;&#160;</a></span>calcAssociatedEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::others::SmartShape::EndPoint::calcAssociatedEntry </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the entry associated with the endpoint. </p>
+<dl class="section return"><dt>Returns</dt><dd>The entry if the endpoint is entry-attached or within 1 Edu of an entry. Null if not. </dd></dl>
+
+</div>
+</div>
 <a id="a575acb132954b76e977734fc3518fd32" name="a575acb132954b76e977734fc3518fd32"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a575acb132954b76e977734fc3518fd32">&#9670;&#160;</a></span>requireAllFields()</h2>
 

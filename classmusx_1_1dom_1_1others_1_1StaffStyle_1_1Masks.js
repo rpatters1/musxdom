@@ -7,6 +7,7 @@ var classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks =
     [ "floatKeys", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ad38c0c55773959486ab106da821b73be", null ],
     [ "floatTime", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ae5580d2c0148d3a4d18573beb8ec4714", null ],
     [ "fullName", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a36ed9a3508fb65a3d10ea424a53fa352", null ],
+    [ "hideKeySigsShowAccis", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a79e192e7e090c7f97716230572eb3c49", null ],
     [ "negNameScore", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a8f948ee4b50fb21222a008fa924d9253", null ],
     [ "showNameParts", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a57908ee817e3570b039a2cb5c82fd8fd", null ],
     [ "showStems", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ace6de717138d94ea77f15b5e74a90466", null ],

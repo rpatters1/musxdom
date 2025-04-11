@@ -154,6 +154,7 @@ var hierarchy =
       [ "musx::dom::others::StaffStyle::Masks", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html", null ]
     ] ],
     [ "musx::dom::details::StaffGroup::Bracket", "classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html", null ],
+    [ "musx::dom::others::Staff::ChromaticTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html", null ],
     [ "musx::dom::others::TimeCompositeLower::CompositeItem", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower_1_1CompositeItem.html", null ],
     [ "musx::dom::others::TimeCompositeUpper::CompositeItem", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html", null ],
     [ "musx::dom::options::SmartShapeOptions::ConnectionStyle", "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ConnectionStyle.html", null ],
@@ -210,6 +211,7 @@ var hierarchy =
       [ "musx::xml::rapidxml::Element", "classmusx_1_1xml_1_1rapidxml_1_1Element.html", null ],
       [ "musx::xml::tinyxml2::Element", "classmusx_1_1xml_1_1tinyxml2_1_1Element.html", null ]
     ] ],
+    [ "musx::dom::others::Staff::KeySigTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html", null ],
     [ "musx::util::Logger", "classmusx_1_1util_1_1Logger.html", null ],
     [ "musx::dom::NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType, TopKeyElementType >::ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
@@ -238,6 +240,7 @@ var hierarchy =
     [ "musx::dom::others::KeyMapArray::StepElement", "classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html", null ],
     [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
     [ "music_theory::Transposer", "classmusic__theory_1_1Transposer.html", null ],
+    [ "musx::dom::others::Staff::Transposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html", null ],
     [ "musx::dom::EntryFrame::TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html", null ],
     [ "musx::factory::TypeRegistry< Types >", "classmusx_1_1factory_1_1TypeRegistry.html", null ]
 ];

@@ -155,9 +155,9 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteId</b> () const</td></tr>
 <tr class="memdesc:a6f0f8b7fc1ce284954140b26b2774d14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the note id for this note. This value does not change, even if the notes in a chord are rearranged (which affects the order of <a class="el" href="classmusx_1_1dom_1_1Entry.html#a533b919d0efa81b9d26fb16ade0b7773" title="Collection of notes that comprise the entry. These are in order from lowest to highest.">Entry::notes</a>.) <br /></td></tr>
 <tr class="separator:a6f0f8b7fc1ce284954140b26b2774d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab67d3da82a9c90ae7780e803b7d425d6" id="r_ab67d3da82a9c90ae7780e803b7d425d6"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">NoteName</a>, int, int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#ab67d3da82a9c90ae7780e803b7d425d6">calcNoteProperties</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex) const</td></tr>
-<tr class="memdesc:ab67d3da82a9c90ae7780e803b7d425d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position.  <br /></td></tr>
-<tr class="separator:ab67d3da82a9c90ae7780e803b7d425d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48b5da5b283e186198718caaac8f8c2a" id="r_a48b5da5b283e186198718caaac8f8c2a"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">NoteName</a>, int, int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a48b5da5b283e186198718caaac8f8c2a">calcNoteProperties</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex, const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff=nullptr) const</td></tr>
+<tr class="memdesc:a48b5da5b283e186198718caaac8f8c2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position.  <br /></td></tr>
+<tr class="separator:a48b5da5b283e186198718caaac8f8c2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36dc7428581bf94502b9e3a8ab2f0db1" id="r_a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a36dc7428581bf94502b9e3a8ab2f0db1">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -250,8 +250,8 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Represents a single note element in an entry. </p>
 <p>This class is identified by the XML node name "note". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab67d3da82a9c90ae7780e803b7d425d6" name="ab67d3da82a9c90ae7780e803b7d425d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab67d3da82a9c90ae7780e803b7d425d6">&#9670;&#160;</a></span>calcNoteProperties()</h2>
+<a id="a48b5da5b283e186198718caaac8f8c2a" name="a48b5da5b283e186198718caaac8f8c2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48b5da5b283e186198718caaac8f8c2a">&#9670;&#160;</a></span>calcNoteProperties()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -266,7 +266,13 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td>
-          <td class="paramname"><em>clefIndex</em>&#160;</td>
+          <td class="paramname"><em>clefIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>staff</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -277,17 +283,20 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculates the note name, octave number, actual alteration, and staff position. </p>
+<p>Finale does not transpose correctly with microtonal key signatures. This function transposes mostly correctly for them, which means that microtonal key signatures may have different results than in Finale. Of particular note is Chromatic Transposition, which produces nonsense results in Finale but here produces correct results, provided that the alteration value is understood to be a chromatic half-step alteration rather than a step alteration in EDO divisions.</p>
+<p>See <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a87cb3c216ea12c1f911b4b289d3a2920" title="Transposes the key by the specified amounts. Set them to zero to remove transposition.">KeySignature::setTransposition</a> for information about differences in key signature transposition.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>The key signature in effect. </td></tr>
     <tr><td class="paramname">clefIndex</td><td>The index of the clef in effect. </td></tr>
+    <tr><td class="paramname">staff</td><td>If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If calling <a class="el" href="classmusx_1_1dom_1_1Note.html#a48b5da5b283e186198718caaac8f8c2a" title="Calculates the note name, octave number, actual alteration, and staff position.">calcNoteProperties</a> for Concert Pitch (sounding pitch) values, omit this parameter. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A tuple containing:<ul>
 <li>NoteName: The note name (C, D, E, F, G, A, B)</li>
 <li>int: The octave number (where 4 is the middle C octave)</li>
-<li>int: The actual alteration (in semitones, relative to natural)</li>
+<li>int: The actual alteration in EDO divisions (normally semitones), relative to natural</li>
 <li>int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.) </li>
 </ul>
 </dd></dl>
