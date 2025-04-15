@@ -52,6 +52,7 @@ add_executable(musxdomtests
     options/augementation_dot_options.cpp
     options/barline_options.cpp
     options/beam_options.cpp
+    options/chord_options.cpp
     options/clef_options.cpp
     options/flag_options.cpp
     options/grace_note_options.cpp

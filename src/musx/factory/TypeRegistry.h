@@ -164,6 +164,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::AugmentationDotOptions,
     dom::options::BarlineOptions,
     dom::options::BeamOptions,
+    dom::options::ChordOptions,
     dom::options::ClefOptions,
     dom::options::FlagOptions,
     dom::options::FontOptions,
