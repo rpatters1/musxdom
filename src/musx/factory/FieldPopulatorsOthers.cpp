@@ -513,6 +513,7 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"bacRepBar", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->backwardsRepeatBar = true; }},
     {"barEnding", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasEnding= true; }},
     {"txtRepeats", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasTextRepeat = true; }},
+    {"hasChord", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasChord = true; }},
     {"hasExpr", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasExpression = true; }},
     {"altNumTsig", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->compositeNumerator = true; }},
     {"altDenTsig", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->compositeDenominator = true; }},

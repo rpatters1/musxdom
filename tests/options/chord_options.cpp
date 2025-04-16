@@ -20,104 +20,105 @@
  * THE SOFTWARE.
  */
 
- #include "gtest/gtest.h"
- #include "musx/musx.h"
- #include "test_utils.h"
- 
- TEST(ChordOptionsTest, PropertiesTest)
- {
-     constexpr static musxtest::string_view xml = R"xml(
- <?xml version="1.0" encoding="UTF-8"?>
- <finale>
-   <options>
-     <chordOptions>
-       <fretPercent>7.500000e+01</fretPercent>
-       <chordPercent>1.100000e+02</chordPercent>
-       <chordSharpLift>12</chordSharpLift>
-       <chordFlatLift>13</chordFlatLift>
-       <chordNaturalLift>14</chordNaturalLift>
-       <showFretboards/>
-       <fretStyleID>2</fretStyleID>
-       <fretInstID>1</fretInstID>
-       <multiFretItemsPerStr/>
-       <italicizeCapoChords/>
-       <chordAlignment>center</chordAlignment>
-       <chordStyle>solfeggio</chordStyle>
-       <useSimpleChordSpelling/>
-       <chordPlayback/>
-     </chordOptions>
-   </options>
- </finale>
- )xml";
- 
-     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
-     auto options = doc->getOptions();
-     ASSERT_TRUE(options);
- 
-     auto chordOptions = options->get<musx::dom::options::ChordOptions>();
-     ASSERT_TRUE(chordOptions);
- 
-     // Test all properties of ChordOptions
-     EXPECT_DOUBLE_EQ(chordOptions->fretPercent, 75.0);
-     EXPECT_DOUBLE_EQ(chordOptions->chordPercent, 110.0);
-     EXPECT_EQ(chordOptions->chordSharpLift, 12);
-     EXPECT_EQ(chordOptions->chordFlatLift, 13);
-     EXPECT_EQ(chordOptions->chordNaturalLift, 14);
-     EXPECT_TRUE(chordOptions->showFretboards);
-     EXPECT_EQ(chordOptions->fretStyleId, 2);
-     EXPECT_EQ(chordOptions->fretInstId, 1);
-     EXPECT_TRUE(chordOptions->multiFretItemsPerStr);
-     EXPECT_TRUE(chordOptions->italicizeCapoChords);
-     EXPECT_EQ(chordOptions->chordAlignment, musx::dom::options::ChordOptions::ChordAlignment::Center);
-     EXPECT_EQ(chordOptions->chordStyle, musx::dom::options::ChordOptions::ChordStyle::Solfeggio);
-     EXPECT_TRUE(chordOptions->useSimpleChordSpelling);
-     EXPECT_TRUE(chordOptions->chordPlayback);
- }
- 
- TEST(ChordOptionsTest, PropertiesDefaultTest)
- {
-     constexpr static musxtest::string_view xml = R"xml(
- <?xml version="1.0" encoding="UTF-8"?>
- <finale>
-   <options>
-     <chordOptions>
-       <fretPercent>7.500000e+01</fretPercent>
-       <chordPercent>1.100000e+02</chordPercent>
-       <chordSharpLift>12</chordSharpLift>
-       <chordFlatLift>13</chordFlatLift>
-       <chordNaturalLift>14</chordNaturalLift>
-       <fretStyleID>2</fretStyleID>
-       <fretInstID>1</fretInstID>
-       <multiFretItemsPerStr/>
-       <italicizeCapoChords/>
-       <useSimpleChordSpelling/>
-       <chordPlayback/>
-     </chordOptions>
-   </options>
- </finale>
- )xml";
- 
-     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
-     auto options = doc->getOptions();
-     ASSERT_TRUE(options);
- 
-     auto chordOptions = options->get<musx::dom::options::ChordOptions>();
-     ASSERT_TRUE(chordOptions);
- 
-     // Test all properties of ChordOptions
-     EXPECT_DOUBLE_EQ(chordOptions->fretPercent, 75.0);
-     EXPECT_DOUBLE_EQ(chordOptions->chordPercent, 110.0);
-     EXPECT_EQ(chordOptions->chordSharpLift, 12);
-     EXPECT_EQ(chordOptions->chordFlatLift, 13);
-     EXPECT_EQ(chordOptions->chordNaturalLift, 14);
-     EXPECT_FALSE(chordOptions->showFretboards);
-     EXPECT_EQ(chordOptions->fretStyleId, 2);
-     EXPECT_EQ(chordOptions->fretInstId, 1);
-     EXPECT_TRUE(chordOptions->multiFretItemsPerStr);
-     EXPECT_TRUE(chordOptions->italicizeCapoChords);
-     EXPECT_EQ(chordOptions->chordAlignment, musx::dom::options::ChordOptions::ChordAlignment::Left);
-     EXPECT_EQ(chordOptions->chordStyle, musx::dom::options::ChordOptions::ChordStyle::Standard);
-     EXPECT_TRUE(chordOptions->useSimpleChordSpelling);
-     EXPECT_TRUE(chordOptions->chordPlayback);
- }
- 
+#include "gtest/gtest.h"
+#include "musx/musx.h"
+#include "test_utils.h"
+
+using namespace musx::dom;
+
+TEST(ChordOptionsTest, PropertiesTest)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <chordOptions>
+      <fretPercent>7.500000e+01</fretPercent>
+      <chordPercent>1.100000e+02</chordPercent>
+      <chordSharpLift>12</chordSharpLift>
+      <chordFlatLift>13</chordFlatLift>
+      <chordNaturalLift>14</chordNaturalLift>
+      <showFretboards/>
+      <fretStyleID>2</fretStyleID>
+      <fretInstID>1</fretInstID>
+      <multiFretItemsPerStr/>
+      <italicizeCapoChords/>
+      <chordAlignment>center</chordAlignment>
+      <chordStyle>solfeggio</chordStyle>
+      <useSimpleChordSpelling/>
+      <chordPlayback/>
+    </chordOptions>
+  </options>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+
+    auto chordOptions = options->get<options::ChordOptions>();
+    ASSERT_TRUE(chordOptions);
+
+    // Test all properties of ChordOptions
+    EXPECT_DOUBLE_EQ(chordOptions->fretPercent, 75.0);
+    EXPECT_DOUBLE_EQ(chordOptions->chordPercent, 110.0);
+    EXPECT_EQ(chordOptions->chordSharpLift, 12);
+    EXPECT_EQ(chordOptions->chordFlatLift, 13);
+    EXPECT_EQ(chordOptions->chordNaturalLift, 14);
+    EXPECT_TRUE(chordOptions->showFretboards);
+    EXPECT_EQ(chordOptions->fretStyleId, 2);
+    EXPECT_EQ(chordOptions->fretInstId, 1);
+    EXPECT_TRUE(chordOptions->multiFretItemsPerStr);
+    EXPECT_TRUE(chordOptions->italicizeCapoChords);
+    EXPECT_EQ(chordOptions->chordAlignment, options::ChordOptions::ChordAlignment::Center);
+    EXPECT_EQ(chordOptions->chordStyle, options::ChordOptions::ChordStyle::Solfeggio);
+    EXPECT_TRUE(chordOptions->useSimpleChordSpelling);
+    EXPECT_TRUE(chordOptions->chordPlayback);
+}
+
+TEST(ChordOptionsTest, PropertiesDefaultTest)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <chordOptions>
+      <fretPercent>7.500000e+01</fretPercent>
+      <chordPercent>1.100000e+02</chordPercent>
+      <chordSharpLift>12</chordSharpLift>
+      <chordFlatLift>13</chordFlatLift>
+      <chordNaturalLift>14</chordNaturalLift>
+      <fretStyleID>2</fretStyleID>
+      <fretInstID>1</fretInstID>
+      <multiFretItemsPerStr/>
+      <italicizeCapoChords/>
+      <useSimpleChordSpelling/>
+      <chordPlayback/>
+    </chordOptions>
+  </options>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+
+    auto chordOptions = options->get<options::ChordOptions>();
+    ASSERT_TRUE(chordOptions);
+
+    // Test all properties of ChordOptions
+    EXPECT_DOUBLE_EQ(chordOptions->fretPercent, 75.0);
+    EXPECT_DOUBLE_EQ(chordOptions->chordPercent, 110.0);
+    EXPECT_EQ(chordOptions->chordSharpLift, 12);
+    EXPECT_EQ(chordOptions->chordFlatLift, 13);
+    EXPECT_EQ(chordOptions->chordNaturalLift, 14);
+    EXPECT_FALSE(chordOptions->showFretboards);
+    EXPECT_EQ(chordOptions->fretStyleId, 2);
+    EXPECT_EQ(chordOptions->fretInstId, 1);
+    EXPECT_TRUE(chordOptions->multiFretItemsPerStr);
+    EXPECT_TRUE(chordOptions->italicizeCapoChords);
+    EXPECT_EQ(chordOptions->chordAlignment, options::ChordOptions::ChordAlignment::Left);
+    EXPECT_EQ(chordOptions->chordStyle, options::ChordOptions::ChordStyle::Standard);
+    EXPECT_TRUE(chordOptions->useSimpleChordSpelling);
+    EXPECT_TRUE(chordOptions->chordPlayback);
+}
