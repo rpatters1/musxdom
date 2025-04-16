@@ -35,6 +35,7 @@ MUSX_XML_ENUM_MAPPING(BeamOptions::FlattenStyle, {
     {"onExtremeNote", BeamOptions::FlattenStyle::OnExtremeNote},
     {"alwaysFlat", BeamOptions::FlattenStyle::AlwaysFlat}
 });
+
 MUSX_XML_ENUM_MAPPING(ChordOptions::ChordAlignment, {
     {"left",   ChordOptions::ChordAlignment::Left},     // this value may never appear in the xml
     {"center", ChordOptions::ChordAlignment::Center}

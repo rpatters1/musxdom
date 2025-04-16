@@ -37,6 +37,12 @@ extern template const XmlEnumMappingElement<options::TupletOptions::BracketStyle
 extern template const XmlEnumMappingElement<options::TupletOptions::NumberStyle> XmlEnumMapping<options::TupletOptions::NumberStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::PositioningStyle> XmlEnumMapping<options::TupletOptions::PositioningStyle>::mapping;
 
+MUSX_XML_ENUM_MAPPING(ChordAssign::BassPosition, {
+    {"afterRoot", ChordAssign::BassPosition::AfterRoot},   // this value may never appear in the xml
+    {"underRoot", ChordAssign::BassPosition::UnderRoot},
+    {"subtext",   ChordAssign::BassPosition::Subtext}
+});
+
 MUSX_XML_ENUM_MAPPING(StaffGroup::HideStaves, {
     // {"Normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
     {"asGroup", StaffGroup::HideStaves::AsGroup},
@@ -88,6 +94,37 @@ MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
     {"do1024th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
     {"do2048th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
     {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ChordAssign, {
+    {"suffix", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->suffixId = e->getTextAs<Cmper>(); }},
+    {"fbStyleID", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbStyleId = e->getTextAs<Cmper>(); }},
+    {"rootScaleNum", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->rootScaleNum = e->getTextAs<int>(); }},
+    {"rootAlter", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->rootAlter = e->getTextAs<int>(); }},
+    {"rootLowerCase", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->rootLowerCase = true; }},
+    {"playSuffix", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->playSuffix = true; }},
+    {"showRoot", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->showRoot = true; }},
+    {"playRoot", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->playRoot = true; }},
+    {"showFretboard", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->showFretboard = true; }},
+    {"showSuffix", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->showSuffix = true; }},
+    {"playFretboard", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->playFretboard = true; }},
+    {"bassScaleNum", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassScaleNum = e->getTextAs<int>(); }},
+    {"bassAlter", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassAlter = e->getTextAs<int>(); }},
+    {"bassLowerCase", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->bassLowerCase = true; }},
+    {"bassPosition", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassPosition = toEnum<ChordAssign::BassPosition>(e); }},
+    {"showAltBass", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->showAltBass = true; }},
+    {"playAltBass", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->playAltBass = true; }},
+    {"capoValue", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->capoValue = e->getTextAs<int>(); }},
+    {"useLocalCapo", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->useLocalCapo = true; }},
+    {"fretInci", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fretInci = e->getTextAs<Cmper>(); }},
+    {"useFretFont", [](const XmlElementPtr&, const std::shared_ptr<ChordAssign>& i) { i->useFretFont = true; }},
+    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
+    {"fbHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbHorzOff = e->getTextAs<Evpu>(); }},
+    {"fbVertOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbVertOff = e->getTextAs<Evpu>(); }},
+    {"horzEdu", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->horzEdu = e->getTextAs<Edu>(); }},
+    {"chPercent", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->chPercent = e->getTextAs<int>(); }},
+    {"fbPercent", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbPercent = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
