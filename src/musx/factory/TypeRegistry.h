@@ -198,6 +198,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::AcciOrderSharps,
     dom::others::ArticulationDef,
     dom::others::BeatChartElement,
+    dom::others::ChordSuffixElement,
+    dom::others::ChordSuffixPlay,
     dom::others::ClefList,
     dom::others::FontDefinition,
     dom::others::Frame,

@@ -103,4 +103,86 @@
      EXPECT_EQ(assign->chPercent, 95);
      EXPECT_EQ(assign->fbPercent, 85);
  }
- 
+
+TEST(ChordSuffixElementTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <chordSuffix cmper="178" inci="0">
+      <suffix>1</suffix>
+      <fontID>10</fontID>
+      <fontSize>12</fontSize>
+      <efx>
+        <italic/>
+        <absolute/>
+        <hidden/>
+      </efx>
+      <xdisp>1</xdisp>
+      <ydisp>2</ydisp>
+      <isNumber/>
+    </chordSuffix>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto element = others->get<others::ChordSuffixElement>(SCORE_PARTID, 178, 0);
+    ASSERT_TRUE(element);
+
+    EXPECT_EQ(element->symbol, char32_t{0x01});
+    EXPECT_TRUE(element->font);
+    EXPECT_EQ(element->font->fontId, 10);
+    EXPECT_EQ(element->font->fontSize, 12);
+    EXPECT_TRUE(element->font->italic);
+    EXPECT_FALSE(element->font->bold);
+    EXPECT_FALSE(element->font->underline);
+    EXPECT_FALSE(element->font->strikeout);
+    EXPECT_TRUE(element->font->absolute);
+    EXPECT_TRUE(element->font->hidden);
+    EXPECT_EQ(element->xdisp, Evpu{1});
+    EXPECT_EQ(element->ydisp, Evpu{2});
+    EXPECT_TRUE(element->isNumber);
+}
+
+TEST(ChordSuffixPlayTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <chordSuffixPlay cmper="178">
+      <data>1</data>
+      <data>2</data>
+      <data>3</data>
+      <data>4</data>
+      <data>5</data>
+      <data>0</data>
+    </chordSuffixPlay>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto playback = others->get<others::ChordSuffixPlay>(SCORE_PARTID, 178);
+    ASSERT_TRUE(playback);
+
+    ASSERT_EQ(playback->values.size(), 6);
+    EXPECT_EQ(playback->values[0], 1);
+    EXPECT_EQ(playback->values[1], 2);
+    EXPECT_EQ(playback->values[2], 3);
+    EXPECT_EQ(playback->values[3], 4);
+    EXPECT_EQ(playback->values[4], 5);
+    EXPECT_EQ(playback->values[5], 0);
+}

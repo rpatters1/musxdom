@@ -362,6 +362,76 @@ public:
 };
 
 /**
+ * @class ChordSuffixElement
+ * @brief Represents a single element in a chord suffix (e.g., a symbol like "1" or "+").
+ *
+ * Each chord suffix consists of one or more such elements, each with its own font and positioning. The @p inci
+ * is a 0-based index for the element.
+ *
+ * The cmper is a unique identifier used by @ref details::ChordAssign to reference the suffix and its playback information.
+ * (See @ref ChordSuffixPlayback.) Suffixes are a library from which chord assignments select their particular suffix.
+ *
+ * This class is identified by the XML node name "chordSuffix".
+ */
+class ChordSuffixElement : public OthersBase
+{
+public:
+    /**
+     * @enum Prefix
+     * @brief Enum for chord symbol prefix options
+     * */
+    enum class Prefix
+    {
+        None,   ///< No prefix (default: may not appear in XML)
+        Minus,  ///< minus symbol ("-")
+        Plus,   ///< plus symbol ("+")
+        Sharp,  ///< musical sharp symbol
+        Flat    ///< musical flat symbol
+    };
+
+    /** @brief Constructor function */
+    explicit ChordSuffixElement(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci), font(new FontInfo(document))
+    {
+    }
+
+    std::shared_ptr<FontInfo> font; ///< Font info for this symbol (xml nodes are `<fontID>`, `<fontSize>`, and `<efx>`)
+    char32_t symbol{};              ///< Unicode symbol (xml node is `<suffix>`)
+    Evpu xdisp{};                   ///< Horizontal displacement in EVPU
+    Evpu ydisp{};                   ///< Vertical displacement in EVPU
+    bool isNumber{};                ///< Indicates the #symbol value is numeric rather than a UTF-32 character
+    Prefix prefix{};                ///< Optional prefix for the symbol, e.g., "plus"
+
+    constexpr static std::string_view XmlNodeName = "chordSuffix";
+    static const xml::XmlElementArray<ChordSuffixElement>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class ChordSuffixPlay
+ * @brief Represents a list of repeat ending numbers for a @ref RepeatEndingStart instance.
+ *
+ * An array of semitone offsets that define the playback and voicing for the chord suffix. They
+ * are offsets from the root of the chord and may be negative or positive. Finale chord playback
+ * has no support for microtone scales, so all values in this table are strictly half-steps.
+ *
+ * Zero-values (usually trailing at the end of the list) should be ignored.
+ *
+ * The cmper is the cmper of the @ref ChordSuffixElement array with the same cmper.
+ *
+ * This class is identified by the XML node name "chordSuffixPlay".
+ */
+class ChordSuffixPlay : public OthersArray<int16_t>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "chordSuffixPlay"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ChordSuffixPlay>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ClefList
  * @brief Represents an element in multimeasure clef list with its positioning and percentage values.
  *
@@ -1509,16 +1579,12 @@ public:
  *
  * This class is identified by the XML node name "shapeData".
  */
-class ShapeData : public OthersBase
+class ShapeData : public OthersArray<int>
 {
-public:
-    /** @brief Constructor function */
-    explicit ShapeData(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
+    std::string_view xmlTag() const override { return XmlNodeName; }
 
-    std::vector<int> data; ///< The data. See @ref ShapeInstructionList for how to interpret it. 
+public:
+    using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "shapeData"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2285,7 +2351,8 @@ public:
  *
  * This class is identified by the XML node name "textRepeatDef".
  */
-class TextRepeatDef : public OthersBase {
+class TextRepeatDef : public OthersBase
+{
 public:
     /** @brief Enum for poundReplace options */
     enum class PoundReplaceOption
@@ -2297,7 +2364,9 @@ public:
 
     /** @brief Constructor function */
     explicit TextRepeatDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper), font(new FontInfo(document)) {}
+        : OthersBase(document, partId, shareMode, cmper), font(new FontInfo(document))
+    {
+    }
 
     // Public properties corresponding to the XML structure
     std::shared_ptr<FontInfo> font;                 ///< The font for this text repeat. (xml nodes `<fontID>`, `<fontSize>`, and `<efx>`)
@@ -2305,8 +2374,8 @@ public:
     bool useThisFont{};                             ///< "Use This Font" (for the `#` substitution)
     PoundReplaceOption poundReplace{};              ///< "Replace # With" choice.
     HorizontalTextJustification justification{};    ///< Although called "justification" in Finale's U.I, this value is used
-                                                    ///< for both the alignment of the text within the measure as well as its justification.
-                                                    ///< (xml node is `<justify >`)
+    ///< for both the alignment of the text within the measure as well as its justification.
+    ///< (xml node is `<justify >`)
     std::vector<int> passList;                      ///< If this vector contains elements, they define the repeat passes that apply to this instance.
 
     constexpr static std::string_view XmlNodeName = "textRepeatDef"; ///< The XML node name for this type.
@@ -2321,7 +2390,8 @@ public:
  *
  * This class is identified by the XML node name "textRepeatEnclosure".
  */
-class TextRepeatEnclosure : public Enclosure {
+class TextRepeatEnclosure : public Enclosure
+{
 public:
     using Enclosure::Enclosure;
 
@@ -2337,11 +2407,14 @@ public:
  *
  * This class is identified by the XML node name "textRepeatText".
  */
-class TextRepeatText : public OthersBase {
+class TextRepeatText : public OthersBase
+{
 public:
     /** @brief Constructor function */
     explicit TextRepeatText(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
 
     std::string text; ///< The text 
 
