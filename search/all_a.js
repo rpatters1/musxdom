@@ -1,14 +1,14 @@
 var searchData=
 [
   ['keepcurrent_0',['KeepCurrent',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a3d5fb29e48c2b11a942457e49d5d9a8baac370eee763b357f18a45ae699fcfea9',1,'musx::dom::options::MusicSpacingOptions']]],
-  ['key_1',['key',['../classmusx_1_1dom_1_1KeySignature.html#a6c58d29ecc8be72709d549e16ef319bb',1,'musx::dom::KeySignature::key'],['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa897356954c2cd3d41b221e3f24f99bba',1,'musx::dom::options::FontOptions::Key']]],
+  ['key_1',['key',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa897356954c2cd3d41b221e3f24f99bba',1,'musx::dom::options::FontOptions::Key'],['../classmusx_1_1dom_1_1KeySignature.html#a6c58d29ecc8be72709d549e16ef319bb',1,'musx::dom::KeySignature::key']]],
   ['keyback_2',['keyBack',['../classmusx_1_1dom_1_1options_1_1KeySignatureOptions.html#a42e723f087d022e3af150da8f8965c61',1,'musx::dom::options::KeySignatureOptions']]],
   ['keyformat_3',['keyformat',['../classmusx_1_1dom_1_1others_1_1KeyFormat.html',1,'musx::dom::others::KeyFormat'],['../classmusx_1_1dom_1_1others_1_1KeyFormat.html#a069058b0fb336235b734ea7d09696911',1,'musx::dom::others::KeyFormat::KeyFormat()']]],
   ['keyfront_4',['keyFront',['../classmusx_1_1dom_1_1options_1_1KeySignatureOptions.html#a590a16ad8b700c0d8d586e312a15fcbe',1,'musx::dom::options::KeySignatureOptions']]],
   ['keyless_5',['keyless',['../classmusx_1_1dom_1_1KeySignature.html#aff704ae36913e05972cd6d5907f93c9e',1,'musx::dom::KeySignature']]],
   ['keymaparray_6',['keymaparray',['../classmusx_1_1dom_1_1others_1_1KeyMapArray.html',1,'musx::dom::others::KeyMapArray'],['../classmusx_1_1dom_1_1others_1_1KeyMapArray.html#ae90380e08b73f4f0f6e402db215f418d',1,'musx::dom::others::KeyMapArray::KeyMapArray()']]],
   ['keymid_7',['keyMid',['../classmusx_1_1dom_1_1options_1_1KeySignatureOptions.html#a874426d00a0c741374480de894beb1ab',1,'musx::dom::options::KeySignatureOptions']]],
-  ['keysig_8',['keysig',['../classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html#a57e24a5af4091f114ec25eec8a766eb0',1,'musx::dom::others::Staff::Transposition::keysig'],['../classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#a55f55ca075c12f092a445bb8170ab4ef',1,'musx::dom::details::IndependentStaffDetails::keySig']]],
+  ['keysig_8',['keysig',['../classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#a55f55ca075c12f092a445bb8170ab4ef',1,'musx::dom::details::IndependentStaffDetails::keySig'],['../classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html#a57e24a5af4091f114ec25eec8a766eb0',1,'musx::dom::others::Staff::Transposition::keysig']]],
   ['keysigdblflat_9',['keySigDblFlat',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a041b9b19a4ae73db30603073ae0cb1c6',1,'musx::dom::options::MusicSymbolOptions']]],
   ['keysigdblsharp_10',['keySigDblSharp',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a1f7b8e988585bd00b00b0324165fb4a7',1,'musx::dom::options::MusicSymbolOptions']]],
   ['keysigflat_11',['keySigFlat',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#ac61e49d38344388fe0f86c9181c9fb15',1,'musx::dom::options::MusicSymbolOptions']]],

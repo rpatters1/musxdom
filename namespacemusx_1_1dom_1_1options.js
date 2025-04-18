@@ -5,6 +5,7 @@ var namespacemusx_1_1dom_1_1options =
     [ "AugmentationDotOptions", "classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html", "classmusx_1_1dom_1_1options_1_1AugmentationDotOptions" ],
     [ "BarlineOptions", "classmusx_1_1dom_1_1options_1_1BarlineOptions.html", "classmusx_1_1dom_1_1options_1_1BarlineOptions" ],
     [ "BeamOptions", "classmusx_1_1dom_1_1options_1_1BeamOptions.html", "classmusx_1_1dom_1_1options_1_1BeamOptions" ],
+    [ "ChordOptions", "classmusx_1_1dom_1_1options_1_1ChordOptions.html", "classmusx_1_1dom_1_1options_1_1ChordOptions" ],
     [ "ClefOptions", "classmusx_1_1dom_1_1options_1_1ClefOptions.html", "classmusx_1_1dom_1_1options_1_1ClefOptions" ],
     [ "FlagOptions", "classmusx_1_1dom_1_1options_1_1FlagOptions.html", "classmusx_1_1dom_1_1options_1_1FlagOptions" ],
     [ "FontOptions", "classmusx_1_1dom_1_1options_1_1FontOptions.html", "classmusx_1_1dom_1_1options_1_1FontOptions" ],

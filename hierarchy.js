@@ -32,6 +32,8 @@ var hierarchy =
           [ "musx::dom::details::BaselineLyricsSection", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html", null ],
           [ "musx::dom::details::BaselineLyricsVerse", "classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html", null ]
         ] ],
+        [ "musx::dom::details::CenterShape", "classmusx_1_1dom_1_1details_1_1CenterShape.html", null ],
+        [ "musx::dom::details::ChordAssign", "classmusx_1_1dom_1_1details_1_1ChordAssign.html", null ],
         [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ],
         [ "musx::dom::details::IndependentStaffDetails", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html", null ],
         [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ]
@@ -45,6 +47,7 @@ var hierarchy =
         [ "musx::dom::options::AugmentationDotOptions", "classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html", null ],
         [ "musx::dom::options::BarlineOptions", "classmusx_1_1dom_1_1options_1_1BarlineOptions.html", null ],
         [ "musx::dom::options::BeamOptions", "classmusx_1_1dom_1_1options_1_1BeamOptions.html", null ],
+        [ "musx::dom::options::ChordOptions", "classmusx_1_1dom_1_1options_1_1ChordOptions.html", null ],
         [ "musx::dom::options::ClefOptions", "classmusx_1_1dom_1_1options_1_1ClefOptions.html", null ],
         [ "musx::dom::options::FlagOptions", "classmusx_1_1dom_1_1options_1_1FlagOptions.html", null ],
         [ "musx::dom::options::FontOptions", "classmusx_1_1dom_1_1options_1_1FontOptions.html", null ],
@@ -74,8 +77,12 @@ var hierarchy =
           [ "musx::dom::others::AcciOrderFlats", "classmusx_1_1dom_1_1others_1_1AcciOrderFlats.html", null ],
           [ "musx::dom::others::AcciOrderSharps", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps.html", null ]
         ] ],
+        [ "musx::dom::OthersArray< int16_t >", "classmusx_1_1dom_1_1OthersArray.html", [
+          [ "musx::dom::others::ChordSuffixPlayback", "classmusx_1_1dom_1_1others_1_1ChordSuffixPlayback.html", null ]
+        ] ],
         [ "musx::dom::OthersArray< int >", "classmusx_1_1dom_1_1OthersArray.html", [
-          [ "musx::dom::others::RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", null ]
+          [ "musx::dom::others::RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", null ],
+          [ "musx::dom::others::ShapeData", "classmusx_1_1dom_1_1others_1_1ShapeData.html", null ]
         ] ],
         [ "musx::dom::OthersArray< unsigned, 8 >", "classmusx_1_1dom_1_1OthersArray.html", [
           [ "musx::dom::others::TonalCenterFlats", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html", null ],
@@ -84,6 +91,7 @@ var hierarchy =
         [ "musx::dom::OthersArray< ElementType, REQUIRED_SIZE >", "classmusx_1_1dom_1_1OthersArray.html", null ],
         [ "musx::dom::others::ArticulationDef", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html", null ],
         [ "musx::dom::others::BeatChartElement", "classmusx_1_1dom_1_1others_1_1BeatChartElement.html", null ],
+        [ "musx::dom::others::ChordSuffixElement", "classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html", null ],
         [ "musx::dom::others::ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", null ],
         [ "musx::dom::others::Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", [
           [ "musx::dom::others::TextExpressionEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html", null ],
@@ -113,7 +121,6 @@ var hierarchy =
         [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
         [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
         [ "musx::dom::others::RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", null ],
-        [ "musx::dom::others::ShapeData", "classmusx_1_1dom_1_1others_1_1ShapeData.html", null ],
         [ "musx::dom::others::ShapeDef", "classmusx_1_1dom_1_1others_1_1ShapeDef.html", null ],
         [ "musx::dom::others::ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", null ],
         [ "musx::dom::others::ShapeInstructionList", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList.html", null ],

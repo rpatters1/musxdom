@@ -6,6 +6,8 @@ var namespacemusx_1_1dom_1_1others =
     [ "AcciOrderSharps", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps.html", "classmusx_1_1dom_1_1others_1_1AcciOrderSharps" ],
     [ "ArticulationDef", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html", "classmusx_1_1dom_1_1others_1_1ArticulationDef" ],
     [ "BeatChartElement", "classmusx_1_1dom_1_1others_1_1BeatChartElement.html", "classmusx_1_1dom_1_1others_1_1BeatChartElement" ],
+    [ "ChordSuffixElement", "classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html", "classmusx_1_1dom_1_1others_1_1ChordSuffixElement" ],
+    [ "ChordSuffixPlayback", "classmusx_1_1dom_1_1others_1_1ChordSuffixPlayback.html", "classmusx_1_1dom_1_1others_1_1ChordSuffixPlayback" ],
     [ "ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", "classmusx_1_1dom_1_1others_1_1ClefList" ],
     [ "Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", "classmusx_1_1dom_1_1others_1_1Enclosure" ],
     [ "FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", "classmusx_1_1dom_1_1others_1_1FontDefinition" ],

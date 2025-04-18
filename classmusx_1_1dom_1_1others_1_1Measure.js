@@ -59,6 +59,7 @@ var classmusx_1_1dom_1_1others_1_1Measure =
     [ "frontSpaceExtra", "classmusx_1_1dom_1_1others_1_1Measure.html#a809fb9908533a86729c984a0267bb526", null ],
     [ "globalKeySig", "classmusx_1_1dom_1_1others_1_1Measure.html#a0ff0a3f44dc240473b50f73c35ad2f8b", null ],
     [ "groupBarlineOverride", "classmusx_1_1dom_1_1others_1_1Measure.html#a36468ede56f05fdf822842def92fd22f", null ],
+    [ "hasChord", "classmusx_1_1dom_1_1others_1_1Measure.html#ad8d6c7dfed09e9f246b7c26c83b280db", null ],
     [ "hasEnding", "classmusx_1_1dom_1_1others_1_1Measure.html#a43a88792d526bd407cb70c8864f173c7", null ],
     [ "hasExpression", "classmusx_1_1dom_1_1others_1_1Measure.html#aa0e6f062a3acd0b2f9588302bb435fc9", null ],
     [ "hasSmartShape", "classmusx_1_1dom_1_1others_1_1Measure.html#a3372430824ea064856fef909fc1ee3c8", null ],

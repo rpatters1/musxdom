@@ -28,9 +28,11 @@ var searchData=
   ['interval_25',['interval',['../classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html#ac5cd641cb2444a4a92883ad09b6fee23',1,'musx::dom::others::Staff::KeySigTransposition']]],
   ['ishidden_26',['isHidden',['../classmusx_1_1dom_1_1Entry.html#aa140b2bc34357eee1085828bae9c9bae',1,'musx::dom::Entry']]],
   ['isnote_27',['isNote',['../classmusx_1_1dom_1_1Entry.html#a1b7183f1bc2716b5eb961a2beab9e3c9',1,'musx::dom::Entry']]],
-  ['isrelative_28',['isRelative',['../classmusx_1_1dom_1_1others_1_1TempoChange.html#af64f51c9326806753eac09a1e8501e12',1,'musx::dom::others::TempoChange']]],
-  ['isshape_29',['isShape',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#aafb0704b240bf7675074b1eb4879487b',1,'musx::dom::options::ClefOptions::ClefDef']]],
-  ['isvalid_30',['isvalid',['../classmusx_1_1dom_1_1Note.html#a3e9ab0528cef1b53791ad277da67b26b',1,'musx::dom::Note::isValid'],['../classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b',1,'musx::dom::Entry::isValid']]],
-  ['italic_31',['italic',['../classmusx_1_1dom_1_1FontInfo.html#ace55cebaa51ad5c68f5e177301938e2f',1,'musx::dom::FontInfo']]],
-  ['items_32',['items',['../classmusx_1_1dom_1_1others_1_1TimeCompositeLower.html#ac05b4c16b962e0ff0afb19766fe75e8f',1,'musx::dom::others::TimeCompositeLower::items'],['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html#aa55d5b45346d9efc22a5d80909a19723',1,'musx::dom::others::TimeCompositeUpper::items']]]
+  ['isnumber_28',['isNumber',['../classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html#a97456d2f505490bd97c244cb13aae1bb',1,'musx::dom::others::ChordSuffixElement']]],
+  ['isrelative_29',['isRelative',['../classmusx_1_1dom_1_1others_1_1TempoChange.html#af64f51c9326806753eac09a1e8501e12',1,'musx::dom::others::TempoChange']]],
+  ['isshape_30',['isShape',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#aafb0704b240bf7675074b1eb4879487b',1,'musx::dom::options::ClefOptions::ClefDef']]],
+  ['isvalid_31',['isvalid',['../classmusx_1_1dom_1_1Note.html#a3e9ab0528cef1b53791ad277da67b26b',1,'musx::dom::Note::isValid'],['../classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b',1,'musx::dom::Entry::isValid']]],
+  ['italic_32',['italic',['../classmusx_1_1dom_1_1FontInfo.html#ace55cebaa51ad5c68f5e177301938e2f',1,'musx::dom::FontInfo']]],
+  ['italicizecapochords_33',['italicizeCapoChords',['../classmusx_1_1dom_1_1options_1_1ChordOptions.html#a1aae380524b833c9fa2a1586b8aefdb2',1,'musx::dom::options::ChordOptions']]],
+  ['items_34',['items',['../classmusx_1_1dom_1_1others_1_1TimeCompositeLower.html#ac05b4c16b962e0ff0afb19766fe75e8f',1,'musx::dom::others::TimeCompositeLower::items'],['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html#aa55d5b45346d9efc22a5d80909a19723',1,'musx::dom::others::TimeCompositeUpper::items']]]
 ];
