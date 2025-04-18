@@ -402,12 +402,12 @@ public:
     bool isNumber{};                ///< Indicates the #symbol value is numeric rather than a UTF-32 character
     Prefix prefix{};                ///< Optional prefix for the symbol, e.g., "plus"
 
-    constexpr static std::string_view XmlNodeName = "chordSuffix";
+    constexpr static std::string_view XmlNodeName = "chordSuffix"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ChordSuffixElement>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
- * @class ChordSuffixPlay
+ * @class ChordSuffixPlayback
  * @brief Represents a list of repeat ending numbers for a @ref RepeatEndingStart instance.
  *
  * An array of semitone offsets that define the playback and voicing for the chord suffix. They
@@ -420,7 +420,7 @@ public:
  *
  * This class is identified by the XML node name "chordSuffixPlay".
  */
-class ChordSuffixPlay : public OthersArray<int16_t>
+class ChordSuffixPlayback : public OthersArray<int16_t>
 {
     std::string_view xmlTag() const override { return XmlNodeName; }
 
@@ -428,7 +428,7 @@ public:
     using OthersArray::OthersArray;
 
     constexpr static std::string_view XmlNodeName = "chordSuffixPlay"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<ChordSuffixPlay>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<ChordSuffixPlayback>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

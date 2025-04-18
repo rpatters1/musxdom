@@ -199,7 +199,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ArticulationDef,
     dom::others::BeatChartElement,
     dom::others::ChordSuffixElement,
-    dom::others::ChordSuffixPlay,
+    dom::others::ChordSuffixPlayback,
     dom::others::ClefList,
     dom::others::FontDefinition,
     dom::others::Frame,
@@ -257,6 +257,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::BaselineLyricsSection,
     dom::details::BaselineLyricsVerse,
     dom::details::BeamStubDirection,
+    dom::details::CenterShape,
     dom::details::ChordAssign,
     dom::details::CrossStaff,
     dom::details::IndependentStaffDetails, // "floats" is the xml key

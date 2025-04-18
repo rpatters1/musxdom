@@ -96,6 +96,13 @@ MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
     {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(CenterShape, {
+    { "startBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
+        { i->startBreakAdj = FieldPopulator<others::SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+    { "endBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
+        { i->endBreakAdj = FieldPopulator<others::SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(ChordAssign, {
     {"suffix", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->suffixId = e->getTextAs<Cmper>(); }},
     {"fbStyleID", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbStyleId = e->getTextAs<Cmper>(); }},

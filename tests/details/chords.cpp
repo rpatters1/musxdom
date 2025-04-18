@@ -175,7 +175,7 @@ TEST(ChordSuffixPlayTest, PopulateFields)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
-    auto playback = others->get<others::ChordSuffixPlay>(SCORE_PARTID, 178);
+    auto playback = others->get<others::ChordSuffixPlayback>(SCORE_PARTID, 178);
     ASSERT_TRUE(playback);
 
     ASSERT_EQ(playback->values.size(), 6);

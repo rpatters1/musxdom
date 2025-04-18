@@ -85,6 +85,7 @@ public:
 
         Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
         Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
+        bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
 
         bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
         static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
@@ -102,6 +103,8 @@ public:
 
         std::shared_ptr<EndPoint> endPoint;                 ///< Endpoint information (xml node is `<endPt>`)
         std::shared_ptr<EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information (xml node is `<endPtAdj>`)
+        std::shared_ptr<EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
+                                                            ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
         void integrityCheck() override
         {
@@ -111,6 +114,9 @@ public:
             }
             if (!endPointAdj) {
                 endPointAdj = std::make_shared<EndPointAdjustment>(getDocument());
+            }
+            if (!breakAdj) {
+                breakAdj = std::make_shared<EndPointAdjustment>(getDocument());
             }
         }
     
@@ -237,6 +243,55 @@ public:
 } // namespace others
 
 namespace details {
+
+/**
+ * @class CenterShape
+ * @brief Represents a center shape for a @ref others::SmartShape that spans three or more measures.
+ *
+ * A @ref others::SmartShape instance controls the endpoint information for the start and end measures. It
+ * also controls the first and the final system breaks if the shape spans more than one system.
+ *
+ * Every measure spanned by the shape in between the first and last measures is assigned its own center shape.
+ * These are only applicable if their measure is the first measure in a system that is not the first or last system.
+ * That means that for any center shape to be applicable, the shape must span at least three systems. However, the center shape
+ * records are created for every measure between the first and last, no matter how many or few systems the shape spans.
+ *
+ * Cmper1 is the shape number. Cmper2 is the center shape number. (See @ref others::SmartShapeMeasureAssign.)
+ * This class is identified by the XML node name "centerShape".
+ */
+class CenterShape : public DetailsBase
+{
+public:
+
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for.
+     * @param shareMode The sharing mode for this #CenterShape.
+     * @param shapeNum The shape number from @ref others::SmartShapeMeasureAssign.
+     * @param centerShapeNum The center shape number from @ref others::SmartShapeMeasureAssign.
+     */
+    explicit CenterShape(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper shapeNum, Cmper centerShapeNum)
+        : DetailsBase(document, partId, shareMode, shapeNum, centerShapeNum)
+    {}
+
+    std::shared_ptr<others::SmartShape::EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
+    std::shared_ptr<others::SmartShape::EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
+
+    void integrityCheck() override
+    {
+        if (!startBreakAdj) {
+            startBreakAdj = std::make_shared<others::SmartShape::EndPointAdjustment>(getDocument());
+        }
+        if (!endBreakAdj) {
+            endBreakAdj = std::make_shared<others::SmartShape::EndPointAdjustment>(getDocument());
+        }
+    }
+
+    bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
+    constexpr static std::string_view XmlNodeName = "centerShape"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<CenterShape>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
 
 /**
  * @class SmartShapeEntryAssign

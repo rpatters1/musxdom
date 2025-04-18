@@ -412,8 +412,8 @@ MUSX_XML_ELEMENT_ARRAY(ChordSuffixElement, {
     { "prefix", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->prefix = toEnum<ChordSuffixElement::Prefix>(e); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(ChordSuffixPlay, {
-    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixPlay>& i) { i->values.push_back(e->getTextAs<int>()); }},
+MUSX_XML_ELEMENT_ARRAY(ChordSuffixPlayback, {
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixPlayback>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ClefList, {
@@ -769,6 +769,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPoint, {
 MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPointAdjustment, {
     {"x", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
     {"y", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"on", [](const XmlElementPtr&, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->active = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
@@ -776,6 +777,8 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
         { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getDocument()); }},
     {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
         { i->endPointAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+    {"breakAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
+        { i->breakAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape, {

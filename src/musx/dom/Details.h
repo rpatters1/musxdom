@@ -207,8 +207,7 @@ public:
     {
     }
 
-    ///< @enum BassPosition
-    ///< @brief Bass position options
+    /** @brief Bass position options */
     enum class BassPosition
     {
         AfterRoot,                  // default value may not appear in xml (but text appears in Finale binary)
