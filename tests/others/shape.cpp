@@ -98,15 +98,15 @@ TEST(ShapeDefTest, PopulateFields)
 
     auto shapeData = others->get<others::ShapeData>(SCORE_PARTID, 5);
     ASSERT_TRUE(shapeData) << "ShapeData 5 not found but does exist";
-    ASSERT_EQ(shapeData->data.size(), 18);
-    EXPECT_EQ(shapeData->data[0], 0);
-    EXPECT_EQ(shapeData->data[1], 2);
-    EXPECT_EQ(shapeData->data[2], 0);
-    EXPECT_EQ(shapeData->data[3], 2);
-    EXPECT_EQ(shapeData->data[4], 28);
-    EXPECT_EQ(shapeData->data[5], 2);
-    EXPECT_EQ(shapeData->data[6], 1000);
-    EXPECT_EQ(shapeData->data[7], 1000);
+    ASSERT_EQ(shapeData->values.size(), 18);
+    EXPECT_EQ(shapeData->values[0], 0);
+    EXPECT_EQ(shapeData->values[1], 2);
+    EXPECT_EQ(shapeData->values[2], 0);
+    EXPECT_EQ(shapeData->values[3], 2);
+    EXPECT_EQ(shapeData->values[4], 28);
+    EXPECT_EQ(shapeData->values[5], 2);
+    EXPECT_EQ(shapeData->values[6], 1000);
+    EXPECT_EQ(shapeData->values[7], 1000);
 
     auto shapeList = others->get<others::ShapeInstructionList>(SCORE_PARTID, 7);
     ASSERT_TRUE(shapeList) << "ShapeInstructionList 7 not found but does exist";
@@ -138,7 +138,7 @@ TEST(ShapeDefTest, InterateInstructions)
 
     auto shapeData = others->get<others::ShapeData>(SCORE_PARTID, shapeDef->dataList);
     ASSERT_TRUE(shapeData) << "ShapeData " << shapeDef->dataList << " not found but does exist";
-    ASSERT_EQ(shapeData->data.size(), 18);
+    ASSERT_EQ(shapeData->values.size(), 18);
 
     auto shapeList = others->get<others::ShapeInstructionList>(SCORE_PARTID, shapeDef->instructionList);
     ASSERT_TRUE(shapeList) << "ShapeInstructionList " << shapeDef->instructionList << " not found but does exist";
@@ -152,14 +152,14 @@ TEST(ShapeDefTest, InterateInstructions)
         if (nextIndex >= shapeList->instructions.size()) {
             return false;
         }
-        EXPECT_LE(nextDataIndex + data.size(), shapeData->data.size()) << "next data index exceeds size of data array";
-        if (nextDataIndex + data.size() > shapeData->data.size()) {
+        EXPECT_LE(nextDataIndex + data.size(), shapeData->values.size()) << "next data index exceeds size of data array";
+        if (nextDataIndex + data.size() > shapeData->values.size()) {
             return false;
         }
         EXPECT_EQ(type, shapeList->instructions[nextIndex]->type);
         EXPECT_EQ(data.size(), shapeList->instructions[nextIndex]->numData);
         for (size_t x = 0; x < data.size(); x++) {
-            EXPECT_EQ(data[x], shapeData->data[nextDataIndex + x]);
+            EXPECT_EQ(data[x], shapeData->values[nextDataIndex + x]);
         }
         nextIndex++;
         nextDataIndex += data.size();

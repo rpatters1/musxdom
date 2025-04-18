@@ -49,6 +49,11 @@ TEST(SmartShape, Populate)
                         <contextDir>over</contextDir>
                         <contextEntCnct>headRightTop</contextEntCnct>
                     </endPtAdj>
+                    <breakAdj>
+                        <x>-124</x>
+                        <y>12</y>
+                        <on/>
+                    </breakAdj>
                 </startTermSeg>
                 <endTermSeg>
                     <endPt>
@@ -63,6 +68,11 @@ TEST(SmartShape, Populate)
                         <contextDir>over</contextDir>
                         <contextEntCnct>headRightTop</contextEntCnct>
                     </endPtAdj>
+                    <breakAdj>
+                        <x>256</x>
+                        <y>-72</y>
+                        <on/>
+                    </breakAdj>
                 </endTermSeg>
                 <fullCtlPtAdj>
                     <startCtlPtX>573</startCtlPtX>
@@ -163,6 +173,7 @@ TEST(SmartShape, Populate)
 
         ASSERT_TRUE(smartShape->startTermSeg->endPointAdj);
         EXPECT_EQ(smartShape->startTermSeg->endPointAdj->vertOffset, 24);
+        EXPECT_TRUE(smartShape->startTermSeg->endPointAdj->active);
 
         ASSERT_TRUE(smartShape->endTermSeg);
         ASSERT_TRUE(smartShape->endTermSeg->endPoint);
@@ -173,6 +184,17 @@ TEST(SmartShape, Populate)
         ASSERT_TRUE(smartShape->endTermSeg->endPointAdj);
         EXPECT_EQ(smartShape->endTermSeg->endPointAdj->horzOffset, -1);
         EXPECT_EQ(smartShape->endTermSeg->endPointAdj->vertOffset, 37);
+        EXPECT_TRUE(smartShape->endTermSeg->endPointAdj->active);
+
+        ASSERT_TRUE(smartShape->startTermSeg->breakAdj);
+        EXPECT_EQ(smartShape->startTermSeg->breakAdj->horzOffset, -124);
+        EXPECT_EQ(smartShape->startTermSeg->breakAdj->vertOffset, 12);
+        EXPECT_TRUE(smartShape->startTermSeg->breakAdj->active);
+
+        ASSERT_TRUE(smartShape->endTermSeg->breakAdj);
+        EXPECT_EQ(smartShape->endTermSeg->breakAdj->horzOffset, 256);
+        EXPECT_EQ(smartShape->endTermSeg->breakAdj->vertOffset, -72);
+        EXPECT_TRUE(smartShape->endTermSeg->breakAdj->active);
     }
     {
         auto smartShape = others->get<others::SmartShape>(SCORE_PARTID, 2);
@@ -183,6 +205,11 @@ TEST(SmartShape, Populate)
         EXPECT_EQ(smartShape->startNoteId, 1);
         EXPECT_EQ(smartShape->endNoteId, 2);
         EXPECT_EQ(smartShape->lineStyleId, 3);
+
+        ASSERT_TRUE(smartShape->startTermSeg->breakAdj);
+        EXPECT_FALSE(smartShape->startTermSeg->breakAdj->active);
+        ASSERT_TRUE(smartShape->endTermSeg->breakAdj);
+        EXPECT_FALSE(smartShape->endTermSeg->breakAdj->active);
     }
     {
         auto smartShape = others->get<others::SmartShape>(SCORE_PARTID, 3);
@@ -192,5 +219,52 @@ TEST(SmartShape, Populate)
         EXPECT_FALSE(smartShape->entryBased);
         EXPECT_EQ(smartShape->startTermSeg->endPoint->eduPosition, 0);
         EXPECT_EQ(smartShape->endTermSeg->endPoint->eduPosition, 2048);
+
+        ASSERT_TRUE(smartShape->startTermSeg->breakAdj);
+        ASSERT_TRUE(smartShape->endTermSeg->breakAdj);
     }
+}
+
+TEST(CenterShape, Populate)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+    <?xml version="1.0" encoding="UTF-8"?>
+    <finale>
+      <details>
+        <centerShape cmper1="1" cmper2="7">
+          <startBreakAdj>
+            <x>37</x>
+            <y>-199</y>
+            <on/>
+          </startBreakAdj>
+          <endBreakAdj>
+            <x>-68</x>
+            <y>-199</y>
+            <on/>
+          </endBreakAdj>
+          <ctlPtAdj>
+            <startCtlPtY>136</startCtlPtY>
+            <on/>
+          </ctlPtAdj>
+        </centerShape>
+      </details>
+    </finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto centerShape = details->get<details::CenterShape>(SCORE_PARTID, 1, 7);
+    ASSERT_TRUE(centerShape) << "CenterShape with cmper1=1, cmper2=7 not found";
+
+    ASSERT_TRUE(centerShape->startBreakAdj);
+    EXPECT_EQ(centerShape->startBreakAdj->horzOffset, 37);
+    EXPECT_EQ(centerShape->startBreakAdj->vertOffset, -199);
+    EXPECT_TRUE(centerShape->startBreakAdj->active);
+
+    ASSERT_TRUE(centerShape->endBreakAdj);
+    EXPECT_EQ(centerShape->endBreakAdj->horzOffset, -68);
+    EXPECT_EQ(centerShape->endBreakAdj->vertOffset, -199);
+    EXPECT_TRUE(centerShape->endBreakAdj->active);
 }

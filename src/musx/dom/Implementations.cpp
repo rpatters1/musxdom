@@ -1299,7 +1299,7 @@ void texts::LyricsTextBase::createSyllableInfo()
     auto plainText = util::EnigmaString::trimTags(text);
     syllables.clear();
     for (auto c : plainText) {
-        if (c == '-' || isspace(c)) {
+        if (c == '-' || isspace(static_cast<unsigned char>(c))) {
             if (c == '-') {
                 currSeparatorHasHyphen = true;
             }
@@ -1841,10 +1841,10 @@ void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::
     if (insts && data) {
         size_t currentDataIndex = 0;
         for (const auto& inst : insts->instructions) {
-            if (currentDataIndex + inst->numData > data->data.size()) {
+            if (currentDataIndex + inst->numData > data->values.size()) {
                 throw std::invalid_argument("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
             }
-            if (!callback(inst->type, { data->data.begin() + currentDataIndex, data->data.begin() + currentDataIndex + inst->numData })) {
+            if (!callback(inst->type, { data->values.begin() + currentDataIndex, data->values.begin() + currentDataIndex + inst->numData })) {
                 break;
             }
             currentDataIndex += inst->numData;

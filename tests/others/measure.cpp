@@ -46,6 +46,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <bacRepBar/>
       <barEnding/>
       <abbrvTime/>
+      <hasChord/>
       <useDisplayTimesig/>
       <leftBarline>default</leftBarline>
     </measSpec>
@@ -136,6 +137,7 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_TRUE(measure1->forwardRepeatBar);
     EXPECT_TRUE(measure1->backwardsRepeatBar);
     EXPECT_TRUE(measure1->hasEnding);
+    EXPECT_TRUE(measure1->hasChord);
     EXPECT_TRUE(measure1->abbrvTime);
     EXPECT_TRUE(measure1->useDisplayTimesig);
     EXPECT_EQ(measure1->leftBarlineType, others::Measure::BarlineType::OptionsDefault);
@@ -171,6 +173,7 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_EQ(measure2->barlineType, others::Measure::BarlineType::Normal);
     EXPECT_FALSE(measure2->hasExpression);
     EXPECT_TRUE(measure2->hasTextRepeat);
+    EXPECT_FALSE(measure2->hasChord);
     EXPECT_TRUE(measure2->useDisplayTimesig);
     EXPECT_EQ(measure2->leftBarlineType, others::Measure::BarlineType::None);
     EXPECT_TRUE(measure2->compositeDispNumerator);
@@ -214,6 +217,7 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_TRUE(measure3->breakMmRest);
     EXPECT_EQ(measure3->barlineType, others::Measure::BarlineType::Double);
     EXPECT_TRUE(measure3->abbrvTime);
+    EXPECT_FALSE(measure3->hasChord);
     EXPECT_TRUE(measure3->useDisplayTimesig);
     EXPECT_EQ(measure3->leftBarlineType, others::Measure::BarlineType::Final);
 }

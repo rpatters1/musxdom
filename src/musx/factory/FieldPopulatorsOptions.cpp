@@ -36,6 +36,22 @@ MUSX_XML_ENUM_MAPPING(BeamOptions::FlattenStyle, {
     {"alwaysFlat", BeamOptions::FlattenStyle::AlwaysFlat}
 });
 
+MUSX_XML_ENUM_MAPPING(ChordOptions::ChordAlignment, {
+    {"left",   ChordOptions::ChordAlignment::Left},     // this value may never appear in the xml
+    {"center", ChordOptions::ChordAlignment::Center}
+});
+
+MUSX_XML_ENUM_MAPPING(ChordOptions::ChordStyle, {
+    {"Standard",     ChordOptions::ChordStyle::Standard},     // this value may never appear in the xml
+    {"European",     ChordOptions::ChordStyle::European},
+    {"German",       ChordOptions::ChordStyle::German},
+    {"Roman",        ChordOptions::ChordStyle::Roman},
+    {"NashvilleA",   ChordOptions::ChordStyle::NashvilleA},
+    {"NashvilleB",   ChordOptions::ChordStyle::NashvilleB},
+    {"solfeggio",    ChordOptions::ChordStyle::Solfeggio}, // lower case: this is an observed inconsistency for this enum type
+    {"Scandinavian", ChordOptions::ChordStyle::Scandinavian}
+});
+
 MUSX_XML_ENUM_MAPPING(FontOptions::FontType, {
     {"music", FontOptions::FontType::Music},
     {"key", FontOptions::FontType::Key},
@@ -364,6 +380,23 @@ MUSX_XML_ELEMENT_ARRAY(BeamOptions, {
     {"spanSpace", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->spanSpace = true; }},
     {"extendSecBeamsOverRests", [](const XmlElementPtr&, const std::shared_ptr<BeamOptions>& i) { i->extendSecBeamsOverRests = true; }},
     {"beamWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamWidth = e->getTextAs<Efix>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ChordOptions, {
+    {"fretPercent", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->fretPercent = e->getTextAs<double>(); }},
+    {"chordPercent", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->chordPercent = e->getTextAs<double>(); }},
+    {"chordSharpLift", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->chordSharpLift = e->getTextAs<Evpu>(); }},
+    {"chordFlatLift", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->chordFlatLift = e->getTextAs<Evpu>(); }},
+    {"chordNaturalLift", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->chordNaturalLift = e->getTextAs<Evpu>(); }},
+    {"showFretboards", [](const XmlElementPtr&, const std::shared_ptr<ChordOptions>& i) { i->showFretboards = true; }},
+    {"fretStyleID", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->fretStyleId = e->getTextAs<Cmper>(); }},
+    {"fretInstID", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->fretInstId = e->getTextAs<Cmper>(); }},
+    {"multiFretItemsPerStr", [](const XmlElementPtr&, const std::shared_ptr<ChordOptions>& i) { i->multiFretItemsPerStr = true; }},
+    {"italicizeCapoChords", [](const XmlElementPtr&, const std::shared_ptr<ChordOptions>& i) { i->italicizeCapoChords = true; }},
+    {"chordAlignment", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->chordAlignment = toEnum<ChordOptions::ChordAlignment>(e); }},
+    {"chordStyle", [](const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->chordStyle = toEnum<ChordOptions::ChordStyle>(e); }},
+    {"useSimpleChordSpelling", [](const XmlElementPtr&, const std::shared_ptr<ChordOptions>& i) { i->useSimpleChordSpelling = true; }},
+    {"chordPlayback", [](const XmlElementPtr&, const std::shared_ptr<ChordOptions>& i) { i->chordPlayback = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ClefOptions::ClefDef, {

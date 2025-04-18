@@ -60,6 +60,14 @@ MUSX_XML_ENUM_MAPPING(FontDefinition::CharacterSetBank, {
     {"Win", FontDefinition::CharacterSetBank::Windows},
 });
 
+MUSX_XML_ENUM_MAPPING(musx::dom::others::ChordSuffixElement::Prefix, {
+    // {"none", ChordSuffixElement::Prefix::None}, // Default value, may not appear in XML.
+    {"minus", ChordSuffixElement::Prefix::Minus},
+    {"plus", ChordSuffixElement::Prefix::Plus},
+    {"sharp", ChordSuffixElement::Prefix::Sharp},
+    {"flat", ChordSuffixElement::Prefix::Flat},
+});
+
 MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
     //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", MeasureNumberRegion::AlignJustify::Center},
@@ -393,6 +401,21 @@ MUSX_XML_ELEMENT_ARRAY(BeatChartElement, {
     {"minPos", [](const XmlElementPtr& e, const std::shared_ptr<BeatChartElement>& i) { i->minPos = e->getTextAs<Evpu>(); }}
 });
 
+MUSX_XML_ELEMENT_ARRAY(ChordSuffixElement, {
+    { "fontID", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    { "fontSize", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    { "efx", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    { "suffix", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->symbol = e->getTextAs<char32_t>(); }},
+    { "xdisp", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->xdisp = e->getTextAs<Evpu>(); }},
+    { "ydisp", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->ydisp = e->getTextAs<Evpu>(); }},
+    { "isNumber", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->isNumber = true; }},
+    { "prefix", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->prefix = toEnum<ChordSuffixElement::Prefix>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ChordSuffixPlayback, {
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixPlayback>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(ClefList, {
     {"clef", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->clefIndex = e->getTextAs<ClefIndex>(); }},
     {"xEduPos", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->xEduPos = e->getTextAs<Edu>(); }},
@@ -513,6 +536,7 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"bacRepBar", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->backwardsRepeatBar = true; }},
     {"barEnding", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasEnding= true; }},
     {"txtRepeats", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasTextRepeat = true; }},
+    {"hasChord", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasChord = true; }},
     {"hasExpr", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->hasExpression = true; }},
     {"altNumTsig", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->compositeNumerator = true; }},
     {"altDenTsig", [](const XmlElementPtr&, const std::shared_ptr<Measure>& i) { i->compositeDenominator = true; }},
@@ -692,7 +716,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeData, {
-    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ShapeData>& i) { i->data.push_back(e->getTextAs<int>()); }},
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ShapeData>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeDef, {
@@ -745,6 +769,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPoint, {
 MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPointAdjustment, {
     {"x", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
     {"y", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"on", [](const XmlElementPtr&, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->active = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
@@ -752,6 +777,8 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
         { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getDocument()); }},
     {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
         { i->endPointAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+    {"breakAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
+        { i->breakAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape, {

@@ -52,6 +52,7 @@ add_executable(musxdomtests
     options/augementation_dot_options.cpp
     options/barline_options.cpp
     options/beam_options.cpp
+    options/chord_options.cpp
     options/clef_options.cpp
     options/flag_options.cpp
     options/grace_note_options.cpp
@@ -97,6 +98,7 @@ add_executable(musxdomtests
     others/text.cpp
     # details
 	details/beam_stubs.cpp
+	details/chords.cpp
 	details/floats.cpp
 	details/gfhold.cpp
 	details/secondary_beams.cpp

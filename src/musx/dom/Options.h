@@ -192,6 +192,59 @@ public:
 };
 
 /**
+ * @class ChordOptions
+ * @brief Options controlling chord symbol and fretboard rendering.
+ *
+ * This class is identified by the XML node name "chordOptions".
+ */
+class ChordOptions : public OptionsBase {
+public:
+    /** @brief Constructor function */
+    explicit ChordOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    /// @brief Horizontal alignment for chord symbols
+    ///
+    /// Only Left and Center are allowed. There is no Right alignment of chords.
+    enum class ChordAlignment
+    {
+        Left,                       ///< this is the default and may not appear in the xml
+        Center
+    };
+
+    /// @brief Chord spelling style
+    enum class ChordStyle
+    {
+        Standard,                   ///< this is the default and may not appear in the xml
+        European,
+        German,
+        Roman,
+        NashvilleA,
+        NashvilleB,
+        Solfeggio,                  // xml value is "solfeggio"
+        Scandinavian
+    };
+
+    double fretPercent{};            ///< Percent size of fretboard relative to default. (1.0 is 100%)
+    double chordPercent{};           ///< Percent size of chord symbol relative to default. (1.0 is 100%)
+    Evpu chordSharpLift{};           ///< Vertical offset for sharp chord symbols.
+    Evpu chordFlatLift{};            ///< Vertical offset for flat chord symbols.
+    Evpu chordNaturalLift{};         ///< Vertical offset for natural chord symbols.
+    bool showFretboards{};           ///< Display fretboards.
+    Cmper fretStyleId{};             ///< Fret style identifier.
+    Cmper fretInstId{};              ///< Fret instrument identifier.
+    bool multiFretItemsPerStr{};     ///< Allow multiple fret items per string.
+    bool italicizeCapoChords{};      ///< Italicize capo chords.
+    ChordAlignment chordAlignment{}; ///< Horizontal alignment for chord symbols.
+    ChordStyle chordStyle{};         ///< Style of chord spelling.
+    bool useSimpleChordSpelling{};   ///< Use simplified chord spelling.
+    bool chordPlayback{};            ///< Enable chord symbol playback.
+
+    constexpr static std::string_view XmlNodeName = "chordOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ChordOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ClefOptions
  * @brief Options for configuring clefs in a musical context.
  */

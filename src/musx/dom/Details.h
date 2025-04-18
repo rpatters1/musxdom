@@ -184,6 +184,71 @@ public:
 };
 
 /**
+ * @class ChordAssign
+ * @brief Represents chord symbol assignment for a staff and measure.
+ *
+ * Cmper1 is the staff (inst) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ * This class is identified by the XML node name "chordAssign".
+ */
+class ChordAssign : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this #ChordAssign (probably always #ShareMode::All).
+     * @param inst The staff ID for this #ChordAssign.
+     * @param meas The measure ID for this #ChordAssign.
+     * @param inci The 0-based incident.
+     */
+    explicit ChordAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas, Inci inci)
+        : DetailsBase(document, partId, shareMode, inst, meas, inci)
+    {
+    }
+
+    /** @brief Bass position options */
+    enum class BassPosition
+    {
+        AfterRoot,                  // default value may not appear in xml (but text appears in Finale binary)
+        UnderRoot,
+        Subtext
+    };
+    
+    Cmper suffixId{};               ///< `<suffix>`: Chord suffix ID
+    Cmper fbStyleId{};              ///< `<fbStyleID>`: Fretboard style ID
+    int rootScaleNum{};             ///< `<rootScaleNum>`: Root scale degree (0–76)
+    int rootAlter{};                ///< `<rootAlter>`: Root alteration
+    bool rootLowerCase{};           ///< `<rootLowerCase/>`: Display root in lowercase
+    bool playSuffix{};              ///< `<playSuffix/>`: Playback suffix
+    bool showRoot{};                ///< `<showRoot/>`: Show root
+    bool playRoot{};                ///< `<playRoot/>`: Playback root
+    bool showFretboard{};           ///< `<showFretboard/>`: Show fretboard
+    bool showSuffix{};              ///< `<showSuffix/>`: Show suffix
+    bool playFretboard{};           ///< `<playFretboard/>`: Playback fretboard
+    int bassScaleNum{};             ///< `<bassScaleNum>`: Bass scale degree (0-6)
+    int bassAlter{};                ///< `<bassAlter>`: Bass alteration
+    bool bassLowerCase{};           ///< `<bassLowerCase/>`: Display bass in lowercase
+    BassPosition bassPosition{};    ///< `<bassPosition>`: Position of bass relative to root
+    bool showAltBass{};             ///< `<showAltBass/>`: Show alternate bass
+    bool playAltBass{};             ///< `<playAltBass/>`: Playback alternate bass
+    int capoValue{};                ///< `<capoValue>`: Capo value (if #useLocalCapo is true)
+    bool useLocalCapo{};            ///< `<useLocalCapo/>`: Use local capo
+    Cmper fretInci{};               ///< One less than the 1-based Cmper value for the fretboard group. (Meaningless if #useFretFont is true.)
+    bool useFretFont{};             ///< `<useFretFont/>`: Use fret font
+    Evpu horzOff{};                 ///< `<horzOff>`: Horizontal offset of chord (in EVPU)
+    Evpu vertOff{};                 ///< `<vertOff>`: Vertical offset of chord (in EVPU)
+    Evpu fbHorzOff{};               ///< `<fbHorzOff>`: Horizontal offset of fretboard (in EVPU)
+    Evpu fbVertOff{};               ///< `<fbVertOff>`: Vertical offset of fretboard (in EVPU)
+    Edu horzEdu{};                  ///< `<horzEdu>`: Edu position in measure
+    int chPercent{};                ///< `<chPercent>`: Chord percent scaling (100 is 100%)
+    int fbPercent{};                ///< `<fbPercent>`: Fretboard percent scaling (100 is 100%)
+
+    constexpr static std::string_view XmlNodeName = "chordAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ChordAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class CrossStaff
  * @brief Represents a cross-staff assignment for the note, if any.
  *
