@@ -962,11 +962,11 @@ public:
     BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
     bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
     bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
-    bool forwardRepeatBar;      ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
-    bool backwardsRepeatBar;    ///< Indicates a forward repeat bar on this measure. (xml node is `<bacRepBar>`)
-    bool hasEnding;             ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
-    bool hasTextRepeat;         ///< Indicates the presence of one or more text repeat assigments. (xml node is `<txtRepeats>`)
-    bool hasChord;              ///< Indicates the presence of one or more chords.
+    bool forwardRepeatBar{};    ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
+    bool backwardsRepeatBar{};  ///< Indicates a forward repeat bar on this measure. (xml node is `<bacRepBar>`)
+    bool hasEnding{};           ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
+    bool hasTextRepeat{};       ///< Indicates the presence of one or more text repeat assigments. (xml node is `<txtRepeats>`)
+    bool hasChord{};            ///< Indicates the presence of one or more chords.
     bool compositeNumerator{};  ///< Indicates a composite numerator for the time signature. (xml node is `<altNumTsig>`)
     bool compositeDenominator{}; ///< Indicates a composite denominator for the time signature. (xml node is `<altDenTsig>`)
     bool abbrvTime{};           ///< Indicates abbreviated time signature (e.g., Common or Cut time.) Applies to the display time signature only.

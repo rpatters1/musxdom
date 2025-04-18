@@ -1299,7 +1299,7 @@ void texts::LyricsTextBase::createSyllableInfo()
     auto plainText = util::EnigmaString::trimTags(text);
     syllables.clear();
     for (auto c : plainText) {
-        if (c == '-' || isspace(c)) {
+        if (c == '-' || isspace(static_cast<unsigned char>(c))) {
             if (c == '-') {
                 currSeparatorHasHyphen = true;
             }
