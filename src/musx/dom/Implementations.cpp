@@ -315,24 +315,6 @@ bool EntryInfoPtr::calcUnbeamed() const
     return (!getNextInBeamGroup() && !getPreviousInBeamGroup());
 }
 
-NoteInfoPtr EntryInfoPtr::findEqualPitch(const NoteInfoPtr& src) const
-{
-    /// @todo (possibly) figure out which is the correct note when two notes of the same
-    /// pitch exist. We would want to associate the first with the first and the second with the second.
-    if ((*this)->getEntry()->isNote && src.getEntryInfo()->getEntry()->isNote) {
-        auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNoteProperties();
-        for (size_t x = 0; x < (*this)->getEntry()->notes.size(); x++) {
-            auto note = NoteInfoPtr(*this, x);
-            auto [pitch, octave, alter, staffPos] = note.calcNoteProperties();
-            if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
-                return note;
-            }
-        }
-        // Finale does not allow ties to enharmonic equivalents, so we can safely ignore enharmonics.
-    }
-    return NoteInfoPtr();
-}
-
 bool EntryInfoPtr::canBeBeamed() const
 {
     if ((*this)->getEntry()->duration >= Edu(NoteType::Quarter)) {
@@ -1547,6 +1529,32 @@ std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::sh
 // ***** NoteInfoPtr *****
 // ***********************
 
+NoteInfoPtr NoteInfoPtr::findEqualPitch(const EntryInfoPtr& entry) const
+{
+    if ((*this).getEntryInfo()->getEntry()->isNote && entry->getEntry()->isNote) {
+        int srcOccurrence = 1;
+        for (auto prev = getPrevious(); prev; prev = prev.getPrevious()) {
+            if (!isSamePitchValues(prev)) break;
+            srcOccurrence++;
+        }
+        auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = calcNoteProperties();
+        for (auto note = NoteInfoPtr(entry, 0); note; note = note.getNext()) {
+            auto [pitch, octave, alter, staffPos] = note.calcNoteProperties();
+            if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
+                int entryOccurrence = 1;
+                for (int entryOccurence = 1; entryOccurrence < srcOccurrence; entryOccurrence++) {
+                    auto next = note.getNext();
+                    if (!next.isSamePitchValues(note)) break;
+                    note = next;
+                }
+                return note;
+            }
+        }
+        // Finale does not allow ties to enharmonic equivalents, so we can safely ignore enharmonics.
+    }
+    return NoteInfoPtr();
+}
+
 NoteInfoPtr NoteInfoPtr::calcTieTo() const
 {
     if (m_entry->getEntry()->isNote) {
@@ -1568,12 +1576,12 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
             if (nextEntry->getEntry()->graceNote) { // grace note tie to the next non grace entry, if there is a note there to tie to
                 continue;
             }
-            if (auto result = nextEntry.findEqualPitch(*this)) {
+            if (auto result = findEqualPitch(nextEntry)) {
                 return result;
             }
             if (nextEntry->v2Launch) {
                 nextEntry = nextEntry.getNextInLayer();
-                return nextEntry.findEqualPitch(*this);
+                return findEqualPitch(nextEntry);
             }
             break;
         }
@@ -1591,7 +1599,7 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
                 continue;
             }
             auto currRawEntry = currEntry->getEntry();
-            if (auto result = currEntry.findEqualPitch(*this)) {
+            if (auto result = findEqualPitch(currEntry)) {
                 return result;
             }
             if (currRawEntry->graceNote) {
