@@ -220,3 +220,33 @@ TEST(TieDetection, NoTiesInMeasure11)
     checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 4, 0));
     checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 5, 0));
 }
+
+TEST(TieDetection, DuplicateNotes)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "ties_duplicate_notes.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+    {
+        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+        auto entryFrame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        checkTie(createNoteInfo(entryFrame, 0, 0), createNoteInfo(entryFrame, 1, 0));
+        checkTie(createNoteInfo(entryFrame, 0, 1), createNoteInfo(entryFrame, 1, 1));
+        checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 1, 2));
+        checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 3, 0));
+        checkTie(createNoteInfo(entryFrame, 2, 0), createNoteInfo(entryFrame, 3, 1));
+        checkTie(createNoteInfo(entryFrame, 2, 1), createNoteInfo(entryFrame, 3, 2));
+    }
+    {
+        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
+        auto entryFrame = gfhold->createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        checkTie(createNoteInfo(entryFrame, 0, 0), createNoteInfo(entryFrame, 1, 0));
+        checkTie(createNoteInfo(entryFrame, 0, 1), createNoteInfo(entryFrame, 1, 0), createNoteInfo(entryFrame, 0, 0));
+    }
+}

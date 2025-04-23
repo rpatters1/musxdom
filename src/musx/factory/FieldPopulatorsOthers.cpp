@@ -826,7 +826,11 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
     {"customStaff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->customStaff = populateEmbeddedArray<int>(e, "staffLine"); }},
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
-    {"instUuid", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->instUuid = e->getTextTrimmed(); }},
+    {"instUuid", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) {
+        auto s = e->getTextTrimmed();
+        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+        i->instUuid = std::move(s);
+    }},
     {"floatKeys", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->floatKeys = true; }},
     {"floatTime", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->floatTime = true; }},
     {"hasStyles", [](const XmlElementPtr&, const std::shared_ptr<Staff>& i) { i->hasStyles = true; }},

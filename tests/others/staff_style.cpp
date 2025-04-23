@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view staffStyleXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -76,7 +76,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(StaffStyleTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(staffStyleXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -121,7 +121,7 @@ TEST(StaffStyleTest, PopulateFields)
 
 TEST(StaffStyleAssignTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(staffStyleXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -134,4 +134,30 @@ TEST(StaffStyleAssignTest, PopulateFields)
     EXPECT_EQ(staffStyleAssign->startEdu, 512);
     EXPECT_EQ(staffStyleAssign->endMeas, 4);
     EXPECT_EQ(staffStyleAssign->endEdu, (std::numeric_limits<Edu>::max)());
+}
+
+TEST(StaffStyleInstrument, DetectInstrumentChange)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "inst_change.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 1, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->instUuid, uuid::Oboe);
+    }
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 2, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->instUuid, uuid::EnglishHorn);
+    }
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 3, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->instUuid, uuid::EnglishHorn);
+    }
 }

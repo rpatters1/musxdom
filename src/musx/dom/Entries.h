@@ -341,11 +341,6 @@ public:
     /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
     EntryInfoPtr findBeamEnd() const;
 
-    /// @brief Finds a note with the same pitch in the current entry
-    /// @param src the pitch to search for
-    /// @return The found note or an null instance of NoteInfoPtr.
-    NoteInfoPtr findEqualPitch(const NoteInfoPtr& src) const;
-
     /// @brief Calculates the number of beams or flags on the entry.
     unsigned calcNumberOfBeams() const;
 
@@ -552,6 +547,11 @@ public:
     bool isSameNote(const NoteInfoPtr& src) const
     { return m_entry.isSameEntry(src.m_entry) && m_noteIndex == src.m_noteIndex; }
 
+    /// @brief Finds a note with the same pitch in the supplied entry
+    /// @param entry the entry to search
+    /// @return The found note or an null instance of NoteInfoPtr.
+    NoteInfoPtr findEqualPitch(const EntryInfoPtr& entry) const;
+
     /// @brief Allows `->` access to the underlying @ref Note instance.
     std::shared_ptr<const Note> operator->() const
     {
@@ -592,7 +592,39 @@ public:
     /// @return A unique pointer to a transposer for this Note.
     std::unique_ptr<music_theory::Transposer> createTransposer() const;
 
+    /// @brief Gets the next note in a chord on the same entry.
+    /// @return The next note or nullptr if none.
+    NoteInfoPtr getNext() const
+    {
+        if (m_noteIndex >= m_entry->getEntry()->notes.size()) {
+            return NoteInfoPtr();
+        }
+        return NoteInfoPtr(m_entry, m_noteIndex + 1);
+    }
+
+    /// @brief Gets the next note in a chord on the same entry.
+    /// @return The next note or nullptr if none.
+    NoteInfoPtr getPrevious() const
+    {
+        if (m_noteIndex <= 0) {
+            return NoteInfoPtr();
+        }
+        return NoteInfoPtr(m_entry, m_noteIndex - 1);
+    }
+
 private:
+    /// @brief Returns true if the @p src and this have the same level and alteration.
+    /// It is only meaningful when this and src are in the same key.
+    /// @param src the value to compare with.
+    bool isSamePitchValues(const NoteInfoPtr& src) const
+    {
+        if (!*this || !src) {
+            return false;
+        }
+        return (*this)->harmLev == src->harmLev
+            && (*this)->harmAlt == src->harmAlt;
+    }
+
     EntryInfoPtr m_entry;
     size_t m_noteIndex;
 };
