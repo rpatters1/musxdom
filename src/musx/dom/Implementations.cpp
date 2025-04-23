@@ -2187,6 +2187,14 @@ int others::Staff::calcMiddleStaffPosition() const
     return 0;
 }
 
+bool others::Staff::hasInstrumentAssigned() const
+{
+    if (instUuid.empty() || instUuid == uuid::BlankStaff || instUuid == uuid::Unknown) {
+        return false;
+    }
+    return true;
+}
+
 // **************************
 // ***** StaffComposite *****
 // **************************
@@ -2194,6 +2202,11 @@ int others::Staff::calcMiddleStaffPosition() const
 void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle>& staffStyle)
 {
     auto srcMasks = staffStyle->masks;
+
+    if (staffStyle->hasInstrumentAssigned()) {
+        instUuid = staffStyle->instUuid;
+        // there appears to be no mask for instUuid.
+    }
 
     /// @todo the rest of the masks as we discover/create them
     if (srcMasks->defaultClef) {

@@ -1927,6 +1927,9 @@ public:
     /// @brief Returns the middle staff position. For staves with even numbers of lines, it is the middle space.
     int calcMiddleStaffPosition() const;
 
+    /// @brief Return true if this staff has an instrument assigned.
+    bool hasInstrumentAssigned() const;
+
     void integrityCheck() override
     {
         OthersBase::integrityCheck();
