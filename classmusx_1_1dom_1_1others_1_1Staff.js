@@ -25,6 +25,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "getFullInstrumentName", "classmusx_1_1dom_1_1others_1_1Staff.html#a45c54bccfd5cb9e66bb1700ec4e91916", null ],
     [ "getFullName", "classmusx_1_1dom_1_1others_1_1Staff.html#aa01ce409746b79ed5a95a205830b6e6a", null ],
     [ "getMultiStaffInstGroup", "classmusx_1_1dom_1_1others_1_1Staff.html#a2f03b041570ad99c110abca358d1bd63", null ],
+    [ "hasInstrumentAssigned", "classmusx_1_1dom_1_1others_1_1Staff.html#a76f425b19ecab6f653dedb641f226748", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1Staff.html#a8840a265b1ac655e630e97831de86e83", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1Staff.html#a8f42c874aa9a04d761629a6f85317af7", null ],
     [ "showNamesForPart", "classmusx_1_1dom_1_1others_1_1Staff.html#ac9c53dc5f21562bebfaf99be4d6d4cd5", null ],

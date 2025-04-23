@@ -14,7 +14,6 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcUnbeamed", "classmusx_1_1dom_1_1EntryInfoPtr.html#accb023218f8bfd19cd3b3c4b82de530c", null ],
     [ "createCurrentStaff", "classmusx_1_1dom_1_1EntryInfoPtr.html#a646ba3b7fbb39724036ae83e3303d5e1", null ],
     [ "findBeamEnd", "classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5", null ],
-    [ "findEqualPitch", "classmusx_1_1dom_1_1EntryInfoPtr.html#a24080923c9e8970ddb6d1bb64643df03", null ],
     [ "getFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a87802553e72c2d71f8e23f4cb01f6a56", null ],
     [ "getIndexInFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a11f59be0da355d4fc06ed79f4465f067", null ],
     [ "getKeySignature", "classmusx_1_1dom_1_1EntryInfoPtr.html#a2e04878024b42853e4d906b6c602094e", null ],

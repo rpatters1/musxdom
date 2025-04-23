@@ -203,9 +203,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsBeamStart</b> (
 <tr class="memitem:aacdf5499308ecdbe9f2e3357b5f984f5" id="r_aacdf5499308ecdbe9f2e3357b5f984f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5">findBeamEnd</a> () const</td></tr>
 <tr class="memdesc:aacdf5499308ecdbe9f2e3357b5f984f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the end entry of a beamed group.  <br /></td></tr>
 <tr class="separator:aacdf5499308ecdbe9f2e3357b5f984f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24080923c9e8970ddb6d1bb64643df03" id="r_a24080923c9e8970ddb6d1bb64643df03"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a24080923c9e8970ddb6d1bb64643df03">findEqualPitch</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;src) const</td></tr>
-<tr class="memdesc:a24080923c9e8970ddb6d1bb64643df03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a note with the same pitch in the current entry.  <br /></td></tr>
-<tr class="separator:a24080923c9e8970ddb6d1bb64643df03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8149bc295e394a775747727cf3d9a5c4" id="r_a8149bc295e394a775747727cf3d9a5c4"><td class="memItemLeft" align="right" valign="top"><a id="a8149bc295e394a775747727cf3d9a5c4" name="a8149bc295e394a775747727cf3d9a5c4"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams</b> () const</td></tr>
 <tr class="memdesc:a8149bc295e394a775747727cf3d9a5c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of beams or flags on the entry. <br /></td></tr>
@@ -437,34 +434,6 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 
 <p>Finds the end entry of a beamed group. </p>
 <dl class="section return"><dt>Returns</dt><dd>The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group. </dd></dl>
-
-</div>
-</div>
-<a id="a24080923c9e8970ddb6d1bb64643df03" name="a24080923c9e8970ddb6d1bb64643df03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24080923c9e8970ddb6d1bb64643df03">&#9670;&#160;</a></span>findEqualPitch()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> musx::dom::EntryInfoPtr::findEqualPitch </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;&#160;</td>
-          <td class="paramname"><em>src</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Finds a note with the same pitch in the current entry. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">src</td><td>the pitch to search for </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The found note or an null instance of <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a>. </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>(possibly) figure out which is the correct note when two notes of the same pitch exist. We would want to associate the first with the first and the second with the second. </dd></dl>
 
 </div>
 </div>

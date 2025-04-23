@@ -4,7 +4,7 @@ var searchData=
   ['findalloverlappingstyles_1',['findAllOverlappingStyles',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a3afd404251dd43927b80bee90c4852b3',1,'musx::dom::others::StaffStyle']]],
   ['findattribute_2',['findattribute',['../classmusx_1_1xml_1_1pugi_1_1Element.html#acc264e273383f4c8701b780fb762d481',1,'musx::xml::pugi::Element::findAttribute()'],['../classmusx_1_1xml_1_1rapidxml_1_1Element.html#a1ba1bc35a0744f3175ed6d201ddba28b',1,'musx::xml::rapidxml::Element::findAttribute()'],['../classmusx_1_1xml_1_1tinyxml2_1_1Element.html#aa69f378f96c9f8741dc4e0a1b87ca535',1,'musx::xml::tinyxml2::Element::findAttribute()'],['../classmusx_1_1xml_1_1IXmlElement.html#ae6afaf06b540902e9467cf2e9c47b8f0',1,'musx::xml::IXmlElement::findAttribute()']]],
   ['findbeamend_3',['findBeamEnd',['../classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5',1,'musx::dom::EntryInfoPtr']]],
-  ['findequalpitch_4',['findEqualPitch',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a24080923c9e8970ddb6d1bb64643df03',1,'musx::dom::EntryInfoPtr']]],
+  ['findequalpitch_4',['findEqualPitch',['../classmusx_1_1dom_1_1NoteInfoPtr.html#aed537f60968794044f42f4b6de7488c4',1,'musx::dom::NoteInfoPtr']]],
   ['findmeasure_5',['findMeasure',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#ab2b24fab0700be7611c99e9d37e24fd8',1,'musx::dom::others::MeasureNumberRegion']]],
   ['flagoptions_6',['FlagOptions',['../classmusx_1_1dom_1_1options_1_1FlagOptions.html#a0ea5087413766d3b48df80ff7916ade6',1,'musx::dom::options::FlagOptions']]],
   ['fontdefinition_7',['FontDefinition',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a5ab1f7c8015fbf95b296fdf824cacdb5',1,'musx::dom::others::FontDefinition']]],
