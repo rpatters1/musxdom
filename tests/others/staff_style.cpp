@@ -135,3 +135,29 @@ TEST(StaffStyleAssignTest, PopulateFields)
     EXPECT_EQ(staffStyleAssign->endMeas, 4);
     EXPECT_EQ(staffStyleAssign->endEdu, (std::numeric_limits<Edu>::max)());
 }
+
+TEST(StaffStyleInstrument, DetectInstrumentChange)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "inst_change.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 1, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->instUuid, uuid::Oboe);
+    }
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 2, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->instUuid, uuid::EnglishHorn);
+    }
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 3, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->instUuid, uuid::EnglishHorn);
+    }
+}
