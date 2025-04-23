@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view staffStyleXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -76,7 +76,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(StaffStyleTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(staffStyleXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -121,7 +121,7 @@ TEST(StaffStyleTest, PopulateFields)
 
 TEST(StaffStyleAssignTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(staffStyleXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
