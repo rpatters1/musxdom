@@ -308,11 +308,11 @@ public:
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
     /// @brief Returns the clef index in effect for at the specified @ref Edu position.
-    /// @todo This function will need to be augmented for transposing staves.
+    /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
     ClefIndex calcClefIndexAt(Edu position) const;
 
     /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
-    /// @todo This function will need to be augmented for transposing staves.
+    /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
     ClefIndex calcClefIndexAt(util::Fraction position) const
     { return calcClefIndexAt(position.calcEduDuration()); }
 

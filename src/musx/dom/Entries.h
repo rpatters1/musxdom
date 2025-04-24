@@ -431,7 +431,6 @@ public:
     */
     std::vector<TupletInfo> tupletInfo;
     std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
-                                                ///< @todo This must be adjusted based on concert or transposed pitch.
 
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }
