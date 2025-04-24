@@ -907,8 +907,6 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                     activeTuplets.emplace_back(tuplet, index);
                 }
 
-                // @todo: calculate and add running values (clef, key)
-
                 // It appears that Finale allows exactly one entry per 0-length tuplet, no matter
                 // what the symbolic duration of the tuplet is. This makes life *much* easier.
                 bool zeroLengthTuplet = false;
@@ -2152,7 +2150,6 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
 
 ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const
 {
-    /// @todo Take into accound clef changes caused by transposition.
     for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
         if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), tryMeasure)) {
             return gfhold->calcClefIndexAt(position);

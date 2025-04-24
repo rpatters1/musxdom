@@ -507,7 +507,6 @@ public:
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
     ClefIndex clefIndex{};              ///< the clef index in effect for the entry.
-                                        ///< @todo This must be adjusted based on concert or transposed pitch.
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid 
