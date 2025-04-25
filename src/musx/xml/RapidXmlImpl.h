@@ -95,8 +95,10 @@ public:
     }
 
     std::shared_ptr<IXmlAttribute> findAttribute(const std::string& tagName) const override {
-        ::rapidxml::xml_attribute<>* attr = m_element->first_attribute(tagName.c_str());
-        return attr ? std::make_shared<Attribute>(attr) : nullptr;
+        // work around Qt bug that attributeNode is not marked const
+        QDomElement& nonConstElement = const_cast<QDomElement&>(m_element);
+        QDomAttr attr = nonConstElement.attributeNode(QString::fromStdString(name));
+        return attr.isNull() ? nullptr : std::make_shared<Attribute>(attr, 0);
     }
 
     std::shared_ptr<IXmlElement> getFirstChildElement(const std::string& tagName = {}) const override {
