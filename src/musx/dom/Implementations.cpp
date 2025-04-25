@@ -1539,8 +1539,7 @@ NoteInfoPtr NoteInfoPtr::findEqualPitch(const EntryInfoPtr& entry) const
         for (auto note = NoteInfoPtr(entry, 0); note; note = note.getNext()) {
             auto [pitch, octave, alter, staffPos] = note.calcNoteProperties();
             if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
-                int entryOccurrence = 1;
-                for (int entryOccurence = 1; entryOccurrence < srcOccurrence; entryOccurrence++) {
+                for (int entryOccurrence = 1; entryOccurrence < srcOccurrence; entryOccurrence++) {
                     auto next = note.getNext();
                     if (!next.isSamePitchValues(note)) break;
                     note = next;
@@ -1604,7 +1603,7 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
                 continue;
             }
             bool skipBackToV1 = !thisRawEntry->voice2
-                              || currRawEntry->voice2 && currEntry.getPreviousInFrame()->v2Launch;
+                              || (currRawEntry->voice2 && currEntry.getPreviousInFrame()->v2Launch);
             if (skipBackToV1 && currRawEntry->voice2) {
                 while (currEntry) {
                     auto testEntry = currEntry.getPreviousInLayer();
@@ -2452,7 +2451,10 @@ std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::Accide
     auto block = getRawTextBlock();
     if (!block) return {};
     auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
-    return musx::util::EnigmaString::trimTags(retval);
+    if (trimTags) {
+        return musx::util::EnigmaString::trimTags(retval);
+    }
+    return retval;
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)

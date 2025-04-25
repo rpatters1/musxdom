@@ -211,7 +211,7 @@ public:
     void integrityCheck() override
     {
         this->Base::integrityCheck();
-        if (numNotes != notes.size()) {
+        if (size_t(numNotes) != notes.size()) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }
     }
