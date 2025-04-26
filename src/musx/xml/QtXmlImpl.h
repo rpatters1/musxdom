@@ -98,8 +98,10 @@ public:
     }
     
     std::shared_ptr<IXmlAttribute> findAttribute(const std::string& name) const override {
-        QDomAttr attr = m_element.attributeNode(QString::fromStdString(name));
-        return attr.isNull() ? nullptr : std::make_shared<Attribute>(attr);
+        // work around Qt bug that attributeNode is not marked const
+        QDomElement& nonConstElement = const_cast<QDomElement&>(m_element);
+        QDomAttr attr = nonConstElement.attributeNode(QString::fromStdString(name));
+        return attr.isNull() ? nullptr : std::make_shared<Attribute>(attr, 0);
     }
 
     std::shared_ptr<IXmlElement> getFirstChildElement(const std::string& tagName = {}) const override {
@@ -153,10 +155,10 @@ public:
         }
     }
 
-    void loadFromString(const std::vector<char>& xmlContent) override {
+    void loadFromBuffer(const char * data, size_t size) override {
         QString errorMsg;
         int errorLine = 0, errorColumn = 0;
-        if (!m_document.setContent(QByteArray(xmlContent.data(), xmlContent.size()), &errorMsg, &errorLine, &errorColumn)) {
+        if (!m_document.setContent(QByteArray(data, size), &errorMsg, &errorLine, &errorColumn)) {
             throw musx::xml::load_error("Error parsing XML at line " + std::to_string(errorLine) +
                                         ", column " + std::to_string(errorColumn) + ": " + errorMsg.toStdString());
         }

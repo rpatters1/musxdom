@@ -134,8 +134,8 @@ public:
         }
     }
 
-    void loadFromString(const std::vector<char>& xmlContent) override {
-        if (m_document.Parse(xmlContent.data(), xmlContent.size()) != ::tinyxml2::XML_SUCCESS) {
+    void loadFromBuffer(const char * data, size_t size) override {
+        if (m_document.Parse(data, size) != ::tinyxml2::XML_SUCCESS) {
             throw musx::xml::load_error(m_document.ErrorStr());
         }
     }
