@@ -41,20 +41,21 @@ class DocumentFactory : FactoryBase
 
 public:
     /**
-     * @brief Creates a `Document` object from an XML element.
+     * @brief Creates a `Document` object from an XML buffer.
      * 
-     * @param xmlBuffer Buffer containing EnigmaXML for a musx file.
+     * @param data Pointer to a buffer containing EnigmaXML for a musx file.
+     * @param size The size of the buffer.
      * @return A fully populated `Document` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
     template <typename XmlDocumentType>
-    static DocumentPtr create(const std::vector<char>& xmlBuffer)
+    static DocumentPtr create(const char * data, size_t size)
     {
         static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value, 
                       "XmlReaderType must derive from IXmlDocument.");
 
         std::unique_ptr<musx::xml::IXmlDocument> xmlDocument = std::make_unique<XmlDocumentType>();
-        xmlDocument->loadFromString(xmlBuffer);
+        xmlDocument->loadFromBuffer(data, size);
 
         auto rootElement = xmlDocument->getRootElement();
         if (!rootElement || rootElement->getTagName() != "finale") {
@@ -91,6 +92,19 @@ public:
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
 #endif        
         return document;
+    }
+
+    /**
+     * @brief Creates a `Document` object from an XML buffer.
+     * 
+     * @param xmlBuffer Buffer containing EnigmaXML for a musx file.
+     * @return A fully populated `Document` object.
+     * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
+     */
+    template <typename XmlDocumentType>
+    static DocumentPtr create(const std::vector<char>& xmlBuffer)
+    {
+        return create<XmlDocumentType>(xmlBuffer.data(), xmlBuffer.size());
     }
 };
 
