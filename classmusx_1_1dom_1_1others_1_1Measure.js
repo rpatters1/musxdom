@@ -63,6 +63,7 @@ var classmusx_1_1dom_1_1others_1_1Measure =
     [ "hasEnding", "classmusx_1_1dom_1_1others_1_1Measure.html#a43a88792d526bd407cb70c8864f173c7", null ],
     [ "hasExpression", "classmusx_1_1dom_1_1others_1_1Measure.html#aa0e6f062a3acd0b2f9588302bb435fc9", null ],
     [ "hasSmartShape", "classmusx_1_1dom_1_1others_1_1Measure.html#a3372430824ea064856fef909fc1ee3c8", null ],
+    [ "hasTextBlock", "classmusx_1_1dom_1_1others_1_1Measure.html#a0a04db84709cb23c880d4036897e0992", null ],
     [ "hasTextRepeat", "classmusx_1_1dom_1_1others_1_1Measure.html#ab953b604b91d28d8b813730637f4723f", null ],
     [ "hideCaution", "classmusx_1_1dom_1_1others_1_1Measure.html#ade861faef8c66f6311dbaae9c46071ac", null ],
     [ "leftBarlineType", "classmusx_1_1dom_1_1others_1_1Measure.html#ac839898aedc62d8b0ea62599fd3bb5e7", null ],

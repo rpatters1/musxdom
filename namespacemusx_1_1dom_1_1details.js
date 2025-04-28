@@ -15,6 +15,7 @@ var namespacemusx_1_1dom_1_1details =
     [ "LyricAssignChorus", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus" ],
     [ "LyricAssignSection", "classmusx_1_1dom_1_1details_1_1LyricAssignSection.html", "classmusx_1_1dom_1_1details_1_1LyricAssignSection" ],
     [ "LyricAssignVerse", "classmusx_1_1dom_1_1details_1_1LyricAssignVerse.html", "classmusx_1_1dom_1_1details_1_1LyricAssignVerse" ],
+    [ "MeasureTextAssign", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign" ],
     [ "SecondaryBeamBreak", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak" ],
     [ "SmartShapeEntryAssign", "classmusx_1_1dom_1_1details_1_1SmartShapeEntryAssign.html", "classmusx_1_1dom_1_1details_1_1SmartShapeEntryAssign" ],
     [ "StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", "classmusx_1_1dom_1_1details_1_1StaffGroup" ],

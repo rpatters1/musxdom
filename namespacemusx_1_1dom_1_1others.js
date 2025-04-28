@@ -27,6 +27,7 @@ var namespacemusx_1_1dom_1_1others =
     [ "MusicRange", "classmusx_1_1dom_1_1others_1_1MusicRange.html", "classmusx_1_1dom_1_1others_1_1MusicRange" ],
     [ "NamePositioning", "classmusx_1_1dom_1_1others_1_1NamePositioning.html", "classmusx_1_1dom_1_1others_1_1NamePositioning" ],
     [ "Page", "classmusx_1_1dom_1_1others_1_1Page.html", "classmusx_1_1dom_1_1others_1_1Page" ],
+    [ "PageTextAssign", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html", "classmusx_1_1dom_1_1others_1_1PageTextAssign" ],
     [ "PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", "classmusx_1_1dom_1_1others_1_1PartDefinition" ],
     [ "PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", "classmusx_1_1dom_1_1others_1_1PartGlobals" ],
     [ "RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", "classmusx_1_1dom_1_1others_1_1RepeatBack" ],

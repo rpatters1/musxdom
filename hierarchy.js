@@ -36,6 +36,7 @@ var hierarchy =
         [ "musx::dom::details::ChordAssign", "classmusx_1_1dom_1_1details_1_1ChordAssign.html", null ],
         [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ],
         [ "musx::dom::details::IndependentStaffDetails", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html", null ],
+        [ "musx::dom::details::MeasureTextAssign", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html", null ],
         [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ]
       ] ],
       [ "musx::dom::Entry", "classmusx_1_1dom_1_1Entry.html", null ],
@@ -116,6 +117,7 @@ var hierarchy =
         ] ],
         [ "musx::dom::others::NamePositioning", "classmusx_1_1dom_1_1others_1_1NamePositioning.html", null ],
         [ "musx::dom::others::Page", "classmusx_1_1dom_1_1others_1_1Page.html", null ],
+        [ "musx::dom::others::PageTextAssign", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html", null ],
         [ "musx::dom::others::PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", null ],
         [ "musx::dom::others::PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", null ],
         [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
