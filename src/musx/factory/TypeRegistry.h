@@ -215,6 +215,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::MeasureExprAssign,
     dom::others::TextBlock,
     dom::others::Page,
+    dom::others::PageTextAssign,
     dom::others::RepeatBack,
     dom::others::RepeatEndingStart,
     dom::others::RepeatEndingText,

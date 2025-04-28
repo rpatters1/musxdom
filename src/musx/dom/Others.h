@@ -1334,6 +1334,68 @@ public:
 };
 
 /**
+ * @class PageTextAssign
+ * @brief Represents a page text assignment with positioning and page range properties.
+ *
+ * If the cmper is non-0, the #startPage and #endPage values are not used and the cmper
+ * specifies the page to which this text is assigned.
+ *
+ * If the cmper is 0, the #startPage and #endPage values specify the range of pages to which
+ * this text is assigned.
+ *
+ * The inci value specifies a particular page text when more than one exists for the cmper value.
+ *
+ * Note that blank pages at the start of a linked part offset the page values (of either single-
+ * or multi-page blocks). The full details of how this works is yet to be tested.
+ *
+ * This class is identified by the XML node name "pageTextAssign".
+ */
+class PageTextAssign : public OthersBase
+{
+public:
+    /** @brief Horizontal alignment options for page text positioning. */
+    enum class HorizontalAlignment {
+        Left, // default value: leave as first (0) item
+        Center,
+        Right
+    };
+
+    /** @brief Vertical alignment options for page text positioning. */
+    enum class VerticalAlignment {
+        Top, // default value: leave as first (0) item
+        Center,
+        Bottom
+    };
+
+    /** @brief Constructor function */
+    explicit PageTextAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    Cmper block{};                  ///< The Cmper for the assigned @ref TextBlock. (xml tag is `<block>`)
+    Evpu xDisp{};                   ///< The horizontal displacement from the default position. (xml tag is `<xdisp>`)
+    Evpu yDisp{};                   ///< The vertical displacement from the default position. (xml tag is `<ydisp>`)
+    Cmper startPage{};              ///< If cmper is zero, the first page on which the text appears. (xml tag is `<startPage>`)
+    Cmper endPage{};                ///< If cmper is zero, the last page on which the text appears.
+                                    ///< A value of zero indicates the last page in the document, whatever number it may be. (xml tag is `<endPage > `)
+    HorizontalAlignment hPosLp{};   ///< Horizontal alignment on left or all pages (depending on #indRpPos). (xml tag is `<hposLp>`)
+    HorizontalAlignment hPosRp{};   ///< Horizontal alignment on right pages (if #indRpPos is true). (xml tag is `<hposRp>`)
+    bool hidden{};                  ///< Indicates if the page text appears only on screen. (xml tag is `<postIt>`)
+    VerticalAlignment vPos{};       ///< Vertical alignment. (xml tag is `<vpos>`)
+    bool hPosPageEdge{};            ///< If true, horizontal position is relative to page edge.
+                                    ///< Otherwise it is relative to the left / right page margins. (xml tag is `<hposPageEdge>`)
+    bool vPosPageEdge{};            ///< If true, vertical position is relative to page edge.
+                                    ///< Otherwise it is relative to the top / bottom page margins. (xml tag is `<vposPageEdge>`)
+    bool indRpPos{};                ///< Individual right page positioning indicator. (xml tag is `<indRpPos>`)
+    Evpu rightPgXDisp{};            ///< Horizontal displacement for right pages (if #indRpPos is true). (xml tag is `<rightPgXdisp>`)
+    Evpu rightPgYDisp{};            ///< Vertical displacement for right pages (if #indRpPos is true). (xml tag is `<rightPgYdisp>`)
+
+    constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class PartDefinition
  * @brief Represents the attributes of a Finale "partDef".
  *
@@ -2215,7 +2277,9 @@ public:
     // Public properties corresponding to the XML structure
     Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
     int lineSpacingPercentage{};       ///< Line spacing percentage.
-    bool newPos36{};                   ///< This is likely a compatibility setting. Best guess is that blocks created before Finale 3.6 do not have this set.
+    bool newPos36{};                   ///< "Position from Edge of Frame" compatibility setting.
+                                       ///< Best guess is that blocks created before Finale 3.6 do not have this set.
+                                       ///< It affects the vertical position of the baseline relative to the block's frame (and handle).
     bool showShape{};                  ///< Show shape
     bool noExpandSingleWord{};         ///< Do not expand single word
     bool wordWrap{};                   ///< Wrap words (in frames)
