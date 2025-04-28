@@ -29,9 +29,9 @@ var NAVTREE =
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
+        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
         [ "Functions", "namespacemembers_func.html", null ],
-        [ "Variables", "namespacemembers_vars.html", null ],
+        [ "Variables", "namespacemembers_vars.html", "namespacemembers_vars" ],
         [ "Typedefs", "namespacemembers_type.html", null ],
         [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
@@ -75,8 +75,12 @@ var NAVTREEINDEX =
 "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa4ed0447d87781cf7c575fa10573baa38",
 "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a0425bb33be67498a7d4c0915bd3ca25c",
 "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html",
-"classmusx_1_1xml_1_1rapidxml_1_1Attribute.html#a1c99c0b86ebbb1f9a2035b7547a6f337",
-"namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371"
+"classmusx_1_1xml_1_1rapidxml_1_1Attribute.html",
+"namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312ad7c06d6056952818ee768091427b977e",
+"namespacemusx_1_1dom_1_1uuid.html#a2c620870e32d5529a0a97104b4a89d28",
+"namespacemusx_1_1dom_1_1uuid.html#a7dc69a7da70d27c2066aa73eb737cd3b",
+"namespacemusx_1_1dom_1_1uuid.html#acbd525745f621a2324b774d17c0b2c40",
+"structmusx_1_1dom_1_1header_1_1Header.html#a79e63e2ddd41548fa8d084979f8cb008"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -119,12 +119,15 @@ $(document).ready(function(){initNavTree('classmusx_1_1xml_1_1IXmlDocument.html'
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a9f8306733e03b3be63d1de4f98500b8d" id="r_a9f8306733e03b3be63d1de4f98500b8d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1xml_1_1IXmlDocument.html#a9f8306733e03b3be63d1de4f98500b8d">loadFromBuffer</a> (const char *data, size_t size)=0</td></tr>
+<tr class="memdesc:a9f8306733e03b3be63d1de4f98500b8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads XML content from buffer.  <br /></td></tr>
+<tr class="separator:a9f8306733e03b3be63d1de4f98500b8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a928c674094e777c54b524716fcc7b1f0" id="r_a928c674094e777c54b524716fcc7b1f0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1xml_1_1IXmlDocument.html#a928c674094e777c54b524716fcc7b1f0">loadFromString</a> (const std::string &amp;xmlContent)=0</td></tr>
 <tr class="memdesc:a928c674094e777c54b524716fcc7b1f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads XML content from a string.  <br /></td></tr>
 <tr class="separator:a928c674094e777c54b524716fcc7b1f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c69cd87120edcf1417d7f797cca3709" id="r_a9c69cd87120edcf1417d7f797cca3709"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1xml_1_1IXmlDocument.html#a9c69cd87120edcf1417d7f797cca3709">loadFromString</a> (const std::vector&lt; char &gt; &amp;xmlContent)=0</td></tr>
-<tr class="memdesc:a9c69cd87120edcf1417d7f797cca3709"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads XML content from a vector of characters.  <br /></td></tr>
-<tr class="separator:a9c69cd87120edcf1417d7f797cca3709"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4b3f92715297e4add1d33d8bcaabe80" id="r_ae4b3f92715297e4add1d33d8bcaabe80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80">loadFromString</a> (const std::vector&lt; char &gt; &amp;xmlContent)</td></tr>
+<tr class="memdesc:ae4b3f92715297e4add1d33d8bcaabe80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads XML content from a vector of characters.  <br /></td></tr>
+<tr class="separator:ae4b3f92715297e4add1d33d8bcaabe80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b7dfe7129fb8e03f816b4cb573cf8cb" id="r_a2b7dfe7129fb8e03f816b4cb573cf8cb"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; <a class="el" href="classmusx_1_1xml_1_1IXmlElement.html">IXmlElement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1xml_1_1IXmlDocument.html#a2b7dfe7129fb8e03f816b4cb573cf8cb">getRootElement</a> () const =0</td></tr>
 <tr class="memdesc:a2b7dfe7129fb8e03f816b4cb573cf8cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the root element of the document.  <br /></td></tr>
 <tr class="separator:a2b7dfe7129fb8e03f816b4cb573cf8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,6 +162,59 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A shared pointer to the root element, or nullptr if the document is empty. </dd></dl>
 
 <p>Implemented in <a class="el" href="classmusx_1_1xml_1_1pugi_1_1Document.html#acf01d7fd5e760e2f868c15499b761fa5">musx::xml::pugi::Document</a>, <a class="el" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac">musx::xml::rapidxml::Document</a>, and <a class="el" href="classmusx_1_1xml_1_1tinyxml2_1_1Document.html#afb530cf037c72db9dc79b1a9d15e97ec">musx::xml::tinyxml2::Document</a>.</p>
+
+</div>
+</div>
+<a id="a9f8306733e03b3be63d1de4f98500b8d" name="a9f8306733e03b3be63d1de4f98500b8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f8306733e03b3be63d1de4f98500b8d">&#9670;&#160;</a></span>loadFromBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void musx::xml::IXmlDocument::loadFromBuffer </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads XML content from buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>pointer to the XML content. </td></tr>
+    <tr><td class="paramname">size</td><td>size of the XML content. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classmusx_1_1xml_1_1load__error.html" title="Exception for load xml error.">musx::xml::load_error</a></td><td>if the load fails. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classmusx_1_1xml_1_1pugi_1_1Document.html#a995291bf5741a0bf1b87a88cc60b1f84">musx::xml::pugi::Document</a>, <a class="el" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#aab02758903e5ac12ecba0360b713c31d">musx::xml::rapidxml::Document</a>, and <a class="el" href="classmusx_1_1xml_1_1tinyxml2_1_1Document.html#a0ea103332330c8bc3e65e9bbb9005148">musx::xml::tinyxml2::Document</a>.</p>
 
 </div>
 </div>
@@ -204,8 +260,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c69cd87120edcf1417d7f797cca3709" name="a9c69cd87120edcf1417d7f797cca3709"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c69cd87120edcf1417d7f797cca3709">&#9670;&#160;</a></span>loadFromString() <span class="overload">[2/2]</span></h2>
+<a id="ae4b3f92715297e4add1d33d8bcaabe80" name="ae4b3f92715297e4add1d33d8bcaabe80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4b3f92715297e4add1d33d8bcaabe80">&#9670;&#160;</a></span>loadFromString() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -214,7 +270,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void musx::xml::IXmlDocument::loadFromString </td>
+          <td class="memname">void musx::xml::IXmlDocument::loadFromString </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; char &gt; &amp;&#160;</td>
           <td class="paramname"><em>xmlContent</em></td><td>)</td>
@@ -223,7 +279,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -241,8 +297,6 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-<p>Implemented in <a class="el" href="classmusx_1_1xml_1_1pugi_1_1Document.html#ad3fa408a447e704c335a95ea088f59f9">musx::xml::pugi::Document</a>, <a class="el" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#afeabfebd10d001fd33cae1b97c47980a">musx::xml::rapidxml::Document</a>, and <a class="el" href="classmusx_1_1xml_1_1tinyxml2_1_1Document.html#ae343bca376e61c5d4e2fcd729e0bbb08">musx::xml::tinyxml2::Document</a>.</p>
 
 </div>
 </div>

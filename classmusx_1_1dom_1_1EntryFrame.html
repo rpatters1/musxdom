@@ -200,7 +200,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ad28c481c240edfb35fb300791604fd11" id="r_ad28c481c240edfb35fb300791604fd11"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html">TupletInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#ad28c481c240edfb35fb300791604fd11">tupletInfo</a></td></tr>
 <tr class="memdesc:ad28c481c240edfb35fb300791604fd11"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of the tuplets in the frame and their calculated starting and ending information.  <br /></td></tr>
 <tr class="separator:ad28c481c240edfb35fb300791604fd11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe7ae16afb5c98fab21b8d6e1c4f9e78" id="r_abe7ae16afb5c98fab21b8d6e1c4f9e78"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#abe7ae16afb5c98fab21b8d6e1c4f9e78">keySignature</a></td></tr>
+<tr class="memitem:abe7ae16afb5c98fab21b8d6e1c4f9e78" id="r_abe7ae16afb5c98fab21b8d6e1c4f9e78"><td class="memItemLeft" align="right" valign="top"><a id="abe7ae16afb5c98fab21b8d6e1c4f9e78" name="abe7ae16afb5c98fab21b8d6e1c4f9e78"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>keySignature</b></td></tr>
+<tr class="memdesc:abe7ae16afb5c98fab21b8d6e1c4f9e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">this can be different than the measure key sig if the staff has independent key signatures <br /></td></tr>
 <tr class="separator:abe7ae16afb5c98fab21b8d6e1c4f9e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
@@ -391,21 +393,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="abe7ae16afb5c98fab21b8d6e1c4f9e78" name="abe7ae16afb5c98fab21b8d6e1c4f9e78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe7ae16afb5c98fab21b8d6e1c4f9e78">&#9670;&#160;</a></span>keySignature</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a>&gt; musx::dom::EntryFrame::keySignature</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>this can be different than the measure key sig if the staff has independent key signatures </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>This must be adjusted based on concert or transposed pitch. </dd></dl>
-
-</div>
-</div>
 <a id="ad28c481c240edfb35fb300791604fd11" name="ad28c481c240edfb35fb300791604fd11"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad28c481c240edfb35fb300791604fd11">&#9670;&#160;</a></span>tupletInfo</h2>
 

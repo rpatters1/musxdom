@@ -238,44 +238,37 @@ $(document).ready(function(){initNavTree('RapidXmlImpl_8h_source.html',''); init
 <div class="foldopen" id="foldopen00138" data-start="{" data-end="}">
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#a853661a7a3ae9da52ddf54fd4ef6233b">  138</a></span><span class="keyword">public</span>:</div>
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#a853661a7a3ae9da52ddf54fd4ef6233b">loadFromString</a>(<span class="keyword">const</span> std::string&amp; xmlContent)<span class="keyword"> override </span>{</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        m_buffer.assign(xmlContent.begin(), xmlContent.end());</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        m_buffer.push_back(<span class="charliteral">&#39;\0&#39;</span>); <span class="comment">// Null-terminate the buffer.</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            m_document.parse&lt;0&gt;(m_buffer.data());</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        } <span class="keywordflow">catch</span> (const ::rapidxml::parse_error&amp; e) {</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classmusx_1_1xml_1_1load__error.html">musx::xml::load_error</a>(e.what());</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        }</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>       <a class="code hl_function" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#aab02758903e5ac12ecba0360b713c31d">loadFromBuffer</a>(xmlContent.data(), xmlContent.size());</div>
 </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    }</div>
-<div class="foldopen" id="foldopen00149" data-start="{" data-end="}">
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno"><a class="line" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#afeabfebd10d001fd33cae1b97c47980a">  149</a></span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#a853661a7a3ae9da52ddf54fd4ef6233b">loadFromString</a>(<span class="keyword">const</span> std::vector&lt;char&gt;&amp; xmlContent)<span class="keyword"> override </span>{</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        m_buffer = xmlContent;</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        m_buffer.push_back(<span class="charliteral">&#39;\0&#39;</span>); <span class="comment">// Null-terminate the buffer.</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>            m_document.parse&lt;0&gt;(m_buffer.data());</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        } <span class="keywordflow">catch</span> (const ::rapidxml::parse_error&amp; e) {</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classmusx_1_1xml_1_1load__error.html">musx::xml::load_error</a>(e.what());</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        }</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    }</div>
+<div class="foldopen" id="foldopen00142" data-start="{" data-end="}">
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#aab02758903e5ac12ecba0360b713c31d">  142</a></span> </div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#aab02758903e5ac12ecba0360b713c31d">loadFromBuffer</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> * data, <span class="keywordtype">size_t</span> size)<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        m_buffer = std::vector&lt;char&gt;(data, data + size);</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        m_buffer.push_back(<span class="charliteral">&#39;\0&#39;</span>); <span class="comment">// Null-terminate the buffer.</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>            m_document.parse&lt;0&gt;(m_buffer.data());</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        } <span class="keywordflow">catch</span> (const ::rapidxml::parse_error&amp; e) {</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classmusx_1_1xml_1_1load__error.html">musx::xml::load_error</a>(e.what());</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        }</div>
 </div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    }</div>
-<div class="foldopen" id="foldopen00160" data-start="{" data-end="}">
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno"><a class="line" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac">  160</a></span> </div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    std::shared_ptr&lt;IXmlElement&gt; <a class="code hl_function" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac">getRootElement</a>()<span class="keyword"> const override </span>{</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        ::rapidxml::xml_node&lt;&gt;* root = m_document.first_node();</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        <span class="keywordflow">return</span> root ? std::make_shared&lt;Element&gt;(root) : <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    }</div>
+<div class="foldopen" id="foldopen00153" data-start="{" data-end="}">
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno"><a class="line" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac">  153</a></span> </div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    std::shared_ptr&lt;IXmlElement&gt; <a class="code hl_function" href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac">getRootElement</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        ::rapidxml::xml_node&lt;&gt;* root = m_document.first_node();</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <span class="keywordflow">return</span> root ? std::make_shared&lt;Element&gt;(root) : <span class="keyword">nullptr</span>;</div>
 </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    }</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>};</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    }</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>};</div>
 </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>} <span class="comment">// namespace rapidxml</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>} <span class="comment">// namespace xml</span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>} <span class="comment">// namespace musx</span></div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="preprocessor">#endif </span><span class="comment">// MUSX_USE_RAPIDXML</span></div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>} <span class="comment">// namespace rapidxml</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>} <span class="comment">// namespace xml</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>} <span class="comment">// namespace musx</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="preprocessor">#endif </span><span class="comment">// MUSX_USE_RAPIDXML</span></div>
 <div class="ttc" id="aclassmusx_1_1xml_1_1IXmlAttribute_html"><div class="ttname"><a href="classmusx_1_1xml_1_1IXmlAttribute.html">musx::xml::IXmlAttribute</a></div><div class="ttdoc">Interface for an XML attribute.</div><div class="ttdef"><b>Definition</b> XmlInterface.h:65</div></div>
 <div class="ttc" id="aclassmusx_1_1xml_1_1IXmlDocument_html"><div class="ttname"><a href="classmusx_1_1xml_1_1IXmlDocument.html">musx::xml::IXmlDocument</a></div><div class="ttdoc">Interface for an XML document.</div><div class="ttdef"><b>Definition</b> XmlInterface.h:230</div></div>
 <div class="ttc" id="aclassmusx_1_1xml_1_1IXmlElement_html"><div class="ttname"><a href="classmusx_1_1xml_1_1IXmlElement.html">musx::xml::IXmlElement</a></div><div class="ttdoc">Interface for an XML element.</div><div class="ttdef"><b>Definition</b> XmlInterface.h:133</div></div>
@@ -286,7 +279,8 @@ $(document).ready(function(){initNavTree('RapidXmlImpl_8h_source.html',''); init
 <div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Attribute_html_adb3446cdfdd712e5175b97681f22dbbf"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Attribute.html#adb3446cdfdd712e5175b97681f22dbbf">musx::xml::rapidxml::Attribute::nextAttribute</a></div><div class="ttdeci">std::shared_ptr&lt; IXmlAttribute &gt; nextAttribute() const override</div><div class="ttdoc">Advances to the next attribute.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:62</div></div>
 <div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Document_html"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Document.html">musx::xml::rapidxml::Document</a></div><div class="ttdoc">Implementation of IXmlDocument using rapidxml.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:134</div></div>
 <div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Document_html_a853661a7a3ae9da52ddf54fd4ef6233b"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#a853661a7a3ae9da52ddf54fd4ef6233b">musx::xml::rapidxml::Document::loadFromString</a></div><div class="ttdeci">void loadFromString(const std::string &amp;xmlContent) override</div><div class="ttdoc">Loads XML content from a string.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:138</div></div>
-<div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Document_html_af030d74e10f85f1d151f9d8a4ef38aac"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac">musx::xml::rapidxml::Document::getRootElement</a></div><div class="ttdeci">std::shared_ptr&lt; IXmlElement &gt; getRootElement() const override</div><div class="ttdoc">Gets the root element of the document.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:160</div></div>
+<div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Document_html_aab02758903e5ac12ecba0360b713c31d"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#aab02758903e5ac12ecba0360b713c31d">musx::xml::rapidxml::Document::loadFromBuffer</a></div><div class="ttdeci">void loadFromBuffer(const char *data, size_t size) override</div><div class="ttdoc">Loads XML content from buffer.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:142</div></div>
+<div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Document_html_af030d74e10f85f1d151f9d8a4ef38aac"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac">musx::xml::rapidxml::Document::getRootElement</a></div><div class="ttdeci">std::shared_ptr&lt; IXmlElement &gt; getRootElement() const override</div><div class="ttdoc">Gets the root element of the document.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:153</div></div>
 <div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Element_html"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Element.html">musx::xml::rapidxml::Element</a></div><div class="ttdoc">Implementation of IXmlElement using rapidxml.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:73</div></div>
 <div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Element_html_a1ba1bc35a0744f3175ed6d201ddba28b"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Element.html#a1ba1bc35a0744f3175ed6d201ddba28b">musx::xml::rapidxml::Element::findAttribute</a></div><div class="ttdeci">std::shared_ptr&lt; IXmlAttribute &gt; findAttribute(const std::string &amp;tagName) const override</div><div class="ttdoc">Finds the first attribute.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:96</div></div>
 <div class="ttc" id="aclassmusx_1_1xml_1_1rapidxml_1_1Element_html_a2b26394ed9407b682f4bd3246f325161"><div class="ttname"><a href="classmusx_1_1xml_1_1rapidxml_1_1Element.html#a2b26394ed9407b682f4bd3246f325161">musx::xml::rapidxml::Element::getTagName</a></div><div class="ttdeci">std::string getTagName() const override</div><div class="ttdoc">Gets the tag name of the element.</div><div class="ttdef"><b>Definition</b> RapidXmlImpl.h:85</div></div>

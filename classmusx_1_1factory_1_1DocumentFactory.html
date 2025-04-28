@@ -117,16 +117,74 @@ $(document).ready(function(){initNavTree('classmusx_1_1factory_1_1DocumentFactor
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a99addb7044f05ca121c446568dc9045f" id="r_a99addb7044f05ca121c446568dc9045f"><td class="memTemplParams" colspan="2">template&lt;typename XmlDocumentType &gt; </td></tr>
+<tr class="memitem:a99addb7044f05ca121c446568dc9045f"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#a99addb7044f05ca121c446568dc9045f">create</a> (const char *data, size_t size)</td></tr>
+<tr class="memdesc:a99addb7044f05ca121c446568dc9045f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML buffer.  <br /></td></tr>
+<tr class="separator:a99addb7044f05ca121c446568dc9045f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa100eb0e3454dd262497d3c2ff81572e" id="r_aa100eb0e3454dd262497d3c2ff81572e"><td class="memTemplParams" colspan="2">template&lt;typename XmlDocumentType &gt; </td></tr>
 <tr class="memitem:aa100eb0e3454dd262497d3c2ff81572e"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#aa100eb0e3454dd262497d3c2ff81572e">create</a> (const std::vector&lt; char &gt; &amp;xmlBuffer)</td></tr>
-<tr class="memdesc:aa100eb0e3454dd262497d3c2ff81572e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML element.  <br /></td></tr>
+<tr class="memdesc:aa100eb0e3454dd262497d3c2ff81572e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML buffer.  <br /></td></tr>
 <tr class="separator:aa100eb0e3454dd262497d3c2ff81572e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Factory class for creating <code>Document</code> objects from XML. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a99addb7044f05ca121c446568dc9045f" name="a99addb7044f05ca121c446568dc9045f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99addb7044f05ca121c446568dc9045f">&#9670;&#160;</a></span>create() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XmlDocumentType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static DocumentPtr musx::factory::DocumentFactory::create </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a <code>Document</code> object from an XML buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Pointer to a buffer containing EnigmaXML for a musx file. </td></tr>
+    <tr><td class="paramname">size</td><td>The size of the buffer. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A fully populated <code>Document</code> object. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If required nodes or attributes are missing or invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="aa100eb0e3454dd262497d3c2ff81572e" name="aa100eb0e3454dd262497d3c2ff81572e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa100eb0e3454dd262497d3c2ff81572e">&#9670;&#160;</a></span>create()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa100eb0e3454dd262497d3c2ff81572e">&#9670;&#160;</a></span>create() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -151,7 +209,7 @@ template&lt;typename XmlDocumentType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Creates a <code>Document</code> object from an XML element. </p>
+<p>Creates a <code>Document</code> object from an XML buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">xmlBuffer</td><td>Buffer containing EnigmaXML for a musx file. </td></tr>

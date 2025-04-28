@@ -1,8 +1,19 @@
 var searchData=
 [
-  ['jumpaction_0',['jumpaction',['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#a9df76f94da775e2aa5f0bffe5d0a47c8',1,'musx::dom::others::RepeatBack::jumpAction'],['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#acffb6ba9f840a266d33df76f154e9a3d',1,'musx::dom::others::RepeatEndingStart::jumpAction'],['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#acf32e424ca8df7b36e34e399b40d6263',1,'musx::dom::others::TextRepeatAssign::jumpAction']]],
-  ['jumpifignoring_1',['jumpifignoring',['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a6edfcb3b22c44fdcdc0b57af835a99ab',1,'musx::dom::others::RepeatEndingStart::jumpIfIgnoring'],['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#aa11dd63603240362a94b35feb3c093b9',1,'musx::dom::others::TextRepeatAssign::jumpIfIgnoring']]],
-  ['jumponmultiplepasses_2',['jumpOnMultiplePasses',['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a1fea12a4961c60f378200166298d1eeb',1,'musx::dom::others::TextRepeatAssign']]],
-  ['justification_3',['justification',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a91272a011b1b778d38d78a2ac34b236e',1,'musx::dom::others::MarkingCategory::justification'],['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#afae0c3f06c0d4c6fec2619562b90f5c0',1,'musx::dom::others::TextRepeatDef::justification']]],
-  ['justify_4',['justify',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#acc6ef6160145dcf027dea1e041d119e0',1,'musx::dom::others::NamePositioning']]]
+  ['janggu_0',['Janggu',['../namespacemusx_1_1dom_1_1uuid.html#af6c51cd6b120647a53ff857e7db7a924',1,'musx::dom::uuid']]],
+  ['jaranahuasteca_1',['JaranaHuasteca',['../namespacemusx_1_1dom_1_1uuid.html#a2477a64297ae1b202f427afee46abb6f',1,'musx::dom::uuid']]],
+  ['jaranajarocho_2',['JaranaJarocho',['../namespacemusx_1_1dom_1_1uuid.html#a7fb9cf15c1cc33b3e5e7d34d3b63c554',1,'musx::dom::uuid']]],
+  ['jaranamosquito_3',['JaranaMosquito',['../namespacemusx_1_1dom_1_1uuid.html#a67947138b0f526553d7ef23318ea0c25',1,'musx::dom::uuid']]],
+  ['jaranasegunda_4',['JaranaSegunda',['../namespacemusx_1_1dom_1_1uuid.html#adbd0a5f29f621839f60acb422a400918',1,'musx::dom::uuid']]],
+  ['jaranatercera_5',['JaranaTercera',['../namespacemusx_1_1dom_1_1uuid.html#a392e7a1453df2bf6771126bb015c6cc8',1,'musx::dom::uuid']]],
+  ['jawbone_6',['Jawbone',['../namespacemusx_1_1dom_1_1uuid.html#a2df4d86ade0041a39b23565fd80712c3',1,'musx::dom::uuid']]],
+  ['jawharp_7',['JawHarp',['../namespacemusx_1_1dom_1_1uuid.html#a962a60a8198113635d838e8e7209148f',1,'musx::dom::uuid']]],
+  ['jinglebells_8',['JingleBells',['../namespacemusx_1_1dom_1_1uuid.html#af68633f6941deef7621028f1fba245f6',1,'musx::dom::uuid']]],
+  ['jogibaja_9',['JogiBaja',['../namespacemusx_1_1dom_1_1uuid.html#a5e5e533a3657f3d96f392a55c3ca0e33',1,'musx::dom::uuid']]],
+  ['jug_10',['Jug',['../namespacemusx_1_1dom_1_1uuid.html#a02ac4ab45a0428dfee0085029fff5731',1,'musx::dom::uuid']]],
+  ['jumpaction_11',['jumpaction',['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#acf32e424ca8df7b36e34e399b40d6263',1,'musx::dom::others::TextRepeatAssign::jumpAction'],['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#acffb6ba9f840a266d33df76f154e9a3d',1,'musx::dom::others::RepeatEndingStart::jumpAction'],['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#a9df76f94da775e2aa5f0bffe5d0a47c8',1,'musx::dom::others::RepeatBack::jumpAction']]],
+  ['jumpifignoring_12',['jumpifignoring',['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#aa11dd63603240362a94b35feb3c093b9',1,'musx::dom::others::TextRepeatAssign::jumpIfIgnoring'],['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a6edfcb3b22c44fdcdc0b57af835a99ab',1,'musx::dom::others::RepeatEndingStart::jumpIfIgnoring']]],
+  ['jumponmultiplepasses_13',['jumpOnMultiplePasses',['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a1fea12a4961c60f378200166298d1eeb',1,'musx::dom::others::TextRepeatAssign']]],
+  ['justification_14',['justification',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#afae0c3f06c0d4c6fec2619562b90f5c0',1,'musx::dom::others::TextRepeatDef::justification'],['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a91272a011b1b778d38d78a2ac34b236e',1,'musx::dom::others::MarkingCategory::justification']]],
+  ['justify_15',['justify',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#acc6ef6160145dcf027dea1e041d119e0',1,'musx::dom::others::NamePositioning']]]
 ];
