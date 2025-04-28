@@ -550,6 +550,7 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"txtRepeats", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasTextRepeat = populateBoolean(e, i); }},
     {"hasChord", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasChord = populateBoolean(e, i); }},
     {"hasExpr", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasExpression = populateBoolean(e, i); }},
+    {"hasTextBlock", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasTextBlock = populateBoolean(e, i); }},
     {"altNumTsig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->compositeNumerator = populateBoolean(e, i); }},
     {"altDenTsig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->compositeDenominator = populateBoolean(e, i); }},
     {"abbrvTime", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->abbrvTime = populateBoolean(e, i); }},

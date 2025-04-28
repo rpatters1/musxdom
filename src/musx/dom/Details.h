@@ -484,6 +484,49 @@ public:
 };
 
 /**
+ * @class MeasureTextAssign
+ * @brief Represents a text block assignment for a staff and measure.
+ *
+ * Cmper1 is the staff (inst) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ *
+ * Note that each instance either has a positive horizontal displacement in Edu,
+ * meaning it maintains metrical alignment as spacing changes. Or it has a negative horizontal displacement
+ * in Evpu, meaning a negative offset maintains its displacement in any spacing context.
+ *
+ * The UI interpolates these values and shows different numbers to the user, but the actual origin point
+ * where both #xDispEdu and #xDispEvpu are zero coincides with Edu position 0.
+ *
+ * This class is identified by the XML node name "measTextAssign".
+ */
+class MeasureTextAssign : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this #MeasureTextAssign (probably always #ShareMode::All).
+     * @param inst The staff ID for this #MeasureTextAssign.
+     * @param meas The measure ID for this #MeasureTextAssign.
+     * @param inci The 0-based incident.
+     */
+    explicit MeasureTextAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas, Inci inci)
+        : DetailsBase(document, partId, shareMode, inst, meas, inci)
+    {
+    }
+
+    Cmper block{};      ///< Text block ID
+    Edu xDispEdu{};     ///< Positive horizontal displacement in Edu (xml node is `<xdispEdu>`)
+                        ///< Note that the UI apparently interpolates between Evpu and Edu for this field.
+    Evpu xDispEvpu{};   ///< Negative horizontal displacement in Evpu (xml node is `<xdispEvpu>`)
+    Evpu yDisp{};       ///< Vertical displacement in Evpu (xml node is `<ydisp>`)
+    bool hidden{};      ///< Indicates the text appears only on screen (xml node is `<postIt/>`)
+
+    constexpr static std::string_view XmlNodeName = "measTextAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class SecondaryBeamBreak
  * @brief Specifies which secondary beams break and restart on the associated entry.
  *

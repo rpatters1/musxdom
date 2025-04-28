@@ -962,6 +962,7 @@ public:
     BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
     bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
     bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
+    bool hasTextBlock{};        ///< Indicates if the measure has a measure-assigned text block. See @ref details::MeasureTextAssign.
     bool forwardRepeatBar{};    ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
     bool backwardsRepeatBar{};  ///< Indicates a forward repeat bar on this measure. (xml node is `<bacRepBar>`)
     bool hasEnding{};           ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
@@ -1378,7 +1379,7 @@ public:
     Evpu yDisp{};                   ///< The vertical displacement from the default position. (xml tag is `<ydisp>`)
     Cmper startPage{};              ///< If cmper is zero, the first page on which the text appears. (xml tag is `<startPage>`)
     Cmper endPage{};                ///< If cmper is zero, the last page on which the text appears.
-                                    ///< A value of zero indicates the last page in the document, whatever number it may be. (xml tag is `<endPage > `)
+                                    ///< A value of zero indicates the last page in the document, whatever number it may be. (xml tag is `<endPage>`)
     HorizontalAlignment hPosLp{};   ///< Horizontal alignment on left or all pages (depending on #indRpPos). (xml tag is `<hposLp>`)
     HorizontalAlignment hPosRp{};   ///< Horizontal alignment on right pages (if #indRpPos is true). (xml tag is `<hposRp>`)
     bool hidden{};                  ///< Indicates if the page text appears only on screen. (xml tag is `<postIt>`)

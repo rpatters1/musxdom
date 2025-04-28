@@ -263,6 +263,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::CrossStaff,
     dom::details::IndependentStaffDetails, // "floats" is the xml key
     dom::details::GFrameHold,
+    dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
     dom::details::SecondaryBeamBreak,
     dom::details::SmartShapeEntryAssign,

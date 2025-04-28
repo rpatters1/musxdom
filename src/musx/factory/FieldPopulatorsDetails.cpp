@@ -178,7 +178,14 @@ MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
     {"displayVerseNum", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->displayVerseNum = populateBoolean(e, i); }},
 });
 
-// XML mappings for the SecondaryBeamBreak class
+MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {
+    {"block", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->block = e->getTextAs<Cmper>(); }},
+    {"xdispEdu", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEdu = e->getTextAs<Edu>(); }},
+    {"xdispEvpu", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEvpu = e->getTextAs<Evpu>(); }},
+    {"ydisp", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->yDisp = e->getTextAs<Evpu>(); }},
+    {"postIt", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->hidden = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
     {"do16th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note16th); }},
     {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
