@@ -215,6 +215,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::MeasureExprAssign,
     dom::others::TextBlock,
     dom::others::Page,
+    dom::others::PageTextAssign,
     dom::others::RepeatBack,
     dom::others::RepeatEndingStart,
     dom::others::RepeatEndingText,
@@ -262,6 +263,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::CrossStaff,
     dom::details::IndependentStaffDetails, // "floats" is the xml key
     dom::details::GFrameHold,
+    dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
     dom::details::SecondaryBeamBreak,
     dom::details::SmartShapeEntryAssign,

@@ -317,7 +317,7 @@ struct FieldPopulator : public FactoryBase
     {
        return FieldPopulator<T>::createAndPopulateImpl(element, std::forward<Args>(args)...);
     }
-
+    
 private:
     static const std::unordered_map<std::string_view, XmlElementPopulator<T>>& elementXref()
     {
@@ -392,6 +392,25 @@ inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(con
 }
 
 void populateFontEfx(const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i);
+
+template <typename T>
+static bool populateBoolean(const XmlElementPtr& element, const std::shared_ptr<T>& instance)
+{
+    MUSX_ASSERT_IF(!element) {
+        throw std::logic_error("Null element passed to populateBoolean function.");
+    }
+
+    if (!element->getFirstChildElement("offInPart")) {
+        return true;
+    }
+
+    if constexpr (std::is_base_of_v<Base, T>) {
+        const Base& instAsBase = *instance;
+        return instAsBase.getPartId() == SCORE_PARTID; // return false if this is a part
+    } else {
+        return false; // I don't think we'll ever get an `offInPart` for the score, so assume it is for a part if we aren't a Base subclass
+    }
+}
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 

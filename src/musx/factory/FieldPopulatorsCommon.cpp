@@ -78,8 +78,8 @@ MUSX_XML_ELEMENT_ARRAY(FontInfo, {
 
 MUSX_XML_ELEMENT_ARRAY(KeySignature, {
     {"key", [](const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->key = e->getTextAs<Cmper>(); }},
-    {"keyless", [](const XmlElementPtr&, const std::shared_ptr<KeySignature>& i) { i->keyless = true; }},
-    {"hideKeySigShowAccis", [](const XmlElementPtr&, const std::shared_ptr<KeySignature>& i) { i->hideKeySigShowAccis = true; }},
+    {"keyless", [](const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->keyless = populateBoolean(e, i); }},
+    {"hideKeySigShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->hideKeySigShowAccis = populateBoolean(e, i); }},
 });
 
 namespace others {
@@ -92,11 +92,11 @@ MUSX_XML_ELEMENT_ARRAY(Enclosure, {
     {"lineWidth", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->lineWidth = e->getTextAs<Efix>(); }},
     {"sides", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->shape = toEnum<Enclosure::Shape>(e->getTextAs<uint8_t>()); }},
     {"cornerRadius", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
-    {"fixedSize", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->fixedSize = true; }},
-    {"equalAspect", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->equalAspect = true; }},
-    {"notTall", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->notTall = true; }},
-    {"opaque", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->opaque = true; }},
-    {"roundCorners", [](const XmlElementPtr&, const std::shared_ptr<Enclosure>& i) { i->roundCorners = true; }},
+    {"fixedSize", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->fixedSize = populateBoolean(e, i); }},
+    {"equalAspect", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->equalAspect = populateBoolean(e, i); }},
+    {"notTall", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->notTall = populateBoolean(e, i); }},
+    {"opaque", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->opaque = populateBoolean(e, i); }},
+    {"roundCorners", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->roundCorners = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MusicRange, {
@@ -110,9 +110,9 @@ MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
     {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e); }},
-    {"indivPos", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->indivPos = true; }},
+    {"indivPos", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->indivPos = populateBoolean(e, i); }},
     {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e); }},
-    {"expand", [](const XmlElementPtr&, const std::shared_ptr<NamePositioning>& i) { i->expand = true; }},
+    {"expand", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->expand = populateBoolean(e, i); }},
 });
     
 } // namespace others
