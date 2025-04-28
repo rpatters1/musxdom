@@ -233,7 +233,8 @@ public:
 
     /**
      * @brief Loads XML content from buffer
-     * @param xmlContent The XML content as a pointer and size.
+     * @param data pointer to the XML content.
+     * @param size size of the XML content.
      * @throws musx::xml::load_error if the load fails.
      */
     virtual void loadFromBuffer(const char * data, size_t size) = 0;
