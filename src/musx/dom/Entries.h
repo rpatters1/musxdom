@@ -211,7 +211,7 @@ public:
     void integrityCheck() override
     {
         this->Base::integrityCheck();
-        if (numNotes != notes.size()) {
+        if (size_t(numNotes) != notes.size()) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }
     }
@@ -431,7 +431,6 @@ public:
     */
     std::vector<TupletInfo> tupletInfo;
     std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
-                                                ///< @todo This must be adjusted based on concert or transposed pitch.
 
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }
@@ -508,7 +507,6 @@ public:
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
     ClefIndex clefIndex{};              ///< the clef index in effect for the entry.
-                                        ///< @todo This must be adjusted based on concert or transposed pitch.
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid 

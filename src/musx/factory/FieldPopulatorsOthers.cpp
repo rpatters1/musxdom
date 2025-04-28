@@ -408,7 +408,7 @@ MUSX_XML_ELEMENT_ARRAY(ChordSuffixElement, {
     { "suffix", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->symbol = e->getTextAs<char32_t>(); }},
     { "xdisp", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->xdisp = e->getTextAs<Evpu>(); }},
     { "ydisp", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->ydisp = e->getTextAs<Evpu>(); }},
-    { "isNumber", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->isNumber = true; }},
+    { "isNumber", [](const XmlElementPtr&, const std::shared_ptr<ChordSuffixElement>& i) { i->isNumber = true; }},
     { "prefix", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixElement>& i) { i->prefix = toEnum<ChordSuffixElement::Prefix>(e); }},
 });
 
@@ -423,8 +423,8 @@ MUSX_XML_ELEMENT_ARRAY(ClefList, {
     {"percent", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->percent = e->getTextAs<int>(); }},
     {"xEvpuOffset", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->xEvpuOffset = e->getTextAs<int>(); }},
     {"clefMode", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->clefMode = toEnum<ShowClefMode>(e); }},
-    {"unlockVert", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->unlockVert = true; }},
-    {"afterBarline", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->afterBarline = true; }},
+    {"unlockVert", [](const XmlElementPtr&, const std::shared_ptr<ClefList>& i) { i->unlockVert = true; }},
+    {"afterBarline", [](const XmlElementPtr&, const std::shared_ptr<ClefList>& i) { i->afterBarline = true; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
@@ -991,8 +991,8 @@ MUSX_XML_ELEMENT_ARRAY(TextRepeatDef, {
     {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
     {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
     {"efx", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
-    {"newEnclosure", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->hasEnclosure = true; }},
-    {"useThisFont", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->useThisFont = true; }},
+    {"newEnclosure", [](const XmlElementPtr&, const std::shared_ptr<TextRepeatDef>& i) { i->hasEnclosure = true; }},
+    {"useThisFont", [](const XmlElementPtr&, const std::shared_ptr<TextRepeatDef>& i) { i->useThisFont = true; }},
     {"poundReplace", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->poundReplace = toEnum<TextRepeatDef::PoundReplaceOption>(e); }},
     {"justify", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->justification = toEnum<HorizontalTextJustification>(e); }},
     {"act", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatDef>& i) { i->passList.push_back(e->getTextAs<int>()); }},

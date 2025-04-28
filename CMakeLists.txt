@@ -52,6 +52,7 @@ option(MUSX_THROW_ON_INTEGRITY_CHECK_FAIL "Enable throwing integrity check failu
 option(MUSX_USE_TINYXML2 "Enable tinyxml2 parsing classes" OFF)
 option(MUSX_USE_RAPIDXML "Enable rapidxml parsing classes" OFF)
 option(MUSX_USE_PUGIXML "Enable pugixml parsing classes" OFF)
+option(MUSX_USE_QTXML "Enable Qt xml parsing classes" OFF)
 option(MUSX_DISPLAY_NODE_NAMES "Write node names to std::cout as they are processed" OFF)
 
 # Override defaults for stand-alone builds
@@ -74,6 +75,7 @@ target_compile_definitions(musx INTERFACE
     $<$<BOOL:${MUSX_USE_TINYXML2}>:MUSX_USE_TINYXML2>
     $<$<BOOL:${MUSX_USE_RAPIDXML}>:MUSX_USE_RAPIDXML>
     $<$<BOOL:${MUSX_USE_PUGIXML}>:MUSX_USE_PUGIXML>
+    $<$<BOOL:${MUSX_USE_QTXML}>:MUSX_USE_QTXML>
 )
 
 # Ensure the library uses the correct include paths

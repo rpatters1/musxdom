@@ -114,7 +114,7 @@ public:
             ObjectKey noInciKey = key;
             noInciKey.inci = std::nullopt;
             auto currentIncis = getArray<ObjectBaseType>(noInciKey);
-            if (key.inci.value() != currentIncis.size()) {
+            if (key.inci.value() != int(currentIncis.size())) {
                 MUSX_INTEGRITY_ERROR("Node " + key.nodeString() + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
             }
         }

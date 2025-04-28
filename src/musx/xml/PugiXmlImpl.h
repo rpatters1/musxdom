@@ -130,8 +130,8 @@ public:
         }
     }
 
-    void loadFromString(const std::vector<char>& xmlContent) override {
-        ::pugi::xml_parse_result result = m_document.load_buffer(xmlContent.data(), xmlContent.size());
+    void loadFromBuffer(const char * data, size_t size) override {
+        ::pugi::xml_parse_result result = m_document.load_buffer(data, size);
         if (!result) {
             throw musx::xml::load_error(result.description());
         }

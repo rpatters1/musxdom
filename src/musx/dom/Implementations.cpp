@@ -907,8 +907,6 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
                     activeTuplets.emplace_back(tuplet, index);
                 }
 
-                // @todo: calculate and add running values (clef, key)
-
                 // It appears that Finale allows exactly one entry per 0-length tuplet, no matter
                 // what the symbolic duration of the tuplet is. This makes life *much* easier.
                 bool zeroLengthTuplet = false;
@@ -1541,8 +1539,7 @@ NoteInfoPtr NoteInfoPtr::findEqualPitch(const EntryInfoPtr& entry) const
         for (auto note = NoteInfoPtr(entry, 0); note; note = note.getNext()) {
             auto [pitch, octave, alter, staffPos] = note.calcNoteProperties();
             if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
-                int entryOccurrence = 1;
-                for (int entryOccurence = 1; entryOccurrence < srcOccurrence; entryOccurrence++) {
+                for (int entryOccurrence = 1; entryOccurrence < srcOccurrence; entryOccurrence++) {
                     auto next = note.getNext();
                     if (!next.isSamePitchValues(note)) break;
                     note = next;
@@ -1606,7 +1603,7 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
                 continue;
             }
             bool skipBackToV1 = !thisRawEntry->voice2
-                              || currRawEntry->voice2 && currEntry.getPreviousInFrame()->v2Launch;
+                              || (currRawEntry->voice2 && currEntry.getPreviousInFrame()->v2Launch);
             if (skipBackToV1 && currRawEntry->voice2) {
                 while (currEntry) {
                     auto testEntry = currEntry.getPreviousInLayer();
@@ -2152,7 +2149,6 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
 
 ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const
 {
-    /// @todo Take into accound clef changes caused by transposition.
     for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
         if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), tryMeasure)) {
             return gfhold->calcClefIndexAt(position);
@@ -2455,7 +2451,10 @@ std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::Accide
     auto block = getRawTextBlock();
     if (!block) return {};
     auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
-    return musx::util::EnigmaString::trimTags(retval);
+    if (trimTags) {
+        return musx::util::EnigmaString::trimTags(retval);
+    }
+    return retval;
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)

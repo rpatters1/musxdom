@@ -137,18 +137,11 @@ class Document : public musx::xml::IXmlDocument
 
 public:
     void loadFromString(const std::string& xmlContent) override {
-        m_buffer.assign(xmlContent.begin(), xmlContent.end());
-        m_buffer.push_back('\0'); // Null-terminate the buffer.
-
-        try {
-            m_document.parse<0>(m_buffer.data());
-        } catch (const ::rapidxml::parse_error& e) {
-            throw musx::xml::load_error(e.what());
-        }
+       loadFromBuffer(xmlContent.data(), xmlContent.size());
     }
 
-    void loadFromString(const std::vector<char>& xmlContent) override {
-        m_buffer = xmlContent;
+    void loadFromBuffer(const char * data, size_t size) override {
+        m_buffer = std::vector<char>(data, data + size);
         m_buffer.push_back('\0'); // Null-terminate the buffer.
 
         try {

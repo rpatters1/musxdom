@@ -232,6 +232,14 @@ public:
     virtual ~IXmlDocument() = default;
 
     /**
+     * @brief Loads XML content from buffer
+     * @param data pointer to the XML content.
+     * @param size size of the XML content.
+     * @throws musx::xml::load_error if the load fails.
+     */
+    virtual void loadFromBuffer(const char * data, size_t size) = 0;
+
+    /**
      * @brief Loads XML content from a string.
      * @param xmlContent The XML content as a string.
      * @throws musx::xml::load_error if the load fails.
@@ -243,7 +251,10 @@ public:
      * @param xmlContent The XML content as a vector of characters.
      * @throws musx::xml::load_error if the load fails.
      */
-    virtual void loadFromString(const std::vector<char>& xmlContent) = 0;
+    void loadFromString(const std::vector<char>& xmlContent)
+    {
+        loadFromBuffer(xmlContent.data(), xmlContent.size());
+    }
 
     /**
      * @brief Gets the root element of the document.

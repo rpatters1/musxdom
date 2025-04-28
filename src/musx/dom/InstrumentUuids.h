@@ -27,7 +27,7 @@ namespace musx {
 namespace dom {
 
 /**
- * @namespace musx::uuid
+ * @namespace musx::dom::uuid
  * @brief Constants for all supported instruments (identified by UUID) in Finale.
  */
 namespace uuid {
