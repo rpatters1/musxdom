@@ -2338,6 +2338,49 @@ std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString
     return getAbbreviatedName(accidentalStyle);
 }
 
+// **************************
+// ***** StaffGroupInfo *****
+// **************************
+
+details::StaffGroupInfo::StaffGroupInfo(const std::shared_ptr<StaffGroup>& inp,
+    const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves) : group(inp)
+{
+    if (systemStaves.empty()) {
+        throw std::logic_error("Attempt to create StaffGroupInfo with no system staves (StaffGroup " + std::to_string(inp->getCmper2()) + ")");
+    }
+    for (size_t x = 0; x < systemStaves.size(); x++) {
+        if (inp->staves.find(systemStaves[x]->staffId) != inp->staves.end()) {
+            startSlot = x;
+            break;
+        }
+    }
+    if (startSlot) {
+        for (size_t x = systemStaves.size() - 1; x >= *startSlot; x--) {
+            if (inp->staves.find(systemStaves[x]->staffId) != inp->staves.end()) {
+                endSlot = x;
+                break;
+            }
+        }
+    }
+}
+
+std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure(MeasCmper measureId,
+    const std::shared_ptr<others::PartDefinition>& linkedPart,
+    const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves)
+{
+    auto rawGroups = linkedPart->getDocument()->getDetails()->getArray<details::StaffGroup>(linkedPart->getCmper(), BASE_SYSTEM_ID);
+    std::vector<StaffGroupInfo> retval;
+    for (const auto& rawGroup : rawGroups) {
+        if (rawGroup->startMeas <= measureId && rawGroup->endMeas >= measureId) {
+            StaffGroupInfo group(rawGroup, systemStaves);
+            if (group.startSlot && group.endSlot) {
+                retval.emplace_back(std::move(group));
+            }
+        }
+    }
+    return retval;
+}
+
 // **********************
 // ***** StaffStyle *****
 // **********************
