@@ -2342,21 +2342,21 @@ std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString
 // ***** StaffGroupInfo *****
 // **************************
 
-details::StaffGroupInfo::StaffGroupInfo(const std::shared_ptr<StaffGroup>& inp,
-    const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves) : group(inp)
+details::StaffGroupInfo::StaffGroupInfo(const std::shared_ptr<StaffGroup>& staffGroup,
+    const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves) : group(staffGroup)
 {
     if (systemStaves.empty()) {
-        throw std::logic_error("Attempt to create StaffGroupInfo with no system staves (StaffGroup " + std::to_string(inp->getCmper2()) + ")");
+        throw std::logic_error("Attempt to create StaffGroupInfo with no system staves (StaffGroup " + std::to_string(staffGroup->getCmper2()) + ")");
     }
     for (size_t x = 0; x < systemStaves.size(); x++) {
-        if (inp->staves.find(systemStaves[x]->staffId) != inp->staves.end()) {
+        if (staffGroup->staves.find(systemStaves[x]->staffId) != staffGroup->staves.end()) {
             startSlot = x;
             break;
         }
     }
     if (startSlot) {
         for (size_t x = systemStaves.size() - 1; x >= *startSlot; x--) {
-            if (inp->staves.find(systemStaves[x]->staffId) != inp->staves.end()) {
+            if (staffGroup->staves.find(systemStaves[x]->staffId) != staffGroup->staves.end()) {
                 endSlot = x;
                 break;
             }
@@ -2368,6 +2368,10 @@ std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure
     const std::shared_ptr<others::PartDefinition>& linkedPart,
     const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves)
 {
+    if (systemStaves.empty()) {
+        util::Logger::log(util::Logger::LogLevel::Info, "Attempted to find groups for empty system staves. Returning an empty vector.");
+        return {};
+    }
     auto rawGroups = linkedPart->getDocument()->getDetails()->getArray<details::StaffGroup>(linkedPart->getCmper(), BASE_SYSTEM_ID);
     std::vector<StaffGroupInfo> retval;
     for (const auto& rawGroup : rawGroups) {
