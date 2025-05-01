@@ -146,7 +146,7 @@ public:
 
 protected:
     /**
-     * @brief Constructs the base class and enforces the static constexpr XmlNodeName.
+     * @brief Constructs the base class.
      * 
      * @param document A weak pointer to the parent document
      * @param partId The part ID for this instance, or zero if for score.
@@ -155,8 +155,13 @@ protected:
     Base(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
         : m_document(document), m_partId(partId), m_shareMode(shareMode) {}
 
-    /// @brief assignment constructor: m_unlinkedNodes is intentionally omitted
+    Base(const Base&) = default;        ///< explicit default copy constructor
+    Base(Base&&) noexcept = default;    ///< explicit default move constructor
+
+    /// @brief no-op copy assignment operator allows subclasses to copy their values.
     Base& operator=(const Base&) { return *this; }
+    /// @brief no-op move assignment operator allows subclasses to move their values.
+    Base& operator=(Base&&) noexcept { return *this; }
 
 private:
     const DocumentWeakPtr m_document;
