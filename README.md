@@ -26,10 +26,9 @@ void process(const std::vector<char>& xmlBuffer)
 {
     // For pugi namespace, define MUSX_USE_PUGIXML macro and include pugixml in your project. (See below.)
     auto document = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xmlBuffer);
-    auto scrollView = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto measures = document->getOthers()->getArray<others::Measure>(SCORE_PARTID);
     for (const auto& item : scrollView) {
         auto staff = item->getStaff();
-        auto measures = document->getOthers()->getArray<others::Measure>(SCORE_PARTID, staff->getCmper());
         for (const auto& measure : measures) {
             if (auto gfHold = document->getDetails()->get<details::GFrameHold>(SCORE_PARTID, staff->getCmper(), measure->getCmper())) {
                 for (LayerIndex layer; layer < MAX_LAYERS; layer++) {
