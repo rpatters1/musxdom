@@ -65,7 +65,7 @@ var searchData=
   ['hidenameinscore_62',['hideNameInScore',['../classmusx_1_1dom_1_1others_1_1Staff.html#aed6165003ca9a17e35f5a81284b123ae',1,'musx::dom::others::Staff']]],
   ['hidepage_63',['hidePage',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a2dd12df5c5644a9dcbc7daf379447083',1,'musx::dom::others::MeasureNumberRegion']]],
   ['hidescroll_64',['hideScroll',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a355ae4607c0b1ca931d18d068c0c6b88',1,'musx::dom::others::MeasureNumberRegion']]],
-  ['hidestaves_65',['hidestaves',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cd',1,'musx::dom::details::StaffGroup::HideStaves'],['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a8a80adf3855d15cbe7c6d500ddf7a099',1,'musx::dom::details::StaffGroup::hideStaves']]],
+  ['hidestaves_65',['hidestaves',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a8a80adf3855d15cbe7c6d500ddf7a099',1,'musx::dom::details::StaffGroup::hideStaves'],['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cd',1,'musx::dom::details::StaffGroup::HideStaves']]],
   ['hidestems_66',['hideStems',['../classmusx_1_1dom_1_1others_1_1Staff.html#a43a8a4d6e40a765ac43c63205336a494',1,'musx::dom::others::Staff']]],
   ['hihatcymbal_67',['HiHatCymbal',['../namespacemusx_1_1dom_1_1uuid.html#a94c4237944dd67d7abd8b2eb895f0607',1,'musx::dom::uuid']]],
   ['hiradaiko_68',['Hiradaiko',['../namespacemusx_1_1dom_1_1uuid.html#a3cc1b44e1ada7a7e5f2b9e31b764e8a6',1,'musx::dom::uuid']]],

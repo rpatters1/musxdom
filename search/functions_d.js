@@ -14,7 +14,7 @@ var searchData=
   ['operator_2f_3d_11',['operator/=',['../classmusx_1_1util_1_1Fraction.html#ae3505b301fa50b2ada26a6345a871e1c',1,'musx::util::Fraction']]],
   ['operator_3c_12',['operator&lt;',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ac4b09ba83a0700cb7697a61b5315d5fe',1,'musx::dom::ObjectPool::ObjectKey::operator&lt;()'],['../classmusx_1_1util_1_1Fraction.html#a06e8d418995fd6af761feb5b76e8b638',1,'musx::util::Fraction::operator&lt;(const Fraction &amp;other) const']]],
   ['operator_3c_3d_13',['operator&lt;=',['../classmusx_1_1util_1_1Fraction.html#a70f09416084efa28ca00f389aa7e9072',1,'musx::util::Fraction']]],
-  ['operator_3d_14',['operator=',['../classmusx_1_1dom_1_1Base.html#a562f33f6f491f61b9dc14822779600ef',1,'musx::dom::Base']]],
+  ['operator_3d_14',['operator=',['../classmusx_1_1dom_1_1Base.html#a562f33f6f491f61b9dc14822779600ef',1,'musx::dom::Base::operator=(const Base &amp;)'],['../classmusx_1_1dom_1_1Base.html#a9857862e0e9c329715dfda1df47bb5b9',1,'musx::dom::Base::operator=(Base &amp;&amp;) noexcept']]],
   ['operator_3d_3d_15',['operator==',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#af1f390f711bf9fd8c715655bb2cb9b31',1,'musx::dom::TimeSignature::TimeSigComponent::operator==()'],['../classmusx_1_1util_1_1Fraction.html#a75c8baa888f70007748b77669c2088c9',1,'musx::util::Fraction::operator==(const Fraction &amp;other) const']]],
   ['operator_3e_16',['operator&gt;',['../classmusx_1_1util_1_1Fraction.html#a547d35fe338bf1d18ae7d1e8e1bf2881',1,'musx::util::Fraction']]],
   ['operator_3e_3d_17',['operator&gt;=',['../classmusx_1_1util_1_1Fraction.html#a5a6ba1071971b3a7ede960aa259e5586',1,'musx::util::Fraction']]],

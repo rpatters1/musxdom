@@ -246,6 +246,7 @@ var hierarchy =
       [ "musx::factory::unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
       [ "musx::xml::load_error", "classmusx_1_1xml_1_1load__error.html", null ]
     ] ],
+    [ "musx::dom::details::StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html", null ],
     [ "musx::dom::others::KeyMapArray::StepElement", "classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html", null ],
     [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
     [ "music_theory::Transposer", "classmusic__theory_1_1Transposer.html", null ],

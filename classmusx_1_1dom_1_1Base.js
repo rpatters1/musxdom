@@ -8,6 +8,8 @@ var classmusx_1_1dom_1_1Base =
     ] ],
     [ "~Base", "classmusx_1_1dom_1_1Base.html#ae20dd597127cd4a1bd8b8aa53c2ee08e", null ],
     [ "Base", "classmusx_1_1dom_1_1Base.html#a57d15e8a530fbfb694e4d3fbd5ae2dd5", null ],
+    [ "Base", "classmusx_1_1dom_1_1Base.html#aea473e63b9afa69b7180712044f020e9", null ],
+    [ "Base", "classmusx_1_1dom_1_1Base.html#af9b7e53eba94bdbf3b552de15e698751", null ],
     [ "addUnlinkedNode", "classmusx_1_1dom_1_1Base.html#ab65d4a6942a09ecc3a2b6ae5c96d434a", null ],
     [ "getDocument", "classmusx_1_1dom_1_1Base.html#a3284dc2e34ac0e59c06847587fe7201a", null ],
     [ "getPartDefinition", "classmusx_1_1dom_1_1Base.html#ab82b29d7f2164630dee1f73d8535633d", null ],
@@ -15,6 +17,7 @@ var classmusx_1_1dom_1_1Base =
     [ "getShareMode", "classmusx_1_1dom_1_1Base.html#a67e14feb232232fb0d2f395079f26c3c", null ],
     [ "getUnlinkedNodes", "classmusx_1_1dom_1_1Base.html#a9bb9442bd1fafb778a180eb1eaaedf4e", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905", null ],
+    [ "operator=", "classmusx_1_1dom_1_1Base.html#a9857862e0e9c329715dfda1df47bb5b9", null ],
     [ "operator=", "classmusx_1_1dom_1_1Base.html#a562f33f6f491f61b9dc14822779600ef", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e", null ]
 ];

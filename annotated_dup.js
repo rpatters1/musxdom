@@ -25,6 +25,7 @@ var annotated_dup =
           [ "SecondaryBeamBreak", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak" ],
           [ "SmartShapeEntryAssign", "classmusx_1_1dom_1_1details_1_1SmartShapeEntryAssign.html", "classmusx_1_1dom_1_1details_1_1SmartShapeEntryAssign" ],
           [ "StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", "classmusx_1_1dom_1_1details_1_1StaffGroup" ],
+          [ "StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo" ],
           [ "TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html", "classmusx_1_1dom_1_1details_1_1TieAlterBase" ],
           [ "TieAlterEnd", "classmusx_1_1dom_1_1details_1_1TieAlterEnd.html", "classmusx_1_1dom_1_1details_1_1TieAlterEnd" ],
           [ "TieAlterStart", "classmusx_1_1dom_1_1details_1_1TieAlterStart.html", "classmusx_1_1dom_1_1details_1_1TieAlterStart" ],
