@@ -38,6 +38,7 @@ constexpr static musxtest::string_view xml = R"xml(
       <divbeat>2</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
+      <hasTextBlock/>
       <altNumTsig/>
       <altDenTsig/>
       <posMode>timesigPlusPos</posMode>
@@ -129,6 +130,7 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_EQ(measure1->dispDivbeat, Cmper(1024));
     EXPECT_FALSE(measure1->hideCaution);
     EXPECT_FALSE(measure1->hasSmartShape);
+    EXPECT_TRUE(measure1->hasTextBlock);
     EXPECT_FALSE(measure1->groupBarlineOverride);
     EXPECT_TRUE(measure1->compositeNumerator);
     EXPECT_TRUE(measure1->compositeDenominator);
@@ -168,6 +170,7 @@ TEST(MeasureTest, PopulateScore)
     EXPECT_EQ(measure2->dispDivbeat, Cmper(6));
     EXPECT_FALSE(measure2->hideCaution);
     EXPECT_TRUE(measure2->hasSmartShape);
+    EXPECT_FALSE(measure2->hasTextBlock);
     EXPECT_FALSE(measure2->compositeNumerator);
     EXPECT_FALSE(measure2->compositeDenominator);
     EXPECT_EQ(measure2->barlineType, others::Measure::BarlineType::Normal);

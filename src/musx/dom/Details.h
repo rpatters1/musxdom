@@ -42,6 +42,7 @@ class TupletOptions;
 } // namespace options
 
 namespace others {
+class InstrumentUsed;
 class Measure;
 class MultiStaffInstrumentGroup;
 } // namespace others
@@ -726,6 +727,32 @@ public:
 
     constexpr static std::string_view XmlNodeName = "staffGroup"; ///< XML node name for this type.
     static const xml::XmlElementArray<StaffGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffGroupInfo
+ * @brief Provides run-time information about Staff Groups within a system or list of @ref others::InstrumentUsed.
+ */
+class StaffGroupInfo
+{
+public:
+    std::optional<size_t> startSlot;                ///< the start slot of the group in the system staves.
+    std::optional<size_t> endSlot;                  ///< the end slot of the group in the system staves.
+    std::shared_ptr<StaffGroup> group;              ///< the StaffGroup record for the group.
+
+    /// @brief Constructs information about a specific StaffGroup as it relates the the @p systemStaves
+    /// @param staffGroup The staff group
+    /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
+    StaffGroupInfo(const std::shared_ptr<StaffGroup>& staffGroup,
+        const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
+
+    /// @brief Creates a vector of #StaffGroupInfo instances for the measure, part, and system staves
+    /// @param measureId The measure to find.
+    /// @param linkedPart The linked part in which to find the groups.
+    /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
+    static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId,
+        const std::shared_ptr<others::PartDefinition>& linkedPart,
+        const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
 };
 
 /**

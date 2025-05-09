@@ -62,6 +62,32 @@ enum class NoteType : Edu
     Note4096th = 0x0001
 };
 
+/// @brief Clef types used by default in Finale documents. The values correspond to indices into
+/// @ref musx::dom::options::ClefOptions::clefDefs.
+/// Note that the user may change the clef list to any clefs the user wishes. These are only defaults, but
+/// they are frequently left unchanged.
+enum class DefaultClefType : ClefIndex
+{
+    Treble          = 0,  ///< G clef, standard treble.
+    Alto            = 1,  ///< C clef, centered on third line (Alto clef).
+    Tenor           = 2,  ///< C clef, centered on fourth line (Tenor clef).
+    Bass            = 3,  ///< F clef, standard bass.
+    Percussion      = 4,  ///< Percussion clef, open rectangle (no pitch).
+    Treble8vb       = 5,  ///< G clef, sounds one octave lower (8vb).
+    Bass8vb         = 6,  ///< F clef, sounds one octave lower (8vb).
+    Baritone        = 7,  ///< F clef on third line (Baritone clef).
+    FrenchViolin    = 8,  ///< G clef placed on first line (French violin clef).
+    BaritoneC       = 9,  ///< C clef on fifth line (Baritone clef).
+    MezzoSoprano    = 10, ///< C clef on second line (Mezzo-soprano clef).
+    Soprano         = 11, ///< C clef on first line (Soprano clef).
+    AltPercussion   = 12, ///< Alternate percussion clef, heavy vertical hash marks (no pitch).
+    Treble8va       = 13, ///< G clef, sounds one octave higher (8va).
+    Bass8va         = 14, ///< F clef, sounds one octave higher (8va).
+    Blank           = 15, ///< Blank clef (invisible, no symbol).
+    Tab1            = 16, ///< Tablature clef (5 lines).
+    Tab2            = 17  ///< Tablature clef (5 lines, alternative style).
+};
+
 /**
  * @brief Enum representing the clef display mode for a frame.
  */

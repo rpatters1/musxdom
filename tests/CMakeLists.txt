@@ -109,6 +109,7 @@ add_executable(musxdomtests
     music_theory/transpose.cpp
 )
 
+set(CMAKE_WARN_DEPRECATED ON CACHE BOOL "Suppress deprecation warnings for external projects" FORCE)
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
     # Extra warnings for Clang/AppleClang
     target_compile_options(musxdomtests PRIVATE -Wall -Wextra -Werror -Wpedantic)

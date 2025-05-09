@@ -14,6 +14,39 @@ Document object model for the EnigmaXml format in Finale musx files. It is compa
 
 [MUSX Document Model](https://rpatters1.github.io/musxdom/)
 
+Here is a simple example to create a document from a buffer containing EnigmaXml. It loops through every staff, measure, and layer in the Musx document.
+
+```cpp
+#include "musx/musx.h"
+
+using namespace musx::dom;
+using namespace musx::util;
+
+void process(const std::vector<char>& xmlBuffer)
+{
+    // For pugi namespace, define MUSX_USE_PUGIXML macro and include pugixml in your project. (See below.)
+    auto document = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xmlBuffer);
+    auto scrollView = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto measures = document->getOthers()->getArray<others::Measure>(SCORE_PARTID);
+    for (const auto& item : scrollView) {
+        auto staff = item->getStaff();
+        for (const auto& measure : measures) {
+            if (auto gfHold = document->getDetails()->get<details::GFrameHold>(SCORE_PARTID, staff->getCmper(), measure->getCmper())) {
+                for (LayerIndex layer; layer < MAX_LAYERS; layer++) {
+                    // create your own entry frame:
+                    auto entries = gfHold->createEntryFrame(layer, /*forWrittenPitch*/ false);
+                    // or let musxdom iterate the entries for you:
+                    gfHold->iterateEntries(layer, [&](const EntryInfoPtr& entryInfo) -> bool {
+                        // do something with the entry (which is a single note, a chord, or a rest)
+                        return true;
+                    });
+                }
+            }
+        }
+    }
+}
+```
+
 ### Setup Instructions
 
 Include the top header in your source file.
