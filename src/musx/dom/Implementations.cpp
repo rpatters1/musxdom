@@ -1481,15 +1481,51 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
 // ***** Note *****
 // ****************
 
+std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignature>& key) const
+{
+    auto transposer = key->createTransposer(harmLev, harmAlt);
+    if (harmAlt) {
+        transposer->enharmonicTranspose(music_theory::sign(harmAlt));
+        if (std::abs(transposer->alteration()) > 7)
+            return {harmLev, harmAlt};
+        return {transposer->displacement(), transposer->alteration()};
+    }
+
+    transposer->enharmonicTranspose(1);
+    int upDisp = transposer->displacement();
+    int upAlt = transposer->alteration();
+
+    // This is observed Finale behavior, relevant in the context of microtone custom key signatures.
+    // A possibly more correct version would omit this hard-coded comparison to the number 2, but it
+    // seems to be what Finale does.
+    if (std::abs(upAlt) != 2) {
+        if (std::abs(upAlt) > 7)
+            return {harmLev, harmAlt};
+        return {upDisp, upAlt};
+    }
+
+    auto down = key->createTransposer(harmLev, harmAlt);
+    down->enharmonicTranspose(-1);
+    int downAlt = down->alteration();
+
+    if (std::abs(downAlt) > 7)
+        return {harmLev, harmAlt};
+
+    if (std::abs(downAlt) < std::abs(upAlt))
+        return {down->displacement(), downAlt};
+    return {upDisp, upAlt};
+}
+
 std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex,
-    const std::shared_ptr<const others::Staff>& staff) const
+    const std::shared_ptr<const others::Staff>& staff, bool respellEnharmonic) const
 {
     static constexpr std::array<Note::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
         Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
     };
 
-    int transposedLev = harmLev;
-    int transposedAlt = harmAlt;
+    auto [transposedLev, transposedAlt] = respellEnharmonic
+                                        ? calcDefaultEnharmonic(key)
+                                        : std::pair<int, int>{ harmLev, harmAlt };
     if (staff && staff->transposition && staff->transposition->chromatic) {
         const auto& chromatic = *staff->transposition->chromatic;
         auto transposer = key->createTransposer(transposedLev, transposedAlt);

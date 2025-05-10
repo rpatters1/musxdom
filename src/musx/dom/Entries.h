@@ -99,6 +99,18 @@ public:
     /// in a chord are rearranged (which affects the order of #Entry::notes.)
     NoteNumber getNoteId() const { return m_noteId; }
 
+    /// @brief Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when
+    /// #details::NoteAlterations::enharmonic is true.
+    ///
+    /// Normally you do not have to call this function directly. It is called inside #calcNoteProperties. But the function
+    /// is available if you need it.
+    ///
+    /// @param key The key signature to use for transposition.
+    /// @return A std::pair containing
+    ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
+    ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
+    std::pair<int, int> calcDefaultEnharmonic(const std::shared_ptr<KeySignature>& key) const;
+
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position.
      *
@@ -114,6 +126,7 @@ public:
      * @param clefIndex The index of the clef in effect.
      * @param staff If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If
      * calling #calcNoteProperties for Concert Pitch (sounding pitch) values, omit this parameter.
+     * @param respellEnharmonic If true, the notes are enharmonically respelled using the default enharmonic spelling.
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
@@ -121,7 +134,7 @@ public:
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
     std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex,
-        const std::shared_ptr<const others::Staff>& staff = nullptr) const;
+        const std::shared_ptr<const others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     bool requireAllFields() const override { return false; }
 
@@ -532,8 +545,8 @@ public:
     NoteInfoPtr() : m_entry(), m_noteIndex(0) {}
 
     /// @brief Constructor
-    /// @param entryInfo 
-    /// @param noteIndex 
+    /// @param entryInfo The entry info containing the note.
+    /// @param noteIndex The index of this note within #Entry::notes.
     NoteInfoPtr(const EntryInfoPtr& entryInfo, size_t noteIndex)
         : m_entry(entryInfo), m_noteIndex(noteIndex)
     {}
