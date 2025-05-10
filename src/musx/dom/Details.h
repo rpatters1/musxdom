@@ -528,6 +528,38 @@ public:
 };
 
 /**
+ * @class NoteAlterations
+ * @brief Represents graphical and notational alterations applied to a note.
+ *
+ * This class is identified by the XML node name "noteAlter".
+ */
+class NoteAlterations : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit NoteAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci), customFont(new FontInfo(document))
+    {
+    }
+
+    NoteNumber noteId{};                    ///< The ID of the note being altered. (xml node is `<noteID>`)
+    int percent{};                          ///< Size percentage for the notehead. (A value of 100 means 100%.)
+    Evpu nxdisp{};                          ///< Horizontal notehead offset.
+    char32_t altNhead{};                    ///< Alternate notehead character.
+    bool useOwnFont{};                      ///< Whether to use the custom font.
+    std::shared_ptr<FontInfo> customFont{}; ///< Custom font info (consolidates: `<fontID>`, `<fontSize>`, `<efx>`)
+    bool allowVertPos{};                    ///< Whether vertical positioning is allowed .
+    Evpu nydisp{};                          ///< Vertical notehead offset.
+    bool enharmonic{};                      ///< Whether this note is enharmonically respelled.
+                                            ///< It is normally only true in linked parts as an unlinked value.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "noteAlter"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<NoteAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class SecondaryBeamBreak
  * @brief Specifies which secondary beams break and restart on the associated entry.
  *

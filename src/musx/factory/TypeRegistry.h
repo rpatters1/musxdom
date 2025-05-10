@@ -261,10 +261,11 @@ using RegisteredDetails = TypeRegistry <
     dom::details::CenterShape,
     dom::details::ChordAssign,
     dom::details::CrossStaff,
-    dom::details::IndependentStaffDetails, // "floats" is the xml key
+    dom::details::IndependentStaffDetails,  // "floats" is the xml key
     dom::details::GFrameHold,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
+    dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it
     dom::details::SecondaryBeamBreak,
     dom::details::SmartShapeEntryAssign,
     dom::details::TieAlterEnd,

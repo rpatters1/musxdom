@@ -101,6 +101,7 @@ add_executable(musxdomtests
 	details/chords.cpp
 	details/floats.cpp
 	details/gfhold.cpp
+	details/note_alters.cpp
 	details/secondary_beams.cpp
 	details/staff_group.cpp
     details/tie_alter.cpp

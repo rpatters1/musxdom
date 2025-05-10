@@ -186,6 +186,20 @@ MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {
     {"postIt", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->hidden = populateBoolean(e, i); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(NoteAlterations, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->percent = e->getTextAs<int>(); }},
+    {"nxdisp", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->nxdisp = e->getTextAs<Evpu>(); }},
+    {"altNhead", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->altNhead = e->getTextAs<char32_t>(); }},
+    {"useOwnFont", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->useOwnFont = populateBoolean(e, i); }},
+    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"allowVertPos", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->allowVertPos = populateBoolean(e, i); }},
+    {"nydisp", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->nydisp = e->getTextAs<Evpu>(); }},
+    {"enharmonic", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->enharmonic = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
     {"do16th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note16th); }},
     {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note32nd); }},

@@ -55,6 +55,7 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"ignore", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->isHidden = populateBoolean(e, i); }},
     {"v2", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->voice2 = populateBoolean(e, i); }},
     {"articDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->articDetail = populateBoolean(e, i); }},
+    {"noteDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->noteDetail = populateBoolean(e, i); }},
     {"beam", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->beam = populateBoolean(e, i); }},
     {"secBeam", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->secBeam = populateBoolean(e, i); }},
     {"crossStaff", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->crossStaff = populateBoolean(e, i); }},
