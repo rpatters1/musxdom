@@ -325,15 +325,15 @@ public:
 
 /**
  * @class GFrameHoldContext
- * @brief A context wrapper for #GFrameHold associated with a specific part and location.
+ * @brief A context wrapper for @ref GFrameHold associated with a specific part and location.
  *
- * This class retrieves the appropriate #GFrameHold from a Document using part, instrument, and measure IDs,
+ * This class retrieves the appropriate @ref GFrameHold from a Document using part, instrument, and measure IDs,
  * and enables part-aware operations like iterating over EntryFrame objects.
  */
 class GFrameHoldContext {
 public:
     /**
-     * @brief Constructs a context-aware #GFrameHold wrapper.
+     * @brief Constructs a context-aware @ref GFrameHold wrapper.
      * 
      * @param document Weak pointer to the owning Document.
      * @param partId The requested part ID.
@@ -350,23 +350,16 @@ public:
     Cmper getRequestedPartId() const { return m_requestedPartId; }
 
     /**
-     * @brief Provides const pointer-style access to the underlying #GFrameHold.
+     * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
      * 
-     * @return A const pointer to #GFrameHold.
+     * @return A const pointer to @ref GFrameHold.
      */
     const GFrameHold* operator->() const { return m_hold.get(); }
 
     /**
-     * @brief Provides non-const pointer-style access to the underlying #GFrameHold.
+     * @brief Returns true if the internal @ref GFrameHold is valid.
      * 
-     * @return A pointer to #GFrameHold.
-     */
-    GFrameHold* operator->() { return m_hold.get(); }
-
-    /**
-     * @brief Returns true if the internal #GFrameHold is valid.
-     * 
-     * @return True if the #GFrameHold was successfully retrieved; false otherwise.
+     * @return True if the @ref GFrameHold was successfully retrieved; false otherwise.
      */
     explicit operator bool() const { return static_cast<bool>(m_hold); }
 
@@ -388,7 +381,7 @@ public:
     std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
     
     /**
-     * @brief iterates the entries for the specified layer in this #GFrameHold from left to right
+     * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
      * @param layerIndex The layer index (0..3) to iterate.
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
@@ -397,7 +390,7 @@ public:
     bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
 
     /**
-     * @brief iterates the entries for this #GFrameHold from left to right for each layer in order
+     * @brief iterates the entries for this @ref GFrameHold from left to right for each layer in order
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
      */

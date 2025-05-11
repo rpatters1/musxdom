@@ -366,7 +366,7 @@ public:
     /// @param forPartId The part for which to get the note detail. If omitted, the @p noteInfo part is used.
     /// @return The instance associated with @p noteInfo or nullptr if none.
     template <typename T, typename std::enable_if_t<std::is_base_of_v<NoteDetailsBase, T>, int> = 0>
-    std::shared_ptr<T> getForNote(const NoteInfoPtr noteInfo, const std::optional<Cmper>& forPartId = std::nullopt)
+    std::shared_ptr<T> getForNote(const NoteInfoPtr& noteInfo, const std::optional<Cmper>& forPartId = std::nullopt)
     {
         auto details = getArray<T>(
             forPartId.value_or(noteInfo.getEntryInfo().getFrame()->getPartId()),

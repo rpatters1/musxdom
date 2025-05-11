@@ -1675,9 +1675,9 @@ InstCmper NoteInfoPtr::calcStaff() const
     return m_entry.getStaff();
 }
 
-std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() const
+std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell) const
 {
-    ClefIndex clefIndex = [&]() {
+    const ClefIndex clefIndex = [&]() {
         if ((*this)->crossStaff) {
             InstCmper staffId = calcStaff();
             if (staffId != m_entry.getStaff()) {
@@ -1689,11 +1689,23 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() cons
         return m_entry->clefIndex;
     }();
 
+    const bool doEnharmonicRespell = [&]() {
+        if (enharmonicRespell.has_value()) {
+            return enharmonicRespell.value();
+        }
+        if (m_entry->getEntry()->noteDetail) {
+            if (auto noteAlts = getEntryInfo().getFrame()->getDocument()->getDetails()->getForNote<details::NoteAlterations>(*this)) {
+                return noteAlts->enharmonic;
+            }
+        }
+        return false;
+    }();
+
     if (getEntryInfo().getFrame()->isForWrittenPitch()) {
-        return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, m_entry.createCurrentStaff());
+        return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, m_entry.createCurrentStaff(), doEnharmonicRespell);
     }
 
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex);
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, nullptr, doEnharmonicRespell);
 }
 
 std::unique_ptr<music_theory::Transposer> NoteInfoPtr::createTransposer() const

@@ -550,7 +550,7 @@ public:
 
     /** @brief Returns a vector of entries contained in the frame.
      *
-     * These are raw entries. Use #details::GFrameHold::createEntryFrame for a vector of entries with computed values.
+     * These are raw entries. Use #details::GFrameHoldContext::createEntryFrame for a vector of entries with computed values.
      */
     std::vector<std::shared_ptr<const Entry>> getEntries();
 

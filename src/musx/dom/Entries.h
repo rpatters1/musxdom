@@ -579,13 +579,15 @@ public:
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
+     * this value calculated automatically based on the score or part settings. Normally you will omit it.
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
      *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
-    std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const;
+    std::tuple<Note::NoteName, int, int, int> calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end.
