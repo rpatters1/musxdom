@@ -43,25 +43,12 @@ namespace musx {
 namespace dom {
 
 // *****************
-// ***** Base *****
-// *****************
-
-std::shared_ptr<others::PartDefinition> Base::getPartDefinition() const
-{
-    if (auto retval = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, getPartId())) {
-        return retval;
-    }
-    MUSX_INTEGRITY_ERROR("PartDefinition for part id " + std::to_string(getPartId()) + " does not exist.");
-    return nullptr;
-}
-
-// *****************
 // ***** Entry *****
 // *****************
 
-std::shared_ptr<Entry> Entry::getNext() const
+ObjectView<Entry> Entry::getNext() const
 {
-    if (!m_next) return nullptr;
+    if (!m_next) return { nullptr, SCORE_PARTID };
     auto retval = getDocument()->getEntries()->get<Entry>(m_next);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has next entry " + std::to_string(m_next) + " that does not exist.");
@@ -69,9 +56,9 @@ std::shared_ptr<Entry> Entry::getNext() const
     return retval;
 }
 
-std::shared_ptr<Entry> Entry::getPrevious() const
+ObjectView<Entry> Entry::getPrevious() const
 {
-    if (!m_prev) return nullptr;
+    if (!m_prev) return { nullptr, SCORE_PARTID };
     auto retval = getDocument()->getEntries()->get<Entry>(m_prev);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has previous entry " + std::to_string(m_prev) + " that does not exist.");
@@ -652,7 +639,7 @@ std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& d
 
 std::string FontInfo::getName() const
 {
-    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId)) {
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getSourcePartId(), fontId)) {
         return fontDef->name;
     }
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
@@ -660,7 +647,7 @@ std::string FontInfo::getName() const
 
 void FontInfo::setFontIdByName(const std::string& name)
 {
-    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>(getPartId());
+    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>(getSourcePartId());
     for (auto fontDef : fontDefs) {
         if (fontDef->name == name) {
             fontId = fontDef->getCmper();
@@ -688,7 +675,7 @@ std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath() const
 
 bool FontInfo::calcIsSymbolFont() const
 {
-    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId)) {
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getSourcePartId(), fontId)) {
         return fontDef->calcIsSymbolFont();
     }
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
@@ -790,10 +777,10 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** Frame *****
 // *****************
 
-std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries()
+std::vector<ObjectView<const Entry>> others::Frame::getEntries()
 {
-    std::vector<std::shared_ptr<const Entry>> retval;
-    auto firstEntry = startEntry ? getDocument()->getEntries()->get<Entry>(startEntry) : nullptr;
+    std::vector<ObjectView<const Entry>> retval;
+    auto firstEntry = startEntry ? getDocument()->getEntries()->get<Entry>(startEntry) : {nullptr, SCORE_PARTID};
     if (!firstEntry) {
         MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1)) + " is not iterable.");
         return retval;
@@ -989,7 +976,7 @@ ClefIndex details::GFrameHold::calcClefIndexAt(Edu position) const
         return clefId.value();
     }
     ClefIndex result = 0;
-    auto clefList = getDocument()->getOthers()->getArray<others::ClefList>(getPartId(), clefListId);
+    auto clefList = getDocument()->getOthers()->getArray<others::ClefList>(getSourcePartId(), clefListId);
     if (clefList.empty()) {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
             + std::to_string(getMeasure()) + " has non-existent clef list [" + std::to_string(clefListId) + "]");
@@ -1028,23 +1015,23 @@ std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createDisplayTi
 // ***** InstrumentUsed *****
 // **************************
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
+ObjectView<others::Staff> others::InstrumentUsed::getStaff() const
 {
-    auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
+    auto retval = getDocument()->getOthers()->get<others::Staff>(getSourcePartId(), staffId);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staffId) + " not found for InstrumentUsed list " + std::to_string(getCmper()));
     }
     return retval;
 }
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
+ObjectView<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<ObjectView<others::InstrumentUsed>>& iuArray, Cmper index)
 {
-    if (index >= iuArray.size()) return nullptr;
+    if (index >= iuArray.size()) return { nullptr, getSourcePartId() };
     auto iuItem = iuArray[index];
     return iuItem->getStaff();
 }
 
-std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId)
+std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector<ObjectView<InstrumentUsed>>& iuArray, InstCmper staffId)
 {
     for (size_t x = 0; x < iuArray.size(); x++) {
         if (iuArray[x]->staffId == staffId) {

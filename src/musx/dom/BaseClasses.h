@@ -56,6 +56,11 @@ using DocumentPtr = std::shared_ptr<Document>;
 /** @brief Shared weak `Document` pointer */
 using DocumentWeakPtr = std::weak_ptr<Document>;
 
+class OptionsPool;
+class OthersPool;
+class DetailsPool;
+class EntryPool;
+
 /**
  * @class Base
  * @brief Base class to enforce polymorphism across all DOM classes.
@@ -97,18 +102,6 @@ public:
     }
 
     /**
-     * @brief Gets the partId for this instance (or SCORE_PARTID for score)
-     * @note When you use `get` or `getArray` to retrieve an instance for a part, the value
-     * returned is either for that part or it is for the score. Therefore, this value is
-     * only reliable for determining the partId you are working on if the entity's share mode
-     * is #ShareMode::None. Otherwise, it returns SCORE_PARTID for instances shared with the score.
-     */
-    Cmper getPartId() const { return m_partId; }
-
-    /** @brief Gets the @ref others::PartDefinition corresponding to #getPartId */
-    std::shared_ptr<others::PartDefinition> getPartDefinition() const;
-
-    /**
      * @brief Gets the sharing mode for this instance.
      */
     ShareMode getShareMode() const { return m_shareMode; }
@@ -148,6 +141,15 @@ public:
      */
     virtual bool requireAllFields() const { return true; }
 
+    /**
+     * @brief Gets the source partId for this instance. This is not necessarily the same as the part Id requested.
+     * @note When you use `get` or `getArray` to retrieve an instance for a part, the value
+     * returned is either for that part or it is for the score. Therefore, this value is
+     * not reliable for returning the part that was requested and should only be used by
+     * internal code such as the pools, factory, and by subclasses for error reporting.
+     */
+    Cmper getSourcePartId() const { return m_partId; }
+
 protected:
     /**
      * @brief Constructs the base class.
@@ -168,6 +170,11 @@ protected:
     Base& operator=(Base&&) noexcept { return *this; }
 
 private:
+    friend class OptionsPool;
+    friend class OthersPool;
+    friend class DetailsPool;
+    friend class TextsPool;
+
     const DocumentWeakPtr m_document;
     const Cmper m_partId;
     const ShareMode m_shareMode;
@@ -195,10 +202,9 @@ protected:
     // these Base functions do not return useful results. However, we allow our subclasses
     // to use their own versions of these functions (esp. `getPartId`) to avoid promiscuous
     // hard-coding of SCORE_PARTID. The rules may change in the future.
-    using Base::getPartDefinition;
-    using Base::getPartId;
     using Base::getShareMode;
     using Base::getUnlinkedNodes;
+    using Base::getSourcePartId;
 };
 
 /**
@@ -420,6 +426,72 @@ public:
 
 private:
     Cmper m_textNumber;             ///< Common attribute: cmper (key value).
+};
+
+/**
+ * @class ObjectView
+ * @brief A lightweight, non-owning wrapper around a shared object that preserves the requested part context.
+ * 
+ * @tparam T The type of the underlying shared object.
+ */
+template <typename T>
+class ObjectView
+{
+public:
+    /**
+     * @brief Constructs an ObjectView with the given shared object and requested part ID.
+     * 
+     * @param obj The shared object pointer (typically retrieved from the object pool).
+     * @param requestedPartId The part ID the object is being viewed in the context of.
+     */
+    ObjectView(const std::shared_ptr<T>& obj, Cmper requestedPartId)
+        : m_obj(obj), m_requestedPartId(requestedPartId) {}
+
+    /**
+     * @brief Dereference operator for accessing members of the underlying object.
+     * 
+     * @return A raw pointer to the object.
+     */
+    const T* operator->() const { return m_obj.get(); }
+
+    /**
+     * @brief Non-const dereference operator for accessing members of the underlying object.
+     * 
+     * @return A raw pointer to the object.
+     */
+    T* operator->() { return m_obj.get(); }
+
+    /**
+     * @brief Dereference operator for accessing the object by reference.
+     * 
+     * @return A reference to the object.
+     */
+    const T& operator*() const { return *m_obj; }
+
+    /**
+     * @brief Checks whether the view holds a valid object.
+     * 
+     * @return True if the shared object is non-null, false otherwise.
+     */
+    explicit operator bool() const { return static_cast<bool>(m_obj); }
+
+    /** @brief return the underlying instance from the pool. */
+    std::shared_ptr<T> instance() const { return m_obj; }
+
+    /**
+     * @brief Gets the requested part ID associated with this view. This can always reflects
+     * the part ID the was requested, even if the underlying instance is shared from the score.
+     *
+     * @return The part ID this object was retrieved for.
+     */
+    Cmper getPartId() const { return m_requestedPartId; }
+
+    /** @brief Gets the @ref others::PartDefinition corresponding to #getPartId */
+    ObjectView<others::PartDefinition> getPartDefinition() const;
+
+private:
+    std::shared_ptr<T> m_obj;      ///< The shared object.
+    Cmper m_requestedPartId;       ///< The requested part ID context.
 };
 
 } // namespace dom

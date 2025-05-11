@@ -64,7 +64,7 @@ struct FieldPopulator<TextRepeatEnclosure> : private FieldPopulator<Enclosure>
 MUSX_RESOLVER_ENTRY(KeyMapArray, {
     [](const dom::DocumentPtr& document) {
         auto arrays = document->getOthers()->getArray<KeyMapArray>(SCORE_PARTID);
-        for (const auto& array : arrays) {
+        for (auto& array : arrays) {
             auto trimSteps = [&](size_t newSize) {
                 while (array->steps.size() > newSize) {
                     const auto& elt = array->steps[array->steps.size() - 1];
@@ -186,11 +186,11 @@ MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
         auto exps = document->getOthers()->getArray<ShapeExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {
             if (instance->categoryId) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance.getPartId(), instance->categoryId);
                 if (!markingCat) {
                     MUSX_INTEGRITY_ERROR("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
-                markingCat->shapeExpressions.emplace(instance->getCmper(), instance);
+                markingCat->shapeExpressions.emplace(instance->getCmper(), instance.instance());
             }
         }
     }
@@ -211,11 +211,11 @@ MUSX_RESOLVER_ENTRY(TextExpressionDef, {
         auto exps = document->getOthers()->getArray<TextExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {
             if (instance->categoryId) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance.getPartId(), instance->categoryId);
                 if (!markingCat) {
                     MUSX_INTEGRITY_ERROR("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
-                markingCat->textExpressions.emplace(instance->getCmper(), instance);
+                markingCat->textExpressions.emplace(instance->getCmper(), instance.instance());
             }
         }
     }

@@ -201,12 +201,12 @@ public:
     /// @brief Gets the next entry in this list or nullptr if none.
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
-    std::shared_ptr<Entry> getNext() const;
+    ObjectView<Entry> getNext() const;
 
     /// @brief Gets the previous entry in this list or nullptr if none
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
-    std::shared_ptr<Entry> getPrevious() const;
+    ObjectView<Entry> getPrevious() const;
 
     /**
      * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)

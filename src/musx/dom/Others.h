@@ -552,7 +552,7 @@ public:
      *
      * These are raw entries. Use #details::GFrameHold::createEntryFrame for a vector of entries with computed values.
      */
-    std::vector<std::shared_ptr<const Entry>> getEntries();
+    std::vector<ObjectView<const Entry>> getEntries();
 
     void integrityCheck() override
     {
@@ -590,17 +590,17 @@ public:
     std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
     /// @brief Returns the @ref Staff instance for this element
-    std::shared_ptr<Staff> getStaff() const;
+    ObjectView<Staff> getStaff() const;
 
     /// @brief Returns the @ref Staff instance at a specified index of iuArray or nullptr if not found
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
     /// @param index The 0-based index to find.
-    static std::shared_ptr<Staff> getStaffAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
+    static ObjectView<Staff> getStaffAtIndex(const std::vector<ObjectView<InstrumentUsed>>& iuArray, Cmper index);
 
     /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
     /// @param staffId The @ref Staff cmper value to find.
-    static std::optional<size_t> getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId);
+    static std::optional<size_t> getIndexForStaff(const std::vector<ObjectView<InstrumentUsed>>& iuArray, InstCmper staffId);
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
     static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1230,7 +1230,7 @@ public:
     {
         this->OthersBase::integrityCheck();
         if (nextMeas <= getStartMeasure()) {
-            MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getPartId()) + " spans 0 or fewer measures.");
+            MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getSourcePartId()) + " spans 0 or fewer measures.");
         }
     }
 
@@ -2125,7 +2125,7 @@ public:
         MusicRange::integrityCheck();
         if (!styleId) {
             MUSX_INTEGRITY_ERROR(std::string("Staff style assignment has no staff style id:")
-                + " Part " + std::to_string(getPartId())
+                + " Part " + std::to_string(getSourcePartId())
                 + " Staff " + std::to_string(getCmper())
             );
         }
@@ -2611,5 +2611,16 @@ public:
 };
 
 } // namespace others
+
+template <typename T>
+inline ObjectView<others::PartDefinition> ObjectView<T>::getPartDefinition() const
+{
+    if (auto retval = (*this)->getDocument()->getOthers()->template get<others::PartDefinition>(SCORE_PARTID, getPartId())) {
+        return retval;
+    }
+    MUSX_INTEGRITY_ERROR("PartDefinition for part id " + std::to_string(getPartId()) + " does not exist.");
+    return ObjectView<others::PartDefinition>(nullptr, getPartId());
+}
+
 } // namespace dom
 } // namespace musx

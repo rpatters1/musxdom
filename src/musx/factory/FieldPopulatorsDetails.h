@@ -101,7 +101,7 @@ MUSX_RESOLVER_ENTRY(StaffGroup, {
         for (const auto& part : parts) {
             auto groups = document->getDetails()->getArray<StaffGroup>(part->getCmper(), BASE_SYSTEM_ID);
             auto baseList = document->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
-            for (const auto& instance : groups) {
+            for (auto& instance : groups) {
                 auto startIndex = others::InstrumentUsed::getIndexForStaff(baseList, instance->startInst);
                 auto endIndex = others::InstrumentUsed::getIndexForStaff(baseList, instance->endInst);
                 if (!startIndex || !endIndex) {
