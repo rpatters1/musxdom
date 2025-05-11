@@ -68,9 +68,9 @@ TEST(TieDetection, TiesInMeasure)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
-    auto entryFrame = gfhold->createEntryFrame(0);
+    auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
     checkTie(createNoteInfo(entryFrame, 0, 0), createNoteInfo(entryFrame, 2, 0));
@@ -91,9 +91,9 @@ TEST(TieDetection, V1V2TiesInMeasure2)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
     ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
-    auto entryFrame = gfhold->createEntryFrame(0);
+    auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
     checkTie(createNoteInfo(entryFrame, 1, 0), createNoteInfo(entryFrame, 4, 0));
@@ -112,22 +112,22 @@ TEST(TieDetection, V1V2TiesAcrossMeasure3_5)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto gfhold3 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 3);
+    auto gfhold3 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
     ASSERT_TRUE(gfhold3) << " gfhold not found for 1, 2";
-    auto entryFrame3 = gfhold3->createEntryFrame(0);
+    auto entryFrame3 = gfhold3.createEntryFrame(0);
     ASSERT_TRUE(entryFrame3);
 
-    auto gfhold4 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 4);
+    auto gfhold4 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
     ASSERT_TRUE(gfhold4) << " gfhold not found for 1, 4";
-    auto entryFrame4 = gfhold4->createEntryFrame(0);
+    auto entryFrame4 = gfhold4.createEntryFrame(0);
     ASSERT_TRUE(entryFrame4);
 
     checkTie(createNoteInfo(entryFrame3, 2, 0), createNoteInfo(entryFrame4, 0, 0));
     checkTie(createNoteInfo(entryFrame3, 3, 0), createNoteInfo(entryFrame4, 0, 1));
 
-    auto gfhold5 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 5);
+    auto gfhold5 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
     ASSERT_TRUE(gfhold5) << " gfhold not found for 1, 5";
-    auto entryFrame5 = gfhold5->createEntryFrame(0);
+    auto entryFrame5 = gfhold5.createEntryFrame(0);
     ASSERT_TRUE(entryFrame5);
 
     checkTie(createNoteInfo(entryFrame4, 2, 0), createNoteInfo(entryFrame5, 1, 0));
@@ -141,14 +141,14 @@ TEST(TieDetection, V1V2TiesAcrossMeasure6_7)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto gfhold6 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 6);
+    auto gfhold6 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
     ASSERT_TRUE(gfhold6) << " gfhold not found for 1, 6";
-    auto entryFrame6 = gfhold6->createEntryFrame(0);
+    auto entryFrame6 = gfhold6.createEntryFrame(0);
     ASSERT_TRUE(entryFrame6);
 
-    auto gfhold7 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 7);
+    auto gfhold7 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 7);
     ASSERT_TRUE(gfhold7) << " gfhold not found for 1, 7";
-    auto entryFrame7 = gfhold7->createEntryFrame(0);
+    auto entryFrame7 = gfhold7.createEntryFrame(0);
     ASSERT_TRUE(entryFrame7);
 
     checkTie(createNoteInfo(entryFrame6, 2, 0), NoteInfoPtr());
@@ -167,14 +167,14 @@ TEST(TieDetection, V1V2TiesAcrossMeasure8_9)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto gfhold8 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 8);
+    auto gfhold8 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 8);
     ASSERT_TRUE(gfhold8) << " gfhold not found for 1, 8";
-    auto entryFrame8 = gfhold8->createEntryFrame(0);
+    auto entryFrame8 = gfhold8.createEntryFrame(0);
     ASSERT_TRUE(entryFrame8);
 
-    auto gfhold9 = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 9);
+    auto gfhold9 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 9);
     ASSERT_TRUE(gfhold9) << " gfhold not found for 1, 9";
-    auto entryFrame9 = gfhold9->createEntryFrame(0);
+    auto entryFrame9 = gfhold9.createEntryFrame(0);
     ASSERT_TRUE(entryFrame9);
 
     checkTie(createNoteInfo(entryFrame8, 2, 0), createNoteInfo(entryFrame9, 0, 0));
@@ -189,9 +189,9 @@ TEST(TieDetection, V1V2TiesInMeasure10)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 10);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 10);
     ASSERT_TRUE(gfhold) << " gfhold not found for 1, 10";
-    auto entryFrame = gfhold->createEntryFrame(0);
+    auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
     checkTie(createNoteInfo(entryFrame, 0, 0), createNoteInfo(entryFrame, 4, 0), createNoteInfo(entryFrame, 3, 0));
@@ -207,9 +207,9 @@ TEST(TieDetection, NoTiesInMeasure11)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 11);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 11);
     ASSERT_TRUE(gfhold) << " gfhold not found for 1, 11";
-    auto entryFrame = gfhold->createEntryFrame(0);
+    auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
     checkTie(createNoteInfo(entryFrame, 1, 0), NoteInfoPtr());
@@ -228,9 +228,9 @@ TEST(TieDetection, DuplicateNotes)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkTie(createNoteInfo(entryFrame, 0, 0), createNoteInfo(entryFrame, 1, 0));
@@ -241,9 +241,9 @@ TEST(TieDetection, DuplicateNotes)
         checkTie(createNoteInfo(entryFrame, 2, 1), createNoteInfo(entryFrame, 3, 2));
     }
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkTie(createNoteInfo(entryFrame, 0, 0), createNoteInfo(entryFrame, 1, 0));

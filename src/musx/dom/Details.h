@@ -308,6 +308,61 @@ public:
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
+    void integrityCheck() override
+    {
+        this->DetailsBase::integrityCheck();
+        if (clefListId && clefId.has_value()) {
+            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has both clef and clef list.");
+        }
+        if (!clefListId && !clefId.has_value()) {
+            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has neither clef nor clef list.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class GFrameHoldContext
+ * @brief A context wrapper for @ref GFrameHold associated with a specific part and location.
+ *
+ * This class retrieves the appropriate @ref GFrameHold from a Document using part, instrument, and measure IDs,
+ * and enables part-aware operations like iterating over EntryFrame objects.
+ */
+class GFrameHoldContext {
+public:
+    /**
+     * @brief Constructs a context-aware @ref GFrameHold wrapper.
+     * 
+     * @param document Weak pointer to the owning Document.
+     * @param partId The requested part ID.
+     * @param inst The instrument ID for.
+     * @param meas The measure ID for.
+     */
+    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas);
+
+    /**
+     * @brief Returns the requested part ID associated with this context.
+     * 
+     * @return The requested part ID.
+     */
+    Cmper getRequestedPartId() const { return m_requestedPartId; }
+
+    /**
+     * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
+     * 
+     * @return A const pointer to @ref GFrameHold.
+     */
+    const GFrameHold* operator->() const { return m_hold.get(); }
+
+    /**
+     * @brief Returns true if the internal @ref GFrameHold is valid.
+     * 
+     * @return True if the @ref GFrameHold was successfully retrieved; false otherwise.
+     */
+    explicit operator bool() const { return static_cast<bool>(m_hold); }
+
     /// @brief Returns the clef index in effect for at the specified @ref Edu position.
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
     ClefIndex calcClefIndexAt(Edu position) const;
@@ -326,7 +381,7 @@ public:
     std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
     
     /**
-     * @brief iterates the entries for the specified layer in this #GFrameHold from left to right
+     * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
      * @param layerIndex The layer index (0..3) to iterate.
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
@@ -335,25 +390,15 @@ public:
     bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
 
     /**
-     * @brief iterates the entries for this #GFrameHold from left to right for each layer in order
+     * @brief iterates the entries for this @ref GFrameHold from left to right for each layer in order
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
      */
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
 
-    void integrityCheck() override
-    {
-        this->DetailsBase::integrityCheck();
-        if (clefListId && clefId.has_value()) {
-            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has both clef and clef list.");
-        }
-        if (!clefListId && !clefId.has_value()) {
-            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has neither clef nor clef list.");
-        }
-    }
-
-    constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+private:
+    std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
+    Cmper m_requestedPartId;                 ///< The requested part context.
 };
 
 /**

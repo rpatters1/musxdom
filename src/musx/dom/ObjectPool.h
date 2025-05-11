@@ -360,11 +360,18 @@ public:
     { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci}); }
 
     /// @brief Returns the detail for a particular note
+    /// @tparam T The type to retrieve (must be derived from @ref NoteDetailsBase)
+    /// @tparam enable_if_t Enforces T as a base of @ref NoteDetailsBase
+    /// @param noteInfo The note for which to get the note detail
+    /// @param forPartId The part for which to get the note detail. If omitted, the @p noteInfo part is used.
+    /// @return The instance associated with @p noteInfo or nullptr if none.
     template <typename T, typename std::enable_if_t<std::is_base_of_v<NoteDetailsBase, T>, int> = 0>
-    std::shared_ptr<T> getForNote(const NoteInfoPtr noteInfo)
+    std::shared_ptr<T> getForNote(const NoteInfoPtr& noteInfo, const std::optional<Cmper>& forPartId = std::nullopt)
     {
-        auto entry = noteInfo.getEntryInfo()->getEntry();
-        auto details = getArray<T>(entry->getPartId(), entry->getEntryNumber());
+        auto details = getArray<T>(
+            forPartId.value_or(noteInfo.getEntryInfo().getFrame()->getPartId()),
+            noteInfo.getEntryInfo()->getEntry()->getEntryNumber()
+        );
         for (const auto& detail : details) {
             if (detail->getNoteId() == noteInfo->getNoteId()) {
                 return detail;

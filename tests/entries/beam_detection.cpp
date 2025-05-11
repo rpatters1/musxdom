@@ -82,9 +82,8 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
     ASSERT_TRUE(doc);
 
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
-        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, false, true, 11);     // start
@@ -113,9 +112,8 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
         expectEntriesInBeam(entryFrame, { 14, 15 });
     }
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 2, 2);
-        ASSERT_TRUE(gfhold) << " gfhold not found for 2, 2";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 2, 2);        ASSERT_TRUE(gfhold) << " gfhold not found for 2, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, true, false, 0);
@@ -138,9 +136,8 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
         expectEntriesInBeam(entryFrame, { 8, 9, 10, 11 });
     }
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 3, 1);
-        ASSERT_TRUE(gfhold) << " gfhold not found for 3, 1";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 1);        ASSERT_TRUE(gfhold) << " gfhold not found for 3, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, true, false, 0);
@@ -151,9 +148,8 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
         checkEntry(entryFrame, 5, true, false, 0);
     }
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 3, 2);
-        ASSERT_TRUE(gfhold) << " gfhold not found for 3, 2";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 2);        ASSERT_TRUE(gfhold) << " gfhold not found for 3, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, true, false, 0);
@@ -178,9 +174,8 @@ TEST(BeamDetection, PrimaryIncludeRests)
     ASSERT_TRUE(doc);
 
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
-        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, false, true, 12);     // start
@@ -209,9 +204,8 @@ TEST(BeamDetection, PrimaryIncludeRests)
         expectEntriesInBeam(entryFrame, { 13, 14, 15, 16 });
     }
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 2, 2);
-        ASSERT_TRUE(gfhold) << " gfhold not found for 2, 2";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 2, 2);        ASSERT_TRUE(gfhold) << " gfhold not found for 2, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, false, true, 3);      // start
@@ -235,9 +229,8 @@ TEST(BeamDetection, PrimaryIncludeRests)
         expectEntriesInBeam(entryFrame, { 8, 9, 10, 11 });
     }
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 3, 1);
-        ASSERT_TRUE(gfhold) << " gfhold not found for 3, 1";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 1);        ASSERT_TRUE(gfhold) << " gfhold not found for 3, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, true, false, 0);
@@ -248,9 +241,8 @@ TEST(BeamDetection, PrimaryIncludeRests)
         checkEntry(entryFrame, 5, true, false, 0);
     }
     {
-        auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 3, 2);
-        ASSERT_TRUE(gfhold) << " gfhold not found for 3, 2";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 2);        ASSERT_TRUE(gfhold) << " gfhold not found for 3, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, true, false, 0);
@@ -283,9 +275,9 @@ TEST(BeamDetection, InvisibleEntries)
     EXPECT_GE(measures.size(), 4);
 
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
 
         checkEntry(entryFrame, 0, false, true, 3);              // start
@@ -296,9 +288,9 @@ TEST(BeamDetection, InvisibleEntries)
         expectEntriesInBeam(entryFrame, { 0, 1, 3 }, true);     // invisible entry 1 should be found with includeHidden = true
     }
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold) << "gfhold not found for 1, 2";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
 
         checkEntry(entryFrame, 0, true, false, 0);              // invisible (unbeamed)
@@ -315,9 +307,9 @@ TEST(BeamDetection, InvisibleEntries)
         expectEntriesInBeam(entryFrame, { 4, 5, 6, 7 }, true);
     }
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 3);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
         ASSERT_TRUE(gfhold) << "gfhold not found for 1, 3";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 3";
 
         checkEntry(entryFrame, 0, true, false, 0);              // visible 8th
@@ -330,9 +322,9 @@ TEST(BeamDetection, InvisibleEntries)
         checkEntry(entryFrame, 7, true, false, 0);              // visible 8th
     }
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 4);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
         ASSERT_TRUE(gfhold) << "gfhold not found for 1, 4";
-        auto entryFrame = gfhold->createEntryFrame(0);
+        auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 4";
 
         checkEntry(entryFrame, 0, false, true, 7);              // start

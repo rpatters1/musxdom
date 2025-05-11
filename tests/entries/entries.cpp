@@ -216,3 +216,61 @@ TEST(EntryTest, IntegrityCheck)
         musx::dom::integrity_error
     ) << "previous entry does not exist";
 }
+ 
+TEST(EntryTest, UnlinkedEnharmonicSpelling)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "enharmonic_unlinked.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto checkEntry = [](const EntryInfoPtr& entryInfo, Note::NoteName expectedNoteName, int expectedOctave, int expectedAlteration,
+                            const std::optional<bool>& enharmonicRespell = std::nullopt) {
+        NoteInfoPtr noteInfo(entryInfo, 0); // assume 1st note
+        ASSERT_TRUE(noteInfo);
+        auto [noteName, octave, alteration, staffLine] = noteInfo.calcNoteProperties(enharmonicRespell);
+        EXPECT_EQ(noteName, expectedNoteName);
+        EXPECT_EQ(octave, expectedOctave);
+        EXPECT_EQ(alteration, expectedAlteration);
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, false);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::E, 4, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::E, 4, 1);
+        entryFrame = gfhold.createEntryFrame(0, true);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::F, 4, 2);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::F, 4, 2);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, 1, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, false);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::F, 4, 0);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::E, 4, 1);
+        entryFrame = gfhold.createEntryFrame(0, true);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::G, 4, 0);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::F, 4, 2);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, true);
+        NoteInfoPtr firstNote(EntryInfoPtr(entryFrame, 0), 0);
+        auto noteAlts = details->getForNote<details::NoteAlterations>(firstNote);
+        ASSERT_TRUE(noteAlts);
+        EXPECT_FALSE(noteAlts->enharmonic) << "Score is not enharmonically respelled";
+        noteAlts = details->getForNote<details::NoteAlterations>(firstNote, 1);
+        ASSERT_TRUE(noteAlts);
+        EXPECT_TRUE(noteAlts->enharmonic) << "Part is enharmonically respelled";
+        checkEntry(firstNote.getEntryInfo(), Note::NoteName::F, 4, 2, false);
+        checkEntry(firstNote.getEntryInfo(), Note::NoteName::G, 4, 0, true);
+    }
+}
