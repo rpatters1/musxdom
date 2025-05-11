@@ -97,7 +97,11 @@ public:
     }
 
     /**
-     * @brief Gets the partId for this instance (or 0 for score)
+     * @brief Gets the partId for this instance (or SCORE_PARTID for score)
+     * @note When you use `get` or `getArray` to retrieve an instance for a part, the value
+     * returned is either for that part or it is for the score. Therefore, this value is
+     * only reliable for determining the partId you are working on if the entity's share mode
+     * is #ShareMode::None. Otherwise, it returns SCORE_PARTID for instances shared with the score.
      */
     Cmper getPartId() const { return m_partId; }
 

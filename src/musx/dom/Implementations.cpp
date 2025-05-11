@@ -1205,7 +1205,7 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
         // is set up to increment each key signature accidental by the number of steps
         // in a chromatic half-step.
         int direction = music_theory::sign(alteration);
-        while (std::abs(alteration) >= 7) {
+        while (std::abs(alteration) >= music_theory::STANDARD_DIATONIC_STEPS) {
             alteration -= direction * music_theory::STANDARD_12EDO_STEPS;
             tonalCenterOffset += direction;
         }
@@ -1486,7 +1486,7 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignatu
     auto transposer = key->createTransposer(harmLev, harmAlt);
     if (harmAlt) {
         transposer->enharmonicTranspose(music_theory::sign(harmAlt));
-        if (std::abs(transposer->alteration()) > 7)
+        if (std::abs(transposer->alteration()) > MAX_ALTERATIONS)
             return {harmLev, harmAlt};
         return {transposer->displacement(), transposer->alteration()};
     }
@@ -1499,7 +1499,7 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignatu
     // A possibly more correct version would omit this hard-coded comparison to the number 2, but it
     // seems to be what Finale does.
     if (std::abs(upAlt) != 2) {
-        if (std::abs(upAlt) > 7)
+        if (std::abs(upAlt) > MAX_ALTERATIONS)
             return {harmLev, harmAlt};
         return {upDisp, upAlt};
     }
@@ -1508,7 +1508,7 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignatu
     down->enharmonicTranspose(-1);
     int downAlt = down->alteration();
 
-    if (std::abs(downAlt) > 7)
+    if (std::abs(downAlt) > MAX_ALTERATIONS)
         return {harmLev, harmAlt};
 
     if (std::abs(downAlt) < std::abs(upAlt))
