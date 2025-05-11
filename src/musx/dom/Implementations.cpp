@@ -105,8 +105,8 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // ***** EntryFrame *****
 // **********************
 
-EntryFrame::EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch) :
-    Base(gfhold.getDocument(), gfhold.getPartId(), gfhold.getShareMode()),
+EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch) :
+    Base(gfhold->getDocument(), gfhold.getRequestedPartId(), ShareMode::None),
     m_staff(staff),
     m_measure(measure),
     m_layerIndex(layerIndex),
@@ -133,8 +133,8 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 {
-    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure + 1)) {
-        return gfhold->createEntryFrame(m_layerIndex, m_forWrittenPitch);
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), m_staff, m_measure + 1)) {
+        return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
     }
     return nullptr;
 }
@@ -142,8 +142,8 @@ std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 {
     if (m_measure > 1) {
-        if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure - 1)) {
-            return gfhold->createEntryFrame(m_layerIndex, m_forWrittenPitch);
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), m_staff, m_measure - 1)) {
+            return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
         }
     }
     return nullptr;
@@ -807,9 +807,15 @@ std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries()
     return retval;
 }
 
-// **********************
-// ***** GFrameHold *****
-// **********************
+// *****************************
+// ***** GFrameHoldContext *****
+// *****************************
+
+details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas)
+    : m_requestedPartId(partId)
+{
+    m_hold = document->getDetails()->get<details::GFrameHold>(partId, inst, meas);
+}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 struct TupletState
@@ -833,14 +839,15 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch) const
+std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch) const
 {
-    if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
+    if (!m_hold) return nullptr;
+    if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
-    if (!frames[layerIndex]) return nullptr; // nothing here
-    auto document = getDocument();
-    auto frameIncis = document->getOthers()->getArray<others::Frame>(getPartId(), frames[layerIndex]);
+    if (!m_hold->frames[layerIndex]) return nullptr; // nothing here
+    auto document = m_hold->getDocument();
+    auto frameIncis = document->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
     auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
         for (const auto& frame : frameIncis) {
             if (frame->startEntry) {
@@ -851,16 +858,16 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
     }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
-        retval = std::make_shared<EntryFrame>(*this, getStaff(), getMeasure(), layerIndex, forWrittenPitch);
-        const auto& measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), getMeasure());
+        retval = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch);
+        const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
         if (!measure) {
-            throw std::invalid_argument("Measure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
+            throw std::invalid_argument("Measure instance for measure " + std::to_string(m_hold->getMeasure()) + " does not exist.");
         }
-        const auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), getStaff(), getMeasure(), 0);
+        const auto staff = others::StaffComposite::createCurrent(m_hold->getDocument(), getRequestedPartId(), m_hold->getStaff(), m_hold->getMeasure(), 0);
         if (!staff) {
-            throw std::invalid_argument("Staff instance for staff " + std::to_string(getStaff()) + " does not exist.");
+            throw std::invalid_argument("Staff instance for staff " + std::to_string(m_hold->getStaff()) + " does not exist.");
         }
-        retval->keySignature = measure->createKeySignature(getStaff());
+        retval->keySignature = measure->createKeySignature(m_hold->getStaff());
         if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
             retval->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
         }
@@ -950,16 +957,16 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
     } else {
-        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
-            + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
+        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
+            + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");
     }
     return retval;
 }
 
-bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
+bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
 {
     bool forWrittenPitch = false;
-    if (auto partGlobals = getDocument()->getOthers()->get<others::PartGlobals>(getPartId(), MUSX_GLOBALS_CMPER)) {
+    if (auto partGlobals = m_hold->getDocument()->getOthers()->get<others::PartGlobals>(getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
         forWrittenPitch = partGlobals->showTransposed;
     }
     auto entryFrame = createEntryFrame(layerIndex, forWrittenPitch);
@@ -973,9 +980,9 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
     return true;
 }
 
-bool details::GFrameHold::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator)
+bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator)
 {
-    for (LayerIndex layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
+    for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
         if (!iterateEntries(layerIndex, iterator)) {
             return false;
         }
@@ -983,18 +990,20 @@ bool details::GFrameHold::iterateEntries(std::function<bool(const EntryInfoPtr&)
     return true;
 }
 
-ClefIndex details::GFrameHold::calcClefIndexAt(Edu position) const
+ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
 {
-    if (clefId.has_value()) {
-        return clefId.value();
+    MUSX_ASSERT_IF(!m_hold) {
+        return 0;
+    }
+    if (m_hold->clefId.has_value()) {
+        return m_hold->clefId.value();
     }
     ClefIndex result = 0;
-    auto clefList = getDocument()->getOthers()->getArray<others::ClefList>(getPartId(), clefListId);
+    auto clefList = m_hold->getDocument()->getOthers()->getArray<others::ClefList>(getRequestedPartId(), m_hold->clefListId);
     if (clefList.empty()) {
-        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
-            + std::to_string(getMeasure()) + " has non-existent clef list [" + std::to_string(clefListId) + "]");
-    }
-    else {
+        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
+            + std::to_string(m_hold->getMeasure()) + " has non-existent clef list [" + std::to_string(m_hold->clefListId) + "]");
+    } else {
         auto& lastClef = clefList[0];
         for (const auto& clef : clefList) {
             if (clef->xEduPos > position) {
@@ -1902,8 +1911,8 @@ void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::
 EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
 {
     EntryInfoPtr result;
-    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), staffId, measId)) {
-        gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) {
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), staffId, measId)) {
+        gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
             if (!entryNumber) {
                 unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
                 if (eduDiff <= 1) {
@@ -2186,8 +2195,8 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
 ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const
 {
     for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
-        if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), tryMeasure)) {
-            return gfhold->calcClefIndexAt(position);
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), getCmper(), tryMeasure)) {
+            return gfhold.calcClefIndexAt(position);
         }
         // after the first iteration, we are looking for the clef at the end of the measure
         position = std::numeric_limits<Edu>::max();

@@ -42,7 +42,7 @@ class StaffComposite;
 
 namespace details {
 class TupletDef;
-class GFrameHold;
+class GFrameHoldContext;
 } // namespace details
 
 /**
@@ -413,13 +413,13 @@ class EntryFrame : public Base, public std::enable_shared_from_this<EntryFrame>
 public:
     /** @brief Constructor function
      *
-     * @param gfhold The @ref details::GFrameHold instance creating this EntryFrame
+     * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
      * @param staff The Cmper for the @ref others::Staff of the entry
      * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
      * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
     */
-    explicit EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch);
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch);
 
     /// @brief class to track tuplets in the frame
     struct TupletInfo
@@ -511,7 +511,7 @@ class EntryInfo
         : m_entry(entry) {}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
-    friend details::GFrameHold;
+    friend details::GFrameHoldContext;
 #endif
 
 public:
