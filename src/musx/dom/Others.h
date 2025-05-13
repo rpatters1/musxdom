@@ -1994,6 +1994,13 @@ public:
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
 
+    /// @brief Gets a list of all parts that contain this staff, including the score.
+    std::vector<std::shared_ptr<PartDefinition>> getContainingParts() const;
+
+    /// @brief Finds the first part that contains this staff, not including the score.
+    /// @return The first part that contains this staff or nullptr if none.
+    std::shared_ptr<PartDefinition> firstFirstContainingPart() const;
+
     void integrityCheck() override
     {
         OthersBase::integrityCheck();
@@ -2154,7 +2161,7 @@ private:
     /// @param staffStyle The @ref StaffStyle to apply.
     void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
 
-    Cmper m_requestedPartId;
+    const Cmper m_requestedPartId;
 
 public:
     /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
@@ -2171,7 +2178,7 @@ public:
     static std::shared_ptr<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
 
     /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
-    Cmper getPartId() const override { return m_requestedPartId; }
+    Cmper getPartId() const final override { return m_requestedPartId; }
 };
 
 /**

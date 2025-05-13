@@ -2235,6 +2235,39 @@ bool others::Staff::hasInstrumentAssigned() const
     return true;
 }
 
+std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts() const
+{
+    std::vector<std::shared_ptr<others::PartDefinition>> result;
+    auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
+    for (const auto& part : parts) {
+        auto scoreView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+        for (const auto& next : scoreView) {
+            if (next->staffId == this->getCmper()) {
+                result.push_back(part);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+std::shared_ptr<others::PartDefinition> others::Staff::firstFirstContainingPart() const
+{
+    std::vector<std::shared_ptr<others::PartDefinition>> result;
+    auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
+    for (const auto& part : parts) {
+        if (part->getCmper() != SCORE_PARTID) {
+            auto scoreView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            for (const auto& next : scoreView) {
+                if (next->staffId == this->getCmper()) {
+                    return part;
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
 // **************************
 // ***** StaffComposite *****
 // **************************
