@@ -254,6 +254,7 @@ using RegisteredOthers = TypeRegistry <
  * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredDetails = TypeRegistry <
+    dom::details::EntrySize,
     dom::details::ArticulationAssign,
     dom::details::BaselineLyricsChorus,
     dom::details::BaselineLyricsSection,
@@ -263,6 +264,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::ChordAssign,
     dom::details::CrossStaff,
     dom::details::IndependentStaffDetails,  // "floats" is the xml key
+    dom::details::StaffSize,
     dom::details::GFrameHold,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,

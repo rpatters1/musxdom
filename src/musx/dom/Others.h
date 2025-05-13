@@ -1287,7 +1287,7 @@ public:
     }
 
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
-    /// @param forGroupId The part for which to get the group. Pass SCORE_PARTID for the score.
+    /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
     std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
 
     void integrityCheck() override
@@ -2216,6 +2216,13 @@ public:
     Evpu distanceToPrev{};          ///< Distance to the previous staff system in Evpu.
     Evpu extraStartSystemSpace{};   ///< Extra space at the start of the staff system in Evpu.
     Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
+
+    /// @brief Calculates the maximum and minimum staff scaling values for this system by searching each staff
+    /// for individual staff scaling.
+    /// @return A std::pair containing
+    ///         - double: The scaling of the staff with the minimum (smallest) scaling factor
+    ///         - double: The scaling of the staff with the maximum (largest) scaling factor
+    std::pair<double, double> calcMinMaxStaffSizes() const;
 
     constexpr static std::string_view XmlNodeName = "staffSystemSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StaffSystem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

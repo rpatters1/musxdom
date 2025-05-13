@@ -360,6 +360,7 @@ public:
     DetailsPool() : ObjectPool({
         { std::string(details::CenterShape::XmlNodeName), Base::ShareMode::None },
         { std::string(details::StaffGroup::XmlNodeName), Base::ShareMode::None },
+        { std::string(details::StaffSize::XmlNodeName), Base::ShareMode::None },
         // add other known sharemode none items as they are identified.
     }) {}
 

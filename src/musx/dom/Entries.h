@@ -179,7 +179,7 @@ public:
     bool isHidden{};         ///< Indicates the entry is hidden, (xml node is `<ignore>`)
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
-    bool noteDetail{};       ///< Indicates there is a note detail for the entry.
+    bool noteDetail{};       ///< Indicates there is a note detail or EntrySize record for the entry.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
     bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.

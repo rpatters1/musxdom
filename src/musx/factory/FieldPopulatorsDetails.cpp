@@ -139,6 +139,10 @@ MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
     {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<InstCmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(EntrySize, {
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<EntrySize>& i) { i->percent = e->getTextAs<int>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"clefID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefId = e->getTextAs<ClefIndex>(); }},
     {"clefListID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefListId = e->getTextAs<Cmper>(); }},
@@ -250,6 +254,10 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"fullExpand", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameExpand = populateBoolean(e, i); }},
     {"abbrvExpand", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameExpand = populateBoolean(e, i); }},
     {"optimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideStaves = toEnum<StaffGroup::HideStaves>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(StaffSize, {
+    {"staffPercent", [](const XmlElementPtr& e, const std::shared_ptr<StaffSize>& i) { i->staffPercent = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {

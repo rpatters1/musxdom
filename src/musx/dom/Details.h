@@ -275,6 +275,31 @@ public:
 };
 
 /**
+ * @class EntrySize
+ * @brief Specifies a custom size for an entry. It scales the entire entry, including the stem and all noteheads.
+ * For beamed entries, it only takes effect if it is applied to the first entry in a beamed group, and then it affects
+ * every entry in the beamed group.
+ */
+class EntrySize : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this @ref EntrySize (probably always #ShareMode::All).
+     * @param entnum The entry number this size applies to.
+     */
+    explicit EntrySize(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum) {}
+
+    int percent{}; ///< The note/chord size as a percent (e.g., 65 for 65%).
+
+    static const xml::XmlElementArray<EntrySize>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    constexpr static std::string_view XmlNodeName = "entrySize"; ///< The XML node name for this type.
+};
+
+/**
  * @class GFrameHold
  * @brief Represents the attributes of a Finale frame holder.
  *
@@ -831,6 +856,36 @@ public:
     static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId,
         const std::shared_ptr<others::PartDefinition>& linkedPart,
         const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
+};
+
+/**
+ * @class StaffSize
+ * @brief Represents a per-staff-size override for a specific staff in a system.
+ *
+ * Cmper1 is the system number and Cmper2 is the staff number (inst) @ref Cmper.
+ *
+ * This class is identified by the XML node name "staffSize".
+ */
+class StaffSize : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for.
+     * @param shareMode The sharing mode for this #StaffSize.
+     * @param system The staff system number (Cmper1).
+     * @param inst The staff number (Cmper2).
+     */
+    explicit StaffSize(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper inst)
+        : DetailsBase(document, partId, shareMode, system, inst)
+    {
+    }
+
+    int staffPercent{}; ///< The staff size percentage override. (A value of 100 means 100%, i.e, no staff scaling.)
+
+    constexpr static std::string_view XmlNodeName = "staffSize"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffSize>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

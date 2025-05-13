@@ -2503,6 +2503,24 @@ std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() co
 }
 
 // ***********************
+// ***** StaffSystem *****
+// ***********************
+
+std::pair<double, double> others::StaffSystem::calcMinMaxStaffSizes() const
+{
+    std::pair<double, double> result = std::make_pair(1.0, 1.0);
+    if (hasStaffScaling) {
+        auto staffSizes = getDocument()->getDetails()->getArray<details::StaffSize>(getPartId(), getCmper());
+        for (const auto& staffSize : staffSizes) {
+            const double val = double(staffSize->staffPercent) / 100.0;
+            if (val < result.first) result.first = val;
+            if (val > result.second) result.second = val;
+        }
+    }
+    return result;
+}
+
+// ***********************
 // ***** TempoChange *****
 // ***********************
 
