@@ -183,7 +183,7 @@ TEST(MultiStaffGroupTest, PopulateFields)
     EXPECT_TRUE(indexOfStaff.has_value());
     EXPECT_EQ(indexOfStaff.value(), 1);
 
-    auto staffGroup = instGroup->getStaffGroup();
+    auto staffGroup = instGroup->getStaffGroup(SCORE_PARTID);
     EXPECT_TRUE(staffGroup) << "Staff group not found";
     EXPECT_EQ(staffGroup->multiStaffGroupId, 2) << "multiStaffGroupId not set for group " << staffGroup->getCmper2();
 

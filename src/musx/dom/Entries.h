@@ -408,7 +408,7 @@ private:
  *
  * Its pointers are owned by @ref EntryInfoPtr
  */
-class EntryFrame : public Base, public std::enable_shared_from_this<EntryFrame>
+class EntryFrame : public std::enable_shared_from_this<EntryFrame>
 {
 public:
     /** @brief Constructor function
@@ -446,13 +446,19 @@ public:
     std::vector<TupletInfo> tupletInfo;
     std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
 
+    /// @brief Get the document for the entry frame
+    DocumentPtr getDocument() const { return m_document; }
+
+    /// @brief Get the requested part ID for the entry frame
+    Cmper getRequestedPartId() const { return m_requestedPartId; }
+
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }
 
-    /// @brief Get the measure for the entry
+    /// @brief Get the measure for the entry frame
     MeasCmper getMeasure() const { return m_measure; }
 
-    /// @brief Get the layer index (0..3) of the entry
+    /// @brief Get the layer index (0..3) of the entry frame
     LayerIndex getLayerIndex() const { return m_layerIndex; }
 
     /// @brief Returns if this entry frame was created for written pitch.
@@ -481,6 +487,8 @@ public:
     std::shared_ptr<const EntryFrame> getPrevious() const;
 
 private:
+    DocumentPtr m_document;
+    Cmper m_requestedPartId;
     InstCmper m_staff;
     MeasCmper m_measure;
     LayerIndex m_layerIndex;

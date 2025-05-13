@@ -1287,7 +1287,8 @@ public:
     }
 
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
-    std::shared_ptr<details::StaffGroup> getStaffGroup() const;
+    /// @param forGroupId The part for which to get the group. Pass SCORE_PARTID for the score.
+    std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
 
     void integrityCheck() override
     {
@@ -2146,12 +2147,14 @@ class StaffComposite : public StaffStyle
 {
 private:
     /** @brief private constructor */
-    explicit StaffComposite(const std::shared_ptr<Staff>& staff)
-        : StaffStyle(staff) {}
+    explicit StaffComposite(const std::shared_ptr<Staff>& staff, Cmper requestedPartId)
+        : StaffStyle(staff), m_requestedPartId(requestedPartId) {}
 
     /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
     /// @param staffStyle The @ref StaffStyle to apply.
     void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
+
+    Cmper m_requestedPartId;
 
 public:
     /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
@@ -2166,6 +2169,9 @@ public:
     /// @param eduPosition The Edu position within the measure to search
     /// @return The composite result or null if @p staffId is not valid.
     static std::shared_ptr<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
+
+    /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
+    Cmper getPartId() const override { return m_requestedPartId; }
 };
 
 /**

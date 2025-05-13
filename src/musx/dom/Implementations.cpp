@@ -43,19 +43,6 @@ namespace musx {
 namespace dom {
 
 // *****************
-// ***** Base *****
-// *****************
-
-std::shared_ptr<others::PartDefinition> Base::getPartDefinition() const
-{
-    if (auto retval = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, getPartId())) {
-        return retval;
-    }
-    MUSX_INTEGRITY_ERROR("PartDefinition for part id " + std::to_string(getPartId()) + " does not exist.");
-    return nullptr;
-}
-
-// *****************
 // ***** Entry *****
 // *****************
 
@@ -106,7 +93,8 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // **********************
 
 EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch) :
-    Base(gfhold->getDocument(), gfhold.getRequestedPartId(), ShareMode::None),
+    m_document(gfhold->getDocument()),
+    m_requestedPartId(gfhold.getRequestedPartId()),
     m_staff(staff),
     m_measure(measure),
     m_layerIndex(layerIndex),
@@ -133,7 +121,7 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 {
-    if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), m_staff, m_measure + 1)) {
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure + 1)) {
         return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
     }
     return nullptr;
@@ -142,7 +130,7 @@ std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 {
     if (m_measure > 1) {
-        if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), m_staff, m_measure - 1)) {
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure - 1)) {
             return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
         }
     }
@@ -189,8 +177,7 @@ std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_e
 
 std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<InstCmper>& forStaffId) const
 {
-    auto entry = (*this)->getEntry();
-    return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), forStaffId.value_or(getStaff()),
+    return others::StaffComposite::createCurrent(m_entryFrame->getDocument(), m_entryFrame->getRequestedPartId(), forStaffId.value_or(getStaff()),
         getMeasure(), (*this)->elapsedDuration.calcEduDuration());
 }
 
@@ -433,7 +420,7 @@ unsigned EntryInfoPtr::calcLowestBeamStart() const
     auto entry = (*this)->getEntry();
     unsigned secondaryBreak = 0;
     if (entry->secBeam) {
-        if (auto beamBreaks = entry->getDocument()->getDetails()->get<details::SecondaryBeamBreak>(entry->getPartId(), entry->getEntryNumber())) {
+        if (auto beamBreaks = m_entryFrame->getDocument()->getDetails()->get<details::SecondaryBeamBreak>(m_entryFrame->getRequestedPartId(), entry->getEntryNumber())) {
             secondaryBreak = beamBreaks->calcLowestBreak();
             if (secondaryBreak < 2) {
                 secondaryBreak = 0;
@@ -486,7 +473,7 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
 {
     auto entry = (*this)->getEntry();
     if (entry->stemDetail) {
-        if (auto manual = entry->getDocument()->getDetails()->get<details::BeamStubDirection>(entry->getPartId(), entry->getEntryNumber())) {
+        if (auto manual = m_entryFrame->getDocument()->getDetails()->get<details::BeamStubDirection>(m_entryFrame->getRequestedPartId(), entry->getEntryNumber())) {
             return manual->isLeft();
         }
     }
@@ -1473,12 +1460,12 @@ std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaff(
     return getStaffAtIndex(0);
 }
 
-std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup() const
+std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup(Cmper forPartId) const
 {
     auto document = getDocument();
-    auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(getPartId(), getCmper());
+    auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(forPartId, getCmper());
     if (!groupIdRecord) return nullptr;
-    auto retval = document->getDetails()->get<details::StaffGroup>(getPartId(), BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
+    auto retval = document->getDetails()->get<details::StaffGroup>(forPartId, BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(groupIdRecord->staffGroupId)
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
@@ -1964,9 +1951,9 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
     if (entryInfo.getStaff() != startTermSeg->endPoint->staffId && entryInfo.getStaff() != endTermSeg->endPoint->staffId) {
         return false;
     }
-    if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entry->getPartId(), entryInfo.getMeasure())) {
+    if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure())) {
         if (meas->hasSmartShape) {
-            auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entry->getPartId(), entryInfo.getMeasure());
+            auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure());
             for (const auto& asgn : shapeAssigns) {
                 if (asgn->shapeNum == getCmper()) {
                     if (entryInfo.getMeasure() > startTermSeg->endPoint->measId && entryInfo.getMeasure() < endTermSeg->endPoint->measId) {
@@ -2177,7 +2164,7 @@ std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalS
     auto name = [&]() -> std::string {
         if (!preferStaffName || !fullNameTextId) {
             if (auto multiInstGroup = getMultiStaffInstGroup()) {
-                if (auto group = multiInstGroup->getStaffGroup()) {
+                if (auto group = multiInstGroup->getStaffGroup(SCORE_PARTID)) {
                     return group->getFullName(accidentalStyle);
                 }
             }
@@ -2193,7 +2180,7 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     auto name = [&]() -> std::string {
         if (!preferStaffName || !abbrvNameTextId) {
             if (auto multiInstGroup = getMultiStaffInstGroup()) {
-                if (auto group = multiInstGroup->getStaffGroup()) {
+                if (auto group = multiInstGroup->getStaffGroup(SCORE_PARTID)) {
                     return group->getAbbreviatedName(accidentalStyle);
                 }
             }
@@ -2339,7 +2326,7 @@ std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(co
     auto rawStaff = document->getOthers()->get<others::Staff>(partId, staffId);
     if (!rawStaff) return nullptr;
 
-    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff));
+    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff, partId));
     if (result->hasStyles) {
         auto styles = others::StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
         for (const auto& style : styles) {

@@ -320,7 +320,9 @@ public:
         { std::string(others::BeatChartElement::XmlNodeName), Base::ShareMode::None },
         { std::string(others::InstrumentUsed::XmlNodeName), Base::ShareMode::None },
         { std::string(others::SystemLock::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::MultiStaffInstrumentGroup::XmlNodeName), Base::ShareMode::None },
         { std::string(others::MultimeasureRest::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::MultiStaffGroupId::XmlNodeName), Base::ShareMode::None },
         { std::string(others::Page::XmlNodeName), Base::ShareMode::None },
         { std::string(others::PartGlobals::XmlNodeName), Base::ShareMode::None },
         { std::string(others::StaffSystem::XmlNodeName), Base::ShareMode::None },
@@ -395,7 +397,7 @@ public:
     std::shared_ptr<T> getForNote(const NoteInfoPtr& noteInfo, const std::optional<Cmper>& forPartId = std::nullopt)
     {
         auto details = getArray<T>(
-            forPartId.value_or(noteInfo.getEntryInfo().getFrame()->getPartId()),
+            forPartId.value_or(noteInfo.getEntryInfo().getFrame()->getRequestedPartId()),
             noteInfo.getEntryInfo()->getEntry()->getEntryNumber()
         );
         for (const auto& detail : details) {
