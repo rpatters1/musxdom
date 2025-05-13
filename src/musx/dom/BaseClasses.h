@@ -377,6 +377,7 @@ public:
     virtual NoteNumber getNoteId() const = 0;
 
 protected:
+    /// @brief Constructor for NoteDetailsBase uses @ref EntryDetailsBase constructor.
     using EntryDetailsBase::EntryDetailsBase;
 };
 

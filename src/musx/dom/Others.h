@@ -2209,6 +2209,28 @@ public:
 };
 
 /**
+ * @class SystemLock
+ * @brief Locks a span of one or more measures so that they always appear in a @ref StaffSystem together.
+ *
+ * The cmper indicates the first measure of the locked system.
+ * The endMeas element specifies the first measure after the locked system.
+ *
+ * The class is identified by the XML node name "lockMeas".
+ */
+class SystemLock : public OthersBase
+{
+public:
+    /** @brief Constructor function. */
+    explicit SystemLock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    MeasCmper endMeas{}; ///< The first measure after the locked system.
+
+    constexpr static std::string_view XmlNodeName = "lockMeas"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SystemLock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class TempoChange
  * @brief A single tempo change value entered with Finale's Tempo tool.
  *

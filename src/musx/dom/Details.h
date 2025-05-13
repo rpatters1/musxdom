@@ -28,7 +28,8 @@
 #include "musx/util/EnigmaString.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
-// do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
+#include "Options.h"
+ // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
 namespace dom {

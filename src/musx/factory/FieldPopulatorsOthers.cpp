@@ -952,6 +952,10 @@ MUSX_XML_ELEMENT_ARRAY(StaffSystem, {
     {"extraEndSystemSpace", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->extraEndSystemSpace = e->getTextAs<Evpu>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(SystemLock, {
+    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<SystemLock>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(TempoChange, {
     {"relativeRatio", [](const XmlElementPtr& e, const std::shared_ptr<TempoChange>& i)
         { i->ratio = e->getTextAs<int>(); i->isRelative = true; }},
