@@ -112,13 +112,14 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1NoteDetailsBase.ht
  <div class="center">
   <img src="classmusx_1_1dom_1_1NoteDetailsBase.png" usemap="#musx::dom::NoteDetailsBase_map" alt=""/>
   <map id="musx::dom::NoteDetailsBase_map" name="musx::dom::NoteDetailsBase_map">
-<area href="classmusx_1_1dom_1_1EntryDetailsBase.html" title="Base class for all &quot;details&quot; types that use entnum rather than cmper and cmper." alt="musx::dom::EntryDetailsBase" shape="rect" coords="99,112,288,136"/>
-<area href="classmusx_1_1dom_1_1DetailsBase.html" title="Base class for all &quot;details&quot; types." alt="musx::dom::DetailsBase" shape="rect" coords="99,56,288,80"/>
-<area href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes." alt="musx::dom::Base" shape="rect" coords="99,0,288,24"/>
-<area href="classmusx_1_1dom_1_1details_1_1CrossStaff.html" title="Represents a cross-staff assignment for the note, if any." alt="musx::dom::details::CrossStaff" shape="rect" coords="0,224,189,248"/>
-<area href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html" title="Base class for tie alteration properties. (Used for both ties and tie ends.)" alt="musx::dom::details::TieAlterBase" shape="rect" coords="199,224,388,248"/>
-<area href="classmusx_1_1dom_1_1details_1_1TieAlterEnd.html" title="Alterations for tie ends." alt="musx::dom::details::TieAlterEnd" shape="rect" coords="99,280,288,304"/>
-<area href="classmusx_1_1dom_1_1details_1_1TieAlterStart.html" title="Alterations for tie starts. (Tie starts are normal ties.)" alt="musx::dom::details::TieAlterStart" shape="rect" coords="298,280,487,304"/>
+<area href="classmusx_1_1dom_1_1EntryDetailsBase.html" title="Base class for all &quot;details&quot; types that use entnum rather than cmper and cmper." alt="musx::dom::EntryDetailsBase" shape="rect" coords="213,112,416,136"/>
+<area href="classmusx_1_1dom_1_1DetailsBase.html" title="Base class for all &quot;details&quot; types." alt="musx::dom::DetailsBase" shape="rect" coords="213,56,416,80"/>
+<area href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes." alt="musx::dom::Base" shape="rect" coords="213,0,416,24"/>
+<area href="classmusx_1_1dom_1_1details_1_1CrossStaff.html" title="Represents a cross-staff assignment for the note, if any." alt="musx::dom::details::CrossStaff" shape="rect" coords="0,224,203,248"/>
+<area href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html" title="Represents graphical and notational alterations applied to a note." alt="musx::dom::details::NoteAlterations" shape="rect" coords="213,224,416,248"/>
+<area href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html" title="Base class for tie alteration properties. (Used for both ties and tie ends.)" alt="musx::dom::details::TieAlterBase" shape="rect" coords="426,224,629,248"/>
+<area href="classmusx_1_1dom_1_1details_1_1TieAlterEnd.html" title="Alterations for tie ends." alt="musx::dom::details::TieAlterEnd" shape="rect" coords="319,280,522,304"/>
+<area href="classmusx_1_1dom_1_1details_1_1TieAlterStart.html" title="Alterations for tie starts. (Tie starts are normal ties.)" alt="musx::dom::details::TieAlterStart" shape="rect" coords="532,280,735,304"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -153,14 +154,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <tr class="memitem:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3284dc2e34ac0e59c06847587fe7201a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3284dc2e34ac0e59c06847587fe7201a">getDocument</a> () const</td></tr>
 <tr class="memdesc:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a reference to the <a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a>.  <br /></td></tr>
 <tr class="separator:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a2064fc32c5bd6ab123461729d1e90d27"><td class="memItemLeft" align="right" valign="top">
-<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPartId</b> () const</td></tr>
-<tr class="memdesc:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or 0 for score) <br /></td></tr>
-<tr class="separator:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ab82b29d7f2164630dee1f73d8535633d"><td class="memItemLeft" align="right" valign="top">
-std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartDefinition</b> () const</td></tr>
-<tr class="memdesc:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> corresponding to <a class="el" href="classmusx_1_1dom_1_1Base.html#a2064fc32c5bd6ab123461729d1e90d27" title="Gets the partId for this instance (or 0 for score)">getPartId</a>. <br /></td></tr>
-<tr class="separator:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ae425c90d2a3dd212fd589803200fdd34"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ae425c90d2a3dd212fd589803200fdd34">getPartId</a> () const</td></tr>
+<tr class="memdesc:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or SCORE_PARTID for score)  <br /></td></tr>
+<tr class="separator:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -182,8 +178,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a105bc2acdcb24b5a3c10bcad1d3c5955" id="r_a105bc2acdcb24b5a3c10bcad1d3c5955"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteDetailsBase.html#a105bc2acdcb24b5a3c10bcad1d3c5955">EntryDetailsBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entnum, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt; inci=std::nullopt)</td></tr>
-<tr class="memdesc:a105bc2acdcb24b5a3c10bcad1d3c5955"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html" title="Base class for all &quot;details&quot; types that use entnum rather than cmper and cmper.">EntryDetailsBase</a> object.  <br /></td></tr>
+<tr class="memitem:a105bc2acdcb24b5a3c10bcad1d3c5955" id="r_a105bc2acdcb24b5a3c10bcad1d3c5955"><td class="memItemLeft" align="right" valign="top"><a id="a105bc2acdcb24b5a3c10bcad1d3c5955" name="a105bc2acdcb24b5a3c10bcad1d3c5955"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>EntryDetailsBase</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entnum, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt; inci=std::nullopt)</td></tr>
+<tr class="memdesc:a105bc2acdcb24b5a3c10bcad1d3c5955"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classmusx_1_1dom_1_1NoteDetailsBase.html" title="Base class note details. Note details are entry details associated with a note ID.">NoteDetailsBase</a> uses <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">EntryDetailsBase</a> constructor. <br /></td></tr>
 <tr class="separator:a105bc2acdcb24b5a3c10bcad1d3c5955"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmusx_1_1dom_1_1EntryDetailsBase')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">musx::dom::EntryDetailsBase</a></td></tr>
 <tr class="memitem:a105bc2acdcb24b5a3c10bcad1d3c5955 inherit pro_methods_classmusx_1_1dom_1_1EntryDetailsBase" id="r_a105bc2acdcb24b5a3c10bcad1d3c5955"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a105bc2acdcb24b5a3c10bcad1d3c5955">EntryDetailsBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entnum, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt; inci=std::nullopt)</td></tr>
@@ -231,72 +228,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> class note details. <a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> details are entry details associated with a note ID. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a105bc2acdcb24b5a3c10bcad1d3c5955" name="a105bc2acdcb24b5a3c10bcad1d3c5955"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a105bc2acdcb24b5a3c10bcad1d3c5955">&#9670;&#160;</a></span>EntryDetailsBase()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">musx::dom::EntryDetailsBase::EntryDetailsBase </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;&#160;</td>
-          <td class="paramname"><em>document</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
-          <td class="paramname"><em>partId</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td>
-          <td class="paramname"><em>shareMode</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td>
-          <td class="paramname"><em>entnum</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt;&#160;</td>
-          <td class="paramname"><em>inci</em> = <code>std::nullopt</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructs a <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html" title="Base class for all &quot;details&quot; types that use entnum rather than cmper and cmper.">EntryDetailsBase</a> object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">document</td><td>A weak pointer to the parent document </td></tr>
-    <tr><td class="paramname">partId</td><td>The part Id for this Detail, or zero if for score. </td></tr>
-    <tr><td class="paramname">shareMode</td><td>Usually <code><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">ShareMode::All</a></code>. This parameter is used with linked parts data. </td></tr>
-    <tr><td class="paramname">entnum</td><td>The <code>EntryNumber</code> key value. </td></tr>
-    <tr><td class="paramname">inci</td><td>The array index (<code>Inci</code>). </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="af8d25667cf7935bb6329736e870b581c" name="af8d25667cf7935bb6329736e870b581c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af8d25667cf7935bb6329736e870b581c">&#9670;&#160;</a></span>getNoteId()</h2>
 
@@ -322,7 +253,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 <p>Required virtual function that returns the note id. </p>
 
-<p>Implemented in <a class="el" href="classmusx_1_1dom_1_1details_1_1CrossStaff.html#a0dbd478212c7282e10b36f8ce084b314">musx::dom::details::CrossStaff</a>, and <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a32610382c8a6ff5be9d7e8f92d7150e8">musx::dom::details::TieAlterBase</a>.</p>
+<p>Implemented in <a class="el" href="classmusx_1_1dom_1_1details_1_1CrossStaff.html#a0dbd478212c7282e10b36f8ce084b314">musx::dom::details::CrossStaff</a>, <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ad876842676f95bff7eba2c97d4442f97">musx::dom::details::NoteAlterations</a>, and <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a32610382c8a6ff5be9d7e8f92d7150e8">musx::dom::details::TieAlterBase</a>.</p>
 
 </div>
 </div>

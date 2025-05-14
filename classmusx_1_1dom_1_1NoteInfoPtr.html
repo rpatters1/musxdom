@@ -132,9 +132,9 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
 <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getEntryInfo</b> () const</td></tr>
 <tr class="memdesc:a274b7e7410c033c60bc818731a9d8598"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the entry info for this note. <br /></td></tr>
 <tr class="separator:a274b7e7410c033c60bc818731a9d8598"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a736631bb45a807d4f0a86ae3757f4080" id="r_a736631bb45a807d4f0a86ae3757f4080"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">Note::NoteName</a>, int, int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a736631bb45a807d4f0a86ae3757f4080">calcNoteProperties</a> () const</td></tr>
-<tr class="memdesc:a736631bb45a807d4f0a86ae3757f4080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position.  <br /></td></tr>
-<tr class="separator:a736631bb45a807d4f0a86ae3757f4080"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6593889a4a734db7633332419e815b59" id="r_a6593889a4a734db7633332419e815b59"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">Note::NoteName</a>, int, int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a6593889a4a734db7633332419e815b59">calcNoteProperties</a> (const std::optional&lt; bool &gt; &amp;enharmonicRespell=std::nullopt) const</td></tr>
+<tr class="memdesc:a6593889a4a734db7633332419e815b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position.  <br /></td></tr>
+<tr class="separator:a6593889a4a734db7633332419e815b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac535914f03c0ac61fe184134c1584d9b" id="r_ac535914f03c0ac61fe184134c1584d9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#ac535914f03c0ac61fe184134c1584d9b">calcTieTo</a> () const</td></tr>
 <tr class="memdesc:ac535914f03c0ac61fe184134c1584d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie to. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> to see if there is actually a tie end.  <br /></td></tr>
 <tr class="separator:ac535914f03c0ac61fe184134c1584d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,9 +195,8 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">entryInfo</td><td></td></tr>
-    <tr><td class="paramname">noteIndex</td><td><br  />
- </td></tr>
+    <tr><td class="paramname">entryInfo</td><td>The entry info containing the note. </td></tr>
+    <tr><td class="paramname">noteIndex</td><td>The index of this note within <a class="el" href="classmusx_1_1dom_1_1Entry.html#a533b919d0efa81b9d26fb16ade0b7773" title="Collection of notes that comprise the entry. These are in order from lowest to highest.">Entry::notes</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -205,8 +204,8 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a736631bb45a807d4f0a86ae3757f4080" name="a736631bb45a807d4f0a86ae3757f4080"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a736631bb45a807d4f0a86ae3757f4080">&#9670;&#160;</a></span>calcNoteProperties()</h2>
+<a id="a6593889a4a734db7633332419e815b59" name="a6593889a4a734db7633332419e815b59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6593889a4a734db7633332419e815b59">&#9670;&#160;</a></span>calcNoteProperties()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -214,13 +213,20 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
         <tr>
           <td class="memname">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">Note::NoteName</a>, int, int, int &gt; musx::dom::NoteInfoPtr::calcNoteProperties </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const std::optional&lt; bool &gt; &amp;&#160;</td>
+          <td class="paramname"><em>enharmonicRespell</em> = <code>std::nullopt</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Calculates the note name, octave number, actual alteration, and staff position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">enharmonicRespell</td><td>If supplied, return the default enharmonic respelling based on this value. If omitted, this value calculated automatically based on the score or part settings. Normally you will omit it. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>A tuple containing:<ul>
 <li>NoteName: The note name (C, D, E, F, G, A, B)</li>
 <li>int: The octave number (where 4 is the middle C octave)</li>

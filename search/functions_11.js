@@ -22,12 +22,14 @@ var searchData=
   ['staffgroup_19',['StaffGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9cc08eb744c1b6ac9087f16ff99dbcfd',1,'musx::dom::details::StaffGroup']]],
   ['staffgroupinfo_20',['StaffGroupInfo',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a9c3b10290cffa74b2cea59bab3cd2063',1,'musx::dom::details::StaffGroupInfo']]],
   ['staffoptions_21',['StaffOptions',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#af1602f801dd9ee76f7f64a9dbd687413',1,'musx::dom::options::StaffOptions']]],
-  ['staffstyle_22',['staffstyle',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a4198715586ac656f96e634f82b3fb3d2',1,'musx::dom::others::StaffStyle::StaffStyle(const std::shared_ptr&lt; Staff &gt; &amp;staff)'],['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a5762f50554830a25eb185acc5808dcbf',1,'musx::dom::others::StaffStyle::StaffStyle(const DocumentWeakPtr &amp;document, Cmper partId, ShareMode shareMode, Cmper cmper)']]],
-  ['staffstyleassign_23',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd',1,'musx::dom::others::StaffStyleAssign']]],
-  ['staffsystem_24',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440',1,'musx::dom::others::StaffSystem']]],
-  ['startswithfontcommand_25',['startsWithFontCommand',['../classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d',1,'musx::util::EnigmaString']]],
-  ['stemoptions_26',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a5c48c35393259a1e2ff79abcd5495acf',1,'musx::dom::options::StemOptions']]],
-  ['stepwisetranspose_27',['stepwiseTranspose',['../classmusic__theory_1_1Transposer.html#a549005f7f6843171987b3ff128c76152',1,'music_theory::Transposer']]],
-  ['sumcounts_28',['sumCounts',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#a7f520211e7fe24c719f3d682ee248f0e',1,'musx::dom::TimeSignature::TimeSigComponent']]],
-  ['sumunits_29',['sumUnits',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#ad6741949876b88d061a2fc0656eca76c',1,'musx::dom::TimeSignature::TimeSigComponent']]]
+  ['staffsize_22',['StaffSize',['../classmusx_1_1dom_1_1details_1_1StaffSize.html#ae8ba121a160fc41deac208cf7a7072c4',1,'musx::dom::details::StaffSize']]],
+  ['staffstyle_23',['staffstyle',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a4198715586ac656f96e634f82b3fb3d2',1,'musx::dom::others::StaffStyle::StaffStyle(const std::shared_ptr&lt; Staff &gt; &amp;staff)'],['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a5762f50554830a25eb185acc5808dcbf',1,'musx::dom::others::StaffStyle::StaffStyle(const DocumentWeakPtr &amp;document, Cmper partId, ShareMode shareMode, Cmper cmper)']]],
+  ['staffstyleassign_24',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd',1,'musx::dom::others::StaffStyleAssign']]],
+  ['staffsystem_25',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440',1,'musx::dom::others::StaffSystem']]],
+  ['startswithfontcommand_26',['startsWithFontCommand',['../classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d',1,'musx::util::EnigmaString']]],
+  ['stemoptions_27',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a5c48c35393259a1e2ff79abcd5495acf',1,'musx::dom::options::StemOptions']]],
+  ['stepwisetranspose_28',['stepwiseTranspose',['../classmusic__theory_1_1Transposer.html#a549005f7f6843171987b3ff128c76152',1,'music_theory::Transposer']]],
+  ['sumcounts_29',['sumCounts',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#a7f520211e7fe24c719f3d682ee248f0e',1,'musx::dom::TimeSignature::TimeSigComponent']]],
+  ['sumunits_30',['sumUnits',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#ad6741949876b88d061a2fc0656eca76c',1,'musx::dom::TimeSignature::TimeSigComponent']]],
+  ['systemlock_31',['SystemLock',['../classmusx_1_1dom_1_1others_1_1SystemLock.html#abc2ae56f0a50eae89ef3e46ab66f0ad0',1,'musx::dom::others::SystemLock']]]
 ];

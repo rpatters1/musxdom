@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1StaffSystem =
 [
     [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440", null ],
+    [ "calcMinMaxStaffSizes", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a8e9360e4bab59fffa40384d67606b014", null ],
     [ "bottom", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a7d519be5fbe7913049ec1a48c1581463", null ],
     [ "distanceToPrev", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a6dec78d53cbd40181c6195e7cd78ffdc", null ],
     [ "endMeas", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12", null ],

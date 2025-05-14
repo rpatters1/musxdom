@@ -4,6 +4,7 @@ var searchData=
   ['nextattribute_1',['nextattribute',['../classmusx_1_1xml_1_1pugi_1_1Attribute.html#a93df8d37ec5f5d183f5fce6bf2d3177e',1,'musx::xml::pugi::Attribute::nextAttribute()'],['../classmusx_1_1xml_1_1rapidxml_1_1Attribute.html#adb3446cdfdd712e5175b97681f22dbbf',1,'musx::xml::rapidxml::Attribute::nextAttribute()'],['../classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ac88cab337dbb357332347bf974319176',1,'musx::xml::tinyxml2::Attribute::nextAttribute()'],['../classmusx_1_1xml_1_1IXmlAttribute.html#aae7f99dd995ba6057ca39c6ee88bddc6',1,'musx::xml::IXmlAttribute::nextAttribute()']]],
   ['nodestring_2',['nodeString',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a126ec8416afdf12c51af56c256740ffd',1,'musx::dom::ObjectPool::ObjectKey']]],
   ['note_3',['Note',['../classmusx_1_1dom_1_1Note.html#a7b5fc7c3dd8fe22c524c311b8eae5463',1,'musx::dom::Note']]],
-  ['noteinfoptr_4',['noteinfoptr',['../classmusx_1_1dom_1_1NoteInfoPtr.html#af96307ed369138a67d004695055e894d',1,'musx::dom::NoteInfoPtr::NoteInfoPtr()'],['../classmusx_1_1dom_1_1NoteInfoPtr.html#abafc8ded0db6f072316ecfee838eaa38',1,'musx::dom::NoteInfoPtr::NoteInfoPtr(const EntryInfoPtr &amp;entryInfo, size_t noteIndex)']]],
-  ['numerator_5',['numerator',['../classmusx_1_1util_1_1Fraction.html#a1723645e98a12e8521ee2e3947f5c9d3',1,'musx::util::Fraction']]]
+  ['notealterations_4',['NoteAlterations',['../classmusx_1_1dom_1_1details_1_1NoteAlterations.html#a79dd6bd8d88757b1f791465a9abb7a12',1,'musx::dom::details::NoteAlterations']]],
+  ['noteinfoptr_5',['noteinfoptr',['../classmusx_1_1dom_1_1NoteInfoPtr.html#af96307ed369138a67d004695055e894d',1,'musx::dom::NoteInfoPtr::NoteInfoPtr()'],['../classmusx_1_1dom_1_1NoteInfoPtr.html#abafc8ded0db6f072316ecfee838eaa38',1,'musx::dom::NoteInfoPtr::NoteInfoPtr(const EntryInfoPtr &amp;entryInfo, size_t noteIndex)']]],
+  ['numerator_6',['numerator',['../classmusx_1_1util_1_1Fraction.html#a1723645e98a12e8521ee2e3947f5c9d3',1,'musx::util::Fraction']]]
 ];

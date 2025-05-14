@@ -41,7 +41,7 @@ var searchData=
   ['uselocalcapo_38',['useLocalCapo',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#ad3c771e2f7197544885fa58f5a240e32',1,'musx::dom::details::ChordAssign']]],
   ['usemultipleencl_39',['useMultipleEncl',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a28840bca71c65ac3a172dfbc18c7625e',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['useouterplacement_40',['useOuterPlacement',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a2fe2bd697d9f7fef202afd0b6aff9dc3',1,'musx::dom::options::TieOptions']]],
-  ['useownfont_41',['useOwnFont',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a5e0d15326b67e8fa552a8b297fd54919',1,'musx::dom::options::ClefOptions::ClefDef']]],
+  ['useownfont_41',['useownfont',['../classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ab6109adfe840115cd1ba92ed2e32f25b',1,'musx::dom::details::NoteAlterations::useOwnFont'],['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a5e0d15326b67e8fa552a8b297fd54919',1,'musx::dom::options::ClefOptions::ClefDef::useOwnFont']]],
   ['useprinter_42',['usePrinter',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a9055b07f40ab32be7512d1b3cadeb3b6',1,'musx::dom::options::MusicSpacingOptions']]],
   ['useratio_43',['UseRatio',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1',1,'musx::dom::options::TupletOptions']]],
   ['usercreated_44',['userCreated',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a6f2ea8bc5edea8fa36ae1231a9480a83',1,'musx::dom::others::MarkingCategory']]],
@@ -56,7 +56,7 @@ var searchData=
   ['usestartencl_53',['useStartEncl',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a3593fd8287f730bbebf757dc20eda4a1',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['usestemconnections_54',['useStemConnections',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a1a40d64302d87b911a00ab2ec250cd8b',1,'musx::dom::options::StemOptions']]],
   ['usestextfont_55',['usesTextFont',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a03b851ee61a59288ec2bbd86e131cb33',1,'musx::dom::others::MarkingCategory']]],
-  ['usesymbols_56',['usesymbols',['../classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a55623e7e6112656fa12d1db860306cc6',1,'musx::dom::others::MultimeasureRest::useSymbols'],['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ab8c273977dffc5a2845256cf70575c57',1,'musx::dom::options::MultimeasureRestOptions::useSymbols']]],
+  ['usesymbols_56',['usesymbols',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ab8c273977dffc5a2845256cf70575c57',1,'musx::dom::options::MultimeasureRestOptions::useSymbols'],['../classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a55623e7e6112656fa12d1db860306cc6',1,'musx::dom::others::MultimeasureRest::useSymbols']]],
   ['usesymsthreshold_57',['useSymsThreshold',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#af8a5525b60ddfffe78e794e10e7eedc8',1,'musx::dom::options::MultimeasureRestOptions']]],
   ['usethisfont_58',['useThisFont',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a4e0cf82565351e6b4959f9cf041686e1',1,'musx::dom::others::TextRepeatDef']]],
   ['usetieendctlstyle_59',['useTieEndCtlStyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad76523ff7c49b4504b4e9baff2140265',1,'musx::dom::options::TieOptions']]]

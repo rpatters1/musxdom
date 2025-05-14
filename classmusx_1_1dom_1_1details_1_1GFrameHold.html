@@ -132,23 +132,6 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getMeasure</b> () const</td></tr>
 <tr class="memdesc:aafb1a25712ba546799697c43dbdf81ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the measure number for this <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a48353d7772e29982e85c64edc0544ba0" title="Constructor function.">GFrameHold</a> <br /></td></tr>
 <tr class="separator:aafb1a25712ba546799697c43dbdf81ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab59779c2997e00a8dce029c937176b6a" id="r_ab59779c2997e00a8dce029c937176b6a"><td class="memItemLeft" align="right" valign="top"><a id="ab59779c2997e00a8dce029c937176b6a" name="ab59779c2997e00a8dce029c937176b6a"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcClefIndexAt</b> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> position) const</td></tr>
-<tr class="memdesc:ab59779c2997e00a8dce029c937176b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the clef index in effect for at the specified <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> position. This function does not take into account transposing clefs. Those are addressed in <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a931ae74ffd27700d95cce04fda7318d1" title="Returns the EntryFrame for all entries in the given layer.">createEntryFrame</a>. <br /></td></tr>
-<tr class="separator:ab59779c2997e00a8dce029c937176b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a598adadbbaf0bb3157dbd4de4fae1ebe" id="r_a598adadbbaf0bb3157dbd4de4fae1ebe"><td class="memItemLeft" align="right" valign="top"><a id="a598adadbbaf0bb3157dbd4de4fae1ebe" name="a598adadbbaf0bb3157dbd4de4fae1ebe"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcClefIndexAt</b> (<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> position) const</td></tr>
-<tr class="memdesc:a598adadbbaf0bb3157dbd4de4fae1ebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the clef index in effect for at the specified <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> position (as a fraction of whole notes). This function does not take into account transposing clefs. Those are addressed in <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a931ae74ffd27700d95cce04fda7318d1" title="Returns the EntryFrame for all entries in the given layer.">createEntryFrame</a>. <br /></td></tr>
-<tr class="separator:a598adadbbaf0bb3157dbd4de4fae1ebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a931ae74ffd27700d95cce04fda7318d1" id="r_a931ae74ffd27700d95cce04fda7318d1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a931ae74ffd27700d95cce04fda7318d1">createEntryFrame</a> (<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> layerIndex, bool forWrittenPitch=false) const</td></tr>
-<tr class="memdesc:a931ae74ffd27700d95cce04fda7318d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> for all entries in the given layer.  <br /></td></tr>
-<tr class="separator:a931ae74ffd27700d95cce04fda7318d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1be8c74339c764144105e6ea04804d89" id="r_a1be8c74339c764144105e6ea04804d89"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a1be8c74339c764144105e6ea04804d89">iterateEntries</a> (<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> layerIndex, std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt; iterator)</td></tr>
-<tr class="memdesc:a1be8c74339c764144105e6ea04804d89"><td class="mdescLeft">&#160;</td><td class="mdescRight">iterates the entries for the specified layer in this <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a48353d7772e29982e85c64edc0544ba0" title="Constructor function.">GFrameHold</a> from left to right  <br /></td></tr>
-<tr class="separator:a1be8c74339c764144105e6ea04804d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7a86984e81b22c24f56e8b696388e7b" id="r_ac7a86984e81b22c24f56e8b696388e7b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#ac7a86984e81b22c24f56e8b696388e7b">iterateEntries</a> (std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt; iterator)</td></tr>
-<tr class="memdesc:ac7a86984e81b22c24f56e8b696388e7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">iterates the entries for this <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a48353d7772e29982e85c64edc0544ba0" title="Constructor function.">GFrameHold</a> from left to right for each layer in order  <br /></td></tr>
-<tr class="separator:ac7a86984e81b22c24f56e8b696388e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc0f3bd7cad4179819fde0a675d8d74c" id="r_adc0f3bd7cad4179819fde0a675d8d74c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#adc0f3bd7cad4179819fde0a675d8d74c">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:adc0f3bd7cad4179819fde0a675d8d74c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:adc0f3bd7cad4179819fde0a675d8d74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,14 +156,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <tr class="memitem:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3284dc2e34ac0e59c06847587fe7201a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3284dc2e34ac0e59c06847587fe7201a">getDocument</a> () const</td></tr>
 <tr class="memdesc:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a reference to the <a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a>.  <br /></td></tr>
 <tr class="separator:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a2064fc32c5bd6ab123461729d1e90d27"><td class="memItemLeft" align="right" valign="top">
-<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPartId</b> () const</td></tr>
-<tr class="memdesc:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or 0 for score) <br /></td></tr>
-<tr class="separator:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ab82b29d7f2164630dee1f73d8535633d"><td class="memItemLeft" align="right" valign="top">
-std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartDefinition</b> () const</td></tr>
-<tr class="memdesc:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> corresponding to <a class="el" href="classmusx_1_1dom_1_1Base.html#a2064fc32c5bd6ab123461729d1e90d27" title="Gets the partId for this instance (or 0 for score)">getPartId</a>. <br /></td></tr>
-<tr class="separator:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ae425c90d2a3dd212fd589803200fdd34"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ae425c90d2a3dd212fd589803200fdd34">getPartId</a> () const</td></tr>
+<tr class="memdesc:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or SCORE_PARTID for score)  <br /></td></tr>
+<tr class="separator:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -347,44 +325,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a931ae74ffd27700d95cce04fda7318d1" name="a931ae74ffd27700d95cce04fda7318d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a931ae74ffd27700d95cce04fda7318d1">&#9670;&#160;</a></span>createEntryFrame()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt; musx::dom::details::GFrameHold::createEntryFrame </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td>
-          <td class="paramname"><em>layerIndex</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forWrittenPitch</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> for all entries in the given layer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">layerIndex</td><td>The layer index (0..3) to iterate. </td></tr>
-    <tr><td class="paramname">forWrittenPitch</td><td>If true, the key and clef for each entry are calculated for written pitch rather than concert pitch. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html" title="Represents a vector of EntryInfo instances for a given frame, along with computed information.">EntryFrame</a> for layer or nullptr if none. </dd></dl>
-
-</div>
-</div>
 <a id="adc0f3bd7cad4179819fde0a675d8d74c" name="adc0f3bd7cad4179819fde0a675d8d74c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adc0f3bd7cad4179819fde0a675d8d74c">&#9670;&#160;</a></span>integrityCheck()</h2>
 
@@ -418,77 +358,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
-
-</div>
-</div>
-<a id="a1be8c74339c764144105e6ea04804d89" name="a1be8c74339c764144105e6ea04804d89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1be8c74339c764144105e6ea04804d89">&#9670;&#160;</a></span>iterateEntries() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::details::GFrameHold::iterateEntries </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td>
-          <td class="paramname"><em>layerIndex</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt;&#160;</td>
-          <td class="paramname"><em>iterator</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>iterates the entries for the specified layer in this <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a48353d7772e29982e85c64edc0544ba0" title="Constructor function.">GFrameHold</a> from left to right </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">layerIndex</td><td>The layer index (0..3) to iterate. </td></tr>
-    <tr><td class="paramname">iterator</td><td>The callback function for each iteration. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if higher-level iteration should continue. false if it should halt. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>if the layer index is out of range </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ac7a86984e81b22c24f56e8b696388e7b" name="ac7a86984e81b22c24f56e8b696388e7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7a86984e81b22c24f56e8b696388e7b">&#9670;&#160;</a></span>iterateEntries() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::details::GFrameHold::iterateEntries </td>
-          <td>(</td>
-          <td class="paramtype">std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt;&#160;</td>
-          <td class="paramname"><em>iterator</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>iterates the entries for this <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a48353d7772e29982e85c64edc0544ba0" title="Constructor function.">GFrameHold</a> from left to right for each layer in order </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">iterator</td><td>The callback function for each iteration. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if higher-level iteration should continue. false if it should halt. </dd></dl>
 
 </div>
 </div>

@@ -33,7 +33,7 @@ var searchData=
   ['uselocalcapo_30',['useLocalCapo',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#ad3c771e2f7197544885fa58f5a240e32',1,'musx::dom::details::ChordAssign']]],
   ['usemultipleencl_31',['useMultipleEncl',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a28840bca71c65ac3a172dfbc18c7625e',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['useouterplacement_32',['useOuterPlacement',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a2fe2bd697d9f7fef202afd0b6aff9dc3',1,'musx::dom::options::TieOptions']]],
-  ['useownfont_33',['useOwnFont',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a5e0d15326b67e8fa552a8b297fd54919',1,'musx::dom::options::ClefOptions::ClefDef']]],
+  ['useownfont_33',['useownfont',['../classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ab6109adfe840115cd1ba92ed2e32f25b',1,'musx::dom::details::NoteAlterations::useOwnFont'],['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a5e0d15326b67e8fa552a8b297fd54919',1,'musx::dom::options::ClefOptions::ClefDef::useOwnFont']]],
   ['useprinter_34',['usePrinter',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a9055b07f40ab32be7512d1b3cadeb3b6',1,'musx::dom::options::MusicSpacingOptions']]],
   ['usercreated_35',['userCreated',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a6f2ea8bc5edea8fa36ae1231a9480a83',1,'musx::dom::others::MarkingCategory']]],
   ['userestoffset_36',['useRestOffset',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae25da3b6bdc8ed2938d80e62b99224e4',1,'musx::dom::others::LayerAttributes']]],

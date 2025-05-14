@@ -21,6 +21,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "isNote", "classmusx_1_1dom_1_1Entry.html#a1b7183f1bc2716b5eb961a2beab9e3c9", null ],
     [ "isValid", "classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b", null ],
     [ "lyricDetail", "classmusx_1_1dom_1_1Entry.html#ab39cf53be02d0856378fd81602a118a2", null ],
+    [ "noteDetail", "classmusx_1_1dom_1_1Entry.html#a8373be49ea239513cbf52f5e4ff6b49a", null ],
     [ "notes", "classmusx_1_1dom_1_1Entry.html#a533b919d0efa81b9d26fb16ade0b7773", null ],
     [ "numNotes", "classmusx_1_1dom_1_1Entry.html#ab528469b556bcfba86cc0d5fe79955f1", null ],
     [ "performanceData", "classmusx_1_1dom_1_1Entry.html#addbada32311803e48b2b05238332c83c", null ],

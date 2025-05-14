@@ -6,11 +6,13 @@ var searchData=
   ['findbeamend_3',['findBeamEnd',['../classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5',1,'musx::dom::EntryInfoPtr']]],
   ['findequalpitch_4',['findEqualPitch',['../classmusx_1_1dom_1_1NoteInfoPtr.html#aed537f60968794044f42f4b6de7488c4',1,'musx::dom::NoteInfoPtr']]],
   ['findmeasure_5',['findMeasure',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#ab2b24fab0700be7611c99e9d37e24fd8',1,'musx::dom::others::MeasureNumberRegion']]],
-  ['flagoptions_6',['FlagOptions',['../classmusx_1_1dom_1_1options_1_1FlagOptions.html#a0ea5087413766d3b48df80ff7916ade6',1,'musx::dom::options::FlagOptions']]],
-  ['fontdefinition_7',['FontDefinition',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a5ab1f7c8015fbf95b296fdf824cacdb5',1,'musx::dom::others::FontDefinition']]],
-  ['fontoptions_8',['FontOptions',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#ad02a81fefc0688893ddf06685aa6da8c',1,'musx::dom::options::FontOptions']]],
-  ['fraction_9',['Fraction',['../classmusx_1_1util_1_1Fraction.html#a3a95749410ef64c078d957fc4d659900',1,'musx::util::Fraction']]],
-  ['frame_10',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html#a264bdcc5b32fb5a8455e0d5ecfd6783b',1,'musx::dom::others::Frame']]],
-  ['fromedu_11',['fromEdu',['../classmusx_1_1util_1_1Fraction.html#a5153046569e5a7afecef882fbb11b1ff',1,'musx::util::Fraction']]],
-  ['fullfraction_12',['fullFraction',['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#a07269c830b58b748b808fabe7a5738e2',1,'musx::dom::others::TimeCompositeUpper::CompositeItem']]]
+  ['firstfirstcontainingpart_6',['firstFirstContainingPart',['../classmusx_1_1dom_1_1others_1_1Staff.html#a97619961c5b6a540dd742392c1a15a49',1,'musx::dom::others::Staff']]],
+  ['flagoptions_7',['FlagOptions',['../classmusx_1_1dom_1_1options_1_1FlagOptions.html#a0ea5087413766d3b48df80ff7916ade6',1,'musx::dom::options::FlagOptions']]],
+  ['fontdefinition_8',['FontDefinition',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a5ab1f7c8015fbf95b296fdf824cacdb5',1,'musx::dom::others::FontDefinition']]],
+  ['fontoptions_9',['FontOptions',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#ad02a81fefc0688893ddf06685aa6da8c',1,'musx::dom::options::FontOptions']]],
+  ['fraction_10',['Fraction',['../classmusx_1_1util_1_1Fraction.html#a3a95749410ef64c078d957fc4d659900',1,'musx::util::Fraction']]],
+  ['frame_11',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html#a264bdcc5b32fb5a8455e0d5ecfd6783b',1,'musx::dom::others::Frame']]],
+  ['fromedu_12',['fromEdu',['../classmusx_1_1util_1_1Fraction.html#a5153046569e5a7afecef882fbb11b1ff',1,'musx::util::Fraction']]],
+  ['fromu8_13',['fromU8',['../classmusx_1_1util_1_1EnigmaString.html#a13ea76fa4dcd68196d8a3a973da01d9e',1,'musx::util::EnigmaString']]],
+  ['fullfraction_14',['fullFraction',['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#a07269c830b58b748b808fabe7a5738e2',1,'musx::dom::others::TimeCompositeUpper::CompositeItem']]]
 ];

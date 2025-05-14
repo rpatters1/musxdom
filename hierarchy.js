@@ -11,6 +11,7 @@ var hierarchy =
         [ "musx::dom::EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", [
           [ "musx::dom::NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", [
             [ "musx::dom::details::CrossStaff", "classmusx_1_1dom_1_1details_1_1CrossStaff.html", null ],
+            [ "musx::dom::details::NoteAlterations", "classmusx_1_1dom_1_1details_1_1NoteAlterations.html", null ],
             [ "musx::dom::details::TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html", [
               [ "musx::dom::details::TieAlterEnd", "classmusx_1_1dom_1_1details_1_1TieAlterEnd.html", null ],
               [ "musx::dom::details::TieAlterStart", "classmusx_1_1dom_1_1details_1_1TieAlterStart.html", null ]
@@ -18,6 +19,7 @@ var hierarchy =
           ] ],
           [ "musx::dom::details::ArticulationAssign", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html", null ],
           [ "musx::dom::details::BeamStubDirection", "classmusx_1_1dom_1_1details_1_1BeamStubDirection.html", null ],
+          [ "musx::dom::details::EntrySize", "classmusx_1_1dom_1_1details_1_1EntrySize.html", null ],
           [ "musx::dom::details::LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html", [
             [ "musx::dom::details::LyricAssignChorus", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html", null ],
             [ "musx::dom::details::LyricAssignSection", "classmusx_1_1dom_1_1details_1_1LyricAssignSection.html", null ],
@@ -37,10 +39,10 @@ var hierarchy =
         [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ],
         [ "musx::dom::details::IndependentStaffDetails", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html", null ],
         [ "musx::dom::details::MeasureTextAssign", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html", null ],
-        [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ]
+        [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ],
+        [ "musx::dom::details::StaffSize", "classmusx_1_1dom_1_1details_1_1StaffSize.html", null ]
       ] ],
       [ "musx::dom::Entry", "classmusx_1_1dom_1_1Entry.html", null ],
-      [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ],
       [ "musx::dom::Note", "classmusx_1_1dom_1_1Note.html", null ],
       [ "musx::dom::OptionsBase", "classmusx_1_1dom_1_1OptionsBase.html", [
         [ "musx::dom::options::AccidentalOptions", "classmusx_1_1dom_1_1options_1_1AccidentalOptions.html", null ],
@@ -134,6 +136,7 @@ var hierarchy =
           ] ]
         ] ],
         [ "musx::dom::others::StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", null ],
+        [ "musx::dom::others::SystemLock", "classmusx_1_1dom_1_1others_1_1SystemLock.html", null ],
         [ "musx::dom::others::TempoChange", "classmusx_1_1dom_1_1others_1_1TempoChange.html", null ],
         [ "musx::dom::others::TextBlock", "classmusx_1_1dom_1_1others_1_1TextBlock.html", null ],
         [ "musx::dom::others::TextExpressionDef", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html", null ],
@@ -203,6 +206,7 @@ var hierarchy =
     [ "musx::dom::header::FileInfo", "structmusx_1_1dom_1_1header_1_1FileInfo.html", null ],
     [ "musx::dom::header::FinaleVersion", "structmusx_1_1dom_1_1header_1_1FinaleVersion.html", null ],
     [ "musx::util::Fraction", "classmusx_1_1util_1_1Fraction.html", null ],
+    [ "musx::dom::details::GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html", null ],
     [ "musx::dom::header::Header", "structmusx_1_1dom_1_1header_1_1Header.html", null ],
     [ "musx::dom::others::ShapeInstructionList::Instruction", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1Instruction.html", null ],
     [ "musx::xml::IXmlAttribute", "classmusx_1_1xml_1_1IXmlAttribute.html", [

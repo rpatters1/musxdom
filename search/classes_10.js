@@ -16,9 +16,11 @@ var searchData=
   ['staffgroup_13',['StaffGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html',1,'musx::dom::details']]],
   ['staffgroupinfo_14',['StaffGroupInfo',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html',1,'musx::dom::details']]],
   ['staffoptions_15',['StaffOptions',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html',1,'musx::dom::options']]],
-  ['staffstyle_16',['StaffStyle',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html',1,'musx::dom::others']]],
-  ['staffstyleassign_17',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html',1,'musx::dom::others']]],
-  ['staffsystem_18',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html',1,'musx::dom::others']]],
-  ['stemoptions_19',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html',1,'musx::dom::options']]],
-  ['stepelement_20',['StepElement',['../classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html',1,'musx::dom::others::KeyMapArray']]]
+  ['staffsize_16',['StaffSize',['../classmusx_1_1dom_1_1details_1_1StaffSize.html',1,'musx::dom::details']]],
+  ['staffstyle_17',['StaffStyle',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html',1,'musx::dom::others']]],
+  ['staffstyleassign_18',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html',1,'musx::dom::others']]],
+  ['staffsystem_19',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html',1,'musx::dom::others']]],
+  ['stemoptions_20',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html',1,'musx::dom::options']]],
+  ['stepelement_21',['StepElement',['../classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html',1,'musx::dom::others::KeyMapArray']]],
+  ['systemlock_22',['SystemLock',['../classmusx_1_1dom_1_1others_1_1SystemLock.html',1,'musx::dom::others']]]
 ];

@@ -10,7 +10,8 @@ var classmusx_1_1dom_1_1Note =
       [ "B", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632ea9d5ed678fe57bcca610140957afab571", null ]
     ] ],
     [ "Note", "classmusx_1_1dom_1_1Note.html#a7b5fc7c3dd8fe22c524c311b8eae5463", null ],
-    [ "calcNoteProperties", "classmusx_1_1dom_1_1Note.html#a48b5da5b283e186198718caaac8f8c2a", null ],
+    [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1Note.html#a70cff35a0297f05a6a7bf5157e0609d6", null ],
+    [ "calcNoteProperties", "classmusx_1_1dom_1_1Note.html#a6c9cfe42580f6cf5ff8c9e80256e00c8", null ],
     [ "getNoteId", "classmusx_1_1dom_1_1Note.html#a6f0f8b7fc1ce284954140b26b2774d14", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1Note.html#a36dc7428581bf94502b9e3a8ab2f0db1", null ],
     [ "crossStaff", "classmusx_1_1dom_1_1Note.html#a84dc0efada748e96ca668df2e1c5c6ec", null ],

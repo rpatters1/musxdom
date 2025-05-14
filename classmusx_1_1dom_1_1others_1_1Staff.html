@@ -210,6 +210,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>calcMiddleStaffPositio
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasInstrumentAssigned</b> () const</td></tr>
 <tr class="memdesc:a76f425b19ecab6f653dedb641f226748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this staff has an instrument assigned. <br /></td></tr>
 <tr class="separator:a76f425b19ecab6f653dedb641f226748"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa01cd366db3e4d698c188a64984832ff" id="r_aa01cd366db3e4d698c188a64984832ff"><td class="memItemLeft" align="right" valign="top"><a id="aa01cd366db3e4d698c188a64984832ff" name="aa01cd366db3e4d698c188a64984832ff"></a>
+std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainingParts</b> () const</td></tr>
+<tr class="memdesc:aa01cd366db3e4d698c188a64984832ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of all parts that contain this staff, including the score. <br /></td></tr>
+<tr class="separator:aa01cd366db3e4d698c188a64984832ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97619961c5b6a540dd742392c1a15a49" id="r_a97619961c5b6a540dd742392c1a15a49"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a97619961c5b6a540dd742392c1a15a49">firstFirstContainingPart</a> () const</td></tr>
+<tr class="memdesc:a97619961c5b6a540dd742392c1a15a49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the first part that contains this staff, not including the score.  <br /></td></tr>
+<tr class="separator:a97619961c5b6a540dd742392c1a15a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8840a265b1ac655e630e97831de86e83" id="r_a8840a265b1ac655e630e97831de86e83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a8840a265b1ac655e630e97831de86e83">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:a8840a265b1ac655e630e97831de86e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a8840a265b1ac655e630e97831de86e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,14 +238,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <tr class="memitem:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3284dc2e34ac0e59c06847587fe7201a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3284dc2e34ac0e59c06847587fe7201a">getDocument</a> () const</td></tr>
 <tr class="memdesc:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a reference to the <a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a>.  <br /></td></tr>
 <tr class="separator:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a2064fc32c5bd6ab123461729d1e90d27"><td class="memItemLeft" align="right" valign="top">
-<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPartId</b> () const</td></tr>
-<tr class="memdesc:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or 0 for score) <br /></td></tr>
-<tr class="separator:a2064fc32c5bd6ab123461729d1e90d27 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ab82b29d7f2164630dee1f73d8535633d"><td class="memItemLeft" align="right" valign="top">
-std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartDefinition</b> () const</td></tr>
-<tr class="memdesc:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> corresponding to <a class="el" href="classmusx_1_1dom_1_1Base.html#a2064fc32c5bd6ab123461729d1e90d27" title="Gets the partId for this instance (or 0 for score)">getPartId</a>. <br /></td></tr>
-<tr class="separator:ab82b29d7f2164630dee1f73d8535633d inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ae425c90d2a3dd212fd589803200fdd34"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ae425c90d2a3dd212fd589803200fdd34">getPartId</a> () const</td></tr>
+<tr class="memdesc:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or SCORE_PARTID for score)  <br /></td></tr>
+<tr class="separator:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -644,6 +646,26 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a97619961c5b6a540dd742392c1a15a49" name="a97619961c5b6a540dd742392c1a15a49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97619961c5b6a540dd742392c1a15a49">&#9670;&#160;</a></span>firstFirstContainingPart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt; musx::dom::others::Staff::firstFirstContainingPart </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Finds the first part that contains this staff, not including the score. </p>
+<dl class="section return"><dt>Returns</dt><dd>The first part that contains this staff or nullptr if none. </dd></dl>
 
 </div>
 </div>

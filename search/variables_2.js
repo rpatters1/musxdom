@@ -80,7 +80,7 @@ var searchData=
   ['clefdefs_77',['clefDefs',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html#a5c9e512196fc083b592a71aecda85653',1,'musx::dom::options::ClefOptions']]],
   ['cleffrontsepar_78',['clefFrontSepar',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html#a5877547109310897bc1e753279eed5aa',1,'musx::dom::options::ClefOptions']]],
   ['clefid_79',['clefId',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#a4299d95db06924be18c150b93a2310d9',1,'musx::dom::details::GFrameHold']]],
-  ['clefindex_80',['clefindex',['../classmusx_1_1dom_1_1others_1_1ClefList.html#a43818c8c5ae6b09cf36e894ae24c6010',1,'musx::dom::others::ClefList::clefIndex'],['../classmusx_1_1dom_1_1EntryInfo.html#a2c9f7777709405db6e5d5ec2edd6369f',1,'musx::dom::EntryInfo::clefIndex']]],
+  ['clefindex_80',['clefindex',['../classmusx_1_1dom_1_1EntryInfo.html#a2c9f7777709405db6e5d5ec2edd6369f',1,'musx::dom::EntryInfo::clefIndex'],['../classmusx_1_1dom_1_1others_1_1ClefList.html#a43818c8c5ae6b09cf36e894ae24c6010',1,'musx::dom::others::ClefList::clefIndex']]],
   ['clefkeysepar_81',['clefKeySepar',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html#a65e51b6bb15d2e049016e19da8d4c06f',1,'musx::dom::options::ClefOptions']]],
   ['cleflistid_82',['clefListId',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#aea171fa9898b2b7c14d1837eefe6c3b9',1,'musx::dom::details::GFrameHold']]],
   ['clefmode_83',['clefMode',['../classmusx_1_1dom_1_1others_1_1ClefList.html#a27b0bfd908a459879666cce7f53966d9',1,'musx::dom::others::ClefList']]],
@@ -112,7 +112,7 @@ var searchData=
   ['copies_109',['copies',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#a5d5cc2ba146e55da4974cabba2037dfc',1,'musx::dom::others::PartDefinition']]],
   ['copymode_110',['copyMode',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#aeed5c04ae8436af52711845fcee2c012',1,'musx::dom::others::ArticulationDef']]],
   ['cornamuse_111',['Cornamuse',['../namespacemusx_1_1dom_1_1uuid.html#a9ba255fbd6a8aa4baf6a7d79fd1f82d8',1,'musx::dom::uuid']]],
-  ['cornerradius_112',['cornerradius',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a5f966712b81192cedcf104788c82b959',1,'musx::dom::others::TextBlock::cornerRadius'],['../classmusx_1_1dom_1_1others_1_1Enclosure.html#adc9364ffa5ba9b3ff0a269aec8b9cb8e',1,'musx::dom::others::Enclosure::cornerRadius']]],
+  ['cornerradius_112',['cornerradius',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#adc9364ffa5ba9b3ff0a269aec8b9cb8e',1,'musx::dom::others::Enclosure::cornerRadius'],['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a5f966712b81192cedcf104788c82b959',1,'musx::dom::others::TextBlock::cornerRadius']]],
   ['cornet_113',['Cornet',['../namespacemusx_1_1dom_1_1uuid.html#ab165a2a358a1767b40fdad6363549b5a',1,'musx::dom::uuid']]],
   ['corneteflat_114',['CornetEFlat',['../namespacemusx_1_1dom_1_1uuid.html#af518409164394c5c798557f14cd12c41',1,'musx::dom::uuid']]],
   ['cornetto_115',['Cornetto',['../namespacemusx_1_1dom_1_1uuid.html#a7ee021fe2c2facd27992e882ba6930b9',1,'musx::dom::uuid']]],
@@ -139,7 +139,8 @@ var searchData=
   ['cuatro_136',['Cuatro',['../namespacemusx_1_1dom_1_1uuid.html#a633af48b11643556b28385c36261af1a',1,'musx::dom::uuid']]],
   ['cuica_137',['Cuica',['../namespacemusx_1_1dom_1_1uuid.html#a5b73eed705bbd82f578848f65895a5d3',1,'musx::dom::uuid']]],
   ['custombarshape_138',['customBarShape',['../classmusx_1_1dom_1_1others_1_1Measure.html#a60eda34ee5260cbf9b887991b04d2e36',1,'musx::dom::others::Measure']]],
-  ['customleftbarshape_139',['customLeftBarShape',['../classmusx_1_1dom_1_1others_1_1Measure.html#a9bbe3b6f012fbb13d49dc8cea28f8081',1,'musx::dom::others::Measure']]],
-  ['customstaff_140',['customStaff',['../classmusx_1_1dom_1_1others_1_1Staff.html#a212f0ef0993b6787ec486eac857a789b',1,'musx::dom::others::Staff']]],
-  ['cymbals_141',['Cymbals',['../namespacemusx_1_1dom_1_1uuid.html#adeff9678741faf14e79ba23e97a4e278',1,'musx::dom::uuid']]]
+  ['customfont_139',['customFont',['../classmusx_1_1dom_1_1details_1_1NoteAlterations.html#aa35ff593dd051f07b07e5b4222e2c0fd',1,'musx::dom::details::NoteAlterations']]],
+  ['customleftbarshape_140',['customLeftBarShape',['../classmusx_1_1dom_1_1others_1_1Measure.html#a9bbe3b6f012fbb13d49dc8cea28f8081',1,'musx::dom::others::Measure']]],
+  ['customstaff_141',['customStaff',['../classmusx_1_1dom_1_1others_1_1Staff.html#a212f0ef0993b6787ec486eac857a789b',1,'musx::dom::others::Staff']]],
+  ['cymbals_142',['Cymbals',['../namespacemusx_1_1dom_1_1uuid.html#adeff9678741faf14e79ba23e97a4e278',1,'musx::dom::uuid']]]
 ];

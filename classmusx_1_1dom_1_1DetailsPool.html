@@ -117,6 +117,10 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1DetailsPool.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a60fc43a68cfac80ca787009b62c3e7c2" id="r_a60fc43a68cfac80ca787009b62c3e7c2"><td class="memItemLeft" align="right" valign="top"><a id="a60fc43a68cfac80ca787009b62c3e7c2" name="a60fc43a68cfac80ca787009b62c3e7c2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>DetailsPool</b> ()</td></tr>
+<tr class="memdesc:a60fc43a68cfac80ca787009b62c3e7c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="separator:a60fc43a68cfac80ca787009b62c3e7c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a180329de73653fa6ec58eff01ebf41a7" id="r_a180329de73653fa6ec58eff01ebf41a7"><td class="memItemLeft" align="right" valign="top"><a id="a180329de73653fa6ec58eff01ebf41a7" name="a180329de73653fa6ec58eff01ebf41a7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const std::string &amp;nodeName, const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1DetailsBase.html">DetailsBase</a> &gt; &amp;instance)</td></tr>
 <tr class="memdesc:a180329de73653fa6ec58eff01ebf41a7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1DetailsPool.html" title="A pool that manages collections of DetailsBase objects, organized by XML node names and Cmper values.">DetailsPool</a> version of <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#aa032c80105389c2bf977762e2e1c96cf" title="Adds an OthersBase object to the pool.">ObjectPool::add</a>. <br /></td></tr>
@@ -141,11 +145,10 @@ template&lt;typename T , typename std::enable_if_t&lt; std::is_base_of_v&lt; <a 
 <tr class="memitem:afea2bf0b61b6aa1098b41b879e278fba"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entnum, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt; inci=std::nullopt) const</td></tr>
 <tr class="memdesc:afea2bf0b61b6aa1098b41b879e278fba"><td class="mdescLeft">&#160;</td><td class="mdescRight">EntryDetailsPool version of <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#ad1b4e4908e89fe890b8e0cef3d120665" title="Retrieves the first (and usually only) object of a specific type from the pool.">ObjectPool::get</a>. <br /></td></tr>
 <tr class="separator:afea2bf0b61b6aa1098b41b879e278fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3c4f3712e3d4874c95ee5b8479541c2" id="r_ad3c4f3712e3d4874c95ee5b8479541c2"><td class="memTemplParams" colspan="2"><a id="ad3c4f3712e3d4874c95ee5b8479541c2" name="ad3c4f3712e3d4874c95ee5b8479541c2"></a>
-template&lt;typename T , typename std::enable_if_t&lt; std::is_base_of_v&lt; <a class="el" href="classmusx_1_1dom_1_1NoteDetailsBase.html">NoteDetailsBase</a>, T &gt;, int &gt;  = 0&gt; </td></tr>
-<tr class="memitem:ad3c4f3712e3d4874c95ee5b8479541c2"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getForNote</b> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> noteInfo)</td></tr>
-<tr class="memdesc:ad3c4f3712e3d4874c95ee5b8479541c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the detail for a particular note. <br /></td></tr>
-<tr class="separator:ad3c4f3712e3d4874c95ee5b8479541c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace68ba03b25b9a481f8618e302159551" id="r_ace68ba03b25b9a481f8618e302159551"><td class="memTemplParams" colspan="2">template&lt;typename T , typename std::enable_if_t&lt; std::is_base_of_v&lt; <a class="el" href="classmusx_1_1dom_1_1NoteDetailsBase.html">NoteDetailsBase</a>, T &gt;, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:ace68ba03b25b9a481f8618e302159551"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1DetailsPool.html#ace68ba03b25b9a481f8618e302159551">getForNote</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;noteInfo, const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; &amp;forPartId=std::nullopt)</td></tr>
+<tr class="memdesc:ace68ba03b25b9a481f8618e302159551"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the detail for a particular note.  <br /></td></tr>
+<tr class="separator:ace68ba03b25b9a481f8618e302159551"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -154,6 +157,10 @@ Additional Inherited Members</h2></td></tr>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>ObjectPtr</b> = std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1DetailsBase.html">DetailsBase</a> &gt;</td></tr>
 <tr class="memdesc:a0852ee2cead576e893c24b67bb8eff67 inherit pro_types_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">shared pointer to <code>ObjectBaseType</code> <br /></td></tr>
 <tr class="separator:a0852ee2cead576e893c24b67bb8eff67 inherit pro_types_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classmusx_1_1dom_1_1ObjectPool"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmusx_1_1dom_1_1ObjectPool')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool&lt; DetailsBase &gt;</a></td></tr>
+<tr class="memitem:adce3eab39cc2e28c1458e4f6daba51de inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_adce3eab39cc2e28c1458e4f6daba51de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#adce3eab39cc2e28c1458e4f6daba51de">ObjectPool</a> (const std::unordered_map&lt; std::string, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">dom::Base::ShareMode</a> &gt; &amp;knownShareModes={})</td></tr>
+<tr class="memdesc:adce3eab39cc2e28c1458e4f6daba51de inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object pool.  <br /></td></tr>
+<tr class="separator:adce3eab39cc2e28c1458e4f6daba51de inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b5dbece54403a34b528ccc5db90e069 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_a5b5dbece54403a34b528ccc5db90e069"><td class="memItemLeft" align="right" valign="top">
 virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ObjectPool</b> ()=default</td></tr>
 <tr class="memdesc:a5b5dbece54403a34b528ccc5db90e069 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">virtual destructor <br /></td></tr>
@@ -177,7 +184,63 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ObjectPool</b> ()
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A pool that manages collections of <code><a class="el" href="classmusx_1_1dom_1_1DetailsBase.html" title="Base class for all &quot;details&quot; types.">DetailsBase</a></code> objects, organized by XML node names and <code>Cmper</code> values. </p>
 <p>Examples of <code>OneCmperBase</code> classes are <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">OthersBase</a> and <a class="el" href="classmusx_1_1dom_1_1TextsBase.html">TextsBase</a>. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ace68ba03b25b9a481f8618e302159551" name="ace68ba03b25b9a481f8618e302159551"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace68ba03b25b9a481f8618e302159551">&#9670;&#160;</a></span>getForNote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename std::enable_if_t&lt; std::is_base_of_v&lt; <a class="el" href="classmusx_1_1dom_1_1NoteDetailsBase.html">NoteDetailsBase</a>, T &gt;, int &gt;  = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; T &gt; musx::dom::DetailsPool::getForNote </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>noteInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>forPartId</em> = <code>std::nullopt</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the detail for a particular note. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type to retrieve (must be derived from <a class="el" href="classmusx_1_1dom_1_1NoteDetailsBase.html">NoteDetailsBase</a>) </td></tr>
+    <tr><td class="paramname">enable_if_t</td><td>Enforces T as a base of <a class="el" href="classmusx_1_1dom_1_1NoteDetailsBase.html">NoteDetailsBase</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteInfo</td><td>The note for which to get the note detail </td></tr>
+    <tr><td class="paramname">forPartId</td><td>The part for which to get the note detail. If omitted, the <code>noteInfo</code> part is used. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The instance associated with <code>noteInfo</code> or nullptr if none. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
