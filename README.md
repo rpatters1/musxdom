@@ -1,6 +1,6 @@
 # musx object model
 
-Document object model for the EnigmaXml format in Finale musx files. It is compatible with the C++17 standard.
+Document object model for the EnigmaXml format in Finale musx files. It is compatible with the C++17 through C++23 standards.
 
 **This project is not affiliated with or endorsed by Finale or its parent company.**
 
@@ -31,10 +31,10 @@ void process(const std::vector<char>& xmlBuffer)
     for (const auto& item : scrollView) {
         auto staff = item->getStaff();
         for (const auto& measure : measures) {
-            if (auto gfHold = document->getDetails()->get<details::GFrameHold>(SCORE_PARTID, staff->getCmper(), measure->getCmper())) {
+            if (auto gfHold = details::GFrameHoldContext(document, SCORE_PARTID, staff->getCmper(), measure->getCmper())) {
                 for (LayerIndex layer; layer < MAX_LAYERS; layer++) {
                     // create your own entry frame:
-                    auto entries = gfHold->createEntryFrame(layer, /*forWrittenPitch*/ false);
+                    auto entries = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
                     // or let musxdom iterate the entries for you:
                     gfHold->iterateEntries(layer, [&](const EntryInfoPtr& entryInfo) -> bool {
                         // do something with the entry (which is a single note, a chord, or a rest)

@@ -28,7 +28,8 @@
 #include "musx/util/EnigmaString.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
-// do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
+#include "Options.h"
+ // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -274,6 +275,31 @@ public:
 };
 
 /**
+ * @class EntrySize
+ * @brief Specifies a custom size for an entry. It scales the entire entry, including the stem and all noteheads.
+ * For beamed entries, it only takes effect if it is applied to the first entry in a beamed group, and then it affects
+ * every entry in the beamed group.
+ */
+class EntrySize : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this @ref EntrySize (probably always #ShareMode::All).
+     * @param entnum The entry number this size applies to.
+     */
+    explicit EntrySize(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum) {}
+
+    int percent{}; ///< The note/chord size as a percent (e.g., 65 for 65%).
+
+    static const xml::XmlElementArray<EntrySize>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    constexpr static std::string_view XmlNodeName = "entrySize"; ///< The XML node name for this type.
+};
+
+/**
  * @class GFrameHold
  * @brief Represents the attributes of a Finale frame holder.
  *
@@ -308,6 +334,61 @@ public:
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
+    void integrityCheck() override
+    {
+        this->DetailsBase::integrityCheck();
+        if (clefListId && clefId.has_value()) {
+            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has both clef and clef list.");
+        }
+        if (!clefListId && !clefId.has_value()) {
+            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has neither clef nor clef list.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class GFrameHoldContext
+ * @brief A context wrapper for @ref GFrameHold associated with a specific part and location.
+ *
+ * This class retrieves the appropriate @ref GFrameHold from a Document using part, instrument, and measure IDs,
+ * and enables part-aware operations like iterating over EntryFrame objects.
+ */
+class GFrameHoldContext {
+public:
+    /**
+     * @brief Constructs a context-aware @ref GFrameHold wrapper.
+     * 
+     * @param document Weak pointer to the owning Document.
+     * @param partId The requested part ID.
+     * @param inst The instrument ID for.
+     * @param meas The measure ID for.
+     */
+    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas);
+
+    /**
+     * @brief Returns the requested part ID associated with this context.
+     * 
+     * @return The requested part ID.
+     */
+    Cmper getRequestedPartId() const { return m_requestedPartId; }
+
+    /**
+     * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
+     * 
+     * @return A const pointer to @ref GFrameHold.
+     */
+    const GFrameHold* operator->() const { return m_hold.get(); }
+
+    /**
+     * @brief Returns true if the internal @ref GFrameHold is valid.
+     * 
+     * @return True if the @ref GFrameHold was successfully retrieved; false otherwise.
+     */
+    explicit operator bool() const { return static_cast<bool>(m_hold); }
+
     /// @brief Returns the clef index in effect for at the specified @ref Edu position.
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
     ClefIndex calcClefIndexAt(Edu position) const;
@@ -326,7 +407,7 @@ public:
     std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
     
     /**
-     * @brief iterates the entries for the specified layer in this #GFrameHold from left to right
+     * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
      * @param layerIndex The layer index (0..3) to iterate.
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
@@ -335,25 +416,15 @@ public:
     bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
 
     /**
-     * @brief iterates the entries for this #GFrameHold from left to right for each layer in order
+     * @brief iterates the entries for this @ref GFrameHold from left to right for each layer in order
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
      */
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
 
-    void integrityCheck() override
-    {
-        this->DetailsBase::integrityCheck();
-        if (clefListId && clefId.has_value()) {
-            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has both clef and clef list.");
-        }
-        if (!clefListId && !clefId.has_value()) {
-            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has neither clef nor clef list.");
-        }
-    }
-
-    constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+private:
+    std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
+    Cmper m_requestedPartId;                 ///< The requested part context.
 };
 
 /**
@@ -525,6 +596,38 @@ public:
 
     constexpr static std::string_view XmlNodeName = "measTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class NoteAlterations
+ * @brief Represents graphical and notational alterations applied to a note.
+ *
+ * This class is identified by the XML node name "noteAlter".
+ */
+class NoteAlterations : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit NoteAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci), customFont(new FontInfo(document))
+    {
+    }
+
+    NoteNumber noteId{};                    ///< The ID of the note being altered. (xml node is `<noteID>`)
+    int percent{};                          ///< Size percentage for the notehead. (A value of 100 means 100%.)
+    Evpu nxdisp{};                          ///< Horizontal notehead offset.
+    char32_t altNhead{};                    ///< Alternate notehead character.
+    bool useOwnFont{};                      ///< Whether to use the custom font.
+    std::shared_ptr<FontInfo> customFont{}; ///< Custom font info (consolidates: `<fontID>`, `<fontSize>`, `<efx>`)
+    bool allowVertPos{};                    ///< Whether vertical positioning is allowed .
+    Evpu nydisp{};                          ///< Vertical notehead offset.
+    bool enharmonic{};                      ///< Whether this note is enharmonically respelled.
+                                            ///< It is normally only true in linked parts as an unlinked value.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "noteAlter"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<NoteAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -753,6 +856,36 @@ public:
     static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId,
         const std::shared_ptr<others::PartDefinition>& linkedPart,
         const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
+};
+
+/**
+ * @class StaffSize
+ * @brief Represents a per-staff-size override for a specific staff in a system.
+ *
+ * Cmper1 is the system number and Cmper2 is the staff number (inst) @ref Cmper.
+ *
+ * This class is identified by the XML node name "staffSize".
+ */
+class StaffSize : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for.
+     * @param shareMode The sharing mode for this #StaffSize.
+     * @param system The staff system number (Cmper1).
+     * @param inst The staff number (Cmper2).
+     */
+    explicit StaffSize(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper inst)
+        : DetailsBase(document, partId, shareMode, system, inst)
+    {
+    }
+
+    int staffPercent{}; ///< The staff size percentage override. (A value of 100 means 100%, i.e, no staff scaling.)
+
+    constexpr static std::string_view XmlNodeName = "staffSize"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffSize>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

@@ -31,6 +31,7 @@
 #include <map>
 #include <tuple>
 #include <sstream>
+#include <type_traits>
 
 #include "musx/util/Logger.h"
 #include "musx/xml/XmlInterface.h"

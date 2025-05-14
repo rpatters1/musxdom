@@ -33,7 +33,10 @@
 #include <limits>
 
 #include "BaseClasses.h"
+#include "Others.h"
+#include "Details.h"
 #include "Entries.h"
+#include "SmartShape.h"
 
 namespace musx {
 namespace dom {
@@ -261,8 +264,11 @@ public:
     }
 
 protected:
-    // prevent standalone construction
-    ObjectPool() = default;
+    /// @brief Constructs the object pool
+    /// @param knownShareModes Optional parameter that specifies known share modes for certain elements.
+    /// These can be particurly important for Base::ShareMode::None because there may be no parts containing them.
+    ObjectPool(const std::unordered_map<TopKeyElementType, dom::Base::ShareMode>& knownShareModes = {})
+        : m_shareMode(knownShareModes) {}
 
 private:
     std::map<ObjectKey, ObjectPtr> m_pool;
@@ -309,6 +315,21 @@ using OptionsPoolPtr = std::shared_ptr<OptionsPool>;
 class OthersPool : public ObjectPool<OthersBase>
 {
 public:
+    /// @brief Constructor
+    OthersPool() : ObjectPool({
+        { std::string(others::BeatChartElement::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::InstrumentUsed::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::SystemLock::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::MultiStaffInstrumentGroup::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::MultimeasureRest::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::MultiStaffGroupId::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::Page::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::PartGlobals::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::StaffSystem::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::StaffStyleAssign::XmlNodeName), Base::ShareMode::None },
+        // add other known sharemode none items as they are identified.
+    }) {}
+
     /** @brief OthersPool version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
@@ -335,6 +356,14 @@ using OthersPoolPtr = std::shared_ptr<OthersPool>;
 class DetailsPool : protected ObjectPool<DetailsBase>
 {
 public:
+    /// @brief Constructor
+    DetailsPool() : ObjectPool({
+        { std::string(details::CenterShape::XmlNodeName), Base::ShareMode::None },
+        { std::string(details::StaffGroup::XmlNodeName), Base::ShareMode::None },
+        { std::string(details::StaffSize::XmlNodeName), Base::ShareMode::None },
+        // add other known sharemode none items as they are identified.
+    }) {}
+
     /** @brief DetailsPool version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
@@ -360,11 +389,18 @@ public:
     { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci}); }
 
     /// @brief Returns the detail for a particular note
+    /// @tparam T The type to retrieve (must be derived from @ref NoteDetailsBase)
+    /// @tparam enable_if_t Enforces T as a base of @ref NoteDetailsBase
+    /// @param noteInfo The note for which to get the note detail
+    /// @param forPartId The part for which to get the note detail. If omitted, the @p noteInfo part is used.
+    /// @return The instance associated with @p noteInfo or nullptr if none.
     template <typename T, typename std::enable_if_t<std::is_base_of_v<NoteDetailsBase, T>, int> = 0>
-    std::shared_ptr<T> getForNote(const NoteInfoPtr noteInfo)
+    std::shared_ptr<T> getForNote(const NoteInfoPtr& noteInfo, const std::optional<Cmper>& forPartId = std::nullopt)
     {
-        auto entry = noteInfo.getEntryInfo()->getEntry();
-        auto details = getArray<T>(entry->getPartId(), entry->getEntryNumber());
+        auto details = getArray<T>(
+            forPartId.value_or(noteInfo.getEntryInfo().getFrame()->getRequestedPartId()),
+            noteInfo.getEntryInfo()->getEntry()->getEntryNumber()
+        );
         for (const auto& detail : details) {
             if (detail->getNoteId() == noteInfo->getNoteId()) {
                 return detail;

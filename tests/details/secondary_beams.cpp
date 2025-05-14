@@ -123,9 +123,9 @@ TEST(SecondaryBeamBreakTest, DetectSecondaryBeams)
 
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
-    auto frame = gfhold->createEntryFrame(0);
+    auto frame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(frame);
     ASSERT_GE(frame->getEntries().size(), 8);
 
@@ -154,9 +154,9 @@ TEST(SecondaryBeamBreakTest, DetectBeamStubs)
 
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
     ASSERT_TRUE(gfhold);
-    auto frame = gfhold->createEntryFrame(0);
+    auto frame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(frame);
     ASSERT_GE(frame->getEntries().size(), 6);
 

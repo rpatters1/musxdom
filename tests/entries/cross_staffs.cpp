@@ -54,9 +54,8 @@ TEST(CrossStaff, Measure3)
     ASSERT_TRUE(doc);
 
 
-    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 3);
-    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
-    auto entryFrame = gfhold->createEntryFrame(0);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
+    auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
     checkCrossStaff(createNoteInfo(entryFrame, 1, 0), 2, 3, 0);
@@ -72,9 +71,8 @@ TEST(CrossStaff, Measure4)
     ASSERT_TRUE(doc);
 
 
-    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 4);
-    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 4";
-    auto entryFrame = gfhold->createEntryFrame(0);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 4";
+    auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
     checkCrossStaff(createNoteInfo(entryFrame, 0, 0), 2, 3, 0);
@@ -94,9 +92,8 @@ TEST(CrossStaff, Measure5)
     ASSERT_TRUE(doc);
 
 
-    auto gfhold = doc->getDetails()->get<details::GFrameHold>(SCORE_PARTID, 1, 5);
-    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 5";
-    auto entryFrame = gfhold->createEntryFrame(0);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 5";
+    auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
     checkCrossStaff(createNoteInfo(entryFrame, 1, 0), 2, 1, -6);

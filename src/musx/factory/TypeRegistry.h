@@ -136,8 +136,7 @@ public:
                             }();
                             if (scoreValue) {
                                 *instance = *scoreValue;
-                            }
-                            else {
+                            } else {
                                 throw std::invalid_argument("Score instance not found for partially linked part instance");
                             }
                         }
@@ -145,7 +144,8 @@ public:
                     factory::FieldPopulator<T>::populate(instance, node, elementLinker);
                     return instance;
                 } else {
-                    throw std::runtime_error("Type for " + node->getTagName() + " is not constructible with given arguments");
+                    assert(false); // This path should never actually be taken, but it is required for std::visit.
+                    throw std::logic_error("Type for " + node->getTagName() + " is not constructible with given arguments");
                 }
             },
             typePtr.value()
@@ -205,6 +205,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::Frame,
     dom::others::TonalCenterFlats,
     dom::others::TonalCenterSharps,
+    dom::others::SystemLock,        // xml node is "lockMeas", which is still sequenced non-alphabetically
     dom::others::InstrumentUsed,
     dom::others::KeyFormat,
     dom::others::KeyMapArray,
@@ -253,6 +254,7 @@ using RegisteredOthers = TypeRegistry <
  * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredDetails = TypeRegistry <
+    dom::details::EntrySize,
     dom::details::ArticulationAssign,
     dom::details::BaselineLyricsChorus,
     dom::details::BaselineLyricsSection,
@@ -261,10 +263,12 @@ using RegisteredDetails = TypeRegistry <
     dom::details::CenterShape,
     dom::details::ChordAssign,
     dom::details::CrossStaff,
-    dom::details::IndependentStaffDetails, // "floats" is the xml key
+    dom::details::IndependentStaffDetails,  // "floats" is the xml key
+    dom::details::StaffSize,
     dom::details::GFrameHold,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
+    dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it
     dom::details::SecondaryBeamBreak,
     dom::details::SmartShapeEntryAssign,
     dom::details::TieAlterEnd,

@@ -37,10 +37,6 @@ namespace musx {
  */
 namespace dom {
 
-namespace others {
-class PartDefinition;
-}
-
 /**
  * @brief Exception for integrity errors. (Used when `MUSX_THROW_ON_INTEGRITY_CHECK_FAIL` is defined.)
  */
@@ -97,12 +93,15 @@ public:
     }
 
     /**
-     * @brief Gets the partId for this instance (or 0 for score)
+     * @brief Gets the partId for this instance (or SCORE_PARTID for score)
+     * @note When you use `get` or `getArray` to retrieve an instance for a part, the value
+     * returned is either for that part or it is for the score. Therefore, this value is
+     * only reliable for determining the partId you are working on if the entity's share mode
+     * is #ShareMode::None. Otherwise, it returns SCORE_PARTID for instances shared with the score.
+     *
+     * Runtime-only classes (e.g., StaffComposite) override this function to return the requested part id.
      */
-    Cmper getPartId() const { return m_partId; }
-
-    /** @brief Gets the @ref others::PartDefinition corresponding to #getPartId */
-    std::shared_ptr<others::PartDefinition> getPartDefinition() const;
+    virtual Cmper getPartId() const { return m_partId; }
 
     /**
      * @brief Gets the sharing mode for this instance.
@@ -191,7 +190,6 @@ protected:
     // these Base functions do not return useful results. However, we allow our subclasses
     // to use their own versions of these functions (esp. `getPartId`) to avoid promiscuous
     // hard-coding of SCORE_PARTID. The rules may change in the future.
-    using Base::getPartDefinition;
     using Base::getPartId;
     using Base::getShareMode;
     using Base::getUnlinkedNodes;
@@ -373,6 +371,7 @@ public:
     virtual NoteNumber getNoteId() const = 0;
 
 protected:
+    /// @brief Constructor for NoteDetailsBase uses @ref EntryDetailsBase constructor.
     using EntryDetailsBase::EntryDetailsBase;
 };
 

@@ -28,6 +28,11 @@
 
 namespace musxtest {
 
+inline std::string pathString(const std::filesystem::path& path) {
+    auto s = path.u8string();
+    return std::string(reinterpret_cast<const char*>(s.data()), s.size());
+}
+
 class string_view : public std::string_view
 {
 public:

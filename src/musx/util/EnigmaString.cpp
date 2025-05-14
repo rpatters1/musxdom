@@ -183,14 +183,14 @@ std::string EnigmaString::replaceAccidentalTags(const std::string& input, Accide
 
     // Maps for SMuFL and plain text accidentals
     const std::unordered_map<std::string, std::string> smuflAccidentals = {
-        {"flat", u8"\uE260"},    // SMuFL character for flat
-        {"sharp", u8"\uE262"},   // SMuFL character for sharp
-        {"natural", u8"\uE261"}  // SMuFL character for natural
+        {"flat", fromU8(u8"\uE260")},    // SMuFL character for flat
+        {"sharp", fromU8(u8"\uE262")},   // SMuFL character for sharp
+        {"natural", fromU8(u8"\uE261")}  // SMuFL character for natural
     };
     const std::unordered_map<std::string, std::string> unicodeAccidentals = {
-        {"flat", u8"\u266D"},    // Text flat: ♭
-        {"sharp", u8"\u266F"},   // Text sharp: ♯
-        {"natural", u8"\u266E"}  // Text natural: ♮
+        {"flat", fromU8(u8"\u266D")},    // Text flat: ♭
+        {"sharp", fromU8(u8"\u266F")},   // Text sharp: ♯
+        {"natural", fromU8(u8"\u266E")}  // Text natural: ♮
     };
     const std::unordered_map<std::string, std::string> asciiAccidentals = {
         {"flat", "b"},         // Plain text representation for flat

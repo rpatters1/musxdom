@@ -399,14 +399,14 @@ TEST(StaffTest, Transposition)
     }};
 
     for (Cmper measId = 1; measId <= 5; measId++) {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measId);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, measId);
         ASSERT_TRUE(gfhold);
 
-        auto writtenEntries = gfhold->createEntryFrame(0, true);
+        auto writtenEntries = gfhold.createEntryFrame(0, true);
         ASSERT_TRUE(writtenEntries);
         ASSERT_GE(writtenEntries->getEntries().size(), 2);
 
-        auto concertEntries = gfhold->createEntryFrame(0, false);
+        auto concertEntries = gfhold.createEntryFrame(0, false);
         ASSERT_TRUE(concertEntries);
         ASSERT_GE(concertEntries->getEntries().size(), 2);
 
@@ -472,14 +472,14 @@ TEST(StaffTest, Transposition31Edo)
     }};
 
     for (Cmper measId = 1; measId <= 5; measId++) {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, measId);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, measId);
         ASSERT_TRUE(gfhold);
 
-        auto writtenEntries = gfhold->createEntryFrame(0, true);
+        auto writtenEntries = gfhold.createEntryFrame(0, true);
         ASSERT_TRUE(writtenEntries);
         ASSERT_GE(writtenEntries->getEntries().size(), 2);
 
-        auto concertEntries = gfhold->createEntryFrame(0, false);
+        auto concertEntries = gfhold.createEntryFrame(0, false);
         ASSERT_TRUE(concertEntries);
         ASSERT_GE(concertEntries->getEntries().size(), 2);
 

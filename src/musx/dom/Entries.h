@@ -42,7 +42,7 @@ class StaffComposite;
 
 namespace details {
 class TupletDef;
-class GFrameHold;
+class GFrameHoldContext;
 } // namespace details
 
 /**
@@ -99,6 +99,18 @@ public:
     /// in a chord are rearranged (which affects the order of #Entry::notes.)
     NoteNumber getNoteId() const { return m_noteId; }
 
+    /// @brief Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when
+    /// #details::NoteAlterations::enharmonic is true.
+    ///
+    /// Normally you do not have to call this function directly. It is called inside #calcNoteProperties. But the function
+    /// is available if you need it.
+    ///
+    /// @param key The key signature to use for transposition.
+    /// @return A std::pair containing
+    ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
+    ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
+    std::pair<int, int> calcDefaultEnharmonic(const std::shared_ptr<KeySignature>& key) const;
+
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position.
      *
@@ -114,6 +126,7 @@ public:
      * @param clefIndex The index of the clef in effect.
      * @param staff If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If
      * calling #calcNoteProperties for Concert Pitch (sounding pitch) values, omit this parameter.
+     * @param respellEnharmonic If true, the notes are enharmonically respelled using the default enharmonic spelling.
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
@@ -121,7 +134,7 @@ public:
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
     std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex,
-        const std::shared_ptr<const others::Staff>& staff = nullptr) const;
+        const std::shared_ptr<const others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     bool requireAllFields() const override { return false; }
 
@@ -166,6 +179,7 @@ public:
     bool isHidden{};         ///< Indicates the entry is hidden, (xml node is `<ignore>`)
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
+    bool noteDetail{};       ///< Indicates there is a note detail or EntrySize record for the entry.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
     bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
@@ -394,18 +408,18 @@ private:
  *
  * Its pointers are owned by @ref EntryInfoPtr
  */
-class EntryFrame : public Base, public std::enable_shared_from_this<EntryFrame>
+class EntryFrame : public std::enable_shared_from_this<EntryFrame>
 {
 public:
     /** @brief Constructor function
      *
-     * @param gfhold The @ref details::GFrameHold instance creating this EntryFrame
+     * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
      * @param staff The Cmper for the @ref others::Staff of the entry
      * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
      * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
     */
-    explicit EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch);
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch);
 
     /// @brief class to track tuplets in the frame
     struct TupletInfo
@@ -432,13 +446,19 @@ public:
     std::vector<TupletInfo> tupletInfo;
     std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
 
+    /// @brief Get the document for the entry frame
+    DocumentPtr getDocument() const { return m_document; }
+
+    /// @brief Get the requested part ID for the entry frame
+    Cmper getRequestedPartId() const { return m_requestedPartId; }
+
     /// @brief Get the staff for the entry
     InstCmper getStaff() const { return m_staff; }
 
-    /// @brief Get the measure for the entry
+    /// @brief Get the measure for the entry frame
     MeasCmper getMeasure() const { return m_measure; }
 
-    /// @brief Get the layer index (0..3) of the entry
+    /// @brief Get the layer index (0..3) of the entry frame
     LayerIndex getLayerIndex() const { return m_layerIndex; }
 
     /// @brief Returns if this entry frame was created for written pitch.
@@ -467,6 +487,8 @@ public:
     std::shared_ptr<const EntryFrame> getPrevious() const;
 
 private:
+    DocumentPtr m_document;
+    Cmper m_requestedPartId;
     InstCmper m_staff;
     MeasCmper m_measure;
     LayerIndex m_layerIndex;
@@ -497,7 +519,7 @@ class EntryInfo
         : m_entry(entry) {}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
-    friend details::GFrameHold;
+    friend details::GFrameHoldContext;
 #endif
 
 public:
@@ -531,8 +553,8 @@ public:
     NoteInfoPtr() : m_entry(), m_noteIndex(0) {}
 
     /// @brief Constructor
-    /// @param entryInfo 
-    /// @param noteIndex 
+    /// @param entryInfo The entry info containing the note.
+    /// @param noteIndex The index of this note within #Entry::notes.
     NoteInfoPtr(const EntryInfoPtr& entryInfo, size_t noteIndex)
         : m_entry(entryInfo), m_noteIndex(noteIndex)
     {}
@@ -565,13 +587,15 @@ public:
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
+     * this value calculated automatically based on the score or part settings. Normally you will omit it.
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
      *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
-    std::tuple<Note::NoteName, int, int, int> calcNoteProperties() const;
+    std::tuple<Note::NoteName, int, int, int> calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end.

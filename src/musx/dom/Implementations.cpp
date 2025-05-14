@@ -43,19 +43,6 @@ namespace musx {
 namespace dom {
 
 // *****************
-// ***** Base *****
-// *****************
-
-std::shared_ptr<others::PartDefinition> Base::getPartDefinition() const
-{
-    if (auto retval = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, getPartId())) {
-        return retval;
-    }
-    MUSX_INTEGRITY_ERROR("PartDefinition for part id " + std::to_string(getPartId()) + " does not exist.");
-    return nullptr;
-}
-
-// *****************
 // ***** Entry *****
 // *****************
 
@@ -105,8 +92,9 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // ***** EntryFrame *****
 // **********************
 
-EntryFrame::EntryFrame(const details::GFrameHold& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch) :
-    Base(gfhold.getDocument(), gfhold.getPartId(), gfhold.getShareMode()),
+EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch) :
+    m_document(gfhold->getDocument()),
+    m_requestedPartId(gfhold.getRequestedPartId()),
     m_staff(staff),
     m_measure(measure),
     m_layerIndex(layerIndex),
@@ -133,8 +121,8 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 {
-    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure + 1)) {
-        return gfhold->createEntryFrame(m_layerIndex, m_forWrittenPitch);
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure + 1)) {
+        return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
     }
     return nullptr;
 }
@@ -142,8 +130,8 @@ std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 {
     if (m_measure > 1) {
-        if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), m_staff, m_measure - 1)) {
-            return gfhold->createEntryFrame(m_layerIndex, m_forWrittenPitch);
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure - 1)) {
+            return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
         }
     }
     return nullptr;
@@ -189,8 +177,7 @@ std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_e
 
 std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<InstCmper>& forStaffId) const
 {
-    auto entry = (*this)->getEntry();
-    return others::StaffComposite::createCurrent(entry->getDocument(), entry->getPartId(), forStaffId.value_or(getStaff()),
+    return others::StaffComposite::createCurrent(m_entryFrame->getDocument(), m_entryFrame->getRequestedPartId(), forStaffId.value_or(getStaff()),
         getMeasure(), (*this)->elapsedDuration.calcEduDuration());
 }
 
@@ -433,7 +420,7 @@ unsigned EntryInfoPtr::calcLowestBeamStart() const
     auto entry = (*this)->getEntry();
     unsigned secondaryBreak = 0;
     if (entry->secBeam) {
-        if (auto beamBreaks = entry->getDocument()->getDetails()->get<details::SecondaryBeamBreak>(entry->getPartId(), entry->getEntryNumber())) {
+        if (auto beamBreaks = m_entryFrame->getDocument()->getDetails()->get<details::SecondaryBeamBreak>(m_entryFrame->getRequestedPartId(), entry->getEntryNumber())) {
             secondaryBreak = beamBreaks->calcLowestBreak();
             if (secondaryBreak < 2) {
                 secondaryBreak = 0;
@@ -486,7 +473,7 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
 {
     auto entry = (*this)->getEntry();
     if (entry->stemDetail) {
-        if (auto manual = entry->getDocument()->getDetails()->get<details::BeamStubDirection>(entry->getPartId(), entry->getEntryNumber())) {
+        if (auto manual = m_entryFrame->getDocument()->getDetails()->get<details::BeamStubDirection>(m_entryFrame->getRequestedPartId(), entry->getEntryNumber())) {
             return manual->isLeft();
         }
     }
@@ -807,9 +794,15 @@ std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries()
     return retval;
 }
 
-// **********************
-// ***** GFrameHold *****
-// **********************
+// *****************************
+// ***** GFrameHoldContext *****
+// *****************************
+
+details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas)
+    : m_requestedPartId(partId)
+{
+    m_hold = document->getDetails()->get<details::GFrameHold>(partId, inst, meas);
+}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 struct TupletState
@@ -833,14 +826,15 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch) const
+std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch) const
 {
-    if (layerIndex >= frames.size()) { // note: layerIndex is unsigned
+    if (!m_hold) return nullptr;
+    if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
-    if (!frames[layerIndex]) return nullptr; // nothing here
-    auto document = getDocument();
-    auto frameIncis = document->getOthers()->getArray<others::Frame>(getPartId(), frames[layerIndex]);
+    if (!m_hold->frames[layerIndex]) return nullptr; // nothing here
+    auto document = m_hold->getDocument();
+    auto frameIncis = document->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
     auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
         for (const auto& frame : frameIncis) {
             if (frame->startEntry) {
@@ -851,16 +845,16 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
     }();
     std::shared_ptr<EntryFrame> retval;
     if (frame) {
-        retval = std::make_shared<EntryFrame>(*this, getStaff(), getMeasure(), layerIndex, forWrittenPitch);
-        const auto& measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), getMeasure());
+        retval = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch);
+        const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
         if (!measure) {
-            throw std::invalid_argument("Measure instance for measure " + std::to_string(getMeasure()) + " does not exist.");
+            throw std::invalid_argument("Measure instance for measure " + std::to_string(m_hold->getMeasure()) + " does not exist.");
         }
-        const auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), getStaff(), getMeasure(), 0);
+        const auto staff = others::StaffComposite::createCurrent(m_hold->getDocument(), getRequestedPartId(), m_hold->getStaff(), m_hold->getMeasure(), 0);
         if (!staff) {
-            throw std::invalid_argument("Staff instance for staff " + std::to_string(getStaff()) + " does not exist.");
+            throw std::invalid_argument("Staff instance for staff " + std::to_string(m_hold->getStaff()) + " does not exist.");
         }
-        retval->keySignature = measure->createKeySignature(getStaff());
+        retval->keySignature = measure->createKeySignature(m_hold->getStaff());
         if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
             retval->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
         }
@@ -950,16 +944,16 @@ std::shared_ptr<const EntryFrame> details::GFrameHold::createEntryFrame(LayerInd
             }
         }
     } else {
-        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
-            + std::to_string(getMeasure()) + " points to non-existent frame [" + std::to_string(frames[layerIndex]) + "]");
+        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
+            + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");
     }
     return retval;
 }
 
-bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
+bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
 {
     bool forWrittenPitch = false;
-    if (auto partGlobals = getDocument()->getOthers()->get<others::PartGlobals>(getPartId(), MUSX_GLOBALS_CMPER)) {
+    if (auto partGlobals = m_hold->getDocument()->getOthers()->get<others::PartGlobals>(getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
         forWrittenPitch = partGlobals->showTransposed;
     }
     auto entryFrame = createEntryFrame(layerIndex, forWrittenPitch);
@@ -973,9 +967,9 @@ bool details::GFrameHold::iterateEntries(LayerIndex layerIndex, std::function<bo
     return true;
 }
 
-bool details::GFrameHold::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator)
+bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator)
 {
-    for (LayerIndex layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
+    for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
         if (!iterateEntries(layerIndex, iterator)) {
             return false;
         }
@@ -983,18 +977,20 @@ bool details::GFrameHold::iterateEntries(std::function<bool(const EntryInfoPtr&)
     return true;
 }
 
-ClefIndex details::GFrameHold::calcClefIndexAt(Edu position) const
+ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
 {
-    if (clefId.has_value()) {
-        return clefId.value();
+    MUSX_ASSERT_IF(!m_hold) {
+        return 0;
+    }
+    if (m_hold->clefId.has_value()) {
+        return m_hold->clefId.value();
     }
     ClefIndex result = 0;
-    auto clefList = getDocument()->getOthers()->getArray<others::ClefList>(getPartId(), clefListId);
+    auto clefList = m_hold->getDocument()->getOthers()->getArray<others::ClefList>(getRequestedPartId(), m_hold->clefListId);
     if (clefList.empty()) {
-        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getStaff()) + " and measure "
-            + std::to_string(getMeasure()) + " has non-existent clef list [" + std::to_string(clefListId) + "]");
-    }
-    else {
+        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
+            + std::to_string(m_hold->getMeasure()) + " has non-existent clef list [" + std::to_string(m_hold->clefListId) + "]");
+    } else {
         auto& lastClef = clefList[0];
         for (const auto& clef : clefList) {
             if (clef->xEduPos > position) {
@@ -1205,7 +1201,7 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
         // is set up to increment each key signature accidental by the number of steps
         // in a chromatic half-step.
         int direction = music_theory::sign(alteration);
-        while (std::abs(alteration) >= 7) {
+        while (std::abs(alteration) >= music_theory::STANDARD_DIATONIC_STEPS) {
             alteration -= direction * music_theory::STANDARD_12EDO_STEPS;
             tonalCenterOffset += direction;
         }
@@ -1464,12 +1460,12 @@ std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaff(
     return getStaffAtIndex(0);
 }
 
-std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup() const
+std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup(Cmper forPartId) const
 {
     auto document = getDocument();
-    auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(getPartId(), getCmper());
+    auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(forPartId, getCmper());
     if (!groupIdRecord) return nullptr;
-    auto retval = document->getDetails()->get<details::StaffGroup>(getPartId(), BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
+    auto retval = document->getDetails()->get<details::StaffGroup>(forPartId, BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(groupIdRecord->staffGroupId)
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
@@ -1481,15 +1477,51 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
 // ***** Note *****
 // ****************
 
+std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignature>& key) const
+{
+    auto transposer = key->createTransposer(harmLev, harmAlt);
+    if (harmAlt) {
+        transposer->enharmonicTranspose(music_theory::sign(harmAlt));
+        if (std::abs(transposer->alteration()) > MAX_ALTERATIONS)
+            return {harmLev, harmAlt};
+        return {transposer->displacement(), transposer->alteration()};
+    }
+
+    transposer->enharmonicTranspose(1);
+    int upDisp = transposer->displacement();
+    int upAlt = transposer->alteration();
+
+    // This is observed Finale behavior, relevant in the context of microtone custom key signatures.
+    // A possibly more correct version would omit this hard-coded comparison to the number 2, but it
+    // seems to be what Finale does.
+    if (std::abs(upAlt) != 2) {
+        if (std::abs(upAlt) > MAX_ALTERATIONS)
+            return {harmLev, harmAlt};
+        return {upDisp, upAlt};
+    }
+
+    auto down = key->createTransposer(harmLev, harmAlt);
+    down->enharmonicTranspose(-1);
+    int downAlt = down->alteration();
+
+    if (std::abs(downAlt) > MAX_ALTERATIONS)
+        return {harmLev, harmAlt};
+
+    if (std::abs(downAlt) < std::abs(upAlt))
+        return {down->displacement(), downAlt};
+    return {upDisp, upAlt};
+}
+
 std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex,
-    const std::shared_ptr<const others::Staff>& staff) const
+    const std::shared_ptr<const others::Staff>& staff, bool respellEnharmonic) const
 {
     static constexpr std::array<Note::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
         Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
     };
 
-    int transposedLev = harmLev;
-    int transposedAlt = harmAlt;
+    auto [transposedLev, transposedAlt] = respellEnharmonic
+                                        ? calcDefaultEnharmonic(key)
+                                        : std::pair<int, int>{ harmLev, harmAlt };
     if (staff && staff->transposition && staff->transposition->chromatic) {
         const auto& chromatic = *staff->transposition->chromatic;
         auto transposer = key->createTransposer(transposedLev, transposedAlt);
@@ -1630,9 +1662,9 @@ InstCmper NoteInfoPtr::calcStaff() const
     return m_entry.getStaff();
 }
 
-std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() const
+std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell) const
 {
-    ClefIndex clefIndex = [&]() {
+    const ClefIndex clefIndex = [&]() {
         if ((*this)->crossStaff) {
             InstCmper staffId = calcStaff();
             if (staffId != m_entry.getStaff()) {
@@ -1644,11 +1676,23 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties() cons
         return m_entry->clefIndex;
     }();
 
+    const bool doEnharmonicRespell = [&]() {
+        if (enharmonicRespell.has_value()) {
+            return enharmonicRespell.value();
+        }
+        if (m_entry->getEntry()->noteDetail) {
+            if (auto noteAlts = getEntryInfo().getFrame()->getDocument()->getDetails()->getForNote<details::NoteAlterations>(*this)) {
+                return noteAlts->enharmonic;
+            }
+        }
+        return false;
+    }();
+
     if (getEntryInfo().getFrame()->isForWrittenPitch()) {
-        return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, m_entry.createCurrentStaff());
+        return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, m_entry.createCurrentStaff(), doEnharmonicRespell);
     }
 
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex);
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, nullptr, doEnharmonicRespell);
 }
 
 std::unique_ptr<music_theory::Transposer> NoteInfoPtr::createTransposer() const
@@ -1866,8 +1910,8 @@ void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::
 EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
 {
     EntryInfoPtr result;
-    if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), staffId, measId)) {
-        gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) {
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), staffId, measId)) {
+        gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
             if (!entryNumber) {
                 unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
                 if (eduDiff <= 1) {
@@ -1907,9 +1951,9 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
     if (entryInfo.getStaff() != startTermSeg->endPoint->staffId && entryInfo.getStaff() != endTermSeg->endPoint->staffId) {
         return false;
     }
-    if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entry->getPartId(), entryInfo.getMeasure())) {
+    if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure())) {
         if (meas->hasSmartShape) {
-            auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entry->getPartId(), entryInfo.getMeasure());
+            auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure());
             for (const auto& asgn : shapeAssigns) {
                 if (asgn->shapeNum == getCmper()) {
                     if (entryInfo.getMeasure() > startTermSeg->endPoint->measId && entryInfo.getMeasure() < endTermSeg->endPoint->measId) {
@@ -2120,7 +2164,7 @@ std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalS
     auto name = [&]() -> std::string {
         if (!preferStaffName || !fullNameTextId) {
             if (auto multiInstGroup = getMultiStaffInstGroup()) {
-                if (auto group = multiInstGroup->getStaffGroup()) {
+                if (auto group = multiInstGroup->getStaffGroup(SCORE_PARTID)) {
                     return group->getFullName(accidentalStyle);
                 }
             }
@@ -2136,7 +2180,7 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     auto name = [&]() -> std::string {
         if (!preferStaffName || !abbrvNameTextId) {
             if (auto multiInstGroup = getMultiStaffInstGroup()) {
-                if (auto group = multiInstGroup->getStaffGroup()) {
+                if (auto group = multiInstGroup->getStaffGroup(SCORE_PARTID)) {
                     return group->getAbbreviatedName(accidentalStyle);
                 }
             }
@@ -2150,8 +2194,8 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
 ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const
 {
     for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
-        if (auto gfhold = getDocument()->getDetails()->get<details::GFrameHold>(getPartId(), getCmper(), tryMeasure)) {
-            return gfhold->calcClefIndexAt(position);
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), getCmper(), tryMeasure)) {
+            return gfhold.calcClefIndexAt(position);
         }
         // after the first iteration, we are looking for the clef at the end of the measure
         position = std::numeric_limits<Edu>::max();
@@ -2189,6 +2233,39 @@ bool others::Staff::hasInstrumentAssigned() const
         return false;
     }
     return true;
+}
+
+std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts() const
+{
+    std::vector<std::shared_ptr<others::PartDefinition>> result;
+    auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
+    for (const auto& part : parts) {
+        auto scoreView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+        for (const auto& next : scoreView) {
+            if (next->staffId == this->getCmper()) {
+                result.push_back(part);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+std::shared_ptr<others::PartDefinition> others::Staff::firstFirstContainingPart() const
+{
+    std::vector<std::shared_ptr<others::PartDefinition>> result;
+    auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
+    for (const auto& part : parts) {
+        if (part->getCmper() != SCORE_PARTID) {
+            auto scoreView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            for (const auto& next : scoreView) {
+                if (next->staffId == this->getCmper()) {
+                    return part;
+                }
+            }
+        }
+    }
+    return nullptr;
 }
 
 // **************************
@@ -2282,7 +2359,7 @@ std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(co
     auto rawStaff = document->getOthers()->get<others::Staff>(partId, staffId);
     if (!rawStaff) return nullptr;
 
-    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff));
+    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff, partId));
     if (result->hasStyles) {
         auto styles = others::StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
         for (const auto& style : styles) {
@@ -2421,6 +2498,24 @@ std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() co
             + ": Part " + std::to_string(getPartId())
             + " Staff " + std::to_string(getCmper())
         );
+    }
+    return result;
+}
+
+// ***********************
+// ***** StaffSystem *****
+// ***********************
+
+std::pair<double, double> others::StaffSystem::calcMinMaxStaffSizes() const
+{
+    std::pair<double, double> result = std::make_pair(1.0, 1.0);
+    if (hasStaffScaling) {
+        auto staffSizes = getDocument()->getDetails()->getArray<details::StaffSize>(getPartId(), getCmper());
+        for (const auto& staffSize : staffSizes) {
+            const double val = double(staffSize->staffPercent) / 100.0;
+            if (val < result.first) result.first = val;
+            if (val > result.second) result.second = val;
+        }
     }
     return result;
 }

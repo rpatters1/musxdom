@@ -64,7 +64,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
     // Test GFrameHold for cmper1=3, cmper2=915
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 3, 915);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 915);
         ASSERT_TRUE(gfhold);
 
         EXPECT_EQ(gfhold->clefId.value_or(-1), 0); // Default to -1 if not set
@@ -80,7 +80,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
     // Test GFrameHold for cmper1=3, cmper2=1083
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 3, 1083);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 1083);
         ASSERT_TRUE(gfhold);
 
         EXPECT_EQ(gfhold->clefId.value_or(-1), 3); // Default to -1 if not set
@@ -96,7 +96,7 @@ TEST(GFrameHoldTest, PopulateFields)
 
     // Test GFrameHold for cmper1=3, cmper2=1129
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 3, 1129);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 1129);
         ASSERT_TRUE(gfhold);
 
         EXPECT_FALSE(gfhold->clefId.has_value());
@@ -215,11 +215,11 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 3, 915);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 915);
     ASSERT_TRUE(gfhold);
 
     EXPECT_THROW(
-        gfhold->iterateEntries([](const auto&) -> bool { return false; }),
+        gfhold.iterateEntries([](const auto&) -> bool { return false; }),
         musx::dom::integrity_error
     ) << "gfhold not iterable";
 
@@ -235,10 +235,10 @@ TEST(GFrameHold, IterationTest)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
     ASSERT_TRUE(gfhold);
     bool enteredLoop = false;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         enteredLoop = true;
         auto entry = entryInfo->getEntry();
         EXPECT_TRUE(entryInfo.getLayerIndex() == 0 || entryInfo.getLayerIndex() == 1) << "unexpected layer index " << entryInfo.getLayerIndex();
@@ -252,10 +252,10 @@ TEST(GFrameHold, IterationTest)
     });
     EXPECT_TRUE(enteredLoop);
 
-    gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 2, 1);
+    gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 2, 1);
     ASSERT_TRUE(gfhold);
     enteredLoop = false;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         enteredLoop = true;
         auto entry = entryInfo->getEntry();
         EXPECT_TRUE(entryInfo.getLayerIndex() == 2) << "unexpected layer index " << entryInfo.getLayerIndex();
@@ -285,11 +285,11 @@ TEST(GFrameHold, QuintupletTest)
     std::vector<Fraction> expectedStartDuras = { Fraction(0, 1) };
     std::vector<Fraction> expectedEndDuras = { Fraction(1, 2) };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    gfhold->iterateEntries([&](const EntryInfoPtr& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
@@ -332,11 +332,11 @@ TEST(GFrameHold, TripletTest)
     std::vector<Fraction> expectedStartDuras = { Fraction(0, 1) };
     std::vector<Fraction> expectedEndDuras = { Fraction(1, 2) };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
@@ -382,11 +382,11 @@ TEST(GFrameHold, NestedTupletTest)
     std::vector<Fraction> expectedStartDuras = { Fraction(1, 2), Fraction(1, 2), Fraction(2, 3) };
     std::vector<Fraction> expectedEndDuras = { Fraction(1, 1), Fraction(2, 3), Fraction(5, 6) };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
@@ -433,12 +433,12 @@ TEST(GFrameHold, V1V2TupletTest)
     std::vector<Fraction> expectedStartDuras = { Fraction(0, 1), Fraction(0, 1), Fraction(1, 2), Fraction(2, 3) };
     std::vector<Fraction> expectedEndDuras = { Fraction(1, 2), Fraction(1, 4), Fraction(1, 1), Fraction(11, 12) };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction v1Total = 0;
     Fraction v2Total = 0;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
@@ -493,12 +493,12 @@ TEST(GFrameHold, NestedEndTuplets)
     std::vector<Fraction> expectedStartDuras = { Fraction(1, 2), Fraction(4, 5), Fraction(9, 10) };
     std::vector<Fraction> expectedEndDuras = { Fraction(1, 1), Fraction(9, 10), Fraction(1, 1) };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction v1Total = 0;
     Fraction v2Total = 0;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
@@ -545,11 +545,11 @@ TEST(GFrameHold, IncompleteTuplet)
     std::vector<Fraction> expectedStartDuras = { Fraction(3, 4) };
     std::vector<Fraction> expectedEndDuras = { Fraction(13, 12) };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
@@ -592,12 +592,12 @@ TEST(GFrameHold, IncompleteTupletV2)
     std::vector<Fraction> expectedStartDuras = { Fraction(1, 4) };
     std::vector<Fraction> expectedEndDuras = { Fraction(7, 12) };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction v1Total = 0;
     Fraction v2Total = 0;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
@@ -643,11 +643,11 @@ TEST(GFrameHold, ZeroTuplet)
     std::vector<Fraction> expectedStartDuras = { Fraction(1, 2), Fraction(5, 6) };
     std::vector<Fraction> expectedEndDuras = { Fraction(1, 1), Fraction(5, 6) };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
     Fraction total = 0;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         if (x == 0) {
@@ -689,10 +689,10 @@ TEST(GFrameHold, GraceNoteIndexTest)
     std::vector<unsigned> expectedValues = { 0, 1, 2, 3, 4, 5, 0, 1, 2, 3 };
     std::vector<unsigned> expectedReverseValues = { 0, 5, 4, 3, 2, 1, 0, 3, 2, 1 };
 
-    auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
     ASSERT_TRUE(gfhold);
     size_t x = 0;
-    gfhold->iterateEntries([&](const auto& entryInfo) -> bool {
+    gfhold.iterateEntries([&](const auto& entryInfo) -> bool {
         EXPECT_LT(x, expectedValues.size()) << "too few expected values";
         if (x >= expectedValues.size()) return false;
         EXPECT_EQ(expectedValues[x], entryInfo->graceIndex);

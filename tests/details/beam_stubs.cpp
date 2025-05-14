@@ -89,7 +89,7 @@ TEST(BeamStubsTest, DetectDirection)
     auto measures = others->getArray<others::Measure>(SCORE_PARTID);
     EXPECT_GE(measures.size(), 10);
     for (const auto& meas : measures) {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, meas->getCmper());
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, meas->getCmper());
         EXPECT_TRUE(gfhold);
         if (gfhold) {
             gfhold->iterateEntries([](const EntryInfoPtr& entryInfo) {
@@ -115,9 +115,9 @@ TEST(BeamStubsTest, DetectDirection)
     };
     
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 1);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 0), false, false);
         testStub(EntryInfoPtr(frame, 1), true);
@@ -132,9 +132,9 @@ TEST(BeamStubsTest, DetectDirection)
     }
     
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 2);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 0), false, false);
         testStub(EntryInfoPtr(frame, 1), true);
@@ -142,9 +142,9 @@ TEST(BeamStubsTest, DetectDirection)
     }
 
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 3);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 0), false, false);
         testStub(EntryInfoPtr(frame, 1), true);
@@ -152,9 +152,9 @@ TEST(BeamStubsTest, DetectDirection)
     }
 
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 4);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 0), false, false);
         testStub(EntryInfoPtr(frame, 1), true);
@@ -164,9 +164,9 @@ TEST(BeamStubsTest, DetectDirection)
     }
     
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 5);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 0), false, false);
         testStub(EntryInfoPtr(frame, 1), true);
@@ -176,27 +176,27 @@ TEST(BeamStubsTest, DetectDirection)
     }
 
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 6);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 0), false, false);
         testStub(EntryInfoPtr(frame, 2), false);
     }
 
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 7);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 7);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 1), true);
         testStub(EntryInfoPtr(frame, 3), false);
     }
 
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 8);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 8);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 1), false);
         testStub(EntryInfoPtr(frame, 4), true); // manually overridden
@@ -205,17 +205,17 @@ TEST(BeamStubsTest, DetectDirection)
     }
 
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 9);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 9);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 1), false);
     }
 
     {
-        auto gfhold = details->get<details::GFrameHold>(SCORE_PARTID, 1, 10);
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 10);
         ASSERT_TRUE(gfhold);
-        auto frame = gfhold->createEntryFrame(0);
+        auto frame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(frame);
         testStub(EntryInfoPtr(frame, 1), false);
         testStub(EntryInfoPtr(frame, 3), true);

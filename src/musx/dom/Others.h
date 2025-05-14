@@ -550,7 +550,7 @@ public:
 
     /** @brief Returns a vector of entries contained in the frame.
      *
-     * These are raw entries. Use #details::GFrameHold::createEntryFrame for a vector of entries with computed values.
+     * These are raw entries. Use #details::GFrameHoldContext::createEntryFrame for a vector of entries with computed values.
      */
     std::vector<std::shared_ptr<const Entry>> getEntries();
 
@@ -1287,7 +1287,8 @@ public:
     }
 
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
-    std::shared_ptr<details::StaffGroup> getStaffGroup() const;
+    /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
+    std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
 
     void integrityCheck() override
     {
@@ -1993,6 +1994,13 @@ public:
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
 
+    /// @brief Gets a list of all parts that contain this staff, including the score.
+    std::vector<std::shared_ptr<PartDefinition>> getContainingParts() const;
+
+    /// @brief Finds the first part that contains this staff, not including the score.
+    /// @return The first part that contains this staff or nullptr if none.
+    std::shared_ptr<PartDefinition> firstFirstContainingPart() const;
+
     void integrityCheck() override
     {
         OthersBase::integrityCheck();
@@ -2146,12 +2154,14 @@ class StaffComposite : public StaffStyle
 {
 private:
     /** @brief private constructor */
-    explicit StaffComposite(const std::shared_ptr<Staff>& staff)
-        : StaffStyle(staff) {}
+    explicit StaffComposite(const std::shared_ptr<Staff>& staff, Cmper requestedPartId)
+        : StaffStyle(staff), m_requestedPartId(requestedPartId) {}
 
     /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
     /// @param staffStyle The @ref StaffStyle to apply.
     void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
+
+    const Cmper m_requestedPartId;
 
 public:
     /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
@@ -2166,6 +2176,9 @@ public:
     /// @param eduPosition The Edu position within the measure to search
     /// @return The composite result or null if @p staffId is not valid.
     static std::shared_ptr<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
+
+    /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
+    Cmper getPartId() const final override { return m_requestedPartId; }
 };
 
 /**
@@ -2204,8 +2217,37 @@ public:
     Evpu extraStartSystemSpace{};   ///< Extra space at the start of the staff system in Evpu.
     Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
 
+    /// @brief Calculates the maximum and minimum staff scaling values for this system by searching each staff
+    /// for individual staff scaling.
+    /// @return A std::pair containing
+    ///         - double: The scaling of the staff with the minimum (smallest) scaling factor
+    ///         - double: The scaling of the staff with the maximum (largest) scaling factor
+    std::pair<double, double> calcMinMaxStaffSizes() const;
+
     constexpr static std::string_view XmlNodeName = "staffSystemSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StaffSystem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class SystemLock
+ * @brief Locks a span of one or more measures so that they always appear in a @ref StaffSystem together.
+ *
+ * The cmper indicates the first measure of the locked system.
+ * The endMeas element specifies the first measure after the locked system.
+ *
+ * The class is identified by the XML node name "lockMeas".
+ */
+class SystemLock : public OthersBase
+{
+public:
+    /** @brief Constructor function. */
+    explicit SystemLock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    MeasCmper endMeas{}; ///< The first measure after the locked system.
+
+    constexpr static std::string_view XmlNodeName = "lockMeas"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SystemLock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

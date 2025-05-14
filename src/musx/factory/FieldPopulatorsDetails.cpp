@@ -139,6 +139,10 @@ MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
     {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<InstCmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(EntrySize, {
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<EntrySize>& i) { i->percent = e->getTextAs<int>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"clefID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefId = e->getTextAs<ClefIndex>(); }},
     {"clefListID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefListId = e->getTextAs<Cmper>(); }},
@@ -184,6 +188,20 @@ MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {
     {"xdispEvpu", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEvpu = e->getTextAs<Evpu>(); }},
     {"ydisp", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->yDisp = e->getTextAs<Evpu>(); }},
     {"postIt", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->hidden = populateBoolean(e, i); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(NoteAlterations, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->percent = e->getTextAs<int>(); }},
+    {"nxdisp", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->nxdisp = e->getTextAs<Evpu>(); }},
+    {"altNhead", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->altNhead = e->getTextAs<char32_t>(); }},
+    {"useOwnFont", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->useOwnFont = populateBoolean(e, i); }},
+    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"allowVertPos", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->allowVertPos = populateBoolean(e, i); }},
+    {"nydisp", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->nydisp = e->getTextAs<Evpu>(); }},
+    {"enharmonic", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->enharmonic = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
@@ -236,6 +254,10 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"fullExpand", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameExpand = populateBoolean(e, i); }},
     {"abbrvExpand", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameExpand = populateBoolean(e, i); }},
     {"optimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideStaves = toEnum<StaffGroup::HideStaves>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(StaffSize, {
+    {"staffPercent", [](const XmlElementPtr& e, const std::shared_ptr<StaffSize>& i) { i->staffPercent = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
