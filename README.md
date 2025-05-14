@@ -1,6 +1,6 @@
 # musx object model
 
-Document object model for the EnigmaXml format in Finale musx files. It is compatible with the C++17 standard.
+Document object model for the EnigmaXml format in Finale musx files. It is compatible with the C++17 through C++23 standards.
 
 **This project is not affiliated with or endorsed by Finale or its parent company.**
 
