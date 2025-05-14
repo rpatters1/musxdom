@@ -577,9 +577,9 @@ TEST(TextsTest, EnigmaParsing)
     EXPECT_EQ(result, "^font(New York)#b^composer()");
     result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()", EnigmaString::AccidentalStyle::Smufl);
     std::string text = "^font(New York)" 
-                    + std::string(u8"\uE262")  // SMuFL sharp
-                    + std::string(u8"\uE261")  // SMuFL natural
-                    + std::string(u8"\uE260")  // SMuFL flat
+                    + EnigmaString::fromU8(u8"\uE262")  // SMuFL sharp
+                    + EnigmaString::fromU8(u8"\uE261")  // SMuFL natural
+                    + EnigmaString::fromU8(u8"\uE260")  // SMuFL flat
                     + "^composer()";
     EXPECT_EQ(result, text);
     result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()", EnigmaString::AccidentalStyle::Unicode);

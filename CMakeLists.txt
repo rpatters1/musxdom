@@ -3,8 +3,19 @@ cmake_minimum_required(VERSION 3.10)
 project(musx)
 
 # Set the C++ standard
-set(CMAKE_CXX_STANDARD 17)
+if(NOT CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 23)
+endif()
+
+# Enforce at least C++17, allow higher if set by the parent
+if(CMAKE_CXX_STANDARD LESS 17)
+    message(FATAL_ERROR "Musx requires at least C++17. Current: C++${CMAKE_CXX_STANDARD}")
+endif()
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+message(STATUS "Musx C++ standard: ${CMAKE_CXX_STANDARD}")
 
 if (MSVC)
     add_compile_options(/bigobj)

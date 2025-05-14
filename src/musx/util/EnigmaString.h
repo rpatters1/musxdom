@@ -38,6 +38,15 @@ namespace util {
 class EnigmaString
 {
 public:
+    /// @brief Convert u8"" literals to std::string in a way that works both in C++17 and C++20+
+    template <typename CharT>
+    static std::string fromU8(const CharT* s)
+    {
+        static_assert(std::is_same<CharT, char>::value || std::is_same<CharT, decltype(u8'a')>::value,
+            "fromU8() only accepts char or char8_t pointers");
+        return std::string(reinterpret_cast<const char*>(s));
+    }
+
     /**
      * @brief Enumeration to specify the type of accidental replacement.
      *
