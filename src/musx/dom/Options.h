@@ -1086,10 +1086,10 @@ public:
     bool slurStretchByPercent{};            ///< "As Percentage of Slur Length"
     int maxSlurStretchPercent{};          ///< "Maximum Slur Stretch Percentage"
     Evpu articAvoidSlurAmt{};                 ///< "Articulation Avoid Slur Amount"
-    Cmper ssLineStyleCmpCustom{};              ///< "SS Line Style Custom"
-    Cmper ssLineStyleCmpGlissando{};           ///< "SS Line Style Glissando"
-    Cmper ssLineStyleCmpTabSlide{};            ///< "SS Line Style Tab Slide"
-    Cmper ssLineStyleCmpTabBendCurve{};        ///< "SS Line Style Tab Bend Curve"
+    Cmper ssLineStyleCmpCustom{};              ///< Cmper of current custom line style. (@ref others::SmartShapeCustomLine)
+    Cmper ssLineStyleCmpGlissando{};           ///< Cmper of current glissando line style. (@ref others::SmartShapeCustomLine)
+    Cmper ssLineStyleCmpTabSlide{};            ///< Cmper of current tab slide line style. (@ref others::SmartShapeCustomLine)
+    Cmper ssLineStyleCmpTabBendCurve{};        ///< Cmper of current tab bend line style. (@ref others::SmartShapeCustomLine)
     EvpuFloat smartSlurTipWidth{};            ///< "Smart Slur Tip Width"
     bool guitarBendUseParens{};                ///< "Guitar Bend Use Parentheses"
     bool guitarBendHideBendTo{};               ///< "Guitar Bend Hide Bend To"

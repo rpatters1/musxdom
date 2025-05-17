@@ -25,7 +25,8 @@
 #include "musx/util/Fraction.h"
 
 #include "BaseClasses.h"
-// do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
+#include "CommonClasses.h"
+ // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -185,7 +186,7 @@ public:
     bool hidden{};                                  ///< Inverse of "Show" option
     NoteNumber startNoteId{};                       ///< If non-zero, the specific note with the entry that this shape starts from. (xml node is `<startNoteID>`)
     NoteNumber endNoteId{};                         ///< If non-zero, the specific note with the entry that this shape ends on. (xml node is `<endNoteID>`)
-    Cmper lineStyleId{};                            ///< If non-zero, the custom line for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)
+    Cmper lineStyleId{};                            ///< If non-zero, the #SmartShapeCustomLine for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)
 
     /// @brief Calculates if the smart shape applies to the specified entry.
     ///
@@ -210,6 +211,124 @@ public:
     bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
     constexpr static std::string_view XmlNodeName = "smartShape"; ///< XML node name
     static const xml::XmlElementArray<SmartShape>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class SmartShapeCustomLine
+ * @brief Represents a Finale smart shape custom line style.
+ *
+ * This class is identified by the XML node name "ssLineStyle".
+ */
+class SmartShapeCustomLine : public OthersBase
+{
+public:
+    /// @brief Constructor function
+    explicit SmartShapeCustomLine(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    /// @brief The type of line style.
+    enum class LineStyle { Char, Solid, Dashed };
+
+    /// @brief The type of line cap.
+    enum class LineCapType { None, Hook, ArrowheadPreset, ArrowheadCustom };
+
+    class CharParams : public Base
+    {
+    public:
+        explicit CharParams(const DocumentWeakPtr& document)
+            : Base(document, SCORE_PARTID, ShareMode::All), font(std::make_shared<FontInfo>(document))
+        {
+        }
+
+        char32_t lineChar{};            ///< The character to use for the line
+        std::shared_ptr<FontInfo> font; ///< `<fontID>`, `<fontSize>`, `<fontEfx>`
+        int baselineShiftEms{};         ///< The UI says the units are "EMs", but it may be 1/100 EMs.
+
+        static const xml::XmlElementArray<CharParams>& xmlMappingArray();
+    };
+
+    class SolidParams : public Base
+    {
+    public:
+        explicit SolidParams(const DocumentWeakPtr& document)
+            : Base(document, SCORE_PARTID, ShareMode::All)
+        {
+        }
+
+        Efix lineWidth{};             ///< Solid line width
+
+        static const xml::XmlElementArray<SolidParams>& xmlMappingArray();
+    };
+
+    class DashedParams : public Base {
+    public:
+        explicit DashedParams(const DocumentWeakPtr& document)
+            : Base(document, SCORE_PARTID, ShareMode::All) {}
+
+        Efix lineWidth{};             ///< Dashed line width
+        Efix dashOn{};                ///< Dash length
+        Efix dashOff{};               ///< Length of gap between dashes
+
+        static const xml::XmlElementArray<DashedParams>& xmlMappingArray();
+    };
+
+    LineStyle lineStyle{};                                ///< Line style
+    std::shared_ptr<CharParams> charParams;               ///< Parameters for char line style
+    std::shared_ptr<SolidParams> solidParams;             ///< Parameters for solid line style
+    std::shared_ptr<DashedParams> dashedParams;           ///< Parameters for dashed line style
+
+    LineCapType lineCapStartType{};                       ///< Line cap start type
+    LineCapType lineCapEndType{};                         ///< Line cap end type
+    Cmper lineCapStartArrowId{};                          ///< Cmper of start arrowhead (preset or cmper of custom @ref ShapeDef). xml node is `<lineCapStartArrowID>`
+    Cmper lineCapEndArrowId{};                            ///< Cmper of end arrowhead (preset or cmper of custom @ref ShapeDef). xml node is `<lineCapStartArrowID>`
+
+    bool makeHorz{};                                      ///< "Horizontal"
+    bool lineAfterLeftStartText{};                        ///< Line adjustments "Start H: After Text"
+    bool lineBeforeRightEndText{};                        ///< Line adjustments "Right H: Before Text"
+    bool lineAfterLeftContText{};                         ///< Line adjustments "Cont H: After Text"
+
+    Cmper leftStartRawTextId{};                           ///< Cmper of @ref texts::SmartShapeText. xml node is `<leftStartRawTextID>`
+    Cmper leftContRawTextId{};                            ///< Cmper of @ref texts::SmartShapeText. xml node is `<leftContRawTextID>`
+    Cmper rightEndRawTextId{};                            ///< Cmper of @ref texts::SmartShapeText. xml node is `<rightEndRawTextID>`
+    Cmper centerFullRawTextId{};                          ///< Cmper of @ref texts::SmartShapeText. xml node is `<centerFullRawTextID>`
+    Cmper centerAbbrRawTextId{};                          ///< Cmper of @ref texts::SmartShapeText. xml node is `<centerAbbrRawTextID>`
+
+    Evpu leftStartX{};                                    ///< Left start position X
+    Evpu leftStartY{};                                    ///< Left start position Y
+    Evpu leftContX{};                                     ///< Left continuation position X
+    Evpu leftContY{};                                     ///< Left continuation position Y
+    Evpu rightEndX{};                                     ///< Right end position X
+    Evpu rightEndY{};                                     ///< Right end position Y
+    Evpu centerFullX{};                                   ///< Center full position X
+    Evpu centerFullY{};                                   ///< Center full position Y
+    Evpu centerAbbrX{};                                   ///< Center abbreviation position X
+    Evpu centerAbbrY{};                                   ///< Center abbreviation position Y
+
+    Evpu lineStartX{};                                    ///< Line adjustments "Start H" value
+    Evpu lineStartY{};                                    ///< Line adjustments "V" value (Finale syncs this with #lineEndY.)
+    Evpu lineEndX{};                                      ///< Line adjustments "End H" value
+    Evpu lineEndY{};                                      ///< Line adjustments "Start H" value
+    Evpu lineContX{};                                     ///< Line adjustments "V" value (Finale syncs this with #lineStartY.)
+
+    Efix lineCapStartHookLength{};                        ///< Length of start hook (if #lineStyle is Hook)
+    Efix lineCapEndHookLength{};                          ///< Length of end hook (if #lineStyle is Hook)
+
+    void integrityCheck() override
+    {
+        OthersBase::integrityCheck();
+
+        if (lineStyle == LineStyle::Char && !charParams)
+            charParams = std::make_shared<CharParams>(getDocument());
+
+        if (lineStyle == LineStyle::Solid && !solidParams)
+            solidParams = std::make_shared<SolidParams>(getDocument());
+
+        if (lineStyle == LineStyle::Dashed && !dashedParams)
+            dashedParams = std::make_shared<DashedParams>(getDocument());
+    }
+
+    constexpr static std::string_view XmlNodeName = "ssLineStyle"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SmartShapeCustomLine>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

@@ -226,6 +226,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ShapeInstructionList,
     dom::others::SmartShape,
     dom::others::SmartShapeMeasureAssign,
+    dom::others::SmartShapeCustomLine,      // node name is `ssLineStyle`
     dom::others::StaffSystem,
     dom::others::Staff,
     dom::others::StaffStyle,
