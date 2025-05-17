@@ -186,7 +186,7 @@ public:
     bool hidden{};                                  ///< Inverse of "Show" option
     NoteNumber startNoteId{};                       ///< If non-zero, the specific note with the entry that this shape starts from. (xml node is `<startNoteID>`)
     NoteNumber endNoteId{};                         ///< If non-zero, the specific note with the entry that this shape ends on. (xml node is `<endNoteID>`)
-    Cmper lineStyleId{};                            ///< If non-zero, the #SmartShapeCustomLine for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)
+    Cmper lineStyleId{};                            ///< If non-zero, the @ref SmartShapeCustomLine for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)
 
     /// @brief Calculates if the smart shape applies to the specified entry.
     ///
@@ -232,9 +232,11 @@ public:
     /// @brief The type of line cap.
     enum class LineCapType { None, Hook, ArrowheadPreset, ArrowheadCustom };
 
+    /// @brief Hold parameters for LineStyle::Char.
     class CharParams : public Base
     {
     public:
+    /// @brief Constructor function
         explicit CharParams(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All), font(std::make_shared<FontInfo>(document))
         {
@@ -244,12 +246,14 @@ public:
         std::shared_ptr<FontInfo> font; ///< `<fontID>`, `<fontSize>`, `<fontEfx>`
         int baselineShiftEms{};         ///< The UI says the units are "EMs", but it may be 1/100 EMs.
 
-        static const xml::XmlElementArray<CharParams>& xmlMappingArray();
+        static const xml::XmlElementArray<CharParams>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
+    /// @brief Hold parameters for LineStyle::Solid.
     class SolidParams : public Base
     {
     public:
+    /// @brief Constructor function
         explicit SolidParams(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All)
         {
@@ -257,11 +261,13 @@ public:
 
         Efix lineWidth{};             ///< Solid line width
 
-        static const xml::XmlElementArray<SolidParams>& xmlMappingArray();
+        static const xml::XmlElementArray<SolidParams>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
+    /// @brief Hold parameters for LineStyle::Dashed.
     class DashedParams : public Base {
     public:
+    /// @brief Constructor function
         explicit DashedParams(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
@@ -269,13 +275,13 @@ public:
         Efix dashOn{};                ///< Dash length
         Efix dashOff{};               ///< Length of gap between dashes
 
-        static const xml::XmlElementArray<DashedParams>& xmlMappingArray();
+        static const xml::XmlElementArray<DashedParams>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
     LineStyle lineStyle{};                                ///< Line style
-    std::shared_ptr<CharParams> charParams;               ///< Parameters for char line style
-    std::shared_ptr<SolidParams> solidParams;             ///< Parameters for solid line style
-    std::shared_ptr<DashedParams> dashedParams;           ///< Parameters for dashed line style
+    std::shared_ptr<CharParams> charParams;               ///< Parameters for char line style. Only allocated if lineStyle is LineStyle::Char.
+    std::shared_ptr<SolidParams> solidParams;             ///< Parameters for solid line style. Only allocated if lineStyle is LineStyle::Solid.
+    std::shared_ptr<DashedParams> dashedParams;           ///< Parameters for dashed line style. Only allocated if lineStyle is LineStyle::Dashed.
 
     LineCapType lineCapStartType{};                       ///< Line cap start type
     LineCapType lineCapEndType{};                         ///< Line cap end type
