@@ -78,7 +78,7 @@ TEST(EntryTest, PopulateFields)
 
     // Test Entry 1001
     {
-        auto entry = entries->get<musx::dom::Entry>(1001);
+        auto entry = entries->get(1001);
         ASSERT_TRUE(entry);
 
         EXPECT_EQ(entry->getEntryNumber(), 1001);
@@ -114,7 +114,7 @@ TEST(EntryTest, PopulateFields)
 
     // Test Entry 1002
     {
-        auto entry = entries->get<musx::dom::Entry>(1002);
+        auto entry = entries->get(1002);
         ASSERT_TRUE(entry);
 
         EXPECT_EQ(entry->getEntryNumber(), 1002);
@@ -203,7 +203,7 @@ TEST(EntryTest, IntegrityCheck)
     auto entries = doc->getEntries();
     ASSERT_TRUE(entries);
 
-    auto entry = entries->get<musx::dom::Entry>(1001);
+    auto entry = entries->get(1001);
     ASSERT_TRUE(entry);
 
     EXPECT_THROW(

@@ -49,7 +49,7 @@ namespace dom {
 std::shared_ptr<Entry> Entry::getNext() const
 {
     if (!m_next) return nullptr;
-    auto retval = getDocument()->getEntries()->get<Entry>(m_next);
+    auto retval = getDocument()->getEntries()->get(m_next);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has next entry " + std::to_string(m_next) + " that does not exist.");
     }
@@ -59,7 +59,7 @@ std::shared_ptr<Entry> Entry::getNext() const
 std::shared_ptr<Entry> Entry::getPrevious() const
 {
     if (!m_prev) return nullptr;
-    auto retval = getDocument()->getEntries()->get<Entry>(m_prev);
+    auto retval = getDocument()->getEntries()->get(m_prev);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has previous entry " + std::to_string(m_prev) + " that does not exist.");
     }
@@ -777,20 +777,26 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** Frame *****
 // *****************
 
-std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries()
+void others::Frame::iterateRawEntries(std::function<bool(const std::shared_ptr<Entry>& entry)> iterator) const
 {
-    std::vector<std::shared_ptr<const Entry>> retval;
-    auto firstEntry = startEntry ? getDocument()->getEntries()->get<Entry>(startEntry) : nullptr;
+    auto firstEntry = startEntry ? getDocument()->getEntries()->get(startEntry) : nullptr;
     if (!firstEntry) {
         MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1)) + " is not iterable.");
-        return retval;
     }
     for (auto entry = firstEntry; entry; entry = entry->getNext()) {
-        retval.emplace_back(entry);
-        if (entry->getEntryNumber() == endEntry) {
+        if (!iterator(entry) || entry->getEntryNumber() == endEntry) {
             break;
         }
     }
+}
+
+std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries() const
+{
+    std::vector<std::shared_ptr<const Entry>> retval;
+    iterateRawEntries([&](const std::shared_ptr<Entry>& entry) -> bool {
+        retval.emplace_back(entry);
+        return true;
+    });
     return retval;
 }
 
@@ -975,6 +981,38 @@ bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryIn
         }
     }
     return true;
+}
+
+std::map<LayerIndex, bool> details::GFrameHoldContext::calcVoices() const
+{
+    std::map<LayerIndex, bool> result;
+    for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
+        auto frameIncis = (*this)->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
+        auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
+            for (const auto& frame : frameIncis) {
+                if (frame->startEntry) {
+                    return frame;
+                }
+            }
+            return nullptr;
+        }();
+        if (frame) {
+            bool gotLayer = false;
+            bool gotV2 = false;
+            frame->iterateRawEntries([&](const std::shared_ptr<Entry>& entry) -> bool {
+                gotLayer = true;
+                if (entry->voice2) {
+                    gotV2 = true;
+                    return false;
+                }
+                return true;
+            });
+            if (gotLayer) {
+                result.emplace(layerIndex, gotV2);
+            }
+        }
+    }
+    return result;
 }
 
 ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const

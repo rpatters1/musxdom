@@ -548,11 +548,15 @@ public:
     EntryNumber endEntry{};   ///< End entry number for this frame. (Appears to be zero when #startTime is supplied.)
     Edu startTime{};          ///< The starting position within the measure. (Appears to be zero when #startEntry and #endEntry are supplied.)
 
+    /// @brief Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops.
+    /// @param iterator function.
+    void iterateRawEntries(std::function<bool(const std::shared_ptr<Entry>& entry)> iterator) const;
+
     /** @brief Returns a vector of entries contained in the frame.
      *
      * These are raw entries. Use #details::GFrameHoldContext::createEntryFrame for a vector of entries with computed values.
      */
-    std::vector<std::shared_ptr<const Entry>> getEntries();
+    std::vector<std::shared_ptr<const Entry>> getEntries() const;
 
     void integrityCheck() override
     {

@@ -423,6 +423,10 @@ public:
      */
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
 
+    /// @brief Calculates the number of voices used by the GFrameHold instance.
+    /// @return A list of each layer that contains entries and whether that layer uses voice2.
+    std::map<LayerIndex, bool> calcVoices() const;
+
 private:
     std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId;                 ///< The requested part context.
