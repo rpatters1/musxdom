@@ -148,6 +148,7 @@ MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"clefListID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefListId = e->getTextAs<Cmper>(); }},
     {"clefMode", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->showClefMode = toEnum<ShowClefMode>(e); }},
     {"mirrorFrame", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->mirrorFrame = populateBoolean(e, i); }},
+    {"clefAfterBarline", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefAfterBarline = populateBoolean(e, i); }},
     {"clefPercent", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefPercent = e->getTextAs<int>(); }},
     {"frame1", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[0] = e->getTextAs<Cmper>(); }},
     {"frame2", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[1] = e->getTextAs<Cmper>(); }},

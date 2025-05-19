@@ -325,6 +325,7 @@ public:
     Cmper clefListId{};                     ///< The clef list ID when there are mid-measure clef changes, if non-zero. (xml tag is `<clefListID>`).
     ShowClefMode showClefMode{};            ///< "Show Clef" mode. (xml tag is `<clefMode>`)
     bool mirrorFrame{};                     ///< Indicates this is a mirror frame. (Not used after Finale 14.5.)
+    bool clefAfterBarline{};                ///< "Place Clef After Barline"
     int clefPercent{};                      ///< Clef percent where 100 means 100%.
     std::vector<Cmper> frames;              ///< @ref others::Frame values for layers 1..4 (layer indices 0..3) if non-zero
 
