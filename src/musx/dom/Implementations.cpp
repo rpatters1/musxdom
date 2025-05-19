@@ -900,10 +900,10 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
                 std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
-                    });
+                });
                 for (const auto& tuplet : tuplets) {
                     size_t index = retval->tupletInfo.size();
-                    retval->tupletInfo.emplace_back(tuplet, i, actualElapsedDuration);
+                    retval->tupletInfo.emplace_back(tuplet, i, actualElapsedDuration, entry->voice2);
                     activeTuplets.emplace_back(tuplet, index);
                 }
 

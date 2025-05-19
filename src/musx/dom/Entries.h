@@ -429,11 +429,12 @@ public:
         size_t endIndex;                                    ///< the index of the last entry in the tuplet
         util::Fraction startDura;                           ///< the actual duration where the tuplet starts
         util::Fraction endDura;                             ///< the actual duration where the tuplet ends
+        bool voice2;                                        ///< whether this tuplet is for voice2
 
         /// @brief Constructor
-        TupletInfo(const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start)
+        TupletInfo(const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start, bool forVoice2)
             : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
-                startDura(start), endDura(-1)
+                startDura(start), endDura(-1), voice2(forVoice2)
         {}
     };
 
