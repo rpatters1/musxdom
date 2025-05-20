@@ -101,6 +101,12 @@ public:
         return Fraction(m_numerator % m_denominator, m_denominator);
     }
 
+    /// @brief Returns the reciprocal fraction
+    /// @throws std::invalid_argument if the current value of the fraction is 0 
+    Fraction reciprocal() const {
+        return Fraction(m_denominator, m_numerator);
+    }
+
     /**
      * @brief Calculates duration as a fraction of a whole note
      */
