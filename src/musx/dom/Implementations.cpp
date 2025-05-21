@@ -1389,7 +1389,7 @@ std::shared_ptr<TimeSignature> others::Measure::createTimeSignature(const std::o
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
-            if (staff->floatKeys) {
+            if (staff->floatTime) {
                 if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
                     if (floats->hasTime) {
                         return floats->createTimeSignature();
@@ -1405,7 +1405,7 @@ std::shared_ptr<TimeSignature> others::Measure::createDisplayTimeSignature(const
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
-            if (staff->floatKeys) {
+            if (staff->floatTime) {
                 if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
                     if (floats->hasTime) {
                         return floats->createDisplayTimeSignature();
