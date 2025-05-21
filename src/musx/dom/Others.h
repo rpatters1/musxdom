@@ -1005,6 +1005,12 @@ public:
     /// @return The display time signature if there is one, otherwise the actual time signature.
     std::shared_ptr<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
+    /// @brief Calculates the duration of the measure according to the time signature
+    /// @param forStaff  If present, specifies the specific staff for which to create duration.
+    /// @return If forStaff is provided, the staff-level duration (taking into account independent time signatures.)
+    /// Otherwise, it returns the global duration of the measure.
+    util::Fraction calcDuration(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+
     void integrityCheck() override
     {
         this->OthersBase::integrityCheck();

@@ -1420,6 +1420,12 @@ std::shared_ptr<TimeSignature> others::Measure::createDisplayTimeSignature(const
     return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
 }
 
+util::Fraction others::Measure::calcDuration(const std::optional<InstCmper>& forStaff) const
+{
+    auto timeSig = createTimeSignature(forStaff);
+    return timeSig->calcTotalDuration();
+}
+
 // *****************************
 // ***** MeasureExprAssign *****
 // *****************************
@@ -1509,6 +1515,31 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
     }
     return retval;
+}
+// **********************
+// ***** MusicRange *****
+// **********************
+
+std::optional<std::pair<MeasCmper, Edu>> others::MusicRange::nextLocation(const std::optional<InstCmper>& forStaff) const
+{
+    std::optional<std::pair<MeasCmper, Edu>> result;
+    if (auto currMeasure = getDocument()->getOthers()->get<others::Measure>(getPartId(), endMeas)) {
+        MeasCmper nextMeas = endMeas;
+        Edu maxEdu = currMeasure->calcDuration(forStaff).calcEduDuration() - 1;
+        Edu nextEdu = 0;
+        if (endEdu < maxEdu) {
+            nextEdu = endEdu + 1;
+        } else {
+            nextMeas++;
+            if (!getDocument()->getOthers()->get<others::Measure>(getPartId(), nextMeas)) {
+                return std::nullopt;
+            }
+        }
+        result = std::make_pair(nextMeas, nextEdu);
+    } else {
+        MUSX_INTEGRITY_ERROR("MusicRange has invalid end measure " + std::to_string(endMeas));
+    }
+    return result;
 }
 
 // ****************

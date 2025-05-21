@@ -525,6 +525,14 @@ public:
                (endMeas > measId || (endMeas == measId && endEdu >= eduPosition));
     }
 
+    /// @brief Returns the next metric location following the music range.
+    /// @param forStaff If provided, calculates the next metric location using staff-level Edus.
+    /// @return An optional std::pair containing
+    ///         - MeasCmper: the measure of the next location
+    ///         - Edu: the location within the measure of the next location
+    ///         Return std::nullopt if the next location is past the end of the document, or other error.
+    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+
     static const xml::XmlElementArray<MusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
