@@ -40,11 +40,6 @@
 #include "FieldPopulatorsDetails.h"
 #include "FieldPopulatorsTexts.h"
 
-#ifdef _MSC_VER
-#  pragma warning(push)
-#  pragma warning(disable : 4244) // disable spurious warnings due to overzealous MSC checking paths that are protected by constexpr
-#endif
-
 namespace musx {
 namespace factory {
 
@@ -103,6 +98,27 @@ private:
         }
     }
 
+    template <typename T>
+    static std::enable_if_t<std::is_base_of_v<dom::EntryDetailsBase, T>, std::shared_ptr<T>>
+    makeInstance(const DocumentPtr& doc, Cmper partId, typename Base::ShareMode mode, dom::EntryNumber entnum, dom::Inci inci)
+    {
+        return std::make_shared<T>(doc, partId, mode, entnum, inci);
+    }
+
+    template <typename T>
+    static std::enable_if_t<std::is_base_of_v<dom::EntryDetailsBase, T>, std::shared_ptr<T>>
+    makeInstance(const DocumentPtr& doc, Cmper partId, typename Base::ShareMode mode, dom::EntryNumber entnum)
+    {
+        return std::make_shared<T>(doc, partId, mode, entnum);
+    }
+
+    template <typename T, typename... Args>
+    static std::enable_if_t<!std::is_base_of_v<dom::EntryDetailsBase, T>, std::shared_ptr<T>>
+    makeInstance(const DocumentPtr& doc, Cmper partId, Base::ShareMode mode, Args&&... args)
+    {
+        return std::make_shared<T>(doc, partId, mode, std::forward<Args>(args)...);
+    }
+
 public:
     /**
      * @brief Creates an instance of the registered type corresponding to the provided node name.
@@ -137,7 +153,7 @@ public:
                     if (auto shareAttr = node->findAttribute("shared")) {
                         shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
                     }
-                    auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
+                    auto instance = makeInstance<T>(document, partId, shareMode, std::forward<Args>(args)...);
                     if constexpr (!std::is_same_v<PoolPtr, ::musx::dom::EntryPoolPtr>) {
                         if (instance->getShareMode() == Base::ShareMode::Partial) {
                             for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
@@ -317,7 +333,3 @@ using RegisteredTexts = TypeRegistry <
 
 } // namespace factory
 } // namespace musx
-
-#ifdef _MSC_VER
-#  pragma warning(pop)
-#endif
