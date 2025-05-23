@@ -87,6 +87,17 @@ private:
         return it->second;
     }
 
+    /// @brief Explicit function to avoid bug in MSC around lamdas inside std::visit.
+    template <typename T, typename PoolPtr, typename... Args>
+    static auto getScoreValue(const PoolPtr& pool, Args&&... args)
+    {
+        if constexpr (std::is_same_v<PoolPtr, ::musx::dom::OthersPoolPtr> || std::is_same_v<PoolPtr, ::musx::dom::DetailsPoolPtr>) {
+            return pool->template get<T>(SCORE_PARTID, std::forward<Args>(args)...);
+        } else {
+            return pool->template get<T>(std::forward<Args>(args)...);
+        }
+    }
+
 public:
     /**
      * @brief Creates an instance of the registered type corresponding to the provided node name.
@@ -127,13 +138,7 @@ public:
                             for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
                                 instance->addUnlinkedNode(child->getTagName());
                             }
-                            auto scoreValue = [&]() {
-                                if constexpr (std::is_same_v<PoolPtr, ::musx::dom::OthersPoolPtr> || std::is_same_v<PoolPtr, ::musx::dom::DetailsPoolPtr>) {
-                                    return pool->template get<T>(SCORE_PARTID, std::forward<Args>(args)...);
-                                } else {
-                                    return pool->template get<T>(std::forward<Args>(args)...);
-                                }
-                            }();
+                            auto scoreValue = getScoreValue<T>(pool, std::forward<Args>(args)...);
                             if (scoreValue) {
                                 *instance = *scoreValue;
                             } else {
