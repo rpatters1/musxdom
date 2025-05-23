@@ -2701,7 +2701,7 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
 {
     auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
         if (hasCompositeTop) {
-            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeUpper>(SCORE_PARTID, beats)) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeUpper>(SCORE_PARTID, Cmper(beats))) {
                 std::vector<std::vector<util::Fraction>> result;
                 for (const auto& nextItem : comps->items) {
                     if (nextItem->startGroup || result.empty()) {
@@ -2718,7 +2718,7 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
     }();
     auto bots = [&]() -> std::vector<std::vector<Edu>> {
         if (hasCompositeBottom) {
-            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeLower>(SCORE_PARTID, unit)) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeLower>(SCORE_PARTID, Cmper(unit))) {
                 std::vector<std::vector<Edu>>result;
                 for (const auto& nextItem : comps->items) {
                     if (nextItem->startGroup || result.empty()) {

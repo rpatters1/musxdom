@@ -122,13 +122,13 @@ public:
                         shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
                     }
                     auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
-                    if constexpr (!std::is_same_v<PoolPtr, EntryPoolPtr>) {
+                    if constexpr (!std::is_same_v<PoolPtr, ::musx::dom::EntryPoolPtr>) {
                         if (instance->getShareMode() == Base::ShareMode::Partial) {
                             for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
                                 instance->addUnlinkedNode(child->getTagName());
                             }
                             auto scoreValue = [&]() {
-                                if constexpr (std::is_same_v<PoolPtr, OthersPoolPtr> || std::is_same_v<PoolPtr, DetailsPoolPtr>) {
+                                if constexpr (std::is_same_v<PoolPtr, ::musx::dom::OthersPoolPtr> || std::is_same_v<PoolPtr, ::musx::dom::DetailsPoolPtr>) {
                                     return pool->template get<T>(SCORE_PARTID, std::forward<Args>(args)...);
                                 } else {
                                     return pool->template get<T>(std::forward<Args>(args)...);

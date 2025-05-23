@@ -436,6 +436,9 @@ public:
             : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
                 startDura(start), endDura(-1), voice2(forVoice2)
         {}
+
+        /// @todo add detection function for tremolos
+        /// @todo add detection function for singleton beams (and whether they are being used as a beam over barline)
     };
 
     /** @brief A list of the tuplets in the frame and their calculated starting and ending information.
