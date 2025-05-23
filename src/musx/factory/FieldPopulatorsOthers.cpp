@@ -929,7 +929,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
     {"instUuid", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) {
         auto s = e->getTextTrimmed();
-        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); });
         i->instUuid = std::move(s);
     }},
     {"floatKeys", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->floatKeys = populateBoolean(e, i); }},
