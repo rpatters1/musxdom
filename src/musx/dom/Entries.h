@@ -432,13 +432,23 @@ public:
         bool voice2;                                        ///< whether this tuplet is for voice2
 
         /// @brief Constructor
-        TupletInfo(const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start, bool forVoice2)
-            : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
+        TupletInfo(const std::shared_ptr<const EntryFrame>& frame, const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start, bool forVoice2)
+            : parent(frame), tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
                 startDura(start), endDura(-1), voice2(forVoice2)
         {}
 
-        /// @todo add detection function for tremolos
+        /// @brief Calculates if this tuplet represents a tremolo based on the following criteria.
+        ///     - the tuplet ratio has a numerator of 1 and a denominator that is a positive integral power of 2.
+        ///     - the tuplet contains exactly 2 entries of equal duration and actual duration.
+        ///     - the tuplet is invisible.
+        /// @return true if the tuplet is a tremolo. If so, use `EntryInfoPtr::calcNumberOfBeams` on either entry to determine
+        /// the number of beams. Use `tuplet->calcReferenceDuration` to get the total length of the tremolo.
+        bool calcIsTremolo() const;
+        
         /// @todo add detection function for singleton beams (and whether they are being used as a beam over barline)
+
+    private:
+        std::weak_ptr<const EntryFrame> parent;
     };
 
     /** @brief A list of the tuplets in the frame and their calculated starting and ending information.

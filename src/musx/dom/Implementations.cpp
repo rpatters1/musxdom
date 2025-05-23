@@ -137,6 +137,44 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
     return nullptr;
 }
 
+bool EntryFrame::TupletInfo::calcIsTremolo() const
+{
+    MUSX_ASSERT_IF(!tuplet) {
+        throw std::logic_error("Tuplet info contains no tuplet.");
+    }
+    // must have exactly 2 entries
+    if (endIndex != startIndex + 1) {
+        return false;
+    }
+    // must be invisible
+    if (!tuplet->hidden) {
+        if (tuplet->numStyle != details::TupletDef::NumberStyle::Nothing || tuplet->brackStyle != details::TupletDef::BracketStyle::Nothing) {
+            return false;
+        }
+    }
+    // must have a ratio that is the reciprocal of a positive integer power of 2 (i.e., >= 2)
+    util::Fraction ratio = tuplet->calcRatio();
+    if (ratio.numerator() != 1 || ratio.denominator() < 2 || ((ratio.denominator() & (ratio.denominator() - 1)) != 0)) {
+        return false;
+    }
+    // entries must have the same duration and actual duration.
+    auto frame = parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
+        throw std::logic_error("TupletInfo instance contains invalid start index.");
+    }
+    MUSX_ASSERT_IF(endIndex >= frame->getEntries().size()) {
+        throw std::logic_error("TupletInfo instance contains invalid end index.");
+    }
+    EntryInfoPtr first(frame, startIndex);
+    EntryInfoPtr second(frame, endIndex);
+    const bool sameDuration = first->getEntry()->duration == second->getEntry()->duration;
+    const bool sameActual = first->actualDuration == second->actualDuration;
+    return sameDuration && sameActual;
+}
+
 // ************************
 // ***** EntryInfoPtr *****
 // ************************
@@ -849,9 +887,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         }
         return nullptr;
     }();
-    std::shared_ptr<EntryFrame> retval;
+    std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
-        retval = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch);
+        entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch);
         const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
         if (!measure) {
             throw std::invalid_argument("Measure instance for measure " + std::to_string(m_hold->getMeasure()) + " does not exist.");
@@ -860,9 +898,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         if (!staff) {
             throw std::invalid_argument("Staff instance for staff " + std::to_string(m_hold->getStaff()) + " does not exist.");
         }
-        retval->keySignature = measure->createKeySignature(m_hold->getStaff());
+        entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
         if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
-            retval->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
+            entryFrame->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
         }
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
@@ -902,8 +940,8 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                     return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
                 });
                 for (const auto& tuplet : tuplets) {
-                    size_t index = retval->tupletInfo.size();
-                    retval->tupletInfo.emplace_back(tuplet, i, actualElapsedDuration, entry->voice2);
+                    size_t index = entryFrame->tupletInfo.size();
+                    entryFrame->tupletInfo.emplace_back(entryFrame, tuplet, i, actualElapsedDuration, entry->voice2);
                     activeTuplets.emplace_back(tuplet, index);
                 }
 
@@ -923,7 +961,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 entryInfo->graceIndex = ++graceIndex;
             }
 
-            retval->addEntry(entryInfo);
+            entryFrame->addEntry(entryInfo);
 
             actualElapsedDuration += entryInfo->actualDuration;
             if (!entry->graceNote) {
@@ -938,7 +976,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 //          It appears that Finale extends incomplete v2 tuplets to the end of the bar in many cases.
                 //          This code only extends them to the end of the v2 sequence. This is by design.
                 for (const auto& tuplet : activeTuplets) {
-                    auto& tuplInf = retval->tupletInfo[tuplet.infoIndex];
+                    auto& tuplInf = entryFrame->tupletInfo[tuplet.infoIndex];
                     tuplInf.endIndex = i;
                     tuplInf.endDura = actualElapsedDuration;
                 }
@@ -953,7 +991,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
             + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");
     }
-    return retval;
+    return entryFrame;
 }
 
 bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
