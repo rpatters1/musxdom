@@ -40,6 +40,11 @@
 #include "FieldPopulatorsDetails.h"
 #include "FieldPopulatorsTexts.h"
 
+#ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable : 4244) // disable spurious warnings due to overzealous MSC checking paths that are protected by constexpr
+#endif
+
 namespace musx {
 namespace factory {
 
@@ -312,3 +317,7 @@ using RegisteredTexts = TypeRegistry <
 
 } // namespace factory
 } // namespace musx
+
+#ifdef _MSC_VER
+#  pragma warning(pop)
+#endif
