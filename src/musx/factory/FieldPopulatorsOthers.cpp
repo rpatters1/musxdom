@@ -438,7 +438,7 @@ MUSX_XML_ELEMENT_ARRAY(ChordSuffixElement, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(ChordSuffixPlayback, {
-    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixPlayback>& i) { i->values.push_back(e->getTextAs<int>()); }},
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixPlayback>& i) { i->values.push_back(e->getTextAs<int16_t>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ClefList, {
