@@ -835,7 +835,23 @@ std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries() const
     });
     return retval;
 }
+ 
+// **********************
+// ***** CustomStem *****
+// **********************
 
+bool details::CustomStem::calcIsHiddenStem() const
+{
+    if (shapeDef != 0) {
+        if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeDef)) {
+            if (shape->instructionList != 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+ 
 // *****************************
 // ***** GFrameHoldContext *****
 // *****************************

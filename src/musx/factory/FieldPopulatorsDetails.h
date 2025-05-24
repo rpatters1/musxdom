@@ -67,6 +67,18 @@ struct FieldPopulator<BeamExtensionUpStem> : private FieldPopulator<BeamExtensio
 };
 
 template <>
+struct FieldPopulator<CustomDownStem> : private FieldPopulator<CustomStem>
+{
+    using FieldPopulator<CustomStem>::populate;
+};
+
+template <>
+struct FieldPopulator<CustomUpStem> : private FieldPopulator<CustomStem>
+{
+    using FieldPopulator<CustomStem>::populate;
+};
+
+template <>
 struct FieldPopulator<LyricAssignChorus> : private FieldPopulator<LyricAssign>
 {
     using FieldPopulator<LyricAssign>::populate;

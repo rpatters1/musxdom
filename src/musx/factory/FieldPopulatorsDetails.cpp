@@ -154,6 +154,12 @@ MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
     {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<InstCmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(CustomStem, {
+    {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
+    {"xdisp",    [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"ydisp",    [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(EntrySize, {
     {"percent", [](const XmlElementPtr& e, const std::shared_ptr<EntrySize>& i) { i->percent = e->getTextAs<int>(); }},
 });

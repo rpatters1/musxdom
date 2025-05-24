@@ -161,7 +161,8 @@ public:
 
 /**
  * @class BeamExtension
- * @brief Represents both sides of a beam extension. It is attached to the first entry in the beam.
+ * @brief Represents both sides of a beam extension. It is attached to the first entry in the beam. Which stem direction this instance controls
+ * is determined by the subclass that inherits this class as a base.
  *
  */
 class BeamExtension : public EntryDetailsBase
@@ -327,6 +328,66 @@ public:
 
     constexpr static std::string_view XmlNodeName = "crossStaff";    ///< The XML node name for this type.
     static const xml::XmlElementArray<CrossStaff>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class CustomStem
+ * @brief Represents a custom stem definition (up or down) for an entry. Which stem direction this instance controls
+ * is determined by the subclass that inherits this class as a base.
+ *
+ * The entry number refers to the entry to which the stem is attached.
+ * The shape is defined by a shape definition number, and optional x/y displacements can adjust placement.
+ */
+class CustomStem : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this stem applies to.
+     */
+    explicit CustomStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum) {}
+
+    Cmper shapeDef{}; ///< The Cmper of the associated @ref others::ShapeDef. Setting this value to zero hides the stem.
+    Evpu xOffset{};   ///< Optional horizontal displacement. (xml node is `<xdisp>`)
+    Evpu yOffset{};   ///< Optional vertical displacement. (xml node is `<ydisp>`)
+
+    /// @brief Calculates if this custom stem record hides the stem. The stem is determined to be hidden if one of the following is true.
+    ///     - #shapeDef is 0. (This is only possible with effort using the Finale UI, but several popular plugins do it commonly.)
+    ///     - The shape indicated by #shapeDef does not exist.
+    ///     - The shape indicated by #shapeDef has no instructions.
+    ///
+    /// @return If true, the associated entry has no stem in the direction controlled by the subclass.
+    bool calcIsHiddenStem() const;
+
+    static const xml::XmlElementArray<CustomStem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class CustomDownStem
+ * @brief Custom stem for downstem context.
+ */
+class CustomDownStem : public CustomStem
+{
+public:
+    using CustomStem::CustomStem;
+
+    constexpr static std::string_view XmlNodeName = "stemDefDown"; ///< The XML node name for this type.
+};
+
+/**
+ * @class CustomUpStem
+ * @brief Custom stem for upstem context.
+ */
+class CustomUpStem : public CustomStem
+{
+public:
+    using CustomStem::CustomStem;
+
+    constexpr static std::string_view XmlNodeName = "stemDefUp"; ///< The XML node name for this type.
 };
 
 /**

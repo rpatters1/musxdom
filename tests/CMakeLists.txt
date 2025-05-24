@@ -97,15 +97,13 @@ add_executable(musxdomtests
     others/text_block.cpp
     others/text.cpp
     # details
-    details/beam_extensions.cpp
 	details/beam_stubs.cpp
 	details/chords.cpp
+    details/entry_details.cpp
 	details/floats.cpp
 	details/gfhold.cpp
-	details/note_alters.cpp
 	details/secondary_beams.cpp
 	details/staff_group.cpp
-    details/tie_alter.cpp
     details/tuplet_def.cpp
     # music_theory
     music_theory/transpose.cpp
