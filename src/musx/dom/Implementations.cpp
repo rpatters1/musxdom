@@ -175,6 +175,82 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     return sameDuration && sameActual;
 }
 
+bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
+{
+    MUSX_ASSERT_IF(!tuplet) {
+        throw std::logic_error("TupletInfo contains no tuplet.");
+    }
+    // must have exactly 1 entry
+    if (startIndex != endIndex) {
+        return false;
+    }
+    // must be invisible
+    if (!tuplet->hidden) {
+        if (tuplet->numStyle != details::TupletDef::NumberStyle::Nothing || tuplet->brackStyle != details::TupletDef::BracketStyle::Nothing) {
+            return false;
+        }
+    }
+    // must have zero length
+    if (tuplet->calcRatio() != 0) {
+        return false;
+    }
+    // entries must have the same duration and actual duration.
+    auto frame = m_parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
+        throw std::logic_error("TupletInfo instance contains invalid start index.");
+    }
+    EntryInfoPtr entryInfo(frame, startIndex);
+    if (!entryInfo.calcIsBeamStart()) {
+        return false;
+    }
+    auto hiddenEntryInfo = left ? entryInfo : entryInfo.getNextInBeamGroup();
+    if (!hiddenEntryInfo) {
+        return false;
+    }
+    auto hiddenEntry = hiddenEntryInfo->getEntry();
+    // must be a non-rest, not hidden as a whole, have suppressed ledger lines, a custom stem, and hidden noteheads.
+    if (!hiddenEntry->isNote || hiddenEntry->isHidden || !hiddenEntry->noLeger || !hiddenEntry->stemDetail || !hiddenEntry->noteDetail) {
+        return false;
+    }
+    // must have manual note positioning in the correct direction.
+    if (left) {
+        if (hiddenEntry->hOffset >= 0) {
+            return false;
+        }
+    } else {
+        if (hiddenEntry->hOffset <= 0) {
+            return false;
+        }
+    }
+    // if either direction has a custom stem, check it
+    std::shared_ptr<details::CustomStem> customStem = frame->getDocument()->getDetails()->get<details::CustomDownStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
+    if (!customStem) {
+        customStem = frame->getDocument()->getDetails()->get<details::CustomUpStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
+    }
+    if (!customStem || !customStem->calcIsHiddenStem()) {
+        return false;
+    }
+    // check that all noteheads are hidden.
+    for (size_t x = 0; x < hiddenEntry->notes.size(); x++) {
+        NoteInfoPtr noteInfo(hiddenEntryInfo, x);
+        if (!noteInfo) {
+            return false;
+        }
+        auto noteheadMods = frame->getDocument()->getDetails()->getForNote<details::NoteAlterations>(noteInfo, frame->getRequestedPartId());
+        if (!noteheadMods) {
+            return false;
+        }
+        if (noteheadMods->altNhead != ' ' && (!noteheadMods->customFont || !noteheadMods->customFont->hidden)) {
+            return false;
+        }
+        /// Beam Over Barlines plugin does not do anything about accidentals, so do no check for them.
+    }
+    return true;
+}
+
 // ************************
 // ***** EntryInfoPtr *****
 // ************************
@@ -949,14 +1025,16 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
             util::Fraction cumulativeRatio = 1;
             if (!entry->graceNote) {
                 graceIndex = 0;
-                auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
-                std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
-                    return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
-                });
-                for (const auto& tuplet : tuplets) {
-                    size_t index = entryFrame->tupletInfo.size();
-                    entryFrame->tupletInfo.emplace_back(entryFrame, tuplet, i, actualElapsedDuration, entry->voice2);
-                    activeTuplets.emplace_back(tuplet, index);
+                if (entry->tupletStart) {
+                    auto tuplets = document->getDetails()->getArray<details::TupletDef>(getRequestedPartId(), entry->getEntryNumber());
+                    std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
+                        return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
+                        });
+                    for (const auto& tuplet : tuplets) {
+                        size_t index = entryFrame->tupletInfo.size();
+                        entryFrame->tupletInfo.emplace_back(entryFrame, tuplet, i, actualElapsedDuration, entry->voice2);
+                        activeTuplets.emplace_back(tuplet, index);
+                    }
                 }
 
                 // It appears that Finale allows exactly one entry per 0-length tuplet, no matter

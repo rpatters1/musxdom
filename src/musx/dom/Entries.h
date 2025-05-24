@@ -172,6 +172,7 @@ public:
     */
     Edu duration{};
     int numNotes{};          ///< Number of notes in the entry. There is an error if this is not the same as notes.size().
+    Evpu hOffset{};          ///< Manual offset created with the Note Position Tool. (xml node is `<posi>`.)
     bool isValid{};          ///< Should always be true but otherwise appears to be used internally by Finale.
     bool isNote{};           ///< If this value is false, the entry is a rest.
     bool graceNote{};        ///< Indicate the entry is a grace note.
@@ -180,15 +181,18 @@ public:
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool noteDetail{};       ///< Indicates there is a note detail or EntrySize record for the entry.
+    bool tupletStart{};      ///< Indicates that a tuplet start on the entry.
+    bool beamExt{};          ///< Indicates that there is a beam extension on the entry.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
     bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
     bool noLeger{};          ///< Hide ledger lines.
-    bool stemDetail{};       ///< Indicates there are stem modification.
+    bool stemDetail{};       ///< Indicates there are stem modifications.
     bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool sorted{};           ///< Sorted flag.
+    bool noPlayback{};       ///< Indicates that the entry should not be played back.
     bool lyricDetail{};      ///< Indicates there is a lyric assignment on the entry.
     bool performanceData{};  ///< Indicates there is performance data on the entry.
     bool freezeBeam{};       ///< Freeze beam flag (Derived from the presence of `<freezeBeam>` node.)
@@ -450,10 +454,38 @@ public:
         /// @return true if the tuplet is a tremolo. If so, use `EntryInfoPtr::calcNumberOfBeams` on either entry to determine
         /// the number of beams. Use `details::TupletDef::calcReferenceDuration` to get the total length of the tremolo.
         bool calcIsTremolo() const;
-        
+
+        /// @brief Calculates if this tuplet is being used to create a singleton beam to the right.
+        ///
+        /// Finale has no built-in support for beams on singleton notes. As a workaround, users and (especially)
+        /// plugins such as Beam Over Barline create singleton beams using a 0-length tuplet and hiding either the tuplet
+        /// note or its next neighbor, depending on whether the beam goes to the left or the right. You should never
+        /// encounter a 0-length tuplet encompassing more than one entry, but this function guarantees this if it returns `true`.
+        ///
+        /// @return True if this tuplet creates a singleton beam to the right. You may handle this as follows.
+        ///     - The entry with the tuplet is the visible entry to use. You can mark this entry as having a singleton beam right, if your application allows it.
+        ///     - Ignore the tuplet on the visible entry. If you need the entry's actual duration in context, its next neighbor in the same voice
+        /// has the correct value.
+        ///     - Ignore the entry's next neighbor in the same voice. It will have its leger lines suppressed and non-visible notehead(s) and stem.
+        /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
+        bool calcCreatesSingletonRight() const { return calcCreatesSingleton(false); }
+
+        /// @brief Calculates if this tuplet is being used to create a singleton beam to the left.
+        ///
+        /// See comments at #calcCreatesSingletonRight.
+        ///
+        /// @return True if this tuplet creates a singleton beam to the left. You may handle this as follows.
+        ///     - Skip the entry and its tuplet.
+        ///     - You can mark the next entry in the same voice as having a singleton beam left, if your application allows it.
+        ///     - The current entry with the 0-length tuplet will have its leger lines suppressed and non-visible notehead(s) and stem.
+        /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
+        bool calcCreatesSingletonLeft() const { return calcCreatesSingleton(true); }
+
         /// @todo add detection function for singleton beams (and whether they are being used as a beam over barline)
 
     private:
+        bool calcCreatesSingleton(bool left) const;
+
         std::weak_ptr<const EntryFrame> m_parent;
     };
 
