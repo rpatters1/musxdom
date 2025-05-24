@@ -438,7 +438,7 @@ public:
         {}
 
         /// @brief Calculates if this tuplet represents a tremolo based on the following criteria.
-        ///     - the tuplet ratio has a numerator of 1 and a denominator that is a positive integral power of 2.
+        ///     - the tuplet ratio is a positive integral power of 2.
         ///     - the tuplet contains exactly 2 entries of equal duration and actual duration.
         ///     - the tuplet is invisible.
         ///

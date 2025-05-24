@@ -702,3 +702,27 @@ TEST(GFrameHold, GraceNoteIndexTest)
     });
     EXPECT_EQ(x, expectedValues.size());
 }
+
+TEST(GFrameHold, TremolosTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "tremolos.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    std::vector<bool> expectedValues = { true, false };
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+    ASSERT_EQ(entryFrame->tupletInfo.size(), expectedValues.size());
+    for (size_t x = 0; x < entryFrame->tupletInfo.size(); x++) {
+        const bool isTremolo = entryFrame->tupletInfo[x].calcIsTremolo();
+        EXPECT_EQ(isTremolo, expectedValues[x]);
+    }
+}

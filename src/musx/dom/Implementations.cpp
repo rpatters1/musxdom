@@ -152,9 +152,9 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
             return false;
         }
     }
-    // must have a ratio that is the reciprocal of a positive integer power of 2 (i.e., >= 2)
+    // must have a ratio that is a positive integer power of 2 (i.e., >= 2)
     util::Fraction ratio = tuplet->calcRatio();
-    if (ratio.numerator() != 1 || ratio.denominator() < 2 || ((ratio.denominator() & (ratio.denominator() - 1)) != 0)) {
+    if (ratio.denominator() != 1 || ratio.numerator() < 2 || ((ratio.numerator() & (ratio.numerator() - 1)) != 0)) {
         return false;
     }
     // entries must have the same duration and actual duration.
