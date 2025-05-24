@@ -61,6 +61,7 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"crossStaff", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->crossStaff = populateBoolean(e, i); }},
     {"freezeStem", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->freezeStem = populateBoolean(e, i); }},
     {"upStem", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->upStem = populateBoolean(e, i); }},
+    {"noLeger", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->noLeger = populateBoolean(e, i); }},
     {"stemDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->stemDetail = populateBoolean(e, i); }},
     {"smartShapeDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->smartShapeDetail = populateBoolean(e, i); }},
     {"sorted", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->sorted = populateBoolean(e, i); }},

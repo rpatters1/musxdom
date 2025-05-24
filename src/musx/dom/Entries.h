@@ -185,6 +185,7 @@ public:
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
+    bool noLeger{};          ///< Hide ledger lines.
     bool stemDetail{};       ///< Indicates there are stem modification.
     bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool sorted{};           ///< Sorted flag.

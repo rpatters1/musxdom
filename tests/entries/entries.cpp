@@ -41,6 +41,7 @@ TEST(EntryTest, PopulateFields)
       <smartShapeDetail/>
       <graceNote/>
       <floatRest/>
+      <noLeger/>
       <sorted/>
       <note id="1">
         <harmLev>-4</harmLev>
@@ -91,6 +92,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(entry->graceNote);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_FALSE(entry->isHidden);
+        EXPECT_TRUE(entry->noLeger);
         EXPECT_TRUE(entry->sorted);
 
         ASSERT_EQ(entry->notes.size(), 2);
@@ -126,6 +128,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_FALSE(entry->smartShapeDetail);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_TRUE(entry->isHidden);
+        EXPECT_FALSE(entry->noLeger);
         EXPECT_TRUE(entry->sorted);
 
         EXPECT_EQ(entry->notes.size(), 0);
