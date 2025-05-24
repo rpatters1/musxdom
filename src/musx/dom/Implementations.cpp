@@ -140,7 +140,7 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 bool EntryFrame::TupletInfo::calcIsTremolo() const
 {
     MUSX_ASSERT_IF(!tuplet) {
-        throw std::logic_error("Tuplet info contains no tuplet.");
+        throw std::logic_error("TupletInfo contains no tuplet.");
     }
     // must have exactly 2 entries
     if (endIndex != startIndex + 1) {
@@ -158,7 +158,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         return false;
     }
     // entries must have the same duration and actual duration.
-    auto frame = parent.lock();
+    auto frame = m_parent.lock();
     MUSX_ASSERT_IF(!frame) {
         throw std::logic_error("Unable to obtain lock on parent entry frame.");
     }
