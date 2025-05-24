@@ -270,6 +270,8 @@ using RegisteredDetails = TypeRegistry <
     dom::details::BaselineLyricsChorus,
     dom::details::BaselineLyricsSection,
     dom::details::BaselineLyricsVerse,
+    dom::details::BeamExtensionDownStem,
+    dom::details::BeamExtensionUpStem,
     dom::details::BeamStubDirection,
     dom::details::CenterShape,
     dom::details::ChordAssign,

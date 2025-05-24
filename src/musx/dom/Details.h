@@ -160,6 +160,61 @@ public:
 };
 
 /**
+ * @class BeamExtension
+ * @brief Represents both sides of a beam extension. It is attached to the first entry in the beam.
+ *
+ */
+class BeamExtension : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number of the first entry in the beam this extension applies to.
+     */
+    explicit BeamExtension(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum) {}
+
+    Evpu leftOffset{};      ///< Left extension offset. (xml node is `<x3Disp>`)
+    Evpu rightOffset{};     ///< Right extension offset. (xml node is `<x4Disp>`)
+    unsigned mask{};        ///< Composite mask of beams to extend, derived from `<do8th>` through `<do4096th>` tags.
+                            ///< A value of 512 is 8th, 256 is 16th, 128 is 32nd, etc. These correspond to the values
+                            ///< in @ref NoteType.
+    bool extBeyond8th{};    ///< Legacy flag. Original versions of Finale could either extend only the 8th beam or extend
+                            ///< a selection of beams. In musx files (Finale 2014+) this boolean has never been observed to be false.
+                            ///< Instead, the mask appears always to be used to determine the beams to be extended. However, if a false
+                            ///< value were encountered, it would mean only the 8th beam is extended.
+
+    static const xml::XmlElementArray<BeamExtension>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class BeamExtensionDownStem
+ * @brief Beam extension for downstem beams.
+ */
+class BeamExtensionDownStem : public BeamExtension
+{
+public:
+    using BeamExtension::BeamExtension;
+
+    constexpr static std::string_view XmlNodeName = "beamExtendDownStem"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BeamExtensionUpStem
+ * @brief Beam extension for upstem beams.
+ */
+class BeamExtensionUpStem : public BeamExtension
+{
+public:
+    using BeamExtension::BeamExtension;
+
+    constexpr static std::string_view XmlNodeName = "beamExtendUpStem"; ///< The XML node name for this type.
+};
+
+/**
  * @class BeamStubDirection
  * @brief Specifies the direction for beam stubs (if they are manually overridden.)
  *

@@ -441,8 +441,13 @@ public:
         ///     - the tuplet ratio has a numerator of 1 and a denominator that is a positive integral power of 2.
         ///     - the tuplet contains exactly 2 entries of equal duration and actual duration.
         ///     - the tuplet is invisible.
+        ///
+        /// @note The TGTools Tremolo plugin always creates beam extensions for both upstem and downstem cases. To detect the type of
+        /// stem connections for the tremolos, it is recommended to look for either an upstem or a downstem extension. This
+        /// covers the TGTools plugin as well as any that might have been created by hand. See @ref details::BeamExtension.
+        ///
         /// @return true if the tuplet is a tremolo. If so, use `EntryInfoPtr::calcNumberOfBeams` on either entry to determine
-        /// the number of beams. Use `tuplet->calcReferenceDuration` to get the total length of the tremolo.
+        /// the number of beams. Use `details::TupletDef::calcReferenceDuration` to get the total length of the tremolo.
         bool calcIsTremolo() const;
         
         /// @todo add detection function for singleton beams (and whether they are being used as a beam over barline)

@@ -181,12 +181,10 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
 
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 {
-    MUSX_ASSERT_IF(!m_entryFrame)
-    {
+    MUSX_ASSERT_IF(!m_entryFrame) {
         throw std::logic_error("EntryInfoPtr has no frame.");
     }
-    MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size())
-    {
+    MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size()) {
         throw std::logic_error("Entry index is too large for entries array.");
     }
     return m_entryFrame->getEntries()[m_indexInFrame];

@@ -55,6 +55,18 @@ struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
 };
 
 template <>
+struct FieldPopulator<BeamExtensionDownStem> : private FieldPopulator<BeamExtension>
+{
+    using FieldPopulator<BeamExtension>::populate;
+};
+
+template <>
+struct FieldPopulator<BeamExtensionUpStem> : private FieldPopulator<BeamExtension>
+{
+    using FieldPopulator<BeamExtension>::populate;
+};
+
+template <>
 struct FieldPopulator<LyricAssignChorus> : private FieldPopulator<LyricAssign>
 {
     using FieldPopulator<LyricAssign>::populate;

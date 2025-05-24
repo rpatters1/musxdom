@@ -97,6 +97,7 @@ add_executable(musxdomtests
     others/text_block.cpp
     others/text.cpp
     # details
+    details/beam_extensions.cpp
 	details/beam_stubs.cpp
 	details/chords.cpp
 	details/floats.cpp

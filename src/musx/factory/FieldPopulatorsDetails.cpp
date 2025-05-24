@@ -82,7 +82,22 @@ MUSX_XML_ELEMENT_ARRAY(Baseline, {
     {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
 });
 
-// XML mappings for the BeamStubDirection class
+MUSX_XML_ELEMENT_ARRAY(BeamExtension, {
+    {"x3Disp", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->leftOffset = e->getTextAs<Evpu>(); }},
+    {"x4Disp", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->rightOffset = e->getTextAs<Evpu>(); }},
+    {"do8th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Eighth); }},
+    {"do16th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note16th); }},
+    {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
+    {"do64th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note64th); }},
+    {"do128th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note128th); }},
+    {"do256th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note256th); }},
+    {"do512th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note512th); }},
+    {"do1024th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
+    {"do2048th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
+    {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
+    {"extBeyond8th", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->extBeyond8th = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
     {"do8th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Eighth); }},
     {"do16th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note16th); }},
