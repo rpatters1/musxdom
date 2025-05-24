@@ -337,6 +337,13 @@ public:
     /// @param voice 1 or 2
     EntryInfoPtr getNextInVoice(int voice) const;
 
+    /// @brief Returns the previous entry in the frame in the specified v1/v2 or null if none.
+    ///
+    /// Unlike #getPreviousSameV, this returns the next v2 entry in any v2 launch sequence.
+    ///
+    /// @param voice 1 or 2
+    EntryInfoPtr getPreviousInVoice(int voice) const;
+
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
     EntryInfoPtr getNextInBeamGroup(bool includeHiddenEntries = false) const
     { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(includeHiddenEntries); }
@@ -382,9 +389,10 @@ public:
     /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
     bool calcBeamStubIsLeft() const;
 
-private:
+    /// @brief Determines if this entry can be beamed.
     bool canBeBeamed() const;
 
+private:
     unsigned calcVisibleBeams() const;
 
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
@@ -481,7 +489,19 @@ public:
         /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
         bool calcCreatesSingletonLeft() const { return calcCreatesSingleton(true); }
 
-        /// @todo add detection function for singleton beams (and whether they are being used as a beam over barline)
+        /// @brief Calculates if this tuplet creates a beam continuation over a barline to the right,
+        /// as created by the Beam Over Barlines plugin.
+        ///
+        /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonRight.
+        /// However, you simply extend a beam from the designated entry to the appropriate entries in the next measure.
+        bool calcCreatesBeamContinuationRight() const;
+
+        /// @brief Calculates if this tuplet creates a beam continuation over a barline to the left,
+        /// as created by the Beam Over Barlines plugin.
+        ///
+        /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonLeft.
+        /// However, you simply extend a beam from the designated entry to the appropriate entries in the next measure.
+        bool calcCreatesBeamContinuationLeft() const;
 
     private:
         bool calcCreatesSingleton(bool left) const;
@@ -525,6 +545,11 @@ public:
     ///
     /// @param voice 1 or 2
     EntryInfoPtr getFirstInVoice(int voice) const;
+
+    /// @brief Returns the last entry in the specified v1/v2 or null if none.
+    ///
+    /// @param voice 1 or 2
+    EntryInfoPtr getLastInVoice(int voice) const;
 
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)

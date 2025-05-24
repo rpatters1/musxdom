@@ -119,6 +119,16 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
     return firstEntry;
 }
 
+EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
+{
+    bool forV2 = voice == 2;
+    auto lastEntry = EntryInfoPtr(shared_from_this(), m_entries.size() - 1);
+    if (!lastEntry || lastEntry->getEntry()->voice2 == forV2) {
+        return lastEntry;
+    }
+    return lastEntry.getPreviousInVoice(voice);
+}
+
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 {
     if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure + 1)) {
@@ -249,6 +259,60 @@ bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
         /// Beam Over Barlines plugin does not do anything about accidentals, so do no check for them.
     }
     return true;
+}
+
+bool EntryFrame::TupletInfo::calcCreatesBeamContinuationRight() const
+{
+    if (!calcCreatesSingletonRight()) {
+        return false;
+    }
+    auto frame = m_parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    int voice = int(voice2) + 1;
+    EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
+    auto nextInBeam = entryInfo.getNextInBeamGroup();
+    // must be followed by exactly one beam
+    if (!nextInBeam) {
+        return false;
+    }
+    // the next item must be the last item
+    if (nextInBeam.getNextInVoice(voice)) {
+        return false;
+    }
+    auto nextFrame = frame->getNext();
+    if (!nextFrame) {
+        return false;
+    }
+    if (auto nextEntryInfo = nextFrame->getFirstInVoice(voice)) {
+        return nextEntryInfo.canBeBeamed();
+    }
+    return false;
+}
+
+bool EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft() const
+{
+    if (!calcCreatesSingletonLeft()) {
+        return false;
+    }
+    auto frame = m_parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    int voice = int(voice2) + 1;
+    EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
+    if (entryInfo.getPreviousInVoice(voice)) {
+        return false;
+    }
+    auto prevFrame = frame->getPrevious();
+    if (!prevFrame) {
+        return false;
+    }
+    if (auto prevEntryInfo = prevFrame->getLastInVoice(voice)) {
+        return prevEntryInfo.canBeBeamed();
+    }
+    return false;
 }
 
 // ************************
@@ -398,6 +462,16 @@ EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
         next = next.getNextInFrame();
     }
     return next;
+}
+
+EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
+{
+    bool forV2 = voice == 2;
+    auto prev = getPreviousInFrame();
+    while (prev && prev->getEntry()->voice2 != forV2) {
+        prev = prev.getPreviousInFrame();
+    }
+    return prev;
 }
 
 bool EntryInfoPtr::calcDisplaysAsRest() const
