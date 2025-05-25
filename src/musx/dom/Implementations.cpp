@@ -286,7 +286,7 @@ bool EntryFrame::TupletInfo::calcCreatesBeamContinuationRight() const
         return false;
     }
     if (auto nextEntryInfo = nextFrame->getFirstInVoice(voice)) {
-        return nextEntryInfo.canBeBeamed();
+        return !nextEntryInfo.calcUnbeamed();
     }
     return false;
 }
@@ -310,7 +310,7 @@ bool EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft() const
         return false;
     }
     if (auto prevEntryInfo = prevFrame->getLastInVoice(voice)) {
-        return prevEntryInfo.canBeBeamed();
+        return !prevEntryInfo.calcUnbeamed();
     }
     return false;
 }

@@ -726,3 +726,52 @@ TEST(GFrameHold, TremolosTest)
         EXPECT_EQ(isTremolo, expectedValues[x]);
     }
 }
+
+TEST(GFrameHold, SingletonBeamsTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "singleton_beams.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto checkTuplet = [](const EntryFrame& entryFrame, size_t tupletIndex, bool isSingletonRight, bool isSingletonLeft, bool isContinuationRight, bool isContinuationLeft) {
+        std::string msg = "Staff " + std::to_string(entryFrame.getStaff()) + " measure " + std::to_string(entryFrame.getMeasure())
+            + " tuplet index " + std::to_string(tupletIndex);
+        ASSERT_LT(tupletIndex, entryFrame.tupletInfo.size()) << msg << " tuplet index is too big";
+        EXPECT_EQ(isSingletonRight, entryFrame.tupletInfo[tupletIndex].calcCreatesSingletonRight()) << msg << " mismatch on singleton right";
+        EXPECT_EQ(isSingletonLeft, entryFrame.tupletInfo[tupletIndex].calcCreatesSingletonLeft()) << msg << " mismatch on singleton left";
+        EXPECT_EQ(isContinuationRight, entryFrame.tupletInfo[tupletIndex].calcCreatesBeamContinuationRight()) << msg << " mismatch on continuation left";
+        EXPECT_EQ(isContinuationLeft, entryFrame.tupletInfo[tupletIndex].calcCreatesBeamContinuationLeft()) << msg << " mismatch on continuation right";
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTuplet(*entryFrame, 0, true, false, true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTuplet(*entryFrame, 0, false, true, false, true);
+        checkTuplet(*entryFrame, 1, true, false, false, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTuplet(*entryFrame, 0, false, true, false, false);
+    }
+}

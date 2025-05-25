@@ -492,12 +492,18 @@ public:
         /// @brief Calculates if this tuplet creates a beam continuation over a barline to the right,
         /// as created by the Beam Over Barlines plugin.
         ///
+        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function can detects v1/v2 correctly on the chance
+        /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
+        ///
         /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonRight.
         /// However, you simply extend a beam from the designated entry to the appropriate entries in the next measure.
         bool calcCreatesBeamContinuationRight() const;
 
         /// @brief Calculates if this tuplet creates a beam continuation over a barline to the left,
         /// as created by the Beam Over Barlines plugin.
+        ///
+        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function can detects v1/v2 correctly on the chance
+        /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
         ///
         /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonLeft.
         /// However, you simply extend a beam from the designated entry to the appropriate entries in the next measure.
