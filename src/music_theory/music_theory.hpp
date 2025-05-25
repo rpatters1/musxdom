@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <optional>
 #include <stdexcept>
+#include <string>
 
 /*
 This header-only library has no dependencies and can be shared into any other library merely
