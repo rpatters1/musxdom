@@ -63,6 +63,8 @@ namespace details {
 /**
  * @class ArticulationAssign
  * @brief Assigns an articulation to an entry.
+ *
+ * #Entry::articDetail is set if the entry has any articulations.
  */
 class ArticulationAssign : public EntryDetailsBase
 {
@@ -163,7 +165,6 @@ public:
  * @class BeamExtension
  * @brief Represents both sides of a beam extension. It is attached to the first entry in the beam. Which stem direction this instance controls
  * is determined by the subclass that inherits this class as a base.
- *
  */
 class BeamExtension : public EntryDetailsBase
 {
@@ -194,6 +195,8 @@ public:
 /**
  * @class BeamExtensionDownStem
  * @brief Beam extension for downstem beams.
+ *
+ * #Entry::beamExt is set if the entry has any beam extensions.
  */
 class BeamExtensionDownStem : public BeamExtension
 {
@@ -206,6 +209,8 @@ public:
 /**
  * @class BeamExtensionUpStem
  * @brief Beam extension for upstem beams.
+ *
+ * #Entry::beamExt is set if the entry has any beam extensions.
  */
 class BeamExtensionUpStem : public BeamExtension
 {
@@ -218,6 +223,8 @@ public:
 /**
  * @class BeamStubDirection
  * @brief Specifies the direction for beam stubs (if they are manually overridden.)
+ *
+ * #Entry::stemDetail is set if the entry has a beam stub direction change.
  *
  * This class is identified by the XML node name "beamStub".
  */
@@ -310,6 +317,8 @@ public:
  * @class CrossStaff
  * @brief Represents a cross-staff assignment for the note, if any.
  *
+ * #Entry::crossStaff is set if any note in the entry is crossed to another staff.
+ *
  * This class is identified by the XML node name "crossStaff".
  */
 class CrossStaff : public NoteDetailsBase
@@ -369,6 +378,8 @@ public:
 /**
  * @class CustomDownStem
  * @brief Custom stem for downstem context.
+ *
+ * #Entry::stemDetail is set if the entry has a custom down stem.
  */
 class CustomDownStem : public CustomStem
 {
@@ -381,6 +392,8 @@ public:
 /**
  * @class CustomUpStem
  * @brief Custom stem for upstem context.
+ *
+ * #Entry::stemDetail is set if the entry has a custom up stem.
  */
 class CustomUpStem : public CustomStem
 {
@@ -395,6 +408,8 @@ public:
  * @brief Specifies a custom size for an entry. It scales the entire entry, including the stem and all noteheads.
  * For beamed entries, it only takes effect if it is applied to the first entry in a beamed group, and then it affects
  * every entry in the beamed group.
+ *
+ * #Entry::stemDetail is set if the entry has a custom size record.
  */
 class EntrySize : public EntryDetailsBase
 {
@@ -640,6 +655,8 @@ public:
 /**
  * @class LyricAssignChorus
  * @brief Contains the syllable assignments for lyrics chorus blocks.
+ *
+ * #Entry::lyricDetail is set if the entry has chorus lyric assignment.
  */
 class LyricAssignChorus : public LyricAssign
 {
@@ -653,6 +670,8 @@ public:
 /**
  * @class LyricAssignSection
  * @brief Contains the syllable assignments for lyrics section blocks.
+ *
+ * #Entry::lyricDetail is set if the entry has section lyric assignment.
  */
 class LyricAssignSection : public LyricAssign
 {
@@ -666,6 +685,8 @@ public:
 /**
  * @class LyricAssignVerse
  * @brief Contains the syllable assignments for lyrics verse blocks.
+ *
+ * #Entry::lyricDetail is set if the entry has verse lyric assignment.
  */
 class LyricAssignVerse : public LyricAssign
 {
@@ -723,6 +744,8 @@ public:
  * @class NoteAlterations
  * @brief Represents graphical and notational alterations applied to a note.
  *
+ * #Entry::noteDetail is set if any note in the entry has note alterations.
+ *
  * This class is identified by the XML node name "noteAlter".
  */
 class NoteAlterations : public NoteDetailsBase
@@ -754,6 +777,8 @@ public:
 /**
  * @class SecondaryBeamBreak
  * @brief Specifies which secondary beams break and restart on the associated entry.
+ *
+ * #Entry::secBeam is set if the entry a secondary beam break.
  *
  * This class is identified by the XML node name "secBeamBreak".
  */
@@ -1012,6 +1037,8 @@ public:
 /**
  * @class TieAlterBase
  * @brief Base class for tie alteration properties. (Used for both ties and tie ends.)
+ *
+ * #Entry::dotTieAlt is set if any note in the entry has tie alterations.
  */
 class TieAlterBase : public NoteDetailsBase
 {
@@ -1089,6 +1116,8 @@ public:
 /**
  * @class TupletDef
  * @brief Options controlling the appearance of tuplets.
+ *
+ * #Entry::tupletStart is set if the entry starts a tuplet.
  *
  * This class is identified by the XML node name "tupletDef".
  */

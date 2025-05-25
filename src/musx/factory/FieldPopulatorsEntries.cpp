@@ -57,6 +57,7 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"v2", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->voice2 = populateBoolean(e, i); }},
     {"articDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->articDetail = populateBoolean(e, i); }},
     {"noteDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->noteDetail = populateBoolean(e, i); }},
+    {"dotTieAlt", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->dotTieAlt = populateBoolean(e, i); }},
     {"tupletStart", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->tupletStart = populateBoolean(e, i); }},
     {"beamExt", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->beamExt = populateBoolean(e, i); }},
     {"beam", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->beam = populateBoolean(e, i); }},
@@ -81,9 +82,7 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     }},
 });
 
-
 } // namespace dom
 } // namespace musx
-
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS

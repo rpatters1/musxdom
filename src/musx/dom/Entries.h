@@ -181,6 +181,7 @@ public:
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool noteDetail{};       ///< Indicates there is a note detail or EntrySize record for the entry.
+    bool dotTieAlt{};        ///< Indicates dot or tie alterations are present.
     bool tupletStart{};      ///< Indicates that a tuplet start on the entry.
     bool beamExt{};          ///< Indicates that there is a beam extension on the entry.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
