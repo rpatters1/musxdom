@@ -24,8 +24,6 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
-#include "music_theory/music_theory.hpp"
-
 using namespace musx::dom;
  
 TEST(KeySigs, Test12EDO)

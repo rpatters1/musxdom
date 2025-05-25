@@ -21,8 +21,6 @@
  */
 
 #include <gtest/gtest.h>
-
-#include "music_theory/music_theory.hpp"
  
  using namespace music_theory;
  

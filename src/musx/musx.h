@@ -65,6 +65,8 @@
 
 #pragma once
 
+#include "music_theory/music_theory.hpp"
+
 #include "util/Fraction.h"
 #include "util/EnigmaString.h"
 #include "util/Logger.h"
