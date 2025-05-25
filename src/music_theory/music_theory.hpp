@@ -26,6 +26,7 @@
 #include <cmath>
 #include <algorithm>
 #include <optional>
+#include <stdexcept>
 
 /*
 This header-only library has no dependencies and can be shared into any other library merely
