@@ -216,7 +216,7 @@ public:
     /**
      * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
      */
-    std::pair<NoteType, int> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
+    std::pair<NoteType, unsigned> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
