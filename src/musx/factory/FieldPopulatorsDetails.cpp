@@ -32,6 +32,7 @@ using namespace ::musx::dom::details;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<others::Measure::BarlineType> XmlEnumMapping<others::Measure::BarlineType>::mapping;
 extern template const XmlEnumMappingElement<others::NamePositioning::AlignJustify> XmlEnumMapping<others::NamePositioning::AlignJustify>::mapping;
+extern template const XmlEnumMappingElement<options::BeamOptions::FlattenStyle> XmlEnumMapping<options::BeamOptions::FlattenStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::AutoBracketStyle> XmlEnumMapping<options::TupletOptions::AutoBracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::BracketStyle> XmlEnumMapping<options::TupletOptions::BracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::NumberStyle> XmlEnumMapping<options::TupletOptions::NumberStyle>::mapping;
@@ -80,6 +81,16 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationAssign, {
 MUSX_XML_ELEMENT_ARRAY(Baseline, {
     {"basedisp", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->baselineDisplacement = e->getTextAs<Evpu>(); }},
     {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(BeamAlterations, {
+    {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->leftOffsetH = e->getTextAs<Evpu>(); }},
+    {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->leftOffsetY = e->getTextAs<Evpu>(); }},
+    {"sxAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->rightOffsetH = e->getTextAs<Evpu>(); }},
+    {"syAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->rightOffsetY = e->getTextAs<Evpu>(); }},
+    {"dura", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->dura = e->getTextAs<Edu>(); }},
+    {"context", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->flattenStyle = toEnum<BeamAlterations::FlattenStyle>(e); }},
+    {"beamWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->beamWidth = e->getTextAs<Efix>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(BeamExtension, {

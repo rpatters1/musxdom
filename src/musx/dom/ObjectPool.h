@@ -358,6 +358,11 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
+    /** @brief version of #ObjectPool::getArray for getting all of them */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId) const
+    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId }); }
+
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const

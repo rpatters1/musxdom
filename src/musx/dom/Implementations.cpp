@@ -41,6 +41,30 @@
 namespace musx {
 namespace dom {
 
+// ***************************
+// ***** BeamAlterations *****
+// ***************************
+
+template <typename T,
+          std::enable_if_t<std::is_base_of_v<details::BeamAlterations, T>, int>>
+void details::BeamAlterations::calcActive(const DocumentPtr& document)
+{
+    if (const auto beamOptions = document->getOptions()->get<options::BeamOptions>()) {
+        const auto values = document->getDetails()->getArray<T>(SCORE_PARTID);
+        std::cout << T::XmlNodeName << " has " << values.size() << " elements." << std::endl;
+        for (const auto& value : values) {
+            value->m_active = (value->flattenStyle == beamOptions->beamingStyle);
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("Unable to retrieve beaming options. Active indicators for beam alterations were not set.");
+    }
+}
+
+template void details::BeamAlterations::calcActive<details::BeamAlterationsUpStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcActive<details::BeamAlterationsDownStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcActive<details::SecondaryBeamAlterationsUpStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcActive<details::SecondaryBeamAlterationsDownStem>(const DocumentPtr&);
+
 // *****************
 // ***** Entry *****
 // *****************
@@ -179,9 +203,14 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     }
     EntryInfoPtr first(frame, startIndex);
     EntryInfoPtr second(frame, endIndex);
-    const bool sameDuration = first->getEntry()->duration == second->getEntry()->duration;
-    const bool sameActual = first->actualDuration == second->actualDuration;
-    return sameDuration && sameActual;
+    if (first->actualDuration != second->actualDuration) {
+        return false;
+    }
+    if (first->getEntry()->duration != second->getEntry()->duration) {
+        return false;
+    }
+    // entries must be beamed-together neighbors
+    return second.isSameEntry(first.getNextInBeamGroup());
 }
 
 bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const

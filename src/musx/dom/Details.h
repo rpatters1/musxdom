@@ -162,6 +162,102 @@ public:
 };
 
 /**
+ * @class BeamAlterations
+ * @brief Represents beam alterations applied to a specific entry. This is used to apply additional shaping or offset
+ * values both primary and secondary beams. Which stem direction this instance controls is determined by the subclass that inherits
+ * this class as a base.
+ */
+class BeamAlterations : public EntryDetailsBase
+{
+private:
+    bool m_active = true; // this value is set by the factory.
+
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     * @param inci The inci (if supplied)
+     */
+    explicit BeamAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, std::optional<Inci> inci = std::nullopt)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci) {}
+
+    /// @brief see @ref options::BeamOptions::FlattenStyle
+    using FlattenStyle = options::BeamOptions::FlattenStyle;
+
+    Evpu leftOffsetH{};         ///< Horizontal adjustment of the beam start. (xml node is `<xAdd>`)
+    Evpu leftOffsetY{};         ///< Vertical adjustment of the beam start. (xml node is `<yAdd>`)
+    Evpu rightOffsetH{};        ///< Horizontal adjustment of the beam end. (xml node is `<sxAdd>`)
+    Evpu rightOffsetY{};        ///< Vertical adjustment of the beam end. (xml node is `<syAdd>`)
+    Edu dura{};                 ///< For secondary beams, specifies the duration corresponding to the secondary beam (16th beam is 256, 32nd beam is 128, etc.)
+    FlattenStyle flattenStyle{}; ///< Beam shaping style (xml node is `<context>`).
+    Efix beamWidth{};            ///< Beam width. A value of -1 indicates to use the default beam width from @ref options::BeamOptions.
+                                ///< The #calcEffectiveBeamWidth method handles this for you.
+
+    /// @brief Calculates the effective beam width by returning either the default width or the width override value specified by #beamWidth.
+    /// @note The #beamWidth of primary beams also controls the width of secondary beams.
+    /// @return The effective beam width of this beam, taking into account all conditions that prefer the default width to the value in #beamWidth.
+    std::optional<Efix> calcEffectiveBeamWidth() const;
+
+    /// @brief Returns whether this beam alteration record is active. Its #flattenStyle must match the value in @ref options::BeamOptions.
+    /// @return True if active, otherwise false.
+    bool isActive() const { return m_active; }
+
+    /// @brief Used by the factory to set active indicators
+    template <typename T,
+              std::enable_if_t<std::is_base_of_v<BeamAlterations, T>, int> = 0>
+    static void calcActive(const DocumentPtr& document);
+
+    static const xml::XmlElementArray<BeamAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class BeamAlterationsDownStem
+ * @brief Beam alteration for downstem primary beams.
+ *
+ * #Entry::stemDetail is set if the entry has any beam extensions.
+ */
+class BeamAlterationsDownStem : public BeamAlterations
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     */
+    explicit BeamAlterationsDownStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : BeamAlterations(document, partId, shareMode, entnum) {}
+
+    constexpr static std::string_view XmlNodeName = "beamAltPrimDownStem"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BeamAlterationsUpStem
+ * @brief Beam alteration for upstem primary beams.
+ *
+ * #Entry::stemDetail is set if the entry has any beam extensions.
+ */
+class BeamAlterationsUpStem : public BeamAlterations
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     */
+    explicit BeamAlterationsUpStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : BeamAlterations(document, partId, shareMode, entnum) {}
+
+    constexpr static std::string_view XmlNodeName = "beamAltPrimUpStem"; ///< The XML node name for this type.
+};
+
+/**
  * @class BeamExtension
  * @brief Represents both sides of a beam extension. It is attached to the first entry in the beam. Which stem direction this instance controls
  * is determined by the subclass that inherits this class as a base.
@@ -775,6 +871,54 @@ public:
 };
 
 /**
+ * @class SecondaryBeamAlterationsDownStem
+ * @brief Beam alteration for downstem secondary beams.
+ *
+ * #Entry::stemDetail is set if the entry has any beam extensions.
+ */
+class SecondaryBeamAlterationsDownStem : public BeamAlterations
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     * @param inci The incident, since each secondary beam has a record. They are in no guaranteed order. Use the #BeamAlterations::dura value to determine
+     * which beam this pertains to.
+     */
+    explicit SecondaryBeamAlterationsDownStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : BeamAlterations(document, partId, shareMode, entnum, inci) {}
+
+    constexpr static std::string_view XmlNodeName = "beamAltSecDownStem"; ///< The XML node name for this type.
+};
+
+/**
+ * @class SecondaryBeamAlterationsUpStem
+ * @brief Beam alteration for downstem secondary beams.
+ *
+ * #Entry::stemDetail is set if the entry has any beam extensions.
+ */
+class SecondaryBeamAlterationsUpStem : public BeamAlterations
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     * @param inci The incident, since each secondary beam has a record. They are in no guaranteed order. Use the #BeamAlterations::dura value to determine
+     * which beam this pertains to.
+     */
+    explicit SecondaryBeamAlterationsUpStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : BeamAlterations(document, partId, shareMode, entnum, inci) {}
+
+    constexpr static std::string_view XmlNodeName = "beamAltSecUpStem"; ///< The XML node name for this type.
+};
+
+/**
  * @class SecondaryBeamBreak
  * @brief Specifies which secondary beams break and restart on the associated entry.
  *
@@ -1037,8 +1181,6 @@ public:
 /**
  * @class TieAlterBase
  * @brief Base class for tie alteration properties. (Used for both ties and tie ends.)
- *
- * #Entry::dotTieAlt is set if any note in the entry has tie alterations.
  */
 class TieAlterBase : public NoteDetailsBase
 {
@@ -1087,6 +1229,8 @@ public:
  * @class TieAlterEnd
  * @brief Alterations for tie ends.
  *
+ * #Entry::dotTieAlt is set if any note in the entry has tie alterations.
+ *
  * This class is identified by the XML node name "tieAlterEnd".
  */
 class TieAlterEnd : public TieAlterBase
@@ -1101,6 +1245,8 @@ public:
 /**
  * @class TieAlterStart
  * @brief Alterations for tie starts. (Tie starts are normal ties.)
+ *
+ * #Entry::dotTieAlt is set if any note in the entry has tie alterations.
  *
  * This class is identified by the XML node name "tieAlterStart".
  */

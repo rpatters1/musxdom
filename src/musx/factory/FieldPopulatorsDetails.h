@@ -55,6 +55,18 @@ struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
 };
 
 template <>
+struct FieldPopulator<BeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
+{
+    using FieldPopulator<BeamAlterations>::populate;
+};
+
+template <>
+struct FieldPopulator<BeamAlterationsUpStem> : private FieldPopulator<BeamAlterations>
+{
+    using FieldPopulator<BeamAlterations>::populate;
+};
+
+template <>
 struct FieldPopulator<BeamExtensionDownStem> : private FieldPopulator<BeamExtension>
 {
     using FieldPopulator<BeamExtension>::populate;
@@ -97,6 +109,18 @@ struct FieldPopulator<LyricAssignVerse> : private FieldPopulator<LyricAssign>
 };
 
 template <>
+struct FieldPopulator<SecondaryBeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
+{
+    using FieldPopulator<BeamAlterations>::populate;
+};
+
+template <>
+struct FieldPopulator<SecondaryBeamAlterationsUpStem> : private FieldPopulator<BeamAlterations>
+{
+    using FieldPopulator<BeamAlterations>::populate;
+};
+
+template <>
 struct FieldPopulator<TieAlterEnd> : private FieldPopulator<TieAlterBase>
 {
     using FieldPopulator<TieAlterBase>::populate;
@@ -118,6 +142,11 @@ inline StaffGroup::BracketStyle toEnum<StaffGroup::BracketStyle>(const int& valu
     MUSX_UNKNOWN_XML("Invalid <bracket><id> value in XML for StaffGroup: " + std::to_string(value));
     return {};
 }
+
+MUSX_RESOLVER_ENTRY(BeamAlterationsDownStem, BeamAlterations::calcActive<BeamAlterationsDownStem>);
+MUSX_RESOLVER_ENTRY(BeamAlterationsUpStem, BeamAlterations::calcActive<BeamAlterationsUpStem>);
+MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsDownStem, BeamAlterations::calcActive<SecondaryBeamAlterationsDownStem>);
+MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsUpStem, BeamAlterations::calcActive<SecondaryBeamAlterationsUpStem>);
 
 MUSX_RESOLVER_ENTRY(StaffGroup, {
     [](const dom::DocumentPtr& document) {

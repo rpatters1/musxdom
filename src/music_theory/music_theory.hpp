@@ -25,6 +25,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <optional>
 
 /*
 This header-only library has no dependencies and can be shared into any other library merely
