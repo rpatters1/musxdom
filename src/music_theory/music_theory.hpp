@@ -38,6 +38,21 @@ namespace music_theory {
 constexpr int STANDARD_DIATONIC_STEPS = 7; ///< currently this is the only supported number of diatonic steps.
 constexpr int STANDARD_12EDO_STEPS = 12;   ///< this can be overriden when constructing a @ref Transposer instance.
 
+/// @enum DiatonicMode
+/// @brief Represents the seven standard diatonic musical modes.
+///
+/// Values correspond to their roots with no sharps or flats C (0) through B (6).
+enum class DiatonicMode : int
+{
+    Ionian = 0,         ///< major
+    Dorian = 1,         ///< minor with raised 6
+    Phrygian = 2,       ///< minor with flat 2
+    Lydian = 3,         ///< major with raised 4
+    Mixolydian = 4,     ///< major with flat 7
+    Aeolian = 5,        ///< natural minor
+    Locrian = 6         ///< diminished with flat 2 and 5
+};
+
 /// @brief Calculates the displacement value for a given absolute pitch class and octave
 /// @param pitchClass 0..6 corresponding to C..B
 /// @param octave Octave 4 is the middle-C octave

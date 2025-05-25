@@ -468,7 +468,7 @@ public:
         /// Finale has no built-in support for beams on singleton notes. As a workaround, users and (especially)
         /// plugins such as Beam Over Barline create singleton beams using a 0-length tuplet and hiding either the tuplet
         /// note or its next neighbor, depending on whether the beam goes to the left or the right. You should never
-        /// encounter a 0-length tuplet encompassing more than one entry, but this function guarantees this if it returns `true`.
+        /// encounter a 0-length tuplet encompassing more than one entry, but these functions guarantee this if they return `true`.
         ///
         /// @return True if this tuplet creates a singleton beam to the right. You may handle this as follows.
         ///     - The entry with the tuplet is the visible entry to use. You can mark this entry as having a singleton beam right, if your application allows it.
@@ -492,7 +492,7 @@ public:
         /// @brief Calculates if this tuplet creates a beam continuation over a barline to the right,
         /// as created by the Beam Over Barlines plugin.
         ///
-        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function can detects v1/v2 correctly on the chance
+        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
         /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
         ///
         /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonRight.
@@ -502,11 +502,11 @@ public:
         /// @brief Calculates if this tuplet creates a beam continuation over a barline to the left,
         /// as created by the Beam Over Barlines plugin.
         ///
-        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function can detects v1/v2 correctly on the chance
+        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
         /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
         ///
         /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonLeft.
-        /// However, you simply extend a beam from the designated entry to the appropriate entries in the next measure.
+        /// However, you simply extend a beam from the designated entry to the appropriate entries in the previous measure.
         bool calcCreatesBeamContinuationLeft() const;
 
     private:

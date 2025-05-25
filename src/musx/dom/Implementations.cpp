@@ -1503,6 +1503,20 @@ std::unique_ptr<music_theory::Transposer> KeySignature::createTransposer(int dis
     return std::make_unique<music_theory::Transposer>(displacement, alteration, isMinor(), calcEDODivisions(), calcKeyMap());
 }
 
+std::optional<music_theory::DiatonicMode> KeySignature::calcDiatonicMode() const
+{
+    if (isLinear()) {
+        const auto centers = calcTonalCenterArrayForSharps();
+        const unsigned index = centers[0];
+        if (index < music_theory::STANDARD_DIATONIC_STEPS) {
+            return static_cast<music_theory::DiatonicMode>(index);
+        } else {
+            MUSX_INTEGRITY_ERROR("KeyMode " + std::to_string(getKeyMode()) + " returned invalid tonal center at index 0: " + std::to_string(index));
+        }
+    }
+    return std::nullopt;
+}
+
 // **************************
 // ***** LyricsTextBase *****
 // **************************
