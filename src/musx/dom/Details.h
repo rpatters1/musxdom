@@ -530,6 +530,34 @@ public:
 };
 
 /**
+ * @class DotAlterations
+ * @brief Represents display offsets and spacing adjustments for augmentation dots on a specific note.
+ *
+ * #Entry::dotTieAlt is set if any note in the entry has visual dot modifications such as position or spacing.
+ *
+ * This class is identified by the XML node name "dotOffset".
+ */
+class DotAlterations : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor */
+    explicit DotAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};         ///< The ID of the note whose dots are adjusted.
+    Evpu hOffset{};              ///< Horizontal offset for the dot (XML: `<xadd>`)
+    Evpu vOffset{};              ///< Vertical offset for the dot (XML: `<yadd>`)
+    Evpu interdotSpacing{};      ///< Additional spacing between dots (XML: `<posIncr>`)
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "dotOffset";   ///< The XML node name for this type.
+    static const xml::XmlElementArray<DotAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class EntrySize
  * @brief Specifies a custom size for an entry. It scales the entire entry, including the stem and all noteheads.
  * For beamed entries, it only takes effect if it is applied to the first entry in a beamed group, and then it affects
@@ -1240,18 +1268,18 @@ public:
 };
 
 /**
- * @class StemAdjustments
+ * @class StemAlterations
  * @brief Specifies horizontal and vertical stem adjustments for upstem and downstem contexts.
  *
  * Entry::stemDetail is set if there are any instances of this class.
  *
  * This class is identified by the XML node name "stemAdjust".
  */
-class StemAdjustments : public EntryDetailsBase
+class StemAlterations : public EntryDetailsBase
 {
 public:
     /** @brief Constructor function */
-    explicit StemAdjustments(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+    explicit StemAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
         : EntryDetailsBase(document, partId, shareMode, entnum)
     {
     }
@@ -1262,7 +1290,7 @@ public:
     Evpu downHorzAdjust{};  ///< Horizontal adjustment for downstem context (positive is right).
 
     constexpr static std::string_view XmlNodeName = "stemAdjust"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StemAdjustments>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StemAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

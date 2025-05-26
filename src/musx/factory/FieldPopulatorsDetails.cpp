@@ -181,8 +181,15 @@ MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
 
 MUSX_XML_ELEMENT_ARRAY(CustomStem, {
     {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
-    {"xdisp",    [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
-    {"ydisp",    [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"xdisp", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"ydisp", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(DotAlterations, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"xadd", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
+    {"yadd", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->vOffset = e->getTextAs<Evpu>(); }},
+    {"posIncr", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->interdotSpacing = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(EntrySize, {
@@ -312,11 +319,11 @@ MUSX_XML_ELEMENT_ARRAY(StaffSize, {
     {"staffPercent", [](const XmlElementPtr& e, const std::shared_ptr<StaffSize>& i) { i->staffPercent = e->getTextAs<int>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(StemAdjustments, {
-    {"upVertAdjust",   [](const XmlElementPtr& e, const std::shared_ptr<StemAdjustments>& i) { i->upVertAdjust = e->getTextAs<Evpu>(); }},
-    {"downVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAdjustments>& i) { i->downVertAdjust = e->getTextAs<Evpu>(); }},
-    {"upHorzAdjust",   [](const XmlElementPtr& e, const std::shared_ptr<StemAdjustments>& i) { i->upHorzAdjust = e->getTextAs<Evpu>(); }},
-    {"downHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAdjustments>& i) { i->downHorzAdjust = e->getTextAs<Evpu>(); }},
+MUSX_XML_ELEMENT_ARRAY(StemAlterations, {
+    {"upVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upVertAdjust = e->getTextAs<Evpu>(); }},
+    {"downVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downVertAdjust = e->getTextAs<Evpu>(); }},
+    {"upHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upHorzAdjust = e->getTextAs<Evpu>(); }},
+    {"downHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downHorzAdjust = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {

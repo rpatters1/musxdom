@@ -360,6 +360,35 @@ TEST(CustomStemTest, PopulateFields)
     EXPECT_EQ(up->yOffset, Evpu(46));
 }
 
+TEST(DotAlterationsTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <dotOffset entnum="5" inci="0">
+      <noteID>1</noteID>
+      <xadd>11</xadd>
+      <yadd>13</yadd>
+      <posIncr>8</posIncr>
+    </dotOffset>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto adjust = details->get<details::DotAlterations>(SCORE_PARTID, 5, 0);
+    ASSERT_TRUE(adjust) << "DotAlterations with entnum 5 and inci 0 not found";
+
+    EXPECT_EQ(adjust->noteId, NoteNumber(1));
+    EXPECT_EQ(adjust->hOffset, Evpu(11));
+    EXPECT_EQ(adjust->vOffset, Evpu(13));
+    EXPECT_EQ(adjust->interdotSpacing, Evpu(8));
+}
+
 TEST(LyricEntryInfoTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -474,7 +503,7 @@ TEST(NoteAlterationsTest, PopulateFields)
     }
 }
 
-TEST(StemAdjustmentsTest, PopulateFields)
+TEST(StemAlterationsTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -490,12 +519,12 @@ TEST(StemAdjustmentsTest, PopulateFields)
 </finale>
 )xml";
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    auto adjust = details->get<details::StemAdjustments>(SCORE_PARTID, 5);
-    ASSERT_TRUE(adjust) << "StemAdjustments with entnum 5 not found";
+    auto adjust = details->get<details::StemAlterations>(SCORE_PARTID, 5);
+    ASSERT_TRUE(adjust) << "StemAlterations with entnum 5 not found";
 
     EXPECT_EQ(adjust->upVertAdjust, Evpu(49));
     EXPECT_EQ(adjust->downVertAdjust, Evpu(-51));
