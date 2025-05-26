@@ -58,6 +58,7 @@ add_executable(musxdomtests
     options/grace_note_options.cpp
     options/key_signature_options.cpp
     options/line_curve_options.cpp
+    options/lyric_options.cpp
     options/misc_options.cpp
     options/multimeasure_rest_options.cpp
     options/music_spacing_options.cpp
@@ -99,12 +100,11 @@ add_executable(musxdomtests
     # details
 	details/beam_stubs.cpp
 	details/chords.cpp
+    details/entry_details.cpp
 	details/floats.cpp
 	details/gfhold.cpp
-	details/note_alters.cpp
 	details/secondary_beams.cpp
 	details/staff_group.cpp
-    details/tie_alter.cpp
     details/tuplet_def.cpp
     # music_theory
     music_theory/transpose.cpp

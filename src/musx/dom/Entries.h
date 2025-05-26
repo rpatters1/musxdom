@@ -172,6 +172,7 @@ public:
     */
     Edu duration{};
     int numNotes{};          ///< Number of notes in the entry. There is an error if this is not the same as notes.size().
+    Evpu hOffset{};          ///< Manual offset created with the Note Position Tool. (xml node is `<posi>`.)
     bool isValid{};          ///< Should always be true but otherwise appears to be used internally by Finale.
     bool isNote{};           ///< If this value is false, the entry is a rest.
     bool graceNote{};        ///< Indicate the entry is a grace note.
@@ -180,14 +181,19 @@ public:
     bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
     bool articDetail{};      ///< Indicates there is an articulation on the entry
     bool noteDetail{};       ///< Indicates there is a note detail or EntrySize record for the entry.
+    bool dotTieAlt{};        ///< Indicates dot or tie alterations are present.
+    bool tupletStart{};      ///< Indicates that a tuplet start on the entry.
+    bool beamExt{};          ///< Indicates that there is a beam extension on the entry.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
     bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
-    bool stemDetail{};       ///< Indicates there are stem modification.
+    bool noLeger{};          ///< Hide ledger lines.
+    bool stemDetail{};       ///< Indicates there are stem modifications.
     bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool sorted{};           ///< Sorted flag.
+    bool noPlayback{};       ///< Indicates that the entry should not be played back.
     bool lyricDetail{};      ///< Indicates there is a lyric assignment on the entry.
     bool performanceData{};  ///< Indicates there is performance data on the entry.
     bool freezeBeam{};       ///< Freeze beam flag (Derived from the presence of `<freezeBeam>` node.)
@@ -211,7 +217,7 @@ public:
     /**
      * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
      */
-    std::pair<NoteType, int> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
+    std::pair<NoteType, unsigned> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
@@ -332,6 +338,13 @@ public:
     /// @param voice 1 or 2
     EntryInfoPtr getNextInVoice(int voice) const;
 
+    /// @brief Returns the previous entry in the frame in the specified v1/v2 or null if none.
+    ///
+    /// Unlike #getPreviousSameV, this returns the next v2 entry in any v2 launch sequence.
+    ///
+    /// @param voice 1 or 2
+    EntryInfoPtr getPreviousInVoice(int voice) const;
+
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
     EntryInfoPtr getNextInBeamGroup(bool includeHiddenEntries = false) const
     { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(includeHiddenEntries); }
@@ -377,9 +390,10 @@ public:
     /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
     bool calcBeamStubIsLeft() const;
 
-private:
+    /// @brief Determines if this entry can be beamed.
     bool canBeBeamed() const;
 
+private:
     unsigned calcVisibleBeams() const;
 
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
@@ -429,12 +443,77 @@ public:
         size_t endIndex;                                    ///< the index of the last entry in the tuplet
         util::Fraction startDura;                           ///< the actual duration where the tuplet starts
         util::Fraction endDura;                             ///< the actual duration where the tuplet ends
+        bool voice2;                                        ///< whether this tuplet is for voice2
 
         /// @brief Constructor
-        TupletInfo(const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start)
+        TupletInfo(const std::weak_ptr<const EntryFrame>& parent, const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start, bool forVoice2)
             : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
-                startDura(start), endDura(-1)
+                startDura(start), endDura(-1), voice2(forVoice2), m_parent(parent)
         {}
+
+        /// @brief Calculates if this tuplet represents a tremolo based on the following criteria.
+        ///     - the tuplet ratio is a positive integral power of 2.
+        ///     - the tuplet contains exactly 2 entries of equal duration and actual duration.
+        ///     - the tuplet is invisible.
+        ///
+        /// @note The TGTools Tremolo plugin always creates beam extensions for both upstem and downstem cases. To detect the type of
+        /// stem connections for the tremolo, it is recommended to look for either an upstem or a downstem extension. This
+        /// covers the TGTools plugin as well as any that might have been created by hand. See @ref details::BeamExtension.
+        ///
+        /// @return true if the tuplet is a tremolo. If so, use `EntryInfoPtr::calcNumberOfBeams` on either entry to determine
+        /// the number of beams. Use `details::TupletDef::calcReferenceDuration` to get the total length of the tremolo.
+        bool calcIsTremolo() const;
+
+        /// @brief Calculates if this tuplet is being used to create a singleton beam to the right.
+        ///
+        /// Finale has no built-in support for beams on singleton notes. As a workaround, users and (especially)
+        /// plugins such as Beam Over Barline create singleton beams using a 0-length tuplet and hiding either the tuplet
+        /// note or its next neighbor, depending on whether the beam goes to the left or the right. You should never
+        /// encounter a 0-length tuplet encompassing more than one entry, but these functions guarantee this if they return `true`.
+        ///
+        /// @return True if this tuplet creates a singleton beam to the right. You may handle this as follows.
+        ///     - The entry with the tuplet is the visible entry to use. You can mark this entry as having a singleton beam right, if your application allows it.
+        ///     - Ignore the tuplet on the visible entry. If you need the entry's actual duration in context, its next neighbor in the same voice
+        /// has the correct value.
+        ///     - Ignore the entry's next neighbor in the same voice. It will have its leger lines suppressed and non-visible notehead(s) and stem.
+        /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
+        bool calcCreatesSingletonRight() const { return calcCreatesSingleton(false); }
+
+        /// @brief Calculates if this tuplet is being used to create a singleton beam to the left.
+        ///
+        /// See comments at #calcCreatesSingletonRight.
+        ///
+        /// @return True if this tuplet creates a singleton beam to the left. You may handle this as follows.
+        ///     - Skip the entry and its tuplet.
+        ///     - You can mark the next entry in the same voice as having a singleton beam left, if your application allows it.
+        ///     - The current entry with the 0-length tuplet will have its leger lines suppressed and non-visible notehead(s) and stem.
+        /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
+        bool calcCreatesSingletonLeft() const { return calcCreatesSingleton(true); }
+
+        /// @brief Calculates if this tuplet creates a beam continuation over a barline to the right,
+        /// as created by the Beam Over Barlines plugin.
+        ///
+        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
+        /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
+        ///
+        /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonRight.
+        /// However, you simply extend a beam from the designated entry to the appropriate entries in the next measure.
+        bool calcCreatesBeamContinuationRight() const;
+
+        /// @brief Calculates if this tuplet creates a beam continuation over a barline to the left,
+        /// as created by the Beam Over Barlines plugin.
+        ///
+        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
+        /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
+        ///
+        /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonLeft.
+        /// However, you simply extend a beam from the designated entry to the appropriate entries in the previous measure.
+        bool calcCreatesBeamContinuationLeft() const;
+
+    private:
+        bool calcCreatesSingleton(bool left) const;
+
+        const std::weak_ptr<const EntryFrame> m_parent;
     };
 
     /** @brief A list of the tuplets in the frame and their calculated starting and ending information.
@@ -473,6 +552,11 @@ public:
     ///
     /// @param voice 1 or 2
     EntryInfoPtr getFirstInVoice(int voice) const;
+
+    /// @brief Returns the last entry in the specified v1/v2 or null if none.
+    ///
+    /// @param voice 1 or 2
+    EntryInfoPtr getLastInVoice(int voice) const;
 
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)

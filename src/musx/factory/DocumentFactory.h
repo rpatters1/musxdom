@@ -87,10 +87,11 @@ public:
         if (!document->getEntries()) document->getEntries() = std::make_shared<musx::dom::EntryPool>();
         if (!document->getTexts()) document->getTexts() = std::make_shared<musx::dom::TextsPool>();
 
-        elementLinker.resolveAll(document);
 #ifdef MUSX_DISPLAY_NODE_NAMES
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
 #endif        
+        elementLinker.resolveAll(document);
+
         return document;
     }
 

@@ -55,6 +55,52 @@ struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
 };
 
 template <>
+struct FieldPopulator<BeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
+{
+    static void populate(const std::shared_ptr<BeamAlterationsDownStem>& instance,
+                        const XmlElementPtr& element,
+                        ElementLinker& elementLinker)
+    {
+        FieldPopulator<BeamAlterations>::template populate<BeamAlterationsDownStem>(instance, element, elementLinker);
+    }
+};
+
+template <>
+struct FieldPopulator<BeamAlterationsUpStem> : private FieldPopulator<BeamAlterations>
+{
+    static void populate(const std::shared_ptr<BeamAlterationsUpStem>& instance,
+                        const XmlElementPtr& element,
+                        ElementLinker& elementLinker)
+    {
+        FieldPopulator<BeamAlterations>::template populate<BeamAlterationsUpStem>(instance, element, elementLinker);
+    }
+};
+
+template <>
+struct FieldPopulator<BeamExtensionDownStem> : private FieldPopulator<BeamExtension>
+{
+    using FieldPopulator<BeamExtension>::populate;
+};
+
+template <>
+struct FieldPopulator<BeamExtensionUpStem> : private FieldPopulator<BeamExtension>
+{
+    using FieldPopulator<BeamExtension>::populate;
+};
+
+template <>
+struct FieldPopulator<CustomDownStem> : private FieldPopulator<CustomStem>
+{
+    using FieldPopulator<CustomStem>::populate;
+};
+
+template <>
+struct FieldPopulator<CustomUpStem> : private FieldPopulator<CustomStem>
+{
+    using FieldPopulator<CustomStem>::populate;
+};
+
+template <>
 struct FieldPopulator<LyricAssignChorus> : private FieldPopulator<LyricAssign>
 {
     using FieldPopulator<LyricAssign>::populate;
@@ -70,6 +116,28 @@ template <>
 struct FieldPopulator<LyricAssignVerse> : private FieldPopulator<LyricAssign>
 {
     using FieldPopulator<LyricAssign>::populate;
+};
+
+template <>
+struct FieldPopulator<SecondaryBeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
+{
+    static void populate(const std::shared_ptr<SecondaryBeamAlterationsDownStem>& instance,
+                        const XmlElementPtr& element,
+                        ElementLinker& elementLinker)
+    {
+        FieldPopulator<BeamAlterations>::template populate<SecondaryBeamAlterationsDownStem>(instance, element, elementLinker);
+    }
+};
+
+template <>
+struct FieldPopulator<SecondaryBeamAlterationsUpStem> : private FieldPopulator<BeamAlterations>
+{
+    static void populate(const std::shared_ptr<SecondaryBeamAlterationsUpStem>& instance,
+                        const XmlElementPtr& element,
+                        ElementLinker& elementLinker)
+    {
+        FieldPopulator<BeamAlterations>::template populate<SecondaryBeamAlterationsUpStem>(instance, element, elementLinker);
+    }
 };
 
 template <>
@@ -94,6 +162,11 @@ inline StaffGroup::BracketStyle toEnum<StaffGroup::BracketStyle>(const int& valu
     MUSX_UNKNOWN_XML("Invalid <bracket><id> value in XML for StaffGroup: " + std::to_string(value));
     return {};
 }
+
+MUSX_RESOLVER_ENTRY(BeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags<BeamAlterationsDownStem>);
+MUSX_RESOLVER_ENTRY(BeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags<BeamAlterationsUpStem>);
+MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags<SecondaryBeamAlterationsDownStem>);
+MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags<SecondaryBeamAlterationsUpStem>);
 
 MUSX_RESOLVER_ENTRY(StaffGroup, {
     [](const dom::DocumentPtr& document) {

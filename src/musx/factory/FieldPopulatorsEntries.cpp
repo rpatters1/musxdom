@@ -48,6 +48,7 @@ MUSX_XML_ELEMENT_ARRAY(Note, {
 MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"dura", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->duration = e->getTextAs<Edu>(); }},
     {"numNotes", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->numNotes = e->getTextAs<int>(); }},
+    {"posi", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
     {"isValid", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->isValid = populateBoolean(e, i); }},
     {"isNote", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->isNote = populateBoolean(e, i); }},
     {"graceNote", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->graceNote = populateBoolean(e, i); }},
@@ -56,14 +57,19 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"v2", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->voice2 = populateBoolean(e, i); }},
     {"articDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->articDetail = populateBoolean(e, i); }},
     {"noteDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->noteDetail = populateBoolean(e, i); }},
+    {"dotTieAlt", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->dotTieAlt = populateBoolean(e, i); }},
+    {"tupletStart", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->tupletStart = populateBoolean(e, i); }},
+    {"beamExt", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->beamExt = populateBoolean(e, i); }},
     {"beam", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->beam = populateBoolean(e, i); }},
     {"secBeam", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->secBeam = populateBoolean(e, i); }},
     {"crossStaff", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->crossStaff = populateBoolean(e, i); }},
     {"freezeStem", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->freezeStem = populateBoolean(e, i); }},
     {"upStem", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->upStem = populateBoolean(e, i); }},
+    {"noLeger", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->noLeger = populateBoolean(e, i); }},
     {"stemDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->stemDetail = populateBoolean(e, i); }},
     {"smartShapeDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->smartShapeDetail = populateBoolean(e, i); }},
     {"sorted", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->sorted = populateBoolean(e, i); }},
+    {"noPlayback", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->noPlayback = populateBoolean(e, i); }},
     {"lyricDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->lyricDetail = populateBoolean(e, i); }},
     {"performanceData", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->performanceData = populateBoolean(e, i); }},
     {"freezeBeam", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->freezeBeam = populateBoolean(e, i); }},
@@ -76,9 +82,7 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     }},
 });
 
-
 } // namespace dom
 } // namespace musx
-
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS

@@ -225,6 +225,140 @@ TEST(SmartShape, Populate)
     }
 }
 
+TEST(SmartShapeCustomLine, Populate)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <ssLineStyle cmper="1">
+            <lineStyle>char</lineStyle>
+            <charParams>
+                <lineChar>126</lineChar>
+                <fontID>4</fontID>
+                <fontSize>24</fontSize>
+                <baselineShiftEms>-88</baselineShiftEms>
+            </charParams>
+            <lineCapStartType>arrowheadPreset</lineCapStartType>
+            <lineCapEndType>arrowheadCustom</lineCapEndType>
+            <lineCapStartArrowID>3</lineCapStartArrowID>
+            <lineCapEndArrowID>6</lineCapEndArrowID>
+            <makeHorz/>
+            <lineAfterLeftStartText/>
+            <lineBeforeRightEndText/>
+            <lineAfterLeftContText/>
+            <leftStartRawTextID>1</leftStartRawTextID>
+            <leftContRawTextID>2</leftContRawTextID>
+            <rightEndRawTextID>3</rightEndRawTextID>
+            <centerFullRawTextID>4</centerFullRawTextID>
+            <centerAbbrRawTextID>5</centerAbbrRawTextID>
+            <leftStartX>7</leftStartX>
+            <leftStartY>11</leftStartY>
+            <leftContX>13</leftContX>
+            <leftContY>17</leftContY>
+            <rightEndX>19</rightEndX>
+            <rightEndY>23</rightEndY>
+            <centerFullX>29</centerFullX>
+            <centerFullY>31</centerFullY>
+            <centerAbbrX>37</centerAbbrX>
+            <centerAbbrY>41</centerAbbrY>
+            <lineStartX>1</lineStartX>
+            <lineStartY>5</lineStartY>
+            <lineEndX>3</lineEndX>
+            <lineEndY>5</lineEndY>
+            <lineContX>2</lineContX>
+        </ssLineStyle>
+        <ssLineStyle cmper="2">
+            <lineStyle>solid</lineStyle>
+            <solidParams>
+                <lineWidth>115</lineWidth>
+            </solidParams>
+            <lineCapStartType>hook</lineCapStartType>
+            <lineCapEndType>hook</lineCapEndType>
+            <lineCapStartHookLength>192</lineCapStartHookLength>
+            <lineCapEndHookLength>-320</lineCapEndHookLength>
+        </ssLineStyle>
+        <ssLineStyle cmper="3">
+            <lineStyle>dashed</lineStyle>
+            <dashedParams>
+                <lineWidth>115</lineWidth>
+                <dashOn>1216</dashOn>
+                <dashOff>1728</dashOff>
+            </dashedParams>
+            <lineCapEndType>arrowheadPreset</lineCapEndType>
+            <lineCapEndArrowID>1</lineCapEndArrowID>
+        </ssLineStyle>
+    </others>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto line = others->get<others::SmartShapeCustomLine>(SCORE_PARTID, 1);
+        ASSERT_TRUE(line);
+        EXPECT_EQ(line->lineStyle, others::SmartShapeCustomLine::LineStyle::Char);
+        ASSERT_TRUE(line->charParams);
+        EXPECT_EQ(line->charParams->lineChar, 126);
+        ASSERT_TRUE(line->charParams->font);
+        EXPECT_EQ(line->charParams->font->fontId, 4);
+        EXPECT_EQ(line->charParams->font->fontSize, 24);
+        EXPECT_EQ(line->charParams->baselineShiftEms, -88);
+        EXPECT_EQ(line->lineCapStartType, others::SmartShapeCustomLine::LineCapType::ArrowheadPreset);
+        EXPECT_EQ(line->lineCapEndType, others::SmartShapeCustomLine::LineCapType::ArrowheadCustom);
+        EXPECT_EQ(line->lineCapStartArrowId, 3);
+        EXPECT_EQ(line->lineCapEndArrowId, 6);
+        EXPECT_TRUE(line->makeHorz);
+        EXPECT_TRUE(line->lineAfterLeftStartText);
+        EXPECT_TRUE(line->lineBeforeRightEndText);
+        EXPECT_TRUE(line->lineAfterLeftContText);
+        EXPECT_EQ(line->leftStartRawTextId, 1);
+        EXPECT_EQ(line->leftContRawTextId, 2);
+        EXPECT_EQ(line->rightEndRawTextId, 3);
+        EXPECT_EQ(line->centerFullRawTextId, 4);
+        EXPECT_EQ(line->centerAbbrRawTextId, 5);
+        EXPECT_EQ(line->leftStartX, 7);
+        EXPECT_EQ(line->leftStartY, 11);
+        EXPECT_EQ(line->leftContX, 13);
+        EXPECT_EQ(line->leftContY, 17);
+        EXPECT_EQ(line->rightEndX, 19);
+        EXPECT_EQ(line->rightEndY, 23);
+        EXPECT_EQ(line->centerFullX, 29);
+        EXPECT_EQ(line->centerFullY, 31);
+        EXPECT_EQ(line->centerAbbrX, 37);
+        EXPECT_EQ(line->centerAbbrY, 41);
+        EXPECT_EQ(line->lineStartX, 1);
+        EXPECT_EQ(line->lineStartY, 5);
+        EXPECT_EQ(line->lineEndX, 3);
+        EXPECT_EQ(line->lineEndY, 5);
+        EXPECT_EQ(line->lineContX, 2);
+    }
+    {
+        auto line = others->get<others::SmartShapeCustomLine>(SCORE_PARTID, 2);
+        ASSERT_TRUE(line);
+        EXPECT_EQ(line->lineStyle, others::SmartShapeCustomLine::LineStyle::Solid);
+        ASSERT_TRUE(line->solidParams);
+        EXPECT_EQ(line->solidParams->lineWidth, 115);
+        EXPECT_EQ(line->lineCapStartType, others::SmartShapeCustomLine::LineCapType::Hook);
+        EXPECT_EQ(line->lineCapEndType, others::SmartShapeCustomLine::LineCapType::Hook);
+        EXPECT_EQ(line->lineCapStartHookLength, 192);
+        EXPECT_EQ(line->lineCapEndHookLength, -320);
+    }
+    {
+        auto line = others->get<others::SmartShapeCustomLine>(SCORE_PARTID, 3);
+        ASSERT_TRUE(line);
+        EXPECT_EQ(line->lineStyle, others::SmartShapeCustomLine::LineStyle::Dashed);
+        ASSERT_TRUE(line->dashedParams);
+        EXPECT_EQ(line->dashedParams->lineWidth, 115);
+        EXPECT_EQ(line->dashedParams->dashOn, 1216);
+        EXPECT_EQ(line->dashedParams->dashOff, 1728);
+        EXPECT_EQ(line->lineCapEndType, others::SmartShapeCustomLine::LineCapType::ArrowheadPreset);
+        EXPECT_EQ(line->lineCapEndArrowId, 1);
+    }
+}
+
 TEST(CenterShape, Populate)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -251,7 +385,7 @@ TEST(CenterShape, Populate)
     </finale>
     )xml";
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 

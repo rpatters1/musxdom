@@ -31,7 +31,6 @@
  // This header includes method implementations that need to see all the classes in the dom
 
 #include "musx/musx.h"
-#include "music_theory/music_theory.hpp"
 
 #if ! defined(MUSX_RUNNING_ON_WINDOWS)
 #include <pwd.h>
@@ -42,6 +41,60 @@
 namespace musx {
 namespace dom {
 
+// ***************************
+// ***** BeamAlterations *****
+// ***************************
+
+template <typename T,
+          std::enable_if_t<std::is_base_of_v<details::BeamAlterations, T>, int>>
+void details::BeamAlterations::calcAllActiveFlags(const DocumentPtr& document)
+{
+    if (const auto beamOptions = document->getOptions()->get<options::BeamOptions>()) {
+        const auto values = document->getDetails()->getArray<T>(SCORE_PARTID);
+#ifdef MUSX_DISPLAY_NODE_NAMES
+        util::Logger::log(util::Logger::LogLevel::Verbose, std::string(T::XmlNodeName) + " has " + std::to_string(values.size()) + " elements.");
+#endif
+        for (const auto& value : values) {
+            value->m_active = (value->flattenStyle == beamOptions->beamingStyle);
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("Unable to retrieve beaming options. Active indicators for beam alterations were not set.");
+    }
+}
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template void details::BeamAlterations::calcAllActiveFlags<details::BeamAlterationsUpStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcAllActiveFlags<details::BeamAlterationsDownStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBeamAlterationsUpStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBeamAlterationsDownStem>(const DocumentPtr&);
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+Efix details::BeamAlterations::calcEffectiveBeamWidth() const
+{
+    if (dura > 0) { // secondary beams always have non-zero dura value
+        std::shared_ptr<BeamAlterations> primary;
+        if (dynamic_cast<const SecondaryBeamAlterationsDownStem*>(this)) {
+            primary = getDocument()->getDetails()->get<BeamAlterationsDownStem>(getPartId(), getEntryNumber());
+        } else {
+            primary = getDocument()->getDetails()->get<BeamAlterationsUpStem>(getPartId(), getEntryNumber());
+        }
+        if (primary) {
+            return primary->calcEffectiveBeamWidth();
+        }
+    } else if (m_active) {
+        if (beamWidth >= 0) {
+            return beamWidth;
+        }
+    }
+    Efix result = 0;
+    if (const auto beamOptions = getDocument()->getOptions()->get<options::BeamOptions>()) {
+        result = beamOptions->beamWidth;
+    } else {
+        MUSX_INTEGRITY_ERROR("Unable to retrieve beaming options. Beam width value returned is zero.");
+    }
+    return result;
+}
+
 // *****************
 // ***** Entry *****
 // *****************
@@ -49,7 +102,7 @@ namespace dom {
 std::shared_ptr<Entry> Entry::getNext() const
 {
     if (!m_next) return nullptr;
-    auto retval = getDocument()->getEntries()->get<Entry>(m_next);
+    auto retval = getDocument()->getEntries()->get(m_next);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has next entry " + std::to_string(m_next) + " that does not exist.");
     }
@@ -59,7 +112,7 @@ std::shared_ptr<Entry> Entry::getNext() const
 std::shared_ptr<Entry> Entry::getPrevious() const
 {
     if (!m_prev) return nullptr;
-    auto retval = getDocument()->getEntries()->get<Entry>(m_prev);
+    auto retval = getDocument()->getEntries()->get(m_prev);
     if (!retval) {
         MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has previous entry " + std::to_string(m_prev) + " that does not exist.");
     }
@@ -119,6 +172,16 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
     return firstEntry;
 }
 
+EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
+{
+    bool forV2 = voice == 2;
+    auto lastEntry = EntryInfoPtr(shared_from_this(), m_entries.size() - 1);
+    if (!lastEntry || lastEntry->getEntry()->voice2 == forV2) {
+        return lastEntry;
+    }
+    return lastEntry.getPreviousInVoice(voice);
+}
+
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 {
     if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure + 1)) {
@@ -137,18 +200,189 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
     return nullptr;
 }
 
+bool EntryFrame::TupletInfo::calcIsTremolo() const
+{
+    MUSX_ASSERT_IF(!tuplet) {
+        throw std::logic_error("TupletInfo contains no tuplet.");
+    }
+    // must have exactly 2 entries
+    if (endIndex != startIndex + 1) {
+        return false;
+    }
+    // must be invisible
+    if (!tuplet->hidden) {
+        if (tuplet->numStyle != details::TupletDef::NumberStyle::Nothing || tuplet->brackStyle != details::TupletDef::BracketStyle::Nothing) {
+            return false;
+        }
+    }
+    // must have a ratio that is a positive integer power of 2 (i.e., >= 2)
+    util::Fraction ratio = tuplet->calcRatio();
+    if (ratio.denominator() != 1 || ratio.numerator() < 2 || ((ratio.numerator() & (ratio.numerator() - 1)) != 0)) {
+        return false;
+    }
+    // entries must have the same duration and actual duration.
+    auto frame = m_parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
+        throw std::logic_error("TupletInfo instance contains invalid start index.");
+    }
+    MUSX_ASSERT_IF(endIndex >= frame->getEntries().size()) {
+        throw std::logic_error("TupletInfo instance contains invalid end index.");
+    }
+    EntryInfoPtr first(frame, startIndex);
+    EntryInfoPtr second(frame, endIndex);
+    if (first->actualDuration != second->actualDuration) {
+        return false;
+    }
+    if (first->getEntry()->duration != second->getEntry()->duration) {
+        return false;
+    }
+    // entries must be beamed-together neighbors
+    return second.isSameEntry(first.getNextInBeamGroup());
+}
+
+bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
+{
+    MUSX_ASSERT_IF(!tuplet) {
+        throw std::logic_error("TupletInfo contains no tuplet.");
+    }
+    // must have exactly 1 entry
+    if (startIndex != endIndex) {
+        return false;
+    }
+    // must be invisible
+    if (!tuplet->hidden) {
+        if (tuplet->numStyle != details::TupletDef::NumberStyle::Nothing || tuplet->brackStyle != details::TupletDef::BracketStyle::Nothing) {
+            return false;
+        }
+    }
+    // must have zero length
+    if (tuplet->calcRatio() != 0) {
+        return false;
+    }
+    // entries must have the same duration and actual duration.
+    auto frame = m_parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
+        throw std::logic_error("TupletInfo instance contains invalid start index.");
+    }
+    EntryInfoPtr entryInfo(frame, startIndex);
+    if (!entryInfo.calcIsBeamStart()) {
+        return false;
+    }
+    auto hiddenEntryInfo = left ? entryInfo : entryInfo.getNextInBeamGroup();
+    if (!hiddenEntryInfo) {
+        return false;
+    }
+    auto hiddenEntry = hiddenEntryInfo->getEntry();
+    // must be a non-rest, not hidden as a whole, have suppressed ledger lines, a custom stem, and hidden noteheads.
+    if (!hiddenEntry->isNote || hiddenEntry->isHidden || !hiddenEntry->noLeger || !hiddenEntry->stemDetail || !hiddenEntry->noteDetail) {
+        return false;
+    }
+    // must have manual note positioning in the correct direction.
+    if (left) {
+        if (hiddenEntry->hOffset >= 0) {
+            return false;
+        }
+    } else {
+        if (hiddenEntry->hOffset <= 0) {
+            return false;
+        }
+    }
+    // if either direction has a custom stem, check it
+    std::shared_ptr<details::CustomStem> customStem = frame->getDocument()->getDetails()->get<details::CustomDownStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
+    if (!customStem) {
+        customStem = frame->getDocument()->getDetails()->get<details::CustomUpStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
+    }
+    if (!customStem || !customStem->calcIsHiddenStem()) {
+        return false;
+    }
+    // check that all noteheads are hidden.
+    for (size_t x = 0; x < hiddenEntry->notes.size(); x++) {
+        NoteInfoPtr noteInfo(hiddenEntryInfo, x);
+        if (!noteInfo) {
+            return false;
+        }
+        auto noteheadMods = frame->getDocument()->getDetails()->getForNote<details::NoteAlterations>(noteInfo, frame->getRequestedPartId());
+        if (!noteheadMods) {
+            return false;
+        }
+        if (noteheadMods->altNhead != ' ' && (!noteheadMods->customFont || !noteheadMods->customFont->hidden)) {
+            return false;
+        }
+        /// Beam Over Barlines plugin does not do anything about accidentals, so do no check for them.
+    }
+    return true;
+}
+
+bool EntryFrame::TupletInfo::calcCreatesBeamContinuationRight() const
+{
+    if (!calcCreatesSingletonRight()) {
+        return false;
+    }
+    auto frame = m_parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    int voice = int(voice2) + 1;
+    EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
+    auto nextInBeam = entryInfo.getNextInBeamGroup();
+    // must be followed by exactly one beam
+    if (!nextInBeam) {
+        return false;
+    }
+    // the next item must be the last item
+    if (nextInBeam.getNextInVoice(voice)) {
+        return false;
+    }
+    auto nextFrame = frame->getNext();
+    if (!nextFrame) {
+        return false;
+    }
+    if (auto nextEntryInfo = nextFrame->getFirstInVoice(voice)) {
+        return !nextEntryInfo.calcUnbeamed();
+    }
+    return false;
+}
+
+bool EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft() const
+{
+    if (!calcCreatesSingletonLeft()) {
+        return false;
+    }
+    auto frame = m_parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    int voice = int(voice2) + 1;
+    EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
+    if (entryInfo.getPreviousInVoice(voice)) {
+        return false;
+    }
+    auto prevFrame = frame->getPrevious();
+    if (!prevFrame) {
+        return false;
+    }
+    if (auto prevEntryInfo = prevFrame->getLastInVoice(voice)) {
+        return !prevEntryInfo.calcUnbeamed();
+    }
+    return false;
+}
+
 // ************************
 // ***** EntryInfoPtr *****
 // ************************
 
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 {
-    MUSX_ASSERT_IF(!m_entryFrame)
-    {
+    MUSX_ASSERT_IF(!m_entryFrame) {
         throw std::logic_error("EntryInfoPtr has no frame.");
     }
-    MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size())
-    {
+    MUSX_ASSERT_IF(m_indexInFrame >= m_entryFrame->getEntries().size()) {
         throw std::logic_error("Entry index is too large for entries array.");
     }
     return m_entryFrame->getEntries()[m_indexInFrame];
@@ -286,6 +520,16 @@ EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
         next = next.getNextInFrame();
     }
     return next;
+}
+
+EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
+{
+    bool forV2 = voice == 2;
+    auto prev = getPreviousInFrame();
+    while (prev && prev->getEntry()->voice2 != forV2) {
+        prev = prev.getPreviousInFrame();
+    }
+    return prev;
 }
 
 bool EntryInfoPtr::calcDisplaysAsRest() const
@@ -777,23 +1021,45 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** Frame *****
 // *****************
 
-std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries()
+void others::Frame::iterateRawEntries(std::function<bool(const std::shared_ptr<Entry>& entry)> iterator) const
 {
-    std::vector<std::shared_ptr<const Entry>> retval;
-    auto firstEntry = startEntry ? getDocument()->getEntries()->get<Entry>(startEntry) : nullptr;
+    auto firstEntry = startEntry ? getDocument()->getEntries()->get(startEntry) : nullptr;
     if (!firstEntry) {
         MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1)) + " is not iterable.");
-        return retval;
     }
     for (auto entry = firstEntry; entry; entry = entry->getNext()) {
-        retval.emplace_back(entry);
-        if (entry->getEntryNumber() == endEntry) {
+        if (!iterator(entry) || entry->getEntryNumber() == endEntry) {
             break;
         }
     }
-    return retval;
 }
 
+std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries() const
+{
+    std::vector<std::shared_ptr<const Entry>> retval;
+    iterateRawEntries([&](const std::shared_ptr<Entry>& entry) -> bool {
+        retval.emplace_back(entry);
+        return true;
+    });
+    return retval;
+}
+ 
+// **********************
+// ***** CustomStem *****
+// **********************
+
+bool details::CustomStem::calcIsHiddenStem() const
+{
+    if (shapeDef != 0) {
+        if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeDef)) {
+            if (shape->instructionList != 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+ 
 // *****************************
 // ***** GFrameHoldContext *****
 // *****************************
@@ -843,9 +1109,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         }
         return nullptr;
     }();
-    std::shared_ptr<EntryFrame> retval;
+    std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
-        retval = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch);
+        entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch);
         const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
         if (!measure) {
             throw std::invalid_argument("Measure instance for measure " + std::to_string(m_hold->getMeasure()) + " does not exist.");
@@ -854,9 +1120,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         if (!staff) {
             throw std::invalid_argument("Staff instance for staff " + std::to_string(m_hold->getStaff()) + " does not exist.");
         }
-        retval->keySignature = measure->createKeySignature(m_hold->getStaff());
+        entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
         if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
-            retval->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
+            entryFrame->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
         }
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
@@ -891,14 +1157,16 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
             util::Fraction cumulativeRatio = 1;
             if (!entry->graceNote) {
                 graceIndex = 0;
-                auto tuplets = document->getDetails()->getArray<details::TupletDef>(SCORE_PARTID, entry->getEntryNumber());
-                std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
-                    return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
-                    });
-                for (const auto& tuplet : tuplets) {
-                    size_t index = retval->tupletInfo.size();
-                    retval->tupletInfo.emplace_back(tuplet, i, actualElapsedDuration);
-                    activeTuplets.emplace_back(tuplet, index);
+                if (entry->tupletStart) {
+                    auto tuplets = document->getDetails()->getArray<details::TupletDef>(getRequestedPartId(), entry->getEntryNumber());
+                    std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
+                        return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
+                        });
+                    for (const auto& tuplet : tuplets) {
+                        size_t index = entryFrame->tupletInfo.size();
+                        entryFrame->tupletInfo.emplace_back(entryFrame, tuplet, i, actualElapsedDuration, entry->voice2);
+                        activeTuplets.emplace_back(tuplet, index);
+                    }
                 }
 
                 // It appears that Finale allows exactly one entry per 0-length tuplet, no matter
@@ -917,7 +1185,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 entryInfo->graceIndex = ++graceIndex;
             }
 
-            retval->addEntry(entryInfo);
+            entryFrame->addEntry(entryInfo);
 
             actualElapsedDuration += entryInfo->actualDuration;
             if (!entry->graceNote) {
@@ -932,7 +1200,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 //          It appears that Finale extends incomplete v2 tuplets to the end of the bar in many cases.
                 //          This code only extends them to the end of the v2 sequence. This is by design.
                 for (const auto& tuplet : activeTuplets) {
-                    auto& tuplInf = retval->tupletInfo[tuplet.infoIndex];
+                    auto& tuplInf = entryFrame->tupletInfo[tuplet.infoIndex];
                     tuplInf.endIndex = i;
                     tuplInf.endDura = actualElapsedDuration;
                 }
@@ -947,7 +1215,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
             + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");
     }
-    return retval;
+    return entryFrame;
 }
 
 bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
@@ -975,6 +1243,38 @@ bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryIn
         }
     }
     return true;
+}
+
+std::map<LayerIndex, bool> details::GFrameHoldContext::calcVoices() const
+{
+    std::map<LayerIndex, bool> result;
+    for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
+        auto frameIncis = (*this)->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
+        auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
+            for (const auto& frame : frameIncis) {
+                if (frame->startEntry) {
+                    return frame;
+                }
+            }
+            return nullptr;
+        }();
+        if (frame) {
+            bool gotLayer = false;
+            bool gotV2 = false;
+            frame->iterateRawEntries([&](const std::shared_ptr<Entry>& entry) -> bool {
+                gotLayer = true;
+                if (entry->voice2) {
+                    gotV2 = true;
+                    return false;
+                }
+                return true;
+            });
+            if (gotLayer) {
+                result.emplace(layerIndex, gotV2);
+            }
+        }
+    }
+    return result;
 }
 
 ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
@@ -1261,6 +1561,20 @@ std::unique_ptr<music_theory::Transposer> KeySignature::createTransposer(int dis
     return std::make_unique<music_theory::Transposer>(displacement, alteration, isMinor(), calcEDODivisions(), calcKeyMap());
 }
 
+std::optional<music_theory::DiatonicMode> KeySignature::calcDiatonicMode() const
+{
+    if (isLinear()) {
+        const auto centers = calcTonalCenterArrayForSharps();
+        const unsigned index = centers[0];
+        if (index < music_theory::STANDARD_DIATONIC_STEPS) {
+            return static_cast<music_theory::DiatonicMode>(index);
+        } else {
+            MUSX_INTEGRITY_ERROR("KeyMode " + std::to_string(getKeyMode()) + " returned invalid tonal center at index 0: " + std::to_string(index));
+        }
+    }
+    return std::nullopt;
+}
+
 // **************************
 // ***** LyricsTextBase *****
 // **************************
@@ -1351,7 +1665,7 @@ std::shared_ptr<TimeSignature> others::Measure::createTimeSignature(const std::o
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
-            if (staff->floatKeys) {
+            if (staff->floatTime) {
                 if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
                     if (floats->hasTime) {
                         return floats->createTimeSignature();
@@ -1367,7 +1681,7 @@ std::shared_ptr<TimeSignature> others::Measure::createDisplayTimeSignature(const
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
-            if (staff->floatKeys) {
+            if (staff->floatTime) {
                 if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
                     if (floats->hasTime) {
                         return floats->createDisplayTimeSignature();
@@ -1380,6 +1694,12 @@ std::shared_ptr<TimeSignature> others::Measure::createDisplayTimeSignature(const
         return createTimeSignature(forStaff);
     }
     return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
+}
+
+util::Fraction others::Measure::calcDuration(const std::optional<InstCmper>& forStaff) const
+{
+    auto timeSig = createTimeSignature(forStaff);
+    return timeSig->calcTotalDuration();
 }
 
 // *****************************
@@ -1471,6 +1791,31 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
     }
     return retval;
+}
+// **********************
+// ***** MusicRange *****
+// **********************
+
+std::optional<std::pair<MeasCmper, Edu>> others::MusicRange::nextLocation(const std::optional<InstCmper>& forStaff) const
+{
+    std::optional<std::pair<MeasCmper, Edu>> result;
+    if (auto currMeasure = getDocument()->getOthers()->get<others::Measure>(getPartId(), endMeas)) {
+        MeasCmper nextMeas = endMeas;
+        Edu maxEdu = currMeasure->calcDuration(forStaff).calcEduDuration() - 1;
+        Edu nextEdu = 0;
+        if (endEdu < maxEdu) {
+            nextEdu = endEdu + 1;
+        } else {
+            nextMeas++;
+            if (!getDocument()->getOthers()->get<others::Measure>(getPartId(), nextMeas)) {
+                return std::nullopt;
+            }
+        }
+        result = std::make_pair(nextMeas, nextEdu);
+    } else {
+        MUSX_INTEGRITY_ERROR("MusicRange has invalid end measure " + std::to_string(endMeas));
+    }
+    return result;
 }
 
 // ****************
@@ -2632,7 +2977,7 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
 {
     auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
         if (hasCompositeTop) {
-            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeUpper>(SCORE_PARTID, beats)) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeUpper>(SCORE_PARTID, Cmper(beats))) {
                 std::vector<std::vector<util::Fraction>> result;
                 for (const auto& nextItem : comps->items) {
                     if (nextItem->startGroup || result.empty()) {
@@ -2649,7 +2994,7 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
     }();
     auto bots = [&]() -> std::vector<std::vector<Edu>> {
         if (hasCompositeBottom) {
-            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeLower>(SCORE_PARTID, unit)) {
+            if (auto comps = getDocument()->getOthers()->get<others::TimeCompositeLower>(SCORE_PARTID, Cmper(unit))) {
                 std::vector<std::vector<Edu>>result;
                 for (const auto& nextItem : comps->items) {
                     if (nextItem->startGroup || result.empty()) {

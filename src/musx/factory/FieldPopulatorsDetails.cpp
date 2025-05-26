@@ -32,6 +32,8 @@ using namespace ::musx::dom::details;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<others::Measure::BarlineType> XmlEnumMapping<others::Measure::BarlineType>::mapping;
 extern template const XmlEnumMappingElement<others::NamePositioning::AlignJustify> XmlEnumMapping<others::NamePositioning::AlignJustify>::mapping;
+extern template const XmlEnumMappingElement<options::BeamOptions::FlattenStyle> XmlEnumMapping<options::BeamOptions::FlattenStyle>::mapping;
+extern template const XmlEnumMappingElement<options::LyricOptions::AlignJustify> XmlEnumMapping<options::LyricOptions::AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::AutoBracketStyle> XmlEnumMapping<options::TupletOptions::AutoBracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::BracketStyle> XmlEnumMapping<options::TupletOptions::BracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::NumberStyle> XmlEnumMapping<options::TupletOptions::NumberStyle>::mapping;
@@ -44,13 +46,13 @@ MUSX_XML_ENUM_MAPPING(ChordAssign::BassPosition, {
 });
 
 MUSX_XML_ENUM_MAPPING(StaffGroup::HideStaves, {
-    // {"Normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
+    // {"normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
     {"asGroup", StaffGroup::HideStaves::AsGroup},
     {"none", StaffGroup::HideStaves::None}
 });
 
 MUSX_XML_ENUM_MAPPING(StaffGroup::DrawBarlineStyle, {
-    // {"OnlyOnStaves", StaffGroup::DrawBarlineStyle::OnlyOnStaves}, // Default value, may not appear in the XML
+    // {"onlyOnStaves", StaffGroup::DrawBarlineStyle::OnlyOnStaves}, // Default value, may not appear in the XML
     {"group", StaffGroup::DrawBarlineStyle::ThroughStaves},
     {"Mensurstriche", StaffGroup::DrawBarlineStyle::Mensurstriche}
 });
@@ -62,6 +64,19 @@ namespace details {
 
 using namespace ::musx::xml;
 using namespace ::musx::factory;
+
+MUSX_XML_ELEMENT_ARRAY(AccidentalAlterations, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->percent = e->getTextAs<int>(); }},
+    {"ayDisp", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->vOffset = e->getTextAs<Evpu>(); }},
+    {"axDisp", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
+    {"altChar", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->altChar = e->getTextAs<char32_t>(); }},
+    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"useOwnFont", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->useOwnFont = populateBoolean(e, i); }},
+    {"allowVertPos", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->allowVertPos = populateBoolean(e, i); }},
+});
 
 MUSX_XML_ELEMENT_ARRAY(ArticulationAssign, {
     {"articDef", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->articDef = e->getTextAs<Cmper>(); }},
@@ -82,7 +97,32 @@ MUSX_XML_ELEMENT_ARRAY(Baseline, {
     {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
 });
 
-// XML mappings for the BeamStubDirection class
+MUSX_XML_ELEMENT_ARRAY(BeamAlterations, {
+    {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->leftOffsetH = e->getTextAs<Evpu>(); }},
+    {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->leftOffsetY = e->getTextAs<Evpu>(); }},
+    {"sxAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->rightOffsetH = e->getTextAs<Evpu>(); }},
+    {"syAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->rightOffsetY = e->getTextAs<Evpu>(); }},
+    {"dura", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->dura = e->getTextAs<Edu>(); }},
+    {"context", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->flattenStyle = toEnum<BeamAlterations::FlattenStyle>(e); }},
+    {"beamWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->beamWidth = e->getTextAs<Efix>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(BeamExtension, {
+    {"x3Disp", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->leftOffset = e->getTextAs<Evpu>(); }},
+    {"x4Disp", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->rightOffset = e->getTextAs<Evpu>(); }},
+    {"do8th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Eighth); }},
+    {"do16th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note16th); }},
+    {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
+    {"do64th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note64th); }},
+    {"do128th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note128th); }},
+    {"do256th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note256th); }},
+    {"do512th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note512th); }},
+    {"do1024th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
+    {"do2048th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
+    {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
+    {"extBeyond8th", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->extBeyond8th = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
     {"do8th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Eighth); }},
     {"do16th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note16th); }},
@@ -139,6 +179,19 @@ MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
     {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<InstCmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(CustomStem, {
+    {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
+    {"xdisp", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"ydisp", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(DotAlterations, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"xadd", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
+    {"yadd", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->vOffset = e->getTextAs<Evpu>(); }},
+    {"posIncr", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->interdotSpacing = e->getTextAs<Evpu>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(EntrySize, {
     {"percent", [](const XmlElementPtr& e, const std::shared_ptr<EntrySize>& i) { i->percent = e->getTextAs<int>(); }},
 });
@@ -148,6 +201,7 @@ MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
     {"clefListID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefListId = e->getTextAs<Cmper>(); }},
     {"clefMode", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->showClefMode = toEnum<ShowClefMode>(e); }},
     {"mirrorFrame", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->mirrorFrame = populateBoolean(e, i); }},
+    {"clefAfterBarline", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefAfterBarline = populateBoolean(e, i); }},
     {"clefPercent", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefPercent = e->getTextAs<int>(); }},
     {"frame1", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[0] = e->getTextAs<Cmper>(); }},
     {"frame2", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[1] = e->getTextAs<Cmper>(); }},
@@ -180,6 +234,11 @@ MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
     {"floatingHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->floatingHorzOff = e->getTextAs<Evpu>(); }},
     {"wext", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->wext = e->getTextAs<int>(); }},
     {"displayVerseNum", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->displayVerseNum = populateBoolean(e, i); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(LyricEntryInfo, {
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->justify = toEnum<LyricEntryInfo::AlignJustify>(e); }},
+    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<LyricEntryInfo::AlignJustify>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {
@@ -258,6 +317,13 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
 
 MUSX_XML_ELEMENT_ARRAY(StaffSize, {
     {"staffPercent", [](const XmlElementPtr& e, const std::shared_ptr<StaffSize>& i) { i->staffPercent = e->getTextAs<int>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(StemAlterations, {
+    {"upVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upVertAdjust = e->getTextAs<Evpu>(); }},
+    {"downVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downVertAdjust = e->getTextAs<Evpu>(); }},
+    {"upHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upHorzAdjust = e->getTextAs<Evpu>(); }},
+    {"downHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downHorzAdjust = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {

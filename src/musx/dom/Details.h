@@ -24,11 +24,13 @@
 #include <vector>
 #include <unordered_set>
 #include <cmath>
+#include <map>
 
 #include "musx/util/EnigmaString.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
 #include "Options.h"
+#include "Others.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
@@ -37,10 +39,6 @@ namespace dom {
 class EntryInfoPtr;
 class EntryFrame;
 class EntryInfo;
-
-namespace options {
-class TupletOptions;
-} // namespace options
 
 namespace others {
 class InstrumentUsed;
@@ -61,8 +59,42 @@ namespace texts {
 namespace details {
 
 /**
+ * @class AccidentalAlterations
+ * @brief Represents display alterations to an accidental for a specific note.
+ *
+ * #Entry::noteDetail is set if any note in the entry has visual alterations such as adjusted accidental appearance or position.
+ *
+ * This class is identified by the XML node name "acciAlter".
+ */
+class AccidentalAlterations : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor */
+    explicit AccidentalAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci), customFont(std::make_shared<FontInfo>(document))
+    {
+    }
+
+    NoteNumber noteId{};                            ///< The ID of the note being altered.
+    int percent{};                                  ///< The percentage size for the accidental, where 100 is 100%.
+    Evpu vOffset{};                                 ///< Vertical offset: positive is up. (XML node: `<ayDisp>`)
+    Evpu hOffset{};                                 ///< Horizontal offset: positive is right. (XML node: `<axDisp>`)
+    char32_t altChar{};                             ///< If non-zero, the character to use for the accidental. (Utf-32 if the font is a Unicode font.)
+    std::shared_ptr<FontInfo> customFont;           ///< Font settings for the accidental (populated from `<fontID>`, `<fontSize>`, and `<efx>`)
+    bool useOwnFont{};                              ///< Whether to use #customFont.
+    bool allowVertPos{};                            ///< Whether to use #vOffset.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "acciAlter";   ///< The XML node name for this type.
+    static const xml::XmlElementArray<AccidentalAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ArticulationAssign
  * @brief Assigns an articulation to an entry.
+ *
+ * #Entry::articDetail is set if the entry has any articulations.
  */
 class ArticulationAssign : public EntryDetailsBase
 {
@@ -160,8 +192,165 @@ public:
 };
 
 /**
+ * @class BeamAlterations
+ * @brief Represents beam alterations applied to a specific entry. This is used to apply additional shaping or offset
+ * values both primary and secondary beams. Which stem direction this instance controls is determined by the subclass that inherits
+ * this class as a base.
+ */
+class BeamAlterations : public EntryDetailsBase
+{
+private:
+    bool m_active = true; // this value is set by the factory.
+
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     * @param inci The inci (if supplied)
+     */
+    explicit BeamAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, std::optional<Inci> inci = std::nullopt)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci) {}
+
+    /// @brief see @ref options::BeamOptions::FlattenStyle
+    using FlattenStyle = options::BeamOptions::FlattenStyle;
+
+    Evpu leftOffsetH{};         ///< Horizontal adjustment of the beam start. (xml node is `<xAdd>`)
+    Evpu leftOffsetY{};         ///< Vertical adjustment of the beam start. (xml node is `<yAdd>`)
+    Evpu rightOffsetH{};        ///< Horizontal adjustment of the beam end. (xml node is `<sxAdd>`)
+    Evpu rightOffsetY{};        ///< Vertical adjustment of the beam end. (xml node is `<syAdd>`)
+    Edu dura{};                 ///< For secondary beams, specifies the duration corresponding to the secondary beam (16th beam is 256, 32nd beam is 128, etc.)
+    FlattenStyle flattenStyle{}; ///< Beam shaping style (xml node is `<context>`).
+    Efix beamWidth{};            ///< Beam width. A value of -1 indicates to use the default beam width from @ref options::BeamOptions.
+                                ///< The #calcEffectiveBeamWidth method handles this for you.
+
+    /// @brief Calculates the effective beam width by returning either the default width or the width override value specified by #beamWidth.
+    /// @note The #beamWidth of primary beams also controls the width of secondary beams.
+    /// @return The effective beam width of this beam, taking into account all conditions that prefer the default width to the value in #beamWidth.
+    Efix calcEffectiveBeamWidth() const;
+
+    /// @brief Returns whether this beam alteration record is active. Its #flattenStyle must match the value in @ref options::BeamOptions.
+    /// @return True if active, otherwise false.
+    bool isActive() const { return m_active; }
+
+    /// @brief Used by the factory to set active indicators
+    template <typename T,
+              std::enable_if_t<std::is_base_of_v<BeamAlterations, T>, int> = 0>
+    static void calcAllActiveFlags(const DocumentPtr& document);
+
+    static const xml::XmlElementArray<BeamAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class BeamAlterationsDownStem
+ * @brief Beam alteration for downstem primary beams.
+ *
+ * #Entry::stemDetail is set if the entry has any beam extensions.
+ */
+class BeamAlterationsDownStem : public BeamAlterations
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     */
+    explicit BeamAlterationsDownStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : BeamAlterations(document, partId, shareMode, entnum) {}
+
+    constexpr static std::string_view XmlNodeName = "beamAltPrimDownStem"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BeamAlterationsUpStem
+ * @brief Beam alteration for upstem primary beams.
+ *
+ * #Entry::stemDetail is set if the entry has any beam extensions.
+ */
+class BeamAlterationsUpStem : public BeamAlterations
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     */
+    explicit BeamAlterationsUpStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : BeamAlterations(document, partId, shareMode, entnum) {}
+
+    constexpr static std::string_view XmlNodeName = "beamAltPrimUpStem"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BeamExtension
+ * @brief Represents both sides of a beam extension. It is attached to the first entry in the beam. Which stem direction this instance controls
+ * is determined by the subclass that inherits this class as a base.
+ */
+class BeamExtension : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number of the first entry in the beam this extension applies to.
+     */
+    explicit BeamExtension(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum) {}
+
+    Evpu leftOffset{};      ///< Left extension offset. (xml node is `<x3Disp>`)
+    Evpu rightOffset{};     ///< Right extension offset. (xml node is `<x4Disp>`)
+    unsigned mask{};        ///< Composite mask of beams to extend, derived from `<do8th>` through `<do4096th>` tags.
+                            ///< A value of 512 is 8th, 256 is 16th, 128 is 32nd, etc. These correspond to the values
+                            ///< in @ref NoteType.
+    bool extBeyond8th{};    ///< Legacy flag. Original versions of Finale could either extend only the 8th beam or extend
+                            ///< a selection of beams. In musx files (Finale 2014+) this boolean has never been observed to be false.
+                            ///< Instead, the mask appears always to be used to determine the beams to be extended. However, if a false
+                            ///< value were encountered, it would mean only the 8th beam is extended.
+
+    static const xml::XmlElementArray<BeamExtension>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class BeamExtensionDownStem
+ * @brief Beam extension for downstem beams.
+ *
+ * #Entry::beamExt is set if the entry has any beam extensions.
+ */
+class BeamExtensionDownStem : public BeamExtension
+{
+public:
+    using BeamExtension::BeamExtension;
+
+    constexpr static std::string_view XmlNodeName = "beamExtendDownStem"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BeamExtensionUpStem
+ * @brief Beam extension for upstem beams.
+ *
+ * #Entry::beamExt is set if the entry has any beam extensions.
+ */
+class BeamExtensionUpStem : public BeamExtension
+{
+public:
+    using BeamExtension::BeamExtension;
+
+    constexpr static std::string_view XmlNodeName = "beamExtendUpStem"; ///< The XML node name for this type.
+};
+
+/**
  * @class BeamStubDirection
  * @brief Specifies the direction for beam stubs (if they are manually overridden.)
+ *
+ * #Entry::stemDetail is set if the entry has a beam stub direction change.
  *
  * This class is identified by the XML node name "beamStub".
  */
@@ -254,6 +443,8 @@ public:
  * @class CrossStaff
  * @brief Represents a cross-staff assignment for the note, if any.
  *
+ * #Entry::crossStaff is set if any note in the entry is crossed to another staff.
+ *
  * This class is identified by the XML node name "crossStaff".
  */
 class CrossStaff : public NoteDetailsBase
@@ -275,10 +466,104 @@ public:
 };
 
 /**
+ * @class CustomStem
+ * @brief Represents a custom stem definition (up or down) for an entry. Which stem direction this instance controls
+ * is determined by the subclass that inherits this class as a base.
+ *
+ * The entry number refers to the entry to which the stem is attached.
+ * The shape is defined by a shape definition number, and optional x/y displacements can adjust placement.
+ */
+class CustomStem : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this stem applies to.
+     */
+    explicit CustomStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum) {}
+
+    Cmper shapeDef{}; ///< The Cmper of the associated @ref others::ShapeDef. Setting this value to zero hides the stem.
+    Evpu xOffset{};   ///< Optional horizontal displacement. (xml node is `<xdisp>`)
+    Evpu yOffset{};   ///< Optional vertical displacement. (xml node is `<ydisp>`)
+
+    /// @brief Calculates if this custom stem record hides the stem. The stem is determined to be hidden if one of the following is true.
+    ///     - #shapeDef is 0. (This is only possible with effort using the Finale UI, but several popular plugins do it commonly.)
+    ///     - The shape indicated by #shapeDef does not exist.
+    ///     - The shape indicated by #shapeDef has no instructions.
+    ///
+    /// @return If true, the associated entry has no stem in the direction controlled by the subclass.
+    bool calcIsHiddenStem() const;
+
+    static const xml::XmlElementArray<CustomStem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class CustomDownStem
+ * @brief Custom stem for downstem context.
+ *
+ * #Entry::stemDetail is set if the entry has a custom down stem.
+ */
+class CustomDownStem : public CustomStem
+{
+public:
+    using CustomStem::CustomStem;
+
+    constexpr static std::string_view XmlNodeName = "stemDefDown"; ///< The XML node name for this type.
+};
+
+/**
+ * @class CustomUpStem
+ * @brief Custom stem for upstem context.
+ *
+ * #Entry::stemDetail is set if the entry has a custom up stem.
+ */
+class CustomUpStem : public CustomStem
+{
+public:
+    using CustomStem::CustomStem;
+
+    constexpr static std::string_view XmlNodeName = "stemDefUp"; ///< The XML node name for this type.
+};
+
+/**
+ * @class DotAlterations
+ * @brief Represents display offsets and spacing adjustments for augmentation dots on a specific note.
+ *
+ * #Entry::dotTieAlt is set if any note in the entry has visual dot modifications such as position or spacing.
+ *
+ * This class is identified by the XML node name "dotOffset".
+ */
+class DotAlterations : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor */
+    explicit DotAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};         ///< The ID of the note whose dots are adjusted.
+    Evpu hOffset{};              ///< Horizontal offset for the dot (XML: `<xadd>`)
+    Evpu vOffset{};              ///< Vertical offset for the dot (XML: `<yadd>`)
+    Evpu interdotSpacing{};      ///< Additional spacing between dots (XML: `<posIncr>`)
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "dotOffset";   ///< The XML node name for this type.
+    static const xml::XmlElementArray<DotAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class EntrySize
  * @brief Specifies a custom size for an entry. It scales the entire entry, including the stem and all noteheads.
  * For beamed entries, it only takes effect if it is applied to the first entry in a beamed group, and then it affects
  * every entry in the beamed group.
+ *
+ * #Entry::stemDetail is set if the entry has a custom size record.
  */
 class EntrySize : public EntryDetailsBase
 {
@@ -325,6 +610,7 @@ public:
     Cmper clefListId{};                     ///< The clef list ID when there are mid-measure clef changes, if non-zero. (xml tag is `<clefListID>`).
     ShowClefMode showClefMode{};            ///< "Show Clef" mode. (xml tag is `<clefMode>`)
     bool mirrorFrame{};                     ///< Indicates this is a mirror frame. (Not used after Finale 14.5.)
+    bool clefAfterBarline{};                ///< "Place Clef After Barline"
     int clefPercent{};                      ///< Clef percent where 100 means 100%.
     std::vector<Cmper> frames;              ///< @ref others::Frame values for layers 1..4 (layer indices 0..3) if non-zero
 
@@ -421,6 +707,10 @@ public:
      * @return true if higher-level iteration should continue. false if it should halt.
      */
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
+
+    /// @brief Calculates the number of voices used by the GFrameHold instance.
+    /// @return A list of each layer that contains entries and whether that layer uses voice2.
+    std::map<LayerIndex, bool> calcVoices() const;
 
 private:
     std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
@@ -519,6 +809,8 @@ public:
 /**
  * @class LyricAssignChorus
  * @brief Contains the syllable assignments for lyrics chorus blocks.
+ *
+ * #Entry::lyricDetail is set if the entry has chorus lyric assignment.
  */
 class LyricAssignChorus : public LyricAssign
 {
@@ -532,6 +824,8 @@ public:
 /**
  * @class LyricAssignSection
  * @brief Contains the syllable assignments for lyrics section blocks.
+ *
+ * #Entry::lyricDetail is set if the entry has section lyric assignment.
  */
 class LyricAssignSection : public LyricAssign
 {
@@ -545,6 +839,8 @@ public:
 /**
  * @class LyricAssignVerse
  * @brief Contains the syllable assignments for lyrics verse blocks.
+ *
+ * #Entry::lyricDetail is set if the entry has verse lyric assignment.
  */
 class LyricAssignVerse : public LyricAssign
 {
@@ -553,6 +849,37 @@ public:
 
     using TextType = texts::LyricsVerse; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "lyrDataVerse"; ///< The XML node name for this type.
+};
+
+/**
+ * @class LyricEntryInfo
+ * @brief Specifies lyric alignment and justification for a single entry. This affects all lyric assignments
+ * on the entry.
+ *
+ * Entry::lyricDetail is set if there are any instances of this class.
+ */
+class LyricEntryInfo : public EntryDetailsBase
+{
+public:
+    /// @brief AlignJustify from @ref options::LyricOptions.
+    using AlignJustify = options::LyricOptions::AlignJustify;
+
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     * @param inci The inci (if supplied)
+     */
+    explicit LyricEntryInfo(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, std::optional<Inci> inci = std::nullopt)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci) {}
+
+    std::optional<AlignJustify> justify{}; ///< Override default justification if present. (xml node is `<justify>`)
+    std::optional<AlignJustify> align{};   ///< Override default alignment if present. (xml node is `<align>`)
+
+    static const xml::XmlElementArray<LyricEntryInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    constexpr static std::string_view XmlNodeName = "lyricEntryInfo"; ///< The XML node name for this type.
 };
 
 /**
@@ -602,6 +929,8 @@ public:
  * @class NoteAlterations
  * @brief Represents graphical and notational alterations applied to a note.
  *
+ * #Entry::noteDetail is set if any note in the entry has note alterations.
+ *
  * This class is identified by the XML node name "noteAlter".
  */
 class NoteAlterations : public NoteDetailsBase
@@ -631,8 +960,58 @@ public:
 };
 
 /**
+ * @class SecondaryBeamAlterationsDownStem
+ * @brief Beam alteration for downstem secondary beams.
+ *
+ * #Entry::stemDetail is set if the entry has any beam extensions.
+ */
+class SecondaryBeamAlterationsDownStem : public BeamAlterations
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     * @param inci The incident, since each secondary beam has a record. They are in no guaranteed order. Use the #BeamAlterations::dura value to determine
+     * which beam this pertains to.
+     */
+    explicit SecondaryBeamAlterationsDownStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : BeamAlterations(document, partId, shareMode, entnum, inci) {}
+
+    constexpr static std::string_view XmlNodeName = "beamAltSecDownStem"; ///< The XML node name for this type.
+};
+
+/**
+ * @class SecondaryBeamAlterationsUpStem
+ * @brief Beam alteration for downstem secondary beams.
+ *
+ * #Entry::stemDetail is set if the entry has any beam extensions.
+ */
+class SecondaryBeamAlterationsUpStem : public BeamAlterations
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     * @param inci The incident, since each secondary beam has a record. They are in no guaranteed order. Use the #BeamAlterations::dura value to determine
+     * which beam this pertains to.
+     */
+    explicit SecondaryBeamAlterationsUpStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : BeamAlterations(document, partId, shareMode, entnum, inci) {}
+
+    constexpr static std::string_view XmlNodeName = "beamAltSecUpStem"; ///< The XML node name for this type.
+};
+
+/**
  * @class SecondaryBeamBreak
  * @brief Specifies which secondary beams break and restart on the associated entry.
+ *
+ * #Entry::secBeam is set if the entry a secondary beam break.
  *
  * This class is identified by the XML node name "secBeamBreak".
  */
@@ -889,6 +1268,32 @@ public:
 };
 
 /**
+ * @class StemAlterations
+ * @brief Specifies horizontal and vertical stem adjustments for upstem and downstem contexts.
+ *
+ * Entry::stemDetail is set if there are any instances of this class.
+ *
+ * This class is identified by the XML node name "stemAdjust".
+ */
+class StemAlterations : public EntryDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit StemAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum)
+    {
+    }
+
+    Evpu upVertAdjust{};    ///< Vertical adjustment for upstem context (positive is up).
+    Evpu downVertAdjust{};  ///< Vertical adjustment for downstem context (positive is up).
+    Evpu upHorzAdjust{};    ///< Horizontal adjustment for upstem context (positive is right).
+    Evpu downHorzAdjust{};  ///< Horizontal adjustment for downstem context (positive is right).
+
+    constexpr static std::string_view XmlNodeName = "stemAdjust"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StemAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class TieAlterBase
  * @brief Base class for tie alteration properties. (Used for both ties and tie ends.)
  */
@@ -939,6 +1344,8 @@ public:
  * @class TieAlterEnd
  * @brief Alterations for tie ends.
  *
+ * #Entry::dotTieAlt is set if any note in the entry has tie alterations.
+ *
  * This class is identified by the XML node name "tieAlterEnd".
  */
 class TieAlterEnd : public TieAlterBase
@@ -954,6 +1361,8 @@ public:
  * @class TieAlterStart
  * @brief Alterations for tie starts. (Tie starts are normal ties.)
  *
+ * #Entry::dotTieAlt is set if any note in the entry has tie alterations.
+ *
  * This class is identified by the XML node name "tieAlterStart".
  */
 class TieAlterStart : public TieAlterBase
@@ -968,6 +1377,8 @@ public:
 /**
  * @class TupletDef
  * @brief Options controlling the appearance of tuplets.
+ *
+ * #Entry::tupletStart is set if the entry starts a tuplet.
  *
  * This class is identified by the XML node name "tupletDef".
  */

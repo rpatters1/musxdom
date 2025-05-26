@@ -214,6 +214,19 @@ MUSX_XML_ENUM_MAPPING(SmartShape::ShapeType, {
     {"dashContourSlurAuto", SmartShape::ShapeType::DashContouSlurAuto},
 });
 
+MUSX_XML_ENUM_MAPPING(SmartShapeCustomLine::LineStyle, {
+    {"char", SmartShapeCustomLine::LineStyle::Char},
+    {"solid", SmartShapeCustomLine::LineStyle::Solid},
+    {"dashed", SmartShapeCustomLine::LineStyle::Dashed},
+});
+
+MUSX_XML_ENUM_MAPPING(SmartShapeCustomLine::LineCapType, {
+    {"none", SmartShapeCustomLine::LineCapType::None},
+    {"hook", SmartShapeCustomLine::LineCapType::Hook},
+    {"arrowheadPreset", SmartShapeCustomLine::LineCapType::ArrowheadPreset},
+    {"arrowheadCustom", SmartShapeCustomLine::LineCapType::ArrowheadCustom},
+});
+
 MUSX_XML_ENUM_MAPPING(Staff::AutoNumberingStyle, {
     {"arabicSuffix", Staff::AutoNumberingStyle::ArabicSuffix}, //this is the default and may not occur in the xml, but the string is in Finale
     {"romanSuffix", Staff::AutoNumberingStyle::RomanSuffix},
@@ -425,7 +438,7 @@ MUSX_XML_ELEMENT_ARRAY(ChordSuffixElement, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(ChordSuffixPlayback, {
-    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixPlayback>& i) { i->values.push_back(e->getTextAs<int>()); }},
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<ChordSuffixPlayback>& i) { i->values.push_back(e->getTextAs<int16_t>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ClefList, {
@@ -822,6 +835,64 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
+    });
+
+MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::CharParams, {
+    {"lineChar", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::CharParams>& i) { i->lineChar = e->getTextAs<char32_t>(); }},
+    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::CharParams>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::CharParams>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::CharParams>& i) { FieldPopulator<FontInfo>::populateField(i->font, e); }},
+    {"baselineShiftEms", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::CharParams>& i) { i->baselineShiftEms = e->getTextAs<int>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::SolidParams, {
+    {"lineWidth", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::SolidParams>& i) { i->lineWidth = e->getTextAs<Efix>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::DashedParams, {
+    {"lineWidth", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::DashedParams>& i) { i->lineWidth = e->getTextAs<Efix>(); }},
+    {"dashOn", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::DashedParams>& i) { i->dashOn = e->getTextAs<Efix>(); }},
+    {"dashOff", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::DashedParams>& i) { i->dashOff = e->getTextAs<Efix>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine, {
+    {"lineStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineStyle = toEnum<SmartShapeCustomLine::LineStyle>(e); }},
+    {"charParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
+        { i->charParams = FieldPopulator<SmartShapeCustomLine::CharParams>::createAndPopulate(e, i->getDocument()); }},
+    {"solidParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
+        { i->solidParams = FieldPopulator<SmartShapeCustomLine::SolidParams>::createAndPopulate(e, i->getDocument()); }},
+    {"dashedParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
+        { i->dashedParams = FieldPopulator<SmartShapeCustomLine::DashedParams>::createAndPopulate(e, i->getDocument()); }},
+    {"lineCapStartType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapStartType = toEnum<SmartShapeCustomLine::LineCapType>(e); }},
+    {"lineCapEndType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapEndType = toEnum<SmartShapeCustomLine::LineCapType>(e); }},
+    {"lineCapStartArrowID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapStartArrowId = e->getTextAs<Cmper>(); }},
+    {"lineCapEndArrowID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapEndArrowId = e->getTextAs<Cmper>(); }},
+    {"makeHorz", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->makeHorz = populateBoolean(e, i); }},
+    {"lineAfterLeftStartText", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineAfterLeftStartText = populateBoolean(e, i); }},
+    {"lineBeforeRightEndText", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineBeforeRightEndText = populateBoolean(e, i); }},
+    {"lineAfterLeftContText", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineAfterLeftContText = populateBoolean(e, i); }},
+    {"leftStartRawTextID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->leftStartRawTextId = e->getTextAs<Cmper>(); }},
+    {"leftContRawTextID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->leftContRawTextId = e->getTextAs<Cmper>(); }},
+    {"rightEndRawTextID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->rightEndRawTextId = e->getTextAs<Cmper>(); }},
+    {"centerFullRawTextID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->centerFullRawTextId = e->getTextAs<Cmper>(); }},
+    {"centerAbbrRawTextID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->centerAbbrRawTextId = e->getTextAs<Cmper>(); }},
+    {"leftStartX", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->leftStartX = e->getTextAs<Evpu>(); }},
+    {"leftStartY", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->leftStartY = e->getTextAs<Evpu>(); }},
+    {"leftContX", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->leftContX = e->getTextAs<Evpu>(); }},
+    {"leftContY", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->leftContY = e->getTextAs<Evpu>(); }},
+    {"rightEndX", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->rightEndX = e->getTextAs<Evpu>(); }},
+    {"rightEndY", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->rightEndY = e->getTextAs<Evpu>(); }},
+    {"centerFullX", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->centerFullX = e->getTextAs<Evpu>(); }},
+    {"centerFullY", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->centerFullY = e->getTextAs<Evpu>(); }},
+    {"centerAbbrX", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->centerAbbrX = e->getTextAs<Evpu>(); }},
+    {"centerAbbrY", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->centerAbbrY = e->getTextAs<Evpu>(); }},
+    {"lineStartX", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineStartX = e->getTextAs<Evpu>(); }},
+    {"lineStartY", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineStartY = e->getTextAs<Evpu>(); }},
+    {"lineEndX", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineEndX = e->getTextAs<Evpu>(); }},
+    {"lineEndY", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineEndY = e->getTextAs<Evpu>(); }},
+    {"lineContX", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineContX = e->getTextAs<Evpu>(); }},
+    {"lineCapStartHookLength", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapStartHookLength = e->getTextAs<Efix>(); }},
+    {"lineCapEndHookLength", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapEndHookLength = e->getTextAs<Efix>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeMeasureAssign, {
@@ -858,7 +929,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
     {"instUuid", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) {
         auto s = e->getTextTrimmed();
-        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); });
         i->instUuid = std::move(s);
     }},
     {"floatKeys", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->floatKeys = populateBoolean(e, i); }},

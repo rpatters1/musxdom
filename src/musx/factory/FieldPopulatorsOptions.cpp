@@ -100,6 +100,51 @@ MUSX_XML_ENUM_MAPPING(FontOptions::FontType, {
     {"timePlusParts", FontOptions::FontType::TimePlusParts}
 });
 
+MUSX_XML_ENUM_MAPPING(LyricOptions::SmartHyphenStart, {
+    {"always", LyricOptions::SmartHyphenStart::Always},
+    {"sometimes", LyricOptions::SmartHyphenStart::Sometimes},
+    {"never", LyricOptions::SmartHyphenStart::Never},
+});
+
+MUSX_XML_ENUM_MAPPING(LyricOptions::AutoNumberingAlign, {
+    {"none", LyricOptions::AutoNumberingAlign::None},   // this default value may never appear in the xml
+    {"align", LyricOptions::AutoNumberingAlign::Align},
+});
+
+MUSX_XML_ENUM_MAPPING(LyricOptions::AlignJustify, {
+    {"left", LyricOptions::AlignJustify::Left},
+    {"center", LyricOptions::AlignJustify::Center},
+    {"right", LyricOptions::AlignJustify::Right},
+});
+
+MUSX_XML_ENUM_MAPPING(LyricOptions::WordExtConnectIndex, {
+    {"lyricRightBottom", LyricOptions::WordExtConnectIndex::LyricRightBottom},
+    {"headRightLyrBaseline", LyricOptions::WordExtConnectIndex::HeadRightLyrBaseline},
+    {"systemLeft", LyricOptions::WordExtConnectIndex::SystemLeft},
+    {"systemRight", LyricOptions::WordExtConnectIndex::SystemRight},
+    {"dotRightLyrBaseline", LyricOptions::WordExtConnectIndex::DotRightLyrBaseline},
+    {"durationLyrBaseline", LyricOptions::WordExtConnectIndex::DurationLyrBaseline},
+});
+
+MUSX_XML_ENUM_MAPPING(LyricOptions::WordExtConnectStyleType, {
+    {"defaultStart", LyricOptions::WordExtConnectStyleType::DefaultStart},
+    {"defaultEnd", LyricOptions::WordExtConnectStyleType::DefaultEnd},
+    {"systemStart", LyricOptions::WordExtConnectStyleType::SystemStart},
+    {"systemEnd", LyricOptions::WordExtConnectStyleType::SystemEnd},
+    {"dottedEnd", LyricOptions::WordExtConnectStyleType::DottedEnd},
+    {"durationEnd", LyricOptions::WordExtConnectStyleType::DurationEnd},
+    {"oneEntryEnd", LyricOptions::WordExtConnectStyleType::OneEntryEnd},
+    {"zeroLengthEnd", LyricOptions::WordExtConnectStyleType::ZeroLengthEnd},
+    {"zeroOffset", LyricOptions::WordExtConnectStyleType::ZeroOffset},
+});
+
+MUSX_XML_ENUM_MAPPING(LyricOptions::SyllablePosStyleType, {
+    {"default", LyricOptions::SyllablePosStyleType::Default},
+    {"wordExt", LyricOptions::SyllablePosStyleType::WordExt},
+    {"first", LyricOptions::SyllablePosStyleType::First},
+    {"systemStart", LyricOptions::SyllablePosStyleType::SystemStart},
+});
+
 MUSX_XML_ENUM_MAPPING(MusicSpacingOptions::ColUnisonsChoice, {
     {"diffNoteheads", MusicSpacingOptions::ColUnisonsChoice::DiffNoteheads},
     {"all", MusicSpacingOptions::ColUnisonsChoice::All}
@@ -511,6 +556,39 @@ MUSX_XML_ELEMENT_ARRAY(LineCurveOptions, {
     {"psUlDepth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->psUlDepth = e->getTextAs<double>(); }},
     {"psUlWidth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->psUlWidth = e->getTextAs<double>(); }},
     {"pathSlurTipWidth", [](const XmlElementPtr& e, const std::shared_ptr<LineCurveOptions>& i) { i->pathSlurTipWidth = e->getTextAs<EvpuFloat>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(LyricOptions::SyllablePosStyle, {
+    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->align = toEnum<LyricOptions::AlignJustify>(e); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->justify = toEnum<LyricOptions::AlignJustify>(e); }},
+    {"on",      [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->on = populateBoolean(e, i); }}
+});
+
+MUSX_XML_ELEMENT_ARRAY(LyricOptions::WordExtConnectStyle, {
+    {"connectIndex", [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::WordExtConnectStyle>& i) { i->connectIndex = toEnum<LyricOptions::WordExtConnectIndex>(e); }},
+    {"xOffset",      [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::WordExtConnectStyle>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"yOffset",      [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::WordExtConnectStyle>& i) { i->yOffset = e->getTextAs<Evpu>(); }}
+});
+
+MUSX_XML_ELEMENT_ARRAY(LyricOptions, {
+    {"hyphenChar",              [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->hyphenChar = e->getTextAs<char32_t>(); }},
+    {"maxHyphenSeparation",     [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->maxHyphenSeparation = e->getTextAs<Evpu>(); }},
+    {"wordExtVertOffset",       [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->wordExtVertOffset = e->getTextAs<Evpu>(); }},
+    {"wordExtHorzOffset",       [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->wordExtHorzOffset = e->getTextAs<Evpu>(); }},
+    {"useSmartWordExtensions",  [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->useSmartWordExtensions = populateBoolean(e, i); }},
+    {"useAltHyphenFont",        [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->useAltHyphenFont = populateBoolean(e, i); }},
+    {"altHyphenFont",           [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->altHyphenFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"useSmartHyphens",         [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->useSmartHyphens = populateBoolean(e, i); }},
+    {"smartHyphenStart",        [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->smartHyphenStart = toEnum<LyricOptions::SmartHyphenStart>(e); }},
+    {"wordExtNeedUnderscore",   [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->wordExtNeedUnderscore = populateBoolean(e, i); }},
+    {"wordExtMinLength",        [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->wordExtMinLength = e->getTextAs<Evpu>(); }},
+    {"wordExtOffsetToNotehead", [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->wordExtOffsetToNotehead = populateBoolean(e, i); }},
+    {"lyricUseEdgePunctuation", [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->lyricUseEdgePunctuation = populateBoolean(e, i); }},
+    {"lyricPunctuationToIgnore",[](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->lyricPunctuationToIgnore = e->getText(); }},
+    {"lyricAutoNumType",        [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->lyricAutoNumType = toEnum<LyricOptions::AutoNumberingAlign>(e); }},
+    {"wordExtLineWidth",        [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { i->wordExtLineWidth = e->getTextAs<Efix>(); }},
+    {"lyricSyllPosStyle",       [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { populateEmbeddedClass(e, i->syllablePosStyles); }},
+    {"wordExtConnectStyle",     [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions>& i) { populateEmbeddedClass(e, i->wordExtConnectStyles); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(MiscOptions, {

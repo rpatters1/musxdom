@@ -305,11 +305,12 @@ struct FieldPopulator : public FactoryBase
         }
     }
 
+    template <typename SubClass = T>
     static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element, ElementLinker& elementLinker)
     {
         populate(instance, element);
-        if (ResolverContainer<T>::resolver.has_value()) {
-            elementLinker.addResolver(ResolverContainer<T>::resolver.value(), element->getTagName());
+        if (ResolverContainer<SubClass>::resolver.has_value()) {
+            elementLinker.addResolver(ResolverContainer<SubClass>::resolver.value(), element->getTagName());
         }
     }
 

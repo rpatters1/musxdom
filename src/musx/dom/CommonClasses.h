@@ -30,6 +30,7 @@
 
 namespace music_theory {
 class Transposer;
+enum class DiatonicMode : int;
 } // namespace music_theory
 
 namespace musx {
@@ -227,6 +228,11 @@ public:
     bool isBuiltIn() const { return isLinear() && getKeyMode() <= 1; }      ///< whether this is a built-in key
     bool isMajor() const { return getKeyMode() == 0; }                      ///< whether this is a built-in major key
     bool isMinor() const { return getKeyMode() == 1; }                      ///< whether this is a built-in minor key
+
+    /// @brief If this key specifies a diatonic mode, returns the mode. This value is independent of EDO divisions.
+    /// Any correctly configured linear key signature should return a value.
+    /// @return The diatonic mode or std::nullopt if it is not one.
+    std::optional<music_theory::DiatonicMode> calcDiatonicMode() const;
 
     /// @brief returns whether the two key signatures represent the same key signature. Does not take into account transposition.
     bool isSame(const KeySignature& src)
@@ -524,6 +530,14 @@ public:
         return (startMeas < measId || (startMeas == measId && startEdu <= eduPosition)) &&
                (endMeas > measId || (endMeas == measId && endEdu >= eduPosition));
     }
+
+    /// @brief Returns the next metric location following the music range.
+    /// @param forStaff If provided, calculates the next metric location using staff-level Edus.
+    /// @return An optional std::pair containing
+    ///         - MeasCmper: the measure of the next location
+    ///         - Edu: the location within the measure of the next location
+    ///         Return std::nullopt if the next location is past the end of the document, or other error.
+    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     static const xml::XmlElementArray<MusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

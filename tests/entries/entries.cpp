@@ -41,6 +41,7 @@ TEST(EntryTest, PopulateFields)
       <smartShapeDetail/>
       <graceNote/>
       <floatRest/>
+      <noLeger/>
       <sorted/>
       <note id="1">
         <harmLev>-4</harmLev>
@@ -78,7 +79,7 @@ TEST(EntryTest, PopulateFields)
 
     // Test Entry 1001
     {
-        auto entry = entries->get<musx::dom::Entry>(1001);
+        auto entry = entries->get(1001);
         ASSERT_TRUE(entry);
 
         EXPECT_EQ(entry->getEntryNumber(), 1001);
@@ -91,6 +92,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(entry->graceNote);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_FALSE(entry->isHidden);
+        EXPECT_TRUE(entry->noLeger);
         EXPECT_TRUE(entry->sorted);
 
         ASSERT_EQ(entry->notes.size(), 2);
@@ -114,7 +116,7 @@ TEST(EntryTest, PopulateFields)
 
     // Test Entry 1002
     {
-        auto entry = entries->get<musx::dom::Entry>(1002);
+        auto entry = entries->get(1002);
         ASSERT_TRUE(entry);
 
         EXPECT_EQ(entry->getEntryNumber(), 1002);
@@ -126,6 +128,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_FALSE(entry->smartShapeDetail);
         EXPECT_TRUE(entry->floatRest);
         EXPECT_TRUE(entry->isHidden);
+        EXPECT_FALSE(entry->noLeger);
         EXPECT_TRUE(entry->sorted);
 
         EXPECT_EQ(entry->notes.size(), 0);
@@ -203,7 +206,7 @@ TEST(EntryTest, IntegrityCheck)
     auto entries = doc->getEntries();
     ASSERT_TRUE(entries);
 
-    auto entry = entries->get<musx::dom::Entry>(1001);
+    auto entry = entries->get(1001);
     ASSERT_TRUE(entry);
 
     EXPECT_THROW(

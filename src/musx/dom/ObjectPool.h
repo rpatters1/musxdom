@@ -50,7 +50,7 @@ namespace dom {
  *
  * @tparam ObjectBaseType the base type for the objects in the pool
  */
-template <typename ObjectBaseType, typename TopKeyElementType = std::string>
+template <typename ObjectBaseType>
 class ObjectPool
 {
 public:
@@ -58,14 +58,14 @@ public:
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
-        TopKeyElementType nodeId;       ///< the identifier for this node. usually the XML node name.
+        std::string nodeId;             ///< the identifier for this node. usually the XML node name.
         Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
         std::optional<Cmper> cmper2;    ///< optional cmper2 for Details.
         std::optional<Inci> inci;       ///< optional inci for multi-inci classes
 
         /** @brief explicit constructor for optional parameters */
-        ObjectKey(const TopKeyElementType n,
+        ObjectKey(const std::string n,
             Cmper p,
             std::optional<Cmper> c1 = std::nullopt,
             std::optional<Cmper> c2 = std::nullopt,
@@ -90,17 +90,7 @@ public:
             }
             return inci < other.inci;
         }
-
-        /** @brief Returns a string version of the nodeId for inclusion in messages. */
-        std::string nodeString() const
-        {
-            if constexpr (std::is_same_v<TopKeyElementType, std::string>) {
-                return nodeId;
-            } else {
-                return std::string("entry ") + std::to_string(nodeId);
-            }
-        }
-    };
+   };
 
     /** @brief virtual destructor */
     virtual ~ObjectPool() = default;
@@ -118,7 +108,7 @@ public:
             noInciKey.inci = std::nullopt;
             auto currentIncis = getArray<ObjectBaseType>(noInciKey);
             if (key.inci.value() != int(currentIncis.size())) {
-                MUSX_INTEGRITY_ERROR("Node " + key.nodeString() + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
+                MUSX_INTEGRITY_ERROR("Node " + key.nodeId + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
             }
         }
         m_pool.emplace(key, object);
@@ -129,7 +119,7 @@ public:
             if (it->second == Base::ShareMode::All) {
                 m_shareMode[key.nodeId] = object->getShareMode();
             } else {
-                MUSX_INTEGRITY_ERROR("Share mode for added " + key.nodeString() + " object [" + std::to_string(int(object->getShareMode()))
+                MUSX_INTEGRITY_ERROR("Share mode for added " + key.nodeId + " object [" + std::to_string(int(object->getShareMode()))
                     + "] does not match previous [" + std::to_string(int(it->second)) + "]");                
             }
         }
@@ -267,12 +257,12 @@ protected:
     /// @brief Constructs the object pool
     /// @param knownShareModes Optional parameter that specifies known share modes for certain elements.
     /// These can be particurly important for Base::ShareMode::None because there may be no parts containing them.
-    ObjectPool(const std::unordered_map<TopKeyElementType, dom::Base::ShareMode>& knownShareModes = {})
+    ObjectPool(const std::unordered_map<std::string, dom::Base::ShareMode>& knownShareModes = {})
         : m_shareMode(knownShareModes) {}
 
 private:
     std::map<ObjectKey, ObjectPtr> m_pool;
-    std::unordered_map<TopKeyElementType, dom::Base::ShareMode> m_shareMode;
+    std::unordered_map<std::string, dom::Base::ShareMode> m_shareMode;
 };
 
 /**
@@ -368,6 +358,11 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
+    /** @brief version of #ObjectPool::getArray for getting all of them */
+    template <typename T>
+    std::vector<std::shared_ptr<T>> getArray(Cmper partId) const
+    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId }); }
+
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
@@ -414,17 +409,30 @@ public:
 using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
 
 /** @brief Entry pool */
-class EntryPool : protected ObjectPool<Entry, EntryNumber>
+class EntryPool // uses different implementation than other pools for more efficient access
 {
 public:
-    /** @brief EntryPool version of #ObjectPool::add */
+    /** @brief Add an entry to the EntryPool. (Used by the factory.) */
     void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
-    { ObjectPool::add({ entryNumber, SCORE_PARTID }, instance); }
+    {
+        auto [it, emplaced] = m_pool.emplace(entryNumber, instance);
+        if (!emplaced) {
+            MUSX_INTEGRITY_ERROR("Entry number " + std::to_string(entryNumber) + " added twice.");
+        }
+    }
 
-    /** @brief EntryPool version of #ObjectPool::get */
-    template <typename T>
-    std::shared_ptr<T> get(EntryNumber entryNumber) const
-    { return ObjectPool::get<T>({ entryNumber, SCORE_PARTID }); }
+    /** @brief Get an entry from the EntryPool. */
+    std::shared_ptr<Entry> get(EntryNumber entryNumber) const
+    {
+        const auto it = m_pool.find(entryNumber);
+        if (it == m_pool.end()) {
+            return nullptr;
+        }
+        return it->second;
+    }
+
+private:
+    std::unordered_map<EntryNumber, std::shared_ptr<Entry>> m_pool;
 };
 /** @brief Shared `EntryPool` pointer */
 using EntryPoolPtr = std::shared_ptr<EntryPool>;

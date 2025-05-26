@@ -40,6 +40,11 @@
 #include "FieldPopulatorsDetails.h"
 #include "FieldPopulatorsTexts.h"
 
+#ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable : 4244) // disable spurious warnings due to overzealous MSC checking paths that are protected by constexpr
+#endif
+
 namespace musx {
 namespace factory {
 
@@ -87,6 +92,17 @@ private:
         return it->second;
     }
 
+    /// @brief Explicit function to avoid bug in MSC around lamdas inside std::visit.
+    template <typename T, typename PoolPtr, typename... Args>
+    static auto getScoreValue(const PoolPtr& pool, Args&&... args)
+    {
+        if constexpr (std::is_same_v<PoolPtr, ::musx::dom::OthersPoolPtr> || std::is_same_v<PoolPtr, ::musx::dom::DetailsPoolPtr>) {
+            return pool->template get<T>(SCORE_PARTID, std::forward<Args>(args)...);
+        } else {
+            return pool->template get<T>(std::forward<Args>(args)...);
+        }
+    }
+
 public:
     /**
      * @brief Creates an instance of the registered type corresponding to the provided node name.
@@ -122,18 +138,12 @@ public:
                         shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
                     }
                     auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
-                    if constexpr (!std::is_same_v<PoolPtr, EntryPoolPtr>) {
+                    if constexpr (!std::is_same_v<PoolPtr, ::musx::dom::EntryPoolPtr>) {
                         if (instance->getShareMode() == Base::ShareMode::Partial) {
                             for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
                                 instance->addUnlinkedNode(child->getTagName());
                             }
-                            auto scoreValue = [&]() {
-                                if constexpr (std::is_same_v<PoolPtr, OthersPoolPtr> || std::is_same_v<PoolPtr, DetailsPoolPtr>) {
-                                    return pool->template get<T>(SCORE_PARTID, std::forward<Args>(args)...);
-                                } else {
-                                    return pool->template get<T>(std::forward<Args>(args)...);
-                                }
-                            }();
+                            auto scoreValue = getScoreValue<T>(pool, std::forward<Args>(args)...);
                             if (scoreValue) {
                                 *instance = *scoreValue;
                             } else {
@@ -171,6 +181,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::GraceNoteOptions,
     dom::options::KeySignatureOptions,
     dom::options::LineCurveOptions,
+    dom::options::LyricOptions,
     dom::options::MiscOptions,
     dom::options::MultimeasureRestOptions,
     dom::options::MusicSpacingOptions,
@@ -226,6 +237,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ShapeInstructionList,
     dom::others::SmartShape,
     dom::others::SmartShapeMeasureAssign,
+    dom::others::SmartShapeCustomLine,      // node name is `ssLineStyle`
     dom::others::StaffSystem,
     dom::others::Staff,
     dom::others::StaffStyle,
@@ -254,23 +266,35 @@ using RegisteredOthers = TypeRegistry <
  * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredDetails = TypeRegistry <
+    dom::details::AccidentalAlterations,
     dom::details::EntrySize,
     dom::details::ArticulationAssign,
     dom::details::BaselineLyricsChorus,
     dom::details::BaselineLyricsSection,
     dom::details::BaselineLyricsVerse,
+    dom::details::BeamExtensionDownStem,
+    dom::details::BeamExtensionUpStem,
     dom::details::BeamStubDirection,
+    dom::details::BeamAlterationsDownStem,          // Finale serializes the beam alts out of alpha sequence
+    dom::details::BeamAlterationsUpStem,
+    dom::details::SecondaryBeamAlterationsDownStem,
+    dom::details::SecondaryBeamAlterationsUpStem,
     dom::details::CenterShape,
     dom::details::ChordAssign,
     dom::details::CrossStaff,
+    dom::details::DotAlterations,
     dom::details::IndependentStaffDetails,  // "floats" is the xml key
     dom::details::StaffSize,
     dom::details::GFrameHold,
+    dom::details::LyricEntryInfo,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
     dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it
     dom::details::SecondaryBeamBreak,
     dom::details::SmartShapeEntryAssign,
+    dom::details::StemAlterations,
+    dom::details::CustomDownStem,           // "stemDefDown" is the xml key
+    dom::details::CustomUpStem,             // "stemDefUp" is the xml key
     dom::details::TieAlterEnd,
     dom::details::TieAlterStart,
     dom::details::TupletDef,
@@ -306,3 +330,7 @@ using RegisteredTexts = TypeRegistry <
 
 } // namespace factory
 } // namespace musx
+
+#ifdef _MSC_VER
+#  pragma warning(pop)
+#endif

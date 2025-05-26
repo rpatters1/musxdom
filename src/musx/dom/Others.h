@@ -548,11 +548,15 @@ public:
     EntryNumber endEntry{};   ///< End entry number for this frame. (Appears to be zero when #startTime is supplied.)
     Edu startTime{};          ///< The starting position within the measure. (Appears to be zero when #startEntry and #endEntry are supplied.)
 
+    /// @brief Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops.
+    /// @param iterator function.
+    void iterateRawEntries(std::function<bool(const std::shared_ptr<Entry>& entry)> iterator) const;
+
     /** @brief Returns a vector of entries contained in the frame.
      *
      * These are raw entries. Use #details::GFrameHoldContext::createEntryFrame for a vector of entries with computed values.
      */
-    std::vector<std::shared_ptr<const Entry>> getEntries();
+    std::vector<std::shared_ptr<const Entry>> getEntries() const;
 
     void integrityCheck() override
     {
@@ -1000,6 +1004,12 @@ public:
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
     /// @return The display time signature if there is one, otherwise the actual time signature.
     std::shared_ptr<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+
+    /// @brief Calculates the duration of the measure according to the time signature
+    /// @param forStaff  If present, specifies the specific staff for which to create duration.
+    /// @return If forStaff is provided, the staff-level duration (taking into account independent time signatures.)
+    /// Otherwise, it returns the global duration of the measure.
+    util::Fraction calcDuration(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     void integrityCheck() override
     {
@@ -2197,7 +2207,8 @@ public:
     }
 
     MeasCmper startMeas{};          ///< Starting measure of the staff system. See @ref Measure.
-    MeasCmper endMeas{};            ///< Ending measure of the staff system. See @ref Measure.
+    MeasCmper endMeas{};            ///< Ending measure of the staff system *plus one*. This is effectively the first measure of the next system or
+                                    ///< one measure past the last measure in the document. (Finale being Finale.) See @ref Measure.
     double horzPercent{};           ///< Horizontal scaling percentage (fractional, 100.0 means no scaling).
                                     ///< This value affects "stretchable" items such as word extensions on lyrics.
     int ssysPercent{};              ///< Staff system scaling percentage (100 means no scaling).
@@ -2216,6 +2227,14 @@ public:
     Evpu distanceToPrev{};          ///< Distance to the previous staff system in Evpu.
     Evpu extraStartSystemSpace{};   ///< Extra space at the start of the staff system in Evpu.
     Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
+
+    /// @brief Encapsulates the weird Finale fact that #endMeas is actually one past the end of the system
+    /// @return The actual last measure on the system.
+    MeasCmper getLastMeasure() const { return endMeas - 1; }
+
+    /// @brief Calculates the number of measures on the system, encapsulating how #endMeas works.
+    /// @return The number of measures on the system.
+    int calcNumMeasures() const { return endMeas - startMeas; }
 
     /// @brief Calculates the maximum and minimum staff scaling values for this system by searching each staff
     /// for individual staff scaling.
