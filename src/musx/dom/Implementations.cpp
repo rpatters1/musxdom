@@ -47,11 +47,13 @@ namespace dom {
 
 template <typename T,
           std::enable_if_t<std::is_base_of_v<details::BeamAlterations, T>, int>>
-void details::BeamAlterations::calcActive(const DocumentPtr& document)
+void details::BeamAlterations::calcAllActiveFlags(const DocumentPtr& document)
 {
     if (const auto beamOptions = document->getOptions()->get<options::BeamOptions>()) {
         const auto values = document->getDetails()->getArray<T>(SCORE_PARTID);
+#ifdef MUSX_DISPLAY_NODE_NAMES
         util::Logger::log(util::Logger::LogLevel::Verbose, std::string(T::XmlNodeName) + " has " + std::to_string(values.size()) + " elements.");
+#endif
         for (const auto& value : values) {
             value->m_active = (value->flattenStyle == beamOptions->beamingStyle);
         }
@@ -60,32 +62,26 @@ void details::BeamAlterations::calcActive(const DocumentPtr& document)
     }
 }
 
-template void details::BeamAlterations::calcActive<details::BeamAlterationsUpStem>(const DocumentPtr&);
-template void details::BeamAlterations::calcActive<details::BeamAlterationsDownStem>(const DocumentPtr&);
-template void details::BeamAlterations::calcActive<details::SecondaryBeamAlterationsUpStem>(const DocumentPtr&);
-template void details::BeamAlterations::calcActive<details::SecondaryBeamAlterationsDownStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcAllActiveFlags<details::BeamAlterationsUpStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcAllActiveFlags<details::BeamAlterationsDownStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBeamAlterationsUpStem>(const DocumentPtr&);
+template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBeamAlterationsDownStem>(const DocumentPtr&);
 
 Efix details::BeamAlterations::calcEffectiveBeamWidth() const
 {
-    if (m_active) {
-        if (dynamic_cast<const details::BeamAlterationsDownStem*>(this) || dynamic_cast<const details::BeamAlterationsUpStem*>(this)) {
-            if (beamWidth >= 0) {
-                return beamWidth;
-            }
+    if (dura > 0) { // secondary beams always have non-zero dura value
+        std::shared_ptr<BeamAlterations> primary;
+        if (dynamic_cast<const SecondaryBeamAlterationsDownStem*>(this)) {
+            primary = getDocument()->getDetails()->get<BeamAlterationsDownStem>(getPartId(), getEntryNumber());
         } else {
-            std::shared_ptr<BeamAlterations> primary;
-            if (dynamic_cast<const SecondaryBeamAlterationsDownStem*>(this)) {
-                primary = getDocument()->getDetails()->get<BeamAlterationsDownStem>(getPartId(), getEntryNumber());
-            } else if (dynamic_cast<const SecondaryBeamAlterationsUpStem*>(this)) {
-                primary = getDocument()->getDetails()->get<BeamAlterationsUpStem>(getPartId(), getEntryNumber());
-            } else {
-                MUSX_ASSERT_IF(false) {
-                    throw std::logic_error("Encountered unknown subtype of details::BeamAlterations");
-                }
-            }
-            if (primary && primary->m_active && primary->beamWidth >= 0) {
-                return primary->beamWidth;
-            }
+            primary = getDocument()->getDetails()->get<BeamAlterationsUpStem>(getPartId(), getEntryNumber());
+        }
+        if (primary) {
+            return primary->calcEffectiveBeamWidth();
+        }
+    } else if (m_active) {
+        if (beamWidth >= 0) {
+            return beamWidth;
         }
     }
     Efix result = 0;

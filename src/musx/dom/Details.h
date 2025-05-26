@@ -208,7 +208,7 @@ public:
     /// @brief Used by the factory to set active indicators
     template <typename T,
               std::enable_if_t<std::is_base_of_v<BeamAlterations, T>, int> = 0>
-    static void calcActive(const DocumentPtr& document);
+    static void calcAllActiveFlags(const DocumentPtr& document);
 
     static const xml::XmlElementArray<BeamAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

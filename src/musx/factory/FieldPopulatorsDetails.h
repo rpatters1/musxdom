@@ -163,10 +163,10 @@ inline StaffGroup::BracketStyle toEnum<StaffGroup::BracketStyle>(const int& valu
     return {};
 }
 
-MUSX_RESOLVER_ENTRY(BeamAlterationsDownStem, BeamAlterations::calcActive<BeamAlterationsDownStem>);
-MUSX_RESOLVER_ENTRY(BeamAlterationsUpStem, BeamAlterations::calcActive<BeamAlterationsUpStem>);
-MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsDownStem, BeamAlterations::calcActive<SecondaryBeamAlterationsDownStem>);
-MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsUpStem, BeamAlterations::calcActive<SecondaryBeamAlterationsUpStem>);
+MUSX_RESOLVER_ENTRY(BeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags<BeamAlterationsDownStem>);
+MUSX_RESOLVER_ENTRY(BeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags<BeamAlterationsUpStem>);
+MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags<SecondaryBeamAlterationsDownStem>);
+MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags<SecondaryBeamAlterationsUpStem>);
 
 MUSX_RESOLVER_ENTRY(StaffGroup, {
     [](const dom::DocumentPtr& document) {

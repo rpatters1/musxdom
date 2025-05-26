@@ -26,6 +26,163 @@
 
 using namespace musx::dom;
 
+TEST(BeamAlterationsTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <beamOptions>
+      <beamStubLength>18</beamStubLength>
+      <maxSlope>12</maxSlope>
+      <beamSepar>18</beamSepar>
+      <beamingStyle>onStandardNote</beamingStyle>
+      <incRestsInClassicBeams/>
+      <beamFourEighthsInCommonTime/>
+      <beamThreeEighthsInCommonTime/>
+      <beamWidth>768</beamWidth>
+    </beamOptions>
+  </options>
+  <details>
+    <beamAltPrimDownStem entnum="11">
+      <yAdd>-24</yAdd>
+      <context>onExtremeNote</context>
+      <beamWidth>1165</beamWidth>
+    </beamAltPrimDownStem>
+    <beamAltPrimUpStem entnum="5">
+      <xAdd>-23</xAdd>
+      <yAdd>40</yAdd>
+      <sxAdd>29</sxAdd>
+      <context>alwaysFlat</context>
+      <beamWidth>1088</beamWidth>
+    </beamAltPrimUpStem>
+    <beamAltSecDownStem entnum="11" inci="0">
+      <yAdd>20</yAdd>
+      <syAdd>-12</syAdd>
+      <dura>256</dura>
+      <beamWidth>-1</beamWidth>
+    </beamAltSecDownStem>
+    <beamAltSecUpStem entnum="5" inci="0">
+      <syAdd>-8</syAdd>
+      <dura>256</dura>
+      <context>onStandardNote</context>
+      <beamWidth>-1</beamWidth>
+    </beamAltSecUpStem>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    // Primary downstem
+    auto primDown = details->get<details::BeamAlterationsDownStem>(SCORE_PARTID, 11);
+    ASSERT_TRUE(primDown);
+    EXPECT_EQ(primDown->leftOffsetH, Evpu(0));
+    EXPECT_EQ(primDown->leftOffsetY, Evpu(-24));
+    EXPECT_EQ(primDown->rightOffsetH, Evpu(0));
+    EXPECT_EQ(primDown->rightOffsetY, Evpu(0));
+    EXPECT_EQ(primDown->dura, Edu(0));
+    EXPECT_EQ(primDown->flattenStyle, options::BeamOptions::FlattenStyle::OnExtremeNote);
+    EXPECT_EQ(primDown->beamWidth, Efix(1165));
+    EXPECT_FALSE(primDown->isActive());
+
+    // Primary upstem
+    auto primUp = details->get<details::BeamAlterationsUpStem>(SCORE_PARTID, 5);
+    ASSERT_TRUE(primUp);
+    EXPECT_EQ(primUp->leftOffsetH, Evpu(-23));
+    EXPECT_EQ(primUp->leftOffsetY, Evpu(40));
+    EXPECT_EQ(primUp->rightOffsetH, Evpu(29));
+    EXPECT_EQ(primUp->rightOffsetY, Evpu(0));
+    EXPECT_EQ(primUp->dura, Edu(0));
+    EXPECT_EQ(primUp->flattenStyle, options::BeamOptions::FlattenStyle::AlwaysFlat);
+    EXPECT_EQ(primUp->beamWidth, Efix(1088));
+    EXPECT_FALSE(primUp->isActive());
+
+    // Secondary downstem
+    auto secDown = details->get<details::SecondaryBeamAlterationsDownStem>(SCORE_PARTID, 11, Inci(0));
+    ASSERT_TRUE(secDown);
+    EXPECT_EQ(secDown->leftOffsetH, Evpu(0));
+    EXPECT_EQ(secDown->leftOffsetY, Evpu(20));
+    EXPECT_EQ(secDown->rightOffsetH, Evpu(0));
+    EXPECT_EQ(secDown->rightOffsetY, Evpu(-12));
+    EXPECT_EQ(secDown->dura, Edu(256));
+    EXPECT_EQ(secDown->flattenStyle, options::BeamOptions::FlattenStyle::OnEndNotes);  // default-initialized
+    EXPECT_EQ(secDown->beamWidth, Efix(-1));
+    EXPECT_FALSE(secDown->isActive());
+
+    // Secondary upstem
+    auto secUp = details->get<details::SecondaryBeamAlterationsUpStem>(SCORE_PARTID, 5, Inci(0));
+    ASSERT_TRUE(secUp);
+    EXPECT_EQ(secUp->leftOffsetH, Evpu(0));
+    EXPECT_EQ(secUp->leftOffsetY, Evpu(0));
+    EXPECT_EQ(secUp->rightOffsetH, Evpu(0));
+    EXPECT_EQ(secUp->rightOffsetY, Evpu(-8));
+    EXPECT_EQ(secUp->dura, Edu(256));
+    EXPECT_EQ(secUp->flattenStyle, options::BeamOptions::FlattenStyle::OnStandardNote);
+    EXPECT_EQ(secUp->beamWidth, Efix(-1));
+    EXPECT_TRUE(secUp->isActive());
+}
+
+TEST(BeamAlterationsTest, BeamWidths)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_mods.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+    auto beamOptions = options->get<options::BeamOptions>();
+    ASSERT_TRUE(beamOptions);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+    ASSERT_GE(entryFrame->getEntries().size(), 12);
+
+    auto checkEntry = [&](size_t index, Efix primUpWidth, Efix secUpWidth, Efix primDnWidth, Efix secDnWidth) {
+        EntryInfoPtr entryInfo(entryFrame, index);
+        ASSERT_TRUE(entryInfo);
+        EXPECT_TRUE(entryInfo->getEntry()->stemDetail);
+        auto primUpAlts = details->get<details::BeamAlterationsUpStem>(SCORE_PARTID, entryInfo->getEntry()->getEntryNumber());
+        auto primDnAlts = details->get<details::BeamAlterationsDownStem>(SCORE_PARTID, entryInfo->getEntry()->getEntryNumber());
+        auto secUpAlts = [&]() -> std::shared_ptr<details::SecondaryBeamAlterationsUpStem> {
+            auto result = details->getArray<details::SecondaryBeamAlterationsUpStem>(SCORE_PARTID, entryInfo->getEntry()->getEntryNumber());
+            if (!result.empty()) {
+                return result[0];
+            }
+            return nullptr;
+        }();
+        auto secDnAlts = [&]() -> std::shared_ptr<details::SecondaryBeamAlterationsDownStem> {
+            auto result = details->getArray<details::SecondaryBeamAlterationsDownStem>(SCORE_PARTID, entryInfo->getEntry()->getEntryNumber());
+            if (!result.empty()) {
+                return result[0];
+            }
+            return nullptr;
+        }();
+        EXPECT_TRUE(primUpAlts);
+        EXPECT_TRUE(primDnAlts);
+        EXPECT_TRUE(secUpAlts);
+        EXPECT_TRUE(secDnAlts);
+        const Efix calcPrimUpWidth = primUpAlts ? primUpAlts->calcEffectiveBeamWidth() : beamOptions->beamWidth;
+        EXPECT_EQ(calcPrimUpWidth, primUpWidth);
+        const Efix calcPrimDnWidth = primDnAlts ? primDnAlts->calcEffectiveBeamWidth() : beamOptions->beamWidth;
+        EXPECT_EQ(calcPrimDnWidth, primDnWidth);
+        const Efix calcSecUpWidth = secUpAlts ? secUpAlts->calcEffectiveBeamWidth() : calcPrimUpWidth;
+        EXPECT_EQ(calcSecUpWidth, secUpWidth);
+        const Efix calcSecDnWidth = secDnAlts ? secDnAlts->calcEffectiveBeamWidth() : calcPrimDnWidth;
+        EXPECT_EQ(calcSecDnWidth, secDnWidth);
+    };
+
+    checkEntry(0, beamOptions->beamWidth, beamOptions->beamWidth, beamOptions->beamWidth, beamOptions->beamWidth);
+    checkEntry(6, 302, 302, 1165, 1165);    
+}
+
 TEST(BeamExtensionTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(
