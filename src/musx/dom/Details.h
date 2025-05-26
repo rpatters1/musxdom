@@ -61,6 +61,38 @@ namespace texts {
 namespace details {
 
 /**
+ * @class AccidentalAlterations
+ * @brief Represents display alterations to an accidental for a specific note.
+ *
+ * #Entry::noteDetail is set if any note in the entry has visual alterations such as adjusted accidental appearance or position.
+ *
+ * This class is identified by the XML node name "acciAlter".
+ */
+class AccidentalAlterations : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor */
+    explicit AccidentalAlterations(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci), customFont(std::make_shared<FontInfo>(document))
+    {
+    }
+
+    NoteNumber noteId{};                            ///< The ID of the note being altered.
+    int percent{};                                  ///< The percentage size for the accidental, where 100 is 100%.
+    Evpu vOffset{};                                 ///< Vertical offset: positive is up. (XML node: `<ayDisp>`)
+    Evpu hOffset{};                                 ///< Horizontal offset: positive is right. (XML node: `<axDisp>`)
+    char32_t altChar{};                             ///< If non-zero, the character to use for the accidental. (Utf-32 if the font is a Unicode font.)
+    std::shared_ptr<FontInfo> customFont;           ///< Font settings for the accidental (populated from <fontID>, <fontSize>, and <efx>)
+    bool useOwnFont{};                              ///< Whether to use #customFont.
+    bool allowVertPos{};                            ///< Whether to use #vOffset.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "acciAlter";   ///< The XML node name for this type.
+    static const xml::XmlElementArray<AccidentalAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ArticulationAssign
  * @brief Assigns an articulation to an entry.
  *

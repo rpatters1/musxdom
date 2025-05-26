@@ -265,6 +265,7 @@ using RegisteredOthers = TypeRegistry <
  * These types are maintained in the order in which Finale serializes them (based on observation).
  */
 using RegisteredDetails = TypeRegistry <
+    dom::details::AccidentalAlterations,
     dom::details::EntrySize,
     dom::details::ArticulationAssign,
     dom::details::BaselineLyricsChorus,

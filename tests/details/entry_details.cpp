@@ -26,6 +26,84 @@
 
 using namespace musx::dom;
 
+TEST(AccidentalAlterationsTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <acciAlter entnum="5" inci="0">
+      <noteID>1</noteID>
+      <percent>91</percent>
+      <ayDisp>13</ayDisp>
+      <axDisp>-5</axDisp>
+      <altChar>69</altChar>
+      <fontID>15</fontID>
+      <fontSize>18</fontSize>
+      <efx>
+        <italic/>
+      </efx>
+      <useOwnFont/>
+      <allowVertPos/>
+    </acciAlter>
+    <acciAlter entnum="6" inci="0">
+      <noteID>2</noteID>
+      <percent>100</percent>
+      <axDisp>-12</axDisp>
+    </acciAlter>
+  </details>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    // Score-level AccidentalAlterations
+    {
+        auto alter = details->get<details::AccidentalAlterations>(SCORE_PARTID, 5, 0);
+        ASSERT_TRUE(alter);
+
+        EXPECT_EQ(alter->noteId, 1);
+        EXPECT_EQ(alter->percent, 91);
+        EXPECT_EQ(alter->vOffset, 13);
+        EXPECT_EQ(alter->hOffset, -5);
+        EXPECT_EQ(alter->altChar, 69);
+        EXPECT_TRUE(alter->useOwnFont);
+        EXPECT_TRUE(alter->allowVertPos);
+
+        ASSERT_TRUE(alter->customFont);
+        EXPECT_EQ(alter->customFont->fontId, 15);
+        EXPECT_EQ(alter->customFont->fontSize, 18);
+        EXPECT_TRUE(alter->customFont->italic);
+        EXPECT_FALSE(alter->customFont->bold);
+        EXPECT_FALSE(alter->customFont->underline);
+    }
+
+    // Score-level AccidentalAlterations with defaults
+    {
+        auto alter = details->get<details::AccidentalAlterations>(SCORE_PARTID, 6, 0);
+        ASSERT_TRUE(alter);
+
+        EXPECT_EQ(alter->noteId, 2);
+        EXPECT_EQ(alter->percent, 100);
+        EXPECT_EQ(alter->vOffset, 0); // default
+        EXPECT_EQ(alter->hOffset, -12);
+        EXPECT_EQ(alter->altChar, 0); // default
+        EXPECT_FALSE(alter->useOwnFont);
+        EXPECT_FALSE(alter->allowVertPos);
+
+        ASSERT_TRUE(alter->customFont);
+        EXPECT_EQ(alter->customFont->fontId, 0);
+        EXPECT_EQ(alter->customFont->fontSize, 0);
+        EXPECT_FALSE(alter->customFont->italic);
+        EXPECT_FALSE(alter->customFont->bold);
+        EXPECT_FALSE(alter->customFont->underline);
+    }
+}
+
 TEST(BeamAlterationsTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(

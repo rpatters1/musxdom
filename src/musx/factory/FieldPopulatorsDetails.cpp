@@ -64,6 +64,19 @@ namespace details {
 using namespace ::musx::xml;
 using namespace ::musx::factory;
 
+MUSX_XML_ELEMENT_ARRAY(AccidentalAlterations, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->percent = e->getTextAs<int>(); }},
+    {"ayDisp", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->vOffset = e->getTextAs<Evpu>(); }},
+    {"axDisp", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
+    {"altChar", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->altChar = e->getTextAs<char32_t>(); }},
+    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
+    {"useOwnFont", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->useOwnFont = populateBoolean(e, i); }},
+    {"allowVertPos", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->allowVertPos = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(ArticulationAssign, {
     {"articDef", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->articDef = e->getTextAs<Cmper>(); }},
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
