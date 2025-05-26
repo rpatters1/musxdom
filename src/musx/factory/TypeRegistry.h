@@ -284,6 +284,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::IndependentStaffDetails,  // "floats" is the xml key
     dom::details::StaffSize,
     dom::details::GFrameHold,
+    dom::details::LyricEntryInfo,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
     dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it

@@ -826,6 +826,45 @@ public:
 };
 
 /**
+ * @class LyricEntryInfo
+ * @brief Specifies lyric alignment and justification for a single entry. This affects all lyric assignments
+ * on the entry.
+ *
+ * Entry::lyricDetail is set if there are any instances of this class.
+ */
+class LyricEntryInfo : public EntryDetailsBase
+{
+public:
+    /**
+     * @enum AlignJustify
+     * @brief Possible alignment and justification values for lyrics.
+     */
+    enum AlignJustify
+    {
+        Left,         ///< Left-aligned/justified
+        Center,       ///< Center-aligned/justified
+        Right         ///< Right-aligned/justified
+    };
+
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part this is for.
+     * @param shareMode The sharing mode.
+     * @param entnum The entry number this applies to.
+     * @param inci The inci (if supplied)
+     */
+    explicit LyricEntryInfo(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, std::optional<Inci> inci = std::nullopt)
+        : EntryDetailsBase(document, partId, shareMode, entnum, inci) {}
+
+    std::optional<AlignJustify> justify{}; ///< Override default justification if present. (xml node is `<justify>`)
+    std::optional<AlignJustify> align{};   ///< Override default alignment if present. (xml node is `<align>`)
+
+    static const xml::XmlElementArray<LyricEntryInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    constexpr static std::string_view XmlNodeName = "lyricEntryInfo"; ///< The XML node name for this type.
+};
+
+/**
  * @class MeasureTextAssign
  * @brief Represents a text block assignment for a staff and measure.
  *

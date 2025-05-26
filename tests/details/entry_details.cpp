@@ -360,6 +360,49 @@ TEST(CustomStemTest, PopulateFields)
     EXPECT_EQ(up->yOffset, Evpu(46));
 }
 
+TEST(LyricEntryInfoTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <lyricEntryInfo entnum="5">
+      <justify>left</justify>
+    </lyricEntryInfo>
+    <lyricEntryInfo entnum="6">
+      <align>center</align>
+    </lyricEntryInfo>
+  </details>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    // Score-level LyricEntryInfo with justify only
+    {
+        auto info = details->get<details::LyricEntryInfo>(SCORE_PARTID, 5);
+        ASSERT_TRUE(info);
+
+        ASSERT_TRUE(info->justify);
+        EXPECT_EQ(*info->justify, details::LyricEntryInfo::AlignJustify::Left);
+        EXPECT_FALSE(info->align);
+    }
+
+    // Score-level LyricEntryInfo with align only
+    {
+        auto info = details->get<details::LyricEntryInfo>(SCORE_PARTID, 6);
+        ASSERT_TRUE(info);
+
+        EXPECT_FALSE(info->justify);
+        ASSERT_TRUE(info->align);
+        EXPECT_EQ(*info->align, details::LyricEntryInfo::AlignJustify::Center);
+    }
+}
+
 TEST(NoteAlterationsTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(

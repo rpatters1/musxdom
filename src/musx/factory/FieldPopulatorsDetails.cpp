@@ -44,6 +44,12 @@ MUSX_XML_ENUM_MAPPING(ChordAssign::BassPosition, {
     {"subtext",   ChordAssign::BassPosition::Subtext}
 });
 
+MUSX_XML_ENUM_MAPPING(LyricEntryInfo::AlignJustify, {
+    {"left", LyricEntryInfo::AlignJustify::Left},
+    {"center", LyricEntryInfo::AlignJustify::Center},
+    {"right", LyricEntryInfo::AlignJustify::Right},
+});
+
 MUSX_XML_ENUM_MAPPING(StaffGroup::HideStaves, {
     // {"Normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
     {"asGroup", StaffGroup::HideStaves::AsGroup},
@@ -226,6 +232,11 @@ MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
     {"floatingHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->floatingHorzOff = e->getTextAs<Evpu>(); }},
     {"wext", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->wext = e->getTextAs<int>(); }},
     {"displayVerseNum", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->displayVerseNum = populateBoolean(e, i); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(LyricEntryInfo, {
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->justify = toEnum<LyricEntryInfo::AlignJustify>(e); }},
+    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<LyricEntryInfo::AlignJustify>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {
