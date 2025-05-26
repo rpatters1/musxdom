@@ -474,6 +474,35 @@ TEST(NoteAlterationsTest, PopulateFields)
     }
 }
 
+TEST(StemAdjustmentsTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <stemAdjust entnum="5">
+      <upVertAdjust>49</upVertAdjust>
+      <downVertAdjust>-51</downVertAdjust>
+      <upHorzAdjust>23</upHorzAdjust>
+      <downHorzAdjust>-21</downHorzAdjust>
+    </stemAdjust>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto adjust = details->get<details::StemAdjustments>(SCORE_PARTID, 5);
+    ASSERT_TRUE(adjust) << "StemAdjustments with entnum 5 not found";
+
+    EXPECT_EQ(adjust->upVertAdjust, Evpu(49));
+    EXPECT_EQ(adjust->downVertAdjust, Evpu(-51));
+    EXPECT_EQ(adjust->upHorzAdjust, Evpu(23));
+    EXPECT_EQ(adjust->downHorzAdjust, Evpu(-21));
+}
+
 TEST(TieAlterTest, PopulateFields)
 {
   constexpr static musxtest::string_view xml = R"xml(

@@ -291,6 +291,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it
     dom::details::SecondaryBeamBreak,
     dom::details::SmartShapeEntryAssign,
+    dom::details::StemAdjustments,
     dom::details::CustomDownStem,           // "stemDefDown" is the xml key
     dom::details::CustomUpStem,             // "stemDefUp" is the xml key
     dom::details::TieAlterEnd,

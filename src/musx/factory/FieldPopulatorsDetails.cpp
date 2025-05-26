@@ -312,6 +312,13 @@ MUSX_XML_ELEMENT_ARRAY(StaffSize, {
     {"staffPercent", [](const XmlElementPtr& e, const std::shared_ptr<StaffSize>& i) { i->staffPercent = e->getTextAs<int>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(StemAdjustments, {
+    {"upVertAdjust",   [](const XmlElementPtr& e, const std::shared_ptr<StemAdjustments>& i) { i->upVertAdjust = e->getTextAs<Evpu>(); }},
+    {"downVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAdjustments>& i) { i->downVertAdjust = e->getTextAs<Evpu>(); }},
+    {"upHorzAdjust",   [](const XmlElementPtr& e, const std::shared_ptr<StemAdjustments>& i) { i->upHorzAdjust = e->getTextAs<Evpu>(); }},
+    {"downHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAdjustments>& i) { i->downHorzAdjust = e->getTextAs<Evpu>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
     {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
     {"xStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xStart = e->getTextAs<Evpu>(); }},

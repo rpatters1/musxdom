@@ -24,11 +24,13 @@
 #include <vector>
 #include <unordered_set>
 #include <cmath>
+#include <map>
 
 #include "musx/util/EnigmaString.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
 #include "Options.h"
+#include "Others.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
@@ -1235,6 +1237,32 @@ public:
 
     constexpr static std::string_view XmlNodeName = "staffSize"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StaffSize>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StemAdjustments
+ * @brief Specifies horizontal and vertical stem adjustments for upstem and downstem contexts.
+ *
+ * Entry::stemDetail is set if there are any instances of this class.
+ *
+ * This class is identified by the XML node name "stemAdjust".
+ */
+class StemAdjustments : public EntryDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit StemAdjustments(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum)
+    {
+    }
+
+    Evpu upVertAdjust{};    ///< Vertical adjustment for upstem context (positive is up).
+    Evpu downVertAdjust{};  ///< Vertical adjustment for downstem context (positive is up).
+    Evpu upHorzAdjust{};    ///< Horizontal adjustment for upstem context (positive is right).
+    Evpu downHorzAdjust{};  ///< Horizontal adjustment for downstem context (positive is right).
+
+    constexpr static std::string_view XmlNodeName = "stemAdjust"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StemAdjustments>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
