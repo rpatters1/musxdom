@@ -532,6 +532,122 @@ public:
 };
 
 /**
+ * @class LyricOptions
+ * @brief Options controlling lyric rendering in the musx file.
+ *
+ * This class is identified by the XML node name "lyricOptions".
+ */
+class LyricOptions : public OptionsBase {
+public:
+    /// @brief Constructor
+    explicit LyricOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    /// @brief When to start hyphenation
+    enum class SmartHyphenStart {
+        Always,     ///< "Always" (default value)
+        Sometimes,  ///< "Only when the first syllable is attached to the second note or later"
+        Never       ///< "Never"
+    };
+
+    /// @brief Autonumbering type
+    enum class AutoNumberingAlign {
+        None,       ///< "Keep with First Syllable in Lyric" (default value)
+        Align       ///< "Group Under the Same Note"
+    };
+
+    /// @brief Horizontal and vertical alignment/justification values
+    enum class AlignJustify {
+        Left,
+        Center,
+        Right
+    };
+
+    /// @brief Word extension connection points
+    enum class WordExtConnectIndex {
+        LyricRightBottom,
+        HeadRightLyrBaseline,
+        SystemLeft,
+        SystemRight,
+        DotRightLyrBaseline,
+        DurationLyrBaseline
+    };
+
+    /// @brief Word extension connection style categories
+    enum class WordExtConnectStyleType {
+        DefaultStart,
+        DefaultEnd,
+        SystemStart,
+        SystemEnd,
+        DottedEnd,
+        DurationEnd,
+        OneEntryEnd,
+        ZeroLengthEnd,
+        ZeroOffset
+    };
+
+    /// @brief Lyric syllable position style types
+    enum class SyllablePosStyleType {
+        Default,        ///< "Others:" (always on, even though the `on` member may be false)
+        WordExt,        ///< "Syllables with Word Extensions"
+        First,          ///< "First Syllable in Lyric"
+        SystemStart     ///< "Syllable at Start of System"
+    };
+
+    char32_t hyphenChar{};                         ///< "Hyphen Character"
+    Evpu maxHyphenSeparation{};                    ///< "Maximum Space Between Hyphens"
+    Evpu wordExtVertOffset{};                      ///< "Word Extension Vertical Offset from Baseline"
+    Evpu wordExtHorzOffset{};                      ///< "Word Extension Horizontal Offset from Syllable"
+    bool useSmartWordExtensions{};                 ///< "Use Smart Word Extensions"
+    bool useAltHyphenFont{};                       ///< "Use Alternate Hyphen Font"
+    std::shared_ptr<FontInfo> altHyphenFont;       ///< "Alternate Hyphen Font"
+    bool useSmartHyphens{};                        ///< "Use Smart Hyphens"
+    SmartHyphenStart smartHyphenStart{};           ///< "Smart Hyphen Start"
+    bool wordExtNeedUnderscore{};                  ///< "Only Create on Lyrics With Underscores"
+    Evpu wordExtMinLength{};                       ///< "Word Extension Minimum Length"
+    bool wordExtOffsetToNotehead{};                ///< "Notehead Alignment: Align to Notehead" (if false: "Stretch to Note Duration")
+    bool lyricUseEdgePunctuation{};                ///< reverse of "Ignore SyllableEdgePunctuation"
+    std::string lyricPunctuationToIgnore;          ///< If this string is omitted in the xml, the default value is populated in #integrityCheck.
+    AutoNumberingAlign lyricAutoNumType{};         ///< "Automatic Lyric Numbers"
+    Efix wordExtLineWidth{};                       ///< "Word Extension Line Width"
+
+    /// @brief Syllable position style
+    struct SyllablePosStyle {
+        AlignJustify align{};                      ///< Horizontal alignment
+        AlignJustify justify{};                    ///< Horizontal justification
+        bool on{};                                 ///< Enabled state: ignore this value for `SyllablePosStyleType::Default`.
+                                                   ///< The default values are the always-applicable fallback values.
+
+        static const xml::XmlElementArray<SyllablePosStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    /// @brief Word extension connection style
+    struct WordExtConnectStyle {
+        WordExtConnectIndex connectIndex{};        ///< Connection point
+        Evpu xOffset{};                            ///< Horizontal offset
+        Evpu yOffset{};                            ///< Vertical offset
+
+        static const xml::XmlElementArray<WordExtConnectStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::unordered_map<SyllablePosStyleType, std::shared_ptr<SyllablePosStyle>> syllablePosStyles;     ///< Syllable positioning styles
+    std::unordered_map<WordExtConnectStyleType, std::shared_ptr<WordExtConnectStyle>> wordExtConnectStyles; ///< Word extension connection styles
+
+    void integrityCheck() override
+    {
+        if (!altHyphenFont) {
+            altHyphenFont = std::make_shared<FontInfo>(getDocument());
+        }
+        if (lyricPunctuationToIgnore.empty()) {
+            lyricPunctuationToIgnore = ",.?!;:'\"“”‘’";  // this default punctuation set is taken from Document Without Libraries
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "lyricOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<LyricOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class MiscOptions
  * @brief Options controlling miscellaneous settings.
  *

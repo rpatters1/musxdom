@@ -33,6 +33,7 @@ extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowCle
 extern template const XmlEnumMappingElement<others::Measure::BarlineType> XmlEnumMapping<others::Measure::BarlineType>::mapping;
 extern template const XmlEnumMappingElement<others::NamePositioning::AlignJustify> XmlEnumMapping<others::NamePositioning::AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<options::BeamOptions::FlattenStyle> XmlEnumMapping<options::BeamOptions::FlattenStyle>::mapping;
+extern template const XmlEnumMappingElement<options::LyricOptions::AlignJustify> XmlEnumMapping<options::LyricOptions::AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::AutoBracketStyle> XmlEnumMapping<options::TupletOptions::AutoBracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::BracketStyle> XmlEnumMapping<options::TupletOptions::BracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::NumberStyle> XmlEnumMapping<options::TupletOptions::NumberStyle>::mapping;
@@ -44,20 +45,14 @@ MUSX_XML_ENUM_MAPPING(ChordAssign::BassPosition, {
     {"subtext",   ChordAssign::BassPosition::Subtext}
 });
 
-MUSX_XML_ENUM_MAPPING(LyricEntryInfo::AlignJustify, {
-    {"left", LyricEntryInfo::AlignJustify::Left},
-    {"center", LyricEntryInfo::AlignJustify::Center},
-    {"right", LyricEntryInfo::AlignJustify::Right},
-});
-
 MUSX_XML_ENUM_MAPPING(StaffGroup::HideStaves, {
-    // {"Normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
+    // {"normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
     {"asGroup", StaffGroup::HideStaves::AsGroup},
     {"none", StaffGroup::HideStaves::None}
 });
 
 MUSX_XML_ENUM_MAPPING(StaffGroup::DrawBarlineStyle, {
-    // {"OnlyOnStaves", StaffGroup::DrawBarlineStyle::OnlyOnStaves}, // Default value, may not appear in the XML
+    // {"onlyOnStaves", StaffGroup::DrawBarlineStyle::OnlyOnStaves}, // Default value, may not appear in the XML
     {"group", StaffGroup::DrawBarlineStyle::ThroughStaves},
     {"Mensurstriche", StaffGroup::DrawBarlineStyle::Mensurstriche}
 });

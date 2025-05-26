@@ -62,10 +62,12 @@ void details::BeamAlterations::calcAllActiveFlags(const DocumentPtr& document)
     }
 }
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 template void details::BeamAlterations::calcAllActiveFlags<details::BeamAlterationsUpStem>(const DocumentPtr&);
 template void details::BeamAlterations::calcAllActiveFlags<details::BeamAlterationsDownStem>(const DocumentPtr&);
 template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBeamAlterationsUpStem>(const DocumentPtr&);
 template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBeamAlterationsDownStem>(const DocumentPtr&);
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 Efix details::BeamAlterations::calcEffectiveBeamWidth() const
 {

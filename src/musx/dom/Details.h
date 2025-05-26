@@ -38,10 +38,6 @@ class EntryInfoPtr;
 class EntryFrame;
 class EntryInfo;
 
-namespace options {
-class TupletOptions;
-} // namespace options
-
 namespace others {
 class InstrumentUsed;
 class Measure;
@@ -82,7 +78,7 @@ public:
     Evpu vOffset{};                                 ///< Vertical offset: positive is up. (XML node: `<ayDisp>`)
     Evpu hOffset{};                                 ///< Horizontal offset: positive is right. (XML node: `<axDisp>`)
     char32_t altChar{};                             ///< If non-zero, the character to use for the accidental. (Utf-32 if the font is a Unicode font.)
-    std::shared_ptr<FontInfo> customFont;           ///< Font settings for the accidental (populated from <fontID>, <fontSize>, and <efx>)
+    std::shared_ptr<FontInfo> customFont;           ///< Font settings for the accidental (populated from `<fontID>`, `<fontSize>`, and `<efx>`)
     bool useOwnFont{};                              ///< Whether to use #customFont.
     bool allowVertPos{};                            ///< Whether to use #vOffset.
 
@@ -835,16 +831,8 @@ public:
 class LyricEntryInfo : public EntryDetailsBase
 {
 public:
-    /**
-     * @enum AlignJustify
-     * @brief Possible alignment and justification values for lyrics.
-     */
-    enum AlignJustify
-    {
-        Left,         ///< Left-aligned/justified
-        Center,       ///< Center-aligned/justified
-        Right         ///< Right-aligned/justified
-    };
+    /// @brief AlignJustify from @ref options::LyricOptions.
+    using AlignJustify = options::LyricOptions::AlignJustify;
 
     /**
      * @brief Constructor

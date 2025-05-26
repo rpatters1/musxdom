@@ -181,6 +181,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::GraceNoteOptions,
     dom::options::KeySignatureOptions,
     dom::options::LineCurveOptions,
+    dom::options::LyricOptions,
     dom::options::MiscOptions,
     dom::options::MultimeasureRestOptions,
     dom::options::MusicSpacingOptions,
