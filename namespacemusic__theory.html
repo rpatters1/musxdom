@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('namespacemusic__theory.html',''); init
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">music_theory Namespace Reference</div></div>
@@ -108,6 +109,22 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html">Transposer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides dependency-free transposition utilities that work with any scale that has 7 diatonic steps and an equal number of divisions of the octave (EDO). The most common Western scales use 12 divisions of the octave, .i.e., 12-EDO.  <a href="classmusic__theory_1_1Transposer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a04ed1b374e50ea532b72ed1bb66683ce" id="r_a04ed1b374e50ea532b72ed1bb66683ce"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ce">DiatonicMode</a> : int { <br />
+&#160;&#160;<a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea2dfbe3d304372906c238010701613654">Ionian</a> = 0
+, <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ceab8dd79e4a88047dee0f3bf56dcb37ca8">Dorian</a> = 1
+, <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea805db0fe201d84ac80b9572cb7d262ea">Phrygian</a> = 2
+, <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ceab1cfb8d73516579a3d9e11d16377205a">Lydian</a> = 3
+, <br />
+&#160;&#160;<a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ceac1992ab744a3d5a14cb387c34a42c7ed">Mixolydian</a> = 4
+, <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea71c7913b150c35a82ad53ae6b3be4d21">Aeolian</a> = 5
+, <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea957b71824981a76ee8367e6684065f5d">Locrian</a> = 6
+<br />
+ }</td></tr>
+<tr class="memdesc:a04ed1b374e50ea532b72ed1bb66683ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the seven standard diatonic musical modes.  <a href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ce">More...</a><br /></td></tr>
+<tr class="separator:a04ed1b374e50ea532b72ed1bb66683ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -136,7 +153,49 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>STANDARD_12E
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A dependency-free, header-only collection of useful functions for music theory. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a04ed1b374e50ea532b72ed1bb66683ce" name="a04ed1b374e50ea532b72ed1bb66683ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04ed1b374e50ea532b72ed1bb66683ce">&#9670;&#160;</a></span>DiatonicMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ce">music_theory::DiatonicMode</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Represents the seven standard diatonic musical modes. </p>
+<p>Values correspond to their roots with no sharps or flats C (0) through B (6). </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a04ed1b374e50ea532b72ed1bb66683cea2dfbe3d304372906c238010701613654" name="a04ed1b374e50ea532b72ed1bb66683cea2dfbe3d304372906c238010701613654"></a>Ionian&#160;</td><td class="fielddoc"><p>major </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a04ed1b374e50ea532b72ed1bb66683ceab8dd79e4a88047dee0f3bf56dcb37ca8" name="a04ed1b374e50ea532b72ed1bb66683ceab8dd79e4a88047dee0f3bf56dcb37ca8"></a>Dorian&#160;</td><td class="fielddoc"><p>minor with raised 6 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a04ed1b374e50ea532b72ed1bb66683cea805db0fe201d84ac80b9572cb7d262ea" name="a04ed1b374e50ea532b72ed1bb66683cea805db0fe201d84ac80b9572cb7d262ea"></a>Phrygian&#160;</td><td class="fielddoc"><p>minor with flat 2 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a04ed1b374e50ea532b72ed1bb66683ceab1cfb8d73516579a3d9e11d16377205a" name="a04ed1b374e50ea532b72ed1bb66683ceab1cfb8d73516579a3d9e11d16377205a"></a>Lydian&#160;</td><td class="fielddoc"><p>major with raised 4 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a04ed1b374e50ea532b72ed1bb66683ceac1992ab744a3d5a14cb387c34a42c7ed" name="a04ed1b374e50ea532b72ed1bb66683ceac1992ab744a3d5a14cb387c34a42c7ed"></a>Mixolydian&#160;</td><td class="fielddoc"><p>major with flat 7 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a04ed1b374e50ea532b72ed1bb66683cea71c7913b150c35a82ad53ae6b3be4d21" name="a04ed1b374e50ea532b72ed1bb66683cea71c7913b150c35a82ad53ae6b3be4d21"></a>Aeolian&#160;</td><td class="fielddoc"><p>natural minor </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a04ed1b374e50ea532b72ed1bb66683cea957b71824981a76ee8367e6684065f5d" name="a04ed1b374e50ea532b72ed1bb66683cea957b71824981a76ee8367e6684065f5d"></a>Locrian&#160;</td><td class="fielddoc"><p>diminished with flat 2 and 5 </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
 <a id="a80cb60f4b9f3dc625d5d957474f63364" name="a80cb60f4b9f3dc625d5d957474f63364"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80cb60f4b9f3dc625d5d957474f63364">&#9670;&#160;</a></span>calcDisplacement()</h2>
 

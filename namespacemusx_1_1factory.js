@@ -12,9 +12,9 @@ var namespacemusx_1_1factory =
     [ "TextsFactory", "classmusx_1_1factory_1_1TextsFactory.html", null ],
     [ "TypeRegistry", "classmusx_1_1factory_1_1TypeRegistry.html", null ],
     [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
-    [ "RegisteredDetails", "namespacemusx_1_1factory.html#aa037405987aed3000eabb34011ab5d12", null ],
+    [ "RegisteredDetails", "namespacemusx_1_1factory.html#ad3cee0f5630581ce1b30c637c76f97d0", null ],
     [ "RegisteredEntries", "namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b", null ],
-    [ "RegisteredOptions", "namespacemusx_1_1factory.html#a0fc1388a40bcf03f2bdff5b18e46a395", null ],
-    [ "RegisteredOthers", "namespacemusx_1_1factory.html#a5af22e59824e3baa641bc29ba3503fa7", null ],
+    [ "RegisteredOptions", "namespacemusx_1_1factory.html#a6dc1f3c481988887655525c7160e69a2", null ],
+    [ "RegisteredOthers", "namespacemusx_1_1factory.html#a989c652a9d2505be6845a429101847e3", null ],
     [ "RegisteredTexts", "namespacemusx_1_1factory.html#ab4b3b01a07b2ca81d2786686aeb69dd5", null ]
 ];

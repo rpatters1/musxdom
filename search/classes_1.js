@@ -6,10 +6,16 @@ var searchData=
   ['baselinelyricschorus_3',['BaselineLyricsChorus',['../classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html',1,'musx::dom::details']]],
   ['baselinelyricssection_4',['BaselineLyricsSection',['../classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html',1,'musx::dom::details']]],
   ['baselinelyricsverse_5',['BaselineLyricsVerse',['../classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html',1,'musx::dom::details']]],
-  ['beamoptions_6',['BeamOptions',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html',1,'musx::dom::options']]],
-  ['beamstubdirection_7',['BeamStubDirection',['../classmusx_1_1dom_1_1details_1_1BeamStubDirection.html',1,'musx::dom::details']]],
-  ['beatchartelement_8',['BeatChartElement',['../classmusx_1_1dom_1_1others_1_1BeatChartElement.html',1,'musx::dom::others']]],
-  ['blocktext_9',['BlockText',['../classmusx_1_1dom_1_1texts_1_1BlockText.html',1,'musx::dom::texts']]],
-  ['bookmarktext_10',['BookmarkText',['../classmusx_1_1dom_1_1texts_1_1BookmarkText.html',1,'musx::dom::texts']]],
-  ['bracket_11',['Bracket',['../classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html',1,'musx::dom::details::StaffGroup']]]
+  ['beamalterations_6',['BeamAlterations',['../classmusx_1_1dom_1_1details_1_1BeamAlterations.html',1,'musx::dom::details']]],
+  ['beamalterationsdownstem_7',['BeamAlterationsDownStem',['../classmusx_1_1dom_1_1details_1_1BeamAlterationsDownStem.html',1,'musx::dom::details']]],
+  ['beamalterationsupstem_8',['BeamAlterationsUpStem',['../classmusx_1_1dom_1_1details_1_1BeamAlterationsUpStem.html',1,'musx::dom::details']]],
+  ['beamextension_9',['BeamExtension',['../classmusx_1_1dom_1_1details_1_1BeamExtension.html',1,'musx::dom::details']]],
+  ['beamextensiondownstem_10',['BeamExtensionDownStem',['../classmusx_1_1dom_1_1details_1_1BeamExtensionDownStem.html',1,'musx::dom::details']]],
+  ['beamextensionupstem_11',['BeamExtensionUpStem',['../classmusx_1_1dom_1_1details_1_1BeamExtensionUpStem.html',1,'musx::dom::details']]],
+  ['beamoptions_12',['BeamOptions',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html',1,'musx::dom::options']]],
+  ['beamstubdirection_13',['BeamStubDirection',['../classmusx_1_1dom_1_1details_1_1BeamStubDirection.html',1,'musx::dom::details']]],
+  ['beatchartelement_14',['BeatChartElement',['../classmusx_1_1dom_1_1others_1_1BeatChartElement.html',1,'musx::dom::others']]],
+  ['blocktext_15',['BlockText',['../classmusx_1_1dom_1_1texts_1_1BlockText.html',1,'musx::dom::texts']]],
+  ['bookmarktext_16',['BookmarkText',['../classmusx_1_1dom_1_1texts_1_1BookmarkText.html',1,'musx::dom::texts']]],
+  ['bracket_17',['Bracket',['../classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html',1,'musx::dom::details::StaffGroup']]]
 ];

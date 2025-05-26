@@ -135,6 +135,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2e299ae69fc2d94b57969772fc6e23c" id="r_ae2e299ae69fc2d94b57969772fc6e23c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ae2e299ae69fc2d94b57969772fc6e23c">iterateEntries</a> (std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt; iterator)</td></tr>
 <tr class="memdesc:ae2e299ae69fc2d94b57969772fc6e23c"><td class="mdescLeft">&#160;</td><td class="mdescRight">iterates the entries for this <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> from left to right for each layer in order  <br /></td></tr>
 <tr class="separator:ae2e299ae69fc2d94b57969772fc6e23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ca3ba56024cb5ef8c30bb1e9afabd9e" id="r_a5ca3ba56024cb5ef8c30bb1e9afabd9e"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a5ca3ba56024cb5ef8c30bb1e9afabd9e">calcVoices</a> () const</td></tr>
+<tr class="memdesc:a5ca3ba56024cb5ef8c30bb1e9afabd9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of voices used by the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html" title="Represents the attributes of a Finale frame holder.">GFrameHold</a> instance.  <br /></td></tr>
+<tr class="separator:a5ca3ba56024cb5ef8c30bb1e9afabd9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A context wrapper for <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> associated with a specific part and location. </p>
@@ -192,6 +195,26 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5ca3ba56024cb5ef8c30bb1e9afabd9e" name="a5ca3ba56024cb5ef8c30bb1e9afabd9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ca3ba56024cb5ef8c30bb1e9afabd9e">&#9670;&#160;</a></span>calcVoices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>, bool &gt; musx::dom::details::GFrameHoldContext::calcVoices </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the number of voices used by the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html" title="Represents the attributes of a Finale frame holder.">GFrameHold</a> instance. </p>
+<dl class="section return"><dt>Returns</dt><dd>A list of each layer that contains entries and whether that layer uses voice2. </dd></dl>
+
+</div>
+</div>
 <a id="aecf3b282a1873fc592838f7c7de4e1bb" name="aecf3b282a1873fc592838f7c7de4e1bb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aecf3b282a1873fc592838f7c7de4e1bb">&#9670;&#160;</a></span>createEntryFrame()</h2>
 

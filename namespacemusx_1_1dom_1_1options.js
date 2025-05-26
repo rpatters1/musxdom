@@ -12,6 +12,7 @@ var namespacemusx_1_1dom_1_1options =
     [ "GraceNoteOptions", "classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html", "classmusx_1_1dom_1_1options_1_1GraceNoteOptions" ],
     [ "KeySignatureOptions", "classmusx_1_1dom_1_1options_1_1KeySignatureOptions.html", "classmusx_1_1dom_1_1options_1_1KeySignatureOptions" ],
     [ "LineCurveOptions", "classmusx_1_1dom_1_1options_1_1LineCurveOptions.html", "classmusx_1_1dom_1_1options_1_1LineCurveOptions" ],
+    [ "LyricOptions", "classmusx_1_1dom_1_1options_1_1LyricOptions.html", "classmusx_1_1dom_1_1options_1_1LyricOptions" ],
     [ "MiscOptions", "classmusx_1_1dom_1_1options_1_1MiscOptions.html", "classmusx_1_1dom_1_1options_1_1MiscOptions" ],
     [ "MultimeasureRestOptions", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions" ],
     [ "MusicSpacingOptions", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions" ],

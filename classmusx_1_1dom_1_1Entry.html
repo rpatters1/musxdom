@@ -133,10 +133,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af99dd422bdcc42b63a4986eda7b18d42" id="r_af99dd422bdcc42b63a4986eda7b18d42"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#af99dd422bdcc42b63a4986eda7b18d42">getPrevious</a> () const</td></tr>
 <tr class="memdesc:af99dd422bdcc42b63a4986eda7b18d42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the previous entry in this list or nullptr if none.  <br /></td></tr>
 <tr class="separator:af99dd422bdcc42b63a4986eda7b18d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09381dad98251a4112cc9c48d9d5c8cc" id="r_a09381dad98251a4112cc9c48d9d5c8cc"><td class="memItemLeft" align="right" valign="top"><a id="a09381dad98251a4112cc9c48d9d5c8cc" name="a09381dad98251a4112cc9c48d9d5c8cc"></a>
-std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcNoteInfo</b> () const</td></tr>
-<tr class="memdesc:a09381dad98251a4112cc9c48d9d5c8cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the NoteType and number of augmentation dots. (See <a class="el" href="namespacemusx_1_1dom.html#aa215062b953a2a9a8e0062df4d991cdd" title="Calculates the NoteType and number of dots in an Edu value.">calcNoteInfoFromEdu</a>.) <br /></td></tr>
-<tr class="separator:a09381dad98251a4112cc9c48d9d5c8cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1929de44334812a632e8a1ba1e27df9e" id="r_a1929de44334812a632e8a1ba1e27df9e"><td class="memItemLeft" align="right" valign="top"><a id="a1929de44334812a632e8a1ba1e27df9e" name="a1929de44334812a632e8a1ba1e27df9e"></a>
+std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcNoteInfo</b> () const</td></tr>
+<tr class="memdesc:a1929de44334812a632e8a1ba1e27df9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the NoteType and number of augmentation dots. (See <a class="el" href="namespacemusx_1_1dom.html#aa215062b953a2a9a8e0062df4d991cdd" title="Calculates the NoteType and number of dots in an Edu value.">calcNoteInfoFromEdu</a>.) <br /></td></tr>
+<tr class="separator:a1929de44334812a632e8a1ba1e27df9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8964412efe44b6569c970cecc4b4631f" id="r_a8964412efe44b6569c970cecc4b4631f"><td class="memItemLeft" align="right" valign="top"><a id="a8964412efe44b6569c970cecc4b4631f" name="a8964412efe44b6569c970cecc4b4631f"></a>
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcFraction</b> () const</td></tr>
 <tr class="memdesc:a8964412efe44b6569c970cecc4b4631f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the duration as a <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> of a whole note. <br /></td></tr>
@@ -190,6 +190,10 @@ Public Attributes</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>numNotes</b> {}</td></tr>
 <tr class="memdesc:ab528469b556bcfba86cc0d5fe79955f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of notes in the entry. There is an error if this is not the same as notes.size(). <br /></td></tr>
 <tr class="separator:ab528469b556bcfba86cc0d5fe79955f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a527b9cb106a6dda4d3a05a5f684183f0" id="r_a527b9cb106a6dda4d3a05a5f684183f0"><td class="memItemLeft" align="right" valign="top"><a id="a527b9cb106a6dda4d3a05a5f684183f0" name="a527b9cb106a6dda4d3a05a5f684183f0"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>hOffset</b> {}</td></tr>
+<tr class="memdesc:a527b9cb106a6dda4d3a05a5f684183f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manual offset created with the <a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> Position Tool. (xml node is <code>&lt;posi&gt;</code>.) <br /></td></tr>
+<tr class="separator:a527b9cb106a6dda4d3a05a5f684183f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47d4b2fe926ac4f0a7dbd22f08b50c1b" id="r_a47d4b2fe926ac4f0a7dbd22f08b50c1b"><td class="memItemLeft" align="right" valign="top"><a id="a47d4b2fe926ac4f0a7dbd22f08b50c1b" name="a47d4b2fe926ac4f0a7dbd22f08b50c1b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> {}</td></tr>
 <tr class="memdesc:a47d4b2fe926ac4f0a7dbd22f08b50c1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should always be true but otherwise appears to be used internally by Finale. <br /></td></tr>
@@ -222,6 +226,18 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>articDetail</b> {}</t
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>noteDetail</b> {}</td></tr>
 <tr class="memdesc:a8373be49ea239513cbf52f5e4ff6b49a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates there is a note detail or EntrySize record for the entry. <br /></td></tr>
 <tr class="separator:a8373be49ea239513cbf52f5e4ff6b49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade0874a5f947f1ac8addd9372a8f8aac" id="r_ade0874a5f947f1ac8addd9372a8f8aac"><td class="memItemLeft" align="right" valign="top"><a id="ade0874a5f947f1ac8addd9372a8f8aac" name="ade0874a5f947f1ac8addd9372a8f8aac"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>dotTieAlt</b> {}</td></tr>
+<tr class="memdesc:ade0874a5f947f1ac8addd9372a8f8aac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates dot or tie alterations are present. <br /></td></tr>
+<tr class="separator:ade0874a5f947f1ac8addd9372a8f8aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafd015ce09d2b966d5317a0741388f9e" id="r_aafd015ce09d2b966d5317a0741388f9e"><td class="memItemLeft" align="right" valign="top"><a id="aafd015ce09d2b966d5317a0741388f9e" name="aafd015ce09d2b966d5317a0741388f9e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>tupletStart</b> {}</td></tr>
+<tr class="memdesc:aafd015ce09d2b966d5317a0741388f9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that a tuplet start on the entry. <br /></td></tr>
+<tr class="separator:aafd015ce09d2b966d5317a0741388f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2db0715ce809789ded5043677bf917a3" id="r_a2db0715ce809789ded5043677bf917a3"><td class="memItemLeft" align="right" valign="top"><a id="a2db0715ce809789ded5043677bf917a3" name="a2db0715ce809789ded5043677bf917a3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>beamExt</b> {}</td></tr>
+<tr class="memdesc:a2db0715ce809789ded5043677bf917a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that there is a beam extension on the entry. <br /></td></tr>
+<tr class="separator:a2db0715ce809789ded5043677bf917a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad829caa4f42eee2a016822e76d04f44c" id="r_ad829caa4f42eee2a016822e76d04f44c"><td class="memItemLeft" align="right" valign="top"><a id="ad829caa4f42eee2a016822e76d04f44c" name="ad829caa4f42eee2a016822e76d04f44c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>beam</b> {}</td></tr>
 <tr class="memdesc:ad829caa4f42eee2a016822e76d04f44c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.) <br /></td></tr>
@@ -242,9 +258,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>freezeStem</b> {}</td
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>upStem</b> {}</td></tr>
 <tr class="memdesc:a0a80d84ecac51e22cb87cfe7db9ceaa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a stem is up or down. (Only reliable when <a class="el" href="classmusx_1_1dom_1_1Entry.html#a2053136682ff832921d71dc11bbcd7d4" title="Freeze stem flag (upStem gives the direction.)">freezeStem</a> is true.) <br /></td></tr>
 <tr class="separator:a0a80d84ecac51e22cb87cfe7db9ceaa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e97e6ca23c02f4f2b98a875ad863459" id="r_a1e97e6ca23c02f4f2b98a875ad863459"><td class="memItemLeft" align="right" valign="top"><a id="a1e97e6ca23c02f4f2b98a875ad863459" name="a1e97e6ca23c02f4f2b98a875ad863459"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>noLeger</b> {}</td></tr>
+<tr class="memdesc:a1e97e6ca23c02f4f2b98a875ad863459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide ledger lines. <br /></td></tr>
+<tr class="separator:a1e97e6ca23c02f4f2b98a875ad863459"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42b417cdb28ed1de83c586fb7c365069" id="r_a42b417cdb28ed1de83c586fb7c365069"><td class="memItemLeft" align="right" valign="top"><a id="a42b417cdb28ed1de83c586fb7c365069" name="a42b417cdb28ed1de83c586fb7c365069"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>stemDetail</b> {}</td></tr>
-<tr class="memdesc:a42b417cdb28ed1de83c586fb7c365069"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates there are stem modification. <br /></td></tr>
+<tr class="memdesc:a42b417cdb28ed1de83c586fb7c365069"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates there are stem modifications. <br /></td></tr>
 <tr class="separator:a42b417cdb28ed1de83c586fb7c365069"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa04b08c5cb6dbde8e24b7ff5be524c04" id="r_aa04b08c5cb6dbde8e24b7ff5be524c04"><td class="memItemLeft" align="right" valign="top"><a id="aa04b08c5cb6dbde8e24b7ff5be524c04" name="aa04b08c5cb6dbde8e24b7ff5be524c04"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>smartShapeDetail</b> {}</td></tr>
@@ -254,6 +274,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>smartShapeDetail</b> 
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>sorted</b> {}</td></tr>
 <tr class="memdesc:ab76162a84d2dc54af058a611af01d51a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorted flag. <br /></td></tr>
 <tr class="separator:ab76162a84d2dc54af058a611af01d51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a252e490a7345608cef59ea26cf7f6bc0" id="r_a252e490a7345608cef59ea26cf7f6bc0"><td class="memItemLeft" align="right" valign="top"><a id="a252e490a7345608cef59ea26cf7f6bc0" name="a252e490a7345608cef59ea26cf7f6bc0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>noPlayback</b> {}</td></tr>
+<tr class="memdesc:a252e490a7345608cef59ea26cf7f6bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that the entry should not be played back. <br /></td></tr>
+<tr class="separator:a252e490a7345608cef59ea26cf7f6bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab39cf53be02d0856378fd81602a118a2" id="r_ab39cf53be02d0856378fd81602a118a2"><td class="memItemLeft" align="right" valign="top"><a id="ab39cf53be02d0856378fd81602a118a2" name="ab39cf53be02d0856378fd81602a118a2"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>lyricDetail</b> {}</td></tr>
 <tr class="memdesc:ab39cf53be02d0856378fd81602a118a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates there is a lyric assignment on the entry. <br /></td></tr>

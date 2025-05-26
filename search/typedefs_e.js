@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['textspoolptr_0',['TextsPoolPtr',['../namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4',1,'musx::dom']]],
-  ['texttype_1',['texttype',['../classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html#a58bf75c75cb55e1bc661ea72388006a8',1,'musx::dom::details::BaselineLyricsChorus::TextType'],['../classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html#a1e164f3ca8747fea4bf6218dcc0ff92c',1,'musx::dom::details::BaselineLyricsSection::TextType'],['../classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html#a63cb79949187fe2b9f9dbbdd24481455',1,'musx::dom::details::BaselineLyricsVerse::TextType'],['../classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html#a9062c0a12ad861947c065d0f37f62abc',1,'musx::dom::details::LyricAssignChorus::TextType'],['../classmusx_1_1dom_1_1details_1_1LyricAssignSection.html#ac3a0a5f0e37dfed24ff71a1f64eb0303',1,'musx::dom::details::LyricAssignSection::TextType'],['../classmusx_1_1dom_1_1details_1_1LyricAssignVerse.html#a7fe5411d4b875b14ce317a0f5d705ce8',1,'musx::dom::details::LyricAssignVerse::TextType']]]
+  ['sharednodes_0',['SharedNodes',['../classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f693e76ad0a',1,'musx::dom::Base']]],
+  ['systemcmper_1',['SystemCmper',['../namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237',1,'musx::dom']]]
 ];

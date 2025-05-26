@@ -182,6 +182,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:ac32c7dc63fac40c07b1c4f4cabeca705" id="r_ac32c7dc63fac40c07b1c4f4cabeca705"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ac32c7dc63fac40c07b1c4f4cabeca705">getNextInVoice</a> (int voice) const</td></tr>
 <tr class="memdesc:ac32c7dc63fac40c07b1c4f4cabeca705"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next entry in the frame in the specified v1/v2 or null if none.  <br /></td></tr>
 <tr class="separator:ac32c7dc63fac40c07b1c4f4cabeca705"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c8203176b8e64a3c2240b8bc6c45b10" id="r_a1c8203176b8e64a3c2240b8bc6c45b10"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a1c8203176b8e64a3c2240b8bc6c45b10">getPreviousInVoice</a> (int voice) const</td></tr>
+<tr class="memdesc:a1c8203176b8e64a3c2240b8bc6c45b10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the previous entry in the frame in the specified v1/v2 or null if none.  <br /></td></tr>
+<tr class="separator:a1c8203176b8e64a3c2240b8bc6c45b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6192cc28f317f8874486401988abbeb5" id="r_a6192cc28f317f8874486401988abbeb5"><td class="memItemLeft" align="right" valign="top"><a id="a6192cc28f317f8874486401988abbeb5" name="a6192cc28f317f8874486401988abbeb5"></a>
 <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNextInBeamGroup</b> (bool includeHiddenEntries=false) const</td></tr>
 <tr class="memdesc:a6192cc28f317f8874486401988abbeb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group. <br /></td></tr>
@@ -219,6 +222,10 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 <tr class="memitem:adf09eb8a3925a1799ff4dad693ed7c5e" id="r_adf09eb8a3925a1799ff4dad693ed7c5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#adf09eb8a3925a1799ff4dad693ed7c5e">calcBeamStubIsLeft</a> () const</td></tr>
 <tr class="memdesc:adf09eb8a3925a1799ff4dad693ed7c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if a beam stub on this entry would go left or right. It does not check that an entry actually has a beam stub. Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a5b2706891a0d330518cc5a85fbf0c8aa" title="Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub,...">calcLowestBeamStub</a> to discover if the entry has a beam stub.  <br /></td></tr>
 <tr class="separator:adf09eb8a3925a1799ff4dad693ed7c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2df5320c5c229417d41865cd7e56df48" id="r_a2df5320c5c229417d41865cd7e56df48"><td class="memItemLeft" align="right" valign="top"><a id="a2df5320c5c229417d41865cd7e56df48" name="a2df5320c5c229417d41865cd7e56df48"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () const</td></tr>
+<tr class="memdesc:a2df5320c5c229417d41865cd7e56df48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry can be beamed. <br /></td></tr>
+<tr class="separator:a2df5320c5c229417d41865cd7e56df48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ownership of the frame so that any instance of it keeps the frame alive without the need for circular references. </p>
@@ -521,6 +528,33 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 
 <p>Get the previous entry in the same layer and staff. This can be in the previous measure. </p>
 <dl class="section return"><dt>Returns</dt><dd>The previous continguous entry. Returns nullptr if it encounters an empty frame or the beginning of the file. </dd></dl>
+
+</div>
+</div>
+<a id="a1c8203176b8e64a3c2240b8bc6c45b10" name="a1c8203176b8e64a3c2240b8bc6c45b10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c8203176b8e64a3c2240b8bc6c45b10">&#9670;&#160;</a></span>getPreviousInVoice()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::getPreviousInVoice </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>voice</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the previous entry in the frame in the specified v1/v2 or null if none. </p>
+<p>Unlike <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ab1b0a9ba02cfc7985aa40ed3ae044eb0" title="Get the previous entry in the frame in the same voice.">getPreviousSameV</a>, this returns the next v2 entry in any v2 launch sequence.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">voice</td><td>1 or 2 </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

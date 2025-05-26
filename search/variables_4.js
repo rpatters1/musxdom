@@ -55,9 +55,10 @@ var searchData=
   ['ewedrumsogo_52',['EweDrumSogo',['../namespacemusx_1_1dom_1_1uuid.html#a9d94913bce76d78fb5c155a0954f12fb',1,'musx::dom::uuid']]],
   ['excludeothers_53',['excludeOthers',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a6bdd14ae516689a55b2f32acd849ea1f',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['expand_54',['expand',['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#a28c31242e0f4e63e4749c079eaf91261',1,'musx::dom::others::NamePositioning']]],
-  ['extendbeamsoverrests_55',['extendBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a1f3b47bbee6bfc6cce1eebee87ce55f8',1,'musx::dom::options::BeamOptions']]],
-  ['extendsecbeamsoverrests_56',['extendSecBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a02176fb4836f94f10f6fdb5e856785d6',1,'musx::dom::options::BeamOptions']]],
-  ['extractpart_57',['extractPart',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aa8675552dd37b6a515773aa5f860d46d',1,'musx::dom::others::PartDefinition']]],
-  ['extraendsystemspace_58',['extraEndSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a81d083d6208bfcde0680e0d5e2b74c7c',1,'musx::dom::others::StaffSystem']]],
-  ['extrastartsystemspace_59',['extraStartSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#aeb8d6f9841c73fdf5f04be04a7393d91',1,'musx::dom::others::StaffSystem']]]
+  ['extbeyond8th_55',['extBeyond8th',['../classmusx_1_1dom_1_1details_1_1BeamExtension.html#a3921e8086601cc5062f021afa54f6a7a',1,'musx::dom::details::BeamExtension']]],
+  ['extendbeamsoverrests_56',['extendBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a1f3b47bbee6bfc6cce1eebee87ce55f8',1,'musx::dom::options::BeamOptions']]],
+  ['extendsecbeamsoverrests_57',['extendSecBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a02176fb4836f94f10f6fdb5e856785d6',1,'musx::dom::options::BeamOptions']]],
+  ['extractpart_58',['extractPart',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aa8675552dd37b6a515773aa5f860d46d',1,'musx::dom::others::PartDefinition']]],
+  ['extraendsystemspace_59',['extraEndSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a81d083d6208bfcde0680e0d5e2b74c7c',1,'musx::dom::others::StaffSystem']]],
+  ['extrastartsystemspace_60',['extraStartSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#aeb8d6f9841c73fdf5f04be04a7393d91',1,'musx::dom::others::StaffSystem']]]
 ];

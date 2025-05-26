@@ -8,9 +8,11 @@ var searchData=
   ['lyricassignchorus_5',['LyricAssignChorus',['../classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html',1,'musx::dom::details']]],
   ['lyricassignsection_6',['LyricAssignSection',['../classmusx_1_1dom_1_1details_1_1LyricAssignSection.html',1,'musx::dom::details']]],
   ['lyricassignverse_7',['LyricAssignVerse',['../classmusx_1_1dom_1_1details_1_1LyricAssignVerse.html',1,'musx::dom::details']]],
-  ['lyricschorus_8',['LyricsChorus',['../classmusx_1_1dom_1_1texts_1_1LyricsChorus.html',1,'musx::dom::texts']]],
-  ['lyricssection_9',['LyricsSection',['../classmusx_1_1dom_1_1texts_1_1LyricsSection.html',1,'musx::dom::texts']]],
-  ['lyricssyllableinfo_10',['LyricsSyllableInfo',['../classmusx_1_1dom_1_1LyricsSyllableInfo.html',1,'musx::dom']]],
-  ['lyricstextbase_11',['LyricsTextBase',['../classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html',1,'musx::dom::texts']]],
-  ['lyricsverse_12',['LyricsVerse',['../classmusx_1_1dom_1_1texts_1_1LyricsVerse.html',1,'musx::dom::texts']]]
+  ['lyricentryinfo_8',['LyricEntryInfo',['../classmusx_1_1dom_1_1details_1_1LyricEntryInfo.html',1,'musx::dom::details']]],
+  ['lyricoptions_9',['LyricOptions',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html',1,'musx::dom::options']]],
+  ['lyricschorus_10',['LyricsChorus',['../classmusx_1_1dom_1_1texts_1_1LyricsChorus.html',1,'musx::dom::texts']]],
+  ['lyricssection_11',['LyricsSection',['../classmusx_1_1dom_1_1texts_1_1LyricsSection.html',1,'musx::dom::texts']]],
+  ['lyricssyllableinfo_12',['LyricsSyllableInfo',['../classmusx_1_1dom_1_1LyricsSyllableInfo.html',1,'musx::dom']]],
+  ['lyricstextbase_13',['LyricsTextBase',['../classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html',1,'musx::dom::texts']]],
+  ['lyricsverse_14',['LyricsVerse',['../classmusx_1_1dom_1_1texts_1_1LyricsVerse.html',1,'musx::dom::texts']]]
 ];

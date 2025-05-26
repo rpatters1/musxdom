@@ -125,9 +125,12 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Frame</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> inci=0)</td></tr>
 <tr class="memdesc:a264bdcc5b32fb5a8455e0d5ecfd6783b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a264bdcc5b32fb5a8455e0d5ecfd6783b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b72073c5097a491ebdedbd1bf37993a" id="r_a1b72073c5097a491ebdedbd1bf37993a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#a1b72073c5097a491ebdedbd1bf37993a">getEntries</a> ()</td></tr>
-<tr class="memdesc:a1b72073c5097a491ebdedbd1bf37993a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of entries contained in the frame.  <br /></td></tr>
-<tr class="separator:a1b72073c5097a491ebdedbd1bf37993a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69dcaf34684d5fb7b04d8f8df3051656" id="r_a69dcaf34684d5fb7b04d8f8df3051656"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#a69dcaf34684d5fb7b04d8f8df3051656">iterateRawEntries</a> (std::function&lt; bool(const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;entry)&gt; iterator) const</td></tr>
+<tr class="memdesc:a69dcaf34684d5fb7b04d8f8df3051656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops.  <br /></td></tr>
+<tr class="separator:a69dcaf34684d5fb7b04d8f8df3051656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa56ea8a23ac2e4d37ead46455aa62182" id="r_aa56ea8a23ac2e4d37ead46455aa62182"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#aa56ea8a23ac2e4d37ead46455aa62182">getEntries</a> () const</td></tr>
+<tr class="memdesc:aa56ea8a23ac2e4d37ead46455aa62182"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of entries contained in the frame.  <br /></td></tr>
+<tr class="separator:aa56ea8a23ac2e4d37ead46455aa62182"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef19abe9b279f31d80a2bb02eec23967" id="r_aef19abe9b279f31d80a2bb02eec23967"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#aef19abe9b279f31d80a2bb02eec23967">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:aef19abe9b279f31d80a2bb02eec23967"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:aef19abe9b279f31d80a2bb02eec23967"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -240,8 +243,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </ul>
 <p>The class is identified by the XML node name "frameSpec". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1b72073c5097a491ebdedbd1bf37993a" name="a1b72073c5097a491ebdedbd1bf37993a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b72073c5097a491ebdedbd1bf37993a">&#9670;&#160;</a></span>getEntries()</h2>
+<a id="aa56ea8a23ac2e4d37ead46455aa62182" name="aa56ea8a23ac2e4d37ead46455aa62182"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa56ea8a23ac2e4d37ead46455aa62182">&#9670;&#160;</a></span>getEntries()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -250,7 +253,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
           <td class="memname">std::vector&lt; std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &gt; musx::dom::others::Frame::getEntries </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -293,6 +296,32 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
+
+</div>
+</div>
+<a id="a69dcaf34684d5fb7b04d8f8df3051656" name="a69dcaf34684d5fb7b04d8f8df3051656"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69dcaf34684d5fb7b04d8f8df3051656">&#9670;&#160;</a></span>iterateRawEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::others::Frame::iterateRawEntries </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;entry)&gt;&#160;</td>
+          <td class="paramname"><em>iterator</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iterator</td><td>function. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

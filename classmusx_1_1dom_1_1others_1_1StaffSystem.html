@@ -125,6 +125,12 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>StaffSystem</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> staffSystemId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:a2379e9502bd46ef93a559ee15a8e8440"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a2379e9502bd46ef93a559ee15a8e8440"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac38cf2f59a255aace72e32eaafd8e35a" id="r_ac38cf2f59a255aace72e32eaafd8e35a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ac38cf2f59a255aace72e32eaafd8e35a">getLastMeasure</a> () const</td></tr>
+<tr class="memdesc:ac38cf2f59a255aace72e32eaafd8e35a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encapsulates the weird Finale fact that <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12">endMeas</a> is actually one past the end of the system.  <br /></td></tr>
+<tr class="separator:ac38cf2f59a255aace72e32eaafd8e35a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d768e858a24cf803606fdfc64034b59" id="r_a2d768e858a24cf803606fdfc64034b59"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2d768e858a24cf803606fdfc64034b59">calcNumMeasures</a> () const</td></tr>
+<tr class="memdesc:a2d768e858a24cf803606fdfc64034b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of measures on the system, encapsulating how <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12">endMeas</a> works.  <br /></td></tr>
+<tr class="separator:a2d768e858a24cf803606fdfc64034b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e9360e4bab59fffa40384d67606b014" id="r_a8e9360e4bab59fffa40384d67606b014"><td class="memItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#a8e9360e4bab59fffa40384d67606b014">calcMinMaxStaffSizes</a> () const</td></tr>
 <tr class="memdesc:a8e9360e4bab59fffa40384d67606b014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the maximum and minimum staff scaling values for this system by searching each staff for individual staff scaling.  <br /></td></tr>
 <tr class="separator:a8e9360e4bab59fffa40384d67606b014"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,9 +184,7 @@ Public Attributes</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>startMeas</b> {}</td></tr>
 <tr class="memdesc:a121e087321973d235c50d09b7fc49335"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starting measure of the staff system. See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a>. <br /></td></tr>
 <tr class="separator:a121e087321973d235c50d09b7fc49335"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab84d4ab7afe06f2331e6a739e93f2a12" id="r_ab84d4ab7afe06f2331e6a739e93f2a12"><td class="memItemLeft" align="right" valign="top"><a id="ab84d4ab7afe06f2331e6a739e93f2a12" name="ab84d4ab7afe06f2331e6a739e93f2a12"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>endMeas</b> {}</td></tr>
-<tr class="memdesc:ab84d4ab7afe06f2331e6a739e93f2a12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ending measure of the staff system. See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a>. <br /></td></tr>
+<tr class="memitem:ab84d4ab7afe06f2331e6a739e93f2a12" id="r_ab84d4ab7afe06f2331e6a739e93f2a12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12">endMeas</a> {}</td></tr>
 <tr class="separator:ab84d4ab7afe06f2331e6a739e93f2a12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58572508b77332051cbe22fe7bac342d" id="r_a58572508b77332051cbe22fe7bac342d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#a58572508b77332051cbe22fe7bac342d">horzPercent</a> {}</td></tr>
 <tr class="separator:a58572508b77332051cbe22fe7bac342d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -310,6 +314,62 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 </div>
 </div>
+<a id="a2d768e858a24cf803606fdfc64034b59" name="a2d768e858a24cf803606fdfc64034b59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d768e858a24cf803606fdfc64034b59">&#9670;&#160;</a></span>calcNumMeasures()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::others::StaffSystem::calcNumMeasures </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the number of measures on the system, encapsulating how <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12">endMeas</a> works. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of measures on the system. </dd></dl>
+
+</div>
+</div>
+<a id="ac38cf2f59a255aace72e32eaafd8e35a" name="ac38cf2f59a255aace72e32eaafd8e35a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac38cf2f59a255aace72e32eaafd8e35a">&#9670;&#160;</a></span>getLastMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> musx::dom::others::StaffSystem::getLastMeasure </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Encapsulates the weird Finale fact that <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12">endMeas</a> is actually one past the end of the system. </p>
+<dl class="section return"><dt>Returns</dt><dd>The actual last measure on the system. </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a7d519be5fbe7913049ec1a48c1581463" name="a7d519be5fbe7913049ec1a48c1581463"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d519be5fbe7913049ec1a48c1581463">&#9670;&#160;</a></span>bottom</h2>
@@ -323,6 +383,21 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
       </table>
 </div><div class="memdoc">
 <p>Bottom margin in Evpu. This value is 96 (i.e., 1 5-line staff thickness) less than the U.I. value. That means if you enter 0 in the Finale UI, this value is -96. </p>
+
+</div>
+</div>
+<a id="ab84d4ab7afe06f2331e6a739e93f2a12" name="ab84d4ab7afe06f2331e6a739e93f2a12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab84d4ab7afe06f2331e6a739e93f2a12">&#9670;&#160;</a></span>endMeas</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> musx::dom::others::StaffSystem::endMeas {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Ending measure of the staff system <em>plus one</em>. This is effectively the first measure of the next system or one measure past the last measure in the document. (Finale being Finale.) See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a>. </p>
 
 </div>
 </div>

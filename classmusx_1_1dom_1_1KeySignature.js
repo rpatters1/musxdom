@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1KeySignature =
 [
     [ "calcAlterationOnNote", "classmusx_1_1dom_1_1KeySignature.html#a5452f8d0cb4cb0f3066ad8fd24957d33", null ],
+    [ "calcDiatonicMode", "classmusx_1_1dom_1_1KeySignature.html#a70d5a77caa9ad5f9e5e5c89653125e34", null ],
     [ "calcEDODivisions", "classmusx_1_1dom_1_1KeySignature.html#a483682cbfa79240872d9e11dbed6af2e", null ],
     [ "calcKeyMap", "classmusx_1_1dom_1_1KeySignature.html#ad49a2938ad8ab254bb2362a626a06aef", null ],
     [ "calcTonalCenterIndex", "classmusx_1_1dom_1_1KeySignature.html#ae17675c61d076e236952c9bcfbe25ffc", null ],

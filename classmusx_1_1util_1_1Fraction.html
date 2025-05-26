@@ -123,6 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a13dccd0b177ec18d649c0457efaa2a4e" id="r_a13dccd0b177ec18d649c0457efaa2a4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a13dccd0b177ec18d649c0457efaa2a4e">remainder</a> () const</td></tr>
 <tr class="memdesc:a13dccd0b177ec18d649c0457efaa2a4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the fractional part of the fraction.  <br /></td></tr>
 <tr class="separator:a13dccd0b177ec18d649c0457efaa2a4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a451dee1ae0c731665ef51318e3613e95" id="r_a451dee1ae0c731665ef51318e3613e95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a451dee1ae0c731665ef51318e3613e95">reciprocal</a> () const</td></tr>
+<tr class="memdesc:a451dee1ae0c731665ef51318e3613e95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the reciprocal fraction.  <br /></td></tr>
+<tr class="separator:a451dee1ae0c731665ef51318e3613e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68f6bf1c16aadb6275c543c9089e76bf" id="r_a68f6bf1c16aadb6275c543c9089e76bf"><td class="memItemLeft" align="right" valign="top"><a id="a68f6bf1c16aadb6275c543c9089e76bf" name="a68f6bf1c16aadb6275c543c9089e76bf"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">dom::Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcEduDuration</b> () const</td></tr>
 <tr class="memdesc:a68f6bf1c16aadb6275c543c9089e76bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates duration as a fraction of a whole note. <br /></td></tr>
@@ -888,6 +891,40 @@ Friends</h2></td></tr>
 
 <p>Returns the integer (whole number) part of the fraction. </p>
 <dl class="section return"><dt>Returns</dt><dd>The integer part of the fraction. </dd></dl>
+
+</div>
+</div>
+<a id="a451dee1ae0c731665ef51318e3613e95" name="a451dee1ae0c731665ef51318e3613e95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a451dee1ae0c731665ef51318e3613e95">&#9670;&#160;</a></span>reciprocal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a> musx::util::Fraction::reciprocal </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the reciprocal fraction. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the current value of the fraction is 0 <br  />
+ </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

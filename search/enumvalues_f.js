@@ -6,7 +6,8 @@ var searchData=
   ['pentagon_3',['Pentagon',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256a09fcf42bcab804addc759acce8ec9051',1,'musx::dom::others::Enclosure']]],
   ['percussion_4',['percussion',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aacb5c10c0b488ed4f3826ba628d18ca6a',1,'musx::dom::options::FontOptions::Percussion'],['../namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67facb5c10c0b488ed4f3826ba628d18ca6a',1,'musx::dom::Percussion']]],
   ['percussionmidimap_5',['PercussionMidiMap',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea9886936a49e92031e21d52724cb2e0de',1,'musx::dom::others']]],
-  ['pianobrace_6',['PianoBrace',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672aaf8f1f518c9abfade56624f83e4d399c',1,'musx::dom::details::StaffGroup']]],
-  ['playtempotoolchanges_7',['PlayTempoToolChanges',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaa0cbb728784176e49dae513294122965',1,'musx::dom::others']]],
-  ['plus_8',['Plus',['../classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html#ad089ab13497a1e9197571632e31c2757a32ba78fe43257d3e7f88e3935a8ea0d4',1,'musx::dom::others::ChordSuffixElement']]]
+  ['phrygian_6',['Phrygian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea805db0fe201d84ac80b9572cb7d262ea',1,'music_theory']]],
+  ['pianobrace_7',['PianoBrace',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672aaf8f1f518c9abfade56624f83e4d399c',1,'musx::dom::details::StaffGroup']]],
+  ['playtempotoolchanges_8',['PlayTempoToolChanges',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaa0cbb728784176e49dae513294122965',1,'musx::dom::others']]],
+  ['plus_9',['Plus',['../classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html#ad089ab13497a1e9197571632e31c2757a32ba78fe43257d3e7f88e3935a8ea0d4',1,'musx::dom::others::ChordSuffixElement']]]
 ];

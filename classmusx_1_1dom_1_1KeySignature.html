@@ -146,6 +146,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMajor</b> () const<
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMinor</b> () const</td></tr>
 <tr class="memdesc:a98167d243969551031f85e34b11a6562"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether this is a built-in minor key <br /></td></tr>
 <tr class="separator:a98167d243969551031f85e34b11a6562"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70d5a77caa9ad5f9e5e5c89653125e34" id="r_a70d5a77caa9ad5f9e5e5c89653125e34"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ce">music_theory::DiatonicMode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a70d5a77caa9ad5f9e5e5c89653125e34">calcDiatonicMode</a> () const</td></tr>
+<tr class="memdesc:a70d5a77caa9ad5f9e5e5c89653125e34"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this key specifies a diatonic mode, returns the mode. This value is independent of EDO divisions. Any correctly configured linear key signature should return a value.  <br /></td></tr>
+<tr class="separator:a70d5a77caa9ad5f9e5e5c89653125e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abaa1f32c8341eb8893b4334596121518" id="r_abaa1f32c8341eb8893b4334596121518"><td class="memItemLeft" align="right" valign="top"><a id="abaa1f32c8341eb8893b4334596121518" name="abaa1f32c8341eb8893b4334596121518"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &amp;src)</td></tr>
 <tr class="memdesc:abaa1f32c8341eb8893b4334596121518"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same key signature. Does not take into account transposition. <br /></td></tr>
@@ -300,6 +303,26 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a70d5a77caa9ad5f9e5e5c89653125e34" name="a70d5a77caa9ad5f9e5e5c89653125e34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70d5a77caa9ad5f9e5e5c89653125e34">&#9670;&#160;</a></span>calcDiatonicMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ce">music_theory::DiatonicMode</a> &gt; musx::dom::KeySignature::calcDiatonicMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If this key specifies a diatonic mode, returns the mode. This value is independent of EDO divisions. Any correctly configured linear key signature should return a value. </p>
+<dl class="section return"><dt>Returns</dt><dd>The diatonic mode or std::nullopt if it is not one. </dd></dl>
 
 </div>
 </div>

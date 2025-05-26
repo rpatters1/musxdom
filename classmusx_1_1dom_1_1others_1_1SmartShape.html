@@ -289,7 +289,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hidden</b> {}</td></t
 <tr class="separator:a5fa83fc067c41f14b3cc56dc45af82dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23523cc7e83d6b1821d816590dadca45" id="r_a23523cc7e83d6b1821d816590dadca45"><td class="memItemLeft" align="right" valign="top"><a id="a23523cc7e83d6b1821d816590dadca45" name="a23523cc7e83d6b1821d816590dadca45"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lineStyleId</b> {}</td></tr>
-<tr class="memdesc:a23523cc7e83d6b1821d816590dadca45"><td class="mdescLeft">&#160;</td><td class="mdescRight">If non-zero, the custom line for this shape. Several <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6f" title="All the smart shape types supported by Finale.">ShapeType</a> values use it. (xml node is <code>&lt;lineStyleID&gt;</code>) <br /></td></tr>
+<tr class="memdesc:a23523cc7e83d6b1821d816590dadca45"><td class="mdescLeft">&#160;</td><td class="mdescRight">If non-zero, the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html">SmartShapeCustomLine</a> for this shape. Several <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6f" title="All the smart shape types supported by Finale.">ShapeType</a> values use it. (xml node is <code>&lt;lineStyleID&gt;</code>) <br /></td></tr>
 <tr class="separator:a23523cc7e83d6b1821d816590dadca45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
@@ -401,7 +401,7 @@ Additional Inherited Members</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a7b869b52ed9d931b235b79d2c4ed1e6fab1dba6a4aa8c4101448fe02a5bc08f37" name="a7b869b52ed9d931b235b79d2c4ed1e6fab1dba6a4aa8c4101448fe02a5bc08f37"></a>DashLineUpBoth&#160;</td><td class="fielddoc"><p>Dashed line with upward hooks on both ends. (xml value is "dashLineUp2") </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a7b869b52ed9d931b235b79d2c4ed1e6fa52c10d6c0bd5d76470bffe2daf2171db" name="a7b869b52ed9d931b235b79d2c4ed1e6fa52c10d6c0bd5d76470bffe2daf2171db"></a>Glissando&#160;</td><td class="fielddoc"><p>Glissando (shape is determined by <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a23523cc7e83d6b1821d816590dadca45" title="If non-zero, the custom line for this shape. Several ShapeType values use it. (xml node is &lt;lineStyle...">lineStyleId</a>) == 25 (24 has no value) </p>
+<tr><td class="fieldname"><a id="a7b869b52ed9d931b235b79d2c4ed1e6fa52c10d6c0bd5d76470bffe2daf2171db" name="a7b869b52ed9d931b235b79d2c4ed1e6fa52c10d6c0bd5d76470bffe2daf2171db"></a>Glissando&#160;</td><td class="fielddoc"><p>Glissando (shape is determined by <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a23523cc7e83d6b1821d816590dadca45" title="If non-zero, the SmartShapeCustomLine for this shape. Several ShapeType values use it....">lineStyleId</a>) == 25 (24 has no value) </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a7b869b52ed9d931b235b79d2c4ed1e6fa3f71cc9a66d5c53f1e534c7d2db3395e" name="a7b869b52ed9d931b235b79d2c4ed1e6fa3f71cc9a66d5c53f1e534c7d2db3395e"></a>TabSlide&#160;</td><td class="fielddoc"><p>Tab slide (a solid line that is often used as a note-attached glissando) </p>
 </td></tr>
@@ -409,7 +409,7 @@ Additional Inherited Members</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a7b869b52ed9d931b235b79d2c4ed1e6fa0c38943f4e7388d82b55a93bad7db492" name="a7b869b52ed9d931b235b79d2c4ed1e6fa0c38943f4e7388d82b55a93bad7db492"></a>BendCurve&#160;</td><td class="fielddoc"><p>Bend curve. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a7b869b52ed9d931b235b79d2c4ed1e6fa132aa8be81626232ff23df91eb3ab3d0" name="a7b869b52ed9d931b235b79d2c4ed1e6fa132aa8be81626232ff23df91eb3ab3d0"></a>CustomLine&#160;</td><td class="fielddoc"><p>User-created custom line with shape determined by <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a23523cc7e83d6b1821d816590dadca45" title="If non-zero, the custom line for this shape. Several ShapeType values use it. (xml node is &lt;lineStyle...">lineStyleId</a>. (xml value is "smartLine") </p>
+<tr><td class="fieldname"><a id="a7b869b52ed9d931b235b79d2c4ed1e6fa132aa8be81626232ff23df91eb3ab3d0" name="a7b869b52ed9d931b235b79d2c4ed1e6fa132aa8be81626232ff23df91eb3ab3d0"></a>CustomLine&#160;</td><td class="fielddoc"><p>User-created custom line with shape determined by <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a23523cc7e83d6b1821d816590dadca45" title="If non-zero, the SmartShapeCustomLine for this shape. Several ShapeType values use it....">lineStyleId</a>. (xml value is "smartLine") </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a7b869b52ed9d931b235b79d2c4ed1e6fad3289a435be7266f6a5a0d2eed469d59" name="a7b869b52ed9d931b235b79d2c4ed1e6fad3289a435be7266f6a5a0d2eed469d59"></a>SolidLineUpLeft&#160;</td><td class="fielddoc"><p>Solid line with upward left hook. </p>
 </td></tr>

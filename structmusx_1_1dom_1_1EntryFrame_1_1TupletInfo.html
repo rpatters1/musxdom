@@ -107,10 +107,25 @@ $(document).ready(function(){initNavTree('structmusx_1_1dom_1_1EntryFrame_1_1Tup
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afc5f27f7e689f4155bb0de7ec6050b1e" id="r_afc5f27f7e689f4155bb0de7ec6050b1e"><td class="memItemLeft" align="right" valign="top"><a id="afc5f27f7e689f4155bb0de7ec6050b1e" name="afc5f27f7e689f4155bb0de7ec6050b1e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TupletInfo</b> (const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1details_1_1TupletDef.html">details::TupletDef</a> &gt; &amp;tup, size_t index, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> start)</td></tr>
-<tr class="memdesc:afc5f27f7e689f4155bb0de7ec6050b1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
-<tr class="separator:afc5f27f7e689f4155bb0de7ec6050b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa78c371a760bfb64f11f93c8380a19eb" id="r_aa78c371a760bfb64f11f93c8380a19eb"><td class="memItemLeft" align="right" valign="top"><a id="aa78c371a760bfb64f11f93c8380a19eb" name="aa78c371a760bfb64f11f93c8380a19eb"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TupletInfo</b> (const std::weak_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt; &amp;parent, const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1details_1_1TupletDef.html">details::TupletDef</a> &gt; &amp;tup, size_t index, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> start, bool forVoice2)</td></tr>
+<tr class="memdesc:aa78c371a760bfb64f11f93c8380a19eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="separator:aa78c371a760bfb64f11f93c8380a19eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f505387d04fded946fe24bb75fa01a1" id="r_a3f505387d04fded946fe24bb75fa01a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a3f505387d04fded946fe24bb75fa01a1">calcIsTremolo</a> () const</td></tr>
+<tr class="memdesc:a3f505387d04fded946fe24bb75fa01a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this tuplet represents a tremolo based on the following criteria.  <br /></td></tr>
+<tr class="separator:a3f505387d04fded946fe24bb75fa01a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb4f3d52884c75ccbf3631e897bdff1f" id="r_adb4f3d52884c75ccbf3631e897bdff1f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#adb4f3d52884c75ccbf3631e897bdff1f">calcCreatesSingletonRight</a> () const</td></tr>
+<tr class="memdesc:adb4f3d52884c75ccbf3631e897bdff1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this tuplet is being used to create a singleton beam to the right.  <br /></td></tr>
+<tr class="separator:adb4f3d52884c75ccbf3631e897bdff1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47519a96ebb5871394c35e50c26c642c" id="r_a47519a96ebb5871394c35e50c26c642c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a47519a96ebb5871394c35e50c26c642c">calcCreatesSingletonLeft</a> () const</td></tr>
+<tr class="memdesc:a47519a96ebb5871394c35e50c26c642c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this tuplet is being used to create a singleton beam to the left.  <br /></td></tr>
+<tr class="separator:a47519a96ebb5871394c35e50c26c642c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a9874b3716c123c2d54d853747950d6" id="r_a5a9874b3716c123c2d54d853747950d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a5a9874b3716c123c2d54d853747950d6">calcCreatesBeamContinuationRight</a> () const</td></tr>
+<tr class="memdesc:a5a9874b3716c123c2d54d853747950d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this tuplet creates a beam continuation over a barline to the right, as created by the Beam Over Barlines plugin.  <br /></td></tr>
+<tr class="separator:a5a9874b3716c123c2d54d853747950d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae34807df262d10a74ca2a9bf08e798f1" id="r_ae34807df262d10a74ca2a9bf08e798f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#ae34807df262d10a74ca2a9bf08e798f1">calcCreatesBeamContinuationLeft</a> () const</td></tr>
+<tr class="memdesc:ae34807df262d10a74ca2a9bf08e798f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this tuplet creates a beam continuation over a barline to the left, as created by the Beam Over Barlines plugin.  <br /></td></tr>
+<tr class="separator:ae34807df262d10a74ca2a9bf08e798f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -134,10 +149,151 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>endIndex</b></td></
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>endDura</b></td></tr>
 <tr class="memdesc:a4cc361a243e8b23fd5dcd39edc570a00"><td class="mdescLeft">&#160;</td><td class="mdescRight">the actual duration where the tuplet ends <br /></td></tr>
 <tr class="separator:a4cc361a243e8b23fd5dcd39edc570a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad296b9cbfc35e51318fd4fb9a22831c8" id="r_ad296b9cbfc35e51318fd4fb9a22831c8"><td class="memItemLeft" align="right" valign="top"><a id="ad296b9cbfc35e51318fd4fb9a22831c8" name="ad296b9cbfc35e51318fd4fb9a22831c8"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>voice2</b></td></tr>
+<tr class="memdesc:ad296b9cbfc35e51318fd4fb9a22831c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">whether this tuplet is for voice2 <br /></td></tr>
+<tr class="separator:ad296b9cbfc35e51318fd4fb9a22831c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>class to track tuplets in the frame </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae34807df262d10a74ca2a9bf08e798f1" name="ae34807df262d10a74ca2a9bf08e798f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae34807df262d10a74ca2a9bf08e798f1">&#9670;&#160;</a></span>calcCreatesBeamContinuationLeft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if this tuplet creates a beam continuation over a barline to the left, as created by the Beam Over Barlines plugin. </p>
+<dl class="section note"><dt>Note</dt><dd>The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance that a user may have manually setup v1/v2 the way Beam Over Barlines should have.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>If the function returns true, you can treat the result similarly to the result from <a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a47519a96ebb5871394c35e50c26c642c" title="Calculates if this tuplet is being used to create a singleton beam to the left.">calcCreatesSingletonLeft</a>. However, you simply extend a beam from the designated entry to the appropriate entries in the previous measure. </dd></dl>
+
+</div>
+</div>
+<a id="a5a9874b3716c123c2d54d853747950d6" name="a5a9874b3716c123c2d54d853747950d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a9874b3716c123c2d54d853747950d6">&#9670;&#160;</a></span>calcCreatesBeamContinuationRight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryFrame::TupletInfo::calcCreatesBeamContinuationRight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if this tuplet creates a beam continuation over a barline to the right, as created by the Beam Over Barlines plugin. </p>
+<dl class="section note"><dt>Note</dt><dd>The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance that a user may have manually setup v1/v2 the way Beam Over Barlines should have.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>If the function returns true, you can treat the result similarly to the result from <a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#adb4f3d52884c75ccbf3631e897bdff1f" title="Calculates if this tuplet is being used to create a singleton beam to the right.">calcCreatesSingletonRight</a>. However, you simply extend a beam from the designated entry to the appropriate entries in the next measure. </dd></dl>
+
+</div>
+</div>
+<a id="a47519a96ebb5871394c35e50c26c642c" name="a47519a96ebb5871394c35e50c26c642c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47519a96ebb5871394c35e50c26c642c">&#9670;&#160;</a></span>calcCreatesSingletonLeft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryFrame::TupletInfo::calcCreatesSingletonLeft </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates if this tuplet is being used to create a singleton beam to the left. </p>
+<p>See comments at <a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#adb4f3d52884c75ccbf3631e897bdff1f" title="Calculates if this tuplet is being used to create a singleton beam to the right.">calcCreatesSingletonRight</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>True if this tuplet creates a singleton beam to the left. You may handle this as follows.<ul>
+<li>Skip the entry and its tuplet.</li>
+<li>You can mark the next entry in the same voice as having a singleton beam left, if your application allows it.</li>
+<li>The current entry with the 0-length tuplet will have its leger lines suppressed and non-visible notehead(s) and stem. Its <code>hidden</code> flag, however, will still be false. (This function guarantees these conditions if it returns <code>true</code>.) </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a id="adb4f3d52884c75ccbf3631e897bdff1f" name="adb4f3d52884c75ccbf3631e897bdff1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb4f3d52884c75ccbf3631e897bdff1f">&#9670;&#160;</a></span>calcCreatesSingletonRight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryFrame::TupletInfo::calcCreatesSingletonRight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates if this tuplet is being used to create a singleton beam to the right. </p>
+<p>Finale has no built-in support for beams on singleton notes. As a workaround, users and (especially) plugins such as Beam Over Barline create singleton beams using a 0-length tuplet and hiding either the tuplet note or its next neighbor, depending on whether the beam goes to the left or the right. You should never encounter a 0-length tuplet encompassing more than one entry, but these functions guarantee this if they return <code>true</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd>True if this tuplet creates a singleton beam to the right. You may handle this as follows.<ul>
+<li>The entry with the tuplet is the visible entry to use. You can mark this entry as having a singleton beam right, if your application allows it.</li>
+<li>Ignore the tuplet on the visible entry. If you need the entry's actual duration in context, its next neighbor in the same voice has the correct value.</li>
+<li>Ignore the entry's next neighbor in the same voice. It will have its leger lines suppressed and non-visible notehead(s) and stem. Its <code>hidden</code> flag, however, will still be false. (This function guarantees these conditions if it returns <code>true</code>.) </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a id="a3f505387d04fded946fe24bb75fa01a1" name="a3f505387d04fded946fe24bb75fa01a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f505387d04fded946fe24bb75fa01a1">&#9670;&#160;</a></span>calcIsTremolo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryFrame::TupletInfo::calcIsTremolo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if this tuplet represents a tremolo based on the following criteria. </p>
+<ul>
+<li>the tuplet ratio is a positive integral power of 2.</li>
+<li>the tuplet contains exactly 2 entries of equal duration and actual duration.</li>
+<li>the tuplet is invisible.</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>The TGTools Tremolo plugin always creates beam extensions for both upstem and downstem cases. To detect the type of stem connections for the tremolo, it is recommended to look for either an upstem or a downstem extension. This covers the TGTools plugin as well as any that might have been created by hand. See <a class="el" href="classmusx_1_1dom_1_1details_1_1BeamExtension.html">details::BeamExtension</a>.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the tuplet is a tremolo. If so, use <code><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a8149bc295e394a775747727cf3d9a5c4" title="Calculates the number of beams or flags on the entry.">EntryInfoPtr::calcNumberOfBeams</a></code> on either entry to determine the number of beams. Use <code><a class="el" href="classmusx_1_1dom_1_1details_1_1TupletDef.html#a9c9b0b9acff5dbed23c74b55ef53fee3" title="return the reference duration as a util::Fraction of a whole note">details::TupletDef::calcReferenceDuration</a></code> to get the total length of the tremolo. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

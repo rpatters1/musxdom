@@ -103,60 +103,17 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1EntryPool.html',''
  <a href="classmusx_1_1dom_1_1EntryPool.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="ObjectPool_8h_source.html">ObjectPool.h</a>&gt;</code></p>
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for musx::dom::EntryPool:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
- <div class="center">
-  <img src="classmusx_1_1dom_1_1EntryPool.png" usemap="#musx::dom::EntryPool_map" alt=""/>
-  <map id="musx::dom::EntryPool_map" name="musx::dom::EntryPool_map">
-<area href="classmusx_1_1dom_1_1ObjectPool.html" alt="musx::dom::ObjectPool&lt; Entry, EntryNumber &gt;" shape="rect" coords="0,0,274,24"/>
-  </map>
-</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a312fb65318327f071d157f71aa37d392" id="r_a312fb65318327f071d157f71aa37d392"><td class="memItemLeft" align="right" valign="top"><a id="a312fb65318327f071d157f71aa37d392" name="a312fb65318327f071d157f71aa37d392"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber, const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;instance)</td></tr>
-<tr class="memdesc:a312fb65318327f071d157f71aa37d392"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1EntryPool.html" title="Entry pool.">EntryPool</a> version of <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#aa032c80105389c2bf977762e2e1c96cf" title="Adds an OthersBase object to the pool.">ObjectPool::add</a>. <br /></td></tr>
+<tr class="memdesc:a312fb65318327f071d157f71aa37d392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an entry to the <a class="el" href="classmusx_1_1dom_1_1EntryPool.html" title="Entry pool.">EntryPool</a>. (Used by the factory.) <br /></td></tr>
 <tr class="separator:a312fb65318327f071d157f71aa37d392"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a334c00aa93d97b1dc9779290cb5bf139" id="r_a334c00aa93d97b1dc9779290cb5bf139"><td class="memTemplParams" colspan="2"><a id="a334c00aa93d97b1dc9779290cb5bf139" name="a334c00aa93d97b1dc9779290cb5bf139"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a334c00aa93d97b1dc9779290cb5bf139"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> (<a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber) const</td></tr>
-<tr class="memdesc:a334c00aa93d97b1dc9779290cb5bf139"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1EntryPool.html" title="Entry pool.">EntryPool</a> version of <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#ad1b4e4908e89fe890b8e0cef3d120665" title="Retrieves the first (and usually only) object of a specific type from the pool.">ObjectPool::get</a>. <br /></td></tr>
-<tr class="separator:a334c00aa93d97b1dc9779290cb5bf139"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_types_classmusx_1_1dom_1_1ObjectPool"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classmusx_1_1dom_1_1ObjectPool')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool&lt; Entry, EntryNumber &gt;</a></td></tr>
-<tr class="memitem:a0852ee2cead576e893c24b67bb8eff67 inherit pro_types_classmusx_1_1dom_1_1ObjectPool" id="r_a0852ee2cead576e893c24b67bb8eff67"><td class="memItemLeft" align="right" valign="top">
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ObjectPtr</b> = std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;</td></tr>
-<tr class="memdesc:a0852ee2cead576e893c24b67bb8eff67 inherit pro_types_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">shared pointer to <code>ObjectBaseType</code> <br /></td></tr>
-<tr class="separator:a0852ee2cead576e893c24b67bb8eff67 inherit pro_types_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classmusx_1_1dom_1_1ObjectPool"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmusx_1_1dom_1_1ObjectPool')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool&lt; Entry, EntryNumber &gt;</a></td></tr>
-<tr class="memitem:adce3eab39cc2e28c1458e4f6daba51de inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_adce3eab39cc2e28c1458e4f6daba51de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#adce3eab39cc2e28c1458e4f6daba51de">ObjectPool</a> (const std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">dom::Base::ShareMode</a> &gt; &amp;knownShareModes={})</td></tr>
-<tr class="memdesc:adce3eab39cc2e28c1458e4f6daba51de inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object pool.  <br /></td></tr>
-<tr class="separator:adce3eab39cc2e28c1458e4f6daba51de inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b5dbece54403a34b528ccc5db90e069 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_a5b5dbece54403a34b528ccc5db90e069"><td class="memItemLeft" align="right" valign="top">
-virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ObjectPool</b> ()=default</td></tr>
-<tr class="memdesc:a5b5dbece54403a34b528ccc5db90e069 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">virtual destructor <br /></td></tr>
-<tr class="separator:a5b5dbece54403a34b528ccc5db90e069 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa032c80105389c2bf977762e2e1c96cf inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_aa032c80105389c2bf977762e2e1c96cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#aa032c80105389c2bf977762e2e1c96cf">add</a> (const ObjectKey &amp;key, <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a0852ee2cead576e893c24b67bb8eff67">ObjectPtr</a> object)</td></tr>
-<tr class="memdesc:aa032c80105389c2bf977762e2e1c96cf inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> object to the pool.  <br /></td></tr>
-<tr class="separator:aa032c80105389c2bf977762e2e1c96cf inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30b2bdf5b80ca0487751bdec109d54f1 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_a30b2bdf5b80ca0487751bdec109d54f1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a30b2bdf5b80ca0487751bdec109d54f1">getArray</a> (const ObjectKey &amp;key) const</td></tr>
-<tr class="memdesc:a30b2bdf5b80ca0487751bdec109d54f1 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a vector of objects of a specific type from the pool.  <br /></td></tr>
-<tr class="separator:a30b2bdf5b80ca0487751bdec109d54f1 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac866ac4b5107cc49d50a035a1ab5d635 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_ac866ac4b5107cc49d50a035a1ab5d635"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#ac866ac4b5107cc49d50a035a1ab5d635">getArrayForPart</a> (const ObjectKey &amp;key) const</td></tr>
-<tr class="memdesc:ac866ac4b5107cc49d50a035a1ab5d635 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a vector of objects of a specific type from the pool.  <br /></td></tr>
-<tr class="separator:ac866ac4b5107cc49d50a035a1ab5d635 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1b4e4908e89fe890b8e0cef3d120665 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_ad1b4e4908e89fe890b8e0cef3d120665"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#ad1b4e4908e89fe890b8e0cef3d120665">get</a> (const ObjectKey &amp;key) const</td></tr>
-<tr class="memdesc:ad1b4e4908e89fe890b8e0cef3d120665 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first (and usually only) object of a specific type from the pool.  <br /></td></tr>
-<tr class="separator:ad1b4e4908e89fe890b8e0cef3d120665 inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0641f773c186d1b582c74632827d270d inherit pro_methods_classmusx_1_1dom_1_1ObjectPool" id="r_a0641f773c186d1b582c74632827d270d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a0641f773c186d1b582c74632827d270d">getEffectiveForPart</a> (const ObjectKey &amp;key) const</td></tr>
-<tr class="memdesc:a0641f773c186d1b582c74632827d270d inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first (and usually only) object of a specific type from the pool for a part.  <br /></td></tr>
-<tr class="separator:a0641f773c186d1b582c74632827d270d inherit pro_methods_classmusx_1_1dom_1_1ObjectPool"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75efe869140b2a74824fa4e8f723777a" id="r_a75efe869140b2a74824fa4e8f723777a"><td class="memItemLeft" align="right" valign="top"><a id="a75efe869140b2a74824fa4e8f723777a" name="a75efe869140b2a74824fa4e8f723777a"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> (<a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber) const</td></tr>
+<tr class="memdesc:a75efe869140b2a74824fa4e8f723777a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get an entry from the <a class="el" href="classmusx_1_1dom_1_1EntryPool.html" title="Entry pool.">EntryPool</a>. <br /></td></tr>
+<tr class="separator:a75efe869140b2a74824fa4e8f723777a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> pool. </p>

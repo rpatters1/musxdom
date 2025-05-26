@@ -11,7 +11,7 @@ var searchData=
   ['vertadjtop_8',['vertAdjTop',['../classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html#a8b0c87bf85503ad53990d34323c3a4f8',1,'musx::dom::details::StaffGroup::Bracket']]],
   ['vertalign_9',['vertAlign',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#aa44a507a849f21b4827fc7bc6934318e',1,'musx::dom::others::MarkingCategory']]],
   ['vertevpuoff_10',['vertEvpuOff',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae9134b699b4f91f0c4f68923eddf1b6d',1,'musx::dom::others::MeasureExprAssign']]],
-  ['vertmeasexpralign_11',['vertmeasexpralign',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#ad22de376b3c260577796369cfd8261f0',1,'musx::dom::others::TextExpressionDef::vertMeasExprAlign'],['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#aa943461f2bcdc8ec5166b4de2abf2183',1,'musx::dom::others::ShapeExpressionDef::vertMeasExprAlign']]],
+  ['vertmeasexpralign_11',['vertmeasexpralign',['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#aa943461f2bcdc8ec5166b4de2abf2183',1,'musx::dom::others::ShapeExpressionDef::vertMeasExprAlign'],['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#ad22de376b3c260577796369cfd8261f0',1,'musx::dom::others::TextExpressionDef::vertMeasExprAlign']]],
   ['vertoff_12',['vertoff',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#a96a13bae437953a123fe8ec957d5efb1',1,'musx::dom::details::ChordAssign::vertOff'],['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#af6ee3295c4d84d78c452a3444ced4fc9',1,'musx::dom::others::NamePositioning::vertOff']]],
   ['vertoffset_13',['vertoffset',['../classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#ade0fedd3db760bfae1bceffdb1a57908',1,'musx::dom::details::ArticulationAssign::vertOffset'],['../classmusx_1_1dom_1_1details_1_1LyricAssign.html#abb7f3699f6182b546ab916fb6cbe8128',1,'musx::dom::details::LyricAssign::vertOffset'],['../classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPointAdjustment.html#a4d6ef420cb1f41ca76ecb4425c11c464',1,'musx::dom::others::SmartShape::EndPointAdjustment::vertOffset']]],
   ['vertoffsetbaseline_14',['vertOffsetBaseline',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a47b6b362dc66c546199cfb55d1be55ea',1,'musx::dom::others::MarkingCategory']]],
@@ -39,10 +39,11 @@ var searchData=
   ['virginal_36',['Virginal',['../namespacemusx_1_1dom_1_1uuid.html#a13ee3e8e8f2ed1d735b4c477e00dd809',1,'musx::dom::uuid']]],
   ['vocalpercussion_37',['VocalPercussion',['../namespacemusx_1_1dom_1_1uuid.html#aa958bb20ec50ffd5d0e44fa54c5465f4',1,'musx::dom::uuid']]],
   ['vocals_38',['Vocals',['../namespacemusx_1_1dom_1_1uuid.html#a9e6597d9676d6b917fd1da0b542b51ee',1,'musx::dom::uuid']]],
-  ['voice_39',['Voice',['../namespacemusx_1_1dom_1_1uuid.html#a2b51aedd740ce1295ae61f90d9a5ae80',1,'musx::dom::uuid']]],
-  ['voice2_40',['voice2',['../classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41',1,'musx::dom::Entry']]],
-  ['voicenoname_41',['VoiceNoName',['../namespacemusx_1_1dom_1_1uuid.html#a5f83c84f8de38b13a93aa16c9cb52d49',1,'musx::dom::uuid']]],
-  ['vpos_42',['vPos',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad413f9c23f03c1443ecb3d0853b4c448',1,'musx::dom::others::PageTextAssign']]],
-  ['vpospageedge_43',['vPosPageEdge',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#af8af2a15c3f67b46deb39466e2afd552',1,'musx::dom::others::PageTextAssign']]],
-  ['vuvuzela_44',['Vuvuzela',['../namespacemusx_1_1dom_1_1uuid.html#aa8f257f4ea45636839176b8b10804804',1,'musx::dom::uuid']]]
+  ['voffset_39',['voffset',['../classmusx_1_1dom_1_1details_1_1AccidentalAlterations.html#ae57fab895f67ab47c6f441454efcdaa9',1,'musx::dom::details::AccidentalAlterations::vOffset'],['../classmusx_1_1dom_1_1details_1_1DotAlterations.html#a45482d82d14cb4de5de29692cd55cad0',1,'musx::dom::details::DotAlterations::vOffset']]],
+  ['voice_40',['Voice',['../namespacemusx_1_1dom_1_1uuid.html#a2b51aedd740ce1295ae61f90d9a5ae80',1,'musx::dom::uuid']]],
+  ['voice2_41',['voice2',['../classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41',1,'musx::dom::Entry::voice2'],['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#ad296b9cbfc35e51318fd4fb9a22831c8',1,'musx::dom::EntryFrame::TupletInfo::voice2']]],
+  ['voicenoname_42',['VoiceNoName',['../namespacemusx_1_1dom_1_1uuid.html#a5f83c84f8de38b13a93aa16c9cb52d49',1,'musx::dom::uuid']]],
+  ['vpos_43',['vPos',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad413f9c23f03c1443ecb3d0853b4c448',1,'musx::dom::others::PageTextAssign']]],
+  ['vpospageedge_44',['vPosPageEdge',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#af8af2a15c3f67b46deb39466e2afd552',1,'musx::dom::others::PageTextAssign']]],
+  ['vuvuzela_45',['Vuvuzela',['../namespacemusx_1_1dom_1_1uuid.html#aa8f257f4ea45636839176b8b10804804',1,'musx::dom::uuid']]]
 ];

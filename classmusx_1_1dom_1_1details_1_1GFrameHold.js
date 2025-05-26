@@ -4,6 +4,7 @@ var classmusx_1_1dom_1_1details_1_1GFrameHold =
     [ "getMeasure", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#aafb1a25712ba546799697c43dbdf81ba", null ],
     [ "getStaff", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a3971ceeb23aa0c1dba04faa86765e811", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#adc0f3bd7cad4179819fde0a675d8d74c", null ],
+    [ "clefAfterBarline", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#ae688daab6d9904b3a48029bd167d8174", null ],
     [ "clefId", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a4299d95db06924be18c150b93a2310d9", null ],
     [ "clefListId", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#aea171fa9898b2b7c14d1837eefe6c3b9", null ],
     [ "clefPercent", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a620ddfc8738db5fcaf5b20f90fade0ff", null ],

@@ -17,6 +17,6 @@ var searchData=
   ['trimfonttags_14',['trimFontTags',['../classmusx_1_1util_1_1EnigmaString.html#a6973476856fe97c708c61f92dde3d820',1,'musx::util::EnigmaString']]],
   ['trimtags_15',['trimTags',['../classmusx_1_1util_1_1EnigmaString.html#a0613f33d67f174d1901dd935232a74b9',1,'musx::util::EnigmaString']]],
   ['tupletdef_16',['TupletDef',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a92caadc2a2773e781568727763c87621',1,'musx::dom::details::TupletDef']]],
-  ['tupletinfo_17',['TupletInfo',['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#afc5f27f7e689f4155bb0de7ec6050b1e',1,'musx::dom::EntryFrame::TupletInfo']]],
+  ['tupletinfo_17',['TupletInfo',['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#aa78c371a760bfb64f11f93c8380a19eb',1,'musx::dom::EntryFrame::TupletInfo']]],
   ['tupletoptions_18',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a2cacc300b9d29984c4568b26bb60ca7e',1,'musx::dom::options::TupletOptions']]]
 ];

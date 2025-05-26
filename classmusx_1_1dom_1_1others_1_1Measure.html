@@ -195,6 +195,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShouldShowFullNam
 <tr class="memitem:a9579a68babbf5008ec3201da1dcc59a7" id="r_a9579a68babbf5008ec3201da1dcc59a7"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a9579a68babbf5008ec3201da1dcc59a7">createDisplayTimeSignature</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;forStaff=std::nullopt) const</td></tr>
 <tr class="memdesc:a9579a68babbf5008ec3201da1dcc59a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a shared pointer to an instance of the display <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> for this measure and staff.  <br /></td></tr>
 <tr class="separator:a9579a68babbf5008ec3201da1dcc59a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac603081e3481e8fcbc9c3910257a2244" id="r_ac603081e3481e8fcbc9c3910257a2244"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#ac603081e3481e8fcbc9c3910257a2244">calcDuration</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;forStaff=std::nullopt) const</td></tr>
+<tr class="memdesc:ac603081e3481e8fcbc9c3910257a2244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the duration of the measure according to the time signature.  <br /></td></tr>
+<tr class="separator:ac603081e3481e8fcbc9c3910257a2244"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6da7a3c1d85a2118427af940b352cffe" id="r_a6da7a3c1d85a2118427af940b352cffe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a6da7a3c1d85a2118427af940b352cffe">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:a6da7a3c1d85a2118427af940b352cffe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a6da7a3c1d85a2118427af940b352cffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -591,6 +594,33 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Calculates the visible number of the measure, based on the first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> that contains it. </p>
 <p>Depending on the display options of the found <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a>, the number may or may not appear in the score. And if it does, it may not appear as a number. </p>
+
+</div>
+</div>
+<a id="ac603081e3481e8fcbc9c3910257a2244" name="ac603081e3481e8fcbc9c3910257a2244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac603081e3481e8fcbc9c3910257a2244">&#9670;&#160;</a></span>calcDuration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::others::Measure::calcDuration </td>
+          <td>(</td>
+          <td class="paramtype">const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>forStaff</em> = <code>std::nullopt</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the duration of the measure according to the time signature. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forStaff</td><td>If present, specifies the specific staff for which to create duration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>If forStaff is provided, the staff-level duration (taking into account independent time signatures.) Otherwise, it returns the global duration of the measure. </dd></dl>
 
 </div>
 </div>

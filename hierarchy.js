@@ -10,7 +10,9 @@ var hierarchy =
       [ "musx::dom::DetailsBase", "classmusx_1_1dom_1_1DetailsBase.html", [
         [ "musx::dom::EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", [
           [ "musx::dom::NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", [
+            [ "musx::dom::details::AccidentalAlterations", "classmusx_1_1dom_1_1details_1_1AccidentalAlterations.html", null ],
             [ "musx::dom::details::CrossStaff", "classmusx_1_1dom_1_1details_1_1CrossStaff.html", null ],
+            [ "musx::dom::details::DotAlterations", "classmusx_1_1dom_1_1details_1_1DotAlterations.html", null ],
             [ "musx::dom::details::NoteAlterations", "classmusx_1_1dom_1_1details_1_1NoteAlterations.html", null ],
             [ "musx::dom::details::TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html", [
               [ "musx::dom::details::TieAlterEnd", "classmusx_1_1dom_1_1details_1_1TieAlterEnd.html", null ],
@@ -18,15 +20,31 @@ var hierarchy =
             ] ]
           ] ],
           [ "musx::dom::details::ArticulationAssign", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html", null ],
+          [ "musx::dom::details::BeamAlterations", "classmusx_1_1dom_1_1details_1_1BeamAlterations.html", [
+            [ "musx::dom::details::BeamAlterationsDownStem", "classmusx_1_1dom_1_1details_1_1BeamAlterationsDownStem.html", null ],
+            [ "musx::dom::details::BeamAlterationsUpStem", "classmusx_1_1dom_1_1details_1_1BeamAlterationsUpStem.html", null ],
+            [ "musx::dom::details::SecondaryBeamAlterationsDownStem", "classmusx_1_1dom_1_1details_1_1SecondaryBeamAlterationsDownStem.html", null ],
+            [ "musx::dom::details::SecondaryBeamAlterationsUpStem", "classmusx_1_1dom_1_1details_1_1SecondaryBeamAlterationsUpStem.html", null ]
+          ] ],
+          [ "musx::dom::details::BeamExtension", "classmusx_1_1dom_1_1details_1_1BeamExtension.html", [
+            [ "musx::dom::details::BeamExtensionDownStem", "classmusx_1_1dom_1_1details_1_1BeamExtensionDownStem.html", null ],
+            [ "musx::dom::details::BeamExtensionUpStem", "classmusx_1_1dom_1_1details_1_1BeamExtensionUpStem.html", null ]
+          ] ],
           [ "musx::dom::details::BeamStubDirection", "classmusx_1_1dom_1_1details_1_1BeamStubDirection.html", null ],
+          [ "musx::dom::details::CustomStem", "classmusx_1_1dom_1_1details_1_1CustomStem.html", [
+            [ "musx::dom::details::CustomDownStem", "classmusx_1_1dom_1_1details_1_1CustomDownStem.html", null ],
+            [ "musx::dom::details::CustomUpStem", "classmusx_1_1dom_1_1details_1_1CustomUpStem.html", null ]
+          ] ],
           [ "musx::dom::details::EntrySize", "classmusx_1_1dom_1_1details_1_1EntrySize.html", null ],
           [ "musx::dom::details::LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html", [
             [ "musx::dom::details::LyricAssignChorus", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html", null ],
             [ "musx::dom::details::LyricAssignSection", "classmusx_1_1dom_1_1details_1_1LyricAssignSection.html", null ],
             [ "musx::dom::details::LyricAssignVerse", "classmusx_1_1dom_1_1details_1_1LyricAssignVerse.html", null ]
           ] ],
+          [ "musx::dom::details::LyricEntryInfo", "classmusx_1_1dom_1_1details_1_1LyricEntryInfo.html", null ],
           [ "musx::dom::details::SecondaryBeamBreak", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html", null ],
           [ "musx::dom::details::SmartShapeEntryAssign", "classmusx_1_1dom_1_1details_1_1SmartShapeEntryAssign.html", null ],
+          [ "musx::dom::details::StemAlterations", "classmusx_1_1dom_1_1details_1_1StemAlterations.html", null ],
           [ "musx::dom::details::TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", null ]
         ] ],
         [ "musx::dom::details::Baseline", "classmusx_1_1dom_1_1details_1_1Baseline.html", [
@@ -57,6 +75,7 @@ var hierarchy =
         [ "musx::dom::options::GraceNoteOptions", "classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html", null ],
         [ "musx::dom::options::KeySignatureOptions", "classmusx_1_1dom_1_1options_1_1KeySignatureOptions.html", null ],
         [ "musx::dom::options::LineCurveOptions", "classmusx_1_1dom_1_1options_1_1LineCurveOptions.html", null ],
+        [ "musx::dom::options::LyricOptions", "classmusx_1_1dom_1_1options_1_1LyricOptions.html", null ],
         [ "musx::dom::options::MiscOptions", "classmusx_1_1dom_1_1options_1_1MiscOptions.html", null ],
         [ "musx::dom::options::MultimeasureRestOptions", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html", null ],
         [ "musx::dom::options::MusicSpacingOptions", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html", null ],
@@ -129,6 +148,7 @@ var hierarchy =
         [ "musx::dom::others::ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", null ],
         [ "musx::dom::others::ShapeInstructionList", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList.html", null ],
         [ "musx::dom::others::SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html", null ],
+        [ "musx::dom::others::SmartShapeCustomLine", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html", null ],
         [ "musx::dom::others::SmartShapeMeasureAssign", "classmusx_1_1dom_1_1others_1_1SmartShapeMeasureAssign.html", null ],
         [ "musx::dom::others::Staff", "classmusx_1_1dom_1_1others_1_1Staff.html", [
           [ "musx::dom::others::StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", [
@@ -163,6 +183,9 @@ var hierarchy =
       [ "musx::dom::others::SmartShape::EndPoint", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPoint.html", null ],
       [ "musx::dom::others::SmartShape::EndPointAdjustment", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPointAdjustment.html", null ],
       [ "musx::dom::others::SmartShape::TerminationSeg", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg.html", null ],
+      [ "musx::dom::others::SmartShapeCustomLine::CharParams", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1CharParams.html", null ],
+      [ "musx::dom::others::SmartShapeCustomLine::DashedParams", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1DashedParams.html", null ],
+      [ "musx::dom::others::SmartShapeCustomLine::SolidParams", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1SolidParams.html", null ],
       [ "musx::dom::others::StaffStyle::Masks", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html", null ]
     ] ],
     [ "musx::dom::details::StaffGroup::Bracket", "classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html", null ],
@@ -183,6 +206,7 @@ var hierarchy =
     [ "musx::util::EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", null ],
     [ "musx::dom::EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", null ],
     [ "musx::dom::EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html", null ],
+    [ "musx::dom::EntryPool", "classmusx_1_1dom_1_1EntryPool.html", null ],
     [ "musx::factory::FactoryBase", "classmusx_1_1factory_1_1FactoryBase.html", [
       [ "musx::factory::PoolFactory< DetailsFactory, dom::DetailsBase, dom::DetailsPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
         [ "musx::factory::DetailsFactory", "classmusx_1_1factory_1_1DetailsFactory.html", null ]
@@ -227,13 +251,10 @@ var hierarchy =
     [ "musx::dom::others::Staff::KeySigTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html", null ],
     [ "musx::util::Logger", "classmusx_1_1util_1_1Logger.html", null ],
     [ "musx::dom::NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", null ],
-    [ "musx::dom::ObjectPool< ObjectBaseType, TopKeyElementType >::ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
-    [ "musx::dom::ObjectPool< ObjectBaseType, TopKeyElementType >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
+    [ "musx::dom::ObjectPool< ObjectBaseType >::ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
+    [ "musx::dom::ObjectPool< ObjectBaseType >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
     [ "musx::dom::ObjectPool< DetailsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
       [ "musx::dom::DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", null ]
-    ] ],
-    [ "musx::dom::ObjectPool< Entry, EntryNumber >", "classmusx_1_1dom_1_1ObjectPool.html", [
-      [ "musx::dom::EntryPool", "classmusx_1_1dom_1_1EntryPool.html", null ]
     ] ],
     [ "musx::dom::ObjectPool< OptionsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
       [ "musx::dom::OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", null ]
@@ -252,9 +273,11 @@ var hierarchy =
     ] ],
     [ "musx::dom::details::StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html", null ],
     [ "musx::dom::others::KeyMapArray::StepElement", "classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html", null ],
+    [ "musx::dom::options::LyricOptions::SyllablePosStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html", null ],
     [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
     [ "music_theory::Transposer", "classmusic__theory_1_1Transposer.html", null ],
     [ "musx::dom::others::Staff::Transposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html", null ],
     [ "musx::dom::EntryFrame::TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html", null ],
-    [ "musx::factory::TypeRegistry< Types >", "classmusx_1_1factory_1_1TypeRegistry.html", null ]
+    [ "musx::factory::TypeRegistry< Types >", "classmusx_1_1factory_1_1TypeRegistry.html", null ],
+    [ "musx::dom::options::LyricOptions::WordExtConnectStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1WordExtConnectStyle.html", null ]
 ];
