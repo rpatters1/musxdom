@@ -199,7 +199,7 @@ public:
     /// @brief Calculates the effective beam width by returning either the default width or the width override value specified by #beamWidth.
     /// @note The #beamWidth of primary beams also controls the width of secondary beams.
     /// @return The effective beam width of this beam, taking into account all conditions that prefer the default width to the value in #beamWidth.
-    std::optional<Efix> calcEffectiveBeamWidth() const;
+    Efix calcEffectiveBeamWidth() const;
 
     /// @brief Returns whether this beam alteration record is active. Its #flattenStyle must match the value in @ref options::BeamOptions.
     /// @return True if active, otherwise false.

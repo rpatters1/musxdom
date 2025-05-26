@@ -65,6 +65,38 @@ template void details::BeamAlterations::calcActive<details::BeamAlterationsDownS
 template void details::BeamAlterations::calcActive<details::SecondaryBeamAlterationsUpStem>(const DocumentPtr&);
 template void details::BeamAlterations::calcActive<details::SecondaryBeamAlterationsDownStem>(const DocumentPtr&);
 
+Efix details::BeamAlterations::calcEffectiveBeamWidth() const
+{
+    if (m_active) {
+        if (dynamic_cast<const details::BeamAlterationsDownStem*>(this) || dynamic_cast<const details::BeamAlterationsUpStem*>(this)) {
+            if (beamWidth >= 0) {
+                return beamWidth;
+            }
+        } else {
+            std::shared_ptr<BeamAlterations> primary;
+            if (dynamic_cast<const SecondaryBeamAlterationsDownStem*>(this)) {
+                primary = getDocument()->getDetails()->get<BeamAlterationsDownStem>(getPartId(), getEntryNumber());
+            } else if (dynamic_cast<const SecondaryBeamAlterationsUpStem*>(this)) {
+                primary = getDocument()->getDetails()->get<BeamAlterationsUpStem>(getPartId(), getEntryNumber());
+            } else {
+                MUSX_ASSERT_IF(false) {
+                    throw std::logic_error("Encountered unknown subtype of details::BeamAlterations");
+                }
+            }
+            if (primary && primary->m_active && primary->beamWidth >= 0) {
+                return primary->beamWidth;
+            }
+        }
+    }
+    Efix result = 0;
+    if (const auto beamOptions = getDocument()->getOptions()->get<options::BeamOptions>()) {
+        result = beamOptions->beamWidth;
+    } else {
+        MUSX_INTEGRITY_ERROR("Unable to retrieve beaming options. Beam width value returned is zero.");
+    }
+    return result;
+}
+
 // *****************
 // ***** Entry *****
 // *****************

@@ -2207,7 +2207,8 @@ public:
     }
 
     MeasCmper startMeas{};          ///< Starting measure of the staff system. See @ref Measure.
-    MeasCmper endMeas{};            ///< Ending measure of the staff system. See @ref Measure.
+    MeasCmper endMeas{};            ///< Ending measure of the staff system *plus one*. This is effectively the first measure of the next system or
+                                    ///< one measure past the last measure in the document. (Finale being Finale.) See @ref Measure.
     double horzPercent{};           ///< Horizontal scaling percentage (fractional, 100.0 means no scaling).
                                     ///< This value affects "stretchable" items such as word extensions on lyrics.
     int ssysPercent{};              ///< Staff system scaling percentage (100 means no scaling).
