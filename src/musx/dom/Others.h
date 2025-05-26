@@ -2228,6 +2228,14 @@ public:
     Evpu extraStartSystemSpace{};   ///< Extra space at the start of the staff system in Evpu.
     Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
 
+    /// @brief Encapsulates the weird Finale fact that #endMeas is actually one past the end of the system
+    /// @return The actual last measure on the system.
+    MeasCmper getLastMeasure() const { return endMeas - 1; }
+
+    /// @brief Calculates the number of measures on the system, encapsulating how #endMeas works.
+    /// @return The number of measures on the system.
+    int calcNumMeasures() const { return endMeas - startMeas; }
+
     /// @brief Calculates the maximum and minimum staff scaling values for this system by searching each staff
     /// for individual staff scaling.
     /// @return A std::pair containing
