@@ -51,7 +51,7 @@ void details::BeamAlterations::calcActive(const DocumentPtr& document)
 {
     if (const auto beamOptions = document->getOptions()->get<options::BeamOptions>()) {
         const auto values = document->getDetails()->getArray<T>(SCORE_PARTID);
-        std::cout << T::XmlNodeName << " has " << values.size() << " elements." << std::endl;
+        util::Logger::log(util::Logger::LogLevel::Verbose, std::string(T::XmlNodeName) + " has " + std::to_string(values.size()) + " elements.");
         for (const auto& value : values) {
             value->m_active = (value->flattenStyle == beamOptions->beamingStyle);
         }

@@ -57,13 +57,23 @@ struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
 template <>
 struct FieldPopulator<BeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
 {
-    using FieldPopulator<BeamAlterations>::populate;
+    static void populate(const std::shared_ptr<BeamAlterationsDownStem>& instance,
+                        const XmlElementPtr& element,
+                        ElementLinker& elementLinker)
+    {
+        FieldPopulator<BeamAlterations>::template populate<BeamAlterationsDownStem>(instance, element, elementLinker);
+    }
 };
 
 template <>
 struct FieldPopulator<BeamAlterationsUpStem> : private FieldPopulator<BeamAlterations>
 {
-    using FieldPopulator<BeamAlterations>::populate;
+    static void populate(const std::shared_ptr<BeamAlterationsUpStem>& instance,
+                        const XmlElementPtr& element,
+                        ElementLinker& elementLinker)
+    {
+        FieldPopulator<BeamAlterations>::template populate<BeamAlterationsUpStem>(instance, element, elementLinker);
+    }
 };
 
 template <>
@@ -111,13 +121,23 @@ struct FieldPopulator<LyricAssignVerse> : private FieldPopulator<LyricAssign>
 template <>
 struct FieldPopulator<SecondaryBeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
 {
-    using FieldPopulator<BeamAlterations>::populate;
+    static void populate(const std::shared_ptr<SecondaryBeamAlterationsDownStem>& instance,
+                        const XmlElementPtr& element,
+                        ElementLinker& elementLinker)
+    {
+        FieldPopulator<BeamAlterations>::template populate<SecondaryBeamAlterationsDownStem>(instance, element, elementLinker);
+    }
 };
 
 template <>
 struct FieldPopulator<SecondaryBeamAlterationsUpStem> : private FieldPopulator<BeamAlterations>
 {
-    using FieldPopulator<BeamAlterations>::populate;
+    static void populate(const std::shared_ptr<SecondaryBeamAlterationsUpStem>& instance,
+                        const XmlElementPtr& element,
+                        ElementLinker& elementLinker)
+    {
+        FieldPopulator<BeamAlterations>::template populate<SecondaryBeamAlterationsUpStem>(instance, element, elementLinker);
+    }
 };
 
 template <>
