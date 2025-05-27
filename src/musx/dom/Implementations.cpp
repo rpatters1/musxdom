@@ -102,13 +102,20 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
                   || std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsUpStem>,
         "SecondaryBeamType must be a secondary beam type.");
     constexpr bool isDownstem = std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsDownStem>;
+    constexpr int direction = isDownstem ? 1 : -1;
 
     const auto& frame = entryInfo.getFrame();
     const auto& secondaries = frame->getDocument()->getDetails()->getArray<SecondaryBeamType>(frame->getRequestedPartId(), entryInfo->getEntry()->getEntryNumber());
+    const auto beamOptions = frame->getDocument()->getOptions()->get<options::BeamOptions>();
+    if (!beamOptions) {
+        MUSX_INTEGRITY_ERROR("Unable to retrieve BeamOptions for determining feathered beaming.");
+    }
+    const Evpu beamSpacing = beamOptions ? beamOptions->beamSepar : 18; // 18 is the standard default (Ross, Gould, et al)
+    const Evpu beamWidth = beamOptions ? Evpu(std::round(beamOptions->beamWidth / EFIX_PER_EVPU)) : 12; // 12 is the standard default (Ross, Gould, et al)
 
     // Start with primary beam verticals
-    Evpu leftY = 0;
-    Evpu rightY = 0;
+    Evpu leftY = direction * beamWidth;
+    Evpu rightY = leftY;
 
     // Cumulative secondary beam Y-offsets
     std::vector<std::pair<Evpu, Evpu>> beamStack;
@@ -117,13 +124,13 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
         if (!sec->isActive())
             continue;
 
-        Evpu dyL = sec->leftOffsetY;
-        Evpu dyR = sec->rightOffsetY;
+        Evpu dyL = sec->leftOffsetY + direction * beamSpacing;
+        Evpu dyR = (sec->leftOffsetY + sec->rightOffsetY) + direction * beamSpacing;
 
-        if constexpr (isDownstem) {
-            dyL = -dyL;
-            dyR = -dyR;
-        }
+        //if constexpr (isDownstem) {
+        //    dyL = -dyL;
+        //    dyR = -dyR;
+       // }
 
         beamStack.emplace_back(dyL, dyR);
     }
@@ -143,12 +150,12 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
         maxRight = std::max(maxRight, rightY);
     }
 
-    const Evpu spanLeft = maxLeft - minLeft;
-    const Evpu spanRight = maxRight - minRight;
+    const Evpu spanLeft = isDownstem ? maxLeft : direction * minLeft;
+    const Evpu spanRight = isDownstem ? maxRight : direction * minRight;
 
     if (spanLeft != spanRight) {
-        outLeftY = minLeft;
-        outRightY = minRight;
+        outLeftY = spanLeft;
+        outRightY = spanRight;
         return true;
     }
 

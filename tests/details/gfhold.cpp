@@ -780,6 +780,14 @@ TEST(GFrameHold, FeatheredBeamsTest)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
+    auto checkEntry = [&](const EntryInfoPtr& entryInfo, bool expSuccess, int expLeftY, int expRightY) {
+        int leftY{}, rightY{};
+        const bool result = entryInfo.calcIsFeatheredBeamStart(leftY, rightY);
+        EXPECT_EQ(result, expSuccess);
+        EXPECT_EQ(leftY, expLeftY);
+        EXPECT_EQ(rightY, expRightY);
+    };
+    
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold);
@@ -787,9 +795,29 @@ TEST(GFrameHold, FeatheredBeamsTest)
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
 
-        EntryInfoPtr entryInfo(entryFrame, 0);
-        int leftY{}, rightY{};
-        const bool result = entryInfo.calcIsFeatheredBeamStart(leftY, rightY);
-        EXPECT_TRUE(result);
+        checkEntry(EntryInfoPtr(entryFrame, 0), true, 48, 12);
+        checkEntry(EntryInfoPtr(entryFrame, 9), true, 24, 48);
+    }
+    
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        checkEntry(EntryInfoPtr(entryFrame, 0), false, 0, 0);
+        checkEntry(EntryInfoPtr(entryFrame, 5), false, 0, 0);
+    }
+    
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        checkEntry(EntryInfoPtr(entryFrame, 0), true, 12, 66);
+        checkEntry(EntryInfoPtr(entryFrame, 14), true, 12, 30);
     }
 }
