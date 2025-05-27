@@ -99,59 +99,49 @@ template <typename SecondaryBeamType>
 bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY)
 {
     static_assert(std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsDownStem>
-                  || std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsUpStem>,
+               || std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsUpStem>,
         "SecondaryBeamType must be a secondary beam type.");
     constexpr bool isDownstem = std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsDownStem>;
     constexpr int direction = isDownstem ? 1 : -1;
 
     const auto& frame = entryInfo.getFrame();
-    const auto& secondaries = frame->getDocument()->getDetails()->getArray<SecondaryBeamType>(frame->getRequestedPartId(), entryInfo->getEntry()->getEntryNumber());
-    const auto beamOptions = frame->getDocument()->getOptions()->get<options::BeamOptions>();
+    const auto& doc = frame->getDocument();
+    const auto& secondaries = doc->getDetails()->getArray<SecondaryBeamType>(
+        frame->getRequestedPartId(), entryInfo->getEntry()->getEntryNumber());
+
+    const auto beamOptions = doc->getOptions()->get<options::BeamOptions>();
     if (!beamOptions) {
         MUSX_INTEGRITY_ERROR("Unable to retrieve BeamOptions for determining feathered beaming.");
     }
-    const Evpu beamSpacing = beamOptions ? beamOptions->beamSepar : 18; // 18 is the standard default (Ross, Gould, et al)
-    const Evpu beamWidth = beamOptions ? Evpu(std::round(beamOptions->beamWidth / EFIX_PER_EVPU)) : 12; // 12 is the standard default (Ross, Gould, et al)
 
-    // Start with primary beam verticals
+    const Evpu beamSpacing = beamOptions ? beamOptions->beamSepar : 18;
+    const Evpu beamWidth   = beamOptions ? Evpu(std::round(beamOptions->beamWidth / EFIX_PER_EVPU)) : 12;
+
     Evpu leftY = direction * beamWidth;
     Evpu rightY = leftY;
-
-    // Cumulative secondary beam Y-offsets
-    std::vector<std::pair<Evpu, Evpu>> beamStack;
+    Evpu extremeLeft = leftY;
+    Evpu extremeRight = rightY;
 
     for (const auto& sec : secondaries) {
-        if (!sec->isActive())
-            continue;
+        if (!sec->isActive()) continue;
 
-        Evpu dyL = sec->leftOffsetY + direction * beamSpacing;
-        Evpu dyR = (sec->leftOffsetY + sec->rightOffsetY) + direction * beamSpacing;
+        const Evpu dyL = sec->leftOffsetY + direction * beamSpacing;
+        const Evpu dyR = (sec->leftOffsetY + sec->rightOffsetY) + direction * beamSpacing;
 
-        //if constexpr (isDownstem) {
-        //    dyL = -dyL;
-        //    dyR = -dyR;
-       // }
-
-        beamStack.emplace_back(dyL, dyR);
-    }
-
-    Evpu minLeft = leftY;
-    Evpu maxLeft = leftY;
-    Evpu minRight = rightY;
-    Evpu maxRight = rightY;
-
-    for (const auto& [dyL, dyR] : beamStack) {
         leftY += dyL;
         rightY += dyR;
 
-        minLeft = std::min(minLeft, leftY);
-        maxLeft = std::max(maxLeft, leftY);
-        minRight = std::min(minRight, rightY);
-        maxRight = std::max(maxRight, rightY);
+        if constexpr (isDownstem) {
+            extremeLeft  = std::max(extremeLeft, leftY);
+            extremeRight = std::max(extremeRight, rightY);
+        } else {
+            extremeLeft  = std::min(extremeLeft, leftY);
+            extremeRight = std::min(extremeRight, rightY);
+        }
     }
 
-    const Evpu spanLeft = isDownstem ? maxLeft : direction * minLeft;
-    const Evpu spanRight = isDownstem ? maxRight : direction * minRight;
+    const Evpu spanLeft  = direction * extremeLeft;
+    const Evpu spanRight = direction * extremeRight;
 
     if (spanLeft != spanRight) {
         outLeftY = spanLeft;
