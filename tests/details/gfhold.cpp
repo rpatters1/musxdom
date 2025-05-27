@@ -734,9 +734,6 @@ TEST(GFrameHold, SingletonBeamsTest)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto details = doc->getDetails();
-    ASSERT_TRUE(details);
-
     auto checkTuplet = [](const EntryFrame& entryFrame, size_t tupletIndex, bool isSingletonRight, bool isSingletonLeft, bool isContinuationRight, bool isContinuationLeft) {
         std::string msg = "Staff " + std::to_string(entryFrame.getStaff()) + " measure " + std::to_string(entryFrame.getMeasure())
             + " tuplet index " + std::to_string(tupletIndex);
@@ -773,5 +770,26 @@ TEST(GFrameHold, SingletonBeamsTest)
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
         checkTuplet(*entryFrame, 0, false, true, false, false);
+    }
+}
+
+TEST(GFrameHold, FeatheredBeamsTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "feathered_beams.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        EntryInfoPtr entryInfo(entryFrame, 0);
+        int leftY{}, rightY{};
+        const bool result = entryInfo.calcIsFeatheredBeamStart(leftY, rightY);
+        EXPECT_TRUE(result);
     }
 }

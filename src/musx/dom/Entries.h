@@ -364,7 +364,13 @@ public:
     /// @brief Returns whether this is the start of a primary beam
     bool calcIsBeamStart() const;
 
-    /// @brief Finds the end entry of a beamed group.
+    /// @brief Calculates if the entry starts a feathered beam and returns information about it if so.
+    /// @param [out] outLeftY The height of the left side of the feathered beam
+    /// @param [out] outRightY The height of the right side of the feathered beam
+    /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
+    bool calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) const;
+        
+        /// @brief Finds the end entry of a beamed group.
     /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
     EntryInfoPtr findBeamEnd() const;
 

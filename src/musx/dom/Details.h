@@ -202,6 +202,11 @@ class BeamAlterations : public EntryDetailsBase
 private:
     bool m_active = true; // this value is set by the factory.
 
+protected:
+    /// @brief Implementation of #SecondaryBeamAlterationsDownStem::calcIsFeatheredBeam and #SecondaryBeamAlterationsUpStem::calcIsFeatheredBeam.
+    template <typename SecondaryBeamType>
+    static bool calcIsFeatheredBeamImpl(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY);
+
 public:
     /**
      * @brief Constructor
@@ -980,6 +985,15 @@ public:
     explicit SecondaryBeamAlterationsDownStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
         : BeamAlterations(document, partId, shareMode, entnum, inci) {}
 
+    /// @brief Calculates if the input entry starts a feathered beam and returns information about it.
+    /// @note Instead of calling this function directly, consider using #EntryInfoPtr::calcIsFeatheredBeamStart instead.
+    /// @param [in] entryInfo The entry info to search.
+    /// @param [out] outLeftY The height of the left side of the feathered beam
+    /// @param [out] outRightY The height of the right side of the feathered beam
+    /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
+    static bool calcIsFeatheredBeam(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY)
+    { return calcIsFeatheredBeamImpl<SecondaryBeamAlterationsDownStem>(entryInfo, outLeftY, outRightY); }
+
     constexpr static std::string_view XmlNodeName = "beamAltSecDownStem"; ///< The XML node name for this type.
 };
 
@@ -1003,6 +1017,15 @@ public:
      */
     explicit SecondaryBeamAlterationsUpStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
         : BeamAlterations(document, partId, shareMode, entnum, inci) {}
+
+    /// @brief Calculates if the input entry starts a feathered beam and returns information about it
+    /// @note Instead of calling this function directly, consider using #EntryInfoPtr::calcIsFeatheredBeamStart instead.
+    /// @param [in] entryInfo The entry info to search.
+    /// @param [out] outLeftY The height of the left side of the feathered beam
+    /// @param [out] outRightY The height of the right side of the feathered beam
+    /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
+    static bool calcIsFeatheredBeam(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY)
+    { return calcIsFeatheredBeamImpl<SecondaryBeamAlterationsUpStem>(entryInfo, outLeftY, outRightY); }
 
     constexpr static std::string_view XmlNodeName = "beamAltSecUpStem"; ///< The XML node name for this type.
 };

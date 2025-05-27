@@ -71,7 +71,7 @@ template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBea
 
 Efix details::BeamAlterations::calcEffectiveBeamWidth() const
 {
-    if (dura > 0) { // secondary beams always have non-zero dura value
+    if (getInci().has_value()) { // secondary beams have incis; primary beams do not
         std::shared_ptr<BeamAlterations> primary;
         if (dynamic_cast<const SecondaryBeamAlterationsDownStem*>(this)) {
             primary = getDocument()->getDetails()->get<BeamAlterationsDownStem>(getPartId(), getEntryNumber());
@@ -93,6 +93,66 @@ Efix details::BeamAlterations::calcEffectiveBeamWidth() const
         MUSX_INTEGRITY_ERROR("Unable to retrieve beaming options. Beam width value returned is zero.");
     }
     return result;
+}
+
+template <typename SecondaryBeamType>
+bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY)
+{
+    static_assert(std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsDownStem>
+                  || std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsUpStem>,
+        "SecondaryBeamType must be a secondary beam type.");
+    constexpr bool isDownstem = std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsDownStem>;
+
+    const auto& frame = entryInfo.getFrame();
+    const auto& secondaries = frame->getDocument()->getDetails()->getArray<SecondaryBeamType>(frame->getRequestedPartId(), entryInfo->getEntry()->getEntryNumber());
+
+    // Start with primary beam verticals
+    Evpu leftY = 0;
+    Evpu rightY = 0;
+
+    // Cumulative secondary beam Y-offsets
+    std::vector<std::pair<Evpu, Evpu>> beamStack;
+
+    for (const auto& sec : secondaries) {
+        if (!sec->isActive())
+            continue;
+
+        Evpu dyL = sec->leftOffsetY;
+        Evpu dyR = sec->rightOffsetY;
+
+        if constexpr (isDownstem) {
+            dyL = -dyL;
+            dyR = -dyR;
+        }
+
+        beamStack.emplace_back(dyL, dyR);
+    }
+
+    Evpu minLeft = leftY;
+    Evpu maxLeft = leftY;
+    Evpu minRight = rightY;
+    Evpu maxRight = rightY;
+
+    for (const auto& [dyL, dyR] : beamStack) {
+        leftY += dyL;
+        rightY += dyR;
+
+        minLeft = std::min(minLeft, leftY);
+        maxLeft = std::max(maxLeft, leftY);
+        minRight = std::min(minRight, rightY);
+        maxRight = std::max(maxRight, rightY);
+    }
+
+    const Evpu spanLeft = maxLeft - minLeft;
+    const Evpu spanRight = maxRight - minRight;
+
+    if (spanLeft != spanRight) {
+        outLeftY = minLeft;
+        outRightY = minRight;
+        return true;
+    }
+
+    return false;
 }
 
 // *****************
@@ -849,6 +909,41 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup(bool includeHiddenEntries) const
         }
     }
     return result;
+}
+
+bool EntryInfoPtr::calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) const
+{
+    if (!(*this)->getEntry()->stemDetail || !calcIsBeamStart()) {
+        return false;
+    }
+
+    Evpu leftYUp{}, rightYUp{}, leftYDown{}, rightYDown{};
+    bool upFeathered = details::SecondaryBeamAlterationsUpStem::calcIsFeatheredBeam(*this, leftYUp, rightYUp);
+    bool downFeathered = details::SecondaryBeamAlterationsDownStem::calcIsFeatheredBeam(*this, leftYDown, rightYDown);
+
+    if (upFeathered && !downFeathered) {
+        outLeftY = leftYUp;
+        outRightY = rightYUp;
+        return true;
+    } else if (downFeathered && !upFeathered) {
+        outLeftY = leftYDown;
+        outRightY = rightYDown;
+        return true;
+    } else if (upFeathered && downFeathered) {
+        // Use the greater wedge span as tie-breaker
+        Evpu spanUp = std::abs(rightYUp - leftYUp);
+        Evpu spanDown = std::abs(rightYDown - leftYDown);
+        if (spanUp >= spanDown) {
+            outLeftY = leftYUp;
+            outRightY = rightYUp;
+        } else {
+            outLeftY = leftYDown;
+            outRightY = rightYDown;
+        }
+        return true;
+    }
+
+    return false;
 }
 
 // ***********************
