@@ -780,8 +780,8 @@ TEST(GFrameHold, FeatheredBeamsTest)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto checkEntry = [&](const EntryInfoPtr& entryInfo, bool expSuccess, int expLeftY, int expRightY) {
-        int leftY{}, rightY{};
+    auto checkEntry = [&](const EntryInfoPtr& entryInfo, bool expSuccess, Evpu expLeftY, Evpu expRightY) {
+        Evpu leftY{}, rightY{};
         const bool result = entryInfo.calcIsFeatheredBeamStart(leftY, rightY);
         EXPECT_EQ(result, expSuccess);
         EXPECT_EQ(leftY, expLeftY);
