@@ -440,26 +440,63 @@ public:
  *
  * This class is identified by the XML node name "clefEnum".
  */
-class ClefList : public OthersBase {
-    public:
-        /** @brief Constructor function */
-        explicit ClefList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
-            : OthersBase(document, partId, shareMode, cmper, inci) {}
-            
-        // Public properties corresponding to the XML structure, in the same order as in the XML.
-        ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
-        Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
-        Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
-        int percent{};          ///< The percentage value from the `<percent>` element.
-        int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
-        ShowClefMode clefMode{}; ///< The clef mode from the `<clefMode>` element.
-        bool unlockVert{};      ///< "Allow Vertical Drag"
-        bool afterBarline{};    ///< "Place Clef After Barline"
-        
-        constexpr static std::string_view XmlNodeName = "clefEnum"; ///< The XML node name for this type.
-        static const xml::XmlElementArray<ClefList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-    
+class ClefList : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit ClefList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    // Public properties corresponding to the XML structure, in the same order as in the XML.
+    ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
+    Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
+    Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
+    int percent{};          ///< The percentage value from the `<percent>` element.
+    int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
+    ShowClefMode clefMode{}; ///< The clef mode from the `<clefMode>` element.
+    bool unlockVert{};      ///< "Allow Vertical Drag"
+    bool afterBarline{};    ///< "Place Clef After Barline"
+
+    constexpr static std::string_view XmlNodeName = "clefEnum"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ClefList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class DrumStaff
+ * @brief Identifies the percussion map ("drum library") for a staff with percussion notations
+ *
+ * The class is identified by the XML node name "drumStaff".
+ */
+class DrumStaff : public OthersBase
+{
+public:
+    /** @brief Constructor function. */
+    explicit DrumStaff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    Cmper whichDrumLib{};       ///< Cmper of the associated percussion map. This cmper is used in various classes to pull
+                                ///< properties of the percussion map.
+
+    constexpr static std::string_view XmlNodeName = "drumStaff"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<DrumStaff>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class DrumStaff
+ * @brief Identifies the percussion map ("drum library") for a staff style with percussion notations
+ *
+ * The class is identified by the XML node name "drumStaff".
+ */
+class DrumStaffStyle : public DrumStaff
+{
+public:
+    using DrumStaff::DrumStaff;
+
+    constexpr static std::string_view XmlNodeName = "drumStaffStyle"; ///< The XML node name for this type.
+};
+
 /**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained.
@@ -1946,9 +1983,12 @@ public:
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
     bool hideKeySigsShowAccis{};    ///< "Hide Key Signature and Show Accidentals" transposition option.
 
+    // The following values are not in xml but computed by the factory.
+
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
-    std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAutoNumberValues.
+    std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
+    std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
 
     /// @brief Returns the full staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
@@ -1986,7 +2026,15 @@ public:
      *
      * This function is called by the DocumentFactory when the document is created.
      */
-    static void calcAutoNumberValues(const DocumentPtr& document);
+    static void calcAllAutoNumberValues(const DocumentPtr& document);
+
+    /**
+     * @brief Populate runtime values for all staves or staffstyles, such as percussion map Id if any.
+     *
+     * This function is called by the DocumentFactory when the document is created.
+     */
+    template <typename SubType>
+    static void calcAllRuntimeValues(const DocumentPtr& document);
 
     /// @brief Add auto numbering as a prefix or suffix, if needed
     /// @param plainName The name (full or abbreviated) to which to add the auto numbering
@@ -2025,9 +2073,9 @@ public:
     {
         OthersBase::integrityCheck();
         if (!staffLines && !customStaff) {
-            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has neither a standard nor a custom staff definition.");
+            MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has neither a standard nor a custom staff definition.");
         } else if (staffLines && customStaff) {
-            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has both a standard and a custom staff definition.");            
+            MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has both a standard and a custom staff definition.");            
         }
         if (customStaff) { // guarantee ascending order of staves.
             std::sort(customStaff.value().begin(), customStaff.value().end(),
@@ -2035,13 +2083,13 @@ public:
         }
         if (transposition) {
             if (!transposition->chromatic && !transposition->keysig) {
-                MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has transposition with neither keysig nor chromatic transposition defined.");
+                MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has transposition with neither keysig nor chromatic transposition defined.");
             } else if (transposition->chromatic && transposition->keysig) {
-                MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has transposition with both keysig and chromatic transposition defined.");
+                MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has transposition with both keysig and chromatic transposition defined.");
             }
         }
         if (useNoteFont && !noteFont) {
-            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " specifies to use a custom font, but no custom font was provided.");
+            MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " specifies to use a custom notehead font, but no custom font was provided.");
             noteFont = std::make_shared<FontInfo>(getDocument());
         }
     }
@@ -2121,13 +2169,16 @@ public:
 
     void integrityCheck() override
     {
-        Staff::integrityCheck();
         if (!masks) {
             // Finale allows creation of staff styles with no masks, so this is just a verbose comment
             util::Logger::log(util::Logger::LogLevel::Verbose, "StaffStyle " + styleName
                 + " (" + std::to_string(getCmper()) + ") does not override anything.");
             masks = std::make_shared<Masks>(getDocument());
         }
+        if (useNoteFont && !masks->floatNoteheadFont && !noteFont) {
+            useNoteFont = false; // silence integrity check in Staff.
+        }
+        Staff::integrityCheck();
     }
 
     constexpr static std::string_view XmlNodeName = "staffStyle"; ///< The XML node name for this type.

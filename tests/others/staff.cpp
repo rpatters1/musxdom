@@ -209,7 +209,7 @@ TEST(StaffTest, AutoNumbering)
     EXPECT_FALSE(staff1->autoNumberValue.has_value());
     EXPECT_EQ(staff1->addAutoNumbering("Name"), "Name");
     staff1->useAutoNumbering = true;
-    others::Staff::calcAutoNumberValues(doc);
+    others::Staff::calcAllAutoNumberValues(doc);
     EXPECT_EQ(staff1->autoNumberValue.value_or(-1), 1);
     EXPECT_EQ(staff1->addAutoNumbering("Name"), "Name 1");
     staff1->autoNumbering = others::Staff::AutoNumberingStyle::RomanSuffix;
@@ -514,4 +514,21 @@ TEST(StaffTest, Transposition31Edo)
     */
         }
     }
+}
+
+TEST(StaffTest, PercussionMapStyle)
+{
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "percstaffstyle.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto staff1 = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 1, 0);
+    EXPECT_EQ(staff1->percussionMapId, 12);
+
+    auto staff2 = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 2, 0);
+    EXPECT_EQ(staff2->percussionMapId, 25);
 }

@@ -2414,7 +2414,7 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
 // ***** Staff *****
 // *****************
 
-void others::Staff::calcAutoNumberValues(const DocumentPtr& document)
+void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 {
     auto scrollViewList = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
 
@@ -2490,6 +2490,25 @@ void others::Staff::calcAutoNumberValues(const DocumentPtr& document)
         // Assign a number for single staves
         instUuidNumbers[staff->instUuid]++;
         staff->autoNumberValue = instUuidNumbers[staff->instUuid];
+    }
+}
+template <typename SubType>
+void others::Staff::calcAllRuntimeValues(const DocumentPtr& document)
+{
+    static_assert(std::is_same_v<SubType, others::Staff>
+               || std::is_same_v<SubType, others::StaffStyle>,
+        "SubType template parameter must be Staff or StaffStyle.");
+    using DrumStaffType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::DrumStaff, others::DrumStaffStyle>;
+    auto list = document->getOthers()->getArray<SubType>(SCORE_PARTID);
+    for (const std::shared_ptr<others::Staff>& item : list) {
+        if (item->notationStyle == others::Staff::NotationStyle::Percussion) {
+            if (auto drumStaff = document->getOthers()->get<DrumStaffType>(SCORE_PARTID, item->getCmper())) {
+                item->percussionMapId = drumStaff->whichDrumLib;
+            } else {
+                item->percussionMapId = 0;
+                MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(item->getCmper()) + " is percussion style but has no DrumStaff record.");
+            }
+        }
     }
 }
 
@@ -2719,15 +2738,16 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     }
 
     /// @todo the rest of the masks as we discover/create them
-    if (srcMasks->notationStyle) {
-        notationStyle = staffStyle->notationStyle;
-        // other fields needed for perc and tab styles
-        masks->notationStyle = true;
-    }
     if (srcMasks->floatNoteheadFont) {
         noteFont = staffStyle->noteFont;
         useNoteFont = staffStyle->useNoteFont;
         masks->floatNoteheadFont = true;
+    }
+    if (srcMasks->notationStyle) {
+        notationStyle = staffStyle->notationStyle;
+        percussionMapId = staffStyle->percussionMapId;
+        // other fields needed for perc and tab styles
+        masks->notationStyle = true;
     }
     if (srcMasks->defaultClef) {
         defaultClef = staffStyle->defaultClef;

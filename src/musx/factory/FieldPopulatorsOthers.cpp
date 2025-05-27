@@ -458,6 +458,10 @@ MUSX_XML_ELEMENT_ARRAY(ClefList, {
     {"afterBarline", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->afterBarline = populateBoolean(e, i); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(DrumStaff, {
+    {"whichDrumLib", [](const XmlElementPtr& e, const std::shared_ptr<DrumStaff>& i) { i->whichDrumLib = e->getTextAs<Cmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
     {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = toEnum<FontDefinition::CharacterSetBank>(e); }},
     {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},

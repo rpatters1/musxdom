@@ -212,6 +212,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ChordSuffixElement,
     dom::others::ChordSuffixPlayback,
     dom::others::ClefList,
+    dom::others::DrumStaff,
+    dom::others::DrumStaffStyle,
     dom::others::FontDefinition,
     dom::others::Frame,
     dom::others::TonalCenterFlats,

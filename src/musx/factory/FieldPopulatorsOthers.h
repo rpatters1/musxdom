@@ -50,6 +50,12 @@ inline Enclosure::Shape toEnum<Enclosure::Shape>(const uint8_t& value)
 }
 
 template <>
+struct FieldPopulator<DrumStaffStyle> : private FieldPopulator<DrumStaff>
+{
+    using FieldPopulator<DrumStaff>::populate;
+};
+
+template <>
 struct FieldPopulator<TextExpressionEnclosure> : private FieldPopulator<Enclosure>
 {
     using FieldPopulator<Enclosure>::populate;
@@ -147,7 +153,7 @@ MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
                 }
             }
         }
-        others::Staff::calcAutoNumberValues(document);
+        others::Staff::calcAllAutoNumberValues(document);
     }
 });
 
@@ -198,11 +204,18 @@ MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
 
 MUSX_RESOLVER_ENTRY(Staff, {
     [](const dom::DocumentPtr& document) {
+        others::Staff::calcAllRuntimeValues<others::Staff>(document);
         auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);
         // If no MultiStaffInstrumentGroup records exist, then we need to do this here.
         if (instGroups.empty()) {
-            others::Staff::calcAutoNumberValues(document);
+            others::Staff::calcAllAutoNumberValues(document);
         }
+    }
+});
+
+MUSX_RESOLVER_ENTRY(StaffStyle, {
+    [](const dom::DocumentPtr& document) {
+        others::Staff::calcAllRuntimeValues<others::StaffStyle>(document);
     }
 });
 
