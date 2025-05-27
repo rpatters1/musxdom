@@ -2719,6 +2719,16 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     }
 
     /// @todo the rest of the masks as we discover/create them
+    if (srcMasks->notationStyle) {
+        notationStyle = staffStyle->notationStyle;
+        // other fields needed for perc and tab styles
+        masks->notationStyle = true;
+    }
+    if (srcMasks->floatNoteheadFont) {
+        noteFont = staffStyle->noteFont;
+        useNoteFont = staffStyle->useNoteFont;
+        masks->floatNoteheadFont = true;
+    }
     if (srcMasks->defaultClef) {
         defaultClef = staffStyle->defaultClef;
         masks->defaultClef = true;

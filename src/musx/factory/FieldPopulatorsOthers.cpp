@@ -235,6 +235,12 @@ MUSX_XML_ENUM_MAPPING(Staff::AutoNumberingStyle, {
     {"arabicPrefix", Staff::AutoNumberingStyle::ArabicPrefix},
 });
 
+MUSX_XML_ENUM_MAPPING(Staff::NotationStyle, {
+    // {"standard", Staff::NotationStyle::Standard}, // this is the default and may not occur in the xml
+    {"percussion", Staff::NotationStyle::Percussion},
+    {"tab", Staff::NotationStyle::Tablature},
+});
+
 MUSX_XML_ENUM_MAPPING(Staff::StemDirection, {
     // {"default", Staff::StemDirection::Default}, // this is the default and may not occur in the XML
     {"alwaysUp", Staff::StemDirection::AlwaysUp},
@@ -920,6 +926,10 @@ MUSX_XML_ELEMENT_ARRAY(Staff::Transposition, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(Staff, {
+    {"notationStyle", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->notationStyle= toEnum<Staff::NotationStyle>(e); }},
+    {"noteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
+        { i->noteFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"useNoteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useNoteFont = populateBoolean(e, i); }},
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
     {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},
     {"transposition", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
@@ -959,6 +969,8 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
+    {"notationStyle", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->notationStyle = populateBoolean(e, i); }},
+    {"floatNoteheadFont", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatNoteheadFont = populateBoolean(e, i); }},
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->defaultClef = populateBoolean(e, i); }},
     {"floatKeys", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatKeys = populateBoolean(e, i); }},
     {"floatTime", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatTime = populateBoolean(e, i); }},

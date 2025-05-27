@@ -1848,6 +1848,14 @@ public:
         AlwaysDown          ///< stems are always down on this staff
     };
 
+    /** @brief Enum for notation style. */
+    enum class NotationStyle
+    {
+        Standard,
+        Percussion,
+        Tablature
+    };
+
     /**
      * @class KeySigTransposition
      * @brief Represents key signature transposition details.
@@ -1904,6 +1912,9 @@ public:
     //          and must be added to StaffComposite::applyStyle.
 
     // Public properties corresponding to the XML structure
+    NotationStyle notationStyle{};  ///< Standard, percussion, or tablature
+    std::shared_ptr<FontInfo> noteFont; ///< The custom font to use for noteheads. Guaranteed non-null by #integrityCheck if #useNoteFont is `true`.
+    bool useNoteFont{};             ///< Indicates if #noteFont should be used.
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff. Only used if #Transposition::setToClef is true.
     std::optional<int> staffLines{}; ///< Number of lines in the staff (if no custom staff)
@@ -1912,7 +1923,6 @@ public:
     std::string instUuid;           ///< Unique identifier for the type of instrument.
     bool floatKeys{};               ///< "Independent Key Signature"
     bool floatTime{};               ///< "Independent Time Signature"
-    //noteFont
     bool hasStyles{};               ///< Indicates that this staff has staff style assignments
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
     std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
@@ -2030,6 +2040,10 @@ public:
                 MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has transposition with both keysig and chromatic transposition defined.");
             }
         }
+        if (useNoteFont && !noteFont) {
+            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " specifies to use a custom font, but no custom font was provided.");
+            noteFont = std::make_shared<FontInfo>(getDocument());
+        }
     }
 
     bool requireAllFields() const override { return false; }
@@ -2069,6 +2083,8 @@ public:
         explicit Masks(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
+        bool floatNoteheadFont{};   ///< overrides notehead font settings
+        bool notationStyle{};       ///< overrides notations style
         bool defaultClef{};         ///< overrides default clef
         bool floatKeys{};           ///< overrides "Independent Key Signature" setting
         bool floatTime{};           ///< overrides "Independent Time Signature" setting
