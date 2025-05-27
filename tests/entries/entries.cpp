@@ -37,6 +37,7 @@ TEST(EntryTest, PopulateFields)
       <numNotes>2</numNotes>
       <isValid/>
       <isNote/>
+      <splitStem/>
       <crossStaff/>
       <smartShapeDetail/>
       <graceNote/>
@@ -47,6 +48,8 @@ TEST(EntryTest, PopulateFields)
         <harmLev>-4</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
+        <upStemSecond/>
+        <upSplitStem/>
       </note>
       <note id="2">
         <harmLev>-2</harmLev>
@@ -56,6 +59,7 @@ TEST(EntryTest, PopulateFields)
         <tieStart/>
         <tieEnd/>
         <showAcci/>
+        <parenAcci/>
         <freezeAcci/>
       </note>
     </entry>
@@ -63,6 +67,7 @@ TEST(EntryTest, PopulateFields)
       <dura>256</dura>
       <numNotes>0</numNotes>
       <isValid/>
+      <doubleStem/>
       <floatRest/>
       <ignore/>
       <sorted/>
@@ -96,17 +101,32 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(entry->sorted);
 
         ASSERT_EQ(entry->notes.size(), 2);
-        auto note = entry->notes[1];
+
+        auto note = entry->notes[0];
+        ASSERT_TRUE(note);
+
+        EXPECT_TRUE(note->upStemSecond);
+        EXPECT_TRUE(note->upSplitStem);
+        EXPECT_FALSE(note->showAcci);
+        EXPECT_FALSE(note->parenAcci);
+        EXPECT_FALSE(note->freezeAcci);
+
+        note = entry->notes[1];
         ASSERT_TRUE(note);
 
         EXPECT_EQ(note->getNoteId(), 2);
         EXPECT_EQ(note->harmLev, -2);
         EXPECT_EQ(note->harmAlt, 1);
         EXPECT_TRUE(note->isValid);
+        EXPECT_FALSE(entry->doubleStem);
+        EXPECT_TRUE(entry->splitStem);
         EXPECT_TRUE(note->crossStaff);
         EXPECT_TRUE(note->tieStart);
         EXPECT_TRUE(note->tieEnd);
+        EXPECT_FALSE(note->upSplitStem);
+        EXPECT_FALSE(note->upSplitStem);
         EXPECT_TRUE(note->showAcci);
+        EXPECT_TRUE(note->parenAcci);
         EXPECT_TRUE(note->freezeAcci);
 
         auto [noteType, numDots] = entry->calcNoteInfo();
@@ -124,6 +144,8 @@ TEST(EntryTest, PopulateFields)
         EXPECT_EQ(entry->numNotes, 0);
         EXPECT_TRUE(entry->isValid);
         EXPECT_FALSE(entry->isNote);
+        EXPECT_TRUE(entry->doubleStem);
+        EXPECT_FALSE(entry->splitStem);
         EXPECT_FALSE(entry->crossStaff);
         EXPECT_FALSE(entry->smartShapeDetail);
         EXPECT_TRUE(entry->floatRest);

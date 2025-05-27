@@ -74,6 +74,9 @@ public:
     {
     }
 
+    /// @brief Non floating rests have a note with this noteId that defines their staff positions.
+    static constexpr NoteNumber RESTID = 31;
+
     /// @brief The available note names, in array order.
     enum class NoteName : int
     {
@@ -92,7 +95,14 @@ public:
     bool crossStaff{};  ///< Signifies that the note has a @ref details::CrossStaff note detail.
     bool tieStart{};    ///< Indicates a tie starts on this note.
     bool tieEnd{};      ///< Indicates a tie ends on this note.
+    bool upStemSecond{}; ///< Indicates that this note is the upper note of a second.
+                        ///< When the entry is upstem, it is drawn on the "wrong" side of the stem.
+    bool downStemSecond{}; ///< Indicates that this note is the lower note of a second.
+                        ///< When the entry is downstem, it is drawn on the "wrong" side of the stem.
+    bool upSplitStem{}; ///< True if the stem splits on this note. To split a chord in the normal way, every note from this higher
+                        ///< should have #upSplitStem set to `true`. Only takes effect if #Entry::splitStem is `true`.
     bool showAcci{};    ///< True if the note has an accidental. (Dynamically changed by Finale unless `freezeAcci` is set.)
+    bool parenAcci{};   ///< True if the accidental has parentheses.
     bool freezeAcci{};  ///< True if the accidental should be forced on or off (based on `showAcci`.)
 
     /// @brief Gets the note id for this note. This value does not change, even if the notes
@@ -186,11 +196,16 @@ public:
     bool beamExt{};          ///< Indicates that there is a beam extension on the entry.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
     bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
+    bool doubleStem{};       ///< Creates a double stem on the entry. (Appears to be exclusive with #splitStem.)
+    bool splitStem{};        ///< Indicates the presence of a note with #Note::upSplitStem set.
+                             ///< If no note has a split stem, it shows as a double stem. (Appears to be exclusive with #doubleStem.)
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
     bool noLeger{};          ///< Hide ledger lines.
     bool stemDetail{};       ///< Indicates there are stem modifications.
+    bool reverseUpStem{};    ///< Indicates that a stem normally up is reversed.
+    bool reverseDownStem{};  ///< Indicates that a stem normally down is reversed.
     bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool sorted{};           ///< Sorted flag.
     bool noPlayback{};       ///< Indicates that the entry should not be played back.

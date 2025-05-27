@@ -274,6 +274,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::BaselineLyricsVerse,
     dom::details::BeamExtensionDownStem,
     dom::details::BeamExtensionUpStem,
+    dom::details::StemAlterationsUnderBeam,         // "beamStemAdjust" is the xml key
     dom::details::BeamStubDirection,
     dom::details::BeamAlterationsDownStem,          // Finale serializes the beam alts out of alpha sequence
     dom::details::BeamAlterationsUpStem,

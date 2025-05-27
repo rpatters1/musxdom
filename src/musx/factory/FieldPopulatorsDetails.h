@@ -141,6 +141,12 @@ struct FieldPopulator<SecondaryBeamAlterationsUpStem> : private FieldPopulator<B
 };
 
 template <>
+struct FieldPopulator<StemAlterationsUnderBeam> : private FieldPopulator<StemAlterations>
+{
+    using FieldPopulator<StemAlterations>::populate;
+};
+
+template <>
 struct FieldPopulator<TieAlterEnd> : private FieldPopulator<TieAlterBase>
 {
     using FieldPopulator<TieAlterBase>::populate;

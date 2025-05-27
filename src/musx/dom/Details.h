@@ -1317,6 +1317,22 @@ public:
 };
 
 /**
+ * @class StemAlterationsUnderBeam
+ * @brief Specifies horizontal and vertical adjustments for stems under beam
+ *
+ * Entry::stemDetail is set if there are any instances of this class.
+ *
+ * This class is identified by the XML node name "stemAdjust".
+ */
+class StemAlterationsUnderBeam : public StemAlterations
+{
+public:
+    using StemAlterations::StemAlterations;
+
+    constexpr static std::string_view XmlNodeName = "beamStemAdjust"; ///< The XML node name for this type.
+};
+
+/**
  * @class TieAlterBase
  * @brief Base class for tie alteration properties. (Used for both ties and tie ends.)
  */
