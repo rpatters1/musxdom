@@ -247,6 +247,13 @@ MUSX_XML_ENUM_MAPPING(Staff::StemDirection, {
     {"alwaysDown", Staff::StemDirection::AlwaysDown},
 });
 
+MUSX_XML_ENUM_MAPPING(Staff::HideMode, {
+    // {"none", Staff::HideMode::None}, // default value probably does not appear in xml
+    {"cutaway", Staff::HideMode::Cutaway},
+    {"scoreParts",  Staff::HideMode::ScoreParts},
+    {"score", Staff::HideMode::Score},
+});
+
 MUSX_XML_ENUM_MAPPING(musx::dom::others::TextBlock::TextType, {
     {"block", TextBlock::TextType::Block},
     {"expression", TextBlock::TextType::Expression}
@@ -927,13 +934,6 @@ MUSX_XML_ELEMENT_ARRAY(Staff::Transposition, {
         { i->keysig = FieldPopulator<Staff::KeySigTransposition>::createAndPopulate(e); }},
     {"chromatic", [](const XmlElementPtr& e, const std::shared_ptr<Staff::Transposition>& i)
         { i->chromatic = FieldPopulator<Staff::ChromaticTransposition>::createAndPopulate(e); }},
-});
-
-MUSX_XML_ELEMENT_ARRAY(Staff::HideMode, {
-    // {"none",      [](const XmlElementPtr&, std::shared_ptr<Staff::HideMode>& i) { *i = Staff::HideMode::None; }}, // default value probably does not appear in xml
-    {"cutaway",   [](const XmlElementPtr&, std::shared_ptr<Staff::HideMode>& i) { *i = Staff::HideMode::Cutaway; }},
-    {"scoreParts",[](const XmlElementPtr&, std::shared_ptr<Staff::HideMode>& i) { *i = Staff::HideMode::ScoreParts; }},
-    {"score",     [](const XmlElementPtr&, std::shared_ptr<Staff::HideMode>& i) { *i = Staff::HideMode::Score; }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(Staff, {
