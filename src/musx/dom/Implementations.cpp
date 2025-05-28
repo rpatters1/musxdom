@@ -2692,10 +2692,12 @@ std::shared_ptr<const others::NamePositioning> others::Staff::getNamePosition() 
             return abrvNamePosId;
         }
     }();
-    if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getPartId(), posCmper)) {
-        return pos;
+    if (posCmper) {
+        if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getPartId(), posCmper)) {
+            return pos;
+        }
     }
-
+    
     std::shared_ptr<const others::NamePositioning> defaultValue;
     if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
         if constexpr (isForFull) {
