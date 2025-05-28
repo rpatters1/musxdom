@@ -1960,6 +1960,8 @@ public:
     std::string instUuid;           ///< Unique identifier for the type of instrument.
     bool floatKeys{};               ///< "Independent Key Signature"
     bool floatTime{};               ///< "Independent Time Signature"
+    bool blineBreak{};              ///< "Break Barlines Between Staves"
+    bool rbarBreak{};               ///< "Break Repeat Barlines Between Staves"
     bool hasStyles{};               ///< Indicates that this staff has staff style assignments
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
     std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
@@ -1971,6 +1973,7 @@ public:
     bool blankMeasure{};            ///< Inverse of "Display Rests in Empty Measures"
     bool hideRepeatTopDot{};        ///< Inverse of "Top Repeat Dot" in Staff Setup dialog
     bool hideLyrics{};              ///< Inverse of "Display Lyrics"
+    bool noOptimize{};              ///< Inverse of "Allow Hiding When Empty"
     Evpu topBarlineOffset{};        ///< Offset for the top barline.
     bool hideMeasNums{};            ///< Inverse of "Display Measure Numbers"
     bool hideRepeats{};             ///< Inverse of "Display Endings and Text Repeats"
@@ -1981,6 +1984,7 @@ public:
     bool hideClefs{};               ///< Inverse of "Display Clefs"
     bool hideStaffLines{};          ///< Inverse of "Display Staff Lines"
     bool hideChords{};              ///< Inverse of "Display Chords"
+    bool noKey{};                   ///< "Ignore Key Signatures"
     Evpu dwRestOffset{};            ///< Offset for downstem rests.
     Evpu wRestOffset{};             ///< Offset for whole rests.
     Evpu hRestOffset{};             ///< Offset for half rests.
@@ -1997,6 +2001,7 @@ public:
     bool hideStems{};               ///< Inverse of "Display Stems"
     bool hideBeams{};               ///< Inverse of "Show Beams"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
+    bool redisplayLayerAccis{};     ///< "Redisplay Accidentals in Other Layers Within Measures"
     bool hideTimeSigsInParts{};     ///< Inverse of "Display Time Signatures in Parts"
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
@@ -2004,8 +2009,23 @@ public:
 
     // The following values are not in xml but computed by the factory.
 
+    /// @todo Actually implement name position classes. For now, these values are placeholders and always zero
+
+    Cmper fullNamePosId{};          ///< Calculated cmper for full name position id. If not overridden by a staff style, it is the
+                                    ///< same as the staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
+                                    ///< @warning placeholder field: currently always 0.
+    bool fullNamePosFromStyle{};    ///< True if #fullNamePosId is for a staff style. (Determines which name pos class to retrieve.)
+                                    ///< Populated by in #calcAllRuntimeValues.
+                                    ///< @warning placeholder field: currently always 0.
+    Cmper abrvNamePosId{};          ///< Calculated cmper for abbreviated name position id. If not overridden by a staff style, it is the
+                                    ///< same as the staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
+                                    ///< @warning placeholder field: currently always 0.
+    bool abrvNamePosFromStyle{};    ///< True if #abrvNamePosId is for a staff style. (Determines which name pos class to retrieve.)
+                                    ///< Populated by in #calcAllRuntimeValues.
+                                    ///< @warning placeholder field: currently always 0.
+    
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
-                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
+    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
     std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
 
@@ -2150,35 +2170,42 @@ public:
         explicit Masks(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
-        bool floatNoteheadFont{};   ///< overrides notehead font settings
-        bool flatBeams{};           ///< overrides #Staff::flatBeams
-        bool blankMeasureRest{};    ///< overrides #Staff::blankMeasure
-        bool notationStyle{};       ///< overrides notations style
-        bool defaultClef{};         ///< overrides #Staff::defaultClef
-        bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
-        bool transposition{};       ///< overrides transposition fields
-        bool negMnumb{};            ///< overrides #Staff::hideMeasNums
-        bool negRepeat{};           ///< overrides #Staff::hideRepeats
-        bool negNameScore{};        ///< overrides #Staff::hideNameInScore
-        bool hideBarlines{};        ///< overrides #Staff::hideBarlines
-        bool floatKeys{};           ///< overrides #Staff::floatKeys
-        bool floatTime{};           ///< overrides #Staff::floatTime
-        bool hideRptBars{};         ///< overrides #Staff::hideRptBars
-        bool negKey{};              ///< overrides #Staff::hideKeySigs
-        bool negClef{};             ///< overrides #Staff::hideClefs
-        bool showTies{};            ///< overrides #Staff::hideTies
-        bool showDots{};            ///< overrides #Staff::hideDots
-        bool showRests{};           ///< overrides #Staff::hideRests
-        bool showStems{};           ///< overrides stem properties (see #StaffComposite::applyStyle)
-        bool hideChords{};          ///< overrides #Staff::hideChords
-        bool hideFretboards{};      ///< overrides #Staff::hideFretboards
-        bool hideLyrics{};          ///< overrides #Staff::hideLyrics
-        bool showNameParts{};       ///< overrides #Staff::showNameInParts
-        bool hideStaffLines{};      ///< overrides #Staff::hideStaffLines
-        bool negTimeParts{};        ///< overrides #Staff::hideTimeSigsInParts
-        bool hideKeySigsShowAccis{};///< overrides #Staff::hideKeySigsShowAccis
-        bool fullName{};            ///< overrides #Staff::fullNameTextId
-        bool abrvName{};            ///< overrides #Staff::abbrvNameTextId
+        bool floatNoteheadFont      : 1;    ///< overrides notehead font settings
+        bool flatBeams              : 1;    ///< overrides #Staff::flatBeams
+        bool blankMeasureRest       : 1;    ///< overrides #Staff::blankMeasure
+        bool noOptimize             : 1;    ///< overrides #Staff::noOptimize
+        bool notationStyle          : 1;    ///< overrides notations style
+        bool defaultClef            : 1;    ///< overrides #Staff::defaultClef
+        bool staffType              : 1;    ///< overrides staff properties (see #StaffComposite::applyStyle)
+        bool transposition          : 1;    ///< overrides transposition fields
+        bool blineBreak             : 1;    ///< overrides #Staff::blineBreak
+        bool rbarBreak              : 1;    ///< overrides #Staff::rbarBreak
+        bool negMnumb               : 1;    ///< overrides #Staff::hideMeasNums
+        bool negRepeat              : 1;    ///< overrides #Staff::hideRepeats
+        bool negNameScore           : 1;    ///< overrides #Staff::hideNameInScore
+        bool hideBarlines           : 1;    ///< overrides #Staff::hideBarlines
+        bool fullName               : 1;    ///< overrides #Staff::fullNameTextId
+        bool abrvName               : 1;    ///< overrides #Staff::abbrvNameTextId
+        bool floatKeys              : 1;    ///< overrides #Staff::floatKeys
+        bool floatTime              : 1;    ///< overrides #Staff::floatTime
+        bool hideRptBars            : 1;    ///< overrides #Staff::hideRptBars
+        bool negKey                 : 1;    ///< overrides #Staff::hideKeySigs
+        bool negClef                : 1;    ///< overrides #Staff::hideClefs
+        bool noKey                  : 1;    ///< overrides #Staff::noKey
+        bool fullNamePos            : 1;    ///< overrides presence, absence of @ref NamePositionStyleFull instance.
+        bool abrvNamePos            : 1;    ///< overrides presence, absence of @ref NamePositionStyleAbbreviated instance.
+        bool showTies               : 1;    ///< overrides #Staff::hideTies
+        bool showDots               : 1;    ///< overrides #Staff::hideDots
+        bool showRests              : 1;    ///< overrides #Staff::hideRests
+        bool showStems              : 1;    ///< overrides stem properties (see #StaffComposite::applyStyle)
+        bool hideChords             : 1;    ///< overrides #Staff::hideChords
+        bool hideFretboards         : 1;    ///< overrides #Staff::hideFretboards
+        bool hideLyrics             : 1;    ///< overrides #Staff::hideLyrics
+        bool showNameParts          : 1;    ///< overrides #Staff::showNameInParts
+        bool hideStaffLines         : 1;    ///< overrides #Staff::hideStaffLines
+        bool redisplayLayerAccis    : 1;    ///< overrides #Staff::redisplayLayerAccis
+        bool negTimeParts           : 1;    ///< overrides #Staff::hideTimeSigsInParts
+        bool hideKeySigsShowAccis   : 1;    ///< overrides #Staff::hideKeySigsShowAccis
 
         bool requireAllFields() const override { return false; }
 

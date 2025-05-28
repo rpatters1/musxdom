@@ -2751,6 +2751,10 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         blankMeasure = staffStyle->blankMeasure;
         masks->blankMeasureRest = true;
     }
+    if (srcMasks->noOptimize) {
+        noOptimize = staffStyle->noOptimize;
+        masks->noOptimize = true;
+    }
     if (srcMasks->notationStyle) {
         notationStyle = staffStyle->notationStyle;
         percussionMapId = staffStyle->percussionMapId;
@@ -2783,6 +2787,14 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         transposition = staffStyle->transposition;
         masks->transposition = true;
     }
+    if (srcMasks->blineBreak) {
+        blineBreak = staffStyle->blineBreak;
+        masks->blineBreak = true;
+    }
+    if (srcMasks->rbarBreak) {
+        rbarBreak = staffStyle->rbarBreak;
+        masks->rbarBreak = true;
+    }
     if (srcMasks->negMnumb) {
         hideMeasNums = staffStyle->hideMeasNums;
         masks->negMnumb = true;
@@ -2798,6 +2810,14 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->hideBarlines) {
         hideBarlines = staffStyle->hideBarlines;
         masks->hideBarlines = true;
+    }
+    if (srcMasks->fullName) {
+        fullNameTextId = staffStyle->fullNameTextId;
+        masks->fullName = true;
+    }
+    if (srcMasks->abrvName) {
+        abbrvNameTextId = staffStyle->abbrvNameTextId;
+        masks->abrvName = true;
     }
     if (srcMasks->floatKeys) {
         floatKeys = staffStyle->floatKeys;
@@ -2815,9 +2835,23 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         hideKeySigs = staffStyle->hideKeySigs;
         masks->negKey = true;
     }
+    if (srcMasks->fullNamePos) {
+        fullNamePosId = staffStyle->fullNamePosId;
+        fullNamePosFromStyle = true;
+        masks->fullNamePos = true;
+    }
+    if (srcMasks->abrvNamePos) {
+        abrvNamePosId = staffStyle->abrvNamePosId;
+        abrvNamePosFromStyle = true;
+        masks->abrvNamePos = true;
+    }
     if (srcMasks->negClef) {
         hideClefs = staffStyle->hideClefs;
         masks->negClef = true;
+    }
+    if (srcMasks->noKey) {
+        noKey = staffStyle->noKey;
+        masks->noKey = true;
     }
     if (srcMasks->showTies) {
         hideTies = staffStyle->hideTies;
@@ -2866,6 +2900,10 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         hideStaffLines = staffStyle->hideStaffLines;
         masks->hideStaffLines = true;
     }
+    if (srcMasks->redisplayLayerAccis) {
+        redisplayLayerAccis = staffStyle->redisplayLayerAccis;
+        masks->redisplayLayerAccis = true;
+    }
     if (srcMasks->negTimeParts) {
         hideTimeSigsInParts = staffStyle->hideTimeSigsInParts;
         masks->negTimeParts = true;
@@ -2873,14 +2911,6 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->hideKeySigsShowAccis) {
         hideKeySigsShowAccis = staffStyle->hideKeySigsShowAccis;
         masks->hideKeySigsShowAccis = true;
-    }
-    if (srcMasks->fullName) {
-        fullNameTextId = staffStyle->fullNameTextId;
-        masks->fullName = true;
-    }
-    if (srcMasks->abrvName) {
-        abbrvNameTextId = staffStyle->abbrvNameTextId;
-        masks->abrvName = true;
     }
 }
 
