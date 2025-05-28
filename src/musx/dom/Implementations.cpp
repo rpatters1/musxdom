@@ -2697,7 +2697,7 @@ std::shared_ptr<const others::NamePositioning> others::Staff::getNamePosition() 
             return pos;
         }
     }
-    
+
     std::shared_ptr<const others::NamePositioning> defaultValue;
     if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
         if constexpr (isForFull) {
@@ -2928,6 +2928,10 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->negClef) {
         hideClefs = staffStyle->hideClefs;
         masks->negClef = true;
+    }
+    if (srcMasks->hideStaff) {
+        hideMode = staffStyle->hideMode;
+        masks->hideStaff = true;
     }
     if (srcMasks->noKey) {
         noKey = staffStyle->noKey;

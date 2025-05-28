@@ -929,6 +929,13 @@ MUSX_XML_ELEMENT_ARRAY(Staff::Transposition, {
         { i->chromatic = FieldPopulator<Staff::ChromaticTransposition>::createAndPopulate(e); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(Staff::HideMode, {
+    // {"none",      [](const XmlElementPtr&, std::shared_ptr<Staff::HideMode>& i) { *i = Staff::HideMode::None; }}, // default value probably does not appear in xml
+    {"cutaway",   [](const XmlElementPtr&, std::shared_ptr<Staff::HideMode>& i) { *i = Staff::HideMode::Cutaway; }},
+    {"scoreParts",[](const XmlElementPtr&, std::shared_ptr<Staff::HideMode>& i) { *i = Staff::HideMode::ScoreParts; }},
+    {"score",     [](const XmlElementPtr&, std::shared_ptr<Staff::HideMode>& i) { *i = Staff::HideMode::Score; }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"notationStyle", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->notationStyle = toEnum<Staff::NotationStyle>(e); }},
     {"noteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
@@ -986,8 +993,9 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
     {"hideStems", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideStems = populateBoolean(e, i); }},
-    {"hideBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBeams = populateBoolean(e, i); }},
     {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection = toEnum<Staff::StemDirection>(e); }},
+    {"hideMode", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideMode = toEnum<Staff::HideMode>(e); }},
+    {"hideBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBeams = populateBoolean(e, i); }},
     {"redisplayLayerAccis", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->redisplayLayerAccis = populateBoolean(e, i); }},
     {"hideTimeSigsInParts", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTimeSigsInParts = populateBoolean(e, i); }},
     {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e); }},
@@ -1017,6 +1025,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"hideRptBars", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideRptBars = populateBoolean(e, i); }},
     {"negKey", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negKey = populateBoolean(e, i); }},
     {"negClef", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negClef = populateBoolean(e, i); }},
+    {"hideStaff", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideStaff = populateBoolean(e, i); }},
     {"noKey", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->noKey = populateBoolean(e, i); }},
     {"fullNamePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullNamePos = populateBoolean(e, i); }},
     {"abrvNamePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvNamePos = populateBoolean(e, i); }},

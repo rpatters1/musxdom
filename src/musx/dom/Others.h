@@ -1949,6 +1949,15 @@ public:
         Tablature
     };
 
+    /** @brief Enum for hide mode. */
+    enum class HideMode
+    {
+        None,           ///< Do not hide
+        Cutaway,        ///< Cutaway score
+        ScoreParts,     ///< Collapse in score and parts
+        Score           ///< Collapse in score only
+    };
+
     /**
      * @class KeySigTransposition
      * @brief Represents key signature transposition details.
@@ -2055,8 +2064,9 @@ public:
     Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
     bool hideStems{};               ///< Inverse of "Display Stems"
-    bool hideBeams{};               ///< Inverse of "Show Beams"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
+    bool hideBeams{};               ///< Inverse of "Show Beams"
+    HideMode hideMode{};            ///< "Force Hide Staff" option
     bool redisplayLayerAccis{};     ///< "Redisplay Accidentals in Other Layers Within Measures"
     bool hideTimeSigsInParts{};     ///< Inverse of "Display Time Signatures in Parts"
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
@@ -2250,6 +2260,7 @@ public:
         bool hideRptBars            : 1;    ///< overrides #Staff::hideRptBars
         bool negKey                 : 1;    ///< overrides #Staff::hideKeySigs
         bool negClef                : 1;    ///< overrides #Staff::hideClefs
+        bool hideStaff              : 1;    ///< overrides #Staff::hideMode
         bool noKey                  : 1;    ///< overrides #Staff::noKey
         bool fullNamePos            : 1;    ///< overrides presence, absence of @ref NamePositionStyleFull instance.
         bool abrvNamePos            : 1;    ///< overrides presence, absence of @ref NamePositionStyleAbbreviated instance.
