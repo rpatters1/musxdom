@@ -1010,6 +1010,8 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"negRepeat", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negRepeat = populateBoolean(e, i); }},
     {"negNameScore", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negNameScore = populateBoolean(e, i); }},
     {"hideBarlines", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideBarlines = populateBoolean(e, i); }},
+    {"fullName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullName = populateBoolean(e, i); }},
+    {"abrvName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvName = populateBoolean(e, i); }},
     {"floatKeys", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatKeys = populateBoolean(e, i); }},
     {"floatTime", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatTime = populateBoolean(e, i); }},
     {"hideRptBars", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideRptBars = populateBoolean(e, i); }},
@@ -1030,8 +1032,6 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"redisplayLayerAccis", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->redisplayLayerAccis = populateBoolean(e, i); }},
     {"negTimeParts", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negTimeParts = populateBoolean(e, i); }},
     {"hideKeySigsShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideKeySigsShowAccis = populateBoolean(e, i); }},
-    {"fullName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullName = populateBoolean(e, i); }},
-    {"abrvName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvName = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle, []() {

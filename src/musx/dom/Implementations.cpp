@@ -2499,8 +2499,12 @@ void others::Staff::calcAllRuntimeValues(const DocumentPtr& document)
                || std::is_same_v<SubType, others::StaffStyle>,
         "SubType template parameter must be Staff or StaffStyle.");
     using DrumStaffType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::DrumStaff, others::DrumStaffStyle>;
+    using NamePositionFullType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::NamePositionFull, others::NamePositionStyleFull>;
+    using NamePositionAbrvType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::NamePositionAbbreviated, others::NamePositionStyleAbbreviated>;
+    constexpr bool isForStyle = std::is_same_v<SubType, others::StaffStyle>;
+
     auto list = document->getOthers()->getArray<SubType>(SCORE_PARTID);
-    for (const std::shared_ptr<others::Staff>& item : list) {
+    for (const auto& item : list) {
         if (item->notationStyle == others::Staff::NotationStyle::Percussion) {
             if (auto drumStaff = document->getOthers()->get<DrumStaffType>(SCORE_PARTID, item->getCmper())) {
                 item->percussionMapId = drumStaff->whichDrumLib;
@@ -2508,6 +2512,30 @@ void others::Staff::calcAllRuntimeValues(const DocumentPtr& document)
                 item->percussionMapId = 0;
                 MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(item->getCmper()) + " is percussion style but has no DrumStaff record.");
             }
+        }
+        bool checkFullNeeded = true;
+        if constexpr (isForStyle) {
+            checkFullNeeded = item->masks->fullNamePos;
+        }
+        if (checkFullNeeded) {
+            if (auto full = document->getOthers()->get<NamePositionFullType>(SCORE_PARTID, item->getCmper())) {
+                item->fullNamePosId = item->getCmper();
+            } else {
+                item->fullNamePosId = 0;
+            }
+            item->fullNamePosFromStyle = isForStyle;
+        }
+        bool checkAbbrvNeeded = true;
+        if constexpr (isForStyle) {
+            checkAbbrvNeeded = item->masks->abrvNamePos;
+        }
+        if (checkFullNeeded) {
+            if (auto abrv = document->getOthers()->get<NamePositionAbrvType>(SCORE_PARTID, item->getCmper())) {
+                item->abrvNamePosId = item->getCmper();
+            } else {
+                item->abrvNamePosId = 0;
+            }
+            item->abrvNamePosFromStyle = isForStyle;
         }
     }
 }
@@ -2645,6 +2673,56 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     }();
     if (name.empty()) return name;
     return addAutoNumbering(name);
+}
+
+template <typename NamePositionType>
+std::shared_ptr<const others::NamePositioning> others::Staff::getNamePosition() const
+{
+    static_assert(std::is_same_v<NamePositionType, others::NamePositionAbbreviated>
+               || std::is_same_v<NamePositionType, others::NamePositionStyleAbbreviated>
+               || std::is_same_v<NamePositionType, others::NamePositionFull>
+               || std::is_same_v<NamePositionType, others::NamePositionStyleFull>,
+        "NamePositionType must be a name positioning type.");
+    constexpr bool isForFull = std::is_same_v<NamePositionType, others::NamePositionFull> || std::is_same_v<NamePositionType, others::NamePositionStyleFull>;
+
+    Cmper posCmper = [&]() {
+        if constexpr (isForFull) {
+            return fullNamePosId;
+        } else {
+            return abrvNamePosId;
+        }
+    }();
+    if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getPartId(), posCmper)) {
+        return pos;
+    }
+
+    std::shared_ptr<const others::NamePositioning> defaultValue;
+    if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
+        if constexpr (isForFull) {
+            defaultValue = staffOptions->namePos;
+        } else {
+            defaultValue = staffOptions->namePosAbbrv;
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("Unable to retrieve staff options for returning default name positioning.");
+    }
+    return defaultValue;
+}
+
+std::shared_ptr<const others::NamePositioning> others::Staff::getFullNamePosition() const
+{
+    if (fullNamePosFromStyle) {
+        return getNamePosition<others::NamePositionStyleFull>();
+    }
+    return getNamePosition<others::NamePositionFull>();
+}
+
+std::shared_ptr<const others::NamePositioning> others::Staff::getAbbreviatedNamePosition() const
+{
+    if (abrvNamePosFromStyle) {
+        return getNamePosition<others::NamePositionStyleAbbreviated>();
+    }
+    return getNamePosition<others::NamePositionAbbreviated>();
 }
 
 ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const

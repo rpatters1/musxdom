@@ -1352,6 +1352,62 @@ public:
 };
 
 /**
+ * @class NamePositionAbbreviated
+ * @brief Overrides abbreviated name positioning for @ref Staff.
+ *
+ * The Cmper is the Staff cmper.
+ */
+class NamePositionAbbreviated : public NamePositioning
+{
+public:
+    using NamePositioning::NamePositioning;
+
+    constexpr static std::string_view XmlNodeName = "namePosAbbrv"; ///< The XML node name for this type.
+};
+
+/**
+ * @class NamePositionStyleAbbreviated
+ * @brief Overrides abbreviated name positioning for @ref StaffStyle.
+ *
+ * The Cmper is the StaffStyle cmper.
+ */
+class NamePositionStyleAbbreviated : public NamePositioning
+{
+public:
+    using NamePositioning::NamePositioning;
+
+    constexpr static std::string_view XmlNodeName = "namePosAbbrvStyle"; ///< The XML node name for this type.
+};
+
+/**
+ * @class NamePositionFull
+ * @brief Overrides full name positioning for @ref Staff.
+ *
+ * The Cmper is the Staff cmper.
+ */
+class NamePositionFull : public NamePositioning
+{
+public:
+    using NamePositioning::NamePositioning;
+
+    constexpr static std::string_view XmlNodeName = "namePosFull"; ///< The XML node name for this type.
+};
+
+/**
+ * @class NamePositionStyleFull
+ * @brief Overrides full name positioning for @ref StaffStyle.
+ *
+ * The Cmper is the StaffStyle cmper.
+ */
+class NamePositionStyleFull : public NamePositioning
+{
+public:
+    using NamePositioning::NamePositioning;
+
+    constexpr static std::string_view XmlNodeName = "namePosFullStyle"; ///< The XML node name for this type.
+};
+
+/**
  * @class Page
  * @brief Represents the attributes of a page in the page layout.
  *
@@ -2009,21 +2065,14 @@ public:
 
     // The following values are not in xml but computed by the factory.
 
-    /// @todo Actually implement name position classes. For now, these values are placeholders and always zero
-
     Cmper fullNamePosId{};          ///< Calculated cmper for full name position id. If not overridden by a staff style, it is the
                                     ///< same as the staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
-                                    ///< @warning placeholder field: currently always 0.
-    bool fullNamePosFromStyle{};    ///< True if #fullNamePosId is for a staff style. (Determines which name pos class to retrieve.)
+    bool fullNamePosFromStyle{};    ///< True if #fullNamePosId is for a staff style. (Determines which full name pos class to retrieve.)
                                     ///< Populated by in #calcAllRuntimeValues.
-                                    ///< @warning placeholder field: currently always 0.
     Cmper abrvNamePosId{};          ///< Calculated cmper for abbreviated name position id. If not overridden by a staff style, it is the
                                     ///< same as the staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
-                                    ///< @warning placeholder field: currently always 0.
-    bool abrvNamePosFromStyle{};    ///< True if #abrvNamePosId is for a staff style. (Determines which name pos class to retrieve.)
+    bool abrvNamePosFromStyle{};    ///< True if #abrvNamePosId is for a staff style. (Determines which abrv name pos class to retrieve.)
                                     ///< Populated by in #calcAllRuntimeValues.
-                                    ///< @warning placeholder field: currently always 0.
-    
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
@@ -2051,6 +2100,12 @@ public:
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
     std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
+
+    /// @brief Returns the full name positioning in effect for this staff instance
+    std::shared_ptr<const NamePositioning> getFullNamePosition() const;
+
+    /// @brief Returns the abbreviated name positioning in effect for this staff instance
+    std::shared_ptr<const NamePositioning> getAbbreviatedNamePosition() const;
 
     /// @brief Returns if names should be shown for the specified part
     bool showNamesForPart(Cmper partId) const
@@ -2137,6 +2192,10 @@ public:
 
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Staff>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+
+private:
+    template <typename NamePositionType>
+    std::shared_ptr<const NamePositioning> getNamePosition() const;
 };
 
 /**

@@ -56,6 +56,30 @@ struct FieldPopulator<DrumStaffStyle> : private FieldPopulator<DrumStaff>
 };
 
 template <>
+struct FieldPopulator<NamePositionAbbreviated> : private FieldPopulator<NamePositioning>
+{
+    using FieldPopulator<NamePositioning>::populate;
+};
+
+template <>
+struct FieldPopulator<NamePositionStyleAbbreviated> : private FieldPopulator<NamePositioning>
+{
+    using FieldPopulator<NamePositioning>::populate;
+};
+
+template <>
+struct FieldPopulator<NamePositionFull> : private FieldPopulator<NamePositioning>
+{
+    using FieldPopulator<NamePositioning>::populate;
+};
+
+template <>
+struct FieldPopulator<NamePositionStyleFull> : private FieldPopulator<NamePositioning>
+{
+    using FieldPopulator<NamePositioning>::populate;
+};
+
+template <>
 struct FieldPopulator<TextExpressionEnclosure> : private FieldPopulator<Enclosure>
 {
     using FieldPopulator<Enclosure>::populate;
