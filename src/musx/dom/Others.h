@@ -484,10 +484,10 @@ public:
 };
 
 /**
- * @class DrumStaff
+ * @class DrumStaffStyle
  * @brief Identifies the percussion map ("drum library") for a staff style with percussion notations
  *
- * The class is identified by the XML node name "drumStaff".
+ * The class is identified by the XML node name "drumStaffStyle".
  */
 class DrumStaffStyle : public DrumStaff
 {
@@ -1964,12 +1964,30 @@ public:
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
     std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
     bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
-    Evpu topBarlineOffset{};        ///< Offset for the top barline.
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
+    bool hideRepeatBottomDot{};     ///< Inverse of "Bottom Repeat Dot" in Staff Setup dialog
+    bool flatBeams{};               ///< "Flat Beams"
+    bool hideFretboards{};          ///< Inverse of "Display Fretboards"
+    bool blankMeasure{};            ///< Inverse of "Display Rests in Empty Measures"
+    bool hideRepeatTopDot{};        ///< Inverse of "Top Repeat Dot" in Staff Setup dialog
+    bool hideLyrics{};              ///< Inverse of "Display Lyrics"
+    Evpu topBarlineOffset{};        ///< Offset for the top barline.
+    bool hideMeasNums{};            ///< Inverse of "Display Measure Numbers"
+    bool hideRepeats{};             ///< Inverse of "Display Endings and Text Repeats"
+    bool hideBarlines{};            ///< Inverse of "Display Barlines"
+    bool hideRptBars{};             ///< Inverse of "Display Repeat Bars"
+    bool hideKeySigs{};             ///< Inverse of "Display Key Signatures"
+    bool hideTimeSigs{};            ///< Inverse of "Display Time Signatures in Score"
+    bool hideClefs{};               ///< Inverse of "Display Clefs"
+    bool hideStaffLines{};          ///< Inverse of "Display Staff Lines"
+    bool hideChords{};              ///< Inverse of "Display Chords"
     Evpu dwRestOffset{};            ///< Offset for downstem rests.
     Evpu wRestOffset{};             ///< Offset for whole rests.
     Evpu hRestOffset{};             ///< Offset for half rests.
     Evpu otherRestOffset{};         ///< Offset for other rests.
+    bool hideRests{};               ///< Inverse of "Display Rests"
+    bool hideTies{};                ///< Inverse of "Display Ties"
+    bool hideDots{};                ///< Inverse of "Display Augmentation Dots"
     int stemReversal{};             ///< Stem reversal value.
     Cmper fullNameTextId{};         ///< Full name @ref TextBlock ID. (xml node is `<fullName>`)
     Cmper abbrvNameTextId{};        ///< Abbreviated name @ref TextBlock ID. (xml node is `<abbrvName>`)
@@ -1979,6 +1997,7 @@ public:
     bool hideStems{};               ///< Inverse of "Display Stems"
     bool hideBeams{};               ///< Inverse of "Show Beams"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
+    bool hideTimeSigsInParts{};     ///< Inverse of "Display Time Signatures in Parts"
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
     bool hideKeySigsShowAccis{};    ///< "Hide Key Signature and Show Accidentals" transposition option.
@@ -2132,18 +2151,34 @@ public:
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
         bool floatNoteheadFont{};   ///< overrides notehead font settings
+        bool flatBeams{};           ///< overrides #Staff::flatBeams
+        bool blankMeasureRest{};    ///< overrides #Staff::blankMeasure
         bool notationStyle{};       ///< overrides notations style
-        bool defaultClef{};         ///< overrides default clef
-        bool floatKeys{};           ///< overrides "Independent Key Signature" setting
-        bool floatTime{};           ///< overrides "Independent Time Signature" setting
+        bool defaultClef{};         ///< overrides #Staff::defaultClef
         bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
         bool transposition{};       ///< overrides transposition fields
-        bool hideKeySigsShowAccis{};///< overrides "Hide Key Signature and Show Accidentals"
-        bool negNameScore{};        ///< overrides #hideNameInScore.
-        bool fullName{};            ///< overrides #fullNameTextId.
-        bool abrvName{};            ///< overrides #abbrvNameTextId.
+        bool negMnumb{};            ///< overrides #Staff::hideMeasNums
+        bool negRepeat{};           ///< overrides #Staff::hideRepeats
+        bool negNameScore{};        ///< overrides #Staff::hideNameInScore
+        bool hideBarlines{};        ///< overrides #Staff::hideBarlines
+        bool floatKeys{};           ///< overrides #Staff::floatKeys
+        bool floatTime{};           ///< overrides #Staff::floatTime
+        bool hideRptBars{};         ///< overrides #Staff::hideRptBars
+        bool negKey{};              ///< overrides #Staff::hideKeySigs
+        bool negClef{};             ///< overrides #Staff::hideClefs
+        bool showTies{};            ///< overrides #Staff::hideTies
+        bool showDots{};            ///< overrides #Staff::hideDots
+        bool showRests{};           ///< overrides #Staff::hideRests
         bool showStems{};           ///< overrides stem properties (see #StaffComposite::applyStyle)
-        bool showNameParts{};       ///< overrides #showNameInParts
+        bool hideChords{};          ///< overrides #Staff::hideChords
+        bool hideFretboards{};      ///< overrides #Staff::hideFretboards
+        bool hideLyrics{};          ///< overrides #Staff::hideLyrics
+        bool showNameParts{};       ///< overrides #Staff::showNameInParts
+        bool hideStaffLines{};      ///< overrides #Staff::hideStaffLines
+        bool negTimeParts{};        ///< overrides #Staff::hideTimeSigsInParts
+        bool hideKeySigsShowAccis{};///< overrides #Staff::hideKeySigsShowAccis
+        bool fullName{};            ///< overrides #Staff::fullNameTextId
+        bool abrvName{};            ///< overrides #Staff::abbrvNameTextId
 
         bool requireAllFields() const override { return false; }
 

@@ -2743,6 +2743,14 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         useNoteFont = staffStyle->useNoteFont;
         masks->floatNoteheadFont = true;
     }
+    if (srcMasks->flatBeams) {
+        flatBeams = staffStyle->flatBeams;
+        masks->flatBeams = true;
+    }
+    if (srcMasks->blankMeasureRest) {
+        blankMeasure = staffStyle->blankMeasure;
+        masks->blankMeasureRest = true;
+    }
     if (srcMasks->notationStyle) {
         notationStyle = staffStyle->notationStyle;
         percussionMapId = staffStyle->percussionMapId;
@@ -2752,14 +2760,6 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->defaultClef) {
         defaultClef = staffStyle->defaultClef;
         masks->defaultClef = true;
-    }
-    if (srcMasks->floatKeys) {
-        floatKeys = staffStyle->floatKeys;
-        masks->floatKeys = true;
-    }
-    if (srcMasks->floatTime) {
-        floatTime = staffStyle->floatTime;
-        masks->floatTime = true;
     }
     if (srcMasks->staffType) {
         staffLines = staffStyle->staffLines;
@@ -2774,8 +2774,8 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         botRepeatDotOff = staffStyle->botRepeatDotOff;
         topRepeatDotOff = staffStyle->topRepeatDotOff;
         stemReversal = staffStyle->stemReversal;
-        // hideTopRepeatDot
-        // hideBotRepeatDot
+        hideRepeatBottomDot = staffStyle->hideRepeatBottomDot;
+        hideRepeatTopDot = staffStyle->hideRepeatTopDot;
         masks->staffType = true;
     }
     if (srcMasks->transposition) {
@@ -2783,21 +2783,53 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         transposition = staffStyle->transposition;
         masks->transposition = true;
     }
-    if (srcMasks->hideKeySigsShowAccis) {
-        hideKeySigsShowAccis = staffStyle->hideKeySigsShowAccis;
-        masks->hideKeySigsShowAccis = true;
+    if (srcMasks->negMnumb) {
+        hideMeasNums = staffStyle->hideMeasNums;
+        masks->negMnumb = true;
+    }
+    if (srcMasks->negRepeat) {
+        hideRepeats= staffStyle->hideRepeats;
+        masks->negRepeat = true;
     }
     if (srcMasks->negNameScore) {
         hideNameInScore = staffStyle->hideNameInScore;
         masks->negNameScore = true;
     }
-    if (srcMasks->fullName) {
-        fullNameTextId = staffStyle->fullNameTextId;
-        masks->fullName = true;
+    if (srcMasks->hideBarlines) {
+        hideBarlines = staffStyle->hideBarlines;
+        masks->hideBarlines = true;
     }
-    if (srcMasks->abrvName) {
-        abbrvNameTextId = staffStyle->abbrvNameTextId;
-        masks->abrvName = true;
+    if (srcMasks->floatKeys) {
+        floatKeys = staffStyle->floatKeys;
+        masks->floatKeys = true;
+    }
+    if (srcMasks->floatTime) {
+        floatTime = staffStyle->floatTime;
+        masks->floatTime = true;
+    }
+    if (srcMasks->hideRptBars) {
+        hideRptBars = staffStyle->hideRptBars;
+        masks->hideRptBars = true;
+    }
+    if (srcMasks->negKey) {
+        hideKeySigs = staffStyle->hideKeySigs;
+        masks->negKey = true;
+    }
+    if (srcMasks->negClef) {
+        hideClefs = staffStyle->hideClefs;
+        masks->negClef = true;
+    }
+    if (srcMasks->showTies) {
+        hideTies = staffStyle->hideTies;
+        masks->showTies = true;
+    }
+    if (srcMasks->showDots) {
+        hideDots = staffStyle->hideDots;
+        masks->showDots = true;
+    }
+    if (srcMasks->showRests) {
+        hideRests = staffStyle->hideRests;
+        masks->showRests = true;
     }
     if (srcMasks->showStems) {
         hideStems = staffStyle->hideStems;
@@ -2814,9 +2846,41 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         // vertStemEndOffDown
         masks->showStems = true;
     }
+    if (srcMasks->hideChords) {
+        hideChords = staffStyle->hideChords;
+        masks->hideChords = true;
+    }
+    if (srcMasks->hideFretboards) {
+        hideFretboards = staffStyle->hideFretboards;
+        masks->hideFretboards = true;
+    }
+    if (srcMasks->hideLyrics) {
+        hideLyrics = staffStyle->hideLyrics;
+        masks->hideLyrics = true;
+    }
     if (srcMasks->showNameParts) {
         showNameInParts = staffStyle->showNameInParts;
         masks->showNameParts = true;
+    }
+    if (srcMasks->hideStaffLines) {
+        hideStaffLines = staffStyle->hideStaffLines;
+        masks->hideStaffLines = true;
+    }
+    if (srcMasks->negTimeParts) {
+        hideTimeSigsInParts = staffStyle->hideTimeSigsInParts;
+        masks->negTimeParts = true;
+    }
+    if (srcMasks->hideKeySigsShowAccis) {
+        hideKeySigsShowAccis = staffStyle->hideKeySigsShowAccis;
+        masks->hideKeySigsShowAccis = true;
+    }
+    if (srcMasks->fullName) {
+        fullNameTextId = staffStyle->fullNameTextId;
+        masks->fullName = true;
+    }
+    if (srcMasks->abrvName) {
+        abbrvNameTextId = staffStyle->abbrvNameTextId;
+        masks->abrvName = true;
     }
 }
 
