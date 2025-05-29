@@ -2530,7 +2530,7 @@ void others::Staff::calcAllRuntimeValues(const DocumentPtr& document)
             if (auto drumStaff = document->getOthers()->get<DrumStaffType>(SCORE_PARTID, item->getCmper())) {
                 item->percussionMapId = drumStaff->whichDrumLib;
             } else {
-                item->percussionMapId = 0;
+                item->percussionMapId = Cmper(0);
                 MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(item->getCmper()) + " is percussion style but has no DrumStaff record.");
             }
         } else {
