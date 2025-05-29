@@ -965,6 +965,32 @@ public:
 };
 
 /**
+ * @class PercussionNoteCode
+ * @brief Represents a percussion note code override for a single note.
+ *
+ * Entry::noteDetail is set if any note in the entry has associated percussion note codes.
+ *
+ * This class is identified by the XML node name "percussionNoteCode".
+ */
+class PercussionNoteCode : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit PercussionNoteCode(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};            ///< The ID of the note being assigned a code.
+    PercussionNoteType noteCode{};  ///< The percussion note code. Use this to search the incis of the percussion map for the specific note.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "percussionNoteCode"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PercussionNoteCode>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class SecondaryBeamAlterationsDownStem
  * @brief Beam alteration for downstem secondary beams.
  *

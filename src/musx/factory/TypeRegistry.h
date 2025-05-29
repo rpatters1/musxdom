@@ -262,6 +262,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName,
+    dom::others::PercussionNoteInfo,
     dom::others::MultiStaffInstrumentGroup,
     dom::others::MultiStaffGroupId
 >;
@@ -305,6 +306,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::TieAlterEnd,
     dom::details::TieAlterStart,
     dom::details::TupletDef,
+    dom::details::PercussionNoteCode,
     dom::details::LyricAssignChorus,
     dom::details::LyricAssignSection,
     dom::details::LyricAssignVerse

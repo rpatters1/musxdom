@@ -1584,6 +1584,39 @@ public:
 };
 
 /**
+ * @class PercussionNoteInfo
+ * @brief Represents percussion notehead and staff position info for a given percussion note type.
+ *
+ * The cmper is the percussion map ID. Obtain this from #Staff::percussionMapId.
+ * The inci identifies a specific note in the map. They are in no guaranteed order.
+ *
+ * This class is identified by the XML node name "percussionNoteInfo".
+ */
+class PercussionNoteInfo : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit PercussionNoteInfo(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
+
+    PercussionNoteType percNoteType{};  ///< The percussion note type ID. Compare this with the value in #details::PercussionNoteCode.
+    int staffPosition{};                ///< The fixed vertical staff position of the note. (xml node is `<harmLev>`.)
+                                        ///< This value is the staff position relative to the first ledger line below the staff.
+                                        ///< The logic behind this choice is that it is the middle-C position on a treble clef, but
+                                        ///< middle-C is not relevant to the note's pitch or value. Use #calcStaffReferencePosition to get the
+                                        ///< staff position relative to the staff's reference line, which is often a more useful value.
+    char32_t closedNotehead{};          ///< SMuFL codepoint for closed notehead.
+    char32_t halfNotehead{};            ///< SMuFL codepoint for half notehead.
+    char32_t wholeNotehead{};           ///< SMuFL codepoint for whole notehead.
+    char32_t dwholeNotehead{};          ///< SMuFL codepoint for double whole notehead.
+
+    /// @brief Calculates the fixed staff position for this percussion note relative to a staff's reference line.
+    int calcStaffReferencePosition() const { return staffPosition - 10; }
+
+    constexpr static std::string_view XmlNodeName = "percussionNoteInfo"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PercussionNoteInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @enum RepeatActionType
  * @brief Enum for the possible values of the `<action>` element.
  */

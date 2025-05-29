@@ -89,6 +89,7 @@ add_executable(musxdomtests
     others/page.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
+	others/percussion_notes.cpp
     others/repeats.cpp
     others/shape.cpp
     others/smart_shape.cpp

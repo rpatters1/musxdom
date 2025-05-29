@@ -2685,13 +2685,7 @@ std::shared_ptr<const others::NamePositioning> others::Staff::getNamePosition() 
         "NamePositionType must be a name positioning type.");
     constexpr bool isForFull = std::is_same_v<NamePositionType, others::NamePositionFull> || std::is_same_v<NamePositionType, others::NamePositionStyleFull>;
 
-    Cmper posCmper = [&]() {
-        if constexpr (isForFull) {
-            return fullNamePosId;
-        } else {
-            return abrvNamePosId;
-        }
-    }();
+    const Cmper posCmper = isForFull ? fullNamePosId : abrvNamePosId;
     if (posCmper) {
         if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getPartId(), posCmper)) {
             return pos;
