@@ -4,7 +4,7 @@ project(musx)
 
 # Set the C++ standard
 if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 23)
+    set(CMAKE_CXX_STANDARD 17)
 endif()
 
 # Enforce at least C++17, allow higher if set by the parent

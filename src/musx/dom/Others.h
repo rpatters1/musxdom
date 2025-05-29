@@ -2239,43 +2239,43 @@ public:
         explicit Masks(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
-        bool floatNoteheadFont      : 1;    ///< overrides notehead font settings
-        bool flatBeams              : 1;    ///< overrides #Staff::flatBeams
-        bool blankMeasureRest       : 1;    ///< overrides #Staff::blankMeasure
-        bool noOptimize             : 1;    ///< overrides #Staff::noOptimize
-        bool notationStyle          : 1;    ///< overrides notations style
-        bool defaultClef            : 1;    ///< overrides #Staff::defaultClef
-        bool staffType              : 1;    ///< overrides staff properties (see #StaffComposite::applyStyle)
-        bool transposition          : 1;    ///< overrides transposition fields
-        bool blineBreak             : 1;    ///< overrides #Staff::blineBreak
-        bool rbarBreak              : 1;    ///< overrides #Staff::rbarBreak
-        bool negMnumb               : 1;    ///< overrides #Staff::hideMeasNums
-        bool negRepeat              : 1;    ///< overrides #Staff::hideRepeats
-        bool negNameScore           : 1;    ///< overrides #Staff::hideNameInScore
-        bool hideBarlines           : 1;    ///< overrides #Staff::hideBarlines
-        bool fullName               : 1;    ///< overrides #Staff::fullNameTextId
-        bool abrvName               : 1;    ///< overrides #Staff::abbrvNameTextId
-        bool floatKeys              : 1;    ///< overrides #Staff::floatKeys
-        bool floatTime              : 1;    ///< overrides #Staff::floatTime
-        bool hideRptBars            : 1;    ///< overrides #Staff::hideRptBars
-        bool negKey                 : 1;    ///< overrides #Staff::hideKeySigs
-        bool negClef                : 1;    ///< overrides #Staff::hideClefs
-        bool hideStaff              : 1;    ///< overrides #Staff::hideMode
-        bool noKey                  : 1;    ///< overrides #Staff::noKey
-        bool fullNamePos            : 1;    ///< overrides presence, absence of @ref NamePositionStyleFull instance.
-        bool abrvNamePos            : 1;    ///< overrides presence, absence of @ref NamePositionStyleAbbreviated instance.
-        bool showTies               : 1;    ///< overrides #Staff::hideTies
-        bool showDots               : 1;    ///< overrides #Staff::hideDots
-        bool showRests              : 1;    ///< overrides #Staff::hideRests
-        bool showStems              : 1;    ///< overrides stem properties (see #StaffComposite::applyStyle)
-        bool hideChords             : 1;    ///< overrides #Staff::hideChords
-        bool hideFretboards         : 1;    ///< overrides #Staff::hideFretboards
-        bool hideLyrics             : 1;    ///< overrides #Staff::hideLyrics
-        bool showNameParts          : 1;    ///< overrides #Staff::showNameInParts
-        bool hideStaffLines         : 1;    ///< overrides #Staff::hideStaffLines
-        bool redisplayLayerAccis    : 1;    ///< overrides #Staff::redisplayLayerAccis
-        bool negTimeParts           : 1;    ///< overrides #Staff::hideTimeSigsInParts
-        bool hideKeySigsShowAccis   : 1;    ///< overrides #Staff::hideKeySigsShowAccis
+        bool floatNoteheadFont{};       ///< overrides notehead font settings
+        bool flatBeams{};               ///< overrides #Staff::flatBeams
+        bool blankMeasureRest{};        ///< overrides #Staff::blankMeasure
+        bool noOptimize{};              ///< overrides #Staff::noOptimize
+        bool notationStyle{};           ///< overrides notations style
+        bool defaultClef{};             ///< overrides #Staff::defaultClef
+        bool staffType{};               ///< overrides staff properties (see #StaffComposite::applyStyle)
+        bool transposition{};           ///< overrides transposition fields
+        bool blineBreak{};              ///< overrides #Staff::blineBreak
+        bool rbarBreak{};               ///< overrides #Staff::rbarBreak
+        bool negMnumb{};                ///< overrides #Staff::hideMeasNums
+        bool negRepeat{};               ///< overrides #Staff::hideRepeats
+        bool negNameScore{};            ///< overrides #Staff::hideNameInScore
+        bool hideBarlines{};            ///< overrides #Staff::hideBarlines
+        bool fullName{};                ///< overrides #Staff::fullNameTextId
+        bool abrvName{};                ///< overrides #Staff::abbrvNameTextId
+        bool floatKeys{};               ///< overrides #Staff::floatKeys
+        bool floatTime{};               ///< overrides #Staff::floatTime
+        bool hideRptBars{};             ///< overrides #Staff::hideRptBars
+        bool negKey{};                  ///< overrides #Staff::hideKeySigs
+        bool negClef{};                 ///< overrides #Staff::hideClefs
+        bool hideStaff{};               ///< overrides #Staff::hideMode
+        bool noKey{};                   ///< overrides #Staff::noKey
+        bool fullNamePos{};             ///< overrides presence, absence of @ref NamePositionStyleFull instance.
+        bool abrvNamePos{};             ///< overrides presence, absence of @ref NamePositionStyleAbbreviated instance.
+        bool showTies{};                ///< overrides #Staff::hideTies
+        bool showDots{};                ///< overrides #Staff::hideDots
+        bool showRests{};               ///< overrides #Staff::hideRests
+        bool showStems{};               ///< overrides stem properties (see #StaffComposite::applyStyle)
+        bool hideChords{};              ///< overrides #Staff::hideChords
+        bool hideFretboards{};          ///< overrides #Staff::hideFretboards
+        bool hideLyrics{};              ///< overrides #Staff::hideLyrics
+        bool showNameParts{};           ///< overrides #Staff::showNameInParts
+        bool hideStaffLines{};          ///< overrides #Staff::hideStaffLines
+        bool redisplayLayerAccis{};     ///< overrides #Staff::redisplayLayerAccis
+        bool negTimeParts{};            ///< overrides #Staff::hideTimeSigsInParts
+        bool hideKeySigsShowAccis{};    ///< overrides #Staff::hideKeySigsShowAccis
 
         bool requireAllFields() const override { return false; }
 
