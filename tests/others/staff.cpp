@@ -563,17 +563,17 @@ TEST(StaffTest, NamePostitioning)
 
     // bar 2 (1st system)
     checkNamePos(1, 1, -72, 0, Align::Right, -64, -12, Align::Right);  // forced by staff style "Default Namepos"
-    checkNamePos(2, 1, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overriden in the staff)
+    checkNamePos(2, 1, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overridden in the staff)
     // bar 4 (2nd system)
-    checkNamePos(1, 4, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overriden in the staff)
+    checkNamePos(1, 4, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overridden in the staff)
     checkNamePos(2, 4, -72, 0, Align::Right, -64, -12, Align::Right);  // forced by staff style "Default Namepos"
     // bar 7 (3rd system)
     checkNamePos(1, 7, 0, 24, Align::Right, 0, -60, Align::Right);  // staff style values from "Override staff style"
     checkNamePos(2, 7, 0, 24, Align::Right, 0, -60, Align::Right);  // staff style values from "Override staff style"
     // bar 8 (4th system)
-    checkNamePos(1, 8, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overriden in the staff)
-    checkNamePos(2, 8, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overriden in the staff)
+    checkNamePos(1, 8, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overridden in the staff)
+    checkNamePos(2, 8, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overridden in the staff)
     // bar 11 (5th system)
-    checkNamePos(1, 11, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overriden in the staff)
-    checkNamePos(2, 11, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overriden in the staff)
+    checkNamePos(1, 11, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overridden in the staff)
+    checkNamePos(2, 11, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overridden in the staff)
 }
