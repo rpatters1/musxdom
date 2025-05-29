@@ -2529,7 +2529,7 @@ void others::Staff::calcAllRuntimeValues(const DocumentPtr& document)
         if constexpr (isForStyle) {
             checkAbbrvNeeded = item->masks->abrvNamePos;
         }
-        if (checkFullNeeded) {
+        if (checkAbbrvNeeded) {
             if (auto abrv = document->getOthers()->get<NamePositionAbrvType>(SCORE_PARTID, item->getCmper())) {
                 item->abrvNamePosId = item->getCmper();
             } else {
