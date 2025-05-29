@@ -532,3 +532,48 @@ TEST(StaffTest, PercussionMapStyle)
     auto staff2 = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 2, 0);
     EXPECT_EQ(staff2->percussionMapId, 25);
 }
+
+TEST(StaffTest, NamePostitioning)
+{
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "namepos.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    using Align = others::NamePositioning::AlignJustify;
+
+    auto checkNamePos = [&](InstCmper staffId, MeasCmper measId,
+            Evpu expectedFullX, Evpu expectedFullY, Align expectedFullAlign,
+            Evpu expectedAbrvX, Evpu expectedAbrvY, Align expectedAbrvAlign) {
+        std::string msg = "Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId);
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, staffId, measId, 0);
+        ASSERT_TRUE(staff) << msg;
+        auto namePos = staff->getFullNamePosition();
+        EXPECT_EQ(namePos->horzOff, expectedFullX);
+        EXPECT_EQ(namePos->vertOff, expectedFullY);
+        EXPECT_EQ(namePos->hAlign, expectedFullAlign);
+        namePos = staff->getAbbreviatedNamePosition();
+        EXPECT_EQ(namePos->horzOff, expectedAbrvX);
+        EXPECT_EQ(namePos->vertOff, expectedAbrvY);
+        EXPECT_EQ(namePos->hAlign, expectedAbrvAlign);
+    };
+
+    // bar 2 (1st system)
+    checkNamePos(1, 1, -72, 0, Align::Right, -64, -12, Align::Right);  // forced by staff style "Default Namepos"
+    checkNamePos(2, 1, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overriden in the staff)
+    // bar 4 (2nd system)
+    checkNamePos(1, 4, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overriden in the staff)
+    checkNamePos(2, 4, -72, 0, Align::Right, -64, -12, Align::Right);  // forced by staff style "Default Namepos"
+    // bar 7 (3rd system)
+    checkNamePos(1, 7, 0, 24, Align::Right, 0, -60, Align::Right);  // staff style values from "Override staff style"
+    checkNamePos(2, 7, 0, 24, Align::Right, 0, -60, Align::Right);  // staff style values from "Override staff style"
+    // bar 8 (4th system)
+    checkNamePos(1, 8, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overriden in the staff)
+    checkNamePos(2, 8, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overriden in the staff)
+    // bar 11 (5th system)
+    checkNamePos(1, 11, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overriden in the staff)
+    checkNamePos(2, 11, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overriden in the staff)
+}

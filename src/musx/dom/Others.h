@@ -2462,7 +2462,8 @@ public:
     explicit SystemLock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    MeasCmper endMeas{}; ///< The first measure after the locked system.
+    MeasCmper endMeas{}; ///< The first measure after the locked system,
+                         ///< or one measure past the end of document if this is the last system.
 
     constexpr static std::string_view XmlNodeName = "lockMeas"; ///< The XML node name for this type.
     static const xml::XmlElementArray<SystemLock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
