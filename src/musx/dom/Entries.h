@@ -36,6 +36,7 @@ namespace musx {
 namespace dom {
 
 namespace others {
+class PercussionNoteInfo;
 class Staff;
 class StaffComposite;
 } // namespace others
@@ -122,7 +123,8 @@ public:
     std::pair<int, int> calcDefaultEnharmonic(const std::shared_ptr<KeySignature>& key) const;
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
+     * not take into account percussion notes and their staff position override.
      *
      * Finale does not transpose correctly with microtonal key signatures. This function transposes
      * mostly correctly for them, which means that microtonal key signatures may have different
@@ -691,9 +693,11 @@ public:
     { return m_entry; }
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
+     * not take into account percussion notes and their staff position override. To discover if a note is a percussion
+     * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
      * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
-     * this value calculated automatically based on the score or part settings. Normally you will omit it.
+     * this value is calculated automatically based on the score or part settings. Normally you will omit it.
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
@@ -701,6 +705,10 @@ public:
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
     std::tuple<Note::NoteName, int, int, int> calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
+
+    /// @brief Calculates the percussion note info for this note, if any.
+    /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
+    std::shared_ptr<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end.

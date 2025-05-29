@@ -2132,6 +2132,27 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const 
     return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, nullptr, doEnharmonicRespell);
 }
 
+std::shared_ptr<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
+{
+    auto entry = getEntryInfo()->getEntry();
+    if (entry->noteDetail) {
+        if (auto currStaff = getEntryInfo().createCurrentStaff()) {
+            if (currStaff->percussionMapId.has_value()) {
+                const Cmper partId = getEntryInfo().getFrame()->getRequestedPartId();
+                if (auto noteCode = entry->getDocument()->getDetails()->getForNote<details::PercussionNoteCode>(*this, partId)) {
+                    auto percNoteInfoList = entry->getDocument()->getOthers()->getArray<others::PercussionNoteInfo>(partId, currStaff->percussionMapId.value());
+                    for (const auto& percNoteInfo : percNoteInfoList) {
+                        if (noteCode->noteCode == percNoteInfo->percNoteType) {
+                            return percNoteInfo;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
 std::unique_ptr<music_theory::Transposer> NoteInfoPtr::createTransposer() const
 {
     return m_entry.getKeySignature()->createTransposer((*this)->harmLev, (*this)->harmAlt);
@@ -2512,6 +2533,8 @@ void others::Staff::calcAllRuntimeValues(const DocumentPtr& document)
                 item->percussionMapId = 0;
                 MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(item->getCmper()) + " is percussion style but has no DrumStaff record.");
             }
+        } else {
+            item->percussionMapId = std::nullopt;
         }
         bool checkFullNeeded = true;
         if constexpr (isForStyle) {
@@ -2675,6 +2698,7 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     return addAutoNumbering(name);
 }
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 template <typename NamePositionType>
 std::shared_ptr<const others::NamePositioning> others::Staff::getNamePosition() const
 {
@@ -2704,6 +2728,7 @@ std::shared_ptr<const others::NamePositioning> others::Staff::getNamePosition() 
     }
     return defaultValue;
 }
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 std::shared_ptr<const others::NamePositioning> others::Staff::getFullNamePosition() const
 {

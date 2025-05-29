@@ -1598,16 +1598,16 @@ public:
     explicit PercussionNoteInfo(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
         : OthersBase(document, partId, shareMode, cmper, inci) {}
 
-    PercussionNoteType percNoteType{};  ///< The percussion note type ID. Compare this with the value in #details::PercussionNoteCode.
+    PercussionNoteType percNoteType{};  ///< The percussion note type ID. Compare this with the value in @ref details::PercussionNoteCode.
     int staffPosition{};                ///< The fixed vertical staff position of the note. (xml node is `<harmLev>`.)
                                         ///< This value is the staff position relative to the first ledger line below the staff.
                                         ///< The logic behind this choice is that it is the middle-C position on a treble clef, but
                                         ///< middle-C is not relevant to the note's pitch or value. Use #calcStaffReferencePosition to get the
                                         ///< staff position relative to the staff's reference line, which is often a more useful value.
-    char32_t closedNotehead{};          ///< SMuFL codepoint for closed notehead.
-    char32_t halfNotehead{};            ///< SMuFL codepoint for half notehead.
-    char32_t wholeNotehead{};           ///< SMuFL codepoint for whole notehead.
-    char32_t dwholeNotehead{};          ///< SMuFL codepoint for double whole notehead.
+    char32_t closedNotehead{};          ///< Codepoint for closed notehead (from default music font.)
+    char32_t halfNotehead{};            ///< Codepoint for half notehead (from default music font.)
+    char32_t wholeNotehead{};           ///< Codepoint for whole notehead (from default music font.)
+    char32_t dwholeNotehead{};          ///< Codepoint for double whole notehead (from default music font.)
 
     /// @brief Calculates the fixed staff position for this percussion note relative to a staff's reference line.
     int calcStaffReferencePosition() const { return staffPosition - 10; }

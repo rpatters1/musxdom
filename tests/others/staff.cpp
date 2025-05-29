@@ -533,7 +533,7 @@ TEST(StaffTest, PercussionMapStyle)
     EXPECT_EQ(staff2->percussionMapId, 25);
 }
 
-TEST(StaffTest, NamePostitioning)
+TEST(StaffTest, NamePositioning)
 {
     std::vector<char> transposeXml;
     musxtest::readFile(musxtest::getInputPath() / "namepos.enigmaxml", transposeXml);
