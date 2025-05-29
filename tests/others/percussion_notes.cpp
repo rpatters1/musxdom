@@ -117,13 +117,14 @@ TEST(StaffTest, CalcPercussionNoteInfo)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    auto checkNoteInfo = [&](const NoteInfoPtr& noteInfo, bool expectedSuccess, int expectedStaffRefPos) {
+    auto checkNoteInfo = [&](const NoteInfoPtr& noteInfo, bool expectedSuccess, int expectedStaffRefPos, char32_t expectedClosed) {
         auto percNoteInfo = noteInfo.calcPercussionNoteInfo();
         EXPECT_EQ(bool(percNoteInfo), expectedSuccess);
         if (!percNoteInfo) {
             return;
         }
         EXPECT_EQ(percNoteInfo->calcStaffReferencePosition(), expectedStaffRefPos);
+        EXPECT_EQ(percNoteInfo->closedNotehead, expectedClosed);
     };
 
     {
@@ -132,9 +133,9 @@ TEST(StaffTest, CalcPercussionNoteInfo)
         auto entryFrame = gfHold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
         ASSERT_GE(entryFrame->getEntries().size(), 3);
-        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), true, -7);
-        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), true, -4);
-        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), false, 0);   // this note is invalid in the perc map
+        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), true, -7, U'\uE0A4');
+        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), true, -4, U'\uE0BE');
+        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), false, 0, 0);   // this note is invalid in the perc map
     }
 
     {
@@ -143,8 +144,8 @@ TEST(StaffTest, CalcPercussionNoteInfo)
         auto entryFrame = gfHold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
         ASSERT_GE(entryFrame->getEntries().size(), 3);
-        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), false, 0);
-        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), false, 0);
-        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), false, 0);
+        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), false, 0, 0);
+        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), false, 0, 0);
+        checkNoteInfo(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), false, 0, 0);
     }
 }
