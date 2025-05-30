@@ -2197,6 +2197,9 @@ public:
     /// @brief Returns the middle staff position. For staves with even numbers of lines, it is the middle space.
     int calcMiddleStaffPosition() const;
 
+    /// @brief Returns the position of the top staff line, relative to the reference line.
+    int calcToplinePosition() const;
+
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
 

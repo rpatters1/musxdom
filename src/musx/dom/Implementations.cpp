@@ -2777,13 +2777,28 @@ int others::Staff::calcMiddleStaffPosition() const
     } else if (customStaff.has_value()) {
         const auto& lines = customStaff.value();
         if (!lines.empty()) {
-            int numStaves = lines[lines.size() - 1] - lines[0] + 1;
+            int numLines = lines[lines.size() - 1] - lines[0] + 1;
             int referenceOffset = 2 * (11 - lines[0]);
-            return referenceOffset - (numStaves - 1);
+            return referenceOffset - (numLines - 1);
         }
     }
     return 0;
 }
+
+int others::Staff::calcToplinePosition() const
+{
+    if (staffLines.has_value()) {
+        return 0;
+    }
+    if (customStaff.has_value()) {
+        const auto& lines = customStaff.value();
+        if (!lines.empty()) {
+            return 2 * (11 - lines[0]);
+        }
+    }
+    return 0;
+}
+
 
 bool others::Staff::hasInstrumentAssigned() const
 {
