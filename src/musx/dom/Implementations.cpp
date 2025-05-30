@@ -2746,8 +2746,11 @@ std::shared_ptr<const others::NamePositioning> others::Staff::getAbbreviatedName
     return getNamePosition<others::NamePositionAbbreviated>();
 }
 
-ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const
+ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrittenPitch) const
 {
+    if (forWrittenPitch && transposition && transposition->setToClef) {
+        return transposedClef;
+    }
     for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
         if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), getCmper(), tryMeasure)) {
             return gfhold.calcClefIndexAt(position);
@@ -2930,10 +2933,6 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         hideRptBars = staffStyle->hideRptBars;
         masks->hideRptBars = true;
     }
-    if (srcMasks->negKey) {
-        hideKeySigs = staffStyle->hideKeySigs;
-        masks->negKey = true;
-    }
     if (srcMasks->fullNamePos) {
         fullNamePosId = staffStyle->fullNamePosId;
         fullNamePosFromStyle = true;
@@ -2943,6 +2942,14 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         abrvNamePosId = staffStyle->abrvNamePosId;
         abrvNamePosFromStyle = true;
         masks->abrvNamePos = true;
+    }
+    if (srcMasks->negKey) {
+        hideKeySigs = staffStyle->hideKeySigs;
+        masks->negKey = true;
+    }
+    if (srcMasks->negTime) {
+        hideTimeSigs = staffStyle->hideTimeSigs;
+        masks->negTime = true;
     }
     if (srcMasks->negClef) {
         hideClefs = staffStyle->hideClefs;

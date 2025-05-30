@@ -1033,6 +1033,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"floatTime", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatTime = populateBoolean(e, i); }},
     {"hideRptBars", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideRptBars = populateBoolean(e, i); }},
     {"negKey", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negKey = populateBoolean(e, i); }},
+    {"negTime", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negTime = populateBoolean(e, i); }},
     {"negClef", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negClef = populateBoolean(e, i); }},
     {"hideStaff", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideStaff = populateBoolean(e, i); }},
     {"noKey", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->noKey = populateBoolean(e, i); }},

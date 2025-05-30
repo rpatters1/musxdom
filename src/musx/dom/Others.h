@@ -2181,11 +2181,12 @@ public:
     /// @brief Returns the clef in this staff at the specified location
     /// @param measureId The measure of the location
     /// @param position The Edu elapsed time with the measure
-    ClefIndex calcClefIndexAt(MeasCmper measureId, Edu position) const;
+    /// @param forWrittenPitch If true, return the transposing clef if there is one
+    ClefIndex calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrittenPitch = false) const;
 
     /// @brief Returns the first clef in this staff
-    ClefIndex calcFirstClefIndex() const
-    { return calcClefIndexAt(1, 0); }
+    ClefIndex calcFirstClefIndex(bool forWrittenPitch = false) const
+    { return calcClefIndexAt(1, 0, forWrittenPitch); }
 
     /// @brief Returns the first clef in the specified staff in the document
     /// @param document the document to search
@@ -2292,6 +2293,7 @@ public:
         bool floatTime{};               ///< overrides #Staff::floatTime
         bool hideRptBars{};             ///< overrides #Staff::hideRptBars
         bool negKey{};                  ///< overrides #Staff::hideKeySigs
+        bool negTime{};                 ///< overrides #Staff::hideTimeSigs (in Score)
         bool negClef{};                 ///< overrides #Staff::hideClefs
         bool hideStaff{};               ///< overrides #Staff::hideMode
         bool noKey{};                   ///< overrides #Staff::noKey
