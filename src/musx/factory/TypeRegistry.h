@@ -119,7 +119,7 @@ public:
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
     template <typename PoolPtr, typename... Args>
-    static std::shared_ptr<Base> createInstance(const PoolPtr& pool, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
+    static std::shared_ptr<Base> createInstance([[maybe_unused]]const PoolPtr& pool, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
     {
         auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
