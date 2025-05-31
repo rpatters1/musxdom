@@ -413,6 +413,12 @@ public:
     /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
     bool calcBeamStubIsLeft() const;
 
+    /// @brief Calculates the elapsed duration in global edu, removing any time stretch due to independent time signature
+    util::Fraction calcGlobalElapsedDuration() const;
+
+    /// @brief Calculates the actual duration in global edu, removing any time stretch due to independent time signature
+    util::Fraction calcGlobalActualDuration() const;
+
     /// @brief Determines if this entry can be beamed.
     bool canBeBeamed() const;
 
@@ -455,8 +461,10 @@ public:
      * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
      * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
+     * @param timeStretch The ratio of global Edu to staff edu.
     */
-    explicit EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch);
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex,
+        bool forWrittenPitch, util::Fraction timeStretch);
 
     /// @brief class to track tuplets in the frame
     struct TupletInfo
@@ -567,6 +575,10 @@ public:
     /// @return True if for written pitch, false if for sounding pitch (i.e., concert pitch)
     bool isForWrittenPitch() const { return m_forWrittenPitch; }
 
+    /// @brief Get the time stretch in this frame. Rather than accessing this value directly,
+    /// consider using #EntryInfoPtr::calcGlobalElapsedDuration or #EntryInfoPtr::calcGlobalActualDuration instead.
+    util::Fraction getTimeStretch() const { return m_timeStretch; }
+
     /// @brief Get the entry list.
     const std::vector<std::shared_ptr<const EntryInfo>>& getEntries() const
     { return m_entries; }
@@ -600,6 +612,7 @@ private:
     MeasCmper m_measure;
     LayerIndex m_layerIndex;
     bool m_forWrittenPitch;
+    util::Fraction m_timeStretch;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
 };

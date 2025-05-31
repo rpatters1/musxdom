@@ -202,13 +202,14 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // ***** EntryFrame *****
 // **********************
 
-EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch) :
+EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch, util::Fraction timeStretch) :
     m_document(gfhold->getDocument()),
     m_requestedPartId(gfhold.getRequestedPartId()),
     m_staff(staff),
     m_measure(measure),
     m_layerIndex(layerIndex),
-    m_forWrittenPitch(forWrittenPitch)
+    m_forWrittenPitch(forWrittenPitch),
+    m_timeStretch(timeStretch)
 {
 }
 
@@ -819,6 +820,16 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
     return false;
 }
 
+util::Fraction EntryInfoPtr::calcGlobalElapsedDuration() const
+{
+    return (*this)->elapsedDuration * m_entryFrame->getTimeStretch();
+}
+
+util::Fraction EntryInfoPtr::calcGlobalActualDuration() const
+{
+    return (*this)->actualDuration * m_entryFrame->getTimeStretch();
+}
+
 template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
 EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
 {
@@ -1203,7 +1214,6 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     }();
     std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
-        entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch);
         const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
         if (!measure) {
             throw std::invalid_argument("Measure instance for measure " + std::to_string(m_hold->getMeasure()) + " does not exist.");
@@ -1212,6 +1222,10 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         if (!staff) {
             throw std::invalid_argument("Staff instance for staff " + std::to_string(m_hold->getStaff()) + " does not exist.");
         }
+        util::Fraction timeStretch = staff->floatTime
+                                   ? measure->createTimeSignature()->calcTotalDuration() / measure->createTimeSignature(staff->getCmper())->calcTotalDuration()
+                                   : 1;
+        entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch, timeStretch);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
         if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
             entryFrame->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
