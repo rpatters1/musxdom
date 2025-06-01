@@ -2230,8 +2230,8 @@ public:
             }
         }
         if (useNoteFont && !noteFont) {
+            noteFont = std::make_shared<FontInfo>(getDocument()); // do this first to avoid unreachable code warning, since MUSX_INTEGRITY_ERROR might throw
             MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " specifies to use a custom notehead font, but no custom font was provided.");
-            noteFont = std::make_shared<FontInfo>(getDocument());
         }
     }
 
