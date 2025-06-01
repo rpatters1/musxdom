@@ -258,6 +258,12 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
     return nullptr;
 }
 
+std::shared_ptr<others::StaffComposite> EntryFrame::createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId) const
+{
+    return others::StaffComposite::createCurrent(getDocument(), getRequestedPartId(), forStaffId.value_or(getStaff()),
+        getMeasure(), eduPosition);
+}
+
 bool EntryFrame::TupletInfo::calcIsTremolo() const
 {
     MUSX_ASSERT_IF(!tuplet) {
@@ -431,6 +437,39 @@ bool EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft() const
     return false;
 }
 
+bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
+{
+    MUSX_ASSERT_IF(!tuplet) {
+        throw std::logic_error("TupletInfo contains no tuplet.");
+    }
+    // must be invisible
+    if (!tuplet->hidden) {
+        if (tuplet->numStyle != details::TupletDef::NumberStyle::Nothing || tuplet->brackStyle != details::TupletDef::BracketStyle::Nothing) {
+            return false;
+        }
+    }
+    auto frame = m_parent.lock();
+    MUSX_ASSERT_IF(!frame) {
+        throw std::logic_error("Unable to obtain lock on parent entry frame.");
+    }
+    // staff must be independent timesig
+    const auto staff = frame->createCurrentStaff(0);
+    if (staff && !staff->floatTime) {
+        return false;
+    }
+    // durations must match
+    const auto measure = frame->getDocument()->getOthers()->get<others::Measure>(frame->getRequestedPartId(), frame->getMeasure());
+    if (staff && measure) {
+        if (tuplet->calcReferenceDuration() == measure->calcDuration()) {
+            auto dispTime = measure->createDisplayTimeSignature(staff->getCmper());
+            return tuplet->calcDisplayDuration() == dispTime->calcTotalDuration();
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("Unable to get data record for Staff " + std::to_string(frame->getStaff()) + " or Measure " + std::to_string(frame->getMeasure()));
+    }
+    return false;
+}
+
 // ************************
 // ***** EntryInfoPtr *****
 // ************************
@@ -469,8 +508,7 @@ std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_e
 
 std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<InstCmper>& forStaffId) const
 {
-    return others::StaffComposite::createCurrent(m_entryFrame->getDocument(), m_entryFrame->getRequestedPartId(), forStaffId.value_or(getStaff()),
-        getMeasure(), (*this)->elapsedDuration.calcEduDuration());
+    return m_entryFrame->createCurrentStaff((*this)->elapsedDuration.calcEduDuration(), forStaffId);
 }
 
 unsigned EntryInfoPtr::calcReverseGraceIndex() const

@@ -312,7 +312,7 @@ public:
     MeasCmper getMeasure() const;
 
     /// @brief Creates the current StaffComposite for the entry
-    /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Usefule when notes are cross-staffed.)
+    /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
     std::shared_ptr<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the key signature of the entry
@@ -541,6 +541,19 @@ public:
         /// However, you simply extend a beam from the designated entry to the appropriate entries in the previous measure.
         bool calcCreatesBeamContinuationLeft() const;
 
+        /// @brief Detects tuplets being used to create time stretch in an independent time signature.
+        ///
+        /// Because the Finale UI is so buggy with smart shapes and clefs when there is an Independent Time Signature,
+        /// a common workaround is to set the Independent Time Signature to the same as the global time signature but
+        /// display a different time signature. Invisible tuplets then create the appearance of time stretch.
+        ///
+        /// @return This function returns true if
+        ///     - the tuplet's total reference duration matches the length of the measure exactly 
+        ///     - the tuplet is invisible
+        ///     - the staff has an independent time signature
+        //      - the independent display time signature matches the tuplet's total display duration
+        bool calcCreatesTimeStretch() const;
+
     private:
         bool calcCreatesSingleton(bool left) const;
 
@@ -604,6 +617,11 @@ public:
     /// @brief Gets the entry frame for the previous measure with the same staff and layer.
     /// @return Frame or nullpter if the previous measure has no matching frame,
     std::shared_ptr<const EntryFrame> getPrevious() const;
+    
+    /// @brief Creates a current StaffComposite for the entry frame.
+    /// @param eduPosition The Edu position for which to create the staff.
+    /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
+    std::shared_ptr<others::StaffComposite> createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId = std::nullopt) const;
 
 private:
     DocumentPtr m_document;
