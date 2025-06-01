@@ -440,26 +440,63 @@ public:
  *
  * This class is identified by the XML node name "clefEnum".
  */
-class ClefList : public OthersBase {
-    public:
-        /** @brief Constructor function */
-        explicit ClefList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
-            : OthersBase(document, partId, shareMode, cmper, inci) {}
-            
-        // Public properties corresponding to the XML structure, in the same order as in the XML.
-        ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
-        Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
-        Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
-        int percent{};          ///< The percentage value from the `<percent>` element.
-        int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
-        ShowClefMode clefMode{}; ///< The clef mode from the `<clefMode>` element.
-        bool unlockVert{};      ///< "Allow Vertical Drag"
-        bool afterBarline{};    ///< "Place Clef After Barline"
-        
-        constexpr static std::string_view XmlNodeName = "clefEnum"; ///< The XML node name for this type.
-        static const xml::XmlElementArray<ClefList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-    
+class ClefList : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit ClefList(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    // Public properties corresponding to the XML structure, in the same order as in the XML.
+    ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
+    Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
+    Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
+    int percent{};          ///< The percentage value from the `<percent>` element.
+    int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
+    ShowClefMode clefMode{}; ///< The clef mode from the `<clefMode>` element.
+    bool unlockVert{};      ///< "Allow Vertical Drag"
+    bool afterBarline{};    ///< "Place Clef After Barline"
+
+    constexpr static std::string_view XmlNodeName = "clefEnum"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ClefList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class DrumStaff
+ * @brief Identifies the percussion map ("drum library") for a staff with percussion notations
+ *
+ * The class is identified by the XML node name "drumStaff".
+ */
+class DrumStaff : public OthersBase
+{
+public:
+    /** @brief Constructor function. */
+    explicit DrumStaff(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    Cmper whichDrumLib{};       ///< Cmper of the associated percussion map. This cmper is used in various classes to pull
+                                ///< properties of the percussion map.
+
+    constexpr static std::string_view XmlNodeName = "drumStaff"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<DrumStaff>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class DrumStaffStyle
+ * @brief Identifies the percussion map ("drum library") for a staff style with percussion notations
+ *
+ * The class is identified by the XML node name "drumStaffStyle".
+ */
+class DrumStaffStyle : public DrumStaff
+{
+public:
+    using DrumStaff::DrumStaff;
+
+    constexpr static std::string_view XmlNodeName = "drumStaffStyle"; ///< The XML node name for this type.
+};
+
 /**
  * @class FontDefinition
  * @brief The name and font characteristics of fonts contained.
@@ -1315,6 +1352,62 @@ public:
 };
 
 /**
+ * @class NamePositionAbbreviated
+ * @brief Overrides abbreviated name positioning for @ref Staff.
+ *
+ * The Cmper is the Staff cmper.
+ */
+class NamePositionAbbreviated : public NamePositioning
+{
+public:
+    using NamePositioning::NamePositioning;
+
+    constexpr static std::string_view XmlNodeName = "namePosAbbrv"; ///< The XML node name for this type.
+};
+
+/**
+ * @class NamePositionStyleAbbreviated
+ * @brief Overrides abbreviated name positioning for @ref StaffStyle.
+ *
+ * The Cmper is the StaffStyle cmper.
+ */
+class NamePositionStyleAbbreviated : public NamePositioning
+{
+public:
+    using NamePositioning::NamePositioning;
+
+    constexpr static std::string_view XmlNodeName = "namePosAbbrvStyle"; ///< The XML node name for this type.
+};
+
+/**
+ * @class NamePositionFull
+ * @brief Overrides full name positioning for @ref Staff.
+ *
+ * The Cmper is the Staff cmper.
+ */
+class NamePositionFull : public NamePositioning
+{
+public:
+    using NamePositioning::NamePositioning;
+
+    constexpr static std::string_view XmlNodeName = "namePosFull"; ///< The XML node name for this type.
+};
+
+/**
+ * @class NamePositionStyleFull
+ * @brief Overrides full name positioning for @ref StaffStyle.
+ *
+ * The Cmper is the StaffStyle cmper.
+ */
+class NamePositionStyleFull : public NamePositioning
+{
+public:
+    using NamePositioning::NamePositioning;
+
+    constexpr static std::string_view XmlNodeName = "namePosFullStyle"; ///< The XML node name for this type.
+};
+
+/**
  * @class Page
  * @brief Represents the attributes of a page in the page layout.
  *
@@ -1488,6 +1581,39 @@ public:
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartGlobals>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class PercussionNoteInfo
+ * @brief Represents percussion notehead and staff position info for a given percussion note type.
+ *
+ * The cmper is the percussion map ID. Obtain this from #Staff::percussionMapId.
+ * The inci identifies a specific note in the map. They are in no guaranteed order.
+ *
+ * This class is identified by the XML node name "percussionNoteInfo".
+ */
+class PercussionNoteInfo : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit PercussionNoteInfo(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
+
+    PercussionNoteType percNoteType{};  ///< The percussion note type ID. Compare this with the value in @ref details::PercussionNoteCode.
+    int staffPosition{};                ///< The fixed vertical staff position of the note. (xml node is `<harmLev>`.)
+                                        ///< This value is the staff position relative to the first ledger line below the staff.
+                                        ///< The logic behind this choice is that it is the middle-C position on a treble clef, but
+                                        ///< middle-C is not relevant to the note's pitch or value. Use #calcStaffReferencePosition to get the
+                                        ///< staff position relative to the staff's reference line, which is often a more useful value.
+    char32_t closedNotehead{};          ///< Codepoint for closed notehead (from default music font.)
+    char32_t halfNotehead{};            ///< Codepoint for half notehead (from default music font.)
+    char32_t wholeNotehead{};           ///< Codepoint for whole notehead (from default music font.)
+    char32_t dwholeNotehead{};          ///< Codepoint for double whole notehead (from default music font.)
+
+    /// @brief Calculates the fixed staff position for this percussion note relative to a staff's reference line.
+    int calcStaffReferencePosition() const { return staffPosition - 10; }
+
+    constexpr static std::string_view XmlNodeName = "percussionNoteInfo"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PercussionNoteInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1848,6 +1974,23 @@ public:
         AlwaysDown          ///< stems are always down on this staff
     };
 
+    /** @brief Enum for notation style. */
+    enum class NotationStyle
+    {
+        Standard,
+        Percussion,
+        Tablature
+    };
+
+    /** @brief Enum for hide mode. */
+    enum class HideMode
+    {
+        None,           ///< Do not hide
+        Cutaway,        ///< Cutaway score
+        ScoreParts,     ///< Collapse in score and parts
+        Score           ///< Collapse in score only
+    };
+
     /**
      * @class KeySigTransposition
      * @brief Represents key signature transposition details.
@@ -1904,6 +2047,9 @@ public:
     //          and must be added to StaffComposite::applyStyle.
 
     // Public properties corresponding to the XML structure
+    NotationStyle notationStyle{};  ///< Standard, percussion, or tablature
+    std::shared_ptr<FontInfo> noteFont; ///< The custom font to use for noteheads. Guaranteed non-null by #integrityCheck if #useNoteFont is `true`.
+    bool useNoteFont{};             ///< Indicates if #noteFont should be used.
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff. Only used if #Transposition::setToClef is true.
     std::optional<int> staffLines{}; ///< Number of lines in the staff (if no custom staff)
@@ -1912,17 +2058,38 @@ public:
     std::string instUuid;           ///< Unique identifier for the type of instrument.
     bool floatKeys{};               ///< "Independent Key Signature"
     bool floatTime{};               ///< "Independent Time Signature"
-    //noteFont
+    bool blineBreak{};              ///< "Break Barlines Between Staves"
+    bool rbarBreak{};               ///< "Break Repeat Barlines Between Staves"
     bool hasStyles{};               ///< Indicates that this staff has staff style assignments
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
     std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
     bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
-    Evpu topBarlineOffset{};        ///< Offset for the top barline.
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
+    bool hideRepeatBottomDot{};     ///< Inverse of "Bottom Repeat Dot" in Staff Setup dialog
+    bool flatBeams{};               ///< "Flat Beams"
+    bool hideFretboards{};          ///< Inverse of "Display Fretboards"
+    bool blankMeasure{};            ///< Inverse of "Display Rests in Empty Measures"
+    bool hideRepeatTopDot{};        ///< Inverse of "Top Repeat Dot" in Staff Setup dialog
+    bool hideLyrics{};              ///< Inverse of "Display Lyrics"
+    bool noOptimize{};              ///< Inverse of "Allow Hiding When Empty"
+    Evpu topBarlineOffset{};        ///< Offset for the top barline.
+    bool hideMeasNums{};            ///< Inverse of "Display Measure Numbers"
+    bool hideRepeats{};             ///< Inverse of "Display Endings and Text Repeats"
+    bool hideBarlines{};            ///< Inverse of "Display Barlines"
+    bool hideRptBars{};             ///< Inverse of "Display Repeat Bars"
+    bool hideKeySigs{};             ///< Inverse of "Display Key Signatures"
+    bool hideTimeSigs{};            ///< Inverse of "Display Time Signatures in Score"
+    bool hideClefs{};               ///< Inverse of "Display Clefs"
+    bool hideStaffLines{};          ///< Inverse of "Display Staff Lines"
+    bool hideChords{};              ///< Inverse of "Display Chords"
+    bool noKey{};                   ///< "Ignore Key Signatures"
     Evpu dwRestOffset{};            ///< Offset for downstem rests.
     Evpu wRestOffset{};             ///< Offset for whole rests.
     Evpu hRestOffset{};             ///< Offset for half rests.
     Evpu otherRestOffset{};         ///< Offset for other rests.
+    bool hideRests{};               ///< Inverse of "Display Rests"
+    bool hideTies{};                ///< Inverse of "Display Ties"
+    bool hideDots{};                ///< Inverse of "Display Augmentation Dots"
     int stemReversal{};             ///< Stem reversal value.
     Cmper fullNameTextId{};         ///< Full name @ref TextBlock ID. (xml node is `<fullName>`)
     Cmper abbrvNameTextId{};        ///< Abbreviated name @ref TextBlock ID. (xml node is `<abbrvName>`)
@@ -1930,15 +2097,29 @@ public:
     Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
     Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
     bool hideStems{};               ///< Inverse of "Display Stems"
-    bool hideBeams{};               ///< Inverse of "Show Beams"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
+    bool hideBeams{};               ///< Inverse of "Show Beams"
+    HideMode hideMode{};            ///< "Force Hide Staff" option
+    bool redisplayLayerAccis{};     ///< "Redisplay Accidentals in Other Layers Within Measures"
+    bool hideTimeSigsInParts{};     ///< Inverse of "Display Time Signatures in Parts"
     AutoNumberingStyle autoNumbering{}; ///< Autonumbering style if #useAutoNumbering is true. (xml node is `<autoNum>`)
     bool useAutoNumbering{};        ///< Whether names should be auto-numbered. (xml node is `<useAutoNum>`)
     bool hideKeySigsShowAccis{};    ///< "Hide Key Signature and Show Accidentals" transposition option.
 
+    // The following values are not in xml but computed by the factory.
+
+    Cmper fullNamePosId{};          ///< Calculated cmper for full name position id. If not overridden by a staff style, it is the
+                                    ///< same as the staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
+    bool fullNamePosFromStyle{};    ///< True if #fullNamePosId is for a staff style. (Determines which full name pos class to retrieve.)
+                                    ///< Populated by in #calcAllRuntimeValues.
+    Cmper abrvNamePosId{};          ///< Calculated cmper for abbreviated name position id. If not overridden by a staff style, it is the
+                                    ///< same as the staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
+    bool abrvNamePosFromStyle{};    ///< True if #abrvNamePosId is for a staff style. (Determines which abrv name pos class to retrieve.)
+                                    ///< Populated by in #calcAllRuntimeValues.
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
-                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
-    std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAutoNumberValues.
+    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
+    std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
+    std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
 
     /// @brief Returns the full staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
@@ -1963,6 +2144,12 @@ public:
     /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
     std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
 
+    /// @brief Returns the full name positioning in effect for this staff instance
+    std::shared_ptr<const NamePositioning> getFullNamePosition() const;
+
+    /// @brief Returns the abbreviated name positioning in effect for this staff instance
+    std::shared_ptr<const NamePositioning> getAbbreviatedNamePosition() const;
+
     /// @brief Returns if names should be shown for the specified part
     bool showNamesForPart(Cmper partId) const
     { return partId == SCORE_PARTID ? !hideNameInScore : showNameInParts; }
@@ -1976,7 +2163,15 @@ public:
      *
      * This function is called by the DocumentFactory when the document is created.
      */
-    static void calcAutoNumberValues(const DocumentPtr& document);
+    static void calcAllAutoNumberValues(const DocumentPtr& document);
+
+    /**
+     * @brief Populate runtime values for all staves or staffstyles, such as percussion map Id if any.
+     *
+     * This function is called by the DocumentFactory when the document is created.
+     */
+    template <typename SubType>
+    static void calcAllRuntimeValues(const DocumentPtr& document);
 
     /// @brief Add auto numbering as a prefix or suffix, if needed
     /// @param plainName The name (full or abbreviated) to which to add the auto numbering
@@ -1986,11 +2181,12 @@ public:
     /// @brief Returns the clef in this staff at the specified location
     /// @param measureId The measure of the location
     /// @param position The Edu elapsed time with the measure
-    ClefIndex calcClefIndexAt(MeasCmper measureId, Edu position) const;
+    /// @param forWrittenPitch If true, return the transposing clef if there is one
+    ClefIndex calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrittenPitch = false) const;
 
     /// @brief Returns the first clef in this staff
-    ClefIndex calcFirstClefIndex() const
-    { return calcClefIndexAt(1, 0); }
+    ClefIndex calcFirstClefIndex(bool forWrittenPitch = false) const
+    { return calcClefIndexAt(1, 0, forWrittenPitch); }
 
     /// @brief Returns the first clef in the specified staff in the document
     /// @param document the document to search
@@ -2000,6 +2196,9 @@ public:
 
     /// @brief Returns the middle staff position. For staves with even numbers of lines, it is the middle space.
     int calcMiddleStaffPosition() const;
+
+    /// @brief Returns the position of the top staff line, relative to the reference line.
+    int calcToplinePosition() const;
 
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
@@ -2015,9 +2214,9 @@ public:
     {
         OthersBase::integrityCheck();
         if (!staffLines && !customStaff) {
-            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has neither a standard nor a custom staff definition.");
+            MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has neither a standard nor a custom staff definition.");
         } else if (staffLines && customStaff) {
-            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has both a standard and a custom staff definition.");            
+            MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has both a standard and a custom staff definition.");            
         }
         if (customStaff) { // guarantee ascending order of staves.
             std::sort(customStaff.value().begin(), customStaff.value().end(),
@@ -2025,10 +2224,14 @@ public:
         }
         if (transposition) {
             if (!transposition->chromatic && !transposition->keysig) {
-                MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has transposition with neither keysig nor chromatic transposition defined.");
+                MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has transposition with neither keysig nor chromatic transposition defined.");
             } else if (transposition->chromatic && transposition->keysig) {
-                MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " has transposition with both keysig and chromatic transposition defined.");
+                MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has transposition with both keysig and chromatic transposition defined.");
             }
+        }
+        if (useNoteFont && !noteFont) {
+            noteFont = std::make_shared<FontInfo>(getDocument()); // do this first to avoid unreachable code warning, since MUSX_INTEGRITY_ERROR might throw
+            MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " specifies to use a custom notehead font, but no custom font was provided.");
         }
     }
 
@@ -2036,6 +2239,10 @@ public:
 
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Staff>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+
+private:
+    template <typename NamePositionType>
+    std::shared_ptr<const NamePositioning> getNamePosition() const;
 };
 
 /**
@@ -2069,17 +2276,44 @@ public:
         explicit Masks(const DocumentWeakPtr& document)
             : Base(document, SCORE_PARTID, ShareMode::All) {}
 
-        bool defaultClef{};         ///< overrides default clef
-        bool floatKeys{};           ///< overrides "Independent Key Signature" setting
-        bool floatTime{};           ///< overrides "Independent Time Signature" setting
-        bool staffType{};           ///< overrides staff properties (see #StaffComposite::applyStyle)
-        bool transposition{};       ///< overrides transposition fields
-        bool hideKeySigsShowAccis{};///< overrides "Hide Key Signature and Show Accidentals"
-        bool negNameScore{};        ///< overrides #hideNameInScore.
-        bool fullName{};            ///< overrides #fullNameTextId.
-        bool abrvName{};            ///< overrides #abbrvNameTextId.
-        bool showStems{};           ///< overrides stem properties (see #StaffComposite::applyStyle)
-        bool showNameParts{};       ///< overrides #showNameInParts
+        bool floatNoteheadFont{};       ///< overrides notehead font settings
+        bool flatBeams{};               ///< overrides #Staff::flatBeams
+        bool blankMeasureRest{};        ///< overrides #Staff::blankMeasure
+        bool noOptimize{};              ///< overrides #Staff::noOptimize
+        bool notationStyle{};           ///< overrides notations style
+        bool defaultClef{};             ///< overrides #Staff::defaultClef
+        bool staffType{};               ///< overrides staff properties (see #StaffComposite::applyStyle)
+        bool transposition{};           ///< overrides transposition fields
+        bool blineBreak{};              ///< overrides #Staff::blineBreak
+        bool rbarBreak{};               ///< overrides #Staff::rbarBreak
+        bool negMnumb{};                ///< overrides #Staff::hideMeasNums
+        bool negRepeat{};               ///< overrides #Staff::hideRepeats
+        bool negNameScore{};            ///< overrides #Staff::hideNameInScore
+        bool hideBarlines{};            ///< overrides #Staff::hideBarlines
+        bool fullName{};                ///< overrides #Staff::fullNameTextId
+        bool abrvName{};                ///< overrides #Staff::abbrvNameTextId
+        bool floatKeys{};               ///< overrides #Staff::floatKeys
+        bool floatTime{};               ///< overrides #Staff::floatTime
+        bool hideRptBars{};             ///< overrides #Staff::hideRptBars
+        bool negKey{};                  ///< overrides #Staff::hideKeySigs
+        bool negTime{};                 ///< overrides #Staff::hideTimeSigs (in Score)
+        bool negClef{};                 ///< overrides #Staff::hideClefs
+        bool hideStaff{};               ///< overrides #Staff::hideMode
+        bool noKey{};                   ///< overrides #Staff::noKey
+        bool fullNamePos{};             ///< overrides presence, absence of @ref NamePositionStyleFull instance.
+        bool abrvNamePos{};             ///< overrides presence, absence of @ref NamePositionStyleAbbreviated instance.
+        bool showTies{};                ///< overrides #Staff::hideTies
+        bool showDots{};                ///< overrides #Staff::hideDots
+        bool showRests{};               ///< overrides #Staff::hideRests
+        bool showStems{};               ///< overrides stem properties (see #StaffComposite::applyStyle)
+        bool hideChords{};              ///< overrides #Staff::hideChords
+        bool hideFretboards{};          ///< overrides #Staff::hideFretboards
+        bool hideLyrics{};              ///< overrides #Staff::hideLyrics
+        bool showNameParts{};           ///< overrides #Staff::showNameInParts
+        bool hideStaffLines{};          ///< overrides #Staff::hideStaffLines
+        bool redisplayLayerAccis{};     ///< overrides #Staff::redisplayLayerAccis
+        bool negTimeParts{};            ///< overrides #Staff::hideTimeSigsInParts
+        bool hideKeySigsShowAccis{};    ///< overrides #Staff::hideKeySigsShowAccis
 
         bool requireAllFields() const override { return false; }
 
@@ -2105,13 +2339,16 @@ public:
 
     void integrityCheck() override
     {
-        Staff::integrityCheck();
         if (!masks) {
             // Finale allows creation of staff styles with no masks, so this is just a verbose comment
             util::Logger::log(util::Logger::LogLevel::Verbose, "StaffStyle " + styleName
                 + " (" + std::to_string(getCmper()) + ") does not override anything.");
             masks = std::make_shared<Masks>(getDocument());
         }
+        if (useNoteFont && !masks->floatNoteheadFont && !noteFont) {
+            useNoteFont = false; // silence integrity check in Staff.
+        }
+        Staff::integrityCheck();
     }
 
     constexpr static std::string_view XmlNodeName = "staffStyle"; ///< The XML node name for this type.
@@ -2263,7 +2500,8 @@ public:
     explicit SystemLock(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    MeasCmper endMeas{}; ///< The first measure after the locked system.
+    MeasCmper endMeas{}; ///< The first measure after the locked system,
+                         ///< or one measure past the end of document if this is the last system.
 
     constexpr static std::string_view XmlNodeName = "lockMeas"; ///< The XML node name for this type.
     static const xml::XmlElementArray<SystemLock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

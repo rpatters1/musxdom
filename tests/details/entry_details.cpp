@@ -532,6 +532,35 @@ TEST(StemAlterationsTest, PopulateFields)
     EXPECT_EQ(adjust->downHorzAdjust, Evpu(-21));
 }
 
+TEST(StemAlterationsUnderBeamTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <beamStemAdjust entnum="6">
+      <upVertAdjust>-31</upVertAdjust>
+      <downVertAdjust>42</downVertAdjust>
+      <upHorzAdjust>23</upHorzAdjust>
+      <downHorzAdjust>-23</downHorzAdjust>
+    </beamStemAdjust>
+   </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto adjust = details->get<details::StemAlterationsUnderBeam>(SCORE_PARTID, 6);
+    ASSERT_TRUE(adjust) << "StemAlterations with entnum 6 not found";
+
+    EXPECT_EQ(adjust->upVertAdjust, Evpu(-31));
+    EXPECT_EQ(adjust->downVertAdjust, Evpu(42));
+    EXPECT_EQ(adjust->upHorzAdjust, Evpu(23));
+    EXPECT_EQ(adjust->downHorzAdjust, Evpu(-23));
+}
+
 TEST(TieAlterTest, PopulateFields)
 {
   constexpr static musxtest::string_view xml = R"xml(

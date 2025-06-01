@@ -235,10 +235,23 @@ MUSX_XML_ENUM_MAPPING(Staff::AutoNumberingStyle, {
     {"arabicPrefix", Staff::AutoNumberingStyle::ArabicPrefix},
 });
 
+MUSX_XML_ENUM_MAPPING(Staff::NotationStyle, {
+    // {"standard", Staff::NotationStyle::Standard}, // this is the default and may not occur in the xml
+    {"percussion", Staff::NotationStyle::Percussion},
+    {"tab", Staff::NotationStyle::Tablature},
+});
+
 MUSX_XML_ENUM_MAPPING(Staff::StemDirection, {
     // {"default", Staff::StemDirection::Default}, // this is the default and may not occur in the XML
     {"alwaysUp", Staff::StemDirection::AlwaysUp},
     {"alwaysDown", Staff::StemDirection::AlwaysDown},
+});
+
+MUSX_XML_ENUM_MAPPING(Staff::HideMode, {
+    // {"none", Staff::HideMode::None}, // default value probably does not appear in xml
+    {"cutaway", Staff::HideMode::Cutaway},
+    {"scoreParts",  Staff::HideMode::ScoreParts},
+    {"score", Staff::HideMode::Score},
 });
 
 MUSX_XML_ENUM_MAPPING(musx::dom::others::TextBlock::TextType, {
@@ -450,6 +463,10 @@ MUSX_XML_ELEMENT_ARRAY(ClefList, {
     {"clefMode", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->clefMode = toEnum<ShowClefMode>(e); }},
     {"unlockVert", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->unlockVert = populateBoolean(e, i); }},
     {"afterBarline", [](const XmlElementPtr& e, const std::shared_ptr<ClefList>& i) { i->afterBarline = populateBoolean(e, i); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(DrumStaff, {
+    {"whichDrumLib", [](const XmlElementPtr& e, const std::shared_ptr<DrumStaff>& i) { i->whichDrumLib = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
@@ -718,6 +735,15 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
     {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(PercussionNoteInfo, {
+    {"percNoteType",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->percNoteType = e->getTextAs<PercussionNoteType>(); }},
+    {"harmLev",         [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->staffPosition = e->getTextAs<int>(); }},
+    {"closedNotehead",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->closedNotehead = e->getTextAs<char32_t>(); }},
+    {"halfNotehead",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->halfNotehead = e->getTextAs<char32_t>(); }},
+    {"wholeNotehead",   [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->wholeNotehead = e->getTextAs<char32_t>(); }},
+    {"dwholeNotehead",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->dwholeNotehead = e->getTextAs<char32_t>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(RepeatBack, {
     {"actuate", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->passNumber = e->getTextAs<int>(); }},
     {"target", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->targetValue = e->getTextAs<int>(); }},
@@ -920,10 +946,12 @@ MUSX_XML_ELEMENT_ARRAY(Staff::Transposition, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(Staff, {
+    {"notationStyle", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->notationStyle = toEnum<Staff::NotationStyle>(e); }},
+    {"noteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
+        { i->noteFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"useNoteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useNoteFont = populateBoolean(e, i); }},
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
     {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},
-    {"transposition", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
-        { i->transposition = FieldPopulator<Staff::Transposition>::createAndPopulate(e); }},
     {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
     {"customStaff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->customStaff = populateEmbeddedArray<int>(e, "staffLine"); }},
     {"lineSpace", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lineSpace = e->getTextAs<Evpu>(); }},
@@ -934,42 +962,95 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     }},
     {"floatKeys", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->floatKeys = populateBoolean(e, i); }},
     {"floatTime", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->floatTime = populateBoolean(e, i); }},
+    {"blineBreak", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->blineBreak = populateBoolean(e, i); }},
+    {"rbarBreak", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->rbarBreak = populateBoolean(e, i); }},
     {"hasStyles", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hasStyles = populateBoolean(e, i); }},
     {"showNameParts", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->showNameInParts = populateBoolean(e, i); }},
+    {"transposition", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
+        { i->transposition = FieldPopulator<Staff::Transposition>::createAndPopulate(e); }},
     {"hideStfNameInScore", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideNameInScore = populateBoolean(e, i); }},
-    {"topBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topBarlineOffset = e->getTextAs<Evpu>(); }},
     {"botBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botBarlineOffset = e->getTextAs<Evpu>(); }},
+    {"hideRepeatBottomDot", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideRepeatBottomDot = populateBoolean(e, i); }},
+    {"flatBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->flatBeams = populateBoolean(e, i); }},
+    {"hideFretboards", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideFretboards = populateBoolean(e, i); }},
+    {"blankMeasure", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->blankMeasure = populateBoolean(e, i); }},
+    {"hideRepeatTopDot", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideRepeatTopDot = populateBoolean(e, i); }},
+    {"hideLyrics", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideLyrics = populateBoolean(e, i); }},
+    {"noOptimize", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->noOptimize = populateBoolean(e, i); }},
+    {"topBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topBarlineOffset = e->getTextAs<Evpu>(); }},
+    {"hideMeasNums", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideMeasNums = populateBoolean(e, i); }},
+    {"hideRepeats", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideRepeats = populateBoolean(e, i); }},
+    {"hideBarlines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBarlines = populateBoolean(e, i); }},
+    {"hideRptBars", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideRptBars = populateBoolean(e, i); }},
+    {"hideKeySigs", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideKeySigs = populateBoolean(e, i); }},
+    {"hideTimeSigs", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTimeSigs = populateBoolean(e, i); }},
+    {"hideClefs", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideClefs = populateBoolean(e, i); }},
+    {"hideStaffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideStaffLines = populateBoolean(e, i); }},
+    {"hideChords", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideChords = populateBoolean(e, i); }},
+    {"noKey", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->noKey = populateBoolean(e, i); }},
     {"dwRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->dwRestOffset = e->getTextAs<Evpu>(); }},
     {"wRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->wRestOffset = e->getTextAs<Evpu>(); }},
     {"hRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hRestOffset = e->getTextAs<Evpu>(); }},
     {"otherRestOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->otherRestOffset = e->getTextAs<Evpu>(); }},
+    {"hideRests", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideRests = populateBoolean(e, i); }},
+    {"hideTies", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTies = populateBoolean(e, i); }},
+    {"hideDots", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideDots = populateBoolean(e, i); }},
     {"stemReversal", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemReversal = e->getTextAs<int>(); }},
     {"fullName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fullNameTextId = e->getTextAs<Cmper>(); }},
     {"abbrvName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->abbrvNameTextId = e->getTextAs<Cmper>(); }},
-    {"staffLines", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->staffLines = e->getTextAs<int>(); }},
     {"botRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
     {"hideStems", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideStems = populateBoolean(e, i); }},
+    {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection = toEnum<Staff::StemDirection>(e); }},
+    {"hideMode", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideMode = toEnum<Staff::HideMode>(e); }},
     {"hideBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBeams = populateBoolean(e, i); }},
-    {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection= toEnum<Staff::StemDirection>(e); }},
+    {"redisplayLayerAccis", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->redisplayLayerAccis = populateBoolean(e, i); }},
+    {"hideTimeSigsInParts", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTimeSigsInParts = populateBoolean(e, i); }},
     {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e); }},
     {"useAutoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useAutoNumbering = populateBoolean(e, i); }},
     {"hideKeySigsShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideKeySigsShowAccis = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
+    {"floatNoteheadFont", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatNoteheadFont = populateBoolean(e, i); }},
+    {"flatBeams", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->flatBeams = populateBoolean(e, i); }},
+    {"blankMeasureRest", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->blankMeasureRest = populateBoolean(e, i); }},
+    {"noOptimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->noOptimize = populateBoolean(e, i); }},
+    {"notationStyle", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->notationStyle = populateBoolean(e, i); }},
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->defaultClef = populateBoolean(e, i); }},
-    {"floatKeys", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatKeys = populateBoolean(e, i); }},
-    {"floatTime", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatTime = populateBoolean(e, i); }},
     {"staffType", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->staffType = populateBoolean(e, i); }},
     {"transposition", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->transposition = populateBoolean(e, i); }},
-    {"hideKeySigsShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideKeySigsShowAccis = populateBoolean(e, i); }},
+    {"blineBreak", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->blineBreak = populateBoolean(e, i); }},
+    {"rbarBreak", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->rbarBreak = populateBoolean(e, i); }},
+    {"negMnumb", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negMnumb = populateBoolean(e, i); }},
+    {"negRepeat", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negRepeat = populateBoolean(e, i); }},
     {"negNameScore", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negNameScore = populateBoolean(e, i); }},
+    {"hideBarlines", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideBarlines = populateBoolean(e, i); }},
     {"fullName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullName = populateBoolean(e, i); }},
     {"abrvName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvName = populateBoolean(e, i); }},
+    {"floatKeys", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatKeys = populateBoolean(e, i); }},
+    {"floatTime", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatTime = populateBoolean(e, i); }},
+    {"hideRptBars", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideRptBars = populateBoolean(e, i); }},
+    {"negKey", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negKey = populateBoolean(e, i); }},
+    {"negTime", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negTime = populateBoolean(e, i); }},
+    {"negClef", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negClef = populateBoolean(e, i); }},
+    {"hideStaff", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideStaff = populateBoolean(e, i); }},
+    {"noKey", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->noKey = populateBoolean(e, i); }},
+    {"fullNamePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullNamePos = populateBoolean(e, i); }},
+    {"abrvNamePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvNamePos = populateBoolean(e, i); }},
+    {"showTies", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showTies = populateBoolean(e, i); }},
+    {"showDots", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showDots = populateBoolean(e, i); }},
+    {"showRests", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showRests = populateBoolean(e, i); }},
     {"showStems", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showStems = populateBoolean(e, i); }},
+    {"hideChords", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideChords = populateBoolean(e, i); }},
+    {"hideFretboards", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideFretboards = populateBoolean(e, i); }},
+    {"hideLyrics", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideLyrics = populateBoolean(e, i); }},
     {"showNameParts", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showNameParts = populateBoolean(e, i); }},
+    {"hideStaffLines", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideStaffLines = populateBoolean(e, i); }},
+    {"redisplayLayerAccis", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->redisplayLayerAccis = populateBoolean(e, i); }},
+    {"negTimeParts", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negTimeParts = populateBoolean(e, i); }},
+    {"hideKeySigsShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideKeySigsShowAccis = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle, []() {

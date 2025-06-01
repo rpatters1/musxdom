@@ -36,6 +36,7 @@ namespace musx {
 namespace dom {
 
 namespace others {
+class PercussionNoteInfo;
 class Staff;
 class StaffComposite;
 } // namespace others
@@ -74,6 +75,9 @@ public:
     {
     }
 
+    /// @brief Non floating rests have a note with this noteId that defines their staff positions.
+    static constexpr NoteNumber RESTID = 31;
+
     /// @brief The available note names, in array order.
     enum class NoteName : int
     {
@@ -92,7 +96,14 @@ public:
     bool crossStaff{};  ///< Signifies that the note has a @ref details::CrossStaff note detail.
     bool tieStart{};    ///< Indicates a tie starts on this note.
     bool tieEnd{};      ///< Indicates a tie ends on this note.
+    bool upStemSecond{}; ///< Indicates that this note is the upper note of a second.
+                        ///< When the entry is upstem, it is drawn on the "wrong" side of the stem.
+    bool downStemSecond{}; ///< Indicates that this note is the lower note of a second.
+                        ///< When the entry is downstem, it is drawn on the "wrong" side of the stem.
+    bool upSplitStem{}; ///< True if the stem splits on this note. To split a chord in the normal way, every note from this higher
+                        ///< should have #upSplitStem set to `true`. Only takes effect if #Entry::splitStem is `true`.
     bool showAcci{};    ///< True if the note has an accidental. (Dynamically changed by Finale unless `freezeAcci` is set.)
+    bool parenAcci{};   ///< True if the accidental has parentheses.
     bool freezeAcci{};  ///< True if the accidental should be forced on or off (based on `showAcci`.)
 
     /// @brief Gets the note id for this note. This value does not change, even if the notes
@@ -112,7 +123,8 @@ public:
     std::pair<int, int> calcDefaultEnharmonic(const std::shared_ptr<KeySignature>& key) const;
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
+     * not take into account percussion notes and their staff position override.
      *
      * Finale does not transpose correctly with microtonal key signatures. This function transposes
      * mostly correctly for them, which means that microtonal key signatures may have different
@@ -186,11 +198,16 @@ public:
     bool beamExt{};          ///< Indicates that there is a beam extension on the entry.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
     bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
+    bool doubleStem{};       ///< Creates a double stem on the entry. (Appears to be exclusive with #splitStem.)
+    bool splitStem{};        ///< Indicates the presence of a note with #Note::upSplitStem set.
+                             ///< If no note has a split stem, it shows as a double stem. (Appears to be exclusive with #doubleStem.)
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
     bool noLeger{};          ///< Hide ledger lines.
     bool stemDetail{};       ///< Indicates there are stem modifications.
+    bool reverseUpStem{};    ///< Indicates that a stem normally up is reversed.
+    bool reverseDownStem{};  ///< Indicates that a stem normally down is reversed.
     bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool sorted{};           ///< Sorted flag.
     bool noPlayback{};       ///< Indicates that the entry should not be played back.
@@ -364,7 +381,13 @@ public:
     /// @brief Returns whether this is the start of a primary beam
     bool calcIsBeamStart() const;
 
-    /// @brief Finds the end entry of a beamed group.
+    /// @brief Calculates if the entry starts a feathered beam and returns information about it if so.
+    /// @param [out] outLeftY The height of the left side of the feathered beam
+    /// @param [out] outRightY The height of the right side of the feathered beam
+    /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
+    bool calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) const;
+        
+        /// @brief Finds the end entry of a beamed group.
     /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
     EntryInfoPtr findBeamEnd() const;
 
@@ -389,6 +412,12 @@ public:
     /// where it does not match.
     /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
     bool calcBeamStubIsLeft() const;
+
+    /// @brief Calculates the elapsed duration in global edu, removing any time stretch due to independent time signature
+    util::Fraction calcGlobalElapsedDuration() const;
+
+    /// @brief Calculates the actual duration in global edu, removing any time stretch due to independent time signature
+    util::Fraction calcGlobalActualDuration() const;
 
     /// @brief Determines if this entry can be beamed.
     bool canBeBeamed() const;
@@ -432,8 +461,10 @@ public:
      * @param measure The Cmper for the @ref others::Measure of the entry
      * @param layerIndex The @ref LayerIndex (0..3) of the entry
      * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
+     * @param timeStretch The ratio of global Edu to staff edu.
     */
-    explicit EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch);
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex,
+        bool forWrittenPitch, util::Fraction timeStretch);
 
     /// @brief class to track tuplets in the frame
     struct TupletInfo
@@ -544,6 +575,10 @@ public:
     /// @return True if for written pitch, false if for sounding pitch (i.e., concert pitch)
     bool isForWrittenPitch() const { return m_forWrittenPitch; }
 
+    /// @brief Get the time stretch in this frame. Rather than accessing this value directly,
+    /// consider using #EntryInfoPtr::calcGlobalElapsedDuration or #EntryInfoPtr::calcGlobalActualDuration instead.
+    util::Fraction getTimeStretch() const { return m_timeStretch; }
+
     /// @brief Get the entry list.
     const std::vector<std::shared_ptr<const EntryInfo>>& getEntries() const
     { return m_entries; }
@@ -577,6 +612,7 @@ private:
     MeasCmper m_measure;
     LayerIndex m_layerIndex;
     bool m_forWrittenPitch;
+    util::Fraction m_timeStretch;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
 };
@@ -670,9 +706,11 @@ public:
     { return m_entry; }
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position.
+     * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
+     * not take into account percussion notes and their staff position override. To discover if a note is a percussion
+     * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
      * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
-     * this value calculated automatically based on the score or part settings. Normally you will omit it.
+     * this value is calculated automatically based on the score or part settings. Normally you will omit it.
      * @return A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
      *         - int: The octave number (where 4 is the middle C octave)
@@ -680,6 +718,10 @@ public:
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
     std::tuple<Note::NoteName, int, int, int> calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
+
+    /// @brief Calculates the percussion note info for this note, if any.
+    /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
+    std::shared_ptr<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end.

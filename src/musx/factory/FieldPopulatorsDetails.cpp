@@ -263,6 +263,11 @@ MUSX_XML_ELEMENT_ARRAY(NoteAlterations, {
     {"enharmonic", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->enharmonic = populateBoolean(e, i); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(PercussionNoteCode, {
+    {"noteID",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"noteCode",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteCode = e->getTextAs<PercussionNoteType>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
     {"do16th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note16th); }},
     {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note32nd); }},

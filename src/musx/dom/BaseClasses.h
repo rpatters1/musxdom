@@ -277,7 +277,7 @@ public:
     void integrityCheck() override
     {
         OthersBase::integrityCheck();
-        if constexpr (REQUIRED_SIZE) {
+        if constexpr (REQUIRED_SIZE > 0) {
             const size_t originalSize = values.size();
             values.resize(REQUIRED_SIZE); // resize first, in case MUSX_INTEGRITY_ERROR throws. (Avoid unreachable code warning.)
             if (originalSize < REQUIRED_SIZE) {

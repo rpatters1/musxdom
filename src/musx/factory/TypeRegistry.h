@@ -119,7 +119,7 @@ public:
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
     template <typename PoolPtr, typename... Args>
-    static std::shared_ptr<Base> createInstance(const PoolPtr& pool, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
+    static std::shared_ptr<Base> createInstance([[maybe_unused]]const PoolPtr& pool, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
     {
         auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
@@ -212,6 +212,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ChordSuffixElement,
     dom::others::ChordSuffixPlayback,
     dom::others::ClefList,
+    dom::others::DrumStaff,
+    dom::others::DrumStaffStyle,
     dom::others::FontDefinition,
     dom::others::Frame,
     dom::others::TonalCenterFlats,
@@ -225,6 +227,10 @@ using RegisteredOthers = TypeRegistry <
     dom::others::MultimeasureRest,
     dom::others::Measure,
     dom::others::MeasureExprAssign,
+    dom::others::NamePositionAbbreviated,
+    dom::others::NamePositionStyleAbbreviated,
+    dom::others::NamePositionFull,
+    dom::others::NamePositionStyleFull,
     dom::others::TextBlock,
     dom::others::Page,
     dom::others::PageTextAssign,
@@ -256,6 +262,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName,
+    dom::others::PercussionNoteInfo,
     dom::others::MultiStaffInstrumentGroup,
     dom::others::MultiStaffGroupId
 >;
@@ -274,6 +281,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::BaselineLyricsVerse,
     dom::details::BeamExtensionDownStem,
     dom::details::BeamExtensionUpStem,
+    dom::details::StemAlterationsUnderBeam,         // "beamStemAdjust" is the xml key
     dom::details::BeamStubDirection,
     dom::details::BeamAlterationsDownStem,          // Finale serializes the beam alts out of alpha sequence
     dom::details::BeamAlterationsUpStem,
@@ -298,6 +306,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::TieAlterEnd,
     dom::details::TieAlterStart,
     dom::details::TupletDef,
+    dom::details::PercussionNoteCode,
     dom::details::LyricAssignChorus,
     dom::details::LyricAssignSection,
     dom::details::LyricAssignVerse

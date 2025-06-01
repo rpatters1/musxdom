@@ -71,7 +71,7 @@ template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBea
 
 Efix details::BeamAlterations::calcEffectiveBeamWidth() const
 {
-    if (dura > 0) { // secondary beams always have non-zero dura value
+    if (getInci().has_value()) { // secondary beams have incis; primary beams do not
         std::shared_ptr<BeamAlterations> primary;
         if (dynamic_cast<const SecondaryBeamAlterationsDownStem*>(this)) {
             primary = getDocument()->getDetails()->get<BeamAlterationsDownStem>(getPartId(), getEntryNumber());
@@ -93,6 +93,63 @@ Efix details::BeamAlterations::calcEffectiveBeamWidth() const
         MUSX_INTEGRITY_ERROR("Unable to retrieve beaming options. Beam width value returned is zero.");
     }
     return result;
+}
+
+template <typename SecondaryBeamType>
+bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY)
+{
+    static_assert(std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsDownStem>
+               || std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsUpStem>,
+        "SecondaryBeamType must be a secondary beam type.");
+    constexpr bool isDownstem = std::is_same_v<SecondaryBeamType, details::SecondaryBeamAlterationsDownStem>;
+    constexpr int direction = isDownstem ? 1 : -1;
+
+    const auto& frame = entryInfo.getFrame();
+    const auto& doc = frame->getDocument();
+    const auto& secondaries = doc->getDetails()->getArray<SecondaryBeamType>(
+        frame->getRequestedPartId(), entryInfo->getEntry()->getEntryNumber());
+
+    const auto beamOptions = doc->getOptions()->get<options::BeamOptions>();
+    if (!beamOptions) {
+        MUSX_INTEGRITY_ERROR("Unable to retrieve BeamOptions for determining feathered beaming.");
+    }
+
+    const Evpu beamSpacing = beamOptions ? beamOptions->beamSepar : 18;
+    const Evpu beamWidth   = beamOptions ? Evpu(std::round(beamOptions->beamWidth / EFIX_PER_EVPU)) : 12;
+
+    Evpu leftY = direction * beamWidth;
+    Evpu rightY = leftY;
+    Evpu extremeLeft = leftY;
+    Evpu extremeRight = rightY;
+
+    for (const auto& sec : secondaries) {
+        if (!sec->isActive()) continue;
+
+        const Evpu dyL = sec->leftOffsetY + direction * beamSpacing;
+        const Evpu dyR = (sec->leftOffsetY + sec->rightOffsetY) + direction * beamSpacing;
+
+        leftY += dyL;
+        rightY += dyR;
+
+        if constexpr (isDownstem) {
+            extremeLeft  = std::max(extremeLeft, leftY);
+            extremeRight = std::max(extremeRight, rightY);
+        } else {
+            extremeLeft  = std::min(extremeLeft, leftY);
+            extremeRight = std::min(extremeRight, rightY);
+        }
+    }
+
+    const Evpu spanLeft  = direction * extremeLeft;
+    const Evpu spanRight = direction * extremeRight;
+
+    if (spanLeft != spanRight) {
+        outLeftY = spanLeft;
+        outRightY = spanRight;
+        return true;
+    }
+
+    return false;
 }
 
 // *****************
@@ -145,13 +202,14 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // ***** EntryFrame *****
 // **********************
 
-EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch) :
+EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch, util::Fraction timeStretch) :
     m_document(gfhold->getDocument()),
     m_requestedPartId(gfhold.getRequestedPartId()),
     m_staff(staff),
     m_measure(measure),
     m_layerIndex(layerIndex),
-    m_forWrittenPitch(forWrittenPitch)
+    m_forWrittenPitch(forWrittenPitch),
+    m_timeStretch(timeStretch)
 {
 }
 
@@ -762,6 +820,16 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
     return false;
 }
 
+util::Fraction EntryInfoPtr::calcGlobalElapsedDuration() const
+{
+    return (*this)->elapsedDuration * m_entryFrame->getTimeStretch();
+}
+
+util::Fraction EntryInfoPtr::calcGlobalActualDuration() const
+{
+    return (*this)->actualDuration * m_entryFrame->getTimeStretch();
+}
+
 template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
 EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
 {
@@ -849,6 +917,41 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup(bool includeHiddenEntries) const
         }
     }
     return result;
+}
+
+bool EntryInfoPtr::calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) const
+{
+    if (!(*this)->getEntry()->stemDetail || !calcIsBeamStart()) {
+        return false;
+    }
+
+    Evpu leftYUp{}, rightYUp{}, leftYDown{}, rightYDown{};
+    bool upFeathered = details::SecondaryBeamAlterationsUpStem::calcIsFeatheredBeam(*this, leftYUp, rightYUp);
+    bool downFeathered = details::SecondaryBeamAlterationsDownStem::calcIsFeatheredBeam(*this, leftYDown, rightYDown);
+
+    if (upFeathered && !downFeathered) {
+        outLeftY = leftYUp;
+        outRightY = rightYUp;
+        return true;
+    } else if (downFeathered && !upFeathered) {
+        outLeftY = leftYDown;
+        outRightY = rightYDown;
+        return true;
+    } else if (upFeathered && downFeathered) {
+        // Use the greater wedge span as tie-breaker
+        Evpu spanUp = std::abs(rightYUp - leftYUp);
+        Evpu spanDown = std::abs(rightYDown - leftYDown);
+        if (spanUp >= spanDown) {
+            outLeftY = leftYUp;
+            outRightY = rightYUp;
+        } else {
+            outLeftY = leftYDown;
+            outRightY = rightYDown;
+        }
+        return true;
+    }
+
+    return false;
 }
 
 // ***********************
@@ -1111,7 +1214,6 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     }();
     std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
-        entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch);
         const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
         if (!measure) {
             throw std::invalid_argument("Measure instance for measure " + std::to_string(m_hold->getMeasure()) + " does not exist.");
@@ -1120,6 +1222,10 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         if (!staff) {
             throw std::invalid_argument("Staff instance for staff " + std::to_string(m_hold->getStaff()) + " does not exist.");
         }
+        const util::Fraction timeStretch = staff->floatTime
+                                         ? measure->calcDuration() / measure->calcDuration(staff->getCmper())
+                                         : 1;
+        entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch, timeStretch);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
         if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
             entryFrame->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
@@ -2040,6 +2146,27 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const 
     return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, nullptr, doEnharmonicRespell);
 }
 
+std::shared_ptr<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
+{
+    auto entry = getEntryInfo()->getEntry();
+    if (entry->noteDetail) {
+        if (auto currStaff = getEntryInfo().createCurrentStaff()) {
+            if (currStaff->percussionMapId.has_value()) {
+                const Cmper partId = getEntryInfo().getFrame()->getRequestedPartId();
+                if (auto noteCode = entry->getDocument()->getDetails()->getForNote<details::PercussionNoteCode>(*this, partId)) {
+                    auto percNoteInfoList = entry->getDocument()->getOthers()->getArray<others::PercussionNoteInfo>(partId, currStaff->percussionMapId.value());
+                    for (const auto& percNoteInfo : percNoteInfoList) {
+                        if (noteCode->noteCode == percNoteInfo->percNoteType) {
+                            return percNoteInfo;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
 std::unique_ptr<music_theory::Transposer> NoteInfoPtr::createTransposer() const
 {
     return m_entry.getKeySignature()->createTransposer((*this)->harmLev, (*this)->harmAlt);
@@ -2322,7 +2449,7 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
 // ***** Staff *****
 // *****************
 
-void others::Staff::calcAutoNumberValues(const DocumentPtr& document)
+void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 {
     auto scrollViewList = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
 
@@ -2398,6 +2525,55 @@ void others::Staff::calcAutoNumberValues(const DocumentPtr& document)
         // Assign a number for single staves
         instUuidNumbers[staff->instUuid]++;
         staff->autoNumberValue = instUuidNumbers[staff->instUuid];
+    }
+}
+template <typename SubType>
+void others::Staff::calcAllRuntimeValues(const DocumentPtr& document)
+{
+    static_assert(std::is_same_v<SubType, others::Staff>
+               || std::is_same_v<SubType, others::StaffStyle>,
+        "SubType template parameter must be Staff or StaffStyle.");
+    using DrumStaffType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::DrumStaff, others::DrumStaffStyle>;
+    using NamePositionFullType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::NamePositionFull, others::NamePositionStyleFull>;
+    using NamePositionAbrvType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::NamePositionAbbreviated, others::NamePositionStyleAbbreviated>;
+    constexpr bool isForStyle = std::is_same_v<SubType, others::StaffStyle>;
+
+    auto list = document->getOthers()->getArray<SubType>(SCORE_PARTID);
+    for (const auto& item : list) {
+        if (item->notationStyle == others::Staff::NotationStyle::Percussion) {
+            if (auto drumStaff = document->getOthers()->get<DrumStaffType>(SCORE_PARTID, item->getCmper())) {
+                item->percussionMapId = drumStaff->whichDrumLib;
+            } else {
+                item->percussionMapId = Cmper(0);
+                MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(item->getCmper()) + " is percussion style but has no DrumStaff record.");
+            }
+        } else {
+            item->percussionMapId = std::nullopt;
+        }
+        bool checkFullNeeded = true;
+        if constexpr (isForStyle) {
+            checkFullNeeded = item->masks->fullNamePos;
+        }
+        if (checkFullNeeded) {
+            if (auto full = document->getOthers()->get<NamePositionFullType>(SCORE_PARTID, item->getCmper())) {
+                item->fullNamePosId = item->getCmper();
+            } else {
+                item->fullNamePosId = 0;
+            }
+            item->fullNamePosFromStyle = isForStyle;
+        }
+        bool checkAbbrvNeeded = true;
+        if constexpr (isForStyle) {
+            checkAbbrvNeeded = item->masks->abrvNamePos;
+        }
+        if (checkAbbrvNeeded) {
+            if (auto abrv = document->getOthers()->get<NamePositionAbrvType>(SCORE_PARTID, item->getCmper())) {
+                item->abrvNamePosId = item->getCmper();
+            } else {
+                item->abrvNamePosId = 0;
+            }
+            item->abrvNamePosFromStyle = isForStyle;
+        }
     }
 }
 
@@ -2536,8 +2712,59 @@ std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::Acci
     return addAutoNumbering(name);
 }
 
-ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position) const
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template <typename NamePositionType>
+std::shared_ptr<const others::NamePositioning> others::Staff::getNamePosition() const
 {
+    static_assert(std::is_same_v<NamePositionType, others::NamePositionAbbreviated>
+               || std::is_same_v<NamePositionType, others::NamePositionStyleAbbreviated>
+               || std::is_same_v<NamePositionType, others::NamePositionFull>
+               || std::is_same_v<NamePositionType, others::NamePositionStyleFull>,
+        "NamePositionType must be a name positioning type.");
+    constexpr bool isForFull = std::is_same_v<NamePositionType, others::NamePositionFull> || std::is_same_v<NamePositionType, others::NamePositionStyleFull>;
+
+    const Cmper posCmper = isForFull ? fullNamePosId : abrvNamePosId;
+    if (posCmper) {
+        if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getPartId(), posCmper)) {
+            return pos;
+        }
+    }
+
+    std::shared_ptr<const others::NamePositioning> defaultValue;
+    if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
+        if constexpr (isForFull) {
+            defaultValue = staffOptions->namePos;
+        } else {
+            defaultValue = staffOptions->namePosAbbrv;
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("Unable to retrieve staff options for returning default name positioning.");
+    }
+    return defaultValue;
+}
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+std::shared_ptr<const others::NamePositioning> others::Staff::getFullNamePosition() const
+{
+    if (fullNamePosFromStyle) {
+        return getNamePosition<others::NamePositionStyleFull>();
+    }
+    return getNamePosition<others::NamePositionFull>();
+}
+
+std::shared_ptr<const others::NamePositioning> others::Staff::getAbbreviatedNamePosition() const
+{
+    if (abrvNamePosFromStyle) {
+        return getNamePosition<others::NamePositionStyleAbbreviated>();
+    }
+    return getNamePosition<others::NamePositionAbbreviated>();
+}
+
+ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrittenPitch) const
+{
+    if (forWrittenPitch && transposition && transposition->setToClef) {
+        return transposedClef;
+    }
     for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
         if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), getCmper(), tryMeasure)) {
             return gfhold.calcClefIndexAt(position);
@@ -2564,13 +2791,28 @@ int others::Staff::calcMiddleStaffPosition() const
     } else if (customStaff.has_value()) {
         const auto& lines = customStaff.value();
         if (!lines.empty()) {
-            int numStaves = lines[lines.size() - 1] - lines[0] + 1;
+            int numLines = lines[lines.size() - 1] - lines[0] + 1;
             int referenceOffset = 2 * (11 - lines[0]);
-            return referenceOffset - (numStaves - 1);
+            return referenceOffset - (numLines - 1);
         }
     }
     return 0;
 }
+
+int others::Staff::calcToplinePosition() const
+{
+    if (staffLines.has_value()) {
+        return 0;
+    }
+    if (customStaff.has_value()) {
+        const auto& lines = customStaff.value();
+        if (!lines.empty()) {
+            return 2 * (11 - lines[0]);
+        }
+    }
+    return 0;
+}
+
 
 bool others::Staff::hasInstrumentAssigned() const
 {
@@ -2627,17 +2869,32 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     }
 
     /// @todo the rest of the masks as we discover/create them
+    if (srcMasks->floatNoteheadFont) {
+        noteFont = staffStyle->noteFont;
+        useNoteFont = staffStyle->useNoteFont;
+        masks->floatNoteheadFont = true;
+    }
+    if (srcMasks->flatBeams) {
+        flatBeams = staffStyle->flatBeams;
+        masks->flatBeams = true;
+    }
+    if (srcMasks->blankMeasureRest) {
+        blankMeasure = staffStyle->blankMeasure;
+        masks->blankMeasureRest = true;
+    }
+    if (srcMasks->noOptimize) {
+        noOptimize = staffStyle->noOptimize;
+        masks->noOptimize = true;
+    }
+    if (srcMasks->notationStyle) {
+        notationStyle = staffStyle->notationStyle;
+        percussionMapId = staffStyle->percussionMapId;
+        // other fields needed for perc and tab styles
+        masks->notationStyle = true;
+    }
     if (srcMasks->defaultClef) {
         defaultClef = staffStyle->defaultClef;
         masks->defaultClef = true;
-    }
-    if (srcMasks->floatKeys) {
-        floatKeys = staffStyle->floatKeys;
-        masks->floatKeys = true;
-    }
-    if (srcMasks->floatTime) {
-        floatTime = staffStyle->floatTime;
-        masks->floatTime = true;
     }
     if (srcMasks->staffType) {
         staffLines = staffStyle->staffLines;
@@ -2652,8 +2909,8 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         botRepeatDotOff = staffStyle->botRepeatDotOff;
         topRepeatDotOff = staffStyle->topRepeatDotOff;
         stemReversal = staffStyle->stemReversal;
-        // hideTopRepeatDot
-        // hideBotRepeatDot
+        hideRepeatBottomDot = staffStyle->hideRepeatBottomDot;
+        hideRepeatTopDot = staffStyle->hideRepeatTopDot;
         masks->staffType = true;
     }
     if (srcMasks->transposition) {
@@ -2661,13 +2918,29 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         transposition = staffStyle->transposition;
         masks->transposition = true;
     }
-    if (srcMasks->hideKeySigsShowAccis) {
-        hideKeySigsShowAccis = staffStyle->hideKeySigsShowAccis;
-        masks->hideKeySigsShowAccis = true;
+    if (srcMasks->blineBreak) {
+        blineBreak = staffStyle->blineBreak;
+        masks->blineBreak = true;
+    }
+    if (srcMasks->rbarBreak) {
+        rbarBreak = staffStyle->rbarBreak;
+        masks->rbarBreak = true;
+    }
+    if (srcMasks->negMnumb) {
+        hideMeasNums = staffStyle->hideMeasNums;
+        masks->negMnumb = true;
+    }
+    if (srcMasks->negRepeat) {
+        hideRepeats= staffStyle->hideRepeats;
+        masks->negRepeat = true;
     }
     if (srcMasks->negNameScore) {
         hideNameInScore = staffStyle->hideNameInScore;
         masks->negNameScore = true;
+    }
+    if (srcMasks->hideBarlines) {
+        hideBarlines = staffStyle->hideBarlines;
+        masks->hideBarlines = true;
     }
     if (srcMasks->fullName) {
         fullNameTextId = staffStyle->fullNameTextId;
@@ -2676,6 +2949,60 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->abrvName) {
         abbrvNameTextId = staffStyle->abbrvNameTextId;
         masks->abrvName = true;
+    }
+    if (srcMasks->floatKeys) {
+        floatKeys = staffStyle->floatKeys;
+        masks->floatKeys = true;
+    }
+    if (srcMasks->floatTime) {
+        floatTime = staffStyle->floatTime;
+        masks->floatTime = true;
+    }
+    if (srcMasks->hideRptBars) {
+        hideRptBars = staffStyle->hideRptBars;
+        masks->hideRptBars = true;
+    }
+    if (srcMasks->fullNamePos) {
+        fullNamePosId = staffStyle->fullNamePosId;
+        fullNamePosFromStyle = true;
+        masks->fullNamePos = true;
+    }
+    if (srcMasks->abrvNamePos) {
+        abrvNamePosId = staffStyle->abrvNamePosId;
+        abrvNamePosFromStyle = true;
+        masks->abrvNamePos = true;
+    }
+    if (srcMasks->negKey) {
+        hideKeySigs = staffStyle->hideKeySigs;
+        masks->negKey = true;
+    }
+    if (srcMasks->negTime) {
+        hideTimeSigs = staffStyle->hideTimeSigs;
+        masks->negTime = true;
+    }
+    if (srcMasks->negClef) {
+        hideClefs = staffStyle->hideClefs;
+        masks->negClef = true;
+    }
+    if (srcMasks->hideStaff) {
+        hideMode = staffStyle->hideMode;
+        masks->hideStaff = true;
+    }
+    if (srcMasks->noKey) {
+        noKey = staffStyle->noKey;
+        masks->noKey = true;
+    }
+    if (srcMasks->showTies) {
+        hideTies = staffStyle->hideTies;
+        masks->showTies = true;
+    }
+    if (srcMasks->showDots) {
+        hideDots = staffStyle->hideDots;
+        masks->showDots = true;
+    }
+    if (srcMasks->showRests) {
+        hideRests = staffStyle->hideRests;
+        masks->showRests = true;
     }
     if (srcMasks->showStems) {
         hideStems = staffStyle->hideStems;
@@ -2692,9 +3019,37 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         // vertStemEndOffDown
         masks->showStems = true;
     }
+    if (srcMasks->hideChords) {
+        hideChords = staffStyle->hideChords;
+        masks->hideChords = true;
+    }
+    if (srcMasks->hideFretboards) {
+        hideFretboards = staffStyle->hideFretboards;
+        masks->hideFretboards = true;
+    }
+    if (srcMasks->hideLyrics) {
+        hideLyrics = staffStyle->hideLyrics;
+        masks->hideLyrics = true;
+    }
     if (srcMasks->showNameParts) {
         showNameInParts = staffStyle->showNameInParts;
         masks->showNameParts = true;
+    }
+    if (srcMasks->hideStaffLines) {
+        hideStaffLines = staffStyle->hideStaffLines;
+        masks->hideStaffLines = true;
+    }
+    if (srcMasks->redisplayLayerAccis) {
+        redisplayLayerAccis = staffStyle->redisplayLayerAccis;
+        masks->redisplayLayerAccis = true;
+    }
+    if (srcMasks->negTimeParts) {
+        hideTimeSigsInParts = staffStyle->hideTimeSigsInParts;
+        masks->negTimeParts = true;
+    }
+    if (srcMasks->hideKeySigsShowAccis) {
+        hideKeySigsShowAccis = staffStyle->hideKeySigsShowAccis;
+        masks->hideKeySigsShowAccis = true;
     }
 }
 

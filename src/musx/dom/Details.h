@@ -202,6 +202,11 @@ class BeamAlterations : public EntryDetailsBase
 private:
     bool m_active = true; // this value is set by the factory.
 
+protected:
+    /// @brief Implementation of #SecondaryBeamAlterationsDownStem::calcIsFeatheredBeam and #SecondaryBeamAlterationsUpStem::calcIsFeatheredBeam.
+    template <typename SecondaryBeamType>
+    static bool calcIsFeatheredBeamImpl(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY);
+
 public:
     /**
      * @brief Constructor
@@ -960,6 +965,32 @@ public:
 };
 
 /**
+ * @class PercussionNoteCode
+ * @brief Represents a percussion note code override for a single note.
+ *
+ * Entry::noteDetail is set if any note in the entry has associated percussion note codes.
+ *
+ * This class is identified by the XML node name "percussionNoteCode".
+ */
+class PercussionNoteCode : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit PercussionNoteCode(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};            ///< The ID of the note being assigned a code.
+    PercussionNoteType noteCode{};  ///< The percussion note code. Use this to search the incis of the percussion map for the specific note.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "percussionNoteCode"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PercussionNoteCode>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class SecondaryBeamAlterationsDownStem
  * @brief Beam alteration for downstem secondary beams.
  *
@@ -979,6 +1010,15 @@ public:
      */
     explicit SecondaryBeamAlterationsDownStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
         : BeamAlterations(document, partId, shareMode, entnum, inci) {}
+
+    /// @brief Calculates if the input entry starts a feathered beam and returns information about it.
+    /// @note Instead of calling this function directly, consider using #EntryInfoPtr::calcIsFeatheredBeamStart instead.
+    /// @param [in] entryInfo The entry info to search.
+    /// @param [out] outLeftY The height of the left side of the feathered beam
+    /// @param [out] outRightY The height of the right side of the feathered beam
+    /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
+    static bool calcIsFeatheredBeam(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY)
+    { return calcIsFeatheredBeamImpl<SecondaryBeamAlterationsDownStem>(entryInfo, outLeftY, outRightY); }
 
     constexpr static std::string_view XmlNodeName = "beamAltSecDownStem"; ///< The XML node name for this type.
 };
@@ -1003,6 +1043,15 @@ public:
      */
     explicit SecondaryBeamAlterationsUpStem(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
         : BeamAlterations(document, partId, shareMode, entnum, inci) {}
+
+    /// @brief Calculates if the input entry starts a feathered beam and returns information about it
+    /// @note Instead of calling this function directly, consider using #EntryInfoPtr::calcIsFeatheredBeamStart instead.
+    /// @param [in] entryInfo The entry info to search.
+    /// @param [out] outLeftY The height of the left side of the feathered beam
+    /// @param [out] outRightY The height of the right side of the feathered beam
+    /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
+    static bool calcIsFeatheredBeam(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY)
+    { return calcIsFeatheredBeamImpl<SecondaryBeamAlterationsUpStem>(entryInfo, outLeftY, outRightY); }
 
     constexpr static std::string_view XmlNodeName = "beamAltSecUpStem"; ///< The XML node name for this type.
 };
@@ -1291,6 +1340,22 @@ public:
 
     constexpr static std::string_view XmlNodeName = "stemAdjust"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StemAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StemAlterationsUnderBeam
+ * @brief Specifies horizontal and vertical adjustments for stems under beam
+ *
+ * Entry::stemDetail is set if there are any instances of this class.
+ *
+ * This class is identified by the XML node name "stemAdjust".
+ */
+class StemAlterationsUnderBeam : public StemAlterations
+{
+public:
+    using StemAlterations::StemAlterations;
+
+    constexpr static std::string_view XmlNodeName = "beamStemAdjust"; ///< The XML node name for this type.
 };
 
 /**
