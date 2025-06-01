@@ -2404,29 +2404,32 @@ EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
     return result;
 }
 
-Edu others::SmartShape::EndPoint::calcEduPosition() const
+util::Fraction others::SmartShape::EndPoint::calcPosition() const
 {
-    if (!entryNumber) return eduPosition;
+    if (!entryNumber) {
+        return util::Fraction::fromEdu(eduPosition);
+    }
     if (auto entryInfo = calcAssociatedEntry()) {
-        return entryInfo->elapsedDuration.calcEduDuration();
+        return entryInfo->elapsedDuration;
     }
     return 0;
 }
 
-Edu others::SmartShape::EndPoint::calcGlobalEduPosition() const
+util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
 {
     if (!entryNumber) {
+        const auto rawPosition = util::Fraction::fromEdu(eduPosition);
         if (auto meas = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
-            auto pos = util::Fraction::fromEdu(eduPosition) * meas->calcTimeStretch(staffId);
-            return pos.calcEduDuration();
+            return rawPosition * meas->calcTimeStretch(staffId);
         }
-        return eduPosition;
+        return rawPosition;
     }
     if (auto entryInfo = calcAssociatedEntry()) {
         return entryInfo.calcGlobalElapsedDuration().calcEduDuration();
     }
     return 0;
 }
+
 bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
 {
     auto entry = entryInfo->getEntry();
@@ -2445,12 +2448,12 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
                     if (entryInfo.getMeasure() > startTermSeg->endPoint->measId && entryInfo.getMeasure() < endTermSeg->endPoint->measId) {
                         return true;
                     } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId && entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration.calcEduDuration() >= startTermSeg->endPoint->calcEduPosition()
-                               && entryInfo->elapsedDuration.calcEduDuration() <= endTermSeg->endPoint->calcEduPosition();
+                        return entryInfo->elapsedDuration >= startTermSeg->endPoint->calcPosition()
+                               && entryInfo->elapsedDuration <= endTermSeg->endPoint->calcPosition();
                     } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration.calcEduDuration() >= startTermSeg->endPoint->calcEduPosition();
+                        return entryInfo->elapsedDuration >= startTermSeg->endPoint->calcPosition();
                     } else if (entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration.calcEduDuration() <= endTermSeg->endPoint->calcEduPosition();
+                        return entryInfo->elapsedDuration <= endTermSeg->endPoint->calcPosition();
                     }
                 }
             }
