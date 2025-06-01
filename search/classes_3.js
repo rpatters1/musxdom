@@ -6,5 +6,7 @@ var searchData=
   ['detailspool_3',['DetailsPool',['../classmusx_1_1dom_1_1DetailsPool.html',1,'musx::dom']]],
   ['document_4',['document',['../classmusx_1_1dom_1_1Document.html',1,'musx::dom::Document'],['../classmusx_1_1xml_1_1pugi_1_1Document.html',1,'musx::xml::pugi::Document'],['../classmusx_1_1xml_1_1rapidxml_1_1Document.html',1,'musx::xml::rapidxml::Document'],['../classmusx_1_1xml_1_1tinyxml2_1_1Document.html',1,'musx::xml::tinyxml2::Document']]],
   ['documentfactory_5',['DocumentFactory',['../classmusx_1_1factory_1_1DocumentFactory.html',1,'musx::factory']]],
-  ['dotalterations_6',['DotAlterations',['../classmusx_1_1dom_1_1details_1_1DotAlterations.html',1,'musx::dom::details']]]
+  ['dotalterations_6',['DotAlterations',['../classmusx_1_1dom_1_1details_1_1DotAlterations.html',1,'musx::dom::details']]],
+  ['drumstaff_7',['DrumStaff',['../classmusx_1_1dom_1_1others_1_1DrumStaff.html',1,'musx::dom::others']]],
+  ['drumstaffstyle_8',['DrumStaffStyle',['../classmusx_1_1dom_1_1others_1_1DrumStaffStyle.html',1,'musx::dom::others']]]
 ];

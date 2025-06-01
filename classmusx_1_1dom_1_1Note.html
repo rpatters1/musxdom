@@ -97,6 +97,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1Note.html',''); in
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classmusx_1_1dom_1_1Note-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::dom::Note Class Reference</div></div>
 </div><!--header-->
@@ -159,7 +160,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a70cff35a0297f05a6a7bf5157e0609d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true.  <br /></td></tr>
 <tr class="separator:a70cff35a0297f05a6a7bf5157e0609d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c9cfe42580f6cf5ff8c9e80256e00c8" id="r_a6c9cfe42580f6cf5ff8c9e80256e00c8"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">NoteName</a>, int, int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a6c9cfe42580f6cf5ff8c9e80256e00c8">calcNoteProperties</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex, const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff=nullptr, bool respellEnharmonic=false) const</td></tr>
-<tr class="memdesc:a6c9cfe42580f6cf5ff8c9e80256e00c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position.  <br /></td></tr>
+<tr class="memdesc:a6c9cfe42580f6cf5ff8c9e80256e00c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override.  <br /></td></tr>
 <tr class="separator:a6c9cfe42580f6cf5ff8c9e80256e00c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36dc7428581bf94502b9e3a8ab2f0db1" id="r_a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a36dc7428581bf94502b9e3a8ab2f0db1">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
@@ -224,14 +225,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>tieStart</b> {}</td><
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>tieEnd</b> {}</td></tr>
 <tr class="memdesc:a6f312eed82f216e8b14500319fa36549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates a tie ends on this note. <br /></td></tr>
 <tr class="separator:a6f312eed82f216e8b14500319fa36549"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a250d2ca7df9eda392d0860ac6c67534f" id="r_a250d2ca7df9eda392d0860ac6c67534f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a250d2ca7df9eda392d0860ac6c67534f">upStemSecond</a> {}</td></tr>
+<tr class="memdesc:a250d2ca7df9eda392d0860ac6c67534f"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the entry is upstem, it is drawn on the "wrong" side of the stem.  <br /></td></tr>
+<tr class="separator:a250d2ca7df9eda392d0860ac6c67534f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9f704935ab409ffc0f70481b710a820" id="r_ab9f704935ab409ffc0f70481b710a820"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#ab9f704935ab409ffc0f70481b710a820">downStemSecond</a> {}</td></tr>
+<tr class="memdesc:ab9f704935ab409ffc0f70481b710a820"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the entry is downstem, it is drawn on the "wrong" side of the stem.  <br /></td></tr>
+<tr class="separator:ab9f704935ab409ffc0f70481b710a820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b58cec57f700722e1488a82f28dcc24" id="r_a6b58cec57f700722e1488a82f28dcc24"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a6b58cec57f700722e1488a82f28dcc24">upSplitStem</a> {}</td></tr>
+<tr class="separator:a6b58cec57f700722e1488a82f28dcc24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af07df87315ac74c605c9a6bb06c0c882" id="r_af07df87315ac74c605c9a6bb06c0c882"><td class="memItemLeft" align="right" valign="top"><a id="af07df87315ac74c605c9a6bb06c0c882" name="af07df87315ac74c605c9a6bb06c0c882"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>showAcci</b> {}</td></tr>
 <tr class="memdesc:af07df87315ac74c605c9a6bb06c0c882"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the note has an accidental. (Dynamically changed by Finale unless <code>freezeAcci</code> is set.) <br /></td></tr>
 <tr class="separator:af07df87315ac74c605c9a6bb06c0c882"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade47003e81ad02ce2dd18e19da706a53" id="r_ade47003e81ad02ce2dd18e19da706a53"><td class="memItemLeft" align="right" valign="top"><a id="ade47003e81ad02ce2dd18e19da706a53" name="ade47003e81ad02ce2dd18e19da706a53"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parenAcci</b> {}</td></tr>
+<tr class="memdesc:ade47003e81ad02ce2dd18e19da706a53"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the accidental has parentheses. <br /></td></tr>
+<tr class="separator:ade47003e81ad02ce2dd18e19da706a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe747089f18d125be7a444492a9db822" id="r_afe747089f18d125be7a444492a9db822"><td class="memItemLeft" align="right" valign="top"><a id="afe747089f18d125be7a444492a9db822" name="afe747089f18d125be7a444492a9db822"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>freezeAcci</b> {}</td></tr>
 <tr class="memdesc:afe747089f18d125be7a444492a9db822"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the accidental should be forced on or off (based on <code>showAcci</code>.) <br /></td></tr>
 <tr class="separator:afe747089f18d125be7a444492a9db822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a51eaf5428a86a0771fcb2977a9821ebb" id="r_a51eaf5428a86a0771fcb2977a9821ebb"><td class="memItemLeft" align="right" valign="top"><a id="a51eaf5428a86a0771fcb2977a9821ebb" name="a51eaf5428a86a0771fcb2977a9821ebb"></a>
+static constexpr <a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>RESTID</b> = 31</td></tr>
+<tr class="memdesc:a51eaf5428a86a0771fcb2977a9821ebb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non floating rests have a note with this noteId that defines their staff positions. <br /></td></tr>
+<tr class="separator:a51eaf5428a86a0771fcb2977a9821ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -277,7 +297,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true. </p>
-<p>Normally you do not have to call this function directly. It is called inside <a class="el" href="classmusx_1_1dom_1_1Note.html#a6c9cfe42580f6cf5ff8c9e80256e00c8" title="Calculates the note name, octave number, actual alteration, and staff position.">calcNoteProperties</a>. But the function is available if you need it.</p>
+<p>Normally you do not have to call this function directly. It is called inside <a class="el" href="classmusx_1_1dom_1_1Note.html#a6c9cfe42580f6cf5ff8c9e80256e00c8" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a>. But the function is available if you need it.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>The key signature to use for transposition. </td></tr>
@@ -330,14 +350,14 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the note name, octave number, actual alteration, and staff position. </p>
+<p>Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override. </p>
 <p>Finale does not transpose correctly with microtonal key signatures. This function transposes mostly correctly for them, which means that microtonal key signatures may have different results than in Finale. Of particular note is Chromatic Transposition, which produces nonsense results in Finale but here produces correct results, provided that the alteration value is understood to be a chromatic half-step alteration rather than a step alteration in EDO divisions.</p>
 <p>See <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a87cb3c216ea12c1f911b4b289d3a2920" title="Transposes the key by the specified amounts. Set them to zero to remove transposition.">KeySignature::setTransposition</a> for information about differences in key signature transposition.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>The key signature in effect. </td></tr>
     <tr><td class="paramname">clefIndex</td><td>The index of the clef in effect. </td></tr>
-    <tr><td class="paramname">staff</td><td>If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If calling <a class="el" href="classmusx_1_1dom_1_1Note.html#a6c9cfe42580f6cf5ff8c9e80256e00c8" title="Calculates the note name, octave number, actual alteration, and staff position.">calcNoteProperties</a> for Concert Pitch (sounding pitch) values, omit this parameter. </td></tr>
+    <tr><td class="paramname">staff</td><td>If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If calling <a class="el" href="classmusx_1_1dom_1_1Note.html#a6c9cfe42580f6cf5ff8c9e80256e00c8" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a> for Concert Pitch (sounding pitch) values, omit this parameter. </td></tr>
     <tr><td class="paramname">respellEnharmonic</td><td>If true, the notes are enharmonically respelled using the default enharmonic spelling. </td></tr>
   </table>
   </dd>
@@ -380,6 +400,56 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section remark"><dt>Remarks</dt><dd>This value only escapes errors on fields. Enum values must still have all values provided to avoid error messages or exceptions. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">musx::dom::Base</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab9f704935ab409ffc0f70481b710a820" name="ab9f704935ab409ffc0f70481b710a820"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9f704935ab409ffc0f70481b710a820">&#9670;&#160;</a></span>downStemSecond</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::Note::downStemSecond {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>When the entry is downstem, it is drawn on the "wrong" side of the stem. </p>
+<p>Indicates that this note is the lower note of a second. </p>
+
+</div>
+</div>
+<a id="a6b58cec57f700722e1488a82f28dcc24" name="a6b58cec57f700722e1488a82f28dcc24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b58cec57f700722e1488a82f28dcc24">&#9670;&#160;</a></span>upSplitStem</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::Note::upSplitStem {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>True if the stem splits on this note. To split a chord in the normal way, every note from this higher should have <a class="el" href="classmusx_1_1dom_1_1Note.html#a6b58cec57f700722e1488a82f28dcc24">upSplitStem</a> set to <code>true</code>. Only takes effect if <a class="el" href="classmusx_1_1dom_1_1Entry.html#a0a325c8ef4a2eb745fc5d07c46a1742a">Entry::splitStem</a> is <code>true</code>. </p>
+
+</div>
+</div>
+<a id="a250d2ca7df9eda392d0860ac6c67534f" name="a250d2ca7df9eda392d0860ac6c67534f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a250d2ca7df9eda392d0860ac6c67534f">&#9670;&#160;</a></span>upStemSecond</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::Note::upStemSecond {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>When the entry is upstem, it is drawn on the "wrong" side of the stem. </p>
+<p>Indicates that this note is the upper note of a second. </p>
 
 </div>
 </div>

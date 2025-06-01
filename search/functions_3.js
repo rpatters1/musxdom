@@ -6,5 +6,6 @@ var searchData=
   ['detailspool_3',['DetailsPool',['../classmusx_1_1dom_1_1DetailsPool.html#a60fc43a68cfac80ca787009b62c3e7c2',1,'musx::dom::DetailsPool']]],
   ['diatonictranspose_4',['diatonicTranspose',['../classmusic__theory_1_1Transposer.html#a8fc8178c83f5655e24b13165a968777a',1,'music_theory::Transposer']]],
   ['displacement_5',['displacement',['../classmusic__theory_1_1Transposer.html#a0514e0c7d959d81e6c118e58acf7ed08',1,'music_theory::Transposer']]],
-  ['dotalterations_6',['DotAlterations',['../classmusx_1_1dom_1_1details_1_1DotAlterations.html#ab5454c8e12b00d1976f6368a0c7833ca',1,'musx::dom::details::DotAlterations']]]
+  ['dotalterations_6',['DotAlterations',['../classmusx_1_1dom_1_1details_1_1DotAlterations.html#ab5454c8e12b00d1976f6368a0c7833ca',1,'musx::dom::details::DotAlterations']]],
+  ['drumstaff_7',['drumstaff',['../classmusx_1_1dom_1_1others_1_1DrumStaff.html#a074ed4e9932c5b6f9612188780344e0f',1,'musx::dom::others::DrumStaff::DrumStaff()'],['../classmusx_1_1dom_1_1others_1_1DrumStaffStyle.html#a074ed4e9932c5b6f9612188780344e0f',1,'musx::dom::others::DrumStaffStyle::DrumStaff()']]]
 ];

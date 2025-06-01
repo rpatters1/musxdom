@@ -246,6 +246,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>beam</b> {}</td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>secBeam</b> {}</td></tr>
 <tr class="memdesc:a3cf3b060d550fbc5d68764087052b97e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies a secondary beam break occurs on the entry. <br /></td></tr>
 <tr class="separator:a3cf3b060d550fbc5d68764087052b97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac97470e2f0c425c11bab107d693ceb7d" id="r_ac97470e2f0c425c11bab107d693ceb7d"><td class="memItemLeft" align="right" valign="top"><a id="ac97470e2f0c425c11bab107d693ceb7d" name="ac97470e2f0c425c11bab107d693ceb7d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>doubleStem</b> {}</td></tr>
+<tr class="memdesc:ac97470e2f0c425c11bab107d693ceb7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a double stem on the entry. (Appears to be exclusive with <a class="el" href="classmusx_1_1dom_1_1Entry.html#a0a325c8ef4a2eb745fc5d07c46a1742a">splitStem</a>.) <br /></td></tr>
+<tr class="separator:ac97470e2f0c425c11bab107d693ceb7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a325c8ef4a2eb745fc5d07c46a1742a" id="r_a0a325c8ef4a2eb745fc5d07c46a1742a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a0a325c8ef4a2eb745fc5d07c46a1742a">splitStem</a> {}</td></tr>
+<tr class="separator:a0a325c8ef4a2eb745fc5d07c46a1742a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a973e08252facadef1e48b3763bef4404" id="r_a973e08252facadef1e48b3763bef4404"><td class="memItemLeft" align="right" valign="top"><a id="a973e08252facadef1e48b3763bef4404" name="a973e08252facadef1e48b3763bef4404"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>crossStaff</b> {}</td></tr>
 <tr class="memdesc:a973e08252facadef1e48b3763bef4404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies that at least one note in the entry has been cross staffed. <br /></td></tr>
@@ -266,6 +272,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>noLeger</b> {}</td></
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>stemDetail</b> {}</td></tr>
 <tr class="memdesc:a42b417cdb28ed1de83c586fb7c365069"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates there are stem modifications. <br /></td></tr>
 <tr class="separator:a42b417cdb28ed1de83c586fb7c365069"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd0a94ec891ef665ec416a201e35e505" id="r_abd0a94ec891ef665ec416a201e35e505"><td class="memItemLeft" align="right" valign="top"><a id="abd0a94ec891ef665ec416a201e35e505" name="abd0a94ec891ef665ec416a201e35e505"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>reverseUpStem</b> {}</td></tr>
+<tr class="memdesc:abd0a94ec891ef665ec416a201e35e505"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that a stem normally up is reversed. <br /></td></tr>
+<tr class="separator:abd0a94ec891ef665ec416a201e35e505"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abafe04400b910721fcf16fe338a8ff3a" id="r_abafe04400b910721fcf16fe338a8ff3a"><td class="memItemLeft" align="right" valign="top"><a id="abafe04400b910721fcf16fe338a8ff3a" name="abafe04400b910721fcf16fe338a8ff3a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>reverseDownStem</b> {}</td></tr>
+<tr class="memdesc:abafe04400b910721fcf16fe338a8ff3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that a stem normally down is reversed. <br /></td></tr>
+<tr class="separator:abafe04400b910721fcf16fe338a8ff3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa04b08c5cb6dbde8e24b7ff5be524c04" id="r_aa04b08c5cb6dbde8e24b7ff5be524c04"><td class="memItemLeft" align="right" valign="top"><a id="aa04b08c5cb6dbde8e24b7ff5be524c04" name="aa04b08c5cb6dbde8e24b7ff5be524c04"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>smartShapeDetail</b> {}</td></tr>
 <tr class="memdesc:aa04b08c5cb6dbde8e24b7ff5be524c04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates this entry has a smart shape assignment. <br /></td></tr>
@@ -555,6 +569,21 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <p>Duration of the entry, not taking into account tuplets. </p>
 <p>This is effectively the type of note (quarter, eight, whole etc.) plus the augmentation dots, if any. The most significant bit determines the note type and each set bit to the right is an augmentation dot.</p>
 <p>(xml node is <code>&lt;dura&gt;</code>) </p>
+
+</div>
+</div>
+<a id="a0a325c8ef4a2eb745fc5d07c46a1742a" name="a0a325c8ef4a2eb745fc5d07c46a1742a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a325c8ef4a2eb745fc5d07c46a1742a">&#9670;&#160;</a></span>splitStem</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::Entry::splitStem {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Indicates the presence of a note with <a class="el" href="classmusx_1_1dom_1_1Note.html#a6b58cec57f700722e1488a82f28dcc24">Note::upSplitStem</a> set. If no note has a split stem, it shows as a double stem. (Appears to be exclusive with <a class="el" href="classmusx_1_1dom_1_1Entry.html#ac97470e2f0c425c11bab107d693ceb7d" title="Creates a double stem on the entry. (Appears to be exclusive with splitStem.)">doubleStem</a>.) </p>
 
 </div>
 </div>

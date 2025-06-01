@@ -203,6 +203,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsBeamStart</b> () const</td></tr>
 <tr class="memdesc:ab127dfae15a3bb5c27b76cbd55c812a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is the start of a primary beam. <br /></td></tr>
 <tr class="separator:ab127dfae15a3bb5c27b76cbd55c812a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe092ac6f686263ca7b26d6ca0d4b6ee" id="r_afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#afe092ac6f686263ca7b26d6ca0d4b6ee">calcIsFeatheredBeamStart</a> (<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &amp;outLeftY, <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &amp;outRightY) const</td></tr>
+<tr class="memdesc:afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the entry starts a feathered beam and returns information about it if so.  <br /></td></tr>
+<tr class="separator:afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacdf5499308ecdbe9f2e3357b5f984f5" id="r_aacdf5499308ecdbe9f2e3357b5f984f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5">findBeamEnd</a> () const</td></tr>
 <tr class="memdesc:aacdf5499308ecdbe9f2e3357b5f984f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the end entry of a beamed group.  <br /></td></tr>
 <tr class="separator:aacdf5499308ecdbe9f2e3357b5f984f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,6 +225,14 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 <tr class="memitem:adf09eb8a3925a1799ff4dad693ed7c5e" id="r_adf09eb8a3925a1799ff4dad693ed7c5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#adf09eb8a3925a1799ff4dad693ed7c5e">calcBeamStubIsLeft</a> () const</td></tr>
 <tr class="memdesc:adf09eb8a3925a1799ff4dad693ed7c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if a beam stub on this entry would go left or right. It does not check that an entry actually has a beam stub. Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a5b2706891a0d330518cc5a85fbf0c8aa" title="Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub,...">calcLowestBeamStub</a> to discover if the entry has a beam stub.  <br /></td></tr>
 <tr class="separator:adf09eb8a3925a1799ff4dad693ed7c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1445f0a573b9b1751c2c8dd5d3092dee" id="r_a1445f0a573b9b1751c2c8dd5d3092dee"><td class="memItemLeft" align="right" valign="top"><a id="a1445f0a573b9b1751c2c8dd5d3092dee" name="a1445f0a573b9b1751c2c8dd5d3092dee"></a>
+<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcGlobalElapsedDuration</b> () const</td></tr>
+<tr class="memdesc:a1445f0a573b9b1751c2c8dd5d3092dee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the elapsed duration in global edu, removing any time stretch due to independent time signature. <br /></td></tr>
+<tr class="separator:a1445f0a573b9b1751c2c8dd5d3092dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefab62e48990cb691af5a4975e102989" id="r_aefab62e48990cb691af5a4975e102989"><td class="memItemLeft" align="right" valign="top"><a id="aefab62e48990cb691af5a4975e102989" name="aefab62e48990cb691af5a4975e102989"></a>
+<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcGlobalActualDuration</b> () const</td></tr>
+<tr class="memdesc:aefab62e48990cb691af5a4975e102989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the actual duration in global edu, removing any time stretch due to independent time signature. <br /></td></tr>
+<tr class="separator:aefab62e48990cb691af5a4975e102989"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2df5320c5c229417d41865cd7e56df48" id="r_a2df5320c5c229417d41865cd7e56df48"><td class="memItemLeft" align="right" valign="top"><a id="a2df5320c5c229417d41865cd7e56df48" name="a2df5320c5c229417d41865cd7e56df48"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () const</td></tr>
 <tr class="memdesc:a2df5320c5c229417d41865cd7e56df48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry can be beamed. <br /></td></tr>
@@ -314,6 +325,44 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 
 <p>Calculates if an entry displays as a rest. </p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
+
+</div>
+</div>
+<a id="afe092ac6f686263ca7b26d6ca0d4b6ee" name="afe092ac6f686263ca7b26d6ca0d4b6ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe092ac6f686263ca7b26d6ca0d4b6ee">&#9670;&#160;</a></span>calcIsFeatheredBeamStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsFeatheredBeamStart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &amp;&#160;</td>
+          <td class="paramname"><em>outLeftY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &amp;&#160;</td>
+          <td class="paramname"><em>outRightY</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if the entry starts a feathered beam and returns information about it if so. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">outLeftY</td><td>The height of the left side of the feathered beam </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">outRightY</td><td>The height of the right side of the feathered beam </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged. </dd></dl>
 
 </div>
 </div>

@@ -14,6 +14,7 @@ var hierarchy =
             [ "musx::dom::details::CrossStaff", "classmusx_1_1dom_1_1details_1_1CrossStaff.html", null ],
             [ "musx::dom::details::DotAlterations", "classmusx_1_1dom_1_1details_1_1DotAlterations.html", null ],
             [ "musx::dom::details::NoteAlterations", "classmusx_1_1dom_1_1details_1_1NoteAlterations.html", null ],
+            [ "musx::dom::details::PercussionNoteCode", "classmusx_1_1dom_1_1details_1_1PercussionNoteCode.html", null ],
             [ "musx::dom::details::TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html", [
               [ "musx::dom::details::TieAlterEnd", "classmusx_1_1dom_1_1details_1_1TieAlterEnd.html", null ],
               [ "musx::dom::details::TieAlterStart", "classmusx_1_1dom_1_1details_1_1TieAlterStart.html", null ]
@@ -44,7 +45,9 @@ var hierarchy =
           [ "musx::dom::details::LyricEntryInfo", "classmusx_1_1dom_1_1details_1_1LyricEntryInfo.html", null ],
           [ "musx::dom::details::SecondaryBeamBreak", "classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html", null ],
           [ "musx::dom::details::SmartShapeEntryAssign", "classmusx_1_1dom_1_1details_1_1SmartShapeEntryAssign.html", null ],
-          [ "musx::dom::details::StemAlterations", "classmusx_1_1dom_1_1details_1_1StemAlterations.html", null ],
+          [ "musx::dom::details::StemAlterations", "classmusx_1_1dom_1_1details_1_1StemAlterations.html", [
+            [ "musx::dom::details::StemAlterationsUnderBeam", "classmusx_1_1dom_1_1details_1_1StemAlterationsUnderBeam.html", null ]
+          ] ],
           [ "musx::dom::details::TupletDef", "classmusx_1_1dom_1_1details_1_1TupletDef.html", null ]
         ] ],
         [ "musx::dom::details::Baseline", "classmusx_1_1dom_1_1details_1_1Baseline.html", [
@@ -115,6 +118,9 @@ var hierarchy =
         [ "musx::dom::others::BeatChartElement", "classmusx_1_1dom_1_1others_1_1BeatChartElement.html", null ],
         [ "musx::dom::others::ChordSuffixElement", "classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html", null ],
         [ "musx::dom::others::ClefList", "classmusx_1_1dom_1_1others_1_1ClefList.html", null ],
+        [ "musx::dom::others::DrumStaff", "classmusx_1_1dom_1_1others_1_1DrumStaff.html", [
+          [ "musx::dom::others::DrumStaffStyle", "classmusx_1_1dom_1_1others_1_1DrumStaffStyle.html", null ]
+        ] ],
         [ "musx::dom::others::Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html", [
           [ "musx::dom::others::TextExpressionEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html", null ],
           [ "musx::dom::others::TextRepeatEnclosure", "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html", null ]
@@ -136,11 +142,17 @@ var hierarchy =
         [ "musx::dom::others::MusicRange", "classmusx_1_1dom_1_1others_1_1MusicRange.html", [
           [ "musx::dom::others::StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", null ]
         ] ],
-        [ "musx::dom::others::NamePositioning", "classmusx_1_1dom_1_1others_1_1NamePositioning.html", null ],
+        [ "musx::dom::others::NamePositioning", "classmusx_1_1dom_1_1others_1_1NamePositioning.html", [
+          [ "musx::dom::others::NamePositionAbbreviated", "classmusx_1_1dom_1_1others_1_1NamePositionAbbreviated.html", null ],
+          [ "musx::dom::others::NamePositionFull", "classmusx_1_1dom_1_1others_1_1NamePositionFull.html", null ],
+          [ "musx::dom::others::NamePositionStyleAbbreviated", "classmusx_1_1dom_1_1others_1_1NamePositionStyleAbbreviated.html", null ],
+          [ "musx::dom::others::NamePositionStyleFull", "classmusx_1_1dom_1_1others_1_1NamePositionStyleFull.html", null ]
+        ] ],
         [ "musx::dom::others::Page", "classmusx_1_1dom_1_1others_1_1Page.html", null ],
         [ "musx::dom::others::PageTextAssign", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html", null ],
         [ "musx::dom::others::PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", null ],
         [ "musx::dom::others::PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", null ],
+        [ "musx::dom::others::PercussionNoteInfo", "classmusx_1_1dom_1_1others_1_1PercussionNoteInfo.html", null ],
         [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
         [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
         [ "musx::dom::others::RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", null ],

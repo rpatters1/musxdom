@@ -840,6 +840,7 @@ var namespacemusx_1_1dom =
     [ "NoteNumber", "namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be", null ],
     [ "OptionsPoolPtr", "namespacemusx_1_1dom.html#a970ba333257a18f1f81abb356b3e6727", null ],
     [ "OthersPoolPtr", "namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e", null ],
+    [ "PercussionNoteType", "namespacemusx_1_1dom.html#a510f4a257351149a50b4d5b4cb43ad94", null ],
     [ "SystemCmper", "namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237", null ],
     [ "TextsPoolPtr", "namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4", null ],
     [ "DefaultClefType", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67f", [

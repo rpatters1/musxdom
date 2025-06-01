@@ -25,8 +25,9 @@ var searchData=
   ['staffstyleassign_22',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html',1,'musx::dom::others']]],
   ['staffsystem_23',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html',1,'musx::dom::others']]],
   ['stemalterations_24',['StemAlterations',['../classmusx_1_1dom_1_1details_1_1StemAlterations.html',1,'musx::dom::details']]],
-  ['stemoptions_25',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html',1,'musx::dom::options']]],
-  ['stepelement_26',['StepElement',['../classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html',1,'musx::dom::others::KeyMapArray']]],
-  ['syllableposstyle_27',['SyllablePosStyle',['../structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html',1,'musx::dom::options::LyricOptions']]],
-  ['systemlock_28',['SystemLock',['../classmusx_1_1dom_1_1others_1_1SystemLock.html',1,'musx::dom::others']]]
+  ['stemalterationsunderbeam_25',['StemAlterationsUnderBeam',['../classmusx_1_1dom_1_1details_1_1StemAlterationsUnderBeam.html',1,'musx::dom::details']]],
+  ['stemoptions_26',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html',1,'musx::dom::options']]],
+  ['stepelement_27',['StepElement',['../classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html',1,'musx::dom::others::KeyMapArray']]],
+  ['syllableposstyle_28',['SyllablePosStyle',['../structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html',1,'musx::dom::options::LyricOptions']]],
+  ['systemlock_29',['SystemLock',['../classmusx_1_1dom_1_1others_1_1SystemLock.html',1,'musx::dom::others']]]
 ];

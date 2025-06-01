@@ -31,7 +31,7 @@ var searchData=
   ['staffstyleassign_28',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd',1,'musx::dom::others::StaffStyleAssign']]],
   ['staffsystem_29',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440',1,'musx::dom::others::StaffSystem']]],
   ['startswithfontcommand_30',['startsWithFontCommand',['../classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d',1,'musx::util::EnigmaString']]],
-  ['stemalterations_31',['StemAlterations',['../classmusx_1_1dom_1_1details_1_1StemAlterations.html#af06394782e64b9ed871698af6ca27495',1,'musx::dom::details::StemAlterations']]],
+  ['stemalterations_31',['stemalterations',['../classmusx_1_1dom_1_1details_1_1StemAlterations.html#af06394782e64b9ed871698af6ca27495',1,'musx::dom::details::StemAlterations::StemAlterations()'],['../classmusx_1_1dom_1_1details_1_1StemAlterationsUnderBeam.html#af06394782e64b9ed871698af6ca27495',1,'musx::dom::details::StemAlterationsUnderBeam::StemAlterations()']]],
   ['stemoptions_32',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a5c48c35393259a1e2ff79abcd5495acf',1,'musx::dom::options::StemOptions']]],
   ['stepwisetranspose_33',['stepwiseTranspose',['../classmusic__theory_1_1Transposer.html#a549005f7f6843171987b3ff128c76152',1,'music_theory::Transposer']]],
   ['sumcounts_34',['sumCounts',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#a7f520211e7fe24c719f3d682ee248f0e',1,'musx::dom::TimeSignature::TimeSigComponent']]],

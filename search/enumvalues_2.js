@@ -18,5 +18,6 @@ var searchData=
   ['current_15',['Current',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2a222a267cc5778206b253be35ee3ddab5',1,'musx::dom::options::PageFormatOptions']]],
   ['custom_16',['Custom',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117a90589c47f06eb971d548591f23c285af',1,'musx::dom::others::Measure']]],
   ['customline_17',['CustomLine',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa132aa8be81626232ff23df91eb3ab3d0',1,'musx::dom::others::SmartShape']]],
-  ['customstem_18',['CustomStem',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621a70ea031182a9d2a8c0f9bb16a767aeb6',1,'musx::dom::others::ShapeDef']]]
+  ['customstem_18',['CustomStem',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621a70ea031182a9d2a8c0f9bb16a767aeb6',1,'musx::dom::others::ShapeDef']]],
+  ['cutaway_19',['Cutaway',['../classmusx_1_1dom_1_1others_1_1Staff.html#ab23c7e94e4782a34d7f06e54e6fed7d0a29ffad5b174ca9491d30a68152296c21',1,'musx::dom::others::Staff']]]
 ];
