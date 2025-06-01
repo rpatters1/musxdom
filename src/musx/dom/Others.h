@@ -451,7 +451,9 @@ public:
 
     // Public properties corresponding to the XML structure, in the same order as in the XML.
     ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
-    Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
+    Edu xEduPos{};          ///< The staff edu position from the `<xEduPos>` element.
+                            ///< In some versions of Finale this was a global edu value.
+                            ///< However, as of F27 it is a staff edu value.
     Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
     int percent{};          ///< The percentage value from the `<percent>` element.
     int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.

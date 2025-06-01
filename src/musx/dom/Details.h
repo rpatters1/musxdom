@@ -682,10 +682,12 @@ public:
 
     /// @brief Returns the clef index in effect for at the specified @ref Edu position.
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
+    /// @param position The Edu position of the clef *in staff-level Edus*. (The staff-level matters for Independent Key Signature staves.)
     ClefIndex calcClefIndexAt(Edu position) const;
 
     /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
+    /// @param position The *staff-level* position of the clef. (The staff-level matters for Independent Key Signature staves.)
     ClefIndex calcClefIndexAt(util::Fraction position) const
     { return calcClefIndexAt(position.calcEduDuration()); }
 
