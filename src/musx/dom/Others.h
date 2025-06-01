@@ -1050,6 +1050,13 @@ public:
     /// Otherwise, it returns the global duration of the measure.
     util::Fraction calcDuration(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
+    /// @brief Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus.
+    /// @param forStaff The staff for wiuch to calculate the time stretch.
+    util::Fraction calcTimeStretch(InstCmper forStaff) const
+    {
+        return calcDuration() / calcDuration(forStaff);
+    }
+
     void integrityCheck() override
     {
         this->OthersBase::integrityCheck();

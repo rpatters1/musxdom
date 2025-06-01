@@ -1223,7 +1223,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
             throw std::invalid_argument("Staff instance for staff " + std::to_string(m_hold->getStaff()) + " does not exist.");
         }
         const util::Fraction timeStretch = staff->floatTime
-                                         ? measure->calcDuration() / measure->calcDuration(staff->getCmper())
+                                         ? measure->calcTimeStretch(staff->getCmper())
                                          : 1;
         entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch, timeStretch);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
@@ -2413,6 +2413,20 @@ Edu others::SmartShape::EndPoint::calcEduPosition() const
     return 0;
 }
 
+Edu others::SmartShape::EndPoint::calcGlobalEduPosition() const
+{
+    if (!entryNumber) {
+        if (auto meas = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
+            auto pos = util::Fraction::fromEdu(eduPosition) * meas->calcTimeStretch(staffId);
+            return pos.calcEduDuration();
+        }
+        return eduPosition;
+    }
+    if (auto entryInfo = calcAssociatedEntry()) {
+        return entryInfo.calcGlobalElapsedDuration().calcEduDuration();
+    }
+    return 0;
+}
 bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
 {
     auto entry = entryInfo->getEntry();
