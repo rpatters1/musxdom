@@ -1222,9 +1222,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         if (!staff) {
             throw std::invalid_argument("Staff instance for staff " + std::to_string(m_hold->getStaff()) + " does not exist.");
         }
-        util::Fraction timeStretch = staff->floatTime
-                                   ? measure->createTimeSignature()->calcTotalDuration() / measure->createTimeSignature(staff->getCmper())->calcTotalDuration()
-                                   : 1;
+        const util::Fraction timeStretch = staff->floatTime
+                                         ? measure->calcDuration() / measure->calcDuration(staff->getCmper())
+                                         : 1;
         entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch, timeStretch);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
         if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
