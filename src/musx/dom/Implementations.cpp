@@ -264,6 +264,12 @@ std::shared_ptr<others::StaffComposite> EntryFrame::createCurrentStaff(Edu eduPo
         getMeasure(), eduPosition);
 }
 
+std::shared_ptr<others::Measure> EntryFrame::getMeasureInstance() const
+{
+    return getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), getMeasure());
+}
+
+
 bool EntryFrame::TupletInfo::calcIsTremolo() const
 {
     MUSX_ASSERT_IF(!tuplet) {
@@ -458,7 +464,7 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
         return false;
     }
     // durations must match
-    const auto measure = frame->getDocument()->getOthers()->get<others::Measure>(frame->getRequestedPartId(), frame->getMeasure());
+    const auto measure = frame->getMeasureInstance();
     if (staff && measure) {
         if (tuplet->calcReferenceDuration() == measure->calcDuration()) {
             auto dispTime = measure->createDisplayTimeSignature(staff->getCmper());
@@ -2085,6 +2091,17 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                         nextEntry = nextFrame->getFirstInVoice(1); // v2Launch entries are always voice 1
                     }
                 }
+            } else if (m_entry->getEntry()->voice2) {
+                auto tryEntry = nextEntry.getNextSameV();
+                if (!tryEntry) { // if v2 sequence exhausted
+                    auto nextDuration = m_entry->calcNextElapsedDuration();
+                    nextEntry = nextEntry.getNextInLayer();
+                    while (nextEntry.getMeasure() == m_entry.getMeasure() && nextEntry->elapsedDuration < nextDuration) {
+                        nextEntry = nextEntry.getNextInLayer();
+                    }
+                } else {
+                    nextEntry = tryEntry;
+                }
             } else {
                 nextEntry = nextEntry.getNextInLayer();
             }
@@ -2109,32 +2126,25 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
 
 NoteInfoPtr NoteInfoPtr::calcTieFrom() const
 {
-    // grace notes cannot tie backwards; only forwards (see grace note comment above)
-    auto thisRawEntry = m_entry->getEntry();
-    if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
-        for (auto currEntry = m_entry.getPreviousInLayer(); currEntry; currEntry = currEntry.getPreviousInLayer()) {
-            if (currEntry->v2Launch && m_entry.isSameEntry(currEntry.getNextInFrame())) {
-                continue;
-            }
-            auto currRawEntry = currEntry->getEntry();
-            if (auto result = findEqualPitch(currEntry)) {
-                return result;
-            }
-            if (currRawEntry->graceNote) {
-                continue;
-            }
-            bool skipBackToV1 = !thisRawEntry->voice2
-                              || (currRawEntry->voice2 && currEntry.getPreviousInFrame()->v2Launch);
-            if (skipBackToV1 && currRawEntry->voice2) {
-                while (currEntry) {
-                    auto testEntry = currEntry.getPreviousInLayer();
-                    if (!testEntry || !testEntry->getEntry()->voice2) {
-                        break;
-                    }
-                    currEntry = testEntry;
+    if (*this) {
+        // grace notes cannot tie backwards; only forwards (see grace note comment above)
+        auto thisRawEntry = m_entry->getEntry();
+        if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
+            for (auto prev = m_entry.getPreviousInLayer(); prev; prev = prev.getPreviousInLayer()) {
+                if (prev.getMeasure() < m_entry.getMeasure() - 1) {
+                    // only search 1 measure previous
+                    break;
                 }
-            } else {
-                break;
+                auto prevEntry = prev->getEntry();
+                if (!prevEntry->isNote) {
+                    continue;
+                }
+                for (size_t noteIndex = 0; noteIndex < prevEntry->notes.size(); noteIndex++) {
+                    NoteInfoPtr tryFrom(prev, noteIndex);
+                    if (auto tryTiedTo = tryFrom.calcTieTo(); isSameNote(tryTiedTo)) {
+                        return tryFrom;
+                    }
+                }
             }
         }
     }

@@ -283,7 +283,7 @@ public:
      * @param entryFrame The entry frame.
      * @param index The index of this instance within the frame. 
     */
-    EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
+    explicit EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
         : m_entryFrame(entryFrame), m_indexInFrame(index) {}
 
     /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
@@ -308,12 +308,12 @@ public:
     /// @brief Get the staff cmper
     InstCmper getStaff() const;
 
-    /// @brief Get the measure cmper
-    MeasCmper getMeasure() const;
-
     /// @brief Creates the current StaffComposite for the entry
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
     std::shared_ptr<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
+
+    /// @brief Get the measure cmper
+    MeasCmper getMeasure() const;
 
     /// @brief Get the key signature of the entry
     std::shared_ptr<KeySignature> getKeySignature() const;
@@ -623,6 +623,9 @@ public:
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
     std::shared_ptr<others::StaffComposite> createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId = std::nullopt) const;
 
+    /// @brief Get the measure instance
+    std::shared_ptr<others::Measure> getMeasureInstance() const;
+
 private:
     DocumentPtr m_document;
     Cmper m_requestedPartId;
@@ -680,6 +683,10 @@ public:
         }
         return retval;
     }
+
+    /// @brief Calculates the next duration position after this entry
+    util::Fraction calcNextElapsedDuration() const
+    { return elapsedDuration + actualDuration; }
 
 private:
     std::weak_ptr<const Entry> m_entry;
