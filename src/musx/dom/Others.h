@@ -1326,6 +1326,10 @@ public:
 
     std::vector<InstCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
 
+    std::vector<InstCmper> visualStaffNums; ///< Calculated list of Cmper values corresponding the staves in the visual staff group.
+                                            ///< This list is calculated by the factory when it calls #calcAllMultiStaffGroupIds. 
+                                            ///< See #calcVisualStaffGroup.
+
     /// @brief Returns the staff at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
     std::shared_ptr<Staff> getStaffAtIndex(size_t x) const;
@@ -1345,6 +1349,17 @@ public:
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
     std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
+
+    /// @brief Calculates the visual group associated with this multistaff instrument, or nullptr if not found.
+    /// This may be different than the actual multistaff group when a standard configuration has extra
+    /// staves added visually. For example, an older file with a 3-staff piano part may have a 2-staff
+    /// multistaff instrument but visually show a 3-staff bracket.
+    /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
+    std::shared_ptr<details::StaffGroup> calcVisualStaffGroup(Cmper forPartId) const;
+
+    /// @brief Used by the factory to calculate all multistaff ids and visual ids for #Staff instances.
+    /// @param document 
+    static void calcAllMultiStaffGroupIds(const DocumentPtr& document);
 
     void integrityCheck() override
     {
@@ -2126,7 +2141,9 @@ public:
     bool abrvNamePosFromStyle{};    ///< True if #abrvNamePosId is for a staff style. (Determines which abrv name pos class to retrieve.)
                                     ///< Populated by in #calcAllRuntimeValues.
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
-    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
+                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
+    Cmper multiStaffInstVisualGroupId{}; /// Calculated cmper for the visual #details::StaffGroup that visually shows the multistaff instrument. This value is not in the xml.
+                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
     std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
 
@@ -2435,6 +2452,8 @@ public:
 
     /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
     Cmper getPartId() const final override { return m_requestedPartId; }
+
+    std::shared_ptr<others::Staff> getRawStaff() const;
 };
 
 /**

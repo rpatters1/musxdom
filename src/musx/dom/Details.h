@@ -1269,22 +1269,36 @@ public:
 class StaffGroupInfo
 {
 public:
-    std::optional<size_t> startSlot;                ///< the start slot of the group in the system staves.
-    std::optional<size_t> endSlot;                  ///< the end slot of the group in the system staves.
-    std::shared_ptr<StaffGroup> group;              ///< the StaffGroup record for the group.
+    std::optional<size_t> startSlot;                        ///< the 0-based start slot (index) of the group in the system staves.
+    std::optional<size_t> endSlot;                          ///< the 0-based end slot (index) of the group in the system staves.
+    std::shared_ptr<StaffGroup> group;                      ///< the StaffGroup record for the group.
+    std::vector<std::shared_ptr<others::InstrumentUsed>> systemStaves; ///< the system staves referred to by startSlot and endSlot
 
     /// @brief Constructs information about a specific StaffGroup as it relates the the @p systemStaves
     /// @param staffGroup The staff group
     /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
     StaffGroupInfo(const std::shared_ptr<StaffGroup>& staffGroup,
-        const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
+        const std::vector<std::shared_ptr<others::InstrumentUsed>>& inpSysStaves);
+
+    std::optional<size_t> numStaves() const
+    {
+        if (startSlot && endSlot) {
+            return endSlot.value() - startSlot.value() + 1;
+        }
+        return std::nullopt;
+    }
+
+    /// @brief Iterates the staves in the group in order according to #systemStaves.
+    /// @param measId The measure for which to construct each #details::StaffComposite instance.
+    /// @param eduPosition The Edu position for which to construct each #details::StaffComposite instance.
+    /// @param iterator The iterator function. Returning false from this function terminates iteration.
+    void iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const std::shared_ptr<others::StaffComposite>&)> iterator) const;
 
     /// @brief Creates a vector of #StaffGroupInfo instances for the measure, part, and system staves
     /// @param measureId The measure to find.
     /// @param linkedPart The linked part in which to find the groups.
     /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
-    static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId,
-        const std::shared_ptr<others::PartDefinition>& linkedPart,
+    static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,
         const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
 };
 

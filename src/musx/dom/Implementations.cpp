@@ -1934,14 +1934,113 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
 {
     auto document = getDocument();
     auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(forPartId, getCmper());
-    if (!groupIdRecord) return nullptr;
-    auto retval = document->getDetails()->get<details::StaffGroup>(forPartId, BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
-    if (!retval) {
+    if (!groupIdRecord || groupIdRecord->staffGroupId == 0) {
+        // staffGroupId can be 0 in upgraded files where there is another StaffGroup showing the instrument name.
+        return nullptr;
+    }
+    auto result = document->getDetails()->get<details::StaffGroup>(forPartId, BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
+    if (!result) {
         MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(groupIdRecord->staffGroupId)
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
     }
-    return retval;
+    return result;
 }
+
+std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::calcVisualStaffGroup(Cmper forPartId) const
+{
+    if (auto result = getStaffGroup(forPartId)) {
+        /// @todo We may need to search for an overlapping group even if this result is valid,
+        /// but for now we only search if it is not.
+        return result;
+    }
+    auto systemStaves = getDocument()->getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    std::vector<size_t> instIndices = [&]() {
+        std::vector<size_t> result;
+        for (InstCmper nextStaffId : staffNums) {
+            if (auto index = others::InstrumentUsed::getIndexForStaff(systemStaves, nextStaffId)) {
+                result.push_back(index.value());
+            }                
+        }
+        std::sort(result.begin(), result.end());
+        return result;
+    }();
+    if (instIndices.empty()) {
+        return nullptr;
+    }
+    if (!systemStaves.empty()) {
+        const size_t topInstSlot = instIndices[0];
+        const size_t botInstSlot = instIndices[instIndices.size() - 1];
+        if (auto topStaff = others::StaffComposite::createCurrent(getDocument(), forPartId, systemStaves[topInstSlot]->staffId, 1, 0)) {
+            auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, forPartId, systemStaves);
+            for (const auto& staffGroup : staffGroups) {
+                const auto& group = staffGroup.group;
+                // for now, only identify piano braces as visual staff groups
+                if (group->bracket && group->bracket->style == details::StaffGroup::BracketStyle::PianoBrace) {
+                    if (staffGroup.startSlot.value() == topInstSlot && staffGroup.endSlot.value() >= botInstSlot) {
+                        bool foundNonMatching = false;
+                        staffGroup.iterateStaves(/*measId*/1, /*eduPos*/0, [&](const std::shared_ptr<others::StaffComposite>& nextStaff) {
+                            if (nextStaff->instUuid == topStaff->instUuid || !nextStaff->hasInstrumentAssigned()) {
+                                if (nextStaff->multiStaffInstId == 0 || nextStaff->multiStaffInstId == getCmper()) {
+                                    return true;
+                                }
+                            }
+                            foundNonMatching = true;
+                            return false;
+                        });
+                        if (!foundNonMatching) {
+                            return group;
+                        }
+                    }
+                }
+            }
+        } else {
+            MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " points to nonexistent start staff "
+                + std::to_string(systemStaves[topInstSlot]->staffId));
+        }
+    }
+    return nullptr;
+}
+
+void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const DocumentPtr& document)
+{
+    auto instGroups = document->getOthers()->getArray<others::MultiStaffInstrumentGroup>(SCORE_PARTID);
+    // multiStaffInstId must be populated in a separate pass before any calls to getVisualStaffGroup
+    for (const auto& instance : instGroups) {
+        for (size_t x = 0; x < instance->staffNums.size(); x++) {
+            auto staff = instance->getStaffAtIndex(x);
+            if (staff) {
+                if (staff->multiStaffInstId) {
+                    musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose, 
+                        "Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
+                } else {
+                    staff->multiStaffInstId = instance->getCmper();
+                }
+            }
+        }
+    }
+    for (const auto& instance : instGroups) {
+        if (auto visibleGroup = instance->calcVisualStaffGroup(SCORE_PARTID)) {
+            auto scrollView = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+            auto groupInfo = details::StaffGroupInfo(visibleGroup, scrollView);
+            groupInfo.iterateStaves(/*measId*/1, /*eduPos*/ 0, [&](const std::shared_ptr<others::StaffComposite>& staffComp) {
+                if (const auto rawStaff = staffComp->getRawStaff()) {
+                    if (rawStaff->multiStaffInstVisualGroupId) {
+                        musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose,
+                            "Staff " + std::to_string(rawStaff->getCmper()) + " appears in more than one visual group associated with a MultiStaffInstrumentGroup.");
+                    } else {
+                        rawStaff->multiStaffInstVisualGroupId = visibleGroup->getCmper2();
+                    }
+                } else {
+                    MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(staffComp->getCmper()) + " in staff group " + std::to_string(visibleGroup->getCmper2()));
+                }
+                return true;
+            });
+        }
+    }
+    // guarantee calcAllAutoNumberValues is called after calcAllMultiStaffGroupIds.
+    others::Staff::calcAllAutoNumberValues(document);
+}
+
 // **********************
 // ***** MusicRange *****
 // **********************
@@ -2748,11 +2847,9 @@ std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffI
 std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
 {
     auto name = [&]() -> std::string {
-        if (!preferStaffName || !fullNameTextId) {
-            if (auto multiInstGroup = getMultiStaffInstGroup()) {
-                if (auto group = multiInstGroup->getStaffGroup(SCORE_PARTID)) {
-                    return group->getFullName(accidentalStyle);
-                }
+        if ((!preferStaffName || !fullNameTextId) && multiStaffInstVisualGroupId) {
+            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, multiStaffInstVisualGroupId)) {
+                return group->getFullName(accidentalStyle);
             }
         }
         return getFullName(accidentalStyle);
@@ -2764,11 +2861,9 @@ std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalS
 std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
 {
     auto name = [&]() -> std::string {
-        if (!preferStaffName || !abbrvNameTextId) {
-            if (auto multiInstGroup = getMultiStaffInstGroup()) {
-                if (auto group = multiInstGroup->getStaffGroup(SCORE_PARTID)) {
-                    return group->getAbbreviatedName(accidentalStyle);
-                }
+        if ((!preferStaffName || !fullNameTextId) && multiStaffInstVisualGroupId) {
+            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, multiStaffInstVisualGroupId)) {
+                return group->getAbbreviatedName(accidentalStyle);
             }
         }
         return getAbbreviatedName(accidentalStyle);
@@ -3118,6 +3213,15 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     }
 }
 
+std::shared_ptr<others::Staff> others::StaffComposite::getRawStaff() const
+{
+    auto result = getDocument()->getOthers()->get<others::Staff>(getPartId(), getCmper());
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(getCmper()) + " from StaffComposite.");        
+    }
+    return result;
+}
+
 std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
     InstCmper staffId, MeasCmper measId, Edu eduPosition)
 {
@@ -3185,36 +3289,53 @@ std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString
 // **************************
 
 details::StaffGroupInfo::StaffGroupInfo(const std::shared_ptr<StaffGroup>& staffGroup,
-    const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves) : group(staffGroup)
+    const std::vector<std::shared_ptr<others::InstrumentUsed>>& inpSysStaves) : group(staffGroup), systemStaves(inpSysStaves)
 {
-    if (systemStaves.empty()) {
+    if (inpSysStaves.empty()) {
         throw std::logic_error("Attempt to create StaffGroupInfo with no system staves (StaffGroup " + std::to_string(staffGroup->getCmper2()) + ")");
     }
-    for (size_t x = 0; x < systemStaves.size(); x++) {
-        if (staffGroup->staves.find(systemStaves[x]->staffId) != staffGroup->staves.end()) {
-            startSlot = x;
-            break;
-        }
+    auto it = std::find_if(inpSysStaves.begin(), inpSysStaves.end(), [&](const auto& item) {
+        return item->staffId == group->startInst;
+    });
+    if (it != inpSysStaves.end()) {
+        startSlot = std::distance(inpSysStaves.begin(), it);
     }
-    if (startSlot) {
-        for (size_t x = systemStaves.size() - 1; x >= *startSlot; x--) {
-            if (staffGroup->staves.find(systemStaves[x]->staffId) != staffGroup->staves.end()) {
-                endSlot = x;
+    it = std::find_if(inpSysStaves.begin(), inpSysStaves.end(), [&](const auto& item) {
+        return item->staffId == group->endInst;
+    });
+    if (it != inpSysStaves.end()) {
+        endSlot = std::distance(inpSysStaves.begin(), it);
+    }
+}
+
+void details::StaffGroupInfo::iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const std::shared_ptr<others::StaffComposite>&)> iterator) const
+{
+    MUSX_ASSERT_IF (!startSlot || !endSlot) {
+        throw std::logic_error("StaffGroupInfo::iterateStaves called with invalid start or end slot for system staves.");
+    }
+    for (size_t slot = startSlot.value(); slot <= endSlot.value(); slot++) {
+        MUSX_ASSERT_IF (slot >= systemStaves.size()) {
+            throw std::logic_error("StaffGroupInfo::iterateStaves encounted invalid slot (" + std::to_string(slot) + ") for system staves.");
+        }
+        const auto& iUsed = systemStaves[slot];
+        if (auto staff = others::StaffComposite::createCurrent(iUsed->getDocument(), iUsed->getPartId(), iUsed->staffId, measId, eduPosition)) {
+            if (!iterator(staff)) {
                 break;
             }
+        } else {
+            MUSX_INTEGRITY_ERROR("StaffGroupInfo::iterateStaves could not find staff " + std::to_string(iUsed->staffId) + " in slot " + std::to_string(slot));
         }
     }
 }
 
-std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure(MeasCmper measureId,
-    const std::shared_ptr<others::PartDefinition>& linkedPart,
+std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,
     const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves)
 {
     if (systemStaves.empty()) {
         util::Logger::log(util::Logger::LogLevel::Info, "Attempted to find groups for empty system staves. Returning an empty vector.");
         return {};
     }
-    auto rawGroups = linkedPart->getDocument()->getDetails()->getArray<details::StaffGroup>(linkedPart->getCmper(), BASE_SYSTEM_ID);
+    auto rawGroups = systemStaves[0]->getDocument()->getDetails()->getArray<details::StaffGroup>(linkedPartId, BASE_SYSTEM_ID);
     std::vector<StaffGroupInfo> retval;
     for (const auto& rawGroup : rawGroups) {
         if (rawGroup->startMeas <= measureId && rawGroup->endMeas >= measureId) {

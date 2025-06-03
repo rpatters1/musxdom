@@ -161,25 +161,7 @@ MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
     }
 });
 
-MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, {
-    [](const dom::DocumentPtr& document) {
-        auto instGroups = document->getOthers()->getArray<MultiStaffInstrumentGroup>(SCORE_PARTID);
-        for (const auto& instance : instGroups) {
-            for (size_t x = 0; x < instance->staffNums.size(); x++) {
-                auto staff = instance->getStaffAtIndex(x);
-                if (staff) {
-                    if (staff->multiStaffInstId) {
-                        musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose, 
-                            "Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
-                    } else {
-                        staff->multiStaffInstId = instance->getCmper();
-                    }
-                }
-            }
-        }
-        others::Staff::calcAllAutoNumberValues(document);
-    }
-});
+MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds);
 
 MUSX_RESOLVER_ENTRY(Page, {
     [](const dom::DocumentPtr& document) {
