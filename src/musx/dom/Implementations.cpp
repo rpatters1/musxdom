@@ -2019,6 +2019,8 @@ void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const Document
         }
     }
     for (const auto& instance : instGroups) {
+        instance->visualStaffNums = instance->staffNums;
+        auto& stavesInInst = instance->visualStaffNums;
         if (auto visibleGroup = instance->calcVisualStaffGroup(SCORE_PARTID)) {
             auto scrollView = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
             auto groupInfo = details::StaffGroupInfo(visibleGroup, scrollView);
@@ -2029,6 +2031,9 @@ void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const Document
                             "Staff " + std::to_string(rawStaff->getCmper()) + " appears in more than one visual group associated with a MultiStaffInstrumentGroup.");
                     } else {
                         rawStaff->multiStaffInstVisualGroupId = visibleGroup->getCmper2();
+                        if (std::find(stavesInInst.begin(), stavesInInst.end(), rawStaff->getCmper()) == stavesInInst.end()) {
+                            stavesInInst.push_back(rawStaff->getCmper());
+                        }
                     }
                 } else {
                     MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(staffComp->getCmper()) + " in staff group " + std::to_string(visibleGroup->getCmper2()));
