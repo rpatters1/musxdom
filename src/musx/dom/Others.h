@@ -1378,6 +1378,15 @@ public:
         return std::nullopt;
     }
 
+    /// @brief Returns the index of an input staffId that visually shows in this multi-instrument group or std::nullopt if not found
+    std::optional<size_t> getVisualIndexOf(InstCmper staffId) const
+    {
+        for (size_t x = 0; x < visualStaffNums.size(); x++) {
+            if (visualStaffNums[x] == staffId) return x;        
+        }
+        return std::nullopt;
+    }
+
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
     std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
@@ -2174,6 +2183,10 @@ public:
                                     ///< Populated by in #calcAllRuntimeValues.
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
+    Cmper multiStaffInstVisualId{}; ///< Calculated cmper for an associated @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
+                                    ///< Some staves are included visually in multistaff instruments without being part of it in the data.
+                                    ///< If #multiStaffInstId is non-zero, this value is the same. But this value can be non-zero when
+                                    ///< #multiStaffInstId is zero. It is set by the factory.
     Cmper multiStaffInstVisualGroupId{}; ///< Calculated cmper for the visual @ref details::StaffGroup that visually shows the multistaff instrument. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
@@ -2187,8 +2200,11 @@ public:
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
-    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one. Otherwise nullptr.
+    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one in the data. Otherwise nullptr.
     std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
+
+    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is shown as part of one. Otherwise nullptr.
+    std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstVisualGroup() const;
 
     /// @brief Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)
     /// @note Ordinal prefix numbering is currently supported only for English.

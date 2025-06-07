@@ -2014,6 +2014,7 @@ void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const Document
                         "Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
                 } else {
                     staff->multiStaffInstId = instance->getCmper();
+                    staff->multiStaffInstVisualId = instance->getCmper();
                 }
             }
         }
@@ -2031,6 +2032,7 @@ void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const Document
                             "Staff " + std::to_string(rawStaff->getCmper()) + " appears in more than one visual group associated with a MultiStaffInstrumentGroup.");
                     } else {
                         rawStaff->multiStaffInstVisualGroupId = visibleGroup->getCmper2();
+                        rawStaff->multiStaffInstVisualId = instance->getCmper();
                         if (std::find(stavesInInst.begin(), stavesInInst.end(), rawStaff->getCmper()) == stavesInInst.end()) {
                             stavesInInst.push_back(rawStaff->getCmper());
                         }
@@ -2845,6 +2847,17 @@ std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffI
             return retval;
         }
         MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffInstId));
+    }
+    return nullptr;
+}
+
+std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffInstVisualGroup() const
+{
+    if (multiStaffInstVisualId) {
+        if (auto retval = getDocument()->getOthers()->get<others::MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffInstVisualId)) {
+            return retval;
+        }
+        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffInstVisualId));
     }
     return nullptr;
 }
