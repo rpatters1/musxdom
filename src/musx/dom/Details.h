@@ -785,6 +785,39 @@ public:
 };
 
 /**
+ * @class KeySymbolListElement
+ * @brief Represents a single element in a Finale accidental symbol list.
+ *
+ * This class is identified by the XML node name "keySymList".
+ * cmper1 is the symbol list ID from #others::KeyAttributes::symbolList. cmper2 is the accidental slot, which should be interpreted as a signed int.
+ */
+class KeySymbolListElement : public DetailsBase {
+public:
+    /** @brief Constructor function */
+    explicit KeySymbolListElement(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2) {}
+
+    std::string accidentalString;   ///< The symbol string used to represent the accidental. The string uses either the default font for keys
+                                    ///< or the font specified by #others::KeyAttributes::fontSym if its value is non-zero. (xml node is `<string>`)
+
+    /** @brief Returns the alteration value that this symbol corresponds with. */
+    int getAlterationValue() const {
+        return static_cast<int16_t>(getCmper2());
+    }
+
+    void integrityCheck() override
+    {
+        DetailsBase::integrityCheck();
+        if (std::abs(getAlterationValue()) > MAX_ALTERATIONS) {
+            MUSX_INTEGRITY_ERROR("KeySymbolListElement for list " + std::to_string(getCmper1()) + " has invalid value " + std::to_string(getAlterationValue()));
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "keySymList"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeySymbolListElement>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class LyricAssign
  * @brief Contains assignment data for a lyric assignment (a single syllable)
  */
@@ -1276,10 +1309,11 @@ public:
 
     /// @brief Constructs information about a specific StaffGroup as it relates the the @p systemStaves
     /// @param staffGroup The staff group
-    /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
+    /// @param inpSysStaves The @ref others::InstrumentUsed list for a system or Scroll view.
     StaffGroupInfo(const std::shared_ptr<StaffGroup>& staffGroup,
         const std::vector<std::shared_ptr<others::InstrumentUsed>>& inpSysStaves);
 
+    /// @brief The number of staves in the group for the #systemStaves.
     std::optional<size_t> numStaves() const
     {
         if (startSlot && endSlot) {
@@ -1289,14 +1323,14 @@ public:
     }
 
     /// @brief Iterates the staves in the group in order according to #systemStaves.
-    /// @param measId The measure for which to construct each #details::StaffComposite instance.
-    /// @param eduPosition The Edu position for which to construct each #details::StaffComposite instance.
+    /// @param measId The measure for which to construct each @ref others::StaffComposite instance.
+    /// @param eduPosition The Edu position for which to construct each @ref others::StaffComposite instance.
     /// @param iterator The iterator function. Returning false from this function terminates iteration.
     void iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const std::shared_ptr<others::StaffComposite>&)> iterator) const;
 
     /// @brief Creates a vector of #StaffGroupInfo instances for the measure, part, and system staves
     /// @param measureId The measure to find.
-    /// @param linkedPart The linked part in which to find the groups.
+    /// @param linkedPartId The ID of the linked part in which to find the groups.
     /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
     static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,
         const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);

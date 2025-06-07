@@ -222,6 +222,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::InstrumentUsed,
     dom::others::KeyFormat,
     dom::others::KeyMapArray,
+    dom::others::KeyAttributes,
     dom::others::LayerAttributes,
     dom::others::MeasureNumberRegion,
     dom::others::MultimeasureRest,
@@ -294,6 +295,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::IndependentStaffDetails,  // "floats" is the xml key
     dom::details::StaffSize,
     dom::details::GFrameHold,
+    dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,

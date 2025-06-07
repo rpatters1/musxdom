@@ -704,7 +704,39 @@ public:
     constexpr static std::string_view XmlNodeName = "keyMap"; ///< The XML node name for this type.
     static const xml::XmlElementArray<KeyMapArray>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
+/**
+ * @class KeyAttributes
+ * @brief Represents the attributes associated with a Finale key signature.
+ *
+ * This class is identified by the XML node name "keysAttrib".
+ * The cmper is the key signature ID.
+ */
+class KeyAttributes : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit KeyAttributes(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    int harmRefer{};        ///< Changes the meaning of 0 in the note tables for key signatures. The Finale manual recommends
+                            ///< never changing it from 0. It also appears not to work as documented if changed. It was part of the original
+                            ///< Finale 1.0 release and was likely never tested much since then.
+    int middleCKey{};       ///< MIDI key number to use for middle C. This value transposes playback if it is set other than the MIDI middle C value of 60.
+    Cmper fontSym{};        ///< If non-zero, the Font symbol ID used for accidentals in this key. Only the font ID can be specified. The size and style are inherited from
+                            ///< the settings in #options::FontOptions::FontType::Key.
+    int gotoKey{};          ///< According to the Finale manual, this specifies the number of "scale steps" between each key on the MIDI keyboard.
+                            ///< Presumably this means EDO division steps, but in any case it is not well implemented and seems not to work as intended.
+                            ///< A value other than 1 is unlikely.
+    Cmper symbolList{};     ///< Cmper of the symbol list that specifies the accidentals for the key. These are stored in incidents of @ref details::KeySymbolListElement.
+    bool hasClefOctv{};     ///< If true, the key signature has clef octave override tables. However, it may not be reliable. The existence of clef octave
+                            ///< tables should probably always be checked even if this value is false.
+                            ///< @todo add clef octave tables to Musx DOM.
+
+    constexpr static std::string_view XmlNodeName = "keysAttrib"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeyAttributes>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 /**
  * @class LayerAttributes
  * @brief Represents the attributes of a Finale "layer".
@@ -1357,7 +1389,7 @@ public:
     /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
     std::shared_ptr<details::StaffGroup> calcVisualStaffGroup(Cmper forPartId) const;
 
-    /// @brief Used by the factory to calculate all multistaff ids and visual ids for #Staff instances.
+    /// @brief Used by the factory to calculate all multistaff ids and visual ids for instances of @ref Staff.
     /// @param document 
     static void calcAllMultiStaffGroupIds(const DocumentPtr& document);
 
@@ -2142,7 +2174,7 @@ public:
                                     ///< Populated by in #calcAllRuntimeValues.
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
-    Cmper multiStaffInstVisualGroupId{}; /// Calculated cmper for the visual #details::StaffGroup that visually shows the multistaff instrument. This value is not in the xml.
+    Cmper multiStaffInstVisualGroupId{}; ///< Calculated cmper for the visual @ref details::StaffGroup that visually shows the multistaff instrument. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
     std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
@@ -2453,6 +2485,7 @@ public:
     /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
     Cmper getPartId() const final override { return m_requestedPartId; }
 
+    /// @brief Returns the underlying staff without any staff styles applied.
     std::shared_ptr<others::Staff> getRawStaff() const;
 };
 

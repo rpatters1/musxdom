@@ -226,6 +226,10 @@ MUSX_XML_ELEMENT_ARRAY(IndependentStaffDetails, {
     {"hasTime", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasTime = populateBoolean(e, i); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(KeySymbolListElement, {
+    {"string", [](const XmlElementPtr& e, const std::shared_ptr<KeySymbolListElement>& i) { i->accidentalString = e->getText(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
     {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
     {"syll", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->syllable = e->getTextAs<unsigned>(); }},
