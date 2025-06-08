@@ -729,9 +729,7 @@ public:
                             ///< Presumably this means EDO division steps, but in any case it is not well implemented and seems not to work as intended.
                             ///< A value other than 1 is unlikely.
     Cmper symbolList{};     ///< Cmper of the symbol list that specifies the accidentals for the key. These are stored in incidents of @ref details::KeySymbolListElement.
-    bool hasClefOctv{};     ///< If true, the key signature has clef octave override tables. However, it may not be reliable. The existence of clef octave
-                            ///< tables should probably always be checked even if this value is false.
-                            ///< @todo add clef octave tables to Musx DOM.
+    bool hasClefOctv{};     ///< If true, the key signature has clef octave override tables. See @ref details::ClefOctaveFlats and @ref details::ClefOctaveSharps.
 
     constexpr static std::string_view XmlNodeName = "keysAttrib"; ///< The XML node name for this type.
     static const xml::XmlElementArray<KeyAttributes>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

@@ -174,6 +174,14 @@ MUSX_XML_ELEMENT_ARRAY(ChordAssign, {
     {"fbPercent", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbPercent = e->getTextAs<int>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(ClefOctaveFlats, {
+    {"ocAdds", [](const XmlElementPtr& e, const std::shared_ptr<ClefOctaveFlats>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ClefOctaveSharps, {
+    {"ocAdds", [](const XmlElementPtr& e, const std::shared_ptr<ClefOctaveSharps>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
     {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
     {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<InstCmper>(); }},

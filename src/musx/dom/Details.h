@@ -445,6 +445,60 @@ public:
 };
 
 /**
+ * @class ClefOctaveFlats
+ * @brief Defines the octaves in which each clef should display flats in key signatures. Only linear key signatures
+ * use this class.
+ *
+ * Note that while flats are numbered from 1-7 (B-F), this table is indexed 0-6.
+ *
+ * Cmper1 is the value returned by #KeySignature::getKeyMode. Cmper2 is the clef index to which
+ * this array applies.
+ *
+ * Each value in the array specifies an octave to display the accidental, where 0 is the middle-C octave.
+ *
+ * This class is identified by the XML node name "clefOctvFlats".
+ */
+class ClefOctaveFlats : public DetailsArray<int, 7>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using DetailsArray::DetailsArray;
+
+    constexpr static std::string_view XmlNodeName = "clefOctvFlats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ClefOctaveFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class ClefOctaveSharps
+ * @brief Defines the octaves in which each clef should display sharps in key signatures.
+ *
+ * For non-linear keys, this class defines the octave in which each clef should display
+ * the accidentals in the key signature, regardless whether they are sharps or flats.
+ * (Non-linear keys do not use @ref ClefOctaveFlats.) Therefore, this class will almost certainly exist
+ * for non-linear keys.
+ *
+ * Note that while sharps are numbered from 1-7 (F-B), this table is indexed 0-6.
+ *
+ * Cmper1 is the value returned by #KeySignature::getKeyMode. Cmper2 is the clef index to which
+ * this array applies.
+ *
+ * Each value in the array specifies an octave to display the accidental, where 0 is the middle-C octave.
+ *
+ * This class is identified by the XML node name "clefOctvSharps".
+ */
+class ClefOctaveSharps : public DetailsArray<int, 7>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using DetailsArray::DetailsArray;
+
+    constexpr static std::string_view XmlNodeName = "clefOctvSharps"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ClefOctaveSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class CrossStaff
  * @brief Represents a cross-staff assignment for the note, if any.
  *

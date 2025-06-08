@@ -290,6 +290,8 @@ using RegisteredDetails = TypeRegistry <
     dom::details::SecondaryBeamAlterationsUpStem,
     dom::details::CenterShape,
     dom::details::ChordAssign,
+    dom::details::ClefOctaveFlats,
+    dom::details::ClefOctaveSharps,
     dom::details::CrossStaff,
     dom::details::DotAlterations,
     dom::details::IndependentStaffDetails,  // "floats" is the xml key

@@ -361,6 +361,40 @@ private:
     using DetailsBase::getCmper2;
 };
 
+/// @brief Template pattern for DetailsBase items consisting of an array of a single item.
+/// @tparam ElementType The type of the elements in the array
+/// @tparam REQUIRED_SIZE If non-zero, the required size of the array.
+template <typename ElementType, size_t REQUIRED_SIZE = 0>
+class DetailsArray : public DetailsBase
+{
+private:
+    virtual std::string_view xmlTag() const = 0;
+
+public:
+    /** @brief Constructor function */
+    explicit DetailsArray(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2)
+    {
+    }
+
+    std::vector<ElementType> values;    ///< Values in the array
+                                        ///< Guaranteed to have REQUIRED_SIZE elements.
+
+    /// @brief Override of #Base::integrityCheck
+    void integrityCheck() override
+    {
+        DetailsBase::integrityCheck();
+        if constexpr (REQUIRED_SIZE > 0) {
+            const size_t originalSize = values.size();
+            values.resize(REQUIRED_SIZE); // resize first, in case MUSX_INTEGRITY_ERROR throws. (Avoid unreachable code warning.)
+            if (originalSize < REQUIRED_SIZE) {
+                MUSX_INTEGRITY_ERROR("Array with xml tag " + std::string(xmlTag()) + " and cmpers [" + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
+                    + "] has fewer than " + std::to_string(REQUIRED_SIZE) + " elements.");
+            }
+        }
+    }
+};
+
 class NoteInfoPtr;
 
 /// @brief Base class note details. Note details are entry details associated with a note ID.
