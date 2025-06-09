@@ -90,7 +90,24 @@ public:
             }
             return inci < other.inci;
         }
-   };
+
+        /** @brief provides a description of the key for diagnostic purposes */
+        std::string description() const
+        {
+            std::string result = nodeId + " part " + std::to_string(partId);
+            if (cmper1) {
+                if (cmper2) {
+                    result += " cmpers [" + std::to_string(cmper1.value()) + ", " + std::to_string(cmper2.value()) + "]";
+                } else {
+                    result += " cmper " + std::to_string(cmper1.value());
+                }
+            }
+            if (inci) {
+                result += " inci " + std::to_string(inci.value());
+            }
+            return result;
+        }
+    };
 
     /** @brief virtual destructor */
     virtual ~ObjectPool() = default;
@@ -111,7 +128,10 @@ public:
                 MUSX_INTEGRITY_ERROR("Node " + key.nodeId + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
             }
         }
-        m_pool.emplace(key, object);
+        auto [poolIt, emplaced] = m_pool.emplace(key, object);
+        if (!emplaced) {
+            MUSX_INTEGRITY_ERROR("Attempted to add same key more than once: " + key.description());
+        }
         auto it = m_shareMode.find(key.nodeId);
         if (it == m_shareMode.end()) {
             m_shareMode.emplace(key.nodeId, object->getShareMode());

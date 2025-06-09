@@ -505,6 +505,15 @@ MUSX_XML_ELEMENT_ARRAY(KeyMapArray, {
     {"keych", [](const XmlElementPtr& e, const std::shared_ptr<KeyMapArray>& i) { i->steps.push_back(FieldPopulator<KeyMapArray::StepElement>::createAndPopulate(e)); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(KeyAttributes, {
+    {"harmRefer", [](const XmlElementPtr& e, const std::shared_ptr<KeyAttributes>& i) { i->harmRefer = e->getTextAs<int>(); }},
+    {"middleCKey", [](const XmlElementPtr& e, const std::shared_ptr<KeyAttributes>& i) { i->middleCKey = e->getTextAs<int>(); }},
+    {"fontSym", [](const XmlElementPtr& e, const std::shared_ptr<KeyAttributes>& i) { i->fontSym = e->getTextAs<Cmper>(); }},
+    {"gotoKey", [](const XmlElementPtr& e, const std::shared_ptr<KeyAttributes>& i) { i->gotoKey = e->getTextAs<int>(); }},
+    {"symbolList", [](const XmlElementPtr& e, const std::shared_ptr<KeyAttributes>& i) { i->symbolList = e->getTextAs<Cmper>(); }},
+    {"hasClefOctv", [](const XmlElementPtr& e, const std::shared_ptr<KeyAttributes>& i) { i->hasClefOctv = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(LayerAttributes, {
     {"restOffset", [](const XmlElementPtr& e, const std::shared_ptr<LayerAttributes>& i) { i->restOffset = e->getTextAs<int>(); }},
     {"flipTies", [](const XmlElementPtr& e, const std::shared_ptr<LayerAttributes>& i) { i->freezTiesToStems = populateBoolean(e, i); }},

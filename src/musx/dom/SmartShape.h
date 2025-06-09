@@ -63,8 +63,11 @@ public:
         Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
         EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
 
-        /// @brief Calculates the edu position of the endpoint, based on whether it is an edu or an entry
-        Edu calcEduPosition() const;
+        /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
+        util::Fraction calcPosition() const;
+
+        /// @brief Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached
+        util::Fraction calcGlobalPosition() const;
 
         /// @brief Calculates the entry associated with the endpoint.
         /// @return The entry if the endpoint is entry-attached or within 1 Edu of an entry. Null if not.

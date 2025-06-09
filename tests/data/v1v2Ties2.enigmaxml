@@ -34,8 +34,8 @@
       <textEncoding>Mac</textEncoding>
       <created>
         <year>2025</year>
-        <month>2</month>
-        <day>23</day>
+        <month>6</month>
+        <day>2</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -61,7 +61,7 @@
       <modified>
         <year>2025</year>
         <month>6</month>
-        <day>8</day>
+        <day>2</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -479,6 +479,7 @@
       <guideColorBlue>65535</guideColorBlue>
     </gridGuideOptions>
     <keySignatureOptions>
+      <doKeyCancel/>
       <doBankDiff/>
       <keyFront>24</keyFront>
       <keyBack>12</keyBack>
@@ -1429,146 +1430,181 @@
     </tupletOptions>
   </options>
   <others>
-    <acciAmountFlats cmper="4">
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-    </acciAmountFlats>
-    <acciAmountFlats cmper="5">
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>-2</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-    </acciAmountFlats>
-    <acciAmountSharps cmper="4">
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-    </acciAmountSharps>
-    <acciAmountSharps cmper="5">
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>2</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-    </acciAmountSharps>
-    <acciAmountSharps cmper="16384">
-      <amount>-1</amount>
-      <amount>-1</amount>
-      <amount>1</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-      <amount>0</amount>
-    </acciAmountSharps>
-    <acciOrderFlats cmper="4">
-      <acci>6</acci>
-      <acci>2</acci>
-      <acci>5</acci>
-      <acci>1</acci>
-      <acci>4</acci>
-      <acci>0</acci>
-      <acci>3</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-    </acciOrderFlats>
-    <acciOrderFlats cmper="5">
-      <acci>6</acci>
-      <acci>2</acci>
-      <acci>5</acci>
-      <acci>1</acci>
-      <acci>4</acci>
-      <acci>0</acci>
-      <acci>3</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-    </acciOrderFlats>
-    <acciOrderSharps cmper="4">
-      <acci>3</acci>
-      <acci>0</acci>
-      <acci>4</acci>
-      <acci>1</acci>
-      <acci>5</acci>
-      <acci>2</acci>
-      <acci>6</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-    </acciOrderSharps>
-    <acciOrderSharps cmper="5">
-      <acci>3</acci>
-      <acci>0</acci>
-      <acci>4</acci>
-      <acci>1</acci>
-      <acci>5</acci>
-      <acci>2</acci>
-      <acci>6</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-    </acciOrderSharps>
-    <acciOrderSharps cmper="16384">
-      <acci>6</acci>
-      <acci>2</acci>
-      <acci>3</acci>
-      <acci>1</acci>
-      <acci>5</acci>
-      <acci>2</acci>
-      <acci>6</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-      <acci>0</acci>
-    </acciOrderSharps>
+    <articDef cmper="1">
+      <charMain>46</charMain>
+      <sizeMain>24</sizeMain>
+      <autoHorz/>
+      <autoVert/>
+      <belowSymbolAlt/>
+      <insideSlur/>
+      <autoStack/>
+      <centerOnStem/>
+      <slurInteractionMode>insideSlur</slurInteractionMode>
+      <charAlt>46</charAlt>
+      <yOffsetMain>-2</yOffsetMain>
+      <defVertPos>16</defVertPos>
+      <avoidStaffLines/>
+      <playArtic/>
+      <sizeAlt>24</sizeAlt>
+      <yOffsetAlt>-2</yOffsetAlt>
+      <durTopNotePercent>40</durTopNotePercent>
+    </articDef>
+    <articDef cmper="2">
+      <charMain>62</charMain>
+      <fontMain>15</fontMain>
+      <sizeMain>24</sizeMain>
+      <autoHorz/>
+      <autoVert/>
+      <outsideStaff/>
+      <belowSymbolAlt/>
+      <autoStack/>
+      <charAlt>62</charAlt>
+      <fontAlt>15</fontAlt>
+      <xOffsetMain>4</xOffsetMain>
+      <defVertPos>12</defVertPos>
+      <playArtic/>
+      <sizeAlt>24</sizeAlt>
+      <xOffsetAlt>4</xOffsetAlt>
+      <yOffsetAlt>-24</yOffsetAlt>
+      <ampTopNoteDelta>26</ampTopNoteDelta>
+      <ampBotNoteDelta>26</ampBotNoteDelta>
+    </articDef>
+    <articDef cmper="3">
+      <charMain>45</charMain>
+      <fontMain>6</fontMain>
+      <sizeMain>24</sizeMain>
+      <autoHorz/>
+      <autoVert/>
+      <belowSymbolAlt/>
+      <insideSlur/>
+      <autoStack/>
+      <slurInteractionMode>insideSlur</slurInteractionMode>
+      <charAlt>45</charAlt>
+      <fontAlt>6</fontAlt>
+      <yOffsetMain>-2</yOffsetMain>
+      <defVertPos>16</defVertPos>
+      <avoidStaffLines/>
+      <mainIsShape/>
+      <altIsShape/>
+      <sizeAlt>24</sizeAlt>
+      <yOffsetAlt>-2</yOffsetAlt>
+      <mainShape>6</mainShape>
+      <altShape>7</altShape>
+    </articDef>
+    <beatChart cmper="1" inci="0">
+      <control>
+        <totalDur>4096</totalDur>
+        <totalWidth>418</totalWidth>
+        <minWidth>786</minWidth>
+        <allotWidth>1504</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="1" inci="1">
+      <endPos>22</endPos>
+      <minPos>3</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="2">
+      <dur>146</dur>
+      <pos>22</pos>
+      <endPos>44</endPos>
+      <minPos>52</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="3">
+      <dur>293</dur>
+      <pos>44</pos>
+      <endPos>66</endPos>
+      <minPos>126</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="4">
+      <dur>439</dur>
+      <pos>66</pos>
+      <endPos>88</endPos>
+      <minPos>172</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="5">
+      <dur>585</dur>
+      <pos>88</pos>
+      <endPos>110</endPos>
+      <minPos>218</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="6">
+      <dur>731</dur>
+      <pos>110</pos>
+      <endPos>132</endPos>
+      <minPos>267</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="7">
+      <dur>878</dur>
+      <pos>132</pos>
+      <endPos>154</endPos>
+      <minPos>316</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="8">
+      <dur>1024</dur>
+      <pos>154</pos>
+      <endPos>290</endPos>
+      <minPos>395</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="9">
+      <dur>3072</dur>
+      <pos>290</pos>
+      <endPos>322</endPos>
+      <minPos>472</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="10">
+      <dur>3328</dur>
+      <pos>322</pos>
+      <endPos>354</endPos>
+      <minPos>554</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="11">
+      <dur>3584</dur>
+      <pos>354</pos>
+      <endPos>386</endPos>
+      <minPos>631</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="12">
+      <dur>3840</dur>
+      <pos>386</pos>
+      <endPos>418</endPos>
+      <minPos>704</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="0">
+      <control>
+        <totalDur>4096</totalDur>
+        <totalWidth>356</totalWidth>
+        <minWidth>277</minWidth>
+        <allotWidth>593</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="2" inci="1">
+      <endPos>84</endPos>
+      <minPos>11</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="2">
+      <dur>1024</dur>
+      <pos>84</pos>
+      <endPos>136</endPos>
+      <minPos>60</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="3">
+      <dur>1536</dur>
+      <pos>136</pos>
+      <endPos>188</endPos>
+      <minPos>109</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="4">
+      <dur>2048</dur>
+      <pos>188</pos>
+      <endPos>272</endPos>
+      <minPos>194</minPos>
+    </beatChart>
+    <beatChart cmper="2" inci="5">
+      <dur>3072</dur>
+      <pos>272</pos>
+      <endPos>356</endPos>
+      <minPos>240</minPos>
+    </beatChart>
     <durAllot cmper="0">
       <allotment>84</allotment>
     </durAllot>
@@ -1665,17 +1701,38 @@
     </fontName>
     <fontName cmper="15">
       <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
+      <charsetVal>4095</charsetVal>
       <pitch>0</pitch>
       <family>0</family>
-      <name>Lucida Grande</name>
+      <name>Petrucci</name>
     </fontName>
     <fontName cmper="16">
       <charsetBank>Mac</charsetBank>
       <charsetVal>4095</charsetVal>
       <pitch>0</pitch>
       <family>0</family>
+      <name>Maestro</name>
+    </fontName>
+    <fontName cmper="17">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Lucida Grande</name>
+    </fontName>
+    <fontName cmper="18">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
       <name>Symbol</name>
+    </fontName>
+    <fontName cmper="20">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Missing Font (20)</name>
     </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
@@ -1687,55 +1744,11 @@
     </frameSpec>
     <frameSpec cmper="3" inci="0">
       <startEntry>9</startEntry>
-      <endEntry>12</endEntry>
+      <endEntry>22</endEntry>
     </frameSpec>
     <frameSpec cmper="4" inci="0">
-      <startEntry>13</startEntry>
-      <endEntry>16</endEntry>
-    </frameSpec>
-    <frameSpec cmper="5" inci="0">
-      <startEntry>17</startEntry>
-      <endEntry>20</endEntry>
-    </frameSpec>
-    <frameSpec cmper="9" inci="0">
-      <startEntry>31</startEntry>
-      <endEntry>38</endEntry>
-    </frameSpec>
-    <frameSpec cmper="10" inci="0">
-      <startEntry>39</startEntry>
-      <endEntry>46</endEntry>
-    </frameSpec>
-    <frameSpec cmper="11" inci="0">
-      <startEntry>47</startEntry>
-      <endEntry>54</endEntry>
-    </frameSpec>
-    <frameSpec cmper="12" inci="0">
-      <startEntry>55</startEntry>
-      <endEntry>58</endEntry>
-    </frameSpec>
-    <frameSpec cmper="13" inci="0">
-      <startEntry>59</startEntry>
-      <endEntry>62</endEntry>
-    </frameSpec>
-    <frameSpec cmper="14" inci="0">
-      <startEntry>63</startEntry>
-      <endEntry>66</endEntry>
-    </frameSpec>
-    <frameSpec cmper="19" inci="0">
-      <startEntry>71</startEntry>
-      <endEntry>67</endEntry>
-    </frameSpec>
-    <frameSpec cmper="20" inci="0">
-      <startEntry>78</startEntry>
-      <endEntry>85</endEntry>
-    </frameSpec>
-    <frameSpec cmper="25" inci="0">
-      <startEntry>90</startEntry>
-      <endEntry>86</endEntry>
-    </frameSpec>
-    <frameSpec cmper="26" inci="0">
-      <startEntry>97</startEntry>
-      <endEntry>104</endEntry>
+      <startEntry>23</startEntry>
+      <endEntry>27</endEntry>
     </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
@@ -1782,107 +1795,6 @@
       <name>Seville</name>
       <fretNumText>fr.</fretNumText>
     </fretStyle>
-    <fstKeyFlats cmper="2">
-      <tcent>0</tcent>
-      <tcent>6</tcent>
-      <tcent>2</tcent>
-      <tcent>5</tcent>
-      <tcent>1</tcent>
-      <tcent>4</tcent>
-      <tcent>0</tcent>
-      <tcent>3</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-    </fstKeyFlats>
-    <fstKeyFlats cmper="3">
-      <tcent>0</tcent>
-      <tcent>5</tcent>
-      <tcent>1</tcent>
-      <tcent>4</tcent>
-      <tcent>0</tcent>
-      <tcent>3</tcent>
-      <tcent>6</tcent>
-      <tcent>2</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-    </fstKeyFlats>
-    <fstKeyFlats cmper="5">
-      <tcent>0</tcent>
-      <tcent>1</tcent>
-      <tcent>4</tcent>
-      <tcent>0</tcent>
-      <tcent>3</tcent>
-      <tcent>6</tcent>
-      <tcent>2</tcent>
-      <tcent>5</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-    </fstKeyFlats>
-    <fstKeySharps cmper="2">
-      <tcent>3</tcent>
-      <tcent>0</tcent>
-      <tcent>4</tcent>
-      <tcent>1</tcent>
-      <tcent>5</tcent>
-      <tcent>2</tcent>
-      <tcent>6</tcent>
-      <tcent>3</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-    </fstKeySharps>
-    <fstKeySharps cmper="3">
-      <tcent>2</tcent>
-      <tcent>6</tcent>
-      <tcent>3</tcent>
-      <tcent>0</tcent>
-      <tcent>4</tcent>
-      <tcent>1</tcent>
-      <tcent>5</tcent>
-      <tcent>2</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-    </fstKeySharps>
-    <fstKeySharps cmper="5">
-      <tcent>5</tcent>
-      <tcent>2</tcent>
-      <tcent>6</tcent>
-      <tcent>3</tcent>
-      <tcent>0</tcent>
-      <tcent>4</tcent>
-      <tcent>1</tcent>
-      <tcent>5</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-    </fstKeySharps>
-    <fstKeySharps cmper="16384">
-      <tcent>1</tcent>
-      <tcent>4</tcent>
-      <tcent>1</tcent>
-      <tcent>5</tcent>
-      <tcent>2</tcent>
-      <tcent>6</tcent>
-      <tcent>3</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-      <tcent>0</tcent>
-    </fstKeySharps>
-    <hpOptions cmper="1">
-      <selectedPreset>none</selectedPreset>
-    </hpOptions>
     <instUsed cmper="0" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
@@ -1895,28 +1807,6 @@
       </range>
     </instUsed>
     <instUsed cmper="1" inci="0">
-      <inst>1</inst>
-      <trackType>staff</trackType>
-      <distFromTop>0</distFromTop>
-      <range>
-        <startMeas>1</startMeas>
-        <startEdu>0</startEdu>
-        <endMeas>32767</endMeas>
-        <endEdu>2147483647</endEdu>
-      </range>
-    </instUsed>
-    <instUsed cmper="2" inci="0">
-      <inst>1</inst>
-      <trackType>staff</trackType>
-      <distFromTop>0</distFromTop>
-      <range>
-        <startMeas>1</startMeas>
-        <startEdu>0</startEdu>
-        <endMeas>32767</endMeas>
-        <endEdu>2147483647</endEdu>
-      </range>
-    </instUsed>
-    <instUsed cmper="3" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
       <distFromTop>0</distFromTop>
@@ -1949,352 +1839,6 @@
         <endEdu>2147483647</endEdu>
       </range>
     </instUsed>
-    <keyFormat cmper="2">
-      <semitones>12</semitones>
-      <scaleTones>7</scaleTones>
-    </keyFormat>
-    <keyFormat cmper="3">
-      <semitones>12</semitones>
-      <scaleTones>7</scaleTones>
-    </keyFormat>
-    <keyFormat cmper="4">
-      <semitones>31</semitones>
-      <scaleTones>7</scaleTones>
-    </keyFormat>
-    <keyFormat cmper="5">
-      <semitones>31</semitones>
-      <scaleTones>7</scaleTones>
-    </keyFormat>
-    <keyFormat cmper="16384">
-      <semitones>12</semitones>
-      <scaleTones>7</scaleTones>
-    </keyFormat>
-    <keyMap cmper="2">
-      <keych>
-        <diatonic/>
-      </keych>
-      <keych/>
-      <keych>
-        <diatonic/>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>6</hlevel>
-      </keych>
-    </keyMap>
-    <keyMap cmper="3">
-      <keych>
-        <diatonic/>
-      </keych>
-      <keych/>
-      <keych>
-        <diatonic/>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>6</hlevel>
-      </keych>
-    </keyMap>
-    <keyMap cmper="4">
-      <keych>
-        <diatonic/>
-      </keych>
-      <keych/>
-      <keych/>
-      <keych/>
-      <keych/>
-      <keych>
-        <diatonic/>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>6</hlevel>
-      </keych>
-      <keych>
-        <hlevel>6</hlevel>
-      </keych>
-      <keych>
-        <hlevel>6</hlevel>
-      </keych>
-      <keych/>
-      <keych/>
-    </keyMap>
-    <keyMap cmper="5">
-      <keych>
-        <diatonic/>
-      </keych>
-      <keych/>
-      <keych/>
-      <keych/>
-      <keych/>
-      <keych>
-        <diatonic/>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>6</hlevel>
-      </keych>
-      <keych>
-        <hlevel>6</hlevel>
-      </keych>
-      <keych>
-        <hlevel>6</hlevel>
-      </keych>
-      <keych/>
-      <keych/>
-    </keyMap>
-    <keyMap cmper="16384">
-      <keych>
-        <diatonic/>
-      </keych>
-      <keych/>
-      <keych>
-        <diatonic/>
-        <hlevel>1</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>2</hlevel>
-      </keych>
-      <keych/>
-      <keych/>
-      <keych>
-        <diatonic/>
-        <hlevel>3</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>4</hlevel>
-      </keych>
-      <keych/>
-      <keych>
-        <diatonic/>
-        <hlevel>5</hlevel>
-      </keych>
-      <keych>
-        <diatonic/>
-        <hlevel>6</hlevel>
-      </keych>
-      <keych/>
-    </keyMap>
-    <keysAttrib cmper="2"/>
-    <keysAttrib cmper="3"/>
-    <keysAttrib cmper="4">
-      <middleCKey>60</middleCKey>
-      <fontSym>5</fontSym>
-      <gotoKey>1</gotoKey>
-      <symbolList>1</symbolList>
-      <hasClefOctv/>
-    </keysAttrib>
-    <keysAttrib cmper="5">
-      <middleCKey>60</middleCKey>
-      <fontSym>5</fontSym>
-      <gotoKey>1</gotoKey>
-      <symbolList>2</symbolList>
-    </keysAttrib>
-    <keysAttrib cmper="16384">
-      <hasClefOctv/>
-    </keysAttrib>
     <layerAtts cmper="0">
       <restOffset>6</restOffset>
       <flipTies/>
@@ -2432,6 +1976,9 @@
       <useScoreInfoForPart/>
       <region>1</region>
     </measNumbRegion>
+    <metaArtic cmper="45">
+      <artic>3</artic>
+    </metaArtic>
     <metaClef cmper="49">
       <clef>0</clef>
     </metaClef>
@@ -2486,182 +2033,49 @@
     <metaClef cmper="73">
       <clef>17</clef>
     </metaClef>
-    <metaDynam cmper="45">
-      <number>7</number>
-      <isTextExpr/>
-    </metaDynam>
-    <metaKeySig cmper="45">
-      <keySig>
-        <key>1531</key>
-      </keySig>
-      <transpositionMode>chromatic</transpositionMode>
-      <doKeyWrap/>
-    </metaKeySig>
+    <metaTuplet cmper="45">
+      <symbolicNum>7</symbolicNum>
+      <symbolicDur>256</symbolicDur>
+      <refNum>4</refNum>
+      <refDur>256</refDur>
+      <autoBracketStyle>unbeamedOnly</autoBracketStyle>
+      <tupOffY>-148</tupOffY>
+      <numStyle>number</numStyle>
+      <allowHorz/>
+      <breakBracket/>
+      <matchHooks/>
+      <brackStyle>bracket</brackStyle>
+      <leftHookLen>14</leftHookLen>
+      <rightHookLen>14</rightHookLen>
+      <rightHookExt>-30</rightHookExt>
+    </metaTuplet>
     <measSpec cmper="1">
-      <width>600</width>
-      <keySig>
-        <key>252</key>
-      </keySig>
+      <width>877</width>
       <beats>4</beats>
       <divbeat>1024</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
+      <hasSmartShape/>
+      <posMode>beatchartPlusPos</posMode>
       <hasExpr/>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="2">
-      <width>600</width>
-      <keySig>
-        <key>261</key>
-      </keySig>
+      <width>432</width>
       <beats>4</beats>
       <divbeat>1024</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
-      <hasExpr/>
-      <barline>normal</barline>
-      <leftBarline>default</leftBarline>
-    </measSpec>
-    <measSpec cmper="3">
-      <width>600</width>
-      <keySig>
-        <key>766</key>
-      </keySig>
-      <beats>4</beats>
-      <divbeat>1024</divbeat>
-      <dispBeats>4</dispBeats>
-      <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
-      <hasExpr/>
-      <barline>normal</barline>
-      <leftBarline>default</leftBarline>
-    </measSpec>
-    <measSpec cmper="4">
-      <width>600</width>
-      <keySig>
-        <key>771</key>
-      </keySig>
-      <beats>4</beats>
-      <divbeat>1024</divbeat>
-      <dispBeats>4</dispBeats>
-      <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
-      <hasExpr/>
-      <barline>normal</barline>
-      <leftBarline>default</leftBarline>
-    </measSpec>
-    <measSpec cmper="5">
-      <width>600</width>
-      <keySig>
-        <key>16384</key>
-      </keySig>
-      <beats>4</beats>
-      <divbeat>1024</divbeat>
-      <dispBeats>4</dispBeats>
-      <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
-      <hasExpr/>
-      <barline>normal</barline>
-      <leftBarline>default</leftBarline>
-    </measSpec>
-    <measSpec cmper="6">
-      <width>600</width>
-      <keySig>
-        <key>1028</key>
-      </keySig>
-      <beats>4</beats>
-      <divbeat>1024</divbeat>
-      <dispBeats>4</dispBeats>
-      <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
-      <hasExpr/>
-      <barline>normal</barline>
-      <leftBarline>default</leftBarline>
-    </measSpec>
-    <measSpec cmper="7">
-      <width>600</width>
-      <keySig>
-        <key>1531</key>
-      </keySig>
-      <beats>4</beats>
-      <divbeat>1024</divbeat>
-      <dispBeats>4</dispBeats>
-      <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
-      <hasExpr/>
-      <barline>normal</barline>
-      <leftBarline>default</leftBarline>
-    </measSpec>
-    <measSpec cmper="8">
-      <width>600</width>
-      <keySig>
-        <key>1531</key>
-      </keySig>
-      <beats>4</beats>
-      <divbeat>1024</divbeat>
-      <dispBeats>4</dispBeats>
-      <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
+      <hasSmartShape/>
+      <posMode>beatchartPlusPos</posMode>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
     <measExprAssign cmper="1" inci="0">
       <textExprID>1</textExprID>
-      <horzEvpuOff>-12</horzEvpuOff>
-      <vertOff>54</vertOff>
+      <vertOff>-36</vertOff>
       <staffAssign>1</staffAssign>
-      <layer>1</layer>
-      <playbackStart>attach</playbackStart>
-    </measExprAssign>
-    <measExprAssign cmper="2" inci="0">
-      <textExprID>2</textExprID>
-      <horzEvpuOff>-8</horzEvpuOff>
-      <vertOff>54</vertOff>
-      <staffAssign>1</staffAssign>
-      <layer>1</layer>
-      <playbackStart>attach</playbackStart>
-    </measExprAssign>
-    <measExprAssign cmper="3" inci="0">
-      <textExprID>3</textExprID>
-      <horzEvpuOff>-15</horzEvpuOff>
-      <vertOff>58</vertOff>
-      <staffAssign>1</staffAssign>
-      <layer>1</layer>
-      <playbackStart>attach</playbackStart>
-    </measExprAssign>
-    <measExprAssign cmper="4" inci="0">
-      <textExprID>4</textExprID>
-      <horzEvpuOff>-4</horzEvpuOff>
-      <vertOff>62</vertOff>
-      <staffAssign>1</staffAssign>
-      <layer>1</layer>
-      <playbackStart>attach</playbackStart>
-    </measExprAssign>
-    <measExprAssign cmper="5" inci="0">
-      <textExprID>5</textExprID>
-      <horzEvpuOff>-23</horzEvpuOff>
-      <vertOff>58</vertOff>
-      <staffAssign>1</staffAssign>
-      <layer>1</layer>
-      <playbackStart>attach</playbackStart>
-    </measExprAssign>
-    <measExprAssign cmper="6" inci="0">
-      <textExprID>6</textExprID>
-      <horzEvpuOff>-18</horzEvpuOff>
-      <vertOff>58</vertOff>
-      <staffAssign>1</staffAssign>
-      <layer>1</layer>
-      <playbackStart>attach</playbackStart>
-    </measExprAssign>
-    <measExprAssign cmper="7" inci="0">
-      <textExprID>7</textExprID>
-      <horzEvpuOff>5</horzEvpuOff>
-      <vertOff>54</vertOff>
-      <staffAssign>1</staffAssign>
-      <layer>1</layer>
       <playbackStart>attach</playbackStart>
     </measExprAssign>
     <textBlock cmper="1">
@@ -2679,9 +2093,8 @@
       <lineSpacingPercent>100</lineSpacingPercent>
       <newPos36/>
       <showShape/>
+      <noExpandSingleWord/>
       <wordWrap/>
-      <roundCorners/>
-      <cornerRadius>512</cornerRadius>
       <textTag>expression</textTag>
     </textBlock>
     <textBlock cmper="3">
@@ -2689,60 +2102,8 @@
       <lineSpacingPercent>100</lineSpacingPercent>
       <newPos36/>
       <showShape/>
-      <wordWrap/>
-      <roundCorners/>
-      <cornerRadius>512</cornerRadius>
-      <textTag>expression</textTag>
-    </textBlock>
-    <textBlock cmper="4">
-      <textID>3</textID>
-      <lineSpacingPercent>100</lineSpacingPercent>
-      <newPos36/>
-      <showShape/>
-      <wordWrap/>
-      <roundCorners/>
-      <cornerRadius>512</cornerRadius>
-      <textTag>expression</textTag>
-    </textBlock>
-    <textBlock cmper="5">
-      <textID>4</textID>
-      <lineSpacingPercent>100</lineSpacingPercent>
-      <newPos36/>
-      <showShape/>
-      <wordWrap/>
-      <roundCorners/>
-      <cornerRadius>512</cornerRadius>
-      <textTag>expression</textTag>
-    </textBlock>
-    <textBlock cmper="6">
-      <textID>5</textID>
-      <lineSpacingPercent>100</lineSpacingPercent>
-      <newPos36/>
-      <showShape/>
-      <wordWrap/>
-      <roundCorners/>
-      <cornerRadius>512</cornerRadius>
-      <textTag>expression</textTag>
-    </textBlock>
-    <textBlock cmper="7">
-      <textID>6</textID>
-      <lineSpacingPercent>100</lineSpacingPercent>
-      <newPos36/>
-      <showShape/>
-      <wordWrap/>
-      <roundCorners/>
-      <cornerRadius>512</cornerRadius>
-      <textTag>expression</textTag>
-    </textBlock>
-    <textBlock cmper="8">
-      <textID>7</textID>
-      <lineSpacingPercent>100</lineSpacingPercent>
-      <newPos36/>
-      <showShape/>
       <noExpandSingleWord/>
       <wordWrap/>
-      <roundCorners/>
-      <cornerRadius>512</cornerRadius>
       <textTag>expression</textTag>
     </textBlock>
     <playbackRoute cmper="1">
@@ -2776,11 +2137,6 @@
     </playDefs>
     <playDumpText cmper="1"/>
     <playDumpText cmper="2"/>
-    <playDumpText cmper="3"/>
-    <playDumpText cmper="4"/>
-    <playDumpText cmper="5"/>
-    <playDumpText cmper="6"/>
-    <playDumpText cmper="7"/>
     <shapeData cmper="1">
       <data>0</data>
       <data>-32</data>
@@ -2840,7 +2196,7 @@
       <data>0</data>
       <data>0</data>
       <data>0</data>
-      <data>0</data>
+      <data>20</data>
       <data>9</data>
       <data>0</data>
       <data>84</data>
@@ -2855,7 +2211,7 @@
       <data>0</data>
       <data>0</data>
       <data>0</data>
-      <data>0</data>
+      <data>20</data>
       <data>9</data>
       <data>0</data>
       <data>65</data>
@@ -2870,7 +2226,7 @@
       <data>0</data>
       <data>0</data>
       <data>0</data>
-      <data>0</data>
+      <data>20</data>
       <data>9</data>
       <data>0</data>
       <data>66</data>
@@ -3037,6 +2393,46 @@
       <data>0</data>
       <data>66</data>
     </shapeData>
+    <shapeData cmper="6">
+      <data>0</data>
+      <data>2</data>
+      <data>0</data>
+      <data>2</data>
+      <data>28</data>
+      <data>2</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>28</data>
+      <data>0</data>
+    </shapeData>
+    <shapeData cmper="7">
+      <data>0</data>
+      <data>2</data>
+      <data>0</data>
+      <data>2</data>
+      <data>28</data>
+      <data>2</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>28</data>
+      <data>0</data>
+    </shapeData>
     <shapeDef cmper="1">
       <instList>1</instList>
       <dataList>1</dataList>
@@ -3060,6 +2456,16 @@
       <instList>5</instList>
       <dataList>5</dataList>
       <shapeType>clef</shapeType>
+    </shapeDef>
+    <shapeDef cmper="6">
+      <instList>6</instList>
+      <dataList>6</dataList>
+      <shapeType>articulation</shapeType>
+    </shapeDef>
+    <shapeDef cmper="7">
+      <instList>7</instList>
+      <dataList>7</dataList>
+      <shapeType>articulation</shapeType>
     </shapeDef>
     <shapeList cmper="1">
       <instruct>
@@ -3327,6 +2733,180 @@
         <tag>stroke</tag>
       </instruct>
     </shapeList>
+    <shapeList cmper="6">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="7">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <smartShape cmper="1">
+      <shapeType>slurAuto</shapeType>
+      <entryBased/>
+      <rotate/>
+      <yBreakType>opposite</yBreakType>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>1</meas>
+          <entryNum>9</entryNum>
+        </endPt>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>1</meas>
+          <entryNum>15</entryNum>
+        </endPt>
+      </endTermSeg>
+    </smartShape>
+    <smartShape cmper="2">
+      <shapeType>octaveUp</shapeType>
+      <makeHorz/>
+      <startTermSeg>
+        <endPt>
+          <inst>3</inst>
+          <meas>2</meas>
+          <edu>2995</edu>
+        </endPt>
+        <endPtAdj>
+          <y>90</y>
+          <on/>
+        </endPtAdj>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>3</inst>
+          <meas>4</meas>
+          <edu>224</edu>
+        </endPt>
+        <endPtAdj>
+          <y>88</y>
+          <on/>
+        </endPtAdj>
+        <breakAdj>
+          <x>-66</x>
+          <on/>
+          <contextDir>over</contextDir>
+        </breakAdj>
+      </endTermSeg>
+    </smartShape>
+    <smartShape cmper="3">
+      <shapeType>slurAuto</shapeType>
+      <entryBased/>
+      <rotate/>
+      <yBreakType>opposite</yBreakType>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>1</meas>
+          <entryNum>18</entryNum>
+        </endPt>
+        <endPtAdj>
+          <y>6</y>
+          <on/>
+          <contextDir>over</contextDir>
+          <contextEntCnct>stemRightTop</contextEntCnct>
+        </endPtAdj>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>2</meas>
+          <entryNum>23</entryNum>
+        </endPt>
+        <endPtAdj>
+          <x>1</x>
+          <y>25</y>
+          <on/>
+          <contextDir>over</contextDir>
+          <contextEntCnct>headRightTop</contextEntCnct>
+        </endPtAdj>
+      </endTermSeg>
+      <fullCtlPtAdj>
+        <startCtlPtX>501</startCtlPtX>
+        <startCtlPtY>67</startCtlPtY>
+        <endCtlPtX>-501</endCtlPtX>
+        <endCtlPtY>83</endCtlPtY>
+        <on/>
+        <contextDir>over</contextDir>
+      </fullCtlPtAdj>
+    </smartShape>
+    <smartShape cmper="4">
+      <shapeType>slurAuto</shapeType>
+      <entryBased/>
+      <rotate/>
+      <yBreakType>opposite</yBreakType>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>2</meas>
+          <entryNum>24</entryNum>
+        </endPt>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>2</meas>
+          <entryNum>26</entryNum>
+        </endPt>
+      </endTermSeg>
+    </smartShape>
+    <smartShapeMeasMark cmper="1" inci="0">
+      <shapeNum>1</shapeNum>
+    </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="1" inci="1">
+      <shapeNum>3</shapeNum>
+    </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="2" inci="0">
+      <shapeNum>3</shapeNum>
+    </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="2" inci="1">
+      <shapeNum>4</shapeNum>
+    </smartShapeMeasMark>
     <ssLineStyle cmper="1">
       <lineStyle>char</lineStyle>
       <charParams>
@@ -3351,8 +2931,8 @@
     </ssLineStyle>
     <staffSystemSpec cmper="1">
       <startMeas>1</startMeas>
-      <endMeas>2</endMeas>
-      <horzPercent>31250</horzPercent>
+      <endMeas>3</endMeas>
+      <horzPercent>16715</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-432</top>
@@ -3360,30 +2940,6 @@
       <bottom>-200</bottom>
       <scaleVert/>
       <scaleContentOnly/>
-    </staffSystemSpec>
-    <staffSystemSpec cmper="2">
-      <startMeas>2</startMeas>
-      <endMeas>6</endMeas>
-      <horzPercent>7304</horzPercent>
-      <ssysPercent>100</ssysPercent>
-      <staffHeight>5248</staffHeight>
-      <top>-68</top>
-      <bottom>-200</bottom>
-      <scaleVert/>
-      <scaleContentOnly/>
-      <distanceToPrev>-76</distanceToPrev>
-    </staffSystemSpec>
-    <staffSystemSpec cmper="3">
-      <startMeas>6</startMeas>
-      <endMeas>9</endMeas>
-      <horzPercent>11767</horzPercent>
-      <ssysPercent>100</ssysPercent>
-      <staffHeight>5248</staffHeight>
-      <top>-68</top>
-      <bottom>-200</bottom>
-      <scaleVert/>
-      <scaleContentOnly/>
-      <distanceToPrev>-76</distanceToPrev>
     </staffSystemSpec>
     <staffPlayData cmper="1">
       <chords>
@@ -3475,45 +3031,22 @@
     <textExprDef cmper="1">
       <textIDKey>2</textIDKey>
       <categoryID>7</categoryID>
-      <horzMeasExprAlign>manual</horzMeasExprAlign>
-      <vertMeasExprAlign>manual</vertMeasExprAlign>
+      <value>101</value>
+      <playType>amplitude</playType>
+      <horzMeasExprAlign>leftOfPrimaryNotehead</horzMeasExprAlign>
+      <horzExprAlign>center</horzExprAlign>
+      <vertMeasExprAlign>belowStaffOrEntry</vertMeasExprAlign>
+      <yAdjustEntry>-54</yAdjustEntry>
     </textExprDef>
     <textExprDef cmper="2">
       <textIDKey>3</textIDKey>
       <categoryID>7</categoryID>
-      <horzMeasExprAlign>manual</horzMeasExprAlign>
-      <vertMeasExprAlign>manual</vertMeasExprAlign>
-    </textExprDef>
-    <textExprDef cmper="3">
-      <textIDKey>4</textIDKey>
-      <categoryID>7</categoryID>
-      <horzMeasExprAlign>manual</horzMeasExprAlign>
-      <vertMeasExprAlign>manual</vertMeasExprAlign>
-    </textExprDef>
-    <textExprDef cmper="4">
-      <textIDKey>5</textIDKey>
-      <categoryID>7</categoryID>
-      <horzMeasExprAlign>manual</horzMeasExprAlign>
-      <vertMeasExprAlign>manual</vertMeasExprAlign>
-    </textExprDef>
-    <textExprDef cmper="5">
-      <textIDKey>6</textIDKey>
-      <categoryID>7</categoryID>
-      <horzMeasExprAlign>manual</horzMeasExprAlign>
-      <vertMeasExprAlign>manual</vertMeasExprAlign>
-    </textExprDef>
-    <textExprDef cmper="6">
-      <textIDKey>7</textIDKey>
-      <categoryID>7</categoryID>
-      <horzMeasExprAlign>manual</horzMeasExprAlign>
-      <vertMeasExprAlign>manual</vertMeasExprAlign>
-    </textExprDef>
-    <textExprDef cmper="7">
-      <textIDKey>8</textIDKey>
-      <categoryID>7</categoryID>
-      <horzMeasExprAlign>manual</horzMeasExprAlign>
-      <vertMeasExprAlign>manual</vertMeasExprAlign>
-      <descStr> (Copy)</descStr>
+      <value>101</value>
+      <playType>amplitude</playType>
+      <horzMeasExprAlign>leftOfPrimaryNotehead</horzMeasExprAlign>
+      <horzExprAlign>center</horzExprAlign>
+      <vertMeasExprAlign>belowStaffOrEntry</vertMeasExprAlign>
+      <yAdjustEntry>-54</yAdjustEntry>
     </textExprDef>
     <viSetup cmper="0"/>
     <partDef cmper="0">
@@ -3526,37 +3059,6 @@
       <showTransposed/>
       <studioViewIUlist>65400</studioViewIUlist>
     </partGlobals>
-    <markingsDialogList cmper="1">
-      <numElements>7</numElements>
-      <item>
-        <cmper>1</cmper>
-        <tag>textExprDef</tag>
-      </item>
-      <item>
-        <cmper>2</cmper>
-        <tag>textExprDef</tag>
-      </item>
-      <item>
-        <cmper>3</cmper>
-        <tag>textExprDef</tag>
-      </item>
-      <item>
-        <cmper>4</cmper>
-        <tag>textExprDef</tag>
-      </item>
-      <item>
-        <cmper>5</cmper>
-        <tag>textExprDef</tag>
-      </item>
-      <item>
-        <cmper>6</cmper>
-        <tag>textExprDef</tag>
-      </item>
-      <item>
-        <cmper>7</cmper>
-        <tag>textExprDef</tag>
-      </item>
-    </markingsDialogList>
     <markingsCategory cmper="1">
       <categoryType>dynamics</categoryType>
       <textFont>
@@ -3797,6 +3299,37 @@
     <bypassFxValue cmper="102"/>
   </others>
   <details>
+    <articAssign entnum="13" inci="0">
+      <articDef>1</articDef>
+      <horzOff>2</horzOff>
+      <neverStack/>
+    </articAssign>
+    <articAssign entnum="14" inci="0">
+      <articDef>1</articDef>
+      <horzOff>2</horzOff>
+      <neverStack/>
+    </articAssign>
+    <articAssign entnum="15" inci="0">
+      <articDef>1</articDef>
+      <horzOff>2</horzOff>
+      <neverStack/>
+    </articAssign>
+    <articAssign entnum="16" inci="0">
+      <articDef>2</articDef>
+      <horzOff>1</horzOff>
+      <neverStack/>
+    </articAssign>
+    <articAssign entnum="24" inci="0">
+      <articDef>3</articDef>
+      <horzOff>3</horzOff>
+      <neverStack/>
+    </articAssign>
+    <articAssign entnum="25" inci="0">
+      <articDef>3</articDef>
+      <horzOff>3</horzOff>
+      <vertOff>6</vertOff>
+      <neverStack/>
+    </articAssign>
     <baselinesChords cmper1="0" cmper2="0">
       <basedisp>144</basedisp>
     </baselinesChords>
@@ -3926,952 +3459,31 @@
       <basedisp>-504</basedisp>
       <lyricNumber>10</lyricNumber>
     </baselinesLyricsVerse>
-    <beamAltPrimDownStem entnum="35">
+    <beamAltPrimDownStem entnum="9">
       <yAdd>6</yAdd>
-      <syAdd>18</syAdd>
       <context>onStandardNote</context>
       <beamWidth>-1</beamWidth>
     </beamAltPrimDownStem>
-    <beamAltPrimDownStem entnum="43">
+    <beamAltPrimDownStem entnum="17">
       <yAdd>6</yAdd>
-      <syAdd>18</syAdd>
       <context>onStandardNote</context>
       <beamWidth>-1</beamWidth>
     </beamAltPrimDownStem>
-    <beamAltPrimDownStem entnum="51">
-      <yAdd>6</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimDownStem>
-    <beamAltPrimDownStem entnum="75">
-      <yAdd>6</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimDownStem>
-    <beamAltPrimDownStem entnum="82">
-      <yAdd>6</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimDownStem>
-    <beamAltPrimDownStem entnum="94">
-      <yAdd>6</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimDownStem>
-    <beamAltPrimDownStem entnum="101">
-      <yAdd>6</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimDownStem>
-    <beamAltPrimUpStem entnum="31">
-      <yAdd>-30</yAdd>
-      <syAdd>18</syAdd>
+    <beamAltPrimUpStem entnum="18">
+      <yAdd>-36</yAdd>
+      <syAdd>24</syAdd>
       <context>onStandardNote</context>
       <beamWidth>-1</beamWidth>
     </beamAltPrimUpStem>
-    <beamAltPrimUpStem entnum="39">
-      <yAdd>-30</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimUpStem>
-    <beamAltPrimUpStem entnum="47">
-      <yAdd>-30</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimUpStem>
-    <beamAltPrimUpStem entnum="71">
-      <yAdd>-30</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimUpStem>
-    <beamAltPrimUpStem entnum="78">
-      <yAdd>-30</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimUpStem>
-    <beamAltPrimUpStem entnum="90">
-      <yAdd>-30</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimUpStem>
-    <beamAltPrimUpStem entnum="97">
-      <yAdd>-30</yAdd>
-      <syAdd>18</syAdd>
-      <context>onStandardNote</context>
-      <beamWidth>-1</beamWidth>
-    </beamAltPrimUpStem>
-    <clefOctvFlats cmper1="4" cmper2="0">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="1">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="2">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="3">
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="4">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="5">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="6">
-      <ocAdds>-3</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-3</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-3</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-3</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="7">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="8">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="9">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="10">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="11">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="12">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="13">
-      <ocAdds>1</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="14">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="15">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="16">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvFlats cmper1="4" cmper2="17">
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvFlats>
-    <clefOctvSharps cmper1="4" cmper2="0">
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="1">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="2">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="3">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="4">
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="5">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="6">
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-3</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-3</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="7">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="8">
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="9">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="10">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="11">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="12">
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="13">
-      <ocAdds>2</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="14">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="15">
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="16">
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="4" cmper2="17">
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="0">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="1">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="2">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="3">
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="4">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="5">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="6">
-      <ocAdds>-3</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-3</ocAdds>
-      <ocAdds>-2</ocAdds>
-      <ocAdds>-3</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="7">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="8">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="9">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="10">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="11">
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="12">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="13">
-      <ocAdds>1</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>2</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="14">
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>-1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="15">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="16">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
-    <clefOctvSharps cmper1="16384" cmper2="17">
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>1</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-      <ocAdds>0</ocAdds>
-    </clefOctvSharps>
     <gfhold cmper1="1" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
-      <frame1>9</frame1>
+      <frame1>3</frame1>
     </gfhold>
     <gfhold cmper1="1" cmper2="2">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
-      <frame1>10</frame1>
-    </gfhold>
-    <gfhold cmper1="1" cmper2="3">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>11</frame1>
-    </gfhold>
-    <gfhold cmper1="1" cmper2="4">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>19</frame1>
-    </gfhold>
-    <gfhold cmper1="1" cmper2="5">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>20</frame1>
-    </gfhold>
-    <gfhold cmper1="1" cmper2="6">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>25</frame1>
-    </gfhold>
-    <gfhold cmper1="1" cmper2="7">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>26</frame1>
+      <frame1>4</frame1>
     </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
@@ -4883,126 +3495,133 @@
       <clefPercent>75</clefPercent>
       <frame1>2</frame1>
     </gfhold>
-    <gfhold cmper1="32767" cmper2="3">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>3</frame1>
-    </gfhold>
-    <gfhold cmper1="32767" cmper2="4">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>4</frame1>
-    </gfhold>
-    <gfhold cmper1="32767" cmper2="5">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>5</frame1>
-    </gfhold>
-    <gfhold cmper1="32767" cmper2="6">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>12</frame1>
-    </gfhold>
-    <gfhold cmper1="32767" cmper2="7">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>13</frame1>
-    </gfhold>
-    <gfhold cmper1="32767" cmper2="8">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>14</frame1>
-    </gfhold>
-    <keySymList cmper1="1" cmper2="0">
-      <string>n</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="1">
-      <string>µ</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="2">
-      <string>m</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="3">
-      <string>÷</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="4">
-      <string>M</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="5">
-      <string>Mµ</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="6">
-      <string>Mm</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="7">
-      <string>M÷</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="65529">
-      <string>Bbbb</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="65530">
-      <string>bbb</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="65531">
-      <string>Bº</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="65532">
-      <string>º</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="65533">
-      <string>Bb</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="65534">
-      <string>b</string>
-    </keySymList>
-    <keySymList cmper1="1" cmper2="65535">
-      <string>B</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="0">
-      <string>n</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="1">
-      <string>µ</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="2">
-      <string>m</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="3">
-      <string>÷</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="4">
-      <string>M</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="5">
-      <string>Mµ</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="6">
-      <string>Mm</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="7">
-      <string>M÷</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="65529">
-      <string>Bbbb</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="65530">
-      <string>bbb</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="65531">
-      <string>Bº</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="65532">
-      <string>º</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="65533">
-      <string>Bb</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="65534">
-      <string>b</string>
-    </keySymList>
-    <keySymList cmper1="2" cmper2="65535">
-      <string>B</string>
-    </keySymList>
+    <smartShapeEntryMark entnum="9" inci="0">
+      <shapeNum>1</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="15" inci="0">
+      <shapeNum>1</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="18" inci="0">
+      <shapeNum>3</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="23" inci="0">
+      <shapeNum>3</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="24" inci="0">
+      <shapeNum>4</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="26" inci="0">
+      <shapeNum>4</shapeNum>
+    </smartShapeEntryMark>
+    <tieAlterEnd entnum="23" inci="0">
+      <noteID>1</noteID>
+      <xEnd>4</xEnd>
+      <afterSingleDotLocal/>
+      <afterSingleDotOn/>
+      <afterMultiDotsLocal/>
+      <afterMultiDotsOn/>
+      <shiftForSecondsLocal/>
+      <shiftForSecondsOn/>
+      <beforeSingleAcciLocal/>
+      <beforeSingleAcciOn/>
+      <yStart>-17</yStart>
+      <yEnd>-17</yEnd>
+      <stPtAdjOn/>
+      <stPtEntCnct>systemStart</stPtEntCnct>
+      <stPtContext>under</stPtContext>
+      <enPtAdjOn/>
+      <enPtEntCnct>noteLeftNoteBottom</enPtEntCnct>
+      <enPtContext>under</enPtContext>
+    </tieAlterEnd>
+    <tieAlterStart entnum="17" inci="0">
+      <noteID>1</noteID>
+      <xStart>8</xStart>
+      <xEnd>-8</xEnd>
+      <afterSingleDotLocal/>
+      <afterSingleDotOn/>
+      <afterMultiDotsLocal/>
+      <afterMultiDotsOn/>
+      <shiftForSecondsLocal/>
+      <shiftForSecondsOn/>
+      <beforeSingleAcciLocal/>
+      <beforeSingleAcciOn/>
+      <yStart>-15</yStart>
+      <yEnd>-15</yEnd>
+      <stPtAdjOn/>
+      <stPtEntCnct>noteCenterNoteBottom</stPtEntCnct>
+      <stPtContext>under</stPtContext>
+      <enPtAdjOn/>
+      <enPtEntCnct>noteLeftNoteBottom</enPtEntCnct>
+      <enPtContext>under</enPtContext>
+    </tieAlterStart>
+    <tieAlterStart entnum="21" inci="0">
+      <noteID>1</noteID>
+      <xEnd>272</xEnd>
+      <outerLocal/>
+      <outerOn/>
+      <afterSingleDotLocal/>
+      <afterSingleDotOn/>
+      <afterMultiDotsLocal/>
+      <afterMultiDotsOn/>
+      <shiftForSecondsLocal/>
+      <shiftForSecondsOn/>
+      <beforeSingleAcciLocal/>
+      <beforeSingleAcciOn/>
+      <yEnd>8</yEnd>
+      <enPtAdjOn/>
+      <enPtEntCnct>entryCenterNoteTop</enPtEntCnct>
+      <enPtContext>over</enPtContext>
+    </tieAlterStart>
+    <tieAlterStart entnum="22" inci="0">
+      <noteID>2</noteID>
+      <afterSingleDotLocal/>
+      <afterSingleDotOn/>
+      <afterMultiDotsLocal/>
+      <afterMultiDotsOn/>
+      <shiftForSecondsLocal/>
+      <shiftForSecondsOn/>
+      <beforeSingleAcciLocal/>
+      <beforeSingleAcciOn/>
+      <down/>
+      <freeze/>
+    </tieAlterStart>
+    <tieAlterStart entnum="22" inci="1">
+      <noteID>1</noteID>
+      <xStart>8</xStart>
+      <xEnd>-8</xEnd>
+      <afterSingleDotLocal/>
+      <afterSingleDotOn/>
+      <afterMultiDotsLocal/>
+      <afterMultiDotsOn/>
+      <shiftForSecondsLocal/>
+      <shiftForSecondsOn/>
+      <beforeSingleAcciLocal/>
+      <beforeSingleAcciOn/>
+      <yStart>-15</yStart>
+      <yEnd>-15</yEnd>
+      <stPtAdjOn/>
+      <stPtEntCnct>noteCenterNoteBottom</stPtEntCnct>
+      <stPtContext>under</stPtContext>
+      <enPtAdjOn/>
+      <enPtEntCnct>noteLeftNoteBottom</enPtEntCnct>
+      <enPtContext>under</enPtContext>
+    </tieAlterStart>
+    <tupletDef entnum="9" inci="0">
+      <symbolicNum>7</symbolicNum>
+      <symbolicDur>256</symbolicDur>
+      <refNum>4</refNum>
+      <refDur>256</refDur>
+      <autoBracketStyle>unbeamedOnly</autoBracketStyle>
+      <tupOffY>-148</tupOffY>
+      <numStyle>number</numStyle>
+      <allowHorz/>
+      <breakBracket/>
+      <matchHooks/>
+      <brackStyle>bracket</brackStyle>
+      <leftHookLen>14</leftHookLen>
+      <rightHookLen>14</rightHookLen>
+      <rightHookExt>-30</rightHookExt>
+    </tupletDef>
   </details>
   <entries>
     <entry entnum="1" prev="0" next="2">
@@ -5089,7 +3708,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="8" prev="7" next="9">
+    <entry entnum="8" prev="7" next="0">
       <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -5101,1067 +3720,311 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="9" prev="8" next="10">
-      <dura>1024</dura>
+    <entry entnum="9" prev="0" next="10">
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <tupletStart/>
+      <beam/>
+      <stemDetail/>
+      <smartShapeDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
+        <harmLev>12</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="10" prev="9" next="11">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
+        <harmLev>14</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="11" prev="10" next="12">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
+        <harmLev>16</harmLev>
+        <harmAlt>-1</harmAlt>
         <isValid/>
+        <showAcci/>
       </note>
     </entry>
     <entry entnum="12" prev="11" next="13">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
+        <harmLev>10</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="13" prev="12" next="14">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <articDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
+        <harmLev>16</harmLev>
+        <harmAlt>-1</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="14" prev="13" next="15">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <articDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
+        <harmLev>17</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="15" prev="14" next="16">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <articDetail/>
+      <smartShapeDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
+        <harmLev>12</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="16" prev="15" next="17">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <dura>2048</dura>
+      <numNotes>3</numNotes>
       <isValid/>
       <isNote/>
+      <articDetail/>
+      <beam/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
+        <harmLev>11</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
+      </note>
+      <note id="2">
+        <harmLev>13</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+        <downStemSecond/>
+      </note>
+      <note id="3">
+        <harmLev>14</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+        <upStemSecond/>
       </note>
     </entry>
     <entry entnum="17" prev="16" next="18">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <controller/>
+      <dotTieAlt/>
+      <beam/>
+      <stemDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
+        <harmLev>10</harmLev>
+        <harmAlt>1</harmAlt>
         <isValid/>
+        <tieStart/>
+        <showAcci/>
       </note>
     </entry>
     <entry entnum="18" prev="17" next="19">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <v2/>
+      <beam/>
+      <stemDetail/>
+      <upStem/>
+      <smartShapeDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
+        <harmLev>10</harmLev>
+        <harmAlt>1</harmAlt>
         <isValid/>
       </note>
     </entry>
     <entry entnum="19" prev="18" next="20">
-      <dura>1024</dura>
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="20" prev="19" next="55">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="31" prev="0" next="32">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
+      <v2/>
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>-3</harmLev>
+        <harmLev>12</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="20" prev="19" next="21">
+      <dura>256</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <v2/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>14</harmLev>
         <harmAlt>1</harmAlt>
         <isValid/>
         <showAcci/>
       </note>
     </entry>
-    <entry entnum="32" prev="31" next="33">
-      <dura>512</dura>
+    <entry entnum="21" prev="20" next="22">
+      <dura>256</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <v2/>
+      <dotTieAlt/>
       <upStem/>
       <sorted/>
       <note id="1">
-        <harmLev>-2</harmLev>
+        <harmLev>16</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+        <tieStart/>
+        <showAcci/>
+      </note>
+    </entry>
+    <entry entnum="22" prev="21" next="23">
+      <dura>768</dura>
+      <numNotes>2</numNotes>
+      <isValid/>
+      <isNote/>
+      <dotTieAlt/>
+      <sorted/>
+      <note id="1">
+        <harmLev>10</harmLev>
         <harmAlt>1</harmAlt>
         <isValid/>
-        <showAcci/>
+        <tieStart/>
+        <tieEnd/>
       </note>
-    </entry>
-    <entry entnum="33" prev="32" next="34">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>-1</harmLev>
+      <note id="2">
+        <harmLev>12</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
+        <tieStart/>
       </note>
     </entry>
-    <entry entnum="34" prev="33" next="35">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
+    <entry entnum="23" prev="22" next="24">
+      <dura>1024</dura>
+      <numNotes>3</numNotes>
       <isValid/>
       <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="35" prev="34" next="36">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
+      <dotTieAlt/>
       <beam/>
-      <stemDetail/>
+      <smartShapeDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>1</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="36" prev="35" next="37">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="37" prev="36" next="38">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>3</harmLev>
+        <harmLev>10</harmLev>
         <harmAlt>1</harmAlt>
         <isValid/>
-        <showAcci/>
+        <tieEnd/>
       </note>
-    </entry>
-    <entry entnum="38" prev="37" next="39">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>4</harmLev>
+      <note id="2">
+        <harmLev>12</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
-        <showAcci/>
+        <tieEnd/>
+      </note>
+      <note id="3">
+        <harmLev>16</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+        <tieEnd/>
       </note>
     </entry>
-    <entry entnum="39" prev="38" next="40">
+    <entry entnum="24" prev="23" next="25">
       <dura>512</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <articDetail/>
       <beam/>
-      <stemDetail/>
-      <upStem/>
+      <smartShapeDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>-2</harmLev>
+        <harmLev>13</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
     </entry>
-    <entry entnum="40" prev="39" next="41">
+    <entry entnum="25" prev="24" next="26">
       <dura>512</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
-      <upStem/>
+      <articDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>-1</harmLev>
+        <harmLev>12</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
+        <tieStart/>
       </note>
     </entry>
-    <entry entnum="41" prev="40" next="42">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>0</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="42" prev="41" next="43">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>1</harmLev>
-        <harmAlt>-2</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="43" prev="42" next="44">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <sorted/>
-      <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="44" prev="43" next="45">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>3</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="45" prev="44" next="46">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <flatBeam/>
-      <note id="1">
-        <harmLev>4</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="46" prev="45" next="47">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>5</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="47" prev="46" next="48">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>0</harmLev>
-        <harmAlt>1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="48" prev="47" next="49">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>1</harmLev>
-        <harmAlt>1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="49" prev="48" next="50">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="50" prev="49" next="51">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>3</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="51" prev="50" next="52">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <sorted/>
-      <note id="1">
-        <harmLev>4</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="52" prev="51" next="53">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>5</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="53" prev="52" next="54">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="54" prev="53" next="71">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>7</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="55" prev="20" next="56">
+    <entry entnum="26" prev="25" next="27">
       <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="56" prev="55" next="57">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="57" prev="56" next="58">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="58" prev="57" next="59">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="59" prev="58" next="60">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="60" prev="59" next="61">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="61" prev="60" next="62">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="62" prev="61" next="63">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="63" prev="62" next="64">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="64" prev="63" next="65">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="65" prev="64" next="66">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="66" prev="65" next="0">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="67" prev="77" next="78">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <dummy/>
-      <sorted/>
-      <note id="1">
-        <harmLev>9</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="71" prev="54" next="72">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
       <beam/>
-      <stemDetail/>
-      <upStem/>
+      <smartShapeDetail/>
       <sorted/>
       <note id="1">
-        <harmLev>2</harmLev>
+        <harmLev>12</harmLev>
         <harmAlt>0</harmAlt>
         <isValid/>
-        <showAcci/>
+        <tieEnd/>
       </note>
     </entry>
-    <entry entnum="72" prev="71" next="73">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
+    <entry entnum="27" prev="26" next="0">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
       <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>3</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="73" prev="72" next="74">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>4</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="74" prev="73" next="75">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>5</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="75" prev="74" next="76">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
+      <floatRest/>
       <beam/>
-      <stemDetail/>
       <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="76" prev="75" next="77">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>7</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="77" prev="76" next="67">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>8</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="78" prev="67" next="79">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>1</harmLev>
-        <harmAlt>1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="79" prev="78" next="80">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="80" prev="79" next="81">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>3</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="81" prev="80" next="82">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>4</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="82" prev="81" next="83">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <sorted/>
-      <note id="1">
-        <harmLev>5</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="83" prev="82" next="84">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="84" prev="83" next="85">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>7</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="85" prev="84" next="90">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>8</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="86" prev="96" next="97">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <dummy/>
-      <sorted/>
-      <note id="1">
-        <harmLev>7</harmLev>
-        <harmAlt>-1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="90" prev="85" next="91">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="91" prev="90" next="92">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>1</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="92" prev="91" next="93">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>-2</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="93" prev="92" next="94">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>3</harmLev>
-        <harmAlt>-2</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="94" prev="93" next="95">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <sorted/>
-      <note id="1">
-        <harmLev>4</harmLev>
-        <harmAlt>-2</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="95" prev="94" next="96">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>5</harmLev>
-        <harmAlt>1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="96" prev="95" next="86">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>-2</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="97" prev="86" next="98">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>-4</harmLev>
-        <harmAlt>2</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="98" prev="97" next="99">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>-3</harmLev>
-        <harmAlt>2</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="99" prev="98" next="100">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>-2</harmLev>
-        <harmAlt>2</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="100" prev="99" next="101">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <upStem/>
-      <sorted/>
-      <note id="1">
-        <harmLev>-1</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="101" prev="100" next="102">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <beam/>
-      <stemDetail/>
-      <sorted/>
-      <note id="1">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="102" prev="101" next="103">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>1</harmLev>
-        <harmAlt>3</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="103" prev="102" next="104">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>2</harmLev>
-        <harmAlt>2</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
-    </entry>
-    <entry entnum="104" prev="103" next="0">
-      <dura>512</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <dummy/>
-      <sorted/>
-      <note id="1">
-        <harmLev>3</harmLev>
-        <harmAlt>1</harmAlt>
-        <isValid/>
-        <showAcci/>
-      </note>
     </entry>
   </entries>
   <texts>
     <blockText number="1">^fontid(1)^size(12)^nfx(0)Score</blockText>
-    <expression number="1">^font(Times New Roman,4096)^size(12)^nfx(0)Ab Major</expression>
-    <expression number="2">^font(Times New Roman,4096)^size(12)^nfx(0)G# minor</expression>
-    <expression number="3">^font(Times New Roman,4096)^size(12)^nfx(0)Eb Lydian</expression>
-    <expression number="4">^font(Times New Roman,4096)^size(12)^nfx(0)C# Phrygian</expression>
-    <expression number="5">^font(Times New Roman,4096)^size(12)^nfx(0)D Freyish (non-linear)</expression>
-    <expression number="6">^font(Times New Roman,4096)^size(12)^nfx(0)E Major 31-EDO</expression>
-    <expression number="7">^font(Times New Roman,4096)^size(12)^nfx(0)Bb major 31-EDO</expression>
+    <expression number="1">^font(Font0,0)^size(24)^nfx(0)Ä</expression>
+    <expression number="2">^font(Font0,0)^size(24)^nfx(0)ffz</expression>
   </texts>
 </finale>

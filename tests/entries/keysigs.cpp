@@ -95,7 +95,6 @@ TEST(KeySigs, Test12EDO)
     }
 }
 
- 
 TEST(KeySigs, Test31EDO)
 {
     std::vector<char> xml;
@@ -161,4 +160,87 @@ TEST(KeySigs, Test31EDO)
         });
         EXPECT_EQ(x, expectedNotes.size());            
     }
+}
+
+TEST(KeySigs, PopulateKeyAttributes)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "keysigs.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto keyAttributes = others->get<others::KeyAttributes>(SCORE_PARTID, 5);
+    ASSERT_TRUE(keyAttributes);
+
+    // Fields populated from XML
+    EXPECT_EQ(keyAttributes->middleCKey, 60);
+    EXPECT_EQ(keyAttributes->fontSym, Cmper(5));
+    EXPECT_EQ(keyAttributes->gotoKey, 1);
+    EXPECT_EQ(keyAttributes->symbolList, Cmper(2));
+
+    // Unspecified fields should retain default values
+    EXPECT_EQ(keyAttributes->harmRefer, 0);
+    EXPECT_FALSE(keyAttributes->hasClefOctv);
+}
+
+TEST(KeySigs, PopulateKeySymbolList)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "keysigs.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto keySymbols = details->getArray<details::KeySymbolListElement>(SCORE_PARTID, 2);
+    ASSERT_EQ(int(keySymbols.size()), 15);
+
+    EXPECT_EQ(keySymbols[0]->getAlterationValue(), 0);
+    EXPECT_EQ(keySymbols[0]->accidentalString, "n");
+
+    EXPECT_EQ(keySymbols[1]->getAlterationValue(), 1);
+    EXPECT_EQ(keySymbols[1]->accidentalString, "µ");
+
+    EXPECT_EQ(keySymbols[2]->getAlterationValue(), 2);
+    EXPECT_EQ(keySymbols[2]->accidentalString, "m");
+
+    EXPECT_EQ(keySymbols[3]->getAlterationValue(), 3);
+    EXPECT_EQ(keySymbols[3]->accidentalString, "÷");
+
+    EXPECT_EQ(keySymbols[4]->getAlterationValue(), 4);
+    EXPECT_EQ(keySymbols[4]->accidentalString, "M");
+
+    EXPECT_EQ(keySymbols[5]->getAlterationValue(), 5);
+    EXPECT_EQ(keySymbols[5]->accidentalString, "Mµ");
+
+    EXPECT_EQ(keySymbols[6]->getAlterationValue(), 6);
+    EXPECT_EQ(keySymbols[6]->accidentalString, "Mm");
+
+    EXPECT_EQ(keySymbols[7]->getAlterationValue(), 7);
+    EXPECT_EQ(keySymbols[7]->accidentalString, "M÷");
+
+    EXPECT_EQ(keySymbols[8]->getAlterationValue(), -7);
+    EXPECT_EQ(keySymbols[8]->accidentalString, "Bbbb");
+
+    EXPECT_EQ(keySymbols[9]->getAlterationValue(), -6);
+    EXPECT_EQ(keySymbols[9]->accidentalString, "bbb");
+
+    EXPECT_EQ(keySymbols[10]->getAlterationValue(), -5);
+    EXPECT_EQ(keySymbols[10]->accidentalString, "Bº");
+
+    EXPECT_EQ(keySymbols[11]->getAlterationValue(), -4);
+    EXPECT_EQ(keySymbols[11]->accidentalString, "º");
+
+    EXPECT_EQ(keySymbols[12]->getAlterationValue(), -3);
+    EXPECT_EQ(keySymbols[12]->accidentalString, "Bb");
+
+    EXPECT_EQ(keySymbols[13]->getAlterationValue(), -2);
+    EXPECT_EQ(keySymbols[13]->accidentalString, "b");
+
+    EXPECT_EQ(keySymbols[14]->getAlterationValue(), -1);
+    EXPECT_EQ(keySymbols[14]->accidentalString, "B");
 }

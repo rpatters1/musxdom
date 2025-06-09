@@ -451,7 +451,9 @@ public:
 
     // Public properties corresponding to the XML structure, in the same order as in the XML.
     ClefIndex clefIndex{};  ///< The 0-based clef index from the `<clef>` element.
-    Edu xEduPos{};          ///< The xEduPos value from the `<xEduPos>` element.
+    Edu xEduPos{};          ///< The staff edu position from the `<xEduPos>` element.
+                            ///< In some versions of Finale this was a global edu value.
+                            ///< However, as of F27 it is a staff edu value.
     Evpu yEvpuPos{};        ///< The yEvpuPos value from the `<yEvpuPos>` element.
     int percent{};          ///< The percentage value from the `<percent>` element.
     int xEvpuOffset{};      ///< The xEvpuOffset value from the `<xEvpuOffset>` element.
@@ -702,7 +704,37 @@ public:
     constexpr static std::string_view XmlNodeName = "keyMap"; ///< The XML node name for this type.
     static const xml::XmlElementArray<KeyMapArray>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
+/**
+ * @class KeyAttributes
+ * @brief Represents the attributes associated with a Finale key signature.
+ *
+ * This class is identified by the XML node name "keysAttrib".
+ * The cmper is the key signature ID.
+ */
+class KeyAttributes : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit KeyAttributes(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper) {}
+
+    // Public properties corresponding to the XML structure
+    int harmRefer{};        ///< Changes the meaning of 0 in the note tables for key signatures. The Finale manual recommends
+                            ///< never changing it from 0. It also appears not to work as documented if changed. It was part of the original
+                            ///< Finale 1.0 release and was likely never tested much since then.
+    int middleCKey{};       ///< MIDI key number to use for middle C. This value transposes playback if it is set other than the MIDI middle C value of 60.
+    Cmper fontSym{};        ///< If non-zero, the Font symbol ID used for accidentals in this key. Only the font ID can be specified. The size and style are inherited from
+                            ///< the settings in #options::FontOptions::FontType::Key.
+    int gotoKey{};          ///< According to the Finale manual, this specifies the number of "scale steps" between each key on the MIDI keyboard.
+                            ///< Presumably this means EDO division steps, but in any case it is not well implemented and seems not to work as intended.
+                            ///< A value other than 1 is unlikely.
+    Cmper symbolList{};     ///< Cmper of the symbol list that specifies the accidentals for the key. These are stored in incidents of @ref details::KeySymbolListElement.
+    bool hasClefOctv{};     ///< If true, the key signature has clef octave override tables. See @ref details::ClefOctaveFlats and @ref details::ClefOctaveSharps.
+
+    constexpr static std::string_view XmlNodeName = "keysAttrib"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeyAttributes>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 /**
  * @class LayerAttributes
  * @brief Represents the attributes of a Finale "layer".
@@ -1048,6 +1080,13 @@ public:
     /// Otherwise, it returns the global duration of the measure.
     util::Fraction calcDuration(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
+    /// @brief Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus.
+    /// @param forStaff The staff for wiuch to calculate the time stretch.
+    util::Fraction calcTimeStretch(InstCmper forStaff) const
+    {
+        return calcDuration() / calcDuration(forStaff);
+    }
+
     void integrityCheck() override
     {
         this->OthersBase::integrityCheck();
@@ -1317,6 +1356,10 @@ public:
 
     std::vector<InstCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
 
+    std::vector<InstCmper> visualStaffNums; ///< Calculated list of Cmper values corresponding the staves in the visual staff group.
+                                            ///< This list is calculated by the factory when it calls #calcAllMultiStaffGroupIds.
+                                            ///< It is potentially a superset of #staffNums and/or the group returned by #calcVisualStaffGroup.
+
     /// @brief Returns the staff at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
     std::shared_ptr<Staff> getStaffAtIndex(size_t x) const;
@@ -1333,9 +1376,29 @@ public:
         return std::nullopt;
     }
 
+    /// @brief Returns the index of an input staffId that visually shows in this multi-instrument group or std::nullopt if not found
+    std::optional<size_t> getVisualIndexOf(InstCmper staffId) const
+    {
+        for (size_t x = 0; x < visualStaffNums.size(); x++) {
+            if (visualStaffNums[x] == staffId) return x;        
+        }
+        return std::nullopt;
+    }
+
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
     std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
+
+    /// @brief Calculates the visual group associated with this multistaff instrument, or nullptr if not found.
+    /// This may be different than the actual multistaff group when a standard configuration has extra
+    /// staves added visually. For example, an older file with a 3-staff piano part may have a 2-staff
+    /// multistaff instrument but visually show a 3-staff bracket.
+    /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
+    std::shared_ptr<details::StaffGroup> calcVisualStaffGroup(Cmper forPartId) const;
+
+    /// @brief Used by the factory to calculate all multistaff ids and visual ids for instances of @ref Staff.
+    /// @param document 
+    static void calcAllMultiStaffGroupIds(const DocumentPtr& document);
 
     void integrityCheck() override
     {
@@ -2117,7 +2180,13 @@ public:
     bool abrvNamePosFromStyle{};    ///< True if #abrvNamePosId is for a staff style. (Determines which abrv name pos class to retrieve.)
                                     ///< Populated by in #calcAllRuntimeValues.
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
-    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
+                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
+    Cmper multiStaffInstVisualId{}; ///< Calculated cmper for an associated @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
+                                    ///< Some staves are included visually in multistaff instruments without being part of it in the data.
+                                    ///< If #multiStaffInstId is non-zero, this value is the same. But this value can be non-zero when
+                                    ///< #multiStaffInstId is zero. It is set by the factory.
+    Cmper multiStaffInstVisualGroupId{}; ///< Calculated cmper for the visual @ref details::StaffGroup that visually shows the multistaff instrument. This value is not in the xml.
+                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
     std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
 
@@ -2129,8 +2198,11 @@ public:
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
-    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one. Otherwise nullptr.
+    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one in the data. Otherwise nullptr.
     std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
+
+    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is shown as part of one. Otherwise nullptr.
+    std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstVisualGroup() const;
 
     /// @brief Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)
     /// @note Ordinal prefix numbering is currently supported only for English.
@@ -2426,6 +2498,9 @@ public:
 
     /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
     Cmper getPartId() const final override { return m_requestedPartId; }
+
+    /// @brief Returns the underlying staff without any staff styles applied.
+    std::shared_ptr<others::Staff> getRawStaff() const;
 };
 
 /**

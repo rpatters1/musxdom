@@ -283,7 +283,7 @@ public:
      * @param entryFrame The entry frame.
      * @param index The index of this instance within the frame. 
     */
-    EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
+    explicit EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
         : m_entryFrame(entryFrame), m_indexInFrame(index) {}
 
     /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
@@ -308,12 +308,12 @@ public:
     /// @brief Get the staff cmper
     InstCmper getStaff() const;
 
+    /// @brief Creates the current StaffComposite for the entry
+    /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
+    std::shared_ptr<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
+
     /// @brief Get the measure cmper
     MeasCmper getMeasure() const;
-
-    /// @brief Creates the current StaffComposite for the entry
-    /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Usefule when notes are cross-staffed.)
-    std::shared_ptr<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the key signature of the entry
     std::shared_ptr<KeySignature> getKeySignature() const;
@@ -541,6 +541,19 @@ public:
         /// However, you simply extend a beam from the designated entry to the appropriate entries in the previous measure.
         bool calcCreatesBeamContinuationLeft() const;
 
+        /// @brief Detects tuplets being used to create time stretch in an independent time signature.
+        ///
+        /// Because the Finale UI is so buggy with smart shapes and clefs when there is an Independent Time Signature,
+        /// a common workaround is to set the Independent Time Signature to the same as the global time signature but
+        /// display a different time signature. Invisible tuplets then create the appearance of time stretch.
+        ///
+        /// @return This function returns true if
+        ///     - the tuplet's total reference duration matches the length of the measure exactly 
+        ///     - the tuplet is invisible
+        ///     - the staff has an independent time signature
+        //      - the independent display time signature matches the tuplet's total display duration
+        bool calcCreatesTimeStretch() const;
+
     private:
         bool calcCreatesSingleton(bool left) const;
 
@@ -604,6 +617,14 @@ public:
     /// @brief Gets the entry frame for the previous measure with the same staff and layer.
     /// @return Frame or nullpter if the previous measure has no matching frame,
     std::shared_ptr<const EntryFrame> getPrevious() const;
+    
+    /// @brief Creates a current StaffComposite for the entry frame.
+    /// @param eduPosition The Edu position for which to create the staff.
+    /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
+    std::shared_ptr<others::StaffComposite> createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId = std::nullopt) const;
+
+    /// @brief Get the measure instance
+    std::shared_ptr<others::Measure> getMeasureInstance() const;
 
 private:
     DocumentPtr m_document;
@@ -644,7 +665,9 @@ class EntryInfo
 
 public:
     util::Fraction elapsedDuration{};   ///< the elapsed duration within the measure where this entry occurs (in fractions of a whole note)
+                                        ///< This is a staff-level position and must be scaled for the global value. (Use #EntryInfoPtr::calcGlobalElapsedDuration.)
     util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
+                                        ///< This is a staff-level value and must be scaled for the global value. (Use #EntryInfoPtr::calcGlobalActualDuration.)
     bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
@@ -660,6 +683,10 @@ public:
         }
         return retval;
     }
+
+    /// @brief Calculates the next duration position after this entry
+    util::Fraction calcNextElapsedDuration() const
+    { return elapsedDuration + actualDuration; }
 
 private:
     std::weak_ptr<const Entry> m_entry;

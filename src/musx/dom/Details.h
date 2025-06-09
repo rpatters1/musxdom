@@ -445,6 +445,60 @@ public:
 };
 
 /**
+ * @class ClefOctaveFlats
+ * @brief Defines the octaves in which each clef should display flats in key signatures. Only linear key signatures
+ * use this class.
+ *
+ * Note that while flats are numbered from 1-7 (B-F), this table is indexed 0-6.
+ *
+ * Cmper1 is the value returned by #KeySignature::getKeyMode. Cmper2 is the clef index to which
+ * this array applies.
+ *
+ * Each value in the array specifies an octave to display the accidental, where 0 is the middle-C octave.
+ *
+ * This class is identified by the XML node name "clefOctvFlats".
+ */
+class ClefOctaveFlats : public DetailsArray<int, 7>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using DetailsArray::DetailsArray;
+
+    constexpr static std::string_view XmlNodeName = "clefOctvFlats"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ClefOctaveFlats>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class ClefOctaveSharps
+ * @brief Defines the octaves in which each clef should display sharps in key signatures.
+ *
+ * For non-linear keys, this class defines the octave in which each clef should display
+ * the accidentals in the key signature, regardless whether they are sharps or flats.
+ * (Non-linear keys do not use @ref ClefOctaveFlats.) Therefore, this class will almost certainly exist
+ * for non-linear keys.
+ *
+ * Note that while sharps are numbered from 1-7 (F-B), this table is indexed 0-6.
+ *
+ * Cmper1 is the value returned by #KeySignature::getKeyMode. Cmper2 is the clef index to which
+ * this array applies.
+ *
+ * Each value in the array specifies an octave to display the accidental, where 0 is the middle-C octave.
+ *
+ * This class is identified by the XML node name "clefOctvSharps".
+ */
+class ClefOctaveSharps : public DetailsArray<int, 7>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using DetailsArray::DetailsArray;
+
+    constexpr static std::string_view XmlNodeName = "clefOctvSharps"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ClefOctaveSharps>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class CrossStaff
  * @brief Represents a cross-staff assignment for the note, if any.
  *
@@ -682,10 +736,12 @@ public:
 
     /// @brief Returns the clef index in effect for at the specified @ref Edu position.
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
+    /// @param position The Edu position of the clef *in staff-level Edus*. (The staff-level matters for Independent Key Signature staves.)
     ClefIndex calcClefIndexAt(Edu position) const;
 
     /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
+    /// @param position The *staff-level* position of the clef. (The staff-level matters for Independent Key Signature staves.)
     ClefIndex calcClefIndexAt(util::Fraction position) const
     { return calcClefIndexAt(position.calcEduDuration()); }
 
@@ -780,6 +836,39 @@ public:
 
     constexpr static std::string_view XmlNodeName = "floats"; ///< The XML node name for this type.
     static const xml::XmlElementArray<IndependentStaffDetails>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class KeySymbolListElement
+ * @brief Represents a single element in a Finale accidental symbol list.
+ *
+ * This class is identified by the XML node name "keySymList".
+ * cmper1 is the symbol list ID from #others::KeyAttributes::symbolList. cmper2 is the accidental slot, which should be interpreted as a signed int.
+ */
+class KeySymbolListElement : public DetailsBase {
+public:
+    /** @brief Constructor function */
+    explicit KeySymbolListElement(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2) {}
+
+    std::string accidentalString;   ///< The symbol string used to represent the accidental. The string uses either the default font for keys
+                                    ///< or the font specified by #others::KeyAttributes::fontSym if its value is non-zero. (xml node is `<string>`)
+
+    /** @brief Returns the alteration value that this symbol corresponds with. */
+    int getAlterationValue() const {
+        return static_cast<int16_t>(getCmper2());
+    }
+
+    void integrityCheck() override
+    {
+        DetailsBase::integrityCheck();
+        if (std::abs(getAlterationValue()) > MAX_ALTERATIONS) {
+            MUSX_INTEGRITY_ERROR("KeySymbolListElement for list " + std::to_string(getCmper1()) + " has invalid value " + std::to_string(getAlterationValue()));
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "keySymList"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<KeySymbolListElement>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1267,22 +1356,37 @@ public:
 class StaffGroupInfo
 {
 public:
-    std::optional<size_t> startSlot;                ///< the start slot of the group in the system staves.
-    std::optional<size_t> endSlot;                  ///< the end slot of the group in the system staves.
-    std::shared_ptr<StaffGroup> group;              ///< the StaffGroup record for the group.
+    std::optional<size_t> startSlot;                        ///< the 0-based start slot (index) of the group in the system staves.
+    std::optional<size_t> endSlot;                          ///< the 0-based end slot (index) of the group in the system staves.
+    std::shared_ptr<StaffGroup> group;                      ///< the StaffGroup record for the group.
+    std::vector<std::shared_ptr<others::InstrumentUsed>> systemStaves; ///< the system staves referred to by startSlot and endSlot
 
     /// @brief Constructs information about a specific StaffGroup as it relates the the @p systemStaves
     /// @param staffGroup The staff group
-    /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
+    /// @param inpSysStaves The @ref others::InstrumentUsed list for a system or Scroll view.
     StaffGroupInfo(const std::shared_ptr<StaffGroup>& staffGroup,
-        const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
+        const std::vector<std::shared_ptr<others::InstrumentUsed>>& inpSysStaves);
+
+    /// @brief The number of staves in the group for the #systemStaves.
+    std::optional<size_t> numStaves() const
+    {
+        if (startSlot && endSlot) {
+            return endSlot.value() - startSlot.value() + 1;
+        }
+        return std::nullopt;
+    }
+
+    /// @brief Iterates the staves in the group in order according to #systemStaves.
+    /// @param measId The measure for which to construct each @ref others::StaffComposite instance.
+    /// @param eduPosition The Edu position for which to construct each @ref others::StaffComposite instance.
+    /// @param iterator The iterator function. Returning false from this function terminates iteration.
+    void iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const std::shared_ptr<others::StaffComposite>&)> iterator) const;
 
     /// @brief Creates a vector of #StaffGroupInfo instances for the measure, part, and system staves
     /// @param measureId The measure to find.
-    /// @param linkedPart The linked part in which to find the groups.
+    /// @param linkedPartId The ID of the linked part in which to find the groups.
     /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
-    static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId,
-        const std::shared_ptr<others::PartDefinition>& linkedPart,
+    static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,
         const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
 };
 
