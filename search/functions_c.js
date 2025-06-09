@@ -6,5 +6,6 @@ var searchData=
   ['note_3',['Note',['../classmusx_1_1dom_1_1Note.html#a7b5fc7c3dd8fe22c524c311b8eae5463',1,'musx::dom::Note']]],
   ['notealterations_4',['NoteAlterations',['../classmusx_1_1dom_1_1details_1_1NoteAlterations.html#a79dd6bd8d88757b1f791465a9abb7a12',1,'musx::dom::details::NoteAlterations']]],
   ['noteinfoptr_5',['noteinfoptr',['../classmusx_1_1dom_1_1NoteInfoPtr.html#af96307ed369138a67d004695055e894d',1,'musx::dom::NoteInfoPtr::NoteInfoPtr()'],['../classmusx_1_1dom_1_1NoteInfoPtr.html#abafc8ded0db6f072316ecfee838eaa38',1,'musx::dom::NoteInfoPtr::NoteInfoPtr(const EntryInfoPtr &amp;entryInfo, size_t noteIndex)']]],
-  ['numerator_6',['numerator',['../classmusx_1_1util_1_1Fraction.html#a1723645e98a12e8521ee2e3947f5c9d3',1,'musx::util::Fraction']]]
+  ['numerator_6',['numerator',['../classmusx_1_1util_1_1Fraction.html#a1723645e98a12e8521ee2e3947f5c9d3',1,'musx::util::Fraction']]],
+  ['numstaves_7',['numStaves',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a7a5b92ca5519326569bcadc26cef58ef',1,'musx::dom::details::StaffGroupInfo']]]
 ];

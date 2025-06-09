@@ -198,6 +198,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShouldShowFullNam
 <tr class="memitem:ac603081e3481e8fcbc9c3910257a2244" id="r_ac603081e3481e8fcbc9c3910257a2244"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#ac603081e3481e8fcbc9c3910257a2244">calcDuration</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;forStaff=std::nullopt) const</td></tr>
 <tr class="memdesc:ac603081e3481e8fcbc9c3910257a2244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the duration of the measure according to the time signature.  <br /></td></tr>
 <tr class="separator:ac603081e3481e8fcbc9c3910257a2244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3f7ef032d1d2191b0a2aff36401851b" id="r_ad3f7ef032d1d2191b0a2aff36401851b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#ad3f7ef032d1d2191b0a2aff36401851b">calcTimeStretch</a> (<a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> forStaff) const</td></tr>
+<tr class="memdesc:ad3f7ef032d1d2191b0a2aff36401851b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus.  <br /></td></tr>
+<tr class="separator:ad3f7ef032d1d2191b0a2aff36401851b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6da7a3c1d85a2118427af940b352cffe" id="r_a6da7a3c1d85a2118427af940b352cffe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a6da7a3c1d85a2118427af940b352cffe">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:a6da7a3c1d85a2118427af940b352cffe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a6da7a3c1d85a2118427af940b352cffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -624,6 +627,40 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ad3f7ef032d1d2191b0a2aff36401851b" name="ad3f7ef032d1d2191b0a2aff36401851b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3f7ef032d1d2191b0a2aff36401851b">&#9670;&#160;</a></span>calcTimeStretch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::others::Measure::calcTimeStretch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&#160;</td>
+          <td class="paramname"><em>forStaff</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forStaff</td><td>The staff for wiuch to calculate the time stretch. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a9579a68babbf5008ec3201da1dcc59a7" name="a9579a68babbf5008ec3201da1dcc59a7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9579a68babbf5008ec3201da1dcc59a7">&#9670;&#160;</a></span>createDisplayTimeSignature()</h2>
 
@@ -762,7 +799,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>: remove this override after identifying all fields. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>: remove this override after identifying all fields. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">musx::dom::Base</a>.</p>
 

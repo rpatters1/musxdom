@@ -15,6 +15,7 @@ var namespacemusx_1_1dom_1_1others =
     [ "FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", "classmusx_1_1dom_1_1others_1_1FontDefinition" ],
     [ "Frame", "classmusx_1_1dom_1_1others_1_1Frame.html", "classmusx_1_1dom_1_1others_1_1Frame" ],
     [ "InstrumentUsed", "classmusx_1_1dom_1_1others_1_1InstrumentUsed.html", "classmusx_1_1dom_1_1others_1_1InstrumentUsed" ],
+    [ "KeyAttributes", "classmusx_1_1dom_1_1others_1_1KeyAttributes.html", "classmusx_1_1dom_1_1others_1_1KeyAttributes" ],
     [ "KeyFormat", "classmusx_1_1dom_1_1others_1_1KeyFormat.html", "classmusx_1_1dom_1_1others_1_1KeyFormat" ],
     [ "KeyMapArray", "classmusx_1_1dom_1_1others_1_1KeyMapArray.html", "classmusx_1_1dom_1_1others_1_1KeyMapArray" ],
     [ "LayerAttributes", "classmusx_1_1dom_1_1others_1_1LayerAttributes.html", "classmusx_1_1dom_1_1others_1_1LayerAttributes" ],

@@ -110,16 +110,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a888c7a89b27d8d1692578d20014aecc5" id="r_a888c7a89b27d8d1692578d20014aecc5"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfo.html#a888c7a89b27d8d1692578d20014aecc5">getEntry</a> () const</td></tr>
 <tr class="memdesc:a888c7a89b27d8d1692578d20014aecc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the entry.  <br /></td></tr>
 <tr class="separator:a888c7a89b27d8d1692578d20014aecc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a417337db6ffa8dfdf40b8594493fb9b1" id="r_a417337db6ffa8dfdf40b8594493fb9b1"><td class="memItemLeft" align="right" valign="top"><a id="a417337db6ffa8dfdf40b8594493fb9b1" name="a417337db6ffa8dfdf40b8594493fb9b1"></a>
+<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcNextElapsedDuration</b> () const</td></tr>
+<tr class="memdesc:a417337db6ffa8dfdf40b8594493fb9b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the next duration position after this entry. <br /></td></tr>
+<tr class="separator:a417337db6ffa8dfdf40b8594493fb9b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ab303dd9c1df64ca0920cd62e1d84eb80" id="r_ab303dd9c1df64ca0920cd62e1d84eb80"><td class="memItemLeft" align="right" valign="top"><a id="ab303dd9c1df64ca0920cd62e1d84eb80" name="ab303dd9c1df64ca0920cd62e1d84eb80"></a>
-<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>elapsedDuration</b> {}</td></tr>
-<tr class="memdesc:ab303dd9c1df64ca0920cd62e1d84eb80"><td class="mdescLeft">&#160;</td><td class="mdescRight">the elapsed duration within the measure where this entry occurs (in fractions of a whole note) <br /></td></tr>
+<tr class="memitem:ab303dd9c1df64ca0920cd62e1d84eb80" id="r_ab303dd9c1df64ca0920cd62e1d84eb80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfo.html#ab303dd9c1df64ca0920cd62e1d84eb80">elapsedDuration</a> {}</td></tr>
 <tr class="separator:ab303dd9c1df64ca0920cd62e1d84eb80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb06eec5ee188c8840d9ed4f794a3951" id="r_adb06eec5ee188c8840d9ed4f794a3951"><td class="memItemLeft" align="right" valign="top"><a id="adb06eec5ee188c8840d9ed4f794a3951" name="adb06eec5ee188c8840d9ed4f794a3951"></a>
-<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>actualDuration</b> {}</td></tr>
-<tr class="memdesc:adb06eec5ee188c8840d9ed4f794a3951"><td class="mdescLeft">&#160;</td><td class="mdescRight">the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes <br /></td></tr>
+<tr class="memitem:adb06eec5ee188c8840d9ed4f794a3951" id="r_adb06eec5ee188c8840d9ed4f794a3951"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfo.html#adb06eec5ee188c8840d9ed4f794a3951">actualDuration</a> {}</td></tr>
 <tr class="separator:adb06eec5ee188c8840d9ed4f794a3951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04b663987154b19939d4da07e3778464" id="r_a04b663987154b19939d4da07e3778464"><td class="memItemLeft" align="right" valign="top"><a id="a04b663987154b19939d4da07e3778464" name="a04b663987154b19939d4da07e3778464"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>v2Launch</b> {}</td></tr>
@@ -172,6 +172,36 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>v2Launch</b> {}</td><
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="adb06eec5ee188c8840d9ed4f794a3951" name="adb06eec5ee188c8840d9ed4f794a3951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb06eec5ee188c8840d9ed4f794a3951">&#9670;&#160;</a></span>actualDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::EntryInfo::actualDuration {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes This is a staff-level value and must be scaled for the global value. (Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aefab62e48990cb691af5a4975e102989" title="Calculates the actual duration in global edu, removing any time stretch due to independent time signa...">EntryInfoPtr::calcGlobalActualDuration</a>.) </p>
+
+</div>
+</div>
+<a id="ab303dd9c1df64ca0920cd62e1d84eb80" name="ab303dd9c1df64ca0920cd62e1d84eb80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab303dd9c1df64ca0920cd62e1d84eb80">&#9670;&#160;</a></span>elapsedDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::EntryInfo::elapsedDuration {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>the elapsed duration within the measure where this entry occurs (in fractions of a whole note) This is a staff-level position and must be scaled for the global value. (Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a1445f0a573b9b1751c2c8dd5d3092dee" title="Calculates the elapsed duration in global edu, removing any time stretch due to independent time sign...">EntryInfoPtr::calcGlobalElapsedDuration</a>.) </p>
+
+</div>
+</div>
 <a id="a203cd7f4d48cd1fab5ac01e9787a0c6e" name="a203cd7f4d48cd1fab5ac01e9787a0c6e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a203cd7f4d48cd1fab5ac01e9787a0c6e">&#9670;&#160;</a></span>graceIndex</h2>
 

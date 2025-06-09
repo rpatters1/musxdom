@@ -108,36 +108,47 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1details_1_1StaffGr
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9c3b10290cffa74b2cea59bab3cd2063" id="r_a9c3b10290cffa74b2cea59bab3cd2063"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a9c3b10290cffa74b2cea59bab3cd2063">StaffGroupInfo</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">StaffGroup</a> &gt; &amp;staffGroup, const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> &gt; &gt; &amp;systemStaves)</td></tr>
-<tr class="memdesc:a9c3b10290cffa74b2cea59bab3cd2063"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs information about a specific <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html" title="Represents the attributes of a Finale staff group that brackets staves.">StaffGroup</a> as it relates the the <code>systemStaves</code>.  <br /></td></tr>
-<tr class="separator:a9c3b10290cffa74b2cea59bab3cd2063"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad200d50ae3b029b407d3f15c7b6c70bd" id="r_ad200d50ae3b029b407d3f15c7b6c70bd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#ad200d50ae3b029b407d3f15c7b6c70bd">StaffGroupInfo</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">StaffGroup</a> &gt; &amp;staffGroup, const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> &gt; &gt; &amp;inpSysStaves)</td></tr>
+<tr class="memdesc:ad200d50ae3b029b407d3f15c7b6c70bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs information about a specific <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html" title="Represents the attributes of a Finale staff group that brackets staves.">StaffGroup</a> as it relates the the <code>systemStaves</code>.  <br /></td></tr>
+<tr class="separator:ad200d50ae3b029b407d3f15c7b6c70bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a5b92ca5519326569bcadc26cef58ef" id="r_a7a5b92ca5519326569bcadc26cef58ef"><td class="memItemLeft" align="right" valign="top"><a id="a7a5b92ca5519326569bcadc26cef58ef" name="a7a5b92ca5519326569bcadc26cef58ef"></a>
+std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>numStaves</b> () const</td></tr>
+<tr class="memdesc:a7a5b92ca5519326569bcadc26cef58ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of staves in the group for the <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#aab4bc13e66dcbcb14bf15f60ac4b10fa" title="the system staves referred to by startSlot and endSlot">systemStaves</a>. <br /></td></tr>
+<tr class="separator:a7a5b92ca5519326569bcadc26cef58ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa26156297c61bc3f2aa32f43a94e6761" id="r_aa26156297c61bc3f2aa32f43a94e6761"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#aa26156297c61bc3f2aa32f43a94e6761">iterateStaves</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measId, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition, std::function&lt; bool(const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt; &amp;)&gt; iterator) const</td></tr>
+<tr class="memdesc:aa26156297c61bc3f2aa32f43a94e6761"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates the staves in the group in order according to <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#aab4bc13e66dcbcb14bf15f60ac4b10fa" title="the system staves referred to by startSlot and endSlot">systemStaves</a>.  <br /></td></tr>
+<tr class="separator:aa26156297c61bc3f2aa32f43a94e6761"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a29e4846353fd67b143404e44d24eeeaa" id="r_a29e4846353fd67b143404e44d24eeeaa"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html">StaffGroupInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a29e4846353fd67b143404e44d24eeeaa">getGroupsAtMeasure</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId, const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt; &amp;linkedPart, const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> &gt; &gt; &amp;systemStaves)</td></tr>
-<tr class="memdesc:a29e4846353fd67b143404e44d24eeeaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a vector of <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a9c3b10290cffa74b2cea59bab3cd2063" title="Constructs information about a specific StaffGroup as it relates the the systemStaves.">StaffGroupInfo</a> instances for the measure, part, and system staves.  <br /></td></tr>
-<tr class="separator:a29e4846353fd67b143404e44d24eeeaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8593831ba7a78f0e0722e1c3d44d9e0f" id="r_a8593831ba7a78f0e0722e1c3d44d9e0f"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html">StaffGroupInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a8593831ba7a78f0e0722e1c3d44d9e0f">getGroupsAtMeasure</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> linkedPartId, const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> &gt; &gt; &amp;<a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#aab4bc13e66dcbcb14bf15f60ac4b10fa">systemStaves</a>)</td></tr>
+<tr class="memdesc:a8593831ba7a78f0e0722e1c3d44d9e0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a vector of <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#ad200d50ae3b029b407d3f15c7b6c70bd" title="Constructs information about a specific StaffGroup as it relates the the systemStaves.">StaffGroupInfo</a> instances for the measure, part, and system staves.  <br /></td></tr>
+<tr class="separator:a8593831ba7a78f0e0722e1c3d44d9e0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a3fc48becbef7d32d2db0377a534dd63c" id="r_a3fc48becbef7d32d2db0377a534dd63c"><td class="memItemLeft" align="right" valign="top"><a id="a3fc48becbef7d32d2db0377a534dd63c" name="a3fc48becbef7d32d2db0377a534dd63c"></a>
 std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>startSlot</b></td></tr>
-<tr class="memdesc:a3fc48becbef7d32d2db0377a534dd63c"><td class="mdescLeft">&#160;</td><td class="mdescRight">the start slot of the group in the system staves. <br /></td></tr>
+<tr class="memdesc:a3fc48becbef7d32d2db0377a534dd63c"><td class="mdescLeft">&#160;</td><td class="mdescRight">the 0-based start slot (index) of the group in the system staves. <br /></td></tr>
 <tr class="separator:a3fc48becbef7d32d2db0377a534dd63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c79b042fef2d07fd0c9cc9817ae50ba" id="r_a4c79b042fef2d07fd0c9cc9817ae50ba"><td class="memItemLeft" align="right" valign="top"><a id="a4c79b042fef2d07fd0c9cc9817ae50ba" name="a4c79b042fef2d07fd0c9cc9817ae50ba"></a>
 std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>endSlot</b></td></tr>
-<tr class="memdesc:a4c79b042fef2d07fd0c9cc9817ae50ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">the end slot of the group in the system staves. <br /></td></tr>
+<tr class="memdesc:a4c79b042fef2d07fd0c9cc9817ae50ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">the 0-based end slot (index) of the group in the system staves. <br /></td></tr>
 <tr class="separator:a4c79b042fef2d07fd0c9cc9817ae50ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ce2806aa0a1033faa7e29a170749f39" id="r_a6ce2806aa0a1033faa7e29a170749f39"><td class="memItemLeft" align="right" valign="top"><a id="a6ce2806aa0a1033faa7e29a170749f39" name="a6ce2806aa0a1033faa7e29a170749f39"></a>
 std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">StaffGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>group</b></td></tr>
 <tr class="memdesc:a6ce2806aa0a1033faa7e29a170749f39"><td class="mdescLeft">&#160;</td><td class="mdescRight">the <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html" title="Represents the attributes of a Finale staff group that brackets staves.">StaffGroup</a> record for the group. <br /></td></tr>
 <tr class="separator:a6ce2806aa0a1033faa7e29a170749f39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab4bc13e66dcbcb14bf15f60ac4b10fa" id="r_aab4bc13e66dcbcb14bf15f60ac4b10fa"><td class="memItemLeft" align="right" valign="top"><a id="aab4bc13e66dcbcb14bf15f60ac4b10fa" name="aab4bc13e66dcbcb14bf15f60ac4b10fa"></a>
+std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>systemStaves</b></td></tr>
+<tr class="memdesc:aab4bc13e66dcbcb14bf15f60ac4b10fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">the system staves referred to by startSlot and endSlot <br /></td></tr>
+<tr class="separator:aab4bc13e66dcbcb14bf15f60ac4b10fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides run-time information about Staff Groups within a system or list of <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9c3b10290cffa74b2cea59bab3cd2063" name="a9c3b10290cffa74b2cea59bab3cd2063"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c3b10290cffa74b2cea59bab3cd2063">&#9670;&#160;</a></span>StaffGroupInfo()</h2>
+<a id="ad200d50ae3b029b407d3f15c7b6c70bd" name="ad200d50ae3b029b407d3f15c7b6c70bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad200d50ae3b029b407d3f15c7b6c70bd">&#9670;&#160;</a></span>StaffGroupInfo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -152,7 +163,7 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGrou
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>systemStaves</em>&#160;</td>
+          <td class="paramname"><em>inpSysStaves</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -166,7 +177,7 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGrou
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">staffGroup</td><td>The staff group </td></tr>
-    <tr><td class="paramname">systemStaves</td><td>The <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> list for a system or Scroll view. </td></tr>
+    <tr><td class="paramname">inpSysStaves</td><td>The <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> list for a system or Scroll view. </td></tr>
   </table>
   </dd>
 </dl>
@@ -174,8 +185,8 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGrou
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a29e4846353fd67b143404e44d24eeeaa" name="a29e4846353fd67b143404e44d24eeeaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29e4846353fd67b143404e44d24eeeaa">&#9670;&#160;</a></span>getGroupsAtMeasure()</h2>
+<a id="a8593831ba7a78f0e0722e1c3d44d9e0f" name="a8593831ba7a78f0e0722e1c3d44d9e0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8593831ba7a78f0e0722e1c3d44d9e0f">&#9670;&#160;</a></span>getGroupsAtMeasure()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,8 +203,8 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGrou
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">others::PartDefinition</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>linkedPart</em>, </td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>linkedPartId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -214,12 +225,56 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGrou
 </table>
 </div><div class="memdoc">
 
-<p>Creates a vector of <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a9c3b10290cffa74b2cea59bab3cd2063" title="Constructs information about a specific StaffGroup as it relates the the systemStaves.">StaffGroupInfo</a> instances for the measure, part, and system staves. </p>
+<p>Creates a vector of <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#ad200d50ae3b029b407d3f15c7b6c70bd" title="Constructs information about a specific StaffGroup as it relates the the systemStaves.">StaffGroupInfo</a> instances for the measure, part, and system staves. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">measureId</td><td>The measure to find. </td></tr>
-    <tr><td class="paramname">linkedPart</td><td>The linked part in which to find the groups. </td></tr>
+    <tr><td class="paramname">linkedPartId</td><td>The ID of the linked part in which to find the groups. </td></tr>
     <tr><td class="paramname">systemStaves</td><td>The <a class="el" href="classmusx_1_1dom_1_1others_1_1InstrumentUsed.html">others::InstrumentUsed</a> list for a system or Scroll view. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa26156297c61bc3f2aa32f43a94e6761" name="aa26156297c61bc3f2aa32f43a94e6761"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa26156297c61bc3f2aa32f43a94e6761">&#9670;&#160;</a></span>iterateStaves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::details::StaffGroupInfo::iterateStaves </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
+          <td class="paramname"><em>eduPosition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; bool(const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt; &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>iterator</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iterates the staves in the group in order according to <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#aab4bc13e66dcbcb14bf15f60ac4b10fa" title="the system staves referred to by startSlot and endSlot">systemStaves</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">measId</td><td>The measure for which to construct each <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> instance. </td></tr>
+    <tr><td class="paramname">eduPosition</td><td>The Edu position for which to construct each <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> instance. </td></tr>
+    <tr><td class="paramname">iterator</td><td>The iterator function. Returning false from this function terminates iteration. </td></tr>
   </table>
   </dd>
 </dl>

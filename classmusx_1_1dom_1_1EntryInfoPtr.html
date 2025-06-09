@@ -140,13 +140,13 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexInFrame</b>
 <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getStaff</b> () const</td></tr>
 <tr class="memdesc:acc0a7723ee2410488fb91b1dd85248f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the staff cmper. <br /></td></tr>
 <tr class="separator:acc0a7723ee2410488fb91b1dd85248f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a646ba3b7fbb39724036ae83e3303d5e1" id="r_a646ba3b7fbb39724036ae83e3303d5e1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a646ba3b7fbb39724036ae83e3303d5e1">createCurrentStaff</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;forStaffId=std::nullopt) const</td></tr>
+<tr class="memdesc:a646ba3b7fbb39724036ae83e3303d5e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the current StaffComposite for the entry.  <br /></td></tr>
+<tr class="separator:a646ba3b7fbb39724036ae83e3303d5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af07b2f3513daaca9f26cb8dc0b96489c" id="r_af07b2f3513daaca9f26cb8dc0b96489c"><td class="memItemLeft" align="right" valign="top"><a id="af07b2f3513daaca9f26cb8dc0b96489c" name="af07b2f3513daaca9f26cb8dc0b96489c"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getMeasure</b> () const</td></tr>
 <tr class="memdesc:af07b2f3513daaca9f26cb8dc0b96489c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the measure cmper. <br /></td></tr>
 <tr class="separator:af07b2f3513daaca9f26cb8dc0b96489c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a646ba3b7fbb39724036ae83e3303d5e1" id="r_a646ba3b7fbb39724036ae83e3303d5e1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a646ba3b7fbb39724036ae83e3303d5e1">createCurrentStaff</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;forStaffId=std::nullopt) const</td></tr>
-<tr class="memdesc:a646ba3b7fbb39724036ae83e3303d5e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the current StaffComposite for the entry.  <br /></td></tr>
-<tr class="separator:a646ba3b7fbb39724036ae83e3303d5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e04878024b42853e4d906b6c602094e" id="r_a2e04878024b42853e4d906b6c602094e"><td class="memItemLeft" align="right" valign="top"><a id="a2e04878024b42853e4d906b6c602094e" name="a2e04878024b42853e4d906b6c602094e"></a>
 std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getKeySignature</b> () const</td></tr>
 <tr class="memdesc:a2e04878024b42853e4d906b6c602094e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the key signature of the entry. <br /></td></tr>
@@ -270,7 +270,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -466,7 +466,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 <p>Creates the current StaffComposite for the entry. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">forStaffId</td><td>Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Usefule when notes are cross-staffed.) </td></tr>
+    <tr><td class="paramname">forStaffId</td><td>Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.) </td></tr>
   </table>
   </dd>
 </dl>

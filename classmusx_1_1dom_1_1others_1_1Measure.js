@@ -32,6 +32,7 @@ var classmusx_1_1dom_1_1others_1_1Measure =
     [ "calcDisplayNumber", "classmusx_1_1dom_1_1others_1_1Measure.html#a7b892fb2143602bcbb3e21be8b4a9e46", null ],
     [ "calcDuration", "classmusx_1_1dom_1_1others_1_1Measure.html#ac603081e3481e8fcbc9c3910257a2244", null ],
     [ "calcShouldShowFullNames", "classmusx_1_1dom_1_1others_1_1Measure.html#a9ff1882e9350038250970527105eebc1", null ],
+    [ "calcTimeStretch", "classmusx_1_1dom_1_1others_1_1Measure.html#ad3f7ef032d1d2191b0a2aff36401851b", null ],
     [ "createDisplayTimeSignature", "classmusx_1_1dom_1_1others_1_1Measure.html#a9579a68babbf5008ec3201da1dcc59a7", null ],
     [ "createKeySignature", "classmusx_1_1dom_1_1others_1_1Measure.html#a0373267ab3659850b617a949d2d77ab6", null ],
     [ "createTimeSignature", "classmusx_1_1dom_1_1others_1_1Measure.html#a421e75f56e610dc35907506ad81f2657", null ],

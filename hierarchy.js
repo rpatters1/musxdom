@@ -8,6 +8,11 @@ var hierarchy =
         [ "musx::dom::TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", null ]
       ] ],
       [ "musx::dom::DetailsBase", "classmusx_1_1dom_1_1DetailsBase.html", [
+        [ "musx::dom::DetailsArray< int, 7 >", "classmusx_1_1dom_1_1DetailsArray.html", [
+          [ "musx::dom::details::ClefOctaveFlats", "classmusx_1_1dom_1_1details_1_1ClefOctaveFlats.html", null ],
+          [ "musx::dom::details::ClefOctaveSharps", "classmusx_1_1dom_1_1details_1_1ClefOctaveSharps.html", null ]
+        ] ],
+        [ "musx::dom::DetailsArray< ElementType, REQUIRED_SIZE >", "classmusx_1_1dom_1_1DetailsArray.html", null ],
         [ "musx::dom::EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", [
           [ "musx::dom::NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", [
             [ "musx::dom::details::AccidentalAlterations", "classmusx_1_1dom_1_1details_1_1AccidentalAlterations.html", null ],
@@ -59,6 +64,7 @@ var hierarchy =
         [ "musx::dom::details::ChordAssign", "classmusx_1_1dom_1_1details_1_1ChordAssign.html", null ],
         [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ],
         [ "musx::dom::details::IndependentStaffDetails", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html", null ],
+        [ "musx::dom::details::KeySymbolListElement", "classmusx_1_1dom_1_1details_1_1KeySymbolListElement.html", null ],
         [ "musx::dom::details::MeasureTextAssign", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html", null ],
         [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ],
         [ "musx::dom::details::StaffSize", "classmusx_1_1dom_1_1details_1_1StaffSize.html", null ]
@@ -128,6 +134,7 @@ var hierarchy =
         [ "musx::dom::others::FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", null ],
         [ "musx::dom::others::Frame", "classmusx_1_1dom_1_1others_1_1Frame.html", null ],
         [ "musx::dom::others::InstrumentUsed", "classmusx_1_1dom_1_1others_1_1InstrumentUsed.html", null ],
+        [ "musx::dom::others::KeyAttributes", "classmusx_1_1dom_1_1others_1_1KeyAttributes.html", null ],
         [ "musx::dom::others::KeyFormat", "classmusx_1_1dom_1_1others_1_1KeyFormat.html", null ],
         [ "musx::dom::others::KeyMapArray", "classmusx_1_1dom_1_1others_1_1KeyMapArray.html", null ],
         [ "musx::dom::others::LayerAttributes", "classmusx_1_1dom_1_1others_1_1LayerAttributes.html", null ],

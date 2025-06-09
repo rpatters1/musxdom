@@ -172,6 +172,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addEntry</b> (const s
 <tr class="memitem:a5f259c0e47d82732e70eb471eccb14ce" id="r_a5f259c0e47d82732e70eb471eccb14ce"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a5f259c0e47d82732e70eb471eccb14ce">getPrevious</a> () const</td></tr>
 <tr class="memdesc:a5f259c0e47d82732e70eb471eccb14ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the entry frame for the previous measure with the same staff and layer.  <br /></td></tr>
 <tr class="separator:a5f259c0e47d82732e70eb471eccb14ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb279770c27241218d88ef42ab4a0c06" id="r_abb279770c27241218d88ef42ab4a0c06"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#abb279770c27241218d88ef42ab4a0c06">createCurrentStaff</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition, const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;forStaffId=std::nullopt) const</td></tr>
+<tr class="memdesc:abb279770c27241218d88ef42ab4a0c06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a current StaffComposite for the entry frame.  <br /></td></tr>
+<tr class="separator:abb279770c27241218d88ef42ab4a0c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dc2a983125e37e683c8c542f0a0567a" id="r_a4dc2a983125e37e683c8c542f0a0567a"><td class="memItemLeft" align="right" valign="top"><a id="a4dc2a983125e37e683c8c542f0a0567a" name="a4dc2a983125e37e683c8c542f0a0567a"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">others::Measure</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMeasureInstance</b> () const</td></tr>
+<tr class="memdesc:a4dc2a983125e37e683c8c542f0a0567a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the measure instance. <br /></td></tr>
+<tr class="separator:a4dc2a983125e37e683c8c542f0a0567a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -261,6 +268,43 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">K
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="abb279770c27241218d88ef42ab4a0c06" name="abb279770c27241218d88ef42ab4a0c06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb279770c27241218d88ef42ab4a0c06">&#9670;&#160;</a></span>createCurrentStaff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt; musx::dom::EntryFrame::createCurrentStaff </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
+          <td class="paramname"><em>eduPosition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>forStaffId</em> = <code>std::nullopt</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a current StaffComposite for the entry frame. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eduPosition</td><td>The Edu position for which to create the staff. </td></tr>
+    <tr><td class="paramname">forStaffId</td><td>Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a8387ecf374717defbeb6389ea79ecf42" name="a8387ecf374717defbeb6389ea79ecf42"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8387ecf374717defbeb6389ea79ecf42">&#9670;&#160;</a></span>getFirstInVoice()</h2>
 

@@ -24,7 +24,7 @@ var searchData=
   ['solidparams_21',['SolidParams',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1SolidParams.html#a1a790e7b36e1a26746ea322c9378e19b',1,'musx::dom::others::SmartShapeCustomLine::SolidParams']]],
   ['staff_22',['Staff',['../classmusx_1_1dom_1_1others_1_1Staff.html#a6b2463c519cd866520ed2116151334b5',1,'musx::dom::others::Staff']]],
   ['staffgroup_23',['StaffGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9cc08eb744c1b6ac9087f16ff99dbcfd',1,'musx::dom::details::StaffGroup']]],
-  ['staffgroupinfo_24',['StaffGroupInfo',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a9c3b10290cffa74b2cea59bab3cd2063',1,'musx::dom::details::StaffGroupInfo']]],
+  ['staffgroupinfo_24',['StaffGroupInfo',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#ad200d50ae3b029b407d3f15c7b6c70bd',1,'musx::dom::details::StaffGroupInfo']]],
   ['staffoptions_25',['StaffOptions',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#af1602f801dd9ee76f7f64a9dbd687413',1,'musx::dom::options::StaffOptions']]],
   ['staffsize_26',['StaffSize',['../classmusx_1_1dom_1_1details_1_1StaffSize.html#ae8ba121a160fc41deac208cf7a7072c4',1,'musx::dom::details::StaffSize']]],
   ['staffstyle_27',['staffstyle',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a4198715586ac656f96e634f82b3fb3d2',1,'musx::dom::others::StaffStyle::StaffStyle(const std::shared_ptr&lt; Staff &gt; &amp;staff)'],['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a5762f50554830a25eb185acc5808dcbf',1,'musx::dom::others::StaffStyle::StaffStyle(const DocumentWeakPtr &amp;document, Cmper partId, ShareMode shareMode, Cmper cmper)']]],

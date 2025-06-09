@@ -193,8 +193,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa3c1793372716cecbf5066470c356690"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f03b041570ad99c110abca358d1bd63" id="r_a2f03b041570ad99c110abca358d1bd63"><td class="memItemLeft" align="right" valign="top"><a id="a2f03b041570ad99c110abca358d1bd63" name="a2f03b041570ad99c110abca358d1bd63"></a>
 std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMultiStaffInstGroup</b> () const</td></tr>
-<tr class="memdesc:a2f03b041570ad99c110abca358d1bd63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> for this staff if it is part of one. Otherwise nullptr. <br /></td></tr>
+<tr class="memdesc:a2f03b041570ad99c110abca358d1bd63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> for this staff if it is part of one in the data. Otherwise nullptr. <br /></td></tr>
 <tr class="separator:a2f03b041570ad99c110abca358d1bd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e690b51c1252da2818e6f35b8bdaeeb" id="r_a1e690b51c1252da2818e6f35b8bdaeeb"><td class="memItemLeft" align="right" valign="top"><a id="a1e690b51c1252da2818e6f35b8bdaeeb" name="a1e690b51c1252da2818e6f35b8bdaeeb"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMultiStaffInstVisualGroup</b> () const</td></tr>
+<tr class="memdesc:a1e690b51c1252da2818e6f35b8bdaeeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> for this staff if it is shown as part of one. Otherwise nullptr. <br /></td></tr>
+<tr class="separator:a1e690b51c1252da2818e6f35b8bdaeeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45c54bccfd5cb9e66bb1700ec4e91916" id="r_a45c54bccfd5cb9e66bb1700ec4e91916"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a45c54bccfd5cb9e66bb1700ec4e91916">getFullInstrumentName</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>, bool preferStaffName=false) const</td></tr>
 <tr class="memdesc:a45c54bccfd5cb9e66bb1700ec4e91916"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)  <br /></td></tr>
 <tr class="separator:a45c54bccfd5cb9e66bb1700ec4e91916"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -539,8 +543,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideKeySigsShowAccis<
 <tr class="memitem:a50309bf2268f58ff5ed76a7337c56912" id="r_a50309bf2268f58ff5ed76a7337c56912"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a50309bf2268f58ff5ed76a7337c56912">abrvNamePosFromStyle</a> {}</td></tr>
 <tr class="separator:a50309bf2268f58ff5ed76a7337c56912"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1be91c741b22c61b0184d8f255733764" id="r_a1be91c741b22c61b0184d8f255733764"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a1be91c741b22c61b0184d8f255733764">multiStaffInstId</a> {}</td></tr>
-<tr class="memdesc:a1be91c741b22c61b0184d8f255733764"><td class="mdescLeft">&#160;</td><td class="mdescRight">It is set by the factory with the Resolver function for <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>.  <br /></td></tr>
 <tr class="separator:a1be91c741b22c61b0184d8f255733764"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a371c2b4ce4ab6cc6c4072957888f12ff" id="r_a371c2b4ce4ab6cc6c4072957888f12ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a371c2b4ce4ab6cc6c4072957888f12ff">multiStaffInstVisualId</a> {}</td></tr>
+<tr class="separator:a371c2b4ce4ab6cc6c4072957888f12ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41eee0c60e99aa7232c27625922f2bea" id="r_a41eee0c60e99aa7232c27625922f2bea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a41eee0c60e99aa7232c27625922f2bea">multiStaffInstVisualGroupId</a> {}</td></tr>
+<tr class="memdesc:a41eee0c60e99aa7232c27625922f2bea"><td class="mdescLeft">&#160;</td><td class="mdescRight">It is set by the factory with the Resolver function for <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>.  <br /></td></tr>
+<tr class="separator:a41eee0c60e99aa7232c27625922f2bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4836d6d1ebe25d08f36b6530b25d8dd1" id="r_a4836d6d1ebe25d08f36b6530b25d8dd1"><td class="memItemLeft" align="right" valign="top"><a id="a4836d6d1ebe25d08f36b6530b25d8dd1" name="a4836d6d1ebe25d08f36b6530b25d8dd1"></a>
 std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>autoNumberValue</b></td></tr>
 <tr class="memdesc:a4836d6d1ebe25d08f36b6530b25d8dd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculated autonumbering value. It is computed by <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a2af29870dae3b8de0e2d99b8a8cbd6d1" title="Get the auto-numbering value for this staff, if applicable.">calcAllAutoNumberValues</a>. <br /></td></tr>
@@ -1166,9 +1174,39 @@ template&lt;typename SubType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Calculated cmper for <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>, if any. This value is not in the xml. It is set by the factory with the Resolver function for <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>. </p>
+
+</div>
+</div>
+<a id="a41eee0c60e99aa7232c27625922f2bea" name="a41eee0c60e99aa7232c27625922f2bea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41eee0c60e99aa7232c27625922f2bea">&#9670;&#160;</a></span>multiStaffInstVisualGroupId</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::others::Staff::multiStaffInstVisualGroupId {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 <p>It is set by the factory with the Resolver function for <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>. </p>
-<p>Calculated cmper for <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>, if any. This value is not in the xml. </p>
+<p>Calculated cmper for the visual <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> that visually shows the multistaff instrument. This value is not in the xml. </p>
+
+</div>
+</div>
+<a id="a371c2b4ce4ab6cc6c4072957888f12ff" name="a371c2b4ce4ab6cc6c4072957888f12ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a371c2b4ce4ab6cc6c4072957888f12ff">&#9670;&#160;</a></span>multiStaffInstVisualId</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::others::Staff::multiStaffInstVisualId {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculated cmper for an associated <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a>, if any. This value is not in the xml. Some staves are included visually in multistaff instruments without being part of it in the data. If <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a1be91c741b22c61b0184d8f255733764">multiStaffInstId</a> is non-zero, this value is the same. But this value can be non-zero when <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a1be91c741b22c61b0184d8f255733764">multiStaffInstId</a> is zero. It is set by the factory. </p>
 
 </div>
 </div>

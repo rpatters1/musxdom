@@ -5,6 +5,7 @@ var structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo =
     [ "calcCreatesBeamContinuationRight", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a5a9874b3716c123c2d54d853747950d6", null ],
     [ "calcCreatesSingletonLeft", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a47519a96ebb5871394c35e50c26c642c", null ],
     [ "calcCreatesSingletonRight", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#adb4f3d52884c75ccbf3631e897bdff1f", null ],
+    [ "calcCreatesTimeStretch", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#afcfe75d7a7e9c43bec0ad246dae8cb15", null ],
     [ "calcIsTremolo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a3f505387d04fded946fe24bb75fa01a1", null ],
     [ "endDura", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4cc361a243e8b23fd5dcd39edc570a00", null ],
     [ "endIndex", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4767e3e0a24fb4dcf1645dea6ec5ae4a", null ],

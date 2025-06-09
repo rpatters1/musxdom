@@ -126,6 +126,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae34807df262d10a74ca2a9bf08e798f1" id="r_ae34807df262d10a74ca2a9bf08e798f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#ae34807df262d10a74ca2a9bf08e798f1">calcCreatesBeamContinuationLeft</a> () const</td></tr>
 <tr class="memdesc:ae34807df262d10a74ca2a9bf08e798f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this tuplet creates a beam continuation over a barline to the left, as created by the Beam Over Barlines plugin.  <br /></td></tr>
 <tr class="separator:ae34807df262d10a74ca2a9bf08e798f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcfe75d7a7e9c43bec0ad246dae8cb15" id="r_afcfe75d7a7e9c43bec0ad246dae8cb15"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#afcfe75d7a7e9c43bec0ad246dae8cb15">calcCreatesTimeStretch</a> () const</td></tr>
+<tr class="memdesc:afcfe75d7a7e9c43bec0ad246dae8cb15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detects tuplets being used to create time stretch in an independent time signature.  <br /></td></tr>
+<tr class="separator:afcfe75d7a7e9c43bec0ad246dae8cb15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -262,6 +265,32 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>voice2</b></td></tr>
 <li>The entry with the tuplet is the visible entry to use. You can mark this entry as having a singleton beam right, if your application allows it.</li>
 <li>Ignore the tuplet on the visible entry. If you need the entry's actual duration in context, its next neighbor in the same voice has the correct value.</li>
 <li>Ignore the entry's next neighbor in the same voice. It will have its leger lines suppressed and non-visible notehead(s) and stem. Its <code>hidden</code> flag, however, will still be false. (This function guarantees these conditions if it returns <code>true</code>.) </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a id="afcfe75d7a7e9c43bec0ad246dae8cb15" name="afcfe75d7a7e9c43bec0ad246dae8cb15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcfe75d7a7e9c43bec0ad246dae8cb15">&#9670;&#160;</a></span>calcCreatesTimeStretch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryFrame::TupletInfo::calcCreatesTimeStretch </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Detects tuplets being used to create time stretch in an independent time signature. </p>
+<p>Because the Finale UI is so buggy with smart shapes and clefs when there is an Independent Time Signature, a common workaround is to set the Independent Time Signature to the same as the global time signature but display a different time signature. Invisible tuplets then create the appearance of time stretch.</p>
+<dl class="section return"><dt>Returns</dt><dd>This function returns true if<ul>
+<li>the tuplet's total reference duration matches the length of the measure exactly</li>
+<li>the tuplet is invisible</li>
+<li>the staff has an independent time signature </li>
 </ul>
 </dd></dl>
 
