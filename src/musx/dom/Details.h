@@ -679,6 +679,18 @@ public:
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
+    /// @brief Returns true if the #GFrameHold instance has more than one layer
+    bool calcIsMultiLayer() const
+    {
+        return std::count_if(frames.begin(), frames.end(), [](Cmper frameId) { return frameId != 0; }) > 1;    
+    }
+
+    /// @brief Returns true if the #GFrameHold contains any layer frames.
+    bool calcContainsMusic() const
+    {
+        return std::find_if(frames.begin(), frames.end(), [](Cmper frameId) { return frameId != 0; }) != frames.end();
+    }
+
     void integrityCheck() override
     {
         this->DetailsBase::integrityCheck();
