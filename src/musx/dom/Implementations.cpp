@@ -1296,10 +1296,11 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
             std::vector<TupletState>& activeTuplets = entry->voice2 ? v2ActiveTuplets : v1ActiveTuplets;
             util::Fraction& actualElapsedDuration = entry->voice2 ? v2ActualElapsedDuration : v1ActualElapsedDuration;
             entryInfo->elapsedDuration = actualElapsedDuration;
+            entryInfo->clefIndexConcert = calcClefIndexAt(actualElapsedDuration);
             if (forWrittenPitch && staff->transposition && staff->transposition->setToClef) {
                 entryInfo->clefIndex = staff->transposedClef;
             } else {
-                entryInfo->clefIndex = calcClefIndexAt(actualElapsedDuration);
+                entryInfo->clefIndex = entryInfo->clefIndexConcert;
             }
             util::Fraction cumulativeRatio = 1;
             if (!entry->graceNote) {
@@ -2304,7 +2305,6 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const 
     if (getEntryInfo().getFrame()->isForWrittenPitch()) {
         return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, m_entry.createCurrentStaff(), doEnharmonicRespell);
     }
-
     return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, nullptr, doEnharmonicRespell);
 }
 
@@ -2312,7 +2312,7 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNotePropertiesConcert
 {
     std::shared_ptr<KeySignature> concertKey = std::make_shared<KeySignature>(*m_entry.getKeySignature());
     concertKey->setTransposition(0, 0, false);
-    return (*this)->calcNoteProperties(concertKey, m_entry->clefIndex, nullptr, false);
+    return (*this)->calcNoteProperties(concertKey, m_entry->clefIndexConcert, nullptr, false);
 }
 
 std::shared_ptr<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
