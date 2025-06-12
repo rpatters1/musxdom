@@ -1637,15 +1637,15 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
     }
     m_octaveDisplacement = interval / music_theory::STANDARD_DIATONIC_STEPS;
     m_alterationOffset = 0; // suppresses transposed tone center and alteration calc
-    int concertAlteration = getAlteration();
+    int concertAlteration = getConcertAlteration();
     int concertTonalCenterIndex = calcTonalCenterIndex();
     int tonalCenterOffset = interval % music_theory::STANDARD_DIATONIC_STEPS;
     
     int alteration = concertAlteration + keyAdjustment;
     if (simplify && keyAdjustment) {
         // Finale does not simplify microtonal key sigs correctly.
-        // This simplification *does* work correctly, provided the custom key sig
-        // is set up to increment each key signature accidental by the number of steps
+        // This simplification *does* work correctly with microtonal key sigs, provided the custom key sig
+        // is set up to increment each key signature accidental by the number of EDO divisions
         // in a chromatic half-step.
         int direction = music_theory::sign(alteration);
         while (std::abs(alteration) >= music_theory::STANDARD_DIATONIC_STEPS) {
@@ -1655,6 +1655,14 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
     }
     m_alterationOffset = alteration - concertAlteration;
     m_octaveDisplacement += (concertTonalCenterIndex + tonalCenterOffset) / music_theory::STANDARD_DIATONIC_STEPS;
+}
+
+void KeySignature::setTransposition(const std::shared_ptr<const others::Staff>& staff)
+{
+    if (staff && staff->transposition && staff->transposition->keysig) {
+        const auto& keysig = *staff->transposition->keysig;
+        setTransposition(keysig.interval, keysig.adjust, !staff->transposition->noSimplifyKey);
+    }
 }
 
 std::optional<std::vector<int>> KeySignature::calcKeyMap() const
@@ -1805,8 +1813,8 @@ std::shared_ptr<KeySignature> others::Measure::createKeySignature(const std::opt
     if (!result) {
         result = std::make_shared<KeySignature>(*globalKeySig);
     }
-    if (result && staff && forWrittenPitch && staff->transposition && staff->transposition->keysig) {
-        result->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
+    if (result && staff && forWrittenPitch) {
+        result->setTransposition(staff);
     }
     return result;
 }

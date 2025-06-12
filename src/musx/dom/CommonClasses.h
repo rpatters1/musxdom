@@ -36,6 +36,15 @@ enum class DiatonicMode : int;
 namespace musx {
 namespace dom {
 
+namespace details {
+class IndependentStaffDetails; // forward delcaration
+} // namespace details
+
+namespace others {
+    class Measure;  // forward declaration
+    class Staff;    // forward declaration
+} // namespace others
+
 // This file contains common classes that are shared among Options, Others, and Details.
 
 /**
@@ -219,9 +228,13 @@ public:
      */
     Cmper getKeyMode() const { return isLinear() ? key >> 8 : key;  }
 
-    /// @brief For linear keys, returns the number of sharps or flats from -7..7.
+    /// @brief For linear keys, returns the number of sharps or flats from -7..7 in key-transposed pitch (if any).
     /// @return Number of sharps/flats for linear keys or 0 for non-linear or invalid keys
-    int getAlteration() const { return isLinear() ? int(int8_t(key & 0xff)) + m_alterationOffset : 0; }
+    int getAlteration() const { return getConcertAlteration() + m_alterationOffset; }
+
+    /// @brief For linear keys, returns the number of sharps or flats from -7..7 in concert pitch.
+    /// @return Number of sharps/flats for linear keys or 0 for non-linear or invalid keys
+    int getConcertAlteration() const { return isLinear() ? int(int8_t(key & 0xff)) : 0; }
 
     bool isLinear() const { return (key & 0xC000) == 0; }                   ///< whether this is a linear key
     bool isNonLinear() const { return (key & 0xC000) != 0; }                ///< whether this is a non-linear key
@@ -257,6 +270,9 @@ public:
      * @param simplify If true, enharmonically adjust the key to have 6 or fewer accidentals
      */
     void setTransposition(int interval, int keyAdjustment, bool simplify);
+
+    /// @brief Sets the key's transposition based on the input staff's transposition settings.
+    void setTransposition(const std::shared_ptr<const others::Staff>& staff);
 
     /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
     /// 
@@ -324,14 +340,6 @@ private:
 
     friend class texts::LyricsTextBase;
 };
-
-namespace details {
-class IndependentStaffDetails; // forward delcaration
-} // namespace details
-
-namespace others {
-    class Measure; // forward delcaration
-    } // namespace others
     
 /**
  * @class TimeSignature
