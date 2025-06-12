@@ -746,6 +746,18 @@ public:
      */
     std::tuple<Note::NoteName, int, int, int> calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
 
+    /**
+     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of thenote. This function does
+     * not take into account percussion notes and their staff position override. To discover if a note is a percussion
+     * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * @return A tuple containing:
+     *         - NoteName: The note name (C, D, E, F, G, A, B)
+     *         - int: The octave number (where 4 is the middle C octave)
+     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
+     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     */
+    std::tuple<Note::NoteName, int, int, int> calcNotePropertiesConcert() const;
+
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
     std::shared_ptr<others::PercussionNoteInfo> calcPercussionNoteInfo() const;

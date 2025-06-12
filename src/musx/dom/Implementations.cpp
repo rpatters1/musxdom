@@ -2308,6 +2308,13 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const 
     return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, nullptr, doEnharmonicRespell);
 }
 
+std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNotePropertiesConcert() const
+{
+    std::shared_ptr<KeySignature> concertKey = std::make_shared<KeySignature>(*m_entry.getKeySignature());
+    concertKey->setTransposition(0, 0, false);
+    return (*this)->calcNoteProperties(concertKey, m_entry->clefIndex, nullptr, false);
+}
+
 std::shared_ptr<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
 {
     auto entry = getEntryInfo()->getEntry();
