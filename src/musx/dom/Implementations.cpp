@@ -1270,10 +1270,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                                          ? measure->calcTimeStretch(staff->getCmper())
                                          : 1;
         entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch, timeStretch);
-        entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
-        if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
-            entryFrame->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
-        }
+        entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff(), forWrittenPitch);
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
@@ -1791,22 +1788,25 @@ int others::Measure::calcDisplayNumber() const
     return getCmper();
 }
 
-std::shared_ptr<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff) const
+std::shared_ptr<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff, bool forWrittenPitch) const
 {
     std::shared_ptr<KeySignature> result;
+    std::shared_ptr<const others::Staff> staff;
     if (forStaff) {
-        if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
-            if (staff->floatKeys) {
-                if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
-                    if (floats->hasKey) {
-                        result = std::make_shared<KeySignature>(*floats->keySig);
-                    }
+        staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0);
+        if (staff && staff->floatKeys) {
+            if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
+                if (floats->hasKey) {
+                    result = std::make_shared<KeySignature>(*floats->keySig);
                 }
             }
         }
     }
     if (!result) {
         result = std::make_shared<KeySignature>(*globalKeySig);
+    }
+    if (result && staff && forWrittenPitch && staff->transposition && staff->transposition->keysig) {
+        result->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
     }
     return result;
 }
