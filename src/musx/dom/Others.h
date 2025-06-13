@@ -90,12 +90,13 @@ public:
  * Note that while flats are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciAmountSharps is required for non-linear key signatures. It specifies whether a slot
- * is sharp or flat with a positive or negative value. The first zero value in the table
- * terminates the sequence of sharps or flats.
+ * is a sharp or a flat with a positive or negative value. The first zero value in the table
+ * terminates the sequence of accidentals in the key signature.
  *
- * AcciAmountSharps is also useful with microtone systems that use standard key
- * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
- * need to specify acci alteration amounts with magnitude larger than 1.
+ * AcciAmountSharps is also useful with microtone systems that use standard key signatures.
+ * Typically linear modes in 12-EDO will not have this table, but EDOs larger than 19-EDO
+ * may need to specify acci alteration amounts with magnitude larger than 1 (equal to the number
+ * of EDO divisions in a chromatic half-step.)
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
@@ -120,8 +121,8 @@ public:
  * Note that while flats are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciOrderFlats is primarily useful with microtone systems that use standard key
- * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
- * will need to supply and @ref AcciAmountFlats table, and this is here to match it.
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
+ * will need to supply an @ref AcciAmountFlats table, and this is here to match it.
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
@@ -146,13 +147,13 @@ public:
  * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciOrderSharps is required for non-linear key signatures. It specifies the order of
- * pitch class indices for corresponding sharps and flats in @ref AcciAmountSharps, which can be mixed in any order.
+ * pitch class indices for the corresponding sharps and flats in @ref AcciAmountSharps, which can be mixed in any order.
  * The first zero value in the @ref AcciAmountSharps table terminates the sequence of sharps or flats, and the rest
  * of the values here are meaningless.
  *
  * AcciOrderSharps is also useful with microtone systems that use standard key
- * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
- * will need to supply an @ref AcciAmountFlats table, and this should have values that correspond.
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
+ * will need to supply an @ref AcciAmountSharps table, and this should have values that correspond.
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
