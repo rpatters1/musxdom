@@ -254,6 +254,16 @@ MUSX_XML_ENUM_MAPPING(Staff::HideMode, {
     {"score", Staff::HideMode::Score},
 });
 
+MUSX_XML_ENUM_MAPPING(Staff::AlternateNotation, {
+    // {"normal", Staff::AlternateNotation::Normal}, // this is the default and may not occur in the XML
+    {"slashBeats", Staff::AlternateNotation::SlashBeats},
+    {"rhythmic", Staff::AlternateNotation::Rhythmic},
+    {"blank", Staff::AlternateNotation::Blank},
+    {"oneBarRepeat", Staff::AlternateNotation::OneBarRepeat},
+    {"twoBarRepeat", Staff::AlternateNotation::TwoBarRepeat},
+    {"blankWithRests", Staff::AlternateNotation::BlankWithRests},
+});
+
 MUSX_XML_ENUM_MAPPING(musx::dom::others::TextBlock::TextType, {
     {"block", TextBlock::TextType::Block},
     {"expression", TextBlock::TextType::Expression}
@@ -979,6 +989,10 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
         { i->transposition = FieldPopulator<Staff::Transposition>::createAndPopulate(e); }},
     {"hideStfNameInScore", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideNameInScore = populateBoolean(e, i); }},
     {"botBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botBarlineOffset = e->getTextAs<Evpu>(); }},
+    {"altNotation", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->altNotation = toEnum<Staff::AlternateNotation>(e); }},
+    {"altLayer", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->altLayer = e->getTextAs<LayerIndex>(); }},
+    {"altRhythmStemsUp", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->altRhythmStemsUp = populateBoolean(e, i); }},
+    {"altHideSmartShapes", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->altHideSmartShapes = populateBoolean(e, i); }},
     {"hideRepeatBottomDot", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideRepeatBottomDot = populateBoolean(e, i); }},
     {"flatBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->flatBeams = populateBoolean(e, i); }},
     {"hideFretboards", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideFretboards = populateBoolean(e, i); }},
@@ -1048,6 +1062,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"noKey", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->noKey = populateBoolean(e, i); }},
     {"fullNamePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->fullNamePos = populateBoolean(e, i); }},
     {"abrvNamePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->abrvNamePos = populateBoolean(e, i); }},
+    {"altNotation", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->altNotation = populateBoolean(e, i); }},
     {"showTies", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showTies = populateBoolean(e, i); }},
     {"showDots", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showDots = populateBoolean(e, i); }},
     {"showRests", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showRests = populateBoolean(e, i); }},

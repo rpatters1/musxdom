@@ -3165,6 +3165,14 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         abrvNamePosFromStyle = true;
         masks->abrvNamePos = true;
     }
+    if (srcMasks->altNotation) {
+        altNotation = staffStyle->altNotation;
+        altLayer = staffStyle->altLayer;
+        altRhythmStemsUp = staffStyle->altRhythmStemsUp;
+        altHideSmartShapes = staffStyle->altHideSmartShapes;
+        /// @todo the rest of the alt notation booleans
+        masks->altNotation = true;
+    }
     if (srcMasks->negKey) {
         hideKeySigs = staffStyle->hideKeySigs;
         masks->negKey = true;

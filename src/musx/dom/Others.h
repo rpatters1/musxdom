@@ -2056,6 +2056,18 @@ public:
         Score           ///< Collapse in score only
     };
 
+    /** @brief Enum for alternate notation styles. */
+    enum class AlternateNotation
+    {
+        Normal,         ///< Normal Notation (default)
+        SlashBeats,     ///< Slash Notation (on beats)
+        Rhythmic,       ///< Rhythmic Notation
+        Blank,          ///< Blank Notation
+        OneBarRepeat,   ///< One Bar Repeat(s)
+        TwoBarRepeat,   ///< Two Bar Repeat(s)
+        BlankWithRests  ///< Blank Notation with Rests
+    };
+
     /**
      * @class KeySigTransposition
      * @brief Represents key signature transposition details.
@@ -2130,6 +2142,11 @@ public:
     std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
     bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
+    AlternateNotation altNotation{};///< Alternate notation on the staff
+    LayerIndex altLayer{};          ///< Alternate notation Apply To Layer index (0..3)
+    bool altRhythmStemsUp{};        ///< Show stems up in alternate Rhythmic Notation mode
+    bool altHideSmartShapes{};      ///< Hide Smart Shapes (in Apply-To layer: probably only affects entry-attached shapes)
+    /// @todo the rest of the alt notation booleans
     bool hideRepeatBottomDot{};     ///< Inverse of "Bottom Repeat Dot" in Staff Setup dialog
     bool flatBeams{};               ///< "Flat Beams"
     bool hideFretboards{};          ///< Inverse of "Display Fretboards"
@@ -2376,6 +2393,7 @@ public:
         bool noKey{};                   ///< overrides #Staff::noKey
         bool fullNamePos{};             ///< overrides presence, absence of @ref NamePositionStyleFull instance.
         bool abrvNamePos{};             ///< overrides presence, absence of @ref NamePositionStyleAbbreviated instance.
+        bool altNotation{};             ///< overrides alternate notation properties (see #StaffComposite::applyStyle)
         bool showTies{};                ///< overrides #Staff::hideTies
         bool showDots{};                ///< overrides #Staff::hideDots
         bool showRests{};               ///< overrides #Staff::hideRests
