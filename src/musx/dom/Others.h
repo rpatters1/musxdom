@@ -2144,9 +2144,17 @@ public:
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
     AlternateNotation altNotation{};///< Alternate notation on the staff
     LayerIndex altLayer{};          ///< Alternate notation Apply To Layer index (0..3)
-    bool altRhythmStemsUp{};        ///< Show stems up in alternate Rhythmic Notation mode
+    bool altHideArtics{};           ///< Hide Articulations in alternate notation (in Apply-To Layer)
+    bool altHideLyrics{};           ///< Hide Lyrics in alternate notation (in Apply-To Layer)
     bool altHideSmartShapes{};      ///< Hide Smart Shapes (in Apply-To layer: probably only affects entry-attached shapes)
-    /// @todo the rest of the alt notation booleans
+    bool altRhythmStemsUp{};        ///< Show stems up in alternate Rhythmic Notation mode
+    bool altSlashDots{};            ///< Show dots on beat slashes in compound meter
+    bool altHideOtherNotes{};       ///< Hide notes in other layers in alternate notation
+    bool altHideOtherArtics{};      ///< Hide articulations in other layers in alternate notation
+    bool altHideExpressions{};      ///< Hide Expressions in alternate notation (in Apply-To Layer)
+    bool altHideOtherLyrics{};      ///< Hide lyrics in other layers in alternate notation
+    bool altHideOtherSmartShapes{}; ///< Hide Smart Shapes in other layers in alternate notation
+    bool altHideOtherExpressions{}; ///< Hide Expressions in other layers in alternate notation
     bool hideRepeatBottomDot{};     ///< Inverse of "Bottom Repeat Dot" in Staff Setup dialog
     bool flatBeams{};               ///< "Flat Beams"
     bool hideFretboards{};          ///< Inverse of "Display Fretboards"

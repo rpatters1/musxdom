@@ -46,6 +46,19 @@ constexpr static musxtest::string_view staffStyleXml = R"xml(
       <fullName>12</fullName>
       <abbrvName>13</abbrvName>
       <botRepeatDotOff>-5</botRepeatDotOff>
+      <altNotation>slashBeats</altNotation>
+      <altLayer>2</altLayer>
+      <altHideArtics/>
+      <altHideLyrics/>
+      <altHideSmartShapes/>
+      <altRhythmStemsUp/>
+      <altSlashDots/>
+      <altHideOtherNotes/>
+      <altHideOtherArtics/>
+      <altHideExpressions/>
+      <altHideOtherLyrics/>
+      <altHideOtherSmartShapes/>
+      <altHideOtherExpressions/>
       <topRepeatDotOff>-3</topRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
       <stemDir>alwaysUp</stemDir>
@@ -59,6 +72,7 @@ constexpr static musxtest::string_view staffStyleXml = R"xml(
         <negNameScore/>
         <fullName/>
         <abrvName/>
+        <altNotation/>
         <showStems/>
         <showNameParts/>
       </mask>
@@ -90,7 +104,7 @@ TEST(StaffStyleTest, PopulateFields)
     EXPECT_EQ(staffStyle->customStaff.value()[0], 11) << "factory did not sort customStaff elements";
     EXPECT_EQ(staffStyle->customStaff.value()[1], 13) << "factory did not sort customStaff elements";
     EXPECT_EQ(staffStyle->lineSpace, 24);
-    EXPECT_EQ(staffStyle->instUuid, "54422b22-4627-4100-abbf-064eedc15fe3");
+    EXPECT_EQ(staffStyle->instUuid, uuid::BlankStaff);
     EXPECT_TRUE(staffStyle->showNameInParts);
     EXPECT_EQ(staffStyle->dwRestOffset, -4);
     EXPECT_EQ(staffStyle->wRestOffset, -4);
@@ -100,6 +114,19 @@ TEST(StaffStyleTest, PopulateFields)
     EXPECT_EQ(staffStyle->fullNameTextId, 12);
     EXPECT_EQ(staffStyle->abbrvNameTextId, 13);
     EXPECT_EQ(staffStyle->botRepeatDotOff, -5);
+    EXPECT_EQ(staffStyle->altNotation, others::Staff::AlternateNotation::SlashBeats);
+    EXPECT_EQ(staffStyle->altLayer, 2);
+    EXPECT_TRUE(staffStyle->altHideArtics);
+    EXPECT_TRUE(staffStyle->altHideLyrics);
+    EXPECT_TRUE(staffStyle->altHideSmartShapes);
+    EXPECT_TRUE(staffStyle->altRhythmStemsUp);
+    EXPECT_TRUE(staffStyle->altSlashDots);
+    EXPECT_TRUE(staffStyle->altHideOtherNotes);
+    EXPECT_TRUE(staffStyle->altHideOtherArtics);
+    EXPECT_TRUE(staffStyle->altHideExpressions);
+    EXPECT_TRUE(staffStyle->altHideOtherLyrics);
+    EXPECT_TRUE(staffStyle->altHideOtherSmartShapes);
+    EXPECT_TRUE(staffStyle->altHideOtherExpressions);
     EXPECT_EQ(staffStyle->topRepeatDotOff, -3);
     EXPECT_EQ(staffStyle->vertTabNumOff, -1024);
     EXPECT_EQ(staffStyle->stemDirection, others::Staff::StemDirection::AlwaysUp);
@@ -115,6 +142,7 @@ TEST(StaffStyleTest, PopulateFields)
     EXPECT_TRUE(staffStyle->masks->negNameScore);
     EXPECT_TRUE(staffStyle->masks->fullName);
     EXPECT_TRUE(staffStyle->masks->abrvName);
+    EXPECT_TRUE(staffStyle->masks->altNotation);
     EXPECT_TRUE(staffStyle->masks->showStems);
     EXPECT_TRUE(staffStyle->masks->showNameParts);
 }

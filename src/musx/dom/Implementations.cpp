@@ -3168,9 +3168,17 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->altNotation) {
         altNotation = staffStyle->altNotation;
         altLayer = staffStyle->altLayer;
-        altRhythmStemsUp = staffStyle->altRhythmStemsUp;
+        altHideArtics = staffStyle->altHideArtics;
+        altHideLyrics = staffStyle->altHideLyrics;
         altHideSmartShapes = staffStyle->altHideSmartShapes;
-        /// @todo the rest of the alt notation booleans
+        altRhythmStemsUp = staffStyle->altRhythmStemsUp;
+        altSlashDots = staffStyle->altSlashDots;
+        altHideOtherNotes = staffStyle->altHideOtherNotes;
+        altHideOtherArtics = staffStyle->altHideOtherArtics;
+        altHideExpressions = staffStyle->altHideExpressions;
+        altHideOtherLyrics = staffStyle->altHideOtherLyrics;
+        altHideOtherSmartShapes = staffStyle->altHideOtherSmartShapes;
+        altHideOtherExpressions = staffStyle->altHideOtherExpressions;
         masks->altNotation = true;
     }
     if (srcMasks->negKey) {
