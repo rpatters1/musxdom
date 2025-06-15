@@ -663,6 +663,24 @@ bool EntryInfoPtr::calcIsBeamStart() const
     return (!getPreviousInBeamGroup() && getNextInBeamGroup());
 }
 
+EntryInfoPtr EntryInfoPtr::findBeamStartOrCurrent() const
+{
+    if (calcUnbeamed()) return *this;
+    auto prev = getPreviousInBeamGroup();
+    if (!prev) {
+        if (getNextInBeamGroup()) return *this;
+        return EntryInfoPtr();
+    }
+    while (true) {
+        if (auto tryPrev = prev.getPreviousInBeamGroup()) {
+            prev = tryPrev;
+        } else {
+            break;
+        }
+    }
+    return prev;
+}
+
 EntryInfoPtr EntryInfoPtr::findBeamEnd() const
 {
     if (calcUnbeamed()) return EntryInfoPtr();
@@ -674,8 +692,7 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
     while (true) {
         if (auto tryNext = next.getNextInBeamGroup()) {
             next = tryNext;
-        }
-        else {
+        } else {
             break;
         }
     }
@@ -990,6 +1007,25 @@ bool EntryInfoPtr::calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) con
         return true;
     }
 
+    return false;
+}
+
+bool EntryInfoPtr::calcIsCue() const
+{
+    auto beamStart = findBeamStartOrCurrent();
+    if (!beamStart) return false;
+    auto doc = m_entryFrame->getDocument();
+    auto entrySize = doc->getDetails()->get<details::EntrySize>(m_entryFrame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber());
+    if (entrySize && entrySize->percent < 100) {
+        auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration());
+        if (scoreStaff) {
+            if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests) {
+                const bool hidden = scoreStaff->altLayer = getLayerIndex() || scoreStaff->altHideOtherNotes;
+                /// @todo: check parts to be sure the entry is not hidden in at least one part
+                return hidden;
+            }
+        }
+    }
     return false;
 }
 

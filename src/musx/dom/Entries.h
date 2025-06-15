@@ -472,8 +472,14 @@ public:
     /// @param [out] outRightY The height of the right side of the feathered beam
     /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
     bool calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) const;
-        
-        /// @brief Finds the end entry of a beamed group.
+
+    /// @brief Finds the first entry of a beamed group or returns the current entry if it is not beams.
+    /// @note This behavior is different than other beam functions in that it returns the current entry if there is no beam
+    /// rather than returning NULL.
+    /// @return The first entry of a beamed group or the current entry if no beam.
+    EntryInfoPtr findBeamStartOrCurrent() const;
+
+    /// @brief Finds the end entry of a beamed group.
     /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
     EntryInfoPtr findBeamEnd() const;
 
@@ -507,6 +513,12 @@ public:
 
     /// @brief Determines if this entry can be beamed.
     bool canBeBeamed() const;
+
+    /// @brief Calculates if this entry is part of a cue.
+    /// @return true if
+    ///         - the entry is reduced in size
+    ///         - the entry is hidden by "Blank Notation with Rests" alternate notation in the score but not in a part.
+    bool calcIsCue() const;
 
 private:
     unsigned calcVisibleBeams() const;
