@@ -22,6 +22,7 @@
 #pragma once
 
 #include <tuple>
+#include <map>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -43,7 +44,92 @@ class StaffComposite;
 
 namespace details {
 class TupletDef;
-class GFrameHoldContext;
+class GFrameHold;
+
+/**
+ * @class GFrameHoldContext
+ * @brief A context wrapper for @ref GFrameHold associated with a specific part and location.
+ *
+ * This class retrieves the appropriate @ref GFrameHold from a Document using part, instrument, and measure IDs,
+ * and enables part-aware operations like iterating over EntryFrame objects.
+ */
+class GFrameHoldContext {
+public:
+    /**
+     * @brief Constructs a context-aware @ref GFrameHold wrapper.
+     * 
+     * @param document Weak pointer to the owning Document.
+     * @param partId The requested part ID.
+     * @param inst The instrument ID for.
+     * @param meas The measure ID for.
+     */
+    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas);
+
+    /**
+     * @brief Returns the requested part ID associated with this context.
+     * 
+     * @return The requested part ID.
+     */
+    Cmper getRequestedPartId() const { return m_requestedPartId; }
+
+    /**
+     * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
+     * 
+     * @return A const pointer to @ref GFrameHold.
+     */
+    const GFrameHold* operator->() const { return m_hold.get(); }
+
+    /**
+     * @brief Returns true if the internal @ref GFrameHold is valid.
+     * 
+     * @return True if the @ref GFrameHold was successfully retrieved; false otherwise.
+     */
+    explicit operator bool() const { return static_cast<bool>(m_hold); }
+
+    /// @brief Returns the clef index in effect for at the specified @ref Edu position.
+    /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
+    /// @param position The Edu position of the clef *in staff-level Edus*. (The staff-level matters for Independent Key Signature staves.)
+    ClefIndex calcClefIndexAt(Edu position) const;
+
+    /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
+    /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
+    /// @param position The *staff-level* position of the clef. (The staff-level matters for Independent Key Signature staves.)
+    ClefIndex calcClefIndexAt(util::Fraction position) const
+    { return calcClefIndexAt(position.calcEduDuration()); }
+
+    /** @brief Returns the @ref EntryFrame for all entries in the given layer.
+     *
+     * @param layerIndex The layer index (0..3) to iterate.
+     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
+     * @return EntryFrame for layer or nullptr if none.
+     */
+    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
+    
+    /**
+     * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
+     * @param layerIndex The layer index (0..3) to iterate.
+     * @param iterator The callback function for each iteration.
+     * @return true if higher-level iteration should continue. false if it should halt.
+     * @throws std::invalid_argument if the layer index is out of range
+     */
+    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
+
+    /**
+     * @brief iterates the entries for this @ref GFrameHold from left to right for each layer in order
+     * @param iterator The callback function for each iteration.
+     * @return true if higher-level iteration should continue. false if it should halt.
+     */
+    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
+
+    /// @brief Calculates the number of voices used by the GFrameHold instance.
+    /// @return A list of each layer that contains entries and whether that layer uses voice2.
+    std::map<LayerIndex, bool> calcVoices() const;
+
+private:
+    std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
+    Cmper m_requestedPartId;                 ///< The requested part context.
+};
+
 } // namespace details
 
 /**
@@ -457,14 +543,17 @@ public:
     /** @brief Constructor function
      *
      * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
-     * @param staff The Cmper for the @ref others::Staff of the entry
-     * @param measure The Cmper for the @ref others::Measure of the entry
-     * @param layerIndex The @ref LayerIndex (0..3) of the entry
+     * @param layerIndex The @ref LayerIndex (0..3) of the entry frame
      * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
      * @param timeStretch The ratio of global Edu to staff edu.
     */
-    explicit EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex,
-        bool forWrittenPitch, util::Fraction timeStretch);
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, bool forWrittenPitch, util::Fraction timeStretch) :
+        m_context(gfhold),
+        m_layerIndex(layerIndex),
+        m_forWrittenPitch(forWrittenPitch),
+        m_timeStretch(timeStretch)
+    {
+    }
 
     /// @brief class to track tuplets in the frame
     struct TupletInfo
@@ -570,16 +659,16 @@ public:
     std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
 
     /// @brief Get the document for the entry frame
-    DocumentPtr getDocument() const { return m_document; }
+    DocumentPtr getDocument() const;
 
     /// @brief Get the requested part ID for the entry frame
-    Cmper getRequestedPartId() const { return m_requestedPartId; }
+    Cmper getRequestedPartId() const { return m_context.getRequestedPartId(); }
 
     /// @brief Get the staff for the entry
-    InstCmper getStaff() const { return m_staff; }
+    InstCmper getStaff() const;
 
     /// @brief Get the measure for the entry frame
-    MeasCmper getMeasure() const { return m_measure; }
+    MeasCmper getMeasure() const;
 
     /// @brief Get the layer index (0..3) of the entry frame
     LayerIndex getLayerIndex() const { return m_layerIndex; }
@@ -627,10 +716,7 @@ public:
     std::shared_ptr<others::Measure> getMeasureInstance() const;
 
 private:
-    DocumentPtr m_document;
-    Cmper m_requestedPartId;
-    InstCmper m_staff;
-    MeasCmper m_measure;
+    details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
     bool m_forWrittenPitch;
     util::Fraction m_timeStretch;

@@ -202,23 +202,18 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // ***** EntryFrame *****
 // **********************
 
-EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch, util::Fraction timeStretch) :
-    m_document(gfhold->getDocument()),
-    m_requestedPartId(gfhold.getRequestedPartId()),
-    m_staff(staff),
-    m_measure(measure),
-    m_layerIndex(layerIndex),
-    m_forWrittenPitch(forWrittenPitch),
-    m_timeStretch(timeStretch)
-{
-}
+DocumentPtr EntryFrame::getDocument() const { return m_context->getDocument(); }
+
+InstCmper EntryFrame::getStaff() const { return m_context->getStaff(); }
+
+MeasCmper EntryFrame::getMeasure() const { return m_context->getMeasure(); }
 
 EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 {
     bool forV2 = voice == 2;
     auto firstEntry = EntryInfoPtr(shared_from_this(), 0);
     if (firstEntry->getEntry()->voice2) {
-        MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(m_staff) + " measure " + std::to_string(m_measure)
+        MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(getStaff()) + " measure " + std::to_string(getMeasure())
             + " layer " + std::to_string(m_layerIndex + 1) + " starts with voice2.");
         if (!forV2) {
             firstEntry = firstEntry.getNextInVoice(voice);
@@ -242,7 +237,7 @@ EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
 
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 {
-    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure + 1)) {
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), getMeasure() + 1)) {
         return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
     }
     return nullptr;
@@ -250,8 +245,8 @@ std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 
 std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 {
-    if (m_measure > 1) {
-        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure - 1)) {
+    if (getMeasure() > 1) {
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), getMeasure() - 1)) {
             return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
         }
     }
@@ -1269,7 +1264,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         const util::Fraction timeStretch = staff->floatTime
                                          ? measure->calcTimeStretch(staff->getCmper())
                                          : 1;
-        entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch, timeStretch);
+        entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, forWrittenPitch, timeStretch);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff(), forWrittenPitch);
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
