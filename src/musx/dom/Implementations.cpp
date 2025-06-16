@@ -1046,6 +1046,35 @@ bool EntryInfoPtr::calcIsFullMeasureRest() const
     return false;
 }
 
+bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
+{
+    auto entry = (*this)->getEntry();
+    if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
+        return false;
+    }
+    if (entry->isHidden && (*this)->v2Launch) {
+        // if this is a hidden v2 launch rest, check to see if there is an equivalent visible stand-alone v2 rest of the same type
+        if (auto next = getNextInFrame()) {
+            auto nextEntry = next->getEntry();
+            if (!nextEntry->isNote && nextEntry->duration == entry->duration && !nextEntry->isHidden) {
+                if (next = next.getNextInFrame(); !next || !next->getEntry()->voice2) {
+                    return true;
+                }
+            }
+        }
+    } else if (!entry->isHidden && entry->voice2) {
+        // if this is a visible stand-alone v2 rest, check to see if there is an equivalent invisible v2 launch rest preceding it
+        if (auto next = getNextInFrame(); !next || !next->getEntry()->voice2) {
+            if (auto prev = getPreviousInFrame(); prev && prev->v2Launch) {
+                auto prevEntry = prev->getEntry();
+                if (!prevEntry->isNote && prevEntry->isHidden && prevEntry->duration == entry->duration) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 
 // ***********************
 // ***** FontOptions *****
