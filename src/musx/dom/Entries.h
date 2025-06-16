@@ -517,8 +517,12 @@ public:
     /// @brief Calculates if this entry is part of a cue.
     /// @return true if
     ///         - the entry is reduced in size
-    ///         - the entry is hidden by "Blank Notation with Rests" alternate notation in the score but not in a part.
+    ///         - the entry is hidden by "Blank Notation" or "Blank Notation with Rests" alternate notation in the score but not in a part.
     bool calcIsCue() const;
+
+    /// @brief Returns whether this is a full measure rest.
+    /// @note Note that in Finale, only whole rests are used as full measure rests.
+    bool calcIsFullMeasureRest() const;
 
 private:
     unsigned calcVisibleBeams() const;

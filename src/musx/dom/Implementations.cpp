@@ -1017,17 +1017,35 @@ bool EntryInfoPtr::calcIsCue() const
     auto doc = m_entryFrame->getDocument();
     auto entrySize = doc->getDetails()->get<details::EntrySize>(m_entryFrame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber());
     if (entrySize && entrySize->percent < 100) {
-        auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration());
-        if (scoreStaff) {
-            if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests) {
-                const bool hidden = scoreStaff->altLayer = getLayerIndex() || scoreStaff->altHideOtherNotes;
-                /// @todo: check parts to be sure the entry is not hidden in at least one part
-                return hidden;
+        if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+            if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank) {
+                if (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes) {
+                    auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
+                    for (const auto& part : parts) {
+                        if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+                            if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
+        } else {
+            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getStaff()) + " not found for measure " + std::to_string(getMeasure()));
         }
     }
     return false;
 }
+
+bool EntryInfoPtr::calcIsFullMeasureRest() const
+{
+    auto entry = (*this)->getEntry();
+    if (!entry->isNote && !entry->isHidden && entry->duration == Edu(NoteType::Whole)) {
+        return m_entryFrame->getEntries().size() == 1;
+    }
+    return false;
+}
+
 
 // ***********************
 // ***** FontOptions *****
@@ -3046,13 +3064,16 @@ bool others::Staff::hasInstrumentAssigned() const
     return true;
 }
 
-std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts() const
+std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts(bool includeScore) const
 {
     std::vector<std::shared_ptr<others::PartDefinition>> result;
     auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
-        auto scoreView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
-        for (const auto& next : scoreView) {
+        if (!includeScore && part->getCmper() == SCORE_PARTID) {
+            continue;
+        }
+        auto scrollView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+        for (const auto& next : scrollView) {
             if (next->staffId == this->getCmper()) {
                 result.push_back(part);
                 break;
@@ -3068,8 +3089,8 @@ std::shared_ptr<others::PartDefinition> others::Staff::firstFirstContainingPart(
     auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
         if (part->getCmper() != SCORE_PARTID) {
-            auto scoreView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
-            for (const auto& next : scoreView) {
+            auto scrollView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            for (const auto& next : scrollView) {
                 if (next->staffId == this->getCmper()) {
                     return part;
                 }

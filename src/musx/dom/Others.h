@@ -2302,8 +2302,9 @@ public:
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
 
-    /// @brief Gets a list of all parts that contain this staff, including the score.
-    std::vector<std::shared_ptr<PartDefinition>> getContainingParts() const;
+    /// @brief Gets a list of all parts that contain this staff
+    /// @param includeScore If true, include the score in the list. (Defaults to true)
+    std::vector<std::shared_ptr<PartDefinition>> getContainingParts(bool includeScore = true) const;
 
     /// @brief Finds the first part that contains this staff, not including the score.
     /// @return The first part that contains this staff or nullptr if none.
