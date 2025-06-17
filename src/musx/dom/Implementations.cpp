@@ -1040,7 +1040,7 @@ int EntryInfoPtr::calcEntrySize() const
 
 bool EntryInfoPtr::calcIsCue() const
 {
-    if (calcEntrySize() < 100) {
+    if (calcEntrySize() <= MAX_CUE_PERCENTAGE) {
         auto doc = m_entryFrame->getDocument();
         if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
             if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank) {
