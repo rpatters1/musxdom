@@ -264,6 +264,21 @@ std::shared_ptr<others::Measure> EntryFrame::getMeasureInstance() const
     return getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), getMeasure());
 }
 
+bool EntryFrame::calcIsCueFrame() const
+{
+    bool foundCueEntry = false;
+    for (size_t x = 0; x < m_entries.size(); x++) {
+        if (!m_entries[x]->getEntry()->isHidden) {
+            EntryInfoPtr entryInfo(shared_from_this(), x);
+            if (entryInfo.calcIsCue()) {
+                foundCueEntry = true;
+            } else {
+                return false; // return false on the first non-cue visible entry found
+            }
+        }
+    }
+    return foundCueEntry;
+}
 
 bool EntryFrame::TupletInfo::calcIsTremolo() const
 {
@@ -1039,9 +1054,8 @@ bool EntryInfoPtr::calcIsCue() const
 
 bool EntryInfoPtr::calcIsFullMeasureRest() const
 {
-    auto entry = (*this)->getEntry();
-    if (!entry->isNote && !entry->isHidden && entry->duration == Edu(NoteType::Whole)) {
-        return m_entryFrame->getEntries().size() == 1;
+    if ((*this)->getEntry()->isPossibleFullMeasureRest()) {
+        return m_entryFrame->getEntries().size() == 1 && (*this)->elapsedDuration == 0;
     }
     return false;
 }
@@ -1317,6 +1331,27 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
+std::pair<std::shared_ptr<const others::Frame>, Edu> details::GFrameHoldContext::findLayerFrame(LayerIndex layerIndex) const
+{
+    std::shared_ptr<const others::Frame> layerFrame;
+    Edu startEdu = 0;
+    if (layerIndex < m_hold->frames.size() && m_hold->frames[layerIndex]) {
+        auto frameIncis = m_hold->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
+        for (const auto& frame : frameIncis) {
+            if (frame->startEntry) {
+                if (layerFrame) {
+                    MUSX_INTEGRITY_ERROR("More than one entry frame inci exists for frame " + std::to_string(m_hold->frames[layerIndex]));
+                }
+                layerFrame = frame;
+            }
+            if (frame->startTime > startEdu) {
+                startEdu = frame->startTime;
+            }
+        }
+    }
+    return std::make_pair(layerFrame, startEdu);
+}
+
 std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch) const
 {
     if (!m_hold) return nullptr;
@@ -1325,15 +1360,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     }
     if (!m_hold->frames[layerIndex]) return nullptr; // nothing here
     auto document = m_hold->getDocument();
-    auto frameIncis = document->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
-    auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
-        for (const auto& frame : frameIncis) {
-            if (frame->startEntry) {
-                return frame;
-            }
-        }
-        return nullptr;
-    }();
+    auto [frame, startEdu] = findLayerFrame(layerIndex);
     std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
         const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
@@ -1352,10 +1379,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
-        util::Fraction v1ActualElapsedDuration = 0;
-        for (const auto& f : frameIncis) {
-            v1ActualElapsedDuration += util::Fraction::fromEdu(f->startTime); // if there is an old-skool pickup, this accounts for it
-        }
+        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu);
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
@@ -1475,15 +1499,7 @@ std::map<LayerIndex, bool> details::GFrameHoldContext::calcVoices() const
 {
     std::map<LayerIndex, bool> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        auto frameIncis = (*this)->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
-        auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
-            for (const auto& frame : frameIncis) {
-                if (frame->startEntry) {
-                    return frame;
-                }
-            }
-            return nullptr;
-        }();
+        auto [frame, startEdu] = findLayerFrame(layerIndex);
         if (frame) {
             bool gotLayer = false;
             bool gotV2 = false;
@@ -1527,6 +1543,28 @@ ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
         result = lastClef->clefIndex;
     }
     return result;
+}
+
+bool details::GFrameHoldContext::calcIsCuesOnly() const
+{
+    bool foundCue = false;
+    for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
+        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        if (frame) {
+            auto entries = frame->getEntries();
+            if (startEdu == 0 && entries.size() == 1 && entries[0]->isPossibleFullMeasureRest()) {
+                continue;
+            }
+            if (auto entryFrame = createEntryFrame(layerIndex)) {
+                if (entryFrame->calcIsCueFrame()) {
+                    foundCue = true;
+                } else {
+                    return false; // non-cue frame found, so this is not a cue frame
+                }
+            }
+        }
+    }
+    return foundCue;
 }
 
 // ***********************************

@@ -37,6 +37,7 @@ namespace musx {
 namespace dom {
 
 namespace others {
+class Frame;
 class PercussionNoteInfo;
 class Staff;
 class StaffComposite;
@@ -125,7 +126,15 @@ public:
     /// @return A list of each layer that contains entries and whether that layer uses voice2.
     std::map<LayerIndex, bool> calcVoices() const;
 
+    /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
+    bool calcIsCuesOnly() const;
+
 private:
+    /// @brief Find the layer frame and Edu start position for the given layer.
+    /// @param layerIndex The layer index to find (0..3)
+    /// @return std::pair containing the frame and the start position.
+    std::pair<std::shared_ptr<const others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;
+
     std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId;                 ///< The requested part context.
 };
@@ -217,6 +226,10 @@ public:
      * results than in Finale. Of particular note is Chromatic Transposition, which produces nonsense
      * results in Finale but here produces correct results, provided that the alteration value
      * is understood to be a chromatic half-step alteration rather than a step alteration in EDO divisions.
+     *
+     * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
+     * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
+     * the staff position returned by #calcNoteProperties for whole rests.
      *
      * See #KeySignature::setTransposition for information about differences in key signature transposition.
      *
@@ -330,6 +343,13 @@ public:
     /// @brief Returns true if the entry's duration has a stem.
     /// @return True if the entry's duration is less than a whole note, irrespective of whether it is a rest or a note.
     bool hasStem() const { return duration < Edu(NoteType::Whole); }
+
+    /// @brief Returns true if the entry could be a full-measure rest.
+    /// @note Finale recognizes only whole rests as possible full-measure rests. Any other rest types (specifically
+    /// breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically
+    /// involve suppressing Finale's full-measure rest display and replacing them with a text expression.
+    bool isPossibleFullMeasureRest() const
+    { return !isNote && !isHidden && duration == Edu(NoteType::Whole); }
 
     void integrityCheck() override
     {
@@ -736,6 +756,12 @@ public:
     /// @brief Get the measure instance
     std::shared_ptr<others::Measure> getMeasureInstance() const;
 
+    /// @brief Calculates if this entry frame is part of a cue.
+    /// @todo Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being
+    /// fast to compute when there is no cue.
+    /// @return true if all entries in the frame are either cue entries or hidden.
+    bool calcIsCueFrame() const;
+
 private:
     details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
@@ -844,6 +870,9 @@ public:
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
      * not take into account percussion notes and their staff position override. To discover if a note is a percussion
      * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
+     * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
+     * the staff position returned by #calcNoteProperties for whole rests.
      * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
      * this value is calculated automatically based on the score or part settings. Normally you will omit it.
      * @return A tuple containing:
