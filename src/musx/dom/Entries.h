@@ -349,7 +349,7 @@ public:
     /// breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically
     /// involve suppressing Finale's full-measure rest display and replacing them with a text expression.
     bool isPossibleFullMeasureRest() const
-    { return !isNote && !isHidden && duration == Edu(NoteType::Whole); }
+    { return !isNote && !isHidden && !voice2 && duration == Edu(NoteType::Whole); }
 
     void integrityCheck() override
     {
@@ -533,6 +533,10 @@ public:
 
     /// @brief Determines if this entry can be beamed.
     bool canBeBeamed() const;
+
+    /// @brief Returns the entry size as a percentage, taking into account the beaming.
+    /// @return Interger percentage where 100 means 100%.
+    int calcEntrySize() const;
 
     /// @brief Calculates if this entry is part of a cue.
     /// @return true if

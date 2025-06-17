@@ -680,11 +680,10 @@ bool EntryInfoPtr::calcIsBeamStart() const
 
 EntryInfoPtr EntryInfoPtr::findBeamStartOrCurrent() const
 {
-    if (calcUnbeamed()) return *this;
+    if (!canBeBeamed()) return *this;
     auto prev = getPreviousInBeamGroup();
     if (!prev) {
-        if (getNextInBeamGroup()) return *this;
-        return EntryInfoPtr();
+        return *this;
     }
     while (true) {
         if (auto tryPrev = prev.getPreviousInBeamGroup()) {
@@ -1025,13 +1024,24 @@ bool EntryInfoPtr::calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) con
     return false;
 }
 
+int EntryInfoPtr::calcEntrySize() const
+{
+    int result = 100;
+    auto beamStart = findBeamStartOrCurrent();
+    if (!beamStart || !beamStart->getEntry()->noteDetail) {
+        return result;
+    }
+    auto doc = m_entryFrame->getDocument();
+    if (auto entrySize = doc->getDetails()->get<details::EntrySize>(m_entryFrame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber())) {
+        result = entrySize->percent;
+    }
+    return result;
+}
+
 bool EntryInfoPtr::calcIsCue() const
 {
-    auto beamStart = findBeamStartOrCurrent();
-    if (!beamStart) return false;
-    auto doc = m_entryFrame->getDocument();
-    auto entrySize = doc->getDetails()->get<details::EntrySize>(m_entryFrame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber());
-    if (entrySize && entrySize->percent < 100) {
+    if (calcEntrySize() < 100) {
+        auto doc = m_entryFrame->getDocument();
         if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
             if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank) {
                 if (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes) {

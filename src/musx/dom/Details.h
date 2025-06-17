@@ -296,6 +296,8 @@ public:
  * @class BeamExtension
  * @brief Represents both sides of a beam extension. It is attached to the first entry in the beam. Which stem direction this instance controls
  * is determined by the subclass that inherits this class as a base.
+ *
+ * #Entry::beamExt is set if the entry has any beam extensions.
  */
 class BeamExtension : public EntryDetailsBase
 {
@@ -326,8 +328,6 @@ public:
 /**
  * @class BeamExtensionDownStem
  * @brief Beam extension for downstem beams.
- *
- * #Entry::beamExt is set if the entry has any beam extensions.
  */
 class BeamExtensionDownStem : public BeamExtension
 {
@@ -340,8 +340,6 @@ public:
 /**
  * @class BeamExtensionUpStem
  * @brief Beam extension for upstem beams.
- *
- * #Entry::beamExt is set if the entry has any beam extensions.
  */
 class BeamExtensionUpStem : public BeamExtension
 {
@@ -622,7 +620,7 @@ public:
  * For beamed entries, it only takes effect if it is applied to the first entry in a beamed group, and then it affects
  * every entry in the beamed group.
  *
- * #Entry::stemDetail is set if the entry has a custom size record.
+ * #Entry::noteDetail is set if the entry has a custom size record.
  */
 class EntrySize : public EntryDetailsBase
 {
