@@ -2424,7 +2424,7 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNotePropertiesConcert
         }
         return m_entry->clefIndexConcert;
     }();
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Concert, m_entry->clefIndexConcert, nullptr, calcIsEnharmonicRespell());
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Concert, clefIndex, nullptr, calcIsEnharmonicRespell());
 }
 
 std::shared_ptr<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
