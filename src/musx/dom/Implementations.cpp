@@ -2244,7 +2244,7 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignatu
     return {upDisp, upAlt};
 }
 
-std::tuple<Note::NoteName, int, int, int> Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
+Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
     const std::shared_ptr<const others::Staff>& staff, bool respellEnharmonic) const
 {
     static constexpr std::array<Note::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
@@ -2398,7 +2398,7 @@ InstCmper NoteInfoPtr::calcStaff() const
     return m_entry.getStaff();
 }
 
-std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell) const
+Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell) const
 {
     InstCmper staffId = calcStaff();
     const ClefIndex clefIndex = [&]() {
@@ -2413,7 +2413,7 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const 
             enharmonicRespell.value_or(calcIsEnharmonicRespell()));
 }
 
-std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNotePropertiesConcert() const
+Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert() const
 {
     const ClefIndex clefIndex = [&]() {
         InstCmper staffId = calcStaff();
@@ -2425,6 +2425,16 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNotePropertiesConcert
         return m_entry->clefIndexConcert;
     }();
     return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Concert, clefIndex, nullptr, calcIsEnharmonicRespell());
+}
+
+Note::NoteProperties NoteInfoPtr::calcNotePropertiesInView() const
+{
+    bool forWrittenPitch = false;
+    auto entryFrame = m_entry.getFrame();
+    if (auto partGlobals = entryFrame->getDocument()->getOthers()->get<others::PartGlobals>(entryFrame->getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
+        forWrittenPitch = partGlobals->showTransposed;
+    }
+    return forWrittenPitch ? calcNoteProperties() : calcNotePropertiesConcert();
 }
 
 std::shared_ptr<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
