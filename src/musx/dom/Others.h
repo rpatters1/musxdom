@@ -90,12 +90,13 @@ public:
  * Note that while flats are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciAmountSharps is required for non-linear key signatures. It specifies whether a slot
- * is sharp or flat with a positive or negative value. The first zero value in the table
- * terminates the sequence of sharps or flats.
+ * is a sharp or a flat with a positive or negative value. The first zero value in the table
+ * terminates the sequence of accidentals in the key signature.
  *
- * AcciAmountSharps is also useful with microtone systems that use standard key
- * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
- * need to specify acci alteration amounts with magnitude larger than 1.
+ * AcciAmountSharps is also useful with microtone systems that use standard key signatures.
+ * Typically linear modes in 12-EDO will not have this table, but EDOs larger than 19-EDO
+ * may need to specify acci alteration amounts with magnitude larger than 1 (equal to the number
+ * of EDO divisions in a chromatic half-step.)
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
@@ -120,8 +121,8 @@ public:
  * Note that while flats are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciOrderFlats is primarily useful with microtone systems that use standard key
- * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
- * will need to supply and @ref AcciAmountFlats table, and this is here to match it.
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
+ * will need to supply an @ref AcciAmountFlats table, and this is here to match it.
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
@@ -146,13 +147,13 @@ public:
  * Note that while sharps are numbered from 1-7, this table is indexed 0-6.
  *
  * AcciOrderSharps is required for non-linear key signatures. It specifies the order of
- * pitch class indices for corresponding sharps and flats in @ref AcciAmountSharps, which can be mixed in any order.
+ * pitch class indices for the corresponding sharps and flats in @ref AcciAmountSharps, which can be mixed in any order.
  * The first zero value in the @ref AcciAmountSharps table terminates the sequence of sharps or flats, and the rest
  * of the values here are meaningless.
  *
  * AcciOrderSharps is also useful with microtone systems that use standard key
- * signatures. Typically linear modes in 12-EDO will not have this table, but larer EDOs
- * will need to supply an @ref AcciAmountFlats table, and this should have values that correspond.
+ * signatures. Typically linear modes in 12-EDO will not have this table, but larger EDOs
+ * will need to supply an @ref AcciAmountSharps table, and this should have values that correspond.
  *
  * The cmper is the value returned by #KeySignature::getKeyMode. The built-in major and minor
  * cmpers (0 and 1) ignore this table, and it should not be present for those values. (However, with Finale
@@ -1062,8 +1063,9 @@ public:
 
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
+    /// @param forWrittenPitch If @p forStaff is present, this value determines if the key signature is created for concert or written pitch.
     /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
-    std::shared_ptr<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    std::shared_ptr<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt, bool forWrittenPitch = false) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
@@ -2054,6 +2056,18 @@ public:
         Score           ///< Collapse in score only
     };
 
+    /** @brief Enum for alternate notation styles. */
+    enum class AlternateNotation
+    {
+        Normal,         ///< Normal Notation (default)
+        SlashBeats,     ///< Slash Notation (on beats)
+        Rhythmic,       ///< Rhythmic Notation
+        Blank,          ///< Blank Notation
+        OneBarRepeat,   ///< One Bar Repeat(s)
+        TwoBarRepeat,   ///< Two Bar Repeat(s)
+        BlankWithRests  ///< Blank Notation with Rests
+    };
+
     /**
      * @class KeySigTransposition
      * @brief Represents key signature transposition details.
@@ -2128,6 +2142,19 @@ public:
     std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
     bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
+    AlternateNotation altNotation{};///< Alternate notation on the staff
+    LayerIndex altLayer{};          ///< Alternate notation Apply To Layer index (0..3)
+    bool altHideArtics{};           ///< Hide Articulations in alternate notation (in Apply-To Layer)
+    bool altHideLyrics{};           ///< Hide Lyrics in alternate notation (in Apply-To Layer)
+    bool altHideSmartShapes{};      ///< Hide Smart Shapes (in Apply-To layer: probably only affects entry-attached shapes)
+    bool altRhythmStemsUp{};        ///< Show stems up in alternate Rhythmic Notation mode
+    bool altSlashDots{};            ///< Show dots on beat slashes in compound meter
+    bool altHideOtherNotes{};       ///< Hide notes in other layers in alternate notation
+    bool altHideOtherArtics{};      ///< Hide articulations in other layers in alternate notation
+    bool altHideExpressions{};      ///< Hide Expressions in alternate notation (in Apply-To Layer)
+    bool altHideOtherLyrics{};      ///< Hide lyrics in other layers in alternate notation
+    bool altHideOtherSmartShapes{}; ///< Hide Smart Shapes in other layers in alternate notation
+    bool altHideOtherExpressions{}; ///< Hide Expressions in other layers in alternate notation
     bool hideRepeatBottomDot{};     ///< Inverse of "Bottom Repeat Dot" in Staff Setup dialog
     bool flatBeams{};               ///< "Flat Beams"
     bool hideFretboards{};          ///< Inverse of "Display Fretboards"
@@ -2275,8 +2302,9 @@ public:
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
 
-    /// @brief Gets a list of all parts that contain this staff, including the score.
-    std::vector<std::shared_ptr<PartDefinition>> getContainingParts() const;
+    /// @brief Gets a list of all parts that contain this staff
+    /// @param includeScore If true, include the score in the list. (Defaults to true)
+    std::vector<std::shared_ptr<PartDefinition>> getContainingParts(bool includeScore = true) const;
 
     /// @brief Finds the first part that contains this staff, not including the score.
     /// @return The first part that contains this staff or nullptr if none.
@@ -2374,6 +2402,7 @@ public:
         bool noKey{};                   ///< overrides #Staff::noKey
         bool fullNamePos{};             ///< overrides presence, absence of @ref NamePositionStyleFull instance.
         bool abrvNamePos{};             ///< overrides presence, absence of @ref NamePositionStyleAbbreviated instance.
+        bool altNotation{};             ///< overrides alternate notation properties (see #StaffComposite::applyStyle)
         bool showTies{};                ///< overrides #Staff::hideTies
         bool showDots{};                ///< overrides #Staff::hideDots
         bool showRests{};               ///< overrides #Staff::hideRests

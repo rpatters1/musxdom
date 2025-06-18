@@ -296,6 +296,8 @@ public:
  * @class BeamExtension
  * @brief Represents both sides of a beam extension. It is attached to the first entry in the beam. Which stem direction this instance controls
  * is determined by the subclass that inherits this class as a base.
+ *
+ * #Entry::beamExt is set if the entry has any beam extensions.
  */
 class BeamExtension : public EntryDetailsBase
 {
@@ -326,8 +328,6 @@ public:
 /**
  * @class BeamExtensionDownStem
  * @brief Beam extension for downstem beams.
- *
- * #Entry::beamExt is set if the entry has any beam extensions.
  */
 class BeamExtensionDownStem : public BeamExtension
 {
@@ -340,8 +340,6 @@ public:
 /**
  * @class BeamExtensionUpStem
  * @brief Beam extension for upstem beams.
- *
- * #Entry::beamExt is set if the entry has any beam extensions.
  */
 class BeamExtensionUpStem : public BeamExtension
 {
@@ -622,7 +620,7 @@ public:
  * For beamed entries, it only takes effect if it is applied to the first entry in a beamed group, and then it affects
  * every entry in the beamed group.
  *
- * #Entry::stemDetail is set if the entry has a custom size record.
+ * #Entry::noteDetail is set if the entry has a custom size record.
  */
 class EntrySize : public EntryDetailsBase
 {
@@ -679,6 +677,18 @@ public:
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
 
+    /// @brief Returns true if the #GFrameHold instance has more than one layer
+    bool calcIsMultiLayer() const
+    {
+        return std::count_if(frames.begin(), frames.end(), [](Cmper frameId) { return frameId != 0; }) > 1;    
+    }
+
+    /// @brief Returns true if the #GFrameHold contains any layer frames.
+    bool calcContainsMusic() const
+    {
+        return std::find_if(frames.begin(), frames.end(), [](Cmper frameId) { return frameId != 0; }) != frames.end();
+    }
+
     void integrityCheck() override
     {
         this->DetailsBase::integrityCheck();
@@ -692,90 +702,6 @@ public:
 
     constexpr static std::string_view XmlNodeName = "gfhold"; ///< The XML node name for this type.
     static const xml::XmlElementArray<GFrameHold>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-};
-
-/**
- * @class GFrameHoldContext
- * @brief A context wrapper for @ref GFrameHold associated with a specific part and location.
- *
- * This class retrieves the appropriate @ref GFrameHold from a Document using part, instrument, and measure IDs,
- * and enables part-aware operations like iterating over EntryFrame objects.
- */
-class GFrameHoldContext {
-public:
-    /**
-     * @brief Constructs a context-aware @ref GFrameHold wrapper.
-     * 
-     * @param document Weak pointer to the owning Document.
-     * @param partId The requested part ID.
-     * @param inst The instrument ID for.
-     * @param meas The measure ID for.
-     */
-    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas);
-
-    /**
-     * @brief Returns the requested part ID associated with this context.
-     * 
-     * @return The requested part ID.
-     */
-    Cmper getRequestedPartId() const { return m_requestedPartId; }
-
-    /**
-     * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
-     * 
-     * @return A const pointer to @ref GFrameHold.
-     */
-    const GFrameHold* operator->() const { return m_hold.get(); }
-
-    /**
-     * @brief Returns true if the internal @ref GFrameHold is valid.
-     * 
-     * @return True if the @ref GFrameHold was successfully retrieved; false otherwise.
-     */
-    explicit operator bool() const { return static_cast<bool>(m_hold); }
-
-    /// @brief Returns the clef index in effect for at the specified @ref Edu position.
-    /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
-    /// @param position The Edu position of the clef *in staff-level Edus*. (The staff-level matters for Independent Key Signature staves.)
-    ClefIndex calcClefIndexAt(Edu position) const;
-
-    /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
-    /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
-    /// @param position The *staff-level* position of the clef. (The staff-level matters for Independent Key Signature staves.)
-    ClefIndex calcClefIndexAt(util::Fraction position) const
-    { return calcClefIndexAt(position.calcEduDuration()); }
-
-    /** @brief Returns the @ref EntryFrame for all entries in the given layer.
-     *
-     * @param layerIndex The layer index (0..3) to iterate.
-     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
-     * @return EntryFrame for layer or nullptr if none.
-     */
-    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
-    
-    /**
-     * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
-     * @param layerIndex The layer index (0..3) to iterate.
-     * @param iterator The callback function for each iteration.
-     * @return true if higher-level iteration should continue. false if it should halt.
-     * @throws std::invalid_argument if the layer index is out of range
-     */
-    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
-
-    /**
-     * @brief iterates the entries for this @ref GFrameHold from left to right for each layer in order
-     * @param iterator The callback function for each iteration.
-     * @return true if higher-level iteration should continue. false if it should halt.
-     */
-    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
-
-    /// @brief Calculates the number of voices used by the GFrameHold instance.
-    /// @return A list of each layer that contains entries and whether that layer uses voice2.
-    std::map<LayerIndex, bool> calcVoices() const;
-
-private:
-    std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
-    Cmper m_requestedPartId;                 ///< The requested part context.
 };
 
 /**

@@ -299,3 +299,82 @@ TEST(EntryTest, UnlinkedEnharmonicSpelling)
         checkEntry(firstNote.getEntryInfo(), Note::NoteName::G, 4, 0, true);
     }
 }
+
+TEST(EntryTest, TransposedConcert)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "hidden_keysigs.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto checkEntry = [](const EntryInfoPtr& entryInfo, Note::NoteName expectedNoteName, int expectedOctave, int expectedAlteration,
+                            Note::NoteName expectedConcertNoteName, int expectedConcertOctave, int expectedConcertAlteration) {
+        NoteInfoPtr noteInfo(entryInfo, 0); // assume 1st note
+        ASSERT_TRUE(noteInfo);
+        auto [noteName, octave, alteration, staffLine] = noteInfo.calcNoteProperties();
+        EXPECT_EQ(noteName, expectedNoteName);
+        EXPECT_EQ(octave, expectedOctave);
+        EXPECT_EQ(alteration, expectedAlteration);
+        auto [noteNameConcert, octaveConcert, alterationConcert, staffLineConcert] = noteInfo.calcNotePropertiesConcert();
+        EXPECT_EQ(noteNameConcert, expectedConcertNoteName);
+        EXPECT_EQ(octaveConcert, expectedConcertOctave);
+        EXPECT_EQ(alterationConcert, expectedConcertAlteration);
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);  // Clarinet in A bar 1
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, true);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::D, 5, -1, Note::NoteName::B, 4, -1);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::F, 5, 0, Note::NoteName::D, 5, 0);
+        checkEntry(EntryInfoPtr(entryFrame, 2), Note::NoteName::G, 5, -1, Note::NoteName::E, 5, -1);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);  // Clarinet in A bar 3
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, true);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::A, 5, 0, Note::NoteName::F, 5, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::C, 6, 1, Note::NoteName::A, 5, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 2), Note::NoteName::D, 6, 0, Note::NoteName::B, 5, 0);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 2, 1);  // Clarinet in Bb bar 1
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, true);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::C, 5, 0, Note::NoteName::B, 4, -1);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::E, 5, 0, Note::NoteName::D, 5, 0);
+        checkEntry(EntryInfoPtr(entryFrame, 2), Note::NoteName::F, 5, 0, Note::NoteName::E, 5, -1);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 2, 3);  // Clarinet in Bb bar 3
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, true);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::A, 5, -1, Note::NoteName::F, 5, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::C, 6, 0, Note::NoteName::A, 5, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 2), Note::NoteName::D, 6, -1, Note::NoteName::B, 5, 0);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 4, 1);  // Horn in F bar 1
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, true);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::F, 4, 0, Note::NoteName::B, 3, -1);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::A, 4, 0, Note::NoteName::D, 4, 0);
+        checkEntry(EntryInfoPtr(entryFrame, 2), Note::NoteName::B, 4, -1, Note::NoteName::E, 4, -1);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 4, 3);  // Horn in F bar 3
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0, true);
+        checkEntry(EntryInfoPtr(entryFrame, 0), Note::NoteName::C, 5, 1, Note::NoteName::F, 4, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 1), Note::NoteName::E, 5, 1, Note::NoteName::A, 4, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 2), Note::NoteName::F, 5, 1, Note::NoteName::B, 4, 0);
+    }
+}

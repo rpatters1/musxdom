@@ -206,16 +206,12 @@ public:
     }
 
     /**
-     * @brief Equality comparison operator.
+     * @brief Equality comparison operator. (This depends on the fact that instances of Fraction are always reduced in the constructor.)
      * @param other The other fraction to compare.
      * @return True if the fractions are equal, false otherwise.
      */
     bool operator==(const Fraction& other) const {
-        Fraction lhs = *this;
-        Fraction rhs = other;
-        lhs.reduce();
-        rhs.reduce();
-        return lhs.m_numerator == rhs.m_numerator && lhs.m_denominator == rhs.m_denominator;
+        return m_numerator == other.m_numerator && m_denominator == other.m_denominator;
     }
 
     /**
@@ -308,3 +304,21 @@ public:
 
 } // namespace util
 } // namespace musx
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+// automatic hash function for Fraction
+namespace std {
+    template <>
+    struct hash<musx::util::Fraction>
+    {
+        size_t operator()(const musx::util::Fraction& frac) const noexcept
+        {
+            // boost algorithm tailored to Fraction
+            size_t seed = std::hash<int>{}(frac.numerator());
+            seed ^= std::hash<int>{}(frac.denominator()) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            return seed;
+        }
+    };
+}
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+

@@ -86,5 +86,7 @@ constexpr double EVPU_PER_SPACE = 24.0;         ///< Number of Evpu units per sp
 constexpr double EFIX_PER_EVPU = 64.0;          ///< Number of Efix units per Evpu
 constexpr double EFIX_PER_SPACE = EVPU_PER_SPACE * EFIX_PER_EVPU; ///< Number of Efix units per space (spatium)
 
+constexpr int MAX_CUE_PERCENTAGE = 90; ///< Arbitrary value that determines the max scaling value for cue notes. This could be configurable in the future.
+
 } // namespace dom
 } // namespace musx

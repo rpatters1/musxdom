@@ -22,6 +22,7 @@
 #pragma once
 
 #include <tuple>
+#include <map>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -36,6 +37,7 @@ namespace musx {
 namespace dom {
 
 namespace others {
+class Frame;
 class PercussionNoteInfo;
 class Staff;
 class StaffComposite;
@@ -43,7 +45,100 @@ class StaffComposite;
 
 namespace details {
 class TupletDef;
-class GFrameHoldContext;
+class GFrameHold;
+
+/**
+ * @class GFrameHoldContext
+ * @brief A context wrapper for @ref GFrameHold associated with a specific part and location.
+ *
+ * This class retrieves the appropriate @ref GFrameHold from a Document using part, instrument, and measure IDs,
+ * and enables part-aware operations like iterating over EntryFrame objects.
+ */
+class GFrameHoldContext {
+public:
+    /**
+     * @brief Constructs a context-aware @ref GFrameHold wrapper.
+     * 
+     * @param document Weak pointer to the owning Document.
+     * @param partId The requested part ID.
+     * @param inst The instrument ID for.
+     * @param meas The measure ID for.
+     */
+    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas);
+
+    /**
+     * @brief Returns the requested part ID associated with this context.
+     * 
+     * @return The requested part ID.
+     */
+    Cmper getRequestedPartId() const { return m_requestedPartId; }
+
+    /**
+     * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
+     * 
+     * @return A const pointer to @ref GFrameHold.
+     */
+    const GFrameHold* operator->() const { return m_hold.get(); }
+
+    /**
+     * @brief Returns true if the internal @ref GFrameHold is valid.
+     * 
+     * @return True if the @ref GFrameHold was successfully retrieved; false otherwise.
+     */
+    explicit operator bool() const { return static_cast<bool>(m_hold); }
+
+    /// @brief Returns the clef index in effect for at the specified @ref Edu position.
+    /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
+    /// @param position The Edu position of the clef *in staff-level Edus*. (The staff-level matters for Independent Key Signature staves.)
+    ClefIndex calcClefIndexAt(Edu position) const;
+
+    /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
+    /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
+    /// @param position The *staff-level* position of the clef. (The staff-level matters for Independent Key Signature staves.)
+    ClefIndex calcClefIndexAt(util::Fraction position) const
+    { return calcClefIndexAt(position.calcEduDuration()); }
+
+    /** @brief Returns the @ref EntryFrame for all entries in the given layer.
+     *
+     * @param layerIndex The layer index (0..3) to iterate.
+     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
+     * @return EntryFrame for layer or nullptr if none.
+     */
+    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
+    
+    /**
+     * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
+     * @param layerIndex The layer index (0..3) to iterate.
+     * @param iterator The callback function for each iteration.
+     * @return true if higher-level iteration should continue. false if it should halt.
+     * @throws std::invalid_argument if the layer index is out of range
+     */
+    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
+
+    /**
+     * @brief iterates the entries for this @ref GFrameHold from left to right for each layer in order
+     * @param iterator The callback function for each iteration.
+     * @return true if higher-level iteration should continue. false if it should halt.
+     */
+    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
+
+    /// @brief Calculates the number of voices used by the GFrameHold instance.
+    /// @return A list of each layer that contains entries and whether that layer uses voice2.
+    std::map<LayerIndex, bool> calcVoices() const;
+
+    /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
+    bool calcIsCuesOnly() const;
+
+private:
+    /// @brief Find the layer frame and Edu start position for the given layer.
+    /// @param layerIndex The layer index to find (0..3)
+    /// @return std::pair containing the frame and the start position.
+    std::pair<std::shared_ptr<const others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;
+
+    std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
+    Cmper m_requestedPartId;                 ///< The requested part context.
+};
+
 } // namespace details
 
 /**
@@ -131,6 +226,10 @@ public:
      * results than in Finale. Of particular note is Chromatic Transposition, which produces nonsense
      * results in Finale but here produces correct results, provided that the alteration value
      * is understood to be a chromatic half-step alteration rather than a step alteration in EDO divisions.
+     *
+     * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
+     * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
+     * the staff position returned by #calcNoteProperties for whole rests.
      *
      * See #KeySignature::setTransposition for information about differences in key signature transposition.
      *
@@ -244,6 +343,13 @@ public:
     /// @brief Returns true if the entry's duration has a stem.
     /// @return True if the entry's duration is less than a whole note, irrespective of whether it is a rest or a note.
     bool hasStem() const { return duration < Edu(NoteType::Whole); }
+
+    /// @brief Returns true if the entry could be a full-measure rest.
+    /// @note Finale recognizes only whole rests as possible full-measure rests. Any other rest types (specifically
+    /// breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically
+    /// involve suppressing Finale's full-measure rest display and replacing them with a text expression.
+    bool isPossibleFullMeasureRest() const
+    { return !isNote && !isHidden && !voice2 && duration == Edu(NoteType::Whole); }
 
     void integrityCheck() override
     {
@@ -386,8 +492,14 @@ public:
     /// @param [out] outRightY The height of the right side of the feathered beam
     /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
     bool calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) const;
-        
-        /// @brief Finds the end entry of a beamed group.
+
+    /// @brief Finds the first entry of a beamed group or returns the current entry if it is not beams.
+    /// @note This behavior is different than other beam functions in that it returns the current entry if there is no beam
+    /// rather than returning NULL.
+    /// @return The first entry of a beamed group or the current entry if no beam.
+    EntryInfoPtr findBeamStartOrCurrent() const;
+
+    /// @brief Finds the end entry of a beamed group.
     /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
     EntryInfoPtr findBeamEnd() const;
 
@@ -421,6 +533,25 @@ public:
 
     /// @brief Determines if this entry can be beamed.
     bool canBeBeamed() const;
+
+    /// @brief Returns the entry size as a percentage, taking into account the beaming.
+    /// @return Interger percentage where 100 means 100%.
+    int calcEntrySize() const;
+
+    /// @brief Calculates if this entry is part of a cue.
+    /// @return true if
+    ///         - the entry is reduced in size
+    ///         - the entry is hidden by "Blank Notation" or "Blank Notation with Rests" alternate notation in the score but not in a part.
+    bool calcIsCue() const;
+
+    /// @brief Returns whether this is a full measure rest.
+    /// @note Note that in Finale, only whole rests are used as full measure rests.
+    bool calcIsFullMeasureRest() const;
+
+    /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with
+    /// a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.
+    /// @return True if this is either the replacement rest in v2 or the hidden rest in v1.
+    bool calcIsBeamedRestWorkaroud() const;
 
 private:
     unsigned calcVisibleBeams() const;
@@ -457,14 +588,17 @@ public:
     /** @brief Constructor function
      *
      * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
-     * @param staff The Cmper for the @ref others::Staff of the entry
-     * @param measure The Cmper for the @ref others::Measure of the entry
-     * @param layerIndex The @ref LayerIndex (0..3) of the entry
+     * @param layerIndex The @ref LayerIndex (0..3) of the entry frame
      * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
      * @param timeStretch The ratio of global Edu to staff edu.
     */
-    explicit EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex,
-        bool forWrittenPitch, util::Fraction timeStretch);
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, bool forWrittenPitch, util::Fraction timeStretch) :
+        m_context(gfhold),
+        m_layerIndex(layerIndex),
+        m_forWrittenPitch(forWrittenPitch),
+        m_timeStretch(timeStretch)
+    {
+    }
 
     /// @brief class to track tuplets in the frame
     struct TupletInfo
@@ -570,16 +704,16 @@ public:
     std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
 
     /// @brief Get the document for the entry frame
-    DocumentPtr getDocument() const { return m_document; }
+    DocumentPtr getDocument() const;
 
     /// @brief Get the requested part ID for the entry frame
-    Cmper getRequestedPartId() const { return m_requestedPartId; }
+    Cmper getRequestedPartId() const { return m_context.getRequestedPartId(); }
 
     /// @brief Get the staff for the entry
-    InstCmper getStaff() const { return m_staff; }
+    InstCmper getStaff() const;
 
     /// @brief Get the measure for the entry frame
-    MeasCmper getMeasure() const { return m_measure; }
+    MeasCmper getMeasure() const;
 
     /// @brief Get the layer index (0..3) of the entry frame
     LayerIndex getLayerIndex() const { return m_layerIndex; }
@@ -626,11 +760,14 @@ public:
     /// @brief Get the measure instance
     std::shared_ptr<others::Measure> getMeasureInstance() const;
 
+    /// @brief Calculates if this entry frame is part of a cue.
+    /// @todo Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being
+    /// fast to compute when there is no cue.
+    /// @return true if all entries in the frame are either cue entries or hidden.
+    bool calcIsCueFrame() const;
+
 private:
-    DocumentPtr m_document;
-    Cmper m_requestedPartId;
-    InstCmper m_staff;
-    MeasCmper m_measure;
+    details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
     bool m_forWrittenPitch;
     util::Fraction m_timeStretch;
@@ -672,6 +809,7 @@ public:
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
     ClefIndex clefIndex{};              ///< the clef index in effect for the entry.
+    ClefIndex clefIndexConcert{};       ///< the concert clef index in effect for the entry.
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid 
@@ -736,6 +874,9 @@ public:
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
      * not take into account percussion notes and their staff position override. To discover if a note is a percussion
      * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
+     * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
+     * the staff position returned by #calcNoteProperties for whole rests.
      * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
      * this value is calculated automatically based on the score or part settings. Normally you will omit it.
      * @return A tuple containing:
@@ -745,6 +886,18 @@ public:
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
     std::tuple<Note::NoteName, int, int, int> calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
+
+    /**
+     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of thenote. This function does
+     * not take into account percussion notes and their staff position override. To discover if a note is a percussion
+     * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * @return A tuple containing:
+     *         - NoteName: The note name (C, D, E, F, G, A, B)
+     *         - int: The octave number (where 4 is the middle C octave)
+     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
+     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     */
+    std::tuple<Note::NoteName, int, int, int> calcNotePropertiesConcert() const;
 
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.

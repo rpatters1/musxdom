@@ -109,6 +109,8 @@ add_executable(musxdomtests
     details/tuplet_def.cpp
     # music_theory
     music_theory/transpose.cpp
+    # util
+    util/fraction.cpp
 )
 
 set(CMAKE_WARN_DEPRECATED ON CACHE BOOL "Suppress deprecation warnings for external projects" FORCE)

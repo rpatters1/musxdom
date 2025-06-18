@@ -202,23 +202,18 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 // ***** EntryFrame *****
 // **********************
 
-EntryFrame::EntryFrame(const details::GFrameHoldContext& gfhold, InstCmper staff, MeasCmper measure, LayerIndex layerIndex, bool forWrittenPitch, util::Fraction timeStretch) :
-    m_document(gfhold->getDocument()),
-    m_requestedPartId(gfhold.getRequestedPartId()),
-    m_staff(staff),
-    m_measure(measure),
-    m_layerIndex(layerIndex),
-    m_forWrittenPitch(forWrittenPitch),
-    m_timeStretch(timeStretch)
-{
-}
+DocumentPtr EntryFrame::getDocument() const { return m_context->getDocument(); }
+
+InstCmper EntryFrame::getStaff() const { return m_context->getStaff(); }
+
+MeasCmper EntryFrame::getMeasure() const { return m_context->getMeasure(); }
 
 EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 {
     bool forV2 = voice == 2;
     auto firstEntry = EntryInfoPtr(shared_from_this(), 0);
     if (firstEntry->getEntry()->voice2) {
-        MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(m_staff) + " measure " + std::to_string(m_measure)
+        MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(getStaff()) + " measure " + std::to_string(getMeasure())
             + " layer " + std::to_string(m_layerIndex + 1) + " starts with voice2.");
         if (!forV2) {
             firstEntry = firstEntry.getNextInVoice(voice);
@@ -242,7 +237,7 @@ EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
 
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 {
-    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure + 1)) {
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), getMeasure() + 1)) {
         return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
     }
     return nullptr;
@@ -250,8 +245,8 @@ std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
 
 std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 {
-    if (m_measure > 1) {
-        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), m_staff, m_measure - 1)) {
+    if (getMeasure() > 1) {
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), getMeasure() - 1)) {
             return gfhold.createEntryFrame(m_layerIndex, m_forWrittenPitch);
         }
     }
@@ -269,6 +264,21 @@ std::shared_ptr<others::Measure> EntryFrame::getMeasureInstance() const
     return getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), getMeasure());
 }
 
+bool EntryFrame::calcIsCueFrame() const
+{
+    bool foundCueEntry = false;
+    for (size_t x = 0; x < m_entries.size(); x++) {
+        if (!m_entries[x]->getEntry()->isHidden) {
+            EntryInfoPtr entryInfo(shared_from_this(), x);
+            if (entryInfo.calcIsCue()) {
+                foundCueEntry = true;
+            } else {
+                return false; // return false on the first non-cue visible entry found
+            }
+        }
+    }
+    return foundCueEntry;
+}
 
 bool EntryFrame::TupletInfo::calcIsTremolo() const
 {
@@ -668,6 +678,23 @@ bool EntryInfoPtr::calcIsBeamStart() const
     return (!getPreviousInBeamGroup() && getNextInBeamGroup());
 }
 
+EntryInfoPtr EntryInfoPtr::findBeamStartOrCurrent() const
+{
+    if (!canBeBeamed()) return *this;
+    auto prev = getPreviousInBeamGroup();
+    if (!prev) {
+        return *this;
+    }
+    while (true) {
+        if (auto tryPrev = prev.getPreviousInBeamGroup()) {
+            prev = tryPrev;
+        } else {
+            break;
+        }
+    }
+    return prev;
+}
+
 EntryInfoPtr EntryInfoPtr::findBeamEnd() const
 {
     if (calcUnbeamed()) return EntryInfoPtr();
@@ -679,8 +706,7 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
     while (true) {
         if (auto tryNext = next.getNextInBeamGroup()) {
             next = tryNext;
-        }
-        else {
+        } else {
             break;
         }
     }
@@ -998,6 +1024,82 @@ bool EntryInfoPtr::calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) con
     return false;
 }
 
+int EntryInfoPtr::calcEntrySize() const
+{
+    int result = 100;
+    auto beamStart = findBeamStartOrCurrent();
+    if (!beamStart || !beamStart->getEntry()->noteDetail) {
+        return result;
+    }
+    auto doc = m_entryFrame->getDocument();
+    if (auto entrySize = doc->getDetails()->get<details::EntrySize>(m_entryFrame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber())) {
+        result = entrySize->percent;
+    }
+    return result;
+}
+
+bool EntryInfoPtr::calcIsCue() const
+{
+    if (calcEntrySize() <= MAX_CUE_PERCENTAGE) {
+        auto doc = m_entryFrame->getDocument();
+        if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+            if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank) {
+                if (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes) {
+                    auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
+                    for (const auto& part : parts) {
+                        if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+                            if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getStaff()) + " not found for measure " + std::to_string(getMeasure()));
+        }
+    }
+    return false;
+}
+
+bool EntryInfoPtr::calcIsFullMeasureRest() const
+{
+    if ((*this)->getEntry()->isPossibleFullMeasureRest()) {
+        return m_entryFrame->getEntries().size() == 1 && (*this)->elapsedDuration == 0;
+    }
+    return false;
+}
+
+bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
+{
+    auto entry = (*this)->getEntry();
+    if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
+        return false;
+    }
+    if (entry->isHidden && (*this)->v2Launch) {
+        // if this is a hidden v2 launch rest, check to see if there is an equivalent visible stand-alone v2 rest of the same type
+        if (auto next = getNextInFrame()) {
+            auto nextEntry = next->getEntry();
+            if (!nextEntry->isNote && nextEntry->duration == entry->duration && !nextEntry->isHidden) {
+                if (next = next.getNextInFrame(); !next || !next->getEntry()->voice2) {
+                    return true;
+                }
+            }
+        }
+    } else if (!entry->isHidden && entry->voice2) {
+        // if this is a visible stand-alone v2 rest, check to see if there is an equivalent invisible v2 launch rest preceding it
+        if (auto next = getNextInFrame(); !next || !next->getEntry()->voice2) {
+            if (auto prev = getPreviousInFrame(); prev && prev->v2Launch) {
+                auto prevEntry = prev->getEntry();
+                if (!prevEntry->isNote && prevEntry->isHidden && prevEntry->duration == entry->duration) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 // ***********************
 // ***** FontOptions *****
 // ***********************
@@ -1239,6 +1341,27 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
+std::pair<std::shared_ptr<const others::Frame>, Edu> details::GFrameHoldContext::findLayerFrame(LayerIndex layerIndex) const
+{
+    std::shared_ptr<const others::Frame> layerFrame;
+    Edu startEdu = 0;
+    if (layerIndex < m_hold->frames.size() && m_hold->frames[layerIndex]) {
+        auto frameIncis = m_hold->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
+        for (const auto& frame : frameIncis) {
+            if (frame->startEntry) {
+                if (layerFrame) {
+                    MUSX_INTEGRITY_ERROR("More than one entry frame inci exists for frame " + std::to_string(m_hold->frames[layerIndex]));
+                }
+                layerFrame = frame;
+            }
+            if (frame->startTime > startEdu) {
+                startEdu = frame->startTime;
+            }
+        }
+    }
+    return std::make_pair(layerFrame, startEdu);
+}
+
 std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch) const
 {
     if (!m_hold) return nullptr;
@@ -1247,15 +1370,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     }
     if (!m_hold->frames[layerIndex]) return nullptr; // nothing here
     auto document = m_hold->getDocument();
-    auto frameIncis = document->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
-    auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
-        for (const auto& frame : frameIncis) {
-            if (frame->startEntry) {
-                return frame;
-            }
-        }
-        return nullptr;
-    }();
+    auto [frame, startEdu] = findLayerFrame(layerIndex);
     std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
         const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
@@ -1269,18 +1384,12 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         const util::Fraction timeStretch = staff->floatTime
                                          ? measure->calcTimeStretch(staff->getCmper())
                                          : 1;
-        entryFrame = std::make_shared<EntryFrame>(*this, m_hold->getStaff(), m_hold->getMeasure(), layerIndex, forWrittenPitch, timeStretch);
-        entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
-        if (forWrittenPitch && staff->transposition && staff->transposition->keysig) {
-            entryFrame->keySignature->setTransposition(staff->transposition->keysig->interval, staff->transposition->keysig->adjust, !staff->transposition->noSimplifyKey);
-        }
+        entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, forWrittenPitch, timeStretch);
+        entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff(), forWrittenPitch);
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
-        util::Fraction v1ActualElapsedDuration = 0;
-        for (const auto& f : frameIncis) {
-            v1ActualElapsedDuration += util::Fraction::fromEdu(f->startTime); // if there is an old-skool pickup, this accounts for it
-        }
+        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu);
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
@@ -1299,10 +1408,11 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
             std::vector<TupletState>& activeTuplets = entry->voice2 ? v2ActiveTuplets : v1ActiveTuplets;
             util::Fraction& actualElapsedDuration = entry->voice2 ? v2ActualElapsedDuration : v1ActualElapsedDuration;
             entryInfo->elapsedDuration = actualElapsedDuration;
+            entryInfo->clefIndexConcert = calcClefIndexAt(actualElapsedDuration);
             if (forWrittenPitch && staff->transposition && staff->transposition->setToClef) {
                 entryInfo->clefIndex = staff->transposedClef;
             } else {
-                entryInfo->clefIndex = calcClefIndexAt(actualElapsedDuration);
+                entryInfo->clefIndex = entryInfo->clefIndexConcert;
             }
             util::Fraction cumulativeRatio = 1;
             if (!entry->graceNote) {
@@ -1399,15 +1509,7 @@ std::map<LayerIndex, bool> details::GFrameHoldContext::calcVoices() const
 {
     std::map<LayerIndex, bool> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        auto frameIncis = (*this)->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
-        auto frame = [frameIncis]() -> std::shared_ptr<others::Frame> {
-            for (const auto& frame : frameIncis) {
-                if (frame->startEntry) {
-                    return frame;
-                }
-            }
-            return nullptr;
-        }();
+        auto [frame, startEdu] = findLayerFrame(layerIndex);
         if (frame) {
             bool gotLayer = false;
             bool gotV2 = false;
@@ -1451,6 +1553,28 @@ ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
         result = lastClef->clefIndex;
     }
     return result;
+}
+
+bool details::GFrameHoldContext::calcIsCuesOnly() const
+{
+    bool foundCue = false;
+    for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
+        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        if (frame) {
+            auto entries = frame->getEntries();
+            if (startEdu == 0 && entries.size() == 1 && entries[0]->isPossibleFullMeasureRest()) {
+                continue;
+            }
+            if (auto entryFrame = createEntryFrame(layerIndex)) {
+                if (entryFrame->calcIsCueFrame()) {
+                    foundCue = true;
+                } else {
+                    return false; // non-cue frame found, so this is not a cue frame
+                }
+            }
+        }
+    }
+    return foundCue;
 }
 
 // ***********************************
@@ -1640,15 +1764,15 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
     }
     m_octaveDisplacement = interval / music_theory::STANDARD_DIATONIC_STEPS;
     m_alterationOffset = 0; // suppresses transposed tone center and alteration calc
-    int concertAlteration = getAlteration();
+    int concertAlteration = getConcertAlteration();
     int concertTonalCenterIndex = calcTonalCenterIndex();
     int tonalCenterOffset = interval % music_theory::STANDARD_DIATONIC_STEPS;
     
     int alteration = concertAlteration + keyAdjustment;
     if (simplify && keyAdjustment) {
         // Finale does not simplify microtonal key sigs correctly.
-        // This simplification *does* work correctly, provided the custom key sig
-        // is set up to increment each key signature accidental by the number of steps
+        // This simplification *does* work correctly with microtonal key sigs, provided the custom key sig
+        // is set up to increment each key signature accidental by the number of EDO divisions
         // in a chromatic half-step.
         int direction = music_theory::sign(alteration);
         while (std::abs(alteration) >= music_theory::STANDARD_DIATONIC_STEPS) {
@@ -1658,6 +1782,14 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
     }
     m_alterationOffset = alteration - concertAlteration;
     m_octaveDisplacement += (concertTonalCenterIndex + tonalCenterOffset) / music_theory::STANDARD_DIATONIC_STEPS;
+}
+
+void KeySignature::setTransposition(const std::shared_ptr<const others::Staff>& staff)
+{
+    if (staff && staff->transposition && staff->transposition->keysig) {
+        const auto& keysig = *staff->transposition->keysig;
+        setTransposition(keysig.interval, keysig.adjust, !staff->transposition->noSimplifyKey);
+    }
 }
 
 std::optional<std::vector<int>> KeySignature::calcKeyMap() const
@@ -1791,22 +1923,25 @@ int others::Measure::calcDisplayNumber() const
     return getCmper();
 }
 
-std::shared_ptr<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff) const
+std::shared_ptr<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff, bool forWrittenPitch) const
 {
     std::shared_ptr<KeySignature> result;
+    std::shared_ptr<const others::Staff> staff;
     if (forStaff) {
-        if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
-            if (staff->floatKeys) {
-                if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
-                    if (floats->hasKey) {
-                        result = std::make_shared<KeySignature>(*floats->keySig);
-                    }
+        staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0);
+        if (staff && staff->floatKeys) {
+            if (auto floats = getDocument()->getDetails()->get<details::IndependentStaffDetails>(getPartId(), forStaff.value(), getCmper())) {
+                if (floats->hasKey) {
+                    result = std::make_shared<KeySignature>(*floats->keySig);
                 }
             }
         }
     }
     if (!result) {
         result = std::make_shared<KeySignature>(*globalKeySig);
+    }
+    if (result && staff && forWrittenPitch) {
+        result->setTransposition(staff);
     }
     return result;
 }
@@ -2296,8 +2431,14 @@ std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNoteProperties(const 
     if (getEntryInfo().getFrame()->isForWrittenPitch()) {
         return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, m_entry.createCurrentStaff(), doEnharmonicRespell);
     }
-
     return (*this)->calcNoteProperties(m_entry.getKeySignature(), clefIndex, nullptr, doEnharmonicRespell);
+}
+
+std::tuple<Note::NoteName, int, int, int> NoteInfoPtr::calcNotePropertiesConcert() const
+{
+    std::shared_ptr<KeySignature> concertKey = std::make_shared<KeySignature>(*m_entry.getKeySignature());
+    concertKey->setTransposition(0, 0, false);
+    return (*this)->calcNoteProperties(concertKey, m_entry->clefIndexConcert, nullptr, false);
 }
 
 std::shared_ptr<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
@@ -3000,13 +3141,16 @@ bool others::Staff::hasInstrumentAssigned() const
     return true;
 }
 
-std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts() const
+std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts(bool includeScore) const
 {
     std::vector<std::shared_ptr<others::PartDefinition>> result;
     auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
-        auto scoreView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
-        for (const auto& next : scoreView) {
+        if (!includeScore && part->getCmper() == SCORE_PARTID) {
+            continue;
+        }
+        auto scrollView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+        for (const auto& next : scrollView) {
             if (next->staffId == this->getCmper()) {
                 result.push_back(part);
                 break;
@@ -3022,8 +3166,8 @@ std::shared_ptr<others::PartDefinition> others::Staff::firstFirstContainingPart(
     auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
         if (part->getCmper() != SCORE_PARTID) {
-            auto scoreView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
-            for (const auto& next : scoreView) {
+            auto scrollView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            for (const auto& next : scrollView) {
                 if (next->staffId == this->getCmper()) {
                     return part;
                 }
@@ -3149,6 +3293,22 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         abrvNamePosId = staffStyle->abrvNamePosId;
         abrvNamePosFromStyle = true;
         masks->abrvNamePos = true;
+    }
+    if (srcMasks->altNotation) {
+        altNotation = staffStyle->altNotation;
+        altLayer = staffStyle->altLayer;
+        altHideArtics = staffStyle->altHideArtics;
+        altHideLyrics = staffStyle->altHideLyrics;
+        altHideSmartShapes = staffStyle->altHideSmartShapes;
+        altRhythmStemsUp = staffStyle->altRhythmStemsUp;
+        altSlashDots = staffStyle->altSlashDots;
+        altHideOtherNotes = staffStyle->altHideOtherNotes;
+        altHideOtherArtics = staffStyle->altHideOtherArtics;
+        altHideExpressions = staffStyle->altHideExpressions;
+        altHideOtherLyrics = staffStyle->altHideOtherLyrics;
+        altHideOtherSmartShapes = staffStyle->altHideOtherSmartShapes;
+        altHideOtherExpressions = staffStyle->altHideOtherExpressions;
+        masks->altNotation = true;
     }
     if (srcMasks->negKey) {
         hideKeySigs = staffStyle->hideKeySigs;
