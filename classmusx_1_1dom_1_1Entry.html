@@ -144,6 +144,9 @@ std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a289
 <tr class="memitem:a9665ee43235cad7e54c82c83abcc5f50" id="r_a9665ee43235cad7e54c82c83abcc5f50"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a9665ee43235cad7e54c82c83abcc5f50">hasStem</a> () const</td></tr>
 <tr class="memdesc:a9665ee43235cad7e54c82c83abcc5f50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the entry's duration has a stem.  <br /></td></tr>
 <tr class="separator:a9665ee43235cad7e54c82c83abcc5f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad38f227b8b7c0dfc847aae2a32cc3e53" id="r_ad38f227b8b7c0dfc847aae2a32cc3e53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#ad38f227b8b7c0dfc847aae2a32cc3e53">isPossibleFullMeasureRest</a> () const</td></tr>
+<tr class="memdesc:ad38f227b8b7c0dfc847aae2a32cc3e53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the entry could be a full-measure rest.  <br /></td></tr>
+<tr class="separator:ad38f227b8b7c0dfc847aae2a32cc3e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a413c78242c3f9f486a2b37d38d28c03b" id="r_a413c78242c3f9f486a2b37d38d28c03b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a413c78242c3f9f486a2b37d38d28c03b">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:a413c78242c3f9f486a2b37d38d28c03b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a413c78242c3f9f486a2b37d38d28c03b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -519,6 +522,34 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
+
+</div>
+</div>
+<a id="ad38f227b8b7c0dfc847aae2a32cc3e53" name="ad38f227b8b7c0dfc847aae2a32cc3e53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad38f227b8b7c0dfc847aae2a32cc3e53">&#9670;&#160;</a></span>isPossibleFullMeasureRest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::Entry::isPossibleFullMeasureRest </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the entry could be a full-measure rest. </p>
+<dl class="section note"><dt>Note</dt><dd>Finale recognizes only whole rests as possible full-measure rests. Any other rest types (specifically breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically involve suppressing Finale's full-measure rest display and replacing them with a text expression. </dd></dl>
 
 </div>
 </div>

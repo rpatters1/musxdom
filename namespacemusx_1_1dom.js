@@ -896,6 +896,7 @@ var namespacemusx_1_1dom =
     [ "EVPU_PER_MM", "namespacemusx_1_1dom.html#a8f5ab26d6d770883e5648d954ff0dc9b", null ],
     [ "EVPU_PER_SPACE", "namespacemusx_1_1dom.html#a0fbe9bcf04cd6e9acfcb562fac1f6f25", null ],
     [ "MAX_ALTERATIONS", "namespacemusx_1_1dom.html#a077fc40e1a52fb0aa59a78a138133ae5", null ],
+    [ "MAX_CUE_PERCENTAGE", "namespacemusx_1_1dom.html#a31c92a4751443e096b5a99100828f6e0", null ],
     [ "MAX_LAYERS", "namespacemusx_1_1dom.html#a83d296c53df0e81b30707dfd6210b77b", null ],
     [ "MUSX_GLOBALS_CMPER", "namespacemusx_1_1dom.html#a484882ede2c8bb64570f45fce4c0edef", null ],
     [ "SCORE_PARTID", "namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0", null ]

@@ -198,10 +198,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>calcToplinePosition</b
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasInstrumentAssigned</b> () const</td></tr>
 <tr class="memdesc:a76f425b19ecab6f653dedb641f226748 inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this staff has an instrument assigned. <br /></td></tr>
 <tr class="separator:a76f425b19ecab6f653dedb641f226748 inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa01cd366db3e4d698c188a64984832ff inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff" id="r_aa01cd366db3e4d698c188a64984832ff"><td class="memItemLeft" align="right" valign="top">
-std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainingParts</b> () const</td></tr>
-<tr class="memdesc:aa01cd366db3e4d698c188a64984832ff inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of all parts that contain this staff, including the score. <br /></td></tr>
-<tr class="separator:aa01cd366db3e4d698c188a64984832ff inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af413395782d2a0ba630303d28eed6311 inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff" id="r_af413395782d2a0ba630303d28eed6311"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#af413395782d2a0ba630303d28eed6311">getContainingParts</a> (bool includeScore=true) const</td></tr>
+<tr class="memdesc:af413395782d2a0ba630303d28eed6311 inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of all parts that contain this staff.  <br /></td></tr>
+<tr class="separator:af413395782d2a0ba630303d28eed6311 inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97619961c5b6a540dd742392c1a15a49 inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff" id="r_a97619961c5b6a540dd742392c1a15a49"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a97619961c5b6a540dd742392c1a15a49">firstFirstContainingPart</a> () const</td></tr>
 <tr class="memdesc:a97619961c5b6a540dd742392c1a15a49 inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the first part that contains this staff, not including the score.  <br /></td></tr>
 <tr class="separator:a97619961c5b6a540dd742392c1a15a49 inherit pub_methods_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -295,6 +294,19 @@ Additional Inherited Members</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ab23c7e94e4782a34d7f06e54e6fed7d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for hide mode.  <a href="classmusx_1_1dom_1_1others_1_1Staff.html#ab23c7e94e4782a34d7f06e54e6fed7d0">More...</a><br /></td></tr>
 <tr class="separator:ab23c7e94e4782a34d7f06e54e6fed7d0 inherit pub_types_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a3bc01d0f78962930fc34ea6fb31bb9 inherit pub_types_classmusx_1_1dom_1_1others_1_1Staff" id="r_a0a3bc01d0f78962930fc34ea6fb31bb9"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9">AlternateNotation</a> { <br />
+&#160;&#160;<a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a960b44c579bc2f6818d2daaf9e4c16f0">Normal</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9ac2af9795625aa114ba1cf3c288ae6277">SlashBeats</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9ad79c32de1167803cb967f13f23a7c87d">Rhythmic</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9ae4ef81cce7e4e10033ebb10962dfdd5e">Blank</a>
+, <br />
+&#160;&#160;<a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a25320a755aed9eeb52d4687818dcee86">OneBarRepeat</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a3a2d4092991ee686a813743a0d02b608">TwoBarRepeat</a>
+, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a554abfcfa334385616487a34e549b909">BlankWithRests</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a0a3bc01d0f78962930fc34ea6fb31bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for alternate notation styles.  <a href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9">More...</a><br /></td></tr>
+<tr class="separator:a0a3bc01d0f78962930fc34ea6fb31bb9 inherit pub_types_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
 <tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
 , <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
@@ -390,6 +402,58 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideNameInScore</b> {
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>botBarlineOffset</b> {}</td></tr>
 <tr class="memdesc:a90aa01c66b12e513594489408249909a inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset for the bottom barline. <br /></td></tr>
 <tr class="separator:a90aa01c66b12e513594489408249909a inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a621dfa14dc083950c53b5c0f18f3dcee inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a621dfa14dc083950c53b5c0f18f3dcee"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9">AlternateNotation</a>&#160;</td><td class="memItemRight" valign="bottom"><b>altNotation</b> {}</td></tr>
+<tr class="memdesc:a621dfa14dc083950c53b5c0f18f3dcee inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alternate notation on the staff. <br /></td></tr>
+<tr class="separator:a621dfa14dc083950c53b5c0f18f3dcee inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a6842bce4881868143230d8a50e597 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a78a6842bce4881868143230d8a50e597"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>altLayer</b> {}</td></tr>
+<tr class="memdesc:a78a6842bce4881868143230d8a50e597 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alternate notation Apply To Layer index (0..3) <br /></td></tr>
+<tr class="separator:a78a6842bce4881868143230d8a50e597 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d71d17f073f49cad55029429f43dd8e inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a3d71d17f073f49cad55029429f43dd8e"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideArtics</b> {}</td></tr>
+<tr class="memdesc:a3d71d17f073f49cad55029429f43dd8e inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide Articulations in alternate notation (in Apply-To Layer) <br /></td></tr>
+<tr class="separator:a3d71d17f073f49cad55029429f43dd8e inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af611ff907ca13c1a60c47e2ade60b39c inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_af611ff907ca13c1a60c47e2ade60b39c"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideLyrics</b> {}</td></tr>
+<tr class="memdesc:af611ff907ca13c1a60c47e2ade60b39c inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide Lyrics in alternate notation (in Apply-To Layer) <br /></td></tr>
+<tr class="separator:af611ff907ca13c1a60c47e2ade60b39c inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a618b38de7b2b463db5112940b801c588 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a618b38de7b2b463db5112940b801c588"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideSmartShapes</b> {}</td></tr>
+<tr class="memdesc:a618b38de7b2b463db5112940b801c588 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide Smart Shapes (in Apply-To layer: probably only affects entry-attached shapes) <br /></td></tr>
+<tr class="separator:a618b38de7b2b463db5112940b801c588 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f215976e7a0c9d9a5aa05fbe0285131 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a0f215976e7a0c9d9a5aa05fbe0285131"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altRhythmStemsUp</b> {}</td></tr>
+<tr class="memdesc:a0f215976e7a0c9d9a5aa05fbe0285131 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show stems up in alternate Rhythmic Notation mode. <br /></td></tr>
+<tr class="separator:a0f215976e7a0c9d9a5aa05fbe0285131 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cce06bed0486ba0b943ad1776d2a9aa inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a2cce06bed0486ba0b943ad1776d2a9aa"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altSlashDots</b> {}</td></tr>
+<tr class="memdesc:a2cce06bed0486ba0b943ad1776d2a9aa inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show dots on beat slashes in compound meter. <br /></td></tr>
+<tr class="separator:a2cce06bed0486ba0b943ad1776d2a9aa inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad36c80effee7673b628ddcce0a259070 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_ad36c80effee7673b628ddcce0a259070"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideOtherNotes</b> {}</td></tr>
+<tr class="memdesc:ad36c80effee7673b628ddcce0a259070 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide notes in other layers in alternate notation. <br /></td></tr>
+<tr class="separator:ad36c80effee7673b628ddcce0a259070 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad11c75fdf3ad5796a90fcda2664fe85d inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_ad11c75fdf3ad5796a90fcda2664fe85d"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideOtherArtics</b> {}</td></tr>
+<tr class="memdesc:ad11c75fdf3ad5796a90fcda2664fe85d inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide articulations in other layers in alternate notation. <br /></td></tr>
+<tr class="separator:ad11c75fdf3ad5796a90fcda2664fe85d inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab793f4f7d3c9ca183084ba3cb8d7e1db inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_ab793f4f7d3c9ca183084ba3cb8d7e1db"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideExpressions</b> {}</td></tr>
+<tr class="memdesc:ab793f4f7d3c9ca183084ba3cb8d7e1db inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide Expressions in alternate notation (in Apply-To Layer) <br /></td></tr>
+<tr class="separator:ab793f4f7d3c9ca183084ba3cb8d7e1db inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a012e0d41ba78f2980aecf44511fe35f9 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a012e0d41ba78f2980aecf44511fe35f9"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideOtherLyrics</b> {}</td></tr>
+<tr class="memdesc:a012e0d41ba78f2980aecf44511fe35f9 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide lyrics in other layers in alternate notation. <br /></td></tr>
+<tr class="separator:a012e0d41ba78f2980aecf44511fe35f9 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87711f70fe47f33273eb57b52d68565c inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a87711f70fe47f33273eb57b52d68565c"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideOtherSmartShapes</b> {}</td></tr>
+<tr class="memdesc:a87711f70fe47f33273eb57b52d68565c inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide Smart Shapes in other layers in alternate notation. <br /></td></tr>
+<tr class="separator:a87711f70fe47f33273eb57b52d68565c inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeeb0997ee0a830e8b45a2f6bf265bf6e inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_aeeb0997ee0a830e8b45a2f6bf265bf6e"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>altHideOtherExpressions</b> {}</td></tr>
+<tr class="memdesc:aeeb0997ee0a830e8b45a2f6bf265bf6e inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hide Expressions in other layers in alternate notation. <br /></td></tr>
+<tr class="separator:aeeb0997ee0a830e8b45a2f6bf265bf6e inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c8ca36d4d55d7c89136c1c4e5a0f532 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff" id="r_a2c8ca36d4d55d7c89136c1c4e5a0f532"><td class="memItemLeft" align="right" valign="top">
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideRepeatBottomDot</b> {}</td></tr>
 <tr class="memdesc:a2c8ca36d4d55d7c89136c1c4e5a0f532 inherit pub_attribs_classmusx_1_1dom_1_1others_1_1Staff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Bottom Repeat Dot" in <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html" title="Represents the definition of a Finale staff.">Staff</a> Setup dialog. <br /></td></tr>

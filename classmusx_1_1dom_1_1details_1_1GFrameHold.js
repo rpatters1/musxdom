@@ -1,6 +1,8 @@
 var classmusx_1_1dom_1_1details_1_1GFrameHold =
 [
     [ "GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a48353d7772e29982e85c64edc0544ba0", null ],
+    [ "calcContainsMusic", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#ab1f92bd76d9afb1a7bfd0ea1b25305a0", null ],
+    [ "calcIsMultiLayer", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#ad9b682d6edc85d866ee40fc24a1ed5f2", null ],
     [ "getMeasure", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#aafb1a25712ba546799697c43dbdf81ba", null ],
     [ "getStaff", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a3971ceeb23aa0c1dba04faa86765e811", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#adc0f3bd7cad4179819fde0a675d8d74c", null ],

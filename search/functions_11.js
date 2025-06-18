@@ -8,7 +8,7 @@ var searchData=
   ['setenigmastyles_5',['setEnigmaStyles',['../classmusx_1_1dom_1_1FontInfo.html#ab482bb76fdb37df80d5eba5a8b0006b0',1,'musx::dom::FontInfo']]],
   ['setfontidbyname_6',['setFontIdByName',['../classmusx_1_1dom_1_1FontInfo.html#a7342806d12d9d725edcb9b897f784e07',1,'musx::dom::FontInfo']]],
   ['settextnumber_7',['setTextNumber',['../classmusx_1_1dom_1_1TextsBase.html#af0d5de0c546af7b5954b05a44c728802',1,'musx::dom::TextsBase']]],
-  ['settransposition_8',['setTransposition',['../classmusx_1_1dom_1_1KeySignature.html#a87cb3c216ea12c1f911b4b289d3a2920',1,'musx::dom::KeySignature']]],
+  ['settransposition_8',['settransposition',['../classmusx_1_1dom_1_1KeySignature.html#a87cb3c216ea12c1f911b4b289d3a2920',1,'musx::dom::KeySignature::setTransposition(int interval, int keyAdjustment, bool simplify)'],['../classmusx_1_1dom_1_1KeySignature.html#a3bcdfe297481bbbc29a1fc56d87162a2',1,'musx::dom::KeySignature::setTransposition(const std::shared_ptr&lt; const others::Staff &gt; &amp;staff)']]],
   ['shapedef_9',['ShapeDef',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a66b52677261434e2d85eea2079c29180',1,'musx::dom::others::ShapeDef']]],
   ['shapeexpressiondef_10',['ShapeExpressionDef',['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#ab0266e213ac598c09cd07c1faf308eaf',1,'musx::dom::others::ShapeExpressionDef']]],
   ['shapeinstructionlist_11',['ShapeInstructionList',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList.html#aa4d92c14348b81f4df48606ccdeca836',1,'musx::dom::others::ShapeInstructionList']]],

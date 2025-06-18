@@ -29,6 +29,7 @@ var searchData=
   ['trill_26',['Trill',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa2306a8f74f0204b3c514029a0f388701',1,'musx::dom::others::SmartShape']]],
   ['trillextension_27',['TrillExtension',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6facbddd8cd9127206e28fc2c27f8fe450b',1,'musx::dom::others::SmartShape']]],
   ['tuplet_28',['Tuplet',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa8ca42e11a227a95e2289f16898c05e98',1,'musx::dom::options::FontOptions']]],
-  ['twooctavedown_29',['TwoOctaveDown',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fad767ee99c57acbd528fc3cbdc558ab87',1,'musx::dom::others::SmartShape']]],
-  ['twooctaveup_30',['TwoOctaveUp',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa082f1d3db8ea79c5afd41d236029ad1c',1,'musx::dom::others::SmartShape']]]
+  ['twobarrepeat_29',['TwoBarRepeat',['../classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a3a2d4092991ee686a813743a0d02b608',1,'musx::dom::others::Staff']]],
+  ['twooctavedown_30',['TwoOctaveDown',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fad767ee99c57acbd528fc3cbdc558ab87',1,'musx::dom::others::SmartShape']]],
+  ['twooctaveup_31',['TwoOctaveUp',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa082f1d3db8ea79c5afd41d236029ad1c',1,'musx::dom::others::SmartShape']]]
 ];

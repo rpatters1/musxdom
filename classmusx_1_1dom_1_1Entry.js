@@ -8,6 +8,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "getPrevious", "classmusx_1_1dom_1_1Entry.html#af99dd422bdcc42b63a4986eda7b18d42", null ],
     [ "hasStem", "classmusx_1_1dom_1_1Entry.html#a9665ee43235cad7e54c82c83abcc5f50", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1Entry.html#a413c78242c3f9f486a2b37d38d28c03b", null ],
+    [ "isPossibleFullMeasureRest", "classmusx_1_1dom_1_1Entry.html#ad38f227b8b7c0dfc847aae2a32cc3e53", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1Entry.html#a61440b0b4e54c1019e98d1b58d75f2e9", null ],
     [ "articDetail", "classmusx_1_1dom_1_1Entry.html#a0e99f4aa18165386218038d02a013b0f", null ],
     [ "beam", "classmusx_1_1dom_1_1Entry.html#ad829caa4f42eee2a016822e76d04f44c", null ],

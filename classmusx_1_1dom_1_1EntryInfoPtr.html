@@ -206,6 +206,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsBeamStart</b> (
 <tr class="memitem:afe092ac6f686263ca7b26d6ca0d4b6ee" id="r_afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#afe092ac6f686263ca7b26d6ca0d4b6ee">calcIsFeatheredBeamStart</a> (<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &amp;outLeftY, <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &amp;outRightY) const</td></tr>
 <tr class="memdesc:afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the entry starts a feathered beam and returns information about it if so.  <br /></td></tr>
 <tr class="separator:afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f1ab79a6faa2d52435f59224e788b0b" id="r_a8f1ab79a6faa2d52435f59224e788b0b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a8f1ab79a6faa2d52435f59224e788b0b">findBeamStartOrCurrent</a> () const</td></tr>
+<tr class="memdesc:a8f1ab79a6faa2d52435f59224e788b0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the first entry of a beamed group or returns the current entry if it is not beams.  <br /></td></tr>
+<tr class="separator:a8f1ab79a6faa2d52435f59224e788b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacdf5499308ecdbe9f2e3357b5f984f5" id="r_aacdf5499308ecdbe9f2e3357b5f984f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5">findBeamEnd</a> () const</td></tr>
 <tr class="memdesc:aacdf5499308ecdbe9f2e3357b5f984f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the end entry of a beamed group.  <br /></td></tr>
 <tr class="separator:aacdf5499308ecdbe9f2e3357b5f984f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,6 +240,18 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () const</td></tr>
 <tr class="memdesc:a2df5320c5c229417d41865cd7e56df48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry can be beamed. <br /></td></tr>
 <tr class="separator:a2df5320c5c229417d41865cd7e56df48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad8efac3646d0cfc7b3c193691b003e7" id="r_aad8efac3646d0cfc7b3c193691b003e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aad8efac3646d0cfc7b3c193691b003e7">calcEntrySize</a> () const</td></tr>
+<tr class="memdesc:aad8efac3646d0cfc7b3c193691b003e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the entry size as a percentage, taking into account the beaming.  <br /></td></tr>
+<tr class="separator:aad8efac3646d0cfc7b3c193691b003e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bdf67863c1a57e99ee426cbb5844d28" id="r_a0bdf67863c1a57e99ee426cbb5844d28"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a0bdf67863c1a57e99ee426cbb5844d28">calcIsCue</a> () const</td></tr>
+<tr class="memdesc:a0bdf67863c1a57e99ee426cbb5844d28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry is part of a cue.  <br /></td></tr>
+<tr class="separator:a0bdf67863c1a57e99ee426cbb5844d28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee6b5524df00cd1f2bbb41ebf760b58d" id="r_aee6b5524df00cd1f2bbb41ebf760b58d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aee6b5524df00cd1f2bbb41ebf760b58d">calcIsFullMeasureRest</a> () const</td></tr>
+<tr class="memdesc:aee6b5524df00cd1f2bbb41ebf760b58d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is a full measure rest.  <br /></td></tr>
+<tr class="separator:aee6b5524df00cd1f2bbb41ebf760b58d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad82e20770828b57b9c8dad206e9e92dd" id="r_ad82e20770828b57b9c8dad206e9e92dd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad82e20770828b57b9c8dad206e9e92dd">calcIsBeamedRestWorkaroud</a> () const</td></tr>
+<tr class="memdesc:ad82e20770828b57b9c8dad206e9e92dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.  <br /></td></tr>
+<tr class="separator:ad82e20770828b57b9c8dad206e9e92dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ownership of the frame so that any instance of it keeps the frame alive without the need for circular references. </p>
@@ -328,6 +343,70 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 
 </div>
 </div>
+<a id="aad8efac3646d0cfc7b3c193691b003e7" name="aad8efac3646d0cfc7b3c193691b003e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad8efac3646d0cfc7b3c193691b003e7">&#9670;&#160;</a></span>calcEntrySize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::EntryInfoPtr::calcEntrySize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the entry size as a percentage, taking into account the beaming. </p>
+<dl class="section return"><dt>Returns</dt><dd>Interger percentage where 100 means 100%. </dd></dl>
+
+</div>
+</div>
+<a id="ad82e20770828b57b9c8dad206e9e92dd" name="ad82e20770828b57b9c8dad206e9e92dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad82e20770828b57b9c8dad206e9e92dd">&#9670;&#160;</a></span>calcIsBeamedRestWorkaroud()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsBeamedRestWorkaroud </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if this is either the replacement rest in v2 or the hidden rest in v1. </dd></dl>
+
+</div>
+</div>
+<a id="a0bdf67863c1a57e99ee426cbb5844d28" name="a0bdf67863c1a57e99ee426cbb5844d28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bdf67863c1a57e99ee426cbb5844d28">&#9670;&#160;</a></span>calcIsCue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsCue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if this entry is part of a cue. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if<ul>
+<li>the entry is reduced in size</li>
+<li>the entry is hidden by "Blank Notation" or "Blank Notation with Rests" alternate notation in the score but not in a part. </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
 <a id="afe092ac6f686263ca7b26d6ca0d4b6ee" name="afe092ac6f686263ca7b26d6ca0d4b6ee"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afe092ac6f686263ca7b26d6ca0d4b6ee">&#9670;&#160;</a></span>calcIsFeatheredBeamStart()</h2>
 
@@ -363,6 +442,26 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged. </dd></dl>
+
+</div>
+</div>
+<a id="aee6b5524df00cd1f2bbb41ebf760b58d" name="aee6b5524df00cd1f2bbb41ebf760b58d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee6b5524df00cd1f2bbb41ebf760b58d">&#9670;&#160;</a></span>calcIsFullMeasureRest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsFullMeasureRest </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether this is a full measure rest. </p>
+<dl class="section note"><dt>Note</dt><dd><a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that in Finale, only whole rests are used as full measure rests. </dd></dl>
 
 </div>
 </div>
@@ -490,6 +589,27 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 
 <p>Finds the end entry of a beamed group. </p>
 <dl class="section return"><dt>Returns</dt><dd>The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group. </dd></dl>
+
+</div>
+</div>
+<a id="a8f1ab79a6faa2d52435f59224e788b0b" name="a8f1ab79a6faa2d52435f59224e788b0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f1ab79a6faa2d52435f59224e788b0b">&#9670;&#160;</a></span>findBeamStartOrCurrent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::findBeamStartOrCurrent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Finds the first entry of a beamed group or returns the current entry if it is not beams. </p>
+<dl class="section note"><dt>Note</dt><dd>This behavior is different than other beam functions in that it returns the current entry if there is no beam rather than returning NULL. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The first entry of a beamed group or the current entry if no beam. </dd></dl>
 
 </div>
 </div>

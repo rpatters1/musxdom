@@ -25,7 +25,7 @@ var searchData=
   ['oldfinalerestbeams_22',['oldFinaleRestBeams',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a849549dd2adf0a60d1f7db36bd2441ae',1,'musx::dom::options::BeamOptions']]],
   ['on_23',['on',['../structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html#aa7401b464c6676e0c4f8053d36415837',1,'musx::dom::options::LyricOptions::SyllablePosStyle']]],
   ['ondesmartenot_24',['OndesMartenot',['../namespacemusx_1_1dom_1_1uuid.html#aad3c394e0619e7d265bcfeed96a518cb',1,'musx::dom::uuid']]],
-  ['onebarrepeat_25',['oneBarRepeat',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a355bb56e4a4dee1ab7f1e5c226c80e5e',1,'musx::dom::options::MusicSymbolOptions']]],
+  ['onebarrepeat_25',['onebarrepeat',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a355bb56e4a4dee1ab7f1e5c226c80e5e',1,'musx::dom::options::MusicSymbolOptions::oneBarRepeat'],['../classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a25320a755aed9eeb52d4687818dcee86',1,'musx::dom::others::Staff::OneBarRepeat']]],
   ['onendnotes_26',['OnEndNotes',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a2541087e462f18f756e654dea7089ed9',1,'musx::dom::options::BeamOptions']]],
   ['onextremenote_27',['OnExtremeNote',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a1d9842eee97b7379c537a45fa78ed80e',1,'musx::dom::options::BeamOptions']]],
   ['onlyifotherlayershavenotes_28',['onlyIfOtherLayersHaveNotes',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae2a33f78ad890261180cddf1c3eaf112',1,'musx::dom::others::LayerAttributes']]],
