@@ -101,10 +101,9 @@ public:
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
      * @param layerIndex The layer index (0..3) to iterate.
-     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
      * @return EntryFrame for layer or nullptr if none.
      */
-    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
+    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex) const;
     
     /**
      * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
@@ -244,7 +243,7 @@ public:
      *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
-    std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex,
+    std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
         const std::shared_ptr<const others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     bool requireAllFields() const override { return false; }
@@ -589,13 +588,11 @@ public:
      *
      * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
      * @param layerIndex The @ref LayerIndex (0..3) of the entry frame
-     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
      * @param timeStretch The ratio of global Edu to staff edu.
     */
-    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, bool forWrittenPitch, util::Fraction timeStretch) :
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, util::Fraction timeStretch) :
         m_context(gfhold),
         m_layerIndex(layerIndex),
-        m_forWrittenPitch(forWrittenPitch),
         m_timeStretch(timeStretch)
     {
     }
@@ -718,10 +715,6 @@ public:
     /// @brief Get the layer index (0..3) of the entry frame
     LayerIndex getLayerIndex() const { return m_layerIndex; }
 
-    /// @brief Returns if this entry frame was created for written pitch.
-    /// @return True if for written pitch, false if for sounding pitch (i.e., concert pitch)
-    bool isForWrittenPitch() const { return m_forWrittenPitch; }
-
     /// @brief Get the time stretch in this frame. Rather than accessing this value directly,
     /// consider using #EntryInfoPtr::calcGlobalElapsedDuration or #EntryInfoPtr::calcGlobalActualDuration instead.
     util::Fraction getTimeStretch() const { return m_timeStretch; }
@@ -769,7 +762,6 @@ public:
 private:
     details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
-    bool m_forWrittenPitch;
     util::Fraction m_timeStretch;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
@@ -939,6 +931,9 @@ public:
         }
         return NoteInfoPtr(m_entry, m_noteIndex - 1);
     }
+
+    /// @brief Returns if this note is enharmonically respelled in the current part view
+    bool calcIsEnharmonicRespell() const;
 
 private:
     /// @brief Returns true if the @p src and this have the same level and alteration.

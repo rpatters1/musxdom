@@ -189,18 +189,23 @@ public:
  */
 class KeySignature : public CommonClassBase
 {
-private:
-    std::vector<unsigned> calcTonalCenterArrayForSharps() const;
-    std::vector<unsigned> calcTonalCenterArrayForFlats() const;
-    std::vector<unsigned> calcTonalCenterArray() const;
-    std::vector<int> calcAcciAmountsArray() const;
-    std::vector<unsigned> calcAcciOrderArray() const;
-
-    int m_octaveDisplacement{};         ///< Displace notes by this many octaves (for transposed keys)
-    int m_alterationOffset{};           ///< Offset of tonal center (for transposed keys)
-
 public:
     using CommonClassBase::CommonClassBase;
+
+    /**
+     * @enum KeyContext
+     * @brief Indicates whether to compute key signature values in concert or written pitch.
+     *
+     * This enum is used to control whether computations such as alteration,
+     * tonal center, or key maps should be performed using the concert pitch
+     * (untransposed key) or the written pitch (transposed key).
+     *
+     * Pass this as an optional argument to key signature methods to specify the desired context.
+     */
+    enum class KeyContext {
+        Concert,   ///< Use concert pitch (untransposed)
+        Written    ///< Use written pitch (with transposition)
+    };
 
     /** @brief 16-bit value intepreted as follows:
      * - <b> Linear Keys </b>: top bit is 0, the next 7 bits define the key mode (see #getKeyMode),
@@ -228,13 +233,11 @@ public:
      */
     Cmper getKeyMode() const { return isLinear() ? key >> 8 : key;  }
 
-    /// @brief For linear keys, returns the number of sharps or flats from -7..7 in key-transposed pitch (if any).
+    /// @brief For linear keys, returns the number of sharps or flats from -7..7 (if any).
+    /// @param ctx (optional) Specifies whether to return the concert or written alteration value. Default is written.
     /// @return Number of sharps/flats for linear keys or 0 for non-linear or invalid keys
-    int getAlteration() const { return getConcertAlteration() + m_alterationOffset; }
-
-    /// @brief For linear keys, returns the number of sharps or flats from -7..7 in concert pitch.
-    /// @return Number of sharps/flats for linear keys or 0 for non-linear or invalid keys
-    int getConcertAlteration() const { return isLinear() ? int(int8_t(key & 0xff)) : 0; }
+    int getAlteration(KeyContext ctx) const
+    { return isLinear() ? int(int8_t(key & 0xff)) + getAlterationOffset(ctx) : 0; }
 
     bool isLinear() const { return (key & 0xC000) == 0; }                   ///< whether this is a linear key
     bool isNonLinear() const { return (key & 0xC000) != 0; }                ///< whether this is a non-linear key
@@ -283,16 +286,17 @@ public:
     /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
     /// 
     /// This is the modal tonal center, so a minor key with no sharps or flats returns 5 (=A).
-    int calcTonalCenterIndex() const;
-
-    /// @brief The octave displacement if this key is a transposed key.
-    /// @return 0 for non-transposing keys or the octave displacement for transposed keys.
-    int getOctaveDisplacement() const
-    { return m_octaveDisplacement; }
+    int calcTonalCenterIndex(KeyContext ctx) const;
 
     /// @brief Calculates the amount of alteration on a note int the key.
     /// @param noteIndex note index, where C=0, D=1, E=3, F=3, G=4, A=5, B=6
-    int calcAlterationOnNote(unsigned noteIndex) const;
+    /// @param ctx Whether to calculate the alteration for concert or written pitch.
+    int calcAlterationOnNote(unsigned noteIndex, KeyContext ctx ) const;
+
+    /// @brief The octave displacement if this key is a transposed key.
+    /// @return 0 for non-transposing keys or the octave displacement for transposed keys.
+    int getOctaveDisplacement(KeyContext ctx) const
+    { return ctx == KeyContext::Written ? m_octaveDisplacement : 0; }
 
     /// @brief Calculates the number of EDO division for the key. (The standard value is 12.)
     int calcEDODivisions() const;
@@ -315,6 +319,20 @@ public:
     }
 
     static const xml::XmlElementArray<KeySignature>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+
+private:
+    std::vector<unsigned> calcTonalCenterArrayForSharps() const;
+    std::vector<unsigned> calcTonalCenterArrayForFlats() const;
+    std::vector<unsigned> calcTonalCenterArray(KeyContext ctx) const;
+    std::vector<int> calcAcciAmountsArray(KeyContext ctx) const;
+    std::vector<unsigned> calcAcciOrderArray(KeyContext ctx) const;
+
+    int m_octaveDisplacement{};         ///< Displace notes by this many octaves (for transposed keys)
+    int m_alterationOffset{};           ///< Offset of alteration (for transposed keys)
+    
+    int getAlterationOffset(KeyContext ctx) const
+    { return ctx == KeyContext::Written ? m_alterationOffset : 0; }
+
 };
 
 namespace texts {

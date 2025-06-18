@@ -402,20 +402,15 @@ TEST(StaffTest, Transposition)
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, measId);
         ASSERT_TRUE(gfhold);
 
-        auto writtenEntries = gfhold.createEntryFrame(0, true);
-        ASSERT_TRUE(writtenEntries);
-        ASSERT_GE(writtenEntries->getEntries().size(), 2);
-
-        auto concertEntries = gfhold.createEntryFrame(0, false);
-        ASSERT_TRUE(concertEntries);
-        ASSERT_GE(concertEntries->getEntries().size(), 2);
+        auto entries = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entries);
+        ASSERT_GE(entries->getEntries().size(), 2);
 
         for (size_t x = 0; x < 2; x++) {
-            auto writtenNote = NoteInfoPtr(EntryInfoPtr(writtenEntries, x), 0);
-            auto concertNote = NoteInfoPtr(EntryInfoPtr(concertEntries, x), 0);
+            auto note = NoteInfoPtr(EntryInfoPtr(entries, x), 0);
 
-            auto [wNote, wOctave, wAlter, wStaff] = writtenNote.calcNoteProperties();
-            auto [cNote, cOctave, cAlter, cStaff] = concertNote.calcNoteProperties();
+            auto [wNote, wOctave, wAlter, wStaff] = note.calcNoteProperties();
+            auto [cNote, cOctave, cAlter, cStaff] = note.calcNotePropertiesConcert();
 
             const auto& [expWNote, expWOct, expWAlt, expWStaff] = expectedWrittenResults[measId - 1][x];
             const auto& [expCNote, expCOct, expCAlt, expCStaff] = expectedConcertResult[x];
@@ -475,20 +470,15 @@ TEST(StaffTest, Transposition31Edo)
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, measId);
         ASSERT_TRUE(gfhold);
 
-        auto writtenEntries = gfhold.createEntryFrame(0, true);
-        ASSERT_TRUE(writtenEntries);
-        ASSERT_GE(writtenEntries->getEntries().size(), 2);
-
-        auto concertEntries = gfhold.createEntryFrame(0, false);
-        ASSERT_TRUE(concertEntries);
-        ASSERT_GE(concertEntries->getEntries().size(), 2);
+        auto entries = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entries);
+        ASSERT_GE(entries->getEntries().size(), 2);
 
         for (size_t x = 0; x < 2; x++) {
-            auto writtenNote = NoteInfoPtr(EntryInfoPtr(writtenEntries, x), 0);
-            auto concertNote = NoteInfoPtr(EntryInfoPtr(concertEntries, x), 0);
+            auto note = NoteInfoPtr(EntryInfoPtr(entries, x), 0);
 
-            auto [wNote, wOctave, wAlter, wStaff] = writtenNote.calcNoteProperties();
-            auto [cNote, cOctave, cAlter, cStaff] = concertNote.calcNoteProperties();
+            auto [wNote, wOctave, wAlter, wStaff] = note.calcNoteProperties();
+            auto [cNote, cOctave, cAlter, cStaff] = note.calcNotePropertiesConcert();
 
             const auto& [expWNote, expWOct, expWAlt, expWStaff] = expectedWrittenResults[measId - 1][x];
             const auto& [expCNote, expCOct, expCAlt, expCStaff] = expectedConcertResult[x];
