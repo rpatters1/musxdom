@@ -69,8 +69,8 @@ TEST(KeySigs, Test12EDO)
 
     for (size_t i = 0; i < expectedKeyAlters.size(); i++) {
         auto key = measures[i]->createKeySignature();
-        EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
-        EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
+        EXPECT_EQ(key->getAlteration(KeySignature::KeyContext::Written), expectedKeyAlters[i]);
+        EXPECT_EQ(key->calcTonalCenterIndex(KeySignature::KeyContext::Written), expectedIndices[i]);
         EXPECT_EQ(key->calcDiatonicMode(), expectedModes[i]);
         EXPECT_EQ(key->calcKeyMap(), expectedKeyMaps[i]);
         if (auto keyMap = key->calcKeyMap()) {
@@ -84,7 +84,7 @@ TEST(KeySigs, Test12EDO)
             if (x >= expectedNotes.size()) return false;
             //ASSERT_GE(entryInfo->getEntry()->notes.size(), 1);
             auto note = entryInfo->getEntry()->notes[0];
-            auto [noteName, octave, alter, position] = note->calcNoteProperties(key, entryInfo->clefIndex);
+            auto [noteName, octave, alter, position] = note->calcNoteProperties(key, KeySignature::KeyContext::Written, entryInfo->clefIndex);
             EXPECT_EQ(expectedOctaves[x], octave);
             EXPECT_EQ(expectedAlters[x], alter);
             EXPECT_EQ(expectedPositions[x], position);
@@ -136,8 +136,8 @@ TEST(KeySigs, Test31EDO)
     for (size_t i = 0; i < expectedKeyAlters.size(); i++) {
         auto measure = measures[i + FIRST_31EDO_MEASURE_INDEX];
         auto key = measure->createKeySignature();
-        EXPECT_EQ(key->getAlteration(), expectedKeyAlters[i]);
-        EXPECT_EQ(key->calcTonalCenterIndex(), expectedIndices[i]);
+        EXPECT_EQ(key->getAlteration(KeySignature::KeyContext::Written), expectedKeyAlters[i]);
+        EXPECT_EQ(key->calcTonalCenterIndex(KeySignature::KeyContext::Written), expectedIndices[i]);
         EXPECT_EQ(key->calcDiatonicMode(), expectedModes[i]);
         EXPECT_EQ(key->calcKeyMap(), expectedKeyMaps[i]);
         if (auto keyMap = key->calcKeyMap()) {
@@ -151,7 +151,7 @@ TEST(KeySigs, Test31EDO)
             if (x >= expectedNotes.size()) return false;
             //ASSERT_GE(entryInfo->getEntry()->notes.size(), 1);
             auto note = entryInfo->getEntry()->notes[0];
-            auto [noteName, octave, alter, position] = note->calcNoteProperties(key, entryInfo->clefIndex);
+            auto [noteName, octave, alter, position] = note->calcNoteProperties(key,KeySignature::KeyContext::Written, entryInfo->clefIndex);
             EXPECT_EQ(expectedOctaves[x], octave);
             EXPECT_EQ(expectedAlters[x], alter);
             EXPECT_EQ(expectedPositions[x], position);

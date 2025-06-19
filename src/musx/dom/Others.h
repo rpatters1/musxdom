@@ -1063,9 +1063,8 @@ public:
 
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
-    /// @param forWrittenPitch If @p forStaff is present, this value determines if the key signature is created for concert or written pitch.
     /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
-    std::shared_ptr<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt, bool forWrittenPitch = false) const;
+    std::shared_ptr<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.

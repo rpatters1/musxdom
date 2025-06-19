@@ -101,10 +101,9 @@ public:
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
      * @param layerIndex The layer index (0..3) to iterate.
-     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
      * @return EntryFrame for layer or nullptr if none.
      */
-    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, bool forWrittenPitch = false) const;
+    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex) const;
     
     /**
      * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
@@ -184,6 +183,15 @@ public:
         A = 5,
         B = 6
     };
+
+    /**
+     * @brief Note properites. A tuple containing:
+     *         - NoteName: The note name (C, D, E, F, G, A, B)
+     *         - int: The octave number (where 4 is the middle C octave)
+     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
+     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     */
+    using NoteProperties = std::tuple<Note::NoteName, int, int, int>;
     
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
@@ -234,17 +242,14 @@ public:
      * See #KeySignature::setTransposition for information about differences in key signature transposition.
      *
      * @param key The key signature in effect.
+     * @param ctx The key context (concert or written pitch).
      * @param clefIndex The index of the clef in effect.
      * @param staff If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If
      * calling #calcNoteProperties for Concert Pitch (sounding pitch) values, omit this parameter.
      * @param respellEnharmonic If true, the notes are enharmonically respelled using the default enharmonic spelling.
-     * @return A tuple containing:
-     *         - NoteName: The note name (C, D, E, F, G, A, B)
-     *         - int: The octave number (where 4 is the middle C octave)
-     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
-     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     * @return #NoteProperties
      */
-    std::tuple<NoteName, int, int, int> calcNoteProperties(const std::shared_ptr<KeySignature>& key, ClefIndex clefIndex,
+    NoteProperties calcNoteProperties(const std::shared_ptr<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
         const std::shared_ptr<const others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     bool requireAllFields() const override { return false; }
@@ -589,13 +594,11 @@ public:
      *
      * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
      * @param layerIndex The @ref LayerIndex (0..3) of the entry frame
-     * @param forWrittenPitch If true, the key and clef for each entry are calculated for written pitch rather than concert pitch.
      * @param timeStretch The ratio of global Edu to staff edu.
     */
-    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, bool forWrittenPitch, util::Fraction timeStretch) :
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, util::Fraction timeStretch) :
         m_context(gfhold),
         m_layerIndex(layerIndex),
-        m_forWrittenPitch(forWrittenPitch),
         m_timeStretch(timeStretch)
     {
     }
@@ -718,10 +721,6 @@ public:
     /// @brief Get the layer index (0..3) of the entry frame
     LayerIndex getLayerIndex() const { return m_layerIndex; }
 
-    /// @brief Returns if this entry frame was created for written pitch.
-    /// @return True if for written pitch, false if for sounding pitch (i.e., concert pitch)
-    bool isForWrittenPitch() const { return m_forWrittenPitch; }
-
     /// @brief Get the time stretch in this frame. Rather than accessing this value directly,
     /// consider using #EntryInfoPtr::calcGlobalElapsedDuration or #EntryInfoPtr::calcGlobalActualDuration instead.
     util::Fraction getTimeStretch() const { return m_timeStretch; }
@@ -769,7 +768,6 @@ public:
 private:
     details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
-    bool m_forWrittenPitch;
     util::Fraction m_timeStretch;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
@@ -879,25 +877,25 @@ public:
      * the staff position returned by #calcNoteProperties for whole rests.
      * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
      * this value is calculated automatically based on the score or part settings. Normally you will omit it.
-     * @return A tuple containing:
-     *         - NoteName: The note name (C, D, E, F, G, A, B)
-     *         - int: The octave number (where 4 is the middle C octave)
-     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
-     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     * @return #Note::NoteProperties
      */
-    std::tuple<Note::NoteName, int, int, int> calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
+    Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of thenote. This function does
+     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does
      * not take into account percussion notes and their staff position override. To discover if a note is a percussion
      * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
-     * @return A tuple containing:
-     *         - NoteName: The note name (C, D, E, F, G, A, B)
-     *         - int: The octave number (where 4 is the middle C octave)
-     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
-     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
+     * @return #Note::NoteProperties
      */
-    std::tuple<Note::NoteName, int, int, int> calcNotePropertiesConcert() const;
+    Note::NoteProperties calcNotePropertiesConcert() const;
+
+    /**
+     * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in view. This may be
+     * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not
+     * handle the staff position override of percussion notes.
+     * @return #Note::NoteProperties
+     */
+    Note::NoteProperties calcNotePropertiesInView() const;
 
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
@@ -939,6 +937,9 @@ public:
         }
         return NoteInfoPtr(m_entry, m_noteIndex - 1);
     }
+
+    /// @brief Returns if this note is enharmonically respelled in the current part view
+    bool calcIsEnharmonicRespell() const;
 
 private:
     /// @brief Returns true if the @p src and this have the same level and alteration.
