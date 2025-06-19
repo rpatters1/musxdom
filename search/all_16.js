@@ -17,9 +17,9 @@ var searchData=
   ['wigglechar_14',['wiggleChar',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a2f2dee5416e6ffcbc19267f348f22252',1,'musx::dom::options::MusicSymbolOptions']]],
   ['windchimes_15',['WindChimes',['../namespacemusx_1_1dom_1_1uuid.html#a00d9574c105c2b591ef5e26281b097f4',1,'musx::dom::uuid']]],
   ['windmachine_16',['WindMachine',['../namespacemusx_1_1dom_1_1uuid.html#aa2ebc5896b8a8515b096457f1ef02998',1,'musx::dom::uuid']]],
-  ['windows_17',['windows',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a8b757b0c6d31a24943436399bc778cbdaaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::others::FontDefinition::Windows'],['../namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391aaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::header::Windows'],['../namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133aaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::header::Windows']]],
+  ['windows_17',['windows',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a8b757b0c6d31a24943436399bc778cbdaaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::others::FontDefinition::Windows'],['../namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133aaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::header::Windows'],['../namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391aaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::header::Windows']]],
   ['windsection_18',['WindSection',['../namespacemusx_1_1dom_1_1uuid.html#ac97e00851331aafc029b651b73e0be6e',1,'musx::dom::uuid']]],
-  ['wingstyle_19',['wingstyle',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#aade2b37305fa0dfe3e3c3567f812182e',1,'musx::dom::options::RepeatOptions::WingStyle'],['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#af59afe99e25e1534eb542e64d88ced5e',1,'musx::dom::options::RepeatOptions::wingStyle']]],
+  ['wingstyle_19',['wingstyle',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#af59afe99e25e1534eb542e64d88ced5e',1,'musx::dom::options::RepeatOptions::wingStyle'],['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#aade2b37305fa0dfe3e3c3567f812182e',1,'musx::dom::options::RepeatOptions::WingStyle']]],
   ['woodblocks_20',['WoodBlocks',['../namespacemusx_1_1dom_1_1uuid.html#a6209d89bb3881f2f81930830b78c2eba',1,'musx::dom::uuid']]],
   ['wordext_21',['WordExt',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#af8f5c0bceb30383a2c1fa569c63192beaa7a16be8d0ac2559f67ae5535215f52a',1,'musx::dom::options::LyricOptions']]],
   ['wordextconnectindex_22',['WordExtConnectIndex',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a6dc71c9c5df0dae534659ccdb5725254',1,'musx::dom::options::LyricOptions']]],
@@ -35,5 +35,6 @@ var searchData=
   ['wordextvertoffset_32',['wordExtVertOffset',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#aa2dab63c09b21958c3e2901a6c38deb4',1,'musx::dom::options::LyricOptions']]],
   ['wordorder_33',['wordorder',['../structmusx_1_1dom_1_1header_1_1Header.html#a3b56b2be2156968c0ee2bdcb71fb1b31',1,'musx::dom::header::Header::wordOrder'],['../namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9',1,'musx::dom::header::WordOrder']]],
   ['wordwrap_34',['wordWrap',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a455aa1dd5ffa529bbdb3a305dfa95b8d',1,'musx::dom::others::TextBlock']]],
-  ['wrestoffset_35',['wRestOffset',['../classmusx_1_1dom_1_1others_1_1Staff.html#a58bfd410b0e5d3dd368adbd497215b31',1,'musx::dom::others::Staff']]]
+  ['wrestoffset_35',['wRestOffset',['../classmusx_1_1dom_1_1others_1_1Staff.html#a58bfd410b0e5d3dd368adbd497215b31',1,'musx::dom::others::Staff']]],
+  ['written_36',['Written',['../classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28a685710b38fa0c2510fc1079843dec6b9',1,'musx::dom::KeySignature']]]
 ];

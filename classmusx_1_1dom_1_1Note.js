@@ -1,5 +1,6 @@
 var classmusx_1_1dom_1_1Note =
 [
+    [ "NoteProperties", "classmusx_1_1dom_1_1Note.html#a37aaf7b9c3eb13027cfe09da150d2c71", null ],
     [ "NoteName", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e", [
       [ "C", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632ea0d61f8370cad1d412f80b84d143e1257", null ],
       [ "D", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632eaf623e75af30e62bbd73d6df5b50bb7b5", null ],
@@ -11,7 +12,7 @@ var classmusx_1_1dom_1_1Note =
     ] ],
     [ "Note", "classmusx_1_1dom_1_1Note.html#a7b5fc7c3dd8fe22c524c311b8eae5463", null ],
     [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1Note.html#a70cff35a0297f05a6a7bf5157e0609d6", null ],
-    [ "calcNoteProperties", "classmusx_1_1dom_1_1Note.html#a6c9cfe42580f6cf5ff8c9e80256e00c8", null ],
+    [ "calcNoteProperties", "classmusx_1_1dom_1_1Note.html#a871b0d6010606935b3e195d9eb9060b9", null ],
     [ "getNoteId", "classmusx_1_1dom_1_1Note.html#a6f0f8b7fc1ce284954140b26b2774d14", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1Note.html#a36dc7428581bf94502b9e3a8ab2f0db1", null ],
     [ "crossStaff", "classmusx_1_1dom_1_1Note.html#a84dc0efada748e96ca668df2e1c5c6ec", null ],

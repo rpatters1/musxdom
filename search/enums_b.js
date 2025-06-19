@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['platform_0',['Platform',['../namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133',1,'musx::dom::header']]],
-  ['playbacktype_1',['PlaybackType',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfe',1,'musx::dom::others']]],
-  ['positioningstyle_2',['PositioningStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a07f9dcf4a252cd8a45df30e4f9d95ec6',1,'musx::dom::options::TupletOptions']]],
-  ['positioningtype_3',['PositioningType',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88f',1,'musx::dom::others::Measure']]],
-  ['poundreplaceoption_4',['PoundReplaceOption',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a24e2fea767899e030dd840a541248473',1,'musx::dom::others::TextRepeatDef']]],
-  ['prefix_5',['Prefix',['../classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html#ad089ab13497a1e9197571632e31c2757',1,'musx::dom::others::ChordSuffixElement']]]
+  ['notationstyle_0',['NotationStyle',['../classmusx_1_1dom_1_1others_1_1Staff.html#a1e8b0e96deee5cbeb3f5bb82416d6cf6',1,'musx::dom::others::Staff']]],
+  ['notename_1',['NoteName',['../classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e',1,'musx::dom::Note']]],
+  ['notetype_2',['NoteType',['../namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312',1,'musx::dom']]],
+  ['numberstyle_3',['NumberStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcd',1,'musx::dom::options::TupletOptions']]]
 ];

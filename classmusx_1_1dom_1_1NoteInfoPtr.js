@@ -2,8 +2,10 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
 [
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#af96307ed369138a67d004695055e894d", null ],
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#abafc8ded0db6f072316ecfee838eaa38", null ],
-    [ "calcNoteProperties", "classmusx_1_1dom_1_1NoteInfoPtr.html#a6593889a4a734db7633332419e815b59", null ],
-    [ "calcNotePropertiesConcert", "classmusx_1_1dom_1_1NoteInfoPtr.html#af46b274546dea8166cdd1c42072e2733", null ],
+    [ "calcIsEnharmonicRespell", "classmusx_1_1dom_1_1NoteInfoPtr.html#aaa7136caca4301202a455a113f136553", null ],
+    [ "calcNoteProperties", "classmusx_1_1dom_1_1NoteInfoPtr.html#a18656de15d4d5e2c2903733f07cb1acf", null ],
+    [ "calcNotePropertiesConcert", "classmusx_1_1dom_1_1NoteInfoPtr.html#aa49453a766729c067cb8fc9263254ded", null ],
+    [ "calcNotePropertiesInView", "classmusx_1_1dom_1_1NoteInfoPtr.html#ad4a706712bf15cb3af60df1de267b700", null ],
     [ "calcPercussionNoteInfo", "classmusx_1_1dom_1_1NoteInfoPtr.html#a99dd9ce89ed8196223f55b74c093d486", null ],
     [ "calcStaff", "classmusx_1_1dom_1_1NoteInfoPtr.html#a0916f855bc1da7af83577dd7a69c54cc", null ],
     [ "calcTieFrom", "classmusx_1_1dom_1_1NoteInfoPtr.html#aaa52156d09836d9bf53b048a317a7829", null ],

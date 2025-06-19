@@ -1,16 +1,19 @@
 var classmusx_1_1dom_1_1KeySignature =
 [
-    [ "calcAlterationOnNote", "classmusx_1_1dom_1_1KeySignature.html#a5452f8d0cb4cb0f3066ad8fd24957d33", null ],
+    [ "KeyContext", "classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28", [
+      [ "Concert", "classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28a6c8730a0f73d13d796f39d636d3623ae", null ],
+      [ "Written", "classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28a685710b38fa0c2510fc1079843dec6b9", null ]
+    ] ],
+    [ "calcAlterationOnNote", "classmusx_1_1dom_1_1KeySignature.html#a899161f19ddb7bae6eed764691959e8a", null ],
     [ "calcDiatonicMode", "classmusx_1_1dom_1_1KeySignature.html#a70d5a77caa9ad5f9e5e5c89653125e34", null ],
     [ "calcEDODivisions", "classmusx_1_1dom_1_1KeySignature.html#a483682cbfa79240872d9e11dbed6af2e", null ],
     [ "calcKeyMap", "classmusx_1_1dom_1_1KeySignature.html#ad49a2938ad8ab254bb2362a626a06aef", null ],
-    [ "calcTonalCenterIndex", "classmusx_1_1dom_1_1KeySignature.html#ae17675c61d076e236952c9bcfbe25ffc", null ],
+    [ "calcTonalCenterIndex", "classmusx_1_1dom_1_1KeySignature.html#a65212e6a66d75dbeb2f191b282e74359", null ],
     [ "CommonClassBase", "classmusx_1_1dom_1_1KeySignature.html#ace51e53d99e83c6ae95d2b89fd1733d7", null ],
     [ "createTransposer", "classmusx_1_1dom_1_1KeySignature.html#a6d5cf39e9f26c653b042251ff4f87f68", null ],
-    [ "getAlteration", "classmusx_1_1dom_1_1KeySignature.html#a346cdad8bfda1d21d22363ccbb4ecc6e", null ],
-    [ "getConcertAlteration", "classmusx_1_1dom_1_1KeySignature.html#a18d2f86feb93e84ddca2acd8b7f81af6", null ],
+    [ "getAlteration", "classmusx_1_1dom_1_1KeySignature.html#a1e31adcf3652b951c0280aa4dd42ca4c", null ],
     [ "getKeyMode", "classmusx_1_1dom_1_1KeySignature.html#a08a72c52d3dba53ad96f88b47e2f3d78", null ],
-    [ "getOctaveDisplacement", "classmusx_1_1dom_1_1KeySignature.html#aa29d66ef67f9a7cc87495459df5700d5", null ],
+    [ "getOctaveDisplacement", "classmusx_1_1dom_1_1KeySignature.html#a69c8e8176511a3ad8e5d50c0e0ed424a", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1KeySignature.html#aa6d83554fe3fac8e89bd2933880ab5f4", null ],
     [ "isBuiltIn", "classmusx_1_1dom_1_1KeySignature.html#a49c630a5adbb73e575424c4678db7c83", null ],
     [ "isLinear", "classmusx_1_1dom_1_1KeySignature.html#a3ea0ce268d5f02f11ab41151461b448f", null ],

@@ -122,9 +122,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1d20de03c8b49d42a30d62c43fdf0818" id="r_a1d20de03c8b49d42a30d62c43fdf0818"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a1d20de03c8b49d42a30d62c43fdf0818">EntryFrame</a> (const <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html">details::GFrameHoldContext</a> &amp;gfhold, <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> layerIndex, bool forWrittenPitch, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> timeStretch)</td></tr>
-<tr class="memdesc:a1d20de03c8b49d42a30d62c43fdf0818"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function.  <br /></td></tr>
-<tr class="separator:a1d20de03c8b49d42a30d62c43fdf0818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f25e673cfcc592f068b55d1368855bc" id="r_a8f25e673cfcc592f068b55d1368855bc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a8f25e673cfcc592f068b55d1368855bc">EntryFrame</a> (const <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html">details::GFrameHoldContext</a> &amp;gfhold, <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> layerIndex, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> timeStretch)</td></tr>
+<tr class="memdesc:a8f25e673cfcc592f068b55d1368855bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function.  <br /></td></tr>
+<tr class="separator:a8f25e673cfcc592f068b55d1368855bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfc09385cdd5a627483229c232e05bcc" id="r_acfc09385cdd5a627483229c232e05bcc"><td class="memItemLeft" align="right" valign="top"><a id="acfc09385cdd5a627483229c232e05bcc" name="acfc09385cdd5a627483229c232e05bcc"></a>
 <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getDocument</b> () const</td></tr>
 <tr class="memdesc:acfc09385cdd5a627483229c232e05bcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the document for the entry frame. <br /></td></tr>
@@ -145,9 +145,6 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getLayerIndex</b> () const</td></tr>
 <tr class="memdesc:ac9d4d9e8977b895a1f0f1439ada79a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the layer index (0..3) of the entry frame. <br /></td></tr>
 <tr class="separator:ac9d4d9e8977b895a1f0f1439ada79a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cdd01b036423e34728877d7711e3dd7" id="r_a1cdd01b036423e34728877d7711e3dd7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a1cdd01b036423e34728877d7711e3dd7">isForWrittenPitch</a> () const</td></tr>
-<tr class="memdesc:a1cdd01b036423e34728877d7711e3dd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if this entry frame was created for written pitch.  <br /></td></tr>
-<tr class="separator:a1cdd01b036423e34728877d7711e3dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04e36a98f44eaa13851aa8df8acc6d9e" id="r_a04e36a98f44eaa13851aa8df8acc6d9e"><td class="memItemLeft" align="right" valign="top"><a id="a04e36a98f44eaa13851aa8df8acc6d9e" name="a04e36a98f44eaa13851aa8df8acc6d9e"></a>
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getTimeStretch</b> () const</td></tr>
 <tr class="memdesc:a04e36a98f44eaa13851aa8df8acc6d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time stretch in this frame. Rather than accessing this value directly, consider using <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a1445f0a573b9b1751c2c8dd5d3092dee" title="Calculates the elapsed duration in global edu, removing any time stretch due to independent time sign...">EntryInfoPtr::calcGlobalElapsedDuration</a> or <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aefab62e48990cb691af5a4975e102989" title="Calculates the actual duration in global edu, removing any time stretch due to independent time signa...">EntryInfoPtr::calcGlobalActualDuration</a> instead. <br /></td></tr>
@@ -197,8 +194,8 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">K
 <div class="textblock"><p>Represents a vector of <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instances for a given frame, along with computed information. </p>
 <p>Its pointers are owned by <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1d20de03c8b49d42a30d62c43fdf0818" name="a1d20de03c8b49d42a30d62c43fdf0818"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d20de03c8b49d42a30d62c43fdf0818">&#9670;&#160;</a></span>EntryFrame()</h2>
+<a id="a8f25e673cfcc592f068b55d1368855bc" name="a8f25e673cfcc592f068b55d1368855bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f25e673cfcc592f068b55d1368855bc">&#9670;&#160;</a></span>EntryFrame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -217,12 +214,6 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">K
           <td></td>
           <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td>
           <td class="paramname"><em>layerIndex</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forWrittenPitch</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -248,7 +239,6 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">K
   <table class="params">
     <tr><td class="paramname">gfhold</td><td>The <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html">details::GFrameHoldContext</a> instance creating this <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html" title="Represents a vector of EntryInfo instances for a given frame, along with computed information.">EntryFrame</a> </td></tr>
     <tr><td class="paramname">layerIndex</td><td>The <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> (0..3) of the entry frame </td></tr>
-    <tr><td class="paramname">forWrittenPitch</td><td>If true, the key and clef for each entry are calculated for written pitch rather than concert pitch. </td></tr>
     <tr><td class="paramname">timeStretch</td><td>The ratio of global Edu to staff edu. </td></tr>
   </table>
   </dd>
@@ -404,34 +394,6 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">K
 
 <p>Gets the entry frame for the previous measure with the same staff and layer. </p>
 <dl class="section return"><dt>Returns</dt><dd>Frame or nullpter if the previous measure has no matching frame, </dd></dl>
-
-</div>
-</div>
-<a id="a1cdd01b036423e34728877d7711e3dd7" name="a1cdd01b036423e34728877d7711e3dd7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1cdd01b036423e34728877d7711e3dd7">&#9670;&#160;</a></span>isForWrittenPitch()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::EntryFrame::isForWrittenPitch </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns if this entry frame was created for written pitch. </p>
-<dl class="section return"><dt>Returns</dt><dd>True if for written pitch, false if for sounding pitch (i.e., concert pitch) </dd></dl>
 
 </div>
 </div>

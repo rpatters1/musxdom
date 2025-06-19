@@ -1,7 +1,7 @@
 var classmusx_1_1dom_1_1EntryFrame =
 [
     [ "TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo" ],
-    [ "EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html#a1d20de03c8b49d42a30d62c43fdf0818", null ],
+    [ "EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html#a8f25e673cfcc592f068b55d1368855bc", null ],
     [ "addEntry", "classmusx_1_1dom_1_1EntryFrame.html#a6352800f5a3791aa5cc988867ac1a5ad", null ],
     [ "calcIsCueFrame", "classmusx_1_1dom_1_1EntryFrame.html#a8275afd056fe42cf3c516810e4044681", null ],
     [ "createCurrentStaff", "classmusx_1_1dom_1_1EntryFrame.html#abb279770c27241218d88ef42ab4a0c06", null ],
@@ -17,7 +17,6 @@ var classmusx_1_1dom_1_1EntryFrame =
     [ "getRequestedPartId", "classmusx_1_1dom_1_1EntryFrame.html#a937e396f4005807208e343084b9137cd", null ],
     [ "getStaff", "classmusx_1_1dom_1_1EntryFrame.html#a31ad4691f62e8509160d8f804d04bce7", null ],
     [ "getTimeStretch", "classmusx_1_1dom_1_1EntryFrame.html#a04e36a98f44eaa13851aa8df8acc6d9e", null ],
-    [ "isForWrittenPitch", "classmusx_1_1dom_1_1EntryFrame.html#a1cdd01b036423e34728877d7711e3dd7", null ],
     [ "keySignature", "classmusx_1_1dom_1_1EntryFrame.html#abe7ae16afb5c98fab21b8d6e1c4f9e78", null ],
     [ "tupletInfo", "classmusx_1_1dom_1_1EntryFrame.html#ad28c481c240edfb35fb300791604fd11", null ]
 ];

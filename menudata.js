@@ -190,6 +190,7 @@ var menudata={children:[
 {text:"g",url:"functions_enum.html#index_g"},
 {text:"h",url:"functions_enum.html#index_h"},
 {text:"i",url:"functions_enum.html#index_i"},
+{text:"k",url:"functions_enum.html#index_k"},
 {text:"l",url:"functions_enum.html#index_l"},
 {text:"m",url:"functions_enum.html#index_m"},
 {text:"n",url:"functions_enum.html#index_n"},
