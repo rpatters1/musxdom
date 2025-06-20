@@ -127,7 +127,8 @@ public:
     std::map<LayerIndex, bool> calcVoices() const;
 
     /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
-    bool calcIsCuesOnly() const;
+    /// @param includeVisibleInScore If true, include cues that are visible in the score.
+    bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
 
 private:
     /// @brief Find the layer frame and Edu start position for the given layer.
@@ -533,10 +534,11 @@ public:
     int calcEntrySize() const;
 
     /// @brief Calculates if this entry is part of a cue.
+    /// @param includeVisibleInScore If true, include cues that are visible in the score.
     /// @return true if
     ///         - the entry is reduced in size
     ///         - the entry is hidden by "Blank Notation" or "Blank Notation with Rests" alternate notation in the score but not in a part.
-    bool calcIsCue() const;
+    bool calcIsCue(bool includeVisibleInScore = false) const;
 
     /// @brief Returns whether this is a full measure rest.
     /// @note Note that in Finale, only whole rests are used as full measure rests.
@@ -751,8 +753,9 @@ public:
     /// @brief Calculates if this entry frame is part of a cue.
     /// @todo Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being
     /// fast to compute when there is no cue.
+    /// @param includeVisibleInScore If true, include cues that are visible in the score.
     /// @return true if all entries in the frame are either cue entries or hidden.
-    bool calcIsCueFrame() const;
+    bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
 private:
     details::GFrameHoldContext m_context;

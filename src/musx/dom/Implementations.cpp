@@ -307,13 +307,13 @@ std::shared_ptr<others::Measure> EntryFrame::getMeasureInstance() const
     return getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), getMeasure());
 }
 
-bool EntryFrame::calcIsCueFrame() const
+bool EntryFrame::calcIsCueFrame(bool includeVisibleInScore) const
 {
     bool foundCueEntry = false;
     for (size_t x = 0; x < m_entries.size(); x++) {
         if (!m_entries[x]->getEntry()->isHidden) {
             EntryInfoPtr entryInfo(shared_from_this(), x);
-            if (entryInfo.calcIsCue()) {
+            if (entryInfo.calcIsCue(includeVisibleInScore)) {
                 foundCueEntry = true;
             } else {
                 return false; // return false on the first non-cue visible entry found
@@ -1081,9 +1081,12 @@ int EntryInfoPtr::calcEntrySize() const
     return result;
 }
 
-bool EntryInfoPtr::calcIsCue() const
+bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
 {
     if (calcEntrySize() <= MAX_CUE_PERCENTAGE) {
+        if (includeVisibleInScore) {
+            return true;
+        }
         auto doc = m_entryFrame->getDocument();
         if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
             if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank) {
@@ -1592,7 +1595,7 @@ ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
     return result;
 }
 
-bool details::GFrameHoldContext::calcIsCuesOnly() const
+bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) const
 {
     bool foundCue = false;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
@@ -1603,7 +1606,7 @@ bool details::GFrameHoldContext::calcIsCuesOnly() const
                 continue;
             }
             if (auto entryFrame = createEntryFrame(layerIndex)) {
-                if (entryFrame->calcIsCueFrame()) {
+                if (entryFrame->calcIsCueFrame(includeVisibleInScore)) {
                     foundCue = true;
                 } else {
                     return false; // non-cue frame found, so this is not a cue frame
