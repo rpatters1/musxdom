@@ -1089,14 +1089,17 @@ bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
         }
         auto doc = m_entryFrame->getDocument();
         if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
-            if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank) {
-                if (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes) {
-                    auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
-                    for (const auto& part : parts) {
-                        if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
-                            if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
-                                return true;
-                            }
+            bool hidden = (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank)
+                && (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes);
+            if (!hidden) {
+                hidden = scoreStaff->hideMode != others::Staff::HideMode::None;
+            }
+            if (hidden) {
+                auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
+                for (const auto& part : parts) {
+                    if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+                        if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
+                            return true;
                         }
                     }
                 }
