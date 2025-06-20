@@ -152,6 +152,49 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
     return false;
 }
 
+// ***********************
+// ***** ClefOptions *****
+// ***********************
+
+bool options::ClefOptions::ClefDef::isBlank() const
+{
+    if (isShape) {
+        if (const auto& shape = shapeId ? getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId) : nullptr) {
+            return shape->isBlank();
+        }
+        return true;
+    }
+    return !clefChar || std::iswspace(clefChar);
+}
+
+options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std::shared_ptr<const others::Staff>& currStaff) const
+{
+    if (currStaff) {
+        switch (currStaff->notationStyle) {
+            case others::Staff::NotationStyle::Tablature: return std::make_pair(music_theory::ClefType::Tab, 0);
+            case others::Staff::NotationStyle::Percussion: return std::make_pair(music_theory::ClefType::Percussion, 0);
+            default: break;
+        }
+    }
+    if (staffPosition == 0 && middleCPos == -10 && isShape) { // find tab staves based on Finale SMuFL default file settings
+        return std::make_pair(music_theory::ClefType::Tab, 0);
+    }
+    music_theory::ClefType clefType = music_theory::ClefType::Unknown;
+    int octave = 0;
+    auto clefPitch = music_theory::NoteName(music_theory::positiveModulus(staffPosition - middleCPos, music_theory::STANDARD_DIATONIC_STEPS, &octave));
+    switch (clefPitch) {
+        case music_theory::NoteName::C: clefType = music_theory::ClefType::C; break;
+        case music_theory::NoteName::F: clefType = music_theory::ClefType::F; break;
+        case music_theory::NoteName::G: clefType = music_theory::ClefType::G; break;
+        case music_theory::NoteName::B: clefType = music_theory::ClefType::Percussion; break; // Finale SMuFL default file settings
+        default: break;
+    }
+    if (clefType == music_theory::ClefType::F) {
+        octave++; // The F clef's non-transposing position is below middle C, so compensate.
+    }
+    return std::make_pair(clefType, octave);
+}
+
 // *****************
 // ***** Entry *****
 // *****************
@@ -1300,10 +1343,8 @@ std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries() const
 bool details::CustomStem::calcIsHiddenStem() const
 {
     if (shapeDef != 0) {
-        if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeDef)) {
-            if (shape->instructionList != 0) {
-                return false;
-            }
+        if (const auto& shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeDef)) {
+            return shape->isBlank();
         }
     }
     return true;
@@ -2247,10 +2288,6 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignatu
 Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
     const std::shared_ptr<const others::Staff>& staff, bool respellEnharmonic) const
 {
-    static constexpr std::array<Note::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
-        Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
-    };
-
     auto [transposedLev, transposedAlt] = respellEnharmonic
                                         ? calcDefaultEnharmonic(key)
                                         : std::pair<int, int>{ harmLev, harmAlt };
@@ -2284,7 +2321,7 @@ Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<KeySignature
     }
     int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
 
-    return { noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
+    return { music_theory::noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
 }
 
 // ***********************

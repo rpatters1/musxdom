@@ -29,8 +29,9 @@
 #include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
- namespace music_theory {
-    class Transposer;
+namespace music_theory {
+enum class NoteName : int;
+class Transposer;
 } // namespace music_theory
     
 namespace musx {
@@ -172,18 +173,6 @@ public:
     /// @brief Non floating rests have a note with this noteId that defines their staff positions.
     static constexpr NoteNumber RESTID = 31;
 
-    /// @brief The available note names, in array order.
-    enum class NoteName : int
-    {
-        C = 0,
-        D = 1,
-        E = 2,
-        F = 3,
-        G = 4,
-        A = 5,
-        B = 6
-    };
-
     /**
      * @brief Note properites. A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
@@ -191,7 +180,7 @@ public:
      *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
-    using NoteProperties = std::tuple<Note::NoteName, int, int, int>;
+    using NoteProperties = std::tuple<music_theory::NoteName, int, int, int>;
     
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.

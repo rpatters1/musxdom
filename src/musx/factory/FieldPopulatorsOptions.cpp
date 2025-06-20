@@ -447,7 +447,7 @@ MUSX_XML_ELEMENT_ARRAY(ChordOptions, {
 MUSX_XML_ELEMENT_ARRAY(ClefOptions::ClefDef, {
     {"adjust", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->middleCPos = e->getTextAs<int>(); }},
     {"clefChar", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->clefChar = e->getTextAs<char32_t>(); }},
-    {"clefYDisp", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->staffPositon = e->getTextAs<int>(); }},
+    {"clefYDisp", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->staffPosition = e->getTextAs<int>(); }},
     {"baseAdjust", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->baselineAdjust = e->getTextAs<Efix>(); }},
     {"shapeID", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->shapeId = e->getTextAs<Cmper>(); }},
     {"isShape", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions::ClefDef>& i) { i->isShape = populateBoolean(e, i); }},

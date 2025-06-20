@@ -31,8 +31,16 @@
 #include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
+namespace music_theory {
+enum class ClefType;
+} // namespace music_theory
+
 namespace musx {
 namespace dom {
+
+namespace others {
+class Staff;
+} // namespace others
 
 /**
  * @namespace musx::dom::options
@@ -250,6 +258,11 @@ public:
  */
 class ClefOptions : public OptionsBase {
 public:
+    /// @brief Information about a #ClefDef consisting of its clef type and octave transposition.
+    /// For example, a treble clef for tenors (often shown with an 8 below the clef) would return
+    /// (#music_theory::ClefType::G, -1).
+    using ClefInfo = std::pair<music_theory::ClefType, int>;
+
     /**
      * @brief Constructor
      * @param document A weak pointer to the document object.
@@ -271,15 +284,26 @@ public:
         explicit ClefDef(const DocumentWeakPtr& document)
             : Base(document, 0, ShareMode::All) {}
             
-        int middleCPos{};               ///< Staff position of middle-C for this clef (from top staffline). (xml node is `<adjust>`.)
+        int middleCPos{};               ///< Staff position of middle-C for this clef from reference staffline (usually the top). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
-        int staffPositon{};             ///< Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is `<clefYDisp>`)
+        int staffPosition{};             ///< Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is `<clefYDisp>`)
         Efix baselineAdjust{};          ///< Additional baseline adjustment in Efix. (xml node is `<baseAdjust>`)
         Cmper shapeId{};                ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
         bool isShape{};                 ///< Indicates if the clef is a shape.
         bool scaleToStaffHeight{};      ///< Indicates if the shape should scale to staff height.
         bool useOwnFont{};              ///< Indicates if the clef has its own font.
         std::shared_ptr<FontInfo> font; ///< When `useOwnFont` is true, this is the clef's font. Otherwise `nullptr`.
+
+        /// @brief Returns true if this is a blank clef.
+        bool isBlank() const;
+        
+        /// @brief Calculates and returns the clef information.
+        /// @param currStaff For most accurate results, pass the current @ref others::StaffComposite instance. If you omit this parameter,
+        /// percussion and tab staves are identified based on the Finale SMuFL default file settings. If you supply it, staves with a notation style
+        /// of tablature always return a tab clef and staves with a notation style of percussion always return a percussion clef. Normal notation style
+        /// detects clefs as if @p currStaff had not been supplied.
+        /// @return See #ClefInfo.
+        ClefInfo calcInfo(const std::shared_ptr<const others::Staff>& currStaff = nullptr) const;
 
         static const xml::XmlElementArray<ClefDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };

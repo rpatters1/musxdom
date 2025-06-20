@@ -19,7 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#pragma once
+
+ // Do not use `#pragma once` here, because the file may be included in multiple projects
+#ifndef MUSIC_THEORY_HPP
+#define MUSIC_THEORY_HPP
 
 #include <array>
 #include <vector>
@@ -41,6 +44,22 @@ namespace music_theory {
 constexpr int STANDARD_DIATONIC_STEPS = 7; ///< currently this is the only supported number of diatonic steps.
 constexpr int STANDARD_12EDO_STEPS = 12;   ///< this can be overriden when constructing a @ref Transposer instance.
 
+/// @brief The available note names in array order.
+enum class NoteName : int
+{
+    C = 0,
+    D = 1,
+    E = 2,
+    F = 3,
+    G = 4,
+    A = 5,
+    B = 6
+};
+
+static constexpr std::array<music_theory::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
+    NoteName::C, NoteName::D, NoteName::E, NoteName::F, NoteName::G, NoteName::A, NoteName::B
+};
+
 /// @enum DiatonicMode
 /// @brief Represents the seven standard diatonic musical modes.
 ///
@@ -54,6 +73,18 @@ enum class DiatonicMode : int
     Mixolydian = 4,     ///< major with flat 7
     Aeolian = 5,        ///< natural minor
     Locrian = 6         ///< diminished with flat 2 and 5
+};
+
+/// @enum ClefType
+/// @brief Represents the possible types of clef, irrespective of octave transposition.
+enum class ClefType
+{
+    Unknown,            ///< Unknown clef type (default value with {} initializer)
+    G,                  ///< Treble clef
+    C,                  ///< C clef
+    F,                  ///< Bass clef
+    Percussion,         ///< Percussion clef (centered on middle staff line)
+    Tab                 ///< Tablature clef
 };
 
 /// @brief Calculates the displacement value for a given absolute pitch class and octave
@@ -84,9 +115,29 @@ constexpr inline T sign(T n)
 /// @param d The base of the modulus. This must be a positive number.
 /// @return For non-negative, the result is the same as `%`. For negative numbers, the result is `-1 * (abs(n) % d)`.
 template <typename T>
-constexpr T signedModulus(T n, T d) {
-    static_assert(std::is_integral_v<T>, "signed_modulus requires an integer type");
+constexpr T signedModulus(T n, T d)
+{
+    static_assert(std::is_integral_v<T>, "signedModulus requires an integer type");
     return sign(n) * (std::abs(n) % d);
+}
+
+/// @brief Calculates a positive modulus in the range [0, d-1], even for negative dividends.
+/// @tparam T An integer type.
+/// @param n The dividend (may be negative).
+/// @param d The modulus base (must be positive).
+/// @param q Optional pointer to receive the quotient such that n = d * q + result.
+/// @return The result of n modulo d in the range [0, d-1].
+template <typename T>
+constexpr T positiveModulus(T n, T d, T* q = nullptr)
+{
+    static_assert(std::is_integral_v<T>, "positiveModulus requires an integer type");
+    if (q) *q = n / d;
+    T result = signedModulus(n, d);
+    if (result < 0) {
+        result += d;
+        if (q) --(*q);
+    }
+    return result;
 }
 
 /// @class Transposer
@@ -258,13 +309,7 @@ private:
     }
     
     int calcScaleDegree(int interval) const
-    {
-        int intervalNormalized = signedModulus(interval, int(m_keyMap.size()));
-        if (intervalNormalized < 0) {
-            intervalNormalized += int(m_keyMap.size());
-        }
-        return intervalNormalized;
-    }
+    { return positiveModulus(interval, int(m_keyMap.size())); }
 
     int calcStepsBetweenScaleDegrees(int firstDisplacement, int secondDisplacement) const
     {
@@ -311,3 +356,5 @@ private:
 };
 
 } // namespace music_theory
+
+#endif // MUSIC_THEORY_HPP

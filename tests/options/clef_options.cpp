@@ -115,12 +115,14 @@ constexpr static musxtest::string_view xml = R"xml(
 </finale>
 )xml";
 
+using namespace musx::dom;
+
 TEST(ClefOptionsTest, ClefDefPropertiesTest)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
-    auto clefOptions = options->get<musx::dom::options::ClefOptions>();
+    auto clefOptions = options->get<options::ClefOptions>();
     ASSERT_TRUE(clefOptions);
 
     // Test properties
@@ -139,7 +141,7 @@ TEST(ClefOptionsTest, ClefDefPropertiesTest)
     const auto& clefDef0 = clefOptions->clefDefs[0];
     EXPECT_EQ(clefDef0->middleCPos, -10);
     EXPECT_EQ(clefDef0->clefChar, 0xe050);
-    EXPECT_EQ(clefDef0->staffPositon, -6);
+    EXPECT_EQ(clefDef0->staffPosition, -6);
     EXPECT_FALSE(clefDef0->isShape);
     EXPECT_FALSE(clefDef0->scaleToStaffHeight);
 
@@ -147,7 +149,7 @@ TEST(ClefOptionsTest, ClefDefPropertiesTest)
     const auto& clefDef4 = clefOptions->clefDefs[4];
     EXPECT_EQ(clefDef4->middleCPos, -10);
     EXPECT_EQ(clefDef4->clefChar, 0xe06a);
-    EXPECT_EQ(clefDef4->staffPositon, -4);
+    EXPECT_EQ(clefDef4->staffPosition, -4);
     EXPECT_EQ(clefDef4->baselineAdjust, 12);
     ASSERT_TRUE(clefDef4->font);
     EXPECT_EQ(clefDef4->font->fontId, 10);
@@ -221,7 +223,50 @@ TEST(ClefOptionsTest, Only2ClefDefs)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(only2Defs);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
-    auto clefOptions = options->get<musx::dom::options::ClefOptions>();
+    auto clefOptions = options->get<options::ClefOptions>();
     ASSERT_TRUE(clefOptions);
     EXPECT_EQ(clefOptions->clefDefs.size(), 2);
+}
+
+TEST(ClefOptionsTest, ClefInfoTest)
+{
+    std::vector<char> smuflDefaultClefs;
+    musxtest::readFile(musxtest::getInputPath() / "smuflclefs.enigmaxml", smuflDefaultClefs);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(smuflDefaultClefs);
+    ASSERT_TRUE(doc);
+
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+    auto clefOptions = options->get<options::ClefOptions>();
+    ASSERT_TRUE(clefOptions);
+    ASSERT_EQ(clefOptions->clefDefs.size(), 18);
+
+    static const std::vector<options::ClefOptions::ClefInfo> expectedValues = {
+        { music_theory::ClefType::G, 0 },
+        { music_theory::ClefType::C, 0 },
+        { music_theory::ClefType::C, 0 },
+        { music_theory::ClefType::F, 0 },
+        { music_theory::ClefType::Percussion, 0 },
+        { music_theory::ClefType::G, -1 },
+        { music_theory::ClefType::F, -1 },
+        { music_theory::ClefType::F, 0 },
+        { music_theory::ClefType::G, 0 },
+        { music_theory::ClefType::C, 0 },
+        { music_theory::ClefType::C, 0 },
+        { music_theory::ClefType::C, 0 },
+        { music_theory::ClefType::Percussion, 0 },
+        { music_theory::ClefType::G, 1 },
+        { music_theory::ClefType::F, 1 },
+        { music_theory::ClefType::G, 0 },
+        { music_theory::ClefType::Tab, 0 },
+        { music_theory::ClefType::Tab, 0 },
+   };
+
+    for (size_t x = 0; x < clefOptions->clefDefs.size(); x++) {
+        const auto& def = clefOptions->clefDefs[x];
+        auto [clefType, octave] = def->calcInfo();
+        EXPECT_EQ(clefType, expectedValues[x].first);
+        EXPECT_EQ(octave, expectedValues[x].second);
+        EXPECT_EQ(def->isBlank(), x == 15) << "x is " << x;
+    }
 }
