@@ -3697,7 +3697,7 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
         return nullptr;
     }
     std::shared_ptr<FontInfo> result;
-    util::EnigmaString::parseEnigmaText(getDocument(), this->text, [&](const std::string& chunk, const std::shared_ptr<FontInfo>& font) {
+    util::EnigmaString::parseEnigmaText(getDocument(), this->text, [&](const std::string&, const std::shared_ptr<FontInfo>& font) {
         result = font;
         return false;
     });
