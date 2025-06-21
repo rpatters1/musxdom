@@ -171,7 +171,7 @@ public:
     /**
      * @brief Calculates whether this is a SMuFL font.
      */
-    bool calcIsSMuFL() const  { return calcSMuFLMetaDataPath().has_value(); }
+    bool calcIsSMuFL() const;
 
     /**
      * @brief Returns the standard SMuFL font folder.

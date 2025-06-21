@@ -305,6 +305,12 @@ public:
         /// @return See #ClefInfo.
         ClefInfo calcInfo(const std::shared_ptr<const others::Staff>& currStaff = nullptr) const;
 
+
+        /// @brief Calculate the font that applies to this clef, based on the options in #ClefDef.
+        /// @return A shared pointer to the font instance used by this #ClefDef.
+        /// @throws std::invalid_argument if not found.
+        std::shared_ptr<const FontInfo> calcFont() const;
+
         static const xml::XmlElementArray<ClefDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 

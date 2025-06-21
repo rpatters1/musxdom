@@ -195,6 +195,20 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std
     return std::make_pair(clefType, octave);
 }
 
+std::shared_ptr<const FontInfo> options::ClefOptions::ClefDef::calcFont() const
+{
+    std::shared_ptr<const FontInfo> result;
+    if (useOwnFont && font) {
+        result = font;
+    } else if (auto fontOptions = getDocument()->getOptions()->get<options::FontOptions>()) {
+        result = fontOptions->getFontInfo(options::FontOptions::FontType::Clef);
+    }
+    if (!result) {
+        throw std::invalid_argument("Unable to determine clef font due to missing font definitions.");
+    }
+    return result;
+}
+
 // *****************
 // ***** Entry *****
 // *****************
@@ -1213,6 +1227,28 @@ std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath() const
         }
     }
     return std::nullopt;
+}
+
+bool FontInfo::calcIsSMuFL() const
+{
+   static const std::set<std::string_view> knownSmuflFontNames =
+    {
+        "Bravura",
+        "Leland",
+        "Emmentaler",
+        "Gonville",
+        "MuseJazz",
+        "Petaluma",
+        "Finale Maestro",
+        "Finale Broadway"
+    };
+
+    if (calcSMuFLMetaDataPath().has_value()) {
+        return true;
+    }
+
+    auto it = knownSmuflFontNames.find(getName());
+    return it != knownSmuflFontNames.end();
 }
 
 bool FontInfo::calcIsSymbolFont() const
