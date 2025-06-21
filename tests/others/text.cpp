@@ -590,30 +590,32 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     std::vector<std::pair<std::string, std::string>> output;
 
-    auto recordChunk = [&](const std::string& text, const std::shared_ptr<FontInfo>&) -> bool {
+    auto recordChunk = [&](const std::string& text, const std::shared_ptr<dom::FontInfo>&) -> bool {
         output.emplace_back("TEXT", text);
         return true;
     };
 
     auto handleNothing = [](const std::vector<std::string>&) -> std::optional<std::string> {
-        return std::nullopt; // fallback to raw
+        return std::nullopt;
     };
 
     // Test 1: Escaped caret
     output.clear();
     EnigmaString::parseEnigmaText("A ^^ B", recordChunk, handleNothing);
-    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+    std::vector<std::pair<std::string, std::string>> expected1 = {
         {"TEXT", "A ^ B"}
-    });
+    };
+    EXPECT_EQ(output, expected1);
 
     // Test 2: Unhandled command dumped raw
     output.clear();
     EnigmaString::parseEnigmaText("X ^foo(bar) Y", recordChunk, handleNothing);
-    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+    std::vector<std::pair<std::string, std::string>> expected2 = {
         {"TEXT", "X "},
         {"TEXT", "^foo(bar)"},
         {"TEXT", " Y"}
-    });
+    };
+    EXPECT_EQ(output, expected2);
 
     // Test 3: Command is handled and replaced
     output.clear();
@@ -623,18 +625,20 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
             if (parsed[0] == "page") return "3";
             return std::nullopt;
         });
-    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+    std::vector<std::pair<std::string, std::string>> expected3 = {
         {"TEXT", "Before "},
         {"TEXT", "3"},
         {"TEXT", " after"}
-    });
+    };
+    EXPECT_EQ(output, expected3);
 
     // Test 4: Invalid command → literal caret
     output.clear();
     EnigmaString::parseEnigmaText("Broken ^ command", recordChunk, handleNothing);
-    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+    std::vector<std::pair<std::string, std::string>> expected4 = {
         {"TEXT", "Broken ^ command"}
-    });
+    };
+    EXPECT_EQ(output, expected4);
 
     // Test 5: Suppressed command (returns empty string)
     output.clear();
@@ -644,10 +648,11 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
             if (parsed[0] == "suppress") return "";
             return std::nullopt;
         });
-    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+    std::vector<std::pair<std::string, std::string>> expected5 = {
         {"TEXT", "Hi "},
         {"TEXT", " Bye"}
-    });
+    };
+    EXPECT_EQ(output, expected5);
 }
 
 TEST(TextsTest, EnigmaParsing)

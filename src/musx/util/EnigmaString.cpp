@@ -143,7 +143,7 @@ bool EnigmaString::parseFontCommand(const std::string& fontTag, FontInfo& fontIn
     return false;
 }
 
-void EnigmaString::parseEnigmaText( const std::string& rawText, const TextChunkCallback& onText, const CommandCallback& onCommand)
+void EnigmaString::parseEnigmaText(const std::string& rawText, const TextChunkCallback& onText, const CommandCallback& onCommand)
 {
     auto currentFont = std::make_shared<dom::FontInfo>();
     std::string remaining = rawText;

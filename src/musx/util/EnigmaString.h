@@ -150,7 +150,7 @@ public:
      * @param onText The handler for when font styling changes.
      * @param onCommand The handler to substitute text for a command.
      */
-    static void parseEnigmaText(const std::string& rawText, const TextChunkCallback& onText, const CommandCallback& onCommand);
+    static void parseEnigmaText(const DocumentPtr& document, const std::string& rawText, const TextChunkCallback& onText, const CommandCallback& onCommand);
 
     /// @brief Simplified version of #parseEnigmaText that strips unhandled commands.
     /// Useful in particular when the caller only cares about font information.
