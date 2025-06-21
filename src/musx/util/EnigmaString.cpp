@@ -28,6 +28,33 @@ using namespace musx::dom;
 namespace musx {
 namespace util {
 
+static const std::unordered_map<std::string, std::string>& getEnigmaAccidentalMap(EnigmaString::AccidentalStyle style)
+{
+    // Maps for SMuFL and plain text accidentals
+    static const std::unordered_map<std::string, std::string> smuflAccidentals = {
+        {"flat", EnigmaString::fromU8(u8"\uE260")},    // SMuFL character for flat
+        {"sharp", EnigmaString::fromU8(u8"\uE262")},   // SMuFL character for sharp
+        {"natural", EnigmaString::fromU8(u8"\uE261")}  // SMuFL character for natural
+    };
+    static const std::unordered_map<std::string, std::string> unicodeAccidentals = {
+        {"flat", EnigmaString::fromU8(u8"\u266D")},    // Text flat: ♭
+        {"sharp", EnigmaString::fromU8(u8"\u266F")},   // Text sharp: ♯
+        {"natural", EnigmaString::fromU8(u8"\u266E")}  // Text natural: ♮
+    };
+    static const std::unordered_map<std::string, std::string> asciiAccidentals = {
+        {"flat", "b"},         // Plain text representation for flat
+        {"sharp", "#"},        // Plain text representation for sharp
+        {"natural", ""},       // Plain text representation for natural (none)
+    };
+
+    switch (style) {
+        default:            
+        case EnigmaString::AccidentalStyle::Ascii: return asciiAccidentals;
+        case EnigmaString::AccidentalStyle::Unicode: return unicodeAccidentals;
+        case EnigmaString::AccidentalStyle::Smufl: return smuflAccidentals;
+    }
+}
+
 static const std::vector<std::string> kEnigmaFontCommands = { "^font", "^fontid", "^Font", "^fontMus", "^fontTxt", "^fontNum", "^size", "^nfx" };
 
 bool EnigmaString::startsWithFontCommand(const std::string& text)
@@ -143,9 +170,10 @@ bool EnigmaString::parseFontCommand(const std::string& fontTag, FontInfo& fontIn
     return false;
 }
 
-void EnigmaString::parseEnigmaText(const std::string& rawText, const TextChunkCallback& onText, const CommandCallback& onCommand)
+void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
+    const TextChunkCallback& onText, const CommandCallback& onCommand, const std::optional<AccidentalStyle>& accidentalStyle)
 {
-    auto currentFont = std::make_shared<dom::FontInfo>();
+    auto currentFont = std::make_shared<dom::FontInfo>(document);
     std::string remaining = rawText;
     std::string textBuffer;
 
@@ -196,7 +224,14 @@ void EnigmaString::parseEnigmaText(const std::string& rawText, const TextChunkCa
             continue;
         }
 
-        /// @todo Handle accidentals here?
+        if (accidentalStyle && components.size() == 1) {
+            const auto& accidentalMap = getEnigmaAccidentalMap(accidentalStyle.value());
+            auto it = accidentalMap.find(components[0]);
+            if (it != accidentalMap.end()) {
+                textBuffer += it->second;
+                continue;
+            }
+        }
 
         // Delegate unknown command to the handler
         std::optional<std::string> replacement = onCommand(components);
@@ -270,31 +305,6 @@ std::string EnigmaString::replaceAccidentalTags(const std::string& input, Accide
     // Define regex for ^flat() and ^sharp()
     std::regex accidentalTagRegex(R"(\^(flat|sharp|natural)\(\))");
 
-    // Maps for SMuFL and plain text accidentals
-    const std::unordered_map<std::string, std::string> smuflAccidentals = {
-        {"flat", fromU8(u8"\uE260")},    // SMuFL character for flat
-        {"sharp", fromU8(u8"\uE262")},   // SMuFL character for sharp
-        {"natural", fromU8(u8"\uE261")}  // SMuFL character for natural
-    };
-    const std::unordered_map<std::string, std::string> unicodeAccidentals = {
-        {"flat", fromU8(u8"\u266D")},    // Text flat: ♭
-        {"sharp", fromU8(u8"\u266F")},   // Text sharp: ♯
-        {"natural", fromU8(u8"\u266E")}  // Text natural: ♮
-    };
-    const std::unordered_map<std::string, std::string> asciiAccidentals = {
-        {"flat", "b"},         // Plain text representation for flat
-        {"sharp", "#"},        // Plain text representation for sharp
-        {"natural", ""},       // Plain text representation for natural (none)
-    };
-    const auto& accidentalMap = [&]() {
-        switch (style) {
-            default:            
-            case AccidentalStyle::Ascii: return asciiAccidentals;
-            case AccidentalStyle::Unicode: return unicodeAccidentals;
-            case AccidentalStyle::Smufl: return smuflAccidentals;
-        }
-    }();
-
     std::string output;
     std::sregex_iterator currentMatch(input.begin(), input.end(), accidentalTagRegex);
     std::sregex_iterator endMatch;
@@ -310,6 +320,7 @@ std::string EnigmaString::replaceAccidentalTags(const std::string& input, Accide
 
         // Replace the match based on the captured group
         const auto& accidental = match[1].str();
+        const auto& accidentalMap = getEnigmaAccidentalMap(style);
         auto it = accidentalMap.find(accidental);
         if (it != accidentalMap.end()) {
             output += it->second;  // Append the replacement character

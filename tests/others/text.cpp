@@ -356,7 +356,7 @@ www.greatrivermusic.com</blockText>
     <expression number="214">^fontTxt(Times,4096)^size(10)^nfx(130)igrc</expression>
     <expression number="215">^fontTxt(Times,4096)^size(10)^nfx(130)iclefs</expression>
     <expression number="216">^fontTxt(Times,4096)^size(12)^nfx(130)skip ties</expression>
-    <expression number="217">^fontTxt(Times(bad,4096)^size(10)^nfx(130)skip tie ends</expression>
+    <expression number="217">bad ^fontTxt(Times,4096)^size(10)^nfx(130)skip tie ends</expression>
     <expression number="218">^fontTxt(TimesXXX,4096)^size(10)^nfx(130)skip trill-to</expression>
     <expression number="219">^font(Times,4096)^size(14)^nfx(2)22100:0: 0E000F001D000000EAFF0000</expression>
     <expression number="221">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
@@ -588,9 +588,13 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 {
     using namespace musx::util;
 
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
     std::vector<std::pair<std::string, std::string>> output;
 
-    auto recordChunk = [&](const std::string& text, const std::shared_ptr<dom::FontInfo>&) -> bool {
+    auto recordChunk = [&](const std::string& text, const std::shared_ptr<FontInfo>&) -> bool {
         output.emplace_back("TEXT", text);
         return true;
     };
@@ -601,7 +605,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 1: Escaped caret
     output.clear();
-    EnigmaString::parseEnigmaText("A ^^ B", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, "A ^^ B", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected1 = {
         {"TEXT", "A ^ B"}
     };
@@ -609,7 +613,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 2: Unhandled command dumped raw
     output.clear();
-    EnigmaString::parseEnigmaText("X ^foo(bar) Y", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected2 = {
         {"TEXT", "X "},
         {"TEXT", "^foo(bar)"},
@@ -619,22 +623,20 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 3: Command is handled and replaced
     output.clear();
-    EnigmaString::parseEnigmaText("Before ^page(2) after",
+    EnigmaString::parseEnigmaText(doc, "Before ^page(2) after",
         recordChunk,
         [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
             if (parsed[0] == "page") return "3";
             return std::nullopt;
         });
     std::vector<std::pair<std::string, std::string>> expected3 = {
-        {"TEXT", "Before "},
-        {"TEXT", "3"},
-        {"TEXT", " after"}
+        {"TEXT", "Before 3 after"}
     };
     EXPECT_EQ(output, expected3);
 
     // Test 4: Invalid command → literal caret
     output.clear();
-    EnigmaString::parseEnigmaText("Broken ^ command", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, "Broken ^ command", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected4 = {
         {"TEXT", "Broken ^ command"}
     };
@@ -642,20 +644,19 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 5: Suppressed command (returns empty string)
     output.clear();
-    EnigmaString::parseEnigmaText("Hi ^suppress Bye",
+    EnigmaString::parseEnigmaText(doc, "Hi ^suppress Bye",
         recordChunk,
         [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
             if (parsed[0] == "suppress") return "";
             return std::nullopt;
         });
     std::vector<std::pair<std::string, std::string>> expected5 = {
-        {"TEXT", "Hi "},
-        {"TEXT", " Bye"}
+        {"TEXT", "Hi  Bye"},
     };
     EXPECT_EQ(output, expected5);
 }
 
-TEST(TextsTest, EnigmaParsing)
+TEST(TextsTest, EnigmaAccidentalParsing)
 {
     using EnigmaString = musx::util::EnigmaString;
     auto result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()"); //ascii default
@@ -673,6 +674,28 @@ TEST(TextsTest, EnigmaParsing)
     EXPECT_EQ(result, "♯♮♭");
     result = EnigmaString::trimTags("^font(New York)^sharp()The composer tag is ^^composer()");
     EXPECT_EQ(result, "The composer tag is ^composer()");
+}
+
+TEST(TextsTest, ParseEnigmaWithAccidentals)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    std::string output;
+    auto accumulateChunk = [&](const std::string& text, const std::shared_ptr<FontInfo>&) -> bool {
+        output += text;
+        return true;
+    };
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Ascii);
+    EXPECT_EQ(output, "#b");
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_EQ(output, "♯♮♭");
 }
 
 TEST(TextsTest, LyricSyllableParsing)

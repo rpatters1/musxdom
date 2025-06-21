@@ -3693,34 +3693,15 @@ int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
 
 std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 {
-    std::string searchText = this->text;
-    auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
-    bool foundTag = false;
-
-    while (true) {
-        if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
-            break;
-        }
-
-        size_t endOfTag = searchText.find_first_of(')');
-        if (endOfTag == std::string::npos) {
-            break;
-        }
-
-        std::string fontTag = searchText.substr(0, endOfTag + 1);
-        if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
-            return nullptr;
-        }
-
-        searchText.erase(0, endOfTag + 1);
-        foundTag = true;
+    if (!musx::util::EnigmaString::startsWithFontCommand(this->text)) {
+        return nullptr;
     }
-
-    if (foundTag) {
-        return fontInfo;
-    }
-
-    return nullptr;
+    std::shared_ptr<FontInfo> result;
+    util::EnigmaString::parseEnigmaText(getDocument(), this->text, [&](const std::string& chunk, const std::shared_ptr<FontInfo>& font) {
+        result = font;
+        return false;
+    });
+    return result;
 }
 
 // *********************
