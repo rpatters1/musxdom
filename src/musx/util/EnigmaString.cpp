@@ -40,12 +40,19 @@ bool EnigmaString::startsWithFontCommand(const std::string& text)
     return false;
 }
 
-std::vector<std::string> EnigmaString::parseComponents(const std::string& input)
+std::vector<std::string> EnigmaString::parseComponents(const std::string& input, size_t* parsedLength)
 {
-    if (input.empty() || input[0] != '^')
+    if (parsedLength) {
+        *parsedLength = 0;
+    }
+    if (input.empty() || input[0] != '^') {
         return {}; // Invalid input
+    }
 
-    if (input.size() == 2 && input[1] == '^') {
+    if (input.size() >= 2 && input[1] == '^') {
+        if (parsedLength) {
+            *parsedLength = 2;
+        }
         return { "^" }; // "^^" returns "^"
     }
 
@@ -53,8 +60,9 @@ std::vector<std::string> EnigmaString::parseComponents(const std::string& input)
     while (i < input.size() && std::isalpha(input[i])) 
         ++i;
 
-    if (i == 1) 
+    if (i == 1) {
         return {}; // No valid command found
+    }
 
     std::vector<std::string> components;
     components.push_back(input.substr(1, i - 1)); // Extract command
@@ -89,17 +97,27 @@ std::vector<std::string> EnigmaString::parseComponents(const std::string& input)
         }
     }
 
+    // No parenthesis group — command is just ^command
+    if (parsedLength) {
+        *parsedLength = i;
+    }
     return components;
 }
 
-bool EnigmaString::parseFontCommand(const std::string& fontTag, FontInfo& fontInfo)
+bool EnigmaString::parseFontCommand(const std::string& fontTag, FontInfo& fontInfo, size_t* parsedLength)
 {
+    if (parsedLength) {
+        *parsedLength = 0;
+    }
     if (fontTag.empty() || fontTag[0] != '^') {
         return false;
     }
 
-    std::vector<std::string> components = parseComponents(fontTag);
+    std::vector<std::string> components = parseComponents(fontTag, parsedLength);
     if (components.size() < 2) {
+        if (parsedLength) {
+            *parsedLength = 0;
+        }
         return false;
     }
 
@@ -123,6 +141,77 @@ bool EnigmaString::parseFontCommand(const std::string& fontTag, FontInfo& fontIn
     }
 
     return false;
+}
+
+void EnigmaString::parseEnigmaText( const std::string& rawText, const TextChunkCallback& onText, const CommandCallback& onCommand)
+{
+    auto currentFont = std::make_shared<dom::FontInfo>();
+    std::string remaining = rawText;
+    std::string textBuffer;
+
+    while (!remaining.empty()) {
+        size_t caretPos = remaining.find('^');
+
+        // Emit text before next command
+        if (caretPos != std::string::npos && caretPos > 0) {
+            textBuffer += remaining.substr(0, caretPos);
+            remaining.erase(0, caretPos);
+        } else if (caretPos == std::string::npos) {
+            textBuffer += remaining;
+            break;
+        }
+
+        size_t parsedLen = 0;
+        if (startsWithFontCommand(remaining)) {
+            if (!textBuffer.empty()) {
+                bool result = onText(textBuffer, currentFont);
+                textBuffer.erase();
+                if (!result) {
+                    break;
+                }
+            }
+            if (!parseFontCommand(remaining, *currentFont.get(), &parsedLen)) {
+                throw std::invalid_argument("malformed font command encountered in Enigma text: " + rawText);
+            }
+            remaining.erase(0, parsedLen);
+            continue;
+        }
+
+        // Try to parse the next command
+        auto components = parseComponents(remaining, &parsedLen);
+
+        if (components.empty() || parsedLen == 0) {
+            // Not a valid command — treat '^' as literal
+            textBuffer += '^';
+            remaining.erase(0, 1);
+            continue;
+        }
+
+        std::string fullCommand = remaining.substr(0, parsedLen);
+        remaining.erase(0, parsedLen);
+
+        // Handle ^^ (escaped caret)
+        if (components.size() == 1 && components[0] == "^") {
+            textBuffer += '^';
+            continue;
+        }
+
+        /// @todo Handle accidentals here?
+
+        // Delegate unknown command to the handler
+        std::optional<std::string> replacement = onCommand(components);
+        if (replacement.has_value()) {
+            textBuffer += replacement.value();
+        } else {
+            // Command unhandled — fallback to raw
+            textBuffer += fullCommand;
+        }
+    }
+
+    // Emit any remaining buffered text
+    if (!textBuffer.empty()) {
+        onText(textBuffer, currentFont);
+    }
 }
 
 std::string EnigmaString::trimFontTags(const std::string& input)

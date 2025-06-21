@@ -521,20 +521,34 @@ TEST(TextsTest, OtherText)
 
 TEST(TextsTest, EnigmaComponents)
 {
-    auto components = musx::util::EnigmaString::parseComponents("^fontTxt(Times,4096)");
+    constexpr auto constexpr_strlen = [](const auto& str) constexpr {
+        return std::size(str) - 1;
+    };
+
+    size_t parsedSize = 0;
+    auto components = musx::util::EnigmaString::parseComponents("^fontTxt(Times,4096)text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "Times", "4096" }));
-    components = musx::util::EnigmaString::parseComponents("^fontTxt((Times),(4096))");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^fontTxt(Times,4096)"));
+
+    components = musx::util::EnigmaString::parseComponents("^fontTxt((Times),(4096))", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "(Times)", "(4096)" }));
-    components = musx::util::EnigmaString::parseComponents("^size(10)");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^fontTxt((Times),(4096))"));
+
+    components = musx::util::EnigmaString::parseComponents("^size(10)size text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "size", "10" }));
-    components = musx::util::EnigmaString::parseComponents("^some");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^size(10)"));
+
+    components = musx::util::EnigmaString::parseComponents("^some text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "some" }));
-    components = musx::util::EnigmaString::parseComponents("^^");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^some"));
+
+    components = musx::util::EnigmaString::parseComponents("^^text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "^" }));
-    components = musx::util::EnigmaString::parseComponents("^^invalid");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^^"));
+
+    components = musx::util::EnigmaString::parseComponents("^fontTxt(Times(bad,4096)", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({}));
-    components = musx::util::EnigmaString::parseComponents("^fontTxt(Times(bad,4096)");
-    EXPECT_EQ(components, std::vector<std::string>({}));
+    EXPECT_EQ(parsedSize, 0);
 }
 
 TEST(TextsTest, FontFromEnigma)
@@ -568,6 +582,72 @@ TEST(TextsTest, FontFromEnigma)
         text->parseFirstFontInfo(),
         std::invalid_argument
     );
+}
+
+TEST(TextsTest, ParseEnigmaTextLowLevel)
+{
+    using namespace musx::util;
+
+    std::vector<std::pair<std::string, std::string>> output;
+
+    auto recordChunk = [&](const std::string& text, const std::shared_ptr<FontInfo>&) -> bool {
+        output.emplace_back("TEXT", text);
+        return true;
+    };
+
+    auto handleNothing = [](const std::vector<std::string>&) -> std::optional<std::string> {
+        return std::nullopt; // fallback to raw
+    };
+
+    // Test 1: Escaped caret
+    output.clear();
+    EnigmaString::parseEnigmaText("A ^^ B", recordChunk, handleNothing);
+    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+        {"TEXT", "A ^ B"}
+    });
+
+    // Test 2: Unhandled command dumped raw
+    output.clear();
+    EnigmaString::parseEnigmaText("X ^foo(bar) Y", recordChunk, handleNothing);
+    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+        {"TEXT", "X "},
+        {"TEXT", "^foo(bar)"},
+        {"TEXT", " Y"}
+    });
+
+    // Test 3: Command is handled and replaced
+    output.clear();
+    EnigmaString::parseEnigmaText("Before ^page(2) after",
+        recordChunk,
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "page") return "3";
+            return std::nullopt;
+        });
+    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+        {"TEXT", "Before "},
+        {"TEXT", "3"},
+        {"TEXT", " after"}
+    });
+
+    // Test 4: Invalid command → literal caret
+    output.clear();
+    EnigmaString::parseEnigmaText("Broken ^ command", recordChunk, handleNothing);
+    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+        {"TEXT", "Broken ^ command"}
+    });
+
+    // Test 5: Suppressed command (returns empty string)
+    output.clear();
+    EnigmaString::parseEnigmaText("Hi ^suppress Bye",
+        recordChunk,
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "suppress") return "";
+            return std::nullopt;
+        });
+    EXPECT_EQ(output, std::vector<std::pair<std::string, std::string>>{
+        {"TEXT", "Hi "},
+        {"TEXT", " Bye"}
+    });
 }
 
 TEST(TextsTest, EnigmaParsing)
