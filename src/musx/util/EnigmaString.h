@@ -23,11 +23,13 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 
 namespace musx {
 
 namespace dom {
 class FontInfo;
+class Document;
 } // namespace dom
 
 namespace util {
@@ -111,9 +113,61 @@ public:
      * @endcode
      *
      * @param input The enigma text insert to parse.
+     * @param parsedLength If supplied, returns the number of characters parsed
      * @return A vector of strings representing the command and its parameters, or an empty vector if invalid.
      */
-    static std::vector<std::string> parseComponents(const std::string& input);
+    static std::vector<std::string> parseComponents(const std::string& input, size_t* parsedLength = nullptr);
+
+    /// @brief Iteration function type that the parser calls back when the font has changed
+    /// - text: the chunk of text styled with the specified font information
+    /// - font: the font information.
+    using TextChunkCallback = std::function<bool(
+        const std::string& text,
+        const std::shared_ptr<dom::FontInfo>& font
+    )>;
+
+    /// @brief Iteration function type that the parser calls back when it encounters an Enigma command
+    /// that requires text subtitution. If the function returns std::nullopt, the command is dumped as-is
+    /// into the processed text. If the function returns an empty string, the command is stripped from the
+    /// processed text.
+    /// - parsedCommand: a vector containing the command (without the leading '^') and all its parameters.
+    using CommandCallback = std::function<std::optional<std::string>(
+        const std::vector<std::string>& parsedCommand
+    )>;
+
+    /**
+     * @brief Parses an Enigma-formatted string, handling font commands and escaped carets.
+     *
+     * This function scans an Enigma-formatted string (typically Finale-style encoded text),
+     * extracts text chunks and control commands, and invokes a callback for each contiguous span
+     * of text using the current font state. It automatically interprets font-related commands 
+     * like ^fontTxt, ^fontMus, ^fontid, ^size, and ^nfx, updating the font info accordingly.
+     *
+     * Escaped carets ("^^") are converted to literal '^' characters. All other unrecognized
+     * commands (e.g., ^value(...) or ^page(...)) are passed through to the callback for higher-level
+     * processing or markup.
+     *
+     * @param rawText The full input Enigma string to parse.
+     * @param onText The handler for when font styling changes.
+     * @param onCommand The handler to substitute text for a command.
+     * @param accidentalStyle If supplied, accidentals are replaced with characters according to the accidental style
+     */
+    static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
+        const TextChunkCallback& onText, const CommandCallback& onCommand,
+        const std::optional<AccidentalStyle>& accidentalStyle = std::nullopt);
+
+    /// @brief Simplified version of #parseEnigmaText that strips unhandled commands.
+    /// Useful in particular when the caller only cares about font information.
+    /// @param rawText The full input Enigma string to parse.
+    /// @param onText The handler for when font styling changes.
+    /// @param accidentalStyle If supplied, accidentals are replaced with characters according to the accidental style.
+    static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText, const TextChunkCallback& onText,
+        const std::optional<AccidentalStyle>& accidentalStyle = std::nullopt)
+    {
+        parseEnigmaText(document, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
+            return ""; // strip all unhandled commands
+        }, accidentalStyle);
+    }
 
     /**
      * @brief Incorporates an enigma font command into the supplied @ref dom::FontInfo instance.
@@ -123,7 +177,7 @@ public:
      * - `^size` specifies the font size in points.
      * - `^nfx` specifies a bit mask of style properties. These are resolved with @ref dom::FontInfo::setEnigmaStyles.
      */
-    static bool parseFontCommand(const std::string& fontTag, dom::FontInfo& fontInfo);
+    static bool parseFontCommand(const std::string& fontTag, dom::FontInfo& fontInfo, size_t* parsedLength = nullptr);
 
     /** @brief Trims all font tags from an enigma string. */
     static std::string trimFontTags(const std::string& input);

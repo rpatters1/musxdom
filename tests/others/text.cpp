@@ -356,7 +356,7 @@ www.greatrivermusic.com</blockText>
     <expression number="214">^fontTxt(Times,4096)^size(10)^nfx(130)igrc</expression>
     <expression number="215">^fontTxt(Times,4096)^size(10)^nfx(130)iclefs</expression>
     <expression number="216">^fontTxt(Times,4096)^size(12)^nfx(130)skip ties</expression>
-    <expression number="217">^fontTxt(Times(bad,4096)^size(10)^nfx(130)skip tie ends</expression>
+    <expression number="217">bad ^fontTxt(Times,4096)^size(10)^nfx(130)skip tie ends</expression>
     <expression number="218">^fontTxt(TimesXXX,4096)^size(10)^nfx(130)skip trill-to</expression>
     <expression number="219">^font(Times,4096)^size(14)^nfx(2)22100:0: 0E000F001D000000EAFF0000</expression>
     <expression number="221">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
@@ -521,20 +521,34 @@ TEST(TextsTest, OtherText)
 
 TEST(TextsTest, EnigmaComponents)
 {
-    auto components = musx::util::EnigmaString::parseComponents("^fontTxt(Times,4096)");
+    constexpr auto constexpr_strlen = [](const auto& str) constexpr {
+        return std::size(str) - 1;
+    };
+
+    size_t parsedSize = 0;
+    auto components = musx::util::EnigmaString::parseComponents("^fontTxt(Times,4096)text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "Times", "4096" }));
-    components = musx::util::EnigmaString::parseComponents("^fontTxt((Times),(4096))");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^fontTxt(Times,4096)"));
+
+    components = musx::util::EnigmaString::parseComponents("^fontTxt((Times),(4096))", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "(Times)", "(4096)" }));
-    components = musx::util::EnigmaString::parseComponents("^size(10)");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^fontTxt((Times),(4096))"));
+
+    components = musx::util::EnigmaString::parseComponents("^size(10)size text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "size", "10" }));
-    components = musx::util::EnigmaString::parseComponents("^some");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^size(10)"));
+
+    components = musx::util::EnigmaString::parseComponents("^some text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "some" }));
-    components = musx::util::EnigmaString::parseComponents("^^");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^some"));
+
+    components = musx::util::EnigmaString::parseComponents("^^text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "^" }));
-    components = musx::util::EnigmaString::parseComponents("^^invalid");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^^"));
+
+    components = musx::util::EnigmaString::parseComponents("^fontTxt(Times(bad,4096)", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({}));
-    components = musx::util::EnigmaString::parseComponents("^fontTxt(Times(bad,4096)");
-    EXPECT_EQ(components, std::vector<std::string>({}));
+    EXPECT_EQ(parsedSize, 0);
 }
 
 TEST(TextsTest, FontFromEnigma)
@@ -570,7 +584,79 @@ TEST(TextsTest, FontFromEnigma)
     );
 }
 
-TEST(TextsTest, EnigmaParsing)
+TEST(TextsTest, ParseEnigmaTextLowLevel)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    std::vector<std::pair<std::string, std::string>> output;
+
+    auto recordChunk = [&](const std::string& text, const std::shared_ptr<FontInfo>&) -> bool {
+        output.emplace_back("TEXT", text);
+        return true;
+    };
+
+    auto handleNothing = [](const std::vector<std::string>&) -> std::optional<std::string> {
+        return std::nullopt;
+    };
+
+    // Test 1: Escaped caret
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "A ^^ B", recordChunk, handleNothing);
+    std::vector<std::pair<std::string, std::string>> expected1 = {
+        {"TEXT", "A ^ B"}
+    };
+    EXPECT_EQ(output, expected1);
+
+    // Test 2: Unhandled command dumped raw
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk, handleNothing);
+    std::vector<std::pair<std::string, std::string>> expected2 = {
+        {"TEXT", "X "},
+        {"TEXT", "^foo(bar)"},
+        {"TEXT", " Y"}
+    };
+    EXPECT_EQ(output, expected2);
+
+    // Test 3: Command is handled and replaced
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "Before ^page(2) after",
+        recordChunk,
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "page") return "3";
+            return std::nullopt;
+        });
+    std::vector<std::pair<std::string, std::string>> expected3 = {
+        {"TEXT", "Before 3 after"}
+    };
+    EXPECT_EQ(output, expected3);
+
+    // Test 4: Invalid command → literal caret
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "Broken ^ command", recordChunk, handleNothing);
+    std::vector<std::pair<std::string, std::string>> expected4 = {
+        {"TEXT", "Broken ^ command"}
+    };
+    EXPECT_EQ(output, expected4);
+
+    // Test 5: Suppressed command (returns empty string)
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "Hi ^suppress Bye",
+        recordChunk,
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "suppress") return "";
+            return std::nullopt;
+        });
+    std::vector<std::pair<std::string, std::string>> expected5 = {
+        {"TEXT", "Hi  Bye"},
+    };
+    EXPECT_EQ(output, expected5);
+}
+
+TEST(TextsTest, EnigmaAccidentalParsing)
 {
     using EnigmaString = musx::util::EnigmaString;
     auto result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()"); //ascii default
@@ -588,6 +674,28 @@ TEST(TextsTest, EnigmaParsing)
     EXPECT_EQ(result, "♯♮♭");
     result = EnigmaString::trimTags("^font(New York)^sharp()The composer tag is ^^composer()");
     EXPECT_EQ(result, "The composer tag is ^composer()");
+}
+
+TEST(TextsTest, ParseEnigmaWithAccidentals)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    std::string output;
+    auto accumulateChunk = [&](const std::string& text, const std::shared_ptr<FontInfo>&) -> bool {
+        output += text;
+        return true;
+    };
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Ascii);
+    EXPECT_EQ(output, "#b");
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_EQ(output, "♯♮♭");
 }
 
 TEST(TextsTest, LyricSyllableParsing)
