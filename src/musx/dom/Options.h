@@ -258,7 +258,7 @@ public:
  */
 class ClefOptions : public OptionsBase {
 public:
-    /// @brief Information about a #ClefDef consisting of its clef type and octave transposition.
+    /// @brief Information about a @ref ClefDef consisting of its clef type and octave transposition.
     /// For example, a treble clef for tenors (often shown with an 8 below the clef) would return
     /// (#music_theory::ClefType::G, -1).
     using ClefInfo = std::pair<music_theory::ClefType, int>;

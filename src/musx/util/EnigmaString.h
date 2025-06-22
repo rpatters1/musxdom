@@ -147,6 +147,7 @@ public:
      * commands (e.g., ^value(...) or ^page(...)) are passed through to the callback for higher-level
      * processing or markup.
      *
+     * @param document The document from which the enigma string is taken.
      * @param rawText The full input Enigma string to parse.
      * @param onText The handler for when font styling changes.
      * @param onCommand The handler to substitute text for a command.
@@ -158,6 +159,7 @@ public:
 
     /// @brief Simplified version of #parseEnigmaText that strips unhandled commands.
     /// Useful in particular when the caller only cares about font information.
+    /// @param document The document from which the enigma string is taken.
     /// @param rawText The full input Enigma string to parse.
     /// @param onText The handler for when font styling changes.
     /// @param accidentalStyle If supplied, accidentals are replaced with characters according to the accidental style.

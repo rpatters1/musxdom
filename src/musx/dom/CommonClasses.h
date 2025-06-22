@@ -129,6 +129,17 @@ public:
 
     using CommonClassBase::CommonClassBase;
 
+    /// @name Enigma style bitmask constants
+    /// These are used to encode and decode style effects in Enigma strings.
+    /// @{
+    inline static constexpr uint16_t EnigmaStyleBold = 0x01; ///< Bold style bit
+    inline static constexpr uint16_t EnigmaStyleItalic = 0x02; ///< Italic style bit
+    inline static constexpr uint16_t EnigmaStyleUnderline = 0x04; ///< Underline style bit
+    inline static constexpr uint16_t EnigmaStyleStrikeout = 0x20; ///< Strikeout style bit
+    inline static constexpr uint16_t EnigmaStyleAbsolute  = 0x40; ///< Fixed-size (absolute) bit
+    inline static constexpr uint16_t EnigmaStyleHidden    = 0x80; ///< Hidden text bit
+    /// @}
+
     /**
      * @brief Get the name of the font.
      * @return The name of the font as a string.
@@ -150,24 +161,24 @@ public:
      */
     void setEnigmaStyles(uint16_t efx)
     {
-        bold = efx & 0x01;         // FONT_EFX_BOLD
-        italic = efx & 0x02;       // FONT_EFX_ITALIC
-        underline = efx & 0x04;    // FONT_EFX_UNDERLINE
-        strikeout = efx & 0x20;    // FONT_EFX_STRIKEOUT
-        absolute = efx & 0x40;     // FONT_EFX_ABSOLUTE
-        hidden = efx & 0x80;       // FONT_EFX_HIDDEN
+        bold = efx & EnigmaStyleBold;
+        italic = efx & EnigmaStyleItalic;
+        underline = efx & EnigmaStyleUnderline;
+        strikeout = efx & EnigmaStyleStrikeout;
+        absolute = efx & EnigmaStyleAbsolute;
+        hidden = efx & EnigmaStyleHidden;
     }
 
     /// @brief Returns the font styles as an nfx bitmask
     uint16_t getEnigmaStyles() const
     {
         uint16_t result = 0;
-        if (bold) result |= 0x01;       // FONT_EFX_BOLD
-        if (italic) result |= 0x02;     // FONT_EFX_ITALIC
-        if (underline) result |= 04;    // FONT_EFX_UNDERLINE
-        if (strikeout) result |= 0x20;  // FONT_EFX_STRIKEOUT
-        if (absolute) result |= 0x40;   // FONT_EFX_ABSOLUTE
-        if (hidden) result |= 0x80;     // FONT_EFX_HIDDEN
+        if (bold) result |= EnigmaStyleBold;
+        if (italic) result |= EnigmaStyleItalic;
+        if (underline) result |= EnigmaStyleUnderline;
+        if (strikeout) result |= EnigmaStyleStrikeout;
+        if (absolute) result |= EnigmaStyleAbsolute;
+        if (hidden) result |= EnigmaStyleHidden;
         return result;
     }
 
