@@ -720,17 +720,17 @@ TEST(TextsTest, ParseEnigmaFontInfo)
     EXPECT_EQ(iterationCount, 1) << "font should be reported even when no text";
 
     iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, "^font(Times)^size(13)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const std::shared_ptr<FontInfo>& font) {
+    EnigmaString::parseEnigmaText(doc, "^fontid(2)^size(10)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const std::shared_ptr<FontInfo>& font) {
         if (iterationCount == 0) {
-            EXPECT_EQ(font->fontId, 1);
-            EXPECT_EQ(font->fontSize, 13);
+            EXPECT_EQ(font->fontId, 2);
+            EXPECT_EQ(font->fontSize, 10);
             EXPECT_EQ(font->getEnigmaStyles(), 2);
             EXPECT_FALSE(font->bold);
             EXPECT_TRUE(font->italic);
             EXPECT_EQ(chunk, "text");
         } else if (iterationCount == 1) {
-            EXPECT_EQ(font->fontId, 1);
-            EXPECT_EQ(font->fontSize, 13);
+            EXPECT_EQ(font->fontId, 2);
+            EXPECT_EQ(font->fontSize, 10);
             EXPECT_EQ(font->getEnigmaStyles(), 0);
             EXPECT_FALSE(font->bold);
             EXPECT_FALSE(font->italic);
