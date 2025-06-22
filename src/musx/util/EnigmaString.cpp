@@ -175,25 +175,33 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
 {
     auto currentFont = std::make_shared<dom::FontInfo>(document);
     std::string remaining = rawText;
-    std::string textBuffer;
+    std::optional<std::string> textBuffer;
+
+    auto addToBuf = [&](const std::string& text) {
+        if (textBuffer) {
+            textBuffer->append(text);
+        } else {
+            textBuffer.emplace(text);
+        }
+    };
 
     while (!remaining.empty()) {
         size_t caretPos = remaining.find('^');
 
         // Emit text before next command
         if (caretPos != std::string::npos && caretPos > 0) {
-            textBuffer += remaining.substr(0, caretPos);
+            addToBuf(remaining.substr(0, caretPos));
             remaining.erase(0, caretPos);
         } else if (caretPos == std::string::npos) {
-            textBuffer += remaining;
+            addToBuf(remaining);
             break;
         }
 
         size_t parsedLen = 0;
         if (startsWithFontCommand(remaining)) {
-            if (!textBuffer.empty()) {
-                bool result = onText(textBuffer, currentFont);
-                textBuffer.erase();
+            if (textBuffer.has_value() && !textBuffer->empty()) {
+                bool result = onText(textBuffer.value(), currentFont);
+                textBuffer = std::nullopt;
                 if (!result) {
                     break;
                 }
@@ -202,6 +210,7 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
                 throw std::invalid_argument("malformed font command encountered in Enigma text: " + rawText);
             }
             remaining.erase(0, parsedLen);
+            textBuffer.emplace(""); // after parsing a font command, make the font change is reported even if no text.
             continue;
         }
 
@@ -210,7 +219,7 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
 
         if (components.empty() || parsedLen == 0) {
             // Not a valid command — treat '^' as literal
-            textBuffer += '^';
+            addToBuf("^");
             remaining.erase(0, 1);
             continue;
         }
@@ -220,7 +229,7 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
 
         // Handle ^^ (escaped caret)
         if (components.size() == 1 && components[0] == "^") {
-            textBuffer += '^';
+            addToBuf("^");
             continue;
         }
 
@@ -228,7 +237,7 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
             const auto& accidentalMap = getEnigmaAccidentalMap(accidentalStyle.value());
             auto it = accidentalMap.find(components[0]);
             if (it != accidentalMap.end()) {
-                textBuffer += it->second;
+                addToBuf(it->second);
                 continue;
             }
         }
@@ -236,16 +245,16 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
         // Delegate unknown command to the handler
         std::optional<std::string> replacement = onCommand(components);
         if (replacement.has_value()) {
-            textBuffer += replacement.value();
+            addToBuf(replacement.value());
         } else {
             // Command unhandled — fallback to raw
-            textBuffer += fullCommand;
+            addToBuf(fullCommand);
         }
     }
 
     // Emit any remaining buffered text
-    if (!textBuffer.empty()) {
-        onText(textBuffer, currentFont);
+    if (textBuffer.has_value()) {
+        onText(textBuffer.value(), currentFont);
     }
 }
 

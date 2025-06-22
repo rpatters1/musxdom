@@ -698,6 +698,50 @@ TEST(TextsTest, ParseEnigmaWithAccidentals)
     EXPECT_EQ(output, "♯♮♭");
 }
 
+TEST(TextsTest, ParseEnigmaFontInfo)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    int iterationCount = 0;
+    EnigmaString::parseEnigmaText(doc, "^font(Times)^size(13)^nfx(2)", [&](const std::string& chunk, const std::shared_ptr<FontInfo>& font) {
+        EXPECT_EQ(font->fontId, 1);
+        EXPECT_EQ(font->fontSize, 13);
+        EXPECT_EQ(font->getEnigmaStyles(), 2);
+        EXPECT_FALSE(font->bold);
+        EXPECT_TRUE(font->italic);
+        EXPECT_TRUE(chunk.empty());
+        iterationCount++;
+        return true;
+    });
+    EXPECT_EQ(iterationCount, 1) << "font should be reported even when no text";
+
+    iterationCount = 0;
+    EnigmaString::parseEnigmaText(doc, "^font(Times)^size(13)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const std::shared_ptr<FontInfo>& font) {
+        if (iterationCount == 0) {
+            EXPECT_EQ(font->fontId, 1);
+            EXPECT_EQ(font->fontSize, 13);
+            EXPECT_EQ(font->getEnigmaStyles(), 2);
+            EXPECT_FALSE(font->bold);
+            EXPECT_TRUE(font->italic);
+            EXPECT_EQ(chunk, "text");
+        } else if (iterationCount == 1) {
+            EXPECT_EQ(font->fontId, 1);
+            EXPECT_EQ(font->fontSize, 13);
+            EXPECT_EQ(font->getEnigmaStyles(), 0);
+            EXPECT_FALSE(font->bold);
+            EXPECT_FALSE(font->italic);
+            EXPECT_TRUE(chunk.empty());
+        }
+        iterationCount++;
+        return true;
+    });
+    EXPECT_EQ(iterationCount, 2) << "trailing font should be reported";
+}
+
 TEST(TextsTest, LyricSyllableParsing)
 {
     using texts::LyricsVerse;
