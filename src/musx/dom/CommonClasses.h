@@ -158,6 +158,19 @@ public:
         hidden = efx & 0x80;       // FONT_EFX_HIDDEN
     }
 
+    /// @brief Returns the font styles as an nfx bitmask
+    uint16_t getEnigmaStyles() const
+    {
+        uint16_t result = 0;
+        if (bold) result |= 0x01;       // FONT_EFX_BOLD
+        if (italic) result |= 0x02;     // FONT_EFX_ITALIC
+        if (underline) result |= 04;    // FONT_EFX_UNDERLINE
+        if (strikeout) result |= 0x20;  // FONT_EFX_STRIKEOUT
+        if (absolute) result |= 0x40;   // FONT_EFX_ABSOLUTE
+        if (hidden) result |= 0x80;     // FONT_EFX_HIDDEN
+        return result;
+    }
+
     /// @brief Calculates if this is the default music font.
     bool calcIsDefaultMusic() const
     { return fontId == 0; }
