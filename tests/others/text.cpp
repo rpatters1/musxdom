@@ -739,7 +739,7 @@ TEST(TextsTest, ParseEnigmaFontInfo)
         iterationCount++;
         return true;
     });
-    EXPECT_EQ(iterationCount, 2) << "trailing font should be reported";
+    EXPECT_EQ(iterationCount, 2) << "trailing font change should be reported";
 }
 
 TEST(TextsTest, LyricSyllableParsing)
