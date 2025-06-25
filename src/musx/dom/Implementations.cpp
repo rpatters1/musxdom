@@ -27,6 +27,7 @@
 #include <numeric>
 #include <algorithm>
 #include <cmath>
+#include <cwctype>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -159,12 +160,12 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
 bool options::ClefOptions::ClefDef::isBlank() const
 {
     if (isShape) {
-        if (const auto& shape = shapeId ? getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId) : nullptr) {
+        if (const auto shape = shapeId ? getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId) : nullptr) {
             return shape->isBlank();
         }
         return true;
     }
-    return !clefChar || std::iswspace(clefChar);
+    return !clefChar || (clefChar <= 0xffff && std::iswspace(static_cast<wint_t>(clefChar)));
 }
 
 options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std::shared_ptr<const others::Staff>& currStaff) const
@@ -1385,7 +1386,7 @@ std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries() const
 bool details::CustomStem::calcIsHiddenStem() const
 {
     if (shapeDef != 0) {
-        if (const auto& shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeDef)) {
+        if (const auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeDef)) {
             return shape->isBlank();
         }
     }
@@ -1456,7 +1457,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     auto [frame, startEdu] = findLayerFrame(layerIndex);
     std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
-        const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
+        const auto measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
         if (!measure) {
             throw std::invalid_argument("Measure instance for measure " + std::to_string(m_hold->getMeasure()) + " does not exist.");
         }
