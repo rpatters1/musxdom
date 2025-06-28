@@ -2058,8 +2058,6 @@ public:
     /// @param callback The callback function. Returning `false` from this function aborts the iteration loop.
     void iterateInstructions(std::function<bool(InstructionType, std::vector<int>)> callback) const;
 
-    bool requireAllFields() const override { return false; }
-
     constexpr static std::string_view XmlNodeName = "shapeDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

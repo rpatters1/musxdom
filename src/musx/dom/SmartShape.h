@@ -179,7 +179,7 @@ public:
         WordExtension,      ///< Lyric word extension, used only with lyric assignments. (xml value is "wordExt")
         DashContourSlurDown, ///< Contoured line dashed downward slur (tips point up).
         DashContourSlurUp,  ///< Contoured line dashed upward slur (tips point down).
-        DashContouSlurAuto, ///< Contoured line dashed slur with direction automatically determined.
+        DashContourSlurAuto, ///< Contoured line dashed slur with direction automatically determined.
     };
 
     ShapeType shapeType{};                          ///< Type of smart shape

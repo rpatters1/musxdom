@@ -217,7 +217,7 @@ MUSX_XML_ENUM_MAPPING(SmartShape::ShapeType, {
     {"wordExt", SmartShape::ShapeType::WordExtension},
     {"dashContourSlurDown", SmartShape::ShapeType::DashContourSlurDown},
     {"dashContourSlurUp", SmartShape::ShapeType::DashContourSlurUp},
-    {"dashContourSlurAuto", SmartShape::ShapeType::DashContouSlurAuto},
+    {"dashContourSlurAuto", SmartShape::ShapeType::DashContourSlurAuto},
 });
 
 MUSX_XML_ENUM_MAPPING(SmartShapeCustomLine::LineStyle, {
