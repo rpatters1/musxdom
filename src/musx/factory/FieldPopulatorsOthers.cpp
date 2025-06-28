@@ -113,6 +113,12 @@ MUSX_XML_ENUM_MAPPING(Measure::ShowTimeSigMode, {
     {"ignoreTime", Measure::ShowTimeSigMode::Never},
 });
 
+MUSX_XML_ENUM_MAPPING(PageTextAssign::PageAssignType, {
+    // {"all", PageTextAssign::PageAssignType::All}, // This is the default and is not known to occur in the XML.
+    {"even", PageTextAssign::PageAssignType::Even},
+    {"odd", PageTextAssign::PageAssignType::Odd},
+});
+
 MUSX_XML_ENUM_MAPPING(PageTextAssign::HorizontalAlignment, {
     // {"left", PageTextAssign::HorizontalAlignment::Left}, // This is the default and is not known to occur in the XML.
     {"center", PageTextAssign::HorizontalAlignment::Center},
@@ -724,6 +730,7 @@ MUSX_XML_ELEMENT_ARRAY(PageTextAssign, {
     {"ydisp", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->yDisp = e->getTextAs<Evpu>(); }},
     {"startPage", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->startPage = e->getTextAs<Cmper>(); }},
     {"endPage", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->endPage = e->getTextAs<Cmper>(); }},
+    {"oddEven", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->oddEven = toEnum<PageTextAssign::PageAssignType>(e); }},
     {"hposLp", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->hPosLp = toEnum<PageTextAssign::HorizontalAlignment>(e); }},
     {"hposRp", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->hPosRp = toEnum<PageTextAssign::HorizontalAlignment>(e); }},
     {"postIt", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->hidden = populateBoolean(e, i); }},

@@ -792,7 +792,8 @@ public:
     {
         DetailsBase::integrityCheck();
         if (std::abs(getAlterationValue()) > MAX_ALTERATIONS) {
-            MUSX_INTEGRITY_ERROR("KeySymbolListElement for list " + std::to_string(getCmper1()) + " has invalid value " + std::to_string(getAlterationValue()));
+            util::Logger::log(util::Logger::LogLevel::Verbose,
+                "KeySymbolListElement for list " + std::to_string(getCmper1()) + " has invalid value " + std::to_string(getAlterationValue()));
         }
     }
 

@@ -1531,6 +1531,17 @@ class PageTextAssign : public OthersBase
 {
 public:
     /**
+     * @enum PageAssignType
+     * @brief Which pages a multipage assignment appears on
+     */
+    enum class PageAssignType
+    {
+        AllPages,       ///< default (may not appear in xml)
+        Even,
+        Odd
+    };
+    
+    /**
      * @enum HorizontalAlignment
      * @brief Horizontal alignment options for page text positioning.
      */
@@ -1564,6 +1575,7 @@ public:
     Cmper startPage{};              ///< If cmper is zero, the first page on which the text appears. (xml tag is `<startPage>`)
     Cmper endPage{};                ///< If cmper is zero, the last page on which the text appears.
                                     ///< A value of zero indicates the last page in the document, whatever number it may be. (xml tag is `<endPage>`)
+    PageAssignType oddEven{};       ///< Determines if a multipage assignment appears on all, even (left), or odd (right) pages
     HorizontalAlignment hPosLp{};   ///< Horizontal alignment on left or all pages (depending on #indRpPos). (xml tag is `<hposLp>`)
     HorizontalAlignment hPosRp{};   ///< Horizontal alignment on right pages (if #indRpPos is true). (xml tag is `<hposRp>`)
     bool hidden{};                  ///< Indicates if the page text appears only on screen. (xml tag is `<postIt>`)
