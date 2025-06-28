@@ -48,6 +48,7 @@ namespace others {
 // This file contains common classes that are shared among Options, Others, and Details.
 
 /**
+ * @enum NoteType
  * @brief Enum class representing note types based on EDU values.
  *
  * The values are expressed in hexadecimal.
@@ -72,6 +73,7 @@ enum class NoteType : Edu
     Note4096th = 0x0001
 };
 
+/// @enum DefaultClefType
 /// @brief Clef types used by default in Finale documents. The values correspond to indices into
 /// @ref musx::dom::options::ClefOptions::clefDefs.
 /// Note that the user may change the clef list to any clefs the user wishes. These are only defaults, but
@@ -99,6 +101,7 @@ enum class DefaultClefType : ClefIndex
 };
 
 /**
+ * @enum ShowClefMode
  * @brief Enum representing the clef display mode for a frame.
  */
 enum class ShowClefMode
@@ -619,6 +622,7 @@ public:
     explicit NamePositioning(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    /// @enum AlignJustify
     /// @brief Alignment and justification options for staff and group names.
     enum class AlignJustify
     {

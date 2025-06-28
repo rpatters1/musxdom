@@ -185,6 +185,7 @@ class ArticulationDef : public OthersBase
 {
 public:
     /**
+     * @enum AutoVerticalMode
      * @brief Defines the automatic vertical positioning mode. These values are only meaningful
      * if #autoVert is true. Otherwise #autoVertMode has the default value but it means "Manual"
      */
@@ -199,6 +200,7 @@ public:
     };
 
     /**
+     * @enum CopyMode
      * @brief Defines the character copy mode (vertical or horizontal)
      */
     enum class CopyMode
@@ -209,6 +211,7 @@ public:
     };
 
     /**
+     * @enum SlurInteractionMode
      * @brief Defines the interaction mode with slurs.
      */
     enum class SlurInteractionMode
@@ -870,7 +873,10 @@ class TextExpressionDef;
  */
 class MarkingCategory : public OthersBase {
 public:
-    /** @brief Enumeration for the type of marking category */
+    /**
+     * @enum CategoryType
+     * @brief Enumeration for the type of marking category
+     */
     enum class CategoryType : Cmper
     {
         Invalid,            ///< There should always be a category type supplied
@@ -1168,6 +1174,7 @@ public:
     explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    /// @enum AlignJustify
     /// @brief Alignment and justification options for measure numbers.
     enum class AlignJustify
     {
@@ -1176,6 +1183,7 @@ public:
         Center  ///< Center alignment.
     };
 
+    /// @enum TimePrecision
     /// @brief Precision for time display
     enum class TimePrecision
     {
@@ -1522,15 +1530,23 @@ public:
 class PageTextAssign : public OthersBase
 {
 public:
-    /** @brief Horizontal alignment options for page text positioning. */
-    enum class HorizontalAlignment {
+    /**
+     * @enum HorizontalAlignment
+     * @brief Horizontal alignment options for page text positioning.
+     */
+    enum class HorizontalAlignment
+    {
         Left, // default value: leave as first (0) item
         Center,
         Right
     };
 
-    /** @brief Vertical alignment options for page text positioning. */
-    enum class VerticalAlignment {
+    /**
+     * @enum VerticalAlignment
+     * @brief Vertical alignment options for page text positioning.
+     */
+    enum class VerticalAlignment
+    {
         Top, // default value: leave as first (0) item
         Center,
         Bottom
@@ -1870,37 +1886,134 @@ public:
     {
     }
 
+    /// @enum InstructionType
     /// @brief Defines the instruction types for Shape Designer shapes.
     enum class InstructionType
     {
-        Undocumented,       ///< catch-all for instruction tags not yet documented
+        /// catch-all for possible undocumented instruction tags.
+        Undocumented,
+
+        /// bracket  
+        /// data items: (1) bracket type (piano brace, bracket, etc.)
         Bracket,
+
+        /// cloned character for horizontal lines (e.g. trills)  
+        /// data items: (5)
+        /// - 0, 1: x and y of endpoint (y ignored)
+        /// - 2:    unused
+        /// - 3:    baseline shift in EMs (1/1000 of current point size)
+        /// - 4:    the 32-bit codepoint of the character to clone
         CloneChar,
+
+        /// close path  
+        /// data items: none
         ClosePath,
+
+        /// relative curveto (bezier)  
+        /// data items: (6) 2 bezier control points and an end point
         CurveTo,
+
+        /// draw character (current font)  
+        /// data items: (1) The 32-bit codepoint of the character to draw
         DrawChar,
+
+        /// ellipse  
+        /// data items: (2) width and height of bounding rectangle  
+        /// current point is lower left corner
         Ellipse,
+
+        /// marks the end of a group  
+        /// data items: none
         EndGroup,
+
+        /// external graphic (eps, pict, tiff, etc)  
+        /// data items: (3) width, height of graphic, cmper of graphic
         ExternalGraphic,
+
+        /// fill path (alternating, or even-odd rule)  
+        /// data items: none
         FillAlt,
+
+        /// fill path (solid, or non-zero winding rule)  
+        /// data items: none
         FillSolid,
+
+        /// go to origin point  
+        /// data items: none
         GoToOrigin,
+
+        /// go to start of path, same as close path for filled shapes  
+        /// data items: none
         GoToStart,
+
+        /// line width  
+        /// data items: (1) the new line width in Efix
         LineWidth,
+
+        /// rectangle  
+        /// data items: (2) width and height of rectangle  
+        /// current point is lower left corner
         Rectangle,
+
+        /// relative lineto  
+        /// data items: (2) X, Y endpoint
         RLineTo,
+
+        /// relative moveto  
+        /// data items: (2) X, Y endpoint
         RMoveTo,
+
+        /// set arrowhead  
+        /// data items: (4) startArrowID, endArrowID, startFlags, endFlags  
+        /// the meaning of the flags is currently untested, but they are likely only used to specify built-in vs. custom arrowhead
         SetArrowhead,
+
+        /// set black: equivalent to `SetGray(0)`  
+        /// data items: none
         SetBlack,
+
+        /// set dash  
+        /// data items: (2) dash length, space between dashes
         SetDash,
+
+        /// set font  
+        /// data items: (3) font id, size, efx
         SetFont,
+
+        /// set gray  
+        /// data items: (1) gray value between 1 and 100 where 0=black and 100=white
         SetGray,
+
+        /// set white: equivalent to `SetGray(100)`  
+        /// data items: none
         SetWhite,
+
+        /// slur  
+        /// data items: (6) 2 bezier control points and an end point  
+        /// like curve, except 2 more control points are deduced from a global slur thickness setting
         Slur,
+
+        /// start group  
+        /// data items: (11) same as StartObject
         StartGroup,
+
+        /// start object  
+        /// data items: (11) with indices as noted:
+        /// - 0, 1: origin point (x, y)
+        /// - 2..5: bounding rect (left, top, right, bottom)
+        /// - 6, 7: x and y transform (scale ratio * 1000)
+        /// - 8:    rotation transform
+        /// - 9,10: always zero
         StartObject,
+
+        /// stroke path  
+        /// data items: none
         Stroke,
-        VerticalMode
+
+        /// pen vertical mode  
+        /// data items: (1) 1=center, 2=left, 3=right  
+        /// tells line-drawing commands to draw the line center, on the left, or on the right of the drawing coordinates specified.
+        VerticalMode,
     };
 
     /**
@@ -2024,7 +2137,10 @@ class StaffStyle;
 class Staff : public OthersBase
 {
 public:
-    /** @brief Enum for auto-numbering style. Auto-numbering is based on #instUuid. */
+    /**
+     * @enum AutoNumberingStyle
+     * @brief Enum for auto-numbering style. Auto-numbering is based on #instUuid.
+     */
     enum class AutoNumberingStyle
     {
         ArabicSuffix,       ///< Arabic numeral suffix (default). May not appear in xml.
@@ -2034,7 +2150,10 @@ public:
         ArabicPrefix        ///< Arabic numeral prefix (with dot): 1. 2. 3. ...
     };
 
-    /** @brief Enum for staff-level stem direction override. */
+    /**
+     * @enum StemDirection
+     * @brief Enum for staff-level stem direction override.
+     */
     enum class StemDirection
     {
         Default,            ///< the default (may not occur in xml)
@@ -2042,7 +2161,10 @@ public:
         AlwaysDown          ///< stems are always down on this staff
     };
 
-    /** @brief Enum for notation style. */
+    /**
+     * @enum NotationStyle
+     * @brief Enum for notation style.
+     */
     enum class NotationStyle
     {
         Standard,
@@ -2050,7 +2172,10 @@ public:
         Tablature
     };
 
-    /** @brief Enum for hide mode. */
+    /**
+     * @enum HideMode
+     * @brief Enum for hide mode.
+     */
     enum class HideMode
     {
         None,           ///< Do not hide
@@ -2059,7 +2184,10 @@ public:
         Score           ///< Collapse in score only
     };
 
-    /** @brief Enum for alternate notation styles. */
+    /**
+     * @enum AlternateNotation
+     * @brief Enum for alternate notation styles.
+     */
     enum class AlternateNotation
     {
         Normal,         ///< Normal Notation (default)
@@ -2670,7 +2798,10 @@ public:
 class TextBlock : public OthersBase
 {
 public:
-    /** @brief Enum for textTag values */
+    /**
+     * @enum TextType
+     * @brief Enum for textTag values
+     */
     enum class TextType
     {
         Block,      ///< #textId is a #Cmper for a @ref texts::BlockText
@@ -2828,7 +2959,10 @@ public:
 class TextRepeatDef : public OthersBase
 {
 public:
-    /** @brief Enum for poundReplace options */
+    /**
+     * @enum PoundReplaceOption
+     * @brief Enum for poundReplace options
+     */
     enum class PoundReplaceOption
     {
         Passes,             ///< "Number of Times Played" (the default: may never appear in xml)

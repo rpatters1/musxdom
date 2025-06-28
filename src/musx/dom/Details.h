@@ -401,7 +401,10 @@ public:
     {
     }
 
-    /** @brief Bass position options */
+    /**
+     * @enum BassPosition
+     * @brief Bass position options
+     */
     enum class BassPosition
     {
         AfterRoot,                  // default value may not appear in xml (but text appears in Finale binary)
@@ -1153,7 +1156,10 @@ public:
     /** @brief Enum for horizontal alignment */
     using AlignJustify = others::NamePositioning::AlignJustify;
 
-    /** @brief Enum for how to draw group barlines */
+    /**
+     * @enum DrawBarlineStyle
+     * @brief Enum for how to draw group barlines
+     */
     enum class DrawBarlineStyle
     {
         OnlyOnStaves,       ///< Default value (may not appear in xml)
@@ -1161,7 +1167,10 @@ public:
         Mensurstriche       ///< Draw barlines between staves (xml value is "Mensurstriche" with capitalization)
     };
 
-    /** @brief Enum for optimization options */
+    /**
+     * @enum HideStaves
+     * @brief Enum for optimization options
+     */
     enum class HideStaves
     {
         Normally,       ///< Hide staves as if there were no StaffGroup (this is the default and may not appear in the xml)
@@ -1169,7 +1178,10 @@ public:
         None            ///< Never hide the staves in this StaffGroup
     };
 
-    /** @brief Bracket style enum for StaffGroup */
+    /**
+     * @enum BracketStyle
+     * @brief Bracket style enum for StaffGroup
+     */
     enum class BracketStyle : int
     {
         None = 0,                   ///< No bracket (the default)

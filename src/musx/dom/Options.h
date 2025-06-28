@@ -171,6 +171,7 @@ public:
     explicit BeamOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum FlattenStyle
     /// @brief Beaming style choices for when to flatten beams
     enum class FlattenStyle
     {
@@ -211,6 +212,7 @@ public:
     explicit ChordOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum ChordAlignment
     /// @brief Horizontal alignment for chord symbols
     ///
     /// Only Left and Center are allowed. There is no Right alignment of chords.
@@ -220,6 +222,7 @@ public:
         Center
     };
 
+    /// @enum ChordStyle
     /// @brief Chord spelling style
     enum class ChordStyle
     {
@@ -573,6 +576,7 @@ public:
     explicit LyricOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum SmartHyphenStart
     /// @brief When to start hyphenation
     enum class SmartHyphenStart {
         Always,     ///< "Always" (default value)
@@ -580,12 +584,14 @@ public:
         Never       ///< "Never"
     };
 
+    /// @enum AutoNumberingAlign
     /// @brief Autonumbering type
     enum class AutoNumberingAlign {
         None,       ///< "Keep with First Syllable in Lyric" (default value)
         Align       ///< "Group Under the Same Note"
     };
 
+    /// @enum AlignJustify
     /// @brief Horizontal and vertical alignment/justification values
     enum class AlignJustify {
         Left,
@@ -593,6 +599,7 @@ public:
         Right
     };
 
+    /// @enum WordExtConnectIndex
     /// @brief Word extension connection points
     enum class WordExtConnectIndex {
         LyricRightBottom,
@@ -603,6 +610,7 @@ public:
         DurationLyrBaseline
     };
 
+    /// @enum WordExtConnectStyleType
     /// @brief Word extension connection style categories
     enum class WordExtConnectStyleType {
         DefaultStart,
@@ -616,6 +624,7 @@ public:
         ZeroOffset
     };
 
+    /// @enum SyllablePosStyleType
     /// @brief Lyric syllable position style types
     enum class SyllablePosStyleType {
         Default,        ///< "Others:" (always on, even though the `on` member may be false)
@@ -741,6 +750,7 @@ public:
     explicit MusicSpacingOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
  
+    /// @enum ColUnisonsChoice
     /// @brief Options for how to handle unisons
     enum class ColUnisonsChoice
     {
@@ -749,6 +759,7 @@ public:
         All             ///< Avoid collisions with all unisons.
     };
 
+    /// @enum GraceNoteSpacing
     /// @brief Options for how to handle grace note spacing
     enum class GraceNoteSpacing
     {
@@ -757,6 +768,7 @@ public:
         KeepCurrent     ///< Keep current grace note spacing. (xml value is "keep")
     };
 
+    /// @enum ManualPositioning
     /// @brief Options for how to handle manual positioning
     enum class ManualPositioning
     {
@@ -1028,6 +1040,7 @@ public:
     explicit RepeatOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum WingStyle
     /// @brief Wing Styles from Document Options - Repeats
     enum class WingStyle
     {
@@ -1037,6 +1050,7 @@ public:
         DoubleLine
     };
 
+    /// @enum BackToBackStyle
     /// @brief Back-to-Back Styles from Document Options - Repeats
     enum class BackToBackStyle
     {
@@ -1087,6 +1101,7 @@ public:
     explicit SmartShapeOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum DefaultDirection
     /// @brief Default slur direction
     enum class DefaultDirection
     {
@@ -1095,6 +1110,7 @@ public:
         Under
     };
 
+    /// @enum ConnectionIndex
     /// @brief Connection index values
     enum class ConnectionIndex
     {
@@ -1114,6 +1130,7 @@ public:
         NoteLeftTop
     };
 
+    /// @enum SlurConnectStyleType
     /// @brief Slur connection style types
     enum class SlurConnectStyleType
     {
@@ -1148,6 +1165,7 @@ public:
         UnderTabNumEnd
     };
 
+    /// @enum TabSlideConnectStyleType
     /// @brief Tab slide connection style types
     enum class TabSlideConnectStyleType
     {
@@ -1171,6 +1189,7 @@ public:
         SameLevelPitchSameEnd
     };
 
+    /// @enum GlissandoConnectStyleType
     /// @brief Glissando connection style types
     enum class GlissandoConnectStyleType
     {
@@ -1178,6 +1197,7 @@ public:
         DefaultEnd
     };
 
+    /// @enum BendCurveConnectStyleType
     /// @brief Bend curve connection style types
     enum class BendCurveConnectStyleType
     {
@@ -1191,6 +1211,7 @@ public:
         StaffFromTopEndOffset
     };
 
+    /// @enum SlurControlStyleType
     /// @brief Slue control style types
     enum class SlurControlStyleType
     {
@@ -1334,41 +1355,64 @@ public:
     explicit TieOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
-    /** @brief Enumeration for seconds placement options */
+    /**
+     * @enum SecondsPlacement
+     * @brief Enumeration for seconds placement options
+     */
     enum class SecondsPlacement
     {
         None,                   ///< the default
         ShiftForSeconds         ///< xml value is "both"
     };
 
-    /** @brief Enumeration for chord tie direction type */
-    enum class ChordTieDirType {
+    /**
+     * @enum ChordTieDirType
+     * @brief Enumeration for chord tie direction type
+     */
+    enum class ChordTieDirType
+    {
         OutsideInside,          ///< Legacy Finale 3.7 behavior (the default)
         StemReversal,           ///< Split at stem reversal point.
         SplitEvenly             ///< Split evenly
     };
 
-    /** @brief Enumeration for mixed stem direction */
-    enum class MixedStemDirection {
+    /**
+     * @enum MixedStemDirection
+     * @brief Enumeration for mixed stem direction
+     */
+    enum class MixedStemDirection
+    {
         Over,
         Under,
         OppositeFirst           ///< xml value is "start"
     };
 
-    /** @brief Enumeration for special position mode */
-    enum class SpecialPosMode {
+    /**
+     * @enum SpecialPosMode
+     * @brief Enumeration for special position mode
+     */
+    enum class SpecialPosMode
+    {
         None, ///< the default
         Avoid
     };
 
-    /** @brief Enumeration for inset styles */
-    enum class InsetStyle {
+    /**
+     * @enum InsetStyle
+     * @brief Enumeration for inset styles
+     */
+    enum class InsetStyle
+    {
         Fixed,                  ///< the default
         Percent
     };
 
-    /** @brief Enumeration for tie connect style types */
-    enum class ConnectStyleType {
+    /**
+     * @enum ConnectStyleType
+     * @brief Enumeration for tie connect style types
+     */
+    enum class ConnectStyleType
+    {
         OverStartPosInner,
         OverEndPosInner,
         UnderStartPosInner,
@@ -1383,8 +1427,12 @@ public:
         UnderLowestNoteStemEndPosUnder
     };
 
-    /** @brief Enumeration for tie control style types */
-    enum class ControlStyleType {
+    /**
+     * @enum ControlStyleType
+     * @brief Enumeration for tie control style types
+     */
+    enum class ControlStyleType
+    {
         ShortSpan,
         MediumSpan,
         LongSpan,
@@ -1498,7 +1546,10 @@ public:
     explicit TupletOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
-    /** @brief Auto-bracket style options. */
+    /**
+     * @enum AutoBracketStyle
+     * @brief Auto-bracket style options.
+     */
     enum class AutoBracketStyle
     {
         Always,             ///< "Always Use Specified Shape"--the default value
@@ -1506,8 +1557,10 @@ public:
         NeverBeamSide,      ///< "Never Bracket Beamed Notes on Beam Side"
     };
 
-    /** @brief Number style options.
-     * 
+    /**
+     * @enum NumberStyle
+     * @brief Number style options.
+     *
      * @note Finale appears to have implemented `RatioPlusBothNotes` and `RatioPlusDenominatorNote`
      * backwards from how they are named in the xml. It is probably a long-standing bug that was never worth fixing.
      * This DOM corrects the mistake by reversing their mapping in the enum mapping.
@@ -1521,7 +1574,10 @@ public:
         RatioPlusBothNotes,         ///< display notes on both values (xml value is "ratioPlusDenNote")
     };
 
-    /** @brief Positioning style options. */
+    /**
+     * @enum PositioningStyle
+     * @brief Positioning style options.
+     */
     enum class PositioningStyle
     {
         Manual,     ///< The default
@@ -1531,7 +1587,10 @@ public:
         Below       ///< Display the tuplet below the notes
     };
 
-    /** @brief Bracket style options. */
+    /**
+     * @enum BracketStyle
+     * @brief Bracket style options.
+     */
     enum class BracketStyle
     {
         Nothing,    ///< No bracket (the default)
