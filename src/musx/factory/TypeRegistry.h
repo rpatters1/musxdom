@@ -192,6 +192,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::SmartShapeOptions,
     dom::options::StaffOptions,
     dom::options::StemOptions,
+    dom::options::TextOptions,
     dom::options::TieOptions,
     dom::options::TimeSignatureOptions,
     dom::options::TupletOptions

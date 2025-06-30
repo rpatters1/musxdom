@@ -30,6 +30,9 @@ using namespace ::musx::xml;
 using namespace ::musx::dom::others;
 
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
+extern template const XmlEnumMappingElement<options::TextOptions::HorizontalAlignment> XmlEnumMapping<options::TextOptions::HorizontalAlignment>::mapping;
+extern template const XmlEnumMappingElement<options::TextOptions::VerticalAlignment> XmlEnumMapping<options::TextOptions::VerticalAlignment>::mapping;
+extern template const XmlEnumMappingElement<options::TextOptions::TextJustify> XmlEnumMapping<options::TextOptions::TextJustify>::mapping;
 
 // Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
@@ -117,18 +120,6 @@ MUSX_XML_ENUM_MAPPING(PageTextAssign::PageAssignType, {
     // {"all", PageTextAssign::PageAssignType::All}, // This is the default and is not known to occur in the XML.
     {"even", PageTextAssign::PageAssignType::Even},
     {"odd", PageTextAssign::PageAssignType::Odd},
-});
-
-MUSX_XML_ENUM_MAPPING(PageTextAssign::HorizontalAlignment, {
-    // {"left", PageTextAssign::HorizontalAlignment::Left}, // This is the default and is not known to occur in the XML.
-    {"center", PageTextAssign::HorizontalAlignment::Center},
-    {"right", PageTextAssign::HorizontalAlignment::Right},
-});
-
-MUSX_XML_ENUM_MAPPING(PageTextAssign::VerticalAlignment, {
-    // {"top", PageTextAssign::VerticalAlignment::Top}, // This is the default and is not known to occur in the XML.
-    {"center", PageTextAssign::VerticalAlignment::Center},
-    {"bottom", PageTextAssign::VerticalAlignment::Bottom},
 });
 
 MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
@@ -1160,6 +1151,7 @@ MUSX_XML_ELEMENT_ARRAY(TempoChange, {
 MUSX_XML_ELEMENT_ARRAY(TextBlock, {
     {"textID", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textId = e->getTextAs<Cmper>(); }},
     {"lineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->justify = toEnum<TextBlock::TextJustify>(e); }},
     {"newPos36", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->newPos36 = populateBoolean(e, i); }},
     {"showShape", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->showShape = populateBoolean(e, i); }},
     {"noExpandSingleWord", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->noExpandSingleWord = populateBoolean(e, i); }},

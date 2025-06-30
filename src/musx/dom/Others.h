@@ -35,7 +35,8 @@
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
-// do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
+#include "Options.h"
+ // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -1540,28 +1541,9 @@ public:
         Even,
         Odd
     };
-    
-    /**
-     * @enum HorizontalAlignment
-     * @brief Horizontal alignment options for page text positioning.
-     */
-    enum class HorizontalAlignment
-    {
-        Left, // default value: leave as first (0) item
-        Center,
-        Right
-    };
 
-    /**
-     * @enum VerticalAlignment
-     * @brief Vertical alignment options for page text positioning.
-     */
-    enum class VerticalAlignment
-    {
-        Top, // default value: leave as first (0) item
-        Center,
-        Bottom
-    };
+    using HorizontalAlignment = options::TextOptions::HorizontalAlignment;  ///< Horizontal alignment options for page text positioning.
+    using VerticalAlignment = options::TextOptions::VerticalAlignment;      ///< Vertical alignment options for page text positioning.
 
     /** @brief Constructor function */
     explicit PageTextAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
@@ -2808,6 +2790,8 @@ public:
 class TextBlock : public OthersBase
 {
 public:
+    using TextJustify = options::TextOptions::TextJustify; ///< justification options
+
     /**
      * @enum TextType
      * @brief Enum for textTag values
@@ -2825,6 +2809,7 @@ public:
     // Public properties corresponding to the XML structure
     Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
     int lineSpacingPercentage{};       ///< Line spacing percentage.
+    TextJustify justify{};             ///< Justification (left, center, right, full, force full)
     bool newPos36{};                   ///< "Position from Edge of Frame" compatibility setting.
                                        ///< Best guess is that blocks created before Finale 3.6 do not have this set.
                                        ///< It affects the vertical position of the baseline relative to the block's frame (and handle).

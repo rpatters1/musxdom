@@ -121,8 +121,18 @@ enum class ShowClefMode
 class FontInfo : public CommonClassBase
 {
 public:
+    /**
+     * @brief constructor
+     * @param document the document containing the font
+     * @param sizeIsPercent if true, the size is a percent relative to the preceding font size in an Enigma string.
+     */
+    FontInfo(const DocumentWeakPtr& document, bool sizeIsPercent = false)
+        : CommonClassBase(document), m_sizeIsPercent(sizeIsPercent)
+    {
+    }
+
     Cmper fontId{};     ///< Font identifier. This is a Cmper for @ref others::FontDefinition.
-    int fontSize{};     ///< Font size.
+    int fontSize{};     ///< Font size or percent (where 100 is 100%) of preceding font size. (See #getSizeIsPercent.)
     bool bold{};        ///< Bold effect.
     bool italic{};      ///< Italic effect.
     bool underline{};   ///< Underline effect.
@@ -130,7 +140,8 @@ public:
     bool absolute{};    ///< Fixed size effect.
     bool hidden{};      ///< Hidden effect.
 
-    using CommonClassBase::CommonClassBase;
+    /// @brief If true, the size of this font is calculated as a percent of the preceding font size (in an Enigma string)
+    bool getSizeIsPercent() const { return m_sizeIsPercent; }
 
     /// @name Enigma style bitmask constants
     /// These are used to encode and decode style effects in Enigma strings.
@@ -208,6 +219,9 @@ public:
     static std::vector<std::filesystem::path> calcSMuFLPaths();
 
     static const xml::XmlElementArray<FontInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+
+private:
+    bool m_sizeIsPercent;
 };
 
 /**

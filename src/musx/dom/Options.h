@@ -285,7 +285,7 @@ public:
     public:
         /** @brief the constructor */
         explicit ClefDef(const DocumentWeakPtr& document)
-            : Base(document, 0, ShareMode::All) {}
+            : Base(document, SCORE_PARTID, ShareMode::All) {}
             
         int middleCPos{};               ///< Staff position of middle-C for this clef from reference staffline (usually the top). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
@@ -1341,6 +1341,132 @@ public:
 
     constexpr static std::string_view XmlNodeName = "stemOptions"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StemOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+// WARNING: Option value 4 below intentionally omits ` chars from 1'02" because they mess up Doxygen.
+
+/**
+ * @class TextOptions
+ * @brief Options controlling text rendering in the musx file. Many of these options are default values that are inserted
+ * into Enigma tags when a page or measure text is created. Others are default values for the assignment. As such, once
+ * a page or measure text has been created, it does not change even if these default values change.
+ *
+ * Missing from these text options is the default format code for elapsed time used by the `perftime` Enigma insert. The values appear
+ * to be
+ * - 0: M:SS (e.g., `1:02`)
+ * - 1: HH:MM:SS (e.g., `00:01:02`)
+ * - 2: HH:MM:SS.mmm (e.g., `00:01:02.000`)
+ * - 3: MM:SS (e.g., `01:02`)
+ * - 4: M'SS" (e.g., 1'02")
+ * - 5: M (e.g., `1`)
+ *
+ * This class is identified by the XML node name "textOptions".
+ */
+class TextOptions : public OptionsBase
+{
+public:
+    /// @brief Constructor
+    explicit TextOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode)
+    {
+    }
+
+    /**
+     * @enum HorizontalAlignment
+     * @brief Horizontal alignment options for page text positioning.
+     */
+    enum class HorizontalAlignment
+    {
+        Left, // default value: leave as first (0) item
+        Center,
+        Right
+    };
+
+    /**
+     * @enum VerticalAlignment
+     * @brief Vertical alignment options for page text positioning.
+     */
+    enum class VerticalAlignment
+    {
+        Top, // default value: leave as first (0) item
+        Center,
+        Bottom
+    };
+
+    /// @enum TextJustify
+    /// @brief Text justification options
+    enum class TextJustify {
+        Left,           ///< "left"
+        Center,         ///< "center"
+        Right,          ///< "right"
+        Full,           ///< "full"
+        ForcedFull      ///< "forcedFull"
+    };
+
+    /// @enum DateFormat
+    /// @brief Date format options. This value is coded into the Enigma `date` insert when the page title is created.
+    enum class DateFormat
+    {
+        Short,      ///< Short date format, based on locale. US format is MM/DD/YY (Default value may not appear in the xml)
+        Long,       ///< Long date format, based on locale. US format is Month DD, YYYY.
+        Abbrev      ///< Abbreviated date format, based on locale. US format is Mon DD, YYYY.
+    };
+
+    /// @enum InsertSymbolType
+    /// @brief Insert symbol types
+    enum class InsertSymbolType
+    {
+        Sharp,
+        Flat,
+        Natural,
+        DblSharp,
+        DblFlat
+    };
+
+    int textLineSpacingPercent{};                 ///< "Line Spacing: Automatic" percent value
+    bool showTimeSeconds{};                       ///< "Include Seconds in Time Stamp"
+    DateFormat dateFormat{};                      ///< "Date Format"
+    int tabSpaces{};                              ///< "Use [x] Spaces in Place of One Tab Character"
+    int textTracking{};                           ///< "Tracking" amount in EMs (1/1000 of the font size)
+    Evpu textBaselineShift{};                     ///< "Baseline Shift" amount
+    Evpu textSuperscript{};                       ///< "Superscript" amount
+    bool textWordWrap{};                          ///< "Word Wrap"
+    Evpu textPageOffset{};                        ///< "Page Offset"
+    TextJustify textJustify{};                    ///< "Justification"
+    bool textExpandSingleWord{};                  ///< "Expand Single Word"
+    HorizontalAlignment textHorzAlign{};          ///< "Horizontal Alignment"
+    VerticalAlignment textVertAlign{};            ///< "Vertical Alignment"
+    bool textIsEdgeAligned{};                     ///< "Position from Page Edge"
+
+    /// @brief Insert symbol information
+    struct InsertSymbolInfo : public Base
+    {
+        /** @brief the constructor */
+        explicit InsertSymbolInfo(const DocumentWeakPtr& document)
+            : Base(document, SCORE_PARTID, ShareMode::All) {}
+
+        int trackingBefore{};                     ///< Tracking before in EMs (1/1000 font size units)
+        int trackingAfter{};                      ///< Tracking after in EMs (1/1000 font size units)
+        int baselineShiftPerc{};                  ///< Baseline shift percent
+        std::shared_ptr<FontInfo> symFont;        ///< Symbol font (Percent-based size is a percent of the preceding font size in the Enigma string.)
+        char32_t symChar{};                       ///< Symbol character
+
+        void integrityCheck() override
+        {
+            if (!symFont) {
+                symFont = std::make_shared<FontInfo>(getDocument(), /*sizeIsPercent*/ true);
+                symFont->fontSize = 100;
+                MUSX_INTEGRITY_ERROR("Text options accidental insert information is missing its font information.");
+            }
+        }
+
+        static const xml::XmlElementArray<InsertSymbolInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::unordered_map<InsertSymbolType, std::shared_ptr<InsertSymbolInfo>> symbolInserts; ///< Insert symbol information map
+
+    constexpr static std::string_view XmlNodeName = "textOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

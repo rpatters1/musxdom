@@ -35,6 +35,7 @@ TEST(TextBlockTest, PopulateFields)
     <textBlock cmper="32">
       <textID>31</textID>
       <lineSpacingPercent>100</lineSpacingPercent>
+      <justify>full</justify>
       <newPos36/>
       <showShape/>
       <noExpandSingleWord/>
@@ -48,6 +49,7 @@ TEST(TextBlockTest, PopulateFields)
     <textBlock cmper="33">
       <textID>221</textID>
       <lineSpacingPercent>100</lineSpacingPercent>
+      <justify>forcedFull</justify>
       <newPos36/>
       <showShape/>
       <wordWrap/>
@@ -66,6 +68,7 @@ TEST(TextBlockTest, PopulateFields)
     ASSERT_TRUE(textBlock1) << "TextBlock 32 not found but does exist";
     EXPECT_EQ(textBlock1->textId, 31);
     EXPECT_EQ(textBlock1->lineSpacingPercentage, 100);
+    EXPECT_EQ(textBlock1->justify, others::TextBlock::TextJustify::Full);
     EXPECT_TRUE(textBlock1->newPos36);
     EXPECT_TRUE(textBlock1->showShape);
     EXPECT_TRUE(textBlock1->noExpandSingleWord);
@@ -81,6 +84,7 @@ TEST(TextBlockTest, PopulateFields)
     ASSERT_TRUE(textBlock2) << "TextBlock 33 not found but does exist";
     EXPECT_EQ(textBlock2->textId, 221);
     EXPECT_EQ(textBlock2->lineSpacingPercentage, 100);
+    EXPECT_EQ(textBlock2->justify, others::TextBlock::TextJustify::ForcedFull);
     EXPECT_TRUE(textBlock2->newPos36);
     EXPECT_TRUE(textBlock2->showShape);
     EXPECT_FALSE(textBlock2->noExpandSingleWord);
