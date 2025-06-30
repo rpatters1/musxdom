@@ -32,19 +32,25 @@ static const std::unordered_map<std::string, std::string>& getEnigmaAccidentalMa
 {
     // Maps for SMuFL and plain text accidentals
     static const std::unordered_map<std::string, std::string> smuflAccidentals = {
-        {"flat", EnigmaString::fromU8(u8"\uE260")},    // SMuFL character for flat
-        {"sharp", EnigmaString::fromU8(u8"\uE262")},   // SMuFL character for sharp
-        {"natural", EnigmaString::fromU8(u8"\uE261")}  // SMuFL character for natural
+        {"flat", EnigmaString::fromU8(u8"\uE260")},     // SMuFL character for flat
+        {"sharp", EnigmaString::fromU8(u8"\uE262")},    // SMuFL character for sharp
+        {"natural", EnigmaString::fromU8(u8"\uE261")},  // SMuFL character for natural
+        {"dbflat", EnigmaString::fromU8(u8"\uE264")},   // SMuFL double flat
+        {"dbsharp", EnigmaString::fromU8(u8"\uE263")}   // SMuFL double sharp
     };
     static const std::unordered_map<std::string, std::string> unicodeAccidentals = {
-        {"flat", EnigmaString::fromU8(u8"\u266D")},    // Text flat: ♭
-        {"sharp", EnigmaString::fromU8(u8"\u266F")},   // Text sharp: ♯
-        {"natural", EnigmaString::fromU8(u8"\u266E")}  // Text natural: ♮
+        {"flat", EnigmaString::fromU8(u8"\u266D")},     // Text flat: ♭
+        {"sharp", EnigmaString::fromU8(u8"\u266F")},    // Text sharp: ♯
+        {"natural", EnigmaString::fromU8(u8"\u266E")},  // Text natural: ♮
+        {"dbflat", EnigmaString::fromU8(u8"\u1D12B")},  // Text double flat: 𝄫
+        {"dbsharp", EnigmaString::fromU8(u8"\u1D12A")}  // Text double sharp: 𝄪
     };
     static const std::unordered_map<std::string, std::string> asciiAccidentals = {
-        {"flat", "b"},         // Plain text representation for flat
-        {"sharp", "#"},        // Plain text representation for sharp
-        {"natural", ""},       // Plain text representation for natural (none)
+        {"flat", "b"},          // Plain text representation for flat
+        {"sharp", "#"},         // Plain text representation for sharp
+        {"natural", ""},        // Plain text representation for natural (none)
+        {"dbflat", "bb"},       // Plain text double flat
+        {"dbsharp", "x"}        // Plain text double sharp
     };
 
     switch (style) {
