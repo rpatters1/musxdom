@@ -242,11 +242,19 @@ bool EnigmaString::parseStyleCommand(const std::string& styleTag, EnigmaStyles& 
 }
 
 void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
-    const TextChunkCallback& onText, const CommandCallback& onCommand, const std::optional<AccidentalStyle>& accidentalStyle)
+    const TextChunkCallback& onText, const CommandCallback& onCommand, const EnigmaParsingOptions& options)
 {
     auto currentStyles = EnigmaStyles(document);
     std::string remaining = rawText;
     std::optional<std::string> textBuffer;
+
+    static const std::unordered_map<std::string_view, options::TextOptions::InsertSymbolType> acciInsertMap = {
+        { "flat",       options::TextOptions::InsertSymbolType::Flat },
+        { "natural",    options::TextOptions::InsertSymbolType::Natural },
+        { "sharp",      options::TextOptions::InsertSymbolType::Sharp },
+        { "dbflat",     options::TextOptions::InsertSymbolType::DblFlat },
+        { "dbsharp",    options::TextOptions::InsertSymbolType::DblSharp },
+    };
 
     auto addToBuf = [&](const std::string& text) {
         if (textBuffer) {
@@ -254,6 +262,18 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
         } else {
             textBuffer.emplace(text);
         }
+    };
+
+    auto processChunk = [&](const EnigmaStyles& styles) -> bool {
+        if (textBuffer.has_value() && !textBuffer->empty()) {
+            bool result = onText(textBuffer.value(), styles);
+            textBuffer = std::nullopt;
+            if (!result) {
+                return false;
+            }
+        }
+        textBuffer.emplace(""); // after parsing a style command, make sure the style change is reported even if no text.
+        return true;
     };
 
     while (!remaining.empty()) {
@@ -270,18 +290,13 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
 
         size_t parsedLen = 0;
         if (startsWithStyleCommand(remaining)) {
-            if (textBuffer.has_value() && !textBuffer->empty()) {
-                bool result = onText(textBuffer.value(), currentStyles);
-                textBuffer = std::nullopt;
-                if (!result) {
-                    break;
-                }
+            if (!processChunk(currentStyles)) {
+                break;
             }
             if (!parseStyleCommand(remaining, currentStyles, &parsedLen)) {
                 throw std::invalid_argument("malformed style command encountered in Enigma text: " + rawText);
             }
             remaining.erase(0, parsedLen);
-            textBuffer.emplace(""); // after parsing a style command, make sure the style change is reported even if no text.
             continue;
         }
 
@@ -304,12 +319,41 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
             continue;
         }
 
-        if (accidentalStyle && components.size() == 1) {
-            const auto& accidentalMap = getEnigmaAccidentalMap(accidentalStyle.value());
-            auto it = accidentalMap.find(components[0]);
-            if (it != accidentalMap.end()) {
-                addToBuf(it->second);
-                continue;
+        if (components.size() == 1) {
+            if (options.insertHandling == AccidentalInsertHandling::Substitute) {
+                const auto& accidentalMap = getEnigmaAccidentalMap(options.substitutionStyle);
+                auto it = accidentalMap.find(components[0]);
+                if (it != accidentalMap.end()) {
+                    addToBuf(it->second);
+                    continue;
+                }
+            } else if (options.insertHandling == AccidentalInsertHandling::ParseToGlyphs) {
+                auto it = acciInsertMap.find(components[0]);
+                if (it != acciInsertMap.end()) {
+                    if (const auto textOptions = document->getOptions()->get<options::TextOptions>()) {
+                        const auto& acciDataIt = textOptions->symbolInserts.find(it->second);
+                        if (acciDataIt != textOptions->symbolInserts.end()) {
+                            EnigmaStyles acciStyles(document);
+                            const auto& insertInfo = acciDataIt->second;
+                            *acciStyles.font.get() = *insertInfo->symFont.get();
+                            acciStyles.font->fontSize = int(std::lround(double(insertInfo->symFont->fontSize) * double(currentStyles.font->fontSize) / 100.0));
+                            acciStyles.baseline = int(std::lround((double(insertInfo->baselineShiftPerc) * double(currentStyles.font->fontSize)) * (EVPU_PER_POINT / 100.0)));
+                            acciStyles.tracking = insertInfo->trackingBefore;
+                            if (!processChunk(currentStyles)) {
+                                break;
+                            }
+                            textBuffer.emplace(toU8(insertInfo->symChar));
+                            if (!processChunk(acciStyles)) {
+                                break;
+                            }
+                        } else {
+                            MUSX_INTEGRITY_ERROR("Document contains no accidental insert options for " + components[0] + ".");
+                        }
+                    } else {
+                        MUSX_INTEGRITY_ERROR("Document contains no text options.");
+                    }
+                    continue;
+                }
             }
         }
 

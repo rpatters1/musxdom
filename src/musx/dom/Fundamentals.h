@@ -81,6 +81,7 @@ constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
 constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::InstrumentUsed cmper)
 
 constexpr double EVPU_PER_INCH = 288.0;         ///< Number of Evpu units per inch
+constexpr double EVPU_PER_POINT = 4.0;          ///< Number of Evpu units per 72 DPI point
 constexpr double EVPU_PER_MM = EVPU_PER_INCH / 25.4; ///< Number of Evpu units per millimeter
 constexpr double EVPU_PER_SPACE = 24.0;         ///< Number of Evpu units per space (spatium)
 constexpr double EFIX_PER_EVPU = 64.0;          ///< Number of Efix units per Evpu

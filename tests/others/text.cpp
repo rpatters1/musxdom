@@ -656,7 +656,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
     EXPECT_EQ(output, expected5);
 }
 
-TEST(TextsTest, EnigmaAccidentalParsing)
+TEST(TextsTest, EnigmaAccidentalSubstitution)
 {
     using EnigmaString = musx::util::EnigmaString;
     auto result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()"); //ascii default
@@ -674,6 +674,84 @@ TEST(TextsTest, EnigmaAccidentalParsing)
     EXPECT_EQ(result, "♯♮♭");
     result = EnigmaString::trimTags("^font(New York)^sharp()The composer tag is ^^composer()");
     EXPECT_EQ(result, "The composer tag is ^composer()");
+}
+
+TEST(TextsTest, EnigmaAccidentalParsingMaestro)
+{
+    using namespace musx::util;
+
+    std::vector<char> acciXml;
+    musxtest::readFile(musxtest::getInputPath() / "acci_inserts.enigmaxml", acciXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(acciXml);
+    ASSERT_TRUE(doc);
+
+    auto blockText = doc->getTexts()->get<texts::BlockText>(2);
+    ASSERT_TRUE(blockText) << "block text 2 not found";
+
+    using Results = std::tuple<std::string, int, Evpu, int, std::string>;
+    std::vector<Results> expectedResults = {
+        { "Times New Roman", 12, 0, 0, "test " },
+        { "Maestro", 13, 16, 35, "#" },
+        { "Maestro", 13, 9, 60, "b" },
+        { "Maestro", 13, 16, 50, "n" },
+        { "Times New Roman", 12, 0, 0, " test" },
+    };
+
+    size_t iterations = 0;
+    EnigmaString::parseEnigmaText(doc, blockText->text, [&](const std::string& chunk, const EnigmaStyles& styles) {
+        EXPECT_TRUE(iterations < expectedResults.size()) << "not enough expected results for interation " << iterations;
+        if (iterations >= expectedResults.size()) {
+            return false;
+        }
+        auto [expFont, expSize, expBaseline, expTracking, expChunk] = expectedResults[iterations];
+        EXPECT_EQ(styles.font->getName(), expFont);
+        EXPECT_EQ(styles.font->fontSize, expSize);
+        EXPECT_EQ(styles.baseline, expBaseline);
+        EXPECT_EQ(styles.tracking, expTracking);
+        EXPECT_EQ(chunk, expChunk);
+        iterations++;
+        return true;
+    });
+    EXPECT_EQ(iterations, expectedResults.size()) << "text start/end plus 3 acci inserts";
+}
+
+TEST(TextsTest, EnigmaAccidentalParsingFinaleMaestro)
+{
+    using namespace musx::util;
+
+    std::vector<char> acciXml;
+    musxtest::readFile(musxtest::getInputPath() / "acci_smufl_inserts.enigmaxml", acciXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(acciXml);
+    ASSERT_TRUE(doc);
+
+    auto blockText = doc->getTexts()->get<texts::BlockText>(2);
+    ASSERT_TRUE(blockText) << "block text 2 not found";
+
+    using Results = std::tuple<std::string, int, Evpu, int, std::string>;
+    std::vector<Results> expectedResults = {
+        { "Times New Roman", 12, 0, 0, "test " },
+        { "Finale Maestro", 13, 16, 35, EnigmaString::fromU8(u8"\uE262") },  // SMuFL sharp
+        { "Finale Maestro", 13, 9, 60, EnigmaString::fromU8(u8"\uE260") },   // SMuFL flat
+        { "Finale Maestro", 13, 16, 50, EnigmaString::fromU8(u8"\uE261") },  // SMuFL natural
+        { "Times New Roman", 12, 0, 0, " test" },
+    };
+
+    size_t iterations = 0;
+    EnigmaString::parseEnigmaText(doc, blockText->text, [&](const std::string& chunk, const EnigmaStyles& styles) {
+        EXPECT_TRUE(iterations < expectedResults.size()) << "not enough expected results for iteration " << iterations;
+        if (iterations >= expectedResults.size()) {
+            return false;
+        }
+        auto [expFont, expSize, expBaseline, expTracking, expChunk] = expectedResults[iterations];
+        EXPECT_EQ(styles.font->getName(), expFont);
+        EXPECT_EQ(styles.font->fontSize, expSize);
+        EXPECT_EQ(styles.baseline, expBaseline);
+        EXPECT_EQ(styles.tracking, expTracking);
+        EXPECT_EQ(chunk, expChunk);
+        iterations++;
+        return true;
+    });
+    EXPECT_EQ(iterations, expectedResults.size()) << "text start/end plus 3 acci inserts";
 }
 
 TEST(TextsTest, ParseEnigmaWithAccidentals)
@@ -740,6 +818,13 @@ TEST(TextsTest, ParseEnigmaFontInfo)
         return true;
     });
     EXPECT_EQ(iterationCount, 2) << "trailing font change should be reported";
+
+    iterationCount = 0;
+    EnigmaString::parseEnigmaText(doc, "", [&](const std::string&, const musx::util::EnigmaStyles&) {
+        iterationCount++;
+        return true;
+    });
+    EXPECT_EQ(iterationCount, 0) << "nothing should be reported";
 }
 
 TEST(TextsTest, LyricSyllableParsing)

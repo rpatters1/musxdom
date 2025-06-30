@@ -146,10 +146,40 @@ public:
     static std::string toU8(char32_t cp);
 
     /**
-     * @brief Enumeration to specify the type of accidental replacement.
+     * @brief Enumeration to specify how accidental insert commands are handled during Enigma parsing.
      *
-     * This enum class is used to choose between different representations
-     * of musical accidentals when processing text.
+     * This enum determines whether accidental insert commands are passed through raw,
+     * parsed into font changes with character glyphs, or substituted with text representations.
+     */
+    enum class AccidentalInsertHandling
+    {
+        /**
+         * @brief Pass accidental insert commands through to the caller unmodified.
+         *
+         * Suitable when the caller wishes to handle these commands directly.
+         */
+        PassThrough,
+
+        /**
+         * @brief Parse accidental insert commands into glyph font changes and character strings.
+         *
+         * Suitable when the parser should produce fully parsed output ready for rendering.
+         */
+        ParseToGlyphs,
+
+        /**
+         * @brief Substitute accidental insert commands with textual representations.
+         *
+         * The substitution style is determined by the `substitutionStyle` field in EnigmaParsingOptions.
+         * Suitable for environments where accidentals should be represented as text rather than as font changes.
+         */
+        Substitute
+    };
+
+    /**
+     * @brief Enumeration to specify the type of accidental substitution representation.
+     *
+     * Defines how accidentals are represented in text when substitution is selected.
      */
     enum class AccidentalStyle
     {
@@ -162,7 +192,7 @@ public:
          * - Double Flat: 'bb'
          * - Double Sharp: 'x'
          *
-         * Suitable for environments where Unicode or SMuFL support is unavailable.
+         * Suitable for environments without Unicode or SMuFL support.
          */
         Ascii,
 
@@ -191,6 +221,36 @@ public:
          * Suitable for musical notation systems or specialized fonts that support SMuFL.
          */
         Smufl
+    };
+
+    /**
+     * @brief Options for configuring how Enigma strings are parsed.
+     *
+     * This struct encapsulates all parsing configuration for Enigma string processing,
+     * including accidental insert handling behavior and substitution style.
+     */
+    struct EnigmaParsingOptions
+    {
+        /// @brief constructor
+        EnigmaParsingOptions() :
+            insertHandling(AccidentalInsertHandling::ParseToGlyphs),
+            substitutionStyle(AccidentalStyle::Unicode) {}
+
+        /**
+         * @brief Specifies how accidental insert commands are handled during parsing.
+         *
+         * Defaults to ParseToGlyphs, which parses insert commands into font changes
+         * and glyph strings.
+         */
+        AccidentalInsertHandling insertHandling;
+
+        /**
+         * @brief Specifies the accidental substitution style used when insertHandling is Substitute.
+         *
+         * Ignored unless insertHandling is set to Substitute.
+         * Defaults to Unicode substitution.
+         */
+        AccidentalStyle substitutionStyle;
     };
 
     /** @brief Returns true if the enigma string starts with a font insert. */
@@ -258,7 +318,7 @@ public:
      */
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
         const TextChunkCallback& onText, const CommandCallback& onCommand,
-        const std::optional<AccidentalStyle>& accidentalStyle = std::nullopt);
+        const EnigmaParsingOptions& options = {});
 
     /// @brief Simplified version of #parseEnigmaText that strips unhandled inserts.
     /// Useful in particular when the caller only cares about font information.
@@ -269,9 +329,14 @@ public:
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText, const TextChunkCallback& onText,
         const std::optional<AccidentalStyle>& accidentalStyle = std::nullopt)
     {
+        EnigmaParsingOptions options;
+        if (accidentalStyle) {
+            options.insertHandling = AccidentalInsertHandling::Substitute;
+            options.substitutionStyle = accidentalStyle.value();
+        }
         parseEnigmaText(document, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
             return ""; // strip all unhandled inserts
-        }, accidentalStyle);
+        }, options);
     }
 
     /**
