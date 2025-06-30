@@ -26,6 +26,8 @@
 #include <functional>
 #include <memory>
 
+#include "musx/dom/Fundamentals.h"
+
 namespace musx {
 
 namespace dom {
@@ -35,6 +37,35 @@ class Document;
 
 namespace util {
 
+struct EnigmaStyles
+{
+    /// @enum CategoryTracking
+    /// @brief Specifies is the current enigma style tracks an expressions marking category font.
+    /// When the marking category font changes, the Finale U.I. searchs all enigma strings for the category
+    /// and modifies any tracked fonts to match the new settings in the marking category. See @ref musx::dom::others::MarkingCategory.
+    /// @note Finale never implemented number fonts in the U.I., and it is possible they do not occur in real-world Finale files.
+    /// However, the enigma data structures support number fonts.
+    enum class CategoryTracking
+    {
+        None,           ///< no category tracking
+        MusicFont,      ///< tracks the category's music font
+        TextFont,       ///< tracks the category's text font
+        NumberFont      ///< tracks the category's number font (not implemented in Finale U.I.)
+    };
+
+    /// @brief constructor
+    EnigmaStyles(const std::weak_ptr<dom::Document>& document)
+        : font(std::make_shared<dom::FontInfo>(document))
+    {
+    }
+
+    std::shared_ptr<dom::FontInfo> font;    ///< the font to use
+    CategoryTracking categoryFont{};        ///< how this font is tracked against a marking category
+    dom::Evpu baseline{};                   ///< baseline setting (positive means up)
+    dom::Evpu superscript{};                ///< superscript setting added to #baseline (positive means up)
+    int tracking{};                         ///< inter-character tracking in EMs (1/1000 font size)
+};
+
 /**
  * @brief Static class that provides utilities to extract information from enigma strings. Enigma strings
  * use text inserts delineated by a preceding caret (^) and parenthesis for parameters. Here is a list of
@@ -42,6 +73,8 @@ namespace util {
  *
  * <b>Text formatting</b>
  * - `^font(name[, encoding])`: sets the font face. The optional encoding usually specifies mac (4095) or win (2) symbol encoding.
+ * Font IDs (especially zero) can be specified as name in the format "FontXX" where XX is the font Id. Typically this occurs for the default
+ * music font ("Font0").
  * - `^fontid(fontId[, encoding])`: sets the font face using the font id within the document.
  * - `^Font(name[, encoding])`: variant of `^font`.
  * - `^fontMus(name[, encoding])`: sets the font face but indicates that it tracks the marking category's Music Font setting.
@@ -109,11 +142,44 @@ public:
         return std::string(reinterpret_cast<const char*>(s));
     }
 
+    /// @brief Concerts a 32-bit codepoint to a utf8-encoded std::string.
+    static std::string toU8(char32_t cp);
+
     /**
-     * @brief Enumeration to specify the type of accidental replacement.
+     * @brief Enumeration to specify how accidental insert commands are handled during Enigma parsing.
      *
-     * This enum class is used to choose between different representations
-     * of musical accidentals when processing text.
+     * This enum determines whether accidental insert commands are passed through raw,
+     * parsed into font changes with character glyphs, or substituted with text representations.
+     */
+    enum class AccidentalInsertHandling
+    {
+        /**
+         * @brief Pass accidental insert commands through to the caller unmodified.
+         *
+         * Suitable when the caller wishes to handle these commands directly.
+         */
+        PassThrough,
+
+        /**
+         * @brief Parse accidental insert commands into glyph font changes and character strings.
+         *
+         * Suitable when the parser should produce fully parsed output ready for rendering.
+         */
+        ParseToGlyphs,
+
+        /**
+         * @brief Substitute accidental insert commands with textual representations.
+         *
+         * The substitution style is determined by the `substitutionStyle` field in EnigmaParsingOptions.
+         * Suitable for environments where accidentals should be represented as text rather than as font changes.
+         */
+        Substitute
+    };
+
+    /**
+     * @brief Enumeration to specify the type of accidental substitution representation.
+     *
+     * Defines how accidentals are represented in text when substitution is selected.
      */
     enum class AccidentalStyle
     {
@@ -126,7 +192,7 @@ public:
          * - Double Flat: 'bb'
          * - Double Sharp: 'x'
          *
-         * Suitable for environments where Unicode or SMuFL support is unavailable.
+         * Suitable for environments without Unicode or SMuFL support.
          */
         Ascii,
 
@@ -157,9 +223,41 @@ public:
         Smufl
     };
 
-    /** @brief Returns true if the enigma string starts with a font insert. */
+    /**
+     * @brief Options for configuring how Enigma strings are parsed.
+     *
+     * This struct encapsulates all parsing configuration for Enigma string processing,
+     * including accidental insert handling behavior and substitution style.
+     */
+    struct EnigmaParsingOptions
+    {
+        /// @brief constructor
+        EnigmaParsingOptions() :
+            insertHandling(AccidentalInsertHandling::ParseToGlyphs),
+            substitutionStyle(AccidentalStyle::Unicode) {}
 
+        /**
+         * @brief Specifies how accidental insert commands are handled during parsing.
+         *
+         * Defaults to ParseToGlyphs, which parses insert commands into font changes
+         * and glyph strings.
+         */
+        AccidentalInsertHandling insertHandling;
+
+        /**
+         * @brief Specifies the accidental substitution style used when insertHandling is Substitute.
+         *
+         * Ignored unless insertHandling is set to Substitute.
+         * Defaults to Unicode substitution.
+         */
+        AccidentalStyle substitutionStyle;
+    };
+
+    /** @brief Returns true if the enigma string starts with a font insert. */
     static bool startsWithFontCommand(const std::string& text);
+
+    /** @brief Returns true if the enigma string starts with a style insert. */
+    static bool startsWithStyleCommand(const std::string& text);
     
     /**
      * @brief Parses an enigma text insert into its constituent components.
@@ -174,7 +272,6 @@ public:
      * parseComponents("^nfx(130,(xyz))");        // Returns {"nfx", "130", "(xyz)"}
      * parseComponents("^some");                  // Returns {"some"}
      * parseComponents("^^");                     // Returns {"^"}
-     * parseComponents("^^invalid");              // Returns {}
      * parseComponents("^unbalanced(abc");        // Returns {}
      * @endcode
      *
@@ -189,7 +286,7 @@ public:
     /// - font: the font information.
     using TextChunkCallback = std::function<bool(
         const std::string& text,
-        const std::shared_ptr<dom::FontInfo>& font
+        const EnigmaStyles& styles
     )>;
 
     /// @brief Iteration function type that the parser calls back when it encounters an Enigma text insert
@@ -221,7 +318,7 @@ public:
      */
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
         const TextChunkCallback& onText, const CommandCallback& onCommand,
-        const std::optional<AccidentalStyle>& accidentalStyle = std::nullopt);
+        const EnigmaParsingOptions& options = {});
 
     /// @brief Simplified version of #parseEnigmaText that strips unhandled inserts.
     /// Useful in particular when the caller only cares about font information.
@@ -232,9 +329,14 @@ public:
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText, const TextChunkCallback& onText,
         const std::optional<AccidentalStyle>& accidentalStyle = std::nullopt)
     {
+        EnigmaParsingOptions options;
+        if (accidentalStyle) {
+            options.insertHandling = AccidentalInsertHandling::Substitute;
+            options.substitutionStyle = accidentalStyle.value();
+        }
         parseEnigmaText(document, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
             return ""; // strip all unhandled inserts
-        }, accidentalStyle);
+        }, options);
     }
 
     /**
@@ -245,7 +347,7 @@ public:
      * - `^size` specifies the font size in points.
      * - `^nfx` specifies a bit mask of style properties. These are resolved with @ref dom::FontInfo::setEnigmaStyles.
      */
-    static bool parseFontCommand(const std::string& fontTag, dom::FontInfo& fontInfo, size_t* parsedLength = nullptr);
+    static bool parseStyleCommand(const std::string& styleTag, EnigmaStyles& styles, size_t* parsedLength = nullptr);
 
     /** @brief Trims all font tags from an enigma string. */
     static std::string trimFontTags(const std::string& input);

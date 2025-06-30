@@ -899,7 +899,7 @@ public:
     // Font information for the marking category
     std::shared_ptr<FontInfo> textFont;      ///< Text font
     std::shared_ptr<FontInfo> musicFont;     ///< Music font
-    std::shared_ptr<FontInfo> numberFont;    ///< Number font
+    std::shared_ptr<FontInfo> numberFont;    ///< Number font (not implemented in the Finale U.I.)
 
     HorizontalMeasExprAlign horzAlign{};     ///< Horizontal alignment for the marking
     VerticalMeasExprAlign vertAlign{};       ///< Vertical alignment for the marking
