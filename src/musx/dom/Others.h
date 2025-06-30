@@ -2790,7 +2790,7 @@ public:
 class TextBlock : public OthersBase
 {
 public:
-    using TextJustify = options::TextOptions::TextJustify; // < justification
+    using TextJustify = options::TextOptions::TextJustify; ///< justification options
 
     /**
      * @enum TextType

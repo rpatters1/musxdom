@@ -121,6 +121,11 @@ enum class ShowClefMode
 class FontInfo : public CommonClassBase
 {
 public:
+    /**
+     * @brief constructor
+     * @param document the document containing the font
+     * @param sizeIsPercent if true, the size is a percent relative to the preceding font size in an Enigma string.
+     */
     FontInfo(const DocumentWeakPtr& document, bool sizeIsPercent = false)
         : CommonClassBase(document), m_sizeIsPercent(sizeIsPercent)
     {

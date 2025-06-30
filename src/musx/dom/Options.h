@@ -1343,11 +1343,22 @@ public:
     static const xml::XmlElementArray<StemOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+// WARNING: Option value 4 below intentionally omits ` chars from 1'02" because they mess up Doxygen.
+
 /**
  * @class TextOptions
  * @brief Options controlling text rendering in the musx file. Many of these options are default values that are inserted
  * into Enigma tags when a page or measure text is created. Others are default values for the assignment. As such, once
  * a page or measure text has been created, it does not change even if these default values change.
+ *
+ * Missing from these text options is the default format code for elapsed time used by the `perftime` Enigma insert. The values appear
+ * to be
+ * - 0: M:SS (e.g., `1:02`)
+ * - 1: HH:MM:SS (e.g., `00:01:02`)
+ * - 2: HH:MM:SS.mmm (e.g., `00:01:02.000`)
+ * - 3: MM:SS (e.g., `01:02`)
+ * - 4: M'SS" (e.g., 1'02")
+ * - 5: M (e.g., `1`)
  *
  * This class is identified by the XML node name "textOptions".
  */
