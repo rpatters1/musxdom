@@ -280,6 +280,40 @@ MUSX_XML_ENUM_MAPPING(SmartShapeOptions::SlurControlStyleType, {
     {"extraLongSpan", SmartShapeOptions::SlurControlStyleType::ExtraLongSpan}
 });
 
+MUSX_XML_ENUM_MAPPING(TextOptions::DateFormat, {
+    // {"short", TextOptions::DateFormat::Short}, // default value may not appear in the XML
+    {"long",   TextOptions::DateFormat::Long},
+    {"abbrev", TextOptions::DateFormat::Abbrev}
+});
+
+MUSX_XML_ENUM_MAPPING(TextOptions::HorizontalAlignment, {
+    // {"left", TextOptions::HorizontalAlignment::Left}, // This is the default and is not known to occur in the XML.
+    {"center", TextOptions::HorizontalAlignment::Center},
+    {"right", TextOptions::HorizontalAlignment::Right},
+});
+
+MUSX_XML_ENUM_MAPPING(TextOptions::VerticalAlignment, {
+    // {"top", TextOptions::VerticalAlignment::Top}, // This is the default and is not known to occur in the XML.
+    {"center", TextOptions::VerticalAlignment::Center},
+    {"bottom", TextOptions::VerticalAlignment::Bottom},
+});
+
+MUSX_XML_ENUM_MAPPING(TextOptions::TextJustify, {
+    // {"left",       TextOptions::TextJustify::Left}, // This is the default and is not known to occur in the XML.
+    {"center",     TextOptions::TextJustify::Center},
+    {"right",      TextOptions::TextJustify::Right},
+    {"full",       TextOptions::TextJustify::Full},
+    {"forcedFull", TextOptions::TextJustify::ForcedFull}
+});
+
+MUSX_XML_ENUM_MAPPING(TextOptions::InsertSymbolType, {
+    {"sharp",    TextOptions::InsertSymbolType::Sharp},
+    {"flat",     TextOptions::InsertSymbolType::Flat},
+    {"natural",  TextOptions::InsertSymbolType::Natural},
+    {"dblSharp", TextOptions::InsertSymbolType::DblSharp},
+    {"dblFlat",  TextOptions::InsertSymbolType::DblFlat}
+});
+
 MUSX_XML_ENUM_MAPPING(TieOptions::SecondsPlacement, {
     {"both", TieOptions::SecondsPlacement::ShiftForSeconds}
 });
@@ -876,6 +910,33 @@ MUSX_XML_ELEMENT_ARRAY(StemOptions, {
     {"stemLift", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemOffset = e->getTextAs<Efix>(); }},
     {"useStemConnections", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->useStemConnections = populateBoolean(e, i); }},
     {"stemConnect", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>&) { /** @todo: parse stem connections. */ }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TextOptions::InsertSymbolInfo, {
+    {"trackingBefore",    [](const XmlElementPtr& e, const std::shared_ptr<TextOptions::InsertSymbolInfo>& i) { i->trackingBefore = e->getTextAs<int>(); }},
+    {"trackingAfter",     [](const XmlElementPtr& e, const std::shared_ptr<TextOptions::InsertSymbolInfo>& i) { i->trackingAfter = e->getTextAs<int>(); }},
+    {"baselineShiftPerc", [](const XmlElementPtr& e, const std::shared_ptr<TextOptions::InsertSymbolInfo>& i) { i->baselineShiftPerc = e->getTextAs<int>(); }},
+    {"symFont",           [](const XmlElementPtr& e, const std::shared_ptr<TextOptions::InsertSymbolInfo>& i)
+        { i->symFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument(), /*sizeIsPercent*/ true); }},
+    {"symChar",           [](const XmlElementPtr& e, const std::shared_ptr<TextOptions::InsertSymbolInfo>& i) { i->symChar = e->getTextAs<char32_t>(); }}
+    });
+
+MUSX_XML_ELEMENT_ARRAY(TextOptions, {
+    {"textLineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textLineSpacingPercent = e->getTextAs<int>(); }},
+    {"showTimeSeconds",        [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->showTimeSeconds = populateBoolean(e, i); }},
+    {"dateFormat",             [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->dateFormat = toEnum<TextOptions::DateFormat>(e); }},
+    {"tabSpaces",              [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->tabSpaces = e->getTextAs<int>(); }},
+    {"textTracking",           [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textTracking = e->getTextAs<int>(); }},
+    {"textBaselineShift",      [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textBaselineShift = e->getTextAs<Evpu>(); }},
+    {"textSuperscript",        [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textSuperscript = e->getTextAs<Evpu>(); }},
+    {"textWordWrap",           [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textWordWrap = populateBoolean(e, i); }},
+    {"textPageOffset",         [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textPageOffset = e->getTextAs<Evpu>(); }},
+    {"textJustify",            [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textJustify = toEnum<TextOptions::TextJustify>(e); }},
+    {"textExpandSingleWord",   [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textExpandSingleWord = populateBoolean(e, i); }},
+    {"textHorzAlign",          [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textHorzAlign = toEnum<TextOptions::HorizontalAlignment>(e); }},
+    {"textVertAlign",          [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textVertAlign = toEnum<TextOptions::VerticalAlignment>(e); }},
+    {"textIsEdgeAligned",      [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textIsEdgeAligned = populateBoolean(e, i); }},
+    {"insertSymbolInfo",       [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { populateEmbeddedClass(e, i->symbolInserts, i->getDocument()); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieOptions::ConnectStyle, {
