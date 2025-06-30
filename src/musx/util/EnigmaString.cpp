@@ -22,6 +22,7 @@
 #include <regex>
 #include <unordered_map>
 #include <cctype>
+#include <string>
 
 #include "musx/musx.h"
 
@@ -29,6 +30,28 @@ using namespace musx::dom;
 
 namespace musx {
 namespace util {
+
+std::string EnigmaString::toU8(char32_t cp)
+{
+    std::string result;
+    if (cp <= 0x7F) {
+        result += static_cast<char>(cp);
+    } else if (cp <= 0x7FF) {
+        result += static_cast<char>(0xC0 | (cp >> 6));
+        result += static_cast<char>(0x80 | (cp & 0x3F));
+    } else if (cp <= 0xFFFF) {
+        result += static_cast<char>(0xE0 | (cp >> 12));
+        result += static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
+        result += static_cast<char>(0x80 | (cp & 0x3F));
+    } else if (cp <= 0x10FFFF) {
+        result += static_cast<char>(0xF0 | (cp >> 18));
+        result += static_cast<char>(0x80 | ((cp >> 12) & 0x3F));
+        result += static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
+        result += static_cast<char>(0x80 | (cp & 0x3F));
+    }
+    // Invalid code points are ignored (returning empty string).
+    return result;
+}
 
 static const std::unordered_map<std::string, std::string>& getEnigmaAccidentalMap(EnigmaString::AccidentalStyle style)
 {

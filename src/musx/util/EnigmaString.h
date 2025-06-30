@@ -73,6 +73,8 @@ struct EnigmaStyles
  *
  * <b>Text formatting</b>
  * - `^font(name[, encoding])`: sets the font face. The optional encoding usually specifies mac (4095) or win (2) symbol encoding.
+ * Font IDs (especially zero) can be specified as name in the format "FontXX" where XX is the font Id. Typically this occurs for the default
+ * music font ("Font0").
  * - `^fontid(fontId[, encoding])`: sets the font face using the font id within the document.
  * - `^Font(name[, encoding])`: variant of `^font`.
  * - `^fontMus(name[, encoding])`: sets the font face but indicates that it tracks the marking category's Music Font setting.
@@ -139,6 +141,9 @@ public:
             "fromU8() only accepts char or char8_t pointers");
         return std::string(reinterpret_cast<const char*>(s));
     }
+
+    /// @brief Concerts a 32-bit codepoint to a utf8-encoded std::string.
+    static std::string toU8(char32_t cp);
 
     /**
      * @brief Enumeration to specify the type of accidental replacement.
