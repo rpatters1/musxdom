@@ -37,6 +37,8 @@ class Document;
 
 namespace util {
 
+/// @class EnigmaStyles
+/// @brief Text styles for enigma strings
 struct EnigmaStyles
 {
     /// @enum CategoryTracking
@@ -236,6 +238,11 @@ public:
             insertHandling(AccidentalInsertHandling::ParseToGlyphs),
             substitutionStyle(AccidentalStyle::Unicode) {}
 
+        /// @brief constructor for accidental substitution
+        EnigmaParsingOptions(AccidentalStyle accidentalStyle) :
+            insertHandling(AccidentalInsertHandling::Substitute),
+            substitutionStyle(accidentalStyle) {}
+
         /**
          * @brief Specifies how accidental insert commands are handled during parsing.
          *
@@ -314,7 +321,7 @@ public:
      * @param rawText The full input Enigma string to parse.
      * @param onText The handler for when font styling changes.
      * @param onCommand The handler to substitute text for an insert.
-     * @param accidentalStyle If supplied, accidentals are replaced with characters according to the accidental style
+     * @param options Parsing options.
      */
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
         const TextChunkCallback& onText, const CommandCallback& onCommand,
@@ -329,11 +336,9 @@ public:
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText, const TextChunkCallback& onText,
         const std::optional<AccidentalStyle>& accidentalStyle = std::nullopt)
     {
-        EnigmaParsingOptions options;
-        if (accidentalStyle) {
-            options.insertHandling = AccidentalInsertHandling::Substitute;
-            options.substitutionStyle = accidentalStyle.value();
-        }
+        EnigmaParsingOptions options = accidentalStyle.has_value()
+                                     ? EnigmaParsingOptions(accidentalStyle.value())
+                                     : EnigmaParsingOptions();
         parseEnigmaText(document, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
             return ""; // strip all unhandled inserts
         }, options);
