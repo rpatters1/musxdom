@@ -20,6 +20,8 @@
  * THE SOFTWARE.
  */
 #include <regex>
+#include <unordered_map>
+#include <cctype>
 
 #include "musx/musx.h"
 
@@ -66,6 +68,20 @@ static const std::vector<std::string> kEnigmaFontCommands = { "^font", "^fontid"
 bool EnigmaString::startsWithFontCommand(const std::string& text)
 {
     for (const auto& textCmd : kEnigmaFontCommands) {
+        if (text.rfind(textCmd, 0) == 0) { // Checks if text starts with textCmd
+            return true;
+        }
+    }
+    return false;
+}
+
+bool EnigmaString::startsWithStyleCommand(const std::string& text)
+{
+    static const std::vector<std::string> kEnigmaStyleCommands = { "^baseline", "^superscript", "^tracking" };
+    if (startsWithFontCommand(text)) {
+        return true;
+    }
+    for (const auto& textCmd : kEnigmaStyleCommands) {
         if (text.rfind(textCmd, 0) == 0) { // Checks if text starts with textCmd
             return true;
         }
@@ -137,16 +153,22 @@ std::vector<std::string> EnigmaString::parseComponents(const std::string& input,
     return components;
 }
 
-bool EnigmaString::parseFontCommand(const std::string& fontTag, FontInfo& fontInfo, size_t* parsedLength)
+bool EnigmaString::parseStyleCommand(const std::string& styleTag, EnigmaStyles& styles, size_t* parsedLength)
 {
+    static const std::unordered_map<std::string_view, EnigmaStyles::CategoryTracking> trackingMap = {
+        { "fontMus", EnigmaStyles::CategoryTracking::MusicFont },
+        { "fontTxt", EnigmaStyles::CategoryTracking::TextFont},
+        { "fontNum", EnigmaStyles::CategoryTracking::NumberFont },
+    };
+
     if (parsedLength) {
         *parsedLength = 0;
     }
-    if (fontTag.empty() || fontTag[0] != '^') {
+    if (styleTag.empty() || styleTag[0] != '^') {
         return false;
     }
 
-    std::vector<std::string> components = parseComponents(fontTag, parsedLength);
+    std::vector<std::string> components = parseComponents(styleTag, parsedLength);
     if (components.size() < 2) {
         if (parsedLength) {
             *parsedLength = 0;
@@ -158,18 +180,38 @@ bool EnigmaString::parseFontCommand(const std::string& fontTag, FontInfo& fontIn
     if (commandPart == "fontMus" || commandPart == "fontTxt" || commandPart == "fontNum" || commandPart == "font" || commandPart == "fontid") {
         const std::string& param1 = components[1];
         if (commandPart == "fontid") {
-            fontInfo.fontId = Cmper(std::stoi(param1));
+            styles.font->fontId = Cmper(std::stoi(param1));
         } else if (param1.find("Font") == 0) { // Starts with "Font"
-            fontInfo.fontId = Cmper(std::stoi(param1.substr(4)));
+            const auto fontIdStr = param1.substr(4);
+            if (!fontIdStr.empty() && std::all_of(fontIdStr.begin(), fontIdStr.end(), ::isdigit)) {
+                styles.font->fontId = Cmper(std::stoi(fontIdStr));
+            } else {
+                styles.font->setFontIdByName(param1);
+            }
         } else {
-            fontInfo.setFontIdByName(param1);
+            styles.font->setFontIdByName(param1);
+        }
+        auto it = trackingMap.find(commandPart);
+        if (it != trackingMap.end()) {
+            styles.categoryFont = it->second;
+        } else {
+            styles.categoryFont = EnigmaStyles::CategoryTracking::None;
         }
         return true;
     } else if (commandPart == "nfx") {
-        fontInfo.setEnigmaStyles(uint16_t(std::stoi(components[1])));
+        styles.font->setEnigmaStyles(uint16_t(std::stoi(components[1])));
         return true;
     } else if (commandPart == "size") {
-        fontInfo.fontSize = std::stoi(components[1]);
+        styles.font->fontSize = std::stoi(components[1]);
+        return true;
+    } else if (commandPart == "baseline") {
+        styles.baseline = std::stoi(components[1]);
+        return true;
+    } else if (commandPart == "superscript") {
+        styles.superscript = std::stoi(components[1]);
+        return true;
+    } else if (commandPart == "tracking") {
+        styles.tracking = std::stoi(components[1]);
         return true;
     }
 
@@ -179,7 +221,7 @@ bool EnigmaString::parseFontCommand(const std::string& fontTag, FontInfo& fontIn
 void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
     const TextChunkCallback& onText, const CommandCallback& onCommand, const std::optional<AccidentalStyle>& accidentalStyle)
 {
-    auto currentFont = std::make_shared<dom::FontInfo>(document);
+    auto currentStyles = EnigmaStyles(document);
     std::string remaining = rawText;
     std::optional<std::string> textBuffer;
 
@@ -204,19 +246,19 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
         }
 
         size_t parsedLen = 0;
-        if (startsWithFontCommand(remaining)) {
+        if (startsWithStyleCommand(remaining)) {
             if (textBuffer.has_value() && !textBuffer->empty()) {
-                bool result = onText(textBuffer.value(), currentFont);
+                bool result = onText(textBuffer.value(), currentStyles);
                 textBuffer = std::nullopt;
                 if (!result) {
                     break;
                 }
             }
-            if (!parseFontCommand(remaining, *currentFont.get(), &parsedLen)) {
-                throw std::invalid_argument("malformed font command encountered in Enigma text: " + rawText);
+            if (!parseStyleCommand(remaining, currentStyles, &parsedLen)) {
+                throw std::invalid_argument("malformed style command encountered in Enigma text: " + rawText);
             }
             remaining.erase(0, parsedLen);
-            textBuffer.emplace(""); // after parsing a font command, make the font change is reported even if no text.
+            textBuffer.emplace(""); // after parsing a style command, make sure the style change is reported even if no text.
             continue;
         }
 
@@ -260,7 +302,7 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
 
     // Emit any remaining buffered text
     if (textBuffer.has_value()) {
-        onText(textBuffer.value(), currentFont);
+        onText(textBuffer.value(), currentStyles);
     }
 }
 

@@ -594,7 +594,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     std::vector<std::pair<std::string, std::string>> output;
 
-    auto recordChunk = [&](const std::string& text, const std::shared_ptr<FontInfo>&) -> bool {
+    auto recordChunk = [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
         output.emplace_back("TEXT", text);
         return true;
     };
@@ -685,7 +685,7 @@ TEST(TextsTest, ParseEnigmaWithAccidentals)
     ASSERT_TRUE(texts);
 
     std::string output;
-    auto accumulateChunk = [&](const std::string& text, const std::shared_ptr<FontInfo>&) -> bool {
+    auto accumulateChunk = [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
         output += text;
         return true;
     };
@@ -707,12 +707,12 @@ TEST(TextsTest, ParseEnigmaFontInfo)
     ASSERT_TRUE(texts);
 
     int iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, "^font(Times)^size(13)^nfx(2)", [&](const std::string& chunk, const std::shared_ptr<FontInfo>& font) {
-        EXPECT_EQ(font->fontId, 1);
-        EXPECT_EQ(font->fontSize, 13);
-        EXPECT_EQ(font->getEnigmaStyles(), 2);
-        EXPECT_FALSE(font->bold);
-        EXPECT_TRUE(font->italic);
+    EnigmaString::parseEnigmaText(doc, "^font(Times)^size(13)^nfx(2)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
+        EXPECT_EQ(styles.font->fontId, 1);
+        EXPECT_EQ(styles.font->fontSize, 13);
+        EXPECT_EQ(styles.font->getEnigmaStyles(), 2);
+        EXPECT_FALSE(styles.font->bold);
+        EXPECT_TRUE(styles.font->italic);
         EXPECT_TRUE(chunk.empty());
         iterationCount++;
         return true;
@@ -720,20 +720,20 @@ TEST(TextsTest, ParseEnigmaFontInfo)
     EXPECT_EQ(iterationCount, 1) << "font should be reported even when no text";
 
     iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, "^fontid(2)^size(10)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const std::shared_ptr<FontInfo>& font) {
+    EnigmaString::parseEnigmaText(doc, "^fontid(2)^size(10)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
         if (iterationCount == 0) {
-            EXPECT_EQ(font->fontId, 2);
-            EXPECT_EQ(font->fontSize, 10);
-            EXPECT_EQ(font->getEnigmaStyles(), 2);
-            EXPECT_FALSE(font->bold);
-            EXPECT_TRUE(font->italic);
+            EXPECT_EQ(styles.font->fontId, 2);
+            EXPECT_EQ(styles.font->fontSize, 10);
+            EXPECT_EQ(styles.font->getEnigmaStyles(), 2);
+            EXPECT_FALSE(styles.font->bold);
+            EXPECT_TRUE(styles.font->italic);
             EXPECT_EQ(chunk, "text");
         } else if (iterationCount == 1) {
-            EXPECT_EQ(font->fontId, 2);
-            EXPECT_EQ(font->fontSize, 10);
-            EXPECT_EQ(font->getEnigmaStyles(), 0);
-            EXPECT_FALSE(font->bold);
-            EXPECT_FALSE(font->italic);
+            EXPECT_EQ(styles.font->fontId, 2);
+            EXPECT_EQ(styles.font->fontSize, 10);
+            EXPECT_EQ(styles.font->getEnigmaStyles(), 0);
+            EXPECT_FALSE(styles.font->bold);
+            EXPECT_FALSE(styles.font->italic);
             EXPECT_TRUE(chunk.empty());
         }
         iterationCount++;

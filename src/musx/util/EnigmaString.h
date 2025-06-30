@@ -26,6 +26,8 @@
 #include <functional>
 #include <memory>
 
+#include "musx/dom/Fundamentals.h"
+
 namespace musx {
 
 namespace dom {
@@ -34,6 +36,35 @@ class Document;
 } // namespace dom
 
 namespace util {
+
+struct EnigmaStyles
+{
+    /// @enum CategoryTracking
+    /// @brief Specifies is the current enigma style tracks an expressions marking category font.
+    /// When the marking category font changes, the Finale U.I. searchs all enigma strings for the category
+    /// and modifies any tracked fonts to match the new settings in the marking category. See @ref musx::dom::others::MarkingCategory.
+    /// @note Finale never implemented number fonts in the U.I., and it is possible they do not occur in real-world Finale files.
+    /// However, the enigma data structures support number fonts.
+    enum class CategoryTracking
+    {
+        None,           ///< no category tracking
+        MusicFont,      ///< tracks the category's music font
+        TextFont,       ///< tracks the category's text font
+        NumberFont      ///< tracks the category's number font (not implemented in Finale U.I.)
+    };
+
+    /// @brief constructor
+    EnigmaStyles(const std::weak_ptr<dom::Document>& document)
+        : font(std::make_shared<dom::FontInfo>(document))
+    {
+    }
+
+    std::shared_ptr<dom::FontInfo> font;    ///< the font to use
+    CategoryTracking categoryFont{};        ///< how this font is tracked against a marking category
+    dom::Evpu baseline{};                   ///< baseline setting (positive means up)
+    dom::Evpu superscript{};                ///< superscript setting added to #baseline (positive means up)
+    int tracking{};                         ///< inter-character tracking in EMs (1/1000 font size)
+};
 
 /**
  * @brief Static class that provides utilities to extract information from enigma strings. Enigma strings
@@ -158,8 +189,10 @@ public:
     };
 
     /** @brief Returns true if the enigma string starts with a font insert. */
-
     static bool startsWithFontCommand(const std::string& text);
+
+    /** @brief Returns true if the enigma string starts with a style insert. */
+    static bool startsWithStyleCommand(const std::string& text);
     
     /**
      * @brief Parses an enigma text insert into its constituent components.
@@ -174,7 +207,6 @@ public:
      * parseComponents("^nfx(130,(xyz))");        // Returns {"nfx", "130", "(xyz)"}
      * parseComponents("^some");                  // Returns {"some"}
      * parseComponents("^^");                     // Returns {"^"}
-     * parseComponents("^^invalid");              // Returns {}
      * parseComponents("^unbalanced(abc");        // Returns {}
      * @endcode
      *
@@ -189,7 +221,7 @@ public:
     /// - font: the font information.
     using TextChunkCallback = std::function<bool(
         const std::string& text,
-        const std::shared_ptr<dom::FontInfo>& font
+        const EnigmaStyles& styles
     )>;
 
     /// @brief Iteration function type that the parser calls back when it encounters an Enigma text insert
@@ -245,7 +277,7 @@ public:
      * - `^size` specifies the font size in points.
      * - `^nfx` specifies a bit mask of style properties. These are resolved with @ref dom::FontInfo::setEnigmaStyles.
      */
-    static bool parseFontCommand(const std::string& fontTag, dom::FontInfo& fontInfo, size_t* parsedLength = nullptr);
+    static bool parseStyleCommand(const std::string& styleTag, EnigmaStyles& styles, size_t* parsedLength = nullptr);
 
     /** @brief Trims all font tags from an enigma string. */
     static std::string trimFontTags(const std::string& input);

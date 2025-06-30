@@ -169,7 +169,7 @@ public:
 
     /**
      * @brief Set style effects based on a bitmask. This is mainly useful for capturing text styles
-     * from enigma strings. (See @ref musx::util::EnigmaString::parseFontCommand.)
+     * from enigma strings. (See @ref musx::util::EnigmaString::parseStyleCommand.)
      *
      * @param efx A 16-bit integer representing style effects with specific bit masks.
      */
