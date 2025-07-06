@@ -44,6 +44,22 @@ namespace music_theory {
 constexpr int STANDARD_DIATONIC_STEPS = 7; ///< currently this is the only supported number of diatonic steps.
 constexpr int STANDARD_12EDO_STEPS = 12;   ///< this can be overriden when constructing a @ref Transposer instance.
 
+constexpr std::array<int, STANDARD_DIATONIC_STEPS> MAJOR_KEYMAP = { 0, 2, 4, 5, 7, 9, 11 };     ///< keymap for 12-EDO major keys
+constexpr std::array<int, STANDARD_DIATONIC_STEPS> MINOR_KEYMAP = { 0, 2, 3, 5, 7, 8, 10 };     ///< keymap for 12-EDO minor keys
+
+/// @brief Array of diatonic intervals. Each member array contains
+///     - the number of fifths to add, which is also the key signature adjustment for the interval
+///     - the number of octaves to subtract
+constexpr std::array<std::array<int, 2>, 7> DIATONIC_INTERVAL_ADJUSTMENTS = { {
+    { 0,  0 },  // unison
+    { 2, -1 },  // second
+    { 4, -2 },  // third
+    {-1,  1 },  // fourth
+    { 1,  0 },  // fifth
+    { 3, -1 },  // sixth
+    { 5, -2 }   // seventh
+}};
+
 /// @brief The available note names in array order.
 enum class NoteName : int
 {
@@ -140,6 +156,46 @@ constexpr T positiveModulus(T n, T d, T* q = nullptr)
     return result;
 }
 
+/// @brief Calculates the number of 12-EDO chromatic halfsteps in the specified interval
+/// @param interval              The diatonic displacement (negative for downward intervals).
+/// @param chromaticAlteration   The chromatic halfstep alteration that defines the chromatic interval.
+/// @return The number of 12-EDO divisions (chromatic halfsteps) in the interval (negative means down)
+inline int calc12EdoHalfstepsInInterval(int interval, int chromaticAlteration)
+{
+    int octaves{};
+    int diatonic = positiveModulus(interval, STANDARD_DIATONIC_STEPS, &octaves);
+    return MAJOR_KEYMAP[diatonic] + (octaves * STANDARD_12EDO_STEPS) + chromaticAlteration;
+}
+
+/// @brief Calculates the alteration in chromatic halfsteps for the specified interval/halfsteps combination
+/// @param interval              The diatonic displacement (negative for downward transposition).
+/// @param chromaticAlteration   The number of 12-EDO chromatic halfsteps in the interval (negative means down).
+/// @return The number of 12-EDO divisions (chromatic halfsteps) in the interval
+inline int calcAlterationFrom12EdoHalfsteps(int interval, int halfsteps)
+{
+    int octaves{};
+    int diatonic = positiveModulus(interval, STANDARD_DIATONIC_STEPS, &octaves);
+    int expectedHalfsteps = MAJOR_KEYMAP[diatonic] + (octaves * STANDARD_12EDO_STEPS);
+    return halfsteps - expectedHalfsteps;
+}
+
+/// @brief Determines the chromatic alteration needed for a diatonic interval to produce a desired key signature change.
+/// @param interval            The diatonic interval (e.g. +4 for perfect fourth).
+/// @param keySigChange        The desired change in key signature (positive for sharps added, negative for flats).
+/// @return The chromatic alteration in halfsteps required to produce that key signature change with the given diatonic interval.
+inline int calcAlterationFromKeySigChange(int interval, int keySigChange)
+{
+    int diatonic = positiveModulus(interval, STANDARD_DIATONIC_STEPS);
+    int expectedKeyChange = DIATONIC_INTERVAL_ADJUSTMENTS[diatonic][0];
+    if (interval < 0) {
+        if (std::abs(expectedKeyChange) > 1) { // imperfect intervals
+            expectedKeyChange -= STANDARD_DIATONIC_STEPS;
+        }
+    }
+    int alteration = (keySigChange - expectedKeyChange) / STANDARD_DIATONIC_STEPS;
+    return alteration;
+}
+
 /// @class Transposer
 /// @brief Provides dependency-free transposition utilities that work with any scale that has 7 diatonic steps
 /// and an equal number of divisions of the octave (EDO). The most common Western scales use 12 divisions of the octave,
@@ -150,22 +206,10 @@ constexpr T positiveModulus(T n, T d, T* q = nullptr)
 class Transposer
 {
 private:
-    static constexpr std::array<int, STANDARD_DIATONIC_STEPS> MAJOR_KEYMAP = { 0, 2, 4, 5, 7, 9, 11 };
-    static constexpr std::array<int, STANDARD_DIATONIC_STEPS> MINOR_KEYMAP = { 0, 2, 3, 5, 7, 8, 10 };
     int m_displacement; 
     int m_alteration;               // alteration from key signature
     int m_numberOfEdoDivisions;     // number of divisions in the EDO (default 12)
     std::vector<int> m_keyMap;      // step map for the EDO
-
-    static constexpr std::array<std::array<int, 2>, 7> DIATONIC_INTERVAL_ADJUSTMENTS = { {
-        { 0,  0},  // unison
-        { 2, -1},  // second
-        { 4, -2},  // third
-        {-1,  1},  // fourth
-        { 1,  0},  // fifth
-        { 3, -1},  // sixth
-        { 5, -2}   // seventh
-    }};
     
 public:
     /// @brief Constructor function
@@ -223,7 +267,7 @@ public:
      *
      * @note Chromatic alterations have the same values in any EDO. That is, the inputs to this functions are
      * the same regardless of EDO number. This function calculates the correct number of EDO divisions in a
-     * chromatic half-step using the key map provided when the Transposer instance was created.
+     * chromatic halfstep using the key map provided when the Transposer instance was created.
      *
      * A chromatic alteration of 0 corresponds to major or perfect intervals. For example:
      * - `{1,  0}` is a major second up
@@ -234,7 +278,7 @@ public:
      * Reversing the signs of both `interval` and `alteration` allows for downward transposition.
      *
      * @param interval              The diatonic displacement (negative for downward transposition).
-     * @param chromaticAlteration   The chromatic half-step alteration that defines the chromatic interval.
+     * @param chromaticAlteration   The chromatic halfstep alteration that defines the chromatic interval.
      */
     void chromaticTranspose(int interval, int chromaticAlteration)
     {
@@ -274,7 +318,7 @@ public:
     /**
      * @brief Transposes by the given number of EDO divisions and simplifies the spelling.
      *
-     * In standard key signatures, each division corresponds to a half-step.
+     * In standard key signatures, each division corresponds to a halfstep.
      *
      * After transposition, the note's spelling is simplified to reduce the alteration while preserving pitch.
      *
@@ -299,7 +343,7 @@ public:
     bool isEnharmonicEquivalent(int displacement, int alteration) const {
         return calcAbsoluteDivision(displacement, alteration) == calcAbsoluteDivision(m_displacement, m_alteration);
     }
-    
+
 private:
     int calcFifthSteps() const
     {

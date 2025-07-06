@@ -29,7 +29,7 @@ void process(const std::vector<char>& xmlBuffer)
     auto scrollView = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
     auto measures = document->getOthers()->getArray<others::Measure>(SCORE_PARTID);
     for (const auto& item : scrollView) {
-        auto staff = item->getStaff();
+        auto staff = item->getStaffInstance();
         for (const auto& measure : measures) {
             if (auto gfHold = details::GFrameHoldContext(document, SCORE_PARTID, staff->getCmper(), measure->getCmper())) {
                 for (LayerIndex layer; layer < MAX_LAYERS; layer++) {

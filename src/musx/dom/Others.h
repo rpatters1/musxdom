@@ -637,13 +637,16 @@ public:
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
     std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
-    /// @brief Returns the @ref Staff instance for this element
-    std::shared_ptr<Staff> getStaff() const;
+    /// @brief Returns the @ref Staff instance for this element, without any staff styles applied
+    std::shared_ptr<Staff> getStaffInstance() const;
 
-    /// @brief Returns the @ref Staff instance at a specified index of iuArray or nullptr if not found
+    /// @brief Returns the @ref Staff instance for this element with staff styles applied at the specified location.
+    std::shared_ptr<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
+
+    /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
     /// @param index The 0-based index to find.
-    static std::shared_ptr<Staff> getStaffAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
+    static std::shared_ptr<Staff> getStaffInstanceAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
 
     /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
@@ -1370,12 +1373,12 @@ public:
                                             ///< This list is calculated by the factory when it calls #calcAllMultiStaffGroupIds.
                                             ///< It is potentially a superset of #staffNums and/or the group returned by #calcVisualStaffGroup.
 
-    /// @brief Returns the staff at the index position or null if out of range or not found.
+    /// @brief Returns the staff instance (without any staff styles applied) at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
-    std::shared_ptr<Staff> getStaffAtIndex(size_t x) const;
+    std::shared_ptr<Staff> getStaffInstanceAtIndex(size_t x) const;
 
-    /// @brief Returns the first staff (with integrity check)
-    std::shared_ptr<Staff> getFirstStaff() const;
+    /// @brief Returns the first staff instance without any staff styles applied (with integrity check)
+    std::shared_ptr<Staff> getFirstStaffInstance() const;
 
     /// @brief Returns the index of the input staffId or std::nullopt if not found
     std::optional<size_t> getIndexOf(InstCmper staffId) const
@@ -2424,6 +2427,13 @@ public:
 
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
+
+    /// @brief Calculates the transposition interval for this staff or staff composite
+    /// @return A pair of int containing
+    ///     - the diatonic displacement interval (positive up, negative down)
+    ///     - the alteration in chromatic halfsteps
+    /// Downward intervals reverse the sign of the chromatic alteration.
+    std::pair<int, int> calcTranspositionInterval() const;
 
     /// @brief Gets a list of all parts that contain this staff
     /// @param includeScore If true, include the score in the list. (Defaults to true)

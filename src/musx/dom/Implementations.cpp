@@ -1678,7 +1678,7 @@ std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createDisplayTi
 // ***** InstrumentUsed *****
 // **************************
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance() const
 {
     auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
     if (!retval) {
@@ -1687,11 +1687,21 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
     return retval;
 }
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance(MeasCmper measureId, Edu eduPosition) const
+{
+    auto retval = others::StaffComposite::createCurrent(getDocument(), getPartId(), staffId, measureId, eduPosition);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Composite staff " + std::to_string(staffId) + " not found for InstrumentUsed list " + std::to_string(getCmper())
+            + " at measure " + std::to_string(measureId) + " eduPosition " + std::to_string(eduPosition));
+    }
+    return retval;
+}
+
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstanceAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
 {
     if (index >= iuArray.size()) return nullptr;
     auto iuItem = iuArray[index];
-    return iuItem->getStaff();
+    return iuItem->getStaffInstance();
 }
 
 std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId)
@@ -2125,7 +2135,7 @@ int others::MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
 // ***** MultiStaffInstrumentGroup *****
 // *************************************
 
-std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffAtIndex(size_t x) const
+std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffInstanceAtIndex(size_t x) const
 {
     if (x >= staffNums.size()) return nullptr;
     auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffNums[x]);
@@ -2136,13 +2146,13 @@ std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffAtInde
     return retval;
 }
 
-std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaff() const
+std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaffInstance() const
 {
     if (staffNums.empty()) {
         MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
         return nullptr;
     }
-    return getStaffAtIndex(0);
+    return getStaffInstanceAtIndex(0);
 }
 
 std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup(Cmper forPartId) const
@@ -2222,7 +2232,7 @@ void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const Document
     // multiStaffInstId must be populated in a separate pass before any calls to getVisualStaffGroup
     for (const auto& instance : instGroups) {
         for (size_t x = 0; x < instance->staffNums.size(); x++) {
-            auto staff = instance->getStaffAtIndex(x);
+            auto staff = instance->getStaffInstanceAtIndex(x);
             if (staff) {
                 if (staff->multiStaffInstId) {
                     musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose, 
@@ -2859,7 +2869,7 @@ void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
     // Pass 1: Check if any instUuid has auto-numbering disabled
     std::unordered_set<std::string> disabledInstUuids;
     for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaff();
+        auto staff = instrumentUsed->getStaffInstance();
         if (staff && !staff->useAutoNumbering) {
             disabledInstUuids.insert(staff->instUuid);
         }
@@ -2867,7 +2877,7 @@ void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 
     // Pass 2: Count occurrences of instUuid, considering multistaff instruments
     for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaff();
+        auto staff = instrumentUsed->getStaffInstance();
         if (!staff || staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
             continue;
         }
@@ -2895,7 +2905,7 @@ void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
     countedMultistaffGroups.clear(); // Reset for numbering
 
     for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaff();
+        auto staff = instrumentUsed->getStaffInstance();
         if (!staff) continue;
         if (staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
             staff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
@@ -2913,7 +2923,7 @@ void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
             // Assign the same number to all staves in the group
             auto groupNumber = instUuidNumbers[staff->instUuid];
             for (size_t x = 0; x < multiStaffGroup->staffNums.size(); x++) {
-                auto groupStaff = multiStaffGroup->getStaffAtIndex(x);
+                auto groupStaff = multiStaffGroup->getStaffInstanceAtIndex(x);
                 if (groupStaff) {
                     groupStaff->autoNumberValue = groupNumber;
                 }
@@ -3228,6 +3238,19 @@ bool others::Staff::hasInstrumentAssigned() const
     return true;
 }
 
+std::pair<int, int> others::Staff::calcTranspositionInterval() const
+{
+    if (transposition) {
+        if (transposition->chromatic) {
+            return std::make_pair(transposition->chromatic->diatonic, transposition->chromatic->alteration);
+        } else if (transposition->keysig) {
+            const int alteration = music_theory::calcAlterationFromKeySigChange(transposition->keysig->interval, transposition->keysig->adjust);
+            return std::make_pair(transposition->keysig->interval, alteration);
+        }
+    }
+    return std::make_pair(0, 0);
+}
+
 std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts(bool includeScore) const
 {
     std::vector<std::shared_ptr<others::PartDefinition>> result;
@@ -3532,7 +3555,7 @@ std::shared_ptr<others::MultiStaffInstrumentGroup> details::StaffGroup::getMulti
 std::string details::StaffGroup::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     if (auto multiStaffGroup = getMultiStaffInstGroup()) {
-        if (auto staff = multiStaffGroup->getFirstStaff()) {
+        if (auto staff = multiStaffGroup->getFirstStaffInstance()) {
             return staff->getFullInstrumentName(accidentalStyle);
         }
     }
@@ -3542,7 +3565,7 @@ std::string details::StaffGroup::getFullInstrumentName(util::EnigmaString::Accid
 std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     if (auto multiStaffGroup = getMultiStaffInstGroup()) {
-        if (auto staff = multiStaffGroup->getFirstStaff()) {
+        if (auto staff = multiStaffGroup->getFirstStaffInstance()) {
             return staff->getAbbreviatedInstrumentName(accidentalStyle);
         }
     }

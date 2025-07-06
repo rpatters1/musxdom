@@ -175,7 +175,7 @@ TEST(MultiStaffGroupTest, PopulateFields)
     EXPECT_EQ(instGroup->staffNums[1], 2);
     EXPECT_EQ(instGroup->staffNums[2], 3);
 
-    auto staffAtIndex = instGroup->getStaffAtIndex(1);
+    auto staffAtIndex = instGroup->getStaffInstanceAtIndex(1);
     EXPECT_TRUE(staffAtIndex) << "Staff at index 1 not found";
     EXPECT_EQ(staffAtIndex->multiStaffInstId, 2);
 
