@@ -933,6 +933,18 @@ public:
     /// @brief Returns if this note is enharmonically respelled in the current part view
     bool calcIsEnharmonicRespell() const;
 
+    /// @brief Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when
+    /// #details::NoteAlterations::enharmonic is true.
+    ///
+    /// Normally you do not have to call this function directly. It is called inside #calcNoteProperties. But the function
+    /// is available if you need it.
+    ///
+    /// @return A std::pair containing
+    ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
+    ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
+    std::pair<int, int> calcDefaultEnharmonic() const
+    { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
+
 private:
     /// @brief Returns true if the @p src and this have the same level and alteration.
     /// It is only meaningful when this and src are in the same key.
