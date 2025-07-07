@@ -1681,10 +1681,10 @@ public:
                                         ///< The logic behind this choice is that it is the middle-C position on a treble clef, but
                                         ///< middle-C is not relevant to the note's pitch or value. Use #calcStaffReferencePosition to get the
                                         ///< staff position relative to the staff's reference line, which is often a more useful value.
-    char32_t closedNotehead{};          ///< Codepoint for closed notehead (from default music font.)
-    char32_t halfNotehead{};            ///< Codepoint for half notehead (from default music font.)
-    char32_t wholeNotehead{};           ///< Codepoint for whole notehead (from default music font.)
-    char32_t dwholeNotehead{};          ///< Codepoint for double whole notehead (from default music font.)
+    char32_t closedNotehead{};          ///< Codepoint for closed notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t halfNotehead{};            ///< Codepoint for half notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t wholeNotehead{};           ///< Codepoint for whole notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t dwholeNotehead{};          ///< Codepoint for double whole notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
 
     /// @brief Calculates the fixed staff position for this percussion note relative to a staff's reference line.
     int calcStaffReferencePosition() const { return staffPosition - 10; }

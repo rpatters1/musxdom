@@ -168,8 +168,8 @@ inline int calc12EdoHalfstepsInInterval(int interval, int chromaticAlteration)
 }
 
 /// @brief Calculates the alteration in chromatic halfsteps for the specified interval/halfsteps combination
-/// @param interval              The diatonic displacement (negative for downward transposition).
-/// @param chromaticAlteration   The number of 12-EDO chromatic halfsteps in the interval (negative means down).
+/// @param interval         The diatonic displacement (negative for downward transposition).
+/// @param halfsteps        The number of 12-EDO chromatic halfsteps in the interval (negative means down).
 /// @return The number of 12-EDO divisions (chromatic halfsteps) in the interval
 inline int calcAlterationFrom12EdoHalfsteps(int interval, int halfsteps)
 {
@@ -180,7 +180,7 @@ inline int calcAlterationFrom12EdoHalfsteps(int interval, int halfsteps)
 }
 
 /// @brief Determines the chromatic alteration needed for a diatonic interval to produce a desired key signature change.
-/// @param interval            The diatonic interval (e.g. +4 for perfect fourth).
+/// @param interval            The diatonic interval (e.g. +3 for a perfect fourth up).
 /// @param keySigChange        The desired change in key signature (positive for sharps added, negative for flats).
 /// @return The chromatic alteration in halfsteps required to produce that key signature change with the given diatonic interval.
 inline int calcAlterationFromKeySigChange(int interval, int keySigChange)
