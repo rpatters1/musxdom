@@ -2389,10 +2389,8 @@ NoteInfoPtr NoteInfoPtr::findEqualPitch(const EntryInfoPtr& entry) const
             if (!isSamePitchValues(prev)) break;
             srcOccurrence++;
         }
-        auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = calcNotePropertiesConcert();
         for (auto note = NoteInfoPtr(entry, 0); note; note = note.getNext()) {
-            auto [pitch, octave, alter, staffPos] = note.calcNotePropertiesConcert();
-            if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
+            if (note.isSamePitch(*this)) {
                 for (int entryOccurrence = 1; entryOccurrence < srcOccurrence; entryOccurrence++) {
                     auto next = note.getNext();
                     if (!next.isSamePitchValues(note)) break;
@@ -2564,7 +2562,7 @@ bool NoteInfoPtr::calcIsEnharmonicRespell() const
     return false;
 }
 
-bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
+bool NoteInfoPtr::isSamePitch(const NoteInfoPtr& src) const
 {
     if (!*this || !src) {
         return false;
@@ -2573,10 +2571,20 @@ bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
     auto srcPercInfo = src.calcPercussionNoteInfo();
     if (thisPercInfo || srcPercInfo) {
         if (!thisPercInfo || !srcPercInfo) {
-            return false;
+            return false; // can't compare perc note with non-perc-note
         }
         return thisPercInfo->percNoteType == srcPercInfo->percNoteType
             && thisPercInfo->staffPosition == srcPercInfo->staffPosition;
+    }
+    auto [thisPitch, thisOctave, thisAlter, thisStaffPos] = calcNotePropertiesConcert();
+    auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNotePropertiesConcert();
+    return srcPitch == thisPitch && srcOctave == thisOctave && srcAlter == thisAlter;
+}
+
+bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
+{
+    if (!*this || !src) {
+        return false;
     }
     return (*this)->harmLev == src->harmLev
         && (*this)->harmAlt == src->harmAlt;

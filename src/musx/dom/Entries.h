@@ -946,9 +946,13 @@ public:
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
 
 private:
+    /// @brief Returns true if the two notes represent the same concert pitch or
+    /// percussion note.
+    /// @param src the value to compare with.
+    bool isSamePitch(const NoteInfoPtr& src) const;
+
     /// @brief Returns true if the @p src and this have the same pitch information.
     /// It is only meaningful when this and src are in the same key.
-    /// @todo Handle different keys.
     /// @param src the value to compare with.
     bool isSamePitchValues(const NoteInfoPtr& src) const;
 
