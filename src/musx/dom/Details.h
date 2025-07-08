@@ -1000,8 +1000,8 @@ public:
     {
     }
 
-    NoteNumber noteId{};            ///< The ID of the note being assigned a code.
-    PercussionNoteType noteCode{};  ///< The percussion note code. Use this to search the incis of the percussion map for the specific note.
+    NoteNumber noteId{};                ///< The ID of the note being assigned a code.
+    PercussionNoteTypeId noteCode{};    ///< The percussion note code. Use this to search the incis of the percussion map for the specific note.
 
     NoteNumber getNoteId() const override { return noteId; }
 

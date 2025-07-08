@@ -32,6 +32,7 @@
 #include "musx/util/EnigmaString.h"
 #include "musx/util/Logger.h"
 #include "musx/util/Fraction.h"
+#include "musx/dom/PercussionNoteType.h"
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
@@ -1675,19 +1676,33 @@ public:
     explicit PercussionNoteInfo(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
         : OthersBase(document, partId, shareMode, cmper, inci) {}
 
-    PercussionNoteType percNoteType{};  ///< The percussion note type ID. Compare this with the value in @ref details::PercussionNoteCode.
-    int staffPosition{};                ///< The fixed vertical staff position of the note. (xml node is `<harmLev>`.)
-                                        ///< This value is the staff position relative to the first ledger line below the staff.
-                                        ///< The logic behind this choice is that it is the middle-C position on a treble clef, but
-                                        ///< middle-C is not relevant to the note's pitch or value. Use #calcStaffReferencePosition to get the
-                                        ///< staff position relative to the staff's reference line, which is often a more useful value.
-    char32_t closedNotehead{};          ///< Codepoint for closed notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
-    char32_t halfNotehead{};            ///< Codepoint for half notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
-    char32_t wholeNotehead{};           ///< Codepoint for whole notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
-    char32_t dwholeNotehead{};          ///< Codepoint for double whole notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    PercussionNoteTypeId percNoteType{};    ///< The percussion note type ID. Compare this with the value in @ref details::PercussionNoteCode.
+    int staffPosition{};                    ///< The fixed vertical staff position of the note. (xml node is `<harmLev>`.)
+                                            ///< This value is the staff position relative to the first ledger line below the staff.
+                                            ///< The logic behind this choice is that it is the middle-C position on a treble clef, but
+                                            ///< middle-C is not relevant to the note's pitch or value. Use #calcStaffReferencePosition to get the
+                                            ///< staff position relative to the staff's reference line, which is often a more useful value.
+    char32_t closedNotehead{};              ///< Codepoint for closed notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t halfNotehead{};                ///< Codepoint for half notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t wholeNotehead{};               ///< Codepoint for whole notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t dwholeNotehead{};              ///< Codepoint for double whole notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
 
     /// @brief Calculates the fixed staff position for this percussion note relative to a staff's reference line.
     int calcStaffReferencePosition() const { return staffPosition - 10; }
+
+    /// @brief Gets the base PercussionNoteTypeId.
+    /// @return the base percussion note type id (used to look it up in the @ref percussion::percussionNoteTypeMap.)
+    PercussionNoteTypeId getBaseNoteTypeId() const
+    { return percNoteType & 0xfff; }
+
+    /// @brief Gets the orderId
+    /// @return value used to distinguish different copies of the same note id.
+    unsigned getNoteTypeOrderId() const
+    { return(percNoteType & 0xf000) >> 12; }
+    
+    /// @brief Gets a reference to the PercussionNoteType record for this note id.
+    /// @return Record from @ref percussion::percussionNoteTypeMap.
+    const percussion::PercussionNoteType& getNoteType() const;
 
     constexpr static std::string_view XmlNodeName = "percussionNoteInfo"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PercussionNoteInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

@@ -753,7 +753,7 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(PercussionNoteInfo, {
-    {"percNoteType",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->percNoteType = e->getTextAs<PercussionNoteType>(); }},
+    {"percNoteType",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->percNoteType = e->getTextAs<PercussionNoteTypeId>(); }},
     {"harmLev",         [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->staffPosition = e->getTextAs<int>(); }},
     {"closedNotehead",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->closedNotehead = e->getTextAs<char32_t>(); }},
     {"halfNotehead",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->halfNotehead = e->getTextAs<char32_t>(); }},
