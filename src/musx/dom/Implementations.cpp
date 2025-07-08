@@ -2564,6 +2564,24 @@ bool NoteInfoPtr::calcIsEnharmonicRespell() const
     return false;
 }
 
+bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    auto thisPercInfo = calcPercussionNoteInfo();
+    auto srcPercInfo = src.calcPercussionNoteInfo();
+    if (thisPercInfo || srcPercInfo) {
+        if (!thisPercInfo || !srcPercInfo) {
+            return false;
+        }
+        return thisPercInfo->percNoteType == srcPercInfo->percNoteType
+            && thisPercInfo->staffPosition == srcPercInfo->staffPosition;
+    }
+    return (*this)->harmLev == src->harmLev
+        && (*this)->harmAlt == src->harmAlt;
+}
+
 // *****************************
 // ***** PageFormatOptions *****
 // *****************************

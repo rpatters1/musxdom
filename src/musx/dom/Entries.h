@@ -946,17 +946,11 @@ public:
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
 
 private:
-    /// @brief Returns true if the @p src and this have the same level and alteration.
+    /// @brief Returns true if the @p src and this have the same pitch information.
     /// It is only meaningful when this and src are in the same key.
+    /// @todo Handle different keys.
     /// @param src the value to compare with.
-    bool isSamePitchValues(const NoteInfoPtr& src) const
-    {
-        if (!*this || !src) {
-            return false;
-        }
-        return (*this)->harmLev == src->harmLev
-            && (*this)->harmAlt == src->harmAlt;
-    }
+    bool isSamePitchValues(const NoteInfoPtr& src) const;
 
     EntryInfoPtr m_entry;
     size_t m_noteIndex;
