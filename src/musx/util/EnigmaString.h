@@ -318,6 +318,10 @@ public:
      * inserts (e.g., ^value(...) or ^page(...)) are passed through to the callback for higher-level
      * processing or markup.
      *
+     * The ^date, ^time, and ^fdate inserts default to POSIX functions for formatting date and time on macOS and Linux.
+     * On Windows they default to WinAPI. If you need finer control over date or time formatting, you should handle
+     * these yourself.
+     *
      * @param document The document from which the enigma string is taken.
      * @param rawText The full input Enigma string to parse.
      * @param onText The handler for when font styling changes.

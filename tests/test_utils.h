@@ -28,7 +28,10 @@
 
 namespace musxtest {
 
-inline std::string pathString(const std::filesystem::path& path) {
+inline std::ostringstream g_endMessages;
+
+inline std::string pathString(const std::filesystem::path& path)
+{
     auto s = path.u8string();
     return std::string(reinterpret_cast<const char*>(s.data()), s.size());
 }
@@ -49,5 +52,12 @@ inline std::filesystem::path getInputPath()
 
 // STOOPID Google test can't ASSERT out of a non-void function
 void readFile(const std::filesystem::path& filePath, std::vector<char>& contents);
+
+inline bool stringHasDigit(const std::string& s)
+{
+    return std::find_if(s.begin(), s.end(),
+                        [](unsigned char c){ return std::isdigit(c); })
+           != s.end();
+}
 
 } // namespace musxtext

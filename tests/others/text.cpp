@@ -29,6 +29,64 @@ using namespace musx::dom;
 constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
+  <header>
+    <headerData>
+      <wordOrder>lo-endian</wordOrder>
+      <textEncoding>Mac</textEncoding>
+      <created>
+        <year>2025</year>
+        <month>6</month>
+        <day>30</day>
+        <modifiedBy/>
+        <enigmaVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </enigmaVersion>
+        <application>FIN</application>
+        <platform>MAC</platform>
+        <appVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <maint>1</maint>
+          <devStatus>dev</devStatus>
+          <build>146</build>
+        </appVersion>
+        <fileVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </fileVersion>
+        <appRegion>US</appRegion>
+      </created>
+      <modified>
+        <year>2025</year>
+        <month>6</month>
+        <day>30</day>
+        <modifiedBy/>
+        <enigmaVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </enigmaVersion>
+        <application>FIN</application>
+        <platform>MAC</platform>
+        <appVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <maint>1</maint>
+          <devStatus>dev</devStatus>
+          <build>146</build>
+        </appVersion>
+        <fileVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </fileVersion>
+        <appRegion>US</appRegion>
+      </modified>
+    </headerData>
+  </header>
   <others>
     <fontName cmper="0">
       <charsetBank>Mac</charsetBank>
@@ -218,7 +276,7 @@ constexpr static musxtest::string_view xml = R"xml(
     <fileInfo type="composer">L. BEETHOVEN</fileInfo>
     <fileInfo type="copyright">1823</fileInfo>
     <fileInfo type="description">GRM–####</fileInfo>
-    <fileInfo type="lyricist">Lyricist</fileInfo>
+    <fileInfo type="lyricist">Johnny Göthe</fileInfo>
     <fileInfo type="arranger">Ferrucio Busoni</fileInfo>
     <fileInfo type="subtitle">Subtitle</fileInfo>
     <verse number="1">^fontid(23)^size(12)^nfx(0)The first verse.</verse>
@@ -404,7 +462,7 @@ TEST(TextsTest, FileInfoText)
     // Test Lyricist
     fileInfo = texts->get<FileInfoText>(Cmper(Type::Lyricist));
     ASSERT_TRUE(fileInfo);
-    EXPECT_EQ(fileInfo->text, "Lyricist");
+    EXPECT_EQ(fileInfo->text, "Johnny Göthe");
     EXPECT_EQ(fileInfo->getTextType(), Type::Lyricist);
 
     // Test Arranger
@@ -798,6 +856,40 @@ TEST(TextsTest, ParseEnigmaWithAccidentals)
     output.clear();
     EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^arranger()", accumulateChunk, EnigmaString::AccidentalStyle::Unicode);
     EXPECT_EQ(output, "♯♮♭Ferrucio Busoni");
+}
+
+TEST(TextsTest, ParseEnigmaInsertsBaseLevel)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    std::string output;
+    auto accumulateChunk = [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+        output += text;
+        return true;
+    };
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^title() ^subtitle() ^cprsym()^copyright()", accumulateChunk);
+    EXPECT_EQ(output, "My Piece Subtitle @1823");
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^composer() ^arranger() ^lyricist() ^description()", accumulateChunk);
+    EXPECT_EQ(output, "L. BEETHOVEN Ferrucio Busoni Johnny Göthe GRM–####");
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^date(0) | ^date(1) | ^date(2) | ^time(0) | ^time(1)", accumulateChunk);
+    EXPECT_TRUE(musxtest::stringHasDigit(output));
+    musxtest::g_endMessages << "parsed enigma dates/times: " << output << std::endl;
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "^fdate(0) | ^fdate(1) | ^fdate(2)", accumulateChunk);
+    EXPECT_TRUE(musxtest::stringHasDigit(output));
+    EXPECT_TRUE(output.contains("2025"));
+    musxtest::g_endMessages << "parsed file dates: " << output << std::endl;
 }
 
 TEST(TextsTest, ParseEnigmaFontInfo)
