@@ -162,7 +162,6 @@ struct DateTime
      */
     inline static std::string formatDate(std::time_t t, DateFormatStyle style)
     {
-        char buf[128];
         struct tm tm;
 
         localtime_r(&t, &tm);
