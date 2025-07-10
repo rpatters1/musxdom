@@ -887,7 +887,6 @@ TEST(TextsTest, ParseEnigmaInsertsBaseLevel)
 
     output.clear();
     EnigmaString::parseEnigmaText(doc, "^fdate(0) | ^fdate(1) | ^fdate(2)", accumulateChunk);
-    EXPECT_TRUE(musxtest::stringHasDigit(output));
     EXPECT_TRUE(output.contains("2025"));
     musxtest::g_endMessages << "parsed file dates: " << output << std::endl;
 }
