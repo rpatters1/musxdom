@@ -326,50 +326,61 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
             continue;
         }
 
-        if (components.size() == 1) {
-            auto insertIt = acciInsertMap.find(components[0]);
-            if (insertIt != acciInsertMap.end()) {
-                switch (options.insertHandling) {
-                    case AccidentalInsertHandling::Substitute:
-                    {
-                        const auto& accidentalMap = getEnigmaAccidentalMap(options.substitutionStyle);
-                        auto it = accidentalMap.find(insertIt->second);
-                        if (it != accidentalMap.end()) {
-                            addToBuf(it->second);
-                            continue;
-                        }
-                        break;
-                    }
-                    case AccidentalInsertHandling::ParseToGlyphs:
-                    {
-                        if (const auto textOptions = document->getOptions()->get<options::TextOptions>()) {
-                            const auto& acciDataIt = textOptions->symbolInserts.find(insertIt->second);
-                            if (acciDataIt != textOptions->symbolInserts.end()) {
-                                EnigmaStyles acciStyles(document);
-                                const auto& insertInfo = acciDataIt->second;
-                                *acciStyles.font.get() = *insertInfo->symFont.get();
-                                acciStyles.font->fontSize = int(std::lround(double(insertInfo->symFont->fontSize) * double(currentStyles.font->fontSize) / 100.0));
-                                acciStyles.baseline = int(std::lround((double(insertInfo->baselineShiftPerc) * double(currentStyles.font->fontSize)) * (EVPU_PER_POINT / 100.0)));
-                                acciStyles.tracking = insertInfo->trackingBefore;
-                                if (!processChunk(currentStyles)) {
-                                    break;
-                                }
-                                textBuffer.emplace(toU8(insertInfo->symChar));
-                                if (!processChunk(acciStyles)) {
-                                    break;
-                                }
-                            } else {
-                                MUSX_INTEGRITY_ERROR("Document contains no accidental insert options for " + components[0] + ".");
-                            }
-                        } else {
-                            MUSX_INTEGRITY_ERROR("Document contains no text options.");
-                        }
+        auto insertIt = acciInsertMap.find(components[0]);
+        if (insertIt != acciInsertMap.end()) {
+            switch (options.insertHandling) {
+                case AccidentalInsertHandling::Substitute:
+                {
+                    const auto& accidentalMap = getEnigmaAccidentalMap(options.substitutionStyle);
+                    auto it = accidentalMap.find(insertIt->second);
+                    if (it != accidentalMap.end()) {
+                        addToBuf(it->second);
                         continue;
                     }
-                    default: break;
+                    break;
                 }
+                case AccidentalInsertHandling::ParseToGlyphs:
+                {
+                    if (const auto textOptions = document->getOptions()->get<options::TextOptions>()) {
+                        const auto& acciDataIt = textOptions->symbolInserts.find(insertIt->second);
+                        if (acciDataIt != textOptions->symbolInserts.end()) {
+                            EnigmaStyles acciStyles(document);
+                            const auto& insertInfo = acciDataIt->second;
+                            *acciStyles.font.get() = *insertInfo->symFont.get();
+                            acciStyles.font->fontSize = int(std::lround(double(insertInfo->symFont->fontSize) * double(currentStyles.font->fontSize) / 100.0));
+                            acciStyles.baseline = int(std::lround((double(insertInfo->baselineShiftPerc) * double(currentStyles.font->fontSize)) * (EVPU_PER_POINT / 100.0)));
+                            acciStyles.tracking = insertInfo->trackingBefore;
+                            if (!processChunk(currentStyles)) {
+                                break;
+                            }
+                            textBuffer.emplace(toU8(insertInfo->symChar));
+                            if (!processChunk(acciStyles)) {
+                                break;
+                            }
+                        } else {
+                            MUSX_INTEGRITY_ERROR("Document contains no accidental insert options for " + components[0] + ".");
+                        }
+                    } else {
+                        MUSX_INTEGRITY_ERROR("Document contains no text options.");
+                    }
+                    continue;
+                }
+                default: break;
             }
         }
+
+        auto processDate = [&](std::time_t time) -> std::string {
+            util::DateTime::DateFormatStyle style = util::DateTime::DateFormatStyle::Short;
+            if (components.size() > 1) {
+                int i = std::stoi(components[1]);
+                if (i >= 0 && i <= 2) {
+                    style = util::DateTime::DateFormatStyle(i);
+                } else {
+                    MUSX_INTEGRITY_ERROR("Enigma string encounted tag " + components[0] + " with input value " + components[1]);
+                }
+            }
+            return util::DateTime::formatDate(time, style);
+        };
 
         if (components[0] == "arranger") {
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Arranger))) {
@@ -379,6 +390,44 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Composer))) {
                 addToBuf(trimTags(textInsert->text));
             }
+        } else if (components[0] == "copyright") {
+            if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Copyright))) {
+                addToBuf(trimTags(textInsert->text));
+            }
+        } else if (components[0] == "cprsym") {
+            addToBuf("@");
+        } else if (components[0] == "date") {
+            addToBuf(processDate(std::time(nullptr)));
+        } else if (components[0] == "description") {
+            if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Description))) {
+                addToBuf(trimTags(textInsert->text));
+            }
+        } else if (components[0] == "fdate") {
+            const auto& modified = document->getHeader()->modified;
+            std::time_t fdate = util::DateTime::makeTimeT(modified.year, modified.month, modified.day);
+            addToBuf(processDate(fdate));
+        } else if (components[0] == "lyricist") {
+            if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Lyricist))) {
+                addToBuf(trimTags(textInsert->text));
+            }
+        } else if (components[0] == "subtitle") {
+            if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Subtitle))) {
+                addToBuf(trimTags(textInsert->text));
+            }
+        } else if (components[0] == "time") {
+            bool includeSeconds = false;
+            if (components.size() > 1) {
+                includeSeconds = bool(std::stoi(components[1]));
+            }
+            addToBuf(util::DateTime::formatTime(std::time(nullptr), includeSeconds));
+        } else if (components[0] == "title") {
+            if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Title))) {
+                addToBuf(trimTags(textInsert->text));
+            }
+        } else if (components[0] == "totpages") {
+            // get score pages at this level. This value is overridden in the TextBlock CommandCallback lamda.
+            auto pages = document->getOthers()->getArray<others::Page>(SCORE_PARTID); // part Id overridden in TextBlock parser
+            addToBuf(std::to_string(pages.size()));
         } else {
             // fall-thru causes unhandled command to be stripped or inserted, based on configuration options
             if (!options.stripUnknownTags) {

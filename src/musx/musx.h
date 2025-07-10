@@ -68,6 +68,7 @@
 #include "music_theory/music_theory.hpp"
 
 #include "util/Fraction.h"
+#include "util/DateTimeFormat.h"
 #include "util/EnigmaString.h"
 #include "util/Logger.h"
 #include "xml/XmlInterface.h"

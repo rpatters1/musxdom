@@ -1691,7 +1691,7 @@ public:
     int calcStaffReferencePosition() const { return staffPosition - 10; }
 
     /// @brief Gets the base PercussionNoteTypeId.
-    /// @return the base percussion note type id (used to look it up in the @ref percussion::percussionNoteTypeMap.)
+    /// @return the base percussion note type id (used to look it up in the @ref dom::percussion::percussionNoteTypeMap.)
     PercussionNoteTypeId getBaseNoteTypeId() const
     { return percNoteType & 0xfff; }
 
@@ -1701,7 +1701,7 @@ public:
     { return(percNoteType & 0xf000) >> 12; }
     
     /// @brief Gets a reference to the PercussionNoteType record for this note id.
-    /// @return Record from @ref percussion::percussionNoteTypeMap.
+    /// @return Record from @ref dom::percussion::percussionNoteTypeMap.
     const percussion::PercussionNoteType& getNoteType() const;
 
     constexpr static std::string_view XmlNodeName = "percussionNoteInfo"; ///< The XML node name for this type.
