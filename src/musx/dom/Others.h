@@ -2850,10 +2850,10 @@ public:
     /// @brief Gets the raw text block (from the `texts` pool) based on #textType.
     std::shared_ptr<TextsBase> getRawTextBlock() const;
 
-    /** @brief return display text with Enigma tags removed */
+    /** @brief return displayable text with Enigma tags removed */
     std::string getText(bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
-    /** @brief return display text with Enigma tags removed */
+    /** @brief return displayable text with Enigma tags removed */
     static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii);
 

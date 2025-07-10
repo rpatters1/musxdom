@@ -3808,11 +3808,7 @@ std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::Accide
 {
     auto block = getRawTextBlock();
     if (!block) return {};
-    auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
-    if (trimTags) {
-        return musx::util::EnigmaString::trimTags(retval);
-    }
-    return retval;
+    return block->getText(trimTags, accidentalStyle);
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
@@ -3837,6 +3833,22 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 {
     if (!hasEnclosure) return nullptr;
     return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getPartId(), getCmper());
+}
+
+// *********************
+// ***** TextsBase *****
+// *********************
+
+std::string TextsBase::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
+    options.stripUnknownTags = trimTags;
+    std::string result;
+    util::EnigmaString::parseEnigmaText(getDocument(), text, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+        result += text;
+        return true;
+    }, options);
+    return result;
 }
 
 // *************************

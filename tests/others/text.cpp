@@ -219,7 +219,7 @@ constexpr static musxtest::string_view xml = R"xml(
     <fileInfo type="copyright">1823</fileInfo>
     <fileInfo type="description">GRM–####</fileInfo>
     <fileInfo type="lyricist">Lyricist</fileInfo>
-    <fileInfo type="arranger">Arranger</fileInfo>
+    <fileInfo type="arranger">Ferrucio Busoni</fileInfo>
     <fileInfo type="subtitle">Subtitle</fileInfo>
     <verse number="1">^fontid(23)^size(12)^nfx(0)The first verse.</verse>
     <chorus number="1">^fontid(11)^size(12)^nfx(0)The first chorus.</chorus>
@@ -410,7 +410,7 @@ TEST(TextsTest, FileInfoText)
     // Test Arranger
     fileInfo = texts->get<FileInfoText>(Cmper(Type::Arranger));
     ASSERT_TRUE(fileInfo);
-    EXPECT_EQ(fileInfo->text, "Arranger");
+    EXPECT_EQ(fileInfo->text, "Ferrucio Busoni");
     EXPECT_EQ(fileInfo->getTextType(), Type::Arranger);
 
     // Test Subtitle
@@ -599,13 +599,13 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
         return true;
     };
 
-    auto stripAllCommands = [](const std::vector<std::string>&) -> std::optional<std::string> {
-        return "";
+    auto handleNothing = [](const std::vector<std::string>&) -> std::optional<std::string> {
+        return std::nullopt;
     };
 
     // Test 1: Escaped caret
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "A ^^ B", recordChunk, stripAllCommands);
+    EnigmaString::parseEnigmaText(doc, "A ^^ B", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected1 = {
         {"TEXT", "A ^ B"}
     };
@@ -613,12 +613,9 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 2: Unhandled command dumped raw
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk,
-        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
-            if (parsed[0] == "foo") return "^foo(" + parsed[1] + ")";
-            return std::nullopt;
-        }
-    );
+    EnigmaString::EnigmaParsingOptions options;
+    options.stripUnknownTags = false;
+    EnigmaString::parseEnigmaText(doc, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk, handleNothing, options);
     std::vector<std::pair<std::string, std::string>> expected2 = {
         {"TEXT", "X "},
         {"TEXT", "^foo(bar)"},
@@ -641,35 +638,62 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 4: Invalid command → literal caret
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "Broken ^ command", recordChunk, stripAllCommands);
+    EnigmaString::parseEnigmaText(doc, "Broken ^ command", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected4 = {
         {"TEXT", "Broken ^ command"}
     };
     EXPECT_EQ(output, expected4);
 
-    // Test 5: Unhandled ^flat command (returns empty std::nullopt)
+    // Test 5: Suppress command (returns empty std::nullopt)
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "Hi ^flat() Bye", recordChunk, stripAllCommands);
+    EnigmaString::parseEnigmaText(doc, "Hi ^suppress Bye", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected5 = {
         {"TEXT", "Hi  Bye"},
     };
     EXPECT_EQ(output, expected5);
+
+    // Test 6: Suppress valid command ^flat
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, "Hi ^flat() Bye", recordChunk,
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "flat") return "";
+            return std::nullopt;
+        }
+    );
+    std::vector<std::pair<std::string, std::string>> expected6 = {
+        {"TEXT", "Hi  Bye"},
+    };
+    EXPECT_EQ(output, expected6);
 }
 
 TEST(TextsTest, EnigmaAccidentalSubstitution)
 {
     using EnigmaString = musx::util::EnigmaString;
-    auto result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()"); //ascii default
-    EXPECT_EQ(result, "^font(New York)#b^composer()");
-    result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()", EnigmaString::AccidentalStyle::Smufl);
-    std::string text = "^font(New York)" 
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+
+    auto replaceAccidentalTags = [&](const std::string& text, EnigmaString::AccidentalStyle accidentalStyle = EnigmaString::AccidentalStyle::Ascii) -> std::string {
+        std::string result;
+        EnigmaString::EnigmaParsingOptions options(accidentalStyle);
+        options.stripUnknownTags = false;
+        EnigmaString::parseEnigmaText(doc, text, [&](const std::string& chunk, const musx::util::EnigmaStyles&) -> bool {
+            result += chunk;
+            return true;
+        }, options);
+        return result;
+    };
+
+    auto result = replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^^composer()"); //ascii default
+    EXPECT_EQ(result, "#b^composer()");
+    result = replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^^composer()", EnigmaString::AccidentalStyle::Smufl);
+    std::string text = "" 
                     + EnigmaString::fromU8(u8"\uE262")  // SMuFL sharp
                     + EnigmaString::fromU8(u8"\uE261")  // SMuFL natural
                     + EnigmaString::fromU8(u8"\uE260")  // SMuFL flat
                     + "^composer()";
     EXPECT_EQ(result, text);
-    result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()", EnigmaString::AccidentalStyle::Unicode);
-    EXPECT_EQ(result, "^font(New York)♯♮♭^composer()");
+    result = replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^^composer()", EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_EQ(result, "♯♮♭^composer()");
     result = EnigmaString::trimTags(result);
     EXPECT_EQ(result, "♯♮♭");
     result = EnigmaString::trimTags("^font(New York)^sharp()The composer tag is ^^composer()");
@@ -770,10 +794,10 @@ TEST(TextsTest, ParseEnigmaWithAccidentals)
 
     output.clear();
     EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Ascii);
-    EXPECT_EQ(output, "#b");
+    EXPECT_EQ(output, "#bL. BEETHOVEN");
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Unicode);
-    EXPECT_EQ(output, "♯♮♭");
+    EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^arranger()", accumulateChunk, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_EQ(output, "♯♮♭Ferrucio Busoni");
 }
 
 TEST(TextsTest, ParseEnigmaFontInfo)

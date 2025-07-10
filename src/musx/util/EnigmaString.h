@@ -250,6 +250,11 @@ public:
          * Defaults to Unicode substitution.
          */
         AccidentalStyle substitutionStyle;
+
+        /**
+         * @brief Specifies whether to strip unknown tags or dump them into the output string.
+        */
+        bool stripUnknownTags = true;
     };
 
     /** @brief Returns true if the enigma string starts with a font insert. */
@@ -347,14 +352,8 @@ public:
      */
     static bool parseStyleCommand(const std::string& styleTag, EnigmaStyles& styles, size_t* parsedLength = nullptr);
 
-    /** @brief Trims all font tags from an enigma string. */
-    static std::string trimFontTags(const std::string& input);
-
     /** @brief Trims all enigma tags from an enigma string, leaving just the plain text. */
     static std::string trimTags(const std::string& input);
-
-    /** @brief Replaces ^flat() and ^sharp() inserts with 'b' and '#'. */
-    static std::string replaceAccidentalTags(const std::string& input, AccidentalStyle style = AccidentalStyle::Ascii);
 };
 
 } // namespace util

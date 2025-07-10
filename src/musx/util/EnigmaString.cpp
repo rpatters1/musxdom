@@ -371,31 +371,26 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
             }
         }
 
-        /// @todo other commands
-
-        // fall-thru causes unhandled command to be stripped.
+        if (components[0] == "arranger") {
+            if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Arranger))) {
+                addToBuf(trimTags(textInsert->text));
+            }
+        } else if (components[0] == "composer") {
+            if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Composer))) {
+                addToBuf(trimTags(textInsert->text));
+            }
+        } else {
+            // fall-thru causes unhandled command to be stripped or inserted, based on configuration options
+            if (!options.stripUnknownTags) {
+                addToBuf(fullCommand);
+            }
+        }
     }
 
     // Emit any remaining buffered text
     if (textBuffer.has_value()) {
         onText(textBuffer.value(), currentStyles);
     }
-}
-
-std::string EnigmaString::trimFontTags(const std::string& input)
-{
-    std::string output;
-    std::regex fontTagRegex = []() {
-        std::string pattern = R"(\^(?:)";
-        for (const auto& command : kEnigmaFontCommands) {
-            if (pattern.size() > 6) pattern += "|"; // Add '|' separator between commands
-            pattern += std::regex_replace(command.substr(1), std::regex(R"([\^])"), R"(\^)"); // Escape '^' in each command
-        }
-        pattern += R"()\([^)]*\))"; // Match the enclosing parenthesis and their content
-        return std::regex(pattern);
-    }();
-    output = std::regex_replace(input, fontTagRegex, "");
-    return output;
 }
 
 std::string EnigmaString::trimTags(const std::string& input)
@@ -430,45 +425,6 @@ std::string EnigmaString::trimTags(const std::string& input)
             output += input[pos++];
         }
     }
-    return output;
-}
-
-std::string EnigmaString::replaceAccidentalTags(const std::string& input, AccidentalStyle style)
-{
-    // Define regex for ^flat() and ^sharp()
-    std::regex accidentalTagRegex(R"(\^(flat|sharp|natural)\(\))");
-
-    std::string output;
-    std::sregex_iterator currentMatch(input.begin(), input.end(), accidentalTagRegex);
-    std::sregex_iterator endMatch;
-
-    std::string::size_type lastPos = 0;
-
-    // Iterate through all matches
-    for (; currentMatch != endMatch; ++currentMatch) {
-        const std::smatch& match = *currentMatch;
-
-        // Append the portion of the string before the match
-        output.append(input, lastPos, match.position() - lastPos);
-
-        // Replace the match based on the captured group
-        const auto& accidental = match[1].str();
-        const auto& accidentalMap = getEnigmaAccidentalMap(style);
-        const auto insertIt = acciInsertMap.find(accidental);
-        if (insertIt != acciInsertMap.end()) {
-            const auto it = accidentalMap.find(insertIt->second);
-            if (it != accidentalMap.end()) {
-                output += it->second;  // Append the replacement character
-            }
-        }
-
-        // Update last processed position
-        lastPos = match.position() + match.length();
-    }
-
-    // Append the remainder of the input string
-    output.append(input, lastPos, input.size() - lastPos);
-
     return output;
 }
 
