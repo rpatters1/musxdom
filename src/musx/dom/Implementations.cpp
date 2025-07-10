@@ -133,11 +133,11 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
         rightY += dyR;
 
         if constexpr (isDownstem) {
-            extremeLeft  = std::max(extremeLeft, leftY);
-            extremeRight = std::max(extremeRight, rightY);
+            extremeLeft  = (std::max)(extremeLeft, leftY);
+            extremeRight = (std::max)(extremeRight, rightY);
         } else {
-            extremeLeft  = std::min(extremeLeft, leftY);
-            extremeRight = std::min(extremeRight, rightY);
+            extremeLeft  = (std::min)(extremeLeft, leftY);
+            extremeRight = (std::min)(extremeRight, rightY);
         }
     }
 
@@ -893,7 +893,7 @@ unsigned EntryInfoPtr::calcLowestBeamStub() const
 {
     if (unsigned lowestBeamStart = calcLowestBeamStart()) {
         if (unsigned lowestBeamEnd = calcLowestBeamEnd()) {
-            return std::max(lowestBeamStart, lowestBeamEnd);
+            return (std::max)(lowestBeamStart, lowestBeamEnd);
         }
     }
     return 0;
@@ -2745,7 +2745,7 @@ std::string percussion::PercussionNoteType::createName(unsigned orderId) const
 
 int others::RepeatEndingStart::calcEndingLength() const
 {
-    int maxLength = std::numeric_limits<int>::max();
+    int maxLength = (std::numeric_limits<int>::max)();
 
     switch (jumpAction) {
         case RepeatActionType::JumpAuto:
@@ -3247,7 +3247,7 @@ ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool
             return gfhold.calcClefIndexAt(position);
         }
         // after the first iteration, we are looking for the clef at the end of the measure
-        position = std::numeric_limits<Edu>::max();
+        position = (std::numeric_limits<Edu>::max)();
     }
     return defaultClef;
 }
@@ -3899,7 +3899,7 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
     if (tops.size() != bots.size()) {
         MUSX_INTEGRITY_ERROR("Composite top group for time signature does not match composite bottom group.");
     }
-    for (size_t x = 0; x < std::min(tops.size(), bots.size()); x++) {
+    for (size_t x = 0; x < (std::min)(tops.size(), bots.size()); x++) {
         components.push_back({ tops[x], bots[x] });
     }
 }

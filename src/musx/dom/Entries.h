@@ -606,7 +606,7 @@ public:
 
         /// @brief Constructor
         TupletInfo(const std::weak_ptr<const EntryFrame>& parent, const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start, bool forVoice2)
-            : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
+            : tuplet(tup), startIndex(index), endIndex((std::numeric_limits<size_t>::max)()),
                 startDura(start), endDura(-1), voice2(forVoice2), m_parent(parent)
         {}
 
