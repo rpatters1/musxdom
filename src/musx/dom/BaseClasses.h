@@ -448,7 +448,7 @@ public:
     std::shared_ptr<FontInfo> parseFirstFontInfo() const;
 
     /** @brief return displayable text with Enigma tags removed */
-    std::string getText(bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+    std::string getText(Cmper forPartId, bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
 private:
     Cmper m_textNumber;             ///< Common attribute: cmper (key value).

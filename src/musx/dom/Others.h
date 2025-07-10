@@ -1691,7 +1691,7 @@ public:
     int calcStaffReferencePosition() const { return staffPosition - 10; }
 
     /// @brief Gets the base PercussionNoteTypeId.
-    /// @return the base percussion note type id (used to look it up in the @ref dom::percussion::percussionNoteTypeMap.)
+    /// @return the base percussion note type id (used to look it up in the #percussion::percussionNoteTypeMap.)
     PercussionNoteTypeId getBaseNoteTypeId() const
     { return percNoteType & 0xfff; }
 
@@ -1701,7 +1701,7 @@ public:
     { return(percNoteType & 0xf000) >> 12; }
     
     /// @brief Gets a reference to the PercussionNoteType record for this note id.
-    /// @return Record from @ref dom::percussion::percussionNoteTypeMap.
+    /// @return Record from #percussion::percussionNoteTypeMap.
     const percussion::PercussionNoteType& getNoteType() const;
 
     constexpr static std::string_view XmlNodeName = "percussionNoteInfo"; ///< The XML node name for this type.
@@ -2358,11 +2358,11 @@ public:
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
     std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
 
-    /// @brief Returns the full staff name without Enigma tags
+    /// @brief Returns the full staff name without Enigma tags. If the full name contains part-specific tags (rare), they are inserted for the score.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
-    /// @brief Returns the abbreviated staff name without Enigma tags
+    /// @brief Returns the abbreviated staff name without Enigma tags. If the abbreviated name contains part-specific tags (rare), they are inserted for the score.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
@@ -2851,10 +2851,10 @@ public:
     std::shared_ptr<TextsBase> getRawTextBlock() const;
 
     /** @brief return displayable text with Enigma tags removed */
-    std::string getText(bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+    std::string getText(Cmper forPartId, bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /** @brief return displayable text with Enigma tags removed */
-    static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false,
+    static std::string getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii);
 
     bool requireAllFields() const override { return false; }

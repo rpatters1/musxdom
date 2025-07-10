@@ -84,7 +84,6 @@ struct DateTime
      *
      * @param t The time value to format.
      * @param style The desired date format style.
-     * @param localeName Currently ignored on POSIX; uses the current global locale.
      * @return A formatted date string, or an empty string on failure.
      */
     inline static std::string formatDate(std::time_t t, DateFormatStyle style)
@@ -159,7 +158,6 @@ struct DateTime
      *
      * @param t The time value to format.
      * @param style The desired date format style.
-     * @param localeName Currently ignored on POSIX; uses the current global locale.
      * @return A formatted date string, or an empty string on failure.
      */
     inline static std::string formatDate(std::time_t t, DateFormatStyle style)

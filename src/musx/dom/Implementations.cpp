@@ -2657,7 +2657,7 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     if (nameId) {
-        return TextBlock::getText(getDocument(), nameId, true, accidentalStyle); // true: trim tags
+        return TextBlock::getText(getDocument(), nameId, getCmper(), true, accidentalStyle); // true: trim tags
     }
     if (defaultNameStaff) {
         if (auto staff = getDocument()->getOthers()->get<others::Staff>(SCORE_PARTID, defaultNameStaff)) {
@@ -3131,12 +3131,12 @@ std::string others::Staff::addAutoNumbering(const std::string& plainName) const
 
 std::string others::Staff::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), fullNameTextId, true, accidentalStyle); // true: strip enigma tags
+    return others::TextBlock::getText(getDocument(), fullNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
 }
 
 std::string others::Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), abbrvNameTextId, true, accidentalStyle); // true: strip enigma tags
+    return others::TextBlock::getText(getDocument(), abbrvNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
 }
 
 std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffInstGroup() const
@@ -3594,12 +3594,14 @@ std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(co
 
 std::string details::StaffGroup::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), fullNameId, true, accidentalStyle); // true: strip enigma tags
+    // StaffGroup instances are always part-specific, so we can use getPartId here.
+    return others::TextBlock::getText(getDocument(), fullNameId, getPartId(), true, accidentalStyle); // true: strip enigma tags
 }
 
 std::string details::StaffGroup::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), abbrvNameId, true, accidentalStyle); // true: strip enigma tags
+    // StaffGroup instances are always part-specific, so we can use getPartId here.
+    return others::TextBlock::getText(getDocument(), abbrvNameId, getPartId(), true, accidentalStyle); // true: strip enigma tags
 }
 
 std::shared_ptr<others::MultiStaffInstrumentGroup> details::StaffGroup::getMultiStaffInstGroup() const
@@ -3782,7 +3784,7 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
         return nullptr;
     }
     std::shared_ptr<FontInfo> result;
-    util::EnigmaString::parseEnigmaText(getDocument(), this->text, [&](const std::string&, const util::EnigmaStyles& styles) {
+    util::EnigmaString::parseEnigmaText(getDocument(), SCORE_PARTID, text, [&](const std::string&, const util::EnigmaStyles& styles) {
         result = styles.font;
         return false;
     });
@@ -3804,18 +3806,18 @@ std::shared_ptr<TextsBase> others::TextBlock::getRawTextBlock() const
     }    
 }
 
-std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
+std::string others::TextBlock::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     auto block = getRawTextBlock();
     if (!block) return {};
-    return block->getText(trimTags, accidentalStyle);
+    return block->getText(forPartId, trimTags, accidentalStyle);
 }
 
-std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
+std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
 {
-    auto textBlock = document->getOthers()->get<others::TextBlock>(SCORE_PARTID, textId);
+    auto textBlock = document->getOthers()->get<others::TextBlock>(forPartId, textId);
     if (textBlock) {
-        return textBlock->getText(trimTags, accidentalStyle);
+        return textBlock->getText(forPartId, trimTags, accidentalStyle);
     }
     return {};
 }
@@ -3839,12 +3841,12 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 // ***** TextsBase *****
 // *********************
 
-std::string TextsBase::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
+std::string TextsBase::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
     options.stripUnknownTags = trimTags;
     std::string result;
-    util::EnigmaString::parseEnigmaText(getDocument(), text, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+    util::EnigmaString::parseEnigmaText(getDocument(), forPartId, text, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
         result += text;
         return true;
     }, options);

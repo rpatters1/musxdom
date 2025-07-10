@@ -663,7 +663,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 1: Escaped caret
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "A ^^ B", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "A ^^ B", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected1 = {
         {"TEXT", "A ^ B"}
     };
@@ -673,7 +673,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
     output.clear();
     EnigmaString::EnigmaParsingOptions options;
     options.stripUnknownTags = false;
-    EnigmaString::parseEnigmaText(doc, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk, handleNothing, options);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk, handleNothing, options);
     std::vector<std::pair<std::string, std::string>> expected2 = {
         {"TEXT", "X "},
         {"TEXT", "^foo(bar)"},
@@ -683,7 +683,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 3: Command is handled and replaced
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "Before ^page(2) after",
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Before ^page(2) after",
         recordChunk,
         [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
             if (parsed[0] == "page") return "3";
@@ -696,7 +696,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 4: Invalid command → literal caret
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "Broken ^ command", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Broken ^ command", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected4 = {
         {"TEXT", "Broken ^ command"}
     };
@@ -704,7 +704,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 5: Suppress command (returns empty std::nullopt)
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "Hi ^suppress Bye", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Hi ^suppress Bye", recordChunk, handleNothing);
     std::vector<std::pair<std::string, std::string>> expected5 = {
         {"TEXT", "Hi  Bye"},
     };
@@ -712,7 +712,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 6: Suppress valid command ^flat
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "Hi ^flat() Bye", recordChunk,
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Hi ^flat() Bye", recordChunk,
         [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
             if (parsed[0] == "flat") return "";
             return std::nullopt;
@@ -734,7 +734,7 @@ TEST(TextsTest, EnigmaAccidentalSubstitution)
         std::string result;
         EnigmaString::EnigmaParsingOptions options(accidentalStyle);
         options.stripUnknownTags = false;
-        EnigmaString::parseEnigmaText(doc, text, [&](const std::string& chunk, const musx::util::EnigmaStyles&) -> bool {
+        EnigmaString::parseEnigmaText(doc, SCORE_PARTID, text, [&](const std::string& chunk, const musx::util::EnigmaStyles&) -> bool {
             result += chunk;
             return true;
         }, options);
@@ -780,7 +780,7 @@ TEST(TextsTest, EnigmaAccidentalParsingMaestro)
     };
 
     size_t iterations = 0;
-    EnigmaString::parseEnigmaText(doc, blockText->text, [&](const std::string& chunk, const EnigmaStyles& styles) {
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, blockText->text, [&](const std::string& chunk, const EnigmaStyles& styles) {
         EXPECT_TRUE(iterations < expectedResults.size()) << "not enough expected results for interation " << iterations;
         if (iterations >= expectedResults.size()) {
             return false;
@@ -819,7 +819,7 @@ TEST(TextsTest, EnigmaAccidentalParsingFinaleMaestro)
     };
 
     size_t iterations = 0;
-    EnigmaString::parseEnigmaText(doc, blockText->text, [&](const std::string& chunk, const EnigmaStyles& styles) {
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, blockText->text, [&](const std::string& chunk, const EnigmaStyles& styles) {
         EXPECT_TRUE(iterations < expectedResults.size()) << "not enough expected results for iteration " << iterations;
         if (iterations >= expectedResults.size()) {
             return false;
@@ -851,10 +851,10 @@ TEST(TextsTest, ParseEnigmaWithAccidentals)
     };
 
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Ascii);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Ascii);
     EXPECT_EQ(output, "#bL. BEETHOVEN");
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^font(New York)^sharp()^natural()^flat()^arranger()", accumulateChunk, EnigmaString::AccidentalStyle::Unicode);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(New York)^sharp()^natural()^flat()^arranger()", accumulateChunk, EnigmaString::AccidentalStyle::Unicode);
     EXPECT_EQ(output, "♯♮♭Ferrucio Busoni");
 }
 
@@ -873,20 +873,20 @@ TEST(TextsTest, ParseEnigmaInsertsBaseLevel)
     };
 
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^title() ^subtitle() ^cprsym()^copyright()", accumulateChunk);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^title() ^subtitle() ^cprsym()^copyright()", accumulateChunk);
     EXPECT_EQ(output, "My Piece Subtitle @1823");
 
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^composer() ^arranger() ^lyricist() ^description()", accumulateChunk);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^composer() ^arranger() ^lyricist() ^description()", accumulateChunk);
     EXPECT_EQ(output, "L. BEETHOVEN Ferrucio Busoni Johnny Göthe GRM–####");
 
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^date(0) | ^date(1) | ^date(2) | ^time(0) | ^time(1)", accumulateChunk);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^date(0) | ^date(1) | ^date(2) | ^time(0) | ^time(1)", accumulateChunk);
     EXPECT_TRUE(musxtest::stringHasDigit(output));
     musxtest::g_endMessages << "parsed enigma dates/times: " << output << std::endl;
 
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^fdate(0) | ^fdate(1) | ^fdate(2)", accumulateChunk);
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fdate(0) | ^fdate(1) | ^fdate(2)", accumulateChunk);
     EXPECT_TRUE(output.contains("2025"));
     musxtest::g_endMessages << "parsed file dates: " << output << std::endl;
 }
@@ -900,7 +900,7 @@ TEST(TextsTest, ParseEnigmaFontInfo)
     ASSERT_TRUE(texts);
 
     int iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, "^font(Times)^size(13)^nfx(2)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(Times)^size(13)^nfx(2)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
         EXPECT_EQ(styles.font->fontId, 1);
         EXPECT_EQ(styles.font->fontSize, 13);
         EXPECT_EQ(styles.font->getEnigmaStyles(), 2);
@@ -913,7 +913,7 @@ TEST(TextsTest, ParseEnigmaFontInfo)
     EXPECT_EQ(iterationCount, 1) << "font should be reported even when no text";
 
     iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, "^fontid(2)^size(10)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fontid(2)^size(10)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
         if (iterationCount == 0) {
             EXPECT_EQ(styles.font->fontId, 2);
             EXPECT_EQ(styles.font->fontSize, 10);
@@ -935,7 +935,7 @@ TEST(TextsTest, ParseEnigmaFontInfo)
     EXPECT_EQ(iterationCount, 2) << "trailing font change should be reported";
 
     iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, "", [&](const std::string&, const musx::util::EnigmaStyles&) {
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "", [&](const std::string&, const musx::util::EnigmaStyles&) {
         iterationCount++;
         return true;
     });

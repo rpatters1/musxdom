@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     int result = RUN_ALL_TESTS();
     const auto endMessages = musxtest::g_endMessages.str();
     if (!endMessages.empty()) {
-        std::cout << std::endl << endMessages;
+        std::cout << std::endl << endMessages << std::endl;
     }
     return result;
 }

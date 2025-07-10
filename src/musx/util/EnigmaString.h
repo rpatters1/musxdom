@@ -149,7 +149,7 @@ public:
 
     /**
      * @brief Enumeration to specify the default handling for accidental insert commands. Like all Enigma commands,
-     * accidental insert commands are passed to the CommandCallback function if there is one. These options determine
+     * accidental insert commands are passed to the TextInsertCallback function if there is one. These options determine
      * how the insert is handled if the callback opts not to handle it.
      */
     enum class AccidentalInsertHandling
@@ -298,11 +298,11 @@ public:
     /// processed text.
     ///
     /// If the function returns std::nullopt, the Enigma parsing function inserts an appropriate
-    /// value. Therefore, CommandCallback functions should only process known commands and return std::nullopt
+    /// value. Therefore, TextInsertCallback functions should only process known commands and return std::nullopt
     /// for any others.
     ///
-    /// - parsedCommand: a vector containing the insert (without the leading '^') and all its parameters.
-    using CommandCallback = std::function<std::optional<std::string>(
+    /// - parsedCommand: a vector containing the insert (without the leading '^') and each of its parameters.
+    using TextInsertCallback = std::function<std::optional<std::string>(
         const std::vector<std::string>& parsedCommand
     )>;
 
@@ -325,23 +325,23 @@ public:
      * @param document The document from which the enigma string is taken.
      * @param rawText The full input Enigma string to parse.
      * @param onText The handler for when font styling changes.
-     * @param onCommand The handler to substitute text for an insert.
+     * @param onInsert The handler to substitute text for an insert.
      * @param options Parsing options.
      */
-    static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
-        const TextChunkCallback& onText, const CommandCallback& onCommand,
+    static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText,
+        const TextChunkCallback& onText, const TextInsertCallback& onInsert,
         const EnigmaParsingOptions& options = {});
 
     /// @brief Simplified version of #parseEnigmaText that strips unhandled inserts.
-    /// Useful in particular when the caller only cares about font information.
+    /// Useful in particular when the caller only cares about the raw text or the font information.
     /// @param document The document from which the enigma string is taken.
     /// @param rawText The full input Enigma string to parse.
     /// @param onText The handler for when font styling changes.
-    /// @param accidentalStyle If supplied, accidentals are replaced with characters according to the accidental style.
-    static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText, const TextChunkCallback& onText,
+    /// @param options Parsing options.
+    static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText, const TextChunkCallback& onText,
         const EnigmaParsingOptions& options = {})
     {
-        parseEnigmaText(document, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
+        parseEnigmaText(document, partId, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
             return std::nullopt; // take default values for all inserts
         }, options);
     }

@@ -249,8 +249,8 @@ bool EnigmaString::parseStyleCommand(const std::string& styleTag, EnigmaStyles& 
     return false;
 }
 
-void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText,
-    const TextChunkCallback& onText, const CommandCallback& onCommand, const EnigmaParsingOptions& options)
+void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& document, Cmper partId, const std::string& rawText,
+    const TextChunkCallback& onText, const TextInsertCallback& onInsert, const EnigmaParsingOptions& options)
 {
     auto currentStyles = EnigmaStyles(document);
     std::string remaining = rawText;
@@ -320,7 +320,7 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
         }
 
         // Send command to the handler and use that if the handler handles it.
-        std::optional<std::string> replacement = onCommand(components);
+        std::optional<std::string> replacement = onInsert(components);
         if (replacement.has_value()) {
             addToBuf(replacement.value());
             continue;
@@ -410,6 +410,11 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Lyricist))) {
                 addToBuf(trimTags(textInsert->text));
             }
+        } else if (components[0] == "partname") {
+            if (auto linkedPart = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
+                /// @todo sub-parse the linked part name
+                addToBuf(linkedPart->getName(options.substitutionStyle));
+            }
         } else if (components[0] == "subtitle") {
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Subtitle))) {
                 addToBuf(trimTags(textInsert->text));
@@ -425,8 +430,7 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
                 addToBuf(trimTags(textInsert->text));
             }
         } else if (components[0] == "totpages") {
-            // get score pages at this level. This value is overridden in the TextBlock CommandCallback lamda.
-            auto pages = document->getOthers()->getArray<others::Page>(SCORE_PARTID); // part Id overridden in TextBlock parser
+            auto pages = document->getOthers()->getArray<others::Page>(partId);
             addToBuf(std::to_string(pages.size()));
         } else {
             // fall-thru causes unhandled command to be stripped or inserted, based on configuration options
