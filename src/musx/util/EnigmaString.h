@@ -148,20 +148,12 @@ public:
     static std::string toU8(char32_t cp);
 
     /**
-     * @brief Enumeration to specify how accidental insert commands are handled during Enigma parsing.
-     *
-     * This enum determines whether accidental insert commands are passed through raw,
-     * parsed into font changes with character glyphs, or substituted with text representations.
+     * @brief Enumeration to specify the default handling for accidental insert commands. Like all Enigma commands,
+     * accidental insert commands are passed to the CommandCallback function if there is one. These options determine
+     * how the insert is handled if the callback opts not to handle it.
      */
     enum class AccidentalInsertHandling
     {
-        /**
-         * @brief Pass accidental insert commands through to the caller unmodified.
-         *
-         * Suitable when the caller wishes to handle these commands directly.
-         */
-        PassThrough,
-
         /**
          * @brief Parse accidental insert commands into glyph font changes and character strings.
          *
@@ -297,9 +289,13 @@ public:
     )>;
 
     /// @brief Iteration function type that the parser calls back when it encounters an Enigma text insert
-    /// that requires text subtitution. If the function returns std::nullopt, the insert is dumped as-is
-    /// into the processed text. If the function returns an empty string, the insert is stripped from the
+    /// that requires text subtitution. If the function returns an empty string, the insert is stripped from the
     /// processed text.
+    ///
+    /// If the function returns std::nullopt, the Enigma parsing function inserts an appropriate
+    /// value. Therefore, CommandCallback functions should only process known commands and return std::nullopt
+    /// for any others.
+    ///
     /// - parsedCommand: a vector containing the insert (without the leading '^') and all its parameters.
     using CommandCallback = std::function<std::optional<std::string>(
         const std::vector<std::string>& parsedCommand
@@ -334,13 +330,10 @@ public:
     /// @param onText The handler for when font styling changes.
     /// @param accidentalStyle If supplied, accidentals are replaced with characters according to the accidental style.
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, const std::string& rawText, const TextChunkCallback& onText,
-        const std::optional<AccidentalStyle>& accidentalStyle = std::nullopt)
+        const EnigmaParsingOptions& options = {})
     {
-        EnigmaParsingOptions options = accidentalStyle.has_value()
-                                     ? EnigmaParsingOptions(accidentalStyle.value())
-                                     : EnigmaParsingOptions();
         parseEnigmaText(document, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
-            return ""; // strip all unhandled inserts
+            return std::nullopt; // take default values for all inserts
         }, options);
     }
 

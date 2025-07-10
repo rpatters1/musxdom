@@ -53,29 +53,37 @@ std::string EnigmaString::toU8(char32_t cp)
     return result;
 }
 
-static const std::unordered_map<std::string, std::string>& getEnigmaAccidentalMap(EnigmaString::AccidentalStyle style)
+static const std::unordered_map<std::string_view, options::TextOptions::InsertSymbolType> acciInsertMap = {
+    { "flat",       options::TextOptions::InsertSymbolType::Flat },
+    { "natural",    options::TextOptions::InsertSymbolType::Natural },
+    { "sharp",      options::TextOptions::InsertSymbolType::Sharp },
+    { "dbflat",     options::TextOptions::InsertSymbolType::DblFlat },
+    { "dbsharp",    options::TextOptions::InsertSymbolType::DblSharp },
+};
+
+static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string>& getEnigmaAccidentalMap(EnigmaString::AccidentalStyle style)
 {
     // Maps for SMuFL and plain text accidentals
-    static const std::unordered_map<std::string, std::string> smuflAccidentals = {
-        {"flat", EnigmaString::fromU8(u8"\uE260")},     // SMuFL character for flat
-        {"sharp", EnigmaString::fromU8(u8"\uE262")},    // SMuFL character for sharp
-        {"natural", EnigmaString::fromU8(u8"\uE261")},  // SMuFL character for natural
-        {"dbflat", EnigmaString::fromU8(u8"\uE264")},   // SMuFL double flat
-        {"dbsharp", EnigmaString::fromU8(u8"\uE263")}   // SMuFL double sharp
+    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> smuflAccidentals = {
+        { options::TextOptions::InsertSymbolType::Flat,     EnigmaString::fromU8(u8"\uE260") }, // SMuFL character for flat
+        { options::TextOptions::InsertSymbolType::Sharp,    EnigmaString::fromU8(u8"\uE262") }, // SMuFL character for sharp
+        { options::TextOptions::InsertSymbolType::Natural,  EnigmaString::fromU8(u8"\uE261") }, // SMuFL character for natural
+        { options::TextOptions::InsertSymbolType::DblFlat,  EnigmaString::fromU8(u8"\uE264") }, // SMuFL double flat
+        { options::TextOptions::InsertSymbolType::DblSharp, EnigmaString::fromU8(u8"\uE263") }, // SMuFL double sharp
     };
-    static const std::unordered_map<std::string, std::string> unicodeAccidentals = {
-        {"flat", EnigmaString::fromU8(u8"\u266D")},     // Text flat: ♭
-        {"sharp", EnigmaString::fromU8(u8"\u266F")},    // Text sharp: ♯
-        {"natural", EnigmaString::fromU8(u8"\u266E")},  // Text natural: ♮
-        {"dbflat", EnigmaString::fromU8(u8"\u1D12B")},  // Text double flat: 𝄫
-        {"dbsharp", EnigmaString::fromU8(u8"\u1D12A")}  // Text double sharp: 𝄪
+    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> unicodeAccidentals = {
+        { options::TextOptions::InsertSymbolType::Flat,     EnigmaString::fromU8(u8"\u266D") },   // Text flat: ♭
+        { options::TextOptions::InsertSymbolType::Sharp,    EnigmaString::fromU8(u8"\u266F") },   // Text sharp: ♯
+        { options::TextOptions::InsertSymbolType::Natural,  EnigmaString::fromU8(u8"\u266E") },   // Text natural: ♮
+        { options::TextOptions::InsertSymbolType::DblFlat,  EnigmaString::fromU8(u8"\u1D12B") },  // Text double flat: 𝄫
+        { options::TextOptions::InsertSymbolType::DblSharp, EnigmaString::fromU8(u8"\u1D12A") },  // Text double sharp: 𝄪
     };
-    static const std::unordered_map<std::string, std::string> asciiAccidentals = {
-        {"flat", "b"},          // Plain text representation for flat
-        {"sharp", "#"},         // Plain text representation for sharp
-        {"natural", ""},        // Plain text representation for natural (none)
-        {"dbflat", "bb"},       // Plain text double flat
-        {"dbsharp", "x"}        // Plain text double sharp
+    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> asciiAccidentals = {
+        { options::TextOptions::InsertSymbolType::Flat,     "b"  }, // Plain text representation for flat
+        { options::TextOptions::InsertSymbolType::Sharp,    "#"  }, // Plain text representation for sharp
+        { options::TextOptions::InsertSymbolType::Natural,  ""   }, // Plain text representation for natural (none)
+        { options::TextOptions::InsertSymbolType::DblFlat,  "bb" }, // Plain text double flat
+        { options::TextOptions::InsertSymbolType::DblSharp, "x"  }, // Plain text double sharp
     };
 
     switch (style) {
@@ -248,14 +256,6 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
     std::string remaining = rawText;
     std::optional<std::string> textBuffer;
 
-    static const std::unordered_map<std::string_view, options::TextOptions::InsertSymbolType> acciInsertMap = {
-        { "flat",       options::TextOptions::InsertSymbolType::Flat },
-        { "natural",    options::TextOptions::InsertSymbolType::Natural },
-        { "sharp",      options::TextOptions::InsertSymbolType::Sharp },
-        { "dbflat",     options::TextOptions::InsertSymbolType::DblFlat },
-        { "dbsharp",    options::TextOptions::InsertSymbolType::DblSharp },
-    };
-
     auto addToBuf = [&](const std::string& text) {
         if (textBuffer) {
             textBuffer->append(text);
@@ -319,52 +319,61 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
             continue;
         }
 
+        // Send command to the handler and use that if the handler handles it.
+        std::optional<std::string> replacement = onCommand(components);
+        if (replacement.has_value()) {
+            addToBuf(replacement.value());
+            continue;
+        }
+
         if (components.size() == 1) {
-            if (options.insertHandling == AccidentalInsertHandling::Substitute) {
-                const auto& accidentalMap = getEnigmaAccidentalMap(options.substitutionStyle);
-                auto it = accidentalMap.find(components[0]);
-                if (it != accidentalMap.end()) {
-                    addToBuf(it->second);
-                    continue;
-                }
-            } else if (options.insertHandling == AccidentalInsertHandling::ParseToGlyphs) {
-                auto it = acciInsertMap.find(components[0]);
-                if (it != acciInsertMap.end()) {
-                    if (const auto textOptions = document->getOptions()->get<options::TextOptions>()) {
-                        const auto& acciDataIt = textOptions->symbolInserts.find(it->second);
-                        if (acciDataIt != textOptions->symbolInserts.end()) {
-                            EnigmaStyles acciStyles(document);
-                            const auto& insertInfo = acciDataIt->second;
-                            *acciStyles.font.get() = *insertInfo->symFont.get();
-                            acciStyles.font->fontSize = int(std::lround(double(insertInfo->symFont->fontSize) * double(currentStyles.font->fontSize) / 100.0));
-                            acciStyles.baseline = int(std::lround((double(insertInfo->baselineShiftPerc) * double(currentStyles.font->fontSize)) * (EVPU_PER_POINT / 100.0)));
-                            acciStyles.tracking = insertInfo->trackingBefore;
-                            if (!processChunk(currentStyles)) {
-                                break;
-                            }
-                            textBuffer.emplace(toU8(insertInfo->symChar));
-                            if (!processChunk(acciStyles)) {
-                                break;
+            auto insertIt = acciInsertMap.find(components[0]);
+            if (insertIt != acciInsertMap.end()) {
+                switch (options.insertHandling) {
+                    case AccidentalInsertHandling::Substitute:
+                    {
+                        const auto& accidentalMap = getEnigmaAccidentalMap(options.substitutionStyle);
+                        auto it = accidentalMap.find(insertIt->second);
+                        if (it != accidentalMap.end()) {
+                            addToBuf(it->second);
+                            continue;
+                        }
+                        break;
+                    }
+                    case AccidentalInsertHandling::ParseToGlyphs:
+                    {
+                        if (const auto textOptions = document->getOptions()->get<options::TextOptions>()) {
+                            const auto& acciDataIt = textOptions->symbolInserts.find(insertIt->second);
+                            if (acciDataIt != textOptions->symbolInserts.end()) {
+                                EnigmaStyles acciStyles(document);
+                                const auto& insertInfo = acciDataIt->second;
+                                *acciStyles.font.get() = *insertInfo->symFont.get();
+                                acciStyles.font->fontSize = int(std::lround(double(insertInfo->symFont->fontSize) * double(currentStyles.font->fontSize) / 100.0));
+                                acciStyles.baseline = int(std::lround((double(insertInfo->baselineShiftPerc) * double(currentStyles.font->fontSize)) * (EVPU_PER_POINT / 100.0)));
+                                acciStyles.tracking = insertInfo->trackingBefore;
+                                if (!processChunk(currentStyles)) {
+                                    break;
+                                }
+                                textBuffer.emplace(toU8(insertInfo->symChar));
+                                if (!processChunk(acciStyles)) {
+                                    break;
+                                }
+                            } else {
+                                MUSX_INTEGRITY_ERROR("Document contains no accidental insert options for " + components[0] + ".");
                             }
                         } else {
-                            MUSX_INTEGRITY_ERROR("Document contains no accidental insert options for " + components[0] + ".");
+                            MUSX_INTEGRITY_ERROR("Document contains no text options.");
                         }
-                    } else {
-                        MUSX_INTEGRITY_ERROR("Document contains no text options.");
+                        continue;
                     }
-                    continue;
+                    default: break;
                 }
             }
         }
 
-        // Delegate unknown command to the handler
-        std::optional<std::string> replacement = onCommand(components);
-        if (replacement.has_value()) {
-            addToBuf(replacement.value());
-        } else {
-            // Command unhandled — fallback to raw
-            addToBuf(fullCommand);
-        }
+        /// @todo other commands
+
+        // fall-thru causes unhandled command to be stripped.
     }
 
     // Emit any remaining buffered text
@@ -445,9 +454,12 @@ std::string EnigmaString::replaceAccidentalTags(const std::string& input, Accide
         // Replace the match based on the captured group
         const auto& accidental = match[1].str();
         const auto& accidentalMap = getEnigmaAccidentalMap(style);
-        auto it = accidentalMap.find(accidental);
-        if (it != accidentalMap.end()) {
-            output += it->second;  // Append the replacement character
+        const auto insertIt = acciInsertMap.find(accidental);
+        if (insertIt != acciInsertMap.end()) {
+            const auto it = accidentalMap.find(insertIt->second);
+            if (it != accidentalMap.end()) {
+                output += it->second;  // Append the replacement character
+            }
         }
 
         // Update last processed position

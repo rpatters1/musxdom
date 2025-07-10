@@ -599,13 +599,13 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
         return true;
     };
 
-    auto handleNothing = [](const std::vector<std::string>&) -> std::optional<std::string> {
-        return std::nullopt;
+    auto stripAllCommands = [](const std::vector<std::string>&) -> std::optional<std::string> {
+        return "";
     };
 
     // Test 1: Escaped caret
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "A ^^ B", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, "A ^^ B", recordChunk, stripAllCommands);
     std::vector<std::pair<std::string, std::string>> expected1 = {
         {"TEXT", "A ^ B"}
     };
@@ -613,7 +613,12 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 2: Unhandled command dumped raw
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk,
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "foo") return "^foo(" + parsed[1] + ")";
+            return std::nullopt;
+        }
+    );
     std::vector<std::pair<std::string, std::string>> expected2 = {
         {"TEXT", "X "},
         {"TEXT", "^foo(bar)"},
@@ -636,20 +641,15 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 
     // Test 4: Invalid command → literal caret
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "Broken ^ command", recordChunk, handleNothing);
+    EnigmaString::parseEnigmaText(doc, "Broken ^ command", recordChunk, stripAllCommands);
     std::vector<std::pair<std::string, std::string>> expected4 = {
         {"TEXT", "Broken ^ command"}
     };
     EXPECT_EQ(output, expected4);
 
-    // Test 5: Suppressed command (returns empty string)
+    // Test 5: Unhandled ^flat command (returns empty std::nullopt)
     output.clear();
-    EnigmaString::parseEnigmaText(doc, "Hi ^suppress Bye",
-        recordChunk,
-        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
-            if (parsed[0] == "suppress") return "";
-            return std::nullopt;
-        });
+    EnigmaString::parseEnigmaText(doc, "Hi ^flat() Bye", recordChunk, stripAllCommands);
     std::vector<std::pair<std::string, std::string>> expected5 = {
         {"TEXT", "Hi  Bye"},
     };
