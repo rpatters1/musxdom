@@ -342,30 +342,32 @@ public:
      * these yourself.
      *
      * @param document The document from which the enigma string is taken.
+     * @param forPartId The linked part ID to use for ^partname and ^totpages tags.
      * @param rawText The full input Enigma string to parse.
      * @param onText The handler for when font styling changes.
      * @param onInsert The handler to substitute text for an insert.
      * @param options Parsing options.
      * @return true if parsing completed, false if aborted by the @p onText function.
      */
-    static bool parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText,
+    static bool parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText,
         const TextChunkCallback& onText, const TextInsertCallback& onInsert,
         const EnigmaParsingOptions& options = {})
     {
-        return parseEnigmaTextImpl(document, partId, rawText, onText, onInsert, options, EnigmaStyles(document));
+        return parseEnigmaTextImpl(document, forPartId, rawText, onText, onInsert, options, EnigmaStyles(document));
     }
 
     /// @brief Simplified version of #parseEnigmaText that strips unhandled inserts.
     /// Useful in particular when the caller only cares about the raw text or the font information.
     /// @param document The document from which the enigma string is taken.
+    /// @param forPartId The linked part ID to use for ^partname and ^totpages tags.
     /// @param rawText The full input Enigma string to parse.
     /// @param onText The handler for when font styling changes.
     /// @param options Parsing options.
     /// @return true if parsing completed, false if aborted by the @p onText function.
-    static bool parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText, const TextChunkCallback& onText,
+    static bool parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText, const TextChunkCallback& onText,
         const EnigmaParsingOptions& options = {})
     {
-        return parseEnigmaTextImpl(document, partId, rawText, onText, defaultInsertsCallback, options, EnigmaStyles(document));
+        return parseEnigmaTextImpl(document, forPartId, rawText, onText, defaultInsertsCallback, options, EnigmaStyles(document));
     }
 
     /**
@@ -382,7 +384,7 @@ public:
     static std::string trimTags(const std::string& input);
 
 private:
-    static bool parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText,
+    static bool parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText,
     const TextChunkCallback& onText, const TextInsertCallback& onInsert,
     const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles);
 };

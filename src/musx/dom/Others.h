@@ -1520,6 +1520,7 @@ public:
     static const xml::XmlElementArray<Page>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+class TextBlock;
 /**
  * @class PageTextAssign
  * @brief Represents a page text assignment with positioning and page range properties.
@@ -1578,6 +1579,12 @@ public:
     bool indRpPos{};                ///< Individual right page positioning indicator. (xml tag is `<indRpPos>`)
     Evpu rightPgXDisp{};            ///< Horizontal displacement for right pages (if #indRpPos is true). (xml tag is `<rightPgXdisp>`)
     Evpu rightPgYDisp{};            ///< Vertical displacement for right pages (if #indRpPos is true). (xml tag is `<rightPgYdisp>`)
+
+    /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
+    std::shared_ptr<TextBlock> getTextBlock() const;
+
+    /** @brief Gets the raw text for this assignment, or nullptr if none. */
+    std::shared_ptr<TextsBase> getRawText() const;
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2910,12 +2917,29 @@ public:
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
-    /** @brief Gets the enclosure for this expression, or nullptr if none. */
+    /** @brief Gets the TextBlock for this expression, or nullptr if none. */
     std::shared_ptr<TextBlock> getTextBlock() const;
+
+    /** @brief Gets the raw text for this expression, or nullptr if none. */
+    std::shared_ptr<TextsBase> getRawText() const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;
 
+    /// @brief Gets human-readable text with insert converted to their appropriate values
+    /// @param forPartId The part id to use for pages and partname
+    /// @param trimTags Whether to trim unknown tags.
+    /// @param accidentalStyle The accidental substitution style.
+    std::string getText(Cmper forPartId, bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+    
+    /// @brief See #util::EnigmaString::parseEnigmaText.
+    /// @param forPartId The part id to use for pages and partname
+    /// @param onText The text chunk handler for style changes
+    /// @param onInsert The insert handler for text replacement
+    /// @param options Parsing options
+    bool parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
+        const util::EnigmaString::EnigmaParsingOptions& options = {}) const;
+    
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

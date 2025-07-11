@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <string>
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
@@ -2162,6 +2163,23 @@ int others::MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
     return result;
 }
 
+// *****************************
+// ***** MeasureTextAssign *****
+// *****************************
+
+std::shared_ptr<others::TextBlock> details::MeasureTextAssign::getTextBlock() const
+{
+    return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
+}
+
+std::shared_ptr<TextsBase> details::MeasureTextAssign::getRawText() const
+{
+    if (auto textBlock = getTextBlock()) {
+        return textBlock->getRawTextBlock();
+    }
+    return nullptr;
+}
+
 // *************************************
 // ***** MultiStaffInstrumentGroup *****
 // *************************************
@@ -2728,6 +2746,23 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 }
 
 // **************************
+// ***** PageTextAssign *****
+// **************************
+
+std::shared_ptr<others::TextBlock> others::PageTextAssign::getTextBlock() const
+{
+    return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
+}
+
+std::shared_ptr<TextsBase> others::PageTextAssign::getRawText() const
+{
+    if (auto textBlock = getTextBlock()) {
+        return textBlock->getRawTextBlock();
+    }
+    return nullptr;
+}
+
+// **************************
 // ***** PartDefinition *****
 // **************************
 
@@ -2916,93 +2951,6 @@ void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::
     } else {
         MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) + " is missing instructions and/or data.");
     }
-}
-
-// **********************
-// ***** SmartShape *****
-// **********************
-
-EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
-{
-    EntryInfoPtr result;
-    if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), staffId, measId)) {
-        gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
-            if (!entryNumber) {
-                unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
-                if (eduDiff <= 1) {
-                    result = entryInfo;
-                    return false; // stop iterating
-                }
-            } else if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
-                result = entryInfo;
-                return false; // stop iterating
-            }
-            return true;
-        });
-    }
-    if (!result && entryNumber != 0) {
-        MUSX_INTEGRITY_ERROR("SmartShape at Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId)
-            + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
-    }
-    return result;
-}
-
-util::Fraction others::SmartShape::EndPoint::calcPosition() const
-{
-    if (!entryNumber) {
-        return util::Fraction::fromEdu(eduPosition);
-    }
-    if (auto entryInfo = calcAssociatedEntry()) {
-        return entryInfo->elapsedDuration;
-    }
-    return 0;
-}
-
-util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
-{
-    if (!entryNumber) {
-        const auto rawPosition = util::Fraction::fromEdu(eduPosition);
-        if (auto meas = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
-            return rawPosition * meas->calcTimeStretch(staffId);
-        }
-        return rawPosition;
-    }
-    if (auto entryInfo = calcAssociatedEntry()) {
-        return entryInfo.calcGlobalElapsedDuration().calcEduDuration();
-    }
-    return 0;
-}
-
-bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
-{
-    auto entry = entryInfo->getEntry();
-    if (entryBased) {
-        if (entry->getEntryNumber() == startTermSeg->endPoint->entryNumber) return true;
-        if (entry->getEntryNumber() == endTermSeg->endPoint->entryNumber) return true;
-    }
-    if (entryInfo.getStaff() != startTermSeg->endPoint->staffId && entryInfo.getStaff() != endTermSeg->endPoint->staffId) {
-        return false;
-    }
-    if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure())) {
-        if (meas->hasSmartShape) {
-            auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure());
-            for (const auto& asgn : shapeAssigns) {
-                if (asgn->shapeNum == getCmper()) {
-                    if (entryInfo.getMeasure() > startTermSeg->endPoint->measId && entryInfo.getMeasure() < endTermSeg->endPoint->measId) {
-                        return true;
-                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId && entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration >= startTermSeg->endPoint->calcPosition()
-                               && entryInfo->elapsedDuration <= endTermSeg->endPoint->calcPosition();
-                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration >= startTermSeg->endPoint->calcPosition();
-                    } else if (entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration <= endTermSeg->endPoint->calcPosition();
-                    }
-                }
-            }
-        }
-    }
-    return false;
 }
 
 // *****************
@@ -3904,10 +3852,50 @@ std::shared_ptr<others::TextBlock> others::TextExpressionDef::getTextBlock() con
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), textIdKey);
 }
 
+std::shared_ptr<TextsBase> others::TextExpressionDef::getRawText() const
+{
+    if (auto textBlock = getTextBlock()) {
+        return textBlock->getRawTextBlock();
+    }
+    return nullptr;
+}
+
 std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 {
     if (!hasEnclosure) return nullptr;
     return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getPartId(), getCmper());
+}
+
+bool others::TextExpressionDef::parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
+    const util::EnigmaString::EnigmaParsingOptions& options) const
+{
+    if (auto rawText = getRawText()) {
+        util::EnigmaString::EnigmaParsingOptions massagedOptions = options;
+        massagedOptions.ignoreTags.emplace("page"); // text exp defs should not ever have a ^page insert, but ignore it if one sneaks in
+        return rawText->parseEnigmaText(forPartId, onText, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
+            if (components[0] == "value") {
+                return std::to_string(value);
+            } else if (components[0] == "control") {
+                return std::to_string(auxData1);
+            } else if (components[0] == "pass") {
+                return std::to_string(playPass);
+            }
+            return onInsert(components);
+        }, massagedOptions);
+    }
+    return false;
+}
+
+std::string others::TextExpressionDef::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
+    options.stripUnknownTags = trimTags;
+    std::string result;
+    parseEnigmaText(forPartId, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+            result += text;
+            return true;
+        }, util::EnigmaString::defaultInsertsCallback, options);
+    return result;
 }
 
 // *********************

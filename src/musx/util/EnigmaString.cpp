@@ -238,7 +238,7 @@ bool EnigmaString::parseStyleCommand(std::vector<std::string> components, Enigma
     return false;
 }
 
-bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, Cmper partId, const std::string& rawText,
+bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, Cmper forPartId, const std::string& rawText,
     const TextChunkCallback& onText, const TextInsertCallback& onInsert, const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles)
 {
     auto currentStyles = startingStyles;
@@ -404,7 +404,7 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                 addToBuf(trimTags(textInsert->text));
             }
         } else if (components[0] == "partname") {
-            if (auto linkedPart = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
+            if (auto linkedPart = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
                 if (auto nameRawText = linkedPart->getNameRawText()) {
                     EnigmaParsingOptions partnameOptions = options;
                     partnameOptions.ignoreStyleTags = true;
@@ -412,7 +412,7 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                     if (!processChunk(currentStyles)) {
                         break;
                     }
-                    bool parseResult = parseEnigmaTextImpl(document, partId, nameRawText->text, onText, onInsert, partnameOptions, currentStyles);
+                    bool parseResult = parseEnigmaTextImpl(document, forPartId, nameRawText->text, onText, onInsert, partnameOptions, currentStyles);
                     if (!parseResult) {
                         return false;
                     }
@@ -433,7 +433,7 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                 addToBuf(trimTags(textInsert->text));
             }
         } else if (components[0] == "totpages") {
-            auto pages = document->getOthers()->getArray<others::Page>(partId);
+            auto pages = document->getOthers()->getArray<others::Page>(forPartId);
             addToBuf(std::to_string(pages.size()));
         } else {
             // fall-thru causes unhandled command to be stripped or inserted, based on configuration options

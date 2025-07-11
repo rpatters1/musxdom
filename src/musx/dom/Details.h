@@ -44,6 +44,7 @@ namespace others {
 class InstrumentUsed;
 class Measure;
 class MultiStaffInstrumentGroup;
+class TextBlock;
 } // namespace others
 
 namespace texts {
@@ -944,6 +945,12 @@ public:
     Evpu xDispEvpu{};   ///< Negative horizontal displacement in Evpu (xml node is `<xdispEvpu>`)
     Evpu yDisp{};       ///< Vertical displacement in Evpu (xml node is `<ydisp>`)
     bool hidden{};      ///< Indicates the text appears only on screen (xml node is `<postIt/>`)
+
+    /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
+    std::shared_ptr<others::TextBlock> getTextBlock() const;
+
+    /** @brief Gets the raw text for this assignment, or nullptr if none. */
+    std::shared_ptr<TextsBase> getRawText() const;
 
     constexpr static std::string_view XmlNodeName = "measTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

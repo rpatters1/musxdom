@@ -449,12 +449,24 @@ public:
      */
     std::shared_ptr<FontInfo> parseFirstFontInfo() const;
 
-    /** @brief return displayable text with Enigma tags removed */
+    /// @brief Return displayable text with Enigma tags converted.
+    /// @param forPartId The linked part ID to use for ^partname and ^totpages tags.
+    /// @param trimTags Whether to trim unknown tags or dump them into the output.
+    /// @param accidentalStyle The accidental substitution style to use. (ASCII, Unicode, SMuFL)
+    /// @param ignoreTags A list of tags to ignore. (Normally only used internally.)
+    /// @param forPageId The page ID to use for converting the ^page insert to a page number.
+    /// @return 
     std::string getText(Cmper forPartId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii,
         const std::unordered_set<std::string_view>& ignoreTags = {}, Cmper forPageId = 1) const;
-    
+
     /// @brief See #util::EnigmaString::parseEnigmaText.
+    /// @param forPartId The linked part ID to use for ^partname and ^totpages tags.
+    /// @param onText The handler for font and text style changes.
+    /// @param onInsert The handler for insert conversions.
+    /// @param options The options for the parsing session.
+    /// @param forPageId The page ID to use for converting the ^page insert to a page number.
+    /// @return 
     bool parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
         const util::EnigmaString::EnigmaParsingOptions& options = {}, Cmper forPageId = 1) const;
 
