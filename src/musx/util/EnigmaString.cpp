@@ -238,7 +238,7 @@ bool EnigmaString::parseStyleCommand(std::vector<std::string> components, Enigma
     return false;
 }
 
-void EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, Cmper partId, const std::string& rawText,
+bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, Cmper partId, const std::string& rawText,
     const TextChunkCallback& onText, const TextInsertCallback& onInsert, const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles)
 {
     auto currentStyles = startingStyles;
@@ -284,7 +284,7 @@ void EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
         if (startsWithStyleCommand(remaining)) {
             if (!options.ignoreStyleTags) {
                 if (!processChunk(currentStyles)) {
-                    break;
+                    return false;
                 }
                 if (!parseStyleCommand(components, currentStyles)) {
                     throw std::invalid_argument("malformed style command encountered in Enigma text: " + rawText);
@@ -342,11 +342,11 @@ void EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                             acciStyles.baseline = int(std::lround((double(insertInfo->baselineShiftPerc) * double(currentStyles.font->fontSize)) * (EVPU_PER_POINT / 100.0)));
                             acciStyles.tracking = insertInfo->trackingBefore;
                             if (!processChunk(currentStyles)) {
-                                break;
+                                return false;
                             }
                             textBuffer.emplace(toU8(insertInfo->symChar));
                             if (!processChunk(acciStyles)) {
-                                break;
+                                return false;
                             }
                         } else {
                             MUSX_INTEGRITY_ERROR("Document contains no accidental insert options for " + components[0] + ".");
@@ -406,12 +406,18 @@ void EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                 if (auto nameRawText = linkedPart->getNameRawText()) {
                     EnigmaParsingOptions partnameOptions = options;
                     partnameOptions.ignoreStyleTags = true;
-                    parseEnigmaTextImpl(document, partId, nameRawText->text, onText, [&](const std::vector<std::string>& components)->std::optional<std::string> {
+                    if (!processChunk(currentStyles)) {
+                        break;
+                    }
+                    bool parseResult = parseEnigmaTextImpl(document, partId, nameRawText->text, onText, [&](const std::vector<std::string>& components)->std::optional<std::string> {
                         if (!components.empty() && components[0] == "partname") {
                             return ""; // do not double-parse partname (Finale UI prevents this anyway)
                         }
                         return onInsert(components);
                     }, partnameOptions, currentStyles);
+                    if (!parseResult) {
+                        return false;
+                    }
                 }
             }
         } else if (components[0] == "subtitle") {
@@ -443,6 +449,8 @@ void EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
     if (textBuffer.has_value()) {
         onText(textBuffer.value(), currentStyles);
     }
+
+    return true;
 }
 
 std::string EnigmaString::trimTags(const std::string& input)
