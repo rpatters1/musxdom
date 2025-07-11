@@ -373,7 +373,9 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
             return util::DateTime::formatDate(time, style);
         };
 
-        if (components[0] == "arranger") {
+        if (options.ignoreTags.contains(components[0])) {
+            continue;
+        } else if (components[0] == "arranger") {
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Arranger))) {
                 addToBuf(trimTags(textInsert->text));
             }
@@ -406,15 +408,11 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                 if (auto nameRawText = linkedPart->getNameRawText()) {
                     EnigmaParsingOptions partnameOptions = options;
                     partnameOptions.ignoreStyleTags = true;
+                    partnameOptions.ignoreTags = { "partname" };
                     if (!processChunk(currentStyles)) {
                         break;
                     }
-                    bool parseResult = parseEnigmaTextImpl(document, partId, nameRawText->text, onText, [&](const std::vector<std::string>& components)->std::optional<std::string> {
-                        if (!components.empty() && components[0] == "partname") {
-                            return ""; // do not double-parse partname (Finale UI prevents this anyway)
-                        }
-                        return onInsert(components);
-                    }, partnameOptions, currentStyles);
+                    bool parseResult = parseEnigmaTextImpl(document, partId, nameRawText->text, onText, onInsert, partnameOptions, currentStyles);
                     if (!parseResult) {
                         return false;
                     }

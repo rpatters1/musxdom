@@ -28,6 +28,8 @@
 #include <algorithm>
 #include <cmath>
 #include <cwctype>
+#include <string_view>
+#include <unordered_set>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -2657,16 +2659,20 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 std::shared_ptr<TextsBase> others::PartDefinition::getNameRawText() const
 {
     /// @todo perhaps additional logic as in getName, but not until something is broken.
-    if (auto textBlock = getDocument()->getOthers()->get<others::TextBlock>(getPartId(), nameId)) {
-        return textBlock->getRawTextBlock();
+    if (nameId) {
+        if (auto textBlock = getDocument()->getOthers()->get<others::TextBlock>(getPartId(), nameId)) {
+            return textBlock->getRawTextBlock();
+        }
     }
     return nullptr;
 }
 
 std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    if (nameId) {
-        return TextBlock::getText(getDocument(), nameId, getCmper(), true, accidentalStyle); // true: trim tags
+    if (auto nameRawText = getNameRawText()) {
+        // Although the Finale U.I. prevents ^partname inserts in partname enigma strings, one might have crept in.
+        std::unordered_set<std::string_view> ignoreTags = { "partname" }; // do not parse ^partname inserts
+        return nameRawText->getText(getCmper(), true, accidentalStyle, ignoreTags);
     }
     if (defaultNameStaff) {
         if (auto staff = getDocument()->getOthers()->get<others::Staff>(SCORE_PARTID, defaultNameStaff)) {
@@ -3783,23 +3789,6 @@ int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
     return int(std::lround(result));
 }
 
-// ********************
-// ***** TextBase *****
-// ********************
-
-std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
-{
-    if (!musx::util::EnigmaString::startsWithFontCommand(this->text)) {
-        return nullptr;
-    }
-    std::shared_ptr<FontInfo> result;
-    util::EnigmaString::parseEnigmaText(getDocument(), SCORE_PARTID, text, [&](const std::string&, const util::EnigmaStyles& styles) {
-        result = styles.font;
-        return false;
-    });
-    return result;
-}
-
 // *********************
 // ***** TextBlock *****
 // *********************
@@ -3850,10 +3839,25 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 // ***** TextsBase *****
 // *********************
 
-std::string TextsBase::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
+std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
+{
+    if (!musx::util::EnigmaString::startsWithFontCommand(this->text)) {
+        return nullptr;
+    }
+    std::shared_ptr<FontInfo> result;
+    util::EnigmaString::parseEnigmaText(getDocument(), SCORE_PARTID, text, [&](const std::string&, const util::EnigmaStyles& styles) {
+        result = styles.font;
+        return false;
+    });
+    return result;
+}
+
+std::string TextsBase::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
+    const std::unordered_set<std::string_view>& ignoreTags) const
 {
     util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
     options.stripUnknownTags = trimTags;
+    options.ignoreTags = ignoreTags;
     std::string result;
     util::EnigmaString::parseEnigmaText(getDocument(), forPartId, text, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
         result += text;

@@ -29,6 +29,54 @@ using namespace musx::dom;
 constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
+  <options>
+    <textOptions>
+      <textLineSpacingPercent>100</textLineSpacingPercent>
+      <tabSpaces>4</tabSpaces>
+      <insertSymbolInfo type="sharp">
+        <trackingBefore>35</trackingBefore>
+        <baselineShiftPerc>34</baselineShiftPerc>
+        <symFont>
+          <fontSize>110</fontSize>
+        </symFont>
+        <symChar>35</symChar>
+      </insertSymbolInfo>
+      <insertSymbolInfo type="flat">
+        <trackingBefore>60</trackingBefore>
+        <baselineShiftPerc>19</baselineShiftPerc>
+        <symFont>
+          <fontSize>110</fontSize>
+        </symFont>
+        <symChar>98</symChar>
+      </insertSymbolInfo>
+      <insertSymbolInfo type="natural">
+        <trackingBefore>50</trackingBefore>
+        <baselineShiftPerc>34</baselineShiftPerc>
+        <symFont>
+          <fontSize>110</fontSize>
+        </symFont>
+        <symChar>110</symChar>
+      </insertSymbolInfo>
+      <insertSymbolInfo type="dblSharp">
+        <trackingBefore>40</trackingBefore>
+        <baselineShiftPerc>34</baselineShiftPerc>
+        <symFont>
+          <fontSize>100</fontSize>
+        </symFont>
+        <symChar>220</symChar>
+      </insertSymbolInfo>
+      <insertSymbolInfo type="dblFlat">
+        <trackingBefore>60</trackingBefore>
+        <baselineShiftPerc>19</baselineShiftPerc>
+        <symFont>
+          <fontSize>100</fontSize>
+        </symFont>
+        <symChar>186</symChar>
+      </insertSymbolInfo>
+      <textWordWrap/>
+      <textExpandSingleWord/>
+    </textOptions>
+  </options>
   <others>
     <measNumbRegion cmper="1">
       <scoreData>
@@ -130,7 +178,7 @@ constexpr static musxtest::string_view xml = R"xml(
     </textBlock>
   </others>
   <texts>
-    <blockText number="33">^fontid(1)^size(14)^nfx(2)Alto Sax in E^flat()</blockText>
+    <blockText number="33">^fontid(1)^size(14)^nfx(2)Alto Sax in E^flat()^partname()</blockText>
   </texts>
 </finale>
     )xml";
@@ -158,11 +206,30 @@ TEST(PartDefinitionTest, GetName)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
-    
-    auto partDef = others->get<others::PartDefinition>(SCORE_PARTID, 1);
+
+    constexpr static Cmper kAltoSaxPartId = 1;
+
+    auto partDef = others->get<others::PartDefinition>(SCORE_PARTID, kAltoSaxPartId);
     ASSERT_TRUE(partDef) << "PartDefinition with cmper 1 not found";
 
     EXPECT_EQ(partDef->getName(), "Alto Sax in Eb");
+
+    std::string parsedName;
+    int iterationCount = 0;
+    bool result = musx::util::EnigmaString::parseEnigmaText(doc, kAltoSaxPartId, "^fontid(2)^size(10)^nfx(2)This is ^baseline(12)part ^partname().^nfx(0)",
+        [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
+            if (iterationCount == 3) {
+                EXPECT_EQ(styles.font->fontId, 0);
+            } else {
+                EXPECT_EQ(styles.font->fontId, 2);
+            }
+            parsedName += chunk;
+            iterationCount++;
+            return true;
+        });
+    EXPECT_EQ(parsedName, "This is part Alto Sax in Eb.");
+    EXPECT_EQ(iterationCount, 7) << "4 iterations for the string and 3 for the partname insert";
+    EXPECT_TRUE(result);
 }
 
 TEST(PartDefinitionTest, GetArrayForScore)

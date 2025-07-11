@@ -900,7 +900,7 @@ TEST(TextsTest, ParseEnigmaFontInfo)
     ASSERT_TRUE(texts);
 
     int iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(Times)^size(13)^nfx(2)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
+    bool result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(Times)^size(13)^nfx(2)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
         EXPECT_EQ(styles.font->fontId, 1);
         EXPECT_EQ(styles.font->fontSize, 13);
         EXPECT_EQ(styles.font->getEnigmaStyles(), 2);
@@ -911,9 +911,10 @@ TEST(TextsTest, ParseEnigmaFontInfo)
         return true;
     });
     EXPECT_EQ(iterationCount, 1) << "font should be reported even when no text";
+    EXPECT_TRUE(result);
 
     iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fontid(2)^size(10)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
+    result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fontid(2)^size(10)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
         if (iterationCount == 0) {
             EXPECT_EQ(styles.font->fontId, 2);
             EXPECT_EQ(styles.font->fontSize, 10);
@@ -933,13 +934,35 @@ TEST(TextsTest, ParseEnigmaFontInfo)
         return true;
     });
     EXPECT_EQ(iterationCount, 2) << "trailing font change should be reported";
+    EXPECT_TRUE(result);
 
     iterationCount = 0;
-    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "", [&](const std::string&, const musx::util::EnigmaStyles&) {
+    result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "", [&](const std::string&, const musx::util::EnigmaStyles&) {
         iterationCount++;
         return true;
     });
     EXPECT_EQ(iterationCount, 0) << "nothing should be reported";
+    EXPECT_TRUE(result);
+
+    EnigmaString::EnigmaParsingOptions options;
+    options.ignoreStyleTags = true;
+    iterationCount = 0;
+    result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fontid(2)^size(10)^nfx(2)This is ^baseline(12)the text.^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles&) {
+        EXPECT_EQ(chunk, "This is the text.");
+        iterationCount++;
+        return true;
+    }, options);
+    EXPECT_EQ(iterationCount, 1) << "no font changes should be reported";
+    EXPECT_TRUE(result);
+
+    iterationCount = 0;
+    result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fontid(2)^size(10)^nfx(2)This is ^baseline(12)the text.^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles&) {
+        EXPECT_EQ(chunk, "This is ");
+        iterationCount++;
+        return false;
+    });
+    EXPECT_EQ(iterationCount, 1) << "only the first font change should be reported, due to early exit return";
+    EXPECT_FALSE(result);
 }
 
 TEST(TextsTest, LyricSyllableParsing)

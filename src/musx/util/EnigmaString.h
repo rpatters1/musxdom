@@ -22,9 +22,11 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <vector>
 #include <functional>
 #include <memory>
+#include <unordered_set>
 
 #include "musx/dom/Fundamentals.h"
 
@@ -261,6 +263,13 @@ public:
          * get font and style changes for accidental inserts.
          */
         bool ignoreStyleTags = false;
+
+        /**
+         * @brief Skip tags in this set. Primarily used by the "partname" insert to avoid a situation where
+         * the partname itself contains a `^partname` tag. (Though the Finale UI prevents this, a
+         * plugin might possibly do it in theory.)
+         */
+        std::unordered_set<std::string_view> ignoreTags;
     };
 
     /** @brief Returns true if the enigma string starts with a font insert. */

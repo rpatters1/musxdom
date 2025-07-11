@@ -24,6 +24,8 @@
 #include <cassert>
 #include <filesystem>
 #include <set>
+#include <string_view>
+#include <unordered_set>
 
 #include "musx/dom/Fundamentals.h"
 #include "musx/xml/XmlInterface.h"
@@ -448,7 +450,9 @@ public:
     std::shared_ptr<FontInfo> parseFirstFontInfo() const;
 
     /** @brief return displayable text with Enigma tags removed */
-    std::string getText(Cmper forPartId, bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+    std::string getText(Cmper forPartId, bool trimTags = false,
+        util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii,
+        const std::unordered_set<std::string_view>& ignoreTags = {}) const;
 
 private:
     Cmper m_textNumber;             ///< Common attribute: cmper (key value).
