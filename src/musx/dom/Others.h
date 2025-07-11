@@ -1605,6 +1605,9 @@ public:
     Cmper defaultNameStaff{};          ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
     Cmper defaultNameGroup{};          ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
 
+    /** @brief Get the raw text for the part name if any */
+    std::shared_ptr<TextsBase> getNameRawText() const;
+
     /** @brief Get the part name if any */
     std::string getName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 

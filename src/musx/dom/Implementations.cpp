@@ -2654,6 +2654,15 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 // ***** PartDefinition *****
 // **************************
 
+std::shared_ptr<TextsBase> others::PartDefinition::getNameRawText() const
+{
+    /// @todo perhaps additional logic as in getName, but not until something is broken.
+    if (auto textBlock = getDocument()->getOthers()->get<others::TextBlock>(getPartId(), nameId)) {
+        return textBlock->getRawTextBlock();
+    }
+    return nullptr;
+}
+
 std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     if (nameId) {

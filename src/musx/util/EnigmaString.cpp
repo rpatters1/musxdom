@@ -94,10 +94,10 @@ static const std::unordered_map<options::TextOptions::InsertSymbolType, std::str
     }
 }
 
-static const std::vector<std::string> kEnigmaFontCommands = { "^font", "^fontid", "^Font", "^fontMus", "^fontTxt", "^fontNum", "^size", "^nfx" };
-
 bool EnigmaString::startsWithFontCommand(const std::string& text)
 {
+    static const std::vector<std::string> kEnigmaFontCommands = { "^font", "^fontid", "^Font", "^fontMus", "^fontTxt", "^fontNum", "^size", "^nfx" };
+
     for (const auto& textCmd : kEnigmaFontCommands) {
         if (text.rfind(textCmd, 0) == 0) { // Checks if text starts with textCmd
             return true;
@@ -184,7 +184,7 @@ std::vector<std::string> EnigmaString::parseComponents(const std::string& input,
     return components;
 }
 
-bool EnigmaString::parseStyleCommand(const std::string& styleTag, EnigmaStyles& styles, size_t* parsedLength)
+bool EnigmaString::parseStyleCommand(std::vector<std::string> components, EnigmaStyles& styles)
 {
     static const std::unordered_map<std::string_view, EnigmaStyles::CategoryTracking> trackingMap = {
         { "fontMus", EnigmaStyles::CategoryTracking::MusicFont },
@@ -192,27 +192,16 @@ bool EnigmaString::parseStyleCommand(const std::string& styleTag, EnigmaStyles& 
         { "fontNum", EnigmaStyles::CategoryTracking::NumberFont },
     };
 
-    if (parsedLength) {
-        *parsedLength = 0;
-    }
-    if (styleTag.empty() || styleTag[0] != '^') {
-        return false;
-    }
-
-    std::vector<std::string> components = parseComponents(styleTag, parsedLength);
     if (components.size() < 2) {
-        if (parsedLength) {
-            *parsedLength = 0;
-        }
         return false;
     }
 
     const std::string& commandPart = components[0];
-    if (commandPart == "fontMus" || commandPart == "fontTxt" || commandPart == "fontNum" || commandPart == "font" || commandPart == "fontid") {
+    if (commandPart == "fontMus" || commandPart == "fontTxt" || commandPart == "fontNum" || commandPart == "font" || commandPart == "Font" || commandPart == "fontid") {
         const std::string& param1 = components[1];
         if (commandPart == "fontid") {
             styles.font->fontId = Cmper(std::stoi(param1));
-        } else if (param1.find("Font") == 0) { // Starts with "Font"
+        } else if (param1.find("Font") == 0) { // font name starts with "Font"
             const auto fontIdStr = param1.substr(4);
             if (!fontIdStr.empty() && std::all_of(fontIdStr.begin(), fontIdStr.end(), ::isdigit)) {
                 styles.font->fontId = Cmper(std::stoi(fontIdStr));
@@ -249,10 +238,10 @@ bool EnigmaString::parseStyleCommand(const std::string& styleTag, EnigmaStyles& 
     return false;
 }
 
-void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& document, Cmper partId, const std::string& rawText,
-    const TextChunkCallback& onText, const TextInsertCallback& onInsert, const EnigmaParsingOptions& options)
+void EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, Cmper partId, const std::string& rawText,
+    const TextChunkCallback& onText, const TextInsertCallback& onInsert, const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles)
 {
-    auto currentStyles = EnigmaStyles(document);
+    auto currentStyles = startingStyles;
     std::string remaining = rawText;
     std::optional<std::string> textBuffer;
 
@@ -289,19 +278,21 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
         }
 
         size_t parsedLen = 0;
+        // Try to parse the next command
+        auto components = parseComponents(remaining, &parsedLen);
+
         if (startsWithStyleCommand(remaining)) {
-            if (!processChunk(currentStyles)) {
-                break;
-            }
-            if (!parseStyleCommand(remaining, currentStyles, &parsedLen)) {
-                throw std::invalid_argument("malformed style command encountered in Enigma text: " + rawText);
+            if (!options.ignoreStyleTags) {
+                if (!processChunk(currentStyles)) {
+                    break;
+                }
+                if (!parseStyleCommand(components, currentStyles)) {
+                    throw std::invalid_argument("malformed style command encountered in Enigma text: " + rawText);
+                }
             }
             remaining.erase(0, parsedLen);
             continue;
         }
-
-        // Try to parse the next command
-        auto components = parseComponents(remaining, &parsedLen);
 
         if (components.empty() || parsedLen == 0) {
             // Not a valid command — treat '^' as literal
@@ -412,8 +403,16 @@ void EnigmaString::parseEnigmaText(const std::shared_ptr<dom::Document>& documen
             }
         } else if (components[0] == "partname") {
             if (auto linkedPart = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
-                /// @todo sub-parse the linked part name
-                addToBuf(linkedPart->getName(options.substitutionStyle));
+                if (auto nameRawText = linkedPart->getNameRawText()) {
+                    EnigmaParsingOptions partnameOptions = options;
+                    partnameOptions.ignoreStyleTags = true;
+                    parseEnigmaTextImpl(document, partId, nameRawText->text, onText, [&](const std::vector<std::string>& components)->std::optional<std::string> {
+                        if (!components.empty() && components[0] == "partname") {
+                            return ""; // do not double-parse partname (Finale UI prevents this anyway)
+                        }
+                        return onInsert(components);
+                    }, partnameOptions, currentStyles);
+                }
             }
         } else if (components[0] == "subtitle") {
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Subtitle))) {

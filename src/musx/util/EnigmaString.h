@@ -253,8 +253,14 @@ public:
 
         /**
          * @brief Specifies whether to strip unknown tags or dump them into the output string.
-        */
+         */
         bool stripUnknownTags = true;
+
+        /**
+         * @brief If value is true, font & style tags are ignored. Note that you may still get
+         * get font and style changes for accidental inserts.
+         */
+        bool ignoreStyleTags = false;
     };
 
     /** @brief Returns true if the enigma string starts with a font insert. */
@@ -330,7 +336,10 @@ public:
      */
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText,
         const TextChunkCallback& onText, const TextInsertCallback& onInsert,
-        const EnigmaParsingOptions& options = {});
+        const EnigmaParsingOptions& options = {})
+    {
+        parseEnigmaTextImpl(document, partId, rawText, onText, onInsert, options, EnigmaStyles(document));
+    }
 
     /// @brief Simplified version of #parseEnigmaText that strips unhandled inserts.
     /// Useful in particular when the caller only cares about the raw text or the font information.
@@ -341,9 +350,9 @@ public:
     static void parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText, const TextChunkCallback& onText,
         const EnigmaParsingOptions& options = {})
     {
-        parseEnigmaText(document, partId, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
+        parseEnigmaTextImpl(document, partId, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
             return std::nullopt; // take default values for all inserts
-        }, options);
+        }, options, EnigmaStyles(document));
     }
 
     /**
@@ -354,10 +363,15 @@ public:
      * - `^size` specifies the font size in points.
      * - `^nfx` specifies a bit mask of style properties. These are resolved with @ref dom::FontInfo::setEnigmaStyles.
      */
-    static bool parseStyleCommand(const std::string& styleTag, EnigmaStyles& styles, size_t* parsedLength = nullptr);
+    static bool parseStyleCommand(std::vector<std::string> components, EnigmaStyles& styles);
 
     /** @brief Trims all enigma tags from an enigma string, leaving just the plain text. */
     static std::string trimTags(const std::string& input);
+
+private:
+    static void parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText,
+    const TextChunkCallback& onText, const TextInsertCallback& onInsert,
+    const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles);
 };
 
 } // namespace util
