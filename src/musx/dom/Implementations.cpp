@@ -3927,17 +3927,29 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
     return result;
 }
 
+bool TextsBase::parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
+    const util::EnigmaString::EnigmaParsingOptions& options, Cmper forPageId) const
+{
+    return util::EnigmaString::parseEnigmaText(getDocument(), forPartId, text, onText, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
+        if (components[0] == "page") {
+            int pageOffset = components.size() > 1 ? std::stoi(components[1]) : 0;
+            return std::to_string(pageOffset + forPageId);
+        }
+        return onInsert(components);
+    }, options);
+}
+
 std::string TextsBase::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
-    const std::unordered_set<std::string_view>& ignoreTags) const
+    const std::unordered_set<std::string_view>& ignoreTags, Cmper forPageId) const
 {
     util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
     options.stripUnknownTags = trimTags;
     options.ignoreTags = ignoreTags;
     std::string result;
-    util::EnigmaString::parseEnigmaText(getDocument(), forPartId, text, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
-        result += text;
-        return true;
-    }, options);
+    parseEnigmaText(forPartId, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+            result += text;
+            return true;
+        }, util::EnigmaString::defaultInsertsCallback, options, forPageId);
     return result;
 }
 

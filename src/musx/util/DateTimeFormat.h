@@ -22,6 +22,7 @@
 #pragma once
 
 #include <string>
+#include <cstring>
 #include <ctime>
 
 #ifdef MUSX_RUNNING_ON_WINDOWS
@@ -92,12 +93,12 @@ struct DateTime
         {
             struct tm tm;
             localtime_s(&tm, &t);
-            st.wYear = tm.tm_year + 1900;
-            st.wMonth = tm.tm_mon + 1;
-            st.wDay = tm.tm_mday;
-            st.wHour = tm.tm_hour;
-            st.wMinute = tm.tm_min;
-            st.wSecond = tm.tm_sec;
+            st.wYear = WORD(tm.tm_year + 1900);
+            st.wMonth = WORD(tm.tm_mon + 1);
+            st.wDay = WORD(tm.tm_mday);
+            st.wHour = WORD(tm.tm_hour);
+            st.wMinute = WORD(tm.tm_min);
+            st.wSecond = WORD(tm.tm_sec);
             st.wMilliseconds = 0;
         }
 
@@ -204,12 +205,12 @@ struct DateTime
         {
             struct tm tm;
             localtime_s(&tm, &t);
-            st.wYear = tm.tm_year + 1900;
-            st.wMonth = tm.tm_mon + 1;
-            st.wDay = tm.tm_mday;
-            st.wHour = tm.tm_hour;
-            st.wMinute = tm.tm_min;
-            st.wSecond = tm.tm_sec;
+            st.wYear = WORD(tm.tm_year + 1900);
+            st.wMonth = WORD(tm.tm_mon + 1);
+            st.wDay = WORD(tm.tm_mday);
+            st.wHour = WORD(tm.tm_hour);
+            st.wMinute = WORD(tm.tm_min);
+            st.wSecond = WORD(tm.tm_sec);
             st.wMilliseconds = 0;
         }
 

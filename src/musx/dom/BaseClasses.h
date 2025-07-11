@@ -452,7 +452,11 @@ public:
     /** @brief return displayable text with Enigma tags removed */
     std::string getText(Cmper forPartId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii,
-        const std::unordered_set<std::string_view>& ignoreTags = {}) const;
+        const std::unordered_set<std::string_view>& ignoreTags = {}, Cmper forPageId = 1) const;
+    
+    /// @brief See #util::EnigmaString::parseEnigmaText.
+    bool parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
+        const util::EnigmaString::EnigmaParsingOptions& options = {}, Cmper forPageId = 1) const;
 
 private:
     Cmper m_textNumber;             ///< Common attribute: cmper (key value).

@@ -322,6 +322,9 @@ public:
         const std::vector<std::string>& parsedCommand
     )>;
 
+    /// @brief Inserts callback to take all default insert subsitutions determined by #parseEnigmaText.
+    static inline TextInsertCallback defaultInsertsCallback = [](const std::vector<std::string>&) { return std::nullopt; };
+
     /**
      * @brief Parses an Enigma-formatted string, handling font inserts and escaped carets.
      *
@@ -362,9 +365,7 @@ public:
     static bool parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper partId, const std::string& rawText, const TextChunkCallback& onText,
         const EnigmaParsingOptions& options = {})
     {
-        return parseEnigmaTextImpl(document, partId, rawText, onText, [](const std::vector<std::string>&) -> std::optional<std::string> {
-            return std::nullopt; // take default values for all inserts
-        }, options, EnigmaStyles(document));
+        return parseEnigmaTextImpl(document, partId, rawText, onText, defaultInsertsCallback, options, EnigmaStyles(document));
     }
 
     /**
