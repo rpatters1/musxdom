@@ -707,7 +707,7 @@ MUSX_XML_ELEMENT_ARRAY(Page, {
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->width = e->getTextAs<Evpu>(); }},
     {"percent", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->percent = e->getTextAs<int>(); }},
-    {"firstSystem", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->firstSystem = e->getTextAs<SystemCmper>(); }},
+    {"firstSystem", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->firstSystemId = e->getTextAs<SystemCmper>(); }},
     {"scaleContentOnly", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->holdMargins = populateBoolean(e, i); }},
     {"margTop", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margTop = e->getTextAs<Evpu>(); }},
     {"margLeft", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margLeft = e->getTextAs<Evpu>(); }},

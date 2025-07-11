@@ -212,6 +212,35 @@ std::shared_ptr<const FontInfo> options::ClefOptions::ClefDef::calcFont() const
     return result;
 }
 
+// ********************
+// ***** Document *****
+// ********************
+
+std::optional<Cmper> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
+{
+    auto pages = getOthers()->getArray<others::Page>(partId);
+    for (const auto& page : pages) {
+        if (page->firstMeasureId && page->lastMeasureId) {
+            if (measureId >= page->firstMeasureId.value() && measureId <= page->lastMeasureId.value()) {
+                return page->getCmper();
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<SystemCmper> Document::calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const
+{
+    auto systems = getOthers()->getArray<others::StaffSystem>(partId);
+    for (const auto& system : systems) {
+        // endMeas is 1 measure past the end of the system
+        if (measureId >= system->startMeas && measureId < system->endMeas) {
+            return SystemCmper(system->getCmper());
+        }
+    }
+    return std::nullopt;
+}
+
 // *****************
 // ***** Entry *****
 // *****************
@@ -2590,6 +2619,52 @@ bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
     }
     return (*this)->harmLev == src->harmLev
         && (*this)->harmAlt == src->harmAlt;
+}
+
+// ****************
+// ***** Page *****
+// ****************
+
+void others::Page::calcSystemInfo(const DocumentPtr& document)
+{
+    auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
+    for (const auto& part : linkedParts) {
+        auto pages = document->getOthers()->getArray<Page>(part->getCmper());
+        auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
+        for (size_t x = 0; x < pages.size(); x++) {
+            auto page = pages[x];
+            if (!page->isBlank()) {
+                page->lastSystemId = [&]() -> SystemCmper {
+                    size_t nextIndex = x + 1;
+                    while (nextIndex < pages.size()) {
+                        auto nextPage = pages[nextIndex++];
+                        if (!nextPage->isBlank()) {
+                            return nextPage->firstSystemId - 1;
+                        }
+                    }
+                    return SystemCmper(systems.size());
+                }();
+                if (page->lastSystemId.value() >= page->firstSystemId) {
+                    if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->firstSystemId)) {
+                        page->firstMeasureId = sys->startMeas;
+                    } else {
+                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                            + " has a no system instance for its first system.");                        
+                    }
+                    if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
+                        page->lastMeasureId = sys->getLastMeasure();
+                    } else {
+                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                            + " has a no system instance for its last system.");                        
+                    }
+                } else {
+                    page->lastSystemId = std::nullopt;
+                    MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                        + " has a last system smaller than the first system.");
+                }
+            }
+        }
+    }
 }
 
 // *****************************

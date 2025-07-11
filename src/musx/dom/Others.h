@@ -1499,17 +1499,22 @@ public:
     Evpu height{};              ///< Page height in Evpu.
     Evpu width{};               ///< Page width in Evpu.
     int percent{};              ///< Percent value (scaling factor).
-    SystemCmper firstSystem{};  ///< First system on the page (-1 if page is blank). See @ref StaffSystem.
+    SystemCmper firstSystemId{}; ///< First system on the page (-1 if page is blank). See @ref StaffSystem. (xml node is `<firstSystem>`)
     bool holdMargins{};         ///< "Hold Margins" (xml node is `<scaleContentOnly>`)
     Evpu margTop{};             ///< Top margin in Evpu. (Sign reversed in Finale UI.)
     Evpu margLeft{};            ///< Left margin in Evpu.
     Evpu margBottom{};          ///< Bottom margin in Evpu.
     Evpu margRight{};           ///< Right margin in Evpu. (Sign reversed in Finale UI.)
 
-    std::optional<SystemCmper> lastSystem; ///< Computed by the Resolver function. This value is not in the xml.
+    std::optional<SystemCmper> lastSystemId;    ///< Computed by the Resolver function #calcSystemInfo. This value is not in the xml.
+    std::optional<MeasCmper> firstMeasureId;    ///< Computed by the Resolver function #calcSystemInfo. This value is not in the xml.
+    std::optional<MeasCmper> lastMeasureId;     ///< Computed by the Resolver function #calcSystemInfo. This value is not in the xml.
 
     /** @brief is this a blank page */
-    bool isBlank() const { return firstSystem < 0; }
+    bool isBlank() const { return firstSystemId < 0; }
+
+    /// @brief Resolver function used by factory to compute system and measure information for all pages.
+    static void calcSystemInfo(const DocumentPtr& document);
 
     constexpr static std::string_view XmlNodeName = "pageSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Page>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

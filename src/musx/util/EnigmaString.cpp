@@ -373,7 +373,7 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
             return util::DateTime::formatDate(time, style);
         };
 
-        if (options.ignoreTags.contains(components[0])) {
+        if (options.ignoreTags.find(components[0]) != options.ignoreTags.end()) {
             continue;
         } else if (components[0] == "arranger") {
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Arranger))) {

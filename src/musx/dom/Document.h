@@ -80,6 +80,16 @@ public:
     /** @brief Retrieves the const texts pool */
     const TextsPoolPtr& getTexts() const { return m_texts; }
 
+    /// @brief Searches pages to find the page that contains the measure.
+    /// @param partId the linked part to search
+    /// @param measureId the measure to find
+    std::optional<Cmper> calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const;
+
+    /// @brief Searches systems to find the page that contains the measure.
+    /// @param partId the linked part to search
+    /// @param measureId the measure to find
+    std::optional<SystemCmper> calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const;
+
 private:
     /**
      * @brief Constructs a `Document`
