@@ -1007,3 +1007,68 @@ TEST(TextsTest, LyricSyllableParsing)
 
     EXPECT_TRUE(lyrics[4]->syllables.empty());
 }
+
+TEST(TextsTest, ExpressionsAndTitles)
+{
+    using namespace musx::util;
+    std::string output;
+    constexpr static Cmper kClarinetPartId = 1;
+
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "enigma_strings.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto expDef = doc->getOthers()->get<others::TextExpressionDef>(SCORE_PARTID, 1);
+    ASSERT_TRUE(expDef) << "text expression def 1 does not exist.";
+
+    output.clear();
+    bool result = expDef->parseEnigmaText(SCORE_PARTID, [&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Score value: 112 control: 64 pass: 3 pages: 2");
+
+    output.clear();
+    result = expDef->parseEnigmaText(kClarinetPartId, [&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Clarinet in B♭ page: # value: 112 control: 64 pass: 3 pages: 1");
+
+    auto measTexts = doc->getDetails()->getArray<details::MeasureTextAssign>(SCORE_PARTID, 1, 34);
+    ASSERT_FALSE(measTexts.empty());
+    auto measTextRaw = measTexts[0]->getRawText();
+    ASSERT_TRUE(measTextRaw);
+
+    const auto scorePageNum = doc->calculatePageFromMeasure(SCORE_PARTID, measTexts[0]->getCmper2());
+    EXPECT_EQ(scorePageNum, 2);
+    const auto partPageNum = doc->calculatePageFromMeasure(kClarinetPartId, measTexts[0]->getCmper2());
+    EXPECT_EQ(partPageNum, 1);
+
+    output.clear();
+    result = measTextRaw->parseEnigmaText(SCORE_PARTID, [&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Score page: #");
+
+    output.clear();
+    result = measTextRaw->parseEnigmaText(SCORE_PARTID, [&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode, scorePageNum);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Score page: 2");
+
+    output.clear();
+    result = measTextRaw->parseEnigmaText(kClarinetPartId, [&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode, partPageNum);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Clarinet in B♭ page: 1 page: 1");
+}

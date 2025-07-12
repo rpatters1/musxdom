@@ -403,6 +403,8 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Lyricist))) {
                 addToBuf(trimTags(textInsert->text));
             }
+        } else if (components[0] == "page") {
+            addToBuf("#");
         } else if (components[0] == "partname") {
             if (auto linkedPart = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
                 if (auto nameRawText = linkedPart->getNameRawText()) {

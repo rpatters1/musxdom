@@ -3870,8 +3870,6 @@ bool others::TextExpressionDef::parseEnigmaText(Cmper forPartId, const util::Eni
     const util::EnigmaString::EnigmaParsingOptions& options) const
 {
     if (auto rawText = getRawText()) {
-        util::EnigmaString::EnigmaParsingOptions massagedOptions = options;
-        massagedOptions.ignoreTags.emplace("page"); // text exp defs should not ever have a ^page insert, but ignore it if one sneaks in
         return rawText->parseEnigmaText(forPartId, onText, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
             if (components[0] == "value") {
                 return std::to_string(value);
@@ -3881,7 +3879,7 @@ bool others::TextExpressionDef::parseEnigmaText(Cmper forPartId, const util::Eni
                 return std::to_string(playPass);
             }
             return onInsert(components);
-        }, massagedOptions);
+        }, options);
     }
     return false;
 }
@@ -3916,19 +3914,21 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
 }
 
 bool TextsBase::parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
-    const util::EnigmaString::EnigmaParsingOptions& options, Cmper forPageId) const
+    const util::EnigmaString::EnigmaParsingOptions& options, std::optional<Cmper> forPageId) const
 {
     return util::EnigmaString::parseEnigmaText(getDocument(), forPartId, text, onText, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
-        if (components[0] == "page") {
-            int pageOffset = components.size() > 1 ? std::stoi(components[1]) : 0;
-            return std::to_string(pageOffset + forPageId);
+        if (forPageId.has_value()) {
+            if (components[0] == "page") {
+                int pageOffset = components.size() > 1 ? std::stoi(components[1]) : 0;
+                return std::to_string(pageOffset + forPageId.value());
+            }
         }
         return onInsert(components);
     }, options);
 }
 
 std::string TextsBase::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
-    const std::unordered_set<std::string_view>& ignoreTags, Cmper forPageId) const
+    const std::unordered_set<std::string_view>& ignoreTags, std::optional<Cmper> forPageId) const
 {
     util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
     options.stripUnknownTags = trimTags;

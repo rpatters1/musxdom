@@ -458,7 +458,7 @@ public:
     /// @return 
     std::string getText(Cmper forPartId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii,
-        const std::unordered_set<std::string_view>& ignoreTags = {}, Cmper forPageId = 1) const;
+        const std::unordered_set<std::string_view>& ignoreTags = {}, std::optional<Cmper> forPageId = std::nullopt) const;
 
     /// @brief See #util::EnigmaString::parseEnigmaText.
     /// @param forPartId The linked part ID to use for ^partname and ^totpages tags.
@@ -468,7 +468,7 @@ public:
     /// @param forPageId The page ID to use for converting the ^page insert to a page number.
     /// @return 
     bool parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
-        const util::EnigmaString::EnigmaParsingOptions& options = {}, Cmper forPageId = 1) const;
+        const util::EnigmaString::EnigmaParsingOptions& options = {}, std::optional<Cmper> forPageId = std::nullopt) const;
 
 private:
     Cmper m_textNumber;             ///< Common attribute: cmper (key value).
