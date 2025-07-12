@@ -2779,10 +2779,10 @@ std::shared_ptr<TextsBase> others::PartDefinition::getNameRawText() const
 
 std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    if (auto nameRawText = getNameRawText()) {
+    if (auto nameRawText = util::EnigmaStringContext(getNameRawText(), getCmper())) {
         // Although the Finale U.I. prevents ^partname inserts in partname enigma strings, one might have crept in.
         std::unordered_set<std::string_view> ignoreTags = { "partname" }; // do not parse ^partname inserts
-        return nameRawText->getText(getCmper(), true, accidentalStyle, ignoreTags);
+        return nameRawText.getText(true, accidentalStyle, ignoreTags);
     }
     if (defaultNameStaff) {
         if (auto staff = getDocument()->getOthers()->get<others::Staff>(SCORE_PARTID, defaultNameStaff)) {
@@ -3829,9 +3829,10 @@ std::shared_ptr<TextsBase> others::TextBlock::getRawTextBlock() const
 
 std::string others::TextBlock::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    auto block = getRawTextBlock();
-    if (!block) return {};
-    return block->getText(forPartId, trimTags, accidentalStyle);
+    if (auto block = util::EnigmaStringContext(getRawTextBlock(), forPartId)) {
+        return block.getText(trimTags, accidentalStyle);
+    }
+    return {};
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
@@ -3869,17 +3870,22 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 bool others::TextExpressionDef::parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
     const util::EnigmaString::EnigmaParsingOptions& options) const
 {
-    if (auto rawText = getRawText()) {
-        return rawText->parseEnigmaText(forPartId, onText, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
-            if (components[0] == "value") {
-                return std::to_string(value);
-            } else if (components[0] == "control") {
-                return std::to_string(auxData1);
-            } else if (components[0] == "pass") {
-                return std::to_string(playPass);
-            }
-            return onInsert(components);
-        }, options);
+    /// @todo put this in a common place for TextExpressionDef.
+    auto rawText = util::EnigmaStringContext(getRawText(), forPartId, std::nullopt, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
+        if (auto result = onInsert(components)) {
+            return result;
+        }
+        if (components[0] == "value") {
+            return std::to_string(value);
+        } else if (components[0] == "control") {
+            return std::to_string(auxData1);
+        } else if (components[0] == "pass") {
+            return std::to_string(playPass);
+        }
+        return std::nullopt;
+    });
+    if (rawText) {
+        return rawText.parseEnigmaText(onText, options);
     }
     return false;
 }
@@ -3910,34 +3916,6 @@ std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
         result = styles.font;
         return false;
     });
-    return result;
-}
-
-bool TextsBase::parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
-    const util::EnigmaString::EnigmaParsingOptions& options, std::optional<Cmper> forPageId) const
-{
-    return util::EnigmaString::parseEnigmaText(getDocument(), forPartId, text, onText, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
-        if (forPageId.has_value()) {
-            if (components[0] == "page") {
-                int pageOffset = components.size() > 1 ? std::stoi(components[1]) : 0;
-                return std::to_string(pageOffset + forPageId.value());
-            }
-        }
-        return onInsert(components);
-    }, options);
-}
-
-std::string TextsBase::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
-    const std::unordered_set<std::string_view>& ignoreTags, std::optional<Cmper> forPageId) const
-{
-    util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
-    options.stripUnknownTags = trimTags;
-    options.ignoreTags = ignoreTags;
-    std::string result;
-    parseEnigmaText(forPartId, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
-            result += text;
-            return true;
-        }, util::EnigmaString::defaultInsertsCallback, options, forPageId);
     return result;
 }
 

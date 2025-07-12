@@ -488,5 +488,39 @@ std::string EnigmaString::trimTags(const std::string& input)
     return output;
 }
 
+bool EnigmaStringContext::parseEnigmaText(const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
+    const util::EnigmaString::EnigmaParsingOptions& options) const
+{
+    if (!m_rawText) {
+        return false;
+    }
+    return util::EnigmaString::parseEnigmaText(m_rawText->getDocument(), m_forPartId, m_rawText->text, onText, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
+        if (auto result = onInsert(components)) {
+            return result;
+        }
+        if (m_forPageId.has_value()) {
+            if (components[0] == "page") {
+                int pageOffset = components.size() > 1 ? std::stoi(components[1]) : 0;
+                return std::to_string(pageOffset + m_forPageId.value());
+            }
+        }
+        return m_insertFunc(components);
+    }, options);
+}
+
+std::string EnigmaStringContext::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
+    const std::unordered_set<std::string_view>& ignoreTags) const
+{
+    util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
+    options.stripUnknownTags = trimTags;
+    options.ignoreTags = ignoreTags;
+    std::string result;
+    parseEnigmaText([&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+            result += text;
+            return true;
+        }, options);
+    return result;
+}
+
 } // namespace util
 } // namespace musx

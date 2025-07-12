@@ -1049,7 +1049,7 @@ TEST(TextsTest, ExpressionsAndTitles)
     EXPECT_EQ(partPageNum, 1);
 
     output.clear();
-    result = measTextRaw->parseEnigmaText(SCORE_PARTID, [&](const std::string& chunk, const EnigmaStyles&) {
+    result = EnigmaStringContext(measTextRaw, SCORE_PARTID).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
         output += chunk;
         return true;
     }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
@@ -1057,18 +1057,18 @@ TEST(TextsTest, ExpressionsAndTitles)
     EXPECT_EQ(output, "Score page: #");
 
     output.clear();
-    result = measTextRaw->parseEnigmaText(SCORE_PARTID, [&](const std::string& chunk, const EnigmaStyles&) {
+    result = EnigmaStringContext(measTextRaw, SCORE_PARTID, scorePageNum).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
         output += chunk;
         return true;
-    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode, scorePageNum);
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
     EXPECT_TRUE(result);
     EXPECT_EQ(output, "Score page: 2");
 
     output.clear();
-    result = measTextRaw->parseEnigmaText(kClarinetPartId, [&](const std::string& chunk, const EnigmaStyles&) {
+    result = EnigmaStringContext(measTextRaw, kClarinetPartId, partPageNum).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
         output += chunk;
         return true;
-    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode, partPageNum);
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
     EXPECT_TRUE(result);
     EXPECT_EQ(output, "Clarinet in B♭ page: 1 page: 1");
 }

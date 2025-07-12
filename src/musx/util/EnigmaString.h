@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <cassert>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -35,6 +36,7 @@ namespace musx {
 namespace dom {
 class FontInfo;
 class Document;
+class TextsBase;
 } // namespace dom
 
 namespace util {
@@ -387,6 +389,69 @@ private:
     static bool parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText,
     const TextChunkCallback& onText, const TextInsertCallback& onInsert,
     const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles);
+};
+
+/// @class EnigmaStringContext
+/// @brief Wrapper class for interpreting and rendering Enigma-style strings with insert handling.
+///
+/// This class provides implementations of `getText()` and `parseEnigmaText()`
+/// that retrieve the raw text from a `TextsBase` object, either directly or by ID,
+/// and perform substitution of special insert commands such as `^page`, `^date`, etc.
+class EnigmaStringContext
+{
+private:
+    std::shared_ptr<dom::TextsBase> m_rawText;
+    dom::Cmper m_forPartId;    ///< The part id to use for ^partname and ^totpages inserts.
+    std::optional<dom::Cmper> m_forPageId;
+    EnigmaString::TextInsertCallback m_insertFunc;
+    
+public:
+
+    /// @brief Constructor
+    /// @param rawText The raw text to use
+    /// @param forPartId The linked part ID to use for ^partname and ^totpages inserts
+    /// @param forPageId The page ID to use for ^page inserts. ("#" is inserted if not provided, mimicing Finale behavior.)
+    /// @param insertFunc A common handler for insert conversions.
+    EnigmaStringContext(const std::shared_ptr<dom::TextsBase>& rawText, dom::Cmper forPartId,
+            std::optional<dom::Cmper> forPageId = std::nullopt,
+            EnigmaString::TextInsertCallback insertFunc = EnigmaString::defaultInsertsCallback)
+        : m_rawText(rawText), m_forPartId(forPartId), m_forPageId(forPageId), m_insertFunc(insertFunc)
+    {}
+
+    /// @brief Check whether the context holds a valid raw text pointer.
+    explicit operator bool() const noexcept
+    { return static_cast<bool>(m_rawText); }
+
+    /// @brief Return displayable text with Enigma tags converted.
+    /// @param trimTags Whether to trim unknown tags or dump them into the output.
+    /// @param accidentalStyle The accidental substitution style to use. (ASCII, Unicode, SMuFL)
+    /// @param ignoreTags A list of tags to ignore. (Normally only used internally.)
+    /// @return The final rendered string.
+    std::string getText(bool trimTags = false,
+        EnigmaString::AccidentalStyle accidentalStyle = EnigmaString::AccidentalStyle::Ascii,
+        const std::unordered_set<std::string_view>& ignoreTags = {}) const;
+
+    /// @brief Parse the Enigma text into structured chunks with insert handling.
+    /// @param onText The handler for font and text style changes.
+    /// @param onInsert The handler for insert conversions.
+    /// @param options The options for the parsing session.
+    /// @return True if parsing was successful.
+    bool parseEnigmaText(const EnigmaString::TextChunkCallback& onText,
+        const EnigmaString::TextInsertCallback& onInsert,
+        const EnigmaString::EnigmaParsingOptions& options = {}) const;
+
+    /// @brief Parse the Enigma text into structured chunks with insert handling.
+    /// @param onText The handler for font and text style changes.
+    /// @param options The options for the parsing session.
+    /// @return True if parsing was successful.
+    bool parseEnigmaText(const EnigmaString::TextChunkCallback& onText,
+        const EnigmaString::EnigmaParsingOptions& options = {}) const
+    {
+        return parseEnigmaText(onText, EnigmaString::defaultInsertsCallback, options);
+    }
+
+    /// @brief Get the raw text pointer
+    std::shared_ptr<dom::TextsBase> getRawText() const { return m_rawText; }
 };
 
 } // namespace util
