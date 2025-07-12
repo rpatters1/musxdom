@@ -488,7 +488,7 @@ std::string EnigmaString::trimTags(const std::string& input)
     return output;
 }
 
-bool EnigmaStringContext::parseEnigmaText(const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
+bool EnigmaParsingContext::parseEnigmaText(const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
     const util::EnigmaString::EnigmaParsingOptions& options) const
 {
     if (!m_rawText) {
@@ -511,7 +511,7 @@ bool EnigmaStringContext::parseEnigmaText(const util::EnigmaString::TextChunkCal
     }, options);
 }
 
-std::string EnigmaStringContext::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
+std::string EnigmaParsingContext::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
     const std::unordered_set<std::string_view>& ignoreTags) const
 {
     util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
@@ -525,7 +525,7 @@ std::string EnigmaStringContext::getText(bool trimTags, util::EnigmaString::Acci
     return result;
 }
 
-std::shared_ptr<FontInfo> EnigmaStringContext::parseFirstFontInfo() const
+std::shared_ptr<FontInfo> EnigmaParsingContext::parseFirstFontInfo() const
 {
     if (!m_rawText || !musx::util::EnigmaString::startsWithFontCommand(m_rawText->text)) {
         return nullptr;

@@ -1526,10 +1526,12 @@ class TextBlock;
  * @brief Represents a page text assignment with positioning and page range properties.
  *
  * If the cmper is non-0, the #startPage and #endPage values are not used and the cmper
- * specifies the page to which this text is assigned.
+ * specifies the page ID to which this text is assigned.
  *
- * If the cmper is 0, the #startPage and #endPage values specify the range of pages to which
- * this text is assigned.
+ * If the cmper is 0, the #startPage and #endPage values specify the range of page IDs to which
+ * this text is assigned. An #endPage of 0 indicateas the last page of the document.
+ * 
+ * If cmper is non-zero, #startPage and #endPage should have the same value as the cmper.
  *
  * The inci value specifies a particular page text when more than one exists for the cmper value.
  *
@@ -1564,9 +1566,11 @@ public:
     Cmper block{};                  ///< The Cmper for the assigned @ref TextBlock. (xml tag is `<block>`)
     Evpu xDisp{};                   ///< The horizontal displacement from the default position. (xml tag is `<xdisp>`)
     Evpu yDisp{};                   ///< The vertical displacement from the default position. (xml tag is `<ydisp>`)
-    Cmper startPage{};              ///< If cmper is zero, the first page on which the text appears. (xml tag is `<startPage>`)
-    Cmper endPage{};                ///< If cmper is zero, the last page on which the text appears.
-                                    ///< A value of zero indicates the last page in the document, whatever number it may be. (xml tag is `<endPage>`)
+    Cmper startPage{};              ///< The first page ID on which the text appears.
+                                    ///< Note that the page ID may be different than the page number. See #calcStartPageNumber.
+    Cmper endPage{};                ///< The last page ID on which the text appears.
+                                    ///< A value of zero indicates the last page in the document, whatever number it may be.
+                                    ///< Note that the page ID may be different than the page number. See #calcEndPageNumber.
     PageAssignType oddEven{};       ///< Determines if a multipage assignment appears on all, even (left), or odd (right) pages
     HorizontalAlignment hPosLp{};   ///< Horizontal alignment on left or all pages (depending on #indRpPos). (xml tag is `<hposLp>`)
     HorizontalAlignment hPosRp{};   ///< Horizontal alignment on right pages (if #indRpPos is true). (xml tag is `<hposRp>`)
@@ -1583,16 +1587,38 @@ public:
     /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
     std::shared_ptr<TextBlock> getTextBlock() const;
 
+    /// @brief Return the starting page number, taking into account leading blank pages in all parts
+    int calcStartPageNumber(Cmper forPartId) const
+    { return calcPageNumberFromId(forPartId, getCmper() ? getCmper() : startPage); }
+
+    /// @brief Return the ending page number, taking into account leading blank pages in all parts
+    int calcEndPageNumber(Cmper forPartId) const
+    { return calcPageNumberFromId(forPartId, getCmper() ? getCmper() : endPage); }
+
     /**
      * @brief Gets the raw text for parsing this assignment, or nullptr if none.
      * @param forPartId The part to use for ^partname and ^totpages inserts.
      * @param forPageNumber The page number to use for ^page inserts if this is a multipage instance.
-     * This value is ignored for single page instances.
+     * This value is ignored for single page instances. Note that this is a page number and not a page ID.
+     * See #calcStartPageNumber and #calcEndPageNumber.
     */
-    util::EnigmaStringContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt) const;
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt) const;
+
+    void integrityCheck() override
+    {
+        if (getCmper() != 0) {
+            if (startPage != getCmper() || endPage != getCmper()) {
+                MUSX_INTEGRITY_ERROR("PageTextAssign " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(0)) +
+                    " has startPage or endPage value that does not match.");
+            }
+        }
+    }
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+
+private:
+    int calcPageNumberFromId(Cmper forPartId, Cmper pageId) const;
 };
 
 /**
@@ -1612,18 +1638,20 @@ public:
         : OthersBase(document, partId, shareMode, cmper) {}
 
     // Public properties corresponding to the XML structure
-    Cmper nameId{};                    ///< @ref Cmper of the part name @ref TextBlock. (xml tag is `<nameID>`)
-    int partOrder{};                   ///< Value that determines the order of listed parts in Finale's UI.
-    int copies{};                      ///< Number of copies to print.
-    bool extractPart{};                ///< Indicates if the part should be extracted.
-    bool needsRecalc{};                ///< Indicates if the part needs update layout.
-    bool useAsSmpInst{};               ///< Indicates if the part is used as a SmartMusic instrument.
-    int smartMusicInst{};              ///< SmartMusic instrument ID (-1 if not used).
-    Cmper defaultNameStaff{};          ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
-    Cmper defaultNameGroup{};          ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
+    Cmper nameId{};                     ///< @ref Cmper of the part name @ref TextBlock. (xml tag is `<nameID>`)
+    int partOrder{};                    ///< Value that determines the order of listed parts in Finale's UI.
+    int copies{};                       ///< Number of copies to print.
+    bool extractPart{};                 ///< Indicates if the part should be extracted.
+    bool needsRecalc{};                 ///< Indicates if the part needs update layout.
+    bool useAsSmpInst{};                ///< Indicates if the part is used as a SmartMusic instrument.
+    int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
+    Cmper defaultNameStaff{};           ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
+    Cmper defaultNameGroup{};           ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
+
+    int numberOfLeadingBlankPages{};    ///< The number of leading blank pages in the part. This is not in the xml but calculated in #factory::DocumentFactory::create.
 
     /** @brief Get the raw text context for the part name if any */
-    util::EnigmaStringContext getNameRawTextCtx() const;
+    util::EnigmaParsingContext getNameRawTextCtx() const;
 
     /** @brief Get the part name if any */
     std::string getName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
@@ -2870,7 +2898,7 @@ public:
     /// @brief Gets the raw text block context (from the `texts` pool) based on #textType.
     /// @param forPartId The linked part to use for ^partname and ^totpages inserts
     /// @param forPageNumber The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior.
-    util::EnigmaStringContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt,
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt,
         util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
     /** @brief return displayable text with Enigma tags removed */
@@ -2929,7 +2957,7 @@ public:
      * @brief Gets the raw text context for parsing this expression, or nullptr if none.
      * @param forPartId The linked part to used for ^partname and ^totpages inserts.
     */
-    util::EnigmaStringContext getRawTextCtx(Cmper forPartId) const;
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;

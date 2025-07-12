@@ -90,18 +90,23 @@ public:
     /// @param measureId the measure to find
     std::shared_ptr<others::StaffSystem> calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const;
 
+    /// @brief Returns the maximum number of blank pages in any part. This is calculated by #factory::DocumentFactory::create.
+    int getMaxBlankPages() const { return m_maxBlankPages; }
+
 private:
     /**
      * @brief Constructs a `Document`
      */
      explicit Document() = default;
 
-     HeaderPtr m_header;        ///< The <header>
-     OptionsPoolPtr m_options;  ///< The <options> pool
-     OthersPoolPtr m_others;    ///< The <others> pool
-     DetailsPoolPtr m_details;  ///< The <details> pool
-     EntryPoolPtr m_entries;    ///< The <entries> pool
-     TextsPoolPtr m_texts;      ///< The <texts> pool
+    HeaderPtr m_header;         ///< The <header>
+    OptionsPoolPtr m_options;   ///< The <options> pool
+    OthersPoolPtr m_others;     ///< The <others> pool
+    DetailsPoolPtr m_details;   ///< The <details> pool
+    EntryPoolPtr m_entries;     ///< The <entries> pool
+    TextsPoolPtr m_texts;       ///< The <texts> pool
+
+    int m_maxBlankPages{};      ///< The maximum number of leading blank pages in any part.
 
     // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;

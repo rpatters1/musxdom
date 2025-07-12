@@ -447,7 +447,7 @@ public:
     /// @brief Gets the raw text block
     /// @param forPartId The linked part to use for ^partname and ^totpages inserts
     /// @param forPageNumber The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior.
-    util::EnigmaStringContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt,
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt,
         util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
 private:

@@ -2182,11 +2182,10 @@ std::shared_ptr<others::TextBlock> details::MeasureTextAssign::getTextBlock() co
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
 }
 
-util::EnigmaStringContext details::MeasureTextAssign::getRawTextCtx(Cmper forPartId) const
+util::EnigmaParsingContext details::MeasureTextAssign::getRawTextCtx(Cmper forPartId) const
 {
     if (auto textBlock = getTextBlock()) {
         if (const auto page = getDocument()->calculatePageFromMeasure(forPartId, getCmper2())) {
-            /// @todo get the page offset for the part (due to blank pages at start)
             return textBlock->getRawTextCtx(forPartId, page->getCmper());
         }
     }
@@ -2767,23 +2766,34 @@ std::shared_ptr<others::TextBlock> others::PageTextAssign::getTextBlock() const
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
 }
 
-util::EnigmaStringContext others::PageTextAssign::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber) const
+util::EnigmaParsingContext others::PageTextAssign::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber) const
 {
     if (auto textBlock = getTextBlock()) {
         if (getCmper() > 0) {
-            /// @todo add in page offset for blank pages at beginning
-            forPageNumber = getCmper();
+            forPageNumber = calcStartPageNumber(forPartId);
         }
         return textBlock->getRawTextCtx(forPartId, forPageNumber);
     }
     return {};
 }
 
+int others::PageTextAssign::calcPageNumberFromId(Cmper forPartId, Cmper pageId) const
+{
+    if (pageId != 0) {
+        if (auto part = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
+            if (pageId > part->numberOfLeadingBlankPages) {
+                return int(pageId) - getDocument()->getMaxBlankPages() + part->numberOfLeadingBlankPages;
+            }
+        }
+    }
+    return int(pageId);
+}
+
 // **************************
 // ***** PartDefinition *****
 // **************************
 
-util::EnigmaStringContext others::PartDefinition::getNameRawTextCtx() const
+util::EnigmaParsingContext others::PartDefinition::getNameRawTextCtx() const
 {
     /// @todo perhaps additional logic as in getName, but not until something is broken.
     if (nameId) {
@@ -3833,7 +3843,7 @@ int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
 // ***** TextBlock *****
 // *********************
 
-util::EnigmaStringContext others::TextBlock::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber, util::EnigmaString::TextInsertCallback defaultInsertFunc) const
+util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber, util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
     std::shared_ptr<TextsBase> rawText;
     switch (textType) {
@@ -3867,7 +3877,7 @@ std::shared_ptr<others::TextBlock> others::TextExpressionDef::getTextBlock() con
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), textIdKey);
 }
 
-util::EnigmaStringContext others::TextExpressionDef::getRawTextCtx(Cmper forPartId) const
+util::EnigmaParsingContext others::TextExpressionDef::getRawTextCtx(Cmper forPartId) const
 {
     if (auto textBlock = getTextBlock()) {
         return textBlock->getRawTextCtx(forPartId, std::nullopt, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
@@ -3894,10 +3904,10 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 // ***** TextsBase *****
 // *********************
 
-util::EnigmaStringContext TextsBase::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber,
+util::EnigmaParsingContext TextsBase::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber,
     util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
-    return util::EnigmaStringContext(shared_from_this(), forPartId, forPageNumber, defaultInsertFunc);
+    return util::EnigmaParsingContext(shared_from_this(), forPartId, forPageNumber, defaultInsertFunc);
 }
 
 // *************************

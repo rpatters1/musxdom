@@ -391,13 +391,13 @@ private:
     const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles);
 };
 
-/// @class EnigmaStringContext
+/// @class EnigmaParsingContext
 /// @brief Wrapper class for interpreting and rendering Enigma-style strings with insert handling.
 ///
 /// This class provides implementations of `getText()` and `parseEnigmaText()`
 /// that retrieve the raw text from a `TextsBase` object, either directly or by ID,
 /// and perform substitution of special insert commands such as `^page`, `^date`, etc.
-class EnigmaStringContext
+class EnigmaParsingContext
 {
 private:
     std::shared_ptr<const dom::TextsBase> m_rawText;
@@ -407,7 +407,7 @@ private:
     
 public:
     /// @brief Null constructor
-    EnigmaStringContext()
+    EnigmaParsingContext()
         : m_rawText(nullptr), m_forPartId(dom::SCORE_PARTID), m_insertFunc(EnigmaString::defaultInsertsCallback)
     {}
         
@@ -416,7 +416,7 @@ public:
     /// @param forPartId The linked part ID to use for ^partname and ^totpages inserts
     /// @param forPageNumber The value to use as page number for ^page inserts. ("#" is inserted if not provided, mimicing Finale behavior.)
     /// @param insertFunc A common handler for insert conversions.
-    EnigmaStringContext(const std::shared_ptr<const dom::TextsBase>& rawText, dom::Cmper forPartId,
+    EnigmaParsingContext(const std::shared_ptr<const dom::TextsBase>& rawText, dom::Cmper forPartId,
             std::optional<int> forPageNumber = std::nullopt,
             EnigmaString::TextInsertCallback insertFunc = EnigmaString::defaultInsertsCallback)
         : m_rawText(rawText), m_forPartId(forPartId), m_forPageNumber(forPageNumber), m_insertFunc(insertFunc)
@@ -466,6 +466,12 @@ public:
 
     // If there is ever a need for a non-const version of the pointer, we can always
     // look it up again.
+
+    /// @brief Get the requested part id.
+    dom::Cmper getRequestedPartId() const { return m_forPartId; }
+
+    /// @brief Get the page number that was supplied, if any.
+    std::optional<int> getPageNumber() const { return m_forPageNumber; }
 };
 
 } // namespace util
