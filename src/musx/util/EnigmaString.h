@@ -400,22 +400,26 @@ private:
 class EnigmaStringContext
 {
 private:
-    std::shared_ptr<dom::TextsBase> m_rawText;
-    dom::Cmper m_forPartId;    ///< The part id to use for ^partname and ^totpages inserts.
-    std::optional<dom::Cmper> m_forPageId;
+    std::shared_ptr<const dom::TextsBase> m_rawText;
+    dom::Cmper m_forPartId;
+    std::optional<int> m_forPageNumber;
     EnigmaString::TextInsertCallback m_insertFunc;
     
 public:
-
+    /// @brief Null constructor
+    EnigmaStringContext()
+        : m_rawText(nullptr), m_forPartId(dom::SCORE_PARTID), m_insertFunc(EnigmaString::defaultInsertsCallback)
+    {}
+        
     /// @brief Constructor
     /// @param rawText The raw text to use
     /// @param forPartId The linked part ID to use for ^partname and ^totpages inserts
-    /// @param forPageId The page ID to use for ^page inserts. ("#" is inserted if not provided, mimicing Finale behavior.)
+    /// @param forPageNumber The value to use as page number for ^page inserts. ("#" is inserted if not provided, mimicing Finale behavior.)
     /// @param insertFunc A common handler for insert conversions.
-    EnigmaStringContext(const std::shared_ptr<dom::TextsBase>& rawText, dom::Cmper forPartId,
-            std::optional<dom::Cmper> forPageId = std::nullopt,
+    EnigmaStringContext(const std::shared_ptr<const dom::TextsBase>& rawText, dom::Cmper forPartId,
+            std::optional<int> forPageNumber = std::nullopt,
             EnigmaString::TextInsertCallback insertFunc = EnigmaString::defaultInsertsCallback)
-        : m_rawText(rawText), m_forPartId(forPartId), m_forPageId(forPageId), m_insertFunc(insertFunc)
+        : m_rawText(rawText), m_forPartId(forPartId), m_forPageNumber(forPageNumber), m_insertFunc(insertFunc)
     {}
 
     /// @brief Check whether the context holds a valid raw text pointer.
@@ -433,7 +437,8 @@ public:
 
     /// @brief Parse the Enigma text into structured chunks with insert handling.
     /// @param onText The handler for font and text style changes.
-    /// @param onInsert The handler for insert conversions.
+    /// @param onInsert The handler for insert conversions. This function is called first. If it returns a string,
+    /// the default insert value is skipped.
     /// @param options The options for the parsing session.
     /// @return True if parsing was successful.
     bool parseEnigmaText(const EnigmaString::TextChunkCallback& onText,
@@ -450,8 +455,17 @@ public:
         return parseEnigmaText(onText, EnigmaString::defaultInsertsCallback, options);
     }
 
+    /**
+     * @brief Returns a shared pointer to a FontInfo instance that reflects
+     * the first font information in the text.
+     */
+    std::shared_ptr<dom::FontInfo> parseFirstFontInfo() const;
+
     /// @brief Get the raw text pointer
-    std::shared_ptr<dom::TextsBase> getRawText() const { return m_rawText; }
+    std::shared_ptr<const dom::TextsBase> getRawText() const { return m_rawText; }
+
+    // If there is ever a need for a non-const version of the pointer, we can always
+    // look it up again.
 };
 
 } // namespace util

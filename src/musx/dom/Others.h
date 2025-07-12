@@ -1583,8 +1583,13 @@ public:
     /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
     std::shared_ptr<TextBlock> getTextBlock() const;
 
-    /** @brief Gets the raw text for this assignment, or nullptr if none. */
-    std::shared_ptr<TextsBase> getRawText() const;
+    /**
+     * @brief Gets the raw text for parsing this assignment, or nullptr if none.
+     * @param forPartId The part to use for ^partname and ^totpages inserts.
+     * @param forPageNumber The page number to use for ^page inserts if this is a multipage instance.
+     * This value is ignored for single page instances.
+    */
+    util::EnigmaStringContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt) const;
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1617,8 +1622,8 @@ public:
     Cmper defaultNameStaff{};          ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
     Cmper defaultNameGroup{};          ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
 
-    /** @brief Get the raw text for the part name if any */
-    std::shared_ptr<TextsBase> getNameRawText() const;
+    /** @brief Get the raw text context for the part name if any */
+    util::EnigmaStringContext getNameRawTextCtx() const;
 
     /** @brief Get the part name if any */
     std::string getName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
@@ -2862,11 +2867,11 @@ public:
     Efix cornerRadius{};               ///< Corner radius for rounded corners.
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
 
-    /// @brief Gets the raw text block (from the `texts` pool) based on #textType.
-    std::shared_ptr<TextsBase> getRawTextBlock() const;
-
-    /** @brief return displayable text with Enigma tags removed */
-    std::string getText(Cmper forPartId, bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+    /// @brief Gets the raw text block context (from the `texts` pool) based on #textType.
+    /// @param forPartId The linked part to use for ^partname and ^totpages inserts
+    /// @param forPageNumber The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior.
+    util::EnigmaStringContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt,
+        util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
     /** @brief return displayable text with Enigma tags removed */
     static std::string getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags = false,
@@ -2920,26 +2925,15 @@ public:
     /** @brief Gets the TextBlock for this expression, or nullptr if none. */
     std::shared_ptr<TextBlock> getTextBlock() const;
 
-    /** @brief Gets the raw text for this expression, or nullptr if none. */
-    std::shared_ptr<TextsBase> getRawText() const;
+    /**
+     * @brief Gets the raw text context for parsing this expression, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaStringContext getRawTextCtx(Cmper forPartId) const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;
-
-    /// @brief Gets human-readable text with insert converted to their appropriate values
-    /// @param forPartId The part id to use for pages and partname
-    /// @param trimTags Whether to trim unknown tags.
-    /// @param accidentalStyle The accidental substitution style.
-    std::string getText(Cmper forPartId, bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
-    
-    /// @brief See #util::EnigmaString::parseEnigmaText.
-    /// @param forPartId The part id to use for pages and partname
-    /// @param onText The text chunk handler for style changes
-    /// @param onInsert The insert handler for text replacement
-    /// @param options Parsing options
-    bool parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
-        const util::EnigmaString::EnigmaParsingOptions& options = {}) const;
-    
+  
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

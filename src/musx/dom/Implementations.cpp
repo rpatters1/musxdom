@@ -217,29 +217,39 @@ std::shared_ptr<const FontInfo> options::ClefOptions::ClefDef::calcFont() const
 // ***** Document *****
 // ********************
 
-std::optional<Cmper> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
+std::shared_ptr<others::Page> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
 {
+    std::shared_ptr<others::Page> result;
     auto pages = getOthers()->getArray<others::Page>(partId);
     for (const auto& page : pages) {
         if (page->firstMeasureId && page->lastMeasureId) {
             if (measureId >= page->firstMeasureId.value() && measureId <= page->lastMeasureId.value()) {
-                return page->getCmper();
+                result = page;
+                break;
             }
         }
     }
-    return std::nullopt;
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("Unable to find page for measure ID " + std::to_string(measureId));
+    }
+    return result;
 }
 
-std::optional<SystemCmper> Document::calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const
+std::shared_ptr<others::StaffSystem> Document::calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const
 {
+    std::shared_ptr<others::StaffSystem> result;
     auto systems = getOthers()->getArray<others::StaffSystem>(partId);
     for (const auto& system : systems) {
         // endMeas is 1 measure past the end of the system
         if (measureId >= system->startMeas && measureId < system->endMeas) {
-            return SystemCmper(system->getCmper());
+            result = system;
+            break;
         }
     }
-    return std::nullopt;
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("Unable to find system for measure ID " + std::to_string(measureId));
+    }
+    return result;
 }
 
 // *****************
@@ -2172,12 +2182,15 @@ std::shared_ptr<others::TextBlock> details::MeasureTextAssign::getTextBlock() co
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
 }
 
-std::shared_ptr<TextsBase> details::MeasureTextAssign::getRawText() const
+util::EnigmaStringContext details::MeasureTextAssign::getRawTextCtx(Cmper forPartId) const
 {
     if (auto textBlock = getTextBlock()) {
-        return textBlock->getRawTextBlock();
+        if (const auto page = getDocument()->calculatePageFromMeasure(forPartId, getCmper2())) {
+            /// @todo get the page offset for the part (due to blank pages at start)
+            return textBlock->getRawTextCtx(forPartId, page->getCmper());
+        }
     }
-    return nullptr;
+    return {};
 }
 
 // *************************************
@@ -2754,32 +2767,36 @@ std::shared_ptr<others::TextBlock> others::PageTextAssign::getTextBlock() const
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
 }
 
-std::shared_ptr<TextsBase> others::PageTextAssign::getRawText() const
+util::EnigmaStringContext others::PageTextAssign::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber) const
 {
     if (auto textBlock = getTextBlock()) {
-        return textBlock->getRawTextBlock();
+        if (getCmper() > 0) {
+            /// @todo add in page offset for blank pages at beginning
+            forPageNumber = getCmper();
+        }
+        return textBlock->getRawTextCtx(forPartId, forPageNumber);
     }
-    return nullptr;
+    return {};
 }
 
 // **************************
 // ***** PartDefinition *****
 // **************************
 
-std::shared_ptr<TextsBase> others::PartDefinition::getNameRawText() const
+util::EnigmaStringContext others::PartDefinition::getNameRawTextCtx() const
 {
     /// @todo perhaps additional logic as in getName, but not until something is broken.
     if (nameId) {
         if (auto textBlock = getDocument()->getOthers()->get<others::TextBlock>(getPartId(), nameId)) {
-            return textBlock->getRawTextBlock();
+            return textBlock->getRawTextCtx(getCmper());
         }
     }
-    return nullptr;
+    return {};
 }
 
 std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    if (auto nameRawText = util::EnigmaStringContext(getNameRawText(), getCmper())) {
+    if (auto nameRawText = getNameRawTextCtx()) {
         // Although the Finale U.I. prevents ^partname inserts in partname enigma strings, one might have crept in.
         std::unordered_set<std::string_view> ignoreTags = { "partname" }; // do not parse ^partname inserts
         return nameRawText.getText(true, accidentalStyle, ignoreTags);
@@ -3816,30 +3833,27 @@ int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
 // ***** TextBlock *****
 // *********************
 
-std::shared_ptr<TextsBase> others::TextBlock::getRawTextBlock() const
+util::EnigmaStringContext others::TextBlock::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber, util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
+    std::shared_ptr<TextsBase> rawText;
     switch (textType) {
         default:
+            break;
         case TextType::Block:
-            return getDocument()->getTexts()->get<texts::BlockText>(textId);
+            rawText = getDocument()->getTexts()->get<texts::BlockText>(textId);
+            break;
         case TextType::Expression:
-            return getDocument()->getTexts()->get<texts::ExpressionText>(textId);        
-    }    
-}
-
-std::string others::TextBlock::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
-{
-    if (auto block = util::EnigmaStringContext(getRawTextBlock(), forPartId)) {
-        return block.getText(trimTags, accidentalStyle);
+            rawText = getDocument()->getTexts()->get<texts::ExpressionText>(textId);
+            break;
     }
-    return {};
+    return rawText->getRawTextCtx(forPartId, forPageNumber, defaultInsertFunc);
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
 {
     auto textBlock = document->getOthers()->get<others::TextBlock>(forPartId, textId);
     if (textBlock) {
-        return textBlock->getText(forPartId, trimTags, accidentalStyle);
+        return textBlock->getRawTextCtx(forPartId).getText(trimTags, accidentalStyle);
     }
     return {};
 }
@@ -3853,12 +3867,21 @@ std::shared_ptr<others::TextBlock> others::TextExpressionDef::getTextBlock() con
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), textIdKey);
 }
 
-std::shared_ptr<TextsBase> others::TextExpressionDef::getRawText() const
+util::EnigmaStringContext others::TextExpressionDef::getRawTextCtx(Cmper forPartId) const
 {
     if (auto textBlock = getTextBlock()) {
-        return textBlock->getRawTextBlock();
+        return textBlock->getRawTextCtx(forPartId, std::nullopt, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
+            if (components[0] == "value") {
+                return std::to_string(value);
+            } else if (components[0] == "control") {
+                return std::to_string(auxData1);
+            } else if (components[0] == "pass") {
+                return std::to_string(playPass);
+            }
+            return std::nullopt;
+        });
     }
-    return nullptr;
+    return {};
 }
 
 std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
@@ -3867,56 +3890,14 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
     return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getPartId(), getCmper());
 }
 
-bool others::TextExpressionDef::parseEnigmaText(Cmper forPartId, const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
-    const util::EnigmaString::EnigmaParsingOptions& options) const
-{
-    /// @todo put this in a common place for TextExpressionDef.
-    auto rawText = util::EnigmaStringContext(getRawText(), forPartId, std::nullopt, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
-        if (auto result = onInsert(components)) {
-            return result;
-        }
-        if (components[0] == "value") {
-            return std::to_string(value);
-        } else if (components[0] == "control") {
-            return std::to_string(auxData1);
-        } else if (components[0] == "pass") {
-            return std::to_string(playPass);
-        }
-        return std::nullopt;
-    });
-    if (rawText) {
-        return rawText.parseEnigmaText(onText, options);
-    }
-    return false;
-}
-
-std::string others::TextExpressionDef::getText(Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
-{
-    util::EnigmaString::EnigmaParsingOptions options(accidentalStyle);
-    options.stripUnknownTags = trimTags;
-    std::string result;
-    parseEnigmaText(forPartId, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
-            result += text;
-            return true;
-        }, util::EnigmaString::defaultInsertsCallback, options);
-    return result;
-}
-
 // *********************
 // ***** TextsBase *****
 // *********************
 
-std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
+util::EnigmaStringContext TextsBase::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber,
+    util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
-    if (!musx::util::EnigmaString::startsWithFontCommand(this->text)) {
-        return nullptr;
-    }
-    std::shared_ptr<FontInfo> result;
-    util::EnigmaString::parseEnigmaText(getDocument(), SCORE_PARTID, text, [&](const std::string&, const util::EnigmaStyles& styles) {
-        result = styles.font;
-        return false;
-    });
-    return result;
+    return util::EnigmaStringContext(shared_from_this(), forPartId, forPageNumber, defaultInsertFunc);
 }
 
 // *************************

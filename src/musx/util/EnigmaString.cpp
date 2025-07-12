@@ -407,7 +407,7 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
             addToBuf("#");
         } else if (components[0] == "partname") {
             if (auto linkedPart = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
-                if (auto nameRawText = linkedPart->getNameRawText()) {
+                if (auto nameRawText = linkedPart->getNameRawTextCtx().getRawText()) {
                     EnigmaParsingOptions partnameOptions = options;
                     partnameOptions.ignoreStyleTags = true;
                     partnameOptions.ignoreTags = { "partname" };
@@ -498,13 +498,16 @@ bool EnigmaStringContext::parseEnigmaText(const util::EnigmaString::TextChunkCal
         if (auto result = onInsert(components)) {
             return result;
         }
-        if (m_forPageId.has_value()) {
+        if (auto result = m_insertFunc(components)) {
+            return result;
+        }
+        if (m_forPageNumber.has_value()) {
             if (components[0] == "page") {
                 int pageOffset = components.size() > 1 ? std::stoi(components[1]) : 0;
-                return std::to_string(pageOffset + m_forPageId.value());
+                return std::to_string(pageOffset + m_forPageNumber.value());
             }
         }
-        return m_insertFunc(components);
+        return std::nullopt;
     }, options);
 }
 
@@ -519,6 +522,19 @@ std::string EnigmaStringContext::getText(bool trimTags, util::EnigmaString::Acci
             result += text;
             return true;
         }, options);
+    return result;
+}
+
+std::shared_ptr<FontInfo> EnigmaStringContext::parseFirstFontInfo() const
+{
+    if (!m_rawText || !musx::util::EnigmaString::startsWithFontCommand(m_rawText->text)) {
+        return nullptr;
+    }
+    std::shared_ptr<FontInfo> result;
+    util::EnigmaString::parseEnigmaText(m_rawText->getDocument(), m_forPartId, m_rawText->text, [&](const std::string&, const util::EnigmaStyles& styles) {
+        result = styles.font;
+        return false;
+    });
     return result;
 }
 

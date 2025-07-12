@@ -950,7 +950,7 @@ public:
     std::shared_ptr<others::TextBlock> getTextBlock() const;
 
     /** @brief Gets the raw text for this assignment, or nullptr if none. */
-    std::shared_ptr<TextsBase> getRawText() const;
+    util::EnigmaStringContext getRawTextCtx(Cmper forPartId) const;
 
     constexpr static std::string_view XmlNodeName = "measTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

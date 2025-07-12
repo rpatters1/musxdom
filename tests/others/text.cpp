@@ -619,7 +619,7 @@ TEST(TextsTest, FontFromEnigma)
 
     auto text = texts->get<ExpressionText>(216);
     ASSERT_TRUE(text);
-    auto font = text->parseFirstFontInfo();
+    auto font = text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo();
     EXPECT_EQ(font->fontId, 1);
     EXPECT_EQ(font->fontSize, 12);
     EXPECT_FALSE(font->bold);
@@ -631,13 +631,13 @@ TEST(TextsTest, FontFromEnigma)
 
     text = texts->get<ExpressionText>(217);
     ASSERT_TRUE(text);
-    font = text->parseFirstFontInfo();
+    font = text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo();
     EXPECT_FALSE(font);
 
     text = texts->get<ExpressionText>(218);
     ASSERT_TRUE(text);
     EXPECT_THROW(
-        text->parseFirstFontInfo(),
+        text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo(),
         std::invalid_argument
     );
 }
@@ -1023,41 +1023,31 @@ TEST(TextsTest, ExpressionsAndTitles)
     ASSERT_TRUE(expDef) << "text expression def 1 does not exist.";
 
     output.clear();
-    bool result = expDef->parseEnigmaText(SCORE_PARTID, [&](const std::string& chunk, const EnigmaStyles&) {
+    bool result = expDef->getRawTextCtx(SCORE_PARTID).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
         output += chunk;
         return true;
-    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
+    }, EnigmaString::AccidentalStyle::Unicode);
     EXPECT_TRUE(result);
     EXPECT_EQ(output, "Score value: 112 control: 64 pass: 3 pages: 2");
 
     output.clear();
-    result = expDef->parseEnigmaText(kClarinetPartId, [&](const std::string& chunk, const EnigmaStyles&) {
+    result = expDef->getRawTextCtx(kClarinetPartId).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
         output += chunk;
         return true;
-    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
+    }, EnigmaString::AccidentalStyle::Unicode);
     EXPECT_TRUE(result);
     EXPECT_EQ(output, "Clarinet in B♭ page: # value: 112 control: 64 pass: 3 pages: 1");
 
     auto measTexts = doc->getDetails()->getArray<details::MeasureTextAssign>(SCORE_PARTID, 1, 34);
     ASSERT_FALSE(measTexts.empty());
-    auto measTextRaw = measTexts[0]->getRawText();
-    ASSERT_TRUE(measTextRaw);
 
-    const auto scorePageNum = doc->calculatePageFromMeasure(SCORE_PARTID, measTexts[0]->getCmper2());
+    const auto scorePageNum = doc->calculatePageFromMeasure(SCORE_PARTID, measTexts[0]->getCmper2())->getCmper();
     EXPECT_EQ(scorePageNum, 2);
-    const auto partPageNum = doc->calculatePageFromMeasure(kClarinetPartId, measTexts[0]->getCmper2());
+    const auto partPageNum = doc->calculatePageFromMeasure(kClarinetPartId, measTexts[0]->getCmper2())->getCmper();
     EXPECT_EQ(partPageNum, 1);
 
     output.clear();
-    result = EnigmaStringContext(measTextRaw, SCORE_PARTID).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
-        output += chunk;
-        return true;
-    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
-    EXPECT_TRUE(result);
-    EXPECT_EQ(output, "Score page: #");
-
-    output.clear();
-    result = EnigmaStringContext(measTextRaw, SCORE_PARTID, scorePageNum).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
+    result = measTexts[0]->getRawTextCtx(SCORE_PARTID).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
         output += chunk;
         return true;
     }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
@@ -1065,7 +1055,7 @@ TEST(TextsTest, ExpressionsAndTitles)
     EXPECT_EQ(output, "Score page: 2");
 
     output.clear();
-    result = EnigmaStringContext(measTextRaw, kClarinetPartId, partPageNum).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
+    result = measTexts[0]->getRawTextCtx(kClarinetPartId).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
         output += chunk;
         return true;
     }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
