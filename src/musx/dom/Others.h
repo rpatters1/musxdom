@@ -1639,6 +1639,7 @@ public:
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
+    /// @todo Refactor calcPageNumberFromAssignmentId and calcAssignmentIdFromPageNumber into Document if we ever support page graphics.
     static PageCmper calcPageNumberFromAssignmentId(const DocumentPtr& document, Cmper forPartId, PageCmper pageAssignmentId);
     static PageCmper calcAssignmentIdFromPageNumber(const DocumentPtr& document, Cmper forPartId, PageCmper pageId);
 };
