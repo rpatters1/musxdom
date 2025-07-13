@@ -203,7 +203,7 @@ TEST(MeasureTextAssignTest, PopulateFields)
     EXPECT_TRUE(assign->hidden);
 }
 
-TEST(PageTextAssignText, ParseSinglePageAssignment)
+TEST(PageTextAssignText, ParseSinglePageAssignment1)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "page_text.enigmaxml", xml);
@@ -235,16 +235,46 @@ TEST(PageTextAssignText, ParseSinglePageAssignment)
     }
 }
 
+TEST(PageTextAssignText, ParseSinglePageAssignment2)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "page_text.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    PageCmper pageAssignmentId = 3;
+    std::vector<PageCmper> expectedValues = { 0, 0, 3 };
+    for (Cmper partId = 0; partId < expectedValues.size(); partId++) {
+        auto pageAssign = doc->getOthers()->get<others::PageTextAssign>(partId, pageAssignmentId, 0);
+        ASSERT_TRUE(pageAssign) << "page assignment " << pageAssignmentId << " should exist in all parts";
+        EXPECT_EQ(expectedValues[partId], pageAssign->calcStartPageNumber(partId));
+        EXPECT_EQ(expectedValues[partId], pageAssign->calcEndPageNumber(partId));
+    }
+
+    pageAssignmentId = 1;
+    expectedValues = { 1, 0, 1 };
+    for (Cmper partId = 0; partId < expectedValues.size(); partId++) {
+        auto pageAssign = doc->getOthers()->get<others::PageTextAssign>(partId, pageAssignmentId, 0);
+        ASSERT_TRUE(pageAssign) << "page assignment " << pageAssignmentId << " should exist in all parts";
+        EXPECT_EQ(expectedValues[partId], pageAssign->calcStartPageNumber(partId));
+        EXPECT_EQ(expectedValues[partId], pageAssign->calcEndPageNumber(partId));
+        std::string text = pageAssign->getRawTextCtx(partId).getText();
+        std::cout << "Page assign text for part " << partId << ": " << text << std::endl;
+    }
+}
+
 static void testMultiPageAssignment(const DocumentPtr& doc, Cmper partId, Inci inci, Cmper expectedMinPage, Cmper expectedMaxPage,
     const std::string& expectedPre, const std::string& expectedPost)
 {
+    auto part = doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId);
+    ASSERT_TRUE(part) << "unable to find part " << partId;
     auto pageAssign = doc->getOthers()->get<others::PageTextAssign>(partId, 0, inci);
-    ASSERT_TRUE(pageAssign) << "Unable to find page text at assignement id: 0 inci: " << inci;
-    Cmper minPage = pageAssign->calcStartPageNumber(partId);
+    ASSERT_TRUE(pageAssign) << "unable to find page text at assignement id: 0 inci: " << inci;
+    PageCmper minPage = (std::max<int>)(pageAssign->calcStartPageNumber(partId), 1);
     ASSERT_EQ(minPage, expectedMinPage);
-    Cmper maxPage = pageAssign->calcEndPageNumber(partId);
+    PageCmper maxPage = (std::min<int>)(pageAssign->calcEndPageNumber(partId), part->numberOfPages);
     ASSERT_EQ(maxPage, expectedMaxPage);
-    for (Cmper pageId = minPage; pageId <= maxPage; pageId++) {
+    for (PageCmper pageId = minPage; pageId <= maxPage; pageId++) {
         std::string text = pageAssign->getRawTextCtx(partId, pageId).getText();
         std::string expectedText = expectedPre + std::to_string(pageId) + expectedPost;
         EXPECT_EQ(text, expectedText);

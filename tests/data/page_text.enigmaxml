@@ -61,7 +61,7 @@
       <modified>
         <year>2025</year>
         <month>7</month>
-        <day>12</day>
+        <day>13</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -2036,6 +2036,26 @@
       <cornerRadius>512</cornerRadius>
       <textTag>block</textTag>
     </textBlock>
+    <textBlock cmper="7">
+      <textID>7</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="8">
+      <textID>8</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
     <playbackRoute cmper="1">
       <patchType>C0_C32_PC</patchType>
       <msb>121</msb>
@@ -2181,6 +2201,26 @@
     </pageTextAssign>
     <pageTextAssign cmper="0" inci="0" part="2" shared="true"/>
     <pageTextAssign cmper="0" inci="1" part="2" shared="true"/>
+    <pageTextAssign cmper="1" inci="0">
+      <block>8</block>
+      <startPage>1</startPage>
+      <endPage>1</endPage>
+      <hposLp>center</hposLp>
+      <hposRp>center</hposRp>
+    </pageTextAssign>
+    <pageTextAssign cmper="3" inci="0">
+      <block>7</block>
+      <xdisp>1078</xdisp>
+      <ydisp>-235</ydisp>
+      <startPage>3</startPage>
+      <endPage>3</endPage>
+      <hposLp>center</hposLp>
+      <hposRp>center</hposRp>
+    </pageTextAssign>
+    <pageTextAssign cmper="3" inci="0" part="2" shared="true">
+      <xdisp>0</xdisp>
+      <ydisp>-235</ydisp>
+    </pageTextAssign>
     <pageTextAssign cmper="4" inci="0">
       <block>2</block>
       <ydisp>-154</ydisp>
@@ -2887,6 +2927,7 @@
       <partOrder>0</partOrder>
       <copies>1</copies>
       <printPart/>
+      <needsRecalc/>
     </partDef>
     <partDef cmper="1">
       <nameID>5</nameID>
@@ -2902,7 +2943,6 @@
       <partOrder>2</partOrder>
       <copies>1</copies>
       <extractPart/>
-      <needsRecalc/>
       <useAsSmpInst/>
       <smartMusicInst>-1</smartMusicInst>
     </partDef>
@@ -3345,11 +3385,14 @@
   </entries>
   <texts>
     <fileInfo type="title">Page Text</fileInfo>
+    <fileInfo type="subtitle">Subtitle</fileInfo>
     <blockText number="1">^fontid(1)^size(12)^nfx(0)Score</blockText>
     <blockText number="2">^fontid(1)^size(12)^nfx(0)Single ^title() - Page ^page(0) of ^totpages()</blockText>
     <blockText number="3">^fontid(1)^size(12)^nfx(0)Multiple ^title() - Page ^page(0) of ^totpages()</blockText>
     <blockText number="4">^fontid(1)^size(12)^nfx(0)All ^title() - Page ^page(0) of ^totpages() ^partname()</blockText>
     <blockText number="5">^fontid(1)^size(12)^nfx(0)Part 1</blockText>
     <blockText number="6">^fontid(1)^size(12)^nfx(0)Part 2</blockText>
+    <blockText number="7">^fontid(1)^size(12)^nfx(0)^subtitle() Page ^page(0) of ^totpages()</blockText>
+    <blockText number="8">^fontid(1)^size(12)^nfx(0)Title Page - Page ^page(0) of ^totpages() </blockText>
   </texts>
 </finale>

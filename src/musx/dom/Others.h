@@ -1493,7 +1493,7 @@ public:
 class Page : public OthersBase {
 public:
     /** @brief Constructor function */
-    explicit Page(const DocumentWeakPtr& document, Cmper pageId, ShareMode shareMode, Cmper cmper)
+    explicit Page(const DocumentWeakPtr& document, PageCmper pageId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, pageId, shareMode, cmper) {}
 
     Evpu height{};              ///< Page height in Evpu.
@@ -1568,9 +1568,9 @@ public:
     Cmper block{};                  ///< The Cmper for the assigned @ref TextBlock. (xml tag is `<block>`)
     Evpu xDisp{};                   ///< The horizontal displacement from the default position. (xml tag is `<xdisp>`)
     Evpu yDisp{};                   ///< The vertical displacement from the default position. (xml tag is `<ydisp>`)
-    Cmper startPage{};              ///< The first page assignment ID on which the text appears.
+    PageCmper startPage{};          ///< The first page assignment ID on which the text appears.
                                     ///< Note that the page assignment ID may be different than the page number. See #calcStartPageNumber.
-    Cmper endPage{};                ///< The last page assignment ID on which the text appears.
+    PageCmper endPage{};            ///< The last page assignment ID on which the text appears.
                                     ///< A value of zero indicates the last page in the document, whatever number it may be.
                                     ///< Note that the page assignment ID may be different than the page number. See #calcEndPageNumber.
     PageAssignType oddEven{};       ///< Determines if a multipage assignment appears on all, even (left), or odd (right) pages
@@ -1589,14 +1589,18 @@ public:
     /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
     std::shared_ptr<TextBlock> getTextBlock() const;
 
-    /// @brief Return the starting page number, taking into account leading blank pages in all parts.
+    /// @brief Return the starting page number, taking into account leading blank pages in all parts. The return
     /// This calculation mimics observed behavior in Finale.
-    Cmper calcStartPageNumber(Cmper forPartId) const
+    /// @return The return value may be a number less than one or greater than the total number of pages for @p forPartId.
+    /// In these cases, the page text is not visible in that part.
+    PageCmper calcStartPageNumber(Cmper forPartId) const
     { return calcPageNumberFromAssignmentId(getDocument(), forPartId, getCmper() ? getCmper() : startPage); }
 
     /// @brief Return the ending page number, taking into account leading blank pages in all parts
     /// This calculation mimics observed behavior in Finale.
-    Cmper calcEndPageNumber(Cmper forPartId) const;
+    /// @return The return value may be a number less than one or greater than the total number of pages for @p forPartId.
+    /// In these cases, the page text is not visible in that part.
+    PageCmper calcEndPageNumber(Cmper forPartId) const;
 
     /**
      * @brief Gets the raw text for parsing this assignment, or nullptr if none.
@@ -1622,21 +1626,21 @@ public:
     /// @param document The document to search.
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for multipage assignments.
-    static std::shared_ptr<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, Cmper pageId, Inci inci);
+    static std::shared_ptr<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci);
 
     /// @brief Returns all the page text assignments for a given page number in a given part.
     /// This allows the caller not to have to know the conversion to page assignment IDs.
     /// @param document The document to search.
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for all multipage assignments.
-    static std::vector<std::shared_ptr<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, Cmper pageId);
+    static std::vector<std::shared_ptr<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
-    static Cmper calcPageNumberFromAssignmentId(const DocumentPtr& document, Cmper forPartId, Cmper pageAssignmentId);
-    static Cmper calcAssignmentIdFromPageNumber(const DocumentPtr& document, Cmper forPartId, Cmper pageId);
+    static PageCmper calcPageNumberFromAssignmentId(const DocumentPtr& document, Cmper forPartId, PageCmper pageAssignmentId);
+    static PageCmper calcAssignmentIdFromPageNumber(const DocumentPtr& document, Cmper forPartId, PageCmper pageId);
 };
 
 /**

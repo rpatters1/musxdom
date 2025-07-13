@@ -2777,26 +2777,28 @@ util::EnigmaParsingContext others::PageTextAssign::getRawTextCtx(Cmper forPartId
     return {};
 }
 
-std::shared_ptr<others::PageTextAssign> others::PageTextAssign::getForPageId(const DocumentPtr& document, Cmper partId, Cmper pageId, Inci inci)
+std::shared_ptr<others::PageTextAssign> others::PageTextAssign::getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci)
 {
-    const Cmper pageAssignmentId = others::PageTextAssign::calcAssignmentIdFromPageNumber(document, partId, pageId);
+    const PageCmper pageAssignmentId = others::PageTextAssign::calcAssignmentIdFromPageNumber(document, partId, pageId);
     return document->getOthers()->get<others::PageTextAssign>(partId, pageAssignmentId, inci);
 }
 
-std::vector<std::shared_ptr<others::PageTextAssign>> others::PageTextAssign::getArrayForPageId(const DocumentPtr& document, Cmper partId, Cmper pageId)
+std::vector<std::shared_ptr<others::PageTextAssign>> others::PageTextAssign::getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId)
 {
-    const Cmper pageAssignmentId = others::PageTextAssign::calcAssignmentIdFromPageNumber(document, partId, pageId);
+    const PageCmper pageAssignmentId = others::PageTextAssign::calcAssignmentIdFromPageNumber(document, partId, pageId);
     return document->getOthers()->getArray<others::PageTextAssign>(partId, pageAssignmentId);
 }
 
-Cmper others::PageTextAssign::calcPageNumberFromAssignmentId(const DocumentPtr& document, Cmper forPartId, Cmper pageAssignmentId)
+PageCmper others::PageTextAssign::calcPageNumberFromAssignmentId(const DocumentPtr& document, Cmper forPartId, PageCmper pageAssignmentId)
 {
     if (pageAssignmentId != 0) {
         if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
             if (pageAssignmentId > part->numberOfLeadingBlankPages) {
-                int calcValue = int(pageAssignmentId) - document->getMaxBlankPages() + part->numberOfLeadingBlankPages;
-                if (calcValue > 0) { // should always happen in a well-formed musx file.
-                    return Cmper((std::min)(calcValue, part->numberOfPages));
+                const int calcValue = int(pageAssignmentId) - document->getMaxBlankPages() + part->numberOfLeadingBlankPages;
+                if (calcValue > part->numberOfLeadingBlankPages) {
+                    return PageCmper(calcValue);
+                } else {
+                    return 0;
                 }
             }
         }
@@ -2804,22 +2806,20 @@ Cmper others::PageTextAssign::calcPageNumberFromAssignmentId(const DocumentPtr& 
     return pageAssignmentId;
 }
 
-Cmper others::PageTextAssign::calcAssignmentIdFromPageNumber(const DocumentPtr& document, Cmper forPartId, Cmper pageId)
+PageCmper others::PageTextAssign::calcAssignmentIdFromPageNumber(const DocumentPtr& document, Cmper forPartId, PageCmper pageId)
 {
     if (pageId != 0) {
         if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
             if (pageId > part->numberOfLeadingBlankPages) {
-                int calcValue = int(pageId) + document->getMaxBlankPages() - part->numberOfLeadingBlankPages;
-                if (calcValue > 0) { // should always happen in a well-formed musx file.
-                    return Cmper(calcValue);
-                }
+                const int calcValue = int(pageId) + document->getMaxBlankPages() - part->numberOfLeadingBlankPages;
+                return PageCmper(calcValue);
             }
         }
     }
     return pageId;
 }
 
-Cmper others::PageTextAssign::calcEndPageNumber(Cmper forPartId) const
+PageCmper others::PageTextAssign::calcEndPageNumber(Cmper forPartId) const
 {
     const Cmper assignmentId = getCmper() ? getCmper() : endPage;
     if (assignmentId != 0) {
