@@ -1589,18 +1589,17 @@ public:
     /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
     std::shared_ptr<TextBlock> getTextBlock() const;
 
-    /// @brief Return the starting page number, taking into account leading blank pages in all parts. The return
+    /// @brief Return the starting page number, taking into account leading blank pages in all parts.
     /// This calculation mimics observed behavior in Finale.
-    /// @return The return value may be a number less than one or greater than the total number of pages for @p forPartId.
-    /// In these cases, the page text is not visible in that part.
-    PageCmper calcStartPageNumber(Cmper forPartId) const
-    { return calcPageNumberFromAssignmentId(getDocument(), forPartId, getCmper() ? getCmper() : startPage); }
+    /// @return The first page in @p forPartId on which the part appears. If the attachment does not appear on the part,
+    /// the function returns std::nullopt.
+    std::optional<PageCmper> calcStartPageNumber(Cmper forPartId) const;
 
     /// @brief Return the ending page number, taking into account leading blank pages in all parts
     /// This calculation mimics observed behavior in Finale.
-    /// @return The return value may be a number less than one or greater than the total number of pages for @p forPartId.
-    /// In these cases, the page text is not visible in that part.
-    PageCmper calcEndPageNumber(Cmper forPartId) const;
+    /// @return The first page in @p forPartId on which the part appears. If the attachment does not appear on the part,
+    /// the function returns std::nullopt.
+    std::optional<PageCmper> calcEndPageNumber(Cmper forPartId) const;
 
     /**
      * @brief Gets the raw text for parsing this assignment, or nullptr if none.
@@ -1637,11 +1636,6 @@ public:
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-
-private:
-    /// @todo Refactor calcPageNumberFromAssignmentId and calcAssignmentIdFromPageNumber into Document if we ever support page graphics.
-    static PageCmper calcPageNumberFromAssignmentId(const DocumentPtr& document, Cmper forPartId, PageCmper pageAssignmentId);
-    static PageCmper calcAssignmentIdFromPageNumber(const DocumentPtr& document, Cmper forPartId, PageCmper pageId);
 };
 
 /**
@@ -1690,6 +1684,17 @@ public:
      * @param systemId The staff system to find.
     */
     Cmper calcSystemIuList(Cmper systemId) const;
+
+    /// @brief Calculates a page number in this part from a page assignment ID. (See @ref PageTextAssign.)
+    /// @param pageAssignmentId The page assignment ID.
+    /// @return Page number or potential page number (if greater than the part's number of pages). If the assignment
+    /// is for a leading blank page the part does not have, returns std::nullopt.
+    std::optional<PageCmper> calcPageNumberFromAssignmentId(PageCmper pageAssignmentId) const;
+
+    /// @brief Calculates a page assignment ID from a page number in the part.
+    /// @param pageId The page for which to get the assignment ID.
+    /// @return The calculated page assignment ID.
+    PageCmper calcAssignmentIdFromPageNumber(PageCmper pageId) const;
 
     /** @brief Return the instance for the score */
     static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);

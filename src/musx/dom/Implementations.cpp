@@ -2779,54 +2779,48 @@ util::EnigmaParsingContext others::PageTextAssign::getRawTextCtx(Cmper forPartId
 
 std::shared_ptr<others::PageTextAssign> others::PageTextAssign::getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci)
 {
-    const PageCmper pageAssignmentId = others::PageTextAssign::calcAssignmentIdFromPageNumber(document, partId, pageId);
-    return document->getOthers()->get<others::PageTextAssign>(partId, pageAssignmentId, inci);
+    if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
+        const PageCmper pageAssignmentId = part->calcAssignmentIdFromPageNumber(pageId);
+        return document->getOthers()->get<others::PageTextAssign>(partId, pageAssignmentId, inci);
+    }
+    return nullptr;
 }
 
 std::vector<std::shared_ptr<others::PageTextAssign>> others::PageTextAssign::getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId)
 {
-    const PageCmper pageAssignmentId = others::PageTextAssign::calcAssignmentIdFromPageNumber(document, partId, pageId);
-    return document->getOthers()->getArray<others::PageTextAssign>(partId, pageAssignmentId);
+    if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
+        const PageCmper pageAssignmentId = part->calcAssignmentIdFromPageNumber(pageId);
+        return document->getOthers()->getArray<others::PageTextAssign>(partId, pageAssignmentId);
+    }
+    return {};
 }
 
-PageCmper others::PageTextAssign::calcPageNumberFromAssignmentId(const DocumentPtr& document, Cmper forPartId, PageCmper pageAssignmentId)
+std::optional<PageCmper> others::PageTextAssign::calcStartPageNumber(Cmper forPartId) const
 {
-    if (pageAssignmentId != 0) {
-        if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
-            if (pageAssignmentId > part->numberOfLeadingBlankPages) {
-                const int calcValue = int(pageAssignmentId) - document->getMaxBlankPages() + part->numberOfLeadingBlankPages;
-                if (calcValue > part->numberOfLeadingBlankPages) {
-                    return PageCmper(calcValue);
-                } else {
-                    return 0;
-                }
+    if (auto part = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
+        if (auto calcValue = part->calcPageNumberFromAssignmentId(getCmper() ? getCmper() : startPage)) {
+            if (calcValue.value() <= part->numberOfPages) {
+                return calcValue;
             }
         }
     }
-    return pageAssignmentId;
+    return std::nullopt;
 }
 
-PageCmper others::PageTextAssign::calcAssignmentIdFromPageNumber(const DocumentPtr& document, Cmper forPartId, PageCmper pageId)
+std::optional<PageCmper> others::PageTextAssign::calcEndPageNumber(Cmper forPartId) const
 {
-    if (pageId != 0) {
-        if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
-            if (pageId > part->numberOfLeadingBlankPages) {
-                const int calcValue = int(pageId) + document->getMaxBlankPages() - part->numberOfLeadingBlankPages;
-                return PageCmper(calcValue);
+    if (auto part = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
+        if (getCmper() == 0 && endPage == 0) {
+            return PageCmper(part->numberOfPages);
+        }
+        if (auto calcValue = part->calcPageNumberFromAssignmentId(getCmper() ? getCmper() : endPage)) {
+            if (calcValue.value() > part->numberOfPages) {
+                calcValue = PageCmper(part->numberOfPages);
             }
+            return calcValue;
         }
     }
-    return pageId;
-}
-
-PageCmper others::PageTextAssign::calcEndPageNumber(Cmper forPartId) const
-{
-    const Cmper assignmentId = getCmper() ? getCmper() : endPage;
-    if (assignmentId != 0) {
-        return calcPageNumberFromAssignmentId(getDocument(), forPartId, getCmper() ? getCmper() : endPage);
-    }
-    const auto part = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId);
-    return part->numberOfPages;
+    return std::nullopt;
 }
 
 // **************************
@@ -2894,6 +2888,34 @@ std::vector<std::shared_ptr<others::PartDefinition>> others::PartDefinition::get
         return lhs->partOrder < rhs->partOrder;
     });
     return result;
+}
+
+std::optional<PageCmper> others::PartDefinition::calcPageNumberFromAssignmentId(PageCmper pageAssignmentId) const
+{
+    MUSX_ASSERT_IF(pageAssignmentId < 0) {
+        throw std::logic_error("Attempt to convert negative page assignment " + std::to_string(pageAssignmentId) + " to a page number.");
+    }
+    std::optional<PageCmper> result = pageAssignmentId;
+    if (result.value() > numberOfLeadingBlankPages) {
+        const int calcValue = int(result.value()) - getDocument()->getMaxBlankPages() + numberOfLeadingBlankPages;
+        if (calcValue > numberOfLeadingBlankPages) {
+            result = PageCmper(calcValue);
+        } else {
+            return std::nullopt;
+        }
+    }
+    return result;
+}
+
+PageCmper others::PartDefinition::calcAssignmentIdFromPageNumber(PageCmper pageId) const
+{
+    if (pageId != 0) {
+        if (pageId > numberOfLeadingBlankPages) {
+            const int calcValue = int(pageId) + getDocument()->getMaxBlankPages() - numberOfLeadingBlankPages;
+            return PageCmper(calcValue);
+        }
+    }
+    return pageId;
 }
 
 // ******************************
