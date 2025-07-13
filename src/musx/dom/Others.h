@@ -1525,18 +1525,20 @@ class TextBlock;
  * @class PageTextAssign
  * @brief Represents a page text assignment with positioning and page range properties.
  *
- * If the cmper is non-0, the #startPage and #endPage values are not used and the cmper
- * specifies the page ID to which this text is assigned.
+ * Instances of #PageTextAssign use page assignment IDs rather than straightforward page numbers.
+ * This allows their page assignments to shift based on how many leading blank pages exist in the
+ * current score or part view vs. all the others. If all score and parts have the same number of
+ * leading blank pages, then page assignment IDs are the same as page numbers.
  *
- * If the cmper is 0, the #startPage and #endPage values specify the range of page IDs to which
- * this text is assigned. An #endPage of 0 indicateas the last page of the document.
+ * If the cmper is non-0, the #startPage and #endPage values are not used and the cmper
+ * specifies a page assignment ID that defines which page this text is assigned to.
+ *
+ * If the cmper is 0, the #startPage and #endPage values specify the range of page assignment IDs to which
+ * this text is assigned. An #endPage of 0 indicates the last page of the document.
  * 
  * If cmper is non-zero, #startPage and #endPage should have the same value as the cmper.
  *
  * The inci value specifies a particular page text when more than one exists for the cmper value.
- *
- * Note that blank pages at the start of a linked part offset the page values (of either single-
- * or multi-page blocks). The full details of how this works is yet to be tested.
  *
  * This class is identified by the XML node name "pageTextAssign".
  */
@@ -1566,11 +1568,11 @@ public:
     Cmper block{};                  ///< The Cmper for the assigned @ref TextBlock. (xml tag is `<block>`)
     Evpu xDisp{};                   ///< The horizontal displacement from the default position. (xml tag is `<xdisp>`)
     Evpu yDisp{};                   ///< The vertical displacement from the default position. (xml tag is `<ydisp>`)
-    Cmper startPage{};              ///< The first page ID on which the text appears.
-                                    ///< Note that the page ID may be different than the page number. See #calcStartPageNumber.
-    Cmper endPage{};                ///< The last page ID on which the text appears.
+    Cmper startPage{};              ///< The first page assignment ID on which the text appears.
+                                    ///< Note that the page assignment ID may be different than the page number. See #calcStartPageNumber.
+    Cmper endPage{};                ///< The last page assignment ID on which the text appears.
                                     ///< A value of zero indicates the last page in the document, whatever number it may be.
-                                    ///< Note that the page ID may be different than the page number. See #calcEndPageNumber.
+                                    ///< Note that the page assignment ID may be different than the page number. See #calcEndPageNumber.
     PageAssignType oddEven{};       ///< Determines if a multipage assignment appears on all, even (left), or odd (right) pages
     HorizontalAlignment hPosLp{};   ///< Horizontal alignment on left or all pages (depending on #indRpPos). (xml tag is `<hposLp>`)
     HorizontalAlignment hPosRp{};   ///< Horizontal alignment on right pages (if #indRpPos is true). (xml tag is `<hposRp>`)
@@ -1587,22 +1589,23 @@ public:
     /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
     std::shared_ptr<TextBlock> getTextBlock() const;
 
-    /// @brief Return the starting page number, taking into account leading blank pages in all parts
+    /// @brief Return the starting page number, taking into account leading blank pages in all parts.
+    /// This calculation mimics observed behavior in Finale.
     int calcStartPageNumber(Cmper forPartId) const
-    { return calcPageNumberFromId(forPartId, getCmper() ? getCmper() : startPage); }
+    { return calcPageNumberFromAssignmentId(forPartId, getCmper() ? getCmper() : startPage); }
 
     /// @brief Return the ending page number, taking into account leading blank pages in all parts
-    int calcEndPageNumber(Cmper forPartId) const
-    { return calcPageNumberFromId(forPartId, getCmper() ? getCmper() : endPage); }
+    /// This calculation mimics observed behavior in Finale.
+    int calcEndPageNumber(Cmper forPartId) const;
 
     /**
      * @brief Gets the raw text for parsing this assignment, or nullptr if none.
      * @param forPartId The part to use for ^partname and ^totpages inserts.
-     * @param forPageNumber The page number to use for ^page inserts if this is a multipage instance.
+     * @param forPageId The page number to use for ^page inserts if this is a multipage instance.
      * This value is ignored for single page instances. Note that this is a page number and not a page ID.
      * See #calcStartPageNumber and #calcEndPageNumber.
     */
-    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt) const;
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId = std::nullopt) const;
 
     void integrityCheck() override
     {
@@ -1618,7 +1621,7 @@ public:
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
-    int calcPageNumberFromId(Cmper forPartId, Cmper pageId) const;
+    int calcPageNumberFromAssignmentId(Cmper forPartId, Cmper pageId) const;
 };
 
 /**
@@ -2897,8 +2900,8 @@ public:
 
     /// @brief Gets the raw text block context (from the `texts` pool) based on #textType.
     /// @param forPartId The linked part to use for ^partname and ^totpages inserts
-    /// @param forPageNumber The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior.
-    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber = std::nullopt,
+    /// @param forPageId The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior.
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId = std::nullopt,
         util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
     /** @brief return displayable text with Enigma tags removed */

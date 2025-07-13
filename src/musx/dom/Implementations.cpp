@@ -2766,18 +2766,18 @@ std::shared_ptr<others::TextBlock> others::PageTextAssign::getTextBlock() const
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
 }
 
-util::EnigmaParsingContext others::PageTextAssign::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber) const
+util::EnigmaParsingContext others::PageTextAssign::getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId) const
 {
     if (auto textBlock = getTextBlock()) {
         if (getCmper() > 0) {
-            forPageNumber = calcStartPageNumber(forPartId);
+            forPageId = calcStartPageNumber(forPartId);
         }
-        return textBlock->getRawTextCtx(forPartId, forPageNumber);
+        return textBlock->getRawTextCtx(forPartId, forPageId);
     }
     return {};
 }
 
-int others::PageTextAssign::calcPageNumberFromId(Cmper forPartId, Cmper pageId) const
+int others::PageTextAssign::calcPageNumberFromAssignmentId(Cmper forPartId, Cmper pageId) const
 {
     if (pageId != 0) {
         if (auto part = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
@@ -2787,6 +2787,16 @@ int others::PageTextAssign::calcPageNumberFromId(Cmper forPartId, Cmper pageId) 
         }
     }
     return int(pageId);
+}
+
+int others::PageTextAssign::calcEndPageNumber(Cmper forPartId) const
+{
+    const Cmper assignmentId = getCmper() ? getCmper() : endPage;
+    if (assignmentId != 0) {
+        return calcPageNumberFromAssignmentId(forPartId, getCmper() ? getCmper() : endPage);
+    }
+    const auto pages = getDocument()->getOthers()->getArray<others::Page>(forPartId);
+    return pages.size();
 }
 
 // **************************
@@ -3843,7 +3853,7 @@ int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
 // ***** TextBlock *****
 // *********************
 
-util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber, util::EnigmaString::TextInsertCallback defaultInsertFunc) const
+util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId, util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
     std::shared_ptr<TextsBase> rawText;
     switch (textType) {
@@ -3856,7 +3866,7 @@ util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std
             rawText = getDocument()->getTexts()->get<texts::ExpressionText>(textId);
             break;
     }
-    return rawText->getRawTextCtx(forPartId, forPageNumber, defaultInsertFunc);
+    return rawText->getRawTextCtx(forPartId, forPageId, defaultInsertFunc);
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
@@ -3904,10 +3914,10 @@ std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() con
 // ***** TextsBase *****
 // *********************
 
-util::EnigmaParsingContext TextsBase::getRawTextCtx(Cmper forPartId, std::optional<int> forPageNumber,
+util::EnigmaParsingContext TextsBase::getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId,
     util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
-    return util::EnigmaParsingContext(shared_from_this(), forPartId, forPageNumber, defaultInsertFunc);
+    return util::EnigmaParsingContext(shared_from_this(), forPartId, forPageId, defaultInsertFunc);
 }
 
 // *************************
