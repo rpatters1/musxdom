@@ -2802,7 +2802,7 @@ std::optional<PageCmper> others::PageTextAssign::calcStartPageNumber(Cmper forPa
             if (calcValue.value() <= part->numberOfPages) {
                 return calcValue;
             }
-        } else if (getCmper() == 0) {
+        } else if (isMultiPage()) {
             if (auto endPageNum = calcEndPageNumber(forPartId)) {
                 if (part->numberOfLeadingBlankPages < endPageNum.value()) {
                     return PageCmper(part->numberOfLeadingBlankPages) + 1;
@@ -2816,7 +2816,7 @@ std::optional<PageCmper> others::PageTextAssign::calcStartPageNumber(Cmper forPa
 std::optional<PageCmper> others::PageTextAssign::calcEndPageNumber(Cmper forPartId) const
 {
     if (auto part = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
-        if (getCmper() == 0 && endPage == 0) {
+        if (isMultiAssignedThruLastPage()) {
             return PageCmper(part->numberOfPages);
         }
         if (auto calcValue = part->calcPageNumberFromAssignmentId(getCmper() ? getCmper() : endPage)) {

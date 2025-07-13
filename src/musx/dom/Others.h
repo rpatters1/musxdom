@@ -1610,6 +1610,14 @@ public:
     */
     util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId = std::nullopt) const;
 
+    /// @brief Returns true if this is a multi-page assignment.
+    bool isMultiPage() const
+    { return getCmper() == 0 && startPage != endPage; }
+
+    /// @brief Returns true if this is a multi-page assignment that is assigned to through last page, no matter how many.
+    bool isMultiAssignedThruLastPage() const
+    { return isMultiPage() && endPage == 0; }
+
     void integrityCheck() override
     {
         if (getCmper() != 0) {
@@ -1695,7 +1703,7 @@ public:
     /// @param pageId The page for which to get the assignment ID.
     /// @return The calculated page assignment ID.
     PageCmper calcAssignmentIdFromPageNumber(PageCmper pageId) const;
-
+    
     /** @brief Return the instance for the score */
     static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
 
