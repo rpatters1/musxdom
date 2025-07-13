@@ -97,6 +97,7 @@ public:
         for (const auto& part : linkedParts) {
             part->numberOfLeadingBlankPages = 0;
             auto pages = document->getOthers()->getArray<Page>(part->getCmper());
+            part->numberOfPages = int(pages.size());
             for (const auto& page : pages) {
                 if (!page->isBlank()) {
                     break;

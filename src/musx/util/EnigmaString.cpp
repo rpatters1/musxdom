@@ -418,6 +418,12 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                     if (!parseResult) {
                         return false;
                     }
+                } else {
+                    AccidentalStyle acciStyle = AccidentalStyle::Ascii;
+                    if (options.insertHandling == AccidentalInsertHandling::Substitute) {
+                        acciStyle = options.substitutionStyle;
+                    }
+                    addToBuf(linkedPart->getName(acciStyle));
                 }
             }
         } else if (components[0] == "subtitle") {

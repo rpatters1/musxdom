@@ -1591,12 +1591,12 @@ public:
 
     /// @brief Return the starting page number, taking into account leading blank pages in all parts.
     /// This calculation mimics observed behavior in Finale.
-    int calcStartPageNumber(Cmper forPartId) const
-    { return calcPageNumberFromAssignmentId(forPartId, getCmper() ? getCmper() : startPage); }
+    Cmper calcStartPageNumber(Cmper forPartId) const
+    { return calcPageNumberFromAssignmentId(getDocument(), forPartId, getCmper() ? getCmper() : startPage); }
 
     /// @brief Return the ending page number, taking into account leading blank pages in all parts
     /// This calculation mimics observed behavior in Finale.
-    int calcEndPageNumber(Cmper forPartId) const;
+    Cmper calcEndPageNumber(Cmper forPartId) const;
 
     /**
      * @brief Gets the raw text for parsing this assignment, or nullptr if none.
@@ -1617,11 +1617,26 @@ public:
         }
     }
 
+    /// @brief Returns a specific page text assignment for a given page number in a given part.
+    /// This allows the caller not to have to know the conversion to page assignment IDs.
+    /// @param document The document to search.
+    /// @param partId The ID of the linked part to search.
+    /// @param pageId The page number to search for, or zero for multipage assignments.
+    static std::shared_ptr<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, Cmper pageId, Inci inci);
+
+    /// @brief Returns all the page text assignments for a given page number in a given part.
+    /// This allows the caller not to have to know the conversion to page assignment IDs.
+    /// @param document The document to search.
+    /// @param partId The ID of the linked part to search.
+    /// @param pageId The page number to search for, or zero for all multipage assignments.
+    static std::vector<std::shared_ptr<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, Cmper pageId);
+
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
-    int calcPageNumberFromAssignmentId(Cmper forPartId, Cmper pageId) const;
+    static Cmper calcPageNumberFromAssignmentId(const DocumentPtr& document, Cmper forPartId, Cmper pageAssignmentId);
+    static Cmper calcAssignmentIdFromPageNumber(const DocumentPtr& document, Cmper forPartId, Cmper pageId);
 };
 
 /**
@@ -1652,6 +1667,7 @@ public:
     Cmper defaultNameGroup{};           ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
 
     int numberOfLeadingBlankPages{};    ///< The number of leading blank pages in the part. This is not in the xml but calculated in #factory::DocumentFactory::create.
+    int numberOfPages{};                ///< The total number of pages in the part. This is not in the xml but calculated in #factory::DocumentFactory::create.
 
     /** @brief Get the raw text context for the part name if any */
     util::EnigmaParsingContext getNameRawTextCtx() const;
