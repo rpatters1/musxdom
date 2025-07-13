@@ -258,8 +258,6 @@ TEST(PageTextAssignText, ParseSinglePageAssignment2)
         ASSERT_TRUE(pageAssign) << "page assignment " << pageAssignmentId << " should exist in all parts";
         EXPECT_EQ(expectedValues[partId], pageAssign->calcStartPageNumber(partId));
         EXPECT_EQ(expectedValues[partId], pageAssign->calcEndPageNumber(partId));
-        std::string text = pageAssign->getRawTextCtx(partId).getText();
-        std::cout << "Page assign text for part " << partId << ": " << text << std::endl;
     }
 }
 
@@ -270,9 +268,9 @@ static void testMultiPageAssignment(const DocumentPtr& doc, Cmper partId, Inci i
     ASSERT_TRUE(part) << "unable to find part " << partId;
     auto pageAssign = doc->getOthers()->get<others::PageTextAssign>(partId, 0, inci);
     ASSERT_TRUE(pageAssign) << "unable to find page text at assignement id: 0 inci: " << inci;
-    PageCmper minPage = (std::max<int>)(pageAssign->calcStartPageNumber(partId).value_or(0), 1);
+    PageCmper minPage = pageAssign->calcStartPageNumber(partId).value_or(0);
     ASSERT_EQ(minPage, expectedMinPage);
-    PageCmper maxPage = (std::min<int>)(pageAssign->calcEndPageNumber(partId).value_or(0), part->numberOfPages);
+    PageCmper maxPage = pageAssign->calcEndPageNumber(partId).value_or(0);
     ASSERT_EQ(maxPage, expectedMaxPage);
     for (PageCmper pageId = minPage; pageId <= maxPage; pageId++) {
         std::string text = pageAssign->getRawTextCtx(partId, pageId).getText();

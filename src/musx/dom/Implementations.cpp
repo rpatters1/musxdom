@@ -2802,6 +2802,12 @@ std::optional<PageCmper> others::PageTextAssign::calcStartPageNumber(Cmper forPa
             if (calcValue.value() <= part->numberOfPages) {
                 return calcValue;
             }
+        } else if (getCmper() == 0) {
+            if (auto endPageNum = calcEndPageNumber(forPartId)) {
+                if (part->numberOfLeadingBlankPages < endPageNum.value()) {
+                    return PageCmper(part->numberOfLeadingBlankPages) + 1;
+                }
+            }
         }
     }
     return std::nullopt;
