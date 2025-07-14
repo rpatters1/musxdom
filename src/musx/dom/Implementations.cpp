@@ -3918,16 +3918,20 @@ std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() co
 
 std::pair<double, double> others::StaffSystem::calcMinMaxStaffSizes() const
 {
-    std::pair<double, double> result = std::make_pair(1.0, 1.0);
     if (hasStaffScaling) {
-        auto staffSizes = getDocument()->getDetails()->getArray<details::StaffSize>(getPartId(), getCmper());
-        for (const auto& staffSize : staffSizes) {
-            const double val = double(staffSize->staffPercent) / 100.0;
-            if (val < result.first) result.first = val;
-            if (val > result.second) result.second = val;
+        auto systemStaves = getDocument()->getOthers()->getArray<others::InstrumentUsed>(getPartId(), getCmper());
+        if (!systemStaves.empty()) {
+            std::pair<double, double> result = std::make_pair((std::numeric_limits<double>::max)(), (std::numeric_limits<double>::min)());
+            for (const auto& systemStaff : systemStaves) {
+                auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getPartId(), getCmper(), systemStaff->getCmper());
+                const double val = staffSize ? double(staffSize->staffPercent) / 100.0 : 1.0;
+                if (val < result.first) result.first = val;
+                if (val > result.second) result.second = val;
+            }
+            return result;
         }
     }
-    return result;
+    return std::make_pair(1.0, 1.0);;
 }
 
 // ***********************
