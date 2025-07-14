@@ -64,15 +64,14 @@ using EduFloat = double;            ///< "Enigma Durational Units" floating poin
 using MeasCmper = int16_t;          ///< Enigma meas Cmper (may be negative when not applicable)
 using InstCmper = int16_t;          ///< Enigma staff (inst) Cmper (may be negative when not applicable)
 using SystemCmper = int16_t;        ///< Enigma systems Cmper (may be negative when not applicable)
+using PageCmper = int16_t;          ///< Enigma page Cmper (may be negative when not applicable)
 using ClefIndex = uint16_t;         ///< Index into @ref options::ClefOptions::clefDefs.
 using EntryNumber = int32_t;        ///< Entry identifier.
 using NoteNumber = uint16_t;        ///< Note identifier.
 using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
 using BeamNumber = unsigned int;    ///< A number where 1 corresponds to the primary (8th note) beam, 2 the 16th beam, 3 the 32nd beam, etc.
-using PercussionNoteType = uint16_t; ///< Percussion note code type. The top 4 bits are an order code for when the same "pure" note type is used
-                                    ///< multiple times in one layout. The rest are the "pure" note type. Generally you do not have to
-                                    ///< worry about this unless you are looking for a known note type.
-                                    ///< @todo update this comment when we have an enum for known note types.
+using PercussionNoteTypeId = uint16_t; ///< Percussion note code type. The top 4 bits are an order ID for when the same "pure" note type is used
+                                    ///< multiple times in one layout. The rest are the "pure" note type. See @ref percussion::PercussionNoteType.
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
@@ -81,6 +80,7 @@ constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
 constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::InstrumentUsed cmper)
 
 constexpr double EVPU_PER_INCH = 288.0;         ///< Number of Evpu units per inch
+constexpr double EVPU_PER_POINT = 4.0;          ///< Number of Evpu units per 72 DPI point
 constexpr double EVPU_PER_MM = EVPU_PER_INCH / 25.4; ///< Number of Evpu units per millimeter
 constexpr double EVPU_PER_SPACE = 24.0;         ///< Number of Evpu units per space (spatium)
 constexpr double EFIX_PER_EVPU = 64.0;          ///< Number of Efix units per Evpu

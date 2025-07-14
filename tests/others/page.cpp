@@ -65,7 +65,7 @@ TEST(PageTest, PopulateFields)
     EXPECT_EQ(page->height, 3744);
     EXPECT_EQ(page->width, 2880);
     EXPECT_EQ(page->percent, 80);
-    EXPECT_EQ(page->firstSystem, 1);
+    EXPECT_EQ(page->firstSystemId, 1);
     EXPECT_FALSE(page->holdMargins);
     EXPECT_EQ(page->margTop, -288);
     EXPECT_EQ(page->margLeft, 288);

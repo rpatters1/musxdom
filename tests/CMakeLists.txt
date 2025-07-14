@@ -69,6 +69,7 @@ add_executable(musxdomtests
     options/smart_shape_options.cpp
     options/staff_options.cpp
     options/stem_options.cpp
+    options/text_options.cpp
     options/tie_options.cpp
     options/time_signature_options.cpp
     options/tuplet_options.cpp

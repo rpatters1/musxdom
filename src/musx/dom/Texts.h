@@ -100,7 +100,9 @@ public:
     TextType getTextType() const
     {
         const Cmper textNumber = getTextNumber();
-        assert(textNumber > 0 && textNumber <= Cmper(TextType::Subtitle));
+        MUSX_ASSERT_IF(textNumber <= 0 || textNumber > Cmper(TextType::Subtitle)) {
+            throw std::logic_error("File Info text found with invalid text number " + std::to_string(textNumber));
+        }
         return TextType(textNumber);
     }
 

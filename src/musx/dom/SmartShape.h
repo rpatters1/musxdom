@@ -179,7 +179,7 @@ public:
         WordExtension,      ///< Lyric word extension, used only with lyric assignments. (xml value is "wordExt")
         DashContourSlurDown, ///< Contoured line dashed downward slur (tips point up).
         DashContourSlurUp,  ///< Contoured line dashed upward slur (tips point down).
-        DashContouSlurAuto, ///< Contoured line dashed slur with direction automatically determined.
+        DashContourSlurAuto, ///< Contoured line dashed slur with direction automatically determined.
     };
 
     ShapeType shapeType{};                          ///< Type of smart shape
@@ -229,9 +229,11 @@ public:
     explicit SmartShapeCustomLine(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    /// @enum LineStyle
     /// @brief The type of line style.
     enum class LineStyle { Char, Solid, Dashed };
 
+    /// @enum LineCapType
     /// @brief The type of line cap.
     enum class LineCapType { None, Hook, ArrowheadPreset, ArrowheadCustom };
 

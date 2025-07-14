@@ -57,9 +57,9 @@ TEST(KeySigs, Test12EDO)
     };
     ASSERT_EQ(expectedKeyAlters.size(), expectedKeyMaps.size());
 
-    std::vector<Note::NoteName> expectedNotes = {
-        Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A,
-        Note::NoteName::B, Note::NoteName::C, Note::NoteName::D, Note::NoteName::E };
+    std::vector<music_theory::NoteName> expectedNotes = {
+        music_theory::NoteName::E, music_theory::NoteName::F, music_theory::NoteName::G, music_theory::NoteName::A,
+        music_theory::NoteName::B, music_theory::NoteName::C, music_theory::NoteName::D, music_theory::NoteName::E };
     std::vector<int> expectedOctaves = { 4, 4, 4, 4, 4, 5, 5, 5 };
     std::vector<int> expectedAlters = { 0, 1, 0, -1, -1, 0, 0, -1 };
     std::vector<int> expectedPositions = { -8, -7, -6, -5, -4, -3, -2, -1 };
@@ -121,9 +121,9 @@ TEST(KeySigs, Test31EDO)
     };
     ASSERT_EQ(expectedKeyAlters.size(), expectedKeyMaps.size());
 
-    std::vector<Note::NoteName> expectedNotes = {
-        Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A,
-        Note::NoteName::B, Note::NoteName::C, Note::NoteName::D, Note::NoteName::E };
+    std::vector<music_theory::NoteName> expectedNotes = {
+        music_theory::NoteName::E, music_theory::NoteName::F, music_theory::NoteName::G, music_theory::NoteName::A,
+        music_theory::NoteName::B, music_theory::NoteName::C, music_theory::NoteName::D, music_theory::NoteName::E };
     std::vector<int> expectedOctaves = { 4, 4, 4, 4, 4, 5, 5, 5 };
     std::vector<int> expectedAlters = { 0, 2, 0, -2, -2, 3, 0, -1 };
     std::vector<int> expectedPositions = { -8, -7, -6, -5, -4, -3, -2, -1 };

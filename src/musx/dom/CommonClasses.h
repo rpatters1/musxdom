@@ -48,6 +48,7 @@ namespace others {
 // This file contains common classes that are shared among Options, Others, and Details.
 
 /**
+ * @enum NoteType
  * @brief Enum class representing note types based on EDU values.
  *
  * The values are expressed in hexadecimal.
@@ -72,6 +73,7 @@ enum class NoteType : Edu
     Note4096th = 0x0001
 };
 
+/// @enum DefaultClefType
 /// @brief Clef types used by default in Finale documents. The values correspond to indices into
 /// @ref musx::dom::options::ClefOptions::clefDefs.
 /// Note that the user may change the clef list to any clefs the user wishes. These are only defaults, but
@@ -99,6 +101,7 @@ enum class DefaultClefType : ClefIndex
 };
 
 /**
+ * @enum ShowClefMode
  * @brief Enum representing the clef display mode for a frame.
  */
 enum class ShowClefMode
@@ -118,8 +121,18 @@ enum class ShowClefMode
 class FontInfo : public CommonClassBase
 {
 public:
+    /**
+     * @brief constructor
+     * @param document the document containing the font
+     * @param sizeIsPercent if true, the size is a percent relative to the preceding font size in an Enigma string.
+     */
+    FontInfo(const DocumentWeakPtr& document, bool sizeIsPercent = false)
+        : CommonClassBase(document), m_sizeIsPercent(sizeIsPercent)
+    {
+    }
+
     Cmper fontId{};     ///< Font identifier. This is a Cmper for @ref others::FontDefinition.
-    int fontSize{};     ///< Font size.
+    int fontSize{};     ///< Font size or percent (where 100 is 100%) of preceding font size. (See #getSizeIsPercent.)
     bool bold{};        ///< Bold effect.
     bool italic{};      ///< Italic effect.
     bool underline{};   ///< Underline effect.
@@ -127,7 +140,19 @@ public:
     bool absolute{};    ///< Fixed size effect.
     bool hidden{};      ///< Hidden effect.
 
-    using CommonClassBase::CommonClassBase;
+    /// @brief If true, the size of this font is calculated as a percent of the preceding font size (in an Enigma string)
+    bool getSizeIsPercent() const { return m_sizeIsPercent; }
+
+    /// @name Enigma style bitmask constants
+    /// These are used to encode and decode style effects in Enigma strings.
+    /// @{
+    inline static constexpr uint16_t EnigmaStyleBold = 0x01; ///< Bold style bit
+    inline static constexpr uint16_t EnigmaStyleItalic = 0x02; ///< Italic style bit
+    inline static constexpr uint16_t EnigmaStyleUnderline = 0x04; ///< Underline style bit
+    inline static constexpr uint16_t EnigmaStyleStrikeout = 0x20; ///< Strikeout style bit
+    inline static constexpr uint16_t EnigmaStyleAbsolute  = 0x40; ///< Fixed-size (absolute) bit
+    inline static constexpr uint16_t EnigmaStyleHidden    = 0x80; ///< Hidden text bit
+    /// @}
 
     /**
      * @brief Get the name of the font.
@@ -144,18 +169,31 @@ public:
 
     /**
      * @brief Set style effects based on a bitmask. This is mainly useful for capturing text styles
-     * from enigma strings. (See @ref musx::util::EnigmaString::parseFontCommand.)
+     * from enigma strings. (See @ref musx::util::EnigmaString::parseStyleCommand.)
      *
      * @param efx A 16-bit integer representing style effects with specific bit masks.
      */
     void setEnigmaStyles(uint16_t efx)
     {
-        bold = efx & 0x01;         // FONT_EFX_BOLD
-        italic = efx & 0x02;       // FONT_EFX_ITALIC
-        underline = efx & 0x04;    // FONT_EFX_UNDERLINE
-        strikeout = efx & 0x20;    // FONT_EFX_STRIKEOUT
-        absolute = efx & 0x40;     // FONT_EFX_ABSOLUTE
-        hidden = efx & 0x80;       // FONT_EFX_HIDDEN
+        bold = efx & EnigmaStyleBold;
+        italic = efx & EnigmaStyleItalic;
+        underline = efx & EnigmaStyleUnderline;
+        strikeout = efx & EnigmaStyleStrikeout;
+        absolute = efx & EnigmaStyleAbsolute;
+        hidden = efx & EnigmaStyleHidden;
+    }
+
+    /// @brief Returns the font styles as an nfx bitmask
+    uint16_t getEnigmaStyles() const
+    {
+        uint16_t result = 0;
+        if (bold) result |= EnigmaStyleBold;
+        if (italic) result |= EnigmaStyleItalic;
+        if (underline) result |= EnigmaStyleUnderline;
+        if (strikeout) result |= EnigmaStyleStrikeout;
+        if (absolute) result |= EnigmaStyleAbsolute;
+        if (hidden) result |= EnigmaStyleHidden;
+        return result;
     }
 
     /// @brief Calculates if this is the default music font.
@@ -171,7 +209,7 @@ public:
     /**
      * @brief Calculates whether this is a SMuFL font.
      */
-    bool calcIsSMuFL() const  { return calcSMuFLMetaDataPath().has_value(); }
+    bool calcIsSMuFL() const;
 
     /**
      * @brief Returns the standard SMuFL font folder.
@@ -181,6 +219,9 @@ public:
     static std::vector<std::filesystem::path> calcSMuFLPaths();
 
     static const xml::XmlElementArray<FontInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+
+private:
+    bool m_sizeIsPercent;
 };
 
 /**
@@ -595,6 +636,7 @@ public:
     explicit NamePositioning(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    /// @enum AlignJustify
     /// @brief Alignment and justification options for staff and group names.
     enum class AlignJustify
     {

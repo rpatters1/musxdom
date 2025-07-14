@@ -44,6 +44,7 @@ namespace others {
 class InstrumentUsed;
 class Measure;
 class MultiStaffInstrumentGroup;
+class TextBlock;
 } // namespace others
 
 namespace texts {
@@ -401,7 +402,10 @@ public:
     {
     }
 
-    /** @brief Bass position options */
+    /**
+     * @enum BassPosition
+     * @brief Bass position options
+     */
     enum class BassPosition
     {
         AfterRoot,                  // default value may not appear in xml (but text appears in Finale binary)
@@ -789,7 +793,8 @@ public:
     {
         DetailsBase::integrityCheck();
         if (std::abs(getAlterationValue()) > MAX_ALTERATIONS) {
-            MUSX_INTEGRITY_ERROR("KeySymbolListElement for list " + std::to_string(getCmper1()) + " has invalid value " + std::to_string(getAlterationValue()));
+            util::Logger::log(util::Logger::LogLevel::Verbose,
+                "KeySymbolListElement for list " + std::to_string(getCmper1()) + " has invalid value " + std::to_string(getAlterationValue()));
         }
     }
 
@@ -941,6 +946,12 @@ public:
     Evpu yDisp{};       ///< Vertical displacement in Evpu (xml node is `<ydisp>`)
     bool hidden{};      ///< Indicates the text appears only on screen (xml node is `<postIt/>`)
 
+    /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
+    std::shared_ptr<others::TextBlock> getTextBlock() const;
+
+    /** @brief Gets the raw text for this assignment, or nullptr if none. */
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
+
     constexpr static std::string_view XmlNodeName = "measTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -996,8 +1007,8 @@ public:
     {
     }
 
-    NoteNumber noteId{};            ///< The ID of the note being assigned a code.
-    PercussionNoteType noteCode{};  ///< The percussion note code. Use this to search the incis of the percussion map for the specific note.
+    NoteNumber noteId{};                ///< The ID of the note being assigned a code.
+    PercussionNoteTypeId noteCode{};    ///< The percussion note code. Use this to search the incis of the percussion map for the specific note.
 
     NoteNumber getNoteId() const override { return noteId; }
 
@@ -1153,7 +1164,10 @@ public:
     /** @brief Enum for horizontal alignment */
     using AlignJustify = others::NamePositioning::AlignJustify;
 
-    /** @brief Enum for how to draw group barlines */
+    /**
+     * @enum DrawBarlineStyle
+     * @brief Enum for how to draw group barlines
+     */
     enum class DrawBarlineStyle
     {
         OnlyOnStaves,       ///< Default value (may not appear in xml)
@@ -1161,7 +1175,10 @@ public:
         Mensurstriche       ///< Draw barlines between staves (xml value is "Mensurstriche" with capitalization)
     };
 
-    /** @brief Enum for optimization options */
+    /**
+     * @enum HideStaves
+     * @brief Enum for optimization options
+     */
     enum class HideStaves
     {
         Normally,       ///< Hide staves as if there were no StaffGroup (this is the default and may not appear in the xml)
@@ -1169,7 +1186,10 @@ public:
         None            ///< Never hide the staves in this StaffGroup
     };
 
-    /** @brief Bracket style enum for StaffGroup */
+    /**
+     * @enum BracketStyle
+     * @brief Bracket style enum for StaffGroup
+     */
     enum class BracketStyle : int
     {
         None = 0,                   ///< No bracket (the default)

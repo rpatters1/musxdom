@@ -304,3 +304,23 @@ TEST(TieDetection, V2toV1Special)
     checkTie(createNoteInfo(entryFrame1, 13, 0), createNoteInfo(entryFrame2, 0, 0));
     checkTie(createNoteInfo(entryFrame1, 13, 1), createNoteInfo(entryFrame2, 0, 1));
 }
+
+TEST(TieDetection, AcrossKeyChange)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "tie_across_key.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold1 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold1) << " gfhold not found for 1, 1";
+    auto entryFrame1 = gfhold1.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame1);
+
+    auto gfhold2 = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+    ASSERT_TRUE(gfhold2) << " gfhold not found for 1, 2";
+    auto entryFrame2 = gfhold2.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame2);
+
+    checkTie(createNoteInfo(entryFrame1, 1, 0), createNoteInfo(entryFrame2, 0, 0));
+}

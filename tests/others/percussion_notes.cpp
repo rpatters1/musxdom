@@ -51,12 +51,10 @@ TEST(PercussionNoteCodeTest, PopulateFields)
     ASSERT_TRUE(pcode) << "PercussionNoteCode with entnum=126 inci=0 not found";
 
     EXPECT_EQ(pcode->noteId, NoteNumber(1));
-    EXPECT_EQ(pcode->noteCode, PercussionNoteType(11));
+    EXPECT_EQ(pcode->noteCode, PercussionNoteTypeId(11));
 }
 
-TEST(PercussionNoteInfoTest, PopulateFields)
-{
-    constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -76,10 +74,20 @@ TEST(PercussionNoteInfoTest, PopulateFields)
       <wholeNotehead>57506</wholeNotehead>
       <dwholeNotehead>57504</dwholeNotehead>
     </percussionNoteInfo>
+    <percussionNoteInfo cmper="4" inci="2">
+      <percNoteType>8428</percNoteType>
+      <harmLev>7</harmLev>
+      <closedNotehead>57508</closedNotehead>
+      <halfNotehead>57507</halfNotehead>
+      <wholeNotehead>57506</wholeNotehead>
+      <dwholeNotehead>57504</dwholeNotehead>
+    </percussionNoteInfo>
   </others>
 </finale>
 )xml";
 
+TEST(PercussionNoteInfoTest, PopulateFields)
+{
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
@@ -87,7 +95,7 @@ TEST(PercussionNoteInfoTest, PopulateFields)
     {
         auto info = others->get<others::PercussionNoteInfo>(SCORE_PARTID, 4, 0);
         ASSERT_TRUE(info);
-        EXPECT_EQ(info->percNoteType, PercussionNoteType(1));
+        EXPECT_EQ(info->percNoteType, PercussionNoteTypeId(1));
         EXPECT_EQ(info->staffPosition, 6);
         EXPECT_EQ(info->closedNotehead, U'\uE0A4');  // 57508
         EXPECT_EQ(info->halfNotehead, U'\uE0A3');    // 57507
@@ -98,12 +106,47 @@ TEST(PercussionNoteInfoTest, PopulateFields)
     {
         auto info = others->get<others::PercussionNoteInfo>(SCORE_PARTID, 4, 1);
         ASSERT_TRUE(info);
-        EXPECT_EQ(info->percNoteType, PercussionNoteType(236));
+        EXPECT_EQ(info->percNoteType, PercussionNoteTypeId(236));
         EXPECT_EQ(info->staffPosition, 7);
         EXPECT_EQ(info->closedNotehead, U'\uE0A4');  // 57508
         EXPECT_EQ(info->halfNotehead, U'\uE0A3');    // 57507
         EXPECT_EQ(info->wholeNotehead, U'\uE0A2');   // 57506
         EXPECT_EQ(info->dwholeNotehead, U'\uE0A0');  // 57504
+    }
+}
+
+
+TEST(PercussionNoteInfoTest, PercussionNoteTypes)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto info = others->get<others::PercussionNoteInfo>(SCORE_PARTID, 4, 0);
+        ASSERT_TRUE(info);
+        auto typeInfo = info->getNoteType();
+        EXPECT_EQ(typeInfo.instrumentId, info->percNoteType);
+        EXPECT_EQ(typeInfo.instrumentId, info->getBaseNoteTypeId());
+        EXPECT_EQ(typeInfo.createName(info->getNoteTypeOrderId()), "Snare Drum");
+    }
+
+    {
+        auto info = others->get<others::PercussionNoteInfo>(SCORE_PARTID, 4, 1);
+        ASSERT_TRUE(info);
+        auto typeInfo = info->getNoteType();
+        EXPECT_EQ(typeInfo.instrumentId, info->percNoteType);
+        EXPECT_EQ(typeInfo.instrumentId, info->getBaseNoteTypeId());
+        EXPECT_EQ(typeInfo.createName(info->getNoteTypeOrderId()), "Snare Drum LH");
+    }
+
+    {
+        auto info = others->get<others::PercussionNoteInfo>(SCORE_PARTID, 4, 2);
+        ASSERT_TRUE(info);
+        auto typeInfo = info->getNoteType();
+        EXPECT_NE(typeInfo.instrumentId, info->percNoteType);
+        EXPECT_EQ(typeInfo.instrumentId, info->getBaseNoteTypeId());
+        EXPECT_EQ(typeInfo.createName(info->getNoteTypeOrderId()), "Snare Drum (3) LH");
     }
 }
 

@@ -225,3 +225,119 @@ TEST(TransposerTest, Non12EDOEquivalentPitch) {
      EXPECT_EQ(t.displacement(), 12);
      EXPECT_EQ(t.alteration(), 0);  // G5 natural
  }
+
+ TEST(TransposerTest, Calc12EdoHalfstepsInInterval)
+{
+    // Perfect unison, no alteration
+    EXPECT_EQ(calc12EdoHalfstepsInInterval(0, 0), 0);
+
+    // Major third, no alteration
+    EXPECT_EQ(calc12EdoHalfstepsInInterval(2, 0), 4);
+
+    // Minor third (by adding -1 alteration to major third)
+    EXPECT_EQ(calc12EdoHalfstepsInInterval(2, -1), 3);
+
+    // Perfect octave
+    EXPECT_EQ(calc12EdoHalfstepsInInterval(7, 0), 12);
+
+    // Negative interval (descending perfect fifth)
+    EXPECT_EQ(calc12EdoHalfstepsInInterval(-4, 0), -7);
+}
+
+TEST(TransposerTest, CalcAlterationFrom12EdoHalfsteps)
+{
+    // Major third: interval=2, halfsteps=4 → alteration=0
+    EXPECT_EQ(calcAlterationFrom12EdoHalfsteps(2, 4), 0);
+
+    // Minor third: interval=2, halfsteps=3 → alteration=-1
+    EXPECT_EQ(calcAlterationFrom12EdoHalfsteps(2, 3), -1);
+
+    // Augmented third: interval=2, halfsteps=5 → alteration=+1
+    EXPECT_EQ(calcAlterationFrom12EdoHalfsteps(2, 5), +1);
+
+    // Perfect octave: interval=7, halfsteps=12 → alteration=0
+    EXPECT_EQ(calcAlterationFrom12EdoHalfsteps(7, 12), 0);
+
+    // Descending perfect fifth: interval=-4, halfsteps=-7 → alteration=0
+    EXPECT_EQ(calcAlterationFrom12EdoHalfsteps(-4, -7), 0);
+
+    // Interval = +3 (perfect fourth), halfsteps = -3
+    // Expected unaltered halfsteps = +5
+    // Therefore alteration = -3 - 5 = -8 (8x diminished 4th)
+    EXPECT_EQ(calcAlterationFrom12EdoHalfsteps(3, -3), -8);
+}
+
+TEST(TransposerTest, CalcFunctionsAreInverse)
+{
+    // Test symmetry for a variety of intervals and alterations
+    for (int interval = -14; interval <= 14; ++interval)
+    {
+        for (int alteration = -7; alteration <= 7; ++alteration)
+        {
+            int halfsteps = calc12EdoHalfstepsInInterval(interval, alteration);
+            int calcAlt = calcAlterationFrom12EdoHalfsteps(interval, halfsteps);
+            EXPECT_EQ(calcAlt, alteration) << "Failed on interval " << interval << " alteration " << alteration;
+        }
+    }
+}
+
+TEST(TransposerTest, CalcAlterationFromKeySigChange_Basic)
+{
+    // Bb clarinet transposes a major second up
+    // Expected for major second up is +2 sharps
+    EXPECT_EQ(calcAlterationFromKeySigChange(1, +2), 0);
+
+    // A clarinet transposes a minor third up
+    // Expected for major third up (+2) is +3 flats
+    EXPECT_EQ(calcAlterationFromKeySigChange(2, -3), -1);
+
+    // Eb clarinet transposes a minor third down
+    // Expected for major third up is +3 sharps
+    EXPECT_EQ(calcAlterationFromKeySigChange(-2, +3), 1);
+
+    // Eb bari sax transposes up a major 13th (octave + major sixth)
+    // Expected for major sixth up (+5) is +3 sharps
+    EXPECT_EQ(calcAlterationFromKeySigChange(12, +3), 0);
+
+    // F Horn transposes a perfect fifth up
+    // Expected for perfect fifth up (+4) is +1 sharp
+    EXPECT_EQ(calcAlterationFromKeySigChange(4, +1), 0);
+
+    // D Horn transposes a minor 7th up
+    // Expected for minor 7th up (+6) is +2 flats
+    EXPECT_EQ(calcAlterationFromKeySigChange(6, -2), -1);
+
+    // B Horn transposes a minor 9th up
+    // Expected for minor 9th up (+8) is +5 flats
+    EXPECT_EQ(calcAlterationFromKeySigChange(8, -5), -1);
+
+    // G-basso Horn transposes a perfect fifth down
+    // Expected for perfect fifth up (+4) is +1 flat
+    EXPECT_EQ(calcAlterationFromKeySigChange(-4, -1), 0);
+}
+
+TEST(TransposerTest, CalcAlterationFromKeySigChange_Theoretical)
+{
+    // Fb Transposition up
+    EXPECT_EQ(calcAlterationFromKeySigChange(4, +8), 1) << "resulting interval should be up aug 5th {4, 1}";
+    // Fb Transposition down
+    EXPECT_EQ(calcAlterationFromKeySigChange(-3, +8), 1) << "resulting interval should be down dim 4th {-3, 1}";
+
+    // Gb Transposition up
+    EXPECT_EQ(calcAlterationFromKeySigChange(3, 6), 1) << "resulting interval should be up aug 4th {3, 1}";
+    // Gb Transposition down
+    EXPECT_EQ(calcAlterationFromKeySigChange(-4, 6), 1) << "resulting interval should be down dim 5th {-4, 1}";
+
+    // F# Transposition up
+    EXPECT_EQ(calcAlterationFromKeySigChange(4, -6), -1) << "resulting interval should be up dim 5th {4, -1}";
+
+    // Ebb Transposition up
+    EXPECT_EQ(calcAlterationFromKeySigChange(5, 10), 1) << "resulting interval should be up aug 6th {5, 1}";
+    // Ebb Transposition dn
+    EXPECT_EQ(calcAlterationFromKeySigChange(-2, 10), 2) << "resulting interval should be down dim 3rd {-2, 2}";
+
+    // D# Transposition up
+    EXPECT_EQ(calcAlterationFromKeySigChange(6, -9), -2) << "resulting interval should be up dim 7th {6, -2}";
+    // D# Transposition dn
+    EXPECT_EQ(calcAlterationFromKeySigChange(-1, -9), -1) << "resulting interval should be down aug 2nd {-1, -1}";
+}

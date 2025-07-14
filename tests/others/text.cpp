@@ -29,6 +29,64 @@ using namespace musx::dom;
 constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
+  <header>
+    <headerData>
+      <wordOrder>lo-endian</wordOrder>
+      <textEncoding>Mac</textEncoding>
+      <created>
+        <year>2025</year>
+        <month>6</month>
+        <day>30</day>
+        <modifiedBy/>
+        <enigmaVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </enigmaVersion>
+        <application>FIN</application>
+        <platform>MAC</platform>
+        <appVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <maint>1</maint>
+          <devStatus>dev</devStatus>
+          <build>146</build>
+        </appVersion>
+        <fileVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </fileVersion>
+        <appRegion>US</appRegion>
+      </created>
+      <modified>
+        <year>2025</year>
+        <month>6</month>
+        <day>30</day>
+        <modifiedBy/>
+        <enigmaVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </enigmaVersion>
+        <application>FIN</application>
+        <platform>MAC</platform>
+        <appVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <maint>1</maint>
+          <devStatus>dev</devStatus>
+          <build>146</build>
+        </appVersion>
+        <fileVersion>
+          <major>27</major>
+          <minor>4</minor>
+          <devStatus>dev</devStatus>
+        </fileVersion>
+        <appRegion>US</appRegion>
+      </modified>
+    </headerData>
+  </header>
   <others>
     <fontName cmper="0">
       <charsetBank>Mac</charsetBank>
@@ -218,8 +276,8 @@ constexpr static musxtest::string_view xml = R"xml(
     <fileInfo type="composer">L. BEETHOVEN</fileInfo>
     <fileInfo type="copyright">1823</fileInfo>
     <fileInfo type="description">GRM–####</fileInfo>
-    <fileInfo type="lyricist">Lyricist</fileInfo>
-    <fileInfo type="arranger">Arranger</fileInfo>
+    <fileInfo type="lyricist">Johnny Göthe</fileInfo>
+    <fileInfo type="arranger">Ferrucio Busoni</fileInfo>
     <fileInfo type="subtitle">Subtitle</fileInfo>
     <verse number="1">^fontid(23)^size(12)^nfx(0)The first verse.</verse>
     <chorus number="1">^fontid(11)^size(12)^nfx(0)The first chorus.</chorus>
@@ -356,7 +414,7 @@ www.greatrivermusic.com</blockText>
     <expression number="214">^fontTxt(Times,4096)^size(10)^nfx(130)igrc</expression>
     <expression number="215">^fontTxt(Times,4096)^size(10)^nfx(130)iclefs</expression>
     <expression number="216">^fontTxt(Times,4096)^size(12)^nfx(130)skip ties</expression>
-    <expression number="217">^fontTxt(Times(bad,4096)^size(10)^nfx(130)skip tie ends</expression>
+    <expression number="217">bad ^fontTxt(Times,4096)^size(10)^nfx(130)skip tie ends</expression>
     <expression number="218">^fontTxt(TimesXXX,4096)^size(10)^nfx(130)skip trill-to</expression>
     <expression number="219">^font(Times,4096)^size(14)^nfx(2)22100:0: 0E000F001D000000EAFF0000</expression>
     <expression number="221">^fontMus(Font0,0)^size(24)^nfx(0)</expression>
@@ -404,13 +462,13 @@ TEST(TextsTest, FileInfoText)
     // Test Lyricist
     fileInfo = texts->get<FileInfoText>(Cmper(Type::Lyricist));
     ASSERT_TRUE(fileInfo);
-    EXPECT_EQ(fileInfo->text, "Lyricist");
+    EXPECT_EQ(fileInfo->text, "Johnny Göthe");
     EXPECT_EQ(fileInfo->getTextType(), Type::Lyricist);
 
     // Test Arranger
     fileInfo = texts->get<FileInfoText>(Cmper(Type::Arranger));
     ASSERT_TRUE(fileInfo);
-    EXPECT_EQ(fileInfo->text, "Arranger");
+    EXPECT_EQ(fileInfo->text, "Ferrucio Busoni");
     EXPECT_EQ(fileInfo->getTextType(), Type::Arranger);
 
     // Test Subtitle
@@ -521,20 +579,34 @@ TEST(TextsTest, OtherText)
 
 TEST(TextsTest, EnigmaComponents)
 {
-    auto components = musx::util::EnigmaString::parseComponents("^fontTxt(Times,4096)");
+    constexpr auto constexpr_strlen = [](const auto& str) constexpr {
+        return std::size(str) - 1;
+    };
+
+    size_t parsedSize = 0;
+    auto components = musx::util::EnigmaString::parseComponents("^fontTxt(Times,4096)text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "Times", "4096" }));
-    components = musx::util::EnigmaString::parseComponents("^fontTxt((Times),(4096))");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^fontTxt(Times,4096)"));
+
+    components = musx::util::EnigmaString::parseComponents("^fontTxt((Times),(4096))", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "fontTxt", "(Times)", "(4096)" }));
-    components = musx::util::EnigmaString::parseComponents("^size(10)");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^fontTxt((Times),(4096))"));
+
+    components = musx::util::EnigmaString::parseComponents("^size(10)size text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "size", "10" }));
-    components = musx::util::EnigmaString::parseComponents("^some");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^size(10)"));
+
+    components = musx::util::EnigmaString::parseComponents("^some text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "some" }));
-    components = musx::util::EnigmaString::parseComponents("^^");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^some"));
+
+    components = musx::util::EnigmaString::parseComponents("^^text", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({ "^" }));
-    components = musx::util::EnigmaString::parseComponents("^^invalid");
+    EXPECT_EQ(parsedSize, constexpr_strlen("^^"));
+
+    components = musx::util::EnigmaString::parseComponents("^fontTxt(Times(bad,4096)", &parsedSize);
     EXPECT_EQ(components, std::vector<std::string>({}));
-    components = musx::util::EnigmaString::parseComponents("^fontTxt(Times(bad,4096)");
-    EXPECT_EQ(components, std::vector<std::string>({}));
+    EXPECT_EQ(parsedSize, 0);
 }
 
 TEST(TextsTest, FontFromEnigma)
@@ -547,7 +619,7 @@ TEST(TextsTest, FontFromEnigma)
 
     auto text = texts->get<ExpressionText>(216);
     ASSERT_TRUE(text);
-    auto font = text->parseFirstFontInfo();
+    auto font = text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo();
     EXPECT_EQ(font->fontId, 1);
     EXPECT_EQ(font->fontSize, 12);
     EXPECT_FALSE(font->bold);
@@ -559,35 +631,338 @@ TEST(TextsTest, FontFromEnigma)
 
     text = texts->get<ExpressionText>(217);
     ASSERT_TRUE(text);
-    font = text->parseFirstFontInfo();
+    font = text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo();
     EXPECT_FALSE(font);
 
     text = texts->get<ExpressionText>(218);
     ASSERT_TRUE(text);
     EXPECT_THROW(
-        text->parseFirstFontInfo(),
+        text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo(),
         std::invalid_argument
     );
 }
 
-TEST(TextsTest, EnigmaParsing)
+TEST(TextsTest, ParseEnigmaTextLowLevel)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    std::vector<std::pair<std::string, std::string>> output;
+
+    auto recordChunk = [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+        output.emplace_back("TEXT", text);
+        return true;
+    };
+
+    auto handleNothing = [](const std::vector<std::string>&) -> std::optional<std::string> {
+        return std::nullopt;
+    };
+
+    // Test 1: Escaped caret
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "A ^^ B", recordChunk, handleNothing);
+    std::vector<std::pair<std::string, std::string>> expected1 = {
+        {"TEXT", "A ^ B"}
+    };
+    EXPECT_EQ(output, expected1);
+
+    // Test 2: Unhandled command dumped raw
+    output.clear();
+    EnigmaString::EnigmaParsingOptions options;
+    options.stripUnknownTags = false;
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(Times)X ^size(12)^foo(bar)^nfx(1) Y", recordChunk, handleNothing, options);
+    std::vector<std::pair<std::string, std::string>> expected2 = {
+        {"TEXT", "X "},
+        {"TEXT", "^foo(bar)"},
+        {"TEXT", " Y"}
+    };
+    EXPECT_EQ(output, expected2);
+
+    // Test 3: Command is handled and replaced
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Before ^page(2) after",
+        recordChunk,
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "page") return "3";
+            return std::nullopt;
+        });
+    std::vector<std::pair<std::string, std::string>> expected3 = {
+        {"TEXT", "Before 3 after"}
+    };
+    EXPECT_EQ(output, expected3);
+
+    // Test 4: Invalid command → literal caret
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Broken ^ command", recordChunk, handleNothing);
+    std::vector<std::pair<std::string, std::string>> expected4 = {
+        {"TEXT", "Broken ^ command"}
+    };
+    EXPECT_EQ(output, expected4);
+
+    // Test 5: Suppress command (returns empty std::nullopt)
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Hi ^suppress Bye", recordChunk, handleNothing);
+    std::vector<std::pair<std::string, std::string>> expected5 = {
+        {"TEXT", "Hi  Bye"},
+    };
+    EXPECT_EQ(output, expected5);
+
+    // Test 6: Suppress valid command ^flat
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Hi ^flat() Bye", recordChunk,
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "flat") return "";
+            return std::nullopt;
+        }
+    );
+    std::vector<std::pair<std::string, std::string>> expected6 = {
+        {"TEXT", "Hi  Bye"},
+    };
+    EXPECT_EQ(output, expected6);
+}
+
+TEST(TextsTest, EnigmaAccidentalSubstitution)
 {
     using EnigmaString = musx::util::EnigmaString;
-    auto result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()"); //ascii default
-    EXPECT_EQ(result, "^font(New York)#b^composer()");
-    result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()", EnigmaString::AccidentalStyle::Smufl);
-    std::string text = "^font(New York)" 
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+
+    auto replaceAccidentalTags = [&](const std::string& text, EnigmaString::AccidentalStyle accidentalStyle = EnigmaString::AccidentalStyle::Ascii) -> std::string {
+        std::string result;
+        EnigmaString::EnigmaParsingOptions options(accidentalStyle);
+        options.stripUnknownTags = false;
+        EnigmaString::parseEnigmaText(doc, SCORE_PARTID, text, [&](const std::string& chunk, const musx::util::EnigmaStyles&) -> bool {
+            result += chunk;
+            return true;
+        }, options);
+        return result;
+    };
+
+    auto result = replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^^composer()"); //ascii default
+    EXPECT_EQ(result, "#b^composer()");
+    result = replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^^composer()", EnigmaString::AccidentalStyle::Smufl);
+    std::string text = "" 
                     + EnigmaString::fromU8(u8"\uE262")  // SMuFL sharp
                     + EnigmaString::fromU8(u8"\uE261")  // SMuFL natural
                     + EnigmaString::fromU8(u8"\uE260")  // SMuFL flat
                     + "^composer()";
     EXPECT_EQ(result, text);
-    result = EnigmaString::replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^composer()", EnigmaString::AccidentalStyle::Unicode);
-    EXPECT_EQ(result, "^font(New York)♯♮♭^composer()");
+    result = replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^^composer()", EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_EQ(result, "♯♮♭^composer()");
     result = EnigmaString::trimTags(result);
     EXPECT_EQ(result, "♯♮♭");
     result = EnigmaString::trimTags("^font(New York)^sharp()The composer tag is ^^composer()");
     EXPECT_EQ(result, "The composer tag is ^composer()");
+}
+
+TEST(TextsTest, EnigmaAccidentalParsingMaestro)
+{
+    using namespace musx::util;
+
+    std::vector<char> acciXml;
+    musxtest::readFile(musxtest::getInputPath() / "acci_inserts.enigmaxml", acciXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(acciXml);
+    ASSERT_TRUE(doc);
+
+    auto blockText = doc->getTexts()->get<texts::BlockText>(2);
+    ASSERT_TRUE(blockText) << "block text 2 not found";
+
+    using Results = std::tuple<std::string, int, Evpu, int, std::string>;
+    std::vector<Results> expectedResults = {
+        { "Times New Roman", 12, 0, 0, "test " },
+        { "Maestro", 13, 16, 35, "#" },
+        { "Maestro", 13, 9, 60, "b" },
+        { "Maestro", 13, 16, 50, "n" },
+        { "Times New Roman", 12, 0, 0, " test" },
+    };
+
+    size_t iterations = 0;
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, blockText->text, [&](const std::string& chunk, const EnigmaStyles& styles) {
+        EXPECT_TRUE(iterations < expectedResults.size()) << "not enough expected results for interation " << iterations;
+        if (iterations >= expectedResults.size()) {
+            return false;
+        }
+        auto [expFont, expSize, expBaseline, expTracking, expChunk] = expectedResults[iterations];
+        EXPECT_EQ(styles.font->getName(), expFont);
+        EXPECT_EQ(styles.font->fontSize, expSize);
+        EXPECT_EQ(styles.baseline, expBaseline);
+        EXPECT_EQ(styles.tracking, expTracking);
+        EXPECT_EQ(chunk, expChunk);
+        iterations++;
+        return true;
+    });
+    EXPECT_EQ(iterations, expectedResults.size()) << "text start/end plus 3 acci inserts";
+}
+
+TEST(TextsTest, EnigmaAccidentalParsingFinaleMaestro)
+{
+    using namespace musx::util;
+
+    std::vector<char> acciXml;
+    musxtest::readFile(musxtest::getInputPath() / "acci_smufl_inserts.enigmaxml", acciXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(acciXml);
+    ASSERT_TRUE(doc);
+
+    auto blockText = doc->getTexts()->get<texts::BlockText>(2);
+    ASSERT_TRUE(blockText) << "block text 2 not found";
+
+    using Results = std::tuple<std::string, int, Evpu, int, std::string>;
+    std::vector<Results> expectedResults = {
+        { "Times New Roman", 12, 0, 0, "test " },
+        { "Finale Maestro", 13, 16, 35, EnigmaString::fromU8(u8"\uE262") },  // SMuFL sharp
+        { "Finale Maestro", 13, 9, 60, EnigmaString::fromU8(u8"\uE260") },   // SMuFL flat
+        { "Finale Maestro", 13, 16, 50, EnigmaString::fromU8(u8"\uE261") },  // SMuFL natural
+        { "Times New Roman", 12, 0, 0, " test" },
+    };
+
+    size_t iterations = 0;
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, blockText->text, [&](const std::string& chunk, const EnigmaStyles& styles) {
+        EXPECT_TRUE(iterations < expectedResults.size()) << "not enough expected results for iteration " << iterations;
+        if (iterations >= expectedResults.size()) {
+            return false;
+        }
+        auto [expFont, expSize, expBaseline, expTracking, expChunk] = expectedResults[iterations];
+        EXPECT_EQ(styles.font->getName(), expFont);
+        EXPECT_EQ(styles.font->fontSize, expSize);
+        EXPECT_EQ(styles.baseline, expBaseline);
+        EXPECT_EQ(styles.tracking, expTracking);
+        EXPECT_EQ(chunk, expChunk);
+        iterations++;
+        return true;
+    });
+    EXPECT_EQ(iterations, expectedResults.size()) << "text start/end plus 3 acci inserts";
+}
+
+TEST(TextsTest, ParseEnigmaWithAccidentals)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    std::string output;
+    auto accumulateChunk = [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+        output += text;
+        return true;
+    };
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(New York)^sharp()^natural()^flat()^composer()", accumulateChunk, EnigmaString::AccidentalStyle::Ascii);
+    EXPECT_EQ(output, "#bL. BEETHOVEN");
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(New York)^sharp()^natural()^flat()^arranger()", accumulateChunk, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_EQ(output, "♯♮♭Ferrucio Busoni");
+}
+
+TEST(TextsTest, ParseEnigmaInsertsBaseLevel)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    std::string output;
+    auto accumulateChunk = [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+        output += text;
+        return true;
+    };
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^title() ^subtitle() ^cprsym()^copyright()", accumulateChunk);
+    EXPECT_EQ(output, "My Piece Subtitle @1823");
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^composer() ^arranger() ^lyricist() ^description()", accumulateChunk);
+    EXPECT_EQ(output, "L. BEETHOVEN Ferrucio Busoni Johnny Göthe GRM–####");
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^date(0) | ^date(1) | ^date(2) | ^time(0) | ^time(1)", accumulateChunk);
+    EXPECT_TRUE(musxtest::stringHasDigit(output));
+    musxtest::g_endMessages << "parsed enigma dates/times: " << output << std::endl;
+
+    output.clear();
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fdate(0) | ^fdate(1) | ^fdate(2)", accumulateChunk);
+    EXPECT_TRUE(output.contains("2025"));
+    musxtest::g_endMessages << "parsed file dates: " << output << std::endl;
+}
+
+TEST(TextsTest, ParseEnigmaFontInfo)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    int iterationCount = 0;
+    bool result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^font(Times)^size(13)^nfx(2)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
+        EXPECT_EQ(styles.font->fontId, 1);
+        EXPECT_EQ(styles.font->fontSize, 13);
+        EXPECT_EQ(styles.font->getEnigmaStyles(), 2);
+        EXPECT_FALSE(styles.font->bold);
+        EXPECT_TRUE(styles.font->italic);
+        EXPECT_TRUE(chunk.empty());
+        iterationCount++;
+        return true;
+    });
+    EXPECT_EQ(iterationCount, 1) << "font should be reported even when no text";
+    EXPECT_TRUE(result);
+
+    iterationCount = 0;
+    result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fontid(2)^size(10)^nfx(2)text^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) {
+        if (iterationCount == 0) {
+            EXPECT_EQ(styles.font->fontId, 2);
+            EXPECT_EQ(styles.font->fontSize, 10);
+            EXPECT_EQ(styles.font->getEnigmaStyles(), 2);
+            EXPECT_FALSE(styles.font->bold);
+            EXPECT_TRUE(styles.font->italic);
+            EXPECT_EQ(chunk, "text");
+        } else if (iterationCount == 1) {
+            EXPECT_EQ(styles.font->fontId, 2);
+            EXPECT_EQ(styles.font->fontSize, 10);
+            EXPECT_EQ(styles.font->getEnigmaStyles(), 0);
+            EXPECT_FALSE(styles.font->bold);
+            EXPECT_FALSE(styles.font->italic);
+            EXPECT_TRUE(chunk.empty());
+        }
+        iterationCount++;
+        return true;
+    });
+    EXPECT_EQ(iterationCount, 2) << "trailing font change should be reported";
+    EXPECT_TRUE(result);
+
+    iterationCount = 0;
+    result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "", [&](const std::string&, const musx::util::EnigmaStyles&) {
+        iterationCount++;
+        return true;
+    });
+    EXPECT_EQ(iterationCount, 0) << "nothing should be reported";
+    EXPECT_TRUE(result);
+
+    EnigmaString::EnigmaParsingOptions options;
+    options.ignoreStyleTags = true;
+    iterationCount = 0;
+    result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fontid(2)^size(10)^nfx(2)This is ^baseline(12)the text.^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles&) {
+        EXPECT_EQ(chunk, "This is the text.");
+        iterationCount++;
+        return true;
+    }, options);
+    EXPECT_EQ(iterationCount, 1) << "no font changes should be reported";
+    EXPECT_TRUE(result);
+
+    iterationCount = 0;
+    result = EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fontid(2)^size(10)^nfx(2)This is ^baseline(12)the text.^nfx(0)", [&](const std::string& chunk, const musx::util::EnigmaStyles&) {
+        EXPECT_EQ(chunk, "This is ");
+        iterationCount++;
+        return false;
+    });
+    EXPECT_EQ(iterationCount, 1) << "only the first font change should be reported, due to early exit return";
+    EXPECT_FALSE(result);
 }
 
 TEST(TextsTest, LyricSyllableParsing)
@@ -631,4 +1006,59 @@ TEST(TextsTest, LyricSyllableParsing)
     checkSyllable(lyrics[3], 2, "le", true, true);
 
     EXPECT_TRUE(lyrics[4]->syllables.empty());
+}
+
+TEST(TextsTest, ExpressionsAndTitles)
+{
+    using namespace musx::util;
+    std::string output;
+    constexpr static Cmper kClarinetPartId = 1;
+
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "enigma_strings.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto expDef = doc->getOthers()->get<others::TextExpressionDef>(SCORE_PARTID, 1);
+    ASSERT_TRUE(expDef) << "text expression def 1 does not exist.";
+
+    output.clear();
+    bool result = expDef->getRawTextCtx(SCORE_PARTID).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Score value: 112 control: 64 pass: 3 pages: 2");
+
+    output.clear();
+    result = expDef->getRawTextCtx(kClarinetPartId).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Clarinet in B♭ page: # value: 112 control: 64 pass: 3 pages: 1");
+
+    auto measTexts = doc->getDetails()->getArray<details::MeasureTextAssign>(SCORE_PARTID, 1, 34);
+    ASSERT_FALSE(measTexts.empty());
+
+    const auto scorePageNum = doc->calculatePageFromMeasure(SCORE_PARTID, measTexts[0]->getCmper2())->getCmper();
+    EXPECT_EQ(scorePageNum, 2);
+    const auto partPageNum = doc->calculatePageFromMeasure(kClarinetPartId, measTexts[0]->getCmper2())->getCmper();
+    EXPECT_EQ(partPageNum, 1);
+
+    output.clear();
+    result = measTexts[0]->getRawTextCtx(SCORE_PARTID).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Score page: 2");
+
+    output.clear();
+    result = measTexts[0]->getRawTextCtx(kClarinetPartId).parseEnigmaText([&](const std::string& chunk, const EnigmaStyles&) {
+        output += chunk;
+        return true;
+    }, EnigmaString::defaultInsertsCallback, EnigmaString::AccidentalStyle::Unicode);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(output, "Clarinet in B♭ page: 1 page: 1");
 }

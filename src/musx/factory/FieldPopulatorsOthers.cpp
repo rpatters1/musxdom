@@ -30,6 +30,9 @@ using namespace ::musx::xml;
 using namespace ::musx::dom::others;
 
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
+extern template const XmlEnumMappingElement<options::TextOptions::HorizontalAlignment> XmlEnumMapping<options::TextOptions::HorizontalAlignment>::mapping;
+extern template const XmlEnumMappingElement<options::TextOptions::VerticalAlignment> XmlEnumMapping<options::TextOptions::VerticalAlignment>::mapping;
+extern template const XmlEnumMappingElement<options::TextOptions::TextJustify> XmlEnumMapping<options::TextOptions::TextJustify>::mapping;
 
 // Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
@@ -113,16 +116,10 @@ MUSX_XML_ENUM_MAPPING(Measure::ShowTimeSigMode, {
     {"ignoreTime", Measure::ShowTimeSigMode::Never},
 });
 
-MUSX_XML_ENUM_MAPPING(PageTextAssign::HorizontalAlignment, {
-    // {"left", PageTextAssign::HorizontalAlignment::Left}, // This is the default and is not known to occur in the XML.
-    {"center", PageTextAssign::HorizontalAlignment::Center},
-    {"right", PageTextAssign::HorizontalAlignment::Right},
-});
-
-MUSX_XML_ENUM_MAPPING(PageTextAssign::VerticalAlignment, {
-    // {"top", PageTextAssign::VerticalAlignment::Top}, // This is the default and is not known to occur in the XML.
-    {"center", PageTextAssign::VerticalAlignment::Center},
-    {"bottom", PageTextAssign::VerticalAlignment::Bottom},
+MUSX_XML_ENUM_MAPPING(PageTextAssign::PageAssignType, {
+    // {"all", PageTextAssign::PageAssignType::All}, // This is the default and is not known to occur in the XML.
+    {"even", PageTextAssign::PageAssignType::Even},
+    {"odd", PageTextAssign::PageAssignType::Odd},
 });
 
 MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
@@ -211,7 +208,7 @@ MUSX_XML_ENUM_MAPPING(SmartShape::ShapeType, {
     {"wordExt", SmartShape::ShapeType::WordExtension},
     {"dashContourSlurDown", SmartShape::ShapeType::DashContourSlurDown},
     {"dashContourSlurUp", SmartShape::ShapeType::DashContourSlurUp},
-    {"dashContourSlurAuto", SmartShape::ShapeType::DashContouSlurAuto},
+    {"dashContourSlurAuto", SmartShape::ShapeType::DashContourSlurAuto},
 });
 
 MUSX_XML_ENUM_MAPPING(SmartShapeCustomLine::LineStyle, {
@@ -710,7 +707,7 @@ MUSX_XML_ELEMENT_ARRAY(Page, {
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->width = e->getTextAs<Evpu>(); }},
     {"percent", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->percent = e->getTextAs<int>(); }},
-    {"firstSystem", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->firstSystem = e->getTextAs<SystemCmper>(); }},
+    {"firstSystem", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->firstSystemId = e->getTextAs<SystemCmper>(); }},
     {"scaleContentOnly", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->holdMargins = populateBoolean(e, i); }},
     {"margTop", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margTop = e->getTextAs<Evpu>(); }},
     {"margLeft", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margLeft = e->getTextAs<Evpu>(); }},
@@ -722,8 +719,9 @@ MUSX_XML_ELEMENT_ARRAY(PageTextAssign, {
     {"block", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->block = e->getTextAs<Cmper>(); }},
     {"xdisp", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->xDisp = e->getTextAs<Evpu>(); }},
     {"ydisp", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->yDisp = e->getTextAs<Evpu>(); }},
-    {"startPage", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->startPage = e->getTextAs<Cmper>(); }},
-    {"endPage", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->endPage = e->getTextAs<Cmper>(); }},
+    {"startPage", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->startPage = e->getTextAs<PageCmper>(); }},
+    {"endPage", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->endPage = e->getTextAs<PageCmper>(); }},
+    {"oddEven", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->oddEven = toEnum<PageTextAssign::PageAssignType>(e); }},
     {"hposLp", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->hPosLp = toEnum<PageTextAssign::HorizontalAlignment>(e); }},
     {"hposRp", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->hPosRp = toEnum<PageTextAssign::HorizontalAlignment>(e); }},
     {"postIt", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->hidden = populateBoolean(e, i); }},
@@ -755,7 +753,7 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(PercussionNoteInfo, {
-    {"percNoteType",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->percNoteType = e->getTextAs<PercussionNoteType>(); }},
+    {"percNoteType",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->percNoteType = e->getTextAs<PercussionNoteTypeId>(); }},
     {"harmLev",         [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->staffPosition = e->getTextAs<int>(); }},
     {"closedNotehead",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->closedNotehead = e->getTextAs<char32_t>(); }},
     {"halfNotehead",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->halfNotehead = e->getTextAs<char32_t>(); }},
@@ -1153,6 +1151,7 @@ MUSX_XML_ELEMENT_ARRAY(TempoChange, {
 MUSX_XML_ELEMENT_ARRAY(TextBlock, {
     {"textID", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textId = e->getTextAs<Cmper>(); }},
     {"lineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->justify = toEnum<TextBlock::TextJustify>(e); }},
     {"newPos36", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->newPos36 = populateBoolean(e, i); }},
     {"showShape", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->showShape = populateBoolean(e, i); }},
     {"noExpandSingleWord", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->noExpandSingleWord = populateBoolean(e, i); }},

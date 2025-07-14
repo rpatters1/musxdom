@@ -21,6 +21,7 @@
  */
 #include <filesystem>
 #include <fstream>
+#include <clocale>
 
 #include "gtest/gtest.h"
 #include "test_utils.h"
@@ -50,7 +51,14 @@ public:
 };
 
 int main(int argc, char **argv) {
+    setlocale(LC_ALL, "");
+
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::AddGlobalTestEnvironment(new TestEnvironment);
-    return RUN_ALL_TESTS();
+    int result = RUN_ALL_TESTS();
+    const auto endMessages = musxtest::g_endMessages.str();
+    if (!endMessages.empty()) {
+        std::cout << std::endl << endMessages << std::endl;
+    }
+    return result;
 }

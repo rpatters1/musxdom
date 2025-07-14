@@ -35,6 +35,7 @@ TEST(TextBlockTest, PopulateFields)
     <textBlock cmper="32">
       <textID>31</textID>
       <lineSpacingPercent>100</lineSpacingPercent>
+      <justify>full</justify>
       <newPos36/>
       <showShape/>
       <noExpandSingleWord/>
@@ -48,6 +49,7 @@ TEST(TextBlockTest, PopulateFields)
     <textBlock cmper="33">
       <textID>221</textID>
       <lineSpacingPercent>100</lineSpacingPercent>
+      <justify>forcedFull</justify>
       <newPos36/>
       <showShape/>
       <wordWrap/>
@@ -66,6 +68,7 @@ TEST(TextBlockTest, PopulateFields)
     ASSERT_TRUE(textBlock1) << "TextBlock 32 not found but does exist";
     EXPECT_EQ(textBlock1->textId, 31);
     EXPECT_EQ(textBlock1->lineSpacingPercentage, 100);
+    EXPECT_EQ(textBlock1->justify, others::TextBlock::TextJustify::Full);
     EXPECT_TRUE(textBlock1->newPos36);
     EXPECT_TRUE(textBlock1->showShape);
     EXPECT_TRUE(textBlock1->noExpandSingleWord);
@@ -81,6 +84,7 @@ TEST(TextBlockTest, PopulateFields)
     ASSERT_TRUE(textBlock2) << "TextBlock 33 not found but does exist";
     EXPECT_EQ(textBlock2->textId, 221);
     EXPECT_EQ(textBlock2->lineSpacingPercentage, 100);
+    EXPECT_EQ(textBlock2->justify, others::TextBlock::TextJustify::ForcedFull);
     EXPECT_TRUE(textBlock2->newPos36);
     EXPECT_TRUE(textBlock2->showShape);
     EXPECT_FALSE(textBlock2->noExpandSingleWord);
@@ -184,7 +188,7 @@ TEST(MeasureTextAssignTest, PopulateFields)
 </finale>
     )xml";
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto details = doc->getDetails();
@@ -197,4 +201,104 @@ TEST(MeasureTextAssignTest, PopulateFields)
     EXPECT_EQ(assign->xDispEdu, 728);
     EXPECT_EQ(assign->yDisp, 104);
     EXPECT_TRUE(assign->hidden);
+}
+
+TEST(PageTextAssignText, ParseSinglePageAssignment1)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "page_text.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto pageAssign = others::PageTextAssign::getForPageId(doc, SCORE_PARTID, 2, 0);
+        std::string text = pageAssign->getRawTextCtx(SCORE_PARTID).getText();
+        EXPECT_EQ(text, "Single Page Text - Page 2 of 3");
+    }
+
+    {
+        auto pageAssigns = others::PageTextAssign::getArrayForPageId(doc, 1, 1);
+        ASSERT_EQ(pageAssigns.size(), 1);
+        std::string text = pageAssigns[0]->getRawTextCtx(1).getText();
+        EXPECT_EQ(text, "Single Page Text - Page 1 of 1");
+    }
+
+    {
+        auto pageAssign = others::PageTextAssign::getForPageId(doc, 2, 4, 0);
+        std::string text = pageAssign->getRawTextCtx(2).getText();
+        EXPECT_EQ(text, "Single Page Text - Page 4 of 6");
+    }
+
+    {
+        auto pageAssign = doc->getOthers()->get<others::PageTextAssign>(SCORE_PARTID, 2, 0);
+        EXPECT_FALSE(pageAssign);
+    }
+}
+
+TEST(PageTextAssignText, ParseSinglePageAssignment2)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "page_text.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    PageCmper pageAssignmentId = 3;
+    std::vector<std::optional<PageCmper>> expectedValues = { std::nullopt, std::nullopt, 3 };
+    for (Cmper partId = 0; partId < expectedValues.size(); partId++) {
+        auto pageAssign = doc->getOthers()->get<others::PageTextAssign>(partId, pageAssignmentId, 0);
+        ASSERT_TRUE(pageAssign) << "page assignment " << pageAssignmentId << " should exist in all parts";
+        EXPECT_EQ(expectedValues[partId], pageAssign->calcStartPageNumber(partId));
+        EXPECT_EQ(expectedValues[partId], pageAssign->calcEndPageNumber(partId));
+    }
+
+    pageAssignmentId = 1;
+    expectedValues = { 1, std::nullopt, 1 };
+    for (Cmper partId = 0; partId < expectedValues.size(); partId++) {
+        auto pageAssign = doc->getOthers()->get<others::PageTextAssign>(partId, pageAssignmentId, 0);
+        ASSERT_TRUE(pageAssign) << "page assignment " << pageAssignmentId << " should exist in all parts";
+        EXPECT_EQ(expectedValues[partId], pageAssign->calcStartPageNumber(partId));
+        EXPECT_EQ(expectedValues[partId], pageAssign->calcEndPageNumber(partId));
+    }
+}
+
+static void testMultiPageAssignment(const DocumentPtr& doc, Cmper partId, Inci inci, Cmper expectedMinPage, Cmper expectedMaxPage,
+    const std::string& expectedPre, const std::string& expectedPost)
+{
+    auto part = doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId);
+    ASSERT_TRUE(part) << "unable to find part " << partId;
+    auto pageAssign = doc->getOthers()->get<others::PageTextAssign>(partId, 0, inci);
+    ASSERT_TRUE(pageAssign) << "unable to find page text at assignement id: 0 inci: " << inci;
+    PageCmper minPage = pageAssign->calcStartPageNumber(partId).value_or(0);
+    ASSERT_EQ(minPage, expectedMinPage);
+    PageCmper maxPage = pageAssign->calcEndPageNumber(partId).value_or(0);
+    ASSERT_EQ(maxPage, expectedMaxPage);
+    for (PageCmper pageId = minPage; pageId <= maxPage; pageId++) {
+        std::string text = pageAssign->getRawTextCtx(partId, pageId).getText();
+        std::string expectedText = expectedPre + std::to_string(pageId) + expectedPost;
+        EXPECT_EQ(text, expectedText);
+    }
+}
+
+TEST(PageTextAssignText, ParseMultiPageAssignment1)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "page_text.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    testMultiPageAssignment(doc, SCORE_PARTID, 0, 2, 3, "Multiple Page Text - Page ", " of 3");
+    testMultiPageAssignment(doc, 1, 0, 1, 1, "Multiple Page Text - Page ", " of 1");
+    testMultiPageAssignment(doc, 2, 0, 4, 5, "Multiple Page Text - Page ", " of 6");
+}
+
+TEST(PageTextAssignText, ParseMultiPageAssignment2)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "page_text.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    testMultiPageAssignment(doc, SCORE_PARTID, 1, 1, 3, "All Page Text - Page ", " of 3 Score");
+    testMultiPageAssignment(doc, 1, 1, 1, 1, "All Page Text - Page ", " of 1 Part 1");
+    testMultiPageAssignment(doc, 2, 1, 1, 6, "All Page Text - Page ", " of 6 Part 2");
 }

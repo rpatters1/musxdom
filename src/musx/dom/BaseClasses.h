@@ -24,6 +24,9 @@
 #include <cassert>
 #include <filesystem>
 #include <set>
+#include <string_view>
+#include <unordered_set>
+#include <memory>
 
 #include "musx/dom/Fundamentals.h"
 #include "musx/xml/XmlInterface.h"
@@ -415,7 +418,7 @@ class FontInfo;
  * 
  * Options types derive from this base class so they can reside in the text pool.
  */
-class TextsBase : public Base
+class TextsBase : public Base, public std::enable_shared_from_this<TextsBase>
 {
 public:
     /**
@@ -441,11 +444,13 @@ public:
      */
     void setTextNumber(Cmper textNumber) { m_textNumber = textNumber; }
 
-    /**
-     * @brief Returns a shared pointer to a FontInfo instance that reflects
-     * the first font information in the text.
-     */
-    std::shared_ptr<FontInfo> parseFirstFontInfo() const;
+    /// @brief Gets the raw text block
+    /// @param forPartId The linked part to use for ^partname and ^totpages inserts
+    /// @param forPageId The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior.
+    /// @param defaultInsertFunc The default text insert replacement function for this context. This function is called if the function supplied
+    /// to #util::EnigmaParsingContext::parseEnigmaText returns std::nullopt.
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId = std::nullopt,
+        util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
 private:
     Cmper m_textNumber;             ///< Common attribute: cmper (key value).

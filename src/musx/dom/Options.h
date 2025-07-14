@@ -31,8 +31,16 @@
 #include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
+namespace music_theory {
+enum class ClefType;
+} // namespace music_theory
+
 namespace musx {
 namespace dom {
+
+namespace others {
+class Staff;
+} // namespace others
 
 /**
  * @namespace musx::dom::options
@@ -163,6 +171,7 @@ public:
     explicit BeamOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum FlattenStyle
     /// @brief Beaming style choices for when to flatten beams
     enum class FlattenStyle
     {
@@ -203,6 +212,7 @@ public:
     explicit ChordOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum ChordAlignment
     /// @brief Horizontal alignment for chord symbols
     ///
     /// Only Left and Center are allowed. There is no Right alignment of chords.
@@ -212,6 +222,7 @@ public:
         Center
     };
 
+    /// @enum ChordStyle
     /// @brief Chord spelling style
     enum class ChordStyle
     {
@@ -250,6 +261,11 @@ public:
  */
 class ClefOptions : public OptionsBase {
 public:
+    /// @brief Information about a @ref ClefDef consisting of its clef type and octave transposition.
+    /// For example, a treble clef for tenors (often shown with an 8 below the clef) would return
+    /// (#music_theory::ClefType::G, -1).
+    using ClefInfo = std::pair<music_theory::ClefType, int>;
+
     /**
      * @brief Constructor
      * @param document A weak pointer to the document object.
@@ -269,17 +285,34 @@ public:
     public:
         /** @brief the constructor */
         explicit ClefDef(const DocumentWeakPtr& document)
-            : Base(document, 0, ShareMode::All) {}
+            : Base(document, SCORE_PARTID, ShareMode::All) {}
             
-        int middleCPos{};               ///< Staff position of middle-C for this clef (from top staffline). (xml node is `<adjust>`.)
+        int middleCPos{};               ///< Staff position of middle-C for this clef from reference staffline (usually the top). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
-        int staffPositon{};             ///< Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is `<clefYDisp>`)
+        int staffPosition{};             ///< Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is `<clefYDisp>`)
         Efix baselineAdjust{};          ///< Additional baseline adjustment in Efix. (xml node is `<baseAdjust>`)
         Cmper shapeId{};                ///< Shape ID if the clef is represented as a shape. (xml node is `<shapeID>`)
         bool isShape{};                 ///< Indicates if the clef is a shape.
         bool scaleToStaffHeight{};      ///< Indicates if the shape should scale to staff height.
         bool useOwnFont{};              ///< Indicates if the clef has its own font.
         std::shared_ptr<FontInfo> font; ///< When `useOwnFont` is true, this is the clef's font. Otherwise `nullptr`.
+
+        /// @brief Returns true if this is a blank clef.
+        bool isBlank() const;
+        
+        /// @brief Calculates and returns the clef information.
+        /// @param currStaff For most accurate results, pass the current @ref others::StaffComposite instance. If you omit this parameter,
+        /// percussion and tab staves are identified based on the Finale SMuFL default file settings. If you supply it, staves with a notation style
+        /// of tablature always return a tab clef and staves with a notation style of percussion always return a percussion clef. Normal notation style
+        /// detects clefs as if @p currStaff had not been supplied.
+        /// @return See #ClefInfo.
+        ClefInfo calcInfo(const std::shared_ptr<const others::Staff>& currStaff = nullptr) const;
+
+
+        /// @brief Calculate the font that applies to this clef, based on the options in #ClefDef.
+        /// @return A shared pointer to the font instance used by this #ClefDef.
+        /// @throws std::invalid_argument if not found.
+        std::shared_ptr<const FontInfo> calcFont() const;
 
         static const xml::XmlElementArray<ClefDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
@@ -543,6 +576,7 @@ public:
     explicit LyricOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum SmartHyphenStart
     /// @brief When to start hyphenation
     enum class SmartHyphenStart {
         Always,     ///< "Always" (default value)
@@ -550,12 +584,14 @@ public:
         Never       ///< "Never"
     };
 
+    /// @enum AutoNumberingAlign
     /// @brief Autonumbering type
     enum class AutoNumberingAlign {
         None,       ///< "Keep with First Syllable in Lyric" (default value)
         Align       ///< "Group Under the Same Note"
     };
 
+    /// @enum AlignJustify
     /// @brief Horizontal and vertical alignment/justification values
     enum class AlignJustify {
         Left,
@@ -563,6 +599,7 @@ public:
         Right
     };
 
+    /// @enum WordExtConnectIndex
     /// @brief Word extension connection points
     enum class WordExtConnectIndex {
         LyricRightBottom,
@@ -573,6 +610,7 @@ public:
         DurationLyrBaseline
     };
 
+    /// @enum WordExtConnectStyleType
     /// @brief Word extension connection style categories
     enum class WordExtConnectStyleType {
         DefaultStart,
@@ -586,6 +624,7 @@ public:
         ZeroOffset
     };
 
+    /// @enum SyllablePosStyleType
     /// @brief Lyric syllable position style types
     enum class SyllablePosStyleType {
         Default,        ///< "Others:" (always on, even though the `on` member may be false)
@@ -711,6 +750,7 @@ public:
     explicit MusicSpacingOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
  
+    /// @enum ColUnisonsChoice
     /// @brief Options for how to handle unisons
     enum class ColUnisonsChoice
     {
@@ -719,6 +759,7 @@ public:
         All             ///< Avoid collisions with all unisons.
     };
 
+    /// @enum GraceNoteSpacing
     /// @brief Options for how to handle grace note spacing
     enum class GraceNoteSpacing
     {
@@ -727,6 +768,7 @@ public:
         KeepCurrent     ///< Keep current grace note spacing. (xml value is "keep")
     };
 
+    /// @enum ManualPositioning
     /// @brief Options for how to handle manual positioning
     enum class ManualPositioning
     {
@@ -998,6 +1040,7 @@ public:
     explicit RepeatOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum WingStyle
     /// @brief Wing Styles from Document Options - Repeats
     enum class WingStyle
     {
@@ -1007,6 +1050,7 @@ public:
         DoubleLine
     };
 
+    /// @enum BackToBackStyle
     /// @brief Back-to-Back Styles from Document Options - Repeats
     enum class BackToBackStyle
     {
@@ -1057,6 +1101,7 @@ public:
     explicit SmartShapeOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
+    /// @enum DefaultDirection
     /// @brief Default slur direction
     enum class DefaultDirection
     {
@@ -1065,6 +1110,7 @@ public:
         Under
     };
 
+    /// @enum ConnectionIndex
     /// @brief Connection index values
     enum class ConnectionIndex
     {
@@ -1084,6 +1130,7 @@ public:
         NoteLeftTop
     };
 
+    /// @enum SlurConnectStyleType
     /// @brief Slur connection style types
     enum class SlurConnectStyleType
     {
@@ -1118,6 +1165,7 @@ public:
         UnderTabNumEnd
     };
 
+    /// @enum TabSlideConnectStyleType
     /// @brief Tab slide connection style types
     enum class TabSlideConnectStyleType
     {
@@ -1141,6 +1189,7 @@ public:
         SameLevelPitchSameEnd
     };
 
+    /// @enum GlissandoConnectStyleType
     /// @brief Glissando connection style types
     enum class GlissandoConnectStyleType
     {
@@ -1148,6 +1197,7 @@ public:
         DefaultEnd
     };
 
+    /// @enum BendCurveConnectStyleType
     /// @brief Bend curve connection style types
     enum class BendCurveConnectStyleType
     {
@@ -1161,6 +1211,7 @@ public:
         StaffFromTopEndOffset
     };
 
+    /// @enum SlurControlStyleType
     /// @brief Slue control style types
     enum class SlurControlStyleType
     {
@@ -1293,6 +1344,121 @@ public:
 };
 
 /**
+ * @class TextOptions
+ * @brief Options controlling text rendering in the musx file. Many of these options are default values that are inserted
+ * into Enigma tags when a page or measure text is created. Others are default values for the assignment. As such, once
+ * a page or measure text has been created, it does not change even if these default values change.
+ *
+ * This class is identified by the XML node name "textOptions".
+ */
+class TextOptions : public OptionsBase
+{
+public:
+    /// @brief Constructor
+    explicit TextOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode)
+    {
+    }
+
+    /**
+     * @enum HorizontalAlignment
+     * @brief Horizontal alignment options for page text positioning.
+     */
+    enum class HorizontalAlignment
+    {
+        Left, // default value: leave as first (0) item
+        Center,
+        Right
+    };
+
+    /**
+     * @enum VerticalAlignment
+     * @brief Vertical alignment options for page text positioning.
+     */
+    enum class VerticalAlignment
+    {
+        Top, // default value: leave as first (0) item
+        Center,
+        Bottom
+    };
+
+    /// @enum TextJustify
+    /// @brief Text justification options
+    enum class TextJustify {
+        Left,           ///< "left"
+        Center,         ///< "center"
+        Right,          ///< "right"
+        Full,           ///< "full"
+        ForcedFull      ///< "forcedFull"
+    };
+
+    /// @enum DateFormat
+    /// @brief Date format options. This value is coded into the Enigma `date` insert when the page title is created.
+    enum class DateFormat
+    {
+        Short,      ///< Short date format, based on locale. US format is MM/DD/YY (Default value may not appear in the xml)
+        Long,       ///< Long date format, based on locale. US format is Month DD, YYYY.
+        Abbrev      ///< Abbreviated date format, based on locale. US format is Mon DD, YYYY.
+    };
+
+    /// @enum InsertSymbolType
+    /// @brief Insert symbol types
+    enum class InsertSymbolType
+    {
+        Sharp,
+        Flat,
+        Natural,
+        DblSharp,
+        DblFlat
+    };
+
+    int textLineSpacingPercent{};                 ///< "Line Spacing: Automatic" percent value
+    bool showTimeSeconds{};                       ///< "Include Seconds in Time Stamp"
+    DateFormat dateFormat{};                      ///< "Date Format"
+    int tabSpaces{};                              ///< "Use [x] Spaces in Place of One Tab Character"
+    int textTracking{};                           ///< "Tracking" amount in EMs (1/1000 of the font size)
+    Evpu textBaselineShift{};                     ///< "Baseline Shift" amount
+    Evpu textSuperscript{};                       ///< "Superscript" amount
+    bool textWordWrap{};                          ///< "Word Wrap"
+    Evpu textPageOffset{};                        ///< "Page Offset"
+    TextJustify textJustify{};                    ///< "Justification"
+    bool textExpandSingleWord{};                  ///< "Expand Single Word"
+    HorizontalAlignment textHorzAlign{};          ///< "Horizontal Alignment"
+    VerticalAlignment textVertAlign{};            ///< "Vertical Alignment"
+    bool textIsEdgeAligned{};                     ///< "Position from Page Edge"
+
+    /// @brief Insert symbol information
+    struct InsertSymbolInfo : public Base
+    {
+        /** @brief the constructor */
+        explicit InsertSymbolInfo(const DocumentWeakPtr& document)
+            : Base(document, SCORE_PARTID, ShareMode::All) {}
+
+        int trackingBefore{};                     ///< Tracking before in EMs (1/1000 font size units)
+        int trackingAfter{};                      ///< Tracking after in EMs (1/1000 font size units)
+        int baselineShiftPerc{};                  ///< Baseline shift percent
+        std::shared_ptr<FontInfo> symFont;        ///< Symbol font (Percent-based size is a percent of the preceding font size in the Enigma string.)
+        char32_t symChar{};                       ///< Symbol character
+
+        void integrityCheck() override
+        {
+            if (!symFont) {
+                symFont = std::make_shared<FontInfo>(getDocument(), /*sizeIsPercent*/ true);
+                symFont->fontSize = 100;
+                MUSX_INTEGRITY_ERROR("Text options accidental insert information is missing its font information.");
+            }
+        }
+
+        static const xml::XmlElementArray<InsertSymbolInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    std::unordered_map<InsertSymbolType, std::shared_ptr<InsertSymbolInfo>> symbolInserts; ///< Insert symbol information map
+
+    constexpr static std::string_view XmlNodeName = "textOptions"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TextOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class TieOptions
  * @brief Options controlling the appearance of ties.
  *
@@ -1304,41 +1470,64 @@ public:
     explicit TieOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
-    /** @brief Enumeration for seconds placement options */
+    /**
+     * @enum SecondsPlacement
+     * @brief Enumeration for seconds placement options
+     */
     enum class SecondsPlacement
     {
         None,                   ///< the default
         ShiftForSeconds         ///< xml value is "both"
     };
 
-    /** @brief Enumeration for chord tie direction type */
-    enum class ChordTieDirType {
+    /**
+     * @enum ChordTieDirType
+     * @brief Enumeration for chord tie direction type
+     */
+    enum class ChordTieDirType
+    {
         OutsideInside,          ///< Legacy Finale 3.7 behavior (the default)
         StemReversal,           ///< Split at stem reversal point.
         SplitEvenly             ///< Split evenly
     };
 
-    /** @brief Enumeration for mixed stem direction */
-    enum class MixedStemDirection {
+    /**
+     * @enum MixedStemDirection
+     * @brief Enumeration for mixed stem direction
+     */
+    enum class MixedStemDirection
+    {
         Over,
         Under,
         OppositeFirst           ///< xml value is "start"
     };
 
-    /** @brief Enumeration for special position mode */
-    enum class SpecialPosMode {
+    /**
+     * @enum SpecialPosMode
+     * @brief Enumeration for special position mode
+     */
+    enum class SpecialPosMode
+    {
         None, ///< the default
         Avoid
     };
 
-    /** @brief Enumeration for inset styles */
-    enum class InsetStyle {
+    /**
+     * @enum InsetStyle
+     * @brief Enumeration for inset styles
+     */
+    enum class InsetStyle
+    {
         Fixed,                  ///< the default
         Percent
     };
 
-    /** @brief Enumeration for tie connect style types */
-    enum class ConnectStyleType {
+    /**
+     * @enum ConnectStyleType
+     * @brief Enumeration for tie connect style types
+     */
+    enum class ConnectStyleType
+    {
         OverStartPosInner,
         OverEndPosInner,
         UnderStartPosInner,
@@ -1353,8 +1542,12 @@ public:
         UnderLowestNoteStemEndPosUnder
     };
 
-    /** @brief Enumeration for tie control style types */
-    enum class ControlStyleType {
+    /**
+     * @enum ControlStyleType
+     * @brief Enumeration for tie control style types
+     */
+    enum class ControlStyleType
+    {
         ShortSpan,
         MediumSpan,
         LongSpan,
@@ -1468,7 +1661,10 @@ public:
     explicit TupletOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
-    /** @brief Auto-bracket style options. */
+    /**
+     * @enum AutoBracketStyle
+     * @brief Auto-bracket style options.
+     */
     enum class AutoBracketStyle
     {
         Always,             ///< "Always Use Specified Shape"--the default value
@@ -1476,8 +1672,10 @@ public:
         NeverBeamSide,      ///< "Never Bracket Beamed Notes on Beam Side"
     };
 
-    /** @brief Number style options.
-     * 
+    /**
+     * @enum NumberStyle
+     * @brief Number style options.
+     *
      * @note Finale appears to have implemented `RatioPlusBothNotes` and `RatioPlusDenominatorNote`
      * backwards from how they are named in the xml. It is probably a long-standing bug that was never worth fixing.
      * This DOM corrects the mistake by reversing their mapping in the enum mapping.
@@ -1491,7 +1689,10 @@ public:
         RatioPlusBothNotes,         ///< display notes on both values (xml value is "ratioPlusDenNote")
     };
 
-    /** @brief Positioning style options. */
+    /**
+     * @enum PositioningStyle
+     * @brief Positioning style options.
+     */
     enum class PositioningStyle
     {
         Manual,     ///< The default
@@ -1501,7 +1702,10 @@ public:
         Below       ///< Display the tuplet below the notes
     };
 
-    /** @brief Bracket style options. */
+    /**
+     * @enum BracketStyle
+     * @brief Bracket style options.
+     */
     enum class BracketStyle
     {
         Nothing,    ///< No bracket (the default)

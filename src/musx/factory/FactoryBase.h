@@ -348,16 +348,17 @@ private:
 /// @brief creates and populates a shared pointer to an embedded class and adds it to an a unordered_map
 /// @tparam EnumClass The enum class that is used as the key in the unordered_map
 /// @tparam EmbeddedClass The class to be created an populated
+/// @tparam Args The arguments to pass to the constructor function
 /// @param e The xml node containing the class members
 /// @param listArray The unordred_map to which to add the new instance.
-template <typename EnumClass, typename EmbeddedClass>
-static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray)
+template <typename EnumClass, typename EmbeddedClass, typename... Args>
+static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray, Args&&... args)
 {
     auto typeAttr = e->findAttribute("type");
     if (!typeAttr) {
         throw std::invalid_argument("<" + e->getTagName() + "> element has no type attribute");
     }
-    listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e));
+    listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e, std::forward<Args>(args)...));
 }
 
 /// @brief creates a vector of type T from a set of nodes with identical tags within a parent tag. (See the `<customStaff>` node in @ref others::Staff)

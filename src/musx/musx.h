@@ -68,12 +68,14 @@
 #include "music_theory/music_theory.hpp"
 
 #include "util/Fraction.h"
+#include "util/DateTimeFormat.h"
 #include "util/EnigmaString.h"
 #include "util/Logger.h"
 #include "xml/XmlInterface.h"
 #include "dom/Document.h"
 #include "factory/DocumentFactory.h"
 #include "dom/InstrumentUuids.h"
+#include "dom/PercussionNoteType.h"
 
 #ifdef MUSX_USE_TINYXML2 // usually defined on the compile line or in CMakeLists.txt
 #include "xml/TinyXmlImpl.h"

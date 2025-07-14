@@ -277,7 +277,7 @@ MUSX_XML_ELEMENT_ARRAY(NoteAlterations, {
 
 MUSX_XML_ELEMENT_ARRAY(PercussionNoteCode, {
     {"noteID",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"noteCode",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteCode = e->getTextAs<PercussionNoteType>(); }},
+    {"noteCode",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteCode = e->getTextAs<PercussionNoteTypeId>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {

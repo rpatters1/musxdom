@@ -32,10 +32,12 @@
 #include "musx/util/EnigmaString.h"
 #include "musx/util/Logger.h"
 #include "musx/util/Fraction.h"
+#include "musx/dom/PercussionNoteType.h"
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
-// do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
+#include "Options.h"
+ // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -185,6 +187,7 @@ class ArticulationDef : public OthersBase
 {
 public:
     /**
+     * @enum AutoVerticalMode
      * @brief Defines the automatic vertical positioning mode. These values are only meaningful
      * if #autoVert is true. Otherwise #autoVertMode has the default value but it means "Manual"
      */
@@ -199,6 +202,7 @@ public:
     };
 
     /**
+     * @enum CopyMode
      * @brief Defines the character copy mode (vertical or horizontal)
      */
     enum class CopyMode
@@ -209,6 +213,7 @@ public:
     };
 
     /**
+     * @enum SlurInteractionMode
      * @brief Defines the interaction mode with slurs.
      */
     enum class SlurInteractionMode
@@ -633,13 +638,16 @@ public:
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
     std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
-    /// @brief Returns the @ref Staff instance for this element
-    std::shared_ptr<Staff> getStaff() const;
+    /// @brief Returns the @ref Staff instance for this element, without any staff styles applied
+    std::shared_ptr<Staff> getStaffInstance() const;
 
-    /// @brief Returns the @ref Staff instance at a specified index of iuArray or nullptr if not found
+    /// @brief Returns the @ref Staff instance for this element with staff styles applied at the specified location.
+    std::shared_ptr<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
+
+    /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
     /// @param index The 0-based index to find.
-    static std::shared_ptr<Staff> getStaffAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
+    static std::shared_ptr<Staff> getStaffInstanceAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
 
     /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
@@ -870,7 +878,10 @@ class TextExpressionDef;
  */
 class MarkingCategory : public OthersBase {
 public:
-    /** @brief Enumeration for the type of marking category */
+    /**
+     * @enum CategoryType
+     * @brief Enumeration for the type of marking category
+     */
     enum class CategoryType : Cmper
     {
         Invalid,            ///< There should always be a category type supplied
@@ -892,7 +903,7 @@ public:
     // Font information for the marking category
     std::shared_ptr<FontInfo> textFont;      ///< Text font
     std::shared_ptr<FontInfo> musicFont;     ///< Music font
-    std::shared_ptr<FontInfo> numberFont;    ///< Number font
+    std::shared_ptr<FontInfo> numberFont;    ///< Number font (not implemented in the Finale U.I.)
 
     HorizontalMeasExprAlign horzAlign{};     ///< Horizontal alignment for the marking
     VerticalMeasExprAlign vertAlign{};       ///< Vertical alignment for the marking
@@ -1168,6 +1179,7 @@ public:
     explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
+    /// @enum AlignJustify
     /// @brief Alignment and justification options for measure numbers.
     enum class AlignJustify
     {
@@ -1176,6 +1188,7 @@ public:
         Center  ///< Center alignment.
     };
 
+    /// @enum TimePrecision
     /// @brief Precision for time display
     enum class TimePrecision
     {
@@ -1361,12 +1374,12 @@ public:
                                             ///< This list is calculated by the factory when it calls #calcAllMultiStaffGroupIds.
                                             ///< It is potentially a superset of #staffNums and/or the group returned by #calcVisualStaffGroup.
 
-    /// @brief Returns the staff at the index position or null if out of range or not found.
+    /// @brief Returns the staff instance (without any staff styles applied) at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
-    std::shared_ptr<Staff> getStaffAtIndex(size_t x) const;
+    std::shared_ptr<Staff> getStaffInstanceAtIndex(size_t x) const;
 
-    /// @brief Returns the first staff (with integrity check)
-    std::shared_ptr<Staff> getFirstStaff() const;
+    /// @brief Returns the first staff instance without any staff styles applied (with integrity check)
+    std::shared_ptr<Staff> getFirstStaffInstance() const;
 
     /// @brief Returns the index of the input staffId or std::nullopt if not found
     std::optional<size_t> getIndexOf(InstCmper staffId) const
@@ -1480,61 +1493,71 @@ public:
 class Page : public OthersBase {
 public:
     /** @brief Constructor function */
-    explicit Page(const DocumentWeakPtr& document, Cmper pageId, ShareMode shareMode, Cmper cmper)
+    explicit Page(const DocumentWeakPtr& document, PageCmper pageId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, pageId, shareMode, cmper) {}
 
     Evpu height{};              ///< Page height in Evpu.
     Evpu width{};               ///< Page width in Evpu.
     int percent{};              ///< Percent value (scaling factor).
-    SystemCmper firstSystem{};  ///< First system on the page (-1 if page is blank). See @ref StaffSystem.
+    SystemCmper firstSystemId{}; ///< First system on the page (-1 if page is blank). See @ref StaffSystem. (xml node is `<firstSystem>`)
     bool holdMargins{};         ///< "Hold Margins" (xml node is `<scaleContentOnly>`)
     Evpu margTop{};             ///< Top margin in Evpu. (Sign reversed in Finale UI.)
     Evpu margLeft{};            ///< Left margin in Evpu.
     Evpu margBottom{};          ///< Bottom margin in Evpu.
     Evpu margRight{};           ///< Right margin in Evpu. (Sign reversed in Finale UI.)
 
-    std::optional<SystemCmper> lastSystem; ///< Computed by the Resolver function. This value is not in the xml.
+    std::optional<SystemCmper> lastSystemId;    ///< Computed by the Resolver function #calcSystemInfo. This value is not in the xml.
+    std::optional<MeasCmper> firstMeasureId;    ///< Computed by the Resolver function #calcSystemInfo. This value is not in the xml.
+    std::optional<MeasCmper> lastMeasureId;     ///< Computed by the Resolver function #calcSystemInfo. This value is not in the xml.
 
     /** @brief is this a blank page */
-    bool isBlank() const { return firstSystem < 0; }
+    bool isBlank() const { return firstSystemId < 0; }
+
+    /// @brief Resolver function used by factory to compute system and measure information for all pages.
+    static void calcSystemInfo(const DocumentPtr& document);
 
     constexpr static std::string_view XmlNodeName = "pageSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Page>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+class TextBlock;
 /**
  * @class PageTextAssign
  * @brief Represents a page text assignment with positioning and page range properties.
  *
- * If the cmper is non-0, the #startPage and #endPage values are not used and the cmper
- * specifies the page to which this text is assigned.
+ * Instances of #PageTextAssign use page assignment IDs rather than straightforward page numbers.
+ * This allows their page assignments to shift based on how many leading blank pages exist in the
+ * current score or part view vs. all the others. If all score and parts have the same number of
+ * leading blank pages, then page assignment IDs are the same as page numbers.
  *
- * If the cmper is 0, the #startPage and #endPage values specify the range of pages to which
- * this text is assigned.
+ * If the cmper is non-0, the #startPage and #endPage values are not used and the cmper
+ * specifies a page assignment ID that defines which page this text is assigned to.
+ *
+ * If the cmper is 0, the #startPage and #endPage values specify the range of page assignment IDs to which
+ * this text is assigned. An #endPage of 0 indicates the last page of the document.
+ * 
+ * If cmper is non-zero, #startPage and #endPage should have the same value as the cmper.
  *
  * The inci value specifies a particular page text when more than one exists for the cmper value.
- *
- * Note that blank pages at the start of a linked part offset the page values (of either single-
- * or multi-page blocks). The full details of how this works is yet to be tested.
  *
  * This class is identified by the XML node name "pageTextAssign".
  */
 class PageTextAssign : public OthersBase
 {
 public:
-    /** @brief Horizontal alignment options for page text positioning. */
-    enum class HorizontalAlignment {
-        Left, // default value: leave as first (0) item
-        Center,
-        Right
+    /**
+     * @enum PageAssignType
+     * @brief Which pages a multipage assignment appears on
+     */
+    enum class PageAssignType
+    {
+        AllPages,       ///< default (may not appear in xml)
+        Even,
+        Odd
     };
 
-    /** @brief Vertical alignment options for page text positioning. */
-    enum class VerticalAlignment {
-        Top, // default value: leave as first (0) item
-        Center,
-        Bottom
-    };
+    using HorizontalAlignment = options::TextOptions::HorizontalAlignment;  ///< Horizontal alignment options for page text positioning.
+    using VerticalAlignment = options::TextOptions::VerticalAlignment;      ///< Vertical alignment options for page text positioning.
 
     /** @brief Constructor function */
     explicit PageTextAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
@@ -1545,9 +1568,12 @@ public:
     Cmper block{};                  ///< The Cmper for the assigned @ref TextBlock. (xml tag is `<block>`)
     Evpu xDisp{};                   ///< The horizontal displacement from the default position. (xml tag is `<xdisp>`)
     Evpu yDisp{};                   ///< The vertical displacement from the default position. (xml tag is `<ydisp>`)
-    Cmper startPage{};              ///< If cmper is zero, the first page on which the text appears. (xml tag is `<startPage>`)
-    Cmper endPage{};                ///< If cmper is zero, the last page on which the text appears.
-                                    ///< A value of zero indicates the last page in the document, whatever number it may be. (xml tag is `<endPage>`)
+    PageCmper startPage{};          ///< The first page assignment ID on which the text appears.
+                                    ///< Note that the page assignment ID may be different than the page number. See #calcStartPageNumber.
+    PageCmper endPage{};            ///< The last page assignment ID on which the text appears.
+                                    ///< A value of zero indicates the last page in the document, whatever number it may be.
+                                    ///< Note that the page assignment ID may be different than the page number. See #calcEndPageNumber.
+    PageAssignType oddEven{};       ///< Determines if a multipage assignment appears on all, even (left), or odd (right) pages
     HorizontalAlignment hPosLp{};   ///< Horizontal alignment on left or all pages (depending on #indRpPos). (xml tag is `<hposLp>`)
     HorizontalAlignment hPosRp{};   ///< Horizontal alignment on right pages (if #indRpPos is true). (xml tag is `<hposRp>`)
     bool hidden{};                  ///< Indicates if the page text appears only on screen. (xml tag is `<postIt>`)
@@ -1559,6 +1585,63 @@ public:
     bool indRpPos{};                ///< Individual right page positioning indicator. (xml tag is `<indRpPos>`)
     Evpu rightPgXDisp{};            ///< Horizontal displacement for right pages (if #indRpPos is true). (xml tag is `<rightPgXdisp>`)
     Evpu rightPgYDisp{};            ///< Vertical displacement for right pages (if #indRpPos is true). (xml tag is `<rightPgYdisp>`)
+
+    /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
+    std::shared_ptr<TextBlock> getTextBlock() const;
+
+    /// @brief Return the starting page number, taking into account leading blank pages in all parts.
+    /// This calculation mimics observed behavior in Finale.
+    /// @return The first page in @p forPartId on which the part appears. If the attachment does not appear on the part,
+    /// the function returns std::nullopt.
+    std::optional<PageCmper> calcStartPageNumber(Cmper forPartId) const;
+
+    /// @brief Return the ending page number, taking into account leading blank pages in all parts
+    /// This calculation mimics observed behavior in Finale.
+    /// @return The first page in @p forPartId on which the part appears. If the attachment does not appear on the part,
+    /// the function returns std::nullopt.
+    std::optional<PageCmper> calcEndPageNumber(Cmper forPartId) const;
+
+    /**
+     * @brief Gets the raw text for parsing this assignment, or nullptr if none.
+     * @param forPartId The part to use for ^partname and ^totpages inserts.
+     * @param forPageId The page number to use for ^page inserts if this is a multipage instance.
+     * This value is ignored for single page instances. Note that this is a page number and not a page ID.
+     * See #calcStartPageNumber and #calcEndPageNumber.
+    */
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId = std::nullopt) const;
+
+    /// @brief Returns true if this is a multi-page assignment.
+    bool isMultiPage() const
+    { return getCmper() == 0 && startPage != endPage; }
+
+    /// @brief Returns true if this is a multi-page assignment that is assigned to through last page, no matter how many.
+    bool isMultiAssignedThruLastPage() const
+    { return isMultiPage() && endPage == 0; }
+
+    void integrityCheck() override
+    {
+        if (getCmper() != 0) {
+            if (startPage != getCmper() || endPage != getCmper()) {
+                MUSX_INTEGRITY_ERROR("PageTextAssign " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(0)) +
+                    " has startPage or endPage value that does not match.");
+            }
+        }
+    }
+
+    /// @brief Returns a specific page text assignment for a given page number in a given part.
+    /// This allows the caller not to have to know the conversion to page assignment IDs.
+    /// @param document The document to search.
+    /// @param partId The ID of the linked part to search.
+    /// @param pageId The page number to search for, or zero for multipage assignments.
+    /// @param inci The inci of the specific page text assignment to retrieve.
+    static std::shared_ptr<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci);
+
+    /// @brief Returns all the page text assignments for a given page number in a given part.
+    /// This allows the caller not to have to know the conversion to page assignment IDs.
+    /// @param document The document to search.
+    /// @param partId The ID of the linked part to search.
+    /// @param pageId The page number to search for, or zero for all multipage assignments.
+    static std::vector<std::shared_ptr<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1581,15 +1664,21 @@ public:
         : OthersBase(document, partId, shareMode, cmper) {}
 
     // Public properties corresponding to the XML structure
-    Cmper nameId{};                    ///< @ref Cmper of the part name @ref TextBlock. (xml tag is `<nameID>`)
-    int partOrder{};                   ///< Value that determines the order of listed parts in Finale's UI.
-    int copies{};                      ///< Number of copies to print.
-    bool extractPart{};                ///< Indicates if the part should be extracted.
-    bool needsRecalc{};                ///< Indicates if the part needs update layout.
-    bool useAsSmpInst{};               ///< Indicates if the part is used as a SmartMusic instrument.
-    int smartMusicInst{};              ///< SmartMusic instrument ID (-1 if not used).
-    Cmper defaultNameStaff{};          ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
-    Cmper defaultNameGroup{};          ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
+    Cmper nameId{};                     ///< @ref Cmper of the part name @ref TextBlock. (xml tag is `<nameID>`)
+    int partOrder{};                    ///< Value that determines the order of listed parts in Finale's UI.
+    int copies{};                       ///< Number of copies to print.
+    bool extractPart{};                 ///< Indicates if the part should be extracted.
+    bool needsRecalc{};                 ///< Indicates if the part needs update layout.
+    bool useAsSmpInst{};                ///< Indicates if the part is used as a SmartMusic instrument.
+    int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
+    Cmper defaultNameStaff{};           ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
+    Cmper defaultNameGroup{};           ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
+
+    int numberOfLeadingBlankPages{};    ///< The number of leading blank pages in the part. This is not in the xml but calculated in #factory::DocumentFactory::create.
+    int numberOfPages{};                ///< The total number of pages in the part. This is not in the xml but calculated in #factory::DocumentFactory::create.
+
+    /** @brief Get the raw text context for the part name if any */
+    util::EnigmaParsingContext getNameRawTextCtx() const;
 
     /** @brief Get the part name if any */
     std::string getName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
@@ -1605,6 +1694,17 @@ public:
     */
     Cmper calcSystemIuList(Cmper systemId) const;
 
+    /// @brief Calculates a page number in this part from a page assignment ID. (See @ref PageTextAssign.)
+    /// @param pageAssignmentId The page assignment ID.
+    /// @return Page number or potential page number (if greater than the part's number of pages). If the assignment
+    /// is for a leading blank page the part does not have, returns std::nullopt.
+    std::optional<PageCmper> calcPageNumberFromAssignmentId(PageCmper pageAssignmentId) const;
+
+    /// @brief Calculates a page assignment ID from a page number in the part.
+    /// @param pageId The page for which to get the assignment ID.
+    /// @return The calculated page assignment ID.
+    PageCmper calcAssignmentIdFromPageNumber(PageCmper pageId) const;
+    
     /** @brief Return the instance for the score */
     static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
 
@@ -1662,19 +1762,33 @@ public:
     explicit PercussionNoteInfo(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
         : OthersBase(document, partId, shareMode, cmper, inci) {}
 
-    PercussionNoteType percNoteType{};  ///< The percussion note type ID. Compare this with the value in @ref details::PercussionNoteCode.
-    int staffPosition{};                ///< The fixed vertical staff position of the note. (xml node is `<harmLev>`.)
-                                        ///< This value is the staff position relative to the first ledger line below the staff.
-                                        ///< The logic behind this choice is that it is the middle-C position on a treble clef, but
-                                        ///< middle-C is not relevant to the note's pitch or value. Use #calcStaffReferencePosition to get the
-                                        ///< staff position relative to the staff's reference line, which is often a more useful value.
-    char32_t closedNotehead{};          ///< Codepoint for closed notehead (from default music font.)
-    char32_t halfNotehead{};            ///< Codepoint for half notehead (from default music font.)
-    char32_t wholeNotehead{};           ///< Codepoint for whole notehead (from default music font.)
-    char32_t dwholeNotehead{};          ///< Codepoint for double whole notehead (from default music font.)
+    PercussionNoteTypeId percNoteType{};    ///< The percussion note type ID. Compare this with the value in @ref details::PercussionNoteCode.
+    int staffPosition{};                    ///< The fixed vertical staff position of the note. (xml node is `<harmLev>`.)
+                                            ///< This value is the staff position relative to the first ledger line below the staff.
+                                            ///< The logic behind this choice is that it is the middle-C position on a treble clef, but
+                                            ///< middle-C is not relevant to the note's pitch or value. Use #calcStaffReferencePosition to get the
+                                            ///< staff position relative to the staff's reference line, which is often a more useful value.
+    char32_t closedNotehead{};              ///< Codepoint for closed notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t halfNotehead{};                ///< Codepoint for half notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t wholeNotehead{};               ///< Codepoint for whole notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
+    char32_t dwholeNotehead{};              ///< Codepoint for double whole notehead (from percussion notehead font. See @ref options::FontOptions::FontType::Percussion.)
 
     /// @brief Calculates the fixed staff position for this percussion note relative to a staff's reference line.
     int calcStaffReferencePosition() const { return staffPosition - 10; }
+
+    /// @brief Gets the base PercussionNoteTypeId.
+    /// @return the base percussion note type id (used to look it up in the #percussion::percussionNoteTypeMap.)
+    PercussionNoteTypeId getBaseNoteTypeId() const
+    { return percNoteType & 0xfff; }
+
+    /// @brief Gets the orderId
+    /// @return value used to distinguish different copies of the same note id.
+    unsigned getNoteTypeOrderId() const
+    { return(percNoteType & 0xf000) >> 12; }
+    
+    /// @brief Gets a reference to the PercussionNoteType record for this note id.
+    /// @return Record from #percussion::percussionNoteTypeMap.
+    const percussion::PercussionNoteType& getNoteType() const;
 
     constexpr static std::string_view XmlNodeName = "percussionNoteInfo"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PercussionNoteInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1870,37 +1984,134 @@ public:
     {
     }
 
+    /// @enum InstructionType
     /// @brief Defines the instruction types for Shape Designer shapes.
     enum class InstructionType
     {
-        Undocumented,       ///< catch-all for instruction tags not yet documented
+        /// catch-all for possible undocumented instruction tags.
+        Undocumented,
+
+        /// bracket  
+        /// data items: (1) bracket type (piano brace, bracket, etc.)
         Bracket,
+
+        /// cloned character for horizontal lines (e.g. trills)  
+        /// data items: (5)
+        /// - 0, 1: x and y of endpoint (y ignored)
+        /// - 2:    unused
+        /// - 3:    baseline shift in EMs (1/1000 of current point size)
+        /// - 4:    the 32-bit codepoint of the character to clone
         CloneChar,
+
+        /// close path  
+        /// data items: none
         ClosePath,
+
+        /// relative curveto (bezier)  
+        /// data items: (6) 2 bezier control points and an end point
         CurveTo,
+
+        /// draw character (current font)  
+        /// data items: (1) The 32-bit codepoint of the character to draw
         DrawChar,
+
+        /// ellipse  
+        /// data items: (2) width and height of bounding rectangle  
+        /// current point is lower left corner
         Ellipse,
+
+        /// marks the end of a group  
+        /// data items: none
         EndGroup,
+
+        /// external graphic (eps, pict, tiff, etc)  
+        /// data items: (3) width, height of graphic, cmper of graphic
         ExternalGraphic,
+
+        /// fill path (alternating, or even-odd rule)  
+        /// data items: none
         FillAlt,
+
+        /// fill path (solid, or non-zero winding rule)  
+        /// data items: none
         FillSolid,
+
+        /// go to origin point  
+        /// data items: none
         GoToOrigin,
+
+        /// go to start of path, same as close path for filled shapes  
+        /// data items: none
         GoToStart,
+
+        /// line width  
+        /// data items: (1) the new line width in Efix
         LineWidth,
+
+        /// rectangle  
+        /// data items: (2) width and height of rectangle  
+        /// current point is lower left corner
         Rectangle,
+
+        /// relative lineto  
+        /// data items: (2) X, Y endpoint
         RLineTo,
+
+        /// relative moveto  
+        /// data items: (2) X, Y endpoint
         RMoveTo,
+
+        /// set arrowhead  
+        /// data items: (4) startArrowID, endArrowID, startFlags, endFlags  
+        /// the meaning of the flags is currently untested, but they are likely only used to specify built-in vs. custom arrowhead
         SetArrowhead,
+
+        /// set black: equivalent to `SetGray(0)`  
+        /// data items: none
         SetBlack,
+
+        /// set dash  
+        /// data items: (2) dash length, space between dashes
         SetDash,
+
+        /// set font  
+        /// data items: (3) font id, size, efx
         SetFont,
+
+        /// set gray  
+        /// data items: (1) gray value between 1 and 100 where 0=black and 100=white
         SetGray,
+
+        /// set white: equivalent to `SetGray(100)`  
+        /// data items: none
         SetWhite,
+
+        /// slur  
+        /// data items: (6) 2 bezier control points and an end point  
+        /// like curve, except 2 more control points are deduced from a global slur thickness setting
         Slur,
+
+        /// start group  
+        /// data items: (11) same as StartObject
         StartGroup,
+
+        /// start object  
+        /// data items: (11) with indices as noted:
+        /// - 0, 1: origin point (x, y)
+        /// - 2..5: bounding rect (left, top, right, bottom)
+        /// - 6, 7: x and y transform (scale ratio * 1000)
+        /// - 8:    rotation transform
+        /// - 9,10: always zero
         StartObject,
+
+        /// stroke path  
+        /// data items: none
         Stroke,
-        VerticalMode
+
+        /// pen vertical mode  
+        /// data items: (1) 1=center, 2=left, 3=right  
+        /// tells line-drawing commands to draw the line center, on the left, or on the right of the drawing coordinates specified.
+        VerticalMode,
     };
 
     /**
@@ -1925,11 +2136,13 @@ public:
     Cmper dataList;         ///< Instruction data list @ref Cmper.
     ShapeType shapeType;    ///< Shape type (specifies which type of entity this shape pertains to)
 
+    /// @brief Returns true if this shape does not draw anything.
+    bool isBlank() const
+    { return instructionList == 0; }
+
     /// @brief Iterates through the instructions in the shape
     /// @param callback The callback function. Returning `false` from this function aborts the iteration loop.
     void iterateInstructions(std::function<bool(InstructionType, std::vector<int>)> callback) const;
-
-    bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "shapeDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2020,7 +2233,10 @@ class StaffStyle;
 class Staff : public OthersBase
 {
 public:
-    /** @brief Enum for auto-numbering style. Auto-numbering is based on #instUuid. */
+    /**
+     * @enum AutoNumberingStyle
+     * @brief Enum for auto-numbering style. Auto-numbering is based on #instUuid.
+     */
     enum class AutoNumberingStyle
     {
         ArabicSuffix,       ///< Arabic numeral suffix (default). May not appear in xml.
@@ -2030,7 +2246,10 @@ public:
         ArabicPrefix        ///< Arabic numeral prefix (with dot): 1. 2. 3. ...
     };
 
-    /** @brief Enum for staff-level stem direction override. */
+    /**
+     * @enum StemDirection
+     * @brief Enum for staff-level stem direction override.
+     */
     enum class StemDirection
     {
         Default,            ///< the default (may not occur in xml)
@@ -2038,7 +2257,10 @@ public:
         AlwaysDown          ///< stems are always down on this staff
     };
 
-    /** @brief Enum for notation style. */
+    /**
+     * @enum NotationStyle
+     * @brief Enum for notation style.
+     */
     enum class NotationStyle
     {
         Standard,
@@ -2046,7 +2268,10 @@ public:
         Tablature
     };
 
-    /** @brief Enum for hide mode. */
+    /**
+     * @enum HideMode
+     * @brief Enum for hide mode.
+     */
     enum class HideMode
     {
         None,           ///< Do not hide
@@ -2055,7 +2280,10 @@ public:
         Score           ///< Collapse in score only
     };
 
-    /** @brief Enum for alternate notation styles. */
+    /**
+     * @enum AlternateNotation
+     * @brief Enum for alternate notation styles.
+     */
     enum class AlternateNotation
     {
         Normal,         ///< Normal Notation (default)
@@ -2216,11 +2444,11 @@ public:
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
     std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
 
-    /// @brief Returns the full staff name without Enigma tags
+    /// @brief Returns the full staff name without Enigma tags. If the full name contains part-specific tags (rare), they are inserted for the score.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
-    /// @brief Returns the abbreviated staff name without Enigma tags
+    /// @brief Returns the abbreviated staff name without Enigma tags. If the abbreviated name contains part-specific tags (rare), they are inserted for the score.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
@@ -2229,6 +2457,16 @@ public:
 
     /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is shown as part of one. Otherwise nullptr.
     std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstVisualGroup() const;
+
+    /// @brief Returns the parsing context for the full name.
+    /// @param forPartId The part id to use for partname and page inserts
+    /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
+    util::EnigmaParsingContext getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName = false) const;
+
+    /// @brief Returns the parsing context for the abbreviated name.
+    /// @param forPartId The part id to use for partname and page inserts
+    /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
+    util::EnigmaParsingContext getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName = false) const;
 
     /// @brief Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)
     /// @note Ordinal prefix numbering is currently supported only for English.
@@ -2271,6 +2509,12 @@ public:
     template <typename SubType>
     static void calcAllRuntimeValues(const DocumentPtr& document);
 
+    /// @brief Calculate the auto numbering prefix or suffix, if needed.
+    /// @return A std::pair containing
+    ///     - A std::string that is either the prefix or suffix.
+    ///     - A bool that if true indicates the string is a prefix and if false a suffix.
+    std::pair<std::string, bool> calcAutoNumberingAffix() const;
+
     /// @brief Add auto numbering as a prefix or suffix, if needed
     /// @param plainName The name (full or abbreviated) to which to add the auto numbering
     /// @return Auto numbered name.
@@ -2300,6 +2544,13 @@ public:
 
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
+
+    /// @brief Calculates the transposition interval for this staff or staff composite
+    /// @return A pair of int containing
+    ///     - the diatonic displacement interval (positive up, negative down)
+    ///     - the alteration in chromatic halfsteps
+    /// Downward intervals reverse the sign of the chromatic alteration.
+    std::pair<int, int> calcTranspositionInterval() const;
 
     /// @brief Gets a list of all parts that contain this staff
     /// @param includeScore If true, include the score in the list. (Defaults to true)
@@ -2666,7 +2917,12 @@ public:
 class TextBlock : public OthersBase
 {
 public:
-    /** @brief Enum for textTag values */
+    using TextJustify = options::TextOptions::TextJustify; ///< justification options
+
+    /**
+     * @enum TextType
+     * @brief Enum for textTag values
+     */
     enum class TextType
     {
         Block,      ///< #textId is a #Cmper for a @ref texts::BlockText
@@ -2680,6 +2936,7 @@ public:
     // Public properties corresponding to the XML structure
     Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
     int lineSpacingPercentage{};       ///< Line spacing percentage.
+    TextJustify justify{};             ///< Justification (left, center, right, full, force full)
     bool newPos36{};                   ///< "Position from Edge of Frame" compatibility setting.
                                        ///< Best guess is that blocks created before Finale 3.6 do not have this set.
                                        ///< It affects the vertical position of the baseline relative to the block's frame (and handle).
@@ -2692,14 +2949,16 @@ public:
     Efix cornerRadius{};               ///< Corner radius for rounded corners.
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
 
-    /// @brief Gets the raw text block (from the `texts` pool) based on #textType.
-    std::shared_ptr<TextsBase> getRawTextBlock() const;
+    /// @brief Gets the raw text block context (from the `texts` pool) based on #textType.
+    /// @param forPartId The linked part to use for ^partname and ^totpages inserts
+    /// @param forPageId The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior.
+    /// @param defaultInsertFunc The default text insert replacement function for this context. This function is called if the function supplied
+    /// to #util::EnigmaParsingContext::parseEnigmaText returns std::nullopt.
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId = std::nullopt,
+        util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
-    /** @brief return display text with Enigma tags removed */
-    std::string getText(bool trimTags = false, util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
-
-    /** @brief return display text with Enigma tags removed */
-    static std::string getText(const DocumentPtr& document, const Cmper textId, bool trimTags = false,
+    /** @brief return displayable text with Enigma tags removed */
+    static std::string getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii);
 
     bool requireAllFields() const override { return false; }
@@ -2747,12 +3006,18 @@ public:
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
-    /** @brief Gets the enclosure for this expression, or nullptr if none. */
+    /** @brief Gets the TextBlock for this expression, or nullptr if none. */
     std::shared_ptr<TextBlock> getTextBlock() const;
+
+    /**
+     * @brief Gets the raw text context for parsing this expression, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     std::shared_ptr<Enclosure> getEnclosure() const;
-
+  
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -2824,7 +3089,10 @@ public:
 class TextRepeatDef : public OthersBase
 {
 public:
-    /** @brief Enum for poundReplace options */
+    /**
+     * @enum PoundReplaceOption
+     * @brief Enum for poundReplace options
+     */
     enum class PoundReplaceOption
     {
         Passes,             ///< "Number of Times Played" (the default: may never appear in xml)

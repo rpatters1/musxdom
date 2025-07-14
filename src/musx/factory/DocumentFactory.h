@@ -92,6 +92,23 @@ public:
 #endif        
         elementLinker.resolveAll(document);
 
+        document->m_maxBlankPages = 0;
+        auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
+        for (const auto& part : linkedParts) {
+            part->numberOfLeadingBlankPages = 0;
+            auto pages = document->getOthers()->getArray<Page>(part->getCmper());
+            part->numberOfPages = int(pages.size());
+            for (const auto& page : pages) {
+                if (!page->isBlank()) {
+                    break;
+                }
+                part->numberOfLeadingBlankPages++;
+            }
+            if (part->numberOfLeadingBlankPages > document->m_maxBlankPages) {
+                document->m_maxBlankPages = part->numberOfLeadingBlankPages;
+            }
+        }
+
         return document;
     }
 

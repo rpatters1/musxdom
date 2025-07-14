@@ -163,35 +163,7 @@ MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
 
 MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds);
 
-MUSX_RESOLVER_ENTRY(Page, {
-    [](const dom::DocumentPtr& document) {
-        auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
-        for (const auto& part : linkedParts) {
-            auto pages = document->getOthers()->getArray<Page>(part->getCmper());
-            auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
-            for (size_t x = 0; x < pages.size(); x++) {
-                auto page = pages[x];
-                if (!page->isBlank()) {
-                    page->lastSystem = [&]() -> SystemCmper {
-                        size_t nextIndex = x + 1;
-                        while (nextIndex < pages.size()) {
-                            auto nextPage = pages[nextIndex++];
-                            if (!nextPage->isBlank()) {
-                                return nextPage->firstSystem - 1;
-                            }
-                        }
-                        return SystemCmper(systems.size());
-                    }();
-                    if (*page->lastSystem < page->firstSystem) {
-                        page->lastSystem = std::nullopt;
-                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                            + " has a last system smaller than the first system.");
-                    }
-                }
-            }
-        }
-    }
-});
+MUSX_RESOLVER_ENTRY(Page, Page::calcSystemInfo);
 
 MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
     [](const dom::DocumentPtr& document) {

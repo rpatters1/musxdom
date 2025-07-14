@@ -29,8 +29,9 @@
 #include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
- namespace music_theory {
-    class Transposer;
+namespace music_theory {
+enum class NoteName : int;
+class Transposer;
 } // namespace music_theory
     
 namespace musx {
@@ -126,7 +127,8 @@ public:
     std::map<LayerIndex, bool> calcVoices() const;
 
     /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
-    bool calcIsCuesOnly() const;
+    /// @param includeVisibleInScore If true, include cues that are visible in the score.
+    bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
 
 private:
     /// @brief Find the layer frame and Edu start position for the given layer.
@@ -172,18 +174,6 @@ public:
     /// @brief Non floating rests have a note with this noteId that defines their staff positions.
     static constexpr NoteNumber RESTID = 31;
 
-    /// @brief The available note names, in array order.
-    enum class NoteName : int
-    {
-        C = 0,
-        D = 1,
-        E = 2,
-        F = 3,
-        G = 4,
-        A = 5,
-        B = 6
-    };
-
     /**
      * @brief Note properites. A tuple containing:
      *         - NoteName: The note name (C, D, E, F, G, A, B)
@@ -191,7 +181,7 @@ public:
      *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
-    using NoteProperties = std::tuple<Note::NoteName, int, int, int>;
+    using NoteProperties = std::tuple<music_theory::NoteName, int, int, int>;
     
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
@@ -544,10 +534,11 @@ public:
     int calcEntrySize() const;
 
     /// @brief Calculates if this entry is part of a cue.
+    /// @param includeVisibleInScore If true, include cues that are visible in the score.
     /// @return true if
     ///         - the entry is reduced in size
     ///         - the entry is hidden by "Blank Notation" or "Blank Notation with Rests" alternate notation in the score but not in a part.
-    bool calcIsCue() const;
+    bool calcIsCue(bool includeVisibleInScore = false) const;
 
     /// @brief Returns whether this is a full measure rest.
     /// @note Note that in Finale, only whole rests are used as full measure rests.
@@ -615,7 +606,7 @@ public:
 
         /// @brief Constructor
         TupletInfo(const std::weak_ptr<const EntryFrame>& parent, const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start, bool forVoice2)
-            : tuplet(tup), startIndex(index), endIndex(std::numeric_limits<size_t>::max()),
+            : tuplet(tup), startIndex(index), endIndex((std::numeric_limits<size_t>::max)()),
                 startDura(start), endDura(-1), voice2(forVoice2), m_parent(parent)
         {}
 
@@ -762,8 +753,9 @@ public:
     /// @brief Calculates if this entry frame is part of a cue.
     /// @todo Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being
     /// fast to compute when there is no cue.
+    /// @param includeVisibleInScore If true, include cues that are visible in the score.
     /// @return true if all entries in the frame are either cue entries or hidden.
-    bool calcIsCueFrame() const;
+    bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
 private:
     details::GFrameHoldContext m_context;
@@ -941,18 +933,28 @@ public:
     /// @brief Returns if this note is enharmonically respelled in the current part view
     bool calcIsEnharmonicRespell() const;
 
+    /// @brief Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when
+    /// #details::NoteAlterations::enharmonic is true.
+    ///
+    /// Normally you do not have to call this function directly. It is called inside #calcNoteProperties. But the function
+    /// is available if you need it.
+    ///
+    /// @return A std::pair containing
+    ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
+    ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
+    std::pair<int, int> calcDefaultEnharmonic() const
+    { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
+
 private:
-    /// @brief Returns true if the @p src and this have the same level and alteration.
+    /// @brief Returns true if the two notes represent the same concert pitch or
+    /// percussion note.
+    /// @param src the value to compare with.
+    bool isSamePitch(const NoteInfoPtr& src) const;
+
+    /// @brief Returns true if the @p src and this have the same pitch information.
     /// It is only meaningful when this and src are in the same key.
     /// @param src the value to compare with.
-    bool isSamePitchValues(const NoteInfoPtr& src) const
-    {
-        if (!*this || !src) {
-            return false;
-        }
-        return (*this)->harmLev == src->harmLev
-            && (*this)->harmAlt == src->harmAlt;
-    }
+    bool isSamePitchValues(const NoteInfoPtr& src) const;
 
     EntryInfoPtr m_entry;
     size_t m_noteIndex;

@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <string>
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
@@ -27,6 +28,9 @@
 #include <numeric>
 #include <algorithm>
 #include <cmath>
+#include <cwctype>
+#include <string_view>
+#include <unordered_set>
 
  // This header includes method implementations that need to see all the classes in the dom
 
@@ -132,11 +136,11 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
         rightY += dyR;
 
         if constexpr (isDownstem) {
-            extremeLeft  = std::max(extremeLeft, leftY);
-            extremeRight = std::max(extremeRight, rightY);
+            extremeLeft  = (std::max)(extremeLeft, leftY);
+            extremeRight = (std::max)(extremeRight, rightY);
         } else {
-            extremeLeft  = std::min(extremeLeft, leftY);
-            extremeRight = std::min(extremeRight, rightY);
+            extremeLeft  = (std::min)(extremeLeft, leftY);
+            extremeRight = (std::min)(extremeRight, rightY);
         }
     }
 
@@ -150,6 +154,102 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
     }
 
     return false;
+}
+
+// ***********************
+// ***** ClefOptions *****
+// ***********************
+
+bool options::ClefOptions::ClefDef::isBlank() const
+{
+    if (isShape) {
+        if (const auto shape = shapeId ? getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId) : nullptr) {
+            return shape->isBlank();
+        }
+        return true;
+    }
+    return !clefChar || (clefChar <= 0xffff && std::iswspace(static_cast<wint_t>(clefChar)));
+}
+
+options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std::shared_ptr<const others::Staff>& currStaff) const
+{
+    if (currStaff) {
+        switch (currStaff->notationStyle) {
+            case others::Staff::NotationStyle::Tablature: return std::make_pair(music_theory::ClefType::Tab, 0);
+            case others::Staff::NotationStyle::Percussion: return std::make_pair(music_theory::ClefType::Percussion, 0);
+            default: break;
+        }
+    }
+    if (staffPosition == 0 && middleCPos == -10 && isShape) { // find tab staves based on Finale SMuFL default file settings
+        return std::make_pair(music_theory::ClefType::Tab, 0);
+    }
+    music_theory::ClefType clefType = music_theory::ClefType::Unknown;
+    int octave = 0;
+    auto clefPitch = music_theory::NoteName(music_theory::positiveModulus(staffPosition - middleCPos, music_theory::STANDARD_DIATONIC_STEPS, &octave));
+    switch (clefPitch) {
+        case music_theory::NoteName::C: clefType = music_theory::ClefType::C; break;
+        case music_theory::NoteName::F: clefType = music_theory::ClefType::F; break;
+        case music_theory::NoteName::G: clefType = music_theory::ClefType::G; break;
+        case music_theory::NoteName::B: clefType = music_theory::ClefType::Percussion; break; // Finale SMuFL default file settings
+        default: break;
+    }
+    if (clefType == music_theory::ClefType::F) {
+        octave++; // The F clef's non-transposing position is below middle C, so compensate.
+    }
+    return std::make_pair(clefType, octave);
+}
+
+std::shared_ptr<const FontInfo> options::ClefOptions::ClefDef::calcFont() const
+{
+    std::shared_ptr<const FontInfo> result;
+    if (useOwnFont && font) {
+        result = font;
+    } else if (auto fontOptions = getDocument()->getOptions()->get<options::FontOptions>()) {
+        result = fontOptions->getFontInfo(options::FontOptions::FontType::Clef);
+    }
+    if (!result) {
+        throw std::invalid_argument("Unable to determine clef font due to missing font definitions.");
+    }
+    return result;
+}
+
+// ********************
+// ***** Document *****
+// ********************
+
+std::shared_ptr<others::Page> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
+{
+    std::shared_ptr<others::Page> result;
+    auto pages = getOthers()->getArray<others::Page>(partId);
+    for (const auto& page : pages) {
+        if (page->firstMeasureId && page->lastMeasureId) {
+            if (measureId >= page->firstMeasureId.value() && measureId <= page->lastMeasureId.value()) {
+                result = page;
+                break;
+            }
+        }
+    }
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("Unable to find page for measure ID " + std::to_string(measureId));
+    }
+    return result;
+}
+
+std::shared_ptr<others::StaffSystem> Document::calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const
+{
+    std::shared_ptr<others::StaffSystem> result;
+    auto systems = getOthers()->getArray<others::StaffSystem>(partId);
+    for (const auto& system : systems) {
+        // endMeas is 1 measure past the end of the system
+        if (measureId >= system->startMeas && measureId < system->endMeas) {
+            result = system;
+            break;
+        }
+    }
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("Unable to find system for measure ID " + std::to_string(measureId));
+    }
+    return result;
 }
 
 // *****************
@@ -264,13 +364,13 @@ std::shared_ptr<others::Measure> EntryFrame::getMeasureInstance() const
     return getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), getMeasure());
 }
 
-bool EntryFrame::calcIsCueFrame() const
+bool EntryFrame::calcIsCueFrame(bool includeVisibleInScore) const
 {
     bool foundCueEntry = false;
     for (size_t x = 0; x < m_entries.size(); x++) {
         if (!m_entries[x]->getEntry()->isHidden) {
             EntryInfoPtr entryInfo(shared_from_this(), x);
-            if (entryInfo.calcIsCue()) {
+            if (entryInfo.calcIsCue(includeVisibleInScore)) {
                 foundCueEntry = true;
             } else {
                 return false; // return false on the first non-cue visible entry found
@@ -835,7 +935,7 @@ unsigned EntryInfoPtr::calcLowestBeamStub() const
 {
     if (unsigned lowestBeamStart = calcLowestBeamStart()) {
         if (unsigned lowestBeamEnd = calcLowestBeamEnd()) {
-            return std::max(lowestBeamStart, lowestBeamEnd);
+            return (std::max)(lowestBeamStart, lowestBeamEnd);
         }
     }
     return 0;
@@ -1038,19 +1138,25 @@ int EntryInfoPtr::calcEntrySize() const
     return result;
 }
 
-bool EntryInfoPtr::calcIsCue() const
+bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
 {
     if (calcEntrySize() <= MAX_CUE_PERCENTAGE) {
+        if (includeVisibleInScore) {
+            return true;
+        }
         auto doc = m_entryFrame->getDocument();
         if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
-            if (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank) {
-                if (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes) {
-                    auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
-                    for (const auto& part : parts) {
-                        if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
-                            if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
-                                return true;
-                            }
+            bool hidden = (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank)
+                && (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes);
+            if (!hidden) {
+                hidden = scoreStaff->hideMode != others::Staff::HideMode::None;
+            }
+            if (hidden) {
+                auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
+                for (const auto& part : parts) {
+                    if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+                        if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
+                            return true;
                         }
                     }
                 }
@@ -1164,6 +1270,28 @@ std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath() const
         }
     }
     return std::nullopt;
+}
+
+bool FontInfo::calcIsSMuFL() const
+{
+   static const std::set<std::string_view> knownSmuflFontNames =
+    {
+        "Bravura",
+        "Leland",
+        "Emmentaler",
+        "Gonville",
+        "MuseJazz",
+        "Petaluma",
+        "Finale Maestro",
+        "Finale Broadway"
+    };
+
+    if (calcSMuFLMetaDataPath().has_value()) {
+        return true;
+    }
+
+    auto it = knownSmuflFontNames.find(getName());
+    return it != knownSmuflFontNames.end();
 }
 
 bool FontInfo::calcIsSymbolFont() const
@@ -1300,10 +1428,8 @@ std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries() const
 bool details::CustomStem::calcIsHiddenStem() const
 {
     if (shapeDef != 0) {
-        if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeDef)) {
-            if (shape->instructionList != 0) {
-                return false;
-            }
+        if (const auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeDef)) {
+            return shape->isBlank();
         }
     }
     return true;
@@ -1373,7 +1499,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     auto [frame, startEdu] = findLayerFrame(layerIndex);
     std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
-        const auto& measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
+        const auto measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
         if (!measure) {
             throw std::invalid_argument("Measure instance for measure " + std::to_string(m_hold->getMeasure()) + " does not exist.");
         }
@@ -1551,7 +1677,7 @@ ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
     return result;
 }
 
-bool details::GFrameHoldContext::calcIsCuesOnly() const
+bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) const
 {
     bool foundCue = false;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
@@ -1562,7 +1688,7 @@ bool details::GFrameHoldContext::calcIsCuesOnly() const
                 continue;
             }
             if (auto entryFrame = createEntryFrame(layerIndex)) {
-                if (entryFrame->calcIsCueFrame()) {
+                if (entryFrame->calcIsCueFrame(includeVisibleInScore)) {
                     foundCue = true;
                 } else {
                     return false; // non-cue frame found, so this is not a cue frame
@@ -1594,7 +1720,7 @@ std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createDisplayTi
 // ***** InstrumentUsed *****
 // **************************
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance() const
 {
     auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
     if (!retval) {
@@ -1603,11 +1729,21 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaff() const
     return retval;
 }
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance(MeasCmper measureId, Edu eduPosition) const
+{
+    auto retval = others::StaffComposite::createCurrent(getDocument(), getPartId(), staffId, measureId, eduPosition);
+    if (!retval) {
+        MUSX_INTEGRITY_ERROR("Composite staff " + std::to_string(staffId) + " not found for InstrumentUsed list " + std::to_string(getCmper())
+            + " at measure " + std::to_string(measureId) + " eduPosition " + std::to_string(eduPosition));
+    }
+    return retval;
+}
+
+std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstanceAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
 {
     if (index >= iuArray.size()) return nullptr;
     auto iuItem = iuArray[index];
-    return iuItem->getStaff();
+    return iuItem->getStaffInstance();
 }
 
 std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId)
@@ -2037,11 +2173,30 @@ int others::MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
     return result;
 }
 
+// *****************************
+// ***** MeasureTextAssign *****
+// *****************************
+
+std::shared_ptr<others::TextBlock> details::MeasureTextAssign::getTextBlock() const
+{
+    return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
+}
+
+util::EnigmaParsingContext details::MeasureTextAssign::getRawTextCtx(Cmper forPartId) const
+{
+    if (auto textBlock = getTextBlock()) {
+        if (const auto page = getDocument()->calculatePageFromMeasure(forPartId, getCmper2())) {
+            return textBlock->getRawTextCtx(forPartId, page->getCmper());
+        }
+    }
+    return {};
+}
+
 // *************************************
 // ***** MultiStaffInstrumentGroup *****
 // *************************************
 
-std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffAtIndex(size_t x) const
+std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffInstanceAtIndex(size_t x) const
 {
     if (x >= staffNums.size()) return nullptr;
     auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffNums[x]);
@@ -2052,13 +2207,13 @@ std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffAtInde
     return retval;
 }
 
-std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaff() const
+std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaffInstance() const
 {
     if (staffNums.empty()) {
         MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
         return nullptr;
     }
-    return getStaffAtIndex(0);
+    return getStaffInstanceAtIndex(0);
 }
 
 std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup(Cmper forPartId) const
@@ -2138,7 +2293,7 @@ void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const Document
     // multiStaffInstId must be populated in a separate pass before any calls to getVisualStaffGroup
     for (const auto& instance : instGroups) {
         for (size_t x = 0; x < instance->staffNums.size(); x++) {
-            auto staff = instance->getStaffAtIndex(x);
+            auto staff = instance->getStaffInstanceAtIndex(x);
             if (staff) {
                 if (staff->multiStaffInstId) {
                     musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose, 
@@ -2247,10 +2402,6 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignatu
 Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
     const std::shared_ptr<const others::Staff>& staff, bool respellEnharmonic) const
 {
-    static constexpr std::array<Note::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
-        Note::NoteName::C, Note::NoteName::D, Note::NoteName::E, Note::NoteName::F, Note::NoteName::G, Note::NoteName::A, Note::NoteName::B
-    };
-
     auto [transposedLev, transposedAlt] = respellEnharmonic
                                         ? calcDefaultEnharmonic(key)
                                         : std::pair<int, int>{ harmLev, harmAlt };
@@ -2284,7 +2435,7 @@ Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<KeySignature
     }
     int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
 
-    return { noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
+    return { music_theory::noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
 }
 
 // ***********************
@@ -2299,10 +2450,8 @@ NoteInfoPtr NoteInfoPtr::findEqualPitch(const EntryInfoPtr& entry) const
             if (!isSamePitchValues(prev)) break;
             srcOccurrence++;
         }
-        auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = calcNotePropertiesConcert();
         for (auto note = NoteInfoPtr(entry, 0); note; note = note.getNext()) {
-            auto [pitch, octave, alter, staffPos] = note.calcNotePropertiesConcert();
-            if (srcPitch == pitch && srcOctave == octave && srcAlter == alter) {
+            if (note.isSamePitch(*this)) {
                 for (int entryOccurrence = 1; entryOccurrence < srcOccurrence; entryOccurrence++) {
                     auto next = note.getNext();
                     if (!next.isSamePitchValues(note)) break;
@@ -2474,6 +2623,80 @@ bool NoteInfoPtr::calcIsEnharmonicRespell() const
     return false;
 }
 
+bool NoteInfoPtr::isSamePitch(const NoteInfoPtr& src) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    auto thisPercInfo = calcPercussionNoteInfo();
+    auto srcPercInfo = src.calcPercussionNoteInfo();
+    if (thisPercInfo || srcPercInfo) {
+        if (!thisPercInfo || !srcPercInfo) {
+            return false; // can't compare perc note with non-perc-note
+        }
+        return thisPercInfo->percNoteType == srcPercInfo->percNoteType
+            && thisPercInfo->staffPosition == srcPercInfo->staffPosition;
+    }
+    auto [thisPitch, thisOctave, thisAlter, thisStaffPos] = calcNotePropertiesConcert();
+    auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNotePropertiesConcert();
+    return srcPitch == thisPitch && srcOctave == thisOctave && srcAlter == thisAlter;
+}
+
+bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    return (*this)->harmLev == src->harmLev
+        && (*this)->harmAlt == src->harmAlt;
+}
+
+// ****************
+// ***** Page *****
+// ****************
+
+void others::Page::calcSystemInfo(const DocumentPtr& document)
+{
+    auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
+    for (const auto& part : linkedParts) {
+        auto pages = document->getOthers()->getArray<Page>(part->getCmper());
+        auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
+        for (size_t x = 0; x < pages.size(); x++) {
+            auto page = pages[x];
+            if (!page->isBlank()) {
+                page->lastSystemId = [&]() -> SystemCmper {
+                    size_t nextIndex = x + 1;
+                    while (nextIndex < pages.size()) {
+                        auto nextPage = pages[nextIndex++];
+                        if (!nextPage->isBlank()) {
+                            return nextPage->firstSystemId - 1;
+                        }
+                    }
+                    return SystemCmper(systems.size());
+                }();
+                if (page->lastSystemId.value() >= page->firstSystemId) {
+                    if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->firstSystemId)) {
+                        page->firstMeasureId = sys->startMeas;
+                    } else {
+                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                            + " has a no system instance for its first system.");                        
+                    }
+                    if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
+                        page->lastMeasureId = sys->getLastMeasure();
+                    } else {
+                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                            + " has a no system instance for its last system.");                        
+                    }
+                } else {
+                    page->lastSystemId = std::nullopt;
+                    MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                        + " has a last system smaller than the first system.");
+                }
+            }
+        }
+    }
+}
+
 // *****************************
 // ***** PageFormatOptions *****
 // *****************************
@@ -2535,13 +2758,98 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 }
 
 // **************************
+// ***** PageTextAssign *****
+// **************************
+
+std::shared_ptr<others::TextBlock> others::PageTextAssign::getTextBlock() const
+{
+    return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
+}
+
+util::EnigmaParsingContext others::PageTextAssign::getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId) const
+{
+    if (auto textBlock = getTextBlock()) {
+        if (getCmper() > 0) {
+            forPageId = calcStartPageNumber(forPartId);
+        }
+        return textBlock->getRawTextCtx(forPartId, forPageId);
+    }
+    return {};
+}
+
+std::shared_ptr<others::PageTextAssign> others::PageTextAssign::getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci)
+{
+    if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
+        const PageCmper pageAssignmentId = part->calcAssignmentIdFromPageNumber(pageId);
+        return document->getOthers()->get<others::PageTextAssign>(partId, pageAssignmentId, inci);
+    }
+    return nullptr;
+}
+
+std::vector<std::shared_ptr<others::PageTextAssign>> others::PageTextAssign::getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId)
+{
+    if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
+        const PageCmper pageAssignmentId = part->calcAssignmentIdFromPageNumber(pageId);
+        return document->getOthers()->getArray<others::PageTextAssign>(partId, pageAssignmentId);
+    }
+    return {};
+}
+
+std::optional<PageCmper> others::PageTextAssign::calcStartPageNumber(Cmper forPartId) const
+{
+    if (auto part = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
+        if (auto calcValue = part->calcPageNumberFromAssignmentId(getCmper() ? getCmper() : startPage)) {
+            if (calcValue.value() <= part->numberOfPages) {
+                return calcValue;
+            }
+        } else if (isMultiPage()) {
+            if (auto endPageNum = calcEndPageNumber(forPartId)) {
+                if (part->numberOfLeadingBlankPages < endPageNum.value()) {
+                    return PageCmper(part->numberOfLeadingBlankPages) + 1;
+                }
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<PageCmper> others::PageTextAssign::calcEndPageNumber(Cmper forPartId) const
+{
+    if (auto part = getDocument()->getOthers()->get<others::PartDefinition>(SCORE_PARTID, forPartId)) {
+        if (isMultiAssignedThruLastPage()) {
+            return PageCmper(part->numberOfPages);
+        }
+        if (auto calcValue = part->calcPageNumberFromAssignmentId(getCmper() ? getCmper() : endPage)) {
+            if (calcValue.value() > part->numberOfPages) {
+                calcValue = PageCmper(part->numberOfPages);
+            }
+            return calcValue;
+        }
+    }
+    return std::nullopt;
+}
+
+// **************************
 // ***** PartDefinition *****
 // **************************
 
+util::EnigmaParsingContext others::PartDefinition::getNameRawTextCtx() const
+{
+    /// @todo perhaps additional logic as in getName, but not until something is broken.
+    if (nameId) {
+        if (auto textBlock = getDocument()->getOthers()->get<others::TextBlock>(getPartId(), nameId)) {
+            return textBlock->getRawTextCtx(getCmper());
+        }
+    }
+    return {};
+}
+
 std::string others::PartDefinition::getName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    if (nameId) {
-        return TextBlock::getText(getDocument(), nameId, true, accidentalStyle); // true: trim tags
+    if (auto nameRawText = getNameRawTextCtx()) {
+        // Although the Finale U.I. prevents ^partname inserts in partname enigma strings, one might have crept in.
+        std::unordered_set<std::string_view> ignoreTags = { "partname" }; // do not parse ^partname inserts
+        return nameRawText.getText(true, accidentalStyle, ignoreTags);
     }
     if (defaultNameStaff) {
         if (auto staff = getDocument()->getOthers()->get<others::Staff>(SCORE_PARTID, defaultNameStaff)) {
@@ -2588,13 +2896,76 @@ std::vector<std::shared_ptr<others::PartDefinition>> others::PartDefinition::get
     return result;
 }
 
+std::optional<PageCmper> others::PartDefinition::calcPageNumberFromAssignmentId(PageCmper pageAssignmentId) const
+{
+    MUSX_ASSERT_IF(pageAssignmentId < 0) {
+        throw std::logic_error("Attempt to convert negative page assignment " + std::to_string(pageAssignmentId) + " to a page number.");
+    }
+    std::optional<PageCmper> result = pageAssignmentId;
+    if (result.value() > numberOfLeadingBlankPages) {
+        const int calcValue = int(result.value()) - getDocument()->getMaxBlankPages() + numberOfLeadingBlankPages;
+        if (calcValue > numberOfLeadingBlankPages) {
+            result = PageCmper(calcValue);
+        } else {
+            return std::nullopt;
+        }
+    }
+    return result;
+}
+
+PageCmper others::PartDefinition::calcAssignmentIdFromPageNumber(PageCmper pageId) const
+{
+    if (pageId != 0) {
+        if (pageId > numberOfLeadingBlankPages) {
+            const int calcValue = int(pageId) + getDocument()->getMaxBlankPages() - numberOfLeadingBlankPages;
+            return PageCmper(calcValue);
+        }
+    }
+    return pageId;
+}
+
+// ******************************
+// ***** PercussionNoteInfo *****
+// ******************************
+
+const percussion::PercussionNoteType& others::PercussionNoteInfo::getNoteType() const
+{
+    auto it = percussion::percussionNoteTypeMap.find(getBaseNoteTypeId());
+    if (it == percussion::percussionNoteTypeMap.end()) {
+        return percussion::kUnknownPercussionNoteType;
+    }
+    return it->second;
+}
+
+// ******************************
+// ***** PercussionNoteType *****
+// ******************************
+
+std::string percussion::PercussionNoteType::createName(unsigned orderId) const
+{
+    std::string result = rawName;
+    size_t pos = result.find("%g");
+    if (pos != std::string::npos) {
+        // Assume at most one occurrence of %g, which is the case with every element in `PercNoteTypes.txt` from Finale
+        result.erase(pos, 2);
+    }
+    const std::string target = "%d";
+    pos = result.find(target);
+    if (pos != std::string::npos) {
+        // Assume at most one occurrence of %d, which is the case with every element in `PercNoteTypes.txt` from Finale
+        const std::string insert = orderId ? " (" + std::to_string(orderId + 1) + ")" : std::string();
+        result.replace(pos, target.size(), insert);
+    }
+    return result;
+}
+
 // *****************************
 // ***** RepeatEndingStart *****
 // *****************************
 
 int others::RepeatEndingStart::calcEndingLength() const
 {
-    int maxLength = std::numeric_limits<int>::max();
+    int maxLength = (std::numeric_limits<int>::max)();
 
     switch (jumpAction) {
         case RepeatActionType::JumpAuto:
@@ -2677,93 +3048,6 @@ void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::
     }
 }
 
-// **********************
-// ***** SmartShape *****
-// **********************
-
-EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
-{
-    EntryInfoPtr result;
-    if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), staffId, measId)) {
-        gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
-            if (!entryNumber) {
-                unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
-                if (eduDiff <= 1) {
-                    result = entryInfo;
-                    return false; // stop iterating
-                }
-            } else if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
-                result = entryInfo;
-                return false; // stop iterating
-            }
-            return true;
-        });
-    }
-    if (!result && entryNumber != 0) {
-        MUSX_INTEGRITY_ERROR("SmartShape at Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId)
-            + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
-    }
-    return result;
-}
-
-util::Fraction others::SmartShape::EndPoint::calcPosition() const
-{
-    if (!entryNumber) {
-        return util::Fraction::fromEdu(eduPosition);
-    }
-    if (auto entryInfo = calcAssociatedEntry()) {
-        return entryInfo->elapsedDuration;
-    }
-    return 0;
-}
-
-util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
-{
-    if (!entryNumber) {
-        const auto rawPosition = util::Fraction::fromEdu(eduPosition);
-        if (auto meas = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
-            return rawPosition * meas->calcTimeStretch(staffId);
-        }
-        return rawPosition;
-    }
-    if (auto entryInfo = calcAssociatedEntry()) {
-        return entryInfo.calcGlobalElapsedDuration().calcEduDuration();
-    }
-    return 0;
-}
-
-bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
-{
-    auto entry = entryInfo->getEntry();
-    if (entryBased) {
-        if (entry->getEntryNumber() == startTermSeg->endPoint->entryNumber) return true;
-        if (entry->getEntryNumber() == endTermSeg->endPoint->entryNumber) return true;
-    }
-    if (entryInfo.getStaff() != startTermSeg->endPoint->staffId && entryInfo.getStaff() != endTermSeg->endPoint->staffId) {
-        return false;
-    }
-    if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure())) {
-        if (meas->hasSmartShape) {
-            auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure());
-            for (const auto& asgn : shapeAssigns) {
-                if (asgn->shapeNum == getCmper()) {
-                    if (entryInfo.getMeasure() > startTermSeg->endPoint->measId && entryInfo.getMeasure() < endTermSeg->endPoint->measId) {
-                        return true;
-                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId && entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration >= startTermSeg->endPoint->calcPosition()
-                               && entryInfo->elapsedDuration <= endTermSeg->endPoint->calcPosition();
-                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration >= startTermSeg->endPoint->calcPosition();
-                    } else if (entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration <= endTermSeg->endPoint->calcPosition();
-                    }
-                }
-            }
-        }
-    }
-    return false;
-}
-
 // *****************
 // ***** Staff *****
 // *****************
@@ -2779,7 +3063,7 @@ void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
     // Pass 1: Check if any instUuid has auto-numbering disabled
     std::unordered_set<std::string> disabledInstUuids;
     for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaff();
+        auto staff = instrumentUsed->getStaffInstance();
         if (staff && !staff->useAutoNumbering) {
             disabledInstUuids.insert(staff->instUuid);
         }
@@ -2787,7 +3071,7 @@ void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 
     // Pass 2: Count occurrences of instUuid, considering multistaff instruments
     for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaff();
+        auto staff = instrumentUsed->getStaffInstance();
         if (!staff || staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
             continue;
         }
@@ -2815,7 +3099,7 @@ void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
     countedMultistaffGroups.clear(); // Reset for numbering
 
     for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaff();
+        auto staff = instrumentUsed->getStaffInstance();
         if (!staff) continue;
         if (staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
             staff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
@@ -2833,7 +3117,7 @@ void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
             // Assign the same number to all staves in the group
             auto groupNumber = instUuidNumbers[staff->instUuid];
             for (size_t x = 0; x < multiStaffGroup->staffNums.size(); x++) {
-                auto groupStaff = multiStaffGroup->getStaffAtIndex(x);
+                auto groupStaff = multiStaffGroup->getStaffInstanceAtIndex(x);
                 if (groupStaff) {
                     groupStaff->autoNumberValue = groupNumber;
                 }
@@ -2956,36 +3240,48 @@ std::string ordinalPrefix(int num)
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::string others::Staff::addAutoNumbering(const std::string& plainName) const
+std::pair<std::string, bool> others::Staff::calcAutoNumberingAffix() const
 {
     if (!autoNumberValue.has_value()) {
-        return plainName; // No numbering needed
+        return std::make_pair(std::string(), false); // No numbering needed
     }
 
     int number = *autoNumberValue;
     switch (autoNumbering) {
         default:
         case AutoNumberingStyle::ArabicSuffix:
-            return plainName + " " + std::to_string(number);
+            return std::make_pair(" " + std::to_string(number), false);
         case AutoNumberingStyle::RomanSuffix:
-            return plainName + " " + intToRoman(number);
+            return std::make_pair(" " + intToRoman(number), false);
         case AutoNumberingStyle::OrdinalPrefix:
-            return ordinalPrefix(number) + " " + plainName;
+            return std::make_pair(ordinalPrefix(number) + " ", true);
         case AutoNumberingStyle::AlphaSuffix:
-            return plainName + " " + intToAlphabetic(number);
+            return std::make_pair(" " + intToAlphabetic(number), false);
         case AutoNumberingStyle::ArabicPrefix:
-            return std::to_string(number) + ". " + plainName;
+            return std::make_pair(std::to_string(number) + ". ", true);
     }
+}
+
+std::string others::Staff::addAutoNumbering(const std::string& plainName) const
+{
+    auto [affix, isPrefix] = calcAutoNumberingAffix();
+    if (affix.empty()) {
+        return plainName;
+    }
+    if (isPrefix) {
+        return affix + plainName;
+    }
+    return plainName + affix;
 }
 
 std::string others::Staff::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), fullNameTextId, true, accidentalStyle); // true: strip enigma tags
+    return others::TextBlock::getText(getDocument(), fullNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
 }
 
 std::string others::Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), abbrvNameTextId, true, accidentalStyle); // true: strip enigma tags
+    return others::TextBlock::getText(getDocument(), abbrvNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
 }
 
 std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffInstGroup() const
@@ -3010,32 +3306,60 @@ std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffI
     return nullptr;
 }
 
-std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
+util::EnigmaParsingContext others::Staff::getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
-    auto name = [&]() -> std::string {
+    auto block = [&]() -> std::shared_ptr<others::TextBlock> {
         if ((!preferStaffName || !fullNameTextId) && multiStaffInstVisualGroupId) {
-            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, multiStaffInstVisualGroupId)) {
-                return group->getFullName(accidentalStyle);
+            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, 0, multiStaffInstVisualGroupId)) {
+                return getDocument()->getOthers()->get<others::TextBlock>(forPartId, group->fullNameId);
             }
         }
-        return getFullName(accidentalStyle);
+        return getDocument()->getOthers()->get<others::TextBlock>(forPartId, fullNameTextId);
     }();
-    if (name.empty()) return name;
-    return addAutoNumbering(name);
+    if (!block) {
+        return {};
+    }
+    auto parsingContext = block->getRawTextCtx(forPartId);
+    auto [affix, isPrefix] = calcAutoNumberingAffix();
+    parsingContext.affixText = affix;
+    parsingContext.affixIsPrefix = isPrefix;
+    return parsingContext;
+}
+
+std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
+{
+    if (auto ctx = getFullInstrumentNameCtx(SCORE_PARTID, preferStaffName)) {
+        return ctx.getText(true, accidentalStyle);
+    }
+    return {};
+}
+
+util::EnigmaParsingContext others::Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
+{
+    auto block = [&]() -> std::shared_ptr<others::TextBlock> {
+        if ((!preferStaffName || !abbrvNameTextId) && multiStaffInstVisualGroupId) {
+            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, 0, multiStaffInstVisualGroupId)) {
+                return getDocument()->getOthers()->get<others::TextBlock>(forPartId, group->abbrvNameId);
+            }
+        }
+        return getDocument()->getOthers()->get<others::TextBlock>(forPartId, abbrvNameTextId);
+    }();
+    if (!block) {
+        return {};
+    }
+    auto parsingContext = block->getRawTextCtx(forPartId);
+    auto [affix, isPrefix] = calcAutoNumberingAffix();
+    parsingContext.affixText = affix;
+    parsingContext.affixIsPrefix = isPrefix;
+    return parsingContext;
 }
 
 std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
 {
-    auto name = [&]() -> std::string {
-        if ((!preferStaffName || !fullNameTextId) && multiStaffInstVisualGroupId) {
-            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, multiStaffInstVisualGroupId)) {
-                return group->getAbbreviatedName(accidentalStyle);
-            }
-        }
-        return getAbbreviatedName(accidentalStyle);
-    }();
-    if (name.empty()) return name;
-    return addAutoNumbering(name);
+    if (auto ctx = getAbbreviatedInstrumentNameCtx(SCORE_PARTID, preferStaffName)) {
+        return ctx.getText(true, accidentalStyle);
+    }
+    return {};
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -3096,7 +3420,7 @@ ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool
             return gfhold.calcClefIndexAt(position);
         }
         // after the first iteration, we are looking for the clef at the end of the measure
-        position = std::numeric_limits<Edu>::max();
+        position = (std::numeric_limits<Edu>::max)();
     }
     return defaultClef;
 }
@@ -3146,6 +3470,19 @@ bool others::Staff::hasInstrumentAssigned() const
         return false;
     }
     return true;
+}
+
+std::pair<int, int> others::Staff::calcTranspositionInterval() const
+{
+    if (transposition) {
+        if (transposition->chromatic) {
+            return std::make_pair(transposition->chromatic->diatonic, transposition->chromatic->alteration);
+        } else if (transposition->keysig) {
+            const int alteration = music_theory::calcAlterationFromKeySigChange(transposition->keysig->interval, transposition->keysig->adjust);
+            return std::make_pair(transposition->keysig->interval, alteration);
+        }
+    }
+    return std::make_pair(0, 0);
 }
 
 std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts(bool includeScore) const
@@ -3430,12 +3767,14 @@ std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(co
 
 std::string details::StaffGroup::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), fullNameId, true, accidentalStyle); // true: strip enigma tags
+    // StaffGroup instances are always part-specific, so we can use getPartId here.
+    return others::TextBlock::getText(getDocument(), fullNameId, getPartId(), true, accidentalStyle); // true: strip enigma tags
 }
 
 std::string details::StaffGroup::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), abbrvNameId, true, accidentalStyle); // true: strip enigma tags
+    // StaffGroup instances are always part-specific, so we can use getPartId here.
+    return others::TextBlock::getText(getDocument(), abbrvNameId, getPartId(), true, accidentalStyle); // true: strip enigma tags
 }
 
 std::shared_ptr<others::MultiStaffInstrumentGroup> details::StaffGroup::getMultiStaffInstGroup() const
@@ -3452,7 +3791,7 @@ std::shared_ptr<others::MultiStaffInstrumentGroup> details::StaffGroup::getMulti
 std::string details::StaffGroup::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     if (auto multiStaffGroup = getMultiStaffInstGroup()) {
-        if (auto staff = multiStaffGroup->getFirstStaff()) {
+        if (auto staff = multiStaffGroup->getFirstStaffInstance()) {
             return staff->getFullInstrumentName(accidentalStyle);
         }
     }
@@ -3462,7 +3801,7 @@ std::string details::StaffGroup::getFullInstrumentName(util::EnigmaString::Accid
 std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
     if (auto multiStaffGroup = getMultiStaffInstGroup()) {
-        if (auto staff = multiStaffGroup->getFirstStaff()) {
+        if (auto staff = multiStaffGroup->getFirstStaffInstance()) {
             return staff->getAbbreviatedInstrumentName(accidentalStyle);
         }
     }
@@ -3608,73 +3947,31 @@ int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
     return int(std::lround(result));
 }
 
-// ********************
-// ***** TextBase *****
-// ********************
-
-std::shared_ptr<FontInfo> TextsBase::parseFirstFontInfo() const
-{
-    std::string searchText = this->text;
-    auto fontInfo = std::make_shared<FontInfo>(this->getDocument());
-    bool foundTag = false;
-
-    while (true) {
-        if (!musx::util::EnigmaString::startsWithFontCommand(searchText)) {
-            break;
-        }
-
-        size_t endOfTag = searchText.find_first_of(')');
-        if (endOfTag == std::string::npos) {
-            break;
-        }
-
-        std::string fontTag = searchText.substr(0, endOfTag + 1);
-        if (!musx::util::EnigmaString::parseFontCommand(fontTag, *fontInfo.get())) {
-            return nullptr;
-        }
-
-        searchText.erase(0, endOfTag + 1);
-        foundTag = true;
-    }
-
-    if (foundTag) {
-        return fontInfo;
-    }
-
-    return nullptr;
-}
-
 // *********************
 // ***** TextBlock *****
 // *********************
 
-std::shared_ptr<TextsBase> others::TextBlock::getRawTextBlock() const
+util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId, util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
+    std::shared_ptr<TextsBase> rawText;
     switch (textType) {
         default:
+            break;
         case TextType::Block:
-            return getDocument()->getTexts()->get<texts::BlockText>(textId);
+            rawText = getDocument()->getTexts()->get<texts::BlockText>(textId);
+            break;
         case TextType::Expression:
-            return getDocument()->getTexts()->get<texts::ExpressionText>(textId);        
-    }    
-}
-
-std::string others::TextBlock::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle) const
-{
-    auto block = getRawTextBlock();
-    if (!block) return {};
-    auto retval = musx::util::EnigmaString::replaceAccidentalTags(block->text, accidentalStyle);
-    if (trimTags) {
-        return musx::util::EnigmaString::trimTags(retval);
+            rawText = getDocument()->getTexts()->get<texts::ExpressionText>(textId);
+            break;
     }
-    return retval;
+    return rawText->getRawTextCtx(forPartId, forPageId, defaultInsertFunc);
 }
 
-std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
+std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)
 {
-    auto textBlock = document->getOthers()->get<others::TextBlock>(SCORE_PARTID, textId);
+    auto textBlock = document->getOthers()->get<others::TextBlock>(forPartId, textId);
     if (textBlock) {
-        return textBlock->getText(trimTags, accidentalStyle);
+        return textBlock->getRawTextCtx(forPartId).getText(trimTags, accidentalStyle);
     }
     return {};
 }
@@ -3688,10 +3985,37 @@ std::shared_ptr<others::TextBlock> others::TextExpressionDef::getTextBlock() con
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), textIdKey);
 }
 
+util::EnigmaParsingContext others::TextExpressionDef::getRawTextCtx(Cmper forPartId) const
+{
+    if (auto textBlock = getTextBlock()) {
+        return textBlock->getRawTextCtx(forPartId, std::nullopt, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
+            if (components[0] == "value") {
+                return std::to_string(value);
+            } else if (components[0] == "control") {
+                return std::to_string(auxData1);
+            } else if (components[0] == "pass") {
+                return std::to_string(playPass);
+            }
+            return std::nullopt;
+        });
+    }
+    return {};
+}
+
 std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 {
     if (!hasEnclosure) return nullptr;
     return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getPartId(), getCmper());
+}
+
+// *********************
+// ***** TextsBase *****
+// *********************
+
+util::EnigmaParsingContext TextsBase::getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId,
+    util::EnigmaString::TextInsertCallback defaultInsertFunc) const
+{
+    return util::EnigmaParsingContext(shared_from_this(), forPartId, forPageId, defaultInsertFunc);
 }
 
 // *************************
@@ -3742,7 +4066,7 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
     if (tops.size() != bots.size()) {
         MUSX_INTEGRITY_ERROR("Composite top group for time signature does not match composite bottom group.");
     }
-    for (size_t x = 0; x < std::min(tops.size(), bots.size()); x++) {
+    for (size_t x = 0; x < (std::min)(tops.size(), bots.size()); x++) {
         components.push_back({ tops[x], bots[x] });
     }
 }
