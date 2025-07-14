@@ -2,6 +2,7 @@ var classmusx_1_1dom_1_1others_1_1TextExpressionDef =
 [
     [ "TextExpressionDef", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a956b0b29607bfd745671f25a408150c9", null ],
     [ "getEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a59f3c9e067d0e73775458208617424ed", null ],
+    [ "getRawTextCtx", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a210437df7dac644e92b3a49a5088df4c", null ],
     [ "getTextBlock", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a5f5febc4a6e826011e42406633a26b7a", null ],
     [ "auxData1", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a611f58b7452e49f62494e5529b54b2c0", null ],
     [ "breakMmRest", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#ad178db907450b552e78548354f166109", null ],

@@ -1,15 +1,6 @@
 var classmusx_1_1dom_1_1Note =
 [
-    [ "NoteProperties", "classmusx_1_1dom_1_1Note.html#a37aaf7b9c3eb13027cfe09da150d2c71", null ],
-    [ "NoteName", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e", [
-      [ "C", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632ea0d61f8370cad1d412f80b84d143e1257", null ],
-      [ "D", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632eaf623e75af30e62bbd73d6df5b50bb7b5", null ],
-      [ "E", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632ea3a3ea00cfc35332cedf6e5e9a32e94da", null ],
-      [ "F", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632ea800618943025315f869e4e1f09471012", null ],
-      [ "G", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632eadfcf28d0734569a6a693bc8194de62bf", null ],
-      [ "A", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632ea7fc56270e7a70fa81a5935b72eacbe29", null ],
-      [ "B", "classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632ea9d5ed678fe57bcca610140957afab571", null ]
-    ] ],
+    [ "NoteProperties", "classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68", null ],
     [ "Note", "classmusx_1_1dom_1_1Note.html#a7b5fc7c3dd8fe22c524c311b8eae5463", null ],
     [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1Note.html#a70cff35a0297f05a6a7bf5157e0609d6", null ],
     [ "calcNoteProperties", "classmusx_1_1dom_1_1Note.html#a871b0d6010606935b3e195d9eb9060b9", null ],

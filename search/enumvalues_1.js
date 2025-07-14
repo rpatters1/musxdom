@@ -23,7 +23,7 @@ var searchData=
   ['blankwithrests_20',['BlankWithRests',['../classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a554abfcfa334385616487a34e549b909',1,'musx::dom::others::Staff']]],
   ['block_21',['Block',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a532d8e8f86ade9e69fc3384ebbbeb775ae1e4c8c9ccd9fc39c391da4bcd093fb2',1,'musx::dom::others::TextBlock']]],
   ['bottomnote_22',['BottomNote',['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371a6d110e8e8a97bf03ffaac649605e4ff5',1,'musx::dom::others']]],
-  ['bracket_23',['Bracket',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a0520ad11e6b380aafe8a9be9ce72f0a5ab5c644787d66a37b2d0e7eefaf11506b',1,'musx::dom::options::TupletOptions']]],
+  ['bracket_23',['bracket',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#ad608f81b2142073a05da65fc4454a768ab5c644787d66a37b2d0e7eefaf11506b',1,'musx::dom::others::ShapeDef::Bracket'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a0520ad11e6b380aafe8a9be9ce72f0a5ab5c644787d66a37b2d0e7eefaf11506b',1,'musx::dom::options::TupletOptions::Bracket']]],
   ['bracketcurvedhooks_24',['BracketCurvedHooks',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672a01c53b33e8bdf1e4befc4bab8167e527',1,'musx::dom::details::StaffGroup']]],
   ['bracketstraighthooks_25',['BracketStraightHooks',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672aca5eab656107c764b7f624914be4e039',1,'musx::dom::details::StaffGroup']]]
 ];

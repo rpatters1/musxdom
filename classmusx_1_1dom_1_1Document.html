@@ -155,6 +155,16 @@ const <a class="el" href="namespacemusx_1_1dom.html#adb56e4e338213ad74040718738d
 const <a class="el" href="namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4">TextsPoolPtr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTexts</b> () const</td></tr>
 <tr class="memdesc:a2c77b6f1a626b8ce48552d4b58f72446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the const texts pool. <br /></td></tr>
 <tr class="separator:a2c77b6f1a626b8ce48552d4b58f72446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ba17cf43981107d8c372748ec2c78fb" id="r_a4ba17cf43981107d8c372748ec2c78fb"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html">others::Page</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a4ba17cf43981107d8c372748ec2c78fb">calculatePageFromMeasure</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId) const</td></tr>
+<tr class="memdesc:a4ba17cf43981107d8c372748ec2c78fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches pages to find the page that contains the measure.  <br /></td></tr>
+<tr class="separator:a4ba17cf43981107d8c372748ec2c78fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc7f8589844252ff2dbb11337947af41" id="r_adc7f8589844252ff2dbb11337947af41"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html">others::StaffSystem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#adc7f8589844252ff2dbb11337947af41">calculateSystemFromMeasure</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId) const</td></tr>
+<tr class="memdesc:adc7f8589844252ff2dbb11337947af41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches systems to find the page that contains the measure.  <br /></td></tr>
+<tr class="separator:adc7f8589844252ff2dbb11337947af41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a4d0b7008895e9e59d721475331f6be" id="r_a5a4d0b7008895e9e59d721475331f6be"><td class="memItemLeft" align="right" valign="top"><a id="a5a4d0b7008895e9e59d721475331f6be" name="a5a4d0b7008895e9e59d721475331f6be"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getMaxBlankPages</b> () const</td></tr>
+<tr class="memdesc:a5a4d0b7008895e9e59d721475331f6be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum number of blank pages in any part. This is calculated by <a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#a99addb7044f05ca121c446568dc9045f" title="Creates a Document object from an XML buffer.">factory::DocumentFactory::create</a>. <br /></td></tr>
+<tr class="separator:a5a4d0b7008895e9e59d721475331f6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -164,7 +174,82 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>musx::factory::Docum
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a document object that encapsulates the entire EnigmaXML structure. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4ba17cf43981107d8c372748ec2c78fb" name="a4ba17cf43981107d8c372748ec2c78fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ba17cf43981107d8c372748ec2c78fb">&#9670;&#160;</a></span>calculatePageFromMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html">others::Page</a> &gt; musx::dom::Document::calculatePageFromMeasure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Searches pages to find the page that contains the measure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partId</td><td>the linked part to search </td></tr>
+    <tr><td class="paramname">measureId</td><td>the measure to find </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adc7f8589844252ff2dbb11337947af41" name="adc7f8589844252ff2dbb11337947af41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc7f8589844252ff2dbb11337947af41">&#9670;&#160;</a></span>calculateSystemFromMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html">others::StaffSystem</a> &gt; musx::dom::Document::calculateSystemFromMeasure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Searches systems to find the page that contains the measure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partId</td><td>the linked part to search </td></tr>
+    <tr><td class="paramname">measureId</td><td>the measure to find </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

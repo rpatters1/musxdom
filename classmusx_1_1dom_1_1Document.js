@@ -1,11 +1,14 @@
 var classmusx_1_1dom_1_1Document =
 [
+    [ "calculatePageFromMeasure", "classmusx_1_1dom_1_1Document.html#a4ba17cf43981107d8c372748ec2c78fb", null ],
+    [ "calculateSystemFromMeasure", "classmusx_1_1dom_1_1Document.html#adc7f8589844252ff2dbb11337947af41", null ],
     [ "getDetails", "classmusx_1_1dom_1_1Document.html#ae5cc504ac90381247c976fddfbf8f6a7", null ],
     [ "getDetails", "classmusx_1_1dom_1_1Document.html#a9c2d300cb8b2da41a34601235b41d963", null ],
     [ "getEntries", "classmusx_1_1dom_1_1Document.html#af81dc03185013ac23c53e5a5f2da3b30", null ],
     [ "getEntries", "classmusx_1_1dom_1_1Document.html#ae196757dfb2f417d75f9510a18b157dc", null ],
     [ "getHeader", "classmusx_1_1dom_1_1Document.html#aa1299858559ac9bb595ab00e67ea0102", null ],
     [ "getHeader", "classmusx_1_1dom_1_1Document.html#a4fda0345262db437ca2e79438dd2f9d4", null ],
+    [ "getMaxBlankPages", "classmusx_1_1dom_1_1Document.html#a5a4d0b7008895e9e59d721475331f6be", null ],
     [ "getOptions", "classmusx_1_1dom_1_1Document.html#aeeb6649b58a69c1d8d81afd9624d72e5", null ],
     [ "getOptions", "classmusx_1_1dom_1_1Document.html#ac1157cd13a429ed6c2e27a0ca008551d", null ],
     [ "getOthers", "classmusx_1_1dom_1_1Document.html#a32f5bc74b654fdb67dbaa2508309cae5", null ],

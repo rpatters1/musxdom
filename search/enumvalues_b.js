@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['left_0',['left',['../classmusx_1_1dom_1_1options_1_1ChordOptions.html#ad1f52316758dd28fb5a13d973a9bed3ca945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::options::ChordOptions::Left'],['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a38d4a6a6f163ef2b55c680bc5bd79699a945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::MeasureNumberRegion::Left'],['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#a2cc1bbb5cec26423d5c9e74331c16203a945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::NamePositioning::Left'],['../namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::Left']]],
+  ['left_0',['left',['../classmusx_1_1dom_1_1options_1_1ChordOptions.html#ad1f52316758dd28fb5a13d973a9bed3ca945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::options::ChordOptions::Left'],['../classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3a945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::options::TextOptions::Left'],['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a38d4a6a6f163ef2b55c680bc5bd79699a945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::MeasureNumberRegion::Left'],['../classmusx_1_1dom_1_1others_1_1NamePositioning.html#a2cc1bbb5cec26423d5c9e74331c16203a945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::NamePositioning::Left'],['../namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca945d5e233cf7d6240f6b783b36a374ff',1,'musx::dom::others::Left']]],
   ['leftbarline_1',['LeftBarline',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea5398156d08432d407c11a5f8c200caa4',1,'musx::dom::others']]],
   ['leftofallnoteheads_2',['LeftOfAllNoteheads',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eabc55b6028fc1941b241fcdb9affe5d30',1,'musx::dom::others']]],
   ['leftofprimarynotehead_3',['LeftOfPrimaryNotehead',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eabe4cb5775c5080ebd794be39d8a6bb05',1,'musx::dom::others']]],
@@ -9,11 +9,14 @@ var searchData=
   ['letters_6',['Letters',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cacd8d64cdb20ce5679ebe747747c3cc4c',1,'musx::dom::others']]],
   ['letterslowercase_7',['LettersLowerCase',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cadc8ea808f0be554472d0f923e5d81f6e',1,'musx::dom::others']]],
   ['lettersnumberslowercase_8',['LettersNumbersLowerCase',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2cab1bd9fa27efd0a1bee5095b30adaf958',1,'musx::dom::others']]],
-  ['littleendian_9',['LittleEndian',['../namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9a3c0ba6b22b526d7fd50c3026435a8c02',1,'musx::dom::header']]],
-  ['locrian_10',['Locrian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea957b71824981a76ee8367e6684065f5d',1,'music_theory']]],
-  ['lydian_11',['Lydian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ceab1cfb8d73516579a3d9e11d16377205a',1,'music_theory']]],
-  ['lyricchorus_12',['LyricChorus',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa73facf9e257b0adc9a4c9ff2d9368b03',1,'musx::dom::options::FontOptions']]],
-  ['lyricist_13',['Lyricist',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa169f3b62d96188e20330c8d460f5152f',1,'musx::dom::texts::FileInfoText']]],
-  ['lyricsection_14',['LyricSection',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa5976a83fe44aae224342c7172b052b30',1,'musx::dom::options::FontOptions']]],
-  ['lyricverse_15',['LyricVerse',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aaf30266545d18be864d96e014309c764d',1,'musx::dom::options::FontOptions']]]
+  ['linewidth_9',['LineWidth',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#ad608f81b2142073a05da65fc4454a768adcf84fe120b3e292deb67ad75eb63012',1,'musx::dom::others::ShapeDef']]],
+  ['littleendian_10',['LittleEndian',['../namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9a3c0ba6b22b526d7fd50c3026435a8c02',1,'musx::dom::header']]],
+  ['locrian_11',['Locrian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea957b71824981a76ee8367e6684065f5d',1,'music_theory']]],
+  ['long_12',['long',['../structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a8394f0347c184cf156ac5924dccb773b',1,'musx::util::DateTime::Long'],['../classmusx_1_1dom_1_1options_1_1TextOptions.html#afcc30134c44b1318ef6b0f13d834c46ba8394f0347c184cf156ac5924dccb773b',1,'musx::dom::options::TextOptions::Long']]],
+  ['longabbreviated_13',['LongAbbreviated',['../structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a9e37beb27c126d7cf9e63e0943d9b683',1,'musx::util::DateTime']]],
+  ['lydian_14',['Lydian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ceab1cfb8d73516579a3d9e11d16377205a',1,'music_theory']]],
+  ['lyricchorus_15',['LyricChorus',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa73facf9e257b0adc9a4c9ff2d9368b03',1,'musx::dom::options::FontOptions']]],
+  ['lyricist_16',['Lyricist',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa169f3b62d96188e20330c8d460f5152f',1,'musx::dom::texts::FileInfoText']]],
+  ['lyricsection_17',['LyricSection',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa5976a83fe44aae224342c7172b052b30',1,'musx::dom::options::FontOptions']]],
+  ['lyricverse_18',['LyricVerse',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aaf30266545d18be864d96e014309c764d',1,'musx::dom::options::FontOptions']]]
 ];

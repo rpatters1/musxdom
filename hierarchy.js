@@ -95,6 +95,7 @@ var hierarchy =
         [ "musx::dom::options::SmartShapeOptions", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html", null ],
         [ "musx::dom::options::StaffOptions", "classmusx_1_1dom_1_1options_1_1StaffOptions.html", null ],
         [ "musx::dom::options::StemOptions", "classmusx_1_1dom_1_1options_1_1StemOptions.html", null ],
+        [ "musx::dom::options::TextOptions", "classmusx_1_1dom_1_1options_1_1TextOptions.html", null ],
         [ "musx::dom::options::TieOptions", "classmusx_1_1dom_1_1options_1_1TieOptions.html", null ],
         [ "musx::dom::options::TimeSignatureOptions", "classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html", null ],
         [ "musx::dom::options::TupletOptions", "classmusx_1_1dom_1_1options_1_1TupletOptions.html", null ]
@@ -198,6 +199,7 @@ var hierarchy =
         [ "musx::dom::texts::SmartShapeText", "classmusx_1_1dom_1_1texts_1_1SmartShapeText.html", null ]
       ] ],
       [ "musx::dom::options::ClefOptions::ClefDef", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html", null ],
+      [ "musx::dom::options::TextOptions::InsertSymbolInfo", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html", null ],
       [ "musx::dom::others::MeasureNumberRegion::ScorePartData", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html", null ],
       [ "musx::dom::others::SmartShape::EndPoint", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPoint.html", null ],
       [ "musx::dom::others::SmartShape::EndPointAdjustment", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPointAdjustment.html", null ],
@@ -217,12 +219,17 @@ var hierarchy =
     [ "musx::dom::options::TieOptions::ControlPoint", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html", null ],
     [ "musx::dom::options::SmartShapeOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html", null ],
     [ "musx::dom::options::TieOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html", null ],
+    [ "musx::util::DateTime", "structmusx_1_1util_1_1DateTime.html", null ],
     [ "musx::dom::Document", "classmusx_1_1dom_1_1Document.html", null ],
     [ "musx::factory::ElementLinker", "classmusx_1_1factory_1_1ElementLinker.html", null ],
     [ "std::enable_shared_from_this", null, [
-      [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ]
+      [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ],
+      [ "musx::dom::TextsBase", "classmusx_1_1dom_1_1TextsBase.html", null ]
     ] ],
+    [ "musx::util::EnigmaParsingContext", "classmusx_1_1util_1_1EnigmaParsingContext.html", null ],
+    [ "musx::util::EnigmaString::EnigmaParsingOptions", "structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html", null ],
     [ "musx::util::EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", null ],
+    [ "musx::util::EnigmaStyles", "structmusx_1_1util_1_1EnigmaStyles.html", null ],
     [ "musx::dom::EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", null ],
     [ "musx::dom::EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html", null ],
     [ "musx::dom::EntryPool", "classmusx_1_1dom_1_1EntryPool.html", null ],
@@ -285,6 +292,7 @@ var hierarchy =
       [ "musx::dom::TextsPool", "classmusx_1_1dom_1_1TextsPool.html", null ]
     ] ],
     [ "musx::dom::options::PageFormatOptions::PageFormat", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html", null ],
+    [ "musx::dom::percussion::PercussionNoteType", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html", null ],
     [ "std::runtime_error", null, [
       [ "musx::dom::integrity_error", "classmusx_1_1dom_1_1integrity__error.html", null ],
       [ "musx::factory::unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],

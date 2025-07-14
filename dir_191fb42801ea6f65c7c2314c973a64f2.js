@@ -11,6 +11,7 @@ var dir_191fb42801ea6f65c7c2314c973a64f2 =
     [ "ObjectPool.h", "ObjectPool_8h_source.html", null ],
     [ "Options.h", "Options_8h_source.html", null ],
     [ "Others.h", "Others_8h_source.html", null ],
+    [ "PercussionNoteType.h", "PercussionNoteType_8h_source.html", null ],
     [ "SmartShape.h", "SmartShape_8h_source.html", null ],
     [ "Texts.h", "Texts_8h_source.html", null ]
 ];

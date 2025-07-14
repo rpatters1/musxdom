@@ -176,9 +176,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addEntry</b> (const s
 std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">others::Measure</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMeasureInstance</b> () const</td></tr>
 <tr class="memdesc:a4dc2a983125e37e683c8c542f0a0567a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the measure instance. <br /></td></tr>
 <tr class="separator:a4dc2a983125e37e683c8c542f0a0567a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8275afd056fe42cf3c516810e4044681" id="r_a8275afd056fe42cf3c516810e4044681"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a8275afd056fe42cf3c516810e4044681">calcIsCueFrame</a> () const</td></tr>
-<tr class="memdesc:a8275afd056fe42cf3c516810e4044681"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry frame is part of a cue.  <br /></td></tr>
-<tr class="separator:a8275afd056fe42cf3c516810e4044681"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af934596122cb5cd63787c096466d7b0e" id="r_af934596122cb5cd63787c096466d7b0e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#af934596122cb5cd63787c096466d7b0e">calcIsCueFrame</a> (bool includeVisibleInScore=false) const</td></tr>
+<tr class="memdesc:af934596122cb5cd63787c096466d7b0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry frame is part of a cue.  <br /></td></tr>
+<tr class="separator:af934596122cb5cd63787c096466d7b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -247,8 +247,8 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">K
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8275afd056fe42cf3c516810e4044681" name="a8275afd056fe42cf3c516810e4044681"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8275afd056fe42cf3c516810e4044681">&#9670;&#160;</a></span>calcIsCueFrame()</h2>
+<a id="af934596122cb5cd63787c096466d7b0e" name="af934596122cb5cd63787c096466d7b0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af934596122cb5cd63787c096466d7b0e">&#9670;&#160;</a></span>calcIsCueFrame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -256,7 +256,8 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">K
         <tr>
           <td class="memname">bool musx::dom::EntryFrame::calcIsCueFrame </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>includeVisibleInScore</em> = <code>false</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -264,6 +265,12 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">K
 
 <p>Calculates if this entry frame is part of a cue. </p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">includeVisibleInScore</td><td>If true, include cues that are visible in the score. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>true if all entries in the frame are either cue entries or hidden. </dd></dl>
 
 </div>

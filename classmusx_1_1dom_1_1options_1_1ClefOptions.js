@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1options_1_1ClefOptions =
 [
     [ "ClefDef", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef" ],
+    [ "ClefInfo", "classmusx_1_1dom_1_1options_1_1ClefOptions.html#a38811b8a9d25c0d11b2ac33b5f43a540", null ],
     [ "ClefOptions", "classmusx_1_1dom_1_1options_1_1ClefOptions.html#a67a20b1e887fb5bc1be0396e8e0d87f5", null ],
     [ "cautionaryClefChanges", "classmusx_1_1dom_1_1options_1_1ClefOptions.html#aa11612be2419ec1fe6d8b77e73193fea", null ],
     [ "clefBackSepar", "classmusx_1_1dom_1_1options_1_1ClefOptions.html#a1f783252fb90f00cc3fa36531971d502", null ],

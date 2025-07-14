@@ -1,26 +1,31 @@
 var classmusx_1_1dom_1_1others_1_1PageTextAssign =
 [
-    [ "HorizontalAlignment", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a4f25cfc5bdf824f2eb67849952f95a72", [
-      [ "Left", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a4f25cfc5bdf824f2eb67849952f95a72a945d5e233cf7d6240f6b783b36a374ff", null ],
-      [ "Center", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a4f25cfc5bdf824f2eb67849952f95a72a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
-      [ "Right", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a4f25cfc5bdf824f2eb67849952f95a72a92b09c7c48c520c3c55e497875da437c", null ]
-    ] ],
-    [ "VerticalAlignment", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad62004baaacc89a51d6431c855f37ff5", [
-      [ "Top", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad62004baaacc89a51d6431c855f37ff5aa4ffdcf0dc1f31b9acaf295d75b51d00", null ],
-      [ "Center", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad62004baaacc89a51d6431c855f37ff5a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
-      [ "Bottom", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad62004baaacc89a51d6431c855f37ff5a2ad9d63b69c4a10a5cc9cad923133bc4", null ]
+    [ "HorizontalAlignment", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a315ccf6a90acaff5807ac9cab9e3024d", null ],
+    [ "VerticalAlignment", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a3dab3092f50ab4137d2124f04c1f71c0", null ],
+    [ "PageAssignType", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a90487371e41dab00c3cd1d60c0d9be9e", [
+      [ "AllPages", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a90487371e41dab00c3cd1d60c0d9be9ea2de75620cd2a59b38e262156d6abe818", null ],
+      [ "Even", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a90487371e41dab00c3cd1d60c0d9be9ea35537fbc25d87ffe59e4f35fefcd34b7", null ],
+      [ "Odd", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a90487371e41dab00c3cd1d60c0d9be9ea37b6bd7fe61d651735cec3d3b0356c66", null ]
     ] ],
     [ "PageTextAssign", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a1e542085eaa10ae6cff1d776b09dc50c", null ],
+    [ "calcEndPageNumber", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a6a5d4bcb4cce9f1d0dc38faaa213ceb7", null ],
+    [ "calcStartPageNumber", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad3caf0e6c46d3a590d14dd7cb8193b26", null ],
+    [ "getRawTextCtx", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a7ad1815a48ef4a7c37a961ac4c4b7813", null ],
+    [ "getTextBlock", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#acf3c5f552734e766a404039c72172c01", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#afd9482fb5aadae6a7ceeb73dd9f61dc4", null ],
+    [ "isMultiAssignedThruLastPage", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#abedc2ce3c8e6d612e956a8ec1bf1c154", null ],
+    [ "isMultiPage", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#aef23981ba0f98f17ba27ffaf2039c6ab", null ],
     [ "block", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#afa4a54eb6f683ab9729b50a595ee3da0", null ],
-    [ "endPage", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ae337439ced0991ec4c37ab0e6ae24bdb", null ],
+    [ "endPage", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a6fbd2ed37d0c77b92abb1587f9b16940", null ],
     [ "hidden", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a5b93962f67604f59fde8c714f65ddd7d", null ],
     [ "hPosLp", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ac5281ee618530eb739a74a115df8b4dd", null ],
     [ "hPosPageEdge", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a3e085fe137e2fb28c829ae77c5c03c83", null ],
     [ "hPosRp", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#aef1ea04c673be1ae50f8f196ebd05304", null ],
     [ "indRpPos", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a24c18443b48e38a42d6fd4846cf0f1ac", null ],
+    [ "oddEven", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a76d8da31ce8926dd0de1653738eabcf8", null ],
     [ "rightPgXDisp", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a73322179c091469057ce21f3ce0691cc", null ],
     [ "rightPgYDisp", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#aa9249f26df6394f649b6eb16f43a4b21", null ],
-    [ "startPage", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a7d7a7e31840c976e895f1b53b9925bc4", null ],
+    [ "startPage", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a0b903ac51960f0bd15ad8856067b2bc7", null ],
     [ "vPos", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad413f9c23f03c1443ecb3d0853b4c448", null ],
     [ "vPosPageEdge", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#af8af2a15c3f67b46deb39466e2afd552", null ],
     [ "xDisp", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#acad33acff070efc7e82e6ac5bdde9a48", null ],

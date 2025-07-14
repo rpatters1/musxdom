@@ -43,8 +43,8 @@ var classmusx_1_1dom_1_1others_1_1ShapeDef =
       [ "Clef", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621a4fb26ab17477cfbc62b748034c0de041", null ]
     ] ],
     [ "ShapeDef", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#a66b52677261434e2d85eea2079c29180", null ],
+    [ "isBlank", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#ae5d7c101df04a3f77e8567a0ec4acbda", null ],
     [ "iterateInstructions", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#aa03419ba6ed074c201d402c2a21abc80", null ],
-    [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#ad655a9217a610abffe361d3beb9a3043", null ],
     [ "dataList", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#a1d59129fd827529cfd77431073ba3b47", null ],
     [ "instructionList", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#ace325c73e24d28390b86e16365f5bac5", null ],
     [ "shapeType", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#ac994456249f8d93568b874d6ff6d01dd", null ]

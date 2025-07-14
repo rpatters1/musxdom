@@ -84,6 +84,7 @@ var annotated_dup =
           [ "SmartShapeOptions", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions" ],
           [ "StaffOptions", "classmusx_1_1dom_1_1options_1_1StaffOptions.html", "classmusx_1_1dom_1_1options_1_1StaffOptions" ],
           [ "StemOptions", "classmusx_1_1dom_1_1options_1_1StemOptions.html", "classmusx_1_1dom_1_1options_1_1StemOptions" ],
+          [ "TextOptions", "classmusx_1_1dom_1_1options_1_1TextOptions.html", "classmusx_1_1dom_1_1options_1_1TextOptions" ],
           [ "TieOptions", "classmusx_1_1dom_1_1options_1_1TieOptions.html", "classmusx_1_1dom_1_1options_1_1TieOptions" ],
           [ "TimeSignatureOptions", "classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html", "classmusx_1_1dom_1_1options_1_1TimeSignatureOptions" ],
           [ "TupletOptions", "classmusx_1_1dom_1_1options_1_1TupletOptions.html", "classmusx_1_1dom_1_1options_1_1TupletOptions" ]
@@ -157,6 +158,9 @@ var annotated_dup =
           [ "TonalCenterFlats", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats" ],
           [ "TonalCenterSharps", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps" ]
         ] ],
+        [ "percussion", null, [
+          [ "PercussionNoteType", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType" ]
+        ] ],
         [ "texts", "namespacemusx_1_1dom_1_1texts.html", [
           [ "BlockText", "classmusx_1_1dom_1_1texts_1_1BlockText.html", "classmusx_1_1dom_1_1texts_1_1BlockText" ],
           [ "BookmarkText", "classmusx_1_1dom_1_1texts_1_1BookmarkText.html", "classmusx_1_1dom_1_1texts_1_1BookmarkText" ],
@@ -212,7 +216,10 @@ var annotated_dup =
         [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ]
       ] ],
       [ "util", null, [
+        [ "DateTime", "structmusx_1_1util_1_1DateTime.html", "structmusx_1_1util_1_1DateTime" ],
+        [ "EnigmaParsingContext", "classmusx_1_1util_1_1EnigmaParsingContext.html", "classmusx_1_1util_1_1EnigmaParsingContext" ],
         [ "EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", "classmusx_1_1util_1_1EnigmaString" ],
+        [ "EnigmaStyles", "structmusx_1_1util_1_1EnigmaStyles.html", "structmusx_1_1util_1_1EnigmaStyles" ],
         [ "Fraction", "classmusx_1_1util_1_1Fraction.html", "classmusx_1_1util_1_1Fraction" ],
         [ "Logger", "classmusx_1_1util_1_1Logger.html", "classmusx_1_1util_1_1Logger" ]
       ] ],

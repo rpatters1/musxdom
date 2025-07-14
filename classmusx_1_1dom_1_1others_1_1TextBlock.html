@@ -127,6 +127,10 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a532d8e8f86ade9e69fc3384ebbbeb775"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for textTag values.  <a href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a532d8e8f86ade9e69fc3384ebbbeb775">More...</a><br /></td></tr>
 <tr class="separator:a532d8e8f86ade9e69fc3384ebbbeb775"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaec5304261e7c030a7c4502f240a605c" id="r_aaec5304261e7c030a7c4502f240a605c"><td class="memItemLeft" align="right" valign="top"><a id="aaec5304261e7c030a7c4502f240a605c" name="aaec5304261e7c030a7c4502f240a605c"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>TextJustify</b> = <a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3">options::TextOptions::TextJustify</a></td></tr>
+<tr class="memdesc:aaec5304261e7c030a7c4502f240a605c"><td class="mdescLeft">&#160;</td><td class="mdescRight">justification options <br /></td></tr>
+<tr class="separator:aaec5304261e7c030a7c4502f240a605c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
 <tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
 , <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
@@ -145,14 +149,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TextBlock</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:af09b4d22b57a426c4f2bd2e7c5f8a9d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:af09b4d22b57a426c4f2bd2e7c5f8a9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d3ef899c9e3510f83c67b45cf67549d" id="r_a9d3ef899c9e3510f83c67b45cf67549d"><td class="memItemLeft" align="right" valign="top"><a id="a9d3ef899c9e3510f83c67b45cf67549d" name="a9d3ef899c9e3510f83c67b45cf67549d"></a>
-std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1TextsBase.html">TextsBase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRawTextBlock</b> () const</td></tr>
-<tr class="memdesc:a9d3ef899c9e3510f83c67b45cf67549d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the raw text block (from the <code>texts</code> pool) based on <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a00eb2e5fa0b0233bb07c2272e8896f52" title="Text tag indicating the type of text block. (xml tag is &lt;textTag&gt;)">textType</a>. <br /></td></tr>
-<tr class="separator:a9d3ef899c9e3510f83c67b45cf67549d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c4b52aa9d9d1a8eae2c658109fdd933" id="r_a9c4b52aa9d9d1a8eae2c658109fdd933"><td class="memItemLeft" align="right" valign="top"><a id="a9c4b52aa9d9d1a8eae2c658109fdd933" name="a9c4b52aa9d9d1a8eae2c658109fdd933"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> (bool trimTags=false, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>) const</td></tr>
-<tr class="memdesc:a9c4b52aa9d9d1a8eae2c658109fdd933"><td class="mdescLeft">&#160;</td><td class="mdescRight">return display text with Enigma tags removed <br /></td></tr>
-<tr class="separator:a9c4b52aa9d9d1a8eae2c658109fdd933"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cddce35e4be909a8bae31192d69d7f0" id="r_a8cddce35e4be909a8bae31192d69d7f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a8cddce35e4be909a8bae31192d69d7f0">getRawTextCtx</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; forPageId=std::nullopt, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">util::EnigmaString::TextInsertCallback</a> defaultInsertFunc=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a78c97ffac1f57121cedf8d72ce879c11">util::EnigmaString::defaultInsertsCallback</a>) const</td></tr>
+<tr class="memdesc:a8cddce35e4be909a8bae31192d69d7f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the raw text block context (from the <code>texts</code> pool) based on <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a00eb2e5fa0b0233bb07c2272e8896f52" title="Text tag indicating the type of text block. (xml tag is &lt;textTag&gt;)">textType</a>.  <br /></td></tr>
+<tr class="separator:a8cddce35e4be909a8bae31192d69d7f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57f6336f95a9b1099216e44fec3bfe4d" id="r_a57f6336f95a9b1099216e44fec3bfe4d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a57f6336f95a9b1099216e44fec3bfe4d">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a57f6336f95a9b1099216e44fec3bfe4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a57f6336f95a9b1099216e44fec3bfe4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,10 +191,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a5330cbade677d450bfbb7726f2076845" id="r_a5330cbade677d450bfbb7726f2076845"><td class="memItemLeft" align="right" valign="top"><a id="a5330cbade677d450bfbb7726f2076845" name="a5330cbade677d450bfbb7726f2076845"></a>
-static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, const <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#ac5d18a958e3d69ea80e8a3ab8bb014b0">textId</a>, bool trimTags=false, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>)</td></tr>
-<tr class="memdesc:a5330cbade677d450bfbb7726f2076845"><td class="mdescLeft">&#160;</td><td class="mdescRight">return display text with Enigma tags removed <br /></td></tr>
-<tr class="separator:a5330cbade677d450bfbb7726f2076845"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53cb1cf0d8a02ed6dcac3977c3925f48" id="r_a53cb1cf0d8a02ed6dcac3977c3925f48"><td class="memItemLeft" align="right" valign="top"><a id="a53cb1cf0d8a02ed6dcac3977c3925f48" name="a53cb1cf0d8a02ed6dcac3977c3925f48"></a>
+static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getText</b> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, const <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#ac5d18a958e3d69ea80e8a3ab8bb014b0">textId</a>, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, bool trimTags=false, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>)</td></tr>
+<tr class="memdesc:a53cb1cf0d8a02ed6dcac3977c3925f48"><td class="mdescLeft">&#160;</td><td class="mdescRight">return displayable text with Enigma tags removed <br /></td></tr>
+<tr class="separator:a53cb1cf0d8a02ed6dcac3977c3925f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6bb572d40fb082a02718eb72768bed6" id="r_ac6bb572d40fb082a02718eb72768bed6"><td class="memItemLeft" align="right" valign="top"><a id="ac6bb572d40fb082a02718eb72768bed6" name="ac6bb572d40fb082a02718eb72768bed6"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html">TextBlock</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:ac6bb572d40fb082a02718eb72768bed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -211,6 +210,10 @@ Public Attributes</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>lineSpacingPercentage</b> {}</td></tr>
 <tr class="memdesc:ac45a6402d4c9f830a248b2e4d0d94ca5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Line spacing percentage. <br /></td></tr>
 <tr class="separator:ac45a6402d4c9f830a248b2e4d0d94ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b03249a4ab25e49b3ab8fe187157726" id="r_a6b03249a4ab25e49b3ab8fe187157726"><td class="memItemLeft" align="right" valign="top"><a id="a6b03249a4ab25e49b3ab8fe187157726" name="a6b03249a4ab25e49b3ab8fe187157726"></a>
+<a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3">TextJustify</a>&#160;</td><td class="memItemRight" valign="bottom"><b>justify</b> {}</td></tr>
+<tr class="memdesc:a6b03249a4ab25e49b3ab8fe187157726"><td class="mdescLeft">&#160;</td><td class="mdescRight">Justification (left, center, right, full, force full) <br /></td></tr>
+<tr class="separator:a6b03249a4ab25e49b3ab8fe187157726"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e4b6ab69888bba10dbd27f470bc385f" id="r_a4e4b6ab69888bba10dbd27f470bc385f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a4e4b6ab69888bba10dbd27f470bc385f">newPos36</a> {}</td></tr>
 <tr class="separator:a4e4b6ab69888bba10dbd27f470bc385f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8156491d2fec35dbe7748081c623dd43" id="r_a8156491d2fec35dbe7748081c623dd43"><td class="memItemLeft" align="right" valign="top"><a id="a8156491d2fec35dbe7748081c623dd43" name="a8156491d2fec35dbe7748081c623dd43"></a>
@@ -316,6 +319,50 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8cddce35e4be909a8bae31192d69d7f0" name="a8cddce35e4be909a8bae31192d69d7f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cddce35e4be909a8bae31192d69d7f0">&#9670;&#160;</a></span>getRawTextCtx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a> musx::dom::others::TextBlock::getRawTextCtx </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>forPartId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;&#160;</td>
+          <td class="paramname"><em>forPageId</em> = <code>std::nullopt</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">util::EnigmaString::TextInsertCallback</a>&#160;</td>
+          <td class="paramname"><em>defaultInsertFunc</em> = <code><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a78c97ffac1f57121cedf8d72ce879c11">util::EnigmaString::defaultInsertsCallback</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the raw text block context (from the <code>texts</code> pool) based on <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a00eb2e5fa0b0233bb07c2272e8896f52" title="Text tag indicating the type of text block. (xml tag is &lt;textTag&gt;)">textType</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forPartId</td><td>The linked part to use for ^partname and ^totpages inserts </td></tr>
+    <tr><td class="paramname">forPageId</td><td>The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior. </td></tr>
+    <tr><td class="paramname">defaultInsertFunc</td><td>The default text insert replacement function for this context. This function is called if the function supplied to <a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html#abcd0e1d0d91de8906a647a39d4faf394" title="Parse the Enigma text into structured chunks with insert handling.">util::EnigmaParsingContext::parseEnigmaText</a> returns std::nullopt. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a57f6336f95a9b1099216e44fec3bfe4d" name="a57f6336f95a9b1099216e44fec3bfe4d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a57f6336f95a9b1099216e44fec3bfe4d">&#9670;&#160;</a></span>requireAllFields()</h2>
 

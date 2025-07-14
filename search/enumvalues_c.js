@@ -13,5 +13,6 @@ var searchData=
   ['misc_10',['Misc',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa74248c725e00bf9fe04df4e35b249a19',1,'musx::dom::others::MarkingCategory']]],
   ['mixolydian_11',['Mixolydian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ceac1992ab744a3d5a14cb387c34a42c7ed',1,'music_theory']]],
   ['multimeasrest_12',['MultiMeasRest',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa4be43c50e31a6d791c9fcf20ba698660',1,'musx::dom::options::FontOptions']]],
-  ['music_13',['Music',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa47dcbd834e669233d7eb8a51456ed217',1,'musx::dom::options::FontOptions']]]
+  ['music_13',['Music',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa47dcbd834e669233d7eb8a51456ed217',1,'musx::dom::options::FontOptions']]],
+  ['musicfont_14',['MusicFont',['../structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768daa04c4b5345691a366bf4015c05d9e664',1,'musx::util::EnigmaStyles']]]
 ];

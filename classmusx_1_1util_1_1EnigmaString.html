@@ -93,26 +93,45 @@ $(document).ready(function(){initNavTree('classmusx_1_1util_1_1EnigmaString.html
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classmusx_1_1util_1_1EnigmaString-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::util::EnigmaString Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Static class that provides utilties to extract information from enigma strings.  
+<p>Static class that provides utilities to extract information from enigma strings. Enigma strings use text inserts delineated by a preceding caret (^) and parenthesis for parameters. Here is a list of known inserts.  
  <a href="classmusx_1_1util_1_1EnigmaString.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="EnigmaString_8h_source.html">EnigmaString.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaParsingOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for configuring how Enigma strings are parsed.  <a href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:ab46ba36ca6082f38e0ce7be58a0553c3" id="r_ab46ba36ca6082f38e0ce7be58a0553c3"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3">AccidentalInsertHandling</a> { <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3a47299dda67970441e982743972d64cfc">ParseToGlyphs</a>
+, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3a5f7bbf366eef76376ac3d25b02eb5164">Substitute</a>
+ }</td></tr>
+<tr class="memdesc:ab46ba36ca6082f38e0ce7be58a0553c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration to specify the default handling for accidental insert commands. Like all Enigma commands, accidental insert commands are passed to the TextInsertCallback function if there is one. These options determine how the insert is handled if the callback opts not to handle it.  <a href="classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3">More...</a><br /></td></tr>
+<tr class="separator:ab46ba36ca6082f38e0ce7be58a0553c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4692b7b51e78c89ee59a2871fee34455" id="r_a4692b7b51e78c89ee59a2871fee34455"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">AccidentalStyle</a> { <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">Ascii</a>
 , <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541">Unicode</a>
 , <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a3368a26ba25b44f3a9cebc6814624127">Smufl</a>
  }</td></tr>
-<tr class="memdesc:a4692b7b51e78c89ee59a2871fee34455"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration to specify the type of accidental replacement.  <a href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">More...</a><br /></td></tr>
+<tr class="memdesc:a4692b7b51e78c89ee59a2871fee34455"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration to specify the type of accidental substitution representation.  <a href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">More...</a><br /></td></tr>
 <tr class="separator:a4692b7b51e78c89ee59a2871fee34455"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7774814f864c7fc4e840f73af322936" id="r_ab7774814f864c7fc4e840f73af322936"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">TextChunkCallback</a> = std::function&lt; bool(const std::string &amp;text, const <a class="el" href="structmusx_1_1util_1_1EnigmaStyles.html">EnigmaStyles</a> &amp;styles)&gt;</td></tr>
+<tr class="memdesc:ab7774814f864c7fc4e840f73af322936"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iteration function type that the parser calls back when the font has changed or when recursively parsing an insert that is itself an enigma string, such as (in particular) the part name.  <br /></td></tr>
+<tr class="separator:ab7774814f864c7fc4e840f73af322936"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0503e291556abece57b9c47b16bbf1e" id="r_ad0503e291556abece57b9c47b16bbf1e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">TextInsertCallback</a> = std::function&lt; std::optional&lt; std::string &gt;(const std::vector&lt; std::string &gt; &amp;parsedCommand)&gt;</td></tr>
+<tr class="memdesc:ad0503e291556abece57b9c47b16bbf1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iteration function type that the parser calls back when it encounters an Enigma text insert that requires text subtitution. If the function returns an empty string, the insert is stripped from the processed text.  <br /></td></tr>
+<tr class="separator:ad0503e291556abece57b9c47b16bbf1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -121,32 +140,173 @@ template&lt;typename CharT &gt; </td></tr>
 <tr class="memitem:a13ea76fa4dcd68196d8a3a973da01d9e"><td class="memTemplItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fromU8</b> (const CharT *s)</td></tr>
 <tr class="memdesc:a13ea76fa4dcd68196d8a3a973da01d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert u8"" literals to std::string in a way that works both in C++17 and C++20+. <br /></td></tr>
 <tr class="separator:a13ea76fa4dcd68196d8a3a973da01d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65cb6ea962b2f85dfd98c485ceaa712c" id="r_a65cb6ea962b2f85dfd98c485ceaa712c"><td class="memItemLeft" align="right" valign="top"><a id="a65cb6ea962b2f85dfd98c485ceaa712c" name="a65cb6ea962b2f85dfd98c485ceaa712c"></a>
+static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toU8</b> (char32_t cp)</td></tr>
+<tr class="memdesc:a65cb6ea962b2f85dfd98c485ceaa712c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concerts a 32-bit codepoint to a utf8-encoded std::string. <br /></td></tr>
+<tr class="separator:a65cb6ea962b2f85dfd98c485ceaa712c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b5fae91351629aeff9b1f526a46af6d" id="r_a3b5fae91351629aeff9b1f526a46af6d"><td class="memItemLeft" align="right" valign="top"><a id="a3b5fae91351629aeff9b1f526a46af6d" name="a3b5fae91351629aeff9b1f526a46af6d"></a>
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>startsWithFontCommand</b> (const std::string &amp;text)</td></tr>
-<tr class="memdesc:a3b5fae91351629aeff9b1f526a46af6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the enigma string starts with a font command. <br /></td></tr>
+<tr class="memdesc:a3b5fae91351629aeff9b1f526a46af6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the enigma string starts with a font insert. <br /></td></tr>
 <tr class="separator:a3b5fae91351629aeff9b1f526a46af6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4915c595b19dbc70f2793a73368382bb" id="r_a4915c595b19dbc70f2793a73368382bb"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">parseComponents</a> (const std::string &amp;input)</td></tr>
-<tr class="memdesc:a4915c595b19dbc70f2793a73368382bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses an enigma text insert into its constituent components.  <br /></td></tr>
-<tr class="separator:a4915c595b19dbc70f2793a73368382bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a589d43bf91b536f31f5b30fb3f655da9" id="r_a589d43bf91b536f31f5b30fb3f655da9"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a589d43bf91b536f31f5b30fb3f655da9">parseFontCommand</a> (const std::string &amp;fontTag, <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">dom::FontInfo</a> &amp;fontInfo)</td></tr>
-<tr class="memdesc:a589d43bf91b536f31f5b30fb3f655da9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incorporates an enigma font command into the supplied <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">dom::FontInfo</a> instance.  <br /></td></tr>
-<tr class="separator:a589d43bf91b536f31f5b30fb3f655da9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6973476856fe97c708c61f92dde3d820" id="r_a6973476856fe97c708c61f92dde3d820"><td class="memItemLeft" align="right" valign="top"><a id="a6973476856fe97c708c61f92dde3d820" name="a6973476856fe97c708c61f92dde3d820"></a>
-static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>trimFontTags</b> (const std::string &amp;input)</td></tr>
-<tr class="memdesc:a6973476856fe97c708c61f92dde3d820"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trims all font tags from an enigma string. <br /></td></tr>
-<tr class="separator:a6973476856fe97c708c61f92dde3d820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2869cf6bd896d6c3a1d83545e424fadc" id="r_a2869cf6bd896d6c3a1d83545e424fadc"><td class="memItemLeft" align="right" valign="top"><a id="a2869cf6bd896d6c3a1d83545e424fadc" name="a2869cf6bd896d6c3a1d83545e424fadc"></a>
+static bool&#160;</td><td class="memItemRight" valign="bottom"><b>startsWithStyleCommand</b> (const std::string &amp;text)</td></tr>
+<tr class="memdesc:a2869cf6bd896d6c3a1d83545e424fadc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the enigma string starts with a style insert. <br /></td></tr>
+<tr class="separator:a2869cf6bd896d6c3a1d83545e424fadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca97ddbf01e2acc934ea5e78c27a69b5" id="r_aca97ddbf01e2acc934ea5e78c27a69b5"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#aca97ddbf01e2acc934ea5e78c27a69b5">parseComponents</a> (const std::string &amp;input, size_t *parsedLength=nullptr)</td></tr>
+<tr class="memdesc:aca97ddbf01e2acc934ea5e78c27a69b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses an enigma text insert into its constituent components.  <br /></td></tr>
+<tr class="separator:aca97ddbf01e2acc934ea5e78c27a69b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73c9da7251efec9c9ead8814b06d8c24" id="r_a73c9da7251efec9c9ead8814b06d8c24"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a73c9da7251efec9c9ead8814b06d8c24">parseEnigmaText</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">dom::Document</a> &gt; &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">dom::Cmper</a> forPartId, const std::string &amp;rawText, const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">TextChunkCallback</a> &amp;onText, const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">TextInsertCallback</a> &amp;onInsert, const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaParsingOptions</a> &amp;options={}, const <a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">EnigmaParsingContext</a> *parsingContext=nullptr)</td></tr>
+<tr class="memdesc:a73c9da7251efec9c9ead8814b06d8c24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses an Enigma-formatted string, handling font inserts and escaped carets.  <br /></td></tr>
+<tr class="separator:a73c9da7251efec9c9ead8814b06d8c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac83f6b2de386556f41c166815f068eef" id="r_ac83f6b2de386556f41c166815f068eef"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ac83f6b2de386556f41c166815f068eef">parseEnigmaText</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">dom::Document</a> &gt; &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">dom::Cmper</a> forPartId, const std::string &amp;rawText, const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">TextChunkCallback</a> &amp;onText, const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaParsingOptions</a> &amp;options={}, const <a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">EnigmaParsingContext</a> *parsingContext=nullptr)</td></tr>
+<tr class="memdesc:ac83f6b2de386556f41c166815f068eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplified version of <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a73c9da7251efec9c9ead8814b06d8c24" title="Parses an Enigma-formatted string, handling font inserts and escaped carets.">parseEnigmaText</a> that strips unhandled inserts. Useful in particular when the caller only cares about the raw text or the font information.  <br /></td></tr>
+<tr class="separator:ac83f6b2de386556f41c166815f068eef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d82cae64c948d4a870a75db2b239f00" id="r_a2d82cae64c948d4a870a75db2b239f00"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a2d82cae64c948d4a870a75db2b239f00">parseStyleCommand</a> (std::vector&lt; std::string &gt; components, <a class="el" href="structmusx_1_1util_1_1EnigmaStyles.html">EnigmaStyles</a> &amp;styles)</td></tr>
+<tr class="memdesc:a2d82cae64c948d4a870a75db2b239f00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incorporates an enigma font insert into the supplied <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">dom::FontInfo</a> instance.  <br /></td></tr>
+<tr class="separator:a2d82cae64c948d4a870a75db2b239f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0613f33d67f174d1901dd935232a74b9" id="r_a0613f33d67f174d1901dd935232a74b9"><td class="memItemLeft" align="right" valign="top"><a id="a0613f33d67f174d1901dd935232a74b9" name="a0613f33d67f174d1901dd935232a74b9"></a>
 static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>trimTags</b> (const std::string &amp;input)</td></tr>
 <tr class="memdesc:a0613f33d67f174d1901dd935232a74b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trims all enigma tags from an enigma string, leaving just the plain text. <br /></td></tr>
 <tr class="separator:a0613f33d67f174d1901dd935232a74b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8c51bab47cef8fdb8763ae9895c5eec" id="r_ad8c51bab47cef8fdb8763ae9895c5eec"><td class="memItemLeft" align="right" valign="top"><a id="ad8c51bab47cef8fdb8763ae9895c5eec" name="ad8c51bab47cef8fdb8763ae9895c5eec"></a>
-static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>replaceAccidentalTags</b> (const std::string &amp;input, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">AccidentalStyle</a> style=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">AccidentalStyle::Ascii</a>)</td></tr>
-<tr class="memdesc:ad8c51bab47cef8fdb8763ae9895c5eec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces ^flat() and ^sharp() inserts with 'b' and '#'. <br /></td></tr>
-<tr class="separator:ad8c51bab47cef8fdb8763ae9895c5eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a78c97ffac1f57121cedf8d72ce879c11" id="r_a78c97ffac1f57121cedf8d72ce879c11"><td class="memItemLeft" align="right" valign="top"><a id="a78c97ffac1f57121cedf8d72ce879c11" name="a78c97ffac1f57121cedf8d72ce879c11"></a>
+static <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">TextInsertCallback</a>&#160;</td><td class="memItemRight" valign="bottom"><b>defaultInsertsCallback</b> = [](const std::vector&lt;std::string&gt;&amp;) { return std::nullopt; }</td></tr>
+<tr class="memdesc:a78c97ffac1f57121cedf8d72ce879c11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts callback to take all default insert subsitutions determined by <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a73c9da7251efec9c9ead8814b06d8c24" title="Parses an Enigma-formatted string, handling font inserts and escaped carets.">parseEnigmaText</a>. <br /></td></tr>
+<tr class="separator:a78c97ffac1f57121cedf8d72ce879c11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Static class that provides utilties to extract information from enigma strings. </p>
-</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<div class="textblock"><p>Static class that provides utilities to extract information from enigma strings. Enigma strings use text inserts delineated by a preceding caret (^) and parenthesis for parameters. Here is a list of known inserts. </p>
+<p><b>Text formatting</b></p><ul>
+<li><code>^font(name[, encoding])</code>: sets the font face. The optional encoding usually specifies mac (4095) or win (2) symbol encoding. Font IDs (especially zero) can be specified as name in the format "FontXX" where XX is the font Id. Typically this occurs for the default music font ("Font0").</li>
+<li><code>^fontid(fontId[, encoding])</code>: sets the font face using the font id within the document.</li>
+<li><code>^Font(name[, encoding])</code>: variant of <code>^font</code>.</li>
+<li><code>^fontMus(name[, encoding])</code>: sets the font face but indicates that it tracks the marking category's Music Font setting.</li>
+<li><code>^fontTxt(name[, encoding])</code>: sets the font face but indicates that it tracks the marking category's Text Font setting.</li>
+<li><code>^fontNum(name[, encoding])</code>: sets the font face but indicates that it tracks the marking category's Number Font setting. (The number font was never implemented in Finale's UI.)</li>
+<li><code>^size(points)</code>: sets the font size in points. Only integer values are allowed.</li>
+<li><code>^nfx(mask)</code>: a bitmask of style bits</li>
+<li><code>^baseline(evpu)</code>: adjusts the baseline up (positive) or down (negative) by the given Evpu value.</li>
+<li><code>^superscript(evpu)</code>: adjusts the baseline up (positive) or down (negative) by the given Evpu value. (Added to baseline value.)</li>
+<li><code>^tracking(em)</code>: adjusts the inter-letter spacing by the given EM value. (1/1000 of font size.)</li>
+</ul>
+<p><b>Accidental inserts</b></p><ul>
+<li><code>^flat()</code>: inserts a flat using settings in <a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html">musx::dom::options::TextOptions</a>.</li>
+<li><code>^natural()</code>: inserts a natural using settings in <a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html">musx::dom::options::TextOptions</a>.</li>
+<li><code>^sharp()</code>: inserts a sharp using settings in <a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html">musx::dom::options::TextOptions</a>.</li>
+<li><code>^dbflat()</code>: inserts a double flat using settings in <a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html">musx::dom::options::TextOptions</a>.</li>
+<li><code>^dbsharp()</code>: inserts a double sharp using settings in <a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html">musx::dom::options::TextOptions</a>.</li>
+</ul>
+<p><b>Expression playback inserts</b></p><ul>
+<li><code>^value()</code>: inserts the playback value from the associated text or shape expression. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#aa8955b31c98ef5c54ed402b10fa108b2">musx::dom::others::TextExpressionDef::value</a>.)</li>
+<li><code>^control()</code>: inserts the playback controller value from the associated text or shape expression. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a611f58b7452e49f62494e5529b54b2c0">musx::dom::others::TextExpressionDef::auxData1</a>.)</li>
+<li><code>^pass()</code>: inserts the repeat pass value from the associated text or shape expression. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a518f6b45f5640e3972bc5571873d9a22">musx::dom::others::TextExpressionDef::playPass</a>.)</li>
+</ul>
+<p><b>Data/time inserts</b></p><ul>
+<li><code>^date(format)</code>: inserts the current date where format 0=short, 1=long, 2=abbreviated. (See <a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html#afcc30134c44b1318ef6b0f13d834c46b">musx::dom::options::TextOptions::DateFormat</a>.)</li>
+<li><code>^fdate(format)</code>: inserts the file modified date where the format is the same as for <code>^date</code>.</li>
+<li><code>^time(seconds)</code>: inserts the current time where seconds 0=omit seconds, nonzero (normally 1)=include seconds. The OS locale settings determine if it is rendered with AM/PM or 24-hour times. (See <a class="el" href="classmusx_1_1dom_1_1options_1_1TextOptions.html#a401bb3727ec68761cc0cc711a37be381">musx::dom::options::TextOptions::showTimeSeconds</a>.)</li>
+<li><code>^perftime(format)</code>: inserts the total performance time. For a list of format values, see the following note.</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>The Finale U.I. does not seem to have a mechanism to modify the <code>^perftime</code> format from its default value of 4. However, plugins can easily create an Enigma string with any of the format values. They are as follows.<ul>
+<li>0: M:SS (e.g., <code>1:02</code>)</li>
+<li>1: HH:MM:SS (e.g., <code>00:01:02</code>)</li>
+<li>2: HH:MM:SS.mmm (e.g., <code>00:01:02.000</code>)</li>
+<li>3: MM:SS (e.g., <code>01:02</code>)</li>
+<li>4: M'SS&quot; (e.g., <code>1'02"</code>)</li>
+<li>5: M (e.g., <code>1</code>)</li>
+</ul>
+</dd></dl>
+<p><b>Other text subsitution inserts</b></p><ul>
+<li><code>^^</code>: inserts a caret (^).</li>
+<li><code>^arranger()</code>: inserts the arranger name from File Info (ScoreManager window).</li>
+<li><code>^composer()</code>: inserts the composer name from File Info (ScoreManager window).</li>
+<li><code>^copyright()</code>: inserts the copyright text from File Info (ScoreManager window).</li>
+<li><code>^cprsym()</code>: inserts a copyright (@) symbol.</li>
+<li><code>^description()</code>: inserts the description text from File Info (ScoreManager window).</li>
+<li><code>^filename()</code>: inserts the file name (no path).</li>
+<li><code>^lyricist()</code>: inserts the lyricist name from File Info (ScoreManager window).</li>
+<li><code>^page(offset)</code>: inserts the current page number, offsetting from the offset parameter. (The Finale UI prevents more than one <code>^page</code> insert per Enigma string.)</li>
+<li><code>^subtitle()</code>: inserts the subtitle from File Info (ScoreManager window).</li>
+<li><code>^partname()</code>: score or part name. (Score uses the score text from File Info.)</li>
+<li><code>^title()</code>: inserts the title from File Info (ScoreManager window).</li>
+<li><code>^totpages()</code>: inserts the total number of pages in the document. </li>
+</ul>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ab7774814f864c7fc4e840f73af322936" name="ab7774814f864c7fc4e840f73af322936"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7774814f864c7fc4e840f73af322936">&#9670;&#160;</a></span>TextChunkCallback</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">musx::util::EnigmaString::TextChunkCallback</a> =  std::function&lt;bool( const std::string&amp; text, const <a class="el" href="structmusx_1_1util_1_1EnigmaStyles.html">EnigmaStyles</a>&amp; styles )&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iteration function type that the parser calls back when the font has changed or when recursively parsing an insert that is itself an enigma string, such as (in particular) the part name. </p>
+<ul>
+<li>text: the chunk of text styled with the specified font information</li>
+<li>font: the font information. </li>
+</ul>
+
+</div>
+</div>
+<a id="ad0503e291556abece57b9c47b16bbf1e" name="ad0503e291556abece57b9c47b16bbf1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0503e291556abece57b9c47b16bbf1e">&#9670;&#160;</a></span>TextInsertCallback</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">musx::util::EnigmaString::TextInsertCallback</a> =  std::function&lt;std::optional&lt;std::string&gt;( const std::vector&lt;std::string&gt;&amp; parsedCommand )&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iteration function type that the parser calls back when it encounters an Enigma text insert that requires text subtitution. If the function returns an empty string, the insert is stripped from the processed text. </p>
+<p>If the function returns std::nullopt, the Enigma parsing function inserts an appropriate value. Therefore, TextInsertCallback functions should only process known commands and return std::nullopt for any others.</p>
+<ul>
+<li>parsedCommand: a vector containing the insert (without the leading '^') and each of its parameters. </li>
+</ul>
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="ab46ba36ca6082f38e0ce7be58a0553c3" name="ab46ba36ca6082f38e0ce7be58a0553c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab46ba36ca6082f38e0ce7be58a0553c3">&#9670;&#160;</a></span>AccidentalInsertHandling</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3">musx::util::EnigmaString::AccidentalInsertHandling</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enumeration to specify the default handling for accidental insert commands. Like all Enigma commands, accidental insert commands are passed to the TextInsertCallback function if there is one. These options determine how the insert is handled if the callback opts not to handle it. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab46ba36ca6082f38e0ce7be58a0553c3a47299dda67970441e982743972d64cfc" name="ab46ba36ca6082f38e0ce7be58a0553c3a47299dda67970441e982743972d64cfc"></a>ParseToGlyphs&#160;</td><td class="fielddoc"><p>Parse accidental insert commands into glyph font changes and character strings. </p>
+<p>Suitable when the parser should produce fully parsed output ready for rendering. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab46ba36ca6082f38e0ce7be58a0553c3a5f7bbf366eef76376ac3d25b02eb5164" name="ab46ba36ca6082f38e0ce7be58a0553c3a5f7bbf366eef76376ac3d25b02eb5164"></a>Substitute&#160;</td><td class="fielddoc"><p>Substitute accidental insert commands with textual representations. </p>
+<p>The substitution style is determined by the <code>substitutionStyle</code> field in <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html" title="Options for configuring how Enigma strings are parsed.">EnigmaParsingOptions</a>. Suitable for environments where accidentals should be represented as text rather than as font changes. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a4692b7b51e78c89ee59a2871fee34455" name="a4692b7b51e78c89ee59a2871fee34455"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4692b7b51e78c89ee59a2871fee34455">&#9670;&#160;</a></span>AccidentalStyle</h2>
 
@@ -167,22 +327,26 @@ static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>replace
 </table>
 </div><div class="memdoc">
 
-<p>Enumeration to specify the type of accidental replacement. </p>
-<p>This enum class is used to choose between different representations of musical accidentals when processing text. </p>
+<p>Enumeration to specify the type of accidental substitution representation. </p>
+<p>Defines how accidentals are represented in text when substitution is selected. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31" name="a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31"></a>Ascii&#160;</td><td class="fielddoc"><p>Use ASCII substitutions for accidentals. </p>
 <ul>
 <li>Flat: 'b'</li>
 <li>Sharp: '#'</li>
 <li>Natural: (empty string)</li>
+<li>Double Flat: 'bb'</li>
+<li>Double Sharp: 'x'</li>
 </ul>
-<p>Suitable for environments where Unicode or SMuFL support is unavailable. </p>
+<p>Suitable for environments without Unicode or SMuFL support. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541" name="a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541"></a>Unicode&#160;</td><td class="fielddoc"><p>Use Unicode text accidentals. </p>
 <ul>
 <li>Flat: ♭ (U+266D)</li>
 <li>Sharp: ♯ (U+266F)</li>
 <li>Natural: ♮ (U+266E)</li>
+<li>Double Flat: 𝄫 (U+1D12B)</li>
+<li>Double Sharp: 𝄪 (U+1D12A)</li>
 </ul>
 <p>Suitable for inline text representations like "Clarinet in B♭." </p>
 </td></tr>
@@ -191,6 +355,8 @@ static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>replace
 <li>Flat: (U+E260)</li>
 <li>Sharp: (U+E262)</li>
 <li>Natural: (U+E261)</li>
+<li>Double Flat: (U+E264)</li>
+<li>Double Sharp: (U+E263)</li>
 </ul>
 <p>Suitable for musical notation systems or specialized fonts that support SMuFL. </p>
 </td></tr>
@@ -199,8 +365,8 @@ static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>replace
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4915c595b19dbc70f2793a73368382bb" name="a4915c595b19dbc70f2793a73368382bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4915c595b19dbc70f2793a73368382bb">&#9670;&#160;</a></span>parseComponents()</h2>
+<a id="aca97ddbf01e2acc934ea5e78c27a69b5" name="aca97ddbf01e2acc934ea5e78c27a69b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca97ddbf01e2acc934ea5e78c27a69b5">&#9670;&#160;</a></span>parseComponents()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -212,57 +378,13 @@ static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>replace
           <td class="memname">std::vector&lt; std::string &gt; musx::util::EnigmaString::parseComponents </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>input</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Parses an enigma text insert into its constituent components. </p>
-<p>The function takes an enigma text insert starting with <code>^</code> and extracts the command and its parameters. If the string is invalid or unbalanced, it returns an empty vector.</p>
-<p>Examples: </p><div class="fragment"><div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">parseComponents</a>(<span class="stringliteral">&quot;^fontTxt(Times,4096)&quot;</span>);   <span class="comment">// Returns {&quot;fontTxt&quot;, &quot;Times&quot;, &quot;4096&quot;}</span></div>
-<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">parseComponents</a>(<span class="stringliteral">&quot;^size(10)&quot;</span>);              <span class="comment">// Returns {&quot;size&quot;, &quot;10&quot;}</span></div>
-<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">parseComponents</a>(<span class="stringliteral">&quot;^nfx(130,(xyz))&quot;</span>);        <span class="comment">// Returns {&quot;nfx&quot;, &quot;130&quot;, &quot;(xyz)&quot;}</span></div>
-<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">parseComponents</a>(<span class="stringliteral">&quot;^some&quot;</span>);                  <span class="comment">// Returns {&quot;some&quot;}</span></div>
-<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">parseComponents</a>(<span class="stringliteral">&quot;^^&quot;</span>);                     <span class="comment">// Returns {&quot;^&quot;}</span></div>
-<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">parseComponents</a>(<span class="stringliteral">&quot;^^invalid&quot;</span>);              <span class="comment">// Returns {}</span></div>
-<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">parseComponents</a>(<span class="stringliteral">&quot;^unbalanced(abc&quot;</span>);        <span class="comment">// Returns {}</span></div>
-<div class="ttc" id="aclassmusx_1_1util_1_1EnigmaString_html_a4915c595b19dbc70f2793a73368382bb"><div class="ttname"><a href="classmusx_1_1util_1_1EnigmaString.html#a4915c595b19dbc70f2793a73368382bb">musx::util::EnigmaString::parseComponents</a></div><div class="ttdeci">static std::vector&lt; std::string &gt; parseComponents(const std::string &amp;input)</div><div class="ttdoc">Parses an enigma text insert into its constituent components.</div><div class="ttdef"><b>Definition</b> EnigmaString.cpp:43</div></div>
-</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>The enigma text insert to parse. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A vector of strings representing the command and its parameters, or an empty vector if invalid. </dd></dl>
-
-</div>
-</div>
-<a id="a589d43bf91b536f31f5b30fb3f655da9" name="a589d43bf91b536f31f5b30fb3f655da9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a589d43bf91b536f31f5b30fb3f655da9">&#9670;&#160;</a></span>parseFontCommand()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::util::EnigmaString::parseFontCommand </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>fontTag</em>, </td>
+          <td class="paramname"><em>input</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html">dom::FontInfo</a> &amp;&#160;</td>
-          <td class="paramname"><em>fontInfo</em>&#160;</td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>parsedLength</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -277,9 +399,221 @@ static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>replace
 </table>
 </div><div class="memdoc">
 
-<p>Incorporates an enigma font command into the supplied <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">dom::FontInfo</a> instance. </p>
-<p>Enigma font commands are</p><ul>
-<li>one of the font identifying commands, such as <code>^font</code>, <code>fontid</code>, etc. (See <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d">startsWithFontCommand</a>.)</li>
+<p>Parses an enigma text insert into its constituent components. </p>
+<p>The function takes an enigma text insert starting with <code>^</code> and extracts the insert and its parameters. If the string is invalid or unbalanced, it returns an empty vector.</p>
+<p>Examples: </p><div class="fragment"><div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#aca97ddbf01e2acc934ea5e78c27a69b5">parseComponents</a>(<span class="stringliteral">&quot;^fontTxt(Times,4096)&quot;</span>);   <span class="comment">// Returns {&quot;fontTxt&quot;, &quot;Times&quot;, &quot;4096&quot;}</span></div>
+<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#aca97ddbf01e2acc934ea5e78c27a69b5">parseComponents</a>(<span class="stringliteral">&quot;^size(10)&quot;</span>);              <span class="comment">// Returns {&quot;size&quot;, &quot;10&quot;}</span></div>
+<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#aca97ddbf01e2acc934ea5e78c27a69b5">parseComponents</a>(<span class="stringliteral">&quot;^nfx(130,(xyz))&quot;</span>);        <span class="comment">// Returns {&quot;nfx&quot;, &quot;130&quot;, &quot;(xyz)&quot;}</span></div>
+<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#aca97ddbf01e2acc934ea5e78c27a69b5">parseComponents</a>(<span class="stringliteral">&quot;^some&quot;</span>);                  <span class="comment">// Returns {&quot;some&quot;}</span></div>
+<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#aca97ddbf01e2acc934ea5e78c27a69b5">parseComponents</a>(<span class="stringliteral">&quot;^^&quot;</span>);                     <span class="comment">// Returns {&quot;^&quot;}</span></div>
+<div class="line"><a class="code hl_function" href="classmusx_1_1util_1_1EnigmaString.html#aca97ddbf01e2acc934ea5e78c27a69b5">parseComponents</a>(<span class="stringliteral">&quot;^unbalanced(abc&quot;</span>);        <span class="comment">// Returns {}</span></div>
+<div class="ttc" id="aclassmusx_1_1util_1_1EnigmaString_html_aca97ddbf01e2acc934ea5e78c27a69b5"><div class="ttname"><a href="classmusx_1_1util_1_1EnigmaString.html#aca97ddbf01e2acc934ea5e78c27a69b5">musx::util::EnigmaString::parseComponents</a></div><div class="ttdeci">static std::vector&lt; std::string &gt; parseComponents(const std::string &amp;input, size_t *parsedLength=nullptr)</div><div class="ttdoc">Parses an enigma text insert into its constituent components.</div><div class="ttdef"><b>Definition</b> EnigmaString.cpp:123</div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>The enigma text insert to parse. </td></tr>
+    <tr><td class="paramname">parsedLength</td><td>If supplied, returns the number of characters parsed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector of strings representing the insert and its parameters, or an empty vector if invalid. </dd></dl>
+
+</div>
+</div>
+<a id="ac83f6b2de386556f41c166815f068eef" name="ac83f6b2de386556f41c166815f068eef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac83f6b2de386556f41c166815f068eef">&#9670;&#160;</a></span>parseEnigmaText() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool musx::util::EnigmaString::parseEnigmaText </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">dom::Document</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">dom::Cmper</a>&#160;</td>
+          <td class="paramname"><em>forPartId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>rawText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">TextChunkCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>onText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaParsingOptions</a> &amp;&#160;</td>
+          <td class="paramname"><em>options</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">EnigmaParsingContext</a> *&#160;</td>
+          <td class="paramname"><em>parsingContext</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Simplified version of <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a73c9da7251efec9c9ead8814b06d8c24" title="Parses an Enigma-formatted string, handling font inserts and escaped carets.">parseEnigmaText</a> that strips unhandled inserts. Useful in particular when the caller only cares about the raw text or the font information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>The document from which the enigma string is taken. </td></tr>
+    <tr><td class="paramname">forPartId</td><td>The linked part ID to use for ^partname and ^totpages tags. </td></tr>
+    <tr><td class="paramname">rawText</td><td>The full input Enigma string to parse. </td></tr>
+    <tr><td class="paramname">onText</td><td>The handler for when font styling changes. </td></tr>
+    <tr><td class="paramname">options</td><td>Parsing options. </td></tr>
+    <tr><td class="paramname">parsingContext</td><td>Generally, only functions internal to musxdom should provide this. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if parsing completed, false if aborted by the <code>onText</code> function. </dd></dl>
+
+</div>
+</div>
+<a id="a73c9da7251efec9c9ead8814b06d8c24" name="a73c9da7251efec9c9ead8814b06d8c24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73c9da7251efec9c9ead8814b06d8c24">&#9670;&#160;</a></span>parseEnigmaText() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool musx::util::EnigmaString::parseEnigmaText </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">dom::Document</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">dom::Cmper</a>&#160;</td>
+          <td class="paramname"><em>forPartId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>rawText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">TextChunkCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>onText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">TextInsertCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>onInsert</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaParsingOptions</a> &amp;&#160;</td>
+          <td class="paramname"><em>options</em> = <code>{}</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">EnigmaParsingContext</a> *&#160;</td>
+          <td class="paramname"><em>parsingContext</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parses an Enigma-formatted string, handling font inserts and escaped carets. </p>
+<p>This function scans an Enigma-formatted string (typically Finale-style encoded text), extracts text chunks and control inserts, and invokes a callback for each contiguous span of text using the current font state. It automatically interprets font-related inserts like ^fontTxt, ^fontMus, ^fontid, ^size, and ^nfx, updating the font info accordingly.</p>
+<p>Escaped carets ("^^") are converted to literal '^' characters. All other unrecognized inserts (e.g., ^value(...) or ^page(...)) are passed through to the callback for higher-level processing or markup.</p>
+<p>The ^date, ^time, and ^fdate inserts default to POSIX functions for formatting date and time on macOS and Linux. On Windows they default to WinAPI. If you need finer control over date or time formatting, you should handle these yourself.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>The document from which the enigma string is taken. </td></tr>
+    <tr><td class="paramname">forPartId</td><td>The linked part ID to use for ^partname and ^totpages tags. </td></tr>
+    <tr><td class="paramname">rawText</td><td>The full input Enigma string to parse. </td></tr>
+    <tr><td class="paramname">onText</td><td>The handler for when font styling changes. </td></tr>
+    <tr><td class="paramname">onInsert</td><td>The handler to substitute text for an insert. </td></tr>
+    <tr><td class="paramname">options</td><td>Parsing options. </td></tr>
+    <tr><td class="paramname">parsingContext</td><td>Generally, only functions internal to musxdom should provide this. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if parsing completed, false if aborted by the <code>onText</code> function. </dd></dl>
+
+</div>
+</div>
+<a id="a2d82cae64c948d4a870a75db2b239f00" name="a2d82cae64c948d4a870a75db2b239f00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d82cae64c948d4a870a75db2b239f00">&#9670;&#160;</a></span>parseStyleCommand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::util::EnigmaString::parseStyleCommand </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>components</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmusx_1_1util_1_1EnigmaStyles.html">EnigmaStyles</a> &amp;&#160;</td>
+          <td class="paramname"><em>styles</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Incorporates an enigma font insert into the supplied <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">dom::FontInfo</a> instance. </p>
+<p>Enigma font inserts are</p><ul>
+<li>one of the font identifying inserts, such as <code>^font</code>, <code>fontid</code>, etc. (See <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d">startsWithFontCommand</a>.)</li>
 <li><code>^size</code> specifies the font size in points.</li>
 <li><code>^nfx</code> specifies a bit mask of style properties. These are resolved with <a class="el" href="classmusx_1_1dom_1_1FontInfo.html#ab482bb76fdb37df80d5eba5a8b0006b0">dom::FontInfo::setEnigmaStyles</a>. </li>
 </ul>

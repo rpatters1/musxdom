@@ -125,13 +125,13 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>MultiStaffInstrumentGroup</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:adead5f9640da743c937a0cd1251d96dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:adead5f9640da743c937a0cd1251d96dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6fed94807f68095255382322aa45565" id="r_ac6fed94807f68095255382322aa45565"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">Staff</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#ac6fed94807f68095255382322aa45565">getStaffAtIndex</a> (size_t x) const</td></tr>
-<tr class="memdesc:ac6fed94807f68095255382322aa45565"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the staff at the index position or null if out of range or not found.  <br /></td></tr>
-<tr class="separator:ac6fed94807f68095255382322aa45565"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b4d81824eec9f8c7f2b075201e9bdc8" id="r_a5b4d81824eec9f8c7f2b075201e9bdc8"><td class="memItemLeft" align="right" valign="top"><a id="a5b4d81824eec9f8c7f2b075201e9bdc8" name="a5b4d81824eec9f8c7f2b075201e9bdc8"></a>
-std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">Staff</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFirstStaff</b> () const</td></tr>
-<tr class="memdesc:a5b4d81824eec9f8c7f2b075201e9bdc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first staff (with integrity check) <br /></td></tr>
-<tr class="separator:a5b4d81824eec9f8c7f2b075201e9bdc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ea274c629e817edcf92798516f20b26" id="r_a3ea274c629e817edcf92798516f20b26"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">Staff</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#a3ea274c629e817edcf92798516f20b26">getStaffInstanceAtIndex</a> (size_t x) const</td></tr>
+<tr class="memdesc:a3ea274c629e817edcf92798516f20b26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the staff instance (without any staff styles applied) at the index position or null if out of range or not found.  <br /></td></tr>
+<tr class="separator:a3ea274c629e817edcf92798516f20b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada96b24c403a268ba01128256355228a" id="r_ada96b24c403a268ba01128256355228a"><td class="memItemLeft" align="right" valign="top"><a id="ada96b24c403a268ba01128256355228a" name="ada96b24c403a268ba01128256355228a"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">Staff</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFirstStaffInstance</b> () const</td></tr>
+<tr class="memdesc:ada96b24c403a268ba01128256355228a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first staff instance without any staff styles applied (with integrity check) <br /></td></tr>
+<tr class="separator:ada96b24c403a268ba01128256355228a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adefa2e55c11c3fb5293254e23f7c21f4" id="r_adefa2e55c11c3fb5293254e23f7c21f4"><td class="memItemLeft" align="right" valign="top"><a id="adefa2e55c11c3fb5293254e23f7c21f4" name="adefa2e55c11c3fb5293254e23f7c21f4"></a>
 std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexOf</b> (<a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> staffId) const</td></tr>
 <tr class="memdesc:adefa2e55c11c3fb5293254e23f7c21f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the input staffId or std::nullopt if not found. <br /></td></tr>
@@ -309,33 +309,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>We may need to search for an overlapping group even if this result is valid, but for now we only search if it is not. </dd></dl>
-
-</div>
-</div>
-<a id="ac6fed94807f68095255382322aa45565" name="ac6fed94807f68095255382322aa45565"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6fed94807f68095255382322aa45565">&#9670;&#160;</a></span>getStaffAtIndex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; musx::dom::others::MultiStaffInstrumentGroup::getStaffAtIndex </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>x</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the staff at the index position or null if out of range or not found. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">x</td><td>the 0-based index to find </td></tr>
-  </table>
-  </dd>
-</dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>We may need to search for an overlapping group even if this result is valid, but for now we only search if it is not. </dd></dl>
 
 </div>
 </div>
@@ -359,6 +333,32 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forPartId</td><td>The part for which to get the group. Pass SCORE_PARTID for the score. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3ea274c629e817edcf92798516f20b26" name="a3ea274c629e817edcf92798516f20b26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ea274c629e817edcf92798516f20b26">&#9670;&#160;</a></span>getStaffInstanceAtIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; musx::dom::others::MultiStaffInstrumentGroup::getStaffInstanceAtIndex </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the staff instance (without any staff styles applied) at the index position or null if out of range or not found. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>the 0-based index to find </td></tr>
   </table>
   </dd>
 </dl>

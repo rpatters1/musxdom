@@ -121,22 +121,9 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1Note.html',''); in
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ac6c4b810183b6ae6695ea7856a24632e" id="r_ac6c4b810183b6ae6695ea7856a24632e"><td class="memItemLeft" align="right" valign="top"><a id="ac6c4b810183b6ae6695ea7856a24632e" name="ac6c4b810183b6ae6695ea7856a24632e"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">NoteName</a> : int { <br />
-&#160;&#160;<b>C</b> = 0
-, <b>D</b> = 1
-, <b>E</b> = 2
-, <b>F</b> = 3
-, <br />
-&#160;&#160;<b>G</b> = 4
-, <b>A</b> = 5
-, <b>B</b> = 6
-<br />
- }</td></tr>
-<tr class="memdesc:ac6c4b810183b6ae6695ea7856a24632e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The available note names, in array order. <br /></td></tr>
-<tr class="separator:ac6c4b810183b6ae6695ea7856a24632e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37aaf7b9c3eb13027cfe09da150d2c71" id="r_a37aaf7b9c3eb13027cfe09da150d2c71"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a37aaf7b9c3eb13027cfe09da150d2c71">NoteProperties</a> = std::tuple&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">Note::NoteName</a>, int, int, int &gt;</td></tr>
-<tr class="memdesc:a37aaf7b9c3eb13027cfe09da150d2c71"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> properites. A tuple containing:  <br /></td></tr>
-<tr class="separator:a37aaf7b9c3eb13027cfe09da150d2c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbde1ac182d8dc432c6aab9a8c08cf68" id="r_abbde1ac182d8dc432c6aab9a8c08cf68"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">NoteProperties</a> = std::tuple&lt; <a class="el" href="namespacemusic__theory.html#acb68e55d250cfd1ba7a7d5ca0bcbb869">music_theory::NoteName</a>, int, int, int &gt;</td></tr>
+<tr class="memdesc:abbde1ac182d8dc432c6aab9a8c08cf68"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> properites. A tuple containing:  <br /></td></tr>
+<tr class="separator:abbde1ac182d8dc432c6aab9a8c08cf68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
 <tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
 , <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
@@ -162,7 +149,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a70cff35a0297f05a6a7bf5157e0609d6" id="r_a70cff35a0297f05a6a7bf5157e0609d6"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a70cff35a0297f05a6a7bf5157e0609d6">calcDefaultEnharmonic</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key) const</td></tr>
 <tr class="memdesc:a70cff35a0297f05a6a7bf5157e0609d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true.  <br /></td></tr>
 <tr class="separator:a70cff35a0297f05a6a7bf5157e0609d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a871b0d6010606935b3e195d9eb9060b9" id="r_a871b0d6010606935b3e195d9eb9060b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#a37aaf7b9c3eb13027cfe09da150d2c71">NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a871b0d6010606935b3e195d9eb9060b9">calcNoteProperties</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeySignature::KeyContext</a> ctx, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex, const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff=nullptr, bool respellEnharmonic=false) const</td></tr>
+<tr class="memitem:a871b0d6010606935b3e195d9eb9060b9" id="r_a871b0d6010606935b3e195d9eb9060b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a871b0d6010606935b3e195d9eb9060b9">calcNoteProperties</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeySignature::KeyContext</a> ctx, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex, const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff=nullptr, bool respellEnharmonic=false) const</td></tr>
 <tr class="memdesc:a871b0d6010606935b3e195d9eb9060b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override.  <br /></td></tr>
 <tr class="separator:a871b0d6010606935b3e195d9eb9060b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36dc7428581bf94502b9e3a8ab2f0db1" id="r_a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a36dc7428581bf94502b9e3a8ab2f0db1">requireAllFields</a> () const override</td></tr>
@@ -283,14 +270,14 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Represents a single note element in an entry. </p>
 <p>This class is identified by the XML node name "note". </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a37aaf7b9c3eb13027cfe09da150d2c71" name="a37aaf7b9c3eb13027cfe09da150d2c71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37aaf7b9c3eb13027cfe09da150d2c71">&#9670;&#160;</a></span>NoteProperties</h2>
+<a id="abbde1ac182d8dc432c6aab9a8c08cf68" name="abbde1ac182d8dc432c6aab9a8c08cf68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbde1ac182d8dc432c6aab9a8c08cf68">&#9670;&#160;</a></span>NoteProperties</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classmusx_1_1dom_1_1Note.html#a37aaf7b9c3eb13027cfe09da150d2c71">musx::dom::Note::NoteProperties</a> =  std::tuple&lt;<a class="el" href="classmusx_1_1dom_1_1Note.html#ac6c4b810183b6ae6695ea7856a24632e">Note::NoteName</a>, int, int, int&gt;</td>
+          <td class="memname">using <a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">musx::dom::Note::NoteProperties</a> =  std::tuple&lt;<a class="el" href="namespacemusic__theory.html#acb68e55d250cfd1ba7a7d5ca0bcbb869">music_theory::NoteName</a>, int, int, int&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -345,7 +332,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1Note.html#a37aaf7b9c3eb13027cfe09da150d2c71">Note::NoteProperties</a> musx::dom::Note::calcNoteProperties </td>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a> musx::dom::Note::calcNoteProperties </td>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>key</em>, </td>
@@ -396,7 +383,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classmusx_1_1dom_1_1Note.html#a37aaf7b9c3eb13027cfe09da150d2c71" title="Note properites. A tuple containing:">NoteProperties</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68" title="Note properites. A tuple containing:">NoteProperties</a> </dd></dl>
 
 </div>
 </div>

@@ -9,7 +9,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcGlobalElapsedDuration", "classmusx_1_1dom_1_1EntryInfoPtr.html#a1445f0a573b9b1751c2c8dd5d3092dee", null ],
     [ "calcIsBeamedRestWorkaroud", "classmusx_1_1dom_1_1EntryInfoPtr.html#ad82e20770828b57b9c8dad206e9e92dd", null ],
     [ "calcIsBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#ab127dfae15a3bb5c27b76cbd55c812a1", null ],
-    [ "calcIsCue", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0bdf67863c1a57e99ee426cbb5844d28", null ],
+    [ "calcIsCue", "classmusx_1_1dom_1_1EntryInfoPtr.html#a933091a4840ecd2596b70069a11201ef", null ],
     [ "calcIsFeatheredBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#afe092ac6f686263ca7b26d6ca0d4b6ee", null ],
     [ "calcIsFullMeasureRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#aee6b5524df00cd1f2bbb41ebf760b58d", null ],
     [ "calcLowestBeamEnd", "classmusx_1_1dom_1_1EntryInfoPtr.html#a732360a72b106e98b7735f3991b9e173", null ],

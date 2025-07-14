@@ -1,6 +1,8 @@
 var classmusx_1_1dom_1_1details_1_1MeasureTextAssign =
 [
     [ "MeasureTextAssign", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html#a7923c379a36a1d6719403b027cb06c8d", null ],
+    [ "getRawTextCtx", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html#a36f118ea6ca32dca678274d002d320db", null ],
+    [ "getTextBlock", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html#a28086ba606e42f7b9c737fddc1a59954", null ],
     [ "block", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html#a9ca1a7c56c957375683c7ffc2f8dc708", null ],
     [ "hidden", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html#a9ecd4ac7bbed08a9e4932a97bf061b64", null ],
     [ "xDispEdu", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html#aed0494c96e8234ea3164c5553e23d322", null ],

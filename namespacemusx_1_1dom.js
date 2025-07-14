@@ -841,7 +841,8 @@ var namespacemusx_1_1dom =
     [ "NoteNumber", "namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be", null ],
     [ "OptionsPoolPtr", "namespacemusx_1_1dom.html#a970ba333257a18f1f81abb356b3e6727", null ],
     [ "OthersPoolPtr", "namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e", null ],
-    [ "PercussionNoteType", "namespacemusx_1_1dom.html#a510f4a257351149a50b4d5b4cb43ad94", null ],
+    [ "PageCmper", "namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2", null ],
+    [ "PercussionNoteTypeId", "namespacemusx_1_1dom.html#a2158a5e042da1a8511f2e3b604afaa7b", null ],
     [ "SystemCmper", "namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237", null ],
     [ "TextsPoolPtr", "namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4", null ],
     [ "DefaultClefType", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67f", [
@@ -894,6 +895,7 @@ var namespacemusx_1_1dom =
     [ "EFIX_PER_SPACE", "namespacemusx_1_1dom.html#a32cf484712b32f0ca4834fd858e5f193", null ],
     [ "EVPU_PER_INCH", "namespacemusx_1_1dom.html#ae7da4591a9b109eadbf985a0589a1251", null ],
     [ "EVPU_PER_MM", "namespacemusx_1_1dom.html#a8f5ab26d6d770883e5648d954ff0dc9b", null ],
+    [ "EVPU_PER_POINT", "namespacemusx_1_1dom.html#a1418dfcdc1da992ab8631ab27b68b160", null ],
     [ "EVPU_PER_SPACE", "namespacemusx_1_1dom.html#a0fbe9bcf04cd6e9acfcb562fac1f6f25", null ],
     [ "MAX_ALTERATIONS", "namespacemusx_1_1dom.html#a077fc40e1a52fb0aa59a78a138133ae5", null ],
     [ "MAX_CUE_PERCENTAGE", "namespacemusx_1_1dom.html#a31c92a4751443e096b5a99100828f6e0", null ],

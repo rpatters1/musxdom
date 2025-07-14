@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['dashcontourslurdown_0',['DashContourSlurDown',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa92f5126779061f17491012263f1f5f3e',1,'musx::dom::others::SmartShape']]],
-  ['dashcontourslurup_1',['DashContourSlurUp',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa8df5d07c11054a1f138455134fe087e4',1,'musx::dom::others::SmartShape']]],
-  ['dashcontouslurauto_2',['DashContouSlurAuto',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa4ed0447d87781cf7c575fa10573baa38',1,'musx::dom::others::SmartShape']]],
+  ['dashcontourslurauto_0',['DashContourSlurAuto',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa8a585cb7b8efe46846a5c4423ecb3327',1,'musx::dom::others::SmartShape']]],
+  ['dashcontourslurdown_1',['DashContourSlurDown',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa92f5126779061f17491012263f1f5f3e',1,'musx::dom::others::SmartShape']]],
+  ['dashcontourslurup_2',['DashContourSlurUp',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa8df5d07c11054a1f138455134fe087e4',1,'musx::dom::others::SmartShape']]],
   ['dashed_3',['Dashed',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117aeb656e41b6da91494775ecf47a51da91',1,'musx::dom::others::Measure']]],
   ['dashline_4',['DashLine',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa35d61a332ecd5c4157f32d6dd86a29d3',1,'musx::dom::others::SmartShape']]],
   ['dashlinedown_5',['DashLineDown',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6faa2117e7cfd2ead99b786add5845040c1',1,'musx::dom::others::SmartShape']]],
@@ -24,6 +24,7 @@ var searchData=
   ['diffnoteheads_21',['DiffNoteheads',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a96ca65be0c05687b0533cc64bd1fcd49a4cf1776f846a94e9559fd58a0fe4bda2',1,'musx::dom::options::MusicSpacingOptions']]],
   ['dorian_22',['Dorian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ceab8dd79e4a88047dee0f3bf56dcb37ca8',1,'music_theory']]],
   ['double_23',['Double',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117ad909d38d705ce75386dd86e611a82f5b',1,'musx::dom::others::Measure']]],
-  ['dump_24',['Dump',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaeba2f52f64e17ff27e6c5cfefd7e32fa',1,'musx::dom::others']]],
-  ['dynamics_25',['Dynamics',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa405d9a69e5139b9df0df6b66e18fc9e2',1,'musx::dom::others::MarkingCategory']]]
+  ['drawchar_24',['DrawChar',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#ad608f81b2142073a05da65fc4454a768ade9a94c8c7949a8fc462d3bdf33a76cc',1,'musx::dom::others::ShapeDef']]],
+  ['dump_25',['Dump',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaeba2f52f64e17ff27e6c5cfefd7e32fa',1,'musx::dom::others']]],
+  ['dynamics_26',['Dynamics',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa405d9a69e5139b9df0df6b66e18fc9e2',1,'musx::dom::others::MarkingCategory']]]
 ];

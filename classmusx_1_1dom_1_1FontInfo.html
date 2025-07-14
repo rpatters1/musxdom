@@ -120,6 +120,13 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1FontInfo.html','')
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a0b5a0f5843f363230f090f76325495ae" id="r_a0b5a0f5843f363230f090f76325495ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html#a0b5a0f5843f363230f090f76325495ae">FontInfo</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, bool sizeIsPercent=false)</td></tr>
+<tr class="memdesc:a0b5a0f5843f363230f090f76325495ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor  <br /></td></tr>
+<tr class="separator:a0b5a0f5843f363230f090f76325495ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab118e9ff06bed0ce3aab78b76c093250" id="r_ab118e9ff06bed0ce3aab78b76c093250"><td class="memItemLeft" align="right" valign="top"><a id="ab118e9ff06bed0ce3aab78b76c093250" name="ab118e9ff06bed0ce3aab78b76c093250"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getSizeIsPercent</b> () const</td></tr>
+<tr class="memdesc:ab118e9ff06bed0ce3aab78b76c093250"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, the size of this font is calculated as a percent of the preceding font size (in an Enigma string) <br /></td></tr>
+<tr class="separator:ab118e9ff06bed0ce3aab78b76c093250"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae053f64458e79327a569d25bfd3b814" id="r_aae053f64458e79327a569d25bfd3b814"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html#aae053f64458e79327a569d25bfd3b814">getName</a> () const</td></tr>
 <tr class="memdesc:aae053f64458e79327a569d25bfd3b814"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the font.  <br /></td></tr>
 <tr class="separator:aae053f64458e79327a569d25bfd3b814"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -127,8 +134,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7342806d12d9d725edcb9b897f784e07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the id of the font from a string name.  <br /></td></tr>
 <tr class="separator:a7342806d12d9d725edcb9b897f784e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab482bb76fdb37df80d5eba5a8b0006b0" id="r_ab482bb76fdb37df80d5eba5a8b0006b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html#ab482bb76fdb37df80d5eba5a8b0006b0">setEnigmaStyles</a> (uint16_t efx)</td></tr>
-<tr class="memdesc:ab482bb76fdb37df80d5eba5a8b0006b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set style effects based on a bitmask. This is mainly useful for capturing text styles from enigma strings. (See <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a589d43bf91b536f31f5b30fb3f655da9">musx::util::EnigmaString::parseFontCommand</a>.)  <br /></td></tr>
+<tr class="memdesc:ab482bb76fdb37df80d5eba5a8b0006b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set style effects based on a bitmask. This is mainly useful for capturing text styles from enigma strings. (See <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a2d82cae64c948d4a870a75db2b239f00">musx::util::EnigmaString::parseStyleCommand</a>.)  <br /></td></tr>
 <tr class="separator:ab482bb76fdb37df80d5eba5a8b0006b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47ab1cf66d4620d3c0ba84004ffcaef3" id="r_a47ab1cf66d4620d3c0ba84004ffcaef3"><td class="memItemLeft" align="right" valign="top"><a id="a47ab1cf66d4620d3c0ba84004ffcaef3" name="a47ab1cf66d4620d3c0ba84004ffcaef3"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getEnigmaStyles</b> () const</td></tr>
+<tr class="memdesc:a47ab1cf66d4620d3c0ba84004ffcaef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the font styles as an nfx bitmask. <br /></td></tr>
+<tr class="separator:a47ab1cf66d4620d3c0ba84004ffcaef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcb9621f9e84005074ce09382b7ee865" id="r_adcb9621f9e84005074ce09382b7ee865"><td class="memItemLeft" align="right" valign="top"><a id="adcb9621f9e84005074ce09382b7ee865" name="adcb9621f9e84005074ce09382b7ee865"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsDefaultMusic</b> () const</td></tr>
 <tr class="memdesc:adcb9621f9e84005074ce09382b7ee865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this is the default music font. <br /></td></tr>
@@ -145,9 +156,6 @@ std::optional&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" 
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSMuFL</b> () const</td></tr>
 <tr class="memdesc:aa2673e6e95e16b3d5cf524dfa2ccc979"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether this is a SMuFL font. <br /></td></tr>
 <tr class="separator:aa2673e6e95e16b3d5cf524dfa2ccc979"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace51e53d99e83c6ae95d2b89fd1733d7" id="r_ace51e53d99e83c6ae95d2b89fd1733d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html#ace51e53d99e83c6ae95d2b89fd1733d7">CommonClassBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document)</td></tr>
-<tr class="memdesc:ace51e53d99e83c6ae95d2b89fd1733d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html" title="Base class for classes that are commonly used among others, details, entries, and/or texts....">CommonClassBase</a> object.  <br /></td></tr>
-<tr class="separator:ace51e53d99e83c6ae95d2b89fd1733d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1CommonClassBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1CommonClassBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html">musx::dom::CommonClassBase</a></td></tr>
 <tr class="memitem:ace51e53d99e83c6ae95d2b89fd1733d7 inherit pub_methods_classmusx_1_1dom_1_1CommonClassBase" id="r_ace51e53d99e83c6ae95d2b89fd1733d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html#ace51e53d99e83c6ae95d2b89fd1733d7">CommonClassBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document)</td></tr>
 <tr class="memdesc:ace51e53d99e83c6ae95d2b89fd1733d7 inherit pub_methods_classmusx_1_1dom_1_1CommonClassBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html" title="Base class for classes that are commonly used among others, details, entries, and/or texts....">CommonClassBase</a> object.  <br /></td></tr>
@@ -197,7 +205,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a7b5eba0c729498d941368d97ee6fe51b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add260a29c5ba23bf36e73c6604f40809" id="r_add260a29c5ba23bf36e73c6604f40809"><td class="memItemLeft" align="right" valign="top"><a id="add260a29c5ba23bf36e73c6604f40809" name="add260a29c5ba23bf36e73c6604f40809"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>fontSize</b> {}</td></tr>
-<tr class="memdesc:add260a29c5ba23bf36e73c6604f40809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Font size. <br /></td></tr>
+<tr class="memdesc:add260a29c5ba23bf36e73c6604f40809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Font size or percent (where 100 is 100%) of preceding font size. (See <a class="el" href="classmusx_1_1dom_1_1FontInfo.html#ab118e9ff06bed0ce3aab78b76c093250" title="If true, the size of this font is calculated as a percent of the preceding font size (in an Enigma st...">getSizeIsPercent</a>.) <br /></td></tr>
 <tr class="separator:add260a29c5ba23bf36e73c6604f40809"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af119fcbd3af20651f9df7f6faebe0b55" id="r_af119fcbd3af20651f9df7f6faebe0b55"><td class="memItemLeft" align="right" valign="top"><a id="af119fcbd3af20651f9df7f6faebe0b55" name="af119fcbd3af20651f9df7f6faebe0b55"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>bold</b> {}</td></tr>
@@ -223,6 +231,36 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>absolute</b> {}</td><
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hidden</b> {}</td></tr>
 <tr class="memdesc:adbc3f5da67f3aa51ca0717573b87bcee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hidden effect. <br /></td></tr>
 <tr class="separator:adbc3f5da67f3aa51ca0717573b87bcee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Enigma style bitmask constants</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>These are used to encode and decode style effects in Enigma strings. </p>
+</div></td></tr>
+<tr class="memitem:a5e88e601b57112f5bb710ceae7e3969b" id="r_a5e88e601b57112f5bb710ceae7e3969b"><td class="memItemLeft" align="right" valign="top"><a id="a5e88e601b57112f5bb710ceae7e3969b" name="a5e88e601b57112f5bb710ceae7e3969b"></a>
+static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>EnigmaStyleBold</b> = 0x01</td></tr>
+<tr class="memdesc:a5e88e601b57112f5bb710ceae7e3969b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bold style bit. <br /></td></tr>
+<tr class="separator:a5e88e601b57112f5bb710ceae7e3969b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0456937f74d10928d9b3bd4e81fda279" id="r_a0456937f74d10928d9b3bd4e81fda279"><td class="memItemLeft" align="right" valign="top"><a id="a0456937f74d10928d9b3bd4e81fda279" name="a0456937f74d10928d9b3bd4e81fda279"></a>
+static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>EnigmaStyleItalic</b> = 0x02</td></tr>
+<tr class="memdesc:a0456937f74d10928d9b3bd4e81fda279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Italic style bit. <br /></td></tr>
+<tr class="separator:a0456937f74d10928d9b3bd4e81fda279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a412b09d57738b50fd812e7949d32a71a" id="r_a412b09d57738b50fd812e7949d32a71a"><td class="memItemLeft" align="right" valign="top"><a id="a412b09d57738b50fd812e7949d32a71a" name="a412b09d57738b50fd812e7949d32a71a"></a>
+static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>EnigmaStyleUnderline</b> = 0x04</td></tr>
+<tr class="memdesc:a412b09d57738b50fd812e7949d32a71a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Underline style bit. <br /></td></tr>
+<tr class="separator:a412b09d57738b50fd812e7949d32a71a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9bea1edc3edc0e47e27bbe4426458e" id="r_a0c9bea1edc3edc0e47e27bbe4426458e"><td class="memItemLeft" align="right" valign="top"><a id="a0c9bea1edc3edc0e47e27bbe4426458e" name="a0c9bea1edc3edc0e47e27bbe4426458e"></a>
+static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>EnigmaStyleStrikeout</b> = 0x20</td></tr>
+<tr class="memdesc:a0c9bea1edc3edc0e47e27bbe4426458e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Strikeout style bit. <br /></td></tr>
+<tr class="separator:a0c9bea1edc3edc0e47e27bbe4426458e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59ecfb293044cafef2fd6f7422d99953" id="r_a59ecfb293044cafef2fd6f7422d99953"><td class="memItemLeft" align="right" valign="top"><a id="a59ecfb293044cafef2fd6f7422d99953" name="a59ecfb293044cafef2fd6f7422d99953"></a>
+static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>EnigmaStyleAbsolute</b> = 0x40</td></tr>
+<tr class="memdesc:a59ecfb293044cafef2fd6f7422d99953"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fixed-size (absolute) bit. <br /></td></tr>
+<tr class="separator:a59ecfb293044cafef2fd6f7422d99953"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a041bdb04ad3df3ae5ce01f5c34f0a352" id="r_a041bdb04ad3df3ae5ce01f5c34f0a352"><td class="memItemLeft" align="right" valign="top"><a id="a041bdb04ad3df3ae5ce01f5c34f0a352" name="a041bdb04ad3df3ae5ce01f5c34f0a352"></a>
+static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>EnigmaStyleHidden</b> = 0x80</td></tr>
+<tr class="memdesc:a041bdb04ad3df3ae5ce01f5c34f0a352"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hidden text bit. <br /></td></tr>
+<tr class="separator:a041bdb04ad3df3ae5ce01f5c34f0a352"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -273,7 +311,53 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the default font settings for a particular element type. </p>
 <p>The <a class="el" href="classmusx_1_1dom_1_1FontInfo.html" title="Represents the default font settings for a particular element type.">FontInfo</a> struct holds information about font properties, such as the font ID, size, and styles like bold, italic, underline, strikeout, fixed size, and visibility. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a0b5a0f5843f363230f090f76325495ae" name="a0b5a0f5843f363230f090f76325495ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b5a0f5843f363230f090f76325495ae">&#9670;&#160;</a></span>FontInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">musx::dom::FontInfo::FontInfo </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>sizeIsPercent</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>constructor </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>the document containing the font </td></tr>
+    <tr><td class="paramname">sizeIsPercent</td><td>if true, the size is a percent relative to the preceding font size in an Enigma string. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9ebd4ba4c280bff6f1561a4063b1b8aa" name="a9ebd4ba4c280bff6f1561a4063b1b8aa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9ebd4ba4c280bff6f1561a4063b1b8aa">&#9670;&#160;</a></span>calcSMuFLPaths()</h2>
 
@@ -299,40 +383,6 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 
 <p>Returns the standard SMuFL font folder. </p>
 <dl class="section return"><dt>Returns</dt><dd>a std::vector&lt;std::filesystem::path&gt; where element 0 is the user path and element 1 is the system path </dd></dl>
-
-</div>
-</div>
-<a id="ace51e53d99e83c6ae95d2b89fd1733d7" name="ace51e53d99e83c6ae95d2b89fd1733d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace51e53d99e83c6ae95d2b89fd1733d7">&#9670;&#160;</a></span>CommonClassBase()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">musx::dom::CommonClassBase::CommonClassBase </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;&#160;</td>
-          <td class="paramname"><em>document</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructs a <a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html" title="Base class for classes that are commonly used among others, details, entries, and/or texts....">CommonClassBase</a> object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">document</td><td>A weak pointer to the parent document. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -380,7 +430,7 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 </table>
 </div><div class="memdoc">
 
-<p>Set style effects based on a bitmask. This is mainly useful for capturing text styles from enigma strings. (See <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a589d43bf91b536f31f5b30fb3f655da9">musx::util::EnigmaString::parseFontCommand</a>.) </p>
+<p>Set style effects based on a bitmask. This is mainly useful for capturing text styles from enigma strings. (See <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a2d82cae64c948d4a870a75db2b239f00">musx::util::EnigmaString::parseStyleCommand</a>.) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">efx</td><td>A 16-bit integer representing style effects with specific bit masks. </td></tr>

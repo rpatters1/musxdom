@@ -123,6 +123,16 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ClefDef</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document)</td></tr>
 <tr class="memdesc:ae0847a4c98d9fa5597528d2d6b1af81b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the constructor <br /></td></tr>
 <tr class="separator:ae0847a4c98d9fa5597528d2d6b1af81b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a918506ae66168708713d2bce24fa89" id="r_a1a918506ae66168708713d2bce24fa89"><td class="memItemLeft" align="right" valign="top"><a id="a1a918506ae66168708713d2bce24fa89" name="a1a918506ae66168708713d2bce24fa89"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBlank</b> () const</td></tr>
+<tr class="memdesc:a1a918506ae66168708713d2bce24fa89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this is a blank clef. <br /></td></tr>
+<tr class="separator:a1a918506ae66168708713d2bce24fa89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34342cd84e8d9bf3109f0741ac5f91c5" id="r_a34342cd84e8d9bf3109f0741ac5f91c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions.html#a38811b8a9d25c0d11b2ac33b5f43a540">ClefInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a34342cd84e8d9bf3109f0741ac5f91c5">calcInfo</a> (const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;currStaff=nullptr) const</td></tr>
+<tr class="memdesc:a34342cd84e8d9bf3109f0741ac5f91c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates and returns the clef information.  <br /></td></tr>
+<tr class="separator:a34342cd84e8d9bf3109f0741ac5f91c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23776d76607f75144c6171bf059dbaff" id="r_a23776d76607f75144c6171bf059dbaff"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">FontInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a23776d76607f75144c6171bf059dbaff">calcFont</a> () const</td></tr>
+<tr class="memdesc:a23776d76607f75144c6171bf059dbaff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the font that applies to this clef, based on the options in <a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#ae0847a4c98d9fa5597528d2d6b1af81b" title="the constructor">ClefDef</a>.  <br /></td></tr>
+<tr class="separator:a23776d76607f75144c6171bf059dbaff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
 <tr class="memitem:ae20dd597127cd4a1bd8b8aa53c2ee08e inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ae20dd597127cd4a1bd8b8aa53c2ee08e"><td class="memItemLeft" align="right" valign="top">
 virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexcept(false)=default</td></tr>
@@ -164,16 +174,16 @@ static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa2ef51da199d9528e46156b19efcb928" id="r_aa2ef51da199d9528e46156b19efcb928"><td class="memItemLeft" align="right" valign="top"><a id="aa2ef51da199d9528e46156b19efcb928" name="aa2ef51da199d9528e46156b19efcb928"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>middleCPos</b> {}</td></tr>
-<tr class="memdesc:aa2ef51da199d9528e46156b19efcb928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Staff position of middle-C for this clef (from top staffline). (xml node is <code>&lt;adjust&gt;</code>.) <br /></td></tr>
+<tr class="memdesc:aa2ef51da199d9528e46156b19efcb928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Staff position of middle-C for this clef from reference staffline (usually the top). (xml node is <code>&lt;adjust&gt;</code>.) <br /></td></tr>
 <tr class="separator:aa2ef51da199d9528e46156b19efcb928"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a245559bc1ca2e893dd0dd86217e6d9c1" id="r_a245559bc1ca2e893dd0dd86217e6d9c1"><td class="memItemLeft" align="right" valign="top"><a id="a245559bc1ca2e893dd0dd86217e6d9c1" name="a245559bc1ca2e893dd0dd86217e6d9c1"></a>
 char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>clefChar</b> {}</td></tr>
 <tr class="memdesc:a245559bc1ca2e893dd0dd86217e6d9c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">UTF-32 character code for the clef symbol. <br /></td></tr>
 <tr class="separator:a245559bc1ca2e893dd0dd86217e6d9c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaaa246ecebe2a72bfc54338e953383ea" id="r_aaaa246ecebe2a72bfc54338e953383ea"><td class="memItemLeft" align="right" valign="top"><a id="aaaa246ecebe2a72bfc54338e953383ea" name="aaaa246ecebe2a72bfc54338e953383ea"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>staffPositon</b> {}</td></tr>
-<tr class="memdesc:aaaa246ecebe2a72bfc54338e953383ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is <code>&lt;clefYDisp&gt;</code>) <br /></td></tr>
-<tr class="separator:aaaa246ecebe2a72bfc54338e953383ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adec0cadc09455b403beb2fec39a8f105" id="r_adec0cadc09455b403beb2fec39a8f105"><td class="memItemLeft" align="right" valign="top"><a id="adec0cadc09455b403beb2fec39a8f105" name="adec0cadc09455b403beb2fec39a8f105"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>staffPosition</b> {}</td></tr>
+<tr class="memdesc:adec0cadc09455b403beb2fec39a8f105"><td class="mdescLeft">&#160;</td><td class="mdescRight">Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is <code>&lt;clefYDisp&gt;</code>) <br /></td></tr>
+<tr class="separator:adec0cadc09455b403beb2fec39a8f105"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a258831024841fc8f5ede65dc0db8a2f2" id="r_a258831024841fc8f5ede65dc0db8a2f2"><td class="memItemLeft" align="right" valign="top"><a id="a258831024841fc8f5ede65dc0db8a2f2" name="a258831024841fc8f5ede65dc0db8a2f2"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a3e452e4045d32c7e8a6acab66adf8e75">Efix</a>&#160;</td><td class="memItemRight" valign="bottom"><b>baselineAdjust</b> {}</td></tr>
 <tr class="memdesc:a258831024841fc8f5ede65dc0db8a2f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Additional baseline adjustment in Efix. (xml node is <code>&lt;baseAdjust&gt;</code>) <br /></td></tr>
@@ -235,7 +245,61 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a single clef definition. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a23776d76607f75144c6171bf059dbaff" name="a23776d76607f75144c6171bf059dbaff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23776d76607f75144c6171bf059dbaff">&#9670;&#160;</a></span>calcFont()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">FontInfo</a> &gt; musx::dom::options::ClefOptions::ClefDef::calcFont </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the font that applies to this clef, based on the options in <a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#ae0847a4c98d9fa5597528d2d6b1af81b" title="the constructor">ClefDef</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>A shared pointer to the font instance used by this <a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#ae0847a4c98d9fa5597528d2d6b1af81b" title="the constructor">ClefDef</a>. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if not found. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a34342cd84e8d9bf3109f0741ac5f91c5" name="a34342cd84e8d9bf3109f0741ac5f91c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34342cd84e8d9bf3109f0741ac5f91c5">&#9670;&#160;</a></span>calcInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions.html#a38811b8a9d25c0d11b2ac33b5f43a540">options::ClefOptions::ClefInfo</a> musx::dom::options::ClefOptions::ClefDef::calcInfo </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>currStaff</em> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates and returns the clef information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">currStaff</td><td>For most accurate results, pass the current <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> instance. If you omit this parameter, percussion and tab staves are identified based on the Finale SMuFL default file settings. If you supply it, staves with a notation style of tablature always return a tab clef and staves with a notation style of percussion always return a percussion clef. Normal notation style detects clefs as if <code>currStaff</code> had not been supplied. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>See <a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions.html#a38811b8a9d25c0d11b2ac33b5f43a540" title="Information about a ClefDef consisting of its clef type and octave transposition. For example,...">ClefInfo</a>. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

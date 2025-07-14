@@ -268,6 +268,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>InstCmper</b> = int1
 using&#160;</td><td class="memItemRight" valign="bottom"><b>SystemCmper</b> = int16_t</td></tr>
 <tr class="memdesc:ada9565e4288b6e80b32971960acb0237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enigma systems Cmper (may be negative when not applicable) <br /></td></tr>
 <tr class="separator:ada9565e4288b6e80b32971960acb0237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3051df2564d9f3cae82e214142eebb2" id="r_af3051df2564d9f3cae82e214142eebb2"><td class="memItemLeft" align="right" valign="top"><a id="af3051df2564d9f3cae82e214142eebb2" name="af3051df2564d9f3cae82e214142eebb2"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>PageCmper</b> = int16_t</td></tr>
+<tr class="memdesc:af3051df2564d9f3cae82e214142eebb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enigma page Cmper (may be negative when not applicable) <br /></td></tr>
+<tr class="separator:af3051df2564d9f3cae82e214142eebb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a894a6de7cd017628a3b75a07ed40952c" id="r_a894a6de7cd017628a3b75a07ed40952c"><td class="memItemLeft" align="right" valign="top"><a id="a894a6de7cd017628a3b75a07ed40952c" name="a894a6de7cd017628a3b75a07ed40952c"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>ClefIndex</b> = uint16_t</td></tr>
 <tr class="memdesc:a894a6de7cd017628a3b75a07ed40952c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index into <a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions.html#a5c9e512196fc083b592a71aecda85653">options::ClefOptions::clefDefs</a>. <br /></td></tr>
@@ -288,8 +292,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>LayerIndex</b> = uns
 using&#160;</td><td class="memItemRight" valign="bottom"><b>BeamNumber</b> = unsigned int</td></tr>
 <tr class="memdesc:af72aa98bddad049ec18ef7858aea2168"><td class="mdescLeft">&#160;</td><td class="mdescRight">A number where 1 corresponds to the primary (8th note) beam, 2 the 16th beam, 3 the 32nd beam, etc. <br /></td></tr>
 <tr class="separator:af72aa98bddad049ec18ef7858aea2168"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a510f4a257351149a50b4d5b4cb43ad94" id="r_a510f4a257351149a50b4d5b4cb43ad94"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a510f4a257351149a50b4d5b4cb43ad94">PercussionNoteType</a> = uint16_t</td></tr>
-<tr class="separator:a510f4a257351149a50b4d5b4cb43ad94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2158a5e042da1a8511f2e3b604afaa7b" id="r_a2158a5e042da1a8511f2e3b604afaa7b"><td class="memItemLeft" align="right" valign="top"><a id="a2158a5e042da1a8511f2e3b604afaa7b" name="a2158a5e042da1a8511f2e3b604afaa7b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>PercussionNoteTypeId</b> = uint16_t</td></tr>
+<tr class="memdesc:a2158a5e042da1a8511f2e3b604afaa7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">multiple times in one layout. The rest are the "pure" note type. See <a class="el" href="structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html">percussion::PercussionNoteType</a>. <br /></td></tr>
+<tr class="separator:a2158a5e042da1a8511f2e3b604afaa7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a970ba333257a18f1f81abb356b3e6727" id="r_a970ba333257a18f1f81abb356b3e6727"><td class="memItemLeft" align="right" valign="top"><a id="a970ba333257a18f1f81abb356b3e6727" name="a970ba333257a18f1f81abb356b3e6727"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>OptionsPoolPtr</b> = std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1OptionsPool.html">OptionsPool</a> &gt;</td></tr>
 <tr class="memdesc:a970ba333257a18f1f81abb356b3e6727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared <code><a class="el" href="classmusx_1_1dom_1_1OptionsPool.html" title="A pool that manages collections of OptionsBase objects that have no Cmper value.">OptionsPool</a></code> pointer. <br /></td></tr>
@@ -407,6 +413,10 @@ constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e
 constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EVPU_PER_INCH</b> = 288.0</td></tr>
 <tr class="memdesc:ae7da4591a9b109eadbf985a0589a1251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Evpu units per inch. <br /></td></tr>
 <tr class="separator:ae7da4591a9b109eadbf985a0589a1251"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1418dfcdc1da992ab8631ab27b68b160" id="r_a1418dfcdc1da992ab8631ab27b68b160"><td class="memItemLeft" align="right" valign="top"><a id="a1418dfcdc1da992ab8631ab27b68b160" name="a1418dfcdc1da992ab8631ab27b68b160"></a>
+constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EVPU_PER_POINT</b> = 4.0</td></tr>
+<tr class="memdesc:a1418dfcdc1da992ab8631ab27b68b160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Evpu units per 72 DPI point. <br /></td></tr>
+<tr class="separator:a1418dfcdc1da992ab8631ab27b68b160"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f5ab26d6d770883e5648d954ff0dc9b" id="r_a8f5ab26d6d770883e5648d954ff0dc9b"><td class="memItemLeft" align="right" valign="top"><a id="a8f5ab26d6d770883e5648d954ff0dc9b" name="a8f5ab26d6d770883e5648d954ff0dc9b"></a>
 constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EVPU_PER_MM</b> = <a class="el" href="namespacemusx_1_1dom.html#ae7da4591a9b109eadbf985a0589a1251">EVPU_PER_INCH</a> / 25.4</td></tr>
 <tr class="memdesc:a8f5ab26d6d770883e5648d954ff0dc9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Evpu units per millimeter. <br /></td></tr>
@@ -431,23 +441,7 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_CUE_PERC
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The DOM (document object model) for musx files. </p>
 <p>classes representing the musx document </p>
-</div><h2 class="groupheader">Typedef Documentation</h2>
-<a id="a510f4a257351149a50b4d5b4cb43ad94" name="a510f4a257351149a50b4d5b4cb43ad94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a510f4a257351149a50b4d5b4cb43ad94">&#9670;&#160;</a></span>PercussionNoteType</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="namespacemusx_1_1dom.html#a510f4a257351149a50b4d5b4cb43ad94">musx::dom::PercussionNoteType</a> = typedef uint16_t</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>multiple times in one layout. The rest are the "pure" note type. Generally you do not have to worry about this unless you are looking for a known note type. </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>update this comment when we have an enum for known note types. </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a86d8f1c0b9cc21018e4d1257c193f67f" name="a86d8f1c0b9cc21018e4d1257c193f67f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86d8f1c0b9cc21018e4d1257c193f67f">&#9670;&#160;</a></span>DefaultClefType</h2>
 

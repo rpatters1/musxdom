@@ -45,7 +45,7 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
       [ "WordExtension", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa34d6e89875e45d6b7e2aa5f89bf150e2", null ],
       [ "DashContourSlurDown", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa92f5126779061f17491012263f1f5f3e", null ],
       [ "DashContourSlurUp", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa8df5d07c11054a1f138455134fe087e4", null ],
-      [ "DashContouSlurAuto", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa4ed0447d87781cf7c575fa10573baa38", null ]
+      [ "DashContourSlurAuto", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa8a585cb7b8efe46846a5c4423ecb3327", null ]
     ] ],
     [ "SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a20fcbbb1d0ad5796cbd5f9ffca84c82a", null ],
     [ "calcAppliesTo", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a43ee2d11faa58c363117cc0cdd843b7c", null ],

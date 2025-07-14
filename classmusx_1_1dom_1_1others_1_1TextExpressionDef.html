@@ -126,8 +126,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a956b0b29607bfd745671f25a408150c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f5febc4a6e826011e42406633a26b7a" id="r_a5f5febc4a6e826011e42406633a26b7a"><td class="memItemLeft" align="right" valign="top"><a id="a5f5febc4a6e826011e42406633a26b7a" name="a5f5febc4a6e826011e42406633a26b7a"></a>
 std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html">TextBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTextBlock</b> () const</td></tr>
-<tr class="memdesc:a5f5febc4a6e826011e42406633a26b7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the enclosure for this expression, or nullptr if none. <br /></td></tr>
+<tr class="memdesc:a5f5febc4a6e826011e42406633a26b7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html" title="Represents the attributes of a Finale &quot;textBlock&quot;.">TextBlock</a> for this expression, or nullptr if none. <br /></td></tr>
 <tr class="separator:a5f5febc4a6e826011e42406633a26b7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a210437df7dac644e92b3a49a5088df4c" id="r_a210437df7dac644e92b3a49a5088df4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a210437df7dac644e92b3a49a5088df4c">getRawTextCtx</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
+<tr class="memdesc:a210437df7dac644e92b3a49a5088df4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the raw text context for parsing this expression, or nullptr if none.  <br /></td></tr>
+<tr class="separator:a210437df7dac644e92b3a49a5088df4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59f3c9e067d0e73775458208617424ed" id="r_a59f3c9e067d0e73775458208617424ed"><td class="memItemLeft" align="right" valign="top"><a id="a59f3c9e067d0e73775458208617424ed" name="a59f3c9e067d0e73775458208617424ed"></a>
 std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Enclosure.html">Enclosure</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getEnclosure</b> () const</td></tr>
 <tr class="memdesc:a59f3c9e067d0e73775458208617424ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the enclosure for this expression, or nullptr if none. <br /></td></tr>
@@ -364,6 +367,33 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 <p>Constructor. </p>
 <p>Initializes all fields to their default values. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a210437df7dac644e92b3a49a5088df4c" name="a210437df7dac644e92b3a49a5088df4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a210437df7dac644e92b3a49a5088df4c">&#9670;&#160;</a></span>getRawTextCtx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a> musx::dom::others::TextExpressionDef::getRawTextCtx </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>forPartId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the raw text context for parsing this expression, or nullptr if none. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forPartId</td><td>The linked part to used for ^partname and ^totpages inserts. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

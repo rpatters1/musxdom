@@ -3,7 +3,7 @@ var classmusx_1_1dom_1_1EntryFrame =
     [ "TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo" ],
     [ "EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html#a8f25e673cfcc592f068b55d1368855bc", null ],
     [ "addEntry", "classmusx_1_1dom_1_1EntryFrame.html#a6352800f5a3791aa5cc988867ac1a5ad", null ],
-    [ "calcIsCueFrame", "classmusx_1_1dom_1_1EntryFrame.html#a8275afd056fe42cf3c516810e4044681", null ],
+    [ "calcIsCueFrame", "classmusx_1_1dom_1_1EntryFrame.html#af934596122cb5cd63787c096466d7b0e", null ],
     [ "createCurrentStaff", "classmusx_1_1dom_1_1EntryFrame.html#abb279770c27241218d88ef42ab4a0c06", null ],
     [ "getDocument", "classmusx_1_1dom_1_1EntryFrame.html#acfc09385cdd5a627483229c232e05bcc", null ],
     [ "getEntries", "classmusx_1_1dom_1_1EntryFrame.html#a76a2be5370083bb43c0c492509e5cece", null ],

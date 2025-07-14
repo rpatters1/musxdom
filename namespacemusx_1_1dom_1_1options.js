@@ -23,6 +23,7 @@ var namespacemusx_1_1dom_1_1options =
     [ "SmartShapeOptions", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions" ],
     [ "StaffOptions", "classmusx_1_1dom_1_1options_1_1StaffOptions.html", "classmusx_1_1dom_1_1options_1_1StaffOptions" ],
     [ "StemOptions", "classmusx_1_1dom_1_1options_1_1StemOptions.html", "classmusx_1_1dom_1_1options_1_1StemOptions" ],
+    [ "TextOptions", "classmusx_1_1dom_1_1options_1_1TextOptions.html", "classmusx_1_1dom_1_1options_1_1TextOptions" ],
     [ "TieOptions", "classmusx_1_1dom_1_1options_1_1TieOptions.html", "classmusx_1_1dom_1_1options_1_1TieOptions" ],
     [ "TimeSignatureOptions", "classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html", "classmusx_1_1dom_1_1options_1_1TimeSignatureOptions" ],
     [ "TupletOptions", "classmusx_1_1dom_1_1options_1_1TupletOptions.html", "classmusx_1_1dom_1_1options_1_1TupletOptions" ]

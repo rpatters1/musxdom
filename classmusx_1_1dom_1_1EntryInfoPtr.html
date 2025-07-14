@@ -243,9 +243,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 <tr class="memitem:aad8efac3646d0cfc7b3c193691b003e7" id="r_aad8efac3646d0cfc7b3c193691b003e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aad8efac3646d0cfc7b3c193691b003e7">calcEntrySize</a> () const</td></tr>
 <tr class="memdesc:aad8efac3646d0cfc7b3c193691b003e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the entry size as a percentage, taking into account the beaming.  <br /></td></tr>
 <tr class="separator:aad8efac3646d0cfc7b3c193691b003e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0bdf67863c1a57e99ee426cbb5844d28" id="r_a0bdf67863c1a57e99ee426cbb5844d28"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a0bdf67863c1a57e99ee426cbb5844d28">calcIsCue</a> () const</td></tr>
-<tr class="memdesc:a0bdf67863c1a57e99ee426cbb5844d28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry is part of a cue.  <br /></td></tr>
-<tr class="separator:a0bdf67863c1a57e99ee426cbb5844d28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a933091a4840ecd2596b70069a11201ef" id="r_a933091a4840ecd2596b70069a11201ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a933091a4840ecd2596b70069a11201ef">calcIsCue</a> (bool includeVisibleInScore=false) const</td></tr>
+<tr class="memdesc:a933091a4840ecd2596b70069a11201ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry is part of a cue.  <br /></td></tr>
+<tr class="separator:a933091a4840ecd2596b70069a11201ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee6b5524df00cd1f2bbb41ebf760b58d" id="r_aee6b5524df00cd1f2bbb41ebf760b58d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aee6b5524df00cd1f2bbb41ebf760b58d">calcIsFullMeasureRest</a> () const</td></tr>
 <tr class="memdesc:aee6b5524df00cd1f2bbb41ebf760b58d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is a full measure rest.  <br /></td></tr>
 <tr class="separator:aee6b5524df00cd1f2bbb41ebf760b58d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -383,8 +383,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 
 </div>
 </div>
-<a id="a0bdf67863c1a57e99ee426cbb5844d28" name="a0bdf67863c1a57e99ee426cbb5844d28"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0bdf67863c1a57e99ee426cbb5844d28">&#9670;&#160;</a></span>calcIsCue()</h2>
+<a id="a933091a4840ecd2596b70069a11201ef" name="a933091a4840ecd2596b70069a11201ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a933091a4840ecd2596b70069a11201ef">&#9670;&#160;</a></span>calcIsCue()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -392,13 +392,20 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
         <tr>
           <td class="memname">bool musx::dom::EntryInfoPtr::calcIsCue </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>includeVisibleInScore</em> = <code>false</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Calculates if this entry is part of a cue. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">includeVisibleInScore</td><td>If true, include cues that are visible in the score. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>true if<ul>
 <li>the entry is reduced in size</li>
 <li>the entry is hidden by "Blank Notation" or "Blank Notation with Rests" alternate notation in the score but not in a part. </li>

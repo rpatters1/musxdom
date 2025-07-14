@@ -136,10 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ca3ba56024cb5ef8c30bb1e9afabd9e" id="r_a5ca3ba56024cb5ef8c30bb1e9afabd9e"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a5ca3ba56024cb5ef8c30bb1e9afabd9e">calcVoices</a> () const</td></tr>
 <tr class="memdesc:a5ca3ba56024cb5ef8c30bb1e9afabd9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of voices used by the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html" title="Represents the attributes of a Finale frame holder.">GFrameHold</a> instance.  <br /></td></tr>
 <tr class="separator:a5ca3ba56024cb5ef8c30bb1e9afabd9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bd6e36a5e4e34486fb3d75c4d031de1" id="r_a9bd6e36a5e4e34486fb3d75c4d031de1"><td class="memItemLeft" align="right" valign="top"><a id="a9bd6e36a5e4e34486fb3d75c4d031de1" name="a9bd6e36a5e4e34486fb3d75c4d031de1"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsCuesOnly</b> () const</td></tr>
-<tr class="memdesc:a9bd6e36a5e4e34486fb3d75c4d031de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this staff in this measure contains only a cue layer and full-measure rest layers. <br /></td></tr>
-<tr class="separator:a9bd6e36a5e4e34486fb3d75c4d031de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0e3d30b4a276c376b3e4b3a18d5d25d" id="r_aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d">calcIsCuesOnly</a> (bool includeVisibleInScore=false) const</td></tr>
+<tr class="memdesc:aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.  <br /></td></tr>
+<tr class="separator:aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A context wrapper for <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> associated with a specific part and location. </p>
@@ -251,6 +250,32 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsCuesOnly</b> ()
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">position</td><td>The <em>staff-level</em> position of the clef. (The staff-level matters for Independent Key Signature staves.) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa0e3d30b4a276c376b3e4b3a18d5d25d" name="aa0e3d30b4a276c376b3e4b3a18d5d25d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0e3d30b4a276c376b3e4b3a18d5d25d">&#9670;&#160;</a></span>calcIsCuesOnly()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::details::GFrameHoldContext::calcIsCuesOnly </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>includeVisibleInScore</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if this staff in this measure contains only a cue layer and full-measure rest layers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">includeVisibleInScore</td><td>If true, include cues that are visible in the score. </td></tr>
   </table>
   </dd>
 </dl>
