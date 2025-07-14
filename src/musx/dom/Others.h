@@ -1633,6 +1633,7 @@ public:
     /// @param document The document to search.
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for multipage assignments.
+    /// @param inci The inci of the specific page text assignment to retrieve.
     static std::shared_ptr<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci);
 
     /// @brief Returns all the page text assignments for a given page number in a given part.
@@ -2951,6 +2952,8 @@ public:
     /// @brief Gets the raw text block context (from the `texts` pool) based on #textType.
     /// @param forPartId The linked part to use for ^partname and ^totpages inserts
     /// @param forPageId The default value to use for ^page inserts. If omitted, the default value is "#", which mimics Finale's behavior.
+    /// @param defaultInsertFunc The default text insert replacement function for this context. This function is called if the function supplied
+    /// to #util::EnigmaParsingContext::parseEnigmaText returns std::nullopt.
     util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId = std::nullopt,
         util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
