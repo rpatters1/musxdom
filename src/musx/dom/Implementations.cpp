@@ -3240,26 +3240,38 @@ std::string ordinalPrefix(int num)
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::string others::Staff::addAutoNumbering(const std::string& plainName) const
+std::pair<std::string, bool> others::Staff::calcAutoNumberingAffix() const
 {
     if (!autoNumberValue.has_value()) {
-        return plainName; // No numbering needed
+        return std::make_pair(std::string(), false); // No numbering needed
     }
 
     int number = *autoNumberValue;
     switch (autoNumbering) {
         default:
         case AutoNumberingStyle::ArabicSuffix:
-            return plainName + " " + std::to_string(number);
+            return std::make_pair(" " + std::to_string(number), false);
         case AutoNumberingStyle::RomanSuffix:
-            return plainName + " " + intToRoman(number);
+            return std::make_pair(" " + intToRoman(number), false);
         case AutoNumberingStyle::OrdinalPrefix:
-            return ordinalPrefix(number) + " " + plainName;
+            return std::make_pair(ordinalPrefix(number) + " ", true);
         case AutoNumberingStyle::AlphaSuffix:
-            return plainName + " " + intToAlphabetic(number);
+            return std::make_pair(" " + intToAlphabetic(number), false);
         case AutoNumberingStyle::ArabicPrefix:
-            return std::to_string(number) + ". " + plainName;
+            return std::make_pair(std::to_string(number) + ". ", true);
     }
+}
+
+std::string others::Staff::addAutoNumbering(const std::string& plainName) const
+{
+    auto [affix, isPrefix] = calcAutoNumberingAffix();
+    if (affix.empty()) {
+        return plainName;
+    }
+    if (isPrefix) {
+        return affix + plainName;
+    }
+    return plainName + affix;
 }
 
 std::string others::Staff::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
@@ -3294,32 +3306,60 @@ std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffI
     return nullptr;
 }
 
-std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
+util::EnigmaParsingContext others::Staff::getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
-    auto name = [&]() -> std::string {
+    auto block = [&]() -> std::shared_ptr<others::TextBlock> {
         if ((!preferStaffName || !fullNameTextId) && multiStaffInstVisualGroupId) {
-            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, multiStaffInstVisualGroupId)) {
-                return group->getFullName(accidentalStyle);
+            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, 0, multiStaffInstVisualGroupId)) {
+                return getDocument()->getOthers()->get<others::TextBlock>(forPartId, group->fullNameId);
             }
         }
-        return getFullName(accidentalStyle);
+        return getDocument()->getOthers()->get<others::TextBlock>(forPartId, fullNameTextId);
     }();
-    if (name.empty()) return name;
-    return addAutoNumbering(name);
+    if (!block) {
+        return {};
+    }
+    auto parsingContext = block->getRawTextCtx(forPartId);
+    auto [affix, isPrefix] = calcAutoNumberingAffix();
+    parsingContext.affixText = affix;
+    parsingContext.affixIsPrefix = isPrefix;
+    return parsingContext;
+}
+
+std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
+{
+    if (auto ctx = getFullInstrumentNameCtx(SCORE_PARTID, preferStaffName)) {
+        return ctx.getText(true, accidentalStyle);
+    }
+    return {};
+}
+
+util::EnigmaParsingContext others::Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
+{
+    auto block = [&]() -> std::shared_ptr<others::TextBlock> {
+        if ((!preferStaffName || !abbrvNameTextId) && multiStaffInstVisualGroupId) {
+            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, 0, multiStaffInstVisualGroupId)) {
+                return getDocument()->getOthers()->get<others::TextBlock>(forPartId, group->abbrvNameId);
+            }
+        }
+        return getDocument()->getOthers()->get<others::TextBlock>(forPartId, abbrvNameTextId);
+    }();
+    if (!block) {
+        return {};
+    }
+    auto parsingContext = block->getRawTextCtx(forPartId);
+    auto [affix, isPrefix] = calcAutoNumberingAffix();
+    parsingContext.affixText = affix;
+    parsingContext.affixIsPrefix = isPrefix;
+    return parsingContext;
 }
 
 std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
 {
-    auto name = [&]() -> std::string {
-        if ((!preferStaffName || !fullNameTextId) && multiStaffInstVisualGroupId) {
-            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, multiStaffInstVisualGroupId)) {
-                return group->getAbbreviatedName(accidentalStyle);
-            }
-        }
-        return getAbbreviatedName(accidentalStyle);
-    }();
-    if (name.empty()) return name;
-    return addAutoNumbering(name);
+    if (auto ctx = getAbbreviatedInstrumentNameCtx(SCORE_PARTID, preferStaffName)) {
+        return ctx.getText(true, accidentalStyle);
+    }
+    return {};
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS

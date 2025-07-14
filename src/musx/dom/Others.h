@@ -2457,6 +2457,16 @@ public:
     /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is shown as part of one. Otherwise nullptr.
     std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstVisualGroup() const;
 
+    /// @brief Returns the parsing context for the full name.
+    /// @param forPartId The part id to use for partname and page inserts
+    /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
+    util::EnigmaParsingContext getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName = false) const;
+
+    /// @brief Returns the parsing context for the abbreviated name.
+    /// @param forPartId The part id to use for partname and page inserts
+    /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
+    util::EnigmaParsingContext getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName = false) const;
+
     /// @brief Returns the full instrument name for this staff without Enigma tags and with autonumbering (if any)
     /// @note Ordinal prefix numbering is currently supported only for English.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
@@ -2497,6 +2507,12 @@ public:
      */
     template <typename SubType>
     static void calcAllRuntimeValues(const DocumentPtr& document);
+
+    /// @brief Calculate the auto numbering prefix or suffix, if needed.
+    /// @return A std::pair containing
+    ///     - A std::string that is either the prefix or suffix.
+    ///     - A bool that if true indicates the string is a prefix and if false a suffix.
+    std::pair<std::string, bool> calcAutoNumberingAffix() const;
 
     /// @brief Add auto numbering as a prefix or suffix, if needed
     /// @param plainName The name (full or abbreviated) to which to add the auto numbering

@@ -193,3 +193,24 @@ TEST(MultiStaffGroupTest, PopulateFields)
 
     EXPECT_EQ(groupId->staffGroupId, 5);
 }
+
+TEST(MultiStaffGroupTest, Autonumbering)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "multistaff_inst.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto staff4 = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 4, 1, 0);
+    ASSERT_TRUE(staff4);
+    EXPECT_EQ(staff4->getFullInstrumentName(), "Harpsichord 1");
+    EXPECT_EQ(staff4->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Ascii, true), "RH 1");
+    EXPECT_EQ(staff4->getAbbreviatedInstrumentName(), "Hpschd. 1");
+
+    auto staff9 = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 9, 1, 0);
+    ASSERT_TRUE(staff9);
+    EXPECT_EQ(staff9->getFullInstrumentName(), "2. sdfdsf");
+    EXPECT_EQ(staff9->getAbbreviatedInstrumentName(), "2. sd");
+}

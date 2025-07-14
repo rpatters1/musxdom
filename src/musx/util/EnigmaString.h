@@ -72,6 +72,8 @@ struct EnigmaStyles
     int tracking{};                         ///< inter-character tracking in EMs (1/1000 font size)
 };
 
+class EnigmaParsingContext;
+
 /**
  * @brief Static class that provides utilities to extract information from enigma strings. Enigma strings
  * use text inserts delineated by a preceding caret (^) and parenthesis for parameters. Here is a list of
@@ -349,13 +351,14 @@ public:
      * @param onText The handler for when font styling changes.
      * @param onInsert The handler to substitute text for an insert.
      * @param options Parsing options.
+     * @param parsingContext Generally, only functions internal to musxdom should provide this.
      * @return true if parsing completed, false if aborted by the @p onText function.
      */
     static bool parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText,
         const TextChunkCallback& onText, const TextInsertCallback& onInsert,
-        const EnigmaParsingOptions& options = {})
+        const EnigmaParsingOptions& options = {}, const EnigmaParsingContext* parsingContext = nullptr)
     {
-        return parseEnigmaTextImpl(document, forPartId, rawText, onText, onInsert, options, EnigmaStyles(document));
+        return parseEnigmaTextImpl(document, forPartId, rawText, onText, onInsert, options, parsingContext, EnigmaStyles(document));
     }
 
     /// @brief Simplified version of #parseEnigmaText that strips unhandled inserts.
@@ -365,11 +368,12 @@ public:
     /// @param rawText The full input Enigma string to parse.
     /// @param onText The handler for when font styling changes.
     /// @param options Parsing options.
+    /// @param parsingContext Generally, only functions internal to musxdom should provide this.
     /// @return true if parsing completed, false if aborted by the @p onText function.
     static bool parseEnigmaText(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText, const TextChunkCallback& onText,
-        const EnigmaParsingOptions& options = {})
+        const EnigmaParsingOptions& options = {}, const EnigmaParsingContext* parsingContext = nullptr)
     {
-        return parseEnigmaTextImpl(document, forPartId, rawText, onText, defaultInsertsCallback, options, EnigmaStyles(document));
+        return parseEnigmaTextImpl(document, forPartId, rawText, onText, defaultInsertsCallback, options, parsingContext, EnigmaStyles(document));
     }
 
     /**
@@ -387,8 +391,9 @@ public:
 
 private:
     static bool parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText,
-    const TextChunkCallback& onText, const TextInsertCallback& onInsert,
-    const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles);
+        const TextChunkCallback& onText, const TextInsertCallback& onInsert,
+        const EnigmaParsingOptions& options, const EnigmaParsingContext* parsingContext,
+        const EnigmaStyles& startingStyles);
 };
 
 /// @class EnigmaParsingContext
@@ -404,7 +409,7 @@ private:
     dom::Cmper m_forPartId;
     std::optional<int> m_forPageNumber;
     EnigmaString::TextInsertCallback m_insertFunc;
-    
+
 public:
     /// @brief Null constructor
     EnigmaParsingContext()
@@ -425,6 +430,9 @@ public:
     /// @brief Check whether the context holds a valid raw text pointer.
     explicit operator bool() const noexcept
     { return static_cast<bool>(m_rawText); }
+
+    std::string affixText;          ///< Prefix or suffix to be passed in parsing options.
+    bool affixIsPrefix{};           ///< True if #affixText is a prefix; false if it is a suffix.
 
     /// @brief Return displayable text with Enigma tags converted.
     /// @param trimTags Whether to trim unknown tags or dump them into the output.

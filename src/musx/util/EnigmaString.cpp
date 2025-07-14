@@ -239,17 +239,27 @@ bool EnigmaString::parseStyleCommand(std::vector<std::string> components, Enigma
 }
 
 bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, Cmper forPartId, const std::string& rawText,
-    const TextChunkCallback& onText, const TextInsertCallback& onInsert, const EnigmaParsingOptions& options, const EnigmaStyles& startingStyles)
+    const TextChunkCallback& onText, const TextInsertCallback& onInsert, const EnigmaParsingOptions& options,
+    const EnigmaParsingContext* parsingContext, const EnigmaStyles& startingStyles)
 {
     auto currentStyles = startingStyles;
+    std::string prefix = parsingContext && parsingContext->affixIsPrefix ? parsingContext->affixText : std::string();
+    bool parsedResultIsEmpty = true;
     std::string remaining = rawText;
     std::optional<std::string> textBuffer;
 
     auto addToBuf = [&](const std::string& text) {
-        if (textBuffer) {
-            textBuffer->append(text);
-        } else {
-            textBuffer.emplace(text);
+        if (!textBuffer) {
+            textBuffer.emplace();
+        }
+        if (!prefix.empty() && !text.empty()) {
+            textBuffer->append(prefix);
+            prefix.clear();
+        }
+        textBuffer->append(text);
+        if (parsedResultIsEmpty) {
+            // keep trying until we have added something to textBuffer
+            parsedResultIsEmpty = textBuffer.value().empty();
         }
     };
 
@@ -414,7 +424,7 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                     if (!processChunk(currentStyles)) {
                         break;
                     }
-                    bool parseResult = parseEnigmaTextImpl(document, forPartId, nameRawText->text, onText, onInsert, partnameOptions, currentStyles);
+                    bool parseResult = parseEnigmaTextImpl(document, forPartId, nameRawText->text, onText, onInsert, partnameOptions, nullptr, currentStyles);
                     if (!parseResult) {
                         return false;
                     }
@@ -449,6 +459,10 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                 addToBuf(fullCommand);
             }
         }
+    }
+
+    if (!parsedResultIsEmpty && parsingContext && !parsingContext->affixIsPrefix && !parsingContext->affixText.empty()) {
+        addToBuf(parsingContext->affixText);
     }
 
     // Emit any remaining buffered text
@@ -514,7 +528,7 @@ bool EnigmaParsingContext::parseEnigmaText(const util::EnigmaString::TextChunkCa
             }
         }
         return std::nullopt;
-    }, options);
+    }, options, this);
 }
 
 std::string EnigmaParsingContext::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
