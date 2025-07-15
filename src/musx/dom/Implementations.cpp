@@ -2723,8 +2723,8 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
                             + " cannot be determined.");
                     }
                 } else {
-                    MUSX_INTEGRITY_ERROR("Layout not updated for page " + std::to_string(page->getCmper())
-                        + " of part " + std::to_string(part->getCmper()) + '.');
+                    MUSX_INTEGRITY_ERROR("Layout for page " + std::to_string(page->getCmper())
+                        + " of part " + std::to_string(part->getCmper()) + " is in an unknown state.");
                 }
             }
         }
@@ -3784,7 +3784,7 @@ std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(co
     auto rawStaff = document->getOthers()->get<others::Staff>(partId, staffId);
     if (!rawStaff) return nullptr;
 
-    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff, partId));
+    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff, partId, measId, eduPosition));
     if (result->hasStyles) {
         auto styles = others::StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
         for (const auto& style : styles) {

@@ -2759,14 +2759,16 @@ class StaffComposite : public StaffStyle
 {
 private:
     /** @brief private constructor */
-    explicit StaffComposite(const std::shared_ptr<Staff>& staff, Cmper requestedPartId)
-        : StaffStyle(staff), m_requestedPartId(requestedPartId) {}
+    explicit StaffComposite(const std::shared_ptr<Staff>& staff, Cmper requestedPartId, MeasCmper measId, Edu eduPosition)
+        : StaffStyle(staff), m_requestedPartId(requestedPartId), m_measureId(measId), m_eduPosition(eduPosition) {}
 
     /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
     /// @param staffStyle The @ref StaffStyle to apply.
     void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
 
     const Cmper m_requestedPartId;
+    const MeasCmper m_measureId;
+    const Edu m_eduPosition;
 
 public:
     /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
@@ -2784,6 +2786,12 @@ public:
 
     /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
     Cmper getPartId() const final override { return m_requestedPartId; }
+
+    /// @brief Returns the measure this staff composite was created with.
+    MeasCmper getMeasureId() const { return m_measureId; }
+
+    /// @brief Returns the Edu position this staff composite was created with.
+    Edu eduPosition() const { return m_eduPosition; }
 
     /// @brief Returns the underlying staff without any staff styles applied.
     std::shared_ptr<others::Staff> getRawStaff() const;
@@ -2849,6 +2857,14 @@ public:
     ///         - util::Fraction: The scaling of the staff with the minimum (smallest) scaling factor
     ///         - util::Fraction: The scaling of the staff with the maximum (largest) scaling factor
     std::pair<util::Fraction, util::Fraction> calcMinMaxStaffSizes() const;
+
+    void integrityCheck() override
+    {
+        if (startMeas == 0 || endMeas == 0) {
+            MUSX_INTEGRITY_ERROR("Layout for system " + std::to_string(getCmper())
+                + " of part " + std::to_string(getPartId()) + " is in an unknown state.");
+        }
+    }
 
     constexpr static std::string_view XmlNodeName = "staffSystemSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StaffSystem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
