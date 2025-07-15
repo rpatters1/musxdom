@@ -1362,6 +1362,10 @@ public:
 
     int staffPercent{}; ///< The staff size percentage override. (A value of 100 means 100%, i.e, no staff scaling.)
 
+    /// @brief Calculate the effect staff scaling.
+    util::Fraction calcStaffScaling() const
+    { return util::Fraction::fromPercent(staffPercent); }
+
     constexpr static std::string_view XmlNodeName = "staffSize"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StaffSize>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

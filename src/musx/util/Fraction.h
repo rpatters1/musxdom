@@ -24,6 +24,7 @@
 #include <iostream>
 #include <numeric>
 #include <stdexcept>
+#include <limits>
 
 #include "musx/dom/Fundamentals.h"
 
@@ -73,6 +74,10 @@ public:
     /// @param edu
     static Fraction fromEdu(int edu);
 
+    /// @brief Constructs a Fraction from a percent (where 100 is 100%)
+    /// @param edu
+    static Fraction fromPercent(int percent) { return Fraction(percent, 100); }
+
     /**
      * @brief Gets the m_numerator of the fraction.
      * @return The m_numerator.
@@ -111,6 +116,13 @@ public:
      * @brief Calculates duration as a fraction of a whole note
      */
     dom::Edu calcEduDuration() const;
+
+    /**
+     * @brief Converts the fraction to floating point double.
+     */
+    double toDouble() const {
+        return double(m_numerator) / double(m_denominator);
+    }
 
     /**
      * @brief Adds two fractions.
@@ -306,19 +318,73 @@ public:
 } // namespace musx
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
-// automatic hash function for Fraction
+#include <limits>
+
 namespace std {
-    template <>
-    struct hash<musx::util::Fraction>
+template <>
+class numeric_limits<musx::util::Fraction> {
+public:
+    static constexpr bool is_specialized = true;
+
+    // Smallest positive normalized value (not necessarily lowest)
+    static musx::util::Fraction min() noexcept {
+        return musx::util::Fraction(1, std::numeric_limits<int>::max());
+    }
+
+    // Largest representable positive fraction
+    static musx::util::Fraction max() noexcept {
+        return musx::util::Fraction(std::numeric_limits<int>::max(), 1);
+    }
+
+    // Most negative representable fraction
+    static musx::util::Fraction lowest() noexcept {
+        return musx::util::Fraction(std::numeric_limits<int>::lowest(), 1);
+    }
+
+    static constexpr int digits    = std::numeric_limits<int>::digits;
+    static constexpr int digits10  = std::numeric_limits<int>::digits10;
+
+    static constexpr bool is_signed      = true;
+    static constexpr bool is_integer     = false;
+    static constexpr bool is_exact       = true;
+    static constexpr bool has_infinity   = false;
+    static constexpr bool has_quiet_NaN  = false;
+    static constexpr bool has_signaling_NaN = false;
+
+    static musx::util::Fraction epsilon() noexcept {
+        return musx::util::Fraction(1, std::numeric_limits<int>::max());
+    }
+
+    static musx::util::Fraction round_error() noexcept {
+        return musx::util::Fraction(0);
+    }
+
+    static constexpr int radix = 2;
+
+    static musx::util::Fraction infinity() noexcept { return musx::util::Fraction(0); }
+    static musx::util::Fraction quiet_NaN() noexcept { return musx::util::Fraction(0); }
+    static musx::util::Fraction signaling_NaN() noexcept { return musx::util::Fraction(0); }
+
+    static constexpr bool is_iec559       = false;
+    static constexpr bool is_bounded      = true;
+    static constexpr bool is_modulo       = false;
+    static constexpr bool traps           = true;  // Because invalid construction throws
+    static constexpr bool tinyness_before = false;
+    static constexpr float_round_style round_style = round_indeterminate;
+};
+
+template <>
+struct hash<musx::util::Fraction>
+{
+    size_t operator()(const musx::util::Fraction& frac) const noexcept
     {
-        size_t operator()(const musx::util::Fraction& frac) const noexcept
-        {
-            // boost algorithm tailored to Fraction
-            size_t seed = std::hash<int>{}(frac.numerator());
-            seed ^= std::hash<int>{}(frac.denominator()) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-            return seed;
-        }
-    };
-}
+        // boost algorithm tailored to Fraction
+        size_t seed = std::hash<int>{}(frac.numerator());
+        seed ^= std::hash<int>{}(frac.denominator()) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        return seed;
+    }
+};
+
+} // namespace std
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 

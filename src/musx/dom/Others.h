@@ -638,6 +638,9 @@ public:
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
     std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
+    /// @brief Calculates the effective scaling on this instance.
+    util::Fraction calcEffectiveScaling() const;
+
     /// @brief Returns the @ref Staff instance for this element, without any staff styles applied
     std::shared_ptr<Staff> getStaffInstance() const;
 
@@ -1512,6 +1515,10 @@ public:
 
     /** @brief is this a blank page */
     bool isBlank() const { return firstSystemId < 0; }
+
+    /// @brief Calculate the effect page scaling.
+    util::Fraction calcPageScaling() const
+    { return util::Fraction::fromPercent(percent); }
 
     /// @brief Resolver function used by factory to compute system and measure information for all pages.
     static void calcSystemInfo(const DocumentPtr& document);
@@ -2819,6 +2826,8 @@ public:
     Evpu extraStartSystemSpace{};   ///< Extra space at the start of the staff system in Evpu.
     Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
 
+    PageCmper pageId;               ///< The page this system is on. This values is not in the xml but is computed by the factory.
+
     /// @brief Encapsulates the weird Finale fact that #endMeas is actually one past the end of the system
     /// @return The actual last measure on the system.
     MeasCmper getLastMeasure() const { return endMeas - 1; }
@@ -2827,12 +2836,19 @@ public:
     /// @return The number of measures on the system.
     int calcNumMeasures() const { return endMeas - startMeas; }
 
+    /// @brief Gets the page this system is on.
+    std::shared_ptr<others::Page> getPage() const;
+
+    /// @brief Calculate the effect system scaling.
+    util::Fraction calcSystemScaling() const
+    { return util::Fraction::fromPercent(ssysPercent) * util::Fraction(staffHeight, 4 * EFIX_PER_SPACE); }
+
     /// @brief Calculates the maximum and minimum staff scaling values for this system by searching each staff
     /// for individual staff scaling.
     /// @return A std::pair containing
-    ///         - double: The scaling of the staff with the minimum (smallest) scaling factor
-    ///         - double: The scaling of the staff with the maximum (largest) scaling factor
-    std::pair<double, double> calcMinMaxStaffSizes() const;
+    ///         - util::Fraction: The scaling of the staff with the minimum (smallest) scaling factor
+    ///         - util::Fraction: The scaling of the staff with the maximum (largest) scaling factor
+    std::pair<util::Fraction, util::Fraction> calcMinMaxStaffSizes() const;
 
     constexpr static std::string_view XmlNodeName = "staffSystemSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StaffSystem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

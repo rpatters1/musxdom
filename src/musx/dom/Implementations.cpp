@@ -1720,6 +1720,25 @@ std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createDisplayTi
 // ***** InstrumentUsed *****
 // **************************
 
+util::Fraction others::InstrumentUsed::calcEffectiveScaling() const
+{
+    util::Fraction result(1);
+    if (SystemCmper(getCmper()) > 0) { // if this is a page-view system
+        if (auto system = getDocument()->getOthers()->get<others::StaffSystem>(getPartId(), getCmper())) {
+            result = system->calcSystemScaling();
+            if (auto page = system->getPage()) {
+                result *= page->calcPageScaling();
+            }
+            if (system->hasStaffScaling) {
+                if (auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getPartId(), getCmper(), staffId)) {
+                    result *= staffSize->calcStaffScaling();
+                }
+            }
+        }
+    }
+    return result;
+}
+
 std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance() const
 {
     auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
@@ -2686,6 +2705,9 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
                     } else {
                         MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
                             + " has a no system instance for its last system.");                        
+                    }
+                    for (size_t x = page->firstSystemId - 1; x < page->lastSystemId.value(); x++) {
+                        systems[x]->pageId = PageCmper(page->getCmper());
                     }
                 } else {
                     page->lastSystemId = std::nullopt;
@@ -3916,22 +3938,27 @@ std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() co
 // ***** StaffSystem *****
 // ***********************
 
-std::pair<double, double> others::StaffSystem::calcMinMaxStaffSizes() const
+std::shared_ptr<others::Page> others::StaffSystem::getPage() const
+{
+    return getDocument()->getOthers()->get<others::Page>(getPartId(), pageId);
+}
+
+std::pair<util::Fraction, util::Fraction> others::StaffSystem::calcMinMaxStaffSizes() const
 {
     if (hasStaffScaling) {
         auto systemStaves = getDocument()->getOthers()->getArray<others::InstrumentUsed>(getPartId(), getCmper());
         if (!systemStaves.empty()) {
-            std::pair<double, double> result = std::make_pair((std::numeric_limits<double>::max)(), (std::numeric_limits<double>::min)());
+            std::pair<util::Fraction, util::Fraction> result = std::make_pair((std::numeric_limits<util::Fraction>::max)(), (std::numeric_limits<util::Fraction>::min)());
             for (const auto& systemStaff : systemStaves) {
                 auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getPartId(), getCmper(), systemStaff->getCmper());
-                const double val = staffSize ? double(staffSize->staffPercent) / 100.0 : 1.0;
+                const util::Fraction val = staffSize ? double(staffSize->staffPercent) / 100.0 : 1.0;
                 if (val < result.first) result.first = val;
                 if (val > result.second) result.second = val;
             }
             return result;
         }
     }
-    return std::make_pair(1.0, 1.0);;
+    return std::make_pair(util::Fraction(1), util::Fraction(1));;
 }
 
 // ***********************
