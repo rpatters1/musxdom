@@ -954,6 +954,16 @@ public:
         bool differentFirstSysMargin{};  ///< Whether to use the first system values.
         bool differentFirstPageMargin{}; ///< Whether to use the `firstPageMarginTop` value.
 
+        /// @brief Calculates the page scaling as a #util::Fraction where 1/1 means no scaling.
+        util::Fraction calcPageScaling() const { return util::Fraction::fromPercent(pagePercent); }
+
+        /// @brief Calculates the system scaling as a #util::Fraction where 1/1 means no scaling.
+        util::Fraction calcSystemScaling() const
+        { return util::Fraction::fromPercent(sysPercent) * util::Fraction(rawStaffHeight, int(EVPU_PER_SPACE) * 4 * 16); }
+
+        /// @brief Calculates the combined system & page scaling as a #util::Fraction where 1/1 means no scaling.
+        util::Fraction calcCombinedSystemScaling() const { return calcPageScaling() * calcSystemScaling(); }
+
         /**
          * @brief Default constructor for PageFormat.
          */

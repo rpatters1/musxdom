@@ -2841,7 +2841,7 @@ public:
 
     /// @brief Calculate the effect system scaling.
     util::Fraction calcSystemScaling() const
-    { return util::Fraction::fromPercent(ssysPercent) * util::Fraction(staffHeight, 4 * EFIX_PER_SPACE); }
+    { return util::Fraction::fromPercent(ssysPercent) * util::Fraction(staffHeight, 4 * int(EFIX_PER_SPACE)); }
 
     /// @brief Calculates the maximum and minimum staff scaling values for this system by searching each staff
     /// for individual staff scaling.
