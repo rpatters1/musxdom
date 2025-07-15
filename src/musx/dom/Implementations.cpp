@@ -2680,39 +2680,51 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
     for (const auto& part : linkedParts) {
         auto pages = document->getOthers()->getArray<Page>(part->getCmper());
         auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
+        for (const auto& system : systems) {
+            system->pageId = 0; // initialize
+        }
         for (size_t x = 0; x < pages.size(); x++) {
             auto page = pages[x];
+            page->lastSystemId = std::nullopt;
             if (!page->isBlank()) {
-                page->lastSystemId = [&]() -> SystemCmper {
-                    size_t nextIndex = x + 1;
-                    while (nextIndex < pages.size()) {
-                        auto nextPage = pages[nextIndex++];
-                        if (!nextPage->isBlank()) {
-                            return nextPage->firstSystemId - 1;
+                if (page->firstSystemId > 0) {
+                    page->lastSystemId = [&]() -> SystemCmper {
+                        size_t nextIndex = x + 1;
+                        while (nextIndex < pages.size()) {
+                            auto nextPage = pages[nextIndex++];
+                            if (!nextPage->isBlank()) {
+                                if (nextPage->firstSystemId > 0) {
+                                    return nextPage->firstSystemId - 1;
+                                } else {
+                                    return 0;
+                                }                            
+                            }
                         }
-                    }
-                    return SystemCmper(systems.size());
-                }();
-                if (page->lastSystemId.value() >= page->firstSystemId) {
-                    if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->firstSystemId)) {
-                        page->firstMeasureId = sys->startMeas;
+                        return SystemCmper(systems.size());
+                    }();
+                    if (page->lastSystemId.value() >= page->firstSystemId) {
+                        if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->firstSystemId)) {
+                            page->firstMeasureId = sys->startMeas;
+                        } else {
+                            MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                                + " has a no system instance for its first system.");                        
+                        }
+                        if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
+                            page->lastMeasureId = sys->getLastMeasure();
+                        } else {
+                            MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                                + " has a no system instance for its last system.");                        
+                        }
+                        for (size_t x = size_t(page->firstSystemId - 1); x < size_t(page->lastSystemId.value()); x++) {
+                            systems[x]->pageId = PageCmper(page->getCmper());
+                        }
                     } else {
-                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                            + " has a no system instance for its first system.");                        
-                    }
-                    if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
-                        page->lastMeasureId = sys->getLastMeasure();
-                    } else {
-                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                            + " has a no system instance for its last system.");                        
-                    }
-                    for (size_t x = page->firstSystemId - 1; x < page->lastSystemId.value(); x++) {
-                        systems[x]->pageId = PageCmper(page->getCmper());
+                        MUSX_INTEGRITY_ERROR("The systems on page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                            + " cannot be determined.");
                     }
                 } else {
-                    page->lastSystemId = std::nullopt;
-                    MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                        + " has a last system smaller than the first system.");
+                    MUSX_INTEGRITY_ERROR("Layout not updated for page " + std::to_string(page->getCmper())
+                        + " of part " + std::to_string(part->getCmper()) + '.');
                 }
             }
         }
