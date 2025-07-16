@@ -549,6 +549,14 @@ public:
     /// @return True if this is either the replacement rest in v2 or the hidden rest in v1.
     bool calcIsBeamedRestWorkaroud() const;
 
+    /// @brief Explicit operator< for std::map
+    bool operator<(const EntryInfoPtr& other) const
+    {
+        if (m_entryFrame != other.m_entryFrame)
+            return m_entryFrame < other.m_entryFrame;
+        return m_indexInFrame < other.m_indexInFrame;
+    }
+
 private:
     unsigned calcVisibleBeams() const;
 
@@ -944,6 +952,14 @@ public:
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
     std::pair<int, int> calcDefaultEnharmonic() const
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
+
+    /// @brief Explicit operator< for std::map
+    bool operator<(const NoteInfoPtr& other) const
+    {
+        if (m_entry != other.m_entry)
+            return m_entry < other.m_entry;
+        return m_noteIndex < other.m_noteIndex;
+    }
 
 private:
     /// @brief Returns true if the two notes represent the same concert pitch or
