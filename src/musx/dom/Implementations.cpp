@@ -2464,10 +2464,7 @@ Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<KeySignature
     if (!clefOptions) {
         throw std::invalid_argument("Document contains no clef options!");
     }
-    if (clefIndex >= clefOptions->clefDefs.size()) {
-        throw std::invalid_argument("Clef index " + std::to_string(clefIndex) + " does not exist in document.`");
-    }
-    int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
+    int middleCLine = clefOptions->getClefDef(clefIndex)->middleCPos;
 
     return { music_theory::noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
 }
