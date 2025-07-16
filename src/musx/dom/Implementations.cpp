@@ -173,10 +173,25 @@ bool options::ClefOptions::ClefDef::isBlank() const
 
 options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std::shared_ptr<const others::Staff>& currStaff) const
 {
+    auto calcPercType = [&]() -> music_theory::ClefType {
+        if (auto clefFont = calcFont()) {
+            if (clefFont->calcIsSMuFL()) {
+                if (clefChar == 0xE06A) { // SMuFL `unpitchedPercussionClef2`
+                    return music_theory::ClefType::Percussion2;
+                }
+            } else if (clefFont->calcIsSymbolFont()) {
+                if (clefChar == 214) {
+                    return music_theory::ClefType::Percussion2;
+                }
+            }
+        }
+        return music_theory::ClefType::Percussion1;
+    };
+    
     if (currStaff) {
         switch (currStaff->notationStyle) {
             case others::Staff::NotationStyle::Tablature: return std::make_pair(music_theory::ClefType::Tab, 0);
-            case others::Staff::NotationStyle::Percussion: return std::make_pair(music_theory::ClefType::Percussion, 0);
+            case others::Staff::NotationStyle::Percussion: return std::make_pair(calcPercType(), 0);
             default: break;
         }
     }
@@ -190,7 +205,7 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std
         case music_theory::NoteName::C: clefType = music_theory::ClefType::C; break;
         case music_theory::NoteName::F: clefType = music_theory::ClefType::F; break;
         case music_theory::NoteName::G: clefType = music_theory::ClefType::G; break;
-        case music_theory::NoteName::B: clefType = music_theory::ClefType::Percussion; break; // Finale SMuFL default file settings
+        case music_theory::NoteName::B: clefType = calcPercType(); break; // Finale SMuFL default file settings
         default: break;
     }
     if (clefType == music_theory::ClefType::F) {

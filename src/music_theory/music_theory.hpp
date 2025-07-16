@@ -99,7 +99,8 @@ enum class ClefType
     G,                  ///< Treble clef
     C,                  ///< C clef
     F,                  ///< Bass clef
-    Percussion,         ///< Percussion clef (centered on middle staff line)
+    Percussion1,        ///< 2 thick vertical lines centered on middle staff line (corresponds to SMuFL glyph `unpitchedPercussionClef1`)
+    Percussion2,        ///< Narrow rectangle centered on middle staff line (corresponds to SMuFL glyph `unpitchedPercussionClef2`)
     Tab                 ///< Tablature clef
 };
 
