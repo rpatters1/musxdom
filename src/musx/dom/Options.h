@@ -335,7 +335,7 @@ public:
     /// @brief Bounds-checked accessor function for #clefDefs.
     /// @param clefIndex The index to retrieve.
     /// @throws std::out_of_range if index is out of range.
-    std::shared_ptr<ClefDef> getClefDef(ClefIndex clefIndex)
+    std::shared_ptr<ClefDef> getClefDef(ClefIndex clefIndex) const
     {
         MUSX_ASSERT_IF(clefIndex >= clefDefs.size()) {
             throw std::out_of_range("Clef index " + std::to_string(clefIndex) + " does not exist in document.");
