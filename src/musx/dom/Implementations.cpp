@@ -195,7 +195,7 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std
             default: break;
         }
     }
-    if (staffPosition == 0 && middleCPos == -10 && isShape) { // find tab staves based on Finale SMuFL default file settings
+    if (!currStaff && staffPosition == 0 && middleCPos == -10 && isShape) { // find tab staves based on Finale SMuFL default file settings
         return std::make_pair(music_theory::ClefType::Tab, 0);
     }
     music_theory::ClefType clefType = music_theory::ClefType::Unknown;
