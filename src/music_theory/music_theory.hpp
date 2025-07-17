@@ -41,6 +41,7 @@ by including it.
 /// @brief A dependency-free, header-only collection of useful functions for music theory
 namespace music_theory {
 
+constexpr int STANDARD_NUMBER_OF_STAFFLINES = 5; ///< The standard number of lines on a staff.
 constexpr int STANDARD_DIATONIC_STEPS = 7; ///< currently this is the only supported number of diatonic steps.
 constexpr int STANDARD_12EDO_STEPS = 12;   ///< this can be overriden when constructing a @ref Transposer instance.
 

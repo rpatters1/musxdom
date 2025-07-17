@@ -3480,6 +3480,16 @@ ClefIndex others::Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper p
     }
 }
 
+int others::Staff::calcNumberOfStafflines() const
+{
+    if (staffLines.has_value()) {
+        return staffLines.value();
+    } else if (customStaff.has_value()) {
+        return int(customStaff.value().size());
+    }
+    return music_theory::STANDARD_NUMBER_OF_STAFFLINES;
+}
+
 int others::Staff::calcMiddleStaffPosition() const
 {
     if (staffLines.has_value()) {

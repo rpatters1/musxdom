@@ -2543,10 +2543,13 @@ public:
     /// @param staffCmper the staff cmper to search
     static ClefIndex calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper);
 
-    /// @brief Returns the middle staff position. For staves with even numbers of lines, it is the middle space.
+    /// @brief Calculates the number of staff lines on this staff.
+    int calcNumberOfStafflines() const;
+
+    /// @brief Calculates the middle staff position. For staves with even numbers of lines, it is the middle space.
     int calcMiddleStaffPosition() const;
 
-    /// @brief Returns the position of the top staff line, relative to the reference line.
+    /// @brief Calculates the position of the top staff line, relative to the reference line.
     int calcToplinePosition() const;
 
     /// @brief Return true if this staff has an instrument assigned.
