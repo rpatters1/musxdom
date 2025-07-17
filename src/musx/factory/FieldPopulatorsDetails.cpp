@@ -244,7 +244,7 @@ MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
     {"floatingHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->floatingHorzOff = e->getTextAs<Evpu>(); }},
-    {"wext", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->wext = e->getTextAs<int>(); }},
+    {"wext", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->wext = e->getTextAs<Evpu>(); }},
     {"displayVerseNum", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->displayVerseNum = populateBoolean(e, i); }},
 });
 

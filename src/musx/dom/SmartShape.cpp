@@ -77,7 +77,7 @@ util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
         return rawPosition;
     }
     if (auto entryInfo = calcAssociatedEntry()) {
-        return entryInfo.calcGlobalElapsedDuration().calcEduDuration();
+        return entryInfo.calcGlobalElapsedDuration();
     }
     return 0;
 }

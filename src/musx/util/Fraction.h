@@ -70,12 +70,13 @@ public:
         reduce();
     }
 
-    /// @brief Constructs a Fraction from edu
-    /// @param edu
+    /// @brief Constructs a Fraction from edu.
+    /// @param edu The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is
+    /// constructed as Fraction(1, 4).
     static Fraction fromEdu(int edu);
 
     /// @brief Constructs a Fraction from a percent (where 100 is 100%)
-    /// @param edu
+    /// @param percent The integral percent value to convert.
     static Fraction fromPercent(int percent) { return Fraction(percent, 100); }
 
     /**
