@@ -187,16 +187,40 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std
         }
         return music_theory::ClefType::Percussion1;
     };
-    
+
+    auto calcTabType = [&]() -> music_theory::ClefType {
+        music_theory::ClefType result = music_theory::ClefType::Tab;
+        if (isShape) {
+            if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId)) {
+                shape->iterateInstructions([&](others::ShapeDef::InstructionType instructionType, std::vector<int> data) -> bool {
+                    if (std::optional<FontInfo> fontInfo = others::ShapeInstruction::parseSetFont(getDocument(), instructionType, data)) {
+                        if (fontInfo->getName().find("Times") != std::string::npos) { // Finale default file uses "Times" or "Times New Roman"
+                            result = music_theory::ClefType::TabSerif;
+                        }
+                        return false;
+                    }
+                    return true;
+                });
+            }
+            return result;
+        }
+        // 0xF40D is "4stringTabClefSerif" and 0xF40B is "6stringTabClefSerif"
+        // They are both optional glyphs from the MakeMusic extended glyph set defined in glyphnamesFinale.json.
+        if (calcFont()->calcIsSMuFL() && (clefChar == 0xF40D || clefChar == 0xF40B)) {
+            result = music_theory::ClefType::TabSerif;
+        }
+        return result;
+    };
+
     if (currStaff) {
         switch (currStaff->notationStyle) {
-            case others::Staff::NotationStyle::Tablature: return std::make_pair(music_theory::ClefType::Tab, 0);
+            case others::Staff::NotationStyle::Tablature: return std::make_pair(calcTabType(), 0);
             case others::Staff::NotationStyle::Percussion: return std::make_pair(calcPercType(), 0);
             default: break;
         }
     }
-    if (!currStaff && staffPosition == 0 && middleCPos == -10 && isShape) { // find tab staves based on Finale SMuFL default file settings
-        return std::make_pair(music_theory::ClefType::Tab, 0);
+    if (!currStaff && staffPosition == 0 && middleCPos == -10 && isShape) { // identify tab staves based on Finale default file settings
+        return std::make_pair(calcTabType(), 0);
     }
     music_theory::ClefType clefType = music_theory::ClefType::Unknown;
     int octave = 0;
@@ -3068,30 +3092,6 @@ bool others::RepeatEndingStart::calcIsOpen() const
         }
     }
     return false;
-}
-
-// ********************
-// ***** ShapeDef *****
-// ********************
-
-void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::InstructionType, std::vector<int>)> callback) const
-{
-    auto insts = getDocument()->getOthers()->get<others::ShapeInstructionList>(getPartId(), instructionList);
-    auto data = getDocument()->getOthers()->get<others::ShapeData>(getPartId(), dataList);
-    if (insts && data) {
-        size_t currentDataIndex = 0;
-        for (const auto& inst : insts->instructions) {
-            if (currentDataIndex + inst->numData > data->values.size()) {
-                throw std::invalid_argument("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
-            }
-            if (!callback(inst->type, { data->values.begin() + currentDataIndex, data->values.begin() + currentDataIndex + inst->numData })) {
-                break;
-            }
-            currentDataIndex += inst->numData;
-        }
-    } else {
-        MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) + " is missing instructions and/or data.");
-    }
 }
 
 // *****************

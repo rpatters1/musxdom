@@ -834,14 +834,14 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList::Instruction, {
-    {"numData", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::Instruction>& i) { i->numData = e->getTextAs<int>(); }},
-    {"tag", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::Instruction>& i) { i->type = toEnum<ShapeDef::InstructionType, true>(e); }},
+MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList::InstructionInfo, {
+    {"numData", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::InstructionInfo>& i) { i->numData = e->getTextAs<int>(); }},
+    {"tag", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::InstructionInfo>& i) { i->type = toEnum<ShapeDef::InstructionType, true>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList, {
     {"instruct", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList>& i) {
-        i->instructions.push_back(FieldPopulator<ShapeInstructionList::Instruction>::createAndPopulate(e));
+        i->instructions.push_back(FieldPopulator<ShapeInstructionList::InstructionInfo>::createAndPopulate(e));
     }},
 });
     

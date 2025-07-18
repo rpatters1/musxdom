@@ -37,6 +37,7 @@
 #include "Details.h"
 #include "Entries.h"
 #include "SmartShape.h"
+#include "ShapeDesigner.h"
 
 namespace musx {
 namespace dom {
