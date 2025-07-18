@@ -259,7 +259,7 @@ TEST(ClefOptionsTest, ClefInfoTest)
         { music_theory::ClefType::F, 1 },
         { music_theory::ClefType::G, 0 },
         { music_theory::ClefType::Tab, 0 },
-        { music_theory::ClefType::Tab, 0 },
+        { music_theory::ClefType::TabSerif, 0 },
    };
 
     for (size_t x = 0; x < clefOptions->clefDefs.size(); x++) {

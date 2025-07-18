@@ -102,7 +102,8 @@ enum class ClefType
     F,                  ///< Bass clef
     Percussion1,        ///< 2 thick vertical lines centered on middle staff line (corresponds to SMuFL glyph `unpitchedPercussionClef1`)
     Percussion2,        ///< Narrow rectangle centered on middle staff line (corresponds to SMuFL glyph `unpitchedPercussionClef2`)
-    Tab                 ///< Tablature clef
+    Tab,                ///< Tablature clef (TAB) with non-serif font
+    TabSerif            ///< Tablature clef (TAB) with serif font
 };
 
 /// @brief Calculates the displacement value for a given absolute pitch class and octave
