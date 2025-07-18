@@ -2120,6 +2120,60 @@ public:
         /// tells line-drawing commands to draw the line center, on the left, or on the right of the drawing coordinates specified.
         VerticalMode,
     };
+    
+    /// @struct Instruction
+    /// @brief Helper functions and structs for decoding instruction data vectors in ShapeDef.
+    struct Instruction
+    {
+        /// @brief Holds the parsed data for a LineWidth instruction.
+        struct LineWidth {
+            Efix efix;  ///< The line width in Efix units.
+        };
+
+        /// @brief Attempts to parse a LineWidth instruction.
+        /// @param[in] type The instruction type; must be InstructionType::LineWidth.
+        /// @param[in] data The instruction's associated data vector.
+        /// @return A LineWidth struct if successfully parsed, otherwise std::nullopt.
+        static std::optional<LineWidth> parseLineWidth(InstructionType type, const std::vector<int>& data) {
+            if (type == InstructionType::LineWidth && data.size() >= 1)
+                return LineWidth{data[0]};
+            return std::nullopt;
+        }
+
+        /// @brief Holds the parsed data for an RLineTo instruction.
+        struct RLineTo {
+            Evpu dx;  ///< The relative X coordinate delta in Evpu.
+            Evpu dy;  ///< The relative Y coordinate delta in Evpu.
+        };
+
+        /// @brief Attempts to parse an RLineTo instruction.
+        /// @param[in] type The instruction type; must be InstructionType::RLineTo.
+        /// @param[in] data The instruction's associated data vector.
+        /// @return An RLineTo struct if successfully parsed, otherwise std::nullopt.
+        static std::optional<RLineTo> parseRLineTo(InstructionType type, const std::vector<int>& data) {
+            if (type == InstructionType::RLineTo && data.size() >= 2)
+                return RLineTo{data[0], data[1]};
+            return std::nullopt;
+        }
+
+        /// @brief Attempts to parse a SetFont instruction into a FontInfo object.
+        /// @param[in] document The owning document used to construct the FontInfo object.
+        /// @param[in] type The instruction type; must be InstructionType::SetFont.
+        /// @param[in] data The instruction's associated data vector.
+        /// @return A FontInfo object if successfully parsed, otherwise std::nullopt.
+        static std::optional<FontInfo> parseSetFont(const DocumentWeakPtr& document, InstructionType type, const std::vector<int>& data) {
+            if (type == InstructionType::SetFont && data.size() >= 3) {
+                FontInfo result(document);
+                result.fontId = data[0];
+                result.fontSize = data[1];
+                result.setEnigmaStyles(data[2]);
+                return result;
+            }
+            return std::nullopt;
+        }
+
+        // Add more parsers as needed...
+    };
 
     /**
      * @enum ShapeType
