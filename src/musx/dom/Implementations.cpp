@@ -193,7 +193,7 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std
         if (isShape) {
             if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId)) {
                 shape->iterateInstructions([&](others::ShapeDef::InstructionType instructionType, std::vector<int> data) -> bool {
-                    if (std::optional<FontInfo> fontInfo = others::ShapeDef::Instruction::parseSetFont(getDocument(), instructionType, data)) {
+                    if (std::optional<FontInfo> fontInfo = others::ShapeInstruction::parseSetFont(getDocument(), instructionType, data)) {
                         if (fontInfo->getName().find("Times") != std::string::npos) { // Finale default file uses "Times" or "Times New Roman"
                             result = music_theory::ClefType::TabSerif;
                         }
@@ -3092,30 +3092,6 @@ bool others::RepeatEndingStart::calcIsOpen() const
         }
     }
     return false;
-}
-
-// ********************
-// ***** ShapeDef *****
-// ********************
-
-void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::InstructionType, std::vector<int>)> callback) const
-{
-    auto insts = getDocument()->getOthers()->get<others::ShapeInstructionList>(getPartId(), instructionList);
-    auto data = getDocument()->getOthers()->get<others::ShapeData>(getPartId(), dataList);
-    if (insts && data) {
-        size_t currentDataIndex = 0;
-        for (const auto& inst : insts->instructions) {
-            if (currentDataIndex + inst->numData > data->values.size()) {
-                throw std::invalid_argument("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
-            }
-            if (!callback(inst->type, { data->values.begin() + currentDataIndex, data->values.begin() + currentDataIndex + inst->numData })) {
-                break;
-            }
-            currentDataIndex += inst->numData;
-        }
-    } else {
-        MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) + " is missing instructions and/or data.");
-    }
 }
 
 // *****************
