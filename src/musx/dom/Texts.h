@@ -43,6 +43,8 @@ namespace texts {
 /**
  * @class FileInfoText
  * @brief Contains File Info text (from Finale's Score Manager)
+ * @note The Enigma inserts in FileInfoText are meaningless. You can use #util::EnigmaString::trimTags to trim them
+ * rather than calling the Enigma string parser.
  */
 class FileInfoText : public TextsBase
 {
@@ -219,7 +221,9 @@ public:
 
 /**
  * @class BookmarkText
- * @brief Contains bookmark description text
+ * @brief Contains bookmark description text.
+ * @note The Enigma inserts in BookmarkText are meaningless. You can use #util::EnigmaString::trimTags to trim them
+ * rather than calling the Enigma string parser.
  */
 class BookmarkText : public TextsBase
 {

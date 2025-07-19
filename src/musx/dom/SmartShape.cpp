@@ -114,5 +114,17 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
     return false;
 }
 
+// ******************&*************
+// ***** SmartShapeCustomLine *****
+// ********************************
+
+util::EnigmaParsingContext others::SmartShapeCustomLine::getRawTextCtx(Cmper forPartId, Cmper rawTextId) const
+{
+    if (auto rawText = getDocument()->getTexts()->get<texts::SmartShapeText>(rawTextId)) {
+        return rawText->getRawTextCtx(forPartId);
+    }
+    return {};
+}
+
 } // namespace dom    
 } // namespace musx

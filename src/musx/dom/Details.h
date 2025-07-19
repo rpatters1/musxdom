@@ -808,6 +808,13 @@ public:
  */
 class LyricAssign : public EntryDetailsBase
 {
+protected:
+    /// @brief Return an Enigma parsing context for the associated lyrics text block.
+    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
+    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
+    template <typename TextType>
+    util::EnigmaParsingContext getRawTextCtx() const;
+    
 public:
     /**
      * @brief Constructor function
@@ -844,6 +851,12 @@ class LyricAssignChorus : public LyricAssign
 public:
     using LyricAssign::LyricAssign;
 
+    /// @brief Return an Enigma parsing context for the associated lyrics text block.
+    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
+    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
+    util::EnigmaParsingContext getRawTextCtx() const
+    { return LyricAssign::getRawTextCtx<TextType>(); }
+
     using TextType = texts::LyricsChorus; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "lyrDataChorus"; ///< The XML node name for this type.
 };
@@ -859,6 +872,12 @@ class LyricAssignSection : public LyricAssign
 public:
     using LyricAssign::LyricAssign;
 
+    /// @brief Return an Enigma parsing context for the associated lyrics text block.
+    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
+    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
+    util::EnigmaParsingContext getRawTextCtx() const
+    { return LyricAssign::getRawTextCtx<TextType>(); }
+
     using TextType = texts::LyricsSection; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "lyrDataSection"; ///< The XML node name for this type.
 };
@@ -873,6 +892,12 @@ class LyricAssignVerse : public LyricAssign
 {
 public:
     using LyricAssign::LyricAssign;
+
+    /// @brief Return an Enigma parsing context for the associated lyrics text block.
+    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
+    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
+    util::EnigmaParsingContext getRawTextCtx() const
+    { return LyricAssign::getRawTextCtx<TextType>(); }
 
     using TextType = texts::LyricsVerse; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "lyrDataVerse"; ///< The XML node name for this type.

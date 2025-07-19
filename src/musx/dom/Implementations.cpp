@@ -2047,6 +2047,27 @@ std::optional<music_theory::DiatonicMode> KeySignature::calcDiatonicMode() const
     return std::nullopt;
 }
 
+// ************************
+// ***** LyricsAssign *****
+// ************************
+
+template <typename TextType>
+util::EnigmaParsingContext details::LyricAssign::getRawTextCtx() const
+{
+    static_assert(std::is_base_of_v<texts::LyricsTextBase, TextType>, "TextType must be a subclass of texts::LyricsTextBase.");
+    // note that lyrics do not have text inserts. The UI doesn't permit them.
+    if (auto rawText = getDocument()->getTexts()->get<TextType>(lyricNumber)) {
+        return rawText->getRawTextCtx(SCORE_PARTID);
+    }
+    return {};
+}
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsVerse>() const;
+template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsChorus>() const;
+template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsSection>() const;
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
 // **************************
 // ***** LyricsTextBase *****
 // **************************
@@ -4029,7 +4050,10 @@ util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std
             rawText = getDocument()->getTexts()->get<texts::ExpressionText>(textId);
             break;
     }
-    return rawText->getRawTextCtx(forPartId, forPageId, defaultInsertFunc);
+    if (rawText) {
+        return rawText->getRawTextCtx(forPartId, forPageId, defaultInsertFunc);
+    }
+    return {};
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)

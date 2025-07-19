@@ -224,6 +224,8 @@ public:
  */
 class SmartShapeCustomLine : public OthersBase
 {
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, Cmper textBlockId) const;
+
 public:
     /// @brief Constructor function
     explicit SmartShapeCustomLine(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
@@ -323,6 +325,41 @@ public:
 
     Efix lineCapStartHookLength{};                        ///< Length of start hook (if #lineStyle is Hook)
     Efix lineCapEndHookLength{};                          ///< Length of end hook (if #lineStyle is Hook)
+
+    /**
+     * @brief Gets the raw text context for parsing the left-start, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getLeftStartRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, leftStartRawTextId); }
+
+    /**
+     * @brief Gets the raw text context for parsing the left-continuation text, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getLeftContRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, leftContRawTextId); }
+
+    /**
+     * @brief Gets the raw text context for parsing the right-end text, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getRightEndRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, rightEndRawTextId); }
+
+    /**
+     * @brief Gets the raw text context for parsing the center-full text, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getCenterFullRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, centerFullRawTextId); }
+
+    /**
+     * @brief Gets the raw text context for parsing the center-abbreviated text, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getCenterAbbrRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, centerAbbrRawTextId); }
 
     void integrityCheck() override
     {
