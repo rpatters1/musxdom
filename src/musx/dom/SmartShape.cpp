@@ -56,6 +56,51 @@ EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
     return result;
 }
 
+std::shared_ptr<others::SmartShapeMeasureAssign> others::SmartShape::EndPoint::getMeasureAssignment() const
+{
+    if (auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
+        if (measure->hasSmartShape) {
+            auto assigns = getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(getPartId(), measId);
+            Cmper shapeId = getParent()->getCmper();
+            for (const auto& assign : assigns) {
+                if (assign->shapeNum == shapeId) {
+                    return assign;
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<details::SmartShapeEntryAssign> others::SmartShape::EndPoint::getEntryAssignment() const
+{
+    if (entryNumber != 0) {
+        if (auto entry = getDocument()->getEntries()->get(entryNumber)) {
+            if (entry->smartShapeDetail) {
+                auto assigns = getDocument()->getDetails()->getArray<details::SmartShapeEntryAssign>(getPartId(), entryNumber);
+                Cmper shapeId = getParent()->getCmper();
+                for (const auto& assign : assigns) {
+                    if (assign->shapeNum == shapeId) {
+                        return assign;
+                    }
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
+bool others::SmartShape::EndPoint::calcIsAssigned() const
+{
+    if (!getMeasureAssignment()) {
+        return false;
+    }
+    if (entryNumber != 0 && !getEntryAssignment()) {
+        return false;
+    }
+    return true;
+}
+
 util::Fraction others::SmartShape::EndPoint::calcPosition() const
 {
     if (!entryNumber) {

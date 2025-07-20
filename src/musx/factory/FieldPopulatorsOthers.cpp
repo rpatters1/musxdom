@@ -860,7 +860,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPointAdjustment, {
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
     {"endPt", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getDocument()); }},
+        { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getDocument(), i->getParent()); }},
     {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
         { i->endPointAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
     {"breakAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
@@ -871,14 +871,14 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"shapeType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->shapeType = toEnum<SmartShape::ShapeType>(e); }},
     {"entryBased", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->entryBased = populateBoolean(e, i); }},
     {"startTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
-        { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
+        { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument(), i); }},
     {"endTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
-        { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
+        { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument(), i); }},
     {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->hidden = populateBoolean(e, i); }},
     {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
-    });
+});
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::CharParams, {
     {"lineChar", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::CharParams>& i) { i->lineChar = e->getTextAs<char32_t>(); }},

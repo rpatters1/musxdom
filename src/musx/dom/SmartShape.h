@@ -33,15 +33,20 @@ namespace dom {
 
 class EntryInfoPtr;
 
+namespace details {
+class SmartShapeEntryAssign;
+}
+
 namespace others {
 
+class SmartShapeMeasureAssign;
 /**
  * @class SmartShape
  * @brief Represents a Finale smart shape.
  *
  * This class is identified by the XML node name "smartShape".
  */
-class SmartShape : public OthersBase
+class SmartShape : public OthersBase, public std::enable_shared_from_this<SmartShape>
 {
 public:
     /** @brief Constructor function */
@@ -55,13 +60,15 @@ public:
     {
     public:
         /** @brief Constructor function. */
-        explicit EndPoint(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        explicit EndPoint(const DocumentWeakPtr& document, const std::weak_ptr<others::SmartShape>& parent)
+            : Base(document, SCORE_PARTID, ShareMode::All), m_parent(parent) {}
 
         InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
         MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
         Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
         EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
+
+        Cmper shapeId{};                ///< The shape that this segment belongs to. (Added by the factory.)
 
         /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
         util::Fraction calcPosition() const;
@@ -70,11 +77,34 @@ public:
         util::Fraction calcGlobalPosition() const;
 
         /// @brief Calculates the entry associated with the endpoint.
-        /// @return The entry if the endpoint is entry-attached or within 1 Edu of an entry. Null if not.
+        /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
+        /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
+        /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
         EntryInfoPtr calcAssociatedEntry() const;
+
+        /// @brief Gets the measure assignment for this endpoint or null if none.
+        std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
+
+        /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
+        std::shared_ptr<details::SmartShapeEntryAssign> getEntryAssignment() const;
+
+        /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
+        bool calcIsAssigned() const;
 
         bool requireAllFields() const override { return false; }
         static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+
+        /// @brief Get the parent SmartShape for this endpoint.
+        std::shared_ptr<others::SmartShape> getParent() const
+        {
+            if (auto result = m_parent.lock()) {
+                return result;
+            }
+            throw std::logic_error("Attempt to get parent of Smart Shape endpoint, but the parent is not longer allocated.");
+        }
+
+    private:
+        std::weak_ptr<others::SmartShape> m_parent;
     };
 
     /**
@@ -102,19 +132,28 @@ public:
     {
     public:
         /** @brief Constructor function. */
-        explicit TerminationSeg(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        explicit TerminationSeg(const DocumentWeakPtr& document, const std::weak_ptr<others::SmartShape>& parent)
+            : Base(document, SCORE_PARTID, ShareMode::All), m_parent(parent) {}
 
         std::shared_ptr<EndPoint> endPoint;                 ///< Endpoint information (xml node is `<endPt>`)
         std::shared_ptr<EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information (xml node is `<endPtAdj>`)
         std::shared_ptr<EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
                                                             ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
+        /// @brief Get the parent SmartShape for this endpoint.
+        std::shared_ptr<others::SmartShape> getParent() const
+        {
+            if (auto result = m_parent.lock()) {
+                return result;
+            }
+            throw std::logic_error("Attempt to get parent of Smart Shape termination segment, but the parent is not longer allocated.");
+        }
+
         void integrityCheck() override
         {
             Base::integrityCheck();
             if (!endPoint) {
-                endPoint = std::make_shared<EndPoint>(getDocument());
+                endPoint = std::make_shared<EndPoint>(getDocument(), m_parent);
             }
             if (!endPointAdj) {
                 endPointAdj = std::make_shared<EndPointAdjustment>(getDocument());
@@ -126,6 +165,9 @@ public:
     
         bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
         static const xml::XmlElementArray<TerminationSeg>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+
+    private:
+        std::weak_ptr<others::SmartShape> m_parent;
     };
 
     /**
@@ -202,10 +244,10 @@ public:
     {
         OthersBase::integrityCheck();
         if (!startTermSeg) {
-            startTermSeg = std::make_shared<TerminationSeg>(getDocument());
+            startTermSeg = std::make_shared<TerminationSeg>(getDocument(), weak_from_this());
         }
         if (!endTermSeg) {
-            endTermSeg = std::make_shared<TerminationSeg>(getDocument());
+            endTermSeg = std::make_shared<TerminationSeg>(getDocument(), weak_from_this());
         }
         startTermSeg->integrityCheck();
         endTermSeg->integrityCheck();
