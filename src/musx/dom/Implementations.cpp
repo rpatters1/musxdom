@@ -3646,8 +3646,15 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     }
     if (srcMasks->notationStyle) {
         notationStyle = staffStyle->notationStyle;
+        capoPos = staffStyle->capoPos;
+        lowestFret = staffStyle->lowestFret;
+        vertTabNumOff = staffStyle->vertTabNumOff;
+        showTabClefAllSys = staffStyle->showTabClefAllSys;
+        useTabLetters = staffStyle->useTabLetters;
+        breakTabLinesAtNotes = staffStyle->breakTabLinesAtNotes;
+        hideTuplets = staffStyle->hideTuplets;
+        fretInstrumentId = staffStyle->fretInstrumentId;
         percussionMapId = staffStyle->percussionMapId;
-        // other fields needed for perc and tab styles
         masks->notationStyle = true;
     }
     if (srcMasks->defaultClef) {
@@ -3808,6 +3815,10 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
     if (srcMasks->showNameParts) {
         showNameInParts = staffStyle->showNameInParts;
         masks->showNameParts = true;
+    }
+    if (srcMasks->showNoteColors) {
+        showNoteColors = staffStyle->showNoteColors;
+        masks->showNoteColors = true;
     }
     if (srcMasks->hideStaffLines) {
         hideStaffLines = staffStyle->hideStaffLines;

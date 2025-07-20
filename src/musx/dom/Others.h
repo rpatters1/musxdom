@@ -2138,12 +2138,15 @@ public:
     std::optional<std::vector<int>> customStaff; ///< A list of stafflines from 0..26 where a standard 5-line staff is values 11, 12, 13, 14, 15.
     Evpu lineSpace{};               ///< Distance between staff lines.
     std::string instUuid;           ///< Unique identifier for the type of instrument.
+    int capoPos{};                  ///< "Capo Position" (Tablature Staff Attributes)
+    int lowestFret{};               ///< "Default Lowest Fret" (Tablature Staff Attributes)
     bool floatKeys{};               ///< "Independent Key Signature"
     bool floatTime{};               ///< "Independent Time Signature"
     bool blineBreak{};              ///< "Break Barlines Between Staves"
     bool rbarBreak{};               ///< "Break Repeat Barlines Between Staves"
     bool hasStyles{};               ///< Indicates that this staff has staff style assignments
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
+    bool showNoteColors{};          ///< "Color Noteheads" (Score Manager)
     std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
     bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
@@ -2190,7 +2193,12 @@ public:
     Cmper abbrvNameTextId{};        ///< Abbreviated name @ref TextBlock ID. (xml node is `<abbrvName>`)
     Evpu botRepeatDotOff{};         ///< Offset for bottom repeat dots.
     Evpu topRepeatDotOff{};         ///< Offset for top repeat dots.
-    Evpu vertTabNumOff{};           ///< Vertical offset for tab number.
+    Efix vertTabNumOff{};           ///< Vertical offset for tab number. (Tablature Staff Attributes)
+    bool showTabClefAllSys{};       ///< Inverse of "Show Clef Only On First Measure" (Tablature Staff Attributes)
+    bool useTabLetters{};           ///< "Use Letters" (Tablature Staff Attributes)
+    bool breakTabLinesAtNotes{};    ///< "Break Tablature Lines At Numbers" (Tablature Staff Attributes)
+    bool hideTuplets{};             ///< Inverse of "Show Tuplets" (Tablature Staff Attributes)
+    Cmper fretInstrumentId{};       ///< Cmper of fret instrument. (Tablature Staff Attributes)
     bool hideStems{};               ///< Inverse of "Display Stems"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
     bool hideBeams{};               ///< Inverse of "Show Beams"
@@ -2442,6 +2450,7 @@ public:
         bool hideFretboards{};          ///< overrides #Staff::hideFretboards
         bool hideLyrics{};              ///< overrides #Staff::hideLyrics
         bool showNameParts{};           ///< overrides #Staff::showNameInParts
+        bool showNoteColors{};          ///< overrides #Staff::showNoteColors
         bool hideStaffLines{};          ///< overrides #Staff::hideStaffLines
         bool redisplayLayerAccis{};     ///< overrides #Staff::redisplayLayerAccis
         bool negTimeParts{};            ///< overrides #Staff::hideTimeSigsInParts
