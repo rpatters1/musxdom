@@ -136,11 +136,17 @@ MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
     {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(CenterShape::EndPointAdjustment, {
+    {"x", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape::EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"y", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape::EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"on", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape::EndPointAdjustment>& i) { i->active = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(CenterShape, {
     { "startBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
-        { i->startBreakAdj = FieldPopulator<others::SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+        { i->startBreakAdj = FieldPopulator<CenterShape::EndPointAdjustment>::createAndPopulate(e, i); }},
     { "endBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
-        { i->endBreakAdj = FieldPopulator<others::SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+        { i->endBreakAdj = FieldPopulator<CenterShape::EndPointAdjustment>::createAndPopulate(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ChordAssign, {

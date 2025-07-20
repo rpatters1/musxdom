@@ -103,7 +103,7 @@ util::Fraction others::SmartShape::EndPoint::calcPosition() const
     if (!entryNumber) {
         return util::Fraction::fromEdu(eduPosition);
     }
-    if (auto entryInfo = calcAssociatedEntry(getParent()->getPartId())) {
+    if (auto entryInfo = calcAssociatedEntry(getPartId())) {
         return entryInfo->elapsedDuration;
     }
     return 0;
@@ -118,7 +118,7 @@ util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
         }
         return rawPosition;
     }
-    if (auto entryInfo = calcAssociatedEntry(getParent()->getPartId())) {
+    if (auto entryInfo = calcAssociatedEntry(getPartId())) {
         return entryInfo.calcGlobalElapsedDuration();
     }
     return 0;

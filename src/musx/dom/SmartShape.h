@@ -56,12 +56,10 @@ public:
     /**
      * @brief Represents an endpoint of the smart shape.
      */
-    class EndPoint : public Base
+    class EndPoint : public ContainedClassBase<SmartShape>
     {
     public:
-        /** @brief Constructor function. */
-        explicit EndPoint(const DocumentWeakPtr& document, const std::weak_ptr<others::SmartShape>& parent)
-            : Base(document, SCORE_PARTID, ShareMode::All), m_parent(parent) {}
+        using ContainedClassBase<SmartShape>::ContainedClassBase;
 
         InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
         MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
@@ -79,7 +77,7 @@ public:
         /// @brief Calculates the entry associated with the endpoint.
         /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
         /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
-        /// @param forPartId The linked part or score for which to create the #EntryInfoPtr.
+        /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
         /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
         EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
 
@@ -94,29 +92,15 @@ public:
 
         bool requireAllFields() const override { return false; }
         static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-
-        /// @brief Get the parent SmartShape for this endpoint.
-        std::shared_ptr<others::SmartShape> getParent() const
-        {
-            if (auto result = m_parent.lock()) {
-                return result;
-            }
-            throw std::logic_error("Attempt to get parent of Smart Shape endpoint, but the parent is not longer allocated.");
-        }
-
-    private:
-        std::weak_ptr<others::SmartShape> m_parent;
     };
 
     /**
      * @brief Represents the endpoint adjustment of the smart shape.
      */
-    class EndPointAdjustment : public Base
+    class EndPointAdjustment : public ContainedClassBase<SmartShape>
     {
     public:
-        /** @brief Constructor function. */
-        explicit EndPointAdjustment(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        using ContainedClassBase<SmartShape>::ContainedClassBase;
 
         Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
         Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
@@ -129,46 +113,32 @@ public:
     /**
      * @brief Represents the termination segment of the smart shape.
      */
-    class TerminationSeg : public Base
+    class TerminationSeg : public ContainedClassBase<SmartShape>
     {
     public:
-        /** @brief Constructor function. */
-        explicit TerminationSeg(const DocumentWeakPtr& document, const std::weak_ptr<others::SmartShape>& parent)
-            : Base(document, SCORE_PARTID, ShareMode::All), m_parent(parent) {}
+        using ContainedClassBase<SmartShape>::ContainedClassBase;
 
         std::shared_ptr<EndPoint> endPoint;                 ///< Endpoint information (xml node is `<endPt>`)
         std::shared_ptr<EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information (xml node is `<endPtAdj>`)
         std::shared_ptr<EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
                                                             ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
-        /// @brief Get the parent SmartShape for this endpoint.
-        std::shared_ptr<others::SmartShape> getParent() const
-        {
-            if (auto result = m_parent.lock()) {
-                return result;
-            }
-            throw std::logic_error("Attempt to get parent of Smart Shape termination segment, but the parent is not longer allocated.");
-        }
-
         void integrityCheck() override
         {
             Base::integrityCheck();
             if (!endPoint) {
-                endPoint = std::make_shared<EndPoint>(getDocument(), m_parent);
+                endPoint = std::make_shared<EndPoint>(getParent());
             }
             if (!endPointAdj) {
-                endPointAdj = std::make_shared<EndPointAdjustment>(getDocument());
+                endPointAdj = std::make_shared<EndPointAdjustment>(getParent());
             }
             if (!breakAdj) {
-                breakAdj = std::make_shared<EndPointAdjustment>(getDocument());
+                breakAdj = std::make_shared<EndPointAdjustment>(getParent());
             }
         }
     
         bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
         static const xml::XmlElementArray<TerminationSeg>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
-
-    private:
-        std::weak_ptr<others::SmartShape> m_parent;
     };
 
     /**
@@ -245,10 +215,10 @@ public:
     {
         OthersBase::integrityCheck();
         if (!startTermSeg) {
-            startTermSeg = std::make_shared<TerminationSeg>(getDocument(), weak_from_this());
+            startTermSeg = std::make_shared<TerminationSeg>(shared_from_this());
         }
         if (!endTermSeg) {
-            endTermSeg = std::make_shared<TerminationSeg>(getDocument(), weak_from_this());
+            endTermSeg = std::make_shared<TerminationSeg>(shared_from_this());
         }
         startTermSeg->integrityCheck();
         endTermSeg->integrityCheck();
@@ -469,9 +439,25 @@ namespace details {
  * Cmper1 is the shape number. Cmper2 is the center shape number. (See @ref others::SmartShapeMeasureAssign.)
  * This class is identified by the XML node name "centerShape".
  */
-class CenterShape : public DetailsBase
+class CenterShape : public DetailsBase, public std::enable_shared_from_this<CenterShape>
 {
 public:
+
+    /**
+     * @brief Represents the endpoint adjustment of the center shape.
+     */
+    class EndPointAdjustment : public ContainedClassBase<CenterShape>
+    {
+    public:
+        using ContainedClassBase<CenterShape>::ContainedClassBase;
+
+        Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
+        Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
+        bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
+
+        bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
+        static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+    };
 
     /**
      * @brief Constructor
@@ -485,16 +471,16 @@ public:
         : DetailsBase(document, partId, shareMode, shapeNum, centerShapeNum)
     {}
 
-    std::shared_ptr<others::SmartShape::EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
-    std::shared_ptr<others::SmartShape::EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
+    std::shared_ptr<EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
+    std::shared_ptr<EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
 
     void integrityCheck() override
     {
         if (!startBreakAdj) {
-            startBreakAdj = std::make_shared<others::SmartShape::EndPointAdjustment>(getDocument());
+            startBreakAdj = std::make_shared<EndPointAdjustment>(shared_from_this());
         }
         if (!endBreakAdj) {
-            endBreakAdj = std::make_shared<others::SmartShape::EndPointAdjustment>(getDocument());
+            endBreakAdj = std::make_shared<EndPointAdjustment>(shared_from_this());
         }
     }
 
