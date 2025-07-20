@@ -79,8 +79,9 @@ public:
         /// @brief Calculates the entry associated with the endpoint.
         /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
         /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
+        /// @param forPartId The linked part or score for which to create the #EntryInfoPtr.
         /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
-        EntryInfoPtr calcAssociatedEntry() const;
+        EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
 
         /// @brief Gets the measure assignment for this endpoint or null if none.
         std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;

@@ -629,6 +629,21 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
 // ***** EntryInfoPtr *****
 // ************************
 
+EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measureId, EntryNumber entryNumber)
+{
+    EntryInfoPtr result;
+    if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId)) {
+        gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
+            if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
+                result = entryInfo;
+                return false; // stop iterating
+            }
+            return true;
+        });
+    }
+    return result;
+}
+
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 {
     MUSX_ASSERT_IF(!m_entryFrame) {

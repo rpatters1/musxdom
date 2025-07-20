@@ -378,7 +378,7 @@ class EntryInfoPtr
 public:
     /** @brief Default constructor */
     EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
-    
+        
     /** @brief Constructor function
      *
      * @param entryFrame The entry frame.
@@ -386,6 +386,15 @@ public:
     */
     explicit EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
         : m_entryFrame(entryFrame), m_indexInFrame(index) {}
+
+    /// @brief Searches the given position at @p staffId and @p measureId for the @p entryNumber.
+    /// @param document The document to search.
+    /// @param partId The part within the document for which to create the #EntryInfoPtr.
+    /// @param staffId The ID of the staff to search.
+    /// @param measureId The ID of the measure to search.
+    /// @param entryNumber The EntryNumber to search for.
+    /// @return If found, an #EntryInfoPtr for the given entry number. Otherwise an null instance.
+    static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measureId, EntryNumber entryNumber);
 
     /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
     const std::shared_ptr<const EntryInfo> operator->() const;

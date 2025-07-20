@@ -31,18 +31,15 @@ namespace dom {
 // ***** SmartShape *****
 // **********************
 
-EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
+EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry(Cmper forPartId) const
 {
     EntryInfoPtr result;
-    if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), staffId, measId)) {
+    if (entryNumber != 0) {
+        result = EntryInfoPtr::fromPositionOrNull(getDocument(), forPartId, staffId, measId, entryNumber);
+    } else if (auto gfhold = details::GFrameHoldContext(getDocument(), forPartId, staffId, measId)) {
         gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
-            if (!entryNumber) {
-                unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
-                if (eduDiff <= 1) {
-                    result = entryInfo;
-                    return false; // stop iterating
-                }
-            } else if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
+            unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
+            if (eduDiff <= 1) {
                 result = entryInfo;
                 return false; // stop iterating
             }
@@ -106,7 +103,7 @@ util::Fraction others::SmartShape::EndPoint::calcPosition() const
     if (!entryNumber) {
         return util::Fraction::fromEdu(eduPosition);
     }
-    if (auto entryInfo = calcAssociatedEntry()) {
+    if (auto entryInfo = calcAssociatedEntry(getParent()->getPartId())) {
         return entryInfo->elapsedDuration;
     }
     return 0;
@@ -121,7 +118,7 @@ util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
         }
         return rawPosition;
     }
-    if (auto entryInfo = calcAssociatedEntry()) {
+    if (auto entryInfo = calcAssociatedEntry(getParent()->getPartId())) {
         return entryInfo.calcGlobalElapsedDuration();
     }
     return 0;
