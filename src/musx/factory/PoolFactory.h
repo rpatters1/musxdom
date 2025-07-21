@@ -322,26 +322,26 @@ public:
     }
 
 private:
-    static Cmper toCmper(const std::string& type) {
+    static Cmper toCmper(const std::string& type)
+    {
         using TextType = texts::FileInfoText::TextType;
-        
-        if (type == "title") {
-            return Cmper(TextType::Title);
-        } else if (type == "composer") {
-            return Cmper(TextType::Composer);
-        } else if (type == "copyright") {
-            return Cmper(TextType::Copyright);
-        } else if (type == "description") {
-            return Cmper(TextType::Description);
-        } else if (type == "lyricist") {
-            return Cmper(TextType::Lyricist);
-        } else if (type == "arranger") {
-            return Cmper(TextType::Arranger);
-        } else if (type == "subtitle") {
-            return Cmper(TextType::Subtitle);
-        } else {
-            throw std::invalid_argument("Unknown type attribute value for <fileInfo> node: " + type);
+
+        static const std::unordered_map<std::string_view, TextType> typeMap = {
+            {"title", TextType::Title},
+            {"composer", TextType::Composer},
+            {"copyright", TextType::Copyright},
+            {"description", TextType::Description},
+            {"lyricist", TextType::Lyricist},
+            {"arranger", TextType::Arranger},
+            {"subtitle", TextType::Subtitle}
+        };
+
+        auto it = typeMap.find(type);
+        if (it != typeMap.end()) {
+            return Cmper(it->second);
         }
+
+        throw std::invalid_argument("Unknown type attribute value for <fileInfo> node: " + type);
     }
 };
 
