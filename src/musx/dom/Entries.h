@@ -702,6 +702,15 @@ public:
     private:
         bool calcCreatesSingleton(bool left) const;
 
+        const std::shared_ptr<const EntryFrame> getParent() const
+        {
+            auto result = m_parent.lock();
+            MUSX_ASSERT_IF(!result) {
+                throw std::logic_error("Unable to obtain lock on parent entry frame.");               
+            }
+            return result;
+        }
+
         const std::weak_ptr<const EntryFrame> m_parent;
     };
 

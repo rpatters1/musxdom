@@ -440,10 +440,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         return false;
     }
     // entries must have the same duration and actual duration.
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
         throw std::logic_error("TupletInfo instance contains invalid start index.");
     }
@@ -482,10 +479,7 @@ bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
         return false;
     }
     // entries must have the same duration and actual duration.
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
         throw std::logic_error("TupletInfo instance contains invalid start index.");
     }
@@ -543,10 +537,7 @@ bool EntryFrame::TupletInfo::calcCreatesBeamContinuationRight() const
     if (!calcCreatesSingletonRight()) {
         return false;
     }
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     int voice = int(voice2) + 1;
     EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
     auto nextInBeam = entryInfo.getNextInBeamGroup();
@@ -573,10 +564,7 @@ bool EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft() const
     if (!calcCreatesSingletonLeft()) {
         return false;
     }
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     int voice = int(voice2) + 1;
     EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
     if (entryInfo.getPreviousInVoice(voice)) {
@@ -603,10 +591,7 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
             return false;
         }
     }
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     // staff must be independent timesig
     const auto staff = frame->createCurrentStaff(0);
     if (staff && !staff->floatTime) {
@@ -3596,7 +3581,7 @@ std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainin
     return result;
 }
 
-std::shared_ptr<others::PartDefinition> others::Staff::firstFirstContainingPart() const
+std::shared_ptr<others::PartDefinition> others::Staff::firstContainingPart() const
 {
     std::vector<std::shared_ptr<others::PartDefinition>> result;
     auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
@@ -3789,15 +3774,15 @@ void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle
         hideStems = staffStyle->hideStems;
         hideBeams = staffStyle->hideBeams;
         stemDirection = staffStyle->stemDirection;
-        // stemsFixedStart
-        // stemdFixedEnd
-        // stemStartFromStaff
-        // horzStemOffUp
-        // horzStemOffDown
-        // vertStemStartOffUp
-        // vertStemStartOffDown
-        // vertStemEndOffUp
-        // vertStemEndOffDown
+        stemStartFromStaff = staffStyle->stemStartFromStaff;
+        stemsFixedEnd = staffStyle->stemsFixedEnd;
+        stemsFixedStart = staffStyle->stemsFixedStart;
+        horzStemOffUp = staffStyle->horzStemOffUp;
+        horzStemOffDown = staffStyle->horzStemOffDown;
+        vertStemStartOffUp = staffStyle->vertStemStartOffUp;
+        vertStemStartOffDown = staffStyle->vertStemStartOffDown;
+        vertStemEndOffUp = staffStyle->vertStemEndOffUp;
+        vertStemEndOffDown = staffStyle->vertStemEndOffDown;
         masks->showStems = true;
     }
     if (srcMasks->hideChords) {

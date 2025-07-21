@@ -225,10 +225,11 @@ public:
     /// @brief Get the parent.
     std::shared_ptr<ContainerClass> getParent() const
     {
-        if (auto result = m_parent.lock()) {
-            return result;
+        auto result = m_parent.lock();
+        MUSX_ASSERT_IF (!result) {
+            throw std::logic_error("Attempt to get parent of contained class, but the parent is no longer allocated.");
         }
-        throw std::logic_error("Attempt to get parent of contained class, but the parent is no longer allocated.");
+        return result;
     }
     
 private:

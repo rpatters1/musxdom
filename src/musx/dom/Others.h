@@ -2202,6 +2202,17 @@ public:
     bool hideStems{};               ///< Inverse of "Display Stems"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
     bool hideBeams{};               ///< Inverse of "Show Beams"
+    bool stemStartFromStaff{};      ///< Vertical offset location for notehead end of stems.
+                                    ///< - Offset from notehead: false
+                                    ///< - Offset from staff: true
+    bool stemsFixedEnd{};           ///< "Use Vertical Offset For Beam End Of Stems (Offset From Staff)"
+    bool stemsFixedStart{};         ///< "Use Vertical Offset For Notehead End Of Stems"
+    Efix horzStemOffUp{};           ///< Horizontal Stem Offsets: Up Stem
+    Efix horzStemOffDown{};         ///< Horizontal Stem Offsets: Down Stem
+    Efix vertStemStartOffUp{};      ///< Vertical Stem Offsets For Notehead End: Up Stem
+    Efix vertStemStartOffDown{};    ///< Vertical Stem Offsets For Notehead End: Down Stem
+    Efix vertStemEndOffUp{};        ///< Vertical Stem Offsets For Stem End: Up Stem
+    Efix vertStemEndOffDown{};      ///< Vertical Stem Offsets For Stem End: Down Stem
     HideMode hideMode{};            ///< "Force Hide Staff" option
     bool redisplayLayerAccis{};     ///< "Redisplay Accidentals in Other Layers Within Measures"
     bool hideTimeSigsInParts{};     ///< Inverse of "Display Time Signatures in Parts"
@@ -2347,7 +2358,7 @@ public:
 
     /// @brief Finds the first part that contains this staff, not including the score.
     /// @return The first part that contains this staff or nullptr if none.
-    std::shared_ptr<PartDefinition> firstFirstContainingPart() const;
+    std::shared_ptr<PartDefinition> firstContainingPart() const;
 
     void integrityCheck() override
     {
@@ -2359,7 +2370,7 @@ public:
         }
         if (customStaff) { // guarantee ascending order of staves.
             std::sort(customStaff.value().begin(), customStaff.value().end(),
-                [](const auto& a, const auto& b) { return a < b; });
+                [](const auto& a, const auto& b) { return a < b; });    
         }
         if (transposition) {
             if (!transposition->chromatic && !transposition->keysig) {
