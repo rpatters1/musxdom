@@ -31,6 +31,7 @@
 #include "CommonClasses.h"
 #include "Options.h"
 #include "Others.h"
+#include "Staff.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {

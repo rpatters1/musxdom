@@ -40,6 +40,7 @@ set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/ShapeDesigner.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/SmartShape.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Staff.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsEntries.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsCommon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsDetails.cpp
