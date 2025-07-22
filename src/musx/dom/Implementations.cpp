@@ -2586,7 +2586,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
     return NoteInfoPtr();
 }
 
-NoteInfoPtr NoteInfoPtr::calcTieFrom() const
+NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
 {
     if (*this) {
         // grace notes cannot tie backwards; only forwards (see grace note comment above)
@@ -2604,7 +2604,10 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
                 for (size_t noteIndex = 0; noteIndex < prevEntry->notes.size(); noteIndex++) {
                     NoteInfoPtr tryFrom(prev, noteIndex);
                     if (auto tryTiedTo = tryFrom.calcTieTo(); isSameNote(tryTiedTo)) {
-                        return tryFrom;
+                        if (!requireTie || tryFrom->tieStart) {
+                            return tryFrom;
+                        }
+                        return NoteInfoPtr();
                     }
                 }
             }

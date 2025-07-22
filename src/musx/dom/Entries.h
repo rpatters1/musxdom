@@ -920,14 +920,15 @@ public:
     std::shared_ptr<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
-    /// to see if there is actually a tie end.
+    /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
     NoteInfoPtr calcTieTo() const;
 
-    /// @brief Calculates the note that this note could tie from. Check the return value's #Note::tieStart
-    /// to see if there is actually a tie.
+    /// @brief Calculates the note that this note could tie from.
+    /// @param requireTie. If @p requireTie is true, the returned value must have its #Note::tieStart flag set to true.
+    /// You can set @requireTie to false to find the *potential* note this note might be tied from.
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
-    NoteInfoPtr calcTieFrom() const;
+    NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
     InstCmper calcStaff() const;
