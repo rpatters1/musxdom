@@ -1393,25 +1393,9 @@ public:
         return std::nullopt;
     }
 
-    /// @brief Returns the index of an input staffId that visually shows in this multi-instrument group or std::nullopt if not found
-    std::optional<size_t> getVisualIndexOf(InstCmper staffId) const
-    {
-        for (size_t x = 0; x < visualStaffNums.size(); x++) {
-            if (visualStaffNums[x] == staffId) return x;        
-        }
-        return std::nullopt;
-    }
-
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
     std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
-
-    /// @brief Calculates the visual group associated with this multistaff instrument, or nullptr if not found.
-    /// This may be different than the actual multistaff group when a standard configuration has extra
-    /// staves added visually. For example, an older file with a 3-staff piano part may have a 2-staff
-    /// multistaff instrument but visually show a 3-staff bracket.
-    /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
-    std::shared_ptr<details::StaffGroup> calcVisualStaffGroup(Cmper forPartId) const;
 
     /// @brief Used by the factory to calculate all multistaff ids and visual ids for instances of @ref Staff.
     /// @param document 

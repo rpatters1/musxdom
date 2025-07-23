@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
 #include "Header.h"
 #include "ObjectPool.h"
@@ -43,6 +44,17 @@ class DocumentFactory;
 namespace dom {
 
 using namespace header;
+
+/// @class InstrumentInfo
+/// @brief Represents information about each instrument in the document. This is calculated from the staves,
+/// staff groups, and multistaff instrument groups.
+struct InstrumentInfo
+{
+    std::unordered_map<InstCmper, size_t> staves;   ///< List of each staffId with its sequence index from top to bottom.
+    Cmper staffGroupId{};                           ///< The @ref details::StaffGroup that visually represents the instrument. (May be zero.)
+    Cmper multistaffGroupId{};                      ///< The @ref others::MultiStaffInstrumentGroup that defines the instrument. (May be zero.)
+};
+using InstrumentMap = std::unordered_map<InstCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
@@ -93,12 +105,30 @@ public:
     /// @brief Returns the maximum number of blank pages in any part. This is calculated by #factory::DocumentFactory::create.
     int getMaxBlankPages() const { return m_maxBlankPages; }
 
-private:
-    /**
-     * @brief Constructs a `Document`
-     */
-     explicit Document() = default;
+    /// @brief Returns the instrument map for this document. It is computed by the factory.
+    const InstrumentMap& getInstruments() const { return m_instruments; }
 
+    /// @brief Get the instrument info for the given staffId
+    /// @param staffId The staffId to find.
+    const InstrumentInfo& getInstrumentForStaff(InstCmper staffId) const;
+
+private:
+    /// @brief Constructs a `Document`
+    explicit Document() = default;
+
+    /**
+     * @brief Builds the instrument map from Finale-style data.
+     *
+     * This routine detects instrument groupings in three stages:
+     * 1. Defined multi-staff instruments (via multiStaffInstId).
+     * 2. Visually bracketed staves with matching instrument UUIDs.
+     * 3. Remaining single staves as individual instruments.
+     *
+     * This is especially important for supporting legacy .musx files
+     * created before multi-staff instruments were defined explicitly.
+     */
+    void createInstrumentMap();
+    
     HeaderPtr m_header;         ///< The <header>
     OptionsPoolPtr m_options;   ///< The <options> pool
     OthersPoolPtr m_others;     ///< The <others> pool
@@ -107,6 +137,9 @@ private:
     TextsPoolPtr m_texts;       ///< The <texts> pool
 
     int m_maxBlankPages{};      ///< The maximum number of leading blank pages in any part.
+
+    InstrumentMap m_instruments; ///< List of instruments in the document, indexed by the top staff in each instrument in Scroll View of the score.
+                                ///< This computed by the factory.
 
     // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;
