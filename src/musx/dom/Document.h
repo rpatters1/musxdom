@@ -22,6 +22,8 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "Header.h"
 #include "ObjectPool.h"
@@ -43,6 +45,13 @@ class DocumentFactory;
 namespace dom {
 
 using namespace header;
+
+struct InstrumentInfo
+{
+    std::unordered_set<InstCmper> staves;
+    Cmper staffGroupId{};
+};
+using InstrumentMap = std::unordered_map<InstCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
@@ -93,12 +102,15 @@ public:
     /// @brief Returns the maximum number of blank pages in any part. This is calculated by #factory::DocumentFactory::create.
     int getMaxBlankPages() const { return m_maxBlankPages; }
 
-private:
-    /**
-     * @brief Constructs a `Document`
-     */
-     explicit Document() = default;
+    /// @brief Returns the instrument map for this document. It is computed by the factory.
+    const InstrumentMap& getInstruments() const { return m_instruments; }
 
+private:
+    /// @brief Constructs a `Document`
+    explicit Document() = default;
+
+    void createInstrumentMap();
+    
     HeaderPtr m_header;         ///< The <header>
     OptionsPoolPtr m_options;   ///< The <options> pool
     OthersPoolPtr m_others;     ///< The <others> pool
@@ -107,6 +119,9 @@ private:
     TextsPoolPtr m_texts;       ///< The <texts> pool
 
     int m_maxBlankPages{};      ///< The maximum number of leading blank pages in any part.
+
+    InstrumentMap m_instruments; ///< List of instruments in the document, indexed by the top staff in each instrument in Scroll View of the score.
+                                ///< This computed by the factory.
 
     // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;
