@@ -291,17 +291,6 @@ std::shared_ptr<others::StaffSystem> Document::calculateSystemFromMeasure(Cmper 
     return result;
 }
 
-/**
- * @brief Builds the instrument map from Finale-style data.
- *
- * This routine detects instrument groupings in three stages:
- * 1. Defined multi-staff instruments (via multiStaffInstId).
- * 2. Visually bracketed staves with matching instrument UUIDs.
- * 3. Remaining single staves as individual instruments.
- *
- * This is especially important for supporting legacy .musx files
- * created before multi-staff instruments were defined explicitly.
- */
 void Document::createInstrumentMap()
 {
     constexpr Cmper forPartId = SCORE_PARTID;
@@ -325,8 +314,16 @@ void Document::createInstrumentMap()
                             }
                             it->second.staffGroupId = multiStaffGroupId->staffGroupId;
                             it->second.multistaffGroupId = rawStaff->multiStaffInstId;
+                            std::optional<size_t> topIndex = others::InstrumentUsed::getIndexForStaff(scrollView, rawStaff->getCmper());
+                            MUSX_ASSERT_IF(!topIndex.has_value()) {
+                                throw std::logic_error("Unable to find " + std::to_string(rawStaff->getCmper()) + " in scrollView.");
+                            }
                             for (InstCmper staffId : multiStaffInst->staffNums) {
-                                it->second.staves.emplace(staffId);
+                                std::optional<size_t> staffIndex = others::InstrumentUsed::getIndexForStaff(scrollView, staffId);
+                                MUSX_ASSERT_IF(!staffIndex.has_value()) {
+                                    throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
+                                }
+                                it->second.staves.emplace(staffId, staffIndex.value() - topIndex.value());
                                 mappedStaves.emplace(staffId);
                             }
                         }
@@ -341,12 +338,16 @@ void Document::createInstrumentMap()
         // for now, only identify piano braces as visual staff groups
         if (group->bracket && group->bracket->style == details::StaffGroup::BracketStyle::PianoBrace) {
             if (const auto topStaff = getOthers()->get<others::Staff>(forPartId, group->startInst)) {
-                std::vector<InstCmper> candidateStaves;
+                std::unordered_map<InstCmper, size_t> candidateStaves;
+                size_t sequenceIndex = 0;
                 staffGroup.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& nextStaff) {
                     if (nextStaff->multiStaffInstId == topStaff->multiStaffInstId || mappedStaves.find(nextStaff->getCmper()) == mappedStaves.end()) {
                         if (nextStaff->instUuid == topStaff->instUuid || !nextStaff->hasInstrumentAssigned()) {
                             if (nextStaff->hideNameInScore || nextStaff->getFullName().empty()) {
-                                candidateStaves.push_back(nextStaff->getCmper());
+                                const auto [it, created] = candidateStaves.emplace(nextStaff->getCmper(), sequenceIndex++);
+                                MUSX_ASSERT_IF (!created) {
+                                    throw std::logic_error("Attempted to insert staff " + std::to_string(nextStaff->getCmper()) + " twice in the same multistaff instrument.");
+                                }
                                 return true;
                             }
                         }
@@ -363,8 +364,8 @@ void Document::createInstrumentMap()
                                 + " [" + group->getFullName() + "] on staff " + std::to_string(group->startInst) + " as a multistaff instrument.");
                         }
                         instInfo.staffGroupId = group->getCmper2();
-                        for (const auto& cmper : candidateStaves) {
-                            instInfo.staves.emplace(cmper);
+                        for (const auto& [cmper, index] : candidateStaves) {
+                            instInfo.staves.insert_or_assign(cmper, index);
                             mappedStaves.emplace(cmper);
                         }
                     }
@@ -378,9 +379,43 @@ void Document::createInstrumentMap()
             MUSX_ASSERT_IF(!created) {
                 throw std::logic_error("Attempted to insert single-instrument id " + std::to_string(staffItem->staffId) + " that was already mapped.");
             }
-            it->second.staves.emplace(staffItem->staffId);
+            it->second.staves.emplace(staffItem->staffId, 0);
         }
     }
+    for (const auto& [instId, info] : m_instruments) {
+        std::unordered_set<size_t> indices;
+        for (const auto& [staffId, index] : info.staves) {
+            indices.insert(index);
+        }
+        if (indices.size() != info.staves.size()) {
+            MUSX_INTEGRITY_ERROR("Instrument " + std::to_string(instId) + " has duplicate or missing staff indices.");
+        } else {
+            for (size_t i = 0; i < info.staves.size(); ++i) {
+                bool breakOut = false; // avoid compiler warning if MUSX_INTEGRITY_ERROR throws
+                if (!indices.count(i)) {
+                    breakOut = true;
+                    MUSX_INTEGRITY_ERROR("Instrument " + std::to_string(instId) + " is missing index " + std::to_string(i));
+                }
+                if (breakOut) break;
+            }
+        }
+    }
+}
+
+const InstrumentInfo& Document::getInstrumentForStaff(InstCmper staffId) const
+{
+    const auto& instIt = m_instruments.find(staffId);
+    if (instIt != m_instruments.end()) {
+        return instIt->second;
+    } else {
+        for (const auto& [top, info] : m_instruments) {
+            if (info.staves.find(staffId) != info.staves.end()) {
+                return info;
+            }
+        }
+    }
+    assert(false); // flag this as early as possible, because getting here is a program bug.
+    throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
 }
 
 // *****************
@@ -2406,7 +2441,6 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
 void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const DocumentPtr& document)
 {
     auto instGroups = document->getOthers()->getArray<others::MultiStaffInstrumentGroup>(SCORE_PARTID);
-    // multiStaffInstId must be populated in a separate pass before any calls to getVisualStaffGroup
     for (const auto& instance : instGroups) {
         for (size_t x = 0; x < instance->staffNums.size(); x++) {
             auto staff = instance->getStaffInstanceAtIndex(x);

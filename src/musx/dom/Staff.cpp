@@ -279,18 +279,7 @@ std::shared_ptr<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
 
 std::shared_ptr<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
 {
-    Cmper groupId = 0;
-    const auto& instruments = getDocument()->getInstruments();
-    const auto& instIt = instruments.find(getCmper());
-    if (instIt != instruments.end()) {
-        groupId = instIt->second.staffGroupId;
-    } else {
-        for (const auto& [top, info] : instruments) {
-            if (info.staves.find(getCmper()) != info.staves.end()) {
-                groupId = info.staffGroupId;
-            }
-        }
-    }
+    Cmper groupId = getDocument()->getInstrumentForStaff(getCmper()).staffGroupId;
     if (groupId != 0) {
         if (auto retval = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, groupId)) {
             return retval;
