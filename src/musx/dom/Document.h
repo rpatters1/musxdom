@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 #include "Header.h"
 #include "ObjectPool.h"
@@ -53,6 +54,9 @@ struct InstrumentInfo
     std::unordered_map<InstCmper, size_t> staves;   ///< List of each staffId with its sequence index from top to bottom.
     Cmper staffGroupId{};                           ///< The @ref details::StaffGroup that visually represents the instrument. (May be zero.)
     Cmper multistaffGroupId{};                      ///< The @ref others::MultiStaffInstrumentGroup that defines the instrument. (May be zero.)
+
+    /// @brief Returns the staffIds in sequence as they appear in Scroll View in the score.
+    std::vector<InstCmper> getSequentialStaves() const;
 };
 using InstrumentMap = std::unordered_map<InstCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 

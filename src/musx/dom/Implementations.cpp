@@ -1883,6 +1883,24 @@ std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createDisplayTi
 }
 
 // **************************
+// ***** InstrumentInfo *****
+// **************************
+
+std::vector<InstCmper> InstrumentInfo::getSequentialStaves() const
+{
+    std::vector<std::pair<InstCmper, size_t>> sorted(staves.begin(), staves.end());
+    std::sort(sorted.begin(), sorted.end(),
+              [](const auto& a, const auto& b) { return a.second < b.second; });
+
+    std::vector<InstCmper> result;
+    result.reserve(sorted.size());
+    for (const auto& [staffId, _] : sorted) {
+        result.push_back(staffId);
+    }
+    return result;
+}
+
+// **************************
 // ***** InstrumentUsed *****
 // **************************
 
