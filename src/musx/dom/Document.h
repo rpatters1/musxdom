@@ -50,6 +50,7 @@ struct InstrumentInfo
 {
     std::unordered_set<InstCmper> staves;
     Cmper staffGroupId{};
+    Cmper multistaffGroupId{};
 };
 using InstrumentMap = std::unordered_map<InstCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 

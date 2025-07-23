@@ -263,12 +263,6 @@ public:
                                     ///< Populated by in #calcAllRuntimeValues.
     Cmper multiStaffInstId{};       ///< Calculated cmper for @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
-    Cmper multiStaffInstVisualId{}; ///< Calculated cmper for an associated @ref MultiStaffInstrumentGroup, if any. This value is not in the xml.
-                                    ///< Some staves are included visually in multistaff instruments without being part of it in the data.
-                                    ///< If #multiStaffInstId is non-zero, this value is the same. But this value can be non-zero when
-                                    ///< #multiStaffInstId is zero. It is set by the factory.
-    Cmper multiStaffInstVisualGroupId{}; ///< Calculated cmper for the visual @ref details::StaffGroup that visually shows the multistaff instrument. This value is not in the xml.
-                                    ///< It is set by the factory with the Resolver function for @ref MultiStaffInstrumentGroup.
     std::optional<int> autoNumberValue; ///< Calculated autonumbering value. It is computed by #calcAllAutoNumberValues.
     std::optional<Cmper> percussionMapId; ///< Calculated percussion map Id for a percussion staff. (Populated by in #calcAllRuntimeValues.)
 
@@ -283,8 +277,8 @@ public:
     /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one in the data. Otherwise nullptr.
     std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
 
-    /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is shown as part of one. Otherwise nullptr.
-    std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstVisualGroup() const;
+    /// @brief Returns the @ref details::StaffGroup for this staff if it is part of a multistaff instrument (as defined in #Document::getInstruments).
+    std::shared_ptr<details::StaffGroup> getMultiStaffInstVisualGroup() const;
 
     /// @brief Returns the parsing context for the full name.
     /// @param forPartId The part id to use for partname and page inserts

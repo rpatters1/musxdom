@@ -277,13 +277,27 @@ std::shared_ptr<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
     return nullptr;
 }
 
-std::shared_ptr<MultiStaffInstrumentGroup> Staff::getMultiStaffInstVisualGroup() const
+std::shared_ptr<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
 {
-    if (multiStaffInstVisualId) {
-        if (auto retval = getDocument()->getOthers()->get<MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffInstVisualId)) {
-            return retval;
+    Cmper groupId = 0;
+    const auto& instruments = getDocument()->getInstruments();
+    const auto& instIt = instruments.find(getCmper());
+    if (instIt != instruments.end()) {
+        groupId = instIt->second.staffGroupId;
+    } else {
+        for (const auto& [top, info] : instruments) {
+            if (info.staves.find(getCmper()) != info.staves.end()) {
+                groupId = info.staffGroupId;
+            }
         }
-        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffInstVisualId));
+    }
+    if (groupId != 0) {
+        if (auto retval = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, groupId)) {
+            return retval;
+        } else {
+            MUSX_INTEGRITY_ERROR("Instrument map " + std::to_string(getCmper()) + " points to non-existent StaffGroup " + std::to_string(groupId)
+                + " for staff " + std::to_string(getCmper()));
+        }
     }
     return nullptr;
 }
@@ -291,8 +305,8 @@ std::shared_ptr<MultiStaffInstrumentGroup> Staff::getMultiStaffInstVisualGroup()
 util::EnigmaParsingContext Staff::getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
     auto block = [&]() -> std::shared_ptr<TextBlock> {
-        if ((!preferStaffName || !fullNameTextId) && multiStaffInstVisualGroupId) {
-            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, 0, multiStaffInstVisualGroupId)) {
+        if (!preferStaffName || !fullNameTextId) {
+            if (auto group = getMultiStaffInstVisualGroup()) {
                 return getDocument()->getOthers()->get<TextBlock>(forPartId, group->fullNameId);
             }
         }
@@ -319,8 +333,8 @@ std::string Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle acc
 util::EnigmaParsingContext Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
     auto block = [&]() -> std::shared_ptr<TextBlock> {
-        if ((!preferStaffName || !abbrvNameTextId) && multiStaffInstVisualGroupId) {
-            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, 0, multiStaffInstVisualGroupId)) {
+        if (!preferStaffName || !abbrvNameTextId) {
+            if (auto group = getMultiStaffInstVisualGroup()) {
                 return getDocument()->getOthers()->get<TextBlock>(forPartId, group->abbrvNameId);
             }
         }
