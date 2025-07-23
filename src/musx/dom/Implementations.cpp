@@ -307,10 +307,13 @@ void Document::createInstrumentMap()
     constexpr Cmper forPartId = SCORE_PARTID;
 
     auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    if (scrollView.empty()) {
+        return;
+    }
     std::unordered_set<Cmper> multiStaffInstsFound;
     std::unordered_set<InstCmper> mappedStaves;
     for (const auto& staffItem : scrollView) {
-        if (auto rawStaff = staffItem->getStaffInstance()) {
+        if (auto rawStaff = getOthers()->get<others::Staff>(forPartId, staffItem->staffId)) { // do not use staffItem->getStaffInstance() because we want no throw here
             if (rawStaff->multiStaffInstId != 0) {
                 if (multiStaffInstsFound.find(rawStaff->multiStaffInstId) == multiStaffInstsFound.end()) {
                     if (auto multiStaffInst = getOthers()->get<others::MultiStaffInstrumentGroup>(forPartId, rawStaff->multiStaffInstId)) {
@@ -338,7 +341,6 @@ void Document::createInstrumentMap()
         if (group->bracket && group->bracket->style == details::StaffGroup::BracketStyle::PianoBrace) {
             if (const auto topStaff = getOthers()->get<others::Staff>(forPartId, group->startInst)) {
                 std::vector<InstCmper> candidateStaves;
-                bool foundNonMatching = false;
                 staffGroup.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& nextStaff) {
                     if (nextStaff->multiStaffInstId == topStaff->multiStaffInstId || mappedStaves.find(nextStaff->getCmper()) == mappedStaves.end()) {
                         if (nextStaff->instUuid == topStaff->instUuid || !nextStaff->hasInstrumentAssigned()) {
@@ -348,15 +350,22 @@ void Document::createInstrumentMap()
                             }
                         }
                     }
-                    foundNonMatching = true;
+                    candidateStaves.clear();
                     return false;
                 });
-                if (!foundNonMatching) {
-                    const auto [it, created] = m_instruments.emplace(topStaff->getCmper(), InstrumentInfo());
-                    it->second.staffGroupId = group->getCmper2();
-                    for (const auto& cmper : candidateStaves) {
-                        it->second.staves.emplace(cmper);
-                        mappedStaves.emplace(cmper);
+                if (!candidateStaves.empty()) {
+                    auto [instIt, created] = m_instruments.emplace(topStaff->getCmper(), InstrumentInfo());
+                    auto& [top, instInfo] = *instIt;
+                    if (created || instInfo.staffGroupId == 0 || group->getCmper2() == instInfo.staffGroupId) {
+                        if (instInfo.staffGroupId == 0) {
+                            util::Logger::log(util::Logger::LogLevel::Info, "Treating piano brace " + std::to_string(group->getCmper2())
+                                + " [" + group->getFullName() + "] on staff " + std::to_string(group->startInst) + " as a multistaff instrument.");
+                        }
+                        instInfo.staffGroupId = group->getCmper2();
+                        for (const auto& cmper : candidateStaves) {
+                            instInfo.staves.emplace(cmper);
+                            mappedStaves.emplace(cmper);
+                        }
                     }
                 }
             }
@@ -372,7 +381,6 @@ void Document::createInstrumentMap()
         }
     }
 }
-
 
 // *****************
 // ***** Entry *****
@@ -3298,7 +3306,8 @@ std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure
     const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves)
 {
     if (systemStaves.empty()) {
-        util::Logger::log(util::Logger::LogLevel::Info, "Attempted to find groups for empty system staves. Returning an empty vector.");
+        util::Logger::log(util::Logger::LogLevel::Info, "Attempted to find groups for empty system staves. [measure " + std::to_string(measureId)
+            + ", part " + std::to_string(linkedPartId) +"] Returning an empty vector.");
         return {};
     }
     auto rawGroups = systemStaves[0]->getDocument()->getDetails()->getArray<details::StaffGroup>(linkedPartId, BASE_SYSTEM_ID);
