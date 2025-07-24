@@ -42,7 +42,6 @@
  * which are always silently skipped.
  * - `MUSX_THROW_ON_INTEGRITY_CHECK_FAIL`: Throws `musx::dom::integrity_error` if a class fails its integrity check.
  * Otherwise it it logs the message, which by default sends it to `std::cerr`.
- * - `MUSX_TEST_DATA_PATH`: Specifies the data path for test files. Normally only used for CI builds on GitHub or on the local machines.
  *
  * The recommended way to define these macros is from your make file or build project. They are primarily intended
  * for debugging.
@@ -72,6 +71,7 @@
 #include "util/DateTimeFormat.h"
 #include "util/EnigmaString.h"
 #include "util/Logger.h"
+#include "util/TestSupport.h"
 #include "xml/XmlInterface.h"
 #include "dom/Document.h"
 #include "factory/DocumentFactory.h"
