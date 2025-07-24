@@ -1468,6 +1468,12 @@ bool FontInfo::calcIsSymbolFont() const
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
 }
 
+#if defined(MUSX_TEST_DATA_PATH)
+std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
+{
+    return { std::filesystem::path(MUSX_TEST_DATA_PATH) / "font_metadata" };
+}
+#else
 std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 {
 #if defined(MUSX_RUNNING_ON_WINDOWS)
@@ -1559,6 +1565,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     }
     return retval;
 }
+#endif // !defined MUSX_TEST_DATA_PATH
 
 // *****************
 // ***** Frame *****
