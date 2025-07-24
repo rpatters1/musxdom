@@ -86,11 +86,12 @@ public:
         if (!document->getDetails()) document->getDetails() = std::make_shared<musx::dom::DetailsPool>();
         if (!document->getEntries()) document->getEntries() = std::make_shared<musx::dom::EntryPool>();
         if (!document->getTexts()) document->getTexts() = std::make_shared<musx::dom::TextsPool>();
-
+        
 #ifdef MUSX_DISPLAY_NODE_NAMES
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
-#endif        
+#endif
         elementLinker.resolveAll(document);
+        document->m_instruments = document->createInstrumentMap(SCORE_PARTID);
 
         document->m_maxBlankPages = 0;
         auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);

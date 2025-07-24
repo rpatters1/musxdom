@@ -203,8 +203,13 @@ public:
     /// @brief Calculates if this is a symbol font. (See #others::FontDefinition::calcIsSymbolFont.)
     bool calcIsSymbolFont() const;
 
+    /// @brief Returns the filepath of the SMuFL font's metadata json file, if any.
+    /// @param fontName The font name to find.
+    static std::optional<std::filesystem::path> calcSMuFLMetaDataPath(const std::string& fontName);
+
     /// @brief Returns the filepath of the SMuFL font's metadata json file, if any
-    std::optional<std::filesystem::path> calcSMuFLMetaDataPath() const;
+    std::optional<std::filesystem::path> calcSMuFLMetaDataPath() const
+    { return FontInfo::calcSMuFLMetaDataPath(getName()); }
 
     /**
      * @brief Calculates whether this is a SMuFL font.

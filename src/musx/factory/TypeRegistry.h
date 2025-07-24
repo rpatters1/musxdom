@@ -31,7 +31,9 @@
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
 #include "musx/dom/Details.h"
+#include "musx/dom/ShapeDesigner.h"
 #include "musx/dom/SmartShape.h"
+#include "musx/dom/Staff.h"
 #include "musx/dom/Entries.h"
 #include "musx/dom/Texts.h"
 #include "musx/xml/XmlInterface.h"
@@ -83,7 +85,7 @@ private:
      * @param nodeName The XML node name to search for.
      * @return A pair consisting of a boolean indicating success and a type pointer if found.
      */
-    static std::optional<VariantType> findRegisteredType(std::string_view nodeName)
+    static std::optional<VariantType> findRegisteredType(const std::string_view& nodeName)
     {
         const auto it = registry.find(nodeName);
         if (it == registry.end()) {

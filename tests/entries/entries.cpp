@@ -68,6 +68,7 @@ TEST(EntryTest, PopulateFields)
       <numNotes>0</numNotes>
       <isValid/>
       <doubleStem/>
+      <slashGrace/>
       <floatRest/>
       <ignore/>
       <sorted/>
@@ -98,6 +99,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(entry->floatRest);
         EXPECT_FALSE(entry->isHidden);
         EXPECT_TRUE(entry->noLeger);
+        EXPECT_FALSE(entry->slashGrace);
         EXPECT_TRUE(entry->sorted);
 
         ASSERT_EQ(entry->notes.size(), 2);
@@ -151,6 +153,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(entry->floatRest);
         EXPECT_TRUE(entry->isHidden);
         EXPECT_FALSE(entry->noLeger);
+        EXPECT_TRUE(entry->slashGrace);
         EXPECT_TRUE(entry->sorted);
 
         EXPECT_EQ(entry->notes.size(), 0);

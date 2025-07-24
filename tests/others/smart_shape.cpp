@@ -402,3 +402,31 @@ TEST(CenterShape, Populate)
     EXPECT_EQ(centerShape->endBreakAdj->vertOffset, -199);
     EXPECT_TRUE(centerShape->endBreakAdj->active);
 }
+
+TEST(SmartShapes, IndependentTimeSigs)
+{
+    using Fraction = musx::util::Fraction;
+
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "independent_timesig.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto ss = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, 1);
+        ASSERT_TRUE(ss) << "failed to load SmartShape 1";
+        EXPECT_EQ(ss->startTermSeg->endPoint->calcPosition(), Fraction(1, 4));
+        EXPECT_EQ(ss->startTermSeg->endPoint->calcGlobalPosition(), Fraction(1, 6));
+        EXPECT_EQ(ss->endTermSeg->endPoint->calcPosition(), Fraction(5, 8));
+        EXPECT_EQ(ss->endTermSeg->endPoint->calcGlobalPosition(), Fraction(5, 12));
+    }
+
+    {
+        auto ss = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, 4);
+        ASSERT_TRUE(ss) << "failed to load SmartShape 4";
+        EXPECT_EQ(ss->startTermSeg->endPoint->calcPosition(), Fraction(1, 4));
+        EXPECT_EQ(ss->startTermSeg->endPoint->calcGlobalPosition(), Fraction(1, 6));
+        EXPECT_EQ(ss->endTermSeg->endPoint->calcPosition(), Fraction(5, 8));
+        EXPECT_EQ(ss->endTermSeg->endPoint->calcGlobalPosition(), Fraction(5, 12));
+    }
+}

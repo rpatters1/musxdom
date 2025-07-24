@@ -173,15 +173,54 @@ bool options::ClefOptions::ClefDef::isBlank() const
 
 options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std::shared_ptr<const others::Staff>& currStaff) const
 {
+    auto calcPercType = [&]() -> music_theory::ClefType {
+        if (auto clefFont = calcFont()) {
+            if (clefFont->calcIsSMuFL()) {
+                if (clefChar == 0xE06A) { // SMuFL `unpitchedPercussionClef2`
+                    return music_theory::ClefType::Percussion2;
+                }
+            } else if (clefFont->calcIsSymbolFont()) {
+                if (clefChar == 214) {
+                    return music_theory::ClefType::Percussion2;
+                }
+            }
+        }
+        return music_theory::ClefType::Percussion1;
+    };
+
+    auto calcTabType = [&]() -> music_theory::ClefType {
+        music_theory::ClefType result = music_theory::ClefType::Tab;
+        if (isShape) {
+            if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId)) {
+                shape->iterateInstructions([&](others::ShapeDef::InstructionType instructionType, std::vector<int> data) -> bool {
+                    if (std::optional<FontInfo> fontInfo = others::ShapeInstruction::parseSetFont(getDocument(), instructionType, data)) {
+                        if (fontInfo->getName().find("Times") != std::string::npos) { // Finale default file uses "Times" or "Times New Roman"
+                            result = music_theory::ClefType::TabSerif;
+                        }
+                        return false;
+                    }
+                    return true;
+                });
+            }
+            return result;
+        }
+        // 0xF40D is "4stringTabClefSerif" and 0xF40B is "6stringTabClefSerif"
+        // They are both optional glyphs from the MakeMusic extended glyph set defined in glyphnamesFinale.json.
+        if (calcFont()->calcIsSMuFL() && (clefChar == 0xF40D || clefChar == 0xF40B)) {
+            result = music_theory::ClefType::TabSerif;
+        }
+        return result;
+    };
+
     if (currStaff) {
         switch (currStaff->notationStyle) {
-            case others::Staff::NotationStyle::Tablature: return std::make_pair(music_theory::ClefType::Tab, 0);
-            case others::Staff::NotationStyle::Percussion: return std::make_pair(music_theory::ClefType::Percussion, 0);
+            case others::Staff::NotationStyle::Tablature: return std::make_pair(calcTabType(), 0);
+            case others::Staff::NotationStyle::Percussion: return std::make_pair(calcPercType(), 0);
             default: break;
         }
     }
-    if (staffPosition == 0 && middleCPos == -10 && isShape) { // find tab staves based on Finale SMuFL default file settings
-        return std::make_pair(music_theory::ClefType::Tab, 0);
+    if (!currStaff && staffPosition == 0 && middleCPos == -10 && isShape) { // identify tab staves based on Finale default file settings
+        return std::make_pair(calcTabType(), 0);
     }
     music_theory::ClefType clefType = music_theory::ClefType::Unknown;
     int octave = 0;
@@ -190,7 +229,7 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std
         case music_theory::NoteName::C: clefType = music_theory::ClefType::C; break;
         case music_theory::NoteName::F: clefType = music_theory::ClefType::F; break;
         case music_theory::NoteName::G: clefType = music_theory::ClefType::G; break;
-        case music_theory::NoteName::B: clefType = music_theory::ClefType::Percussion; break; // Finale SMuFL default file settings
+        case music_theory::NoteName::B: clefType = calcPercType(); break; // Finale SMuFL default file settings
         default: break;
     }
     if (clefType == music_theory::ClefType::F) {
@@ -250,6 +289,134 @@ std::shared_ptr<others::StaffSystem> Document::calculateSystemFromMeasure(Cmper 
         MUSX_INTEGRITY_ERROR("Unable to find system for measure ID " + std::to_string(measureId));
     }
     return result;
+}
+
+InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
+{
+    InstrumentMap result;
+
+    auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    if (scrollView.empty()) {
+        return result;
+    }
+    std::unordered_set<Cmper> multiStaffInstsFound;
+    std::unordered_set<InstCmper> mappedStaves;
+    for (const auto& staffItem : scrollView) {
+        if (auto rawStaff = getOthers()->get<others::Staff>(forPartId, staffItem->staffId)) { // do not use staffItem->getStaffInstance() because we want no throw here
+            if (rawStaff->multiStaffInstId != 0) {
+                if (multiStaffInstsFound.find(rawStaff->multiStaffInstId) == multiStaffInstsFound.end()) {
+                    if (auto multiStaffInst = getOthers()->get<others::MultiStaffInstrumentGroup>(forPartId, rawStaff->multiStaffInstId)) {
+                        if (auto multiStaffGroupId = getOthers()->get<others::MultiStaffGroupId>(forPartId, rawStaff->multiStaffInstId)) {
+                            multiStaffInstsFound.emplace(rawStaff->multiStaffInstId);
+                            const auto [it, created] = result.emplace(rawStaff->getCmper(), InstrumentInfo());
+                            MUSX_ASSERT_IF(!created) {
+                                throw std::logic_error("Attempted to insert multi-instrument id " + std::to_string(rawStaff->multiStaffInstId) + " more than once.");
+                            }
+                            it->second.staffGroupId = multiStaffGroupId->staffGroupId;
+                            it->second.multistaffGroupId = rawStaff->multiStaffInstId;
+                            std::optional<size_t> topIndex = others::InstrumentUsed::getIndexForStaff(scrollView, rawStaff->getCmper());
+                            MUSX_ASSERT_IF(!topIndex.has_value()) {
+                                throw std::logic_error("Unable to find " + std::to_string(rawStaff->getCmper()) + " in scrollView.");
+                            }
+                            for (InstCmper staffId : multiStaffInst->staffNums) {
+                                std::optional<size_t> staffIndex = others::InstrumentUsed::getIndexForStaff(scrollView, staffId);
+                                MUSX_ASSERT_IF(!staffIndex.has_value()) {
+                                    throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
+                                }
+                                it->second.staves.emplace(staffId, staffIndex.value() - topIndex.value());
+                                mappedStaves.emplace(staffId);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, forPartId, scrollView);
+    for (const auto& staffGroup : staffGroups) {
+        const auto& group = staffGroup.group;
+        // for now, only identify piano braces as visual staff groups
+        if (group->bracket && group->bracket->style == details::StaffGroup::BracketStyle::PianoBrace) {
+            if (const auto topStaff = getOthers()->get<others::Staff>(forPartId, group->startInst)) {
+                std::unordered_map<InstCmper, size_t> candidateStaves;
+                size_t sequenceIndex = 0;
+                staffGroup.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& nextStaff) {
+                    if (nextStaff->multiStaffInstId == topStaff->multiStaffInstId || mappedStaves.find(nextStaff->getCmper()) == mappedStaves.end()) {
+                        if (nextStaff->instUuid == topStaff->instUuid || !nextStaff->hasInstrumentAssigned()) {
+                            if (nextStaff->hideNameInScore || nextStaff->getFullName().empty()) {
+                                const auto [it, created] = candidateStaves.emplace(nextStaff->getCmper(), sequenceIndex++);
+                                MUSX_ASSERT_IF (!created) {
+                                    throw std::logic_error("Attempted to insert staff " + std::to_string(nextStaff->getCmper()) + " twice in the same multistaff instrument.");
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                    candidateStaves.clear();
+                    return false;
+                });
+                if (!candidateStaves.empty()) {
+                    auto [instIt, created] = result.emplace(topStaff->getCmper(), InstrumentInfo());
+                    auto& [top, instInfo] = *instIt;
+                    if (created || instInfo.staffGroupId == 0 || group->getCmper2() == instInfo.staffGroupId) {
+                        if (instInfo.staffGroupId == 0) {
+                            util::Logger::log(util::Logger::LogLevel::Info, "Treating piano brace " + std::to_string(group->getCmper2())
+                                + " [" + group->getFullName() + "] on staff " + std::to_string(group->startInst) + " as a multistaff instrument.");
+                        }
+                        instInfo.staffGroupId = group->getCmper2();
+                        for (const auto& [cmper, index] : candidateStaves) {
+                            instInfo.staves.insert_or_assign(cmper, index);
+                            mappedStaves.emplace(cmper);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    for (const auto& staffItem : scrollView) {
+        if (mappedStaves.find(staffItem->staffId) == mappedStaves.end()) {
+            const auto [it, created] = result.emplace(staffItem->staffId, InstrumentInfo());
+            MUSX_ASSERT_IF(!created) {
+                throw std::logic_error("Attempted to insert single-instrument id " + std::to_string(staffItem->staffId) + " that was already mapped.");
+            }
+            it->second.staves.emplace(staffItem->staffId, 0);
+        }
+    }
+    for (const auto& [instId, info] : result) {
+        std::unordered_set<size_t> indices;
+        for (const auto& [staffId, index] : info.staves) {
+            indices.insert(index);
+        }
+        if (indices.size() != info.staves.size()) {
+            MUSX_INTEGRITY_ERROR("Instrument " + std::to_string(instId) + " has duplicate or missing staff indices.");
+        } else {
+            for (size_t i = 0; i < info.staves.size(); ++i) {
+                bool breakOut = false; // avoid compiler warning if MUSX_INTEGRITY_ERROR throws
+                if (!indices.count(i)) {
+                    breakOut = true;
+                    MUSX_INTEGRITY_ERROR("Instrument " + std::to_string(instId) + " is missing index " + std::to_string(i));
+                }
+                if (breakOut) break;
+            }
+        }
+    }
+    return result;
+}
+
+const InstrumentInfo& Document::getInstrumentForStaff(InstCmper staffId) const
+{
+    const auto& instIt = m_instruments.find(staffId);
+    if (instIt != m_instruments.end()) {
+        return instIt->second;
+    } else {
+        for (const auto& [top, info] : m_instruments) {
+            if (info.staves.find(staffId) != info.staves.end()) {
+                return info;
+            }
+        }
+    }
+    assert(false); // flag this as early as possible, because getting here is a program bug.
+    throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
 }
 
 // *****************
@@ -401,10 +568,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         return false;
     }
     // entries must have the same duration and actual duration.
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
         throw std::logic_error("TupletInfo instance contains invalid start index.");
     }
@@ -443,10 +607,7 @@ bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
         return false;
     }
     // entries must have the same duration and actual duration.
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
         throw std::logic_error("TupletInfo instance contains invalid start index.");
     }
@@ -504,10 +665,7 @@ bool EntryFrame::TupletInfo::calcCreatesBeamContinuationRight() const
     if (!calcCreatesSingletonRight()) {
         return false;
     }
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     int voice = int(voice2) + 1;
     EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
     auto nextInBeam = entryInfo.getNextInBeamGroup();
@@ -534,10 +692,7 @@ bool EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft() const
     if (!calcCreatesSingletonLeft()) {
         return false;
     }
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     int voice = int(voice2) + 1;
     EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
     if (entryInfo.getPreviousInVoice(voice)) {
@@ -564,10 +719,7 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
             return false;
         }
     }
-    auto frame = m_parent.lock();
-    MUSX_ASSERT_IF(!frame) {
-        throw std::logic_error("Unable to obtain lock on parent entry frame.");
-    }
+    auto frame = getParent();
     // staff must be independent timesig
     const auto staff = frame->createCurrentStaff(0);
     if (staff && !staff->floatTime) {
@@ -589,6 +741,21 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
 // ************************
 // ***** EntryInfoPtr *****
 // ************************
+
+EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measureId, EntryNumber entryNumber)
+{
+    EntryInfoPtr result;
+    if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId)) {
+        gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
+            if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
+                result = entryInfo;
+                return false; // stop iterating
+            }
+            return true;
+        });
+    }
+    return result;
+}
 
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 {
@@ -1256,13 +1423,12 @@ void FontInfo::setFontIdByName(const std::string& name)
     throw std::invalid_argument("font definition not found for font \"" + name + "\"");
 }
 
-std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath() const
+std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath(const std::string& fontName)
 {
-    auto name = getName();
     auto standardFontPaths = calcSMuFLPaths();
     for (const auto& path : standardFontPaths) {
         if (!path.empty()) {
-            std::filesystem::path metaFilePath(path / name / name);
+            std::filesystem::path metaFilePath(path / fontName / fontName);
             metaFilePath.replace_extension(".json");
             if (std::filesystem::is_regular_file(metaFilePath)) {
                 return metaFilePath;
@@ -1717,8 +1883,45 @@ std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createDisplayTi
 }
 
 // **************************
+// ***** InstrumentInfo *****
+// **************************
+
+std::vector<InstCmper> InstrumentInfo::getSequentialStaves() const
+{
+    std::vector<std::pair<InstCmper, size_t>> sorted(staves.begin(), staves.end());
+    std::sort(sorted.begin(), sorted.end(),
+              [](const auto& a, const auto& b) { return a.second < b.second; });
+
+    std::vector<InstCmper> result;
+    result.reserve(sorted.size());
+    for (const auto& [staffId, _] : sorted) {
+        result.push_back(staffId);
+    }
+    return result;
+}
+
+// **************************
 // ***** InstrumentUsed *****
 // **************************
+
+util::Fraction others::InstrumentUsed::calcEffectiveScaling() const
+{
+    util::Fraction result(1);
+    if (SystemCmper(getCmper()) > 0) { // if this is a page-view system
+        if (auto system = getDocument()->getOthers()->get<others::StaffSystem>(getPartId(), getCmper())) {
+            result = system->calcSystemScaling();
+            if (auto page = system->getPage()) {
+                result *= page->calcPageScaling();
+            }
+            if (system->hasStaffScaling) {
+                if (auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getPartId(), getCmper(), staffId)) {
+                    result *= staffSize->calcStaffScaling();
+                }
+            }
+        }
+    }
+    return result;
+}
 
 std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance() const
 {
@@ -1989,6 +2192,27 @@ std::optional<music_theory::DiatonicMode> KeySignature::calcDiatonicMode() const
     return std::nullopt;
 }
 
+// ************************
+// ***** LyricsAssign *****
+// ************************
+
+template <typename TextType>
+util::EnigmaParsingContext details::LyricAssign::getRawTextCtx() const
+{
+    static_assert(std::is_base_of_v<texts::LyricsTextBase, TextType>, "TextType must be a subclass of texts::LyricsTextBase.");
+    // note that lyrics do not have text inserts. The UI doesn't permit them.
+    if (auto rawText = getDocument()->getTexts()->get<TextType>(lyricNumber)) {
+        return rawText->getRawTextCtx(SCORE_PARTID);
+    }
+    return {};
+}
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsVerse>() const;
+template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsChorus>() const;
+template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsSection>() const;
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
 // **************************
 // ***** LyricsTextBase *****
 // **************************
@@ -2232,102 +2456,22 @@ std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaff
     return result;
 }
 
-std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::calcVisualStaffGroup(Cmper forPartId) const
-{
-    if (auto result = getStaffGroup(forPartId)) {
-        /// @todo We may need to search for an overlapping group even if this result is valid,
-        /// but for now we only search if it is not.
-        return result;
-    }
-    auto systemStaves = getDocument()->getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
-    std::vector<size_t> instIndices = [&]() {
-        std::vector<size_t> result;
-        for (InstCmper nextStaffId : staffNums) {
-            if (auto index = others::InstrumentUsed::getIndexForStaff(systemStaves, nextStaffId)) {
-                result.push_back(index.value());
-            }                
-        }
-        std::sort(result.begin(), result.end());
-        return result;
-    }();
-    if (instIndices.empty()) {
-        return nullptr;
-    }
-    if (!systemStaves.empty()) {
-        const size_t topInstSlot = instIndices[0];
-        const size_t botInstSlot = instIndices[instIndices.size() - 1];
-        if (auto topStaff = others::StaffComposite::createCurrent(getDocument(), forPartId, systemStaves[topInstSlot]->staffId, 1, 0)) {
-            auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, forPartId, systemStaves);
-            for (const auto& staffGroup : staffGroups) {
-                const auto& group = staffGroup.group;
-                // for now, only identify piano braces as visual staff groups
-                if (group->bracket && group->bracket->style == details::StaffGroup::BracketStyle::PianoBrace) {
-                    if (staffGroup.startSlot.value() == topInstSlot && staffGroup.endSlot.value() >= botInstSlot) {
-                        bool foundNonMatching = false;
-                        staffGroup.iterateStaves(/*measId*/1, /*eduPos*/0, [&](const std::shared_ptr<others::StaffComposite>& nextStaff) {
-                            if (nextStaff->instUuid == topStaff->instUuid || !nextStaff->hasInstrumentAssigned()) {
-                                if (nextStaff->multiStaffInstId == 0 || nextStaff->multiStaffInstId == getCmper()) {
-                                    return true;
-                                }
-                            }
-                            foundNonMatching = true;
-                            return false;
-                        });
-                        if (!foundNonMatching) {
-                            return group;
-                        }
-                    }
-                }
-            }
-        } else {
-            MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " points to nonexistent start staff "
-                + std::to_string(systemStaves[topInstSlot]->staffId));
-        }
-    }
-    return nullptr;
-}
-
 void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const DocumentPtr& document)
 {
     auto instGroups = document->getOthers()->getArray<others::MultiStaffInstrumentGroup>(SCORE_PARTID);
-    // multiStaffInstId must be populated in a separate pass before any calls to getVisualStaffGroup
     for (const auto& instance : instGroups) {
         for (size_t x = 0; x < instance->staffNums.size(); x++) {
             auto staff = instance->getStaffInstanceAtIndex(x);
             if (staff) {
-                if (staff->multiStaffInstId) {
-                    musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose, 
-                        "Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
-                } else {
-                    staff->multiStaffInstId = instance->getCmper();
-                    staff->multiStaffInstVisualId = instance->getCmper();
+                if (staff->multiStaffInstId != instance->getCmper()) {
+                    if (staff->multiStaffInstId) {
+                        musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose,
+                            "Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
+                    } else {
+                        staff->multiStaffInstId = instance->getCmper();
+                    }
                 }
             }
-        }
-    }
-    for (const auto& instance : instGroups) {
-        instance->visualStaffNums = instance->staffNums;
-        auto& stavesInInst = instance->visualStaffNums;
-        if (auto visibleGroup = instance->calcVisualStaffGroup(SCORE_PARTID)) {
-            auto scrollView = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
-            auto groupInfo = details::StaffGroupInfo(visibleGroup, scrollView);
-            groupInfo.iterateStaves(/*measId*/1, /*eduPos*/ 0, [&](const std::shared_ptr<others::StaffComposite>& staffComp) {
-                if (const auto rawStaff = staffComp->getRawStaff()) {
-                    if (rawStaff->multiStaffInstVisualGroupId) {
-                        musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose,
-                            "Staff " + std::to_string(rawStaff->getCmper()) + " appears in more than one visual group associated with a MultiStaffInstrumentGroup.");
-                    } else {
-                        rawStaff->multiStaffInstVisualGroupId = visibleGroup->getCmper2();
-                        rawStaff->multiStaffInstVisualId = instance->getCmper();
-                        if (std::find(stavesInInst.begin(), stavesInInst.end(), rawStaff->getCmper()) == stavesInInst.end()) {
-                            stavesInInst.push_back(rawStaff->getCmper());
-                        }
-                    }
-                } else {
-                    MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(staffComp->getCmper()) + " in staff group " + std::to_string(visibleGroup->getCmper2()));
-                }
-                return true;
-            });
         }
     }
     // guarantee calcAllAutoNumberValues is called after calcAllMultiStaffGroupIds.
@@ -2430,10 +2574,7 @@ Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<KeySignature
     if (!clefOptions) {
         throw std::invalid_argument("Document contains no clef options!");
     }
-    if (clefIndex >= clefOptions->clefDefs.size()) {
-        throw std::invalid_argument("Clef index " + std::to_string(clefIndex) + " does not exist in document.`");
-    }
-    int middleCLine = clefOptions->clefDefs[clefIndex]->middleCPos;
+    int middleCLine = clefOptions->getClefDef(clefIndex)->middleCPos;
 
     return { music_theory::noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
 }
@@ -2510,7 +2651,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
     return NoteInfoPtr();
 }
 
-NoteInfoPtr NoteInfoPtr::calcTieFrom() const
+NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
 {
     if (*this) {
         // grace notes cannot tie backwards; only forwards (see grace note comment above)
@@ -2528,7 +2669,10 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom() const
                 for (size_t noteIndex = 0; noteIndex < prevEntry->notes.size(); noteIndex++) {
                     NoteInfoPtr tryFrom(prev, noteIndex);
                     if (auto tryTiedTo = tryFrom.calcTieTo(); isSameNote(tryTiedTo)) {
-                        return tryFrom;
+                        if (!requireTie || tryFrom->tieStart) {
+                            return tryFrom;
+                        }
+                        return NoteInfoPtr();
                     }
                 }
             }
@@ -2661,36 +2805,51 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
     for (const auto& part : linkedParts) {
         auto pages = document->getOthers()->getArray<Page>(part->getCmper());
         auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
+        for (const auto& system : systems) {
+            system->pageId = 0; // initialize
+        }
         for (size_t x = 0; x < pages.size(); x++) {
             auto page = pages[x];
+            page->lastSystemId = std::nullopt;
             if (!page->isBlank()) {
-                page->lastSystemId = [&]() -> SystemCmper {
-                    size_t nextIndex = x + 1;
-                    while (nextIndex < pages.size()) {
-                        auto nextPage = pages[nextIndex++];
-                        if (!nextPage->isBlank()) {
-                            return nextPage->firstSystemId - 1;
+                if (page->firstSystemId > 0) {
+                    page->lastSystemId = [&]() -> SystemCmper {
+                        size_t nextIndex = x + 1;
+                        while (nextIndex < pages.size()) {
+                            auto nextPage = pages[nextIndex++];
+                            if (!nextPage->isBlank()) {
+                                if (nextPage->firstSystemId > 0) {
+                                    return nextPage->firstSystemId - 1;
+                                } else {
+                                    return 0;
+                                }                            
+                            }
                         }
-                    }
-                    return SystemCmper(systems.size());
-                }();
-                if (page->lastSystemId.value() >= page->firstSystemId) {
-                    if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->firstSystemId)) {
-                        page->firstMeasureId = sys->startMeas;
+                        return SystemCmper(systems.size());
+                    }();
+                    if (page->lastSystemId.value() >= page->firstSystemId) {
+                        if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->firstSystemId)) {
+                            page->firstMeasureId = sys->startMeas;
+                        } else {
+                            MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                                + " has a no system instance for its first system.");                        
+                        }
+                        if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
+                            page->lastMeasureId = sys->getLastMeasure();
+                        } else {
+                            MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                                + " has a no system instance for its last system.");                        
+                        }
+                        for (size_t x = size_t(page->firstSystemId - 1); x < size_t(page->lastSystemId.value()); x++) {
+                            systems[x]->pageId = PageCmper(page->getCmper());
+                        }
                     } else {
-                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                            + " has a no system instance for its first system.");                        
-                    }
-                    if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
-                        page->lastMeasureId = sys->getLastMeasure();
-                    } else {
-                        MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                            + " has a no system instance for its last system.");                        
+                        MUSX_INTEGRITY_ERROR("The systems on page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                            + " cannot be determined.");
                     }
                 } else {
-                    page->lastSystemId = std::nullopt;
-                    MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                        + " has a last system smaller than the first system.");
+                    MUSX_INTEGRITY_ERROR("Layout for page " + std::to_string(page->getCmper())
+                        + " of part " + std::to_string(part->getCmper()) + " is in an unknown state.");
                 }
             }
         }
@@ -3024,743 +3183,6 @@ bool others::RepeatEndingStart::calcIsOpen() const
     return false;
 }
 
-// ********************
-// ***** ShapeDef *****
-// ********************
-
-void others::ShapeDef::iterateInstructions(std::function<bool(others::ShapeDef::InstructionType, std::vector<int>)> callback) const
-{
-    auto insts = getDocument()->getOthers()->get<others::ShapeInstructionList>(getPartId(), instructionList);
-    auto data = getDocument()->getOthers()->get<others::ShapeData>(getPartId(), dataList);
-    if (insts && data) {
-        size_t currentDataIndex = 0;
-        for (const auto& inst : insts->instructions) {
-            if (currentDataIndex + inst->numData > data->values.size()) {
-                throw std::invalid_argument("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
-            }
-            if (!callback(inst->type, { data->values.begin() + currentDataIndex, data->values.begin() + currentDataIndex + inst->numData })) {
-                break;
-            }
-            currentDataIndex += inst->numData;
-        }
-    } else {
-        MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) + " is missing instructions and/or data.");
-    }
-}
-
-// *****************
-// ***** Staff *****
-// *****************
-
-void others::Staff::calcAllAutoNumberValues(const DocumentPtr& document)
-{
-    auto scrollViewList = document->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
-
-    // Map to track counts for instUuid
-    std::unordered_map<std::string, int> instUuidCounts;
-    std::unordered_set<Cmper> countedMultistaffGroups;
-
-    // Pass 1: Check if any instUuid has auto-numbering disabled
-    std::unordered_set<std::string> disabledInstUuids;
-    for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaffInstance();
-        if (staff && !staff->useAutoNumbering) {
-            disabledInstUuids.insert(staff->instUuid);
-        }
-    }
-
-    // Pass 2: Count occurrences of instUuid, considering multistaff instruments
-    for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaffInstance();
-        if (!staff || staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
-            continue;
-        }
-
-        // Check if the staff is part of a multistaff instrument
-        auto multiStaffGroup = staff->getMultiStaffInstGroup();
-        if (multiStaffGroup) {
-            if (countedMultistaffGroups.find(multiStaffGroup->getCmper()) != countedMultistaffGroups.end()) {
-                continue; // Skip already-counted multistaff groups
-            }
-            countedMultistaffGroups.insert(multiStaffGroup->getCmper());
-        }
-        instUuidCounts[staff->instUuid]++;
-    }
-
-    // Pass 2.1: Remove singleton or empty instUuid counts, including single multistaff instruments
-    for (const auto& count : instUuidCounts) {
-        if (count.second <= 1) {
-            disabledInstUuids.insert(count.first);
-        }
-    }
-
-    // Pass 3: Assign auto-numbering values
-    std::unordered_map<std::string, int> instUuidNumbers;
-    countedMultistaffGroups.clear(); // Reset for numbering
-
-    for (const auto& instrumentUsed : scrollViewList) {
-        auto staff = instrumentUsed->getStaffInstance();
-        if (!staff) continue;
-        if (staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
-            staff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
-            continue;
-        }
-
-        // Check if the staff is part of a multistaff instrument
-        auto multiStaffGroup = staff->getMultiStaffInstGroup();
-        if (multiStaffGroup) {
-            if (countedMultistaffGroups.find(multiStaffGroup->getCmper()) == countedMultistaffGroups.end()) {
-                // Assign a number for this multistaff group
-                countedMultistaffGroups.insert(multiStaffGroup->getCmper());
-                instUuidNumbers[staff->instUuid]++;
-            }
-            // Assign the same number to all staves in the group
-            auto groupNumber = instUuidNumbers[staff->instUuid];
-            for (size_t x = 0; x < multiStaffGroup->staffNums.size(); x++) {
-                auto groupStaff = multiStaffGroup->getStaffInstanceAtIndex(x);
-                if (groupStaff) {
-                    groupStaff->autoNumberValue = groupNumber;
-                }
-            }
-            continue; // Skip further processing for the current staff
-        }
-
-        // Assign a number for single staves
-        instUuidNumbers[staff->instUuid]++;
-        staff->autoNumberValue = instUuidNumbers[staff->instUuid];
-    }
-}
-template <typename SubType>
-void others::Staff::calcAllRuntimeValues(const DocumentPtr& document)
-{
-    static_assert(std::is_same_v<SubType, others::Staff>
-               || std::is_same_v<SubType, others::StaffStyle>,
-        "SubType template parameter must be Staff or StaffStyle.");
-    using DrumStaffType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::DrumStaff, others::DrumStaffStyle>;
-    using NamePositionFullType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::NamePositionFull, others::NamePositionStyleFull>;
-    using NamePositionAbrvType = std::conditional_t<std::is_same_v<SubType, others::Staff>, others::NamePositionAbbreviated, others::NamePositionStyleAbbreviated>;
-    constexpr bool isForStyle = std::is_same_v<SubType, others::StaffStyle>;
-
-    auto list = document->getOthers()->getArray<SubType>(SCORE_PARTID);
-    for (const auto& item : list) {
-        if (item->notationStyle == others::Staff::NotationStyle::Percussion) {
-            if (auto drumStaff = document->getOthers()->get<DrumStaffType>(SCORE_PARTID, item->getCmper())) {
-                item->percussionMapId = drumStaff->whichDrumLib;
-            } else {
-                item->percussionMapId = Cmper(0);
-                MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(item->getCmper()) + " is percussion style but has no DrumStaff record.");
-            }
-        } else {
-            item->percussionMapId = std::nullopt;
-        }
-        bool checkFullNeeded = true;
-        if constexpr (isForStyle) {
-            checkFullNeeded = item->masks->fullNamePos;
-        }
-        if (checkFullNeeded) {
-            if (auto full = document->getOthers()->get<NamePositionFullType>(SCORE_PARTID, item->getCmper())) {
-                item->fullNamePosId = item->getCmper();
-            } else {
-                item->fullNamePosId = 0;
-            }
-            item->fullNamePosFromStyle = isForStyle;
-        }
-        bool checkAbbrvNeeded = true;
-        if constexpr (isForStyle) {
-            checkAbbrvNeeded = item->masks->abrvNamePos;
-        }
-        if (checkAbbrvNeeded) {
-            if (auto abrv = document->getOthers()->get<NamePositionAbrvType>(SCORE_PARTID, item->getCmper())) {
-                item->abrvNamePosId = item->getCmper();
-            } else {
-                item->abrvNamePosId = 0;
-            }
-            item->abrvNamePosFromStyle = isForStyle;
-        }
-    }
-}
-
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
-static std::string intToRoman(int num)
-{
-    if (num <= 0 || num > 3999) {
-        throw std::out_of_range("Number out of range for Roman numerals (1-3999)");
-    }
-
-    const std::vector<std::pair<int, std::string>> romanMap = {
-        {1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
-        {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"},
-        {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}
-    };
-
-    std::string result;
-    for (const auto& [value, symbol] : romanMap) {
-        while (num >= value) {
-            result += symbol;
-            num -= value;
-        }
-    }
-    return result;
-}
-
-std::string intToAlphabetic(int num) {
-    if (num <= 0) {
-        throw std::out_of_range("Number must be greater than 0");
-    }
-
-    std::string result;
-    while (num > 0) {
-        --num; // Convert to 0-based index
-        result.insert(result.begin(), 'A' + (num % 26));
-        num /= 26;
-    }
-
-    return result;
-}
-
-std::string ordinalPrefix(int num)
-{
-    if (num <= 0) {
-        throw std::out_of_range("Number must be greater than 0");
-    }
-
-    int lastTwoDigits = num % 100;
-    int lastDigit = num % 10;
-
-    if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
-        return std::to_string(num) + "th";
-    }
-
-    switch (lastDigit) {
-        case 1: return std::to_string(num) + "st";
-        case 2: return std::to_string(num) + "nd";
-        case 3: return std::to_string(num) + "rd";
-        default: return std::to_string(num) + "th";
-    }
-}
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
-
-std::pair<std::string, bool> others::Staff::calcAutoNumberingAffix() const
-{
-    if (!autoNumberValue.has_value()) {
-        return std::make_pair(std::string(), false); // No numbering needed
-    }
-
-    int number = *autoNumberValue;
-    switch (autoNumbering) {
-        default:
-        case AutoNumberingStyle::ArabicSuffix:
-            return std::make_pair(" " + std::to_string(number), false);
-        case AutoNumberingStyle::RomanSuffix:
-            return std::make_pair(" " + intToRoman(number), false);
-        case AutoNumberingStyle::OrdinalPrefix:
-            return std::make_pair(ordinalPrefix(number) + " ", true);
-        case AutoNumberingStyle::AlphaSuffix:
-            return std::make_pair(" " + intToAlphabetic(number), false);
-        case AutoNumberingStyle::ArabicPrefix:
-            return std::make_pair(std::to_string(number) + ". ", true);
-    }
-}
-
-std::string others::Staff::addAutoNumbering(const std::string& plainName) const
-{
-    auto [affix, isPrefix] = calcAutoNumberingAffix();
-    if (affix.empty()) {
-        return plainName;
-    }
-    if (isPrefix) {
-        return affix + plainName;
-    }
-    return plainName + affix;
-}
-
-std::string others::Staff::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
-{
-    return others::TextBlock::getText(getDocument(), fullNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
-}
-
-std::string others::Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
-{
-    return others::TextBlock::getText(getDocument(), abbrvNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
-}
-
-std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffInstGroup() const
-{
-    if (multiStaffInstId) {
-        if (auto retval = getDocument()->getOthers()->get<others::MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffInstId)) {
-            return retval;
-        }
-        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffInstId));
-    }
-    return nullptr;
-}
-
-std::shared_ptr<others::MultiStaffInstrumentGroup> others::Staff::getMultiStaffInstVisualGroup() const
-{
-    if (multiStaffInstVisualId) {
-        if (auto retval = getDocument()->getOthers()->get<others::MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffInstVisualId)) {
-            return retval;
-        }
-        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getCmper()) + " points to non-existent MultiStaffInstrumentGroup " + std::to_string(multiStaffInstVisualId));
-    }
-    return nullptr;
-}
-
-util::EnigmaParsingContext others::Staff::getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
-{
-    auto block = [&]() -> std::shared_ptr<others::TextBlock> {
-        if ((!preferStaffName || !fullNameTextId) && multiStaffInstVisualGroupId) {
-            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, 0, multiStaffInstVisualGroupId)) {
-                return getDocument()->getOthers()->get<others::TextBlock>(forPartId, group->fullNameId);
-            }
-        }
-        return getDocument()->getOthers()->get<others::TextBlock>(forPartId, fullNameTextId);
-    }();
-    if (!block) {
-        return {};
-    }
-    auto parsingContext = block->getRawTextCtx(forPartId);
-    auto [affix, isPrefix] = calcAutoNumberingAffix();
-    parsingContext.affixText = affix;
-    parsingContext.affixIsPrefix = isPrefix;
-    return parsingContext;
-}
-
-std::string others::Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
-{
-    if (auto ctx = getFullInstrumentNameCtx(SCORE_PARTID, preferStaffName)) {
-        return ctx.getText(true, accidentalStyle);
-    }
-    return {};
-}
-
-util::EnigmaParsingContext others::Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
-{
-    auto block = [&]() -> std::shared_ptr<others::TextBlock> {
-        if ((!preferStaffName || !abbrvNameTextId) && multiStaffInstVisualGroupId) {
-            if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, 0, multiStaffInstVisualGroupId)) {
-                return getDocument()->getOthers()->get<others::TextBlock>(forPartId, group->abbrvNameId);
-            }
-        }
-        return getDocument()->getOthers()->get<others::TextBlock>(forPartId, abbrvNameTextId);
-    }();
-    if (!block) {
-        return {};
-    }
-    auto parsingContext = block->getRawTextCtx(forPartId);
-    auto [affix, isPrefix] = calcAutoNumberingAffix();
-    parsingContext.affixText = affix;
-    parsingContext.affixIsPrefix = isPrefix;
-    return parsingContext;
-}
-
-std::string others::Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
-{
-    if (auto ctx = getAbbreviatedInstrumentNameCtx(SCORE_PARTID, preferStaffName)) {
-        return ctx.getText(true, accidentalStyle);
-    }
-    return {};
-}
-
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
-template <typename NamePositionType>
-std::shared_ptr<const others::NamePositioning> others::Staff::getNamePosition() const
-{
-    static_assert(std::is_same_v<NamePositionType, others::NamePositionAbbreviated>
-               || std::is_same_v<NamePositionType, others::NamePositionStyleAbbreviated>
-               || std::is_same_v<NamePositionType, others::NamePositionFull>
-               || std::is_same_v<NamePositionType, others::NamePositionStyleFull>,
-        "NamePositionType must be a name positioning type.");
-    constexpr bool isForFull = std::is_same_v<NamePositionType, others::NamePositionFull> || std::is_same_v<NamePositionType, others::NamePositionStyleFull>;
-
-    const Cmper posCmper = isForFull ? fullNamePosId : abrvNamePosId;
-    if (posCmper) {
-        if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getPartId(), posCmper)) {
-            return pos;
-        }
-    }
-
-    std::shared_ptr<const others::NamePositioning> defaultValue;
-    if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
-        if constexpr (isForFull) {
-            defaultValue = staffOptions->namePos;
-        } else {
-            defaultValue = staffOptions->namePosAbbrv;
-        }
-    } else {
-        MUSX_INTEGRITY_ERROR("Unable to retrieve staff options for returning default name positioning.");
-    }
-    return defaultValue;
-}
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
-
-std::shared_ptr<const others::NamePositioning> others::Staff::getFullNamePosition() const
-{
-    if (fullNamePosFromStyle) {
-        return getNamePosition<others::NamePositionStyleFull>();
-    }
-    return getNamePosition<others::NamePositionFull>();
-}
-
-std::shared_ptr<const others::NamePositioning> others::Staff::getAbbreviatedNamePosition() const
-{
-    if (abrvNamePosFromStyle) {
-        return getNamePosition<others::NamePositionStyleAbbreviated>();
-    }
-    return getNamePosition<others::NamePositionAbbreviated>();
-}
-
-ClefIndex others::Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrittenPitch) const
-{
-    if (forWrittenPitch && transposition && transposition->setToClef) {
-        return transposedClef;
-    }
-    for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
-        if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), getCmper(), tryMeasure)) {
-            return gfhold.calcClefIndexAt(position);
-        }
-        // after the first iteration, we are looking for the clef at the end of the measure
-        position = (std::numeric_limits<Edu>::max)();
-    }
-    return defaultClef;
-}
-
-ClefIndex others::Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper)
-{
-    if (auto staff = others::StaffComposite::createCurrent(document, partId, staffCmper, 1, 0)) {
-        return staff->calcFirstClefIndex();
-    } else {
-        throw std::logic_error("Unable to find StaffComposite instance for staff " + std::to_string(staffCmper));
-    }
-}
-
-int others::Staff::calcMiddleStaffPosition() const
-{
-    if (staffLines.has_value()) {
-        return -(staffLines.value() - 1);
-    } else if (customStaff.has_value()) {
-        const auto& lines = customStaff.value();
-        if (!lines.empty()) {
-            int numLines = lines[lines.size() - 1] - lines[0] + 1;
-            int referenceOffset = 2 * (11 - lines[0]);
-            return referenceOffset - (numLines - 1);
-        }
-    }
-    return 0;
-}
-
-int others::Staff::calcToplinePosition() const
-{
-    if (staffLines.has_value()) {
-        return 0;
-    }
-    if (customStaff.has_value()) {
-        const auto& lines = customStaff.value();
-        if (!lines.empty()) {
-            return 2 * (11 - lines[0]);
-        }
-    }
-    return 0;
-}
-
-
-bool others::Staff::hasInstrumentAssigned() const
-{
-    if (instUuid.empty() || instUuid == uuid::BlankStaff || instUuid == uuid::Unknown) {
-        return false;
-    }
-    return true;
-}
-
-std::pair<int, int> others::Staff::calcTranspositionInterval() const
-{
-    if (transposition) {
-        if (transposition->chromatic) {
-            return std::make_pair(transposition->chromatic->diatonic, transposition->chromatic->alteration);
-        } else if (transposition->keysig) {
-            const int alteration = music_theory::calcAlterationFromKeySigChange(transposition->keysig->interval, transposition->keysig->adjust);
-            return std::make_pair(transposition->keysig->interval, alteration);
-        }
-    }
-    return std::make_pair(0, 0);
-}
-
-std::vector<std::shared_ptr<others::PartDefinition>> others::Staff::getContainingParts(bool includeScore) const
-{
-    std::vector<std::shared_ptr<others::PartDefinition>> result;
-    auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
-    for (const auto& part : parts) {
-        if (!includeScore && part->getCmper() == SCORE_PARTID) {
-            continue;
-        }
-        auto scrollView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
-        for (const auto& next : scrollView) {
-            if (next->staffId == this->getCmper()) {
-                result.push_back(part);
-                break;
-            }
-        }
-    }
-    return result;
-}
-
-std::shared_ptr<others::PartDefinition> others::Staff::firstFirstContainingPart() const
-{
-    std::vector<std::shared_ptr<others::PartDefinition>> result;
-    auto parts = getDocument()->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
-    for (const auto& part : parts) {
-        if (part->getCmper() != SCORE_PARTID) {
-            auto scrollView = getDocument()->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
-            for (const auto& next : scrollView) {
-                if (next->staffId == this->getCmper()) {
-                    return part;
-                }
-            }
-        }
-    }
-    return nullptr;
-}
-
-// **************************
-// ***** StaffComposite *****
-// **************************
-
-void others::StaffComposite::applyStyle(const std::shared_ptr<others::StaffStyle>& staffStyle)
-{
-    auto srcMasks = staffStyle->masks;
-
-    if (staffStyle->hasInstrumentAssigned()) {
-        instUuid = staffStyle->instUuid;
-        // there appears to be no mask for instUuid.
-    }
-
-    /// @todo the rest of the masks as we discover/create them
-    if (srcMasks->floatNoteheadFont) {
-        noteFont = staffStyle->noteFont;
-        useNoteFont = staffStyle->useNoteFont;
-        masks->floatNoteheadFont = true;
-    }
-    if (srcMasks->flatBeams) {
-        flatBeams = staffStyle->flatBeams;
-        masks->flatBeams = true;
-    }
-    if (srcMasks->blankMeasureRest) {
-        blankMeasure = staffStyle->blankMeasure;
-        masks->blankMeasureRest = true;
-    }
-    if (srcMasks->noOptimize) {
-        noOptimize = staffStyle->noOptimize;
-        masks->noOptimize = true;
-    }
-    if (srcMasks->notationStyle) {
-        notationStyle = staffStyle->notationStyle;
-        percussionMapId = staffStyle->percussionMapId;
-        // other fields needed for perc and tab styles
-        masks->notationStyle = true;
-    }
-    if (srcMasks->defaultClef) {
-        defaultClef = staffStyle->defaultClef;
-        masks->defaultClef = true;
-    }
-    if (srcMasks->staffType) {
-        staffLines = staffStyle->staffLines;
-        customStaff = staffStyle->customStaff;
-        lineSpace = staffStyle->lineSpace;
-        topBarlineOffset = staffStyle->topBarlineOffset;
-        botBarlineOffset = staffStyle->botBarlineOffset;
-        dwRestOffset = staffStyle->dwRestOffset;
-        wRestOffset = staffStyle->wRestOffset;
-        hRestOffset = staffStyle->hRestOffset;
-        otherRestOffset = staffStyle->otherRestOffset;
-        botRepeatDotOff = staffStyle->botRepeatDotOff;
-        topRepeatDotOff = staffStyle->topRepeatDotOff;
-        stemReversal = staffStyle->stemReversal;
-        hideRepeatBottomDot = staffStyle->hideRepeatBottomDot;
-        hideRepeatTopDot = staffStyle->hideRepeatTopDot;
-        masks->staffType = true;
-    }
-    if (srcMasks->transposition) {
-        transposedClef = staffStyle->transposedClef;
-        transposition = staffStyle->transposition;
-        masks->transposition = true;
-    }
-    if (srcMasks->blineBreak) {
-        blineBreak = staffStyle->blineBreak;
-        masks->blineBreak = true;
-    }
-    if (srcMasks->rbarBreak) {
-        rbarBreak = staffStyle->rbarBreak;
-        masks->rbarBreak = true;
-    }
-    if (srcMasks->negMnumb) {
-        hideMeasNums = staffStyle->hideMeasNums;
-        masks->negMnumb = true;
-    }
-    if (srcMasks->negRepeat) {
-        hideRepeats= staffStyle->hideRepeats;
-        masks->negRepeat = true;
-    }
-    if (srcMasks->negNameScore) {
-        hideNameInScore = staffStyle->hideNameInScore;
-        masks->negNameScore = true;
-    }
-    if (srcMasks->hideBarlines) {
-        hideBarlines = staffStyle->hideBarlines;
-        masks->hideBarlines = true;
-    }
-    if (srcMasks->fullName) {
-        fullNameTextId = staffStyle->fullNameTextId;
-        masks->fullName = true;
-    }
-    if (srcMasks->abrvName) {
-        abbrvNameTextId = staffStyle->abbrvNameTextId;
-        masks->abrvName = true;
-    }
-    if (srcMasks->floatKeys) {
-        floatKeys = staffStyle->floatKeys;
-        masks->floatKeys = true;
-    }
-    if (srcMasks->floatTime) {
-        floatTime = staffStyle->floatTime;
-        masks->floatTime = true;
-    }
-    if (srcMasks->hideRptBars) {
-        hideRptBars = staffStyle->hideRptBars;
-        masks->hideRptBars = true;
-    }
-    if (srcMasks->fullNamePos) {
-        fullNamePosId = staffStyle->fullNamePosId;
-        fullNamePosFromStyle = true;
-        masks->fullNamePos = true;
-    }
-    if (srcMasks->abrvNamePos) {
-        abrvNamePosId = staffStyle->abrvNamePosId;
-        abrvNamePosFromStyle = true;
-        masks->abrvNamePos = true;
-    }
-    if (srcMasks->altNotation) {
-        altNotation = staffStyle->altNotation;
-        altLayer = staffStyle->altLayer;
-        altHideArtics = staffStyle->altHideArtics;
-        altHideLyrics = staffStyle->altHideLyrics;
-        altHideSmartShapes = staffStyle->altHideSmartShapes;
-        altRhythmStemsUp = staffStyle->altRhythmStemsUp;
-        altSlashDots = staffStyle->altSlashDots;
-        altHideOtherNotes = staffStyle->altHideOtherNotes;
-        altHideOtherArtics = staffStyle->altHideOtherArtics;
-        altHideExpressions = staffStyle->altHideExpressions;
-        altHideOtherLyrics = staffStyle->altHideOtherLyrics;
-        altHideOtherSmartShapes = staffStyle->altHideOtherSmartShapes;
-        altHideOtherExpressions = staffStyle->altHideOtherExpressions;
-        masks->altNotation = true;
-    }
-    if (srcMasks->negKey) {
-        hideKeySigs = staffStyle->hideKeySigs;
-        masks->negKey = true;
-    }
-    if (srcMasks->negTime) {
-        hideTimeSigs = staffStyle->hideTimeSigs;
-        masks->negTime = true;
-    }
-    if (srcMasks->negClef) {
-        hideClefs = staffStyle->hideClefs;
-        masks->negClef = true;
-    }
-    if (srcMasks->hideStaff) {
-        hideMode = staffStyle->hideMode;
-        masks->hideStaff = true;
-    }
-    if (srcMasks->noKey) {
-        noKey = staffStyle->noKey;
-        masks->noKey = true;
-    }
-    if (srcMasks->showTies) {
-        hideTies = staffStyle->hideTies;
-        masks->showTies = true;
-    }
-    if (srcMasks->showDots) {
-        hideDots = staffStyle->hideDots;
-        masks->showDots = true;
-    }
-    if (srcMasks->showRests) {
-        hideRests = staffStyle->hideRests;
-        masks->showRests = true;
-    }
-    if (srcMasks->showStems) {
-        hideStems = staffStyle->hideStems;
-        hideBeams = staffStyle->hideBeams;
-        stemDirection = staffStyle->stemDirection;
-        // stemsFixedStart
-        // stemdFixedEnd
-        // stemStartFromStaff
-        // horzStemOffUp
-        // horzStemOffDown
-        // vertStemStartOffUp
-        // vertStemStartOffDown
-        // vertStemEndOffUp
-        // vertStemEndOffDown
-        masks->showStems = true;
-    }
-    if (srcMasks->hideChords) {
-        hideChords = staffStyle->hideChords;
-        masks->hideChords = true;
-    }
-    if (srcMasks->hideFretboards) {
-        hideFretboards = staffStyle->hideFretboards;
-        masks->hideFretboards = true;
-    }
-    if (srcMasks->hideLyrics) {
-        hideLyrics = staffStyle->hideLyrics;
-        masks->hideLyrics = true;
-    }
-    if (srcMasks->showNameParts) {
-        showNameInParts = staffStyle->showNameInParts;
-        masks->showNameParts = true;
-    }
-    if (srcMasks->hideStaffLines) {
-        hideStaffLines = staffStyle->hideStaffLines;
-        masks->hideStaffLines = true;
-    }
-    if (srcMasks->redisplayLayerAccis) {
-        redisplayLayerAccis = staffStyle->redisplayLayerAccis;
-        masks->redisplayLayerAccis = true;
-    }
-    if (srcMasks->negTimeParts) {
-        hideTimeSigsInParts = staffStyle->hideTimeSigsInParts;
-        masks->negTimeParts = true;
-    }
-    if (srcMasks->hideKeySigsShowAccis) {
-        hideKeySigsShowAccis = staffStyle->hideKeySigsShowAccis;
-        masks->hideKeySigsShowAccis = true;
-    }
-}
-
-std::shared_ptr<others::Staff> others::StaffComposite::getRawStaff() const
-{
-    auto result = getDocument()->getOthers()->get<others::Staff>(getPartId(), getCmper());
-    if (!result) {
-        MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(getCmper()) + " from StaffComposite.");        
-    }
-    return result;
-}
-
-std::shared_ptr<others::StaffComposite> others::StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
-    InstCmper staffId, MeasCmper measId, Edu eduPosition)
-{
-    auto rawStaff = document->getOthers()->get<others::Staff>(partId, staffId);
-    if (!rawStaff) return nullptr;
-
-    std::shared_ptr<others::StaffComposite> result(new others::StaffComposite(rawStaff, partId));
-    if (result->hasStyles) {
-        auto styles = others::StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
-        for (const auto& style : styles) {
-            result->applyStyle(style);
-        }
-    }
-
-    return result;
-}
-
 // **********************
 // ***** StaffGroup *****
 // **********************
@@ -3856,7 +3278,8 @@ std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure
     const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves)
 {
     if (systemStaves.empty()) {
-        util::Logger::log(util::Logger::LogLevel::Info, "Attempted to find groups for empty system staves. Returning an empty vector.");
+        util::Logger::log(util::Logger::LogLevel::Info, "Attempted to find groups for empty system staves. [measure " + std::to_string(measureId)
+            + ", part " + std::to_string(linkedPartId) +"] Returning an empty vector.");
         return {};
     }
     auto rawGroups = systemStaves[0]->getDocument()->getDetails()->getArray<details::StaffGroup>(linkedPartId, BASE_SYSTEM_ID);
@@ -3916,18 +3339,27 @@ std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() co
 // ***** StaffSystem *****
 // ***********************
 
-std::pair<double, double> others::StaffSystem::calcMinMaxStaffSizes() const
+std::shared_ptr<others::Page> others::StaffSystem::getPage() const
 {
-    std::pair<double, double> result = std::make_pair(1.0, 1.0);
+    return getDocument()->getOthers()->get<others::Page>(getPartId(), pageId);
+}
+
+std::pair<util::Fraction, util::Fraction> others::StaffSystem::calcMinMaxStaffSizes() const
+{
     if (hasStaffScaling) {
-        auto staffSizes = getDocument()->getDetails()->getArray<details::StaffSize>(getPartId(), getCmper());
-        for (const auto& staffSize : staffSizes) {
-            const double val = double(staffSize->staffPercent) / 100.0;
-            if (val < result.first) result.first = val;
-            if (val > result.second) result.second = val;
+        auto systemStaves = getDocument()->getOthers()->getArray<others::InstrumentUsed>(getPartId(), getCmper());
+        if (!systemStaves.empty()) {
+            std::pair<util::Fraction, util::Fraction> result = std::make_pair((std::numeric_limits<util::Fraction>::max)(), (std::numeric_limits<util::Fraction>::min)());
+            for (const auto& systemStaff : systemStaves) {
+                auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getPartId(), getCmper(), systemStaff->getCmper());
+                const util::Fraction val = staffSize ? double(staffSize->staffPercent) / 100.0 : 1.0;
+                if (val < result.first) result.first = val;
+                if (val > result.second) result.second = val;
+            }
+            return result;
         }
     }
-    return result;
+    return std::make_pair(util::Fraction(1), util::Fraction(1));;
 }
 
 // ***********************
@@ -3964,7 +3396,10 @@ util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std
             rawText = getDocument()->getTexts()->get<texts::ExpressionText>(textId);
             break;
     }
-    return rawText->getRawTextCtx(forPartId, forPageId, defaultInsertFunc);
+    if (rawText) {
+        return rawText->getRawTextCtx(forPartId, forPageId, defaultInsertFunc);
+    }
+    return {};
 }
 
 std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle)

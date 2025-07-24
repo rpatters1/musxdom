@@ -332,6 +332,17 @@ public:
      */
     std::vector<std::shared_ptr<ClefDef>> clefDefs;
 
+    /// @brief Bounds-checked accessor function for #clefDefs.
+    /// @param clefIndex The index to retrieve.
+    /// @throws std::out_of_range if index is out of range.
+    std::shared_ptr<ClefDef> getClefDef(ClefIndex clefIndex) const
+    {
+        MUSX_ASSERT_IF(clefIndex >= clefDefs.size()) {
+            throw std::out_of_range("Clef index " + std::to_string(clefIndex) + " does not exist in document.");
+        }
+        return clefDefs[clefIndex];
+    }
+
     /**
      * @brief The XML node name for this type.
      */
@@ -953,6 +964,16 @@ public:
         bool facingPages{};              ///< Whether to use the right page margin values.
         bool differentFirstSysMargin{};  ///< Whether to use the first system values.
         bool differentFirstPageMargin{}; ///< Whether to use the `firstPageMarginTop` value.
+
+        /// @brief Calculates the page scaling as a #musx::util::Fraction where 1/1 means no scaling.
+        util::Fraction calcPageScaling() const { return util::Fraction::fromPercent(pagePercent); }
+
+        /// @brief Calculates the system scaling as a #musx::util::Fraction where 1/1 means no scaling.
+        util::Fraction calcSystemScaling() const
+        { return util::Fraction::fromPercent(sysPercent) * util::Fraction(rawStaffHeight, int(EVPU_PER_SPACE) * 4 * 16); }
+
+        /// @brief Calculates the combined system & page scaling as a #musx::util::Fraction where 1/1 means no scaling.
+        util::Fraction calcCombinedSystemScaling() const { return calcPageScaling() * calcSystemScaling(); }
 
         /**
          * @brief Default constructor for PageFormat.

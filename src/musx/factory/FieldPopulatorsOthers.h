@@ -152,7 +152,7 @@ MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
             for (const auto& instance : instGroups) {
                 if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), BASE_SYSTEM_ID, instance->staffGroupId)) {
                     group->multiStaffGroupId = instance->getCmper();
-                } else {
+                } else if (instance->staffGroupId != 0) {
                     MUSX_INTEGRITY_ERROR("Group " + std::to_string(instance->staffGroupId) + " appears in MultiStaffGroupId "
                         + std::to_string(instance->getCmper()) + " but does not exist.");
                 }

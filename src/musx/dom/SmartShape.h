@@ -33,15 +33,20 @@ namespace dom {
 
 class EntryInfoPtr;
 
+namespace details {
+class SmartShapeEntryAssign;
+}
+
 namespace others {
 
+class SmartShapeMeasureAssign;
 /**
  * @class SmartShape
  * @brief Represents a Finale smart shape.
  *
  * This class is identified by the XML node name "smartShape".
  */
-class SmartShape : public OthersBase
+class SmartShape : public OthersBase, public std::enable_shared_from_this<SmartShape>
 {
 public:
     /** @brief Constructor function */
@@ -51,17 +56,17 @@ public:
     /**
      * @brief Represents an endpoint of the smart shape.
      */
-    class EndPoint : public Base
+    class EndPoint : public ContainedClassBase<SmartShape>
     {
     public:
-        /** @brief Constructor function. */
-        explicit EndPoint(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        using ContainedClassBase<SmartShape>::ContainedClassBase;
 
         InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
         MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
         Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
         EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
+
+        Cmper shapeId{};                ///< The shape that this segment belongs to. (Added by the factory.)
 
         /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
         util::Fraction calcPosition() const;
@@ -70,8 +75,20 @@ public:
         util::Fraction calcGlobalPosition() const;
 
         /// @brief Calculates the entry associated with the endpoint.
-        /// @return The entry if the endpoint is entry-attached or within 1 Edu of an entry. Null if not.
-        EntryInfoPtr calcAssociatedEntry() const;
+        /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
+        /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
+        /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
+        /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
+        EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
+
+        /// @brief Gets the measure assignment for this endpoint or null if none.
+        std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
+
+        /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
+        std::shared_ptr<details::SmartShapeEntryAssign> getEntryAssignment() const;
+
+        /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
+        bool calcIsAssigned() const;
 
         bool requireAllFields() const override { return false; }
         static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -80,12 +97,10 @@ public:
     /**
      * @brief Represents the endpoint adjustment of the smart shape.
      */
-    class EndPointAdjustment : public Base
+    class EndPointAdjustment : public ContainedClassBase<SmartShape>
     {
     public:
-        /** @brief Constructor function. */
-        explicit EndPointAdjustment(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        using ContainedClassBase<SmartShape>::ContainedClassBase;
 
         Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
         Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
@@ -98,12 +113,10 @@ public:
     /**
      * @brief Represents the termination segment of the smart shape.
      */
-    class TerminationSeg : public Base
+    class TerminationSeg : public ContainedClassBase<SmartShape>
     {
     public:
-        /** @brief Constructor function. */
-        explicit TerminationSeg(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        using ContainedClassBase<SmartShape>::ContainedClassBase;
 
         std::shared_ptr<EndPoint> endPoint;                 ///< Endpoint information (xml node is `<endPt>`)
         std::shared_ptr<EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information (xml node is `<endPtAdj>`)
@@ -114,13 +127,13 @@ public:
         {
             Base::integrityCheck();
             if (!endPoint) {
-                endPoint = std::make_shared<EndPoint>(getDocument());
+                endPoint = std::make_shared<EndPoint>(getParent());
             }
             if (!endPointAdj) {
-                endPointAdj = std::make_shared<EndPointAdjustment>(getDocument());
+                endPointAdj = std::make_shared<EndPointAdjustment>(getParent());
             }
             if (!breakAdj) {
-                breakAdj = std::make_shared<EndPointAdjustment>(getDocument());
+                breakAdj = std::make_shared<EndPointAdjustment>(getParent());
             }
         }
     
@@ -202,10 +215,10 @@ public:
     {
         OthersBase::integrityCheck();
         if (!startTermSeg) {
-            startTermSeg = std::make_shared<TerminationSeg>(getDocument());
+            startTermSeg = std::make_shared<TerminationSeg>(shared_from_this());
         }
         if (!endTermSeg) {
-            endTermSeg = std::make_shared<TerminationSeg>(getDocument());
+            endTermSeg = std::make_shared<TerminationSeg>(shared_from_this());
         }
         startTermSeg->integrityCheck();
         endTermSeg->integrityCheck();
@@ -224,6 +237,8 @@ public:
  */
 class SmartShapeCustomLine : public OthersBase
 {
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, Cmper textBlockId) const;
+
 public:
     /// @brief Constructor function
     explicit SmartShapeCustomLine(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
@@ -324,6 +339,41 @@ public:
     Efix lineCapStartHookLength{};                        ///< Length of start hook (if #lineStyle is Hook)
     Efix lineCapEndHookLength{};                          ///< Length of end hook (if #lineStyle is Hook)
 
+    /**
+     * @brief Gets the raw text context for parsing the left-start, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getLeftStartRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, leftStartRawTextId); }
+
+    /**
+     * @brief Gets the raw text context for parsing the left-continuation text, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getLeftContRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, leftContRawTextId); }
+
+    /**
+     * @brief Gets the raw text context for parsing the right-end text, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getRightEndRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, rightEndRawTextId); }
+
+    /**
+     * @brief Gets the raw text context for parsing the center-full text, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getCenterFullRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, centerFullRawTextId); }
+
+    /**
+     * @brief Gets the raw text context for parsing the center-abbreviated text, or nullptr if none.
+     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getCenterAbbrRawTextCtx(Cmper forPartId) const
+    { return getRawTextCtx(forPartId, centerAbbrRawTextId); }
+
     void integrityCheck() override
     {
         OthersBase::integrityCheck();
@@ -389,9 +439,25 @@ namespace details {
  * Cmper1 is the shape number. Cmper2 is the center shape number. (See @ref others::SmartShapeMeasureAssign.)
  * This class is identified by the XML node name "centerShape".
  */
-class CenterShape : public DetailsBase
+class CenterShape : public DetailsBase, public std::enable_shared_from_this<CenterShape>
 {
 public:
+
+    /**
+     * @brief Represents the endpoint adjustment of the center shape.
+     */
+    class EndPointAdjustment : public ContainedClassBase<CenterShape>
+    {
+    public:
+        using ContainedClassBase<CenterShape>::ContainedClassBase;
+
+        Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
+        Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
+        bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
+
+        bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
+        static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+    };
 
     /**
      * @brief Constructor
@@ -405,16 +471,16 @@ public:
         : DetailsBase(document, partId, shareMode, shapeNum, centerShapeNum)
     {}
 
-    std::shared_ptr<others::SmartShape::EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
-    std::shared_ptr<others::SmartShape::EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
+    std::shared_ptr<EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
+    std::shared_ptr<EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
 
     void integrityCheck() override
     {
         if (!startBreakAdj) {
-            startBreakAdj = std::make_shared<others::SmartShape::EndPointAdjustment>(getDocument());
+            startBreakAdj = std::make_shared<EndPointAdjustment>(shared_from_this());
         }
         if (!endBreakAdj) {
-            endBreakAdj = std::make_shared<others::SmartShape::EndPointAdjustment>(getDocument());
+            endBreakAdj = std::make_shared<EndPointAdjustment>(shared_from_this());
         }
     }
 

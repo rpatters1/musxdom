@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpected, const std::optional<NoteInfoPtr>& backNoteExpected = std::nullopt)
+static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpected, const std::optional<NoteInfoPtr>& backNoteExpected = std::nullopt, bool requireTie = true)
 {
     ASSERT_TRUE(fromNote || toNoteExpected) << " null passed for both fromNote and toNoteExpected";
 
@@ -42,11 +42,15 @@ static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpec
         } else {
             EXPECT_TRUE(toNoteExpected.isSameNote(toNote)) << msg << " unexpected tied to note";
             ASSERT_TRUE(toNote) << msg << " unexpected tied to note";
-            auto expectedFromNote = toNote.calcTieFrom();
-            ASSERT_TRUE(expectedFromNote) << msg << " expected from note was null";
-            if (backNoteExpected) {
-                EXPECT_TRUE(backNoteExpected.value().isSameNote(expectedFromNote)) << msg << " unexpected tied from note";
+            auto expectedFromNote = toNote.calcTieFrom(requireTie);
+            if (backNoteExpected.has_value()) {
+                EXPECT_EQ(bool(expectedFromNote), bool(backNoteExpected.value())) << msg << " expected and calculated back notes both null or not null";
+                if (backNoteExpected.value()) {
+                    ASSERT_TRUE(expectedFromNote) << msg << " expected from note was null";
+                    EXPECT_TRUE(backNoteExpected.value().isSameNote(expectedFromNote)) << msg << " unexpected tied from note";
+                }
             } else {
+                ASSERT_TRUE(expectedFromNote) << msg << " expected from note was null";
                 EXPECT_TRUE(fromNote.isSameNote(expectedFromNote)) << msg << " unexpected tied from note";
             }
         }
@@ -74,7 +78,8 @@ TEST(TieDetection, TiesInMeasure)
     ASSERT_TRUE(entryFrame);
 
     checkTie(createNoteInfo(entryFrame, 0, 0), createNoteInfo(entryFrame, 2, 0));
-    checkTie(createNoteInfo(entryFrame, 1, 0), createNoteInfo(entryFrame, 2, 1));
+    checkTie(createNoteInfo(entryFrame, 1, 0), createNoteInfo(entryFrame, 2, 1), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame, 1, 0), createNoteInfo(entryFrame, 2, 1), std::nullopt, false);
     checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 1, 0));
     checkTie(NoteInfoPtr(), createNoteInfo(entryFrame, 2, 2));
 

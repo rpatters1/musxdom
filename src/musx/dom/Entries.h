@@ -302,6 +302,9 @@ public:
     bool stemDetail{};       ///< Indicates there are stem modifications.
     bool reverseUpStem{};    ///< Indicates that a stem normally up is reversed.
     bool reverseDownStem{};  ///< Indicates that a stem normally down is reversed.
+    bool slashGrace{};       ///< Indicates that a non-beamed grace note with flags (8th note or smaller) should have a slash on the stem.
+                             ///< If #options::GraceNoteOptions::slashFlaggedGraceNotes is true, this options has no effect. The stem
+                             ///< always has a slash in that case.
     bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool sorted{};           ///< Sorted flag.
     bool noPlayback{};       ///< Indicates that the entry should not be played back.
@@ -378,7 +381,7 @@ class EntryInfoPtr
 public:
     /** @brief Default constructor */
     EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
-    
+        
     /** @brief Constructor function
      *
      * @param entryFrame The entry frame.
@@ -386,6 +389,15 @@ public:
     */
     explicit EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
         : m_entryFrame(entryFrame), m_indexInFrame(index) {}
+
+    /// @brief Searches the given position at @p staffId and @p measureId for the @p entryNumber.
+    /// @param document The document to search.
+    /// @param partId The part within the document for which to create the #EntryInfoPtr.
+    /// @param staffId The ID of the staff to search.
+    /// @param measureId The ID of the measure to search.
+    /// @param entryNumber The EntryNumber to search for.
+    /// @return If found, an #EntryInfoPtr for the given entry number. Otherwise an null instance.
+    static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measureId, EntryNumber entryNumber);
 
     /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
     const std::shared_ptr<const EntryInfo> operator->() const;
@@ -549,6 +561,14 @@ public:
     /// @return True if this is either the replacement rest in v2 or the hidden rest in v1.
     bool calcIsBeamedRestWorkaroud() const;
 
+    /// @brief Explicit operator< for std::map
+    bool operator<(const EntryInfoPtr& other) const
+    {
+        if (m_entryFrame != other.m_entryFrame)
+            return m_entryFrame < other.m_entryFrame;
+        return m_indexInFrame < other.m_indexInFrame;
+    }
+
 private:
     unsigned calcVisibleBeams() const;
 
@@ -684,6 +704,15 @@ public:
 
     private:
         bool calcCreatesSingleton(bool left) const;
+
+        const std::shared_ptr<const EntryFrame> getParent() const
+        {
+            auto result = m_parent.lock();
+            MUSX_ASSERT_IF(!result) {
+                throw std::logic_error("Unable to obtain lock on parent entry frame.");               
+            }
+            return result;
+        }
 
         const std::weak_ptr<const EntryFrame> m_parent;
     };
@@ -894,14 +923,15 @@ public:
     std::shared_ptr<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
-    /// to see if there is actually a tie end.
+    /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
     NoteInfoPtr calcTieTo() const;
 
-    /// @brief Calculates the note that this note could tie from. Check the return value's #Note::tieStart
-    /// to see if there is actually a tie.
+    /// @brief Calculates the note that this note could tie from.
+    /// @param requireTie If @p requireTie is true, the returned value must have its #Note::tieStart flag set to true.
+    /// You can set @p requireTie to false to find the *potential* note this note might be tied from.
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
-    NoteInfoPtr calcTieFrom() const;
+    NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
     InstCmper calcStaff() const;
@@ -944,6 +974,14 @@ public:
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
     std::pair<int, int> calcDefaultEnharmonic() const
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
+
+    /// @brief Explicit operator< for std::map
+    bool operator<(const NoteInfoPtr& other) const
+    {
+        if (m_entry != other.m_entry)
+            return m_entry < other.m_entry;
+        return m_noteIndex < other.m_noteIndex;
+    }
 
 private:
     /// @brief Returns true if the two notes represent the same concert pitch or

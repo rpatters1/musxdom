@@ -194,6 +194,29 @@ TEST(MultiStaffGroupTest, PopulateFields)
     EXPECT_EQ(groupId->staffGroupId, 5);
 }
 
+void checkInstrument(const DocumentPtr& doc, const std::string& name, InstCmper topStaffId, size_t expectedNumStaves)
+{
+    const auto scrollView = doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto topIndex = others::InstrumentUsed::getIndexForStaff(scrollView, topStaffId);
+    ASSERT_TRUE(topIndex.has_value());
+    const auto& instruments = doc->getInstruments();
+    const auto& it = instruments.find(topStaffId);
+    ASSERT_NE(it, instruments.end()) << name << " instrument not found";
+    const auto& [top, instInfo] = *it;
+    EXPECT_EQ(instInfo.staves.size(), expectedNumStaves);
+    auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, topStaffId, 1, 0);
+    ASSERT_TRUE(staff) << "top staff not found for " << name;
+    EXPECT_EQ(name, staff->getFullInstrumentName());
+    for (const auto& [staffId, index] : instInfo.staves) {
+        auto staffIndex = others::InstrumentUsed::getIndexForStaff(scrollView, staffId);
+        EXPECT_TRUE(staffIndex.has_value()) << name << " staff " << staffId << " was not found in scrollView";
+        if (staffIndex) {
+            EXPECT_EQ(index, staffIndex.value() - topIndex.value()) << name << " contains staff out of sequence";
+        }
+    }
+};
+
+
 TEST(MultiStaffGroupTest, Autonumbering)
 {
     std::vector<char> enigmaXml;
@@ -213,4 +236,33 @@ TEST(MultiStaffGroupTest, Autonumbering)
     ASSERT_TRUE(staff9);
     EXPECT_EQ(staff9->getFullInstrumentName(), "2. sdfdsf");
     EXPECT_EQ(staff9->getAbbreviatedInstrumentName(), "2. sd");
+
+    const auto& instruments = doc->getInstruments();
+    ASSERT_EQ(instruments.size(), 5);
+
+    checkInstrument(doc, "Organ", 1, 3);
+    checkInstrument(doc, "Harpsichord 1", 4, 2);
+    checkInstrument(doc, "Harpsichord 2", 6, 2);
+    checkInstrument(doc, "Trumpet 1", 8, 1);
+    checkInstrument(doc, "2. sdfdsf", 9, 1);
+}
+
+
+TEST(MultiStaffGroupTest, InstrumentDetection)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "multistaff_inst_tests.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    const auto& instruments = doc->getInstruments();
+    ASSERT_EQ(instruments.size(), 5);
+
+    checkInstrument(doc, "Organ", 1, 3);
+    checkInstrument(doc, "Adhoc Piano", 4, 2);
+    checkInstrument(doc, "Harpsichord (adhoc brace)", 6, 3);
+    checkInstrument(doc, "Piano Extra Staves", 10, 4);
+    checkInstrument(doc, "Flute", 9, 1);
 }

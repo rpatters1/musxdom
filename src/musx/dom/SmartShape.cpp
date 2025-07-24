@@ -31,18 +31,15 @@ namespace dom {
 // ***** SmartShape *****
 // **********************
 
-EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
+EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry(Cmper forPartId) const
 {
     EntryInfoPtr result;
-    if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), staffId, measId)) {
+    if (entryNumber != 0) {
+        result = EntryInfoPtr::fromPositionOrNull(getDocument(), forPartId, staffId, measId, entryNumber);
+    } else if (auto gfhold = details::GFrameHoldContext(getDocument(), forPartId, staffId, measId)) {
         gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
-            if (!entryNumber) {
-                unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
-                if (eduDiff <= 1) {
-                    result = entryInfo;
-                    return false; // stop iterating
-                }
-            } else if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
+            unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
+            if (eduDiff <= 1) {
                 result = entryInfo;
                 return false; // stop iterating
             }
@@ -56,12 +53,57 @@ EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry() const
     return result;
 }
 
+std::shared_ptr<others::SmartShapeMeasureAssign> others::SmartShape::EndPoint::getMeasureAssignment() const
+{
+    if (auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
+        if (measure->hasSmartShape) {
+            auto assigns = getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(getPartId(), measId);
+            Cmper shapeId = getParent()->getCmper();
+            for (const auto& assign : assigns) {
+                if (assign->shapeNum == shapeId) {
+                    return assign;
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<details::SmartShapeEntryAssign> others::SmartShape::EndPoint::getEntryAssignment() const
+{
+    if (entryNumber != 0) {
+        if (auto entry = getDocument()->getEntries()->get(entryNumber)) {
+            if (entry->smartShapeDetail) {
+                auto assigns = getDocument()->getDetails()->getArray<details::SmartShapeEntryAssign>(getPartId(), entryNumber);
+                Cmper shapeId = getParent()->getCmper();
+                for (const auto& assign : assigns) {
+                    if (assign->shapeNum == shapeId) {
+                        return assign;
+                    }
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
+bool others::SmartShape::EndPoint::calcIsAssigned() const
+{
+    if (!getMeasureAssignment()) {
+        return false;
+    }
+    if (entryNumber != 0 && !getEntryAssignment()) {
+        return false;
+    }
+    return true;
+}
+
 util::Fraction others::SmartShape::EndPoint::calcPosition() const
 {
     if (!entryNumber) {
         return util::Fraction::fromEdu(eduPosition);
     }
-    if (auto entryInfo = calcAssociatedEntry()) {
+    if (auto entryInfo = calcAssociatedEntry(getPartId())) {
         return entryInfo->elapsedDuration;
     }
     return 0;
@@ -76,8 +118,8 @@ util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
         }
         return rawPosition;
     }
-    if (auto entryInfo = calcAssociatedEntry()) {
-        return entryInfo.calcGlobalElapsedDuration().calcEduDuration();
+    if (auto entryInfo = calcAssociatedEntry(getPartId())) {
+        return entryInfo.calcGlobalElapsedDuration();
     }
     return 0;
 }
@@ -112,6 +154,18 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
         }
     }
     return false;
+}
+
+// ******************&*************
+// ***** SmartShapeCustomLine *****
+// ********************************
+
+util::EnigmaParsingContext others::SmartShapeCustomLine::getRawTextCtx(Cmper forPartId, Cmper rawTextId) const
+{
+    if (auto rawText = getDocument()->getTexts()->get<texts::SmartShapeText>(rawTextId)) {
+        return rawText->getRawTextCtx(forPartId);
+    }
+    return {};
 }
 
 } // namespace dom    

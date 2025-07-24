@@ -71,7 +71,7 @@ using NoteNumber = uint16_t;        ///< Note identifier.
 using LayerIndex = unsigned int;    ///< Layer index (valid values are 0..3)
 using BeamNumber = unsigned int;    ///< A number where 1 corresponds to the primary (8th note) beam, 2 the 16th beam, 3 the 32nd beam, etc.
 using PercussionNoteTypeId = uint16_t; ///< Percussion note code type. The top 4 bits are an order ID for when the same "pure" note type is used
-                                    ///< multiple times in one layout. The rest are the "pure" note type. See @ref percussion::PercussionNoteType.
+///< multiple times in one layout. The rest are the "pure" note type. See @ref percussion::PercussionNoteType.
 
 constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global variables (used sparingly since Finale 26.2)
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.

@@ -246,7 +246,7 @@ TEST(ClefOptionsTest, ClefInfoTest)
         { music_theory::ClefType::C, 0 },
         { music_theory::ClefType::C, 0 },
         { music_theory::ClefType::F, 0 },
-        { music_theory::ClefType::Percussion, 0 },
+        { music_theory::ClefType::Percussion2, 0 },
         { music_theory::ClefType::G, -1 },
         { music_theory::ClefType::F, -1 },
         { music_theory::ClefType::F, 0 },
@@ -254,12 +254,12 @@ TEST(ClefOptionsTest, ClefInfoTest)
         { music_theory::ClefType::C, 0 },
         { music_theory::ClefType::C, 0 },
         { music_theory::ClefType::C, 0 },
-        { music_theory::ClefType::Percussion, 0 },
+        { music_theory::ClefType::Percussion1, 0 },
         { music_theory::ClefType::G, 1 },
         { music_theory::ClefType::F, 1 },
         { music_theory::ClefType::G, 0 },
         { music_theory::ClefType::Tab, 0 },
-        { music_theory::ClefType::Tab, 0 },
+        { music_theory::ClefType::TabSerif, 0 },
    };
 
     for (size_t x = 0; x < clefOptions->clefDefs.size(); x++) {

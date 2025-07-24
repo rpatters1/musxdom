@@ -834,14 +834,14 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList::Instruction, {
-    {"numData", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::Instruction>& i) { i->numData = e->getTextAs<int>(); }},
-    {"tag", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::Instruction>& i) { i->type = toEnum<ShapeDef::InstructionType, true>(e); }},
+MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList::InstructionInfo, {
+    {"numData", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::InstructionInfo>& i) { i->numData = e->getTextAs<int>(); }},
+    {"tag", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::InstructionInfo>& i) { i->type = toEnum<ShapeDef::InstructionType, true>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList, {
     {"instruct", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList>& i) {
-        i->instructions.push_back(FieldPopulator<ShapeInstructionList::Instruction>::createAndPopulate(e));
+        i->instructions.push_back(FieldPopulator<ShapeInstructionList::InstructionInfo>::createAndPopulate(e));
     }},
 });
     
@@ -860,25 +860,25 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPointAdjustment, {
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
     {"endPt", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getDocument()); }},
+        { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getParent()); }},
     {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPointAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+        { i->endPointAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
     {"breakAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->breakAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getDocument()); }},
+        { i->breakAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"shapeType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->shapeType = toEnum<SmartShape::ShapeType>(e); }},
     {"entryBased", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->entryBased = populateBoolean(e, i); }},
     {"startTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
-        { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
+        { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i); }},
     {"endTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
-        { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i->getDocument()); }},
+        { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i); }},
     {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->hidden = populateBoolean(e, i); }},
     {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
-    });
+});
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::CharParams, {
     {"lineChar", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine::CharParams>& i) { i->lineChar = e->getTextAs<char32_t>(); }},
@@ -977,12 +977,15 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
         std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); });
         i->instUuid = std::move(s);
     }},
+    {"capoPos", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->capoPos = e->getTextAs<int>(); }},
+    {"lowestFret", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->lowestFret = e->getTextAs<int>(); }},
     {"floatKeys", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->floatKeys = populateBoolean(e, i); }},
     {"floatTime", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->floatTime = populateBoolean(e, i); }},
     {"blineBreak", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->blineBreak = populateBoolean(e, i); }},
     {"rbarBreak", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->rbarBreak = populateBoolean(e, i); }},
     {"hasStyles", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hasStyles = populateBoolean(e, i); }},
     {"showNameParts", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->showNameInParts = populateBoolean(e, i); }},
+    {"showNoteColors", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->showNoteColors = populateBoolean(e, i); }},
     {"transposition", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
         { i->transposition = FieldPopulator<Staff::Transposition>::createAndPopulate(e); }},
     {"hideStfNameInScore", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideNameInScore = populateBoolean(e, i); }},
@@ -1030,11 +1033,25 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"abbrvName", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->abbrvNameTextId = e->getTextAs<Cmper>(); }},
     {"botRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botRepeatDotOff = e->getTextAs<Evpu>(); }},
     {"topRepeatDotOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->topRepeatDotOff = e->getTextAs<Evpu>(); }},
-    {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Evpu>(); }},
+    {"vertTabNumOff", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->vertTabNumOff = e->getTextAs<Efix>(); }},
+    {"showTabClefAllSys", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->showTabClefAllSys = populateBoolean(e, i); }},
+    {"useTabLetters", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useTabLetters = populateBoolean(e, i); }},
+    {"breakTabLinesAtNotes", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->breakTabLinesAtNotes = populateBoolean(e, i); }},
+    {"hideTuplets", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTuplets = populateBoolean(e, i); }},
+    {"fretInstrumentId", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fretInstrumentId = e->getTextAs<Cmper>(); }},
     {"hideStems", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideStems = populateBoolean(e, i); }},
     {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection = toEnum<Staff::StemDirection>(e); }},
-    {"hideMode", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideMode = toEnum<Staff::HideMode>(e); }},
     {"hideBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBeams = populateBoolean(e, i); }},
+    {"stemStartFromStaff",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->stemStartFromStaff = populateBoolean(e, i); }},
+    {"stemsFixedEnd",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->stemsFixedEnd = populateBoolean(e, i); }},
+    {"stemsFixedStart",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->stemsFixedStart = populateBoolean(e, i); }},
+    {"horzStemOffUp",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->horzStemOffUp = e->getTextAs<Efix>(); }},
+    {"horzStemOffDown",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->horzStemOffDown = e->getTextAs<Efix>(); }},
+    {"vertStemStartOffUp",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->vertStemStartOffUp = e->getTextAs<Efix>(); }},
+    {"vertStemStartOffDown",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->vertStemStartOffDown = e->getTextAs<Efix>(); }},
+    {"vertStemEndOffUp",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->vertStemEndOffUp = e->getTextAs<Efix>(); }},
+    {"vertStemEndOffDown",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->vertStemEndOffDown = e->getTextAs<Efix>(); }},
+    {"hideMode", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideMode = toEnum<Staff::HideMode>(e); }},
     {"redisplayLayerAccis", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->redisplayLayerAccis = populateBoolean(e, i); }},
     {"hideTimeSigsInParts", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTimeSigsInParts = populateBoolean(e, i); }},
     {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e); }},
@@ -1078,6 +1095,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"hideFretboards", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideFretboards = populateBoolean(e, i); }},
     {"hideLyrics", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideLyrics = populateBoolean(e, i); }},
     {"showNameParts", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showNameParts = populateBoolean(e, i); }},
+    {"showNoteColors", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->showNoteColors = populateBoolean(e, i); }},
     {"hideStaffLines", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->hideStaffLines = populateBoolean(e, i); }},
     {"redisplayLayerAccis", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->redisplayLayerAccis = populateBoolean(e, i); }},
     {"negTimeParts", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->negTimeParts = populateBoolean(e, i); }},
