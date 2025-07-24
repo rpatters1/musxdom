@@ -75,6 +75,7 @@ MUSX_XML_ELEMENT_ARRAY(Entry, {
     {"stemDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->stemDetail = populateBoolean(e, i); }},
     {"reverseUpStem", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->reverseUpStem = populateBoolean(e, i); }},
     {"reverseDownStem", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->reverseDownStem = populateBoolean(e, i); }},
+    {"slashGrace", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->slashGrace = populateBoolean(e, i); }},
     {"smartShapeDetail", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->smartShapeDetail = populateBoolean(e, i); }},
     {"sorted", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->sorted = populateBoolean(e, i); }},
     {"noPlayback", [](const XmlElementPtr& e, const std::shared_ptr<Entry>& i) { i->noPlayback = populateBoolean(e, i); }},

@@ -1278,7 +1278,7 @@ public:
     Cmper multiStaffGroupId{};      ///< Calculated cmper for @ref others::MultiStaffGroupId, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref others::MultiStaffGroupId.
                                     ///< @note This is the value (if any) for a defined multistaff instrument. Normally you should use
-                                    ///< #Document.getInstruments() to determing the instrument groupings. These include any that
+                                    ///< #Document::getInstruments to determine the instrument groupings. These include any that
                                     ///< the factory detected from legacy staves or other special circumstances.
     std::unordered_set<InstCmper> staves; ///< Calculated list of staves in the group
 

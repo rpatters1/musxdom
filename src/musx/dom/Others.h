@@ -1373,10 +1373,6 @@ public:
 
     std::vector<InstCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
 
-    std::vector<InstCmper> visualStaffNums; ///< Calculated list of Cmper values corresponding the staves in the visual staff group.
-                                            ///< This list is calculated by the factory when it calls #calcAllMultiStaffGroupIds.
-                                            ///< It is potentially a superset of #staffNums and/or the group returned by #calcVisualStaffGroup.
-
     /// @brief Returns the staff instance (without any staff styles applied) at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
     std::shared_ptr<Staff> getStaffInstanceAtIndex(size_t x) const;

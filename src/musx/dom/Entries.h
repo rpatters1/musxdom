@@ -302,6 +302,9 @@ public:
     bool stemDetail{};       ///< Indicates there are stem modifications.
     bool reverseUpStem{};    ///< Indicates that a stem normally up is reversed.
     bool reverseDownStem{};  ///< Indicates that a stem normally down is reversed.
+    bool slashGrace{};       ///< Indicates that a non-beamed grace note with flags (8th note or smaller) should have a slash on the stem.
+                             ///< If #options::GraceNoteOptions::slashFlaggedGraceNotes is true, this options has no effect. The stem
+                             ///< always has a slash in that case.
     bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool sorted{};           ///< Sorted flag.
     bool noPlayback{};       ///< Indicates that the entry should not be played back.
@@ -925,8 +928,8 @@ public:
     NoteInfoPtr calcTieTo() const;
 
     /// @brief Calculates the note that this note could tie from.
-    /// @param requireTie. If @p requireTie is true, the returned value must have its #Note::tieStart flag set to true.
-    /// You can set @requireTie to false to find the *potential* note this note might be tied from.
+    /// @param requireTie If @p requireTie is true, the returned value must have its #Note::tieStart flag set to true.
+    /// You can set @p requireTie to false to find the *potential* note this note might be tied from.
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
