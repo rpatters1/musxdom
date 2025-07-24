@@ -794,6 +794,7 @@ var namespacemusx_1_1dom =
     ] ],
     [ "Base", "classmusx_1_1dom_1_1Base.html", "classmusx_1_1dom_1_1Base" ],
     [ "CommonClassBase", "classmusx_1_1dom_1_1CommonClassBase.html", "classmusx_1_1dom_1_1CommonClassBase" ],
+    [ "ContainedClassBase", "classmusx_1_1dom_1_1ContainedClassBase.html", "classmusx_1_1dom_1_1ContainedClassBase" ],
     [ "DetailsArray", "classmusx_1_1dom_1_1DetailsArray.html", "classmusx_1_1dom_1_1DetailsArray" ],
     [ "DetailsBase", "classmusx_1_1dom_1_1DetailsBase.html", "classmusx_1_1dom_1_1DetailsBase" ],
     [ "DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", "classmusx_1_1dom_1_1DetailsPool" ],
@@ -805,6 +806,7 @@ var namespacemusx_1_1dom =
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html", "classmusx_1_1dom_1_1EntryInfoPtr" ],
     [ "EntryPool", "classmusx_1_1dom_1_1EntryPool.html", "classmusx_1_1dom_1_1EntryPool" ],
     [ "FontInfo", "classmusx_1_1dom_1_1FontInfo.html", "classmusx_1_1dom_1_1FontInfo" ],
+    [ "InstrumentInfo", "structmusx_1_1dom_1_1InstrumentInfo.html", "structmusx_1_1dom_1_1InstrumentInfo" ],
     [ "integrity_error", "classmusx_1_1dom_1_1integrity__error.html", null ],
     [ "KeySignature", "classmusx_1_1dom_1_1KeySignature.html", "classmusx_1_1dom_1_1KeySignature" ],
     [ "LyricsSyllableInfo", "classmusx_1_1dom_1_1LyricsSyllableInfo.html", "classmusx_1_1dom_1_1LyricsSyllableInfo" ],
@@ -836,6 +838,7 @@ var namespacemusx_1_1dom =
     [ "EvpuFloat", "namespacemusx_1_1dom.html#a901fc57f5455ae033180b2401434b6a9", null ],
     [ "Inci", "namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb", null ],
     [ "InstCmper", "namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a", null ],
+    [ "InstrumentMap", "namespacemusx_1_1dom.html#a638216e8b0a5c70fc91f4d6259330e7b", null ],
     [ "LayerIndex", "namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981", null ],
     [ "MeasCmper", "namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817", null ],
     [ "NoteNumber", "namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be", null ],
@@ -864,6 +867,9 @@ var namespacemusx_1_1dom =
       [ "Blank", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fae4ef81cce7e4e10033ebb10962dfdd5e", null ],
       [ "Tab1", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa470e312cea82d45a9b100e1f0991e42f", null ],
       [ "Tab2", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fad4c2a0228d8e808f1ca012f63f429a38", null ]
+    ] ],
+    [ "KnownShapeDefType", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7", [
+      [ "TenutoMark", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd", null ]
     ] ],
     [ "NoteType", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312", [
       [ "Maxima", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312abc3292567552688d69e5ddc95781245b", null ],

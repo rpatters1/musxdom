@@ -131,9 +131,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2d768e858a24cf803606fdfc64034b59" id="r_a2d768e858a24cf803606fdfc64034b59"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2d768e858a24cf803606fdfc64034b59">calcNumMeasures</a> () const</td></tr>
 <tr class="memdesc:a2d768e858a24cf803606fdfc64034b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of measures on the system, encapsulating how <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12">endMeas</a> works.  <br /></td></tr>
 <tr class="separator:a2d768e858a24cf803606fdfc64034b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e9360e4bab59fffa40384d67606b014" id="r_a8e9360e4bab59fffa40384d67606b014"><td class="memItemLeft" align="right" valign="top">std::pair&lt; double, double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#a8e9360e4bab59fffa40384d67606b014">calcMinMaxStaffSizes</a> () const</td></tr>
-<tr class="memdesc:a8e9360e4bab59fffa40384d67606b014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the maximum and minimum staff scaling values for this system by searching each staff for individual staff scaling.  <br /></td></tr>
-<tr class="separator:a8e9360e4bab59fffa40384d67606b014"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a2f2642f04d0f72aa93de219a670e99" id="r_a0a2f2642f04d0f72aa93de219a670e99"><td class="memItemLeft" align="right" valign="top"><a id="a0a2f2642f04d0f72aa93de219a670e99" name="a0a2f2642f04d0f72aa93de219a670e99"></a>
+std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html">others::Page</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPage</b> () const</td></tr>
+<tr class="memdesc:a0a2f2642f04d0f72aa93de219a670e99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the page this system is on. <br /></td></tr>
+<tr class="separator:a0a2f2642f04d0f72aa93de219a670e99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a69cd425e0dde3521710a337c3e6783" id="r_a0a69cd425e0dde3521710a337c3e6783"><td class="memItemLeft" align="right" valign="top"><a id="a0a69cd425e0dde3521710a337c3e6783" name="a0a69cd425e0dde3521710a337c3e6783"></a>
+<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcSystemScaling</b> () const</td></tr>
+<tr class="memdesc:a0a69cd425e0dde3521710a337c3e6783"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the effect system scaling. <br /></td></tr>
+<tr class="separator:a0a69cd425e0dde3521710a337c3e6783"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c389946c1c3da2aad1ee0f41066d5f2" id="r_a7c389946c1c3da2aad1ee0f41066d5f2"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#a7c389946c1c3da2aad1ee0f41066d5f2">calcMinMaxStaffSizes</a> () const</td></tr>
+<tr class="memdesc:a7c389946c1c3da2aad1ee0f41066d5f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the maximum and minimum staff scaling values for this system by searching each staff for individual staff scaling.  <br /></td></tr>
+<tr class="separator:a7c389946c1c3da2aad1ee0f41066d5f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac800f7d607596961fc51c6ab8b8bbc83" id="r_ac800f7d607596961fc51c6ab8b8bbc83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ac800f7d607596961fc51c6ab8b8bbc83">integrityCheck</a> () override</td></tr>
+<tr class="memdesc:ac800f7d607596961fc51c6ab8b8bbc83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:ac800f7d607596961fc51c6ab8b8bbc83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1OthersBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1OthersBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">musx::dom::OthersBase</a></td></tr>
 <tr class="memitem:a9e07522e2ff27550170838acc995a1b8 inherit pub_methods_classmusx_1_1dom_1_1OthersBase" id="r_a9e07522e2ff27550170838acc995a1b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1OthersBase.html#a9e07522e2ff27550170838acc995a1b8">getCmper</a> () const</td></tr>
 <tr class="memdesc:a9e07522e2ff27550170838acc995a1b8 inherit pub_methods_classmusx_1_1dom_1_1OthersBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <code>cmper</code> key value.  <br /></td></tr>
@@ -164,9 +175,6 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (const std::string &amp;nodeName)</td></tr>
 <tr class="memdesc:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a shared node for this instance. <br /></td></tr>
 <tr class="separator:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a368bf85332ce10bac71833627f858905"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">integrityCheck</a> ()</td></tr>
-<tr class="memdesc:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
-<tr class="separator:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3bee36f4048e813c0f267b8eb84ec68e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">requireAllFields</a> () const</td></tr>
 <tr class="memdesc:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -240,6 +248,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>holdMargins</b> {}</t
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>extraEndSystemSpace</b> {}</td></tr>
 <tr class="memdesc:a81d083d6208bfcde0680e0d5e2b74c7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extra space at the end of the staff system in Evpu. <br /></td></tr>
 <tr class="separator:a81d083d6208bfcde0680e0d5e2b74c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b158cde22c2bebe65a677da119b98c9" id="r_a9b158cde22c2bebe65a677da119b98c9"><td class="memItemLeft" align="right" valign="top"><a id="a9b158cde22c2bebe65a677da119b98c9" name="a9b158cde22c2bebe65a677da119b98c9"></a>
+<a class="el" href="namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2">PageCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>pageId</b></td></tr>
+<tr class="memdesc:a9b158cde22c2bebe65a677da119b98c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The page this system is on. This values is not in the xml but is computed by the factory. <br /></td></tr>
+<tr class="separator:a9b158cde22c2bebe65a677da119b98c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -290,14 +302,14 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <div class="textblock"><p>Represents the attributes of a staff system in the page layout. </p>
 <p>This class is identified by the XML node name "staffSystemSpec". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8e9360e4bab59fffa40384d67606b014" name="a8e9360e4bab59fffa40384d67606b014"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e9360e4bab59fffa40384d67606b014">&#9670;&#160;</a></span>calcMinMaxStaffSizes()</h2>
+<a id="a7c389946c1c3da2aad1ee0f41066d5f2" name="a7c389946c1c3da2aad1ee0f41066d5f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c389946c1c3da2aad1ee0f41066d5f2">&#9670;&#160;</a></span>calcMinMaxStaffSizes()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt; double, double &gt; musx::dom::others::StaffSystem::calcMinMaxStaffSizes </td>
+          <td class="memname">std::pair&lt; <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> &gt; musx::dom::others::StaffSystem::calcMinMaxStaffSizes </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -307,8 +319,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 <p>Calculates the maximum and minimum staff scaling values for this system by searching each staff for individual staff scaling. </p>
 <dl class="section return"><dt>Returns</dt><dd>A std::pair containing<ul>
-<li>double: The scaling of the staff with the minimum (smallest) scaling factor</li>
-<li>double: The scaling of the staff with the maximum (largest) scaling factor </li>
+<li><a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">util::Fraction</a>: The scaling of the staff with the minimum (smallest) scaling factor</li>
+<li><a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">util::Fraction</a>: The scaling of the staff with the maximum (largest) scaling factor </li>
 </ul>
 </dd></dl>
 
@@ -367,6 +379,42 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 <p>Encapsulates the weird Finale fact that <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12">endMeas</a> is actually one past the end of the system. </p>
 <dl class="section return"><dt>Returns</dt><dd>The actual last measure on the system. </dd></dl>
+
+</div>
+</div>
+<a id="ac800f7d607596961fc51c6ab8b8bbc83" name="ac800f7d607596961fc51c6ab8b8bbc83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac800f7d607596961fc51c6ab8b8bbc83">&#9670;&#160;</a></span>integrityCheck()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::others::StaffSystem::integrityCheck </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes. </p>
+<p>The default implementation should always be called inside an overridden implementation.</p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html" title="Exception for integrity errors. (Used when MUSX_THROW_ON_INTEGRITY_CHECK_FAIL is defined....">musx::dom::integrity_error</a></td><td>if there is a problem. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
 
 </div>
 </div>

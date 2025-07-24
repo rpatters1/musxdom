@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1EntryInfoPtr.html'
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classmusx_1_1dom_1_1EntryInfoPtr-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::dom::EntryInfoPtr Class Reference</div></div>
 </div><!--header-->
@@ -252,6 +253,16 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 <tr class="memitem:ad82e20770828b57b9c8dad206e9e92dd" id="r_ad82e20770828b57b9c8dad206e9e92dd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad82e20770828b57b9c8dad206e9e92dd">calcIsBeamedRestWorkaroud</a> () const</td></tr>
 <tr class="memdesc:ad82e20770828b57b9c8dad206e9e92dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.  <br /></td></tr>
 <tr class="separator:ad82e20770828b57b9c8dad206e9e92dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa247de0fb2eb2be22aaa12cf14266768" id="r_aa247de0fb2eb2be22aaa12cf14266768"><td class="memItemLeft" align="right" valign="top"><a id="aa247de0fb2eb2be22aaa12cf14266768" name="aa247de0fb2eb2be22aaa12cf14266768"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;other) const</td></tr>
+<tr class="memdesc:aa247de0fb2eb2be22aaa12cf14266768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicit operator&lt; for std::map. <br /></td></tr>
+<tr class="separator:aa247de0fb2eb2be22aaa12cf14266768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a9a83726fa8297e55071bedc330d71e6b" id="r_a9a83726fa8297e55071bedc330d71e6b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a9a83726fa8297e55071bedc330d71e6b">fromPositionOrNull</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> staffId, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber)</td></tr>
+<tr class="memdesc:a9a83726fa8297e55071bedc330d71e6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches the given position at <code>staffId</code> and <code>measureId</code> for the <code>entryNumber</code>.  <br /></td></tr>
+<tr class="separator:a9a83726fa8297e55071bedc330d71e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ownership of the frame so that any instance of it keeps the frame alive without the need for circular references. </p>
@@ -617,6 +628,73 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 <p>Finds the first entry of a beamed group or returns the current entry if it is not beams. </p>
 <dl class="section note"><dt>Note</dt><dd>This behavior is different than other beam functions in that it returns the current entry if there is no beam rather than returning NULL. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The first entry of a beamed group or the current entry if no beam. </dd></dl>
+
+</div>
+</div>
+<a id="a9a83726fa8297e55071bedc330d71e6b" name="a9a83726fa8297e55071bedc330d71e6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a83726fa8297e55071bedc330d71e6b">&#9670;&#160;</a></span>fromPositionOrNull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::fromPositionOrNull </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&#160;</td>
+          <td class="paramname"><em>staffId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td>
+          <td class="paramname"><em>entryNumber</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Searches the given position at <code>staffId</code> and <code>measureId</code> for the <code>entryNumber</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>The document to search. </td></tr>
+    <tr><td class="paramname">partId</td><td>The part within the document for which to create the <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad2b5a35a87aa853929fb934aa1d5fbc6" title="Default constructor.">EntryInfoPtr</a>. </td></tr>
+    <tr><td class="paramname">staffId</td><td>The ID of the staff to search. </td></tr>
+    <tr><td class="paramname">measureId</td><td>The ID of the measure to search. </td></tr>
+    <tr><td class="paramname">entryNumber</td><td>The EntryNumber to search for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>If found, an <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad2b5a35a87aa853929fb934aa1d5fbc6" title="Default constructor.">EntryInfoPtr</a> for the given entry number. Otherwise an null instance. </dd></dl>
 
 </div>
 </div>

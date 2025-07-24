@@ -180,5 +180,5 @@ var searchData=
   ['tupoffy_177',['tupoffy',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#aa53c7f1b844fbd4c29dae1c3dac07341',1,'musx::dom::details::TupletDef::tupOffY'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a53f6f79f64324d045ef5b585161ca509',1,'musx::dom::options::TupletOptions::tupOffY']]],
   ['twobarrepeat_178',['twoBarRepeat',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a9157c083a765a673850a79d497e8768f',1,'musx::dom::options::MusicSymbolOptions']]],
   ['twomeasnumlift_179',['twoMeasNumLift',['../classmusx_1_1dom_1_1options_1_1AlternateNotationOptions.html#ad7f218c11996aaa61edc1a51e37fdc44',1,'musx::dom::options::AlternateNotationOptions']]],
-  ['type_180',['type',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1Instruction.html#aafea84513ad7528d712913b82a9e22c9',1,'musx::dom::others::ShapeInstructionList::Instruction']]]
+  ['type_180',['type',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1InstructionInfo.html#a29f66b24f415e25d87b06b10c15aa5f3',1,'musx::dom::others::ShapeInstructionList::InstructionInfo']]]
 ];

@@ -1,9 +1,12 @@
 var classmusx_1_1dom_1_1others_1_1StaffSystem =
 [
     [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440", null ],
-    [ "calcMinMaxStaffSizes", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a8e9360e4bab59fffa40384d67606b014", null ],
+    [ "calcMinMaxStaffSizes", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a7c389946c1c3da2aad1ee0f41066d5f2", null ],
     [ "calcNumMeasures", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2d768e858a24cf803606fdfc64034b59", null ],
+    [ "calcSystemScaling", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a0a69cd425e0dde3521710a337c3e6783", null ],
     [ "getLastMeasure", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#ac38cf2f59a255aace72e32eaafd8e35a", null ],
+    [ "getPage", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a0a2f2642f04d0f72aa93de219a670e99", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#ac800f7d607596961fc51c6ab8b8bbc83", null ],
     [ "bottom", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a7d519be5fbe7913049ec1a48c1581463", null ],
     [ "distanceToPrev", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a6dec78d53cbd40181c6195e7cd78ffdc", null ],
     [ "endMeas", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12", null ],
@@ -14,6 +17,7 @@ var classmusx_1_1dom_1_1others_1_1StaffSystem =
     [ "horzPercent", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a58572508b77332051cbe22fe7bac342d", null ],
     [ "left", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2bb9cfd805f4715de22128fbf75ab888", null ],
     [ "noNames", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#aae3c5d70f71d2326779b1ffbd8e0c78d", null ],
+    [ "pageId", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a9b158cde22c2bebe65a677da119b98c9", null ],
     [ "placeEndSpaceBeforeBarline", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a660f81113aba8c791ef40fa33e0f720b", null ],
     [ "right", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a0321f528ecaa9aca72324b44b0815724", null ],
     [ "scaleVert", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a20c4f4931702f7c3b472c0dacae63fc2", null ],

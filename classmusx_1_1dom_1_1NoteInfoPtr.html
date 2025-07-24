@@ -145,11 +145,11 @@ std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1Note.html">Not
 <tr class="memdesc:a99dd9ce89ed8196223f55b74c093d486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the percussion note info for this note, if any.  <br /></td></tr>
 <tr class="separator:a99dd9ce89ed8196223f55b74c093d486"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac535914f03c0ac61fe184134c1584d9b" id="r_ac535914f03c0ac61fe184134c1584d9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#ac535914f03c0ac61fe184134c1584d9b">calcTieTo</a> () const</td></tr>
-<tr class="memdesc:ac535914f03c0ac61fe184134c1584d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie to. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> to see if there is actually a tie end.  <br /></td></tr>
+<tr class="memdesc:ac535914f03c0ac61fe184134c1584d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie to. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> to see if there is actually a tie end. (<a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that Finale shows a tie whether there <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> is true or not.)  <br /></td></tr>
 <tr class="separator:ac535914f03c0ac61fe184134c1584d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa52156d09836d9bf53b048a317a7829" id="r_aaa52156d09836d9bf53b048a317a7829"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aaa52156d09836d9bf53b048a317a7829">calcTieFrom</a> () const</td></tr>
-<tr class="memdesc:aaa52156d09836d9bf53b048a317a7829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie from. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a8020db4ad0f674e86e386af23a6d0eca" title="Indicates a tie starts on this note.">Note::tieStart</a> to see if there is actually a tie.  <br /></td></tr>
-<tr class="separator:aaa52156d09836d9bf53b048a317a7829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d4472ff1bfd27358ea69f33a3e82d18" id="r_a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d4472ff1bfd27358ea69f33a3e82d18">calcTieFrom</a> (bool requireTie=true) const</td></tr>
+<tr class="memdesc:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie from.  <br /></td></tr>
+<tr class="separator:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0916f855bc1da7af83577dd7a69c54cc" id="r_a0916f855bc1da7af83577dd7a69c54cc"><td class="memItemLeft" align="right" valign="top"><a id="a0916f855bc1da7af83577dd7a69c54cc" name="a0916f855bc1da7af83577dd7a69c54cc"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcStaff</b> () const</td></tr>
 <tr class="memdesc:a0916f855bc1da7af83577dd7a69c54cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff number, taking into account cross staffing. <br /></td></tr>
@@ -170,6 +170,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsEnharmonicRespe
 <tr class="memitem:aabb32c50345e151d488956b4f61f99b1" id="r_aabb32c50345e151d488956b4f61f99b1"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aabb32c50345e151d488956b4f61f99b1">calcDefaultEnharmonic</a> () const</td></tr>
 <tr class="memdesc:aabb32c50345e151d488956b4f61f99b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true.  <br /></td></tr>
 <tr class="separator:aabb32c50345e151d488956b4f61f99b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a426c0c1e964e363f9a2dff66e683a75b" id="r_a426c0c1e964e363f9a2dff66e683a75b"><td class="memItemLeft" align="right" valign="top"><a id="a426c0c1e964e363f9a2dff66e683a75b" name="a426c0c1e964e363f9a2dff66e683a75b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;other) const</td></tr>
+<tr class="memdesc:a426c0c1e964e363f9a2dff66e683a75b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicit operator&lt; for std::map. <br /></td></tr>
+<tr class="separator:a426c0c1e964e363f9a2dff66e683a75b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps an <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instance and a note index. </p>
@@ -341,8 +345,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsEnharmonicRespe
 
 </div>
 </div>
-<a id="aaa52156d09836d9bf53b048a317a7829" name="aaa52156d09836d9bf53b048a317a7829"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa52156d09836d9bf53b048a317a7829">&#9670;&#160;</a></span>calcTieFrom()</h2>
+<a id="a8d4472ff1bfd27358ea69f33a3e82d18" name="a8d4472ff1bfd27358ea69f33a3e82d18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d4472ff1bfd27358ea69f33a3e82d18">&#9670;&#160;</a></span>calcTieFrom()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -350,13 +354,20 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsEnharmonicRespe
         <tr>
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> musx::dom::NoteInfoPtr::calcTieFrom </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>requireTie</em> = <code>true</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the note that this note could tie from. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a8020db4ad0f674e86e386af23a6d0eca" title="Indicates a tie starts on this note.">Note::tieStart</a> to see if there is actually a tie. </p>
+<p>Calculates the note that this note could tie from. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">requireTie</td><td>If <code>requireTie</code> is true, the returned value must have its <a class="el" href="classmusx_1_1dom_1_1Note.html#a8020db4ad0f674e86e386af23a6d0eca" title="Indicates a tie starts on this note.">Note::tieStart</a> flag set to true. You can set <code>requireTie</code> to false to find the <em>potential</em> note this note might be tied from. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>The candidate note or an empty <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a> if no candidate was found. </dd></dl>
 
 </div>
@@ -376,7 +387,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsEnharmonicRespe
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the note that this note could tie to. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> to see if there is actually a tie end. </p>
+<p>Calculates the note that this note could tie to. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> to see if there is actually a tie end. (<a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that Finale shows a tie whether there <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> is true or not.) </p>
 <dl class="section return"><dt>Returns</dt><dd>The candidate note or an empty <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a> if no candidate was found. </dd></dl>
 
 </div>

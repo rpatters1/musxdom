@@ -31,7 +31,7 @@ var searchData=
   ['insetstyle_28',['insetStyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions']]],
   ['insideslur_29',['insideSlur',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a6204b87271ca01b4d909ad85f2bdc8de',1,'musx::dom::others::ArticulationDef']]],
   ['instructionlist_30',['instructionList',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#ace325c73e24d28390b86e16365f5bac5',1,'musx::dom::others::ShapeDef']]],
-  ['instructions_31',['instructions',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList.html#a20c793c3f3c97e5bb03c11179bc61f72',1,'musx::dom::others::ShapeInstructionList']]],
+  ['instructions_31',['instructions',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList.html#a5b4e76c93fb3acba14b36eaf3f7b236e',1,'musx::dom::others::ShapeInstructionList']]],
   ['instrumentid_32',['instrumentId',['../structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#aeaed1050261f2cb3b0f6ba2c6b8c8427',1,'musx::dom::percussion::PercussionNoteType']]],
   ['instuuid_33',['instUuid',['../classmusx_1_1dom_1_1others_1_1Staff.html#aed8dd51f5f3d7128990113c16925589a',1,'musx::dom::others::Staff']]],
   ['interdotspacing_34',['interdotSpacing',['../classmusx_1_1dom_1_1details_1_1DotAlterations.html#aa8cf65df45f464cef2a3ef05aa542990',1,'musx::dom::details::DotAlterations']]],

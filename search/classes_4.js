@@ -4,7 +4,7 @@ var searchData=
   ['elementlinker_1',['ElementLinker',['../classmusx_1_1factory_1_1ElementLinker.html',1,'musx::factory']]],
   ['enclosure_2',['Enclosure',['../classmusx_1_1dom_1_1others_1_1Enclosure.html',1,'musx::dom::others']]],
   ['endpoint_3',['EndPoint',['../classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPoint.html',1,'musx::dom::others::SmartShape']]],
-  ['endpointadjustment_4',['EndPointAdjustment',['../classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPointAdjustment.html',1,'musx::dom::others::SmartShape']]],
+  ['endpointadjustment_4',['endpointadjustment',['../classmusx_1_1dom_1_1details_1_1CenterShape_1_1EndPointAdjustment.html',1,'musx::dom::details::CenterShape::EndPointAdjustment'],['../classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPointAdjustment.html',1,'musx::dom::others::SmartShape::EndPointAdjustment']]],
   ['enigmaparsingcontext_5',['EnigmaParsingContext',['../classmusx_1_1util_1_1EnigmaParsingContext.html',1,'musx::util']]],
   ['enigmaparsingoptions_6',['EnigmaParsingOptions',['../structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html',1,'musx::util::EnigmaString']]],
   ['enigmastring_7',['EnigmaString',['../classmusx_1_1util_1_1EnigmaString.html',1,'musx::util']]],

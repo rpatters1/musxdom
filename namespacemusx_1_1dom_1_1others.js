@@ -45,6 +45,7 @@ var namespacemusx_1_1dom_1_1others =
     [ "ShapeData", "classmusx_1_1dom_1_1others_1_1ShapeData.html", "classmusx_1_1dom_1_1others_1_1ShapeData" ],
     [ "ShapeDef", "classmusx_1_1dom_1_1others_1_1ShapeDef.html", "classmusx_1_1dom_1_1others_1_1ShapeDef" ],
     [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef" ],
+    [ "ShapeInstruction", "structmusx_1_1dom_1_1others_1_1ShapeInstruction.html", "structmusx_1_1dom_1_1others_1_1ShapeInstruction" ],
     [ "ShapeInstructionList", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList.html", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList" ],
     [ "SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html", "classmusx_1_1dom_1_1others_1_1SmartShape" ],
     [ "SmartShapeCustomLine", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine" ],

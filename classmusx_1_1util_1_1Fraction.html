@@ -130,6 +130,10 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">dom::Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcEduDuration</b> () const</td></tr>
 <tr class="memdesc:a68f6bf1c16aadb6275c543c9089e76bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates duration as a fraction of a whole note. <br /></td></tr>
 <tr class="separator:a68f6bf1c16aadb6275c543c9089e76bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b395f304dc9e9291da3c6bed3bd3e70" id="r_a0b395f304dc9e9291da3c6bed3bd3e70"><td class="memItemLeft" align="right" valign="top"><a id="a0b395f304dc9e9291da3c6bed3bd3e70" name="a0b395f304dc9e9291da3c6bed3bd3e70"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>toDouble</b> () const</td></tr>
+<tr class="memdesc:a0b395f304dc9e9291da3c6bed3bd3e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the fraction to floating point double. <br /></td></tr>
+<tr class="separator:a0b395f304dc9e9291da3c6bed3bd3e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b0737b8a8a7e9fc91747cc60ef1b896" id="r_a2b0737b8a8a7e9fc91747cc60ef1b896"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a2b0737b8a8a7e9fc91747cc60ef1b896">operator+</a> (const <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a> &amp;other) const</td></tr>
 <tr class="memdesc:a2b0737b8a8a7e9fc91747cc60ef1b896"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds two fractions.  <br /></td></tr>
 <tr class="separator:a2b0737b8a8a7e9fc91747cc60ef1b896"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +185,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5153046569e5a7afecef882fbb11b1ff" id="r_a5153046569e5a7afecef882fbb11b1ff"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a5153046569e5a7afecef882fbb11b1ff">fromEdu</a> (int edu)</td></tr>
 <tr class="memdesc:a5153046569e5a7afecef882fbb11b1ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> from edu.  <br /></td></tr>
 <tr class="separator:a5153046569e5a7afecef882fbb11b1ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01e484cf2a0f4174404458089c5f611d" id="r_a01e484cf2a0f4174404458089c5f611d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a01e484cf2a0f4174404458089c5f611d">fromPercent</a> (int percent)</td></tr>
+<tr class="memdesc:a01e484cf2a0f4174404458089c5f611d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> from a percent (where 100 is 100%)  <br /></td></tr>
+<tr class="separator:a01e484cf2a0f4174404458089c5f611d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -301,7 +308,41 @@ Friends</h2></td></tr>
 <p>Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> from edu. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">edu</td><td></td></tr>
+    <tr><td class="paramname">edu</td><td>The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is constructed as Fraction(1, 4). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a01e484cf2a0f4174404458089c5f611d" name="a01e484cf2a0f4174404458089c5f611d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01e484cf2a0f4174404458089c5f611d">&#9670;&#160;</a></span>fromPercent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a> musx::util::Fraction::fromPercent </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>percent</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> from a percent (where 100 is 100%) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">percent</td><td>The integral percent value to convert. </td></tr>
   </table>
   </dd>
 </dl>

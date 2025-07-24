@@ -58,7 +58,7 @@ var searchData=
   ['numberofleadingblankpages_55',['numberOfLeadingBlankPages',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#a791284a57a20f7ebc406f46d0ba1c9fd',1,'musx::dom::others::PartDefinition']]],
   ['numberofpages_56',['numberOfPages',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#acef3b54cccd893b0f63feab658cf24d4',1,'musx::dom::others::PartDefinition']]],
   ['numcompositedecimalplaces_57',['numCompositeDecimalPlaces',['../classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html#a6bb2fc74b2ad812559ab02ed3c99f39d',1,'musx::dom::options::TimeSignatureOptions']]],
-  ['numdata_58',['numData',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1Instruction.html#afe62cb7c96b95e0db65f1a12f29bf06a',1,'musx::dom::others::ShapeInstructionList::Instruction']]],
+  ['numdata_58',['numData',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1InstructionInfo.html#a083edd1c012560e49d6da50e2bbbc8e1',1,'musx::dom::others::ShapeInstructionList::InstructionInfo']]],
   ['numhorzadj_59',['numHorzAdj',['../classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#ac080cafa4b4def09dd7706edee66958f',1,'musx::dom::others::MultimeasureRest']]],
   ['numnotes_60',['numNotes',['../classmusx_1_1dom_1_1Entry.html#ab528469b556bcfba86cc0d5fe79955f1',1,'musx::dom::Entry']]],
   ['numslursavoided_61',['numSlursAvoided',['../classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#a432ff8739bef8b3cbc0085d9e823dd5e',1,'musx::dom::details::ArticulationAssign']]],

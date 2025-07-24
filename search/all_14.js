@@ -66,6 +66,7 @@ var searchData=
   ['usestextfont_63',['usesTextFont',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a03b851ee61a59288ec2bbd86e131cb33',1,'musx::dom::others::MarkingCategory']]],
   ['usesymbols_64',['usesymbols',['../classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a55623e7e6112656fa12d1db860306cc6',1,'musx::dom::others::MultimeasureRest::useSymbols'],['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ab8c273977dffc5a2845256cf70575c57',1,'musx::dom::options::MultimeasureRestOptions::useSymbols']]],
   ['usesymsthreshold_65',['useSymsThreshold',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#af8a5525b60ddfffe78e794e10e7eedc8',1,'musx::dom::options::MultimeasureRestOptions']]],
-  ['usethisfont_66',['useThisFont',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a4e0cf82565351e6b4959f9cf041686e1',1,'musx::dom::others::TextRepeatDef']]],
-  ['usetieendctlstyle_67',['useTieEndCtlStyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad76523ff7c49b4504b4e9baff2140265',1,'musx::dom::options::TieOptions']]]
+  ['usetabletters_66',['useTabLetters',['../classmusx_1_1dom_1_1others_1_1Staff.html#ae1db7c6cd84416164b2ddec5d5bc9bb1',1,'musx::dom::others::Staff']]],
+  ['usethisfont_67',['useThisFont',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a4e0cf82565351e6b4959f9cf041686e1',1,'musx::dom::others::TextRepeatDef']]],
+  ['usetieendctlstyle_68',['useTieEndCtlStyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad76523ff7c49b4504b4e9baff2140265',1,'musx::dom::options::TieOptions']]]
 ];

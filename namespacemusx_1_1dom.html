@@ -135,6 +135,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html">CommonClassBase</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> class for classes that are commonly used among others, details, entries, and/or texts. They can be constructed in atypical contexts, so their Part and Sharing info is not meaningful.  <a href="classmusx_1_1dom_1_1CommonClassBase.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ContainedClassBase.html">ContainedClassBase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> class for classes that are contained by other classes.  <a href="classmusx_1_1dom_1_1ContainedClassBase.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1DetailsArray.html">DetailsArray</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template pattern for <a class="el" href="classmusx_1_1dom_1_1DetailsBase.html" title="Base class for all &quot;details&quot; types.">DetailsBase</a> items consisting of an array of a single item.  <a href="classmusx_1_1dom_1_1DetailsArray.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,6 +170,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html">FontInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the default font settings for a particular element type.  <a href="classmusx_1_1dom_1_1FontInfo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents information about each instrument in the document. This is calculated from the staves, staff groups, and multistaff instrument groups.  <a href="structmusx_1_1dom_1_1InstrumentInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html">integrity_error</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception for integrity errors. (Used when <code>MUSX_THROW_ON_INTEGRITY_CHECK_FAIL</code> is defined.)  <a href="classmusx_1_1dom_1_1integrity__error.html#details">More...</a><br /></td></tr>
@@ -224,6 +230,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentPtr</b> = st
 using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentWeakPtr</b> = std::weak_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a> &gt;</td></tr>
 <tr class="memdesc:aa76356b1ad3580081294898c79615c4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared weak <code><a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a></code> pointer. <br /></td></tr>
 <tr class="separator:aa76356b1ad3580081294898c79615c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a638216e8b0a5c70fc91f4d6259330e7b" id="r_a638216e8b0a5c70fc91f4d6259330e7b"><td class="memItemLeft" align="right" valign="top"><a id="a638216e8b0a5c70fc91f4d6259330e7b" name="a638216e8b0a5c70fc91f4d6259330e7b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>InstrumentMap</b> = std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>, <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &gt;</td></tr>
+<tr class="memdesc:a638216e8b0a5c70fc91f4d6259330e7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of instruments, which may be single- or multi-staff. <br /></td></tr>
+<tr class="separator:a638216e8b0a5c70fc91f4d6259330e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a849c0fb091707be060d840e877486f65" id="r_a849c0fb091707be060d840e877486f65"><td class="memItemLeft" align="right" valign="top"><a id="a849c0fb091707be060d840e877486f65" name="a849c0fb091707be060d840e877486f65"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Cmper</b> = uint16_t</td></tr>
 <tr class="memdesc:a849c0fb091707be060d840e877486f65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enigma "comperator" key type. <br /></td></tr>
@@ -376,6 +386,10 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a09b81b6535bd382e3afc1a00ba080215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing the clef display mode for a frame.  <a href="namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215">More...</a><br /></td></tr>
 <tr class="separator:a09b81b6535bd382e3afc1a00ba080215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16d85e8ed9439b9a2ef071d38ffa0fd7" id="r_a16d85e8ed9439b9a2ef071d38ffa0fd7"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7">KnownShapeDefType</a> { <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd">TenutoMark</a>
+ }</td></tr>
+<tr class="memdesc:a16d85e8ed9439b9a2ef071d38ffa0fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerates the shape types we can recognize semantically.  <a href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7">More...</a><br /></td></tr>
+<tr class="separator:a16d85e8ed9439b9a2ef071d38ffa0fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -499,6 +513,34 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_CUE_PERC
 <tr><td class="fieldname"><a id="a86d8f1c0b9cc21018e4d1257c193f67fa470e312cea82d45a9b100e1f0991e42f" name="a86d8f1c0b9cc21018e4d1257c193f67fa470e312cea82d45a9b100e1f0991e42f"></a>Tab1&#160;</td><td class="fielddoc"><p>Tablature clef (5 lines). </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a86d8f1c0b9cc21018e4d1257c193f67fad4c2a0228d8e808f1ca012f63f429a38" name="a86d8f1c0b9cc21018e4d1257c193f67fad4c2a0228d8e808f1ca012f63f429a38"></a>Tab2&#160;</td><td class="fielddoc"><p>Tablature clef (5 lines, alternative style). </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a16d85e8ed9439b9a2ef071d38ffa0fd7" name="a16d85e8ed9439b9a2ef071d38ffa0fd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16d85e8ed9439b9a2ef071d38ffa0fd7">&#9670;&#160;</a></span>KnownShapeDefType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7">musx::dom::KnownShapeDefType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enumerates the shape types we can recognize semantically. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd" name="a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd"></a>TenutoMark&#160;</td><td class="fielddoc"><p>A horizontal tenuto mark, typically used as an articulation symbol. </p>
 </td></tr>
 </table>
 

@@ -6,8 +6,10 @@ var namespacemusic__theory =
       [ "G", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946adfcf28d0734569a6a693bc8194de62bf", null ],
       [ "C", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a0d61f8370cad1d412f80b84d143e1257", null ],
       [ "F", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a800618943025315f869e4e1f09471012", null ],
-      [ "Percussion", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946acb5c10c0b488ed4f3826ba628d18ca6a", null ],
-      [ "Tab", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a5c6ba25104401c9ee0650230fc6ba413", null ]
+      [ "Percussion1", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946ae45a3c65bbd13b82efb95ddfce95ee28", null ],
+      [ "Percussion2", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a50fdf989a6b1d1c6999550038f0a46f4", null ],
+      [ "Tab", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a5c6ba25104401c9ee0650230fc6ba413", null ],
+      [ "TabSerif", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a4cb9cfa22009948bec6cd029cb616e00", null ]
     ] ],
     [ "DiatonicMode", "namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ce", [
       [ "Ionian", "namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea2dfbe3d304372906c238010701613654", null ],
@@ -38,5 +40,6 @@ var namespacemusic__theory =
     [ "MAJOR_KEYMAP", "namespacemusic__theory.html#a6bd660ac8929dd467be2713bec8e4402", null ],
     [ "MINOR_KEYMAP", "namespacemusic__theory.html#af0e72207b9ce2605cdf0bae1e2176ef1", null ],
     [ "STANDARD_12EDO_STEPS", "namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384", null ],
-    [ "STANDARD_DIATONIC_STEPS", "namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5", null ]
+    [ "STANDARD_DIATONIC_STEPS", "namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5", null ],
+    [ "STANDARD_NUMBER_OF_STAFFLINES", "namespacemusic__theory.html#a210de35d79a74652575c3fdbe5a829ab", null ]
 ];

@@ -283,6 +283,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>reverseUpStem</b> {}<
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>reverseDownStem</b> {}</td></tr>
 <tr class="memdesc:abafe04400b910721fcf16fe338a8ff3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that a stem normally down is reversed. <br /></td></tr>
 <tr class="separator:abafe04400b910721fcf16fe338a8ff3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4769d8c8cdf9482fea30b8e9ed8eab93" id="r_a4769d8c8cdf9482fea30b8e9ed8eab93"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a4769d8c8cdf9482fea30b8e9ed8eab93">slashGrace</a> {}</td></tr>
+<tr class="separator:a4769d8c8cdf9482fea30b8e9ed8eab93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa04b08c5cb6dbde8e24b7ff5be524c04" id="r_aa04b08c5cb6dbde8e24b7ff5be524c04"><td class="memItemLeft" align="right" valign="top"><a id="aa04b08c5cb6dbde8e24b7ff5be524c04" name="aa04b08c5cb6dbde8e24b7ff5be524c04"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>smartShapeDetail</b> {}</td></tr>
 <tr class="memdesc:aa04b08c5cb6dbde8e24b7ff5be524c04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates this entry has a smart shape assignment. <br /></td></tr>
@@ -600,6 +602,21 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <p>Duration of the entry, not taking into account tuplets. </p>
 <p>This is effectively the type of note (quarter, eight, whole etc.) plus the augmentation dots, if any. The most significant bit determines the note type and each set bit to the right is an augmentation dot.</p>
 <p>(xml node is <code>&lt;dura&gt;</code>) </p>
+
+</div>
+</div>
+<a id="a4769d8c8cdf9482fea30b8e9ed8eab93" name="a4769d8c8cdf9482fea30b8e9ed8eab93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4769d8c8cdf9482fea30b8e9ed8eab93">&#9670;&#160;</a></span>slashGrace</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::Entry::slashGrace {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Indicates that a non-beamed grace note with flags (8th note or smaller) should have a slash on the stem. If <a class="el" href="classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html#a1d7a969a3099e2fc811402c3bcb0be9f" title="&quot;Always Slash Flagged Grace Notes&quot;">options::GraceNoteOptions::slashFlaggedGraceNotes</a> is true, this options has no effect. The stem always has a slash in that case. </p>
 
 </div>
 </div>

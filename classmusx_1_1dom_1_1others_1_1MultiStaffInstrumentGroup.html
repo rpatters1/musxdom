@@ -136,16 +136,9 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html
 std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexOf</b> (<a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> staffId) const</td></tr>
 <tr class="memdesc:adefa2e55c11c3fb5293254e23f7c21f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the input staffId or std::nullopt if not found. <br /></td></tr>
 <tr class="separator:adefa2e55c11c3fb5293254e23f7c21f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83cd7df2b630c85f23fba80d663cc748" id="r_a83cd7df2b630c85f23fba80d663cc748"><td class="memItemLeft" align="right" valign="top"><a id="a83cd7df2b630c85f23fba80d663cc748" name="a83cd7df2b630c85f23fba80d663cc748"></a>
-std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getVisualIndexOf</b> (<a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> staffId) const</td></tr>
-<tr class="memdesc:a83cd7df2b630c85f23fba80d663cc748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of an input staffId that visually shows in this multi-instrument group or std::nullopt if not found. <br /></td></tr>
-<tr class="separator:a83cd7df2b630c85f23fba80d663cc748"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02f340fdd19d93d2715bdbd3d7badfaa" id="r_a02f340fdd19d93d2715bdbd3d7badfaa"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#a02f340fdd19d93d2715bdbd3d7badfaa">getStaffGroup</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
 <tr class="memdesc:a02f340fdd19d93d2715bdbd3d7badfaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the group associated with this multistaff instrument, or nullptr if not found.  <br /></td></tr>
 <tr class="separator:a02f340fdd19d93d2715bdbd3d7badfaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ffdf5ab82bf6a40bade3227adb4c883" id="r_a1ffdf5ab82bf6a40bade3227adb4c883"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#a1ffdf5ab82bf6a40bade3227adb4c883">calcVisualStaffGroup</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
-<tr class="memdesc:a1ffdf5ab82bf6a40bade3227adb4c883"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the visual group associated with this multistaff instrument, or nullptr if not found. This may be different than the actual multistaff group when a standard configuration has extra staves added visually. For example, an older file with a 3-staff piano part may have a 2-staff multistaff instrument but visually show a 3-staff bracket.  <br /></td></tr>
-<tr class="separator:a1ffdf5ab82bf6a40bade3227adb4c883"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d70fd7ffce2d0a2aa2efada5fdac441" id="r_a5d70fd7ffce2d0a2aa2efada5fdac441"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#a5d70fd7ffce2d0a2aa2efada5fdac441">integrityCheck</a> () override</td></tr>
 <tr class="memdesc:a5d70fd7ffce2d0a2aa2efada5fdac441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a5d70fd7ffce2d0a2aa2efada5fdac441"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,8 +192,6 @@ Public Attributes</h2></td></tr>
 std::vector&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>staffNums</b></td></tr>
 <tr class="memdesc:a8123b1cfc1182a16dbf6d815ee4d3062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of Cmper values representing up to 3 staff numbers. <br /></td></tr>
 <tr class="separator:a8123b1cfc1182a16dbf6d815ee4d3062"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6337ef146d52cef1d308a3a3eaec6e26" id="r_a6337ef146d52cef1d308a3a3eaec6e26"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#a6337ef146d52cef1d308a3a3eaec6e26">visualStaffNums</a></td></tr>
-<tr class="separator:a6337ef146d52cef1d308a3a3eaec6e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -283,33 +274,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a1ffdf5ab82bf6a40bade3227adb4c883" name="a1ffdf5ab82bf6a40bade3227adb4c883"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ffdf5ab82bf6a40bade3227adb4c883">&#9670;&#160;</a></span>calcVisualStaffGroup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> &gt; musx::dom::others::MultiStaffInstrumentGroup::calcVisualStaffGroup </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
-          <td class="paramname"><em>forPartId</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculates the visual group associated with this multistaff instrument, or nullptr if not found. This may be different than the actual multistaff group when a standard configuration has extra staves added visually. For example, an older file with a 3-staff piano part may have a 2-staff multistaff instrument but visually show a 3-staff bracket. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">forPartId</td><td>The part for which to get the group. Pass SCORE_PARTID for the score. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>We may need to search for an overlapping group even if this result is valid, but for now we only search if it is not. </dd></dl>
 
 </div>
 </div>
@@ -398,22 +362,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a6337ef146d52cef1d308a3a3eaec6e26" name="a6337ef146d52cef1d308a3a3eaec6e26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6337ef146d52cef1d308a3a3eaec6e26">&#9670;&#160;</a></span>visualStaffNums</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&gt; musx::dom::others::MultiStaffInstrumentGroup::visualStaffNums</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Calculated list of Cmper values corresponding the staves in the visual staff group. This list is calculated by the factory when it calls <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#ae68c139bbdeedfcdfda39fd18a351374" title="Used by the factory to calculate all multistaff ids and visual ids for instances of Staff.">calcAllMultiStaffGroupIds</a>. It is potentially a superset of <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#a8123b1cfc1182a16dbf6d815ee4d3062" title="Vector of Cmper values representing up to 3 staff numbers.">staffNums</a> and/or the group returned by <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#a1ffdf5ab82bf6a40bade3227adb4c883" title="Calculates the visual group associated with this multistaff instrument, or nullptr if not found....">calcVisualStaffGroup</a>. </p>
 
 </div>
 </div>

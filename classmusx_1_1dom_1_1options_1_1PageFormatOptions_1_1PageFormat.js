@@ -1,6 +1,9 @@
 var classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat =
 [
     [ "PageFormat", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a3a7ac5a1a13889ebaf2fc482f887d7f3", null ],
+    [ "calcCombinedSystemScaling", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#aed6f69b01826a4ef456b6535d7360009", null ],
+    [ "calcPageScaling", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a8a39d93161281686e9859fc6d5016067", null ],
+    [ "calcSystemScaling", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a5a25d51f9af5e28c8108fa541f08ccf5", null ],
     [ "differentFirstPageMargin", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a3f8b6a160674ea87c856658e9162136c", null ],
     [ "differentFirstSysMargin", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#ab904cc8a1ca12d5d8744dde3e54d5f63", null ],
     [ "facingPages", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a445b7a05a67ef29b411f9f43a2c72724", null ],

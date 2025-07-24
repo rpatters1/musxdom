@@ -15,6 +15,11 @@ var classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine =
       [ "Dashed", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#aca34f5a13ec65af0f432d54f3a0bd2ceaeb656e41b6da91494775ecf47a51da91", null ]
     ] ],
     [ "SmartShapeCustomLine", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#a18ab674e4b1221f5b1c6821b30984e87", null ],
+    [ "getCenterAbbrRawTextCtx", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#ac43e7bd5b3d47b29f800854a77f5d722", null ],
+    [ "getCenterFullRawTextCtx", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#a5dfb8eee948f5ccb21ce561c94376fe7", null ],
+    [ "getLeftContRawTextCtx", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#a225c0775929afb70a1696f4dcf020029", null ],
+    [ "getLeftStartRawTextCtx", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#ac5c31892255c50ce834bed589c27226e", null ],
+    [ "getRightEndRawTextCtx", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#a7b4006855fc3bfbc9cde588f28f528b6", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#af75893245fae6ef6d83257a2a117ad62", null ],
     [ "centerAbbrRawTextId", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#abd73c0038c330ecc5218bdd194459415", null ],
     [ "centerAbbrX", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#a8dc79a8b08031124e2127984652b730d", null ],

@@ -35,6 +35,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "reverseDownStem", "classmusx_1_1dom_1_1Entry.html#abafe04400b910721fcf16fe338a8ff3a", null ],
     [ "reverseUpStem", "classmusx_1_1dom_1_1Entry.html#abd0a94ec891ef665ec416a201e35e505", null ],
     [ "secBeam", "classmusx_1_1dom_1_1Entry.html#a3cf3b060d550fbc5d68764087052b97e", null ],
+    [ "slashGrace", "classmusx_1_1dom_1_1Entry.html#a4769d8c8cdf9482fea30b8e9ed8eab93", null ],
     [ "smartShapeDetail", "classmusx_1_1dom_1_1Entry.html#aa04b08c5cb6dbde8e24b7ff5be524c04", null ],
     [ "sorted", "classmusx_1_1dom_1_1Entry.html#ab76162a84d2dc54af058a611af01d51a", null ],
     [ "splitStem", "classmusx_1_1dom_1_1Entry.html#a0a325c8ef4a2eb745fc5d07c46a1742a", null ],

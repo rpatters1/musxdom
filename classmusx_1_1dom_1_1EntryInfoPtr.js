@@ -41,5 +41,6 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "getStaff", "classmusx_1_1dom_1_1EntryInfoPtr.html#acc0a7723ee2410488fb91b1dd85248f1", null ],
     [ "isSameEntry", "classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795", null ],
     [ "operator bool", "classmusx_1_1dom_1_1EntryInfoPtr.html#a75770f02addcc36e261584142e5910c6", null ],
-    [ "operator->", "classmusx_1_1dom_1_1EntryInfoPtr.html#acbc874af2cdeb4ad7e8a706ea8f85285", null ]
+    [ "operator->", "classmusx_1_1dom_1_1EntryInfoPtr.html#acbc874af2cdeb4ad7e8a706ea8f85285", null ],
+    [ "operator<", "classmusx_1_1dom_1_1EntryInfoPtr.html#aa247de0fb2eb2be22aaa12cf14266768", null ]
 ];

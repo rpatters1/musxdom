@@ -36,6 +36,7 @@ var classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks =
     [ "redisplayLayerAccis", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a7b6124d7edf56d60bd9b0dc7ac585381", null ],
     [ "showDots", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#afa128736a0b842ea2dd882a8c82f1b28", null ],
     [ "showNameParts", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a57908ee817e3570b039a2cb5c82fd8fd", null ],
+    [ "showNoteColors", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ac4d615fd39e445f46a4260492b20dda7", null ],
     [ "showRests", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#addbc52df67e02067395b9fb554226afe", null ],
     [ "showStems", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ace6de717138d94ea77f15b5e74a90466", null ],
     [ "showTies", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a284e1129f5705fcea869dc925d00c490", null ],

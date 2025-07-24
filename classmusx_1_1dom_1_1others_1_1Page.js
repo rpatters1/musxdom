@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1Page =
 [
     [ "Page", "classmusx_1_1dom_1_1others_1_1Page.html#af8f0848db759b0fbb57d3c40e9e209e3", null ],
+    [ "calcPageScaling", "classmusx_1_1dom_1_1others_1_1Page.html#a18a1c2569960221a82797e695bd4a45c", null ],
     [ "isBlank", "classmusx_1_1dom_1_1others_1_1Page.html#a2394f352b3461ee765fe821c8d1432bd", null ],
     [ "firstMeasureId", "classmusx_1_1dom_1_1others_1_1Page.html#a472a988bdcdbabaf5b24f133257b05d6", null ],
     [ "firstSystemId", "classmusx_1_1dom_1_1others_1_1Page.html#a9ed2e145854434c3864fdebfdbe9b999", null ],

@@ -22,6 +22,7 @@ var classmusx_1_1util_1_1Fraction =
     [ "quotient", "classmusx_1_1util_1_1Fraction.html#a1ee9dfe752d220d2e549347326a6338d", null ],
     [ "reciprocal", "classmusx_1_1util_1_1Fraction.html#a451dee1ae0c731665ef51318e3613e95", null ],
     [ "remainder", "classmusx_1_1util_1_1Fraction.html#a13dccd0b177ec18d649c0457efaa2a4e", null ],
+    [ "toDouble", "classmusx_1_1util_1_1Fraction.html#a0b395f304dc9e9291da3c6bed3bd3e70", null ],
     [ "operator<<", "classmusx_1_1util_1_1Fraction.html#a8ac0bd6d4e4b51fd98127667311124e1", null ],
     [ "operator>>", "classmusx_1_1util_1_1Fraction.html#a9fa0caf55fd2ad525456fc28040185ed", null ]
 ];

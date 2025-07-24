@@ -165,6 +165,16 @@ const <a class="el" href="namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getMaxBlankPages</b> () const</td></tr>
 <tr class="memdesc:a5a4d0b7008895e9e59d721475331f6be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum number of blank pages in any part. This is calculated by <a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#a99addb7044f05ca121c446568dc9045f" title="Creates a Document object from an XML buffer.">factory::DocumentFactory::create</a>. <br /></td></tr>
 <tr class="separator:a5a4d0b7008895e9e59d721475331f6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f737b924b967fc0cfe22d79c763c164" id="r_a5f737b924b967fc0cfe22d79c763c164"><td class="memItemLeft" align="right" valign="top"><a id="a5f737b924b967fc0cfe22d79c763c164" name="a5f737b924b967fc0cfe22d79c763c164"></a>
+const <a class="el" href="namespacemusx_1_1dom.html#a638216e8b0a5c70fc91f4d6259330e7b">InstrumentMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInstruments</b> () const</td></tr>
+<tr class="memdesc:a5f737b924b967fc0cfe22d79c763c164"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the instrument map for this document. It is computed by the factory. <br /></td></tr>
+<tr class="separator:a5f737b924b967fc0cfe22d79c763c164"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc1b50aa5ae203384dcf9c693e8e4e77" id="r_afc1b50aa5ae203384dcf9c693e8e4e77"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#afc1b50aa5ae203384dcf9c693e8e4e77">getInstrumentForStaff</a> (<a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a> staffId) const</td></tr>
+<tr class="memdesc:afc1b50aa5ae203384dcf9c693e8e4e77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the instrument info for the given staffId.  <br /></td></tr>
+<tr class="separator:afc1b50aa5ae203384dcf9c693e8e4e77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7512a1daf902e8580a8b4418a31ded8" id="r_ad7512a1daf902e8580a8b4418a31ded8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a638216e8b0a5c70fc91f4d6259330e7b">InstrumentMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#ad7512a1daf902e8580a8b4418a31ded8">createInstrumentMap</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
+<tr class="memdesc:ad7512a1daf902e8580a8b4418a31ded8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds an instrument map for the specified linked part ID.  <br /></td></tr>
+<tr class="separator:ad7512a1daf902e8580a8b4418a31ded8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -243,6 +253,64 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>musx::factory::Docum
   <table class="params">
     <tr><td class="paramname">partId</td><td>the linked part to search </td></tr>
     <tr><td class="paramname">measureId</td><td>the measure to find </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad7512a1daf902e8580a8b4418a31ded8" name="ad7512a1daf902e8580a8b4418a31ded8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7512a1daf902e8580a8b4418a31ded8">&#9670;&#160;</a></span>createInstrumentMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a638216e8b0a5c70fc91f4d6259330e7b">InstrumentMap</a> musx::dom::Document::createInstrumentMap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>forPartId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Builds an instrument map for the specified linked part ID. </p>
+<p>This routine detects instrument groupings in three stages:</p><ol type="1">
+<li>Defined multi-staff instruments (via multiStaffInstId).</li>
+<li>Visually bracketed staves with matching instrument UUIDs.</li>
+<li>Remaining single staves as individual instruments.</li>
+</ol>
+<p>This is especially important for supporting legacy .musx files created before multi-staff instruments were defined explicitly.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forPartId</td><td>The linked part for which to create the map. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afc1b50aa5ae203384dcf9c693e8e4e77" name="afc1b50aa5ae203384dcf9c693e8e4e77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc1b50aa5ae203384dcf9c693e8e4e77">&#9670;&#160;</a></span>getInstrumentForStaff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &amp; musx::dom::Document::getInstrumentForStaff </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a">InstCmper</a>&#160;</td>
+          <td class="paramname"><em>staffId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the instrument info for the given staffId. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">staffId</td><td>The staffId to find. </td></tr>
   </table>
   </dd>
 </dl>

@@ -144,8 +144,10 @@ Enumerations</h2></td></tr>
 , <a class="el" href="namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a0d61f8370cad1d412f80b84d143e1257">C</a>
 , <a class="el" href="namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a800618943025315f869e4e1f09471012">F</a>
 , <br />
-&#160;&#160;<a class="el" href="namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946acb5c10c0b488ed4f3826ba628d18ca6a">Percussion</a>
+&#160;&#160;<a class="el" href="namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946ae45a3c65bbd13b82efb95ddfce95ee28">Percussion1</a>
+, <a class="el" href="namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a50fdf989a6b1d1c6999550038f0a46f4">Percussion2</a>
 , <a class="el" href="namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a5c6ba25104401c9ee0650230fc6ba413">Tab</a>
+, <a class="el" href="namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a4cb9cfa22009948bec6cd029cb616e00">TabSerif</a>
 <br />
  }</td></tr>
 <tr class="memdesc:a815d2a1e748a138127d59c252e4fa946"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the possible types of clef, irrespective of octave transposition.  <a href="namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946">More...</a><br /></td></tr>
@@ -180,6 +182,10 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:a210de35d79a74652575c3fdbe5a829ab" id="r_a210de35d79a74652575c3fdbe5a829ab"><td class="memItemLeft" align="right" valign="top"><a id="a210de35d79a74652575c3fdbe5a829ab" name="a210de35d79a74652575c3fdbe5a829ab"></a>
+constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>STANDARD_NUMBER_OF_STAFFLINES</b> = 5</td></tr>
+<tr class="memdesc:a210de35d79a74652575c3fdbe5a829ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">The standard number of lines on a staff. <br /></td></tr>
+<tr class="separator:a210de35d79a74652575c3fdbe5a829ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab35adc6b33ebe9aa9f6606f04216c1d5" id="r_ab35adc6b33ebe9aa9f6606f04216c1d5"><td class="memItemLeft" align="right" valign="top"><a id="ab35adc6b33ebe9aa9f6606f04216c1d5" name="ab35adc6b33ebe9aa9f6606f04216c1d5"></a>
 constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>STANDARD_DIATONIC_STEPS</b> = 7</td></tr>
 <tr class="memdesc:ab35adc6b33ebe9aa9f6606f04216c1d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">currently this is the only supported number of diatonic steps. <br /></td></tr>
@@ -233,9 +239,13 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 </td></tr>
 <tr><td class="fieldname"><a id="a815d2a1e748a138127d59c252e4fa946a800618943025315f869e4e1f09471012" name="a815d2a1e748a138127d59c252e4fa946a800618943025315f869e4e1f09471012"></a>F&#160;</td><td class="fielddoc"><p>Bass clef. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a815d2a1e748a138127d59c252e4fa946acb5c10c0b488ed4f3826ba628d18ca6a" name="a815d2a1e748a138127d59c252e4fa946acb5c10c0b488ed4f3826ba628d18ca6a"></a>Percussion&#160;</td><td class="fielddoc"><p>Percussion clef (centered on middle staff line) </p>
+<tr><td class="fieldname"><a id="a815d2a1e748a138127d59c252e4fa946ae45a3c65bbd13b82efb95ddfce95ee28" name="a815d2a1e748a138127d59c252e4fa946ae45a3c65bbd13b82efb95ddfce95ee28"></a>Percussion1&#160;</td><td class="fielddoc"><p>2 thick vertical lines centered on middle staff line (corresponds to SMuFL glyph <code>unpitchedPercussionClef1</code>) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a815d2a1e748a138127d59c252e4fa946a5c6ba25104401c9ee0650230fc6ba413" name="a815d2a1e748a138127d59c252e4fa946a5c6ba25104401c9ee0650230fc6ba413"></a>Tab&#160;</td><td class="fielddoc"><p>Tablature clef. </p>
+<tr><td class="fieldname"><a id="a815d2a1e748a138127d59c252e4fa946a50fdf989a6b1d1c6999550038f0a46f4" name="a815d2a1e748a138127d59c252e4fa946a50fdf989a6b1d1c6999550038f0a46f4"></a>Percussion2&#160;</td><td class="fielddoc"><p>Narrow rectangle centered on middle staff line (corresponds to SMuFL glyph <code>unpitchedPercussionClef2</code>) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a815d2a1e748a138127d59c252e4fa946a5c6ba25104401c9ee0650230fc6ba413" name="a815d2a1e748a138127d59c252e4fa946a5c6ba25104401c9ee0650230fc6ba413"></a>Tab&#160;</td><td class="fielddoc"><p>Tablature clef (TAB) with non-serif font. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a815d2a1e748a138127d59c252e4fa946a4cb9cfa22009948bec6cd029cb616e00" name="a815d2a1e748a138127d59c252e4fa946a4cb9cfa22009948bec6cd029cb616e00"></a>TabSerif&#160;</td><td class="fielddoc"><p>Tablature clef (TAB) with serif font. </p>
 </td></tr>
 </table>
 

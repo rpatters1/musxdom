@@ -45,6 +45,7 @@ var classmusx_1_1dom_1_1others_1_1ShapeDef =
     [ "ShapeDef", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#a66b52677261434e2d85eea2079c29180", null ],
     [ "isBlank", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#ae5d7c101df04a3f77e8567a0ec4acbda", null ],
     [ "iterateInstructions", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#aa03419ba6ed074c201d402c2a21abc80", null ],
+    [ "recognize", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#a87abfbde46d61b13d9f9000ca41deb91", null ],
     [ "dataList", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#a1d59129fd827529cfd77431073ba3b47", null ],
     [ "instructionList", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#ace325c73e24d28390b86e16365f5bac5", null ],
     [ "shapeType", "classmusx_1_1dom_1_1others_1_1ShapeDef.html#ac994456249f8d93568b874d6ff6d01dd", null ]

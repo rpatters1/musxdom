@@ -1,6 +1,5 @@
 var classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg =
 [
-    [ "TerminationSeg", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg.html#a80259f97dded8a7dbc6f5f1b34e758ef", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg.html#a5438be1af86a32a7e624840a87d45138", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg.html#af2da6ee0a9f2c63356b44de62a05ef50", null ],
     [ "breakAdj", "classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg.html#ab1bbccd3c55fef6ca25845f177a843f3", null ],
