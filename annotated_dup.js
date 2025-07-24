@@ -224,7 +224,8 @@ var annotated_dup =
         [ "EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", "classmusx_1_1util_1_1EnigmaString" ],
         [ "EnigmaStyles", "structmusx_1_1util_1_1EnigmaStyles.html", "structmusx_1_1util_1_1EnigmaStyles" ],
         [ "Fraction", "classmusx_1_1util_1_1Fraction.html", "classmusx_1_1util_1_1Fraction" ],
-        [ "Logger", "classmusx_1_1util_1_1Logger.html", "classmusx_1_1util_1_1Logger" ]
+        [ "Logger", "classmusx_1_1util_1_1Logger.html", "classmusx_1_1util_1_1Logger" ],
+        [ "TestConfiguration", "classmusx_1_1util_1_1TestConfiguration.html", null ]
       ] ],
       [ "xml", "namespacemusx_1_1xml.html", [
         [ "pugi", "namespacemusx_1_1xml_1_1pugi.html", [
