@@ -116,12 +116,8 @@ public:
     /// @param staffId The staffId to find.
     const InstrumentInfo& getInstrumentForStaff(InstCmper staffId) const;
 
-private:
-    /// @brief Constructs a `Document`
-    explicit Document() = default;
-
     /**
-     * @brief Builds the instrument map from Finale-style data.
+     * @brief Builds an instrument map for the specified linked part ID.
      *
      * This routine detects instrument groupings in three stages:
      * 1. Defined multi-staff instruments (via multiStaffInstId).
@@ -130,8 +126,14 @@ private:
      *
      * This is especially important for supporting legacy .musx files
      * created before multi-staff instruments were defined explicitly.
+     *
+     * @param forPartId The linked part for which to create the map.
      */
-    void createInstrumentMap();
+    InstrumentMap createInstrumentMap(Cmper forPartId) const;
+
+private:
+    /// @brief Constructs a `Document`
+    explicit Document() = default;
     
     HeaderPtr m_header;         ///< The <header>
     OptionsPoolPtr m_options;   ///< The <options> pool

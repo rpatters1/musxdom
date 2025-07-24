@@ -291,13 +291,13 @@ std::shared_ptr<others::StaffSystem> Document::calculateSystemFromMeasure(Cmper 
     return result;
 }
 
-void Document::createInstrumentMap()
+InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 {
-    constexpr Cmper forPartId = SCORE_PARTID;
+    InstrumentMap result;
 
     auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
     if (scrollView.empty()) {
-        return;
+        return result;
     }
     std::unordered_set<Cmper> multiStaffInstsFound;
     std::unordered_set<InstCmper> mappedStaves;
@@ -308,7 +308,7 @@ void Document::createInstrumentMap()
                     if (auto multiStaffInst = getOthers()->get<others::MultiStaffInstrumentGroup>(forPartId, rawStaff->multiStaffInstId)) {
                         if (auto multiStaffGroupId = getOthers()->get<others::MultiStaffGroupId>(forPartId, rawStaff->multiStaffInstId)) {
                             multiStaffInstsFound.emplace(rawStaff->multiStaffInstId);
-                            const auto [it, created] = m_instruments.emplace(rawStaff->getCmper(), InstrumentInfo());
+                            const auto [it, created] = result.emplace(rawStaff->getCmper(), InstrumentInfo());
                             MUSX_ASSERT_IF(!created) {
                                 throw std::logic_error("Attempted to insert multi-instrument id " + std::to_string(rawStaff->multiStaffInstId) + " more than once.");
                             }
@@ -356,7 +356,7 @@ void Document::createInstrumentMap()
                     return false;
                 });
                 if (!candidateStaves.empty()) {
-                    auto [instIt, created] = m_instruments.emplace(topStaff->getCmper(), InstrumentInfo());
+                    auto [instIt, created] = result.emplace(topStaff->getCmper(), InstrumentInfo());
                     auto& [top, instInfo] = *instIt;
                     if (created || instInfo.staffGroupId == 0 || group->getCmper2() == instInfo.staffGroupId) {
                         if (instInfo.staffGroupId == 0) {
@@ -375,14 +375,14 @@ void Document::createInstrumentMap()
     }
     for (const auto& staffItem : scrollView) {
         if (mappedStaves.find(staffItem->staffId) == mappedStaves.end()) {
-            const auto [it, created] = m_instruments.emplace(staffItem->staffId, InstrumentInfo());
+            const auto [it, created] = result.emplace(staffItem->staffId, InstrumentInfo());
             MUSX_ASSERT_IF(!created) {
                 throw std::logic_error("Attempted to insert single-instrument id " + std::to_string(staffItem->staffId) + " that was already mapped.");
             }
             it->second.staves.emplace(staffItem->staffId, 0);
         }
     }
-    for (const auto& [instId, info] : m_instruments) {
+    for (const auto& [instId, info] : result) {
         std::unordered_set<size_t> indices;
         for (const auto& [staffId, index] : info.staves) {
             indices.insert(index);
@@ -400,6 +400,7 @@ void Document::createInstrumentMap()
             }
         }
     }
+    return result;
 }
 
 const InstrumentInfo& Document::getInstrumentForStaff(InstCmper staffId) const
@@ -1422,13 +1423,12 @@ void FontInfo::setFontIdByName(const std::string& name)
     throw std::invalid_argument("font definition not found for font \"" + name + "\"");
 }
 
-std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath() const
+std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath(const std::string& fontName)
 {
-    auto name = getName();
     auto standardFontPaths = calcSMuFLPaths();
     for (const auto& path : standardFontPaths) {
         if (!path.empty()) {
-            std::filesystem::path metaFilePath(path / name / name);
+            std::filesystem::path metaFilePath(path / fontName / fontName);
             metaFilePath.replace_extension(".json");
             if (std::filesystem::is_regular_file(metaFilePath)) {
                 return metaFilePath;

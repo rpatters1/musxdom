@@ -91,7 +91,7 @@ public:
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
 #endif
         elementLinker.resolveAll(document);
-        document->createInstrumentMap();
+        document->m_instruments = document->createInstrumentMap(SCORE_PARTID);
 
         document->m_maxBlankPages = 0;
         auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
