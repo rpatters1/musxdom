@@ -71,6 +71,7 @@
 #include "util/DateTimeFormat.h"
 #include "util/EnigmaString.h"
 #include "util/Logger.h"
+#include "util/TestSupport.h"
 #include "xml/XmlInterface.h"
 #include "dom/Document.h"
 #include "factory/DocumentFactory.h"

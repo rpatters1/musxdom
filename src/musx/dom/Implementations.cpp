@@ -1470,6 +1470,9 @@ bool FontInfo::calcIsSymbolFont() const
 
 std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 {
+    if (const auto& testPath = util::TestConfiguration::getTestDataPath()) {
+        return { std::filesystem::path(testPath.value()) / "font_metadata" };
+    }
 #if defined(MUSX_RUNNING_ON_WINDOWS)
     auto systemEnv = "COMMONPROGRAMFILES";
     auto userEnv = "LOCALAPPDATA";

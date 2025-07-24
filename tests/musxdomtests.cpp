@@ -55,6 +55,7 @@ int main(int argc, char **argv) {
 
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::AddGlobalTestEnvironment(new TestEnvironment);
+    ::musx::util::TestConfiguration::setTestDataPath(std::filesystem::current_path());
     int result = RUN_ALL_TESTS();
     const auto endMessages = musxtest::g_endMessages.str();
     if (!endMessages.empty()) {
