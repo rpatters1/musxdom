@@ -422,17 +422,14 @@ const InstrumentInfo& Document::getInstrumentForStaff(InstCmper staffId) const
 bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
 {
     auto staffSystems = getOthers()->getArray<others::StaffSystem>(forPartId);
-    if (staffSystems.size() <= 1) {
-        return false;
-    }
-    auto firstSystem = getOthers()->getArray<others::InstrumentUsed>(forPartId, staffSystems[0]->getCmper());
-    for (size_t systemIndex = 1; systemIndex < staffSystems.size(); systemIndex++) {
-        auto nextSystem = getOthers()->getArray<others::InstrumentUsed>(forPartId, staffSystems[systemIndex]->getCmper());
-        if (nextSystem.size() != firstSystem.size()) {
+    auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    for (const auto& staffSystem : staffSystems) {
+        auto nextSystem = getOthers()->getArray<others::InstrumentUsed>(forPartId, staffSystem->getCmper());
+        if (nextSystem.size() != scrollView.size()) {
             return true;
         }
         for (size_t staffIndex = 0; staffIndex < nextSystem.size(); staffIndex++) {
-            if (nextSystem[staffIndex]->staffId != firstSystem[staffIndex]->staffId) {
+            if (nextSystem[staffIndex]->staffId != scrollView[staffIndex]->staffId) {
                 return true;
             }
         }
