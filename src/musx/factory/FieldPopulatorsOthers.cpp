@@ -364,6 +364,27 @@ MUSX_XML_ENUM_MAPPING(musx::dom::others::TextRepeatDef::PoundReplaceOption, {
 
 } // namespace factory
 namespace dom {
+
+namespace smartshape {
+
+using namespace ::musx::xml;
+using namespace ::musx::factory;
+    
+MUSX_XML_ELEMENT_ARRAY(EndPoint, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
+    {"meas", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
+    {"edu", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
+    {"entryNum", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->entryNumber = e->getTextAs<EntryNumber>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(EndPointAdjustment, {
+    {"x", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"y", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"on", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->active = populateBoolean(e, i); }},
+});
+
+} // namespace smartshape
+
 namespace others {
 
 using namespace ::musx::xml;
@@ -844,27 +865,14 @@ MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList, {
         i->instructions.push_back(FieldPopulator<ShapeInstructionList::InstructionInfo>::createAndPopulate(e));
     }},
 });
-    
-MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPoint, {
-    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
-    {"meas", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
-    {"edu", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
-    {"entryNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->entryNumber = e->getTextAs<EntryNumber>(); }},
-});
-
-MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPointAdjustment, {
-    {"x", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
-    {"y", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
-    {"on", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->active = populateBoolean(e, i); }},
-});
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
     {"endPt", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getParent()); }},
+        { i->endPoint = FieldPopulator<smartshape::EndPoint>::createAndPopulate(e, i->getParent()); }},
     {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPointAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+        { i->endPointAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
     {"breakAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->breakAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+        { i->breakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape, {

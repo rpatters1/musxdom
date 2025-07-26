@@ -38,8 +38,70 @@ class SmartShapeEntryAssign;
 }
 
 namespace others {
+    class SmartShapeMeasureAssign;
+}
 
-class SmartShapeMeasureAssign;
+namespace smartshape {
+
+/**
+ * @brief Represents an endpoint of the smart shape.
+ */
+class EndPoint : public ContainedClassBase
+{
+public:
+    using ContainedClassBase::ContainedClassBase;
+
+    InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
+    MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
+    Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
+    EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
+
+    /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
+    util::Fraction calcPosition() const;
+
+    /// @brief Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached
+    util::Fraction calcGlobalPosition() const;
+
+    /// @brief Calculates the entry associated with the endpoint.
+    /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
+    /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
+    /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
+    /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
+    EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
+
+    /// @brief Gets the measure assignment for this endpoint or null if none.
+    std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
+
+    /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
+    std::shared_ptr<details::SmartShapeEntryAssign> getEntryAssignment() const;
+
+    /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
+    bool calcIsAssigned() const;
+
+    bool requireAllFields() const override { return false; }
+    static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @brief Represents the endpoint adjustment of a smart shape or center shape.
+ */
+class EndPointAdjustment : public ContainedClassBase
+{
+public:
+    using ContainedClassBase::ContainedClassBase;
+
+    Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
+    Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
+    bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
+
+    bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
+    static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+};
+
+} // namespace smartshape
+
+namespace others {
+
 /**
  * @class SmartShape
  * @brief Represents a Finale smart shape.
@@ -54,86 +116,29 @@ public:
         : OthersBase(document, partId, shareMode, cmper) {}
 
     /**
-     * @brief Represents an endpoint of the smart shape.
-     */
-    class EndPoint : public ContainedClassBase<SmartShape>
-    {
-    public:
-        using ContainedClassBase<SmartShape>::ContainedClassBase;
-
-        InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
-        MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
-        Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
-        EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
-
-        Cmper shapeId{};                ///< The shape that this segment belongs to. (Added by the factory.)
-
-        /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
-        util::Fraction calcPosition() const;
-
-        /// @brief Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached
-        util::Fraction calcGlobalPosition() const;
-
-        /// @brief Calculates the entry associated with the endpoint.
-        /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
-        /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
-        /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
-        /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
-        EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
-
-        /// @brief Gets the measure assignment for this endpoint or null if none.
-        std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
-
-        /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
-        std::shared_ptr<details::SmartShapeEntryAssign> getEntryAssignment() const;
-
-        /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
-        bool calcIsAssigned() const;
-
-        bool requireAllFields() const override { return false; }
-        static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-
-    /**
-     * @brief Represents the endpoint adjustment of the smart shape.
-     */
-    class EndPointAdjustment : public ContainedClassBase<SmartShape>
-    {
-    public:
-        using ContainedClassBase<SmartShape>::ContainedClassBase;
-
-        Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
-        Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
-        bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
-
-        bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
-        static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
-    };
-
-    /**
      * @brief Represents the termination segment of the smart shape.
      */
-    class TerminationSeg : public ContainedClassBase<SmartShape>
+    class TerminationSeg : public ContainedClassBase
     {
     public:
-        using ContainedClassBase<SmartShape>::ContainedClassBase;
+        using ContainedClassBase::ContainedClassBase;
 
-        std::shared_ptr<EndPoint> endPoint;                 ///< Endpoint information (xml node is `<endPt>`)
-        std::shared_ptr<EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information (xml node is `<endPtAdj>`)
-        std::shared_ptr<EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
-                                                            ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
+        std::shared_ptr<smartshape::EndPoint> endPoint;             ///< Endpoint information (xml node is `<endPt>`)
+        std::shared_ptr<smartshape::EndPointAdjustment> endPointAdj;///< Endpoint adjustment information (xml node is `<endPtAdj>`)
+        std::shared_ptr<smartshape::EndPointAdjustment> breakAdj;   ///< System break adjustment for first or last system (depending which endpoint it is)
+                                                                    ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
         void integrityCheck() override
         {
             Base::integrityCheck();
             if (!endPoint) {
-                endPoint = std::make_shared<EndPoint>(getParent());
+                endPoint = std::make_shared<smartshape::EndPoint>(getParent());
             }
             if (!endPointAdj) {
-                endPointAdj = std::make_shared<EndPointAdjustment>(getParent());
+                endPointAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
             }
             if (!breakAdj) {
-                breakAdj = std::make_shared<EndPointAdjustment>(getParent());
+                breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
             }
         }
     
@@ -444,22 +449,6 @@ class CenterShape : public DetailsBase, public std::enable_shared_from_this<Cent
 public:
 
     /**
-     * @brief Represents the endpoint adjustment of the center shape.
-     */
-    class EndPointAdjustment : public ContainedClassBase<CenterShape>
-    {
-    public:
-        using ContainedClassBase<CenterShape>::ContainedClassBase;
-
-        Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
-        Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
-        bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
-
-        bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
-        static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
-    };
-
-    /**
      * @brief Constructor
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for.
@@ -471,16 +460,16 @@ public:
         : DetailsBase(document, partId, shareMode, shapeNum, centerShapeNum)
     {}
 
-    std::shared_ptr<EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
-    std::shared_ptr<EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
+    std::shared_ptr<smartshape::EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
+    std::shared_ptr<smartshape::EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
 
     void integrityCheck() override
     {
         if (!startBreakAdj) {
-            startBreakAdj = std::make_shared<EndPointAdjustment>(shared_from_this());
+            startBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(shared_from_this());
         }
         if (!endBreakAdj) {
-            endBreakAdj = std::make_shared<EndPointAdjustment>(shared_from_this());
+            endBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(shared_from_this());
         }
     }
 

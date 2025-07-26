@@ -27,11 +27,11 @@
 namespace musx {
 namespace dom {
 
-// **********************
-// ***** SmartShape *****
-// **********************
+// ********************
+// ***** EndPoint *****
+// ********************
 
-EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry(Cmper forPartId) const
+EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId) const
 {
     EntryInfoPtr result;
     if (entryNumber != 0) {
@@ -53,14 +53,17 @@ EntryInfoPtr others::SmartShape::EndPoint::calcAssociatedEntry(Cmper forPartId) 
     return result;
 }
 
-std::shared_ptr<others::SmartShapeMeasureAssign> others::SmartShape::EndPoint::getMeasureAssignment() const
+std::shared_ptr<others::SmartShapeMeasureAssign> smartshape::EndPoint::getMeasureAssignment() const
 {
+    auto shapeParent = getParent<others::SmartShape>();
+    MUSX_ASSERT_IF (!shapeParent) {
+        throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
+    }
     if (auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
         if (measure->hasSmartShape) {
             auto assigns = getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(getPartId(), measId);
-            Cmper shapeId = getParent()->getCmper();
             for (const auto& assign : assigns) {
-                if (assign->shapeNum == shapeId) {
+                if (assign->shapeNum == shapeParent->getCmper()) {
                     return assign;
                 }
             }
@@ -69,13 +72,17 @@ std::shared_ptr<others::SmartShapeMeasureAssign> others::SmartShape::EndPoint::g
     return nullptr;
 }
 
-std::shared_ptr<details::SmartShapeEntryAssign> others::SmartShape::EndPoint::getEntryAssignment() const
+std::shared_ptr<details::SmartShapeEntryAssign> smartshape::EndPoint::getEntryAssignment() const
 {
+    auto shapeParent = getParent<others::SmartShape>();
+    MUSX_ASSERT_IF (!shapeParent) {
+        throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
+    }
     if (entryNumber != 0) {
+        Cmper shapeId = shapeParent->getCmper();
         if (auto entry = getDocument()->getEntries()->get(entryNumber)) {
             if (entry->smartShapeDetail) {
                 auto assigns = getDocument()->getDetails()->getArray<details::SmartShapeEntryAssign>(getPartId(), entryNumber);
-                Cmper shapeId = getParent()->getCmper();
                 for (const auto& assign : assigns) {
                     if (assign->shapeNum == shapeId) {
                         return assign;
@@ -87,7 +94,7 @@ std::shared_ptr<details::SmartShapeEntryAssign> others::SmartShape::EndPoint::ge
     return nullptr;
 }
 
-bool others::SmartShape::EndPoint::calcIsAssigned() const
+bool smartshape::EndPoint::calcIsAssigned() const
 {
     if (!getMeasureAssignment()) {
         return false;
@@ -98,7 +105,7 @@ bool others::SmartShape::EndPoint::calcIsAssigned() const
     return true;
 }
 
-util::Fraction others::SmartShape::EndPoint::calcPosition() const
+util::Fraction smartshape::EndPoint::calcPosition() const
 {
     if (!entryNumber) {
         return util::Fraction::fromEdu(eduPosition);
@@ -109,7 +116,7 @@ util::Fraction others::SmartShape::EndPoint::calcPosition() const
     return 0;
 }
 
-util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
+util::Fraction smartshape::EndPoint::calcGlobalPosition() const
 {
     if (!entryNumber) {
         const auto rawPosition = util::Fraction::fromEdu(eduPosition);
@@ -123,6 +130,10 @@ util::Fraction others::SmartShape::EndPoint::calcGlobalPosition() const
     }
     return 0;
 }
+
+// **********************
+// ***** SmartShape *****
+// **********************
 
 bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
 {
