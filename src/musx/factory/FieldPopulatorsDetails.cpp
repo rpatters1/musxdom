@@ -137,10 +137,12 @@ MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(CenterShape, {
-    { "startBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
+    {"startBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
         { i->startBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i); }},
-    { "endBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
+    {"endBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
         { i->endBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i); }},
+    {"ctlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
+        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::createAndPopulate(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ChordAssign, {

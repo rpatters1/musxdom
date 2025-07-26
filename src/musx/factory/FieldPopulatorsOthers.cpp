@@ -27,6 +27,7 @@ namespace musx {
 namespace factory {
 
 using namespace ::musx::xml;
+using namespace ::musx::dom::smartshape;
 using namespace ::musx::dom::others;
 
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
@@ -151,6 +152,37 @@ MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
     {"startObject", ShapeDef::InstructionType::StartObject},
     {"stroke", ShapeDef::InstructionType::Stroke},
     {"vertMode", ShapeDef::InstructionType::VerticalMode},
+});
+
+MUSX_XML_ENUM_MAPPING(DirectionType, {
+    // {"none", DirectionType::None}, // Default value, may not appear in XML.
+    {"under", DirectionType::Under},
+    {"over", DirectionType::Over},
+});
+
+MUSX_XML_ENUM_MAPPING(EntryConnectionType, {
+    {"headLeftTop", EntryConnectionType::HeadLeftTop}, // Default value, may not appear in XML.
+    {"headRightTop", EntryConnectionType::HeadRightTop},
+    {"headRightBottom", EntryConnectionType::HeadRightBottom},
+    {"headLeftBottom", EntryConnectionType::HeadLeftBottom},
+    {"stemLeftTop", EntryConnectionType::StemLeftTop},
+    {"stemRightTop", EntryConnectionType::StemRightTop},
+    {"stemRightBottom", EntryConnectionType::StemRightBottom},
+    {"stemLeftBottom", EntryConnectionType::StemLeftBottom},
+    {"noteLeftTop", EntryConnectionType::NoteLeftTop},
+    {"noteRightTop", EntryConnectionType::NoteRightTop},
+    {"noteRightBottom", EntryConnectionType::NoteRightBottom},
+    {"noteLeftBottom", EntryConnectionType::NoteLeftBottom},
+    {"noteLeftCenter", EntryConnectionType::NoteLeftCenter},
+    {"noteRightCenter", EntryConnectionType::NoteRightCenter},
+    {"lyricRightCenter", EntryConnectionType::LyricRightCenter},
+    {"lyricLeftCenter", EntryConnectionType::LyricLeftCenter},
+    {"lyricRightBottom", EntryConnectionType::LyricRightBottom},
+    {"headRightLyrBaseline", EntryConnectionType::HeadRightLyricBaseline},
+    {"dotRightLyrBaseline", EntryConnectionType::DotRightLyricBaseline},
+    {"durationLyrBaseline", EntryConnectionType::DurationLyricBaseline},
+    {"systemLeft", EntryConnectionType::SystemLeft},
+    {"systemRight", EntryConnectionType::SystemRight},
 });
 
 MUSX_XML_ENUM_MAPPING(ShapeDef::ShapeType, {
@@ -369,7 +401,16 @@ namespace smartshape {
 
 using namespace ::musx::xml;
 using namespace ::musx::factory;
-    
+
+MUSX_XML_ELEMENT_ARRAY(ControlPointAdjustment, {
+    {"startCtlPtX", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->startCtlPtX = e->getTextAs<Evpu>(); }},
+    {"startCtlPtY", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->startCtlPtY = e->getTextAs<Evpu>(); }},
+    {"endCtlPtX", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->endCtlPtX = e->getTextAs<Evpu>(); }},
+    {"endCtlPtY", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->endCtlPtY = e->getTextAs<Evpu>(); }},
+    {"on", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->active = populateBoolean(e, i); }},
+    {"contextDir", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->contextDir = toEnum<DirectionType>(e); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(EndPoint, {
     {"inst", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
     {"meas", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
@@ -381,6 +422,8 @@ MUSX_XML_ELEMENT_ARRAY(EndPointAdjustment, {
     {"x", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
     {"y", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
     {"on", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->active = populateBoolean(e, i); }},
+    {"contextDir", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->contextDir = toEnum<DirectionType>(e); }},
+    {"contextEntCnct", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->contextEntCnct = toEnum<EntryConnectionType>(e); }},
 });
 
 } // namespace smartshape
@@ -871,6 +914,8 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
         { i->endPoint = FieldPopulator<smartshape::EndPoint>::createAndPopulate(e, i->getParent()); }},
     {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
         { i->endPointAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+    {"ctlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
+        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::createAndPopulate(e, i->getParent()); }},
     {"breakAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
         { i->breakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
 });

@@ -44,6 +44,75 @@ namespace others {
 namespace smartshape {
 
 /**
+ * @enum DirectionType
+ * @brief Indicates the placement context of end- and control-point adjustments of @ref others::SmartShape instances.
+ */
+enum class DirectionType
+{
+    None,   ///< No context. (The default value when there is no adjustment or the context is not applicable to the SmartShape.)
+    Under,  ///< The shape is positioned below (e.g., slur under)
+    Over    ///< The shape is positioned above (e.g., slur over)
+};
+
+/**
+ * @enum EntryConnectionType
+ * @brief Indicates the entry connection type for entry-attached @ref others::SmartShape instances.
+ * 
+ * These values are untested, so the documentation provides only a best guess as to what they do.
+ * Some values are also used for beat-attached shapes, but how they apply in this context (if at all) is unknown.
+ */
+enum class EntryConnectionType
+{
+    HeadLeftTop,             ///< Attached to left-top of the head rectangle. (Default value.)
+    HeadRightTop,            ///< Attached to right-top of the head rectangle.
+    HeadRightBottom,         ///< Attached to right-bottom of the head rectangle.
+    HeadLeftBottom,          ///< Attached to left-bottom of the head rectangle.
+
+    StemLeftTop,             ///< Attached to left-top of the stem rectangle.
+    StemRightTop,            ///< Attached to right-top of the stem rectangle.
+    StemRightBottom,         ///< Attached to right-bottom of the stem rectangle.
+    StemLeftBottom,          ///< Attached to left-bottom of the stem rectangle.
+
+    NoteLeftTop,             ///< Attached to left-top of the notehead.
+    NoteRightTop,            ///< Attached to right-top of the notehead.
+    NoteRightBottom,         ///< Attached to right-bottom of the notehead.
+    NoteLeftBottom,          ///< Attached to left-bottom of the notehead.
+    NoteLeftCenter,          ///< Attached to left-center of the notehead.
+    NoteRightCenter,         ///< Attached to right-center of the notehead.
+
+    LyricRightCenter,        ///< Attached to right-center of the lyric.
+    LyricLeftCenter,         ///< Attached to left-center of the lyric.
+    LyricRightBottom,        ///< Attached to right-bottom of the lyric.
+    HeadRightLyricBaseline,  ///< Attached to right of the head rectangle, aligned with the lyric baseline.
+    DotRightLyricBaseline,   ///< Attached to the right of the augmentation dot, aligned with the lyric baseline.
+    DurationLyricBaseline,   ///< Attached to the duration position, aligned with the lyric baseline.
+
+    SystemLeft,              ///< Attached to the left edge of the system.
+    SystemRight              ///< Attached to the right edge of the system.
+};
+
+/**
+ * @brief Represents the manual adjustments to a smart shape.
+ *
+ * The meaning of these control point adjustments differs according to the type of SmartShape.
+ */
+class ControlPointAdjustment : public ContainedClassBase
+{
+public:
+    using ContainedClassBase::ContainedClassBase;
+
+    Evpu startCtlPtX{};             ///< Horizontal offset of the start control point.
+    Evpu startCtlPtY{};             ///< Vertical offset of the start control point.
+    Evpu endCtlPtX{};               ///< Horizontal offset of the end control point.
+    Evpu endCtlPtY{};               ///< Vertical offset of the end control point.
+    bool active{};                  ///< If true, this adjustment should be used when it is applicable.
+    DirectionType contextDir{};  ///< The direction type for this adjustment.
+
+    bool requireAllFields() const override { return false; }    ///< Ignore missing fields that may not be set.
+    static const xml::XmlElementArray<ControlPointAdjustment>& xmlMappingArray();  ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @brief Represents an endpoint of the smart shape.
  */
 class EndPoint : public ContainedClassBase
@@ -90,9 +159,11 @@ class EndPointAdjustment : public ContainedClassBase
 public:
     using ContainedClassBase::ContainedClassBase;
 
-    Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
-    Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
-    bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
+    Evpu horzOffset{};                      ///< Horizontal offset (xml node is `<x>`)
+    Evpu vertOffset{};                      ///< Vertical offset (xml node is `<y>`)
+    bool active{};                          ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
+    DirectionType contextDir{};             ///< The direction type for this adjustment.
+    EntryConnectionType contextEntCnct{};   ///< The entry conntection type for this adjustment.
 
     bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
     static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
@@ -123,10 +194,11 @@ public:
     public:
         using ContainedClassBase::ContainedClassBase;
 
-        std::shared_ptr<smartshape::EndPoint> endPoint;             ///< Endpoint information (xml node is `<endPt>`)
-        std::shared_ptr<smartshape::EndPointAdjustment> endPointAdj;///< Endpoint adjustment information (xml node is `<endPtAdj>`)
-        std::shared_ptr<smartshape::EndPointAdjustment> breakAdj;   ///< System break adjustment for first or last system (depending which endpoint it is)
-                                                                    ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
+        std::shared_ptr<smartshape::EndPoint> endPoint;                 ///< Endpoint information.
+        std::shared_ptr<smartshape::EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information.
+        std::shared_ptr<smartshape::ControlPointAdjustment> ctlPtAdj;   ///< Manual adjustments made to this termination segment.
+        std::shared_ptr<smartshape::EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
+                                                                        ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
         void integrityCheck() override
         {
@@ -136,6 +208,9 @@ public:
             }
             if (!endPointAdj) {
                 endPointAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
+            }
+            if (!ctlPtAdj) {
+                ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(getParent());
             }
             if (!breakAdj) {
                 breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
@@ -462,6 +537,7 @@ public:
 
     std::shared_ptr<smartshape::EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
     std::shared_ptr<smartshape::EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
+    std::shared_ptr<smartshape::ControlPointAdjustment> ctlPtAdj;  ///< Manual adjustments made to this center shape.
 
     void integrityCheck() override
     {
@@ -470,6 +546,9 @@ public:
         }
         if (!endBreakAdj) {
             endBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(shared_from_this());
+        }
+        if (!ctlPtAdj) {
+            ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(shared_from_this());
         }
     }
 

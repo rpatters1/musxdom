@@ -42,6 +42,16 @@
 namespace musx {
 namespace dom {
 
+/// @brief Type trait to determine if a class in a given pool
+/// @tparam Pool The pool type
+/// @tparam T The class to query
+template <typename Pool, typename T>
+struct is_pool_type : std::false_type {};  // default: not valid
+
+/// @brief Value shortcut for #is_pool_type
+template <typename Pool, typename T>
+inline constexpr bool is_pool_type_v = is_pool_type<Pool, T>::value;
+
 /**
  * @class ObjectPool
  * @brief A pool that manages collections of `OthersBase` objects, organized by XML node names and `Cmper` values.
@@ -306,6 +316,7 @@ public:
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray() const
     {
+        static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
         return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
     }
 
@@ -313,6 +324,7 @@ public:
     template <typename T>
     std::shared_ptr<T> get() const
     {
+        static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
         return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
     }
 };
@@ -348,12 +360,18 @@ public:
     /** @brief OthersPool version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
-    { return ObjectPool::getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper }); }
+    {
+        static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
+        return ObjectPool::getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper });
+    }
 
     /** @brief OthersPool version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
-    { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper, std::nullopt, inci}); }
+    {
+        static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
+        return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, cmper, std::nullopt, inci });
+    }
 };
 /** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;
@@ -380,29 +398,41 @@ public:
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
     /** @brief version of #ObjectPool::getArray for getting all of them */
-    template <typename T>
+    template <typename T, typename = std::enable_if_t<is_pool_type_v<DetailsPool, T>>>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId) const
     { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId }); }
 
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
-    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 }); }
+    {
+        static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
+        return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 });
+    }
 
     /** @brief EntryDetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     std::vector<std::shared_ptr<T>> getArray(Cmper partId, EntryNumber entnum) const
-    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) }); }
+    {
+        static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
+        return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
+    }
 
     /** @brief DetailsPool version of #ObjectPool::get */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     std::shared_ptr<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
-    { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, cmper1, cmper2, inci}); }
+    {
+        static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
+        return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2, inci });
+    }
 
     /** @brief EntryDetailsPool version of #ObjectPool::get */
     template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     std::shared_ptr<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
-    { return ObjectPool::getEffectiveForPart<T>({std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci}); }
+    {
+        static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
+        return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci });
+    }
 
     /// @brief Returns the detail for a particular note
     /// @tparam T The type to retrieve (must be derived from @ref NoteDetailsBase)
@@ -413,6 +443,7 @@ public:
     template <typename T, typename std::enable_if_t<std::is_base_of_v<NoteDetailsBase, T>, int> = 0>
     std::shared_ptr<T> getForNote(const NoteInfoPtr& noteInfo, const std::optional<Cmper>& forPartId = std::nullopt)
     {
+        static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
         auto details = getArray<T>(
             forPartId.value_or(noteInfo.getEntryInfo().getFrame()->getRequestedPartId()),
             noteInfo.getEntryInfo()->getEntry()->getEntryNumber()
@@ -474,12 +505,18 @@ public:
     /** @brief Texts version of #ObjectPool::getArray */
     template <typename T>
     std::vector<std::shared_ptr<T>> getArray(std::optional<Cmper> cmper = std::nullopt) const
-    { return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper }); }
+    {
+        static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
+        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper });
+    }
 
     /** @brief Texts version of #ObjectPool::get */
     template <typename T>
     std::shared_ptr<T> get(Cmper cmper) const
-    { return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt }); }
+    {
+        static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
+        return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt });
+    }
 };
 /** @brief Shared `OthersPool` pointer */
 using TextsPoolPtr = std::shared_ptr<TextsPool>;
