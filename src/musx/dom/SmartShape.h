@@ -108,7 +108,6 @@ public:
     bool active{};                  ///< If true, this adjustment should be used when it is applicable.
     DirectionType contextDir{};  ///< The direction type for this adjustment.
 
-    bool requireAllFields() const override { return false; }    ///< Ignore missing fields that may not be set.
     static const xml::XmlElementArray<ControlPointAdjustment>& xmlMappingArray();  ///< Required for musx::factory::FieldPopulator.
 };
 
@@ -147,7 +146,6 @@ public:
     /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
     bool calcIsAssigned() const;
 
-    bool requireAllFields() const override { return false; }
     static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
@@ -165,7 +163,6 @@ public:
     DirectionType contextDir{};             ///< The direction type for this adjustment.
     EntryConnectionType contextEntCnct{};   ///< The entry conntection type for this adjustment.
 
-    bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
     static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
@@ -196,7 +193,7 @@ public:
 
         std::shared_ptr<smartshape::EndPoint> endPoint;                 ///< Endpoint information.
         std::shared_ptr<smartshape::EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information.
-        std::shared_ptr<smartshape::ControlPointAdjustment> ctlPtAdj;   ///< Manual adjustments made to this termination segment.
+        std::shared_ptr<smartshape::ControlPointAdjustment> ctlPtAdj;   ///< Manual adjustments for the shape at this endpoint.
         std::shared_ptr<smartshape::EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
                                                                         ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
@@ -215,9 +212,12 @@ public:
             if (!breakAdj) {
                 breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
             }
+            endPoint->integrityCheck();
+            endPointAdj->integrityCheck();
+            ctlPtAdj->integrityCheck();
+            breakAdj->integrityCheck();
         }
     
-        bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
         static const xml::XmlElementArray<TerminationSeg>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
     };
 
@@ -275,14 +275,81 @@ public:
         DashContourSlurAuto, ///< Contoured line dashed slur with direction automatically determined.
     };
 
-    ShapeType shapeType{};                          ///< Type of smart shape
-    bool entryBased{};                              ///< Whether the shape is entry-based
-    std::shared_ptr<TerminationSeg> startTermSeg;   ///< Start termination segment
-    std::shared_ptr<TerminationSeg> endTermSeg;     ///< End termination segment
-    bool hidden{};                                  ///< Inverse of "Show" option
+    /**
+     * @enum EngraverSlurState
+     * @brief The selection for engraver slurs. (Only applicable for slurs.)
+     */
+    enum class EngraverSlurState
+    {
+        Auto,           ///< Take the engraver slur setting from #options::SmartShapeOptions::useEngraverSlurs. (Default value.)
+        Off,            ///< Do not use engraver slur behaviour.
+        On,             ///< Use engraver slur behaviour.
+    };
+
+    /**
+     * @enum SlurAvoidAccidentalsState
+     * @brief The selection whether this shape avoids accidentals. (Only applicable for slurs.)
+     */
+    enum class SlurAvoidAccidentalsState
+    {
+        Auto,           ///< Take the avoid accidentals setting from #options::SmartShapeOptions::slurAvoidAccidentals. (Default value.)
+        Off,            ///< Do not use avoid accidentals behaviour.
+        On,             ///< Use avoid accidentals behaviour.
+        Invalid = -1    ///< May not be used, but exists as a possibility in the Finale app.
+    };
+
+    /**
+     * @enum SystemBreakType
+     * @brief How this shape breaks across systems. Represents the choice between "Make Horizontal Over System Break" and "Maintain Angle
+     * Over System Break" in the Finale U.I.
+     * @note Although this is presented in the xml as an enum, it appears to have only two values. There is some evidence that at one
+     * point the developers had intentions to expand to more options here, but it seems those plans never materialized.
+     */
+    enum class SystemBreakType
+    {
+        Same,           ///< System break honors #makeHorz setting over a system break. (Default)
+        Opposite,       ///< System break is the opposite of #makeHorz over a system break. So if
+                        ///< #makeHorz is true, this allows the system break to be angled. If
+                        ///< #makeHorz is false, this forces the system break to be horizontal.
+    };
+
+    /**
+     * @enum LyricTextType
+     * @brief The lyric text type if this is a lyrics smart shape.
+     */
+    enum class LyricTextType
+    {
+        None,           ///< The default, for when there is no lyrics text block.
+        Verse,          ///< The assignment is to a Verse lyrics text block.
+        Chorus,         ///< The assignment is to a Chorus lyrics text block.
+        Section,        ///< The assignment is to a Section lyrics text block.
+    };
+
+    ShapeType shapeType{};                          ///< Type of smart shape.
+    bool entryBased{};                              ///< Whether the shape is entry-based.
+    bool rotate{};                                  ///< Purpose unknown: always set for slurs.
+    bool noPresetShape{};                           ///< Legacy flag that may no longer be used.
+    bool makeHorz{};                                ///< "Make Horizontal"
+    bool noPushEndStart{};                          ///< Legacy flag that should always be false in modern files going back to at least Finale 2000.
+    bool makeVert{};                                ///< This option has no obvious setting in the Finale U.I. A plugin could perhaps set it, but whether it works is untested.
+    EngraverSlurState engraverSlurState{};          ///< The engraver slur setting if this is a slur.
+    SlurAvoidAccidentalsState slurAvoidAcciState{}; ///< The avoid accidentals settings if this is a slur.
+    SystemBreakType yBreakType{};                   ///< Whether a system break should honor #makeHorz or do its opposite.
+    std::shared_ptr<TerminationSeg> startTermSeg;   ///< Start termination segment.
+    std::shared_ptr<TerminationSeg> endTermSeg;     ///< End termination segment.
+    std::shared_ptr<smartshape::ControlPointAdjustment> fullCtlPtAdj; ///< If the shape is only on one staff system, this is where the manual edits are.
+    bool hidden{};                                  ///< Inverse of "Show" option.
     NoteNumber startNoteId{};                       ///< If non-zero, the specific note with the entry that this shape starts from. (xml node is `<startNoteID>`)
     NoteNumber endNoteId{};                         ///< If non-zero, the specific note with the entry that this shape ends on. (xml node is `<endNoteID>`)
     Cmper lineStyleId{};                            ///< If non-zero, the @ref SmartShapeCustomLine for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)
+    Cmper startLyricNum{};                          ///< The text block of the lyrics text if this is a word extension or hyphen smart shape.
+    Cmper endLyricNum{};                            ///< This value appears to be meaningless. It is often zero for word extensions or the same value as #startLyricNum for hyphens.
+                                                    ///< It can also have an apparent nonsense value (.e.g, "-2"). The meaning of this is not known. The Finale U.I. does not appear
+                                                    ///< to allow hyphen or word extensions between syllables from two different lyric blocks, so the need for start and end blocks
+                                                    ///< is unclear.
+    LyricTextType startLyricType{};                 ///< The type of lyrics block for #startLyricNum. (xml node is `<startLyricTag>`)
+    LyricTextType endLyricType{};                   ///< The type of lyrics block for #endLyricNum. The speculative comments at #endLyricNum also apply here.
+                                                    ///< This value has never been seen to be different than #startLyricNum unless endLyricNum is zero. (xml node is `<endLyricTag>`)
 
     /// @brief Calculates if the smart shape applies to the specified entry.
     ///
@@ -300,11 +367,14 @@ public:
         if (!endTermSeg) {
             endTermSeg = std::make_shared<TerminationSeg>(shared_from_this());
         }
+        if (!fullCtlPtAdj) {
+            fullCtlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(shared_from_this());
+        }
         startTermSeg->integrityCheck();
         endTermSeg->integrityCheck();
+        fullCtlPtAdj->integrityCheck();
     }
 
-    bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
     constexpr static std::string_view XmlNodeName = "smartShape"; ///< XML node name
     static const xml::XmlElementArray<SmartShape>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -552,7 +622,6 @@ public:
         }
     }
 
-    bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
     constexpr static std::string_view XmlNodeName = "centerShape"; ///< The XML node name for this type.
     static const xml::XmlElementArray<CenterShape>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

@@ -243,6 +243,31 @@ MUSX_XML_ENUM_MAPPING(SmartShape::ShapeType, {
     {"dashContourSlurAuto", SmartShape::ShapeType::DashContourSlurAuto},
 });
 
+MUSX_XML_ENUM_MAPPING(SmartShape::EngraverSlurState, {
+    // {"auto", SmartShape::EngraverSlurState::Auto}, // Default value, may not appear in XML.
+    {"off", SmartShape::EngraverSlurState::Off},
+    {"on", SmartShape::EngraverSlurState::On},
+});
+
+MUSX_XML_ENUM_MAPPING(SmartShape::SlurAvoidAccidentalsState, {
+    // {"auto", SmartShape::SlurAvoidAccidentalsState::Auto}, // Default value, may not appear in XML.
+    {"off", SmartShape::SlurAvoidAccidentalsState::Off},
+    {"on", SmartShape::SlurAvoidAccidentalsState::On},
+    {"invalid", SmartShape::SlurAvoidAccidentalsState::Invalid},
+});
+
+MUSX_XML_ENUM_MAPPING(SmartShape::SystemBreakType, {
+    // {"same", SystemBreakType::Same}, // Default value, may not appear in XML.
+    {"opposite", SmartShape::SystemBreakType::Opposite},
+});
+
+MUSX_XML_ENUM_MAPPING(SmartShape::LyricTextType, {
+    // {"none", SmartShape::LyricTextType::None}, // Default value, may not appear in XML.
+    {"verse", SmartShape::LyricTextType::Verse},
+    {"chorus", SmartShape::LyricTextType::Chorus},
+    {"section", SmartShape::LyricTextType::Section},
+});
+
 MUSX_XML_ENUM_MAPPING(SmartShapeCustomLine::LineStyle, {
     {"char", SmartShapeCustomLine::LineStyle::Char},
     {"solid", SmartShapeCustomLine::LineStyle::Solid},
@@ -923,14 +948,28 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
 MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"shapeType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->shapeType = toEnum<SmartShape::ShapeType>(e); }},
     {"entryBased", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->entryBased = populateBoolean(e, i); }},
+    {"rotate", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->rotate = populateBoolean(e, i); }},
+    {"noPresetShape", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->noPresetShape = populateBoolean(e, i); }},
+    {"makeHorz", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->makeHorz = populateBoolean(e, i); }},
+    {"noPushEndStart", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->noPushEndStart = populateBoolean(e, i); }},
+    {"makeVert", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->makeVert = populateBoolean(e, i); }},
+    {"engraverSlurState", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->engraverSlurState = toEnum<SmartShape::EngraverSlurState>(e); }},
+    {"slurAvoidAcciState", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->slurAvoidAcciState = toEnum<SmartShape::SlurAvoidAccidentalsState>(e); }},
+    {"yBreakType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->yBreakType = toEnum<SmartShape::SystemBreakType>(e); }},
     {"startTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
         { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i); }},
     {"endTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
         { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i); }},
+    {"fullCtlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
+        { i->fullCtlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::createAndPopulate(e, i); }},
     {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->hidden = populateBoolean(e, i); }},
     {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
+    {"startLyricNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startLyricNum = e->getTextAs<Cmper>(); }},
+    {"endLyricNum",   [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endLyricNum = e->getTextAs<Cmper>(); }},
+    {"startLyricTag", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startLyricType = toEnum<SmartShape::LyricTextType>(e); }},
+    {"endLyricTag",   [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endLyricType = toEnum<SmartShape::LyricTextType>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::CharParams, {
