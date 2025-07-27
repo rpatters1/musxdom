@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 project(musx)
 
@@ -20,6 +20,13 @@ message(STATUS "Musx C++ standard: ${CMAKE_CXX_STANDARD}")
 if (MSVC)
     add_compile_options(/bigobj)
 endif()
+
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
+include(${PROJECT_SOURCE_DIR}/cmake/GenerateFontMaps.cmake)
+generate_fontmap_headers()
+
+add_custom_target(generate-fontmaps DEPENDS ${FONTMAP_GENERATED_HEADERS})
 
 set(MUSX_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "Root directory of musx")
 
@@ -53,6 +60,9 @@ set(MUSX_SRC_FILES
 
 # Create a static library for the project
 add_library(musx STATIC ${MUSX_SRC_FILES})
+
+
+add_dependencies(musx generate-fontmaps)
 
 # Detect if we are building standalone or as part of a consuming project
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)

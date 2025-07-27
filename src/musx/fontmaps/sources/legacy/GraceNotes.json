@@ -1,0 +1,32 @@
+{
+	"accidentalQuarterToneSharp4": {
+		"codepoint": "U+E47E",
+		"legacyCodepoint": "64",
+		"description": ""
+	},
+	"tremolo1": {
+		"codepoint": "U+E220",
+		"legacyCodepoint": "124",
+		"description": ""
+	},
+	"tremolo2": {
+		"codepoint": "U+E221",
+		"legacyCodepoint": "199",
+		"description": ""
+	},
+	"tremolo3": {
+		"codepoint": "U+E222",
+		"legacyCodepoint": "200",
+		"description": ""
+	},
+	"tremolo4": {
+		"codepoint": "U+E223",
+		"legacyCodepoint": "230",
+		"description": ""
+	},
+	"accidentalQuarterToneFlat4": {
+		"codepoint": "U+E47F",
+		"legacyCodepoint": "245",
+		"description": ""
+	}
+}
