@@ -41,7 +41,9 @@ else()
 endif()
 
 # Add the include directory
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
 set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
@@ -60,7 +62,6 @@ set(MUSX_SRC_FILES
 
 # Create a static library for the project
 add_library(musx STATIC ${MUSX_SRC_FILES})
-
 
 add_dependencies(musx generate-fontmaps)
 
