@@ -33,6 +33,9 @@ namespace util {
 
 std::string EnigmaString::toU8(char32_t cp)
 {
+    if (cp == 0) {
+        return {};
+    }
     std::string result;
     if (cp <= 0x7F) {
         result += static_cast<char>(cp);
@@ -61,29 +64,30 @@ static const std::unordered_map<std::string_view, options::TextOptions::InsertSy
     { "dbsharp",    options::TextOptions::InsertSymbolType::DblSharp },
 };
 
-static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string>& getEnigmaAccidentalMap(EnigmaString::AccidentalStyle style)
+static const std::unordered_map<options::TextOptions::InsertSymbolType, char32_t>& getEnigmaAccidentalMap(EnigmaString::AccidentalStyle style)
 {
-    // Maps for SMuFL and plain text accidentals
-    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> smuflAccidentals = {
-        { options::TextOptions::InsertSymbolType::Flat,     EnigmaString::fromU8(u8"\uE260") }, // SMuFL character for flat
-        { options::TextOptions::InsertSymbolType::Sharp,    EnigmaString::fromU8(u8"\uE262") }, // SMuFL character for sharp
-        { options::TextOptions::InsertSymbolType::Natural,  EnigmaString::fromU8(u8"\uE261") }, // SMuFL character for natural
-        { options::TextOptions::InsertSymbolType::DblFlat,  EnigmaString::fromU8(u8"\uE264") }, // SMuFL double flat
-        { options::TextOptions::InsertSymbolType::DblSharp, EnigmaString::fromU8(u8"\uE263") }, // SMuFL double sharp
+    static const std::unordered_map<options::TextOptions::InsertSymbolType, char32_t> smuflAccidentals = {
+        { options::TextOptions::InsertSymbolType::Flat,     U'\uE260' }, // SMuFL flat
+        { options::TextOptions::InsertSymbolType::Sharp,    U'\uE262' }, // SMuFL sharp
+        { options::TextOptions::InsertSymbolType::Natural,  U'\uE261' }, // SMuFL natural
+        { options::TextOptions::InsertSymbolType::DblFlat,  U'\uE264' }, // SMuFL double flat
+        { options::TextOptions::InsertSymbolType::DblSharp, U'\uE263' }, // SMuFL double sharp
     };
-    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> unicodeAccidentals = {
-        { options::TextOptions::InsertSymbolType::Flat,     EnigmaString::fromU8(u8"\u266D") },   // Text flat: ♭
-        { options::TextOptions::InsertSymbolType::Sharp,    EnigmaString::fromU8(u8"\u266F") },   // Text sharp: ♯
-        { options::TextOptions::InsertSymbolType::Natural,  EnigmaString::fromU8(u8"\u266E") },   // Text natural: ♮
-        { options::TextOptions::InsertSymbolType::DblFlat,  EnigmaString::fromU8(u8"\u1D12B") },  // Text double flat: 𝄫
-        { options::TextOptions::InsertSymbolType::DblSharp, EnigmaString::fromU8(u8"\u1D12A") },  // Text double sharp: 𝄪
+
+    static const std::unordered_map<options::TextOptions::InsertSymbolType, char32_t> unicodeAccidentals = {
+        { options::TextOptions::InsertSymbolType::Flat,     U'♭' },  // U+266D
+        { options::TextOptions::InsertSymbolType::Sharp,    U'♯' },  // U+266F
+        { options::TextOptions::InsertSymbolType::Natural,  U'♮' },  // U+266E
+        { options::TextOptions::InsertSymbolType::DblFlat,  U'𝄫' },  // U+1D12B
+        { options::TextOptions::InsertSymbolType::DblSharp, U'𝄪' },  // U+1D12A
     };
-    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> asciiAccidentals = {
-        { options::TextOptions::InsertSymbolType::Flat,     "b"  }, // Plain text representation for flat
-        { options::TextOptions::InsertSymbolType::Sharp,    "#"  }, // Plain text representation for sharp
-        { options::TextOptions::InsertSymbolType::Natural,  ""   }, // Plain text representation for natural (none)
-        { options::TextOptions::InsertSymbolType::DblFlat,  "bb" }, // Plain text double flat
-        { options::TextOptions::InsertSymbolType::DblSharp, "x"  }, // Plain text double sharp
+
+    static const std::unordered_map<options::TextOptions::InsertSymbolType, char32_t> asciiAccidentals = {
+        { options::TextOptions::InsertSymbolType::Flat,     U'b'   }, // ASCII flat
+        { options::TextOptions::InsertSymbolType::Sharp,    U'#'   }, // ASCII sharp
+        { options::TextOptions::InsertSymbolType::Natural,  U'\0'  }, // ASCII natural (none)
+        { options::TextOptions::InsertSymbolType::DblFlat,  U'\0'  }, // ASCII double flat → handled as fallback?
+        { options::TextOptions::InsertSymbolType::DblSharp, U'x'   }, // ASCII double sharp
     };
 
     switch (style) {
@@ -335,7 +339,7 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                     const auto& accidentalMap = getEnigmaAccidentalMap(options.substitutionStyle);
                     auto it = accidentalMap.find(insertIt->second);
                     if (it != accidentalMap.end()) {
-                        addToBuf(it->second);
+                        addToBuf(toU8(it->second));
                         continue;
                     }
                     break;
