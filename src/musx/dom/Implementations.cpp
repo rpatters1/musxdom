@@ -3110,33 +3110,7 @@ PageCmper others::PartDefinition::calcAssignmentIdFromPageNumber(PageCmper pageI
 
 const percussion::PercussionNoteType& others::PercussionNoteInfo::getNoteType() const
 {
-    auto it = percussion::percussionNoteTypeMap.find(getBaseNoteTypeId());
-    if (it == percussion::percussionNoteTypeMap.end()) {
-        return percussion::kUnknownPercussionNoteType;
-    }
-    return it->second;
-}
-
-// ******************************
-// ***** PercussionNoteType *****
-// ******************************
-
-std::string percussion::PercussionNoteType::createName(unsigned orderId) const
-{
-    std::string result = std::string(rawName);
-    size_t pos = result.find("%g");
-    if (pos != std::string::npos) {
-        // Assume at most one occurrence of %g, which is the case with every element in `PercNoteTypes.txt` from Finale
-        result.erase(pos, 2);
-    }
-    const std::string target = "%d";
-    pos = result.find(target);
-    if (pos != std::string::npos) {
-        // Assume at most one occurrence of %d, which is the case with every element in `PercNoteTypes.txt` from Finale
-        const std::string insert = orderId ? " (" + std::to_string(orderId + 1) + ")" : std::string();
-        result.replace(pos, target.size(), insert);
-    }
-    return result;
+    return percussion::getPercussionNoteTypeFromId(getBaseNoteTypeId());
 }
 
 // *****************************
