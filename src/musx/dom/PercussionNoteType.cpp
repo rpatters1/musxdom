@@ -28,7 +28,7 @@ namespace dom {
 namespace percussion {
 
 /// @brief C++ version of the `PercNoteTypes.txt` CSV file bundled with the Finale app.
-inline const std::unordered_map<int, PercussionNoteType> percussionNoteTypeMap = {
+static const std::unordered_map<int, PercussionNoteType> percussionNoteTypeMap = {
 // Auxiliary
     { 6,   { 6,6,"Cowbell",5,56,101,1,false } },
     { 48,  { 48,6,"Cowbell%g Mute",5,-1,101,1,false } },
