@@ -58,7 +58,7 @@ enum class NoteType : Edu
     Maxima = 0x8000,
     Longa = 0x4000,
     Breve = 0x2000,
-    Whole = 0x1000,
+    Whole = EDU_PER_WHOLE_NOTE,
     Half = 0x0800,
     Quarter = 0x0400,
     Eighth = 0x0200,
