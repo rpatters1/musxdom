@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <string>
+#include <string_view>
 #include <unordered_map>
 
 namespace musx {
@@ -39,7 +39,7 @@ struct PercussionNoteType
 {
     int instrumentId;           ///< Unique ID for this percussion note type
     int parentInstrumentId;     ///< ID of the parent percussion instrument
-    std::string rawName;        ///< Raw name of the note type. May need to be massaged with group and order id.
+    const char* rawName;        ///< Raw name of the note type. May need to be massaged with group and order id.
     int defaultStaffPos;        ///< Default staff position for this note type, where 0 is the middle-C position of treble clef and up is positive.
     int generalMidi;            ///< General MIDI percussion mapping number or -1 if none
     int groupId;                ///< Group ID for note type grouping in Finale UI.

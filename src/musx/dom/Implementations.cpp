@@ -3123,7 +3123,7 @@ const percussion::PercussionNoteType& others::PercussionNoteInfo::getNoteType() 
 
 std::string percussion::PercussionNoteType::createName(unsigned orderId) const
 {
-    std::string result = rawName;
+    std::string result = std::string(rawName);
     size_t pos = result.find("%g");
     if (pos != std::string::npos) {
         // Assume at most one occurrence of %g, which is the case with every element in `PercNoteTypes.txt` from Finale
