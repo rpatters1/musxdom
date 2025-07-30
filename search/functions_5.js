@@ -16,7 +16,7 @@ var searchData=
   ['formattime_13',['formatTime',['../structmusx_1_1util_1_1DateTime.html#ac53c15b2cc28f2c6d62fce70701f52b1',1,'musx::util::DateTime']]],
   ['fraction_14',['Fraction',['../classmusx_1_1util_1_1Fraction.html#a3a95749410ef64c078d957fc4d659900',1,'musx::util::Fraction']]],
   ['frame_15',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html#a264bdcc5b32fb5a8455e0d5ecfd6783b',1,'musx::dom::others::Frame']]],
-  ['fromedu_16',['fromEdu',['../classmusx_1_1util_1_1Fraction.html#a5153046569e5a7afecef882fbb11b1ff',1,'musx::util::Fraction']]],
+  ['fromedu_16',['fromEdu',['../classmusx_1_1util_1_1Fraction.html#a924ed5b847651515fd88faa9862704c5',1,'musx::util::Fraction']]],
   ['frompercent_17',['fromPercent',['../classmusx_1_1util_1_1Fraction.html#a01e484cf2a0f4174404458089c5f611d',1,'musx::util::Fraction']]],
   ['frompositionornull_18',['fromPositionOrNull',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a9a83726fa8297e55071bedc330d71e6b',1,'musx::dom::EntryInfoPtr']]],
   ['fromu8_19',['fromU8',['../classmusx_1_1util_1_1EnigmaString.html#a13ea76fa4dcd68196d8a3a973da01d9e',1,'musx::util::EnigmaString']]],

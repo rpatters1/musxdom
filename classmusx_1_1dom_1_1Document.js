@@ -1,5 +1,6 @@
 var classmusx_1_1dom_1_1Document =
 [
+    [ "calcHasVaryingSystemStaves", "classmusx_1_1dom_1_1Document.html#abf79aabe5f131018df3561b9302b3585", null ],
     [ "calculatePageFromMeasure", "classmusx_1_1dom_1_1Document.html#a4ba17cf43981107d8c372748ec2c78fb", null ],
     [ "calculateSystemFromMeasure", "classmusx_1_1dom_1_1Document.html#adc7f8589844252ff2dbb11337947af41", null ],
     [ "createInstrumentMap", "classmusx_1_1dom_1_1Document.html#ad7512a1daf902e8580a8b4418a31ded8", null ],

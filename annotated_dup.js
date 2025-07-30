@@ -162,6 +162,11 @@ var annotated_dup =
         [ "percussion", null, [
           [ "PercussionNoteType", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType" ]
         ] ],
+        [ "smartshape", null, [
+          [ "ControlPointAdjustment", "classmusx_1_1dom_1_1smartshape_1_1ControlPointAdjustment.html", "classmusx_1_1dom_1_1smartshape_1_1ControlPointAdjustment" ],
+          [ "EndPoint", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html", "classmusx_1_1dom_1_1smartshape_1_1EndPoint" ],
+          [ "EndPointAdjustment", "classmusx_1_1dom_1_1smartshape_1_1EndPointAdjustment.html", "classmusx_1_1dom_1_1smartshape_1_1EndPointAdjustment" ]
+        ] ],
         [ "texts", "namespacemusx_1_1dom_1_1texts.html", [
           [ "BlockText", "classmusx_1_1dom_1_1texts_1_1BlockText.html", "classmusx_1_1dom_1_1texts_1_1BlockText" ],
           [ "BookmarkText", "classmusx_1_1dom_1_1texts_1_1BookmarkText.html", "classmusx_1_1dom_1_1texts_1_1BookmarkText" ],
@@ -189,6 +194,12 @@ var annotated_dup =
         [ "FontInfo", "classmusx_1_1dom_1_1FontInfo.html", "classmusx_1_1dom_1_1FontInfo" ],
         [ "InstrumentInfo", "structmusx_1_1dom_1_1InstrumentInfo.html", "structmusx_1_1dom_1_1InstrumentInfo" ],
         [ "integrity_error", "classmusx_1_1dom_1_1integrity__error.html", null ],
+        [ "is_pool_type", "structmusx_1_1dom_1_1is__pool__type.html", null ],
+        [ "is_pool_type< DetailsPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01DetailsPool_00_01T_01_4.html", null ],
+        [ "is_pool_type< EntryPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01EntryPool_00_01T_01_4.html", null ],
+        [ "is_pool_type< OptionsPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01OptionsPool_00_01T_01_4.html", null ],
+        [ "is_pool_type< OthersPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01OthersPool_00_01T_01_4.html", null ],
+        [ "is_pool_type< TextsPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01TextsPool_00_01T_01_4.html", null ],
         [ "KeySignature", "classmusx_1_1dom_1_1KeySignature.html", "classmusx_1_1dom_1_1KeySignature" ],
         [ "LyricsSyllableInfo", "classmusx_1_1dom_1_1LyricsSyllableInfo.html", "classmusx_1_1dom_1_1LyricsSyllableInfo" ],
         [ "Note", "classmusx_1_1dom_1_1Note.html", "classmusx_1_1dom_1_1Note" ],
@@ -215,7 +226,7 @@ var annotated_dup =
         [ "OthersFactory", "classmusx_1_1factory_1_1OthersFactory.html", null ],
         [ "PoolFactory", "classmusx_1_1factory_1_1PoolFactory.html", null ],
         [ "TextsFactory", "classmusx_1_1factory_1_1TextsFactory.html", null ],
-        [ "TypeRegistry", "classmusx_1_1factory_1_1TypeRegistry.html", null ],
+        [ "TypeRegistry", "classmusx_1_1factory_1_1TypeRegistry.html", "classmusx_1_1factory_1_1TypeRegistry" ],
         [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ]
       ] ],
       [ "util", null, [

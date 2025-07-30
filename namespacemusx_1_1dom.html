@@ -177,6 +177,24 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html">integrity_error</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception for integrity errors. (Used when <code>MUSX_THROW_ON_INTEGRITY_CHECK_FAIL</code> is defined.)  <a href="classmusx_1_1dom_1_1integrity__error.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1is__pool__type.html">is_pool_type</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type trait to determine if a class in a given pool.  <a href="structmusx_1_1dom_1_1is__pool__type.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1is__pool__type_3_01DetailsPool_00_01T_01_4.html">is_pool_type&lt; DetailsPool, T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pool type specialization for RegisteredDetails.  <a href="structmusx_1_1dom_1_1is__pool__type_3_01DetailsPool_00_01T_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1is__pool__type_3_01EntryPool_00_01T_01_4.html">is_pool_type&lt; EntryPool, T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pool type specialization for RegisteredEntries.  <a href="structmusx_1_1dom_1_1is__pool__type_3_01EntryPool_00_01T_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1is__pool__type_3_01OptionsPool_00_01T_01_4.html">is_pool_type&lt; OptionsPool, T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pool type specialization for RegisteredOptions.  <a href="structmusx_1_1dom_1_1is__pool__type_3_01OptionsPool_00_01T_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1is__pool__type_3_01OthersPool_00_01T_01_4.html">is_pool_type&lt; OthersPool, T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pool type specialization for RegisteredOthers.  <a href="structmusx_1_1dom_1_1is__pool__type_3_01OthersPool_00_01T_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1is__pool__type_3_01TextsPool_00_01T_01_4.html">is_pool_type&lt; TextsPool, T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pool type specialization for RegisteredTexts.  <a href="structmusx_1_1dom_1_1is__pool__type_3_01TextsPool_00_01T_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared key signature class that is contained in other classes. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">others::Measure</a>)  <a href="classmusx_1_1dom_1_1KeySignature.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -333,7 +351,7 @@ Enumerations</h2></td></tr>
 &#160;&#160;<b>Maxima</b> = 0x8000
 , <b>Longa</b> = 0x4000
 , <b>Breve</b> = 0x2000
-, <b>Whole</b> = 0x1000
+, <b>Whole</b> = EDU_PER_WHOLE_NOTE
 , <br />
 &#160;&#160;<b>Half</b> = 0x0800
 , <b>Quarter</b> = 0x0400
@@ -451,6 +469,11 @@ constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EFIX_PER_
 constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_CUE_PERCENTAGE</b> = 90</td></tr>
 <tr class="memdesc:a31c92a4751443e096b5a99100828f6e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arbitrary value that determines the max scaling value for cue notes. This could be configurable in the future. <br /></td></tr>
 <tr class="separator:a31c92a4751443e096b5a99100828f6e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6636eac92fb7f81ee37826d6de646e68" id="r_a6636eac92fb7f81ee37826d6de646e68"><td class="memTemplParams" colspan="2"><a id="a6636eac92fb7f81ee37826d6de646e68" name="a6636eac92fb7f81ee37826d6de646e68"></a>
+template&lt;typename Pool , typename T &gt; </td></tr>
+<tr class="memitem:a6636eac92fb7f81ee37826d6de646e68"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>is_pool_type_v</b> = <a class="el" href="structmusx_1_1dom_1_1is__pool__type.html">is_pool_type</a>&lt;Pool, T&gt;::value</td></tr>
+<tr class="memdesc:a6636eac92fb7f81ee37826d6de646e68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Value shortcut for #is_pool_type. <br /></td></tr>
+<tr class="separator:a6636eac92fb7f81ee37826d6de646e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The DOM (document object model) for musx files. </p>

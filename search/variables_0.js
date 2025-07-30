@@ -23,7 +23,7 @@ var searchData=
   ['accordion_20',['Accordion',['../namespacemusx_1_1dom_1_1uuid.html#a609f7d79d8505094675292ef01e85250',1,'musx::dom::uuid']]],
   ['acousticbass_21',['AcousticBass',['../namespacemusx_1_1dom_1_1uuid.html#ad6a235691f62ad6f6516437e6801acbb',1,'musx::dom::uuid']]],
   ['acousticguitar_22',['AcousticGuitar',['../namespacemusx_1_1dom_1_1uuid.html#ae3e9188823c10b6cfb043fe9a4c84ecc',1,'musx::dom::uuid']]],
-  ['active_23',['active',['../classmusx_1_1dom_1_1details_1_1CenterShape_1_1EndPointAdjustment.html#aae8c8c880694e94ed0bfa4e29a155fc8',1,'musx::dom::details::CenterShape::EndPointAdjustment::active'],['../classmusx_1_1dom_1_1others_1_1SmartShape_1_1EndPointAdjustment.html#ae20b40fb505674e0b40577efa8341664',1,'musx::dom::others::SmartShape::EndPointAdjustment::active']]],
+  ['active_23',['active',['../classmusx_1_1dom_1_1smartshape_1_1EndPointAdjustment.html#a5d5b62e6617fee21ce419d26accb2912',1,'musx::dom::smartshape::EndPointAdjustment::active'],['../classmusx_1_1dom_1_1smartshape_1_1ControlPointAdjustment.html#ae0adba6fc579bb2737d209704b670552',1,'musx::dom::smartshape::ControlPointAdjustment::active']]],
   ['actualduration_24',['actualDuration',['../classmusx_1_1dom_1_1EntryInfo.html#adb06eec5ee188c8840d9ed4f794a3951',1,'musx::dom::EntryInfo']]],
   ['addperiod_25',['addPeriod',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a7e97132fb6deb21611d58f8ddbf88235',1,'musx::dom::options::RepeatOptions']]],
   ['addtomenu_26',['addToMenu',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#af2c60ab875aa9b7073e3419fdb760455',1,'musx::dom::others::StaffStyle']]],

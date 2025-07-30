@@ -126,7 +126,7 @@ var searchData=
   ['brackstyle_123',['brackstyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a12434644fd0e32d4436405857799ea9a',1,'musx::dom::options::TupletOptions::brackStyle'],['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a5df6e1e8938c53dd905324debfbd3fd6',1,'musx::dom::details::TupletDef::brackStyle']]],
   ['brakedrum_124',['BrakeDrum',['../namespacemusx_1_1dom_1_1uuid.html#a08c7e3063e1edf84b33f6056f3f87879',1,'musx::dom::uuid']]],
   ['brasssection_125',['BrassSection',['../namespacemusx_1_1dom_1_1uuid.html#a54ed685a6aedc83e3314bb614a270fe8',1,'musx::dom::uuid']]],
-  ['breakadj_126',['breakAdj',['../classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg.html#ab1bbccd3c55fef6ca25845f177a843f3',1,'musx::dom::others::SmartShape::TerminationSeg']]],
+  ['breakadj_126',['breakAdj',['../classmusx_1_1dom_1_1others_1_1SmartShape_1_1TerminationSeg.html#af0cd8905a8270580aaa13f6578113c5e',1,'musx::dom::others::SmartShape::TerminationSeg']]],
   ['breakbracket_127',['breakbracket',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#ac8cbd7bfff1b94959622456fc0582e05',1,'musx::dom::details::TupletDef::breakBracket'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#ae3c0d06b0e3021f844df9f45d117c4fa',1,'musx::dom::options::TupletOptions::breakBracket']]],
   ['breakforkeysigs_128',['breakForKeySigs',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a1f9eccc2cfa6d61b630639a0a69176c7',1,'musx::dom::options::TieOptions']]],
   ['breakfortimesigs_129',['breakForTimeSigs',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad544aef35a9f0ef7a9ba3206364aa903',1,'musx::dom::options::TieOptions']]],

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['dashedparams_0',['DashedParams',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1DashedParams.html#a71c88e28d1d886815ceb072fe34f6cd5',1,'musx::dom::others::SmartShapeCustomLine::DashedParams']]],
-  ['denominator_1',['denominator',['../classmusx_1_1util_1_1Fraction.html#af53e537bc24e3db971832947180f2842',1,'musx::util::Fraction']]],
+  ['denominator_1',['denominator',['../classmusx_1_1util_1_1Fraction.html#a40e9fc0ad4a437eb1fdcc450021943de',1,'musx::util::Fraction']]],
   ['description_2',['description',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#adef96b2158be0c4efa453cb0d9a0d118',1,'musx::dom::ObjectPool::ObjectKey']]],
   ['detailsarray_3',['detailsarray',['../classmusx_1_1dom_1_1DetailsArray.html#a5f738a6c0374feb9337aca6c0dab292f',1,'musx::dom::DetailsArray::DetailsArray()'],['../classmusx_1_1dom_1_1details_1_1ClefOctaveFlats.html#a5f738a6c0374feb9337aca6c0dab292f',1,'musx::dom::details::ClefOctaveFlats::DetailsArray()'],['../classmusx_1_1dom_1_1details_1_1ClefOctaveSharps.html#a5f738a6c0374feb9337aca6c0dab292f',1,'musx::dom::details::ClefOctaveSharps::DetailsArray()']]],
   ['detailsbase_4',['DetailsBase',['../classmusx_1_1dom_1_1DetailsBase.html#a70f59561099bae5b2b75fe668812fb9b',1,'musx::dom::DetailsBase']]],

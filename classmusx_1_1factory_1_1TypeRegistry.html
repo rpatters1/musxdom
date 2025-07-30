@@ -93,7 +93,9 @@ $(document).ready(function(){initNavTree('classmusx_1_1factory_1_1TypeRegistry.h
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classmusx_1_1factory_1_1TypeRegistry-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::factory::TypeRegistry&lt; Types &gt; Class Template Reference</div></div>
 </div><!--header-->
@@ -104,12 +106,25 @@ $(document).ready(function(){initNavTree('classmusx_1_1factory_1_1TypeRegistry.h
 
 <p><code>#include &lt;<a class="el" href="TypeRegistry_8h_source.html">TypeRegistry.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html">is_registered_type</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine at compile-time if type T is a class in this registry.  <a href="structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aee737a2017ce16eff12504e47596d9f1" id="r_aee737a2017ce16eff12504e47596d9f1"><td class="memTemplParams" colspan="2">template&lt;typename PoolPtr , typename... Args&gt; </td></tr>
 <tr class="memitem:aee737a2017ce16eff12504e47596d9f1"><td class="memTemplItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html#aee737a2017ce16eff12504e47596d9f1">createInstance</a> (const PoolPtr &amp;pool, const <a class="el" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a> &amp;node, <a class="el" href="classmusx_1_1factory_1_1ElementLinker.html">ElementLinker</a> &amp;elementLinker, const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, Args &amp;&amp;... args)</td></tr>
 <tr class="memdesc:aee737a2017ce16eff12504e47596d9f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an instance of the registered type corresponding to the provided node name.  <br /></td></tr>
 <tr class="separator:aee737a2017ce16eff12504e47596d9f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:aaeb2b9943476ce3331e3e7cdbfde4043" id="r_aaeb2b9943476ce3331e3e7cdbfde4043"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aaeb2b9943476ce3331e3e7cdbfde4043"><td class="memTemplItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html#aaeb2b9943476ce3331e3e7cdbfde4043">is_registered_type_v</a> = <a class="el" href="structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html">is_registered_type</a>&lt;T&gt;::value</td></tr>
+<tr class="memdesc:aaeb2b9943476ce3331e3e7cdbfde4043"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shorthand to get the value of #is_registered_type.  <br /></td></tr>
+<tr class="separator:aaeb2b9943476ce3331e3e7cdbfde4043"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename... Types&gt;<br />
@@ -198,6 +213,41 @@ template&lt;typename PoolPtr , typename... Args&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A shared pointer to the created instance of the base type, or nullptr if not found. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aaeb2b9943476ce3331e3e7cdbfde4043" name="aaeb2b9943476ce3331e3e7cdbfde4043"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaeb2b9943476ce3331e3e7cdbfde4043">&#9670;&#160;</a></span>is_registered_type_v</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... Types&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html">musx::factory::TypeRegistry</a>&lt; Types &gt;::is_registered_type_v = <a class="el" href="structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html">is_registered_type</a>&lt;T&gt;::value</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Shorthand to get the value of #is_registered_type. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The class to check. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

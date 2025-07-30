@@ -32,6 +32,7 @@ var searchData=
   ['ascii_29',['Ascii',['../classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31',1,'musx::util::EnigmaString']]],
   ['asgroup_30',['AsGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cda48060aa7465ec95ec6e9fd7a8e609e04',1,'musx::dom::details::StaffGroup']]],
   ['augdots_31',['AugDots',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aabb52f098e1017a99bf6fee165dbd2175',1,'musx::dom::options::FontOptions']]],
-  ['automatic_32',['Automatic',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a3d5fb29e48c2b11a942457e49d5d9a8ba086247a9b57fde6eefee2a0c4752242d',1,'musx::dom::options::MusicSpacingOptions']]],
-  ['autonotestem_33',['AutoNoteStem',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ac7293e071062ccde1f4c6d9de9cecd6ea61bc1fc4173f1aaa6d301ddd3fc2da33',1,'musx::dom::others::ArticulationDef']]]
+  ['auto_32',['auto',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a20422aebb4bbb4adb8330aed4bf29d51a06b9281e396db002010bde1de57262eb',1,'musx::dom::others::SmartShape::Auto'],['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a401ee7c12c872ce9f039ab9994a6708ba06b9281e396db002010bde1de57262eb',1,'musx::dom::others::SmartShape::Auto']]],
+  ['automatic_33',['Automatic',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a3d5fb29e48c2b11a942457e49d5d9a8ba086247a9b57fde6eefee2a0c4752242d',1,'musx::dom::options::MusicSpacingOptions']]],
+  ['autonotestem_34',['AutoNoteStem',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ac7293e071062ccde1f4c6d9de9cecd6ea61bc1fc4173f1aaa6d301ddd3fc2da33',1,'musx::dom::others::ArticulationDef']]]
 ];

@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['verticalalignment_0',['VerticalAlignment',['../classmusx_1_1dom_1_1options_1_1TextOptions.html#a7e1e7080f6cc6710d79429f7b7a83021',1,'musx::dom::options::TextOptions']]],
-  ['verticalmeasexpralign_1',['VerticalMeasExprAlign',['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371',1,'musx::dom::others']]]
+  ['tabslideconnectstyletype_0',['TabSlideConnectStyleType',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a518fb0b39dfee6bd61b31d42c7d4e03c',1,'musx::dom::options::SmartShapeOptions']]],
+  ['textencoding_1',['TextEncoding',['../namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391',1,'musx::dom::header']]],
+  ['textjustify_2',['TextJustify',['../classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3',1,'musx::dom::options::TextOptions']]],
+  ['texttype_3',['texttype',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a532d8e8f86ade9e69fc3384ebbbeb775',1,'musx::dom::others::TextBlock::TextType'],['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2a',1,'musx::dom::texts::FileInfoText::TextType']]],
+  ['timeprecision_4',['TimePrecision',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a7f9e41dc1e40505990951abfcf894cd1',1,'musx::dom::others::MeasureNumberRegion']]]
 ];

@@ -10,7 +10,7 @@ var namespacemusx_1_1factory =
     [ "OthersFactory", "classmusx_1_1factory_1_1OthersFactory.html", null ],
     [ "PoolFactory", "classmusx_1_1factory_1_1PoolFactory.html", null ],
     [ "TextsFactory", "classmusx_1_1factory_1_1TextsFactory.html", null ],
-    [ "TypeRegistry", "classmusx_1_1factory_1_1TypeRegistry.html", null ],
+    [ "TypeRegistry", "classmusx_1_1factory_1_1TypeRegistry.html", "classmusx_1_1factory_1_1TypeRegistry" ],
     [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
     [ "RegisteredDetails", "namespacemusx_1_1factory.html#ad8bbbd766b4ff7b47d7cc1fee12c9825", null ],
     [ "RegisteredEntries", "namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b", null ],

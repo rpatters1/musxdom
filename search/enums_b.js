@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['notationstyle_0',['NotationStyle',['../classmusx_1_1dom_1_1others_1_1Staff.html#a1e8b0e96deee5cbeb3f5bb82416d6cf6',1,'musx::dom::others::Staff']]],
-  ['notename_1',['NoteName',['../namespacemusic__theory.html#acb68e55d250cfd1ba7a7d5ca0bcbb869',1,'music_theory']]],
-  ['notetype_2',['NoteType',['../namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312',1,'musx::dom']]],
-  ['numberstyle_3',['NumberStyle',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcd',1,'musx::dom::options::TupletOptions']]]
+  ['manualpositioning_0',['ManualPositioning',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a8ccf7f18be6c0552e426fbb788b8a402',1,'musx::dom::options::MusicSpacingOptions']]],
+  ['mixedstemdirection_1',['MixedStemDirection',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aaceacef983669122a11ea7986681a0ed',1,'musx::dom::options::TieOptions']]]
 ];

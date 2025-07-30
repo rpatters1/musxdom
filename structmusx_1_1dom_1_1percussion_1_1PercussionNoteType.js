@@ -8,5 +8,5 @@ var structmusx_1_1dom_1_1percussion_1_1PercussionNoteType =
     [ "groupId", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#ad3b5fb88c7561bcec28f592c9e9b3081", null ],
     [ "instrumentId", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#aeaed1050261f2cb3b0f6ba2c6b8c8427", null ],
     [ "parentInstrumentId", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#a5eac2b7120a8cf60f9b6aef64c1efd1c", null ],
-    [ "rawName", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#a6c5363938c84a4cc97833a3569e9da4d", null ]
+    [ "rawName", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#a095f3a424a82de980c2a059dceaf66c5", null ]
 ];
