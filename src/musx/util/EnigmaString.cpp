@@ -200,6 +200,25 @@ bool EnigmaString::parseStyleCommand(std::vector<std::string> components, Enigma
     return false;
 }
 
+std::optional<options::AccidentalInsertSymbolType> EnigmaString::commandIsAccidentalType(std::string_view commandText)
+{
+    using AcciSymType = options::AccidentalInsertSymbolType;
+
+    static const std::unordered_map<std::string_view, AcciSymType> acciInsertMap{
+        { "flat",       AcciSymType::Flat },
+        { "natural",    AcciSymType::Natural },
+        { "sharp",      AcciSymType::Sharp },
+        { "dbflat",     AcciSymType::DblFlat },
+        { "dbsharp",    AcciSymType::DblSharp },
+    };
+
+    const auto it = acciInsertMap.find(commandText);
+    if (it != acciInsertMap.end()) {
+        return it->second;
+    }
+    return std::nullopt;
+}
+
 bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, Cmper forPartId, const std::string& rawText,
     const TextChunkCallback& onText, const TextInsertCallback& onInsert, const EnigmaParsingOptions& options,
     const EnigmaParsingContext* parsingContext, const EnigmaStyles& startingStyles)
@@ -210,16 +229,8 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
     std::string remaining = rawText;
     std::optional<std::string> textBuffer;
 
-    using AcciSymType = options::TextOptions::InsertSymbolType;
+    using AcciSymType = options::AccidentalInsertSymbolType;
     using AcciSymValue = std::tuple<char32_t, char32_t, std::string_view>; // smufl, unicode, ascii
-
-    static const std::unordered_map<std::string_view, AcciSymType> acciInsertMap {
-        { "flat",       AcciSymType::Flat },
-        { "natural",    AcciSymType::Natural },
-        { "sharp",      AcciSymType::Sharp },
-        { "dbflat",     AcciSymType::DblFlat },
-        { "dbsharp",    AcciSymType::DblSharp },
-    };
 
     static const std::unordered_map<AcciSymType, AcciSymValue> accidentalSymbols {
         { AcciSymType::Flat,     { U'\uE260', U'\u266D', "b"   } }, // SMuFL flat, Unicode flat ♭, ASCII "b"
@@ -308,12 +319,11 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
             continue;
         }
 
-        auto insertIt = acciInsertMap.find(components[0]);
-        if (insertIt != acciInsertMap.end()) {
+        if (auto accidentalType = commandIsAccidentalType(components[0])) {
             switch (options.insertHandling) {
                 case AccidentalInsertHandling::Substitute:
                 {
-                    auto it = accidentalSymbols.find(insertIt->second);
+                    auto it = accidentalSymbols.find(accidentalType.value());
                     if (it != accidentalSymbols.end()) {
                         const auto [smufl, ucode, asciiStr] = it->second;
                         switch (options.substitutionStyle) {
@@ -336,7 +346,7 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
                 case AccidentalInsertHandling::ParseToGlyphs:
                 {
                     if (const auto textOptions = document->getOptions()->get<options::TextOptions>()) {
-                        const auto& acciDataIt = textOptions->symbolInserts.find(insertIt->second);
+                        const auto& acciDataIt = textOptions->symbolInserts.find(accidentalType.value());
                         if (acciDataIt != textOptions->symbolInserts.end()) {
                             EnigmaStyles acciStyles(document);
                             const auto& insertInfo = acciDataIt->second;

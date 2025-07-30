@@ -1364,6 +1364,17 @@ public:
     static const xml::XmlElementArray<StemOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/// @enum AccidentalInsertSymbolType
+/// @brief Insert symbol types for accidentals
+enum class AccidentalInsertSymbolType
+{
+    Sharp,
+    Flat,
+    Natural,
+    DblSharp,
+    DblFlat
+};
+
 /**
  * @class TextOptions
  * @brief Options controlling text rendering in the musx file. Many of these options are default values that are inserted
@@ -1422,17 +1433,6 @@ public:
         Abbrev      ///< Abbreviated date format, based on locale. US format is Mon DD, YYYY.
     };
 
-    /// @enum InsertSymbolType
-    /// @brief Insert symbol types
-    enum class InsertSymbolType
-    {
-        Sharp,
-        Flat,
-        Natural,
-        DblSharp,
-        DblFlat
-    };
-
     int textLineSpacingPercent{};                 ///< "Line Spacing: Automatic" percent value
     bool showTimeSeconds{};                       ///< "Include Seconds in Time Stamp"
     DateFormat dateFormat{};                      ///< "Date Format"
@@ -1473,7 +1473,7 @@ public:
         static const xml::XmlElementArray<InsertSymbolInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
-    std::unordered_map<InsertSymbolType, std::shared_ptr<InsertSymbolInfo>> symbolInserts; ///< Insert symbol information map
+    std::unordered_map<AccidentalInsertSymbolType, std::shared_ptr<InsertSymbolInfo>> symbolInserts; ///< Insert symbol information map
 
     constexpr static std::string_view XmlNodeName = "textOptions"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

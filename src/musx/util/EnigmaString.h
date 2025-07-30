@@ -37,6 +37,11 @@ namespace dom {
 class FontInfo;
 class Document;
 class TextsBase;
+
+namespace options {
+enum class AccidentalInsertSymbolType;
+}
+
 } // namespace dom
 
 namespace util {
@@ -281,7 +286,10 @@ public:
 
     /** @brief Returns true if the enigma string starts with a style insert. */
     static bool startsWithStyleCommand(const std::string& text);
-    
+
+    /// @brief Returns the accidental insert symbol type if the input command is an accidental insert
+    static std::optional<dom::options::AccidentalInsertSymbolType> commandIsAccidentalType(std::string_view commandText);
+
     /**
      * @brief Parses an enigma text insert into its constituent components.
      *

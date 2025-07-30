@@ -306,12 +306,12 @@ MUSX_XML_ENUM_MAPPING(TextOptions::TextJustify, {
     {"forcedFull", TextOptions::TextJustify::ForcedFull}
 });
 
-MUSX_XML_ENUM_MAPPING(TextOptions::InsertSymbolType, {
-    {"sharp",    TextOptions::InsertSymbolType::Sharp},
-    {"flat",     TextOptions::InsertSymbolType::Flat},
-    {"natural",  TextOptions::InsertSymbolType::Natural},
-    {"dblSharp", TextOptions::InsertSymbolType::DblSharp},
-    {"dblFlat",  TextOptions::InsertSymbolType::DblFlat}
+MUSX_XML_ENUM_MAPPING(AccidentalInsertSymbolType, {
+    {"sharp",    AccidentalInsertSymbolType::Sharp},
+    {"flat",     AccidentalInsertSymbolType::Flat},
+    {"natural",  AccidentalInsertSymbolType::Natural},
+    {"dblSharp", AccidentalInsertSymbolType::DblSharp},
+    {"dblFlat",  AccidentalInsertSymbolType::DblFlat}
 });
 
 MUSX_XML_ENUM_MAPPING(TieOptions::SecondsPlacement, {
