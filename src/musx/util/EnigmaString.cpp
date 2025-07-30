@@ -222,11 +222,11 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
     };
 
     static const std::unordered_map<AcciSymType, AcciSymValue> accidentalSymbols {
-        { AcciSymType::Flat,     { U'\uE260', U'♭', "b"   } }, // SMuFL flat, Unicode flat, ASCII "b"
-        { AcciSymType::Natural,  { U'\uE261', U'♮', ""    } }, // SMuFL natural, Unicode natural, no ASCII
-        { AcciSymType::Sharp,    { U'\uE262', U'♯', "#"   } }, // SMuFL sharp, Unicode sharp, ASCII "#"
-        { AcciSymType::DblFlat,  { U'\uE264', U'𝄫', "bb"  } }, // SMuFL double flat, Unicode double flat, "bb"
-        { AcciSymType::DblSharp, { U'\uE263', U'𝄪', "x"   } }, // SMuFL double sharp, Unicode double sharp, ASCII "x"
+        { AcciSymType::Flat,     { U'\uE260', U'\u266D', "b"   } }, // SMuFL flat, Unicode flat ♭, ASCII "b"
+        { AcciSymType::Natural,  { U'\uE261', U'\u266E', ""    } }, // SMuFL natural, Unicode natural ♮, no ASCII
+        { AcciSymType::Sharp,    { U'\uE262', U'\u266F', "#"   } }, // SMuFL sharp, Unicode sharp ♯, ASCII "#"
+        { AcciSymType::DblFlat,  { U'\uE264', U'\U0001D12B', "bb"  } }, // SMuFL double flat, Unicode double flat 𝄫, ASCII "bb"
+        { AcciSymType::DblSharp, { U'\uE263', U'\U0001D12A', "x"   } }, // SMuFL double sharp, Unicode double sharp 𝄪, ASCII "x"
     };
 
     auto addToBuf = [&](const std::string_view text) {

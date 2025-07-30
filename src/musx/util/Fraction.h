@@ -126,7 +126,12 @@ public:
     /**
      * @brief Calculates duration as a fraction of a whole note
      */
-    constexpr dom::Edu calcEduDuration() const { return dom::Edu(std::lround(double(numerator() * EDU_PER_WHOLE_NOTE) / double(denominator()))); }
+    constexpr dom::Edu calcEduDuration() const {
+        const int num = numerator() * EDU_PER_WHOLE_NOTE;
+        const int den = denominator();
+        const double div = double(num) / double(den);
+        return dom::Edu(static_cast<int>(div + (div >= 0.0 ? 0.5 : -0.5)));
+    }
 
     /**
      * @brief Converts the fraction to floating point double.
