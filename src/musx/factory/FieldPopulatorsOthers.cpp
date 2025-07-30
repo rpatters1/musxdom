@@ -27,6 +27,7 @@ namespace musx {
 namespace factory {
 
 using namespace ::musx::xml;
+using namespace ::musx::dom::smartshape;
 using namespace ::musx::dom::others;
 
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
@@ -153,6 +154,37 @@ MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
     {"vertMode", ShapeDef::InstructionType::VerticalMode},
 });
 
+MUSX_XML_ENUM_MAPPING(DirectionType, {
+    // {"none", DirectionType::None}, // Default value, may not appear in XML.
+    {"under", DirectionType::Under},
+    {"over", DirectionType::Over},
+});
+
+MUSX_XML_ENUM_MAPPING(EntryConnectionType, {
+    {"headLeftTop", EntryConnectionType::HeadLeftTop}, // Default value, may not appear in XML.
+    {"headRightTop", EntryConnectionType::HeadRightTop},
+    {"headRightBottom", EntryConnectionType::HeadRightBottom},
+    {"headLeftBottom", EntryConnectionType::HeadLeftBottom},
+    {"stemLeftTop", EntryConnectionType::StemLeftTop},
+    {"stemRightTop", EntryConnectionType::StemRightTop},
+    {"stemRightBottom", EntryConnectionType::StemRightBottom},
+    {"stemLeftBottom", EntryConnectionType::StemLeftBottom},
+    {"noteLeftTop", EntryConnectionType::NoteLeftTop},
+    {"noteRightTop", EntryConnectionType::NoteRightTop},
+    {"noteRightBottom", EntryConnectionType::NoteRightBottom},
+    {"noteLeftBottom", EntryConnectionType::NoteLeftBottom},
+    {"noteLeftCenter", EntryConnectionType::NoteLeftCenter},
+    {"noteRightCenter", EntryConnectionType::NoteRightCenter},
+    {"lyricRightCenter", EntryConnectionType::LyricRightCenter},
+    {"lyricLeftCenter", EntryConnectionType::LyricLeftCenter},
+    {"lyricRightBottom", EntryConnectionType::LyricRightBottom},
+    {"headRightLyrBaseline", EntryConnectionType::HeadRightLyricBaseline},
+    {"dotRightLyrBaseline", EntryConnectionType::DotRightLyricBaseline},
+    {"durationLyrBaseline", EntryConnectionType::DurationLyricBaseline},
+    {"systemLeft", EntryConnectionType::SystemLeft},
+    {"systemRight", EntryConnectionType::SystemRight},
+});
+
 MUSX_XML_ENUM_MAPPING(ShapeDef::ShapeType, {
     {"other", ShapeDef::ShapeType::Other}, // Default value, may not appear in XML, but the Finale binary contains the string.
     {"articulation", ShapeDef::ShapeType::Articulation},
@@ -209,6 +241,31 @@ MUSX_XML_ENUM_MAPPING(SmartShape::ShapeType, {
     {"dashContourSlurDown", SmartShape::ShapeType::DashContourSlurDown},
     {"dashContourSlurUp", SmartShape::ShapeType::DashContourSlurUp},
     {"dashContourSlurAuto", SmartShape::ShapeType::DashContourSlurAuto},
+});
+
+MUSX_XML_ENUM_MAPPING(SmartShape::EngraverSlurState, {
+    // {"auto", SmartShape::EngraverSlurState::Auto}, // Default value, may not appear in XML.
+    {"off", SmartShape::EngraverSlurState::Off},
+    {"on", SmartShape::EngraverSlurState::On},
+});
+
+MUSX_XML_ENUM_MAPPING(SmartShape::SlurAvoidAccidentalsState, {
+    // {"auto", SmartShape::SlurAvoidAccidentalsState::Auto}, // Default value, may not appear in XML.
+    {"off", SmartShape::SlurAvoidAccidentalsState::Off},
+    {"on", SmartShape::SlurAvoidAccidentalsState::On},
+    {"invalid", SmartShape::SlurAvoidAccidentalsState::Invalid},
+});
+
+MUSX_XML_ENUM_MAPPING(SmartShape::SystemBreakType, {
+    // {"same", SystemBreakType::Same}, // Default value, may not appear in XML.
+    {"opposite", SmartShape::SystemBreakType::Opposite},
+});
+
+MUSX_XML_ENUM_MAPPING(SmartShape::LyricTextType, {
+    // {"none", SmartShape::LyricTextType::None}, // Default value, may not appear in XML.
+    {"verse", SmartShape::LyricTextType::Verse},
+    {"chorus", SmartShape::LyricTextType::Chorus},
+    {"section", SmartShape::LyricTextType::Section},
 });
 
 MUSX_XML_ENUM_MAPPING(SmartShapeCustomLine::LineStyle, {
@@ -364,6 +421,38 @@ MUSX_XML_ENUM_MAPPING(musx::dom::others::TextRepeatDef::PoundReplaceOption, {
 
 } // namespace factory
 namespace dom {
+
+namespace smartshape {
+
+using namespace ::musx::xml;
+using namespace ::musx::factory;
+
+MUSX_XML_ELEMENT_ARRAY(ControlPointAdjustment, {
+    {"startCtlPtX", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->startCtlPtX = e->getTextAs<Evpu>(); }},
+    {"startCtlPtY", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->startCtlPtY = e->getTextAs<Evpu>(); }},
+    {"endCtlPtX", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->endCtlPtX = e->getTextAs<Evpu>(); }},
+    {"endCtlPtY", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->endCtlPtY = e->getTextAs<Evpu>(); }},
+    {"on", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->active = populateBoolean(e, i); }},
+    {"contextDir", [](const XmlElementPtr& e, const std::shared_ptr<ControlPointAdjustment>& i) { i->contextDir = toEnum<DirectionType>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(EndPoint, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
+    {"meas", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
+    {"edu", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
+    {"entryNum", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->entryNumber = e->getTextAs<EntryNumber>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(EndPointAdjustment, {
+    {"x", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"y", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"on", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->active = populateBoolean(e, i); }},
+    {"contextDir", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->contextDir = toEnum<DirectionType>(e); }},
+    {"contextEntCnct", [](const XmlElementPtr& e, const std::shared_ptr<EndPointAdjustment>& i) { i->contextEntCnct = toEnum<EntryConnectionType>(e); }},
+});
+
+} // namespace smartshape
+
 namespace others {
 
 using namespace ::musx::xml;
@@ -844,40 +933,43 @@ MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList, {
         i->instructions.push_back(FieldPopulator<ShapeInstructionList::InstructionInfo>::createAndPopulate(e));
     }},
 });
-    
-MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPoint, {
-    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
-    {"meas", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
-    {"edu", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
-    {"entryNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPoint>& i) { i->entryNumber = e->getTextAs<EntryNumber>(); }},
-});
-
-MUSX_XML_ELEMENT_ARRAY(SmartShape::EndPointAdjustment, {
-    {"x", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
-    {"y", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
-    {"on", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::EndPointAdjustment>& i) { i->active = populateBoolean(e, i); }},
-});
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
     {"endPt", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPoint = FieldPopulator<SmartShape::EndPoint>::createAndPopulate(e, i->getParent()); }},
+        { i->endPoint = FieldPopulator<smartshape::EndPoint>::createAndPopulate(e, i->getParent()); }},
     {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPointAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+        { i->endPointAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+    {"ctlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
+        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::createAndPopulate(e, i->getParent()); }},
     {"breakAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->breakAdj = FieldPopulator<SmartShape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+        { i->breakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"shapeType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->shapeType = toEnum<SmartShape::ShapeType>(e); }},
     {"entryBased", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->entryBased = populateBoolean(e, i); }},
+    {"rotate", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->rotate = populateBoolean(e, i); }},
+    {"noPresetShape", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->noPresetShape = populateBoolean(e, i); }},
+    {"makeHorz", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->makeHorz = populateBoolean(e, i); }},
+    {"noPushEndStart", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->noPushEndStart = populateBoolean(e, i); }},
+    {"makeVert", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->makeVert = populateBoolean(e, i); }},
+    {"engraverSlurState", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->engraverSlurState = toEnum<SmartShape::EngraverSlurState>(e); }},
+    {"slurAvoidAcciState", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->slurAvoidAcciState = toEnum<SmartShape::SlurAvoidAccidentalsState>(e); }},
+    {"yBreakType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->yBreakType = toEnum<SmartShape::SystemBreakType>(e); }},
     {"startTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
         { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i); }},
     {"endTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
         { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i); }},
+    {"fullCtlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
+        { i->fullCtlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::createAndPopulate(e, i); }},
     {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->hidden = populateBoolean(e, i); }},
     {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
+    {"startLyricNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startLyricNum = e->getTextAs<Cmper>(); }},
+    {"endLyricNum",   [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endLyricNum = e->getTextAs<Cmper>(); }},
+    {"startLyricTag", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startLyricType = toEnum<SmartShape::LyricTextType>(e); }},
+    {"endLyricTag",   [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endLyricType = toEnum<SmartShape::LyricTextType>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::CharParams, {

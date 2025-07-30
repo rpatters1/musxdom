@@ -86,6 +86,9 @@ constexpr double EVPU_PER_SPACE = 24.0;         ///< Number of Evpu units per sp
 constexpr double EFIX_PER_EVPU = 64.0;          ///< Number of Efix units per Evpu
 constexpr double EFIX_PER_SPACE = EVPU_PER_SPACE * EFIX_PER_EVPU; ///< Number of Efix units per space (spatium)
 
+// this must be a macro due to dependency issues with Fraction and NoteType.
+#define EDU_PER_WHOLE_NOTE 0x1000    ///< Number of Edu units per whole note
+
 constexpr int MAX_CUE_PERCENTAGE = 90; ///< Arbitrary value that determines the max scaling value for cue notes. This could be configurable in the future.
 
 } // namespace dom

@@ -415,18 +415,28 @@ TEST(SmartShapes, IndependentTimeSigs)
     {
         auto ss = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, 1);
         ASSERT_TRUE(ss) << "failed to load SmartShape 1";
+        EXPECT_EQ(ss->shapeType, others::SmartShape::ShapeType::SlurAuto);
         EXPECT_EQ(ss->startTermSeg->endPoint->calcPosition(), Fraction(1, 4));
         EXPECT_EQ(ss->startTermSeg->endPoint->calcGlobalPosition(), Fraction(1, 6));
+        EXPECT_TRUE(ss->startTermSeg->endPoint->getMeasureAssignment());
+        EXPECT_TRUE(ss->startTermSeg->endPoint->getEntryAssignment());
         EXPECT_EQ(ss->endTermSeg->endPoint->calcPosition(), Fraction(5, 8));
         EXPECT_EQ(ss->endTermSeg->endPoint->calcGlobalPosition(), Fraction(5, 12));
+        EXPECT_TRUE(ss->endTermSeg->endPoint->getMeasureAssignment());
+        EXPECT_TRUE(ss->endTermSeg->endPoint->getEntryAssignment());
     }
 
     {
         auto ss = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, 4);
         ASSERT_TRUE(ss) << "failed to load SmartShape 4";
+        EXPECT_EQ(ss->shapeType, others::SmartShape::ShapeType::Crescendo);
         EXPECT_EQ(ss->startTermSeg->endPoint->calcPosition(), Fraction(1, 4));
         EXPECT_EQ(ss->startTermSeg->endPoint->calcGlobalPosition(), Fraction(1, 6));
+        EXPECT_TRUE(ss->startTermSeg->endPoint->getMeasureAssignment());
+        EXPECT_FALSE(ss->startTermSeg->endPoint->getEntryAssignment());
         EXPECT_EQ(ss->endTermSeg->endPoint->calcPosition(), Fraction(5, 8));
         EXPECT_EQ(ss->endTermSeg->endPoint->calcGlobalPosition(), Fraction(5, 12));
+        EXPECT_TRUE(ss->endTermSeg->endPoint->getMeasureAssignment());
+        EXPECT_FALSE(ss->endTermSeg->endPoint->getEntryAssignment());
     }
 }

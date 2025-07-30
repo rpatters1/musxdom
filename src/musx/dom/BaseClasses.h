@@ -201,9 +201,7 @@ protected:
 /**
  * @class ContainedClassBase
  * @brief Base class for classes that are contained by other classes.
- * @tparam ContainerClass The class that contains this class.
  */
-template <typename ContainerClass>
 class ContainedClassBase : public Base
 {
 public:
@@ -212,28 +210,30 @@ public:
      * 
      * @param parent A shared pointer to the parent document.
      */
-    ContainedClassBase(const std::shared_ptr<ContainerClass>& parent)
+    ContainedClassBase(const std::shared_ptr<Base>& parent)
         : Base(parent->getDocument(), SCORE_PARTID, ShareMode::All), m_parent(parent)
-    {
-        // std::is_base_of_v can't work until the entire class is known, which is true when creating the constructor
-        static_assert(std::is_base_of_v<Base, ContainerClass>, "ContainerClass must inherit from Base.");
-    }
+    {}
 
     /// @brief Override of getPartId returns parent's part ID.
     Cmper getPartId() const override { return getParent()->getPartId(); }
 
     /// @brief Get the parent.
-    std::shared_ptr<ContainerClass> getParent() const
+    template <typename ParentClass = Base>
+    std::shared_ptr<ParentClass> getParent() const
     {
         auto result = m_parent.lock();
         MUSX_ASSERT_IF (!result) {
             throw std::logic_error("Attempt to get parent of contained class, but the parent is no longer allocated.");
         }
-        return result;
+        if constexpr (std::is_same_v<Base, ParentClass>) {
+            return result;        
+        } else {
+            return std::dynamic_pointer_cast<ParentClass>(result);
+        }
     }
     
 private:
-    const std::weak_ptr<ContainerClass> m_parent;
+    const std::weak_ptr<Base> m_parent;
 };
 
 /**

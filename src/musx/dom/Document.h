@@ -131,6 +131,10 @@ public:
      */
     InstrumentMap createInstrumentMap(Cmper forPartId) const;
 
+    /// @brief Calculate if the current score/part has staves that differ from system to system.
+    /// @param forPartId The linked score or part ID to check.
+    bool calcHasVaryingSystemStaves(Cmper forPartId) const;
+
 private:
     /// @brief Constructs a `Document`
     explicit Document() = default;

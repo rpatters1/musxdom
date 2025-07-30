@@ -21,12 +21,12 @@
  */
 #pragma once
 
-#include "FactoryBase.h"
-#include "TypeRegistry.h"
 #include "musx/xml/XmlInterface.h"
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/ObjectPool.h"
 #include "musx/dom/Document.h"
+#include "FactoryBase.h"
+#include "TypeRegistry.h"
 
 #ifdef MUSX_DISPLAY_NODE_NAMES
 #include <set>

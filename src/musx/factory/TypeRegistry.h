@@ -26,6 +26,7 @@
 #include <string>
 #include <tuple>
 
+#include "musx/dom/ObjectPool.h"
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/CommonClasses.h"
 #include "musx/dom/Options.h"
@@ -106,6 +107,16 @@ private:
     }
 
 public:
+    /// @brief Determine at compile-time if type T is a class in this registry.
+    /// @tparam T The class to check.
+    template <typename T>
+    struct is_registered_type : std::disjunction<std::is_same<T, Types>...> {};
+
+    /// @brief Shorthand to get the value of #is_registered_type.
+    /// @tparam T  The class to check.
+    template <typename T>
+    static constexpr bool is_registered_type_v = is_registered_type<T>::value;
+
     /**
      * @brief Creates an instance of the registered type corresponding to the provided node name.
      *
@@ -345,6 +356,30 @@ using RegisteredTexts = TypeRegistry <
 >;
 
 } // namespace factory
+
+namespace dom {
+
+/// @brief Pool type specialization for RegisteredOptions
+template <typename T>
+struct is_pool_type<OptionsPool, T> : musx::factory::RegisteredOptions::template is_registered_type<T> {};
+
+/// @brief Pool type specialization for RegisteredOthers
+template <typename T>
+struct is_pool_type<OthersPool, T> : musx::factory::RegisteredOthers::template is_registered_type<T> {};
+
+/// @brief Pool type specialization for RegisteredDetails
+template <typename T>
+struct is_pool_type<DetailsPool, T> : musx::factory::RegisteredDetails::template is_registered_type<T> {};
+
+/// @brief Pool type specialization for RegisteredEntries
+template <typename T>
+struct is_pool_type<EntryPool, T> : musx::factory::RegisteredEntries::template is_registered_type<T> {};
+
+/// @brief Pool type specialization for RegisteredTexts
+template <typename T>
+struct is_pool_type<TextsPool, T> : musx::factory::RegisteredTexts::template is_registered_type<T> {};
+
+} // namespace dom
 } // namespace musx
 
 #ifdef _MSC_VER

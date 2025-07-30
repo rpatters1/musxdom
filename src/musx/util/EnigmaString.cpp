@@ -33,6 +33,9 @@ namespace util {
 
 std::string EnigmaString::toU8(char32_t cp)
 {
+    if (cp == 0) {
+        return {};
+    }
     std::string result;
     if (cp <= 0x7F) {
         result += static_cast<char>(cp);
@@ -51,47 +54,6 @@ std::string EnigmaString::toU8(char32_t cp)
     }
     // Invalid code points are ignored (returning empty string).
     return result;
-}
-
-static const std::unordered_map<std::string_view, options::TextOptions::InsertSymbolType> acciInsertMap = {
-    { "flat",       options::TextOptions::InsertSymbolType::Flat },
-    { "natural",    options::TextOptions::InsertSymbolType::Natural },
-    { "sharp",      options::TextOptions::InsertSymbolType::Sharp },
-    { "dbflat",     options::TextOptions::InsertSymbolType::DblFlat },
-    { "dbsharp",    options::TextOptions::InsertSymbolType::DblSharp },
-};
-
-static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string>& getEnigmaAccidentalMap(EnigmaString::AccidentalStyle style)
-{
-    // Maps for SMuFL and plain text accidentals
-    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> smuflAccidentals = {
-        { options::TextOptions::InsertSymbolType::Flat,     EnigmaString::fromU8(u8"\uE260") }, // SMuFL character for flat
-        { options::TextOptions::InsertSymbolType::Sharp,    EnigmaString::fromU8(u8"\uE262") }, // SMuFL character for sharp
-        { options::TextOptions::InsertSymbolType::Natural,  EnigmaString::fromU8(u8"\uE261") }, // SMuFL character for natural
-        { options::TextOptions::InsertSymbolType::DblFlat,  EnigmaString::fromU8(u8"\uE264") }, // SMuFL double flat
-        { options::TextOptions::InsertSymbolType::DblSharp, EnigmaString::fromU8(u8"\uE263") }, // SMuFL double sharp
-    };
-    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> unicodeAccidentals = {
-        { options::TextOptions::InsertSymbolType::Flat,     EnigmaString::fromU8(u8"\u266D") },   // Text flat: ♭
-        { options::TextOptions::InsertSymbolType::Sharp,    EnigmaString::fromU8(u8"\u266F") },   // Text sharp: ♯
-        { options::TextOptions::InsertSymbolType::Natural,  EnigmaString::fromU8(u8"\u266E") },   // Text natural: ♮
-        { options::TextOptions::InsertSymbolType::DblFlat,  EnigmaString::fromU8(u8"\u1D12B") },  // Text double flat: 𝄫
-        { options::TextOptions::InsertSymbolType::DblSharp, EnigmaString::fromU8(u8"\u1D12A") },  // Text double sharp: 𝄪
-    };
-    static const std::unordered_map<options::TextOptions::InsertSymbolType, std::string> asciiAccidentals = {
-        { options::TextOptions::InsertSymbolType::Flat,     "b"  }, // Plain text representation for flat
-        { options::TextOptions::InsertSymbolType::Sharp,    "#"  }, // Plain text representation for sharp
-        { options::TextOptions::InsertSymbolType::Natural,  ""   }, // Plain text representation for natural (none)
-        { options::TextOptions::InsertSymbolType::DblFlat,  "bb" }, // Plain text double flat
-        { options::TextOptions::InsertSymbolType::DblSharp, "x"  }, // Plain text double sharp
-    };
-
-    switch (style) {
-        default:            
-        case EnigmaString::AccidentalStyle::Ascii: return asciiAccidentals;
-        case EnigmaString::AccidentalStyle::Unicode: return unicodeAccidentals;
-        case EnigmaString::AccidentalStyle::Smufl: return smuflAccidentals;
-    }
 }
 
 bool EnigmaString::startsWithFontCommand(const std::string& text)
@@ -248,7 +210,26 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
     std::string remaining = rawText;
     std::optional<std::string> textBuffer;
 
-    auto addToBuf = [&](const std::string& text) {
+    using AcciSymType = options::TextOptions::InsertSymbolType;
+    using AcciSymValue = std::tuple<char32_t, char32_t, std::string_view>; // smufl, unicode, ascii
+
+    static const std::unordered_map<std::string_view, AcciSymType> acciInsertMap {
+        { "flat",       AcciSymType::Flat },
+        { "natural",    AcciSymType::Natural },
+        { "sharp",      AcciSymType::Sharp },
+        { "dbflat",     AcciSymType::DblFlat },
+        { "dbsharp",    AcciSymType::DblSharp },
+    };
+
+    static const std::unordered_map<AcciSymType, AcciSymValue> accidentalSymbols {
+        { AcciSymType::Flat,     { U'\uE260', U'\u266D', "b"   } }, // SMuFL flat, Unicode flat ♭, ASCII "b"
+        { AcciSymType::Natural,  { U'\uE261', U'\u266E', ""    } }, // SMuFL natural, Unicode natural ♮, no ASCII
+        { AcciSymType::Sharp,    { U'\uE262', U'\u266F', "#"   } }, // SMuFL sharp, Unicode sharp ♯, ASCII "#"
+        { AcciSymType::DblFlat,  { U'\uE264', U'\U0001D12B', "bb"  } }, // SMuFL double flat, Unicode double flat 𝄫, ASCII "bb"
+        { AcciSymType::DblSharp, { U'\uE263', U'\U0001D12A', "x"   } }, // SMuFL double sharp, Unicode double sharp 𝄪, ASCII "x"
+    };
+
+    auto addToBuf = [&](const std::string_view text) {
         if (!textBuffer) {
             textBuffer.emplace();
         }
@@ -332,13 +313,25 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
             switch (options.insertHandling) {
                 case AccidentalInsertHandling::Substitute:
                 {
-                    const auto& accidentalMap = getEnigmaAccidentalMap(options.substitutionStyle);
-                    auto it = accidentalMap.find(insertIt->second);
-                    if (it != accidentalMap.end()) {
-                        addToBuf(it->second);
-                        continue;
+                    auto it = accidentalSymbols.find(insertIt->second);
+                    if (it != accidentalSymbols.end()) {
+                        const auto [smufl, ucode, asciiStr] = it->second;
+                        switch (options.substitutionStyle) {
+                        case AccidentalStyle::Smufl:
+                            addToBuf(toU8(smufl));
+                            break;
+                        case AccidentalStyle::Unicode:
+                            addToBuf(toU8(ucode));
+                            break;
+                        case AccidentalStyle::Ascii:
+                            addToBuf(asciiStr);
+                            break;
+                        }
+                    } else {
+                        assert(false);
+                        throw std::logic_error("Accidental subsitution type not mapped for " + components[0]);
                     }
-                    break;
+                    continue;
                 }
                 case AccidentalInsertHandling::ParseToGlyphs:
                 {

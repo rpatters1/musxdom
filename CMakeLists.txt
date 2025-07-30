@@ -38,6 +38,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/PercussionNoteType.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/ShapeDesigner.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/SmartShape.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Staff.cpp
@@ -47,7 +48,6 @@ set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOptions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOthers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/EnigmaString.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/Fraction.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/TestSupport.cpp
 )
 

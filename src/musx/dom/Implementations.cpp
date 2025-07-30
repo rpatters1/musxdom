@@ -419,6 +419,24 @@ const InstrumentInfo& Document::getInstrumentForStaff(InstCmper staffId) const
     throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
 }
 
+bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
+{
+    auto staffSystems = getOthers()->getArray<others::StaffSystem>(forPartId);
+    auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    for (const auto& staffSystem : staffSystems) {
+        auto nextSystem = getOthers()->getArray<others::InstrumentUsed>(forPartId, staffSystem->getCmper());
+        if (nextSystem.size() != scrollView.size()) {
+            return true;
+        }
+        for (size_t staffIndex = 0; staffIndex < nextSystem.size(); staffIndex++) {
+            if (nextSystem[staffIndex]->staffId != scrollView[staffIndex]->staffId) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 // *****************
 // ***** Entry *****
 // *****************
@@ -3092,33 +3110,7 @@ PageCmper others::PartDefinition::calcAssignmentIdFromPageNumber(PageCmper pageI
 
 const percussion::PercussionNoteType& others::PercussionNoteInfo::getNoteType() const
 {
-    auto it = percussion::percussionNoteTypeMap.find(getBaseNoteTypeId());
-    if (it == percussion::percussionNoteTypeMap.end()) {
-        return percussion::kUnknownPercussionNoteType;
-    }
-    return it->second;
-}
-
-// ******************************
-// ***** PercussionNoteType *****
-// ******************************
-
-std::string percussion::PercussionNoteType::createName(unsigned orderId) const
-{
-    std::string result = rawName;
-    size_t pos = result.find("%g");
-    if (pos != std::string::npos) {
-        // Assume at most one occurrence of %g, which is the case with every element in `PercNoteTypes.txt` from Finale
-        result.erase(pos, 2);
-    }
-    const std::string target = "%d";
-    pos = result.find(target);
-    if (pos != std::string::npos) {
-        // Assume at most one occurrence of %d, which is the case with every element in `PercNoteTypes.txt` from Finale
-        const std::string insert = orderId ? " (" + std::to_string(orderId + 1) + ")" : std::string();
-        result.replace(pos, target.size(), insert);
-    }
-    return result;
+    return percussion::getPercussionNoteTypeFromId(getBaseNoteTypeId());
 }
 
 // *****************************

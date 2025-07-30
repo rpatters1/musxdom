@@ -41,19 +41,21 @@ private:
     int m_denominator; ///< The m_denominator of the fraction.
 
     /**
-     * @brief Reduces the fraction to its simplest form.
-     * Ensures the m_denominator is always positive.
+     * @brief Reduces the input to its simplest form.
+     * Ensures the denominator is always positive.
      */
-    void reduce() {
-        int gcd = std::gcd(m_numerator, m_denominator);
-        m_numerator /= gcd;
-        m_denominator /= gcd;
+    static constexpr std::pair<int, int> reduce(int num, int den) {
+        int gcd = std::gcd(num, den);
+        num /= gcd;
+        den /= gcd;
 
-        // Ensure the m_denominator is always positive
-        if (m_denominator < 0) {
-            m_numerator = -m_numerator;
-            m_denominator = -m_denominator;
+        // Ensure denominator is always positive
+        if (den < 0) {
+            num = -num;
+            den = -den;
         }
+
+        return {num, den};
     }
 
 public:
@@ -62,53 +64,61 @@ public:
      * @param num The m_numerator of the fraction.
      * @param den The m_denominator of the fraction. Defaults to 1.
      * @throws std::invalid_argument if the m_denominator is zero.
+     * @todo Make this constructor constexpr when we drop C++17 support.
      */
-    Fraction(int num = 0, int den = 1) : m_numerator(num), m_denominator(den) {
-        if (m_denominator == 0) {
+    Fraction(int num = 0, int den = 1)
+    {
+        if (den == 0) {
             throw std::invalid_argument("Denominator cannot be zero.");
         }
-        reduce();
+
+        auto [n, d] = reduce(num, den);
+        m_numerator = n;
+        m_denominator = d;
     }
 
     /// @brief Constructs a Fraction from edu.
     /// @param edu The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is
     /// constructed as Fraction(1, 4).
-    static Fraction fromEdu(int edu);
+    /// @todo Make this function constexpr when we drop C++17 support.
+    static Fraction fromEdu(dom::Edu edu) { return Fraction(edu, EDU_PER_WHOLE_NOTE); }
 
     /// @brief Constructs a Fraction from a percent (where 100 is 100%)
     /// @param percent The integral percent value to convert.
+    /// @todo Make this function constexpr when we drop C++17 support.
     static Fraction fromPercent(int percent) { return Fraction(percent, 100); }
 
     /**
      * @brief Gets the m_numerator of the fraction.
      * @return The m_numerator.
      */
-    int numerator() const { return m_numerator; }
+    constexpr int numerator() const { return m_numerator; }
 
     /**
      * @brief Gets the m_denominator of the fraction.
      * @return The m_denominator.
      */
-    int denominator() const { return m_denominator; }
+    constexpr int denominator() const { return m_denominator; }
 
     /**
      * @brief Returns the integer (whole number) part of the fraction.
      * @return The integer part of the fraction.
      */
-    int quotient() const {
+    constexpr int quotient() const {
         return m_numerator / m_denominator;
     }
 
     /**
      * @brief Returns the fractional part of the fraction.
      * @return The remainder as a fraction, satisfying -1 < remainder < 1.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction remainder() const {
         return Fraction(m_numerator % m_denominator, m_denominator);
     }
 
     /// @brief Returns the reciprocal fraction
-    /// @throws std::invalid_argument if the current value of the fraction is 0 
+    /// @todo Make this function constexpr when we drop C++17 support.
     Fraction reciprocal() const {
         return Fraction(m_denominator, m_numerator);
     }
@@ -116,12 +126,17 @@ public:
     /**
      * @brief Calculates duration as a fraction of a whole note
      */
-    dom::Edu calcEduDuration() const;
+    constexpr dom::Edu calcEduDuration() const {
+        const int num = numerator() * EDU_PER_WHOLE_NOTE;
+        const int den = denominator();
+        const double div = double(num) / double(den);
+        return dom::Edu(static_cast<int>(div + (div >= 0.0 ? 0.5 : -0.5)));
+    }
 
     /**
      * @brief Converts the fraction to floating point double.
      */
-    double toDouble() const {
+    constexpr double toDouble() const {
         return double(m_numerator) / double(m_denominator);
     }
 
@@ -129,6 +144,7 @@ public:
      * @brief Adds two fractions.
      * @param other The other fraction to add.
      * @return The resulting fraction after addition.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction operator+(const Fraction& other) const {
         return Fraction(
@@ -141,6 +157,7 @@ public:
      * @brief Subtracts one fraction from another.
      * @param other The other fraction to subtract.
      * @return The resulting fraction after subtraction.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction operator-(const Fraction& other) const {
         return Fraction(
@@ -153,6 +170,7 @@ public:
      * @brief Multiplies two fractions.
      * @param other The other fraction to multiply.
      * @return The resulting fraction after multiplication.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction operator*(const Fraction& other) const {
         return Fraction(
@@ -166,11 +184,9 @@ public:
      * @param other The other fraction to divide by.
      * @return The resulting fraction after division.
      * @throws std::invalid_argument if attempting to divide by a fraction with a zero m_numerator.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction operator/(const Fraction& other) const {
-        if (other.m_numerator == 0) {
-            throw std::invalid_argument("Cannot divide by zero fraction.");
-        }
         return Fraction(
             m_numerator * other.m_denominator,
             m_denominator * other.m_numerator
@@ -181,6 +197,7 @@ public:
      * @brief Compound addition assignment operator.
      * @param other The other fraction to add.
      * @return A reference to the updated fraction.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction& operator+=(const Fraction& other) {
         *this = *this + other;
@@ -191,6 +208,7 @@ public:
      * @brief Compound subtraction assignment operator.
      * @param other The other fraction to subtract.
      * @return A reference to the updated fraction.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction& operator-=(const Fraction& other) {
         *this = *this - other;
@@ -201,6 +219,7 @@ public:
      * @brief Compound multiplication assignment operator.
      * @param other The other fraction to multiply.
      * @return A reference to the updated fraction.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction& operator*=(const Fraction& other) {
         *this = *this * other;
@@ -211,7 +230,7 @@ public:
      * @brief Compound division assignment operator.
      * @param other The other fraction to divide by.
      * @return A reference to the updated fraction.
-     * @throws std::invalid_argument if attempting to divide by a fraction with a zero m_numerator.
+     * @todo Make this function constexpr when we drop C++17 support.
      */
     Fraction& operator/=(const Fraction& other) {
         *this = *this / other;
@@ -223,7 +242,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if the fractions are equal, false otherwise.
      */
-    bool operator==(const Fraction& other) const {
+    constexpr bool operator==(const Fraction& other) const {
         return m_numerator == other.m_numerator && m_denominator == other.m_denominator;
     }
 
@@ -232,7 +251,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if the fractions are not equal, false otherwise.
      */
-    bool operator!=(const Fraction& other) const {
+    constexpr bool operator!=(const Fraction& other) const {
         return !(*this == other);
     }
 
@@ -241,7 +260,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if this fraction is less than the other, false otherwise.
      */
-    bool operator<(const Fraction& other) const {
+    constexpr bool operator<(const Fraction& other) const {
         double lhs = static_cast<double>(m_numerator) / m_denominator;
         double rhs = static_cast<double>(other.m_numerator) / other.m_denominator;
         return lhs < rhs;
@@ -252,7 +271,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if this fraction is less than or equal to the other, false otherwise.
      */
-    bool operator<=(const Fraction& other) const {
+    constexpr bool operator<=(const Fraction& other) const {
         return *this < other || *this == other;
     }
 
@@ -261,7 +280,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if this fraction is greater than the other, false otherwise.
      */
-    bool operator>(const Fraction& other) const {
+    constexpr bool operator>(const Fraction& other) const {
         return !(*this <= other);
     }
 
@@ -270,7 +289,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if this fraction is greater than or equal to the other, false otherwise.
      */
-    bool operator>=(const Fraction& other) const {
+    constexpr bool operator>=(const Fraction& other) const {
         return !(*this < other);
     }
 
@@ -278,7 +297,7 @@ public:
      * @brief Checks if the fraction is nonzero.
      * @return True if the fraction is nonzero, false otherwise.
      */
-    explicit operator bool() const {
+    constexpr explicit operator bool() const {
         return m_numerator != 0;
     }
 

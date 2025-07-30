@@ -38,8 +38,138 @@ class SmartShapeEntryAssign;
 }
 
 namespace others {
+    class SmartShapeMeasureAssign;
+}
 
-class SmartShapeMeasureAssign;
+namespace smartshape {
+
+/**
+ * @enum DirectionType
+ * @brief Indicates the placement context of end- and control-point adjustments of @ref others::SmartShape instances.
+ */
+enum class DirectionType
+{
+    None,   ///< No context. (The default value when there is no adjustment or the context is not applicable to the SmartShape.)
+    Under,  ///< The shape is positioned below (e.g., slur under)
+    Over    ///< The shape is positioned above (e.g., slur over)
+};
+
+/**
+ * @enum EntryConnectionType
+ * @brief Indicates the entry connection type for entry-attached @ref others::SmartShape instances.
+ * 
+ * These values are untested, so the documentation provides only a best guess as to what they do.
+ * Some values are also used for beat-attached shapes, but how they apply in this context (if at all) is unknown.
+ */
+enum class EntryConnectionType
+{
+    HeadLeftTop,             ///< Attached to left-top of the head rectangle. (Default value.)
+    HeadRightTop,            ///< Attached to right-top of the head rectangle.
+    HeadRightBottom,         ///< Attached to right-bottom of the head rectangle.
+    HeadLeftBottom,          ///< Attached to left-bottom of the head rectangle.
+
+    StemLeftTop,             ///< Attached to left-top of the stem rectangle.
+    StemRightTop,            ///< Attached to right-top of the stem rectangle.
+    StemRightBottom,         ///< Attached to right-bottom of the stem rectangle.
+    StemLeftBottom,          ///< Attached to left-bottom of the stem rectangle.
+
+    NoteLeftTop,             ///< Attached to left-top of the notehead.
+    NoteRightTop,            ///< Attached to right-top of the notehead.
+    NoteRightBottom,         ///< Attached to right-bottom of the notehead.
+    NoteLeftBottom,          ///< Attached to left-bottom of the notehead.
+    NoteLeftCenter,          ///< Attached to left-center of the notehead.
+    NoteRightCenter,         ///< Attached to right-center of the notehead.
+
+    LyricRightCenter,        ///< Attached to right-center of the lyric.
+    LyricLeftCenter,         ///< Attached to left-center of the lyric.
+    LyricRightBottom,        ///< Attached to right-bottom of the lyric.
+    HeadRightLyricBaseline,  ///< Attached to right of the head rectangle, aligned with the lyric baseline.
+    DotRightLyricBaseline,   ///< Attached to the right of the augmentation dot, aligned with the lyric baseline.
+    DurationLyricBaseline,   ///< Attached to the duration position, aligned with the lyric baseline.
+
+    SystemLeft,              ///< Attached to the left edge of the system.
+    SystemRight              ///< Attached to the right edge of the system.
+};
+
+/**
+ * @brief Represents the manual adjustments to a smart shape.
+ *
+ * The meaning of these control point adjustments differs according to the type of SmartShape.
+ */
+class ControlPointAdjustment : public ContainedClassBase
+{
+public:
+    using ContainedClassBase::ContainedClassBase;
+
+    Evpu startCtlPtX{};             ///< Horizontal offset of the start control point.
+    Evpu startCtlPtY{};             ///< Vertical offset of the start control point.
+    Evpu endCtlPtX{};               ///< Horizontal offset of the end control point.
+    Evpu endCtlPtY{};               ///< Vertical offset of the end control point.
+    bool active{};                  ///< If true, this adjustment should be used when it is applicable.
+    DirectionType contextDir{};  ///< The direction type for this adjustment.
+
+    static const xml::XmlElementArray<ControlPointAdjustment>& xmlMappingArray();  ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @brief Represents an endpoint of the smart shape.
+ */
+class EndPoint : public ContainedClassBase
+{
+public:
+    using ContainedClassBase::ContainedClassBase;
+
+    InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
+    MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
+    Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
+    EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
+
+    /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
+    util::Fraction calcPosition() const;
+
+    /// @brief Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached
+    util::Fraction calcGlobalPosition() const;
+
+    /// @brief Calculates the entry associated with the endpoint.
+    /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
+    /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
+    /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
+    /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
+    EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
+
+    /// @brief Gets the measure assignment for this endpoint or null if none.
+    std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
+
+    /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
+    std::shared_ptr<details::SmartShapeEntryAssign> getEntryAssignment() const;
+
+    /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
+    bool calcIsAssigned() const;
+
+    static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @brief Represents the endpoint adjustment of a smart shape or center shape.
+ */
+class EndPointAdjustment : public ContainedClassBase
+{
+public:
+    using ContainedClassBase::ContainedClassBase;
+
+    Evpu horzOffset{};                      ///< Horizontal offset (xml node is `<x>`)
+    Evpu vertOffset{};                      ///< Vertical offset (xml node is `<y>`)
+    bool active{};                          ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
+    DirectionType contextDir{};             ///< The direction type for this adjustment.
+    EntryConnectionType contextEntCnct{};   ///< The entry conntection type for this adjustment.
+
+    static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+};
+
+} // namespace smartshape
+
+namespace others {
+
 /**
  * @class SmartShape
  * @brief Represents a Finale smart shape.
@@ -54,90 +184,40 @@ public:
         : OthersBase(document, partId, shareMode, cmper) {}
 
     /**
-     * @brief Represents an endpoint of the smart shape.
-     */
-    class EndPoint : public ContainedClassBase<SmartShape>
-    {
-    public:
-        using ContainedClassBase<SmartShape>::ContainedClassBase;
-
-        InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
-        MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
-        Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
-        EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
-
-        Cmper shapeId{};                ///< The shape that this segment belongs to. (Added by the factory.)
-
-        /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
-        util::Fraction calcPosition() const;
-
-        /// @brief Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached
-        util::Fraction calcGlobalPosition() const;
-
-        /// @brief Calculates the entry associated with the endpoint.
-        /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
-        /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
-        /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
-        /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
-        EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
-
-        /// @brief Gets the measure assignment for this endpoint or null if none.
-        std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
-
-        /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
-        std::shared_ptr<details::SmartShapeEntryAssign> getEntryAssignment() const;
-
-        /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
-        bool calcIsAssigned() const;
-
-        bool requireAllFields() const override { return false; }
-        static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-
-    /**
-     * @brief Represents the endpoint adjustment of the smart shape.
-     */
-    class EndPointAdjustment : public ContainedClassBase<SmartShape>
-    {
-    public:
-        using ContainedClassBase<SmartShape>::ContainedClassBase;
-
-        Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
-        Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
-        bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
-
-        bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
-        static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
-    };
-
-    /**
      * @brief Represents the termination segment of the smart shape.
      */
-    class TerminationSeg : public ContainedClassBase<SmartShape>
+    class TerminationSeg : public ContainedClassBase
     {
     public:
-        using ContainedClassBase<SmartShape>::ContainedClassBase;
+        using ContainedClassBase::ContainedClassBase;
 
-        std::shared_ptr<EndPoint> endPoint;                 ///< Endpoint information (xml node is `<endPt>`)
-        std::shared_ptr<EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information (xml node is `<endPtAdj>`)
-        std::shared_ptr<EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
-                                                            ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
+        std::shared_ptr<smartshape::EndPoint> endPoint;                 ///< Endpoint information.
+        std::shared_ptr<smartshape::EndPointAdjustment> endPointAdj;    ///< Endpoint adjustment information.
+        std::shared_ptr<smartshape::ControlPointAdjustment> ctlPtAdj;   ///< Manual adjustments for the shape at this endpoint.
+        std::shared_ptr<smartshape::EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
+                                                                        ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
         void integrityCheck() override
         {
             Base::integrityCheck();
             if (!endPoint) {
-                endPoint = std::make_shared<EndPoint>(getParent());
+                endPoint = std::make_shared<smartshape::EndPoint>(getParent());
             }
             if (!endPointAdj) {
-                endPointAdj = std::make_shared<EndPointAdjustment>(getParent());
+                endPointAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
+            }
+            if (!ctlPtAdj) {
+                ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(getParent());
             }
             if (!breakAdj) {
-                breakAdj = std::make_shared<EndPointAdjustment>(getParent());
+                breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
             }
+            endPoint->integrityCheck();
+            endPointAdj->integrityCheck();
+            ctlPtAdj->integrityCheck();
+            breakAdj->integrityCheck();
         }
     
-        bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
         static const xml::XmlElementArray<TerminationSeg>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
     };
 
@@ -195,14 +275,81 @@ public:
         DashContourSlurAuto, ///< Contoured line dashed slur with direction automatically determined.
     };
 
-    ShapeType shapeType{};                          ///< Type of smart shape
-    bool entryBased{};                              ///< Whether the shape is entry-based
-    std::shared_ptr<TerminationSeg> startTermSeg;   ///< Start termination segment
-    std::shared_ptr<TerminationSeg> endTermSeg;     ///< End termination segment
-    bool hidden{};                                  ///< Inverse of "Show" option
+    /**
+     * @enum EngraverSlurState
+     * @brief The selection for engraver slurs. (Only applicable for slurs.)
+     */
+    enum class EngraverSlurState
+    {
+        Auto,           ///< Take the engraver slur setting from #options::SmartShapeOptions::useEngraverSlurs. (Default value.)
+        Off,            ///< Do not use engraver slur behaviour.
+        On,             ///< Use engraver slur behaviour.
+    };
+
+    /**
+     * @enum SlurAvoidAccidentalsState
+     * @brief The selection whether this shape avoids accidentals. (Only applicable for slurs.)
+     */
+    enum class SlurAvoidAccidentalsState
+    {
+        Auto,           ///< Take the avoid accidentals setting from #options::SmartShapeOptions::slurAvoidAccidentals. (Default value.)
+        Off,            ///< Do not use avoid accidentals behaviour.
+        On,             ///< Use avoid accidentals behaviour.
+        Invalid = -1    ///< May not be used, but exists as a possibility in the Finale app.
+    };
+
+    /**
+     * @enum SystemBreakType
+     * @brief How this shape breaks across systems. Represents the choice between "Make Horizontal Over System Break" and "Maintain Angle
+     * Over System Break" in the Finale U.I.
+     * @note Although this is presented in the xml as an enum, it appears to have only two values. There is some evidence that at one
+     * point the developers had intentions to expand to more options here, but it seems those plans never materialized.
+     */
+    enum class SystemBreakType
+    {
+        Same,           ///< System break honors #makeHorz setting over a system break. (Default)
+        Opposite,       ///< System break is the opposite of #makeHorz over a system break. So if
+                        ///< #makeHorz is true, this allows the system break to be angled. If
+                        ///< #makeHorz is false, this forces the system break to be horizontal.
+    };
+
+    /**
+     * @enum LyricTextType
+     * @brief The lyric text type if this is a lyrics smart shape.
+     */
+    enum class LyricTextType
+    {
+        None,           ///< The default, for when there is no lyrics text block.
+        Verse,          ///< The assignment is to a Verse lyrics text block.
+        Chorus,         ///< The assignment is to a Chorus lyrics text block.
+        Section,        ///< The assignment is to a Section lyrics text block.
+    };
+
+    ShapeType shapeType{};                          ///< Type of smart shape.
+    bool entryBased{};                              ///< Whether the shape is entry-based.
+    bool rotate{};                                  ///< Purpose unknown: always set for slurs.
+    bool noPresetShape{};                           ///< Legacy flag that may no longer be used.
+    bool makeHorz{};                                ///< "Make Horizontal"
+    bool noPushEndStart{};                          ///< Legacy flag that should always be false in modern files going back to at least Finale 2000.
+    bool makeVert{};                                ///< This option has no obvious setting in the Finale U.I. A plugin could perhaps set it, but whether it works is untested.
+    EngraverSlurState engraverSlurState{};          ///< The engraver slur setting if this is a slur.
+    SlurAvoidAccidentalsState slurAvoidAcciState{}; ///< The avoid accidentals settings if this is a slur.
+    SystemBreakType yBreakType{};                   ///< Whether a system break should honor #makeHorz or do its opposite.
+    std::shared_ptr<TerminationSeg> startTermSeg;   ///< Start termination segment.
+    std::shared_ptr<TerminationSeg> endTermSeg;     ///< End termination segment.
+    std::shared_ptr<smartshape::ControlPointAdjustment> fullCtlPtAdj; ///< If the shape is only on one staff system, this is where the manual edits are.
+    bool hidden{};                                  ///< Inverse of "Show" option.
     NoteNumber startNoteId{};                       ///< If non-zero, the specific note with the entry that this shape starts from. (xml node is `<startNoteID>`)
     NoteNumber endNoteId{};                         ///< If non-zero, the specific note with the entry that this shape ends on. (xml node is `<endNoteID>`)
     Cmper lineStyleId{};                            ///< If non-zero, the @ref SmartShapeCustomLine for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)
+    Cmper startLyricNum{};                          ///< The text block of the lyrics text if this is a word extension or hyphen smart shape.
+    Cmper endLyricNum{};                            ///< This value appears to be meaningless. It is often zero for word extensions or the same value as #startLyricNum for hyphens.
+                                                    ///< It can also have an apparent nonsense value (.e.g, "-2"). The meaning of this is not known. The Finale U.I. does not appear
+                                                    ///< to allow hyphen or word extensions between syllables from two different lyric blocks, so the need for start and end blocks
+                                                    ///< is unclear.
+    LyricTextType startLyricType{};                 ///< The type of lyrics block for #startLyricNum. (xml node is `<startLyricTag>`)
+    LyricTextType endLyricType{};                   ///< The type of lyrics block for #endLyricNum. The speculative comments at #endLyricNum also apply here.
+                                                    ///< This value has never been seen to be different than #startLyricNum unless endLyricNum is zero. (xml node is `<endLyricTag>`)
 
     /// @brief Calculates if the smart shape applies to the specified entry.
     ///
@@ -220,11 +367,14 @@ public:
         if (!endTermSeg) {
             endTermSeg = std::make_shared<TerminationSeg>(shared_from_this());
         }
+        if (!fullCtlPtAdj) {
+            fullCtlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(shared_from_this());
+        }
         startTermSeg->integrityCheck();
         endTermSeg->integrityCheck();
+        fullCtlPtAdj->integrityCheck();
     }
 
-    bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
     constexpr static std::string_view XmlNodeName = "smartShape"; ///< XML node name
     static const xml::XmlElementArray<SmartShape>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -444,22 +594,6 @@ class CenterShape : public DetailsBase, public std::enable_shared_from_this<Cent
 public:
 
     /**
-     * @brief Represents the endpoint adjustment of the center shape.
-     */
-    class EndPointAdjustment : public ContainedClassBase<CenterShape>
-    {
-    public:
-        using ContainedClassBase<CenterShape>::ContainedClassBase;
-
-        Evpu horzOffset{};          ///< Horizontal offset (xml node is `<x>`)
-        Evpu vertOffset{};          ///< Vertical offset (xml node is `<y>`)
-        bool active{};              ///< If true, this adjustment should be used when it is applicable (xml node is `<on>`)
-
-        bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
-        static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
-    };
-
-    /**
      * @brief Constructor
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for.
@@ -471,20 +605,23 @@ public:
         : DetailsBase(document, partId, shareMode, shapeNum, centerShapeNum)
     {}
 
-    std::shared_ptr<EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
-    std::shared_ptr<EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
+    std::shared_ptr<smartshape::EndPointAdjustment> startBreakAdj; ///< Adjustment at the start break (xml: `<startBreakAdj>`)
+    std::shared_ptr<smartshape::EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
+    std::shared_ptr<smartshape::ControlPointAdjustment> ctlPtAdj;  ///< Manual adjustments made to this center shape.
 
     void integrityCheck() override
     {
         if (!startBreakAdj) {
-            startBreakAdj = std::make_shared<EndPointAdjustment>(shared_from_this());
+            startBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(shared_from_this());
         }
         if (!endBreakAdj) {
-            endBreakAdj = std::make_shared<EndPointAdjustment>(shared_from_this());
+            endBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(shared_from_this());
+        }
+        if (!ctlPtAdj) {
+            ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(shared_from_this());
         }
     }
 
-    bool requireAllFields() const override { return false; }    ///< ignore other fields because they are difficult to figure out
     constexpr static std::string_view XmlNodeName = "centerShape"; ///< The XML node name for this type.
     static const xml::XmlElementArray<CenterShape>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
