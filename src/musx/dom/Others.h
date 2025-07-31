@@ -1137,11 +1137,12 @@ public:
     Evpu horzEvpuOff{};         ///< Horizontal Evpu offset from the default position.
     Edu eduPosition{};          ///< Horizontal Edu position (xml node is `<horzEduOff>`)
     Evpu vertEvpuOff{};         ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
-    InstCmper staffAssign{};    ///< The staff to which this expression is assigned, or -1 if it uses #staffList.
+    InstCmper staffAssign{};    ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
     int layer{};                ///< The 1-based layer number to which this expression is assigned. (0 means all)
     bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
     Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
-    Cmper staffList{};          ///< The cmper of the staff list to use if #staffAssign is negative.
+    Cmper staffList{};          ///< The cmper of the staff list that is controlling this assignment (if any). There will be a separate #MeasureExprAssign instance
+                                ///< for every staff in the staff list.
     bool hidden{};              ///< True if the dynamic is hidden.
 
     /// @brief Gets the assigned text expression.
