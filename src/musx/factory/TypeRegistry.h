@@ -112,7 +112,7 @@ public:
     template <typename T>
     struct is_registered_type : std::disjunction<std::is_same<T, Types>...> {};
 
-    /// @brief Shorthand to get the value of #is_registered_type.
+    /// @brief Shorthand to get the value of @ref is_registered_type.
     /// @tparam T  The class to check.
     template <typename T>
     static constexpr bool is_registered_type_v = is_registered_type<T>::value;

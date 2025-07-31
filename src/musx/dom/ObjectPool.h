@@ -48,7 +48,7 @@ namespace dom {
 template <typename Pool, typename T>
 struct is_pool_type : std::false_type {};  // default: not valid
 
-/// @brief Value shortcut for #is_pool_type
+/// @brief Value shortcut for @ref is_pool_type
 template <typename Pool, typename T>
 inline constexpr bool is_pool_type_v = is_pool_type<Pool, T>::value;
 

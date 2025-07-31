@@ -624,7 +624,7 @@ public:
 class Staff;
 /**
  * @class InstrumentUsed
- * @brief An array of InstrumentUsed defines a set of staves in a staff system or in Scroll View.
+ * @brief An element in an @ref InstrumentUsedArray.
  *
  * This class is identified by the XML node name "instUsed".
  */
@@ -651,6 +651,11 @@ public:
     static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class InstrumentUsedArray
+ * @brief Defines a set of staves in a staff system or in Scroll View. You can create it from the value
+ * returned by #OthersPool::getArray<others::InstrumentUsed>.
+ */
 class InstrumentUsedArray : public std::vector<std::shared_ptr<InstrumentUsed>>
 {
     using VectorType = std::vector<std::shared_ptr<InstrumentUsed>>;
@@ -665,12 +670,10 @@ public:
         : VectorType(v) {}
 
     /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
-    /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
     /// @param index The 0-based index to find.
     std::shared_ptr<Staff> getStaffInstanceAtIndex(Cmper index) const;
 
     /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
-    /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
     /// @param staffId The @ref Staff cmper value to find.
     std::optional<size_t> getIndexForStaff(InstCmper staffId) const;
 };
@@ -2029,7 +2032,7 @@ public:
 
 /**
  * @class StaffListCategoryParts
- * @brief This class is used by #MarkingCategory to define the staves for parts in a staff list.
+ * @brief This class is used by @ref MarkingCategory to define the staves for parts in a staff list.
  *
  * The Cmper is a value from 1 to 8, corresponding to one of the eight canned staff lists available to marking categories.
  */
@@ -2044,8 +2047,8 @@ public:
 };
 
 /**
- * @class StaffListCategoryParts
- * @brief This class is used by #MarkingCategory to define the staves for parts in a staff list.
+ * @class StaffListCategoryScore
+ * @brief This class is used by @ref MarkingCategory to define the staves for parts in a staff list.
  *
  * The Cmper is a value from 1 to 8, corresponding to one of the eight canned staff lists available to marking categories.
  */
