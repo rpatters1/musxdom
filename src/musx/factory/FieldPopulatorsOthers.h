@@ -56,6 +56,12 @@ struct FieldPopulator<DrumStaffStyle> : private FieldPopulator<DrumStaff>
 };
 
 template <>
+struct FieldPopulator<MarkingCategoryName> : private FieldPopulator<OthersName>
+{
+    using FieldPopulator<OthersName>::populate;
+};
+
+template <>
 struct FieldPopulator<NamePositionAbbreviated> : private FieldPopulator<NamePositioning>
 {
     using FieldPopulator<NamePositioning>::populate;
@@ -77,6 +83,54 @@ template <>
 struct FieldPopulator<NamePositionStyleFull> : private FieldPopulator<NamePositioning>
 {
     using FieldPopulator<NamePositioning>::populate;
+};
+
+template <>
+struct FieldPopulator<StaffListCategoryName> : private FieldPopulator<OthersName>
+{
+    using FieldPopulator<OthersName>::populate;
+};
+
+template <>
+struct FieldPopulator<StaffListCategoryParts> : private FieldPopulator<StaffList>
+{
+    using FieldPopulator<StaffList>::populate;
+};
+
+template <>
+struct FieldPopulator<StaffListCategoryScore> : private FieldPopulator<StaffList>
+{
+    using FieldPopulator<StaffList>::populate;
+};
+
+template <>
+struct FieldPopulator<StaffListRepeatName> : private FieldPopulator<OthersName>
+{
+    using FieldPopulator<OthersName>::populate;
+};
+
+template <>
+struct FieldPopulator<StaffListRepeatParts> : private FieldPopulator<StaffList>
+{
+    using FieldPopulator<StaffList>::populate;
+};
+
+template <>
+struct FieldPopulator<StaffListRepeatPartsForced> : private FieldPopulator<StaffList>
+{
+    using FieldPopulator<StaffList>::populate;
+};
+
+template <>
+struct FieldPopulator<StaffListRepeatScore> : private FieldPopulator<StaffList>
+{
+    using FieldPopulator<StaffList>::populate;
+};
+
+template <>
+struct FieldPopulator<StaffListRepeatScoreForced> : private FieldPopulator<StaffList>
+{
+    using FieldPopulator<StaffList>::populate;
 };
 
 template <>

@@ -312,7 +312,7 @@ public:
     }
 
     std::vector<ElementType> values;    ///< Values in the array
-                                        ///< Guaranteed to have REQUIRED_SIZE elements.
+                                        ///< Guaranteed to have REQUIRED_SIZE elements, if REQUIRED_SIZE is non-zero.
 
     /// @brief Override of #Base::integrityCheck
     void integrityCheck() override
@@ -327,6 +327,24 @@ public:
             }
         }
     }
+};
+
+/**
+ * @class OthersName
+ * @brief Many element names are embedded directly in top-level xml tags. This encapsulates that pattern.
+ */
+class OthersName : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit OthersName(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    std::string name;       ///< the name
+
+    static const xml::XmlElementArray<OthersName>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.    
 };
 
 /**
@@ -435,8 +453,6 @@ public:
         }
     }
 };
-
-class NoteInfoPtr;
 
 /// @brief Base class note details. Note details are entry details associated with a note ID.
 class NoteDetailsBase : public EntryDetailsBase

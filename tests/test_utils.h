@@ -26,6 +26,10 @@
 #include <filesystem>
 #include <iostream>
 
+namespace musx::dom::others {
+class StaffList;
+}
+
 namespace musxtest {
 
 inline std::ostringstream g_endMessages;
@@ -59,5 +63,7 @@ inline bool stringHasDigit(const std::string& s)
                         [](unsigned char c){ return std::isdigit(c); })
            != s.end();
 }
+
+void staffListCheck(std::string_view staffListName, const std::shared_ptr<musx::dom::others::StaffList>& staffList, std::vector<int> expectedValues);
 
 } // namespace musxtext

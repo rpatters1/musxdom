@@ -649,10 +649,6 @@ MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
     {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->staffList = e->getTextAs<Cmper>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(MarkingCategoryName, {
-    {"name", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategoryName>& i) { i->name = e->getText(); }},
-});
-
 MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->width = e->getTextAs<Evpu>(); }},
     {"keySig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) {
@@ -1149,6 +1145,10 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"autoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->autoNumbering = toEnum<Staff::AutoNumberingStyle>(e); }},
     {"useAutoNum", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useAutoNumbering = populateBoolean(e, i); }},
     {"hideKeySigsShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideKeySigsShowAccis = populateBoolean(e, i); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(StaffList, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffList>& i) { i->values.push_back(e->getTextAs<InstCmper>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {

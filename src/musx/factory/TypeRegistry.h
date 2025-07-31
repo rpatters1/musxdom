@@ -260,6 +260,11 @@ using RegisteredOthers = TypeRegistry <
     dom::others::SmartShapeMeasureAssign,
     dom::others::SmartShapeCustomLine,      // node name is `ssLineStyle`
     dom::others::StaffSystem,
+    dom::others::StaffListRepeatName,
+    dom::others::StaffListRepeatParts,
+    dom::others::StaffListRepeatPartsForced,
+    dom::others::StaffListRepeatScore,
+    dom::others::StaffListRepeatScoreForced,
     dom::others::Staff,
     dom::others::StaffStyle,
     dom::others::StaffStyleAssign,
@@ -277,6 +282,9 @@ using RegisteredOthers = TypeRegistry <
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName,
+    dom::others::StaffListCategoryName,
+    dom::others::StaffListCategoryParts,
+    dom::others::StaffListCategoryScore,
     dom::others::PercussionNoteInfo,
     dom::others::MultiStaffInstrumentGroup,
     dom::others::MultiStaffGroupId

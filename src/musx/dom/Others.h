@@ -473,7 +473,7 @@ public:
 
 /**
  * @class DrumStaff
- * @brief Identifies the percussion map ("drum library") for a staff with percussion notations
+ * @brief Identifies the percussion map ("drum library") for a staff with percussion notation.
  *
  * The class is identified by the XML node name "drumStaff".
  */
@@ -493,7 +493,7 @@ public:
 
 /**
  * @class DrumStaffStyle
- * @brief Identifies the percussion map ("drum library") for a staff style with percussion notations
+ * @brief Identifies the percussion map ("drum library") for a staff style with percussion notation.
  *
  * The class is identified by the XML node name "drumStaffStyle".
  */
@@ -957,16 +957,11 @@ public:
  *
  * This class is identified by the XML node name "markingsCategoryName".
  */
-class MarkingCategoryName : public OthersBase {
+class MarkingCategoryName : public OthersName {
 public:
-    /** @brief Constructor function */
-    explicit MarkingCategoryName(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
-
-    std::string name; ///< The name of the marking category.
+    using OthersName::OthersName;
 
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MarkingCategoryName>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1141,8 +1136,8 @@ public:
     int layer{};                ///< The 1-based layer number to which this expression is assigned. (0 means all)
     bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
     Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
-    Cmper staffList{};          ///< The cmper of the staff list that is controlling this assignment (if any). There will be a separate #MeasureExprAssign instance
-                                ///< for every staff in the staff list.
+    Cmper staffList{};          ///< The cmper of the marking category staff list that is controlling this assignment (if any).
+                                ///< There will be a separate #MeasureExprAssign instance for every staff in the staff list.
     bool hidden{};              ///< True if the dynamic is hidden.
 
     /// @brief Gets the assigned text expression.
@@ -1980,6 +1975,154 @@ public:
 
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffList
+ * @brief Defines a staff list. See subclasses for how it is used.
+ *
+ * Each value is a specific staff cmper or one of the #StaffList::FloatingValues.
+ */
+class StaffList : public OthersArray<InstCmper>
+{
+public:
+    using OthersArray::OthersArray;
+
+    /// @enum FloatingValues
+    /// @brief Defines special assignment values used for floating staff assignments
+    enum class FloatingValues : InstCmper
+    {
+        TopStaff = -1,          ///< This value means the assignment is to the top staff of any system or part
+        BottomStaff = -2        ///< This value means the assignment is to the bottom staff of any system or part
+    };
+
+    static const xml::XmlElementArray<StaffList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffListCategoryName
+ * @brief This class specified the name of a staff list used by @ ref MarkingCategory.
+ *
+ * The Cmper is a value from 1 to 8, corresponding to one of the eight canned staff lists available to marking categories.
+ */
+class StaffListCategoryName : public OthersName
+{
+public:
+    using OthersName::OthersName;
+
+    constexpr static std::string_view XmlNodeName = "categoryStaffListName"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListCategoryParts
+ * @brief This class is used by #MarkingCategory to define the staves for parts in a staff list.
+ *
+ * The Cmper is a value from 1 to 8, corresponding to one of the eight canned staff lists available to marking categories.
+ */
+class StaffListCategoryParts : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "categoryStaffListParts"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListCategoryParts
+ * @brief This class is used by #MarkingCategory to define the staves for parts in a staff list.
+ *
+ * The Cmper is a value from 1 to 8, corresponding to one of the eight canned staff lists available to marking categories.
+ */
+class StaffListCategoryScore : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "categoryStaffListScore"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatName
+ * @brief This class specified the name of a staff list used by @ref RepeatEndingStart, @ref RepeatBack, and @ref TextRepeatAssign.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatName : public OthersName
+{
+public:
+    using OthersName::OthersName;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListName"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatParts
+ * @brief This class is used by repeat classes to define the staves for parts in a staff list.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatParts : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListParts"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatPartsForced
+ * @brief This class is used by repeat classes to define the forced staves for parts in a staff list. Repeats on these
+ * staves appear even if the staff has turned them off with #Staff::hideRepeats or #Staff::hideRptBars.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatPartsForced : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListPartsOverride"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatScore
+ * @brief This class is used by repeat classes to define the staves for the score in a staff list.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatScore : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListScore"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatScoreForced
+ * @brief This class is used by repeat classes to define the forced staves for the score in a staff list. Repeats on these
+ * staves appear even if the staff has turned them off with #Staff::hideRepeats or #Staff::hideRptBars.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatScoreForced : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListScoreOverride"; ///< The XML node name for this type.
 };
 
 /**
