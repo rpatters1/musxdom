@@ -422,7 +422,7 @@ TEST(StaffListCategory, Populate)
     EXPECT_EQ(names[2]->name, "Tempo Staves");
 
     auto parts = others->getArray<others::StaffListCategoryParts>(SCORE_PARTID);
-    ASSERT_EQ(parts.size(), 8) << " there should always be 8 canned staff lists";
+    ASSERT_EQ(parts.size(), 8) << " there should always be 8 canned staff lists (unless user removed all staff assignments for one)";
     EXPECT_EQ(names[0]->getCmper(), parts[0]->getCmper());
     musxtest::staffListCheck(names[0]->name, parts[0], { -1 });
     EXPECT_EQ(names[1]->getCmper(), parts[1]->getCmper());
@@ -431,7 +431,7 @@ TEST(StaffListCategory, Populate)
     musxtest::staffListCheck(names[2]->name, parts[2], { -1 });
 
     auto score = others->getArray<others::StaffListCategoryScore>(SCORE_PARTID);
-    ASSERT_EQ(score.size(), 8) << " there should always be 8 canned staff lists";
+    ASSERT_EQ(score.size(), 8) << " there should always be 8 canned staff lists (unless user removed all staff assignments for one)";
     EXPECT_EQ(names[0]->getCmper(), score[0]->getCmper());
     musxtest::staffListCheck(names[0]->name, score[0], { -1 });
     EXPECT_EQ(names[1]->getCmper(), score[1]->getCmper());

@@ -295,7 +295,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 {
     InstrumentMap result;
 
-    auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    const others::InstrumentUsedArray scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
     if (scrollView.empty()) {
         return result;
     }
@@ -314,12 +314,12 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                             }
                             it->second.staffGroupId = multiStaffGroupId->staffGroupId;
                             it->second.multistaffGroupId = rawStaff->multiStaffInstId;
-                            std::optional<size_t> topIndex = others::InstrumentUsed::getIndexForStaff(scrollView, rawStaff->getCmper());
+                            std::optional<size_t> topIndex = scrollView.getIndexForStaff(rawStaff->getCmper());
                             MUSX_ASSERT_IF(!topIndex.has_value()) {
                                 throw std::logic_error("Unable to find " + std::to_string(rawStaff->getCmper()) + " in scrollView.");
                             }
                             for (InstCmper staffId : multiStaffInst->staffNums) {
-                                std::optional<size_t> staffIndex = others::InstrumentUsed::getIndexForStaff(scrollView, staffId);
+                                std::optional<size_t> staffIndex = scrollView.getIndexForStaff(staffId);
                                 MUSX_ASSERT_IF(!staffIndex.has_value()) {
                                     throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
                                 }
@@ -1963,15 +1963,21 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance(MeasCmpe
     return retval;
 }
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstanceAtIndex(const std::vector<std::shared_ptr<others::InstrumentUsed>>& iuArray, Cmper index)
+// *******************************
+// ***** InstrumentUsedArray *****
+// *******************************
+
+std::shared_ptr<others::Staff> others::InstrumentUsedArray::getStaffInstanceAtIndex(Cmper index) const
 {
+    const auto& iuArray = *this;
     if (index >= iuArray.size()) return nullptr;
     auto iuItem = iuArray[index];
     return iuItem->getStaffInstance();
 }
 
-std::optional<size_t> others::InstrumentUsed::getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId)
+std::optional<size_t> others::InstrumentUsedArray::getIndexForStaff(InstCmper staffId) const
 {
+    const auto& iuArray = *this;
     for (size_t x = 0; x < iuArray.size(); x++) {
         if (iuArray[x]->staffId == staffId) {
             return x;

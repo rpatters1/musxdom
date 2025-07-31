@@ -196,8 +196,8 @@ TEST(MultiStaffGroupTest, PopulateFields)
 
 void checkInstrument(const DocumentPtr& doc, const std::string& name, InstCmper topStaffId, size_t expectedNumStaves)
 {
-    const auto scrollView = doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
-    auto topIndex = others::InstrumentUsed::getIndexForStaff(scrollView, topStaffId);
+    const others::InstrumentUsedArray scrollView = doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto topIndex = scrollView.getIndexForStaff(topStaffId);
     ASSERT_TRUE(topIndex.has_value());
     const auto& instruments = doc->getInstruments();
     const auto& it = instruments.find(topStaffId);
@@ -208,7 +208,7 @@ void checkInstrument(const DocumentPtr& doc, const std::string& name, InstCmper 
     ASSERT_TRUE(staff) << "top staff not found for " << name;
     EXPECT_EQ(name, staff->getFullInstrumentName());
     for (const auto& [staffId, index] : instInfo.staves) {
-        auto staffIndex = others::InstrumentUsed::getIndexForStaff(scrollView, staffId);
+        auto staffIndex = scrollView.getIndexForStaff(staffId);
         EXPECT_TRUE(staffIndex.has_value()) << name << " staff " << staffId << " was not found in scrollView";
         if (staffIndex) {
             EXPECT_EQ(index, staffIndex.value() - topIndex.value()) << name << " contains staff out of sequence";

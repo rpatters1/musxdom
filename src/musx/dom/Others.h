@@ -647,18 +647,32 @@ public:
     /// @brief Returns the @ref Staff instance for this element with staff styles applied at the specified location.
     std::shared_ptr<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
 
+    constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+class InstrumentUsedArray : public std::vector<std::shared_ptr<InstrumentUsed>>
+{
+    using VectorType = std::vector<std::shared_ptr<InstrumentUsed>>;
+
+public:
+    /// @brief Move constructor from vector
+    InstrumentUsedArray(VectorType&& v)
+        : VectorType(std::move(v)) {}
+
+    /// @brief Copy constructor from vector
+    InstrumentUsedArray(const VectorType& v)
+        : VectorType(v) {}
+
     /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
     /// @param index The 0-based index to find.
-    static std::shared_ptr<Staff> getStaffInstanceAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
+    std::shared_ptr<Staff> getStaffInstanceAtIndex(Cmper index) const;
 
     /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
     /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
     /// @param staffId The @ref Staff cmper value to find.
-    static std::optional<size_t> getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId);
-
-    constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    std::optional<size_t> getIndexForStaff(InstCmper staffId) const;
 };
 
 /**
