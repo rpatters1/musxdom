@@ -67,7 +67,7 @@ public:
      */
     static std::shared_ptr<PoolType> create(const XmlElementPtr& element, const dom::DocumentPtr& document, ElementLinker& elementLinker)
     {
-        auto pool = std::make_shared<PoolType>();
+        auto pool = std::make_shared<PoolType>(document);
 
 #ifdef MUSX_DISPLAY_NODE_NAMES
         std::set<std::string> alreadyDisplayed;

@@ -81,11 +81,11 @@ public:
             }
         }
         if (!document->getHeader()) document->getHeader() = std::make_shared<musx::dom::Header>();
-        if (!document->getOptions()) document->getOptions() = std::make_shared<musx::dom::OptionsPool>();
-        if (!document->getOthers()) document->getOthers() = std::make_shared<musx::dom::OthersPool>();
-        if (!document->getDetails()) document->getDetails() = std::make_shared<musx::dom::DetailsPool>();
-        if (!document->getEntries()) document->getEntries() = std::make_shared<musx::dom::EntryPool>();
-        if (!document->getTexts()) document->getTexts() = std::make_shared<musx::dom::TextsPool>();
+        if (!document->getOptions()) document->getOptions() = std::make_shared<musx::dom::OptionsPool>(document);
+        if (!document->getOthers()) document->getOthers() = std::make_shared<musx::dom::OthersPool>(document);
+        if (!document->getDetails()) document->getDetails() = std::make_shared<musx::dom::DetailsPool>(document);
+        if (!document->getEntries()) document->getEntries() = std::make_shared<musx::dom::EntryPool>(document);
+        if (!document->getTexts()) document->getTexts() = std::make_shared<musx::dom::TextsPool>(document);
         
 #ifdef MUSX_DISPLAY_NODE_NAMES
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");

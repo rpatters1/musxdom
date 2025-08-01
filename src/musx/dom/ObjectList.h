@@ -24,6 +24,8 @@
 #include <vector>
 #include <memory>
 
+#include "BaseClasses.h"
+
 namespace musx {
 namespace dom {
 
@@ -48,15 +50,25 @@ class ObjectListBase : public std::vector<std::shared_ptr<T>>
 
 public:
     /// @brief Default constructor.
-    ObjectListBase() = default;
+    explicit ObjectListBase(const DocumentWeakPtr& document, Cmper partId)
+        : m_document(document), m_partId(partId) {}
 
-    /// @brief Constructs from a vector of shared pointers.
-    /// @param v The source vector to copy.
-    ObjectListBase(const VectorType& v) : VectorType(v) {}
+    /// @brief Gets the part id that was used to create this list
+    Cmper getRequestedPartId() const { return m_partId; }
 
-    /// @brief Constructs from a moved vector of shared pointers.
-    /// @param v The source vector to move.
-    ObjectListBase(VectorType&& v) : VectorType(std::move(v)) {}
+    /// @brief Gets the document that was used to create this list
+    DocumentPtr getDocument() const
+    {
+        auto document = m_document.lock();
+        MUSX_ASSERT_IF(!document) {
+            throw std::logic_error("Document pointer is no longer valid.");
+        }
+        return document;
+    }
+
+private:
+    DocumentWeakPtr m_document;
+    Cmper m_partId;
 };
 
 /**

@@ -88,8 +88,7 @@ public:
     DocumentPtr getDocument() const
     {
         auto document = m_document.lock();
-        assert(document); // program bug if this pointer goes out of scope.
-        if (!document) {
+        MUSX_ASSERT_IF(!document) {
             throw std::logic_error("Document pointer is no longer valid.");
         }
         return document;

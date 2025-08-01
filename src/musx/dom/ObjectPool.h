@@ -174,7 +174,7 @@ public:
     template <typename T>
     ObjectList<T> getArray(const ObjectKey& key) const
     {
-        ObjectList<T> result;
+        ObjectList<T> result(m_document, key.partId);
 
         auto rangeStart = m_pool.lower_bound(key);
         auto rangeEnd = m_pool.upper_bound(
@@ -291,12 +291,14 @@ protected:
     /// @brief Constructs the object pool
     /// @param knownShareModes Optional parameter that specifies known share modes for certain elements.
     /// These can be particurly important for Base::ShareMode::None because there may be no parts containing them.
-    ObjectPool(const std::unordered_map<std::string, dom::Base::ShareMode>& knownShareModes = {})
-        : m_shareMode(knownShareModes) {}
+    ObjectPool(const DocumentWeakPtr& document, const std::unordered_map<std::string, dom::Base::ShareMode>& knownShareModes = {})
+        : m_document(document), m_shareMode(knownShareModes) {}
 
 private:
-    std::map<ObjectKey, ObjectPtr> m_pool;
+    DocumentWeakPtr m_document;
     std::unordered_map<std::string, dom::Base::ShareMode> m_shareMode;
+
+    std::map<ObjectKey, ObjectPtr> m_pool;
 };
 
 /**
@@ -306,6 +308,8 @@ private:
 class OptionsPool : protected ObjectPool<OptionsBase>
 {
 public:
+    OptionsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
+
     /** @brief Scalar version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<OptionsBase>& instance)
     {
@@ -342,7 +346,7 @@ class OthersPool : public ObjectPool<OthersBase>
 {
 public:
     /// @brief Constructor
-    OthersPool() : ObjectPool({
+    OthersPool(const DocumentWeakPtr& document) : ObjectPool(document, {
         { std::string(others::BeatChartElement::XmlNodeName), Base::ShareMode::None },
         { std::string(others::InstrumentUsed::XmlNodeName), Base::ShareMode::None },
         { std::string(others::SystemLock::XmlNodeName), Base::ShareMode::None },
@@ -389,7 +393,7 @@ class DetailsPool : protected ObjectPool<DetailsBase>
 {
 public:
     /// @brief Constructor
-    DetailsPool() : ObjectPool({
+    DetailsPool(const DocumentWeakPtr& document) : ObjectPool(document, {
         { std::string(details::CenterShape::XmlNodeName), Base::ShareMode::None },
         { std::string(details::StaffGroup::XmlNodeName), Base::ShareMode::None },
         { std::string(details::StaffSize::XmlNodeName), Base::ShareMode::None },
@@ -467,6 +471,8 @@ using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
 class EntryPool // uses different implementation than other pools for more efficient access
 {
 public:
+    EntryPool(const DocumentWeakPtr& document) : m_document(document) {}
+
     /** @brief Add an entry to the EntryPool. (Used by the factory.) */
     void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
     {
@@ -487,6 +493,7 @@ public:
     }
 
 private:
+    DocumentWeakPtr m_document;
     std::unordered_map<EntryNumber, std::shared_ptr<Entry>> m_pool;
 };
 /** @brief Shared `EntryPool` pointer */
@@ -496,6 +503,8 @@ using EntryPoolPtr = std::shared_ptr<EntryPool>;
 class TextsPool : protected ObjectPool<TextsBase>
 {
 public:
+    TextsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
+
     /** @brief Texts version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
     {
