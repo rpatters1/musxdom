@@ -32,12 +32,12 @@ namespace dom {
 /// @brief Defines the type of a musx instance stored in a pool
 /// @tparam T The musx type
 template <typename T>
-using MusxInstance = std::shared_ptr<T>;
+using MusxInstance = std::shared_ptr<const T>;
 
 /// @brief Defines a weak ptr to the type of a musx instance stored in a pool
 /// @tparam T The musx type
 template <typename T>
-using MusxInstanceWeak = std::weak_ptr<T>;
+using MusxInstanceWeak = std::weak_ptr<const T>;
 
 class Document;
 
@@ -113,7 +113,7 @@ public:
 
     /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
     /// @param index The 0-based index to find.
-    std::shared_ptr<others::Staff> getStaffInstanceAtIndex(Cmper index) const;
+    MusxInstance<others::Staff> getStaffInstanceAtIndex(Cmper index) const;
 
     /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
     /// @param staffId The @ref Staff cmper value to find.

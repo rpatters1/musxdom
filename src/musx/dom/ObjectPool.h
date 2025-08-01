@@ -69,7 +69,7 @@ class ObjectPool
 {
 public:
     /** @brief shared pointer to `ObjectBaseType` */
-    using ObjectPtr = MusxInstance<ObjectBaseType>;
+    using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
         std::string nodeId;             ///< the identifier for this node. usually the XML node name.
@@ -311,7 +311,7 @@ public:
     OptionsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
 
     /** @brief Scalar version of #ObjectPool::add */
-    void add(const std::string& nodeName, const MusxInstance<OptionsBase>& instance)
+    void add(const std::string& nodeName, const std::shared_ptr<OptionsBase>& instance)
     {
         if (instance->getPartId()) {
             MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-zero part id [" + std::to_string(instance->getPartId()) + "]");
@@ -361,7 +361,7 @@ public:
     }) {}
 
     /** @brief OthersPool version of #ObjectPool::add */
-    void add(const std::string& nodeName, const MusxInstance<OthersBase>& instance)
+    void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
     
     /** @brief OthersPool version of #ObjectPool::getArray */
@@ -401,7 +401,7 @@ public:
     }) {}
 
     /** @brief DetailsPool version of #ObjectPool::add */
-    void add(const std::string& nodeName, const MusxInstance<DetailsBase>& instance)
+    void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
     /** @brief version of #ObjectPool::getArray for getting all of them */
@@ -474,7 +474,7 @@ public:
     EntryPool(const DocumentWeakPtr& document) : m_document(document) {}
 
     /** @brief Add an entry to the EntryPool. (Used by the factory.) */
-    void add(EntryNumber entryNumber, const MusxInstance<Entry>& instance)
+    void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
     {
         auto [it, emplaced] = m_pool.emplace(entryNumber, instance);
         if (!emplaced) {
@@ -494,7 +494,7 @@ public:
 
 private:
     DocumentWeakPtr m_document;
-    std::unordered_map<EntryNumber, MusxInstance<Entry>> m_pool;
+    std::unordered_map<EntryNumber, std::shared_ptr<Entry>> m_pool;
 };
 /** @brief Shared `EntryPool` pointer */
 using EntryPoolPtr = std::shared_ptr<EntryPool>;
@@ -506,7 +506,7 @@ public:
     TextsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
 
     /** @brief Texts version of #ObjectPool::add */
-    void add(const std::string& nodeName, const MusxInstance<TextsBase>& instance)
+    void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
     {
         if (instance->getPartId()) {
             MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-zero part id [" + std::to_string(instance->getPartId()) + "]");

@@ -977,7 +977,7 @@ TEST(TextsTest, LyricSyllableParsing)
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
-    auto checkSyllable = [&](const std::shared_ptr<LyricsVerse>& lyr, size_t index, const std::string& expSyl, bool expBefore, bool expAfter) -> void {
+    auto checkSyllable = [&](const MusxInstance<LyricsVerse>& lyr, size_t index, const std::string& expSyl, bool expBefore, bool expAfter) -> void {
         ASSERT_GT(lyr->syllables.size(), index);
         const auto& syl = lyr->syllables[index];
         ASSERT_TRUE(syl);

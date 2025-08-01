@@ -595,7 +595,7 @@ public:
 
     /// @brief Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops.
     /// @param iterator function.
-    void iterateRawEntries(std::function<bool(const std::shared_ptr<Entry>& entry)> iterator) const;
+    void iterateRawEntries(std::function<bool(const MusxInstance<Entry>& entry)> iterator) const;
 
     /** @brief Returns a vector of entries contained in the frame.
      *

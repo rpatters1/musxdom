@@ -59,7 +59,8 @@ void details::BeamAlterations::calcAllActiveFlags(const DocumentPtr& document)
         util::Logger::log(util::Logger::LogLevel::Verbose, std::string(T::XmlNodeName) + " has " + std::to_string(values.size()) + " elements.");
 #endif
         for (const auto& value : values) {
-            value->m_active = (value->flattenStyle == beamOptions->beamingStyle);
+            T* mutableValue = const_cast<T*>(value.get());
+            mutableValue->m_active = (value->flattenStyle == beamOptions->beamingStyle);
         }
     } else {
         MUSX_INTEGRITY_ERROR("Unable to retrieve beaming options. Active indicators for beam alterations were not set.");
@@ -2239,7 +2240,7 @@ void texts::LyricsTextBase::createSyllableInfo()
         } else {
             if (inSeparator) {
                 if (!current.empty()) {
-                    syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
+                    syllables.push_back(std::shared_ptr<const LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
                     current.clear();
                 }
                 lastSeparatorHadHyphen = currSeparatorHasHyphen;
@@ -2251,7 +2252,7 @@ void texts::LyricsTextBase::createSyllableInfo()
     }
 
     if (!current.empty()) {
-        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
+        syllables.push_back(std::shared_ptr<const LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
     }
 }
 
@@ -2285,7 +2286,7 @@ int others::Measure::calcDisplayNumber() const
 
 MusxInstance<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff) const
 {
-    MusxInstance<KeySignature> result;
+    std::shared_ptr<KeySignature> result;
     MusxInstance<others::Staff> staff;
     if (forStaff) {
         staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0);
@@ -2472,7 +2473,8 @@ void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const Document
                         musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose,
                             "Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
                     } else {
-                        staff->multiStaffInstId = instance->getCmper();
+                        others::Staff* staffMutable = const_cast<others::Staff*>(staff.get());
+                        staffMutable->multiStaffInstId = instance->getCmper();
                     }
                 }
             }
@@ -2833,14 +2835,16 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
         auto pages = document->getOthers()->getArray<Page>(part->getCmper());
         auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
         for (const auto& system : systems) {
-            system->pageId = 0; // initialize
+            StaffSystem* mutableSystem = const_cast<StaffSystem*>(system.get());
+            mutableSystem->pageId = 0; // initialize
         }
         for (size_t x = 0; x < pages.size(); x++) {
             auto page = pages[x];
-            page->lastSystemId = std::nullopt;
+            Page* mutablePage = const_cast<Page*>(page.get());
+            mutablePage->lastSystemId = std::nullopt;
             if (!page->isBlank()) {
                 if (page->firstSystemId > 0) {
-                    page->lastSystemId = [&]() -> SystemCmper {
+                    mutablePage->lastSystemId = [&]() -> SystemCmper {
                         size_t nextIndex = x + 1;
                         while (nextIndex < pages.size()) {
                             auto nextPage = pages[nextIndex++];
@@ -2856,19 +2860,20 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
                     }();
                     if (page->lastSystemId.value() >= page->firstSystemId) {
                         if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->firstSystemId)) {
-                            page->firstMeasureId = sys->startMeas;
+                            mutablePage->firstMeasureId = sys->startMeas;
                         } else {
                             MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
                                 + " has a no system instance for its first system.");                        
                         }
                         if (auto sys = document->getOthers()->get<others::StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
-                            page->lastMeasureId = sys->getLastMeasure();
+                            mutablePage->lastMeasureId = sys->getLastMeasure();
                         } else {
                             MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
                                 + " has a no system instance for its last system.");                        
                         }
                         for (size_t x = size_t(page->firstSystemId - 1); x < size_t(page->lastSystemId.value()); x++) {
-                            systems[x]->pageId = PageCmper(page->getCmper());
+                            StaffSystem* mutableSystem = const_cast<StaffSystem*>(systems[x].get());
+                            mutableSystem->pageId = PageCmper(page->getCmper());
                         }
                     } else {
                         MUSX_INTEGRITY_ERROR("The systems on page " + std::to_string(page->getCmper()) + " of part " + part->getName()
@@ -2887,7 +2892,7 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
 // ***** PageFormatOptions *****
 // *****************************
 
-MusxInstance<options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
+std::shared_ptr<const options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
 {
     const auto& baseOptions = (partId == SCORE_PARTID) ? pageFormatScore : pageFormatParts;
     auto retval = std::make_shared<options::PageFormatOptions::PageFormat>(*baseOptions);

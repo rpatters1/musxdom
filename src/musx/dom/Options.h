@@ -1001,7 +1001,7 @@ public:
      * @returns A pointer to a detached instance of @ref PageFormat that is a best approximation
      * to the settings for the input part.
      */
-    std::shared_ptr<PageFormat> calcPageFormatForPart(Cmper partId) const;
+    std::shared_ptr<const PageFormat> calcPageFormatForPart(Cmper partId) const;
 
     /**
      * @brief Constructor for PageFormatOptions.

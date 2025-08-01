@@ -229,14 +229,14 @@ TEST(BeamAlterationsTest, BeamWidths)
         EXPECT_TRUE(entryInfo->getEntry()->stemDetail);
         auto primUpAlts = details->get<details::BeamAlterationsUpStem>(SCORE_PARTID, entryInfo->getEntry()->getEntryNumber());
         auto primDnAlts = details->get<details::BeamAlterationsDownStem>(SCORE_PARTID, entryInfo->getEntry()->getEntryNumber());
-        auto secUpAlts = [&]() -> std::shared_ptr<details::SecondaryBeamAlterationsUpStem> {
+        auto secUpAlts = [&]() -> MusxInstance<details::SecondaryBeamAlterationsUpStem> {
             auto result = details->getArray<details::SecondaryBeamAlterationsUpStem>(SCORE_PARTID, entryInfo->getEntry()->getEntryNumber());
             if (!result.empty()) {
                 return result[0];
             }
             return nullptr;
         }();
-        auto secDnAlts = [&]() -> std::shared_ptr<details::SecondaryBeamAlterationsDownStem> {
+        auto secDnAlts = [&]() -> MusxInstance<details::SecondaryBeamAlterationsDownStem> {
             auto result = details->getArray<details::SecondaryBeamAlterationsDownStem>(SCORE_PARTID, entryInfo->getEntry()->getEntryNumber());
             if (!result.empty()) {
                 return result[0];

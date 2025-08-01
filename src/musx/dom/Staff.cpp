@@ -82,9 +82,10 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 
     for (const auto& instrumentUsed : scrollViewList) {
         auto staff = instrumentUsed->getStaffInstance();
+        Staff* mutableStaff = const_cast<Staff*>(staff.get());
         if (!staff) continue;
         if (staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
-            staff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
+            mutableStaff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
             continue;
         }
 
@@ -101,7 +102,8 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
             for (size_t x = 0; x < multiStaffGroup->staffNums.size(); x++) {
                 auto groupStaff = multiStaffGroup->getStaffInstanceAtIndex(x);
                 if (groupStaff) {
-                    groupStaff->autoNumberValue = groupNumber;
+                    Staff* mutableGroupStaff = const_cast<Staff*>(groupStaff.get());
+                    mutableGroupStaff->autoNumberValue = groupNumber;
                 }
             }
             continue; // Skip further processing for the current staff
@@ -109,7 +111,7 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 
         // Assign a number for single staves
         instUuidNumbers[staff->instUuid]++;
-        staff->autoNumberValue = instUuidNumbers[staff->instUuid];
+        mutableStaff->autoNumberValue = instUuidNumbers[staff->instUuid];
     }
 }
 template <typename SubType>
@@ -125,15 +127,16 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
 
     auto list = document->getOthers()->getArray<SubType>(SCORE_PARTID);
     for (const auto& item : list) {
+        SubType* mutableItem = const_cast<SubType*>(item.get());
         if (item->notationStyle == Staff::NotationStyle::Percussion) {
             if (auto drumStaff = document->getOthers()->get<DrumStaffType>(SCORE_PARTID, item->getCmper())) {
-                item->percussionMapId = drumStaff->whichDrumLib;
+                mutableItem->percussionMapId = drumStaff->whichDrumLib;
             } else {
-                item->percussionMapId = Cmper(0);
+                mutableItem->percussionMapId = Cmper(0);
                 MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(item->getCmper()) + " is percussion style but has no DrumStaff record.");
             }
         } else {
-            item->percussionMapId = std::nullopt;
+            mutableItem->percussionMapId = std::nullopt;
         }
         bool checkFullNeeded = true;
         if constexpr (isForStyle) {
@@ -141,11 +144,11 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
         }
         if (checkFullNeeded) {
             if (auto full = document->getOthers()->get<NamePositionFullType>(SCORE_PARTID, item->getCmper())) {
-                item->fullNamePosId = item->getCmper();
+                mutableItem->fullNamePosId = item->getCmper();
             } else {
-                item->fullNamePosId = 0;
+                mutableItem->fullNamePosId = 0;
             }
-            item->fullNamePosFromStyle = isForStyle;
+            mutableItem->fullNamePosFromStyle = isForStyle;
         }
         bool checkAbbrvNeeded = true;
         if constexpr (isForStyle) {
@@ -153,11 +156,11 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
         }
         if (checkAbbrvNeeded) {
             if (auto abrv = document->getOthers()->get<NamePositionAbrvType>(SCORE_PARTID, item->getCmper())) {
-                item->abrvNamePosId = item->getCmper();
+                mutableItem->abrvNamePosId = item->getCmper();
             } else {
-                item->abrvNamePosId = 0;
+                mutableItem->abrvNamePosId = 0;
             }
-            item->abrvNamePosFromStyle = isForStyle;
+            mutableItem->abrvNamePosFromStyle = isForStyle;
         }
     }
 }
@@ -755,7 +758,7 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
     auto rawStaff = document->getOthers()->get<Staff>(partId, staffId);
     if (!rawStaff) return nullptr;
 
-    MusxInstance<StaffComposite> result(new StaffComposite(rawStaff, partId, measId, eduPosition));
+    std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, partId, measId, eduPosition));
     if (result->hasStyles) {
         auto styles = StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
         for (const auto& style : styles) {

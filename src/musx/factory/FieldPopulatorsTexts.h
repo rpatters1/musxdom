@@ -38,7 +38,8 @@ MUSX_RESOLVER_ENTRY(LyricsVerse, {
     [](const dom::DocumentPtr& document) {
         auto lyricsTexts = document->getTexts()->getArray<LyricsVerse>();
         for (auto& text : lyricsTexts) {
-            text->createSyllableInfo();
+            auto mutableText = const_cast<LyricsVerse*>(text.get());
+            mutableText->createSyllableInfo();
         }
     }
 });
@@ -47,7 +48,8 @@ MUSX_RESOLVER_ENTRY(LyricsChorus, {
     [](const dom::DocumentPtr& document) {
         auto lyricsTexts = document->getTexts()->getArray<LyricsChorus>();
         for (auto& text : lyricsTexts) {
-            text->createSyllableInfo();
+            auto mutableText = const_cast<LyricsChorus*>(text.get());
+            mutableText->createSyllableInfo();
         }
     }
 });
@@ -56,7 +58,8 @@ MUSX_RESOLVER_ENTRY(LyricsSection, {
     [](const dom::DocumentPtr& document) {
         auto lyricsTexts = document->getTexts()->getArray<LyricsSection>();
         for (auto& text : lyricsTexts) {
-            text->createSyllableInfo();
+            auto mutableText = const_cast<LyricsSection*>(text.get());
+            mutableText->createSyllableInfo();
         }
     }
 });

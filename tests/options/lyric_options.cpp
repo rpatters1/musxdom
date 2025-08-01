@@ -130,25 +130,25 @@ TEST(LyricOptionsTest, PropertiesAndSubnodes)
 
     // syllablePosStyles
     EXPECT_EQ(lyric->syllablePosStyles.size(), 4);
-    EXPECT_EQ(lyric->syllablePosStyles[LyricOptions::SyllablePosStyleType::Default]->align, LyricOptions::AlignJustify::Center);
-    EXPECT_EQ(lyric->syllablePosStyles[LyricOptions::SyllablePosStyleType::Default]->justify, LyricOptions::AlignJustify::Center);
-    EXPECT_TRUE(lyric->syllablePosStyles[LyricOptions::SyllablePosStyleType::Default]->on);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::Default)->align, LyricOptions::AlignJustify::Center);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::Default)->justify, LyricOptions::AlignJustify::Center);
+    EXPECT_TRUE(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::Default)->on);
 
-    EXPECT_EQ(lyric->syllablePosStyles[LyricOptions::SyllablePosStyleType::WordExt]->align, LyricOptions::AlignJustify::Left);
-    EXPECT_EQ(lyric->syllablePosStyles[LyricOptions::SyllablePosStyleType::WordExt]->justify, LyricOptions::AlignJustify::Left);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::WordExt)->align, LyricOptions::AlignJustify::Left);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::WordExt)->justify, LyricOptions::AlignJustify::Left);
 
-    EXPECT_EQ(lyric->syllablePosStyles[LyricOptions::SyllablePosStyleType::First]->justify, LyricOptions::AlignJustify::Left);
-    EXPECT_EQ(lyric->syllablePosStyles[LyricOptions::SyllablePosStyleType::SystemStart]->justify, LyricOptions::AlignJustify::Left);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::First)->justify, LyricOptions::AlignJustify::Left);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::SystemStart)->justify, LyricOptions::AlignJustify::Left);
 
     // wordExtConnectStyles
     EXPECT_EQ(lyric->wordExtConnectStyles.size(), 9);
-    EXPECT_EQ(lyric->wordExtConnectStyles[LyricOptions::WordExtConnectStyleType::DefaultStart]->connectIndex, LyricOptions::WordExtConnectIndex::LyricRightBottom);
-    EXPECT_EQ(lyric->wordExtConnectStyles[LyricOptions::WordExtConnectStyleType::DefaultStart]->xOffset, 4);
-    EXPECT_EQ(lyric->wordExtConnectStyles[LyricOptions::WordExtConnectStyleType::DefaultStart]->yOffset, 1);
+    EXPECT_EQ(lyric->wordExtConnectStyles.at(LyricOptions::WordExtConnectStyleType::DefaultStart)->connectIndex, LyricOptions::WordExtConnectIndex::LyricRightBottom);
+    EXPECT_EQ(lyric->wordExtConnectStyles.at(LyricOptions::WordExtConnectStyleType::DefaultStart)->xOffset, 4);
+    EXPECT_EQ(lyric->wordExtConnectStyles.at(LyricOptions::WordExtConnectStyleType::DefaultStart)->yOffset, 1);
 
-    EXPECT_EQ(lyric->wordExtConnectStyles[LyricOptions::WordExtConnectStyleType::DefaultEnd]->connectIndex, LyricOptions::WordExtConnectIndex::HeadRightLyrBaseline);
-    EXPECT_EQ(lyric->wordExtConnectStyles[LyricOptions::WordExtConnectStyleType::SystemStart]->xOffset, 12);
-    EXPECT_EQ(lyric->wordExtConnectStyles[LyricOptions::WordExtConnectStyleType::SystemEnd]->xOffset, -12);
-    EXPECT_EQ(lyric->wordExtConnectStyles[LyricOptions::WordExtConnectStyleType::DurationEnd]->xOffset, -8);
-    EXPECT_EQ(lyric->wordExtConnectStyles[LyricOptions::WordExtConnectStyleType::OneEntryEnd]->xOffset, 42);
+    EXPECT_EQ(lyric->wordExtConnectStyles.at(LyricOptions::WordExtConnectStyleType::DefaultEnd)->connectIndex, LyricOptions::WordExtConnectIndex::HeadRightLyrBaseline);
+    EXPECT_EQ(lyric->wordExtConnectStyles.at(LyricOptions::WordExtConnectStyleType::SystemStart)->xOffset, 12);
+    EXPECT_EQ(lyric->wordExtConnectStyles.at(LyricOptions::WordExtConnectStyleType::SystemEnd)->xOffset, -12);
+    EXPECT_EQ(lyric->wordExtConnectStyles.at(LyricOptions::WordExtConnectStyleType::DurationEnd)->xOffset, -8);
+    EXPECT_EQ(lyric->wordExtConnectStyles.at(LyricOptions::WordExtConnectStyleType::OneEntryEnd)->xOffset, 42);
 }

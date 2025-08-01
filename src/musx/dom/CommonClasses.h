@@ -460,7 +460,7 @@ public:
     }
 
     /// @brief returns whether the two time signatures represent the same time signature
-    bool isSame(const TimeSignature& src)
+    bool isSame(const TimeSignature& src) const
     {
         return components == src.components && m_abbreviate == src.m_abbreviate;
     }

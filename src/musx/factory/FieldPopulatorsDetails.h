@@ -191,7 +191,8 @@ MUSX_RESOLVER_ENTRY(StaffGroup, {
                     continue;
                 }
                 for (size_t x = *startIndex; x <= *endIndex && x < baseList.size(); x++) {
-                    instance->staves.insert(baseList[x]->staffId);
+                    auto mutableInstance = const_cast<StaffGroup*>(instance.get());
+                    mutableInstance->staves.insert(baseList[x]->staffId);
                 }
             }
         }

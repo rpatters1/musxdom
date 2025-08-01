@@ -228,7 +228,7 @@ public:
         if constexpr (std::is_same_v<Base, ParentClass>) {
             return result;        
         } else {
-            return std::dynamic_pointer_cast<ParentClass>(result);
+            return std::dynamic_pointer_cast<const ParentClass>(result);
         }
     }
     
