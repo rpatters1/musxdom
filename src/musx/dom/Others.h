@@ -652,33 +652,6 @@ public:
 };
 
 /**
- * @class InstrumentUsedArray
- * @brief Defines a set of staves in a staff system or in Scroll View. You can create it from the value
- * returned by #OthersPool::getArray<others::InstrumentUsed>.
- */
-class InstrumentUsedArray : public std::vector<std::shared_ptr<InstrumentUsed>>
-{
-    using VectorType = std::vector<std::shared_ptr<InstrumentUsed>>;
-
-public:
-    /// @brief Move constructor from vector
-    InstrumentUsedArray(VectorType&& v)
-        : VectorType(std::move(v)) {}
-
-    /// @brief Copy constructor from vector
-    InstrumentUsedArray(const VectorType& v)
-        : VectorType(v) {}
-
-    /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
-    /// @param index The 0-based index to find.
-    std::shared_ptr<Staff> getStaffInstanceAtIndex(Cmper index) const;
-
-    /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
-    /// @param staffId The @ref Staff cmper value to find.
-    std::optional<size_t> getIndexForStaff(InstCmper staffId) const;
-};
-
-/**
  * @class KeyFormat
  * @brief The key format for a custom key signature.
  *

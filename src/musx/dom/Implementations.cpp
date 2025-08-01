@@ -295,7 +295,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 {
     InstrumentMap result;
 
-    const others::InstrumentUsedArray scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    const auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
     if (scrollView.empty()) {
         return result;
     }
@@ -1963,29 +1963,6 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance(MeasCmpe
     return retval;
 }
 
-// *******************************
-// ***** InstrumentUsedArray *****
-// *******************************
-
-std::shared_ptr<others::Staff> others::InstrumentUsedArray::getStaffInstanceAtIndex(Cmper index) const
-{
-    const auto& iuArray = *this;
-    if (index >= iuArray.size()) return nullptr;
-    auto iuItem = iuArray[index];
-    return iuItem->getStaffInstance();
-}
-
-std::optional<size_t> others::InstrumentUsedArray::getIndexForStaff(InstCmper staffId) const
-{
-    const auto& iuArray = *this;
-    for (size_t x = 0; x < iuArray.size(); x++) {
-        if (iuArray[x]->staffId == staffId) {
-            return x;
-        }
-    }
-    return std::nullopt;
-}
-
 // ************************
 // ***** KeySignature *****
 // ************************
@@ -2820,6 +2797,29 @@ bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
     }
     return (*this)->harmLev == src->harmLev
         && (*this)->harmAlt == src->harmAlt;
+}
+
+// **********************************************
+// ***** ObjectList<others::InstrumentUsed> *****
+// **********************************************
+
+std::shared_ptr<others::Staff> ObjectList<others::InstrumentUsed>::getStaffInstanceAtIndex(Cmper index) const
+{
+    const auto& iuArray = *this;
+    if (index >= iuArray.size()) return nullptr;
+    auto iuItem = iuArray[index];
+    return iuItem->getStaffInstance();
+}
+
+std::optional<size_t> ObjectList<others::InstrumentUsed>::getIndexForStaff(InstCmper staffId) const
+{
+    const auto& iuArray = *this;
+    for (size_t x = 0; x < iuArray.size(); x++) {
+        if (iuArray[x]->staffId == staffId) {
+            return x;
+        }
+    }
+    return std::nullopt;
 }
 
 // ****************
