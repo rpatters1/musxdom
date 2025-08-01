@@ -813,7 +813,7 @@ class EntryInfo
      * @param entry The entry.
     */
     explicit EntryInfo(const MusxInstance<Entry>& entry)
-        : m_entry(entry) {}
+        : m_entry(entry.ptr()) {}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
     friend details::GFrameHoldContext;
@@ -838,7 +838,7 @@ public:
         if (!retval) {
             throw std::logic_error("Entry pointer is no longer valid");
         }
-        return retval;
+        return MusxInstance<Entry>(retval);
     }
 
     /// @brief Calculates the next duration position after this entry
@@ -882,7 +882,7 @@ public:
         MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
             throw std::logic_error("Note index is too large for notes array.");
         }
-        return m_entry->getEntry()->notes[m_noteIndex];
+        return MusxInstance<Note>(m_entry->getEntry()->notes[m_noteIndex]);
     }
 
     /// @brief Gets the entry info for this note

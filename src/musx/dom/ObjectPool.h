@@ -190,7 +190,7 @@ public:
         for (auto it = rangeStart; it != rangeEnd; ++it) {
             auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
             assert(typedPtr);
-            result.push_back(typedPtr);
+            result.push_back(MusxInstance<T>(typedPtr));
         }
         return result;
     }
@@ -259,7 +259,7 @@ public:
         }
         auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
         assert(typedPtr); // There is a program bug if the pointer cast fails.
-        return typedPtr;
+        return MusxInstance<T>(typedPtr);
     }
 
     /**
@@ -489,7 +489,7 @@ public:
         if (it == m_pool.end()) {
             return nullptr;
         }
-        return it->second;
+        return MusxInstance<Entry>(it->second);
     }
 
 private:

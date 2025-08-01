@@ -330,7 +330,7 @@ public:
     /**
      * @brief Vector of clef definitions (@ref ClefDef).
      */
-    std::vector<MusxInstance<ClefDef>> clefDefs;
+    std::vector<std::shared_ptr<ClefDef>> clefDefs;
 
     /// @brief Bounds-checked accessor function for #clefDefs.
     /// @param clefIndex The index to retrieve.
@@ -340,7 +340,7 @@ public:
         MUSX_ASSERT_IF(clefIndex >= clefDefs.size()) {
             throw std::out_of_range("Clef index " + std::to_string(clefIndex) + " does not exist in document.");
         }
-        return clefDefs[clefIndex];
+        return MusxInstance<ClefDef>(clefDefs[clefIndex]);
     }
 
     /**
@@ -467,7 +467,7 @@ public:
      *
      * An unordered map that associates each `FontType` with its corresponding `FontInfo` settings.
      */
-    std::unordered_map<FontType, MusxInstance<FontInfo>> fontOptions;
+    std::unordered_map<FontType, std::shared_ptr<FontInfo>> fontOptions;
 
     /**
      * @brief get the `FontInfo` for a particular type

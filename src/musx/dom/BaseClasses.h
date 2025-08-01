@@ -210,7 +210,7 @@ public:
      * 
      * @param parent A shared pointer to the parent document.
      */
-    ContainedClassBase(const MusxInstance<Base>& parent)
+    ContainedClassBase(const std::shared_ptr<const Base>& parent)
         : Base(parent->getDocument(), SCORE_PARTID, ShareMode::All), m_parent(parent)
     {}
 
@@ -226,9 +226,9 @@ public:
             throw std::logic_error("Attempt to get parent of contained class, but the parent is no longer allocated.");
         }
         if constexpr (std::is_same_v<Base, ParentClass>) {
-            return result;        
+            return MusxInstance<ParentClass>(result);        
         } else {
-            return std::dynamic_pointer_cast<const ParentClass>(result);
+            return MusxInstance<ParentClass>(std::dynamic_pointer_cast<const ParentClass>(result));
         }
     }
     

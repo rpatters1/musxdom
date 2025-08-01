@@ -241,16 +241,12 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const Mus
 
 MusxInstance<FontInfo> options::ClefOptions::ClefDef::calcFont() const
 {
-    MusxInstance<FontInfo> result;
     if (useOwnFont && font) {
-        result = font;
+        return MusxInstance<FontInfo>(font);
     } else if (auto fontOptions = getDocument()->getOptions()->get<options::FontOptions>()) {
-        result = fontOptions->getFontInfo(options::FontOptions::FontType::Clef);
+        return fontOptions->getFontInfo(options::FontOptions::FontType::Clef);
     }
-    if (!result) {
-        throw std::invalid_argument("Unable to determine clef font due to missing font definitions.");
-    }
-    return result;
+    throw std::invalid_argument("Unable to determine clef font due to missing font definitions.");
 }
 
 // ********************
@@ -1402,7 +1398,7 @@ MusxInstance<FontInfo> options::FontOptions::getFontInfo(options::FontOptions::F
     if (it == fontOptions.end()) {
         throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
     }
-    return it->second;
+    return MusxInstance<FontInfo>(it->second);
 }
 
 MusxInstance<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
@@ -2304,7 +2300,7 @@ MusxInstance<KeySignature> others::Measure::createKeySignature(const std::option
     if (result && staff) {
         result->setTransposition(staff);
     }
-    return result;
+    return MusxInstance<KeySignature>(result);
 }
 
 MusxInstance<TimeSignature> others::Measure::createTimeSignature(const std::optional<StaffCmper>& forStaff) const
@@ -3396,10 +3392,10 @@ util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std
         default:
             break;
         case TextType::Block:
-            rawText = getDocument()->getTexts()->get<texts::BlockText>(textId);
+            rawText = MusxInstance<TextsBase>(getDocument()->getTexts()->get<texts::BlockText>(textId));
             break;
         case TextType::Expression:
-            rawText = getDocument()->getTexts()->get<texts::ExpressionText>(textId);
+            rawText = MusxInstance<TextsBase>(getDocument()->getTexts()->get<texts::ExpressionText>(textId));
             break;
     }
     if (rawText) {

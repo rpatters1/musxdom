@@ -231,7 +231,7 @@ MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
                     MUSX_INTEGRITY_ERROR("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
                 auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
-                mutableMarkingCat->shapeExpressions.emplace(instance->getCmper(), instance);
+                mutableMarkingCat->shapeExpressions.emplace(instance->getCmper(), instance.ptr());
             }
         }
     }
@@ -264,7 +264,7 @@ MUSX_RESOLVER_ENTRY(TextExpressionDef, {
                     MUSX_INTEGRITY_ERROR("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
                 auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
-                mutableMarkingCat->textExpressions.emplace(instance->getCmper(), instance);
+                mutableMarkingCat->textExpressions.emplace(instance->getCmper(), instance.ptr());
             }
         }
     }

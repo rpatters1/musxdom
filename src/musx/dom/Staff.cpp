@@ -368,7 +368,7 @@ MusxInstance<NamePositioning> Staff::getNamePosition() const
         }
     }
 
-    MusxInstance<NamePositioning> defaultValue;
+    std::shared_ptr<NamePositioning> defaultValue;
     if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
         if constexpr (isForFull) {
             defaultValue = staffOptions->namePos;
@@ -378,7 +378,7 @@ MusxInstance<NamePositioning> Staff::getNamePosition() const
     } else {
         MUSX_INTEGRITY_ERROR("Unable to retrieve staff options for returning default name positioning.");
     }
-    return defaultValue;
+    return MusxInstance<NamePositioning>(defaultValue);
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
@@ -766,7 +766,7 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
         }
     }
 
-    return result;
+    return MusxInstance<StaffComposite>(result);
 }
 
 } // namespace others

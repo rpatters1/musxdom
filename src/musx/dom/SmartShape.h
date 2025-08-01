@@ -201,16 +201,16 @@ public:
         {
             Base::integrityCheck();
             if (!endPoint) {
-                endPoint = std::make_shared<smartshape::EndPoint>(getParent());
+                endPoint = std::make_shared<smartshape::EndPoint>(getParent().ptr());
             }
             if (!endPointAdj) {
-                endPointAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
+                endPointAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent().ptr());
             }
             if (!ctlPtAdj) {
-                ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(getParent());
+                ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(getParent().ptr());
             }
             if (!breakAdj) {
-                breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
+                breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent().ptr());
             }
             endPoint->integrityCheck();
             endPointAdj->integrityCheck();
