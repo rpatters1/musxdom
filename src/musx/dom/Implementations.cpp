@@ -2888,7 +2888,7 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
 // ***** PageFormatOptions *****
 // *****************************
 
-std::shared_ptr<const options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
+MusxInstance<options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
 {
     const auto& baseOptions = (partId == SCORE_PARTID) ? pageFormatScore : pageFormatParts;
     auto retval = std::make_shared<options::PageFormatOptions::PageFormat>(*baseOptions);
@@ -2941,7 +2941,7 @@ std::shared_ptr<const options::PageFormatOptions::PageFormat> options::PageForma
             // do not change retval->firstSysMarginDistance because it varies so much depending on context
         }
     }
-    return retval;
+    return MusxInstance<options::PageFormatOptions::PageFormat>(retval);
 }
 
 // **************************
