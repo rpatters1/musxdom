@@ -134,9 +134,9 @@ private:
     /// @brief Find the layer frame and Edu start position for the given layer.
     /// @param layerIndex The layer index to find (0..3)
     /// @return std::pair containing the frame and the start position.
-    std::pair<std::shared_ptr<const others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;
+    std::pair<MusxInstance<others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;
 
-    std::shared_ptr<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
+    MusxInstance<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId;                 ///< The requested part context.
 };
 
@@ -213,7 +213,7 @@ public:
     /// @return A std::pair containing
     ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
-    std::pair<int, int> calcDefaultEnharmonic(const std::shared_ptr<KeySignature>& key) const;
+    std::pair<int, int> calcDefaultEnharmonic(const MusxInstance<KeySignature>& key) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
@@ -239,8 +239,8 @@ public:
      * @param respellEnharmonic If true, the notes are enharmonically respelled using the default enharmonic spelling.
      * @return #NoteProperties
      */
-    NoteProperties calcNoteProperties(const std::shared_ptr<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
-        const std::shared_ptr<const others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
+    NoteProperties calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
+        const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     bool requireAllFields() const override { return false; }
 
@@ -321,12 +321,12 @@ public:
     /// @brief Gets the next entry in this list or nullptr if none.
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
-    std::shared_ptr<Entry> getNext() const;
+    MusxInstance<Entry> getNext() const;
 
     /// @brief Gets the previous entry in this list or nullptr if none
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
-    std::shared_ptr<Entry> getPrevious() const;
+    MusxInstance<Entry> getPrevious() const;
 
     /**
      * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
@@ -423,13 +423,13 @@ public:
 
     /// @brief Creates the current StaffComposite for the entry
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
-    std::shared_ptr<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
+    MusxInstance<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the measure cmper
     MeasCmper getMeasure() const;
 
     /// @brief Get the key signature of the entry
-    std::shared_ptr<KeySignature> getKeySignature() const;
+    MusxInstance<KeySignature> getKeySignature() const;
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
     unsigned calcReverseGraceIndex() const;
@@ -617,15 +617,15 @@ public:
     /// @brief class to track tuplets in the frame
     struct TupletInfo
     {
-        std::shared_ptr<const details::TupletDef> tuplet;   ///< the tuplet
-        size_t startIndex;                                  ///< the index of the first entry in the tuplet
-        size_t endIndex;                                    ///< the index of the last entry in the tuplet
-        util::Fraction startDura;                           ///< the actual duration where the tuplet starts
-        util::Fraction endDura;                             ///< the actual duration where the tuplet ends
-        bool voice2;                                        ///< whether this tuplet is for voice2
+        MusxInstance<details::TupletDef> tuplet;  ///< the tuplet
+        size_t startIndex;                              ///< the index of the first entry in the tuplet
+        size_t endIndex;                                ///< the index of the last entry in the tuplet
+        util::Fraction startDura;                       ///< the actual duration where the tuplet starts
+        util::Fraction endDura;                         ///< the actual duration where the tuplet ends
+        bool voice2;                                    ///< whether this tuplet is for voice2
 
         /// @brief Constructor
-        TupletInfo(const std::weak_ptr<const EntryFrame>& parent, const std::shared_ptr<const details::TupletDef>& tup, size_t index, util::Fraction start, bool forVoice2)
+        TupletInfo(const std::weak_ptr<const EntryFrame>& parent, const MusxInstance<details::TupletDef>& tup, size_t index, util::Fraction start, bool forVoice2)
             : tuplet(tup), startIndex(index), endIndex((std::numeric_limits<size_t>::max)()),
                 startDura(start), endDura(-1), voice2(forVoice2), m_parent(parent)
         {}
@@ -724,7 +724,7 @@ public:
      * Finale does not display them.)
     */
     std::vector<TupletInfo> tupletInfo;
-    std::shared_ptr<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
+    MusxInstance<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
 
     /// @brief Get the document for the entry frame
     DocumentPtr getDocument() const;
@@ -774,10 +774,10 @@ public:
     /// @brief Creates a current StaffComposite for the entry frame.
     /// @param eduPosition The Edu position for which to create the staff.
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
-    std::shared_ptr<others::StaffComposite> createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId = std::nullopt) const;
+    MusxInstance<others::StaffComposite> createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the measure instance
-    std::shared_ptr<others::Measure> getMeasureInstance() const;
+    MusxInstance<others::Measure> getMeasureInstance() const;
 
     /// @brief Calculates if this entry frame is part of a cue.
     /// @todo Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being
@@ -812,7 +812,7 @@ class EntryInfo
      *
      * @param entry The entry.
     */
-    explicit EntryInfo(const std::shared_ptr<const Entry>& entry)
+    explicit EntryInfo(const MusxInstance<Entry>& entry)
         : m_entry(entry) {}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -832,7 +832,7 @@ public:
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid 
-    std::shared_ptr<const Entry> getEntry() const
+    MusxInstance<Entry> getEntry() const
     {
         auto retval = m_entry.lock();
         if (!retval) {
@@ -846,7 +846,7 @@ public:
     { return elapsedDuration + actualDuration; }
 
 private:
-    std::weak_ptr<const Entry> m_entry;
+    MusxInstanceWeak<Entry> m_entry;
 };
 
 /// @brief Wraps an @ref EntryInfo instance and a note index.
@@ -877,7 +877,7 @@ public:
     NoteInfoPtr findEqualPitch(const EntryInfoPtr& entry) const;
 
     /// @brief Allows `->` access to the underlying @ref Note instance.
-    std::shared_ptr<const Note> operator->() const
+    MusxInstance<Note> operator->() const
     {
         MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
             throw std::logic_error("Note index is too large for notes array.");
@@ -920,7 +920,7 @@ public:
 
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
-    std::shared_ptr<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
+    MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)

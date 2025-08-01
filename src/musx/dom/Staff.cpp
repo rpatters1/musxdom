@@ -266,7 +266,7 @@ std::string Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accide
     return TextBlock::getText(getDocument(), abbrvNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
 }
 
-std::shared_ptr<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
+MusxInstance<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
 {
     if (multiStaffInstId) {
         if (auto retval = getDocument()->getOthers()->get<MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffInstId)) {
@@ -277,7 +277,7 @@ std::shared_ptr<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
     return nullptr;
 }
 
-std::shared_ptr<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
+MusxInstance<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
 {
     Cmper groupId = getDocument()->getInstrumentForStaff(getCmper()).staffGroupId;
     if (groupId != 0) {
@@ -293,7 +293,7 @@ std::shared_ptr<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
 
 util::EnigmaParsingContext Staff::getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
-    auto block = [&]() -> std::shared_ptr<TextBlock> {
+    auto block = [&]() -> MusxInstance<TextBlock> {
         if (!preferStaffName || !fullNameTextId) {
             if (auto group = getMultiStaffInstVisualGroup()) {
                 return getDocument()->getOthers()->get<TextBlock>(forPartId, group->fullNameId);
@@ -321,7 +321,7 @@ std::string Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle acc
 
 util::EnigmaParsingContext Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
-    auto block = [&]() -> std::shared_ptr<TextBlock> {
+    auto block = [&]() -> MusxInstance<TextBlock> {
         if (!preferStaffName || !abbrvNameTextId) {
             if (auto group = getMultiStaffInstVisualGroup()) {
                 return getDocument()->getOthers()->get<TextBlock>(forPartId, group->abbrvNameId);
@@ -349,7 +349,7 @@ std::string Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalSt
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 template <typename NamePositionType>
-std::shared_ptr<const NamePositioning> Staff::getNamePosition() const
+MusxInstance<NamePositioning> Staff::getNamePosition() const
 {
     static_assert(std::is_same_v<NamePositionType, NamePositionAbbreviated>
                || std::is_same_v<NamePositionType, NamePositionStyleAbbreviated>
@@ -365,7 +365,7 @@ std::shared_ptr<const NamePositioning> Staff::getNamePosition() const
         }
     }
 
-    std::shared_ptr<const NamePositioning> defaultValue;
+    MusxInstance<NamePositioning> defaultValue;
     if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
         if constexpr (isForFull) {
             defaultValue = staffOptions->namePos;
@@ -379,7 +379,7 @@ std::shared_ptr<const NamePositioning> Staff::getNamePosition() const
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::shared_ptr<const NamePositioning> Staff::getFullNamePosition() const
+MusxInstance<NamePositioning> Staff::getFullNamePosition() const
 {
     if (fullNamePosFromStyle) {
         return getNamePosition<NamePositionStyleFull>();
@@ -387,7 +387,7 @@ std::shared_ptr<const NamePositioning> Staff::getFullNamePosition() const
     return getNamePosition<NamePositionFull>();
 }
 
-std::shared_ptr<const NamePositioning> Staff::getAbbreviatedNamePosition() const
+MusxInstance<NamePositioning> Staff::getAbbreviatedNamePosition() const
 {
     if (abrvNamePosFromStyle) {
         return getNamePosition<NamePositionStyleAbbreviated>();
@@ -480,9 +480,9 @@ std::pair<int, int> Staff::calcTranspositionInterval() const
     return std::make_pair(0, 0);
 }
 
-std::vector<std::shared_ptr<PartDefinition>> Staff::getContainingParts(bool includeScore) const
+MusxInstanceList<PartDefinition> Staff::getContainingParts(bool includeScore) const
 {
-    std::vector<std::shared_ptr<PartDefinition>> result;
+    MusxInstanceList<PartDefinition> result(getDocument(), SCORE_PARTID);
     auto parts = getDocument()->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
         if (!includeScore && part->getCmper() == SCORE_PARTID) {
@@ -499,9 +499,8 @@ std::vector<std::shared_ptr<PartDefinition>> Staff::getContainingParts(bool incl
     return result;
 }
 
-std::shared_ptr<PartDefinition> Staff::firstContainingPart() const
+MusxInstance<PartDefinition> Staff::firstContainingPart() const
 {
-    std::vector<std::shared_ptr<PartDefinition>> result;
     auto parts = getDocument()->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
         if (part->getCmper() != SCORE_PARTID) {
@@ -520,7 +519,7 @@ std::shared_ptr<PartDefinition> Staff::firstContainingPart() const
 // ***** StaffComposite *****
 // **************************
 
-void StaffComposite::applyStyle(const std::shared_ptr<StaffStyle>& staffStyle)
+void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
 {
     auto srcMasks = staffStyle->masks;
 
@@ -741,7 +740,7 @@ void StaffComposite::applyStyle(const std::shared_ptr<StaffStyle>& staffStyle)
     }
 }
 
-std::shared_ptr<Staff> StaffComposite::getRawStaff() const
+MusxInstance<Staff> StaffComposite::getRawStaff() const
 {
     auto result = getDocument()->getOthers()->get<Staff>(getPartId(), getCmper());
     if (!result) {
@@ -750,13 +749,13 @@ std::shared_ptr<Staff> StaffComposite::getRawStaff() const
     return result;
 }
 
-std::shared_ptr<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
+MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
     InstCmper staffId, MeasCmper measId, Edu eduPosition)
 {
     auto rawStaff = document->getOthers()->get<Staff>(partId, staffId);
     if (!rawStaff) return nullptr;
 
-    std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, partId, measId, eduPosition));
+    MusxInstance<StaffComposite> result(new StaffComposite(rawStaff, partId, measId, eduPosition));
     if (result->hasStyles) {
         auto styles = StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
         for (const auto& style : styles) {

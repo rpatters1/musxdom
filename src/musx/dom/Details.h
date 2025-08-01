@@ -27,6 +27,7 @@
 #include <map>
 
 #include "musx/util/EnigmaString.h"
+#include "MusxInstance.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
 #include "Options.h"
@@ -751,11 +752,11 @@ public:
     bool hasTime{};                     ///< If true, this item contains an independent time signature.
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this instance.
-    std::shared_ptr<TimeSignature> createTimeSignature() const;
+    MusxInstance<TimeSignature> createTimeSignature() const;
 
     /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
     /// @return The display time signature if there is one, otherwise the actual time signature.
-    std::shared_ptr<TimeSignature> createDisplayTimeSignature() const;
+    MusxInstance<TimeSignature> createDisplayTimeSignature() const;
 
     void integrityCheck() override
     {
@@ -975,7 +976,7 @@ public:
     bool hidden{};      ///< Indicates the text appears only on screen (xml node is `<postIt/>`)
 
     /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
-    std::shared_ptr<others::TextBlock> getTextBlock() const;
+    MusxInstance<others::TextBlock> getTextBlock() const;
 
     /** @brief Gets the raw text for this assignment, or nullptr if none. */
     util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
@@ -1291,7 +1292,7 @@ public:
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /// @brief Returns the @ref others::MultiStaffInstrumentGroup for this group if it is part of one. Otherwise nullptr.
-    std::shared_ptr<others::MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
+    MusxInstance<others::MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
 
     /// @brief Returns the full instrument name for this group without Enigma tags and with autonumbering (if any).
     /// @note Ordinal prefix numbering is currently supported only for English.
@@ -1333,16 +1334,16 @@ public:
 class StaffGroupInfo
 {
 public:
-    std::optional<size_t> startSlot;                        ///< the 0-based start slot (index) of the group in the system staves.
-    std::optional<size_t> endSlot;                          ///< the 0-based end slot (index) of the group in the system staves.
-    std::shared_ptr<StaffGroup> group;                      ///< the StaffGroup record for the group.
-    std::vector<std::shared_ptr<others::InstrumentUsed>> systemStaves; ///< the system staves referred to by startSlot and endSlot
+    std::optional<size_t> startSlot;                    ///< the 0-based start slot (index) of the group in the system staves.
+    std::optional<size_t> endSlot;                      ///< the 0-based end slot (index) of the group in the system staves.
+    MusxInstance<StaffGroup> group;                     ///< the StaffGroup record for the group.
+    MusxInstanceList<others::InstrumentUsed> systemStaves;    ///< the system staves referred to by startSlot and endSlot
 
     /// @brief Constructs information about a specific StaffGroup as it relates the the @p systemStaves
     /// @param staffGroup The staff group
     /// @param inpSysStaves The @ref others::InstrumentUsed list for a system or Scroll view.
-    StaffGroupInfo(const std::shared_ptr<StaffGroup>& staffGroup,
-        const std::vector<std::shared_ptr<others::InstrumentUsed>>& inpSysStaves);
+    StaffGroupInfo(const MusxInstance<StaffGroup>& staffGroup,
+        const MusxInstanceList<others::InstrumentUsed>& inpSysStaves);
 
     /// @brief The number of staves in the group for the #systemStaves.
     std::optional<size_t> numStaves() const
@@ -1357,14 +1358,14 @@ public:
     /// @param measId The measure for which to construct each @ref others::StaffComposite instance.
     /// @param eduPosition The Edu position for which to construct each @ref others::StaffComposite instance.
     /// @param iterator The iterator function. Returning false from this function terminates iteration.
-    void iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const std::shared_ptr<others::StaffComposite>&)> iterator) const;
+    void iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const MusxInstance<others::StaffComposite>&)> iterator) const;
 
     /// @brief Creates a vector of #StaffGroupInfo instances for the measure, part, and system staves
     /// @param measureId The measure to find.
     /// @param linkedPartId The ID of the linked part in which to find the groups.
     /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
     static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,
-        const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves);
+        const MusxInstanceList<others::InstrumentUsed>& systemStaves);
 };
 
 /**

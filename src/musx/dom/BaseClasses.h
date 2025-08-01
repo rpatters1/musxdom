@@ -31,6 +31,7 @@
 #include "musx/dom/Fundamentals.h"
 #include "musx/xml/XmlInterface.h"
 #include "musx/util/Logger.h"
+#include "MusxInstance.h"
 
 namespace musx {
 
@@ -209,7 +210,7 @@ public:
      * 
      * @param parent A shared pointer to the parent document.
      */
-    ContainedClassBase(const std::shared_ptr<Base>& parent)
+    ContainedClassBase(const MusxInstance<Base>& parent)
         : Base(parent->getDocument(), SCORE_PARTID, ShareMode::All), m_parent(parent)
     {}
 
@@ -218,7 +219,7 @@ public:
 
     /// @brief Get the parent.
     template <typename ParentClass = Base>
-    std::shared_ptr<ParentClass> getParent() const
+    MusxInstance<ParentClass> getParent() const
     {
         auto result = m_parent.lock();
         MUSX_ASSERT_IF (!result) {
@@ -232,7 +233,7 @@ public:
     }
     
 private:
-    const std::weak_ptr<Base> m_parent;
+    const MusxInstanceWeak<Base> m_parent;
 };
 
 /**

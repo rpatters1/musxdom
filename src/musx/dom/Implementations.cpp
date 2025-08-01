@@ -76,7 +76,7 @@ template void details::BeamAlterations::calcAllActiveFlags<details::SecondaryBea
 Efix details::BeamAlterations::calcEffectiveBeamWidth() const
 {
     if (getInci().has_value()) { // secondary beams have incis; primary beams do not
-        std::shared_ptr<BeamAlterations> primary;
+        MusxInstance<BeamAlterations> primary;
         if (dynamic_cast<const SecondaryBeamAlterationsDownStem*>(this)) {
             primary = getDocument()->getDetails()->get<BeamAlterationsDownStem>(getPartId(), getEntryNumber());
         } else {
@@ -171,7 +171,7 @@ bool options::ClefOptions::ClefDef::isBlank() const
     return !clefChar || (clefChar <= 0xffff && std::iswspace(static_cast<wint_t>(clefChar)));
 }
 
-options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std::shared_ptr<const others::Staff>& currStaff) const
+options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const MusxInstance<others::Staff>& currStaff) const
 {
     auto calcPercType = [&]() -> music_theory::ClefType {
         if (auto clefFont = calcFont()) {
@@ -238,9 +238,9 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const std
     return std::make_pair(clefType, octave);
 }
 
-std::shared_ptr<const FontInfo> options::ClefOptions::ClefDef::calcFont() const
+MusxInstance<FontInfo> options::ClefOptions::ClefDef::calcFont() const
 {
-    std::shared_ptr<const FontInfo> result;
+    MusxInstance<FontInfo> result;
     if (useOwnFont && font) {
         result = font;
     } else if (auto fontOptions = getDocument()->getOptions()->get<options::FontOptions>()) {
@@ -256,9 +256,9 @@ std::shared_ptr<const FontInfo> options::ClefOptions::ClefDef::calcFont() const
 // ***** Document *****
 // ********************
 
-std::shared_ptr<others::Page> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
+MusxInstance<others::Page> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
 {
-    std::shared_ptr<others::Page> result;
+    MusxInstance<others::Page> result;
     auto pages = getOthers()->getArray<others::Page>(partId);
     for (const auto& page : pages) {
         if (page->firstMeasureId && page->lastMeasureId) {
@@ -274,9 +274,9 @@ std::shared_ptr<others::Page> Document::calculatePageFromMeasure(Cmper partId, M
     return result;
 }
 
-std::shared_ptr<others::StaffSystem> Document::calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const
+MusxInstance<others::StaffSystem> Document::calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const
 {
-    std::shared_ptr<others::StaffSystem> result;
+    MusxInstance<others::StaffSystem> result;
     auto systems = getOthers()->getArray<others::StaffSystem>(partId);
     for (const auto& system : systems) {
         // endMeas is 1 measure past the end of the system
@@ -340,7 +340,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
             if (const auto topStaff = getOthers()->get<others::Staff>(forPartId, group->startInst)) {
                 std::unordered_map<InstCmper, size_t> candidateStaves;
                 size_t sequenceIndex = 0;
-                staffGroup.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& nextStaff) {
+                staffGroup.iterateStaves(1, 0, [&](const MusxInstance<others::StaffComposite>& nextStaff) {
                     if (nextStaff->multiStaffInstId == topStaff->multiStaffInstId || mappedStaves.find(nextStaff->getCmper()) == mappedStaves.end()) {
                         if (nextStaff->instUuid == topStaff->instUuid || !nextStaff->hasInstrumentAssigned()) {
                             if (nextStaff->hideNameInScore || nextStaff->getFullName().empty()) {
@@ -441,7 +441,7 @@ bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
 // ***** Entry *****
 // *****************
 
-std::shared_ptr<Entry> Entry::getNext() const
+MusxInstance<Entry> Entry::getNext() const
 {
     if (!m_next) return nullptr;
     auto retval = getDocument()->getEntries()->get(m_next);
@@ -451,7 +451,7 @@ std::shared_ptr<Entry> Entry::getNext() const
     return retval;
 }
 
-std::shared_ptr<Entry> Entry::getPrevious() const
+MusxInstance<Entry> Entry::getPrevious() const
 {
     if (!m_prev) return nullptr;
     auto retval = getDocument()->getEntries()->get(m_prev);
@@ -538,13 +538,13 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
     return nullptr;
 }
 
-std::shared_ptr<others::StaffComposite> EntryFrame::createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId) const
+MusxInstance<others::StaffComposite> EntryFrame::createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId) const
 {
     return others::StaffComposite::createCurrent(getDocument(), getRequestedPartId(), forStaffId.value_or(getStaff()),
         getMeasure(), eduPosition);
 }
 
-std::shared_ptr<others::Measure> EntryFrame::getMeasureInstance() const
+MusxInstance<others::Measure> EntryFrame::getMeasureInstance() const
 {
     return getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), getMeasure());
 }
@@ -653,7 +653,7 @@ bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
         }
     }
     // if either direction has a custom stem, check it
-    std::shared_ptr<details::CustomStem> customStem = frame->getDocument()->getDetails()->get<details::CustomDownStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
+    MusxInstance<details::CustomStem> customStem = frame->getDocument()->getDetails()->get<details::CustomDownStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
     if (!customStem) {
         customStem = frame->getDocument()->getDetails()->get<details::CustomUpStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
     }
@@ -805,9 +805,9 @@ InstCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
 
 MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); }
 
-std::shared_ptr<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
+MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
 
-std::shared_ptr<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<InstCmper>& forStaffId) const
+MusxInstance<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<InstCmper>& forStaffId) const
 {
     return m_entryFrame->createCurrentStaff((*this)->elapsedDuration.calcEduDuration(), forStaffId);
 }
@@ -1395,7 +1395,7 @@ bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
 // ***** FontOptions *****
 // ***********************
 
-std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(options::FontOptions::FontType type) const
+MusxInstance<FontInfo> options::FontOptions::getFontInfo(options::FontOptions::FontType type) const
 {
     auto it = fontOptions.find(type);
     if (it == fontOptions.end()) {
@@ -1404,7 +1404,7 @@ std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(options::FontOptions
     return it->second;
 }
 
-std::shared_ptr<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
+MusxInstance<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
 {
     auto options = document->getOptions();
     if (!options) {
@@ -1585,7 +1585,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** Frame *****
 // *****************
 
-void others::Frame::iterateRawEntries(std::function<bool(const std::shared_ptr<Entry>& entry)> iterator) const
+void others::Frame::iterateRawEntries(std::function<bool(const MusxInstance<Entry>& entry)> iterator) const
 {
     auto firstEntry = startEntry ? getDocument()->getEntries()->get(startEntry) : nullptr;
     if (!firstEntry) {
@@ -1598,10 +1598,10 @@ void others::Frame::iterateRawEntries(std::function<bool(const std::shared_ptr<E
     }
 }
 
-std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries() const
+MusxInstanceList<Entry> others::Frame::getEntries() const
 {
-    std::vector<std::shared_ptr<const Entry>> retval;
-    iterateRawEntries([&](const std::shared_ptr<Entry>& entry) -> bool {
+    MusxInstanceList<Entry> retval(getDocument(), getPartId());
+    iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
         retval.emplace_back(entry);
         return true;
     });
@@ -1637,7 +1637,7 @@ struct TupletState
 {
     util::Fraction remainingSymbolicDuration;         // The remaining symbolic duration
     util::Fraction ratio;             // The remaining actual duration
-    std::shared_ptr<const details::TupletDef> tuplet; // The tuplet.
+    MusxInstance<details::TupletDef> tuplet; // The tuplet.
     size_t infoIndex;               // the index of this tuplet in EntryFrame::tupletInfo
 
     void accountFor(util::Fraction actual)
@@ -1645,7 +1645,7 @@ struct TupletState
         remainingSymbolicDuration -= (actual / ratio);
     }
 
-    TupletState(const std::shared_ptr<details::TupletDef>& t, size_t i)
+    TupletState(const MusxInstance<details::TupletDef>& t, size_t i)
         : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(NoteType::Whole)),
         ratio(t->referenceNumber* t->referenceDuration, t->displayNumber* t->displayDuration),
         tuplet(t), infoIndex(i)
@@ -1654,9 +1654,9 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::pair<std::shared_ptr<const others::Frame>, Edu> details::GFrameHoldContext::findLayerFrame(LayerIndex layerIndex) const
+std::pair<MusxInstance<others::Frame>, Edu> details::GFrameHoldContext::findLayerFrame(LayerIndex layerIndex) const
 {
-    std::shared_ptr<const others::Frame> layerFrame;
+    MusxInstance<others::Frame> layerFrame;
     Edu startEdu = 0;
     if (layerIndex < m_hold->frames.size() && m_hold->frames[layerIndex]) {
         auto frameIncis = m_hold->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
@@ -1822,7 +1822,7 @@ std::map<LayerIndex, bool> details::GFrameHoldContext::calcVoices() const
         if (frame) {
             bool gotLayer = false;
             bool gotV2 = false;
-            frame->iterateRawEntries([&](const std::shared_ptr<Entry>& entry) -> bool {
+            frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
                 gotLayer = true;
                 if (entry->voice2) {
                     gotV2 = true;
@@ -1890,17 +1890,17 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 // ***** IndependentStaffDetails *****
 // ***********************************
 
-std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createTimeSignature() const
+MusxInstance<TimeSignature> details::IndependentStaffDetails::createTimeSignature() const
 {
-   return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, altNumTsig, altDenTsig));
+   return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, altNumTsig, altDenTsig));
 }
 
-std::shared_ptr<TimeSignature> details::IndependentStaffDetails::createDisplayTimeSignature() const
+MusxInstance<TimeSignature> details::IndependentStaffDetails::createDisplayTimeSignature() const
 {
     if (!displayAbbrvTime) {
         return createTimeSignature();
     }
-    return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig, displayAbbrvTime));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig, displayAbbrvTime));
 }
 
 // **************************
@@ -1944,7 +1944,7 @@ util::Fraction others::InstrumentUsed::calcEffectiveScaling() const
     return result;
 }
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance() const
+MusxInstance<others::Staff> others::InstrumentUsed::getStaffInstance() const
 {
     auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
     if (!retval) {
@@ -1953,7 +1953,7 @@ std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance() const
     return retval;
 }
 
-std::shared_ptr<others::Staff> others::InstrumentUsed::getStaffInstance(MeasCmper measureId, Edu eduPosition) const
+MusxInstance<others::Staff> others::InstrumentUsed::getStaffInstance(MeasCmper measureId, Edu eduPosition) const
 {
     auto retval = others::StaffComposite::createCurrent(getDocument(), getPartId(), staffId, measureId, eduPosition);
     if (!retval) {
@@ -2123,7 +2123,7 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
     m_octaveDisplacement += (concertTonalCenterIndex + tonalCenterOffset) / music_theory::STANDARD_DIATONIC_STEPS;
 }
 
-void KeySignature::setTransposition(const std::shared_ptr<const others::Staff>& staff)
+void KeySignature::setTransposition(const MusxInstance<others::Staff>& staff)
 {
     if (staff && staff->transposition && staff->transposition->keysig) {
         const auto& keysig = *staff->transposition->keysig;
@@ -2239,7 +2239,7 @@ void texts::LyricsTextBase::createSyllableInfo()
         } else {
             if (inSeparator) {
                 if (!current.empty()) {
-                    syllables.push_back(std::shared_ptr<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
+                    syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
                     current.clear();
                 }
                 lastSeparatorHadHyphen = currSeparatorHasHyphen;
@@ -2251,7 +2251,7 @@ void texts::LyricsTextBase::createSyllableInfo()
     }
 
     if (!current.empty()) {
-        syllables.push_back(std::shared_ptr<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
+        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
     }
 }
 
@@ -2283,10 +2283,10 @@ int others::Measure::calcDisplayNumber() const
     return getCmper();
 }
 
-std::shared_ptr<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff) const
+MusxInstance<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff) const
 {
-    std::shared_ptr<KeySignature> result;
-    std::shared_ptr<const others::Staff> staff;
+    MusxInstance<KeySignature> result;
+    MusxInstance<others::Staff> staff;
     if (forStaff) {
         staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0);
         if (staff && staff->floatKeys) {
@@ -2306,7 +2306,7 @@ std::shared_ptr<KeySignature> others::Measure::createKeySignature(const std::opt
     return result;
 }
 
-std::shared_ptr<TimeSignature> others::Measure::createTimeSignature(const std::optional<InstCmper>& forStaff) const
+MusxInstance<TimeSignature> others::Measure::createTimeSignature(const std::optional<InstCmper>& forStaff) const
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
@@ -2319,10 +2319,10 @@ std::shared_ptr<TimeSignature> others::Measure::createTimeSignature(const std::o
             }
         }
     }
-   return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
+   return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
 }
 
-std::shared_ptr<TimeSignature> others::Measure::createDisplayTimeSignature(const std::optional<InstCmper>& forStaff) const
+MusxInstance<TimeSignature> others::Measure::createDisplayTimeSignature(const std::optional<InstCmper>& forStaff) const
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
@@ -2338,7 +2338,7 @@ std::shared_ptr<TimeSignature> others::Measure::createDisplayTimeSignature(const
     if (!useDisplayTimesig) {
         return createTimeSignature(forStaff);
     }
-    return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
 }
 
 util::Fraction others::Measure::calcDuration(const std::optional<InstCmper>& forStaff) const
@@ -2351,7 +2351,7 @@ util::Fraction others::Measure::calcDuration(const std::optional<InstCmper>& for
 // ***** MeasureExprAssign *****
 // *****************************
 
-std::shared_ptr<others::TextExpressionDef> others::MeasureExprAssign::getTextExpression() const
+MusxInstance<others::TextExpressionDef> others::MeasureExprAssign::getTextExpression() const
 {
     if (!textExprId) {
         return nullptr;
@@ -2359,7 +2359,7 @@ std::shared_ptr<others::TextExpressionDef> others::MeasureExprAssign::getTextExp
     return getDocument()->getOthers()->get<others::TextExpressionDef>(getPartId(), textExprId);
 }
 
-std::shared_ptr<others::ShapeExpressionDef> others::MeasureExprAssign::getShapeExpression() const
+MusxInstance<others::ShapeExpressionDef> others::MeasureExprAssign::getShapeExpression() const
 {
     if (!shapeExprId) {
         return nullptr;
@@ -2371,7 +2371,7 @@ std::shared_ptr<others::ShapeExpressionDef> others::MeasureExprAssign::getShapeE
 // ***** MeasureNumberRegion *****
 // *******************************
 
-std::shared_ptr<others::MeasureNumberRegion> others::MeasureNumberRegion::findMeasure(const DocumentPtr& document, MeasCmper measureId)
+MusxInstance<others::MeasureNumberRegion> others::MeasureNumberRegion::findMeasure(const DocumentPtr& document, MeasCmper measureId)
 {
     auto regions = document->getOthers()->getArray<others::MeasureNumberRegion>(SCORE_PARTID);
     for (const auto& region : regions) {
@@ -2405,7 +2405,7 @@ int others::MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
 // ***** MeasureTextAssign *****
 // *****************************
 
-std::shared_ptr<others::TextBlock> details::MeasureTextAssign::getTextBlock() const
+MusxInstance<others::TextBlock> details::MeasureTextAssign::getTextBlock() const
 {
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
 }
@@ -2424,7 +2424,7 @@ util::EnigmaParsingContext details::MeasureTextAssign::getRawTextCtx(Cmper forPa
 // ***** MultiStaffInstrumentGroup *****
 // *************************************
 
-std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffInstanceAtIndex(size_t x) const
+MusxInstance<others::Staff> others::MultiStaffInstrumentGroup::getStaffInstanceAtIndex(size_t x) const
 {
     if (x >= staffNums.size()) return nullptr;
     auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffNums[x]);
@@ -2435,7 +2435,7 @@ std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getStaffInstan
     return retval;
 }
 
-std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaffInstance() const
+MusxInstance<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaffInstance() const
 {
     if (staffNums.empty()) {
         MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
@@ -2444,7 +2444,7 @@ std::shared_ptr<others::Staff> others::MultiStaffInstrumentGroup::getFirstStaffI
     return getStaffInstanceAtIndex(0);
 }
 
-std::shared_ptr<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup(Cmper forPartId) const
+MusxInstance<details::StaffGroup> others::MultiStaffInstrumentGroup::getStaffGroup(Cmper forPartId) const
 {
     auto document = getDocument();
     auto groupIdRecord = document->getOthers()->get<others::MultiStaffGroupId>(forPartId, getCmper());
@@ -2512,7 +2512,7 @@ std::optional<std::pair<MeasCmper, Edu>> others::MusicRange::nextLocation(const 
 // ***** Note *****
 // ****************
 
-std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignature>& key) const
+std::pair<int, int> Note::calcDefaultEnharmonic(const MusxInstance<KeySignature>& key) const
 {
     auto transposer = key->createTransposer(harmLev, harmAlt);
     if (harmAlt) {
@@ -2547,8 +2547,8 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<KeySignatu
     return {upDisp, upAlt};
 }
 
-Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
-    const std::shared_ptr<const others::Staff>& staff, bool respellEnharmonic) const
+Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
+    const MusxInstance<others::Staff>& staff, bool respellEnharmonic) const
 {
     auto [transposedLev, transposedAlt] = respellEnharmonic
                                         ? calcDefaultEnharmonic(key)
@@ -2734,7 +2734,7 @@ Note::NoteProperties NoteInfoPtr::calcNotePropertiesInView() const
     return forWrittenPitch ? calcNoteProperties() : calcNotePropertiesConcert();
 }
 
-std::shared_ptr<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
+MusxInstance<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
 {
     auto entry = getEntryInfo()->getEntry();
     if (entry->noteDetail) {
@@ -2800,10 +2800,10 @@ bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
 }
 
 // **********************************************
-// ***** ObjectList<others::InstrumentUsed> *****
+// ***** MusxInstanceList<others::InstrumentUsed> *****
 // **********************************************
 
-std::shared_ptr<others::Staff> ObjectList<others::InstrumentUsed>::getStaffInstanceAtIndex(Cmper index) const
+MusxInstance<others::Staff> MusxInstanceList<others::InstrumentUsed>::getStaffInstanceAtIndex(Cmper index) const
 {
     const auto& iuArray = *this;
     if (index >= iuArray.size()) return nullptr;
@@ -2811,7 +2811,7 @@ std::shared_ptr<others::Staff> ObjectList<others::InstrumentUsed>::getStaffInsta
     return iuItem->getStaffInstance();
 }
 
-std::optional<size_t> ObjectList<others::InstrumentUsed>::getIndexForStaff(InstCmper staffId) const
+std::optional<size_t> MusxInstanceList<others::InstrumentUsed>::getIndexForStaff(InstCmper staffId) const
 {
     const auto& iuArray = *this;
     for (size_t x = 0; x < iuArray.size(); x++) {
@@ -2887,7 +2887,7 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
 // ***** PageFormatOptions *****
 // *****************************
 
-std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
+MusxInstance<options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
 {
     const auto& baseOptions = (partId == SCORE_PARTID) ? pageFormatScore : pageFormatParts;
     auto retval = std::make_shared<options::PageFormatOptions::PageFormat>(*baseOptions);
@@ -2947,7 +2947,7 @@ std::shared_ptr<options::PageFormatOptions::PageFormat> options::PageFormatOptio
 // ***** PageTextAssign *****
 // **************************
 
-std::shared_ptr<others::TextBlock> others::PageTextAssign::getTextBlock() const
+MusxInstance<others::TextBlock> others::PageTextAssign::getTextBlock() const
 {
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), block);
 }
@@ -2963,7 +2963,7 @@ util::EnigmaParsingContext others::PageTextAssign::getRawTextCtx(Cmper forPartId
     return {};
 }
 
-std::shared_ptr<others::PageTextAssign> others::PageTextAssign::getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci)
+MusxInstance<others::PageTextAssign> others::PageTextAssign::getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci)
 {
     if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
         const PageCmper pageAssignmentId = part->calcAssignmentIdFromPageNumber(pageId);
@@ -2972,7 +2972,7 @@ std::shared_ptr<others::PageTextAssign> others::PageTextAssign::getForPageId(con
     return nullptr;
 }
 
-std::vector<std::shared_ptr<others::PageTextAssign>> others::PageTextAssign::getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId)
+std::vector<MusxInstance<others::PageTextAssign>> others::PageTextAssign::getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId)
 {
     if (auto part = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
         const PageCmper pageAssignmentId = part->calcAssignmentIdFromPageNumber(pageId);
@@ -3064,7 +3064,7 @@ Cmper others::PartDefinition::calcSystemIuList(Cmper systemId) const
     return systemId;
 }
 
-std::shared_ptr<others::PartDefinition> others::PartDefinition::getScore(const DocumentPtr& document)
+MusxInstance<others::PartDefinition> others::PartDefinition::getScore(const DocumentPtr& document)
 {
     if (auto score = document->getOthers()->get<others::PartDefinition>(SCORE_PARTID, SCORE_PARTID)) {
         return score;
@@ -3073,7 +3073,7 @@ std::shared_ptr<others::PartDefinition> others::PartDefinition::getScore(const D
     return nullptr;
 }
 
-std::vector<std::shared_ptr<others::PartDefinition>> others::PartDefinition::getInUserOrder(const DocumentPtr& document)
+std::vector<MusxInstance<others::PartDefinition>> others::PartDefinition::getInUserOrder(const DocumentPtr& document)
 {
     auto result = document->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
     std::sort(result.begin(), result.end(), [](const auto& lhs, const auto& rhs) {
@@ -3200,7 +3200,7 @@ std::string details::StaffGroup::getAbbreviatedName(util::EnigmaString::Accident
     return others::TextBlock::getText(getDocument(), abbrvNameId, getPartId(), true, accidentalStyle); // true: strip enigma tags
 }
 
-std::shared_ptr<others::MultiStaffInstrumentGroup> details::StaffGroup::getMultiStaffInstGroup() const
+MusxInstance<others::MultiStaffInstrumentGroup> details::StaffGroup::getMultiStaffInstGroup() const
 {
     if (multiStaffGroupId) {
         if (auto retval = getDocument()->getOthers()->get<others::MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffGroupId)) {
@@ -3235,8 +3235,8 @@ std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString
 // ***** StaffGroupInfo *****
 // **************************
 
-details::StaffGroupInfo::StaffGroupInfo(const std::shared_ptr<StaffGroup>& staffGroup,
-    const std::vector<std::shared_ptr<others::InstrumentUsed>>& inpSysStaves) : group(staffGroup), systemStaves(inpSysStaves)
+details::StaffGroupInfo::StaffGroupInfo(const MusxInstance<StaffGroup>& staffGroup,
+    const MusxInstanceList<others::InstrumentUsed>& inpSysStaves) : group(staffGroup), systemStaves(inpSysStaves)
 {
     if (inpSysStaves.empty()) {
         throw std::logic_error("Attempt to create StaffGroupInfo with no system staves (StaffGroup " + std::to_string(staffGroup->getCmper2()) + ")");
@@ -3255,7 +3255,7 @@ details::StaffGroupInfo::StaffGroupInfo(const std::shared_ptr<StaffGroup>& staff
     }
 }
 
-void details::StaffGroupInfo::iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const std::shared_ptr<others::StaffComposite>&)> iterator) const
+void details::StaffGroupInfo::iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const MusxInstance<others::StaffComposite>&)> iterator) const
 {
     MUSX_ASSERT_IF (!startSlot || !endSlot) {
         throw std::logic_error("StaffGroupInfo::iterateStaves called with invalid start or end slot for system staves.");
@@ -3276,14 +3276,14 @@ void details::StaffGroupInfo::iterateStaves(MeasCmper measId, Edu eduPosition, s
 }
 
 std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,
-    const std::vector<std::shared_ptr<others::InstrumentUsed>>& systemStaves)
+    const MusxInstanceList<others::InstrumentUsed>& systemStaves)
 {
     if (systemStaves.empty()) {
         util::Logger::log(util::Logger::LogLevel::Info, "Attempted to find groups for empty system staves. [measure " + std::to_string(measureId)
             + ", part " + std::to_string(linkedPartId) +"] Returning an empty vector.");
         return {};
     }
-    auto rawGroups = systemStaves[0]->getDocument()->getDetails()->getArray<details::StaffGroup>(linkedPartId, BASE_SYSTEM_ID);
+    auto rawGroups = systemStaves.getDocument()->getDetails()->getArray<details::StaffGroup>(linkedPartId, BASE_SYSTEM_ID);
     std::vector<StaffGroupInfo> retval;
     for (const auto& rawGroup : rawGroups) {
         if (rawGroup->startMeas <= measureId && rawGroup->endMeas >= measureId) {
@@ -3300,17 +3300,17 @@ std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure
 // ***** StaffStyle *****
 // **********************
 
- std::vector<std::shared_ptr<others::StaffStyle>> others::StaffStyle::findAllOverlappingStyles(const DocumentPtr& document,
+MusxInstanceList<others::StaffStyle> others::StaffStyle::findAllOverlappingStyles(const DocumentPtr& document,
         Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition)
 {
     auto staffStyleAssignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
-    std::vector<std::shared_ptr<others::StaffStyleAssign>> applicableAssignments;
+    std::vector<MusxInstance<others::StaffStyleAssign>> applicableAssignments;
     std::copy_if(staffStyleAssignments.begin(), staffStyleAssignments.end(), std::back_inserter(applicableAssignments),
-        [measId, eduPosition](const std::shared_ptr<others::StaffStyleAssign>& range) {
+        [measId, eduPosition](const MusxInstance<others::StaffStyleAssign>& range) {
             return range->contains(measId, eduPosition);
         });
 
-    std::vector<std::shared_ptr<others::StaffStyle>> result;
+    MusxInstanceList<others::StaffStyle> result(document, partId);
     result.reserve(applicableAssignments.size());
     for (const auto& assign : applicableAssignments) {
         if (auto style = assign->getStaffStyle()) {
@@ -3324,7 +3324,7 @@ std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure
 // ***** StaffStyleAssign *****
 // ****************************
 
-std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() const
+MusxInstance<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() const
 {
     auto result = getDocument()->getOthers()->get<others::StaffStyle>(getPartId(), styleId);
     if (!result) {
@@ -3340,7 +3340,7 @@ std::shared_ptr<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() co
 // ***** StaffSystem *****
 // ***********************
 
-std::shared_ptr<others::Page> others::StaffSystem::getPage() const
+MusxInstance<others::Page> others::StaffSystem::getPage() const
 {
     return getDocument()->getOthers()->get<others::Page>(getPartId(), pageId);
 }
@@ -3386,7 +3386,7 @@ int others::TempoChange::getAbsoluteTempo(NoteType noteType) const
 
 util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId, util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
-    std::shared_ptr<TextsBase> rawText;
+    MusxInstance<TextsBase> rawText;
     switch (textType) {
         default:
             break;
@@ -3416,7 +3416,7 @@ std::string others::TextBlock::getText(const DocumentPtr& document, const Cmper 
 // ***** TextExpressionDef *****
 // *****************************
 
-std::shared_ptr<others::TextBlock> others::TextExpressionDef::getTextBlock() const
+MusxInstance<others::TextBlock> others::TextExpressionDef::getTextBlock() const
 {
     return getDocument()->getOthers()->get<others::TextBlock>(getPartId(), textIdKey);
 }
@@ -3438,7 +3438,7 @@ util::EnigmaParsingContext others::TextExpressionDef::getRawTextCtx(Cmper forPar
     return {};
 }
 
-std::shared_ptr<others::Enclosure> others::TextExpressionDef::getEnclosure() const
+MusxInstance<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 {
     if (!hasEnclosure) return nullptr;
     return getDocument()->getOthers()->get<others::TextExpressionEnclosure>(getPartId(), getCmper());

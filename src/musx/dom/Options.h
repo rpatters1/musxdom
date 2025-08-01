@@ -306,13 +306,13 @@ public:
         /// of tablature always return a tab clef and staves with a notation style of percussion always return a percussion clef. Normal notation style
         /// detects clefs as if @p currStaff had not been supplied.
         /// @return See #ClefInfo.
-        ClefInfo calcInfo(const std::shared_ptr<const others::Staff>& currStaff = nullptr) const;
+        ClefInfo calcInfo(const MusxInstance<others::Staff>& currStaff = nullptr) const;
 
 
         /// @brief Calculate the font that applies to this clef, based on the options in #ClefDef.
         /// @return A shared pointer to the font instance used by this #ClefDef.
         /// @throws std::invalid_argument if not found.
-        std::shared_ptr<const FontInfo> calcFont() const;
+        MusxInstance<FontInfo> calcFont() const;
 
         static const xml::XmlElementArray<ClefDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
@@ -330,12 +330,12 @@ public:
     /**
      * @brief Vector of clef definitions (@ref ClefDef).
      */
-    std::vector<std::shared_ptr<ClefDef>> clefDefs;
+    std::vector<MusxInstance<ClefDef>> clefDefs;
 
     /// @brief Bounds-checked accessor function for #clefDefs.
     /// @param clefIndex The index to retrieve.
     /// @throws std::out_of_range if index is out of range.
-    std::shared_ptr<ClefDef> getClefDef(ClefIndex clefIndex) const
+    MusxInstance<ClefDef> getClefDef(ClefIndex clefIndex) const
     {
         MUSX_ASSERT_IF(clefIndex >= clefDefs.size()) {
             throw std::out_of_range("Clef index " + std::to_string(clefIndex) + " does not exist in document.");
@@ -467,7 +467,7 @@ public:
      *
      * An unordered map that associates each `FontType` with its corresponding `FontInfo` settings.
      */
-    std::unordered_map<FontType, std::shared_ptr<FontInfo>> fontOptions;
+    std::unordered_map<FontType, MusxInstance<FontInfo>> fontOptions;
 
     /**
      * @brief get the `FontInfo` for a particular type
@@ -475,7 +475,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    std::shared_ptr<FontInfo> getFontInfo(FontType type) const;
+    MusxInstance<FontInfo> getFontInfo(FontType type) const;
 
     /**
      * @brief get the `FontInfo` for a particular type from the document pool
@@ -484,7 +484,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    static std::shared_ptr<FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
+    static MusxInstance<FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
 
     /**
      * @brief The XML node name for this type.

@@ -138,10 +138,10 @@ public:
     EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
 
     /// @brief Gets the measure assignment for this endpoint or null if none.
-    std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
+    MusxInstance<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
 
     /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
-    std::shared_ptr<details::SmartShapeEntryAssign> getEntryAssignment() const;
+    MusxInstance<details::SmartShapeEntryAssign> getEntryAssignment() const;
 
     /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
     bool calcIsAssigned() const;

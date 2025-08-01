@@ -32,7 +32,7 @@
 #include <functional>
 #include <limits>
 
-#include "ObjectList.h"
+#include "MusxInstance.h"
 
 #include "BaseClasses.h"
 #include "Others.h"
@@ -69,7 +69,7 @@ class ObjectPool
 {
 public:
     /** @brief shared pointer to `ObjectBaseType` */
-    using ObjectPtr = std::shared_ptr<ObjectBaseType>;
+    using ObjectPtr = MusxInstance<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
         std::string nodeId;             ///< the identifier for this node. usually the XML node name.
@@ -169,12 +169,12 @@ public:
      *
      * @tparam T The derived type of `OthersBase` to retrieve.
      * @param key The key value used to filter the objects.
-     * @return An ObjectList of shared pointers to objects of type `T`.
+     * @return An MusxInstanceList of shared pointers to objects of type `T`.
      */
     template <typename T>
-    ObjectList<T> getArray(const ObjectKey& key) const
+    MusxInstanceList<T> getArray(const ObjectKey& key) const
     {
-        ObjectList<T> result(m_document, key.partId);
+        MusxInstanceList<T> result(m_document, key.partId);
 
         auto rangeStart = m_pool.lower_bound(key);
         auto rangeEnd = m_pool.upper_bound(
@@ -205,10 +205,10 @@ public:
      *
      * @tparam T The derived type of `OthersBase` to retrieve.
      * @param key The key value used to filter the objects.
-     * @return An ObjectList of shared pointers to objects of type `T`.
+     * @return An MusxInstanceList of shared pointers to objects of type `T`.
      */
     template <typename T>
-    ObjectList<T> getArrayForPart(const ObjectKey& key) const
+    MusxInstanceList<T> getArrayForPart(const ObjectKey& key) const
     {
         Base::ShareMode forShareMode = Base::ShareMode::All;
         if (key.partId != SCORE_PARTID) {
@@ -251,7 +251,7 @@ public:
      * @return A shared_ptr to the type or nullptr if none exists
      */
     template <typename T>
-    std::shared_ptr<T> get(const ObjectKey& key) const
+    MusxInstance<T> get(const ObjectKey& key) const
     {
         auto it = m_pool.find(key);
         if (it == m_pool.end()) {
@@ -273,7 +273,7 @@ public:
      * @return A shared_ptr to the type or nullptr if none exists
      */
     template <typename T>
-    std::shared_ptr<T> getEffectiveForPart(const ObjectKey& key) const
+    MusxInstance<T> getEffectiveForPart(const ObjectKey& key) const
     {
         if (auto partVersion = get<T>(key)) {
             return partVersion;
@@ -311,7 +311,7 @@ public:
     OptionsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
 
     /** @brief Scalar version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<OptionsBase>& instance)
+    void add(const std::string& nodeName, const MusxInstance<OptionsBase>& instance)
     {
         if (instance->getPartId()) {
             MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-zero part id [" + std::to_string(instance->getPartId()) + "]");
@@ -321,7 +321,7 @@ public:
 
     /** @brief Scalar version of #ObjectPool::getArray */
     template <typename T>
-    ObjectList<T> getArray() const
+    MusxInstanceList<T> getArray() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
         return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
@@ -329,7 +329,7 @@ public:
 
     /** @brief Scalar version of #ObjectPool::get */
     template <typename T>
-    std::shared_ptr<T> get() const
+    MusxInstance<T> get() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
         return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
@@ -361,12 +361,12 @@ public:
     }) {}
 
     /** @brief OthersPool version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
+    void add(const std::string& nodeName, const MusxInstance<OthersBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
     
     /** @brief OthersPool version of #ObjectPool::getArray */
     template <typename T>
-    ObjectList<T> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
+    MusxInstanceList<T> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
         return ObjectPool::getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper });
@@ -374,7 +374,7 @@ public:
 
     /** @brief OthersPool version of #ObjectPool::get */
     template <typename T>
-    std::shared_ptr<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
+    MusxInstance<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
         return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, cmper, std::nullopt, inci });
@@ -401,17 +401,17 @@ public:
     }) {}
 
     /** @brief DetailsPool version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
+    void add(const std::string& nodeName, const MusxInstance<DetailsBase>& instance)
     { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
     /** @brief version of #ObjectPool::getArray for getting all of them */
     template <typename T, typename = std::enable_if_t<is_pool_type_v<DetailsPool, T>>>
-    ObjectList<T> getArray(Cmper partId) const
+    MusxInstanceList<T> getArray(Cmper partId) const
     { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId }); }
 
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
-    ObjectList<T> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
+    MusxInstanceList<T> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
         return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 });
@@ -419,7 +419,7 @@ public:
 
     /** @brief EntryDetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
-    ObjectList<T> getArray(Cmper partId, EntryNumber entnum) const
+    MusxInstanceList<T> getArray(Cmper partId, EntryNumber entnum) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
         return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
@@ -427,7 +427,7 @@ public:
 
     /** @brief DetailsPool version of #ObjectPool::get */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
-    std::shared_ptr<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
+    MusxInstance<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
         return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2, inci });
@@ -435,7 +435,7 @@ public:
 
     /** @brief EntryDetailsPool version of #ObjectPool::get */
     template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
-    std::shared_ptr<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
+    MusxInstance<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
         return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci });
@@ -448,7 +448,7 @@ public:
     /// @param forPartId The part for which to get the note detail. If omitted, the @p noteInfo part is used.
     /// @return The instance associated with @p noteInfo or nullptr if none.
     template <typename T, typename std::enable_if_t<std::is_base_of_v<NoteDetailsBase, T>, int> = 0>
-    std::shared_ptr<T> getForNote(const NoteInfoPtr& noteInfo, const std::optional<Cmper>& forPartId = std::nullopt)
+    MusxInstance<T> getForNote(const NoteInfoPtr& noteInfo, const std::optional<Cmper>& forPartId = std::nullopt)
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
         auto details = getArray<T>(
@@ -474,7 +474,7 @@ public:
     EntryPool(const DocumentWeakPtr& document) : m_document(document) {}
 
     /** @brief Add an entry to the EntryPool. (Used by the factory.) */
-    void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
+    void add(EntryNumber entryNumber, const MusxInstance<Entry>& instance)
     {
         auto [it, emplaced] = m_pool.emplace(entryNumber, instance);
         if (!emplaced) {
@@ -483,7 +483,7 @@ public:
     }
 
     /** @brief Get an entry from the EntryPool. */
-    std::shared_ptr<Entry> get(EntryNumber entryNumber) const
+    MusxInstance<Entry> get(EntryNumber entryNumber) const
     {
         const auto it = m_pool.find(entryNumber);
         if (it == m_pool.end()) {
@@ -494,7 +494,7 @@ public:
 
 private:
     DocumentWeakPtr m_document;
-    std::unordered_map<EntryNumber, std::shared_ptr<Entry>> m_pool;
+    std::unordered_map<EntryNumber, MusxInstance<Entry>> m_pool;
 };
 /** @brief Shared `EntryPool` pointer */
 using EntryPoolPtr = std::shared_ptr<EntryPool>;
@@ -506,7 +506,7 @@ public:
     TextsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
 
     /** @brief Texts version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
+    void add(const std::string& nodeName, const MusxInstance<TextsBase>& instance)
     {
         if (instance->getPartId()) {
             MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-zero part id [" + std::to_string(instance->getPartId()) + "]");
@@ -516,7 +516,7 @@ public:
     
     /** @brief Texts version of #ObjectPool::getArray */
     template <typename T>
-    ObjectList<T> getArray(std::optional<Cmper> cmper = std::nullopt) const
+    MusxInstanceList<T> getArray(std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
         return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper });
@@ -524,7 +524,7 @@ public:
 
     /** @brief Texts version of #ObjectPool::get */
     template <typename T>
-    std::shared_ptr<T> get(Cmper cmper) const
+    MusxInstance<T> get(Cmper cmper) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
         return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt });

@@ -601,7 +601,7 @@ public:
      *
      * These are raw entries. Use #details::GFrameHoldContext::createEntryFrame for a vector of entries with computed values.
      */
-    std::vector<std::shared_ptr<const Entry>> getEntries() const;
+    MusxInstanceList<Entry> getEntries() const;
 
     void integrityCheck() override
     {
@@ -642,10 +642,10 @@ public:
     util::Fraction calcEffectiveScaling() const;
 
     /// @brief Returns the @ref Staff instance for this element, without any staff styles applied
-    std::shared_ptr<Staff> getStaffInstance() const;
+    MusxInstance<Staff> getStaffInstance() const;
 
     /// @brief Returns the @ref Staff instance for this element with staff styles applied at the specified location.
-    std::shared_ptr<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
+    MusxInstance<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
     static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -924,13 +924,13 @@ public:
      *
      * (This in not in the xml but is created by the factory.)
      */
-    std::map<Cmper, std::weak_ptr<ShapeExpressionDef>> shapeExpressions;
+    std::map<Cmper, MusxInstanceWeak<ShapeExpressionDef>> shapeExpressions;
 
     /** @brief A list of text expressions in this category.
      *
      * (This in not in the xml but is created by the factory.)
      */
-    std::map<Cmper, std::weak_ptr<TextExpressionDef>> textExpressions;
+    std::map<Cmper, MusxInstanceWeak<TextExpressionDef>> textExpressions;
 
     /** @brief gets the name of the marking category */
     std::string getName() const;
@@ -1063,16 +1063,16 @@ public:
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
     /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
-    std::shared_ptr<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
-    std::shared_ptr<TimeSignature> createTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<TimeSignature> createTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
     /// @return The display time signature if there is one, otherwise the actual time signature.
-    std::shared_ptr<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
 
     /// @brief Calculates the duration of the measure according to the time signature
     /// @param forStaff  If present, specifies the specific staff for which to create duration.
@@ -1132,11 +1132,11 @@ public:
 
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
-    std::shared_ptr<TextExpressionDef> getTextExpression() const;
+    MusxInstance<TextExpressionDef> getTextExpression() const;
 
     /// @brief Gets the assigned shape expression.
     /// @return The shape expression or nullptr if this assignment is for a text expression or #shapeExprId not found.
-    std::shared_ptr<ShapeExpressionDef> getShapeExpression() const;
+    MusxInstance<ShapeExpressionDef> getShapeExpression() const;
 
     void integrityCheck() override
     {
@@ -1273,7 +1273,7 @@ public:
     /// @param document The document to search
     /// @param measureId The measure Id to search for
     /// @return The first MeasureNumberRegion instance that contains the @p measureId, or nullptr if not found.
-    static std::shared_ptr<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
+    static MusxInstance<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
 
     constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureNumberRegion>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1361,10 +1361,10 @@ public:
 
     /// @brief Returns the staff instance (without any staff styles applied) at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
-    std::shared_ptr<Staff> getStaffInstanceAtIndex(size_t x) const;
+    MusxInstance<Staff> getStaffInstanceAtIndex(size_t x) const;
 
     /// @brief Returns the first staff instance without any staff styles applied (with integrity check)
-    std::shared_ptr<Staff> getFirstStaffInstance() const;
+    MusxInstance<Staff> getFirstStaffInstance() const;
 
     /// @brief Returns the index of the input staffId or std::nullopt if not found
     std::optional<size_t> getIndexOf(InstCmper staffId) const
@@ -1377,7 +1377,7 @@ public:
 
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
-    std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
+    MusxInstance<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
 
     /// @brief Used by the factory to calculate all multistaff ids and visual ids for instances of @ref Staff.
     /// @param document 
@@ -1560,7 +1560,7 @@ public:
     Evpu rightPgYDisp{};            ///< Vertical displacement for right pages (if #indRpPos is true). (xml tag is `<rightPgYdisp>`)
 
     /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
-    std::shared_ptr<TextBlock> getTextBlock() const;
+    MusxInstance<TextBlock> getTextBlock() const;
 
     /// @brief Return the starting page number, taking into account leading blank pages in all parts.
     /// This calculation mimics observed behavior in Finale.
@@ -1607,14 +1607,14 @@ public:
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for multipage assignments.
     /// @param inci The inci of the specific page text assignment to retrieve.
-    static std::shared_ptr<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci);
+    static MusxInstance<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci);
 
     /// @brief Returns all the page text assignments for a given page number in a given part.
     /// This allows the caller not to have to know the conversion to page assignment IDs.
     /// @param document The document to search.
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for all multipage assignments.
-    static std::vector<std::shared_ptr<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
+    static std::vector<MusxInstance<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1679,10 +1679,10 @@ public:
     PageCmper calcAssignmentIdFromPageNumber(PageCmper pageId) const;
     
     /** @brief Return the instance for the score */
-    static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
+    static MusxInstance<PartDefinition> getScore(const DocumentPtr& document);
 
     /** @brief Return the linked parts sorted in UI order by #partOrder */
-    static std::vector<std::shared_ptr<PartDefinition>> getInUserOrder(const DocumentPtr& document);
+    static std::vector<MusxInstance<PartDefinition>> getInUserOrder(const DocumentPtr& document);
 
     bool requireAllFields() const override { return false; }
 
@@ -2163,7 +2163,7 @@ public:
     int calcNumMeasures() const { return endMeas - startMeas; }
 
     /// @brief Gets the page this system is on.
-    std::shared_ptr<others::Page> getPage() const;
+    MusxInstance<others::Page> getPage() const;
 
     /// @brief Calculate the effect system scaling.
     util::Fraction calcSystemScaling() const
@@ -2357,7 +2357,7 @@ public:
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
     /** @brief Gets the TextBlock for this expression, or nullptr if none. */
-    std::shared_ptr<TextBlock> getTextBlock() const;
+    MusxInstance<TextBlock> getTextBlock() const;
 
     /**
      * @brief Gets the raw text context for parsing this expression, or nullptr if none.
@@ -2366,7 +2366,7 @@ public:
     util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
-    std::shared_ptr<Enclosure> getEnclosure() const;
+    MusxInstance<Enclosure> getEnclosure() const;
   
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

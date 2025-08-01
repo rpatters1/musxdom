@@ -53,7 +53,7 @@ EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId) const
     return result;
 }
 
-std::shared_ptr<others::SmartShapeMeasureAssign> smartshape::EndPoint::getMeasureAssignment() const
+MusxInstance<others::SmartShapeMeasureAssign> smartshape::EndPoint::getMeasureAssignment() const
 {
     auto shapeParent = getParent<others::SmartShape>();
     MUSX_ASSERT_IF (!shapeParent) {
@@ -72,7 +72,7 @@ std::shared_ptr<others::SmartShapeMeasureAssign> smartshape::EndPoint::getMeasur
     return nullptr;
 }
 
-std::shared_ptr<details::SmartShapeEntryAssign> smartshape::EndPoint::getEntryAssignment() const
+MusxInstance<details::SmartShapeEntryAssign> smartshape::EndPoint::getEntryAssignment() const
 {
     auto shapeParent = getParent<others::SmartShape>();
     MUSX_ASSERT_IF (!shapeParent) {

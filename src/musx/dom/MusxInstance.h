@@ -24,10 +24,22 @@
 #include <vector>
 #include <memory>
 
-#include "BaseClasses.h"
+#include "Fundamentals.h"
 
 namespace musx {
 namespace dom {
+
+/// @brief Defines the type of a musx instance stored in a pool
+/// @tparam T The musx type
+template <typename T>
+using MusxInstance = std::shared_ptr<T>;
+
+/// @brief Defines a weak ptr to the type of a musx instance stored in a pool
+/// @tparam T The musx type
+template <typename T>
+using MusxInstanceWeak = std::weak_ptr<T>;
+
+class Document;
 
 namespace others {
 class InstrumentUsed;
@@ -35,29 +47,29 @@ class Staff;
 }
 
 /**
- * @class ObjectListBase
+ * @class MusxInstanceListBase
  * @brief A container of pooled shared object instances from an ObjectPool.
  *
  * This class wraps a std::vector of std::shared_ptr<T> and optionally adds
- * type-specific helper methods via @ref ObjectListExtension.
+ * type-specific helper methods via @ref MusxInstanceListExtension.
  *
  * @tparam T The object type stored in the list (e.g., InstrumentUsed, SmartShape, etc.).
  */
 template <typename T>
-class ObjectListBase : public std::vector<std::shared_ptr<T>>
+class MusxInstanceListBase : public std::vector<MusxInstance<T>>
 {
-    using VectorType = std::vector<std::shared_ptr<T>>;
+    using VectorType = std::vector<MusxInstance<T>>;
 
 public:
     /// @brief Default constructor.
-    explicit ObjectListBase(const DocumentWeakPtr& document, Cmper partId)
+    explicit MusxInstanceListBase(const std::weak_ptr<Document>& document, Cmper partId)
         : m_document(document), m_partId(partId) {}
 
     /// @brief Gets the part id that was used to create this list
     Cmper getRequestedPartId() const { return m_partId; }
 
     /// @brief Gets the document that was used to create this list
-    DocumentPtr getDocument() const
+    std::shared_ptr<Document> getDocument() const
     {
         auto document = m_document.lock();
         MUSX_ASSERT_IF(!document) {
@@ -67,13 +79,13 @@ public:
     }
 
 private:
-    DocumentWeakPtr m_document;
+    std::weak_ptr<Document> m_document;
     Cmper m_partId;
 };
 
 /**
- * @class ObjectList
- * @brief Provides optional per-type extension methods for ObjectList.
+ * @class MusxInstanceList
+ * @brief Provides optional per-type extension methods for MusxInstanceList.
  *
  * This struct is specialized for individual types (e.g., InstrumentUsed) to add
  * type-specific methods. The default template is empty.
@@ -81,23 +93,23 @@ private:
  * @tparam T The object type.
  */
 template <typename T>
-class ObjectList : public ObjectListBase<T>
+class MusxInstanceList : public MusxInstanceListBase<T>
 {
 public:
-    using ObjectListBase<T>::ObjectListBase;
+    using MusxInstanceListBase<T>::MusxInstanceListBase;
 
     // No helpers by default
 };
 
 /**
- * @class ObjectList<others::InstrumentUsed>
+ * @class MusxInstanceList<others::InstrumentUsed>
  * @brief Specialization for @ref others::InstrumentUsed that adds methods for processing the array as a whole.
  */
 template<>
-class ObjectList<others::InstrumentUsed> : public ObjectListBase<others::InstrumentUsed>
+class MusxInstanceList<others::InstrumentUsed> : public MusxInstanceListBase<others::InstrumentUsed>
 {
 public:
-    using ObjectListBase<others::InstrumentUsed>::ObjectListBase;
+    using MusxInstanceListBase<others::InstrumentUsed>::MusxInstanceListBase;
 
     /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
     /// @param index The 0-based index to find.

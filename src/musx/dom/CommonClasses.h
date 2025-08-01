@@ -327,7 +327,7 @@ public:
     void setTransposition(int interval, int keyAdjustment, bool simplify);
 
     /// @brief Sets the key's transposition based on the input staff's transposition settings.
-    void setTransposition(const std::shared_ptr<const others::Staff>& staff);
+    void setTransposition(const MusxInstance<others::Staff>& staff);
 
     /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
     /// 
@@ -468,10 +468,10 @@ public:
     /// @brief Creates a time signature corresponding to the component at @p index
     /// @param index The 0-based component index
     /// @throw std::invalid_argument if @p index is out of range
-    std::shared_ptr<TimeSignature> createComponent(size_t index) const
+    MusxInstance<TimeSignature> createComponent(size_t index) const
     {
         checkIndex(index);
-        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviate));
+        return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviate));
     }
 
     /// @brief Returns the abbreviated symbol (code point) for this time signature, or std::nullopt if none.

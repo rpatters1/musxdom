@@ -275,10 +275,10 @@ public:
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one in the data. Otherwise nullptr.
-    std::shared_ptr<MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
+    MusxInstance<MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
 
     /// @brief Returns the @ref details::StaffGroup for this staff if it is part of a multistaff instrument (as defined in #Document::getInstruments).
-    std::shared_ptr<details::StaffGroup> getMultiStaffInstVisualGroup() const;
+    MusxInstance<details::StaffGroup> getMultiStaffInstVisualGroup() const;
 
     /// @brief Returns the parsing context for the full name.
     /// @param forPartId The part id to use for partname and page inserts
@@ -303,10 +303,10 @@ public:
     std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
 
     /// @brief Returns the full name positioning in effect for this staff instance
-    std::shared_ptr<const NamePositioning> getFullNamePosition() const;
+    MusxInstance<NamePositioning> getFullNamePosition() const;
 
     /// @brief Returns the abbreviated name positioning in effect for this staff instance
-    std::shared_ptr<const NamePositioning> getAbbreviatedNamePosition() const;
+    MusxInstance<NamePositioning> getAbbreviatedNamePosition() const;
 
     /// @brief Returns if names should be shown for the specified part
     bool showNamesForPart(Cmper partId) const
@@ -379,11 +379,11 @@ public:
 
     /// @brief Gets a list of all parts that contain this staff
     /// @param includeScore If true, include the score in the list. (Defaults to true)
-    std::vector<std::shared_ptr<PartDefinition>> getContainingParts(bool includeScore = true) const;
+    MusxInstanceList<PartDefinition> getContainingParts(bool includeScore = true) const;
 
     /// @brief Finds the first part that contains this staff, not including the score.
     /// @return The first part that contains this staff or nullptr if none.
-    std::shared_ptr<PartDefinition> firstContainingPart() const;
+    MusxInstance<PartDefinition> firstContainingPart() const;
 
     void integrityCheck() override
     {
@@ -417,7 +417,7 @@ public:
 
 private:
     template <typename NamePositionType>
-    std::shared_ptr<const NamePositioning> getNamePosition() const;
+    MusxInstance<NamePositioning> getNamePosition() const;
 };
 
 /**
@@ -431,7 +431,7 @@ class StaffStyle : public Staff
 {
 protected:
     /** @brief protected constructor for @ref StaffComposite */
-    explicit StaffStyle(const std::shared_ptr<Staff>& staff)
+    explicit StaffStyle(const MusxInstance<Staff>& staff)
         : Staff(*staff), masks(std::make_shared<Masks>(staff->getDocument())) {}
 
 public:
@@ -509,7 +509,7 @@ public:
     /// @param staffId The staff to search
     /// @param measId The MeasCmper of the measure position
     /// @param eduPosition The Edu position within the measure specified by @p measId.
-    static std::vector<std::shared_ptr<StaffStyle>> findAllOverlappingStyles(const DocumentPtr& document,
+    static MusxInstanceList<StaffStyle> findAllOverlappingStyles(const DocumentPtr& document,
         Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
 
     bool requireAllFields() const override { return false; }
@@ -550,7 +550,7 @@ public:
     /// @brief Returns the @ref StaffStyle instance for this assignment
     /// @return Can return nullptr only in the case when there is an itegrity error
     /// @throws musx::dom::integrity_error if compiled to throw integrity errors
-    std::shared_ptr<StaffStyle> getStaffStyle() const;
+    MusxInstance<StaffStyle> getStaffStyle() const;
 
     void integrityCheck() override
     {
@@ -578,12 +578,12 @@ class StaffComposite : public StaffStyle
 {
 private:
     /** @brief private constructor */
-    explicit StaffComposite(const std::shared_ptr<Staff>& staff, Cmper requestedPartId, MeasCmper measId, Edu eduPosition)
+    explicit StaffComposite(const MusxInstance<Staff>& staff, Cmper requestedPartId, MeasCmper measId, Edu eduPosition)
         : StaffStyle(staff), m_requestedPartId(requestedPartId), m_measureId(measId), m_eduPosition(eduPosition) {}
 
     /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
     /// @param staffStyle The @ref StaffStyle to apply.
-    void applyStyle(const std::shared_ptr<StaffStyle>& staffStyle);
+    void applyStyle(const MusxInstance<StaffStyle>& staffStyle);
 
     const Cmper m_requestedPartId;
     const MeasCmper m_measureId;
@@ -601,7 +601,7 @@ public:
     /// @param measId The measure location to search
     /// @param eduPosition The Edu position within the measure to search
     /// @return The composite result or null if @p staffId is not valid.
-    static std::shared_ptr<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
+    static MusxInstance<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
 
     /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
     Cmper getPartId() const final override { return m_requestedPartId; }
@@ -613,7 +613,7 @@ public:
     Edu eduPosition() const { return m_eduPosition; }
 
     /// @brief Returns the underlying staff without any staff styles applied.
-    std::shared_ptr<others::Staff> getRawStaff() const;
+    MusxInstance<others::Staff> getRawStaff() const;
 };
 
 } // namespace others
