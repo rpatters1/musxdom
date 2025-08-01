@@ -297,13 +297,13 @@ public:
     std::optional<music_theory::DiatonicMode> calcDiatonicMode() const;
 
     /// @brief returns whether the two key signatures represent the same key signature, taking into account transposition.
-    bool isSame(const KeySignature& src)
+    bool isSame(const KeySignature& src) const
     {
         return isSameConcert(src) && m_alterationOffset == src.m_alterationOffset && m_octaveDisplacement == src.m_octaveDisplacement;
     }
 
     /// @brief returns whether the two key signatures represent the same concert key signature, ignoring transposition.
-    bool isSameConcert(const KeySignature& src)
+    bool isSameConcert(const KeySignature& src) const
     {
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }

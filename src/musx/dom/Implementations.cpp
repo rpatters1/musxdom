@@ -3078,7 +3078,7 @@ MusxInstance<others::PartDefinition> others::PartDefinition::getScore(const Docu
     return nullptr;
 }
 
-std::vector<MusxInstance<others::PartDefinition>> others::PartDefinition::getInUserOrder(const DocumentPtr& document)
+MusxInstanceList<others::PartDefinition> others::PartDefinition::getInUserOrder(const DocumentPtr& document)
 {
     auto result = document->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
     std::sort(result.begin(), result.end(), [](const auto& lhs, const auto& rhs) {

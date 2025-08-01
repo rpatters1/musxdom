@@ -1682,7 +1682,7 @@ public:
     static MusxInstance<PartDefinition> getScore(const DocumentPtr& document);
 
     /** @brief Return the linked parts sorted in UI order by #partOrder */
-    static std::vector<MusxInstance<PartDefinition>> getInUserOrder(const DocumentPtr& document);
+    static MusxInstanceList<PartDefinition> getInUserOrder(const DocumentPtr& document);
 
     bool requireAllFields() const override { return false; }
 
