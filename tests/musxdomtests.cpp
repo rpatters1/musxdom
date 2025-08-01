@@ -44,7 +44,7 @@ void staffListCheck(std::string_view staffListName, const musx::dom::MusxInstanc
     ASSERT_EQ(staffList->values.size(), expectedValues.size()) << staffListName << ": StaffList size " << staffList->values.size()
         << " does not match expected values size " << expectedValues.size();
     for (size_t x = 0; x < expectedValues.size(); x++) {
-        EXPECT_EQ(staffList->values[x], InstCmper(expectedValues[x])) << staffListName << ": StaffList element " << x << " does not match expected value.";
+        EXPECT_EQ(staffList->values[x], StaffCmper(expectedValues[x])) << staffListName << ": StaffList element " << x << " does not match expected value.";
     }
 }
 

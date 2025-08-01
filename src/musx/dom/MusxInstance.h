@@ -42,7 +42,7 @@ using MusxInstanceWeak = std::weak_ptr<const T>;
 class Document;
 
 namespace others {
-class InstrumentUsed;
+class StaffUsed;
 class Staff;
 }
 
@@ -53,7 +53,7 @@ class Staff;
  * This class wraps a std::vector of std::shared_ptr<T> and optionally adds
  * type-specific helper methods via @ref MusxInstanceListExtension.
  *
- * @tparam T The object type stored in the list (e.g., InstrumentUsed, SmartShape, etc.).
+ * @tparam T The object type stored in the list (e.g., StaffUsed, SmartShape, etc.).
  */
 template <typename T>
 class MusxInstanceListBase : public std::vector<MusxInstance<T>>
@@ -87,7 +87,7 @@ private:
  * @class MusxInstanceList
  * @brief Provides optional per-type extension methods for MusxInstanceList.
  *
- * This struct is specialized for individual types (e.g., InstrumentUsed) to add
+ * This struct is specialized for individual types (e.g., StaffUsed) to add
  * type-specific methods. The default template is empty.
  *
  * @tparam T The object type.
@@ -102,22 +102,22 @@ public:
 };
 
 /**
- * @class MusxInstanceList<others::InstrumentUsed>
- * @brief Specialization for @ref others::InstrumentUsed that adds methods for processing the array as a whole.
+ * @class MusxInstanceList<others::StaffUsed>
+ * @brief Specialization for @ref others::StaffUsed that adds methods for processing the array as a whole.
  */
 template<>
-class MusxInstanceList<others::InstrumentUsed> : public MusxInstanceListBase<others::InstrumentUsed>
+class MusxInstanceList<others::StaffUsed> : public MusxInstanceListBase<others::StaffUsed>
 {
 public:
-    using MusxInstanceListBase<others::InstrumentUsed>::MusxInstanceListBase;
+    using MusxInstanceListBase<others::StaffUsed>::MusxInstanceListBase;
 
     /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
     /// @param index The 0-based index to find.
     MusxInstance<others::Staff> getStaffInstanceAtIndex(Cmper index) const;
 
-    /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
+    /// @brief Returns the 0-based index of the StaffCmper or std::nullopt if not found.
     /// @param staffId The @ref Staff cmper value to find.
-    std::optional<size_t> getIndexForStaff(InstCmper staffId) const;
+    std::optional<size_t> getIndexForStaff(StaffCmper staffId) const;
 };
 
 } // namespace dom

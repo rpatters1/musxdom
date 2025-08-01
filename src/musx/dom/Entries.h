@@ -62,10 +62,10 @@ public:
      * 
      * @param document Weak pointer to the owning Document.
      * @param partId The requested part ID.
-     * @param inst The instrument ID for.
+     * @param staffId The instrument ID for.
      * @param meas The measure ID for.
      */
-    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas);
+    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper meas);
 
     /**
      * @brief Returns the requested part ID associated with this context.
@@ -397,7 +397,7 @@ public:
     /// @param measureId The ID of the measure to search.
     /// @param entryNumber The EntryNumber to search for.
     /// @return If found, an #EntryInfoPtr for the given entry number. Otherwise an null instance.
-    static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measureId, EntryNumber entryNumber);
+    static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber);
 
     /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
     const std::shared_ptr<const EntryInfo> operator->() const;
@@ -419,11 +419,11 @@ public:
     LayerIndex getLayerIndex() const;
 
     /// @brief Get the staff cmper
-    InstCmper getStaff() const;
+    StaffCmper getStaff() const;
 
     /// @brief Creates the current StaffComposite for the entry
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
-    MusxInstance<others::StaffComposite> createCurrentStaff(const std::optional<InstCmper>& forStaffId = std::nullopt) const;
+    MusxInstance<others::StaffComposite> createCurrentStaff(const std::optional<StaffCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the measure cmper
     MeasCmper getMeasure() const;
@@ -733,7 +733,7 @@ public:
     Cmper getRequestedPartId() const { return m_context.getRequestedPartId(); }
 
     /// @brief Get the staff for the entry
-    InstCmper getStaff() const;
+    StaffCmper getStaff() const;
 
     /// @brief Get the measure for the entry frame
     MeasCmper getMeasure() const;
@@ -774,7 +774,7 @@ public:
     /// @brief Creates a current StaffComposite for the entry frame.
     /// @param eduPosition The Edu position for which to create the staff.
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
-    MusxInstance<others::StaffComposite> createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId = std::nullopt) const;
+    MusxInstance<others::StaffComposite> createCurrentStaff(Edu eduPosition, const std::optional<StaffCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the measure instance
     MusxInstance<others::Measure> getMeasureInstance() const;
@@ -934,7 +934,7 @@ public:
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
-    InstCmper calcStaff() const;
+    StaffCmper calcStaff() const;
 
     /// @brief Creates a transposer for this Note instance.
     /// @return A unique pointer to a transposer for this Note.

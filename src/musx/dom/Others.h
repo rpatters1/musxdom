@@ -623,18 +623,18 @@ public:
 
 class Staff;
 /**
- * @class InstrumentUsed
- * @brief An element in an @ref InstrumentUsedArray.
+ * @class StaffUsed
+ * @brief An array of StaffUsed defines a set of staves in a staff system or in Scroll View.
  *
  * This class is identified by the XML node name "instUsed".
  */
-class InstrumentUsed : public OthersBase {
+class StaffUsed : public OthersBase {
 public:
     /** @brief Constructor function */
-    explicit InstrumentUsed(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+    explicit StaffUsed(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
         : OthersBase(document, partId, shareMode, cmper, inci) {}
 
-    InstCmper staffId{};                    ///< Staff cmper (xml node is `<inst>`)
+    StaffCmper staffId{};                   ///< Staff cmper (xml node is `<inst>`)
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
     std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
@@ -648,7 +648,7 @@ public:
     MusxInstance<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1063,26 +1063,26 @@ public:
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
     /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
-    MusxInstance<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<KeySignature> createKeySignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
-    MusxInstance<TimeSignature> createTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<TimeSignature> createTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
     /// @return The display time signature if there is one, otherwise the actual time signature.
-    MusxInstance<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<TimeSignature> createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Calculates the duration of the measure according to the time signature
     /// @param forStaff  If present, specifies the specific staff for which to create duration.
     /// @return If forStaff is provided, the staff-level duration (taking into account independent time signatures.)
     /// Otherwise, it returns the global duration of the measure.
-    util::Fraction calcDuration(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    util::Fraction calcDuration(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus.
     /// @param forStaff The staff for wiuch to calculate the time stretch.
-    util::Fraction calcTimeStretch(InstCmper forStaff) const
+    util::Fraction calcTimeStretch(StaffCmper forStaff) const
     {
         return calcDuration() / calcDuration(forStaff);
     }
@@ -1122,7 +1122,7 @@ public:
     Evpu horzEvpuOff{};         ///< Horizontal Evpu offset from the default position.
     Edu eduPosition{};          ///< Horizontal Edu position (xml node is `<horzEduOff>`)
     Evpu vertEvpuOff{};         ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
-    InstCmper staffAssign{};    ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
+    StaffCmper staffAssign{};   ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
     int layer{};                ///< The 1-based layer number to which this expression is assigned. (0 means all)
     bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
     Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
@@ -1357,7 +1357,7 @@ public:
     explicit MultiStaffInstrumentGroup(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    std::vector<InstCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
+    std::vector<StaffCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
 
     /// @brief Returns the staff instance (without any staff styles applied) at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
@@ -1367,7 +1367,7 @@ public:
     MusxInstance<Staff> getFirstStaffInstance() const;
 
     /// @brief Returns the index of the input staffId or std::nullopt if not found
-    std::optional<size_t> getIndexOf(InstCmper staffId) const
+    std::optional<size_t> getIndexOf(StaffCmper staffId) const
     {
         for (size_t x = 0; x < staffNums.size(); x++) {
             if (staffNums[x] == staffId) return x;        
@@ -1659,7 +1659,7 @@ public:
     /** @brief Return true if this part corresponds to the score */
     bool isScore() const { return getCmper() == SCORE_PARTID; }
 
-    /** @brief Return the @ref InstrumentUsed cmper by this part for the specified system.
+    /** @brief Return the @ref StaffUsed cmper by this part for the specified system.
      *
      * This function either returns the input @p systemId or the Special Part Extraction cmper.
      *
@@ -1708,7 +1708,7 @@ public:
     bool showTransposed{};                  ///< If true, "Display Concert Pitch" is unchecked for the part.
     Cmper scrollViewIUlist{};               ///< If this value is non-zero, it is the iuList @ref Cmper of the current Staff List in Scroll View.
     Cmper studioViewIUlist{};               ///< The iuList @ref Cmper for Studio View.
-    /** @brief If non-zero, Special Part Extraction is in effect and this is the @ref Cmper for its @ref InstrumentUsed array.
+    /** @brief If non-zero, Special Part Extraction is in effect and this is the @ref Cmper for its @ref StaffUsed array.
      *
      * When Special Part Extraction is in effect, staff systems no longer have their own instrument lists. Instead, they use this value.
      *
@@ -1973,14 +1973,14 @@ public:
  *
  * Each value is a specific staff cmper or one of the #StaffList::FloatingValues.
  */
-class StaffList : public OthersArray<InstCmper>
+class StaffList : public OthersArray<StaffCmper>
 {
 public:
     using OthersArray::OthersArray;
 
     /// @enum FloatingValues
     /// @brief Defines special assignment values used for floating staff assignments
-    enum class FloatingValues : InstCmper
+    enum class FloatingValues : StaffCmper
     {
         TopStaff = -1,          ///< This value means the assignment is to the top staff of any system or part
         BottomStaff = -2        ///< This value means the assignment is to the bottom staff of any system or part

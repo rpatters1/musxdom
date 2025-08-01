@@ -348,7 +348,7 @@ public:
     /// @brief Constructor
     OthersPool(const DocumentWeakPtr& document) : ObjectPool(document, {
         { std::string(others::BeatChartElement::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::InstrumentUsed::XmlNodeName), Base::ShareMode::None },
+        { std::string(others::StaffUsed::XmlNodeName), Base::ShareMode::None },
         { std::string(others::SystemLock::XmlNodeName), Base::ShareMode::None },
         { std::string(others::MultiStaffInstrumentGroup::XmlNodeName), Base::ShareMode::None },
         { std::string(others::MultimeasureRest::XmlNodeName), Base::ShareMode::None },

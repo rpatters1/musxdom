@@ -119,7 +119,7 @@ class EndPoint : public ContainedClassBase
 public:
     using ContainedClassBase::ContainedClassBase;
 
-    InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
+    StaffCmper staffId{};           ///< Staff ID (xml node is `<inst>`)
     MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
     Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
     EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)

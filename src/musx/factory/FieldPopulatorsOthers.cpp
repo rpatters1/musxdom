@@ -437,7 +437,7 @@ MUSX_XML_ELEMENT_ARRAY(ControlPointAdjustment, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(EndPoint, {
-    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->staffId = e->getTextAs<StaffCmper>(); }},
     {"meas", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
     {"edu", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
     {"entryNum", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->entryNumber = e->getTextAs<EntryNumber>(); }},
@@ -579,11 +579,11 @@ MUSX_XML_ELEMENT_ARRAY(Frame, {
     {"startTime", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->startTime = e->getTextAs<Edu>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(InstrumentUsed, {
-    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
-    {"trackType", [](const XmlElementPtr&, const std::shared_ptr<InstrumentUsed>&) { /* this field seems like it was for future enhancement */ }},
-    {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
-    {"range", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i)
+MUSX_XML_ELEMENT_ARRAY(StaffUsed, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
+    {"trackType", [](const XmlElementPtr&, const std::shared_ptr<StaffUsed>&) { /* this field seems like it was for future enhancement */ }},
+    {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
+    {"range", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i)
         { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
 });
 
@@ -697,7 +697,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
     {"horzEvpuOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->horzEvpuOff = e->getTextAs<Evpu>(); }},
     {"horzEduOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->vertEvpuOff = e->getTextAs<Evpu>(); }},
-    {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<InstCmper>(); }},
+    {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<StaffCmper>(); }},
     {"layer", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->layer = e->getTextAs<int>(); }},
     {"dontScaleWithEntry", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = populateBoolean(e, i); }},
     {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
@@ -783,9 +783,9 @@ MUSX_XML_ELEMENT_ARRAY(MultiStaffGroupId, {
 
 // NOTE: zero values are not exported in the xml, so this mapping only pushes non-zero values to the vector of staffNums.
 MUSX_XML_ELEMENT_ARRAY(MultiStaffInstrumentGroup, {
-    {"staffNum1", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
-    {"staffNum2", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
-    {"staffNum3", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
+    {"staffNum1", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<StaffCmper>()); }},
+    {"staffNum2", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<StaffCmper>()); }},
+    {"staffNum3", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<StaffCmper>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(Page, {
@@ -1148,7 +1148,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffList, {
-    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffList>& i) { i->values.push_back(e->getTextAs<InstCmper>()); }},
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffList>& i) { i->values.push_back(e->getTextAs<StaffCmper>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {

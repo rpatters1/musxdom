@@ -356,7 +356,7 @@ public:
     /// @param document the document to search
     /// @param partId the linked part to search
     /// @param staffCmper the staff cmper to search
-    static ClefIndex calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper);
+    static ClefIndex calcFirstClefIndex(const DocumentPtr& document, Cmper partId, StaffCmper staffCmper);
 
     /// @brief Calculates the number of staff lines on this staff.
     int calcNumberOfStafflines() const;
@@ -510,7 +510,7 @@ public:
     /// @param measId The MeasCmper of the measure position
     /// @param eduPosition The Edu position within the measure specified by @p measId.
     static MusxInstanceList<StaffStyle> findAllOverlappingStyles(const DocumentPtr& document,
-        Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
+        Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition);
 
     bool requireAllFields() const override { return false; }
 
@@ -601,7 +601,7 @@ public:
     /// @param measId The measure location to search
     /// @param eduPosition The Edu position within the measure to search
     /// @return The composite result or null if @p staffId is not valid.
-    static MusxInstance<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition);
+    static MusxInstance<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition);
 
     /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
     Cmper getPartId() const final override { return m_requestedPartId; }

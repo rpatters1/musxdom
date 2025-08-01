@@ -43,7 +43,7 @@ class EntryFrame;
 class EntryInfo;
 
 namespace others {
-class InstrumentUsed;
+class StaffUsed;
 class Measure;
 class MultiStaffInstrumentGroup;
 class TextBlock;
@@ -384,7 +384,7 @@ public:
  * @class ChordAssign
  * @brief Represents chord symbol assignment for a staff and measure.
  *
- * Cmper1 is the staff (inst) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ * Cmper1 is the staff (staffId) @ref Cmper and Cmper2 is the measure @ref Cmper.
  * This class is identified by the XML node name "chordAssign".
  */
 class ChordAssign : public DetailsBase
@@ -395,12 +395,12 @@ public:
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for (probably always 0).
      * @param shareMode The sharing mode for this #ChordAssign (probably always #ShareMode::All).
-     * @param inst The staff ID for this #ChordAssign.
+     * @param staffId The staff ID for this #ChordAssign.
      * @param meas The measure ID for this #ChordAssign.
      * @param inci The 0-based incident.
      */
-    explicit ChordAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas, Inci inci)
-        : DetailsBase(document, partId, shareMode, inst, meas, inci)
+    explicit ChordAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staffId, Cmper meas, Inci inci)
+        : DetailsBase(document, partId, shareMode, staffId, meas, inci)
     {
     }
 
@@ -520,7 +520,7 @@ public:
     }
 
     NoteNumber noteId{};    ///< The ID of the note being assigned to a different staff (XML node: `<noteID>`)
-    InstCmper staff{};      ///< The target staff (XML node: `<instrument>`)
+    StaffCmper staff{};     ///< The target staff (XML node: `<instrument>`)
 
     NoteNumber getNoteId() const override { return noteId; }
 
@@ -651,7 +651,7 @@ public:
  * @class GFrameHold
  * @brief Represents the attributes of a Finale frame holder.
  *
- * Cmper1 is the staff (inst) @ref Cmper and Cmper2 is the measur @ref Cmper
+ * Cmper1 is the staff (staffId) @ref Cmper and Cmper2 is the measur @ref Cmper
  * This class is identified by the XML node name "gfhold".
  */
 class GFrameHold : public DetailsBase
@@ -662,11 +662,11 @@ public:
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for (probably always 0).
      * @param shareMode The sharing mode for this #GFrameHold (probably always #ShareMode::All)
-     * @param inst The staff ID for this #GFrameHold.
+     * @param staffId The staff ID for this #GFrameHold.
      * @param meas The measure ID for this #GFrameHold.
      */
-    explicit GFrameHold(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas)
-        : DetailsBase(document, partId, shareMode, inst, meas), frames(MAX_LAYERS) {}
+    explicit GFrameHold(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staffId, Cmper meas)
+        : DetailsBase(document, partId, shareMode, staffId, meas), frames(MAX_LAYERS) {}
 
     // Public properties corresponding to the XML structure
     std::optional<ClefIndex> clefId;        ///< clef index when there are no mid-measure clef changes. (xml tag is `<clefID>`).
@@ -677,8 +677,8 @@ public:
     int clefPercent{};                      ///< Clef percent where 100 means 100%.
     std::vector<Cmper> frames;              ///< @ref others::Frame values for layers 1..4 (layer indices 0..3) if non-zero
 
-    /// @brief returns the inst (staff) number for this #GFrameHold
-    InstCmper getStaff() const { return InstCmper(getCmper1()); }
+    /// @brief returns the staffId (staff) number for this #GFrameHold
+    StaffCmper getStaff() const { return StaffCmper(getCmper1()); }
 
     /// @brief returns the measure number for this #GFrameHold
     MeasCmper getMeasure() const { return MeasCmper(getCmper2()); }
@@ -714,7 +714,7 @@ public:
  * @class IndependentStaffDetails
  * @brief Represents independent time and key signature overrides for a staff.
  *
- * Cmper1 is the staff (inst) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ * Cmper1 is the staff (staffId) @ref Cmper and Cmper2 is the measure @ref Cmper.
  * This class is identified by the XML node name "floats".
  */
 class IndependentStaffDetails : public DetailsBase
@@ -725,11 +725,11 @@ public:
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for (probably always 0).
      * @param shareMode The sharing mode for this #IndependentStaffDetails (probably always #ShareMode::All).
-     * @param inst The staff ID for this #IndependentStaffDetails.
+     * @param staffId The staff ID for this #IndependentStaffDetails.
      * @param meas The measure ID for this #IndependentStaffDetails.
      */
-    explicit IndependentStaffDetails(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas)
-        : DetailsBase(document, partId, shareMode, inst, meas)
+    explicit IndependentStaffDetails(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staffId, Cmper meas)
+        : DetailsBase(document, partId, shareMode, staffId, meas)
     {
     }
 
@@ -940,7 +940,7 @@ public:
  * @class MeasureTextAssign
  * @brief Represents a text block assignment for a staff and measure.
  *
- * Cmper1 is the staff (inst) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ * Cmper1 is the staff (staffId) @ref Cmper and Cmper2 is the measure @ref Cmper.
  *
  * Note that each instance either has a positive horizontal displacement in Edu,
  * meaning it maintains metrical alignment as spacing changes. Or it has a negative horizontal displacement
@@ -959,12 +959,12 @@ public:
      * @param document A weak pointer to the associated document.
      * @param partId The part that this is for (probably always 0).
      * @param shareMode The sharing mode for this #MeasureTextAssign (probably always #ShareMode::All).
-     * @param inst The staff ID for this #MeasureTextAssign.
+     * @param staffId The staff ID for this #MeasureTextAssign.
      * @param meas The measure ID for this #MeasureTextAssign.
      * @param inci The 0-based incident.
      */
-    explicit MeasureTextAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper inst, Cmper meas, Inci inci)
-        : DetailsBase(document, partId, shareMode, inst, meas, inci)
+    explicit MeasureTextAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staffId, Cmper meas, Inci inci)
+        : DetailsBase(document, partId, shareMode, staffId, meas, inci)
     {
     }
 
@@ -1181,7 +1181,7 @@ public:
      * @param document The document owner of this instance
      * @param partId The part that owns this staff group
      * @param shareMode The sharing mode deduced from xml attributes
-     * @param cmper1 In modern Finale files, all groups have 0 for cmper1. In legacy files this was a cmper for an @ref others::InstrumentUsed list.
+     * @param cmper1 In modern Finale files, all groups have 0 for cmper1. In legacy files this was a cmper for a @ref others::StaffUsed list.
      * @param cmper2 The identifier for the StaffGroup.
      */
     StaffGroup(const DocumentWeakPtr& document, Cmper partId, Base::ShareMode shareMode, Cmper cmper1, Cmper cmper2)
@@ -1251,8 +1251,8 @@ public:
     };
 
     // Public properties corresponding to the XML structure, ordered as they appear in the XML
-    InstCmper startInst{};                    ///< Starting staff ID
-    InstCmper endInst{};                      ///< Ending staff ID
+    StaffCmper startInst{};                   ///< Starting staff ID
+    StaffCmper endInst{};                     ///< Ending staff ID
     MeasCmper startMeas{};                    ///< Starting measure number
     MeasCmper endMeas{};                      ///< Ending measure number
     Cmper fullNameId{};                       ///< Full name TextBlock cmper (xml node is `<fullID>`)
@@ -1281,7 +1281,7 @@ public:
                                     ///< @note This is the value (if any) for a defined multistaff instrument. Normally you should use
                                     ///< #Document::getInstruments to determine the instrument groupings. These include any that
                                     ///< the factory detected from legacy staves or other special circumstances.
-    std::unordered_set<InstCmper> staves; ///< Calculated list of staves in the group
+    std::unordered_set<StaffCmper> staves; ///< Calculated list of staves in the group
 
     /// @brief Get the full staff name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
@@ -1329,7 +1329,7 @@ public:
 
 /**
  * @class StaffGroupInfo
- * @brief Provides run-time information about Staff Groups within a system or list of @ref others::InstrumentUsed.
+ * @brief Provides run-time information about Staff Groups within a system or list of @ref others::StaffUsed.
  */
 class StaffGroupInfo
 {
@@ -1337,13 +1337,13 @@ public:
     std::optional<size_t> startSlot;                    ///< the 0-based start slot (index) of the group in the system staves.
     std::optional<size_t> endSlot;                      ///< the 0-based end slot (index) of the group in the system staves.
     MusxInstance<StaffGroup> group;                     ///< the StaffGroup record for the group.
-    MusxInstanceList<others::InstrumentUsed> systemStaves;    ///< the system staves referred to by startSlot and endSlot
+    MusxInstanceList<others::StaffUsed> systemStaves;    ///< the system staves referred to by startSlot and endSlot
 
     /// @brief Constructs information about a specific StaffGroup as it relates the the @p systemStaves
     /// @param staffGroup The staff group
-    /// @param inpSysStaves The @ref others::InstrumentUsed list for a system or Scroll view.
+    /// @param inpSysStaves The @ref others::StaffUsed list for a system or Scroll view.
     StaffGroupInfo(const MusxInstance<StaffGroup>& staffGroup,
-        const MusxInstanceList<others::InstrumentUsed>& inpSysStaves);
+        const MusxInstanceList<others::StaffUsed>& inpSysStaves);
 
     /// @brief The number of staves in the group for the #systemStaves.
     std::optional<size_t> numStaves() const
@@ -1363,16 +1363,16 @@ public:
     /// @brief Creates a vector of #StaffGroupInfo instances for the measure, part, and system staves
     /// @param measureId The measure to find.
     /// @param linkedPartId The ID of the linked part in which to find the groups.
-    /// @param systemStaves The @ref others::InstrumentUsed list for a system or Scroll view.
+    /// @param systemStaves The @ref others::StaffUsed list for a system or Scroll view.
     static std::vector<StaffGroupInfo> getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,
-        const MusxInstanceList<others::InstrumentUsed>& systemStaves);
+        const MusxInstanceList<others::StaffUsed>& systemStaves);
 };
 
 /**
  * @class StaffSize
  * @brief Represents a per-staff-size override for a specific staff in a system.
  *
- * Cmper1 is the system number and Cmper2 is the staff number (inst) @ref Cmper.
+ * Cmper1 is the system number and Cmper2 is the staff number (staffId) @ref Cmper.
  *
  * This class is identified by the XML node name "staffSize".
  */
@@ -1385,10 +1385,10 @@ public:
      * @param partId The part that this is for.
      * @param shareMode The sharing mode for this #StaffSize.
      * @param system The staff system number (Cmper1).
-     * @param inst The staff number (Cmper2).
+     * @param staffId The staff number (Cmper2).
      */
-    explicit StaffSize(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper inst)
-        : DetailsBase(document, partId, shareMode, system, inst)
+    explicit StaffSize(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staffId)
+        : DetailsBase(document, partId, shareMode, system, staffId)
     {
     }
 

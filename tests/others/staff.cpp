@@ -538,7 +538,7 @@ TEST(StaffTest, NamePositioning)
 
     using Align = others::NamePositioning::AlignJustify;
 
-    auto checkNamePos = [&](InstCmper staffId, MeasCmper measId,
+    auto checkNamePos = [&](StaffCmper staffId, MeasCmper measId,
             Evpu expectedFullX, Evpu expectedFullY, Align expectedFullAlign,
             Evpu expectedAbrvX, Evpu expectedAbrvY, Align expectedAbrvAlign) {
         std::string msg = "Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId);

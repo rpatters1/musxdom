@@ -194,9 +194,9 @@ TEST(MultiStaffGroupTest, PopulateFields)
     EXPECT_EQ(groupId->staffGroupId, 5);
 }
 
-void checkInstrument(const DocumentPtr& doc, const std::string& name, InstCmper topStaffId, size_t expectedNumStaves)
+void checkInstrument(const DocumentPtr& doc, const std::string& name, StaffCmper topStaffId, size_t expectedNumStaves)
 {
-    const auto scrollView = doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    const auto scrollView = doc->getOthers()->getArray<others::StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
     auto topIndex = scrollView.getIndexForStaff(topStaffId);
     ASSERT_TRUE(topIndex.has_value());
     const auto& instruments = doc->getInstruments();

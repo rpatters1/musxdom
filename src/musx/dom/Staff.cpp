@@ -36,7 +36,7 @@ namespace others {
 
 void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 {
-    auto scrollViewList = document->getOthers()->getArray<InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto scrollViewList = document->getOthers()->getArray<StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
 
     // Map to track counts for instUuid
     std::unordered_map<std::string, int> instUuidCounts;
@@ -413,7 +413,7 @@ ClefIndex Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrit
     return defaultClef;
 }
 
-ClefIndex Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper)
+ClefIndex Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper partId, StaffCmper staffCmper)
 {
     if (auto staff = StaffComposite::createCurrent(document, partId, staffCmper, 1, 0)) {
         return staff->calcFirstClefIndex();
@@ -491,7 +491,7 @@ MusxInstanceList<PartDefinition> Staff::getContainingParts(bool includeScore) co
         if (!includeScore && part->getCmper() == SCORE_PARTID) {
             continue;
         }
-        auto scrollView = getDocument()->getOthers()->getArray<InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+        auto scrollView = getDocument()->getOthers()->getArray<StaffUsed>(part->getCmper(), BASE_SYSTEM_ID);
         for (const auto& next : scrollView) {
             if (next->staffId == this->getCmper()) {
                 result.push_back(part);
@@ -507,7 +507,7 @@ MusxInstance<PartDefinition> Staff::firstContainingPart() const
     auto parts = getDocument()->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
         if (part->getCmper() != SCORE_PARTID) {
-            auto scrollView = getDocument()->getOthers()->getArray<InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            auto scrollView = getDocument()->getOthers()->getArray<StaffUsed>(part->getCmper(), BASE_SYSTEM_ID);
             for (const auto& next : scrollView) {
                 if (next->staffId == this->getCmper()) {
                     return part;
@@ -753,7 +753,7 @@ MusxInstance<Staff> StaffComposite::getRawStaff() const
 }
 
 MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
-    InstCmper staffId, MeasCmper measId, Edu eduPosition)
+    StaffCmper staffId, MeasCmper measId, Edu eduPosition)
 {
     auto rawStaff = document->getOthers()->get<Staff>(partId, staffId);
     if (!rawStaff) return nullptr;

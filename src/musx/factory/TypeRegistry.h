@@ -233,7 +233,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TonalCenterFlats,
     dom::others::TonalCenterSharps,
     dom::others::SystemLock,        // xml node is "lockMeas", which is still sequenced non-alphabetically
-    dom::others::InstrumentUsed,
+    dom::others::StaffUsed,
     dom::others::KeyFormat,
     dom::others::KeyMapArray,
     dom::others::KeyAttributes,

@@ -586,7 +586,7 @@ public:
      * @param document Shared pointer to the document.
      * @param partId The part ID if this range is unlinked, otherwise 0.
      * @param shareMode The share mode if this range is unlinked.
-     * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::InstrumentUsed.
+     * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::StaffUsed.
      * @param inci incident value, for subclasses that have them.
      */
     explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All,
@@ -615,7 +615,7 @@ public:
     ///         - MeasCmper: the measure of the next location
     ///         - Edu: the location within the measure of the next location
     ///         Return std::nullopt if the next location is past the end of the document, or other error.
-    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     static const xml::XmlElementArray<MusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

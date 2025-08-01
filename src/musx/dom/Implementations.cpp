@@ -296,12 +296,12 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 {
     InstrumentMap result;
 
-    const auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    const auto scrollView = getOthers()->getArray<others::StaffUsed>(forPartId, BASE_SYSTEM_ID);
     if (scrollView.empty()) {
         return result;
     }
     std::unordered_set<Cmper> multiStaffInstsFound;
-    std::unordered_set<InstCmper> mappedStaves;
+    std::unordered_set<StaffCmper> mappedStaves;
     for (const auto& staffItem : scrollView) {
         if (auto rawStaff = getOthers()->get<others::Staff>(forPartId, staffItem->staffId)) { // do not use staffItem->getStaffInstance() because we want no throw here
             if (rawStaff->multiStaffInstId != 0) {
@@ -319,7 +319,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                             MUSX_ASSERT_IF(!topIndex.has_value()) {
                                 throw std::logic_error("Unable to find " + std::to_string(rawStaff->getCmper()) + " in scrollView.");
                             }
-                            for (InstCmper staffId : multiStaffInst->staffNums) {
+                            for (StaffCmper staffId : multiStaffInst->staffNums) {
                                 std::optional<size_t> staffIndex = scrollView.getIndexForStaff(staffId);
                                 MUSX_ASSERT_IF(!staffIndex.has_value()) {
                                     throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
@@ -339,7 +339,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
         // for now, only identify piano braces as visual staff groups
         if (group->bracket && group->bracket->style == details::StaffGroup::BracketStyle::PianoBrace) {
             if (const auto topStaff = getOthers()->get<others::Staff>(forPartId, group->startInst)) {
-                std::unordered_map<InstCmper, size_t> candidateStaves;
+                std::unordered_map<StaffCmper, size_t> candidateStaves;
                 size_t sequenceIndex = 0;
                 staffGroup.iterateStaves(1, 0, [&](const MusxInstance<others::StaffComposite>& nextStaff) {
                     if (nextStaff->multiStaffInstId == topStaff->multiStaffInstId || mappedStaves.find(nextStaff->getCmper()) == mappedStaves.end()) {
@@ -404,7 +404,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
     return result;
 }
 
-const InstrumentInfo& Document::getInstrumentForStaff(InstCmper staffId) const
+const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 {
     const auto& instIt = m_instruments.find(staffId);
     if (instIt != m_instruments.end()) {
@@ -423,9 +423,9 @@ const InstrumentInfo& Document::getInstrumentForStaff(InstCmper staffId) const
 bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
 {
     auto staffSystems = getOthers()->getArray<others::StaffSystem>(forPartId);
-    auto scrollView = getOthers()->getArray<others::InstrumentUsed>(forPartId, BASE_SYSTEM_ID);
+    auto scrollView = getOthers()->getArray<others::StaffUsed>(forPartId, BASE_SYSTEM_ID);
     for (const auto& staffSystem : staffSystems) {
-        auto nextSystem = getOthers()->getArray<others::InstrumentUsed>(forPartId, staffSystem->getCmper());
+        auto nextSystem = getOthers()->getArray<others::StaffUsed>(forPartId, staffSystem->getCmper());
         if (nextSystem.size() != scrollView.size()) {
             return true;
         }
@@ -490,7 +490,7 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
 
 DocumentPtr EntryFrame::getDocument() const { return m_context->getDocument(); }
 
-InstCmper EntryFrame::getStaff() const { return m_context->getStaff(); }
+StaffCmper EntryFrame::getStaff() const { return m_context->getStaff(); }
 
 MeasCmper EntryFrame::getMeasure() const { return m_context->getMeasure(); }
 
@@ -539,7 +539,7 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
     return nullptr;
 }
 
-MusxInstance<others::StaffComposite> EntryFrame::createCurrentStaff(Edu eduPosition, const std::optional<InstCmper>& forStaffId) const
+MusxInstance<others::StaffComposite> EntryFrame::createCurrentStaff(Edu eduPosition, const std::optional<StaffCmper>& forStaffId) const
 {
     return others::StaffComposite::createCurrent(getDocument(), getRequestedPartId(), forStaffId.value_or(getStaff()),
         getMeasure(), eduPosition);
@@ -761,7 +761,7 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
 // ***** EntryInfoPtr *****
 // ************************
 
-EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, InstCmper staffId, MeasCmper measureId, EntryNumber entryNumber)
+EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber)
 {
     EntryInfoPtr result;
     if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId)) {
@@ -802,13 +802,13 @@ bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
 
 LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
-InstCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
+StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
 
 MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); }
 
 MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
 
-MusxInstance<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<InstCmper>& forStaffId) const
+MusxInstance<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<StaffCmper>& forStaffId) const
 {
     return m_entryFrame->createCurrentStaff((*this)->elapsedDuration.calcEduDuration(), forStaffId);
 }
@@ -1627,10 +1627,10 @@ bool details::CustomStem::calcIsHiddenStem() const
 // ***** GFrameHoldContext *****
 // *****************************
 
-details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper inst, Cmper meas)
+details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper meas)
     : m_requestedPartId(partId)
 {
-    m_hold = document->getDetails()->get<details::GFrameHold>(partId, inst, meas);
+    m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, meas);
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -1908,13 +1908,13 @@ MusxInstance<TimeSignature> details::IndependentStaffDetails::createDisplayTimeS
 // ***** InstrumentInfo *****
 // **************************
 
-std::vector<InstCmper> InstrumentInfo::getSequentialStaves() const
+std::vector<StaffCmper> InstrumentInfo::getSequentialStaves() const
 {
-    std::vector<std::pair<InstCmper, size_t>> sorted(staves.begin(), staves.end());
+    std::vector<std::pair<StaffCmper, size_t>> sorted(staves.begin(), staves.end());
     std::sort(sorted.begin(), sorted.end(),
               [](const auto& a, const auto& b) { return a.second < b.second; });
 
-    std::vector<InstCmper> result;
+    std::vector<StaffCmper> result;
     result.reserve(sorted.size());
     for (const auto& [staffId, _] : sorted) {
         result.push_back(staffId);
@@ -1922,11 +1922,11 @@ std::vector<InstCmper> InstrumentInfo::getSequentialStaves() const
     return result;
 }
 
-// **************************
-// ***** InstrumentUsed *****
-// **************************
+// *********************
+// ***** StaffUsed *****
+// *********************
 
-util::Fraction others::InstrumentUsed::calcEffectiveScaling() const
+util::Fraction others::StaffUsed::calcEffectiveScaling() const
 {
     util::Fraction result(1);
     if (SystemCmper(getCmper()) > 0) { // if this is a page-view system
@@ -1945,20 +1945,20 @@ util::Fraction others::InstrumentUsed::calcEffectiveScaling() const
     return result;
 }
 
-MusxInstance<others::Staff> others::InstrumentUsed::getStaffInstance() const
+MusxInstance<others::Staff> others::StaffUsed::getStaffInstance() const
 {
     auto retval = getDocument()->getOthers()->get<others::Staff>(getPartId(), staffId);
     if (!retval) {
-        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staffId) + " not found for InstrumentUsed list " + std::to_string(getCmper()));
+        MUSX_INTEGRITY_ERROR("Staff " + std::to_string(staffId) + " not found for StaffUsed list " + std::to_string(getCmper()));
     }
     return retval;
 }
 
-MusxInstance<others::Staff> others::InstrumentUsed::getStaffInstance(MeasCmper measureId, Edu eduPosition) const
+MusxInstance<others::Staff> others::StaffUsed::getStaffInstance(MeasCmper measureId, Edu eduPosition) const
 {
     auto retval = others::StaffComposite::createCurrent(getDocument(), getPartId(), staffId, measureId, eduPosition);
     if (!retval) {
-        MUSX_INTEGRITY_ERROR("Composite staff " + std::to_string(staffId) + " not found for InstrumentUsed list " + std::to_string(getCmper())
+        MUSX_INTEGRITY_ERROR("Composite staff " + std::to_string(staffId) + " not found for StaffUsed list " + std::to_string(getCmper())
             + " at measure " + std::to_string(measureId) + " eduPosition " + std::to_string(eduPosition));
     }
     return retval;
@@ -2284,7 +2284,7 @@ int others::Measure::calcDisplayNumber() const
     return getCmper();
 }
 
-MusxInstance<KeySignature> others::Measure::createKeySignature(const std::optional<InstCmper>& forStaff) const
+MusxInstance<KeySignature> others::Measure::createKeySignature(const std::optional<StaffCmper>& forStaff) const
 {
     std::shared_ptr<KeySignature> result;
     MusxInstance<others::Staff> staff;
@@ -2307,7 +2307,7 @@ MusxInstance<KeySignature> others::Measure::createKeySignature(const std::option
     return result;
 }
 
-MusxInstance<TimeSignature> others::Measure::createTimeSignature(const std::optional<InstCmper>& forStaff) const
+MusxInstance<TimeSignature> others::Measure::createTimeSignature(const std::optional<StaffCmper>& forStaff) const
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
@@ -2323,7 +2323,7 @@ MusxInstance<TimeSignature> others::Measure::createTimeSignature(const std::opti
    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
 }
 
-MusxInstance<TimeSignature> others::Measure::createDisplayTimeSignature(const std::optional<InstCmper>& forStaff) const
+MusxInstance<TimeSignature> others::Measure::createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff) const
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
@@ -2342,7 +2342,7 @@ MusxInstance<TimeSignature> others::Measure::createDisplayTimeSignature(const st
     return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
 }
 
-util::Fraction others::Measure::calcDuration(const std::optional<InstCmper>& forStaff) const
+util::Fraction others::Measure::calcDuration(const std::optional<StaffCmper>& forStaff) const
 {
     auto timeSig = createTimeSignature(forStaff);
     return timeSig->calcTotalDuration();
@@ -2488,7 +2488,7 @@ void others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const Document
 // ***** MusicRange *****
 // **********************
 
-std::optional<std::pair<MeasCmper, Edu>> others::MusicRange::nextLocation(const std::optional<InstCmper>& forStaff) const
+std::optional<std::pair<MeasCmper, Edu>> others::MusicRange::nextLocation(const std::optional<StaffCmper>& forStaff) const
 {
     std::optional<std::pair<MeasCmper, Edu>> result;
     if (auto currMeasure = getDocument()->getOthers()->get<others::Measure>(getPartId(), endMeas)) {
@@ -2687,7 +2687,7 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
     return NoteInfoPtr();
 }
 
-InstCmper NoteInfoPtr::calcStaff() const
+StaffCmper NoteInfoPtr::calcStaff() const
 {
     if ((*this)->crossStaff) {
         if (auto crossStaff = m_entry->getEntry()->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
@@ -2699,7 +2699,7 @@ InstCmper NoteInfoPtr::calcStaff() const
 
 Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell) const
 {
-    InstCmper staffId = calcStaff();
+    StaffCmper staffId = calcStaff();
     const ClefIndex clefIndex = [&]() {
         if (staffId != m_entry.getStaff()) {
             if (auto staff = m_entry.createCurrentStaff(staffId)) {
@@ -2715,7 +2715,7 @@ Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& 
 Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert() const
 {
     const ClefIndex clefIndex = [&]() {
-        InstCmper staffId = calcStaff();
+        StaffCmper staffId = calcStaff();
         if (staffId != m_entry.getStaff()) {
             if (auto staff = m_entry.createCurrentStaff(staffId)) {
                 return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ false);
@@ -2801,11 +2801,11 @@ bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
         && (*this)->harmAlt == src->harmAlt;
 }
 
-// **********************************************
-// ***** MusxInstanceList<others::InstrumentUsed> *****
-// **********************************************
+// ***********************************************
+// ***** MusxInstanceList<others::StaffUsed> *****
+// ***********************************************
 
-MusxInstance<others::Staff> MusxInstanceList<others::InstrumentUsed>::getStaffInstanceAtIndex(Cmper index) const
+MusxInstance<others::Staff> MusxInstanceList<others::StaffUsed>::getStaffInstanceAtIndex(Cmper index) const
 {
     const auto& iuArray = *this;
     if (index >= iuArray.size()) return nullptr;
@@ -2813,7 +2813,7 @@ MusxInstance<others::Staff> MusxInstanceList<others::InstrumentUsed>::getStaffIn
     return iuItem->getStaffInstance();
 }
 
-std::optional<size_t> MusxInstanceList<others::InstrumentUsed>::getIndexForStaff(InstCmper staffId) const
+std::optional<size_t> MusxInstanceList<others::StaffUsed>::getIndexForStaff(StaffCmper staffId) const
 {
     const auto& iuArray = *this;
     for (size_t x = 0; x < iuArray.size(); x++) {
@@ -3241,7 +3241,7 @@ std::string details::StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString
 // **************************
 
 details::StaffGroupInfo::StaffGroupInfo(const MusxInstance<StaffGroup>& staffGroup,
-    const MusxInstanceList<others::InstrumentUsed>& inpSysStaves) : group(staffGroup), systemStaves(inpSysStaves)
+    const MusxInstanceList<others::StaffUsed>& inpSysStaves) : group(staffGroup), systemStaves(inpSysStaves)
 {
     if (inpSysStaves.empty()) {
         throw std::logic_error("Attempt to create StaffGroupInfo with no system staves (StaffGroup " + std::to_string(staffGroup->getCmper2()) + ")");
@@ -3281,7 +3281,7 @@ void details::StaffGroupInfo::iterateStaves(MeasCmper measId, Edu eduPosition, s
 }
 
 std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,
-    const MusxInstanceList<others::InstrumentUsed>& systemStaves)
+    const MusxInstanceList<others::StaffUsed>& systemStaves)
 {
     if (systemStaves.empty()) {
         util::Logger::log(util::Logger::LogLevel::Info, "Attempted to find groups for empty system staves. [measure " + std::to_string(measureId)
@@ -3306,7 +3306,7 @@ std::vector<details::StaffGroupInfo> details::StaffGroupInfo::getGroupsAtMeasure
 // **********************
 
 MusxInstanceList<others::StaffStyle> others::StaffStyle::findAllOverlappingStyles(const DocumentPtr& document,
-        Cmper partId, InstCmper staffId, MeasCmper measId, Edu eduPosition)
+        Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition)
 {
     auto staffStyleAssignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
     std::vector<MusxInstance<others::StaffStyleAssign>> applicableAssignments;
@@ -3353,7 +3353,7 @@ MusxInstance<others::Page> others::StaffSystem::getPage() const
 std::pair<util::Fraction, util::Fraction> others::StaffSystem::calcMinMaxStaffSizes() const
 {
     if (hasStaffScaling) {
-        auto systemStaves = getDocument()->getOthers()->getArray<others::InstrumentUsed>(getPartId(), getCmper());
+        auto systemStaves = getDocument()->getOthers()->getArray<others::StaffUsed>(getPartId(), getCmper());
         if (!systemStaves.empty()) {
             std::pair<util::Fraction, util::Fraction> result = std::make_pair((std::numeric_limits<util::Fraction>::max)(), (std::numeric_limits<util::Fraction>::min)());
             for (const auto& systemStaff : systemStaves) {
