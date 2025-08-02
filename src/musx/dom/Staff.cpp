@@ -368,7 +368,7 @@ MusxInstance<NamePositioning> Staff::getNamePosition() const
         }
     }
 
-    std::shared_ptr<NamePositioning> defaultValue;
+    MusxInstance<NamePositioning> defaultValue;
     if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
         if constexpr (isForFull) {
             defaultValue = staffOptions->namePos;
@@ -378,7 +378,7 @@ MusxInstance<NamePositioning> Staff::getNamePosition() const
     } else {
         MUSX_INTEGRITY_ERROR("Unable to retrieve staff options for returning default name positioning.");
     }
-    return MusxInstance<NamePositioning>(defaultValue, getPartId());
+    return defaultValue;
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
@@ -759,7 +759,6 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
     if (!rawStaff) return nullptr;
 
     std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, partId, measId, eduPosition));
-    result->createMasks(result);
     if (result->hasStyles) {
         auto styles = StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
         for (const auto& style : styles) {
@@ -767,7 +766,7 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
         }
     }
 
-    return MusxInstance<StaffComposite>(result, partId);
+    return result;
 }
 
 } // namespace others

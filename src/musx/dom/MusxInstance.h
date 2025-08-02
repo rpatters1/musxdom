@@ -29,96 +29,13 @@
 namespace musx {
 namespace dom {
 
-class Base;
-
-/**
- * @brief A wrapper for shared instance pointers.
- * 
- * @tparam T The type of the musx object.
- */
+/// @brief Defines the type of a musx instance stored in a pool
+/// @tparam T The musx type
 template <typename T>
-class MusxInstance {
-public:
-    using element_type = T;                         ///< The base type that this pointer points to.
-    using pointer_type = std::shared_ptr<const T>;  ///< The full pointer type (e.g. shared_ptr<const T>).
+using MusxInstance = std::shared_ptr<const T>;
 
-    /// @brief Default constructor.
-    MusxInstance() = default;
-
-    /// @brief Null constructor.
-    MusxInstance(std::nullptr_t)
-        : m_ptr(nullptr), m_requestedPartId(0) {}
-
-    /// @brief Copy constructor accepts T or any subclass of T
-    template <typename U,
-              typename = std::enable_if_t<std::is_base_of_v<T, U>>>
-    MusxInstance(const MusxInstance<U>& other)
-        : m_ptr(other.ptr()), m_requestedPartId(other.getRequestedPartId())
-    {
-        static_assert(std::is_base_of_v<Base, T>, "T must be derived from Base");        
-    }
-
-    /// @brief Move constructor from pointer.
-    explicit MusxInstance(pointer_type ptr, Cmper requestedPartId)
-        : m_ptr(std::move(ptr)), m_requestedPartId(requestedPartId)
-    {
-        static_assert(std::is_base_of_v<Base, T>, "T must be derived from Base");
-    }
-
-    /// @brief Constructor from raw pointer (shared_ptr only)
-    template <typename U = pointer_type,
-              typename = std::enable_if_t<std::is_same_v<U, std::shared_ptr<const T>>>>
-    MusxInstance(const element_type* rawPtr, Cmper requestedPartId)
-        : m_ptr(rawPtr), m_requestedPartId(requestedPartId)
-    {
-        static_assert(std::is_base_of_v<Base, T>, "T must be derived from Base");
-    }
-
-    /// @brief Returns true if the pointer is valid (non-null or not expired).
-    explicit operator bool() const {
-        return static_cast<bool>(m_ptr);
-    }
-
-    /// @brief Gets the shared_ptr.
-    pointer_type ptr() const {
-        return m_ptr;
-    }
-
-    /// @brief Gets the raw pointer.
-    const T* get() const {
-        return m_ptr.get();
-    }
-
-    /// @brief Dereference operator.
-    const T* operator->() const {
-        return get();
-    }
-
-    /// @brief Dereference operator.
-    const T& operator*() const {
-        return *get();
-    }
-
-    /// @brief Assignment operator accepts T or any subclass of T
-    template <typename U,
-              typename = std::enable_if_t<std::is_base_of_v<T, U>>>
-    MusxInstance& operator=(const MusxInstance<U>& other) {
-        m_ptr = other.ptr();  // use public accessor
-        m_requestedPartId = other.getRequestedPartId();
-        return *this;
-    }
-
-    Cmper getRequestedPartId() const {
-        return m_requestedPartId;
-    }
-
-private:
-    pointer_type m_ptr;
-    Cmper m_requestedPartId{};
-};
-
-/// @brief Weak musx instance pointer (non-owning reference)
-/// @tparam T The musx object type
+/// @brief Defines a weak ptr to the type of a musx instance stored in a pool
+/// @tparam T The musx type
 template <typename T>
 using MusxInstanceWeak = std::weak_ptr<const T>;
 

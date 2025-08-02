@@ -164,8 +164,6 @@ unsigned calcNumberOfBeamsInEdu(Edu duration);
  */
 class Note : public Base
 {
-    Cmper getPartId() = delete;
-
 public:
     /** @brief Constructor function */
     explicit Note(const DocumentWeakPtr& document, NoteNumber noteId)
@@ -215,7 +213,7 @@ public:
     /// @return A std::pair containing
     ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
-    std::pair<int, int> calcDefaultEnharmonic(const std::shared_ptr<const KeySignature>& key) const;
+    std::pair<int, int> calcDefaultEnharmonic(const MusxInstance<KeySignature>& key) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
@@ -241,7 +239,7 @@ public:
      * @param respellEnharmonic If true, the notes are enharmonically respelled using the default enharmonic spelling.
      * @return #NoteProperties
      */
-    NoteProperties calcNoteProperties(const std::shared_ptr<const KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
+    NoteProperties calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
         const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     bool requireAllFields() const override { return false; }
@@ -260,8 +258,6 @@ private:
  */
 class Entry : public Base
 {
-    Cmper getPartId() = delete;
-    
 public:
     /** @brief Constructor function
      *
@@ -325,12 +321,12 @@ public:
     /// @brief Gets the next entry in this list or nullptr if none.
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
-    std::shared_ptr<const Entry> getNext() const;
+    MusxInstance<Entry> getNext() const;
 
     /// @brief Gets the previous entry in this list or nullptr if none
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
-    std::shared_ptr<const Entry> getPrevious() const;
+    MusxInstance<Entry> getPrevious() const;
 
     /**
      * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
@@ -353,9 +349,9 @@ public:
     bool isPossibleFullMeasureRest() const
     { return !isNote && !isHidden && !voice2 && duration == Edu(NoteType::Whole); }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck() override
     {
-        this->Base::integrityCheck(ptrToThis);
+        this->Base::integrityCheck();
         if (size_t(numNotes) != notes.size()) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }
@@ -433,7 +429,7 @@ public:
     MeasCmper getMeasure() const;
 
     /// @brief Get the key signature of the entry
-    std::shared_ptr<const KeySignature> getKeySignature() const;
+    MusxInstance<KeySignature> getKeySignature() const;
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
     unsigned calcReverseGraceIndex() const;
@@ -604,6 +600,7 @@ private:
  */
 class EntryFrame : public std::enable_shared_from_this<EntryFrame>
 {
+public:
     /** @brief Constructor function
      *
      * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
@@ -617,15 +614,6 @@ class EntryFrame : public std::enable_shared_from_this<EntryFrame>
     {
     }
 
-    // prevent any shenanigans with shared_from_this
-    EntryFrame(const EntryFrame&) = delete;
-    EntryFrame(EntryFrame&&) = delete;
-    EntryFrame& operator=(const EntryFrame&) = delete;
-    EntryFrame& operator=(EntryFrame&&) = delete;
-
-    friend class details::GFrameHoldContext; // only this class can construct this
-
-public:
     /// @brief class to track tuplets in the frame
     struct TupletInfo
     {
@@ -736,7 +724,7 @@ public:
      * Finale does not display them.)
     */
     std::vector<TupletInfo> tupletInfo;
-    std::shared_ptr<const KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
+    MusxInstance<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
 
     /// @brief Get the document for the entry frame
     DocumentPtr getDocument() const;
@@ -799,15 +787,6 @@ public:
     bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
 private:
-    std::shared_ptr<const EntryFrame> safeSharedFromThis() const
-    {
-        auto result = weak_from_this().lock();
-        MUSX_ASSERT_IF(!result) {
-            throw std::bad_weak_ptr();
-        }
-        return result;
-    }
-
     details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
     util::Fraction m_timeStretch;
@@ -833,7 +812,7 @@ class EntryInfo
      *
      * @param entry The entry.
     */
-    explicit EntryInfo(const std::shared_ptr<const Entry>& entry)
+    explicit EntryInfo(const MusxInstance<Entry>& entry)
         : m_entry(entry) {}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -853,7 +832,7 @@ public:
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid 
-    std::shared_ptr<const Entry> getEntry() const
+    MusxInstance<Entry> getEntry() const
     {
         auto retval = m_entry.lock();
         if (!retval) {
@@ -903,7 +882,7 @@ public:
         MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
             throw std::logic_error("Note index is too large for notes array.");
         }
-        return MusxInstance<Note>(m_entry->getEntry()->notes[m_noteIndex], getEntryInfo().getFrame()->getRequestedPartId());
+        return m_entry->getEntry()->notes[m_noteIndex];
     }
 
     /// @brief Gets the entry info for this note

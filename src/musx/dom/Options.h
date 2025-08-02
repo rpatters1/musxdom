@@ -328,7 +328,7 @@ public:
     /**
      * @brief Vector of clef definitions (@ref ClefDef).
      */
-    std::vector<std::shared_ptr<ClefDef>> clefDefs;
+    std::vector<MusxInstance<ClefDef>> clefDefs;
 
     /// @brief Bounds-checked accessor function for #clefDefs.
     /// @param clefIndex The index to retrieve.
@@ -465,7 +465,7 @@ public:
      *
      * An unordered map that associates each `FontType` with its corresponding `FontInfo` settings.
      */
-    std::unordered_map<FontType, std::shared_ptr<FontInfo>> fontOptions;
+    std::unordered_map<FontType, MusxInstance<FontInfo>> fontOptions;
 
     /**
      * @brief get the `FontInfo` for a particular type
