@@ -56,6 +56,18 @@ using DocumentPtr = std::shared_ptr<Document>;
 /** @brief Shared weak `Document` pointer */
 using DocumentWeakPtr = std::weak_ptr<Document>;
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+class PartContextCloner {
+public:
+    template <typename T>
+    static std::shared_ptr<T> copyWithPartId(const std::shared_ptr<const T>& obj, Cmper partId) {
+        auto result = std::make_shared<T>(*obj);
+        result->setRequestedPartId(partId);
+        return result;
+    }
+};
+#endif
+
 /**
  * @class Base
  * @brief Base class to enforce polymorphism across all DOM classes.
@@ -96,15 +108,13 @@ public:
     }
 
     /**
-     * @brief Gets the partId for this instance (or SCORE_PARTID for score)
-     * @note When you use `get` or `getArray` to retrieve an instance for a part, the value
-     * returned is either for that part or it is for the score. Therefore, this value is
-     * only reliable for determining the partId you are working on if the entity's share mode
-     * is #ShareMode::None. Otherwise, it returns SCORE_PARTID for instances shared with the score.
-     *
-     * Runtime-only classes (e.g., StaffComposite) override this function to return the requested part id.
+     * @brief Gets the *source* partId for this instance. If an instance is fully shared with the score,
+     * the source is SCORE_PARTID. If an instance is partially shared or non shared, the source is the ID
+     * of the part that sourced it.
+     * @warning This value is often different than the value used to retrieve the instance. Normally you
+     * should not use it to retrieve another instance.
      */
-    virtual Cmper getPartId() const { return m_partId; }
+    Cmper getSourcePartId() const { return m_sourcePartId; }
 
     /**
      * @brief Gets the sharing mode for this instance.
@@ -157,7 +167,7 @@ protected:
      * @param shareMode The @ref ShareMode for this instance.
      */
     Base(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
-        : m_document(document), m_partId(partId), m_shareMode(shareMode) {}
+        : m_document(document), m_sourcePartId(partId), m_shareMode(shareMode) {}
 
     Base(const Base&) = default;        ///< explicit default copy constructor
     Base(Base&&) noexcept = default;    ///< explicit default move constructor
@@ -169,7 +179,7 @@ protected:
 
 private:
     const DocumentWeakPtr m_document;
-    const Cmper m_partId;
+    const Cmper m_sourcePartId;
     const ShareMode m_shareMode;
     SharedNodes m_unlinkedNodes;
 };
@@ -181,8 +191,6 @@ private:
  */
 class CommonClassBase : public Base
 {
-    // Cmper getPartId() = delete;
-
 public:
     /**
      * @brief Constructs a CommonClassBase object.
@@ -194,9 +202,7 @@ public:
 
 protected:
     // Because the part ID and share mode are hard-coded for this category of classes,
-    // these Base functions do not return useful results. However, we allow our subclasses
-    // to use their own versions of these functions (esp. `getPartId`) to avoid promiscuous
-    // hard-coding of SCORE_PARTID. The rules may change in the future.
+    // these Base functions do not return useful results.
     using Base::getShareMode;
     using Base::getUnlinkedNodes;
 };
@@ -216,9 +222,6 @@ public:
     ContainedClassBase(const MusxInstance<Base>& parent)
         : Base(parent->getDocument(), SCORE_PARTID, ShareMode::All), m_parent(parent)
     {}
-
-    /// @brief Override of getPartId returns parent's part ID.
-    Cmper getPartId() const override { return getParent()->getPartId(); }
 
     /// @brief Get the parent.
     template <typename ParentClass = Base>
@@ -245,8 +248,6 @@ private:
  * Options types derive from this base class so they can reside in the options pool.
  */
 class OptionsBase : public Base {
-    // Cmper getPartId() = delete;
-    
 protected:
     /**
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
@@ -267,6 +268,11 @@ protected:
  */
 class OthersBase : public Base
 {
+    /// @brief Private setter for requested part id.
+    void setRequestedPartId(Cmper newValue) { m_requestedPartId = newValue; }
+
+    friend class PartContextCloner; // gives access to private setter
+
 protected:
     /**
      * @brief Constructs an OthersBase object.
@@ -278,7 +284,7 @@ protected:
      * @param inci The array index (`Inci`).
      */
     OthersBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, std::optional<Inci> inci = std::nullopt)
-        : Base(document, partId, shareMode), m_cmper(cmper), m_inci(inci) {}
+        : Base(document, partId, shareMode), m_requestedPartId(partId), m_cmper(cmper), m_inci(inci) {}
 
 public:
     /**
@@ -295,7 +301,13 @@ public:
      */
     std::optional<Inci> getInci() const { return m_inci; }
 
+    /// @brief If this instance was retrieved from an object pool, it contains the part ID
+    /// that was used to retrieve it. If this value is different than #getSourcePartId, then
+    /// this instance is a copy of the pool instance.
+    Cmper getRequestedPartId() const { return m_requestedPartId; }
+
 private:
+    Cmper m_requestedPartId{};      ///< Defaults to source part id if not requested.
     Cmper m_cmper;                  ///< Common attribute: cmper (key value).
     std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
 };
@@ -360,6 +372,11 @@ public:
  */
 class DetailsBase : public Base
 {
+    /// @brief Private setter for requested part id.
+    void setRequestedPartId(Cmper newValue) { m_requestedPartId = newValue; }
+
+    friend class PartContextCloner; // gives access to private setter
+
 protected:
     /**
      * @brief Constructs a DetailsBase object.
@@ -372,7 +389,7 @@ protected:
      * @param inci The array index (`Inci`).
      */
     DetailsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt)
-        : Base(document, partId, shareMode), m_cmper1(cmper1), m_cmper2(cmper2), m_inci(inci) {}
+        : Base(document, partId, shareMode), m_requestedPartId(partId), m_cmper1(cmper1), m_cmper2(cmper2), m_inci(inci) {}
 
 public:
     /**
@@ -390,9 +407,15 @@ public:
      */
     std::optional<Inci> getInci() const { return m_inci; }
 
+    /// @brief If this instance was retrieved from an object pool, it contains the part ID
+    /// that was used to retrieve it. If this value is different than #getSourcePartId, then
+    /// this instance is a copy of the pool instance.
+    Cmper getRequestedPartId() const { return m_requestedPartId; }
+
 private:
-    Cmper m_cmper1;                  ///< Common attribute: cmper1 (key value).
-    Cmper m_cmper2;                  ///< Common attribute: cmper2 (key value).
+    Cmper m_requestedPartId{};      ///< Defaults to source part id if not requested.
+    Cmper m_cmper1;                 ///< Common attribute: cmper1 (key value).
+    Cmper m_cmper2;                 ///< Common attribute: cmper2 (key value).
     std::optional<Inci> m_inci;     ///< Optional array index: inci (starting from 0).
 };
 
@@ -479,8 +502,6 @@ class FontInfo;
  */
 class TextsBase : public Base
 {
-    // Cmper getPartId() = delete;
-    
 public:
     /**
      * @brief Constructs a `TextsBase` object.

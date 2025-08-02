@@ -88,8 +88,8 @@ std::optional<KnownShapeDefType> ShapeDef::recognize() const
 
 void ShapeDef::iterateInstructions(std::function<bool(ShapeDef::InstructionType, std::vector<int>)> callback) const
 {
-    auto insts = getDocument()->getOthers()->get<ShapeInstructionList>(getPartId(), instructionList);
-    auto data = getDocument()->getOthers()->get<ShapeData>(getPartId(), dataList);
+    auto insts = getDocument()->getOthers()->get<ShapeInstructionList>(getRequestedPartId(), instructionList);
+    auto data = getDocument()->getOthers()->get<ShapeData>(getRequestedPartId(), dataList);
     if (insts && data) {
         size_t currentDataIndex = 0;
         for (const auto& inst : insts->instructions) {

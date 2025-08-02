@@ -363,7 +363,7 @@ MusxInstance<NamePositioning> Staff::getNamePosition() const
 
     const Cmper posCmper = isForFull ? fullNamePosId : abrvNamePosId;
     if (posCmper) {
-        if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getPartId(), posCmper)) {
+        if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getRequestedPartId(), posCmper)) {
             return pos;
         }
     }
@@ -404,7 +404,7 @@ ClefIndex Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrit
         return transposedClef;
     }
     for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
-        if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), getCmper(), tryMeasure)) {
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getCmper(), tryMeasure)) {
             return gfhold.calcClefIndexAt(position);
         }
         // after the first iteration, we are looking for the clef at the end of the measure
@@ -745,7 +745,7 @@ void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
 
 MusxInstance<Staff> StaffComposite::getRawStaff() const
 {
-    auto result = getDocument()->getOthers()->get<Staff>(getPartId(), getCmper());
+    auto result = getDocument()->getOthers()->get<Staff>(getRequestedPartId(), getCmper());
     if (!result) {
         MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(getCmper()) + " from StaffComposite.");        
     }
@@ -758,7 +758,7 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
     auto rawStaff = document->getOthers()->get<Staff>(partId, staffId);
     if (!rawStaff) return nullptr;
 
-    std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, partId, measId, eduPosition));
+    std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, measId, eduPosition));
     result->createMasks(result);
     if (result->hasStyles) {
         auto styles = StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);

@@ -226,7 +226,7 @@ MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
         auto exps = document->getOthers()->getArray<ShapeExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {
             if (instance->categoryId) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getSourcePartId(), instance->categoryId);
                 if (!markingCat) {
                     MUSX_INTEGRITY_ERROR("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
@@ -259,7 +259,7 @@ MUSX_RESOLVER_ENTRY(TextExpressionDef, {
         auto exps = document->getOthers()->getArray<TextExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {
             if (instance->categoryId) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getSourcePartId(), instance->categoryId);
                 if (!markingCat) {
                     MUSX_INTEGRITY_ERROR("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }

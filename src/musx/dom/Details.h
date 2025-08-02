@@ -1314,7 +1314,7 @@ public:
     {
         this->DetailsBase::integrityCheck(ptrToThis);
         if (endMeas <= startMeas || startMeas <= 0) {
-            MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getPartId())
+            MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getSourcePartId())
                 + " starts at measure " + std::to_string(startMeas) + " and ends at measure " + std::to_string(endMeas));
         }
         if (!bracket) {

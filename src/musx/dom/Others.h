@@ -1319,7 +1319,7 @@ public:
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (nextMeas <= getStartMeasure()) {
-            MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getPartId()) + " spans 0 or fewer measures.");
+            MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getSourcePartId()) + " spans 0 or fewer measures.");
         }
     }
 
@@ -2180,7 +2180,7 @@ public:
     {
         if (startMeas == 0 || endMeas == 0) {
             MUSX_INTEGRITY_ERROR("Layout for system " + std::to_string(getCmper())
-                + " of part " + std::to_string(getPartId()) + " is in an unknown state.");
+                + " of part " + std::to_string(getSourcePartId()) + " is in an unknown state.");
         }
     }
 

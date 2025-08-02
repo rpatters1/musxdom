@@ -59,9 +59,9 @@ MusxInstance<others::SmartShapeMeasureAssign> smartshape::EndPoint::getMeasureAs
     MUSX_ASSERT_IF (!shapeParent) {
         throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
     }
-    if (auto measure = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
+    if (auto measure = getDocument()->getOthers()->get<others::Measure>(shapeParent->getRequestedPartId(), measId)) {
         if (measure->hasSmartShape) {
-            auto assigns = getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(getPartId(), measId);
+            auto assigns = getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(shapeParent->getRequestedPartId(), measId);
             for (const auto& assign : assigns) {
                 if (assign->shapeNum == shapeParent->getCmper()) {
                     return assign;
@@ -82,7 +82,7 @@ MusxInstance<details::SmartShapeEntryAssign> smartshape::EndPoint::getEntryAssig
         Cmper shapeId = shapeParent->getCmper();
         if (auto entry = getDocument()->getEntries()->get(entryNumber)) {
             if (entry->smartShapeDetail) {
-                auto assigns = getDocument()->getDetails()->getArray<details::SmartShapeEntryAssign>(getPartId(), entryNumber);
+                auto assigns = getDocument()->getDetails()->getArray<details::SmartShapeEntryAssign>(shapeParent->getRequestedPartId(), entryNumber);
                 for (const auto& assign : assigns) {
                     if (assign->shapeNum == shapeId) {
                         return assign;
@@ -110,7 +110,11 @@ util::Fraction smartshape::EndPoint::calcPosition() const
     if (!entryNumber) {
         return util::Fraction::fromEdu(eduPosition);
     }
-    if (auto entryInfo = calcAssociatedEntry(getPartId())) {
+    auto shapeParent = getParent<others::SmartShape>();
+    MUSX_ASSERT_IF (!shapeParent) {
+        throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
+    }
+    if (auto entryInfo = calcAssociatedEntry(shapeParent->getRequestedPartId())) {
         return entryInfo->elapsedDuration;
     }
     return 0;
@@ -118,14 +122,18 @@ util::Fraction smartshape::EndPoint::calcPosition() const
 
 util::Fraction smartshape::EndPoint::calcGlobalPosition() const
 {
+    auto shapeParent = getParent<others::SmartShape>();
+    MUSX_ASSERT_IF (!shapeParent) {
+        throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
+    }
     if (!entryNumber) {
         const auto rawPosition = util::Fraction::fromEdu(eduPosition);
-        if (auto meas = getDocument()->getOthers()->get<others::Measure>(getPartId(), measId)) {
+        if (auto meas = getDocument()->getOthers()->get<others::Measure>(shapeParent->getRequestedPartId(), measId)) {
             return rawPosition * meas->calcTimeStretch(staffId);
         }
         return rawPosition;
     }
-    if (auto entryInfo = calcAssociatedEntry(getPartId())) {
+    if (auto entryInfo = calcAssociatedEntry(shapeParent->getRequestedPartId())) {
         return entryInfo.calcGlobalElapsedDuration();
     }
     return 0;

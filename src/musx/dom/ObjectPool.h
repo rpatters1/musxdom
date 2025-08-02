@@ -67,6 +67,17 @@ inline constexpr bool is_pool_type_v = is_pool_type<Pool, T>::value;
 template <typename ObjectBaseType>
 class ObjectPool
 {
+    template <typename T>
+    std::shared_ptr<const T> bindWithPartId(std::shared_ptr<const T> obj, Cmper requestedPartId) const
+    {
+        if constexpr (std::is_base_of_v<OthersBase, T> || std::is_base_of_v<DetailsBase, T>) {
+            if (obj && obj->getRequestedPartId() != requestedPartId) {
+                return PartContextCloner::copyWithPartId(obj, requestedPartId);
+            }
+        }
+        return obj;
+    }
+
 public:
     /** @brief shared pointer to `ObjectBaseType` */
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
@@ -188,7 +199,7 @@ public:
         );
 
         for (auto it = rangeStart; it != rangeEnd; ++it) {
-            auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
+            auto typedPtr = bindWithPartId<T>(std::dynamic_pointer_cast<T>(it->second), requestedPartId);
             assert(typedPtr);
             result.push_back(typedPtr);
         }
@@ -257,7 +268,7 @@ public:
         if (it == m_pool.end()) {
             return nullptr;
         }
-        auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
+        auto typedPtr = bindWithPartId<T>(std::dynamic_pointer_cast<T>(it->second), requestedPartId);
         assert(typedPtr); // There is a program bug if the pointer cast fails.
         return typedPtr;
     }
@@ -314,10 +325,10 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<OptionsBase>& instance)
     {
         const Base* basePtr = instance.get();
-        if (basePtr->getPartId()) {
-            MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-zero part id [" + std::to_string(basePtr->getPartId()) + "]");
+        if (basePtr->getSourcePartId()) {
+            MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-zero part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
-        ObjectPool::add({ nodeName, basePtr->getPartId() }, instance);
+        ObjectPool::add({ nodeName, basePtr->getSourcePartId() }, instance);
     }
 
     /** @brief Scalar version of #ObjectPool::getArray */
@@ -363,7 +374,7 @@ public:
 
     /** @brief OthersPool version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
-    { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
+    { ObjectPool::add({nodeName, instance->getSourcePartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
     
     /** @brief OthersPool version of #ObjectPool::getArray */
     template <typename T>
@@ -403,7 +414,7 @@ public:
 
     /** @brief DetailsPool version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
-    { ObjectPool::add({nodeName, instance->getPartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
+    { ObjectPool::add({nodeName, instance->getSourcePartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
     /** @brief version of #ObjectPool::getArray for getting all of them */
     template <typename T, typename = std::enable_if_t<is_pool_type_v<DetailsPool, T>>>
@@ -510,10 +521,10 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
     {
         const Base* basePtr = instance.get();
-        if (basePtr->getPartId()) {
-            MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-zero part id [" + std::to_string(basePtr->getPartId()) + "]");
+        if (basePtr->getSourcePartId()) {
+            MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-zero part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
-        ObjectPool::add({ nodeName, basePtr->getPartId(), instance->getTextNumber() }, instance);
+        ObjectPool::add({ nodeName, basePtr->getSourcePartId(), instance->getTextNumber() }, instance);
     }
     
     /** @brief Texts version of #ObjectPool::getArray */

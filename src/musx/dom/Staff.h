@@ -556,7 +556,7 @@ public:
         MusicRange::integrityCheck(ptrToThis);
         if (!styleId) {
             MUSX_INTEGRITY_ERROR(std::string("Staff style assignment has no staff style id:")
-                + " Part " + std::to_string(getPartId())
+                + " Part " + std::to_string(getSourcePartId())
                 + " Staff " + std::to_string(getCmper())
             );
         }
@@ -577,14 +577,13 @@ class StaffComposite : public StaffStyle
 {
 private:
     /** @brief private constructor. must be followed by a call to createMasks. */
-    explicit StaffComposite(const MusxInstance<Staff>& staff, Cmper requestedPartId, MeasCmper measId, Edu eduPosition)
-        : StaffStyle(staff), m_requestedPartId(requestedPartId), m_measureId(measId), m_eduPosition(eduPosition) {}
+    explicit StaffComposite(const MusxInstance<Staff>& staff, MeasCmper measId, Edu eduPosition)
+        : StaffStyle(staff), m_measureId(measId), m_eduPosition(eduPosition) {}
 
     /// @brief Modifies the current StaffComposite instance with all applicable values from the @ref StaffStyle.
     /// @param staffStyle The @ref StaffStyle to apply.
     void applyStyle(const MusxInstance<StaffStyle>& staffStyle);
 
-    const Cmper m_requestedPartId;
     const MeasCmper m_measureId;
     const Edu m_eduPosition;
 
@@ -601,9 +600,6 @@ public:
     /// @param eduPosition The Edu position within the measure to search
     /// @return The composite result or null if @p staffId is not valid.
     static MusxInstance<StaffComposite> createCurrent(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition);
-
-    /// @brief Overrides Base function to return the requested part id instead of the Staff's source part id (which is always the score)
-    Cmper getPartId() const final override { return m_requestedPartId; }
 
     /// @brief Returns the measure this staff composite was created with.
     MeasCmper getMeasureId() const { return m_measureId; }
