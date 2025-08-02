@@ -601,7 +601,7 @@ public:
      *
      * These are raw entries. Use #details::GFrameHoldContext::createEntryFrame for a vector of entries with computed values.
      */
-    std::vector<std::shared_ptr<const Entry>> getEntries() const;
+    MusxInstanceList<Entry> getEntries() const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {

@@ -181,7 +181,7 @@ private:
  */
 class CommonClassBase : public Base
 {
-    Cmper getPartId() = delete;
+    // Cmper getPartId() = delete;
 
 public:
     /**
@@ -213,7 +213,7 @@ public:
      * 
      * @param parent A shared pointer to the parent document.
      */
-    ContainedClassBase(const std::shared_ptr<const Base>& parent)
+    ContainedClassBase(const MusxInstance<Base>& parent)
         : Base(parent->getDocument(), SCORE_PARTID, ShareMode::All), m_parent(parent)
     {}
 
@@ -222,7 +222,7 @@ public:
 
     /// @brief Get the parent.
     template <typename ParentClass = Base>
-    std::shared_ptr<const ParentClass> getParent() const
+    MusxInstance<ParentClass> getParent() const
     {
         auto result = m_parent.lock();
         MUSX_ASSERT_IF (!result) {
@@ -245,7 +245,7 @@ private:
  * Options types derive from this base class so they can reside in the options pool.
  */
 class OptionsBase : public Base {
-    Cmper getPartId() = delete;
+    // Cmper getPartId() = delete;
     
 protected:
     /**
@@ -479,7 +479,7 @@ class FontInfo;
  */
 class TextsBase : public Base
 {
-    Cmper getPartId() = delete;
+    // Cmper getPartId() = delete;
     
 public:
     /**
