@@ -752,11 +752,11 @@ public:
     bool hasTime{};                     ///< If true, this item contains an independent time signature.
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this instance.
-    std::shared_ptr<const TimeSignature> createTimeSignature() const;
+    MusxInstance<TimeSignature> createTimeSignature() const;
 
     /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
     /// @return The display time signature if there is one, otherwise the actual time signature.
-    std::shared_ptr<const TimeSignature> createDisplayTimeSignature() const;
+    MusxInstance<TimeSignature> createDisplayTimeSignature() const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {

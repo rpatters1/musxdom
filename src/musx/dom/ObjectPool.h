@@ -484,7 +484,7 @@ public:
     }
 
     /** @brief Get an entry from the EntryPool. */
-    std::shared_ptr<const Entry> get(EntryNumber entryNumber) const
+    MusxInstance<Entry> get(EntryNumber entryNumber) const
     {
         const auto it = m_pool.find(entryNumber);
         if (it == m_pool.end()) {

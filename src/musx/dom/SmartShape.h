@@ -407,7 +407,7 @@ public:
     {
     public:
     /// @brief Constructor function
-        explicit CharParams(const std::shared_ptr<const Base>& parent)
+        explicit CharParams(const MusxInstance<Base>& parent)
             : ContainedClassBase(parent), font(std::make_shared<FontInfo>(parent->getDocument()))
         {
         }

@@ -310,7 +310,7 @@ public:
         /// @brief Calculate the font that applies to this clef, based on the options in #ClefDef.
         /// @return A shared pointer to the font instance used by this #ClefDef.
         /// @throws std::invalid_argument if not found.
-        std::shared_ptr<const FontInfo> calcFont() const;
+        MusxInstance<FontInfo> calcFont() const;
 
         static const xml::XmlElementArray<ClefDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
@@ -333,7 +333,7 @@ public:
     /// @brief Bounds-checked accessor function for #clefDefs.
     /// @param clefIndex The index to retrieve.
     /// @throws std::out_of_range if index is out of range.
-    std::shared_ptr<const ClefDef> getClefDef(ClefIndex clefIndex) const
+    MusxInstance<ClefDef> getClefDef(ClefIndex clefIndex) const
     {
         MUSX_ASSERT_IF(clefIndex >= clefDefs.size()) {
             throw std::out_of_range("Clef index " + std::to_string(clefIndex) + " does not exist in document.");
@@ -473,7 +473,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    std::shared_ptr<const FontInfo> getFontInfo(FontType type) const;
+    MusxInstance<FontInfo> getFontInfo(FontType type) const;
 
     /**
      * @brief get the `FontInfo` for a particular type from the document pool
@@ -482,7 +482,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    static std::shared_ptr<const FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
+    static MusxInstance<FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
 
     /**
      * @brief The XML node name for this type.
@@ -999,7 +999,7 @@ public:
      * @returns A pointer to a detached instance of @ref PageFormat that is a best approximation
      * to the settings for the input part.
      */
-    std::shared_ptr<const PageFormat> calcPageFormatForPart(Cmper partId) const;
+    MusxInstance<PageFormat> calcPageFormatForPart(Cmper partId) const;
 
     /**
      * @brief Constructor for PageFormatOptions.

@@ -436,7 +436,7 @@ protected:
 
     /// @brief Separate creator for masks.
     /// @param ptrToSelf This allows both external subclass creation (StaffComposite) and shared_from_this
-    void createMasks(const std::shared_ptr<const Base>& ptrToSelf)
+    void createMasks(const MusxInstance<Base>& ptrToSelf)
     {
         masks = std::make_shared<Masks>(ptrToSelf);
     }

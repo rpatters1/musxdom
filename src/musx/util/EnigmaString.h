@@ -414,7 +414,7 @@ private:
 class EnigmaParsingContext
 {
 private:
-    std::shared_ptr<const dom::TextsBase> m_rawText;
+    dom::MusxInstance<dom::TextsBase> m_rawText;
     dom::Cmper m_forPartId;
     std::optional<int> m_forPageNumber;
     EnigmaString::TextInsertCallback m_insertFunc;
@@ -430,7 +430,7 @@ public:
     /// @param forPartId The linked part ID to use for ^partname and ^totpages inserts
     /// @param forPageId The value to use as page number for ^page inserts. ("#" is inserted if not provided, mimicing Finale behavior.)
     /// @param insertFunc A common handler for insert conversions.
-    EnigmaParsingContext(std::shared_ptr<const dom::TextsBase> rawText, dom::Cmper forPartId,
+    EnigmaParsingContext(dom::MusxInstance<dom::TextsBase> rawText, dom::Cmper forPartId,
             std::optional<dom::Cmper> forPageId = std::nullopt,
             EnigmaString::TextInsertCallback insertFunc = EnigmaString::defaultInsertsCallback)
         : m_rawText(std::move(rawText)), m_forPartId(forPartId), m_forPageNumber(forPageId), m_insertFunc(insertFunc)
@@ -476,10 +476,10 @@ public:
      * @brief Returns a shared pointer to a FontInfo instance that reflects
      * the first font information in the text.
      */
-    std::shared_ptr<const dom::FontInfo> parseFirstFontInfo() const;
+    dom::MusxInstance<dom::FontInfo> parseFirstFontInfo() const;
 
     /// @brief Get the raw text pointer
-    std::shared_ptr<const dom::TextsBase> getRawText() const { return m_rawText; }
+    dom::MusxInstance<dom::TextsBase> getRawText() const { return m_rawText; }
 
     // If there is ever a need for a non-const version of the pointer, we can always
     // look it up again.

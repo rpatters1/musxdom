@@ -2252,7 +2252,7 @@ void texts::LyricsTextBase::createSyllableInfo()
     }
 
     if (!current.empty()) {
-        syllables.push_back(std::shared_ptr<const LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
+        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen)));
     }
 }
 
@@ -2892,7 +2892,7 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
 // ***** PageFormatOptions *****
 // *****************************
 
-std::shared_ptr<const options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
+MusxInstance<options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
 {
     const auto& baseOptions = (partId == SCORE_PARTID) ? pageFormatScore : pageFormatParts;
     auto retval = std::make_shared<options::PageFormatOptions::PageFormat>(*baseOptions);
