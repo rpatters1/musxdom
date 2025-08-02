@@ -26,8 +26,6 @@
 #include "gtest/gtest.h"
 #include "test_utils.h"
 
-#include "musx/musx.h"
-
 namespace musxtest {
 
 using namespace ::musx::dom;
@@ -40,13 +38,13 @@ void readFile(const std::filesystem::path& filePath, std::vector<char>& contents
     contents = std::vector<char>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 }
 
-void staffListCheck(std::string_view staffListName, const std::shared_ptr<others::StaffList>& staffList, std::vector<int> expectedValues)
+void staffListCheck(std::string_view staffListName, const musx::dom::MusxInstance<others::StaffList>& staffList, std::vector<int> expectedValues)
 {
     ASSERT_TRUE(staffList) << staffListName << ": StaffList was null";
     ASSERT_EQ(staffList->values.size(), expectedValues.size()) << staffListName << ": StaffList size " << staffList->values.size()
         << " does not match expected values size " << expectedValues.size();
     for (size_t x = 0; x < expectedValues.size(); x++) {
-        EXPECT_EQ(staffList->values[x], InstCmper(expectedValues[x])) << staffListName << ": StaffList element " << x << " does not match expected value.";
+        EXPECT_EQ(staffList->values[x], StaffCmper(expectedValues[x])) << staffListName << ": StaffList element " << x << " does not match expected value.";
     }
 }
 

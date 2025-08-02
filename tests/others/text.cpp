@@ -619,7 +619,7 @@ TEST(TextsTest, FontFromEnigma)
 
     auto text = texts->get<ExpressionText>(216);
     ASSERT_TRUE(text);
-    auto font = text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo();
+    auto font = text->getRawTextCtx(text, SCORE_PARTID).parseFirstFontInfo();
     EXPECT_EQ(font->fontId, 1);
     EXPECT_EQ(font->fontSize, 12);
     EXPECT_FALSE(font->bold);
@@ -631,13 +631,13 @@ TEST(TextsTest, FontFromEnigma)
 
     text = texts->get<ExpressionText>(217);
     ASSERT_TRUE(text);
-    font = text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo();
+    font = text->getRawTextCtx(text, SCORE_PARTID).parseFirstFontInfo();
     EXPECT_FALSE(font);
 
     text = texts->get<ExpressionText>(218);
     ASSERT_TRUE(text);
     EXPECT_THROW(
-        text->getRawTextCtx(SCORE_PARTID).parseFirstFontInfo(),
+        text->getRawTextCtx(text, SCORE_PARTID).parseFirstFontInfo(),
         std::invalid_argument
     );
 }
@@ -977,7 +977,7 @@ TEST(TextsTest, LyricSyllableParsing)
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
-    auto checkSyllable = [&](const std::shared_ptr<LyricsVerse>& lyr, size_t index, const std::string& expSyl, bool expBefore, bool expAfter) -> void {
+    auto checkSyllable = [&](const MusxInstance<LyricsVerse>& lyr, size_t index, const std::string& expSyl, bool expBefore, bool expAfter) -> void {
         ASSERT_GT(lyr->syllables.size(), index);
         const auto& syl = lyr->syllables[index];
         ASSERT_TRUE(syl);

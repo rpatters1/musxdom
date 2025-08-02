@@ -203,8 +203,9 @@ TEST(StaffTest, AutoNumbering)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
-    auto staff1 = others->get<others::Staff>(SCORE_PARTID, 15);
-    ASSERT_TRUE(staff1) << "Staff with cmper 15 not found";
+    auto staff1Const = others->get<others::Staff>(SCORE_PARTID, 15);
+    ASSERT_TRUE(staff1Const) << "Staff with cmper 15 not found";
+    auto staff1 = const_cast<others::Staff*>(staff1Const.get());
 
     EXPECT_FALSE(staff1->autoNumberValue.has_value());
     EXPECT_EQ(staff1->addAutoNumbering("Name"), "Name");
@@ -221,8 +222,9 @@ TEST(StaffTest, AutoNumbering)
     staff1->autoNumbering = others::Staff::AutoNumberingStyle::ArabicPrefix;
     EXPECT_EQ(staff1->addAutoNumbering("Name"), "1. Name");
 
-    auto staff2 = others->get<others::Staff>(SCORE_PARTID, 16);
-    ASSERT_TRUE(staff2) << "Staff with cmper 16 not found";
+    auto staff2Const = others->get<others::Staff>(SCORE_PARTID, 16);
+    ASSERT_TRUE(staff2Const) << "Staff with cmper 16 not found";
+    auto staff2 = const_cast<others::Staff*>(staff2Const.get());
 
     EXPECT_EQ(staff2->autoNumberValue.value_or(-1), 2);
     EXPECT_EQ(staff2->addAutoNumbering("Name"), "2. Name");
@@ -235,8 +237,9 @@ TEST(StaffTest, AutoNumbering)
     staff2->autoNumbering = others::Staff::AutoNumberingStyle::ArabicSuffix;
     EXPECT_EQ(staff2->addAutoNumbering("Name"), "Name 2");
 
-    auto staff3 = others->get<others::Staff>(SCORE_PARTID, 11);
-    ASSERT_TRUE(staff3) << "Staff with cmper 11 not found";
+    auto staff3Const = others->get<others::Staff>(SCORE_PARTID, 11);
+    ASSERT_TRUE(staff3Const) << "Staff with cmper 11 not found";
+    auto staff3 = const_cast<others::Staff*>(staff3Const.get());
 
     EXPECT_EQ(staff3->autoNumberValue.value_or(-1), 3);
     EXPECT_EQ(staff3->addAutoNumbering("Name"), "Name 3");
@@ -535,7 +538,7 @@ TEST(StaffTest, NamePositioning)
 
     using Align = others::NamePositioning::AlignJustify;
 
-    auto checkNamePos = [&](InstCmper staffId, MeasCmper measId,
+    auto checkNamePos = [&](StaffCmper staffId, MeasCmper measId,
             Evpu expectedFullX, Evpu expectedFullY, Align expectedFullAlign,
             Evpu expectedAbrvX, Evpu expectedAbrvY, Align expectedAbrvAlign) {
         std::string msg = "Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId);

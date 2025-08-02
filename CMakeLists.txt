@@ -37,6 +37,7 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(MUSX_SRC_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Entries.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/PercussionNoteType.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/ShapeDesigner.cpp

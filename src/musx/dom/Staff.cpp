@@ -36,7 +36,7 @@ namespace others {
 
 void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 {
-    auto scrollViewList = document->getOthers()->getArray<InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto scrollViewList = document->getOthers()->getArray<StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
 
     // Map to track counts for instUuid
     std::unordered_map<std::string, int> instUuidCounts;
@@ -82,9 +82,10 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 
     for (const auto& instrumentUsed : scrollViewList) {
         auto staff = instrumentUsed->getStaffInstance();
+        Staff* mutableStaff = const_cast<Staff*>(staff.get());
         if (!staff) continue;
         if (staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
-            staff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
+            mutableStaff->autoNumberValue = std::nullopt; // No numbering for disabled or empty instUuid
             continue;
         }
 
@@ -101,7 +102,8 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
             for (size_t x = 0; x < multiStaffGroup->staffNums.size(); x++) {
                 auto groupStaff = multiStaffGroup->getStaffInstanceAtIndex(x);
                 if (groupStaff) {
-                    groupStaff->autoNumberValue = groupNumber;
+                    Staff* mutableGroupStaff = const_cast<Staff*>(groupStaff.get());
+                    mutableGroupStaff->autoNumberValue = groupNumber;
                 }
             }
             continue; // Skip further processing for the current staff
@@ -109,7 +111,7 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 
         // Assign a number for single staves
         instUuidNumbers[staff->instUuid]++;
-        staff->autoNumberValue = instUuidNumbers[staff->instUuid];
+        mutableStaff->autoNumberValue = instUuidNumbers[staff->instUuid];
     }
 }
 template <typename SubType>
@@ -125,15 +127,16 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
 
     auto list = document->getOthers()->getArray<SubType>(SCORE_PARTID);
     for (const auto& item : list) {
+        SubType* mutableItem = const_cast<SubType*>(item.get());
         if (item->notationStyle == Staff::NotationStyle::Percussion) {
             if (auto drumStaff = document->getOthers()->get<DrumStaffType>(SCORE_PARTID, item->getCmper())) {
-                item->percussionMapId = drumStaff->whichDrumLib;
+                mutableItem->percussionMapId = drumStaff->whichDrumLib;
             } else {
-                item->percussionMapId = Cmper(0);
+                mutableItem->percussionMapId = Cmper(0);
                 MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(item->getCmper()) + " is percussion style but has no DrumStaff record.");
             }
         } else {
-            item->percussionMapId = std::nullopt;
+            mutableItem->percussionMapId = std::nullopt;
         }
         bool checkFullNeeded = true;
         if constexpr (isForStyle) {
@@ -141,11 +144,11 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
         }
         if (checkFullNeeded) {
             if (auto full = document->getOthers()->get<NamePositionFullType>(SCORE_PARTID, item->getCmper())) {
-                item->fullNamePosId = item->getCmper();
+                mutableItem->fullNamePosId = item->getCmper();
             } else {
-                item->fullNamePosId = 0;
+                mutableItem->fullNamePosId = 0;
             }
-            item->fullNamePosFromStyle = isForStyle;
+            mutableItem->fullNamePosFromStyle = isForStyle;
         }
         bool checkAbbrvNeeded = true;
         if constexpr (isForStyle) {
@@ -153,11 +156,11 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
         }
         if (checkAbbrvNeeded) {
             if (auto abrv = document->getOthers()->get<NamePositionAbrvType>(SCORE_PARTID, item->getCmper())) {
-                item->abrvNamePosId = item->getCmper();
+                mutableItem->abrvNamePosId = item->getCmper();
             } else {
-                item->abrvNamePosId = 0;
+                mutableItem->abrvNamePosId = 0;
             }
-            item->abrvNamePosFromStyle = isForStyle;
+            mutableItem->abrvNamePosFromStyle = isForStyle;
         }
     }
 }
@@ -266,7 +269,7 @@ std::string Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accide
     return TextBlock::getText(getDocument(), abbrvNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
 }
 
-std::shared_ptr<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
+MusxInstance<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
 {
     if (multiStaffInstId) {
         if (auto retval = getDocument()->getOthers()->get<MultiStaffInstrumentGroup>(SCORE_PARTID, multiStaffInstId)) {
@@ -277,7 +280,7 @@ std::shared_ptr<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
     return nullptr;
 }
 
-std::shared_ptr<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
+MusxInstance<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
 {
     Cmper groupId = getDocument()->getInstrumentForStaff(getCmper()).staffGroupId;
     if (groupId != 0) {
@@ -293,7 +296,7 @@ std::shared_ptr<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
 
 util::EnigmaParsingContext Staff::getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
-    auto block = [&]() -> std::shared_ptr<TextBlock> {
+    auto block = [&]() -> MusxInstance<TextBlock> {
         if (!preferStaffName || !fullNameTextId) {
             if (auto group = getMultiStaffInstVisualGroup()) {
                 return getDocument()->getOthers()->get<TextBlock>(forPartId, group->fullNameId);
@@ -321,7 +324,7 @@ std::string Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle acc
 
 util::EnigmaParsingContext Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
-    auto block = [&]() -> std::shared_ptr<TextBlock> {
+    auto block = [&]() -> MusxInstance<TextBlock> {
         if (!preferStaffName || !abbrvNameTextId) {
             if (auto group = getMultiStaffInstVisualGroup()) {
                 return getDocument()->getOthers()->get<TextBlock>(forPartId, group->abbrvNameId);
@@ -349,7 +352,7 @@ std::string Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalSt
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 template <typename NamePositionType>
-std::shared_ptr<const NamePositioning> Staff::getNamePosition() const
+MusxInstance<NamePositioning> Staff::getNamePosition() const
 {
     static_assert(std::is_same_v<NamePositionType, NamePositionAbbreviated>
                || std::is_same_v<NamePositionType, NamePositionStyleAbbreviated>
@@ -360,12 +363,12 @@ std::shared_ptr<const NamePositioning> Staff::getNamePosition() const
 
     const Cmper posCmper = isForFull ? fullNamePosId : abrvNamePosId;
     if (posCmper) {
-        if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getPartId(), posCmper)) {
+        if (auto pos = getDocument()->getOthers()->get<NamePositionType>(getRequestedPartId(), posCmper)) {
             return pos;
         }
     }
 
-    std::shared_ptr<const NamePositioning> defaultValue;
+    MusxInstance<NamePositioning> defaultValue;
     if (auto staffOptions = getDocument()->getOptions()->get<options::StaffOptions>()) {
         if constexpr (isForFull) {
             defaultValue = staffOptions->namePos;
@@ -379,7 +382,7 @@ std::shared_ptr<const NamePositioning> Staff::getNamePosition() const
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::shared_ptr<const NamePositioning> Staff::getFullNamePosition() const
+MusxInstance<NamePositioning> Staff::getFullNamePosition() const
 {
     if (fullNamePosFromStyle) {
         return getNamePosition<NamePositionStyleFull>();
@@ -387,7 +390,7 @@ std::shared_ptr<const NamePositioning> Staff::getFullNamePosition() const
     return getNamePosition<NamePositionFull>();
 }
 
-std::shared_ptr<const NamePositioning> Staff::getAbbreviatedNamePosition() const
+MusxInstance<NamePositioning> Staff::getAbbreviatedNamePosition() const
 {
     if (abrvNamePosFromStyle) {
         return getNamePosition<NamePositionStyleAbbreviated>();
@@ -401,7 +404,7 @@ ClefIndex Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrit
         return transposedClef;
     }
     for (MeasCmper tryMeasure = measureId; tryMeasure > 0; tryMeasure--) {
-        if (auto gfhold = details::GFrameHoldContext(getDocument(), getPartId(), getCmper(), tryMeasure)) {
+        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getCmper(), tryMeasure)) {
             return gfhold.calcClefIndexAt(position);
         }
         // after the first iteration, we are looking for the clef at the end of the measure
@@ -410,7 +413,7 @@ ClefIndex Staff::calcClefIndexAt(MeasCmper measureId, Edu position, bool forWrit
     return defaultClef;
 }
 
-ClefIndex Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper partId, InstCmper staffCmper)
+ClefIndex Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper partId, StaffCmper staffCmper)
 {
     if (auto staff = StaffComposite::createCurrent(document, partId, staffCmper, 1, 0)) {
         return staff->calcFirstClefIndex();
@@ -480,15 +483,15 @@ std::pair<int, int> Staff::calcTranspositionInterval() const
     return std::make_pair(0, 0);
 }
 
-std::vector<std::shared_ptr<PartDefinition>> Staff::getContainingParts(bool includeScore) const
+MusxInstanceList<PartDefinition> Staff::getContainingParts(bool includeScore) const
 {
-    std::vector<std::shared_ptr<PartDefinition>> result;
+    MusxInstanceList<PartDefinition> result(getDocument(), SCORE_PARTID);
     auto parts = getDocument()->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
         if (!includeScore && part->getCmper() == SCORE_PARTID) {
             continue;
         }
-        auto scrollView = getDocument()->getOthers()->getArray<InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+        auto scrollView = getDocument()->getOthers()->getArray<StaffUsed>(part->getCmper(), BASE_SYSTEM_ID);
         for (const auto& next : scrollView) {
             if (next->staffId == this->getCmper()) {
                 result.push_back(part);
@@ -499,13 +502,12 @@ std::vector<std::shared_ptr<PartDefinition>> Staff::getContainingParts(bool incl
     return result;
 }
 
-std::shared_ptr<PartDefinition> Staff::firstContainingPart() const
+MusxInstance<PartDefinition> Staff::firstContainingPart() const
 {
-    std::vector<std::shared_ptr<PartDefinition>> result;
     auto parts = getDocument()->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
         if (part->getCmper() != SCORE_PARTID) {
-            auto scrollView = getDocument()->getOthers()->getArray<InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            auto scrollView = getDocument()->getOthers()->getArray<StaffUsed>(part->getCmper(), BASE_SYSTEM_ID);
             for (const auto& next : scrollView) {
                 if (next->staffId == this->getCmper()) {
                     return part;
@@ -520,7 +522,7 @@ std::shared_ptr<PartDefinition> Staff::firstContainingPart() const
 // ***** StaffComposite *****
 // **************************
 
-void StaffComposite::applyStyle(const std::shared_ptr<StaffStyle>& staffStyle)
+void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
 {
     auto srcMasks = staffStyle->masks;
 
@@ -741,22 +743,25 @@ void StaffComposite::applyStyle(const std::shared_ptr<StaffStyle>& staffStyle)
     }
 }
 
-std::shared_ptr<Staff> StaffComposite::getRawStaff() const
+MusxInstance<Staff> StaffComposite::getRawStaff() const
 {
-    auto result = getDocument()->getOthers()->get<Staff>(getPartId(), getCmper());
+    auto result = getDocument()->getOthers()->get<Staff>(getRequestedPartId(), getCmper());
     if (!result) {
         MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(getCmper()) + " from StaffComposite.");        
     }
     return result;
 }
 
-std::shared_ptr<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
-    InstCmper staffId, MeasCmper measId, Edu eduPosition)
+MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
+    StaffCmper staffId, MeasCmper measId, Edu eduPosition)
 {
-    auto rawStaff = document->getOthers()->get<Staff>(partId, staffId);
+    // Use getEffectiveSourceForPart to guarantee no copy out of the pool.
+    auto rawStaff = document->getOthers()->getEffectiveSourceForPart<Staff>({ std::string(Staff::XmlNodeName), partId, staffId, std::nullopt, std::nullopt });
     if (!rawStaff) return nullptr;
 
-    std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, partId, measId, eduPosition));
+    std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, measId, eduPosition));
+    PartContextCloner::setRequestedPartId(result, partId);
+    result->createMasks(result);
     if (result->hasStyles) {
         auto styles = StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
         for (const auto& style : styles) {

@@ -26,6 +26,8 @@
 #include <filesystem>
 #include <iostream>
 
+#include "musx/musx.h"
+
 namespace musx::dom::others {
 class StaffList;
 }
@@ -64,6 +66,6 @@ inline bool stringHasDigit(const std::string& s)
            != s.end();
 }
 
-void staffListCheck(std::string_view staffListName, const std::shared_ptr<musx::dom::others::StaffList>& staffList, std::vector<int> expectedValues);
+void staffListCheck(std::string_view staffListName, const musx::dom::MusxInstance<musx::dom::others::StaffList>& staffList, std::vector<int> expectedValues);
 
 } // namespace musxtext

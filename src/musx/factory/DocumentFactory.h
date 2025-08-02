@@ -81,11 +81,11 @@ public:
             }
         }
         if (!document->getHeader()) document->getHeader() = std::make_shared<musx::dom::Header>();
-        if (!document->getOptions()) document->getOptions() = std::make_shared<musx::dom::OptionsPool>();
-        if (!document->getOthers()) document->getOthers() = std::make_shared<musx::dom::OthersPool>();
-        if (!document->getDetails()) document->getDetails() = std::make_shared<musx::dom::DetailsPool>();
-        if (!document->getEntries()) document->getEntries() = std::make_shared<musx::dom::EntryPool>();
-        if (!document->getTexts()) document->getTexts() = std::make_shared<musx::dom::TextsPool>();
+        if (!document->getOptions()) document->getOptions() = std::make_shared<musx::dom::OptionsPool>(document);
+        if (!document->getOthers()) document->getOthers() = std::make_shared<musx::dom::OthersPool>(document);
+        if (!document->getDetails()) document->getDetails() = std::make_shared<musx::dom::DetailsPool>(document);
+        if (!document->getEntries()) document->getEntries() = std::make_shared<musx::dom::EntryPool>(document);
+        if (!document->getTexts()) document->getTexts() = std::make_shared<musx::dom::TextsPool>(document);
         
 #ifdef MUSX_DISPLAY_NODE_NAMES
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
@@ -96,16 +96,17 @@ public:
         document->m_maxBlankPages = 0;
         auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
         for (const auto& part : linkedParts) {
-            part->numberOfLeadingBlankPages = 0;
+            auto mutablePart = const_cast<PartDefinition*>(part.get());
+            mutablePart->numberOfLeadingBlankPages = 0;
             auto pages = document->getOthers()->getArray<Page>(part->getCmper());
-            part->numberOfPages = int(pages.size());
+            mutablePart->numberOfPages = int(pages.size());
             for (const auto& page : pages) {
                 if (!page->isBlank()) {
                     break;
                 }
-                part->numberOfLeadingBlankPages++;
+                mutablePart->numberOfLeadingBlankPages++;
             }
-            if (part->numberOfLeadingBlankPages > document->m_maxBlankPages) {
+            if (mutablePart->numberOfLeadingBlankPages > document->m_maxBlankPages) {
                 document->m_maxBlankPages = part->numberOfLeadingBlankPages;
             }
         }

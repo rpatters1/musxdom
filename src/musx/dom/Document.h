@@ -51,14 +51,14 @@ using namespace header;
 /// staff groups, and multistaff instrument groups.
 struct InstrumentInfo
 {
-    std::unordered_map<InstCmper, size_t> staves;   ///< List of each staffId with its sequence index from top to bottom.
+    std::unordered_map<StaffCmper, size_t> staves;   ///< List of each staffId with its sequence index from top to bottom.
     Cmper staffGroupId{};                           ///< The @ref details::StaffGroup that visually represents the instrument. (May be zero.)
     Cmper multistaffGroupId{};                      ///< The @ref others::MultiStaffInstrumentGroup that defines the instrument. (May be zero.)
 
     /// @brief Returns the staffIds in sequence as they appear in Scroll View in the score.
-    std::vector<InstCmper> getSequentialStaves() const;
+    std::vector<StaffCmper> getSequentialStaves() const;
 };
-using InstrumentMap = std::unordered_map<InstCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
+using InstrumentMap = std::unordered_map<StaffCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
@@ -99,12 +99,12 @@ public:
     /// @brief Searches pages to find the page that contains the measure.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
-    std::shared_ptr<others::Page> calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const;
+    MusxInstance<others::Page> calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const;
 
     /// @brief Searches systems to find the page that contains the measure.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
-    std::shared_ptr<others::StaffSystem> calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const;
+    MusxInstance<others::StaffSystem> calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const;
 
     /// @brief Returns the maximum number of blank pages in any part. This is calculated by #factory::DocumentFactory::create.
     int getMaxBlankPages() const { return m_maxBlankPages; }
@@ -114,7 +114,7 @@ public:
 
     /// @brief Get the instrument info for the given staffId
     /// @param staffId The staffId to find.
-    const InstrumentInfo& getInstrumentForStaff(InstCmper staffId) const;
+    const InstrumentInfo& getInstrumentForStaff(StaffCmper staffId) const;
 
     /**
      * @brief Builds an instrument map for the specified linked part ID.

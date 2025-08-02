@@ -548,7 +548,7 @@ std::string EnigmaParsingContext::getText(bool trimTags, util::EnigmaString::Acc
     return result;
 }
 
-std::shared_ptr<FontInfo> EnigmaParsingContext::parseFirstFontInfo() const
+MusxInstance<FontInfo> EnigmaParsingContext::parseFirstFontInfo() const
 {
     if (!m_rawText || !musx::util::EnigmaString::startsWithFontCommand(m_rawText->text)) {
         return nullptr;

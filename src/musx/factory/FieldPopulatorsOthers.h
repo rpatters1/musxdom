@@ -149,13 +149,14 @@ MUSX_RESOLVER_ENTRY(KeyMapArray, {
     [](const dom::DocumentPtr& document) {
         auto arrays = document->getOthers()->getArray<KeyMapArray>(SCORE_PARTID);
         for (const auto& array : arrays) {
+            KeyMapArray* mutableArray = const_cast<KeyMapArray*>(array.get());
             auto trimSteps = [&](size_t newSize) {
                 while (array->steps.size() > newSize) {
                     const auto& elt = array->steps[array->steps.size() - 1];
                     if (elt->diatonic || elt->hlevel != 0) {
                         break; // itegrity check below will catch this error
                     }
-                    array->steps.pop_back();
+                    mutableArray->steps.pop_back();
                 }
             };
             if (auto keyFormat = document->getOthers()->get<others::KeyFormat>(SCORE_PARTID, array->getCmper())) {
@@ -205,7 +206,8 @@ MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
             auto instGroups = document->getOthers()->getArray<MultiStaffGroupId>(part->getCmper());
             for (const auto& instance : instGroups) {
                 if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), BASE_SYSTEM_ID, instance->staffGroupId)) {
-                    group->multiStaffGroupId = instance->getCmper();
+                    details::StaffGroup* mutableGroup = const_cast<details::StaffGroup*>(group.get());
+                    mutableGroup->multiStaffGroupId = instance->getCmper();
                 } else if (instance->staffGroupId != 0) {
                     MUSX_INTEGRITY_ERROR("Group " + std::to_string(instance->staffGroupId) + " appears in MultiStaffGroupId "
                         + std::to_string(instance->getCmper()) + " but does not exist.");
@@ -224,11 +226,12 @@ MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
         auto exps = document->getOthers()->getArray<ShapeExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {
             if (instance->categoryId) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getSourcePartId(), instance->categoryId);
                 if (!markingCat) {
                     MUSX_INTEGRITY_ERROR("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
-                markingCat->shapeExpressions.emplace(instance->getCmper(), instance);
+                auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
+                mutableMarkingCat->shapeExpressions.emplace(instance->getCmper(), instance);
             }
         }
     }
@@ -256,11 +259,12 @@ MUSX_RESOLVER_ENTRY(TextExpressionDef, {
         auto exps = document->getOthers()->getArray<TextExpressionDef>(SCORE_PARTID);
         for (const auto& instance : exps) {
             if (instance->categoryId) {
-                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getPartId(), instance->categoryId);
+                auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getSourcePartId(), instance->categoryId);
                 if (!markingCat) {
                     MUSX_INTEGRITY_ERROR("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
-                markingCat->textExpressions.emplace(instance->getCmper(), instance);
+                auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
+                mutableMarkingCat->textExpressions.emplace(instance->getCmper(), instance);
             }
         }
     }

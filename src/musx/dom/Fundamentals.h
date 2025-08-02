@@ -62,7 +62,7 @@ using Edu = int32_t;                ///< "Enigma Durational Units" value (1024 p
 using EduFloat = double;            ///< "Enigma Durational Units" floating point value (1024.0 per quarter note)
 
 using MeasCmper = int16_t;          ///< Enigma meas Cmper (may be negative when not applicable)
-using InstCmper = int16_t;          ///< Enigma staff (inst) Cmper (may be negative when not applicable)
+using StaffCmper = int16_t;         ///< Enigma staff (staffId) Cmper (may be negative when not applicable)
 using SystemCmper = int16_t;        ///< Enigma systems Cmper (may be negative when not applicable)
 using PageCmper = int16_t;          ///< Enigma page Cmper (may be negative when not applicable)
 using ClefIndex = uint16_t;         ///< Index into @ref options::ClefOptions::clefDefs.
@@ -77,7 +77,7 @@ constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global vari
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
 constexpr int MAX_ALTERATIONS = 7;  ///< Maximum absolute value for chromatic alterations supported in Finale.
 constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
-constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::InstrumentUsed cmper)
+constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::StaffUsed cmper)
 
 constexpr double EVPU_PER_INCH = 288.0;         ///< Number of Evpu units per inch
 constexpr double EVPU_PER_POINT = 4.0;          ///< Number of Evpu units per 72 DPI point

@@ -506,7 +506,7 @@ MUSX_XML_ELEMENT_ARRAY(ClefOptions, {
             if (i->clefDefs.size() != index) {
                 throw std::invalid_argument("ClefDef index mismatch. Expected: " + std::to_string(i->clefDefs.size()) + ", Found: " + std::to_string(index));
             }
-            i->clefDefs.push_back(FieldPopulator<ClefOptions::ClefDef>::createAndPopulate(e, i->getDocument()));
+            i->clefDefs.push_back(FieldPopulator<ClefOptions::ClefDef>::createAndPopulate(e, i));
         }
     },
 });
@@ -936,7 +936,7 @@ MUSX_XML_ELEMENT_ARRAY(TextOptions, {
     {"textHorzAlign",          [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textHorzAlign = toEnum<TextOptions::HorizontalAlignment>(e); }},
     {"textVertAlign",          [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textVertAlign = toEnum<TextOptions::VerticalAlignment>(e); }},
     {"textIsEdgeAligned",      [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textIsEdgeAligned = populateBoolean(e, i); }},
-    {"insertSymbolInfo",       [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { populateEmbeddedClass(e, i->symbolInserts, i->getDocument()); }}
+    {"insertSymbolInfo",       [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { populateEmbeddedClass(e, i->symbolInserts, i); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieOptions::ConnectStyle, {
