@@ -430,10 +430,10 @@ public:
     /// @param forPartId The linked part ID to use for ^partname and ^totpages inserts
     /// @param forPageId The value to use as page number for ^page inserts. ("#" is inserted if not provided, mimicing Finale behavior.)
     /// @param insertFunc A common handler for insert conversions.
-    EnigmaParsingContext(const std::shared_ptr<const dom::TextsBase>& rawText, dom::Cmper forPartId,
+    EnigmaParsingContext(std::shared_ptr<const dom::TextsBase> rawText, dom::Cmper forPartId,
             std::optional<dom::Cmper> forPageId = std::nullopt,
             EnigmaString::TextInsertCallback insertFunc = EnigmaString::defaultInsertsCallback)
-        : m_rawText(rawText), m_forPartId(forPartId), m_forPageNumber(forPageId), m_insertFunc(insertFunc)
+        : m_rawText(std::move(rawText)), m_forPartId(forPartId), m_forPageNumber(forPageId), m_insertFunc(insertFunc)
     {}
 
     /// @brief Check whether the context holds a valid raw text pointer.

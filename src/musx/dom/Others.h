@@ -351,9 +351,9 @@ public:
     Evpu endPos{};     ///< End position of the beat span
     Evpu minPos{};     ///< Minimum position (see remarks in the class-level description of @ref BeatChartElement)
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
         if (control && getInci() != 0) {
             MUSX_INTEGRITY_ERROR("Beat chart for measure " + std::to_string(getCmper()) + " has a control instance in inci " + std::to_string(*getInci()));
         }
@@ -603,9 +603,9 @@ public:
      */
     std::vector<std::shared_ptr<const Entry>> getEntries() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->OthersBase::integrityCheck();
+        this->OthersBase::integrityCheck(ptrToThis);
         if (startTime && (startEntry || endEntry)) {
             MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has non-zero startTime and non-zero startEntry or endEntry.");
         }
@@ -1087,9 +1087,9 @@ public:
         return calcDuration() / calcDuration(forStaff);
     }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->OthersBase::integrityCheck();
+        this->OthersBase::integrityCheck(ptrToThis);
         if (!globalKeySig) {
             globalKeySig = std::make_shared<KeySignature>(getDocument());
         }
@@ -1138,9 +1138,9 @@ public:
     /// @return The shape expression or nullptr if this assignment is for a text expression or #shapeExprId not found.
     MusxInstance<ShapeExpressionDef> getShapeExpression() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->OthersBase::integrityCheck();
+        this->OthersBase::integrityCheck(ptrToThis);
         if (!textExprId && !shapeExprId) {
             MUSX_INTEGRITY_ERROR("Expression assignment at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1))
                 + " has no expression definition ID.");
@@ -1315,9 +1315,9 @@ public:
     /// @brief Calculates if the number on this multimeasure rest is visible.
     bool calcIsNumberVisible() const { return calcNumberOfMeasures() >= numStart; }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->OthersBase::integrityCheck();
+        this->OthersBase::integrityCheck(ptrToThis);
         if (nextMeas <= getStartMeasure()) {
             MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getPartId()) + " spans 0 or fewer measures.");
         }
@@ -1383,9 +1383,9 @@ public:
     /// @param document 
     static void calcAllMultiStaffGroupIds(const DocumentPtr& document);
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
         if (staffNums.empty()) {
             MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
         } else if (staffNums.size() > 3) {
@@ -1591,7 +1591,7 @@ public:
     bool isMultiAssignedThruLastPage() const
     { return isMultiPage() && endPage == 0; }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         if (getCmper() != 0) {
             if (startPage != getCmper() || endPage != getCmper()) {
@@ -1870,9 +1870,9 @@ public:
     bool calcIsOpen() const;
 
 
-    void integrityCheck()
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
         if (trigger != RepeatTriggerType::OnPass) {
             MUSX_INTEGRITY_ERROR("RepeatEndingStart at measure " + std::to_string(getCmper()) + " has an unexpected trigger value " +
                 std::to_string(int(trigger)));
@@ -2176,7 +2176,7 @@ public:
     ///         - util::Fraction: The scaling of the staff with the maximum (largest) scaling factor
     std::pair<util::Fraction, util::Fraction> calcMinMaxStaffSizes() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         if (startMeas == 0 || endMeas == 0) {
             MUSX_INTEGRITY_ERROR("Layout for system " + std::to_string(getCmper())

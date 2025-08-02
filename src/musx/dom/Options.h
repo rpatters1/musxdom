@@ -681,7 +681,7 @@ public:
     std::unordered_map<SyllablePosStyleType, std::shared_ptr<SyllablePosStyle>> syllablePosStyles;     ///< Syllable positioning styles
     std::unordered_map<WordExtConnectStyleType, std::shared_ptr<WordExtConnectStyle>> wordExtConnectStyles; ///< Word extension connection styles
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         if (!altHyphenFont) {
             altHyphenFont = std::make_shared<FontInfo>(getDocument());
@@ -1457,7 +1457,7 @@ public:
         std::shared_ptr<FontInfo> symFont;        ///< Symbol font (Percent-based size is a percent of the preceding font size in the Enigma string.)
         char32_t symChar{};                       ///< Symbol character
 
-        void integrityCheck() override
+        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
         {
             if (!symFont) {
                 symFont = std::make_shared<FontInfo>(getDocument(), /*sizeIsPercent*/ true);

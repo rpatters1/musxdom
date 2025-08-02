@@ -174,7 +174,7 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
 util::EnigmaParsingContext others::SmartShapeCustomLine::getRawTextCtx(Cmper forPartId, Cmper rawTextId) const
 {
     if (auto rawText = getDocument()->getTexts()->get<texts::SmartShapeText>(rawTextId)) {
-        return rawText->getRawTextCtx(forPartId);
+        return rawText->getRawTextCtx(rawText, forPartId);
     }
     return {};
 }

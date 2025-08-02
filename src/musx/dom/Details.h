@@ -695,9 +695,9 @@ public:
         return std::find_if(frames.begin(), frames.end(), [](Cmper frameId) { return frameId != 0; }) != frames.end();
     }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->DetailsBase::integrityCheck();
+        this->DetailsBase::integrityCheck(ptrToThis);
         if (clefListId && clefId.has_value()) {
             MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has both clef and clef list.");
         }
@@ -758,9 +758,9 @@ public:
     /// @return The display time signature if there is one, otherwise the actual time signature.
     std::shared_ptr<const TimeSignature> createDisplayTimeSignature() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        DetailsBase::integrityCheck();
+        DetailsBase::integrityCheck(ptrToThis);
         if (hasKey && !keySig) {
             keySig = std::make_shared<KeySignature>(getDocument());
         }
@@ -791,9 +791,9 @@ public:
         return static_cast<int16_t>(getCmper2());
     }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        DetailsBase::integrityCheck();
+        DetailsBase::integrityCheck(ptrToThis);
         if (std::abs(getAlterationValue()) > MAX_ALTERATIONS) {
             util::Logger::log(util::Logger::LogLevel::Verbose,
                 "KeySymbolListElement for list " + std::to_string(getCmper1()) + " has invalid value " + std::to_string(getAlterationValue()));
@@ -1151,9 +1151,9 @@ public:
         return 0;
     }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        EntryDetailsBase::integrityCheck();
+        EntryDetailsBase::integrityCheck(ptrToThis);
         if (!mask) {
             mask = unsigned(NoteType::Note4096th);
             MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " has no breaks.");
@@ -1310,9 +1310,9 @@ public:
     bool isAllMeasures() const
     { return (startMeas == 1 && endMeas == (std::numeric_limits<MeasCmper>::max)()); }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->DetailsBase::integrityCheck();
+        this->DetailsBase::integrityCheck(ptrToThis);
         if (endMeas <= startMeas || startMeas <= 0) {
             MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getPartId())
                 + " starts at measure " + std::to_string(startMeas) + " and ends at measure " + std::to_string(endMeas));

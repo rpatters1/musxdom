@@ -2203,7 +2203,7 @@ util::EnigmaParsingContext details::LyricAssign::getRawTextCtx() const
     static_assert(std::is_base_of_v<texts::LyricsTextBase, TextType>, "TextType must be a subclass of texts::LyricsTextBase.");
     // note that lyrics do not have text inserts. The UI doesn't permit them.
     if (auto rawText = getDocument()->getTexts()->get<TextType>(lyricNumber)) {
-        return rawText->getRawTextCtx(SCORE_PARTID);
+        return rawText->getRawTextCtx(rawText, SCORE_PARTID);
     }
     return {};
 }
@@ -3399,7 +3399,7 @@ util::EnigmaParsingContext others::TextBlock::getRawTextCtx(Cmper forPartId, std
             break;
     }
     if (rawText) {
-        return rawText->getRawTextCtx(forPartId, forPageId, defaultInsertFunc);
+        return rawText->getRawTextCtx(rawText, forPartId, forPageId, defaultInsertFunc);
     }
     return {};
 }
@@ -3449,10 +3449,10 @@ MusxInstance<others::Enclosure> others::TextExpressionDef::getEnclosure() const
 // ***** TextsBase *****
 // *********************
 
-util::EnigmaParsingContext TextsBase::getRawTextCtx(Cmper forPartId, std::optional<Cmper> forPageId,
+util::EnigmaParsingContext TextsBase::getRawTextCtx(const MusxInstance<TextsBase>& ptrToThis, Cmper forPartId, std::optional<Cmper> forPageId,
     util::EnigmaString::TextInsertCallback defaultInsertFunc) const
 {
-    return util::EnigmaParsingContext(shared_from_this(), forPartId, forPageId, defaultInsertFunc);
+    return util::EnigmaParsingContext(ptrToThis.ptr(), forPartId, forPageId, defaultInsertFunc);
 }
 
 // *************************

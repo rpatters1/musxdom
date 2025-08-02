@@ -385,9 +385,9 @@ public:
     /// @return The first part that contains this staff or nullptr if none.
     MusxInstance<PartDefinition> firstContainingPart() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
         if (!staffLines && !customStaff) {
             MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has neither a standard nor a custom staff definition.");
         } else if (staffLines && customStaff) {
@@ -427,7 +427,7 @@ private:
  * The cmper is a 1-based staff style ID (not necessarily sequential).
  * This class is identified by the XML node name "staffStyle".
  */
-class StaffStyle : public Staff, std::enable_shared_from_this<StaffStyle>
+class StaffStyle : public Staff
 {
 protected:
     /** @brief protected constructor for @ref StaffComposite. This constructor must be followed by a call to createMasks. */
@@ -436,7 +436,7 @@ protected:
 
     /// @brief Separate creator for masks.
     /// @param ptrToSelf This allows both external subclass creation (StaffComposite) and shared_from_this
-    void createMasks(const std::shared_ptr<const StaffStyle>& ptrToSelf)
+    void createMasks(const std::shared_ptr<const Base>& ptrToSelf)
     {
         masks = std::make_shared<Masks>(ptrToSelf);
     }
@@ -513,18 +513,18 @@ public:
     static MusxInstanceList<StaffStyle> findAllOverlappingStyles(const DocumentPtr& document,
         Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition);
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         if (!masks) {
             // Finale allows creation of staff styles with no masks, so this is just a verbose comment
             util::Logger::log(util::Logger::LogLevel::Verbose, "StaffStyle " + styleName
                 + " (" + std::to_string(getCmper()) + ") does not override anything.");
-            createMasks(shared_from_this());
+            createMasks(ptrToThis);
         }
         if (useNoteFont && !masks->floatNoteheadFont && !noteFont) {
             useNoteFont = false; // silence integrity check in Staff.
         }
-        Staff::integrityCheck();
+        Staff::integrityCheck(ptrToThis);
     }
 
     constexpr static std::string_view XmlNodeName = "staffStyle"; ///< The XML node name for this type.
@@ -551,9 +551,9 @@ public:
     /// @throws musx::dom::integrity_error if compiled to throw integrity errors
     MusxInstance<StaffStyle> getStaffStyle() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        MusicRange::integrityCheck();
+        MusicRange::integrityCheck(ptrToThis);
         if (!styleId) {
             MUSX_INTEGRITY_ERROR(std::string("Staff style assignment has no staff style id:")
                 + " Part " + std::to_string(getPartId())

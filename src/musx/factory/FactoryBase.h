@@ -301,7 +301,7 @@ struct FieldPopulator : public FactoryBase
             }
         }
         if constexpr (std::is_base_of_v<Base, T>) {
-            instance->integrityCheck();
+            instance->integrityCheck(instance);
         }
     }
 

@@ -353,9 +353,9 @@ public:
     bool isPossibleFullMeasureRest() const
     { return !isNote && !isHidden && !voice2 && duration == Edu(NoteType::Whole); }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->Base::integrityCheck();
+        this->Base::integrityCheck(ptrToThis);
         if (size_t(numNotes) != notes.size()) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }
