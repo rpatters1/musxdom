@@ -280,12 +280,10 @@ public:
     /**
      * @brief Represents a single clef definition.
      */
-    class ClefDef : public CommonClassBase
+    class ClefDef : public ContainedClassBase
     {
     public:
-        /** @brief the constructor */
-        explicit ClefDef(const DocumentWeakPtr& document)
-            : CommonClassBase(document) {}
+        using ContainedClassBase::ContainedClassBase;
             
         int middleCPos{};               ///< Staff position of middle-C for this clef from reference staffline (usually the top). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
@@ -1449,11 +1447,9 @@ public:
     bool textIsEdgeAligned{};                     ///< "Position from Page Edge"
 
     /// @brief Insert symbol information
-    struct InsertSymbolInfo : public CommonClassBase
+    struct InsertSymbolInfo : public ContainedClassBase
     {
-        /** @brief the constructor */
-        explicit InsertSymbolInfo(const DocumentWeakPtr& document)
-            : CommonClassBase(document) {}
+        using ContainedClassBase::ContainedClassBase;
 
         int trackingBefore{};                     ///< Tracking before in EMs (1/1000 font size units)
         int trackingAfter{};                      ///< Tracking after in EMs (1/1000 font size units)

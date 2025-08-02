@@ -385,7 +385,7 @@ public:
  *
  * This class is identified by the XML node name "ssLineStyle".
  */
-class SmartShapeCustomLine : public OthersBase
+class SmartShapeCustomLine : public OthersBase, public std::enable_shared_from_this<SmartShapeCustomLine>
 {
     util::EnigmaParsingContext getRawTextCtx(Cmper forPartId, Cmper textBlockId) const;
 
@@ -403,12 +403,12 @@ public:
     enum class LineCapType { None, Hook, ArrowheadPreset, ArrowheadCustom };
 
     /// @brief Hold parameters for LineStyle::Char.
-    class CharParams : public CommonClassBase
+    class CharParams : public ContainedClassBase
     {
     public:
     /// @brief Constructor function
-        explicit CharParams(const DocumentWeakPtr& document)
-            : CommonClassBase(document), font(std::make_shared<FontInfo>(document))
+        explicit CharParams(const std::shared_ptr<const SmartShapeCustomLine>& parent)
+            : ContainedClassBase(parent), font(std::make_shared<FontInfo>(parent->getDocument()))
         {
         }
 
@@ -420,14 +420,10 @@ public:
     };
 
     /// @brief Hold parameters for LineStyle::Solid.
-    class SolidParams : public CommonClassBase
+    class SolidParams : public ContainedClassBase
     {
     public:
-    /// @brief Constructor function
-        explicit SolidParams(const DocumentWeakPtr& document)
-            : CommonClassBase(document)
-        {
-        }
+        using ContainedClassBase::ContainedClassBase;
 
         Efix lineWidth{};             ///< Solid line width
 
@@ -435,11 +431,9 @@ public:
     };
 
     /// @brief Hold parameters for LineStyle::Dashed.
-    class DashedParams : public CommonClassBase {
+    class DashedParams : public ContainedClassBase {
     public:
-    /// @brief Constructor function
-        explicit DashedParams(const DocumentWeakPtr& document)
-            : CommonClassBase(document) {}
+        using ContainedClassBase::ContainedClassBase;
 
         Efix lineWidth{};             ///< Dashed line width
         Efix dashOn{};                ///< Dash length
@@ -529,13 +523,13 @@ public:
         OthersBase::integrityCheck();
 
         if (lineStyle == LineStyle::Char && !charParams)
-            charParams = std::make_shared<CharParams>(getDocument());
+            charParams = std::make_shared<CharParams>(shared_from_this());
 
         if (lineStyle == LineStyle::Solid && !solidParams)
-            solidParams = std::make_shared<SolidParams>(getDocument());
+            solidParams = std::make_shared<SolidParams>(shared_from_this());
 
         if (lineStyle == LineStyle::Dashed && !dashedParams)
-            dashedParams = std::make_shared<DashedParams>(getDocument());
+            dashedParams = std::make_shared<DashedParams>(shared_from_this());
     }
 
     constexpr static std::string_view XmlNodeName = "ssLineStyle"; ///< The XML node name for this type.

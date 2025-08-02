@@ -427,12 +427,19 @@ private:
  * The cmper is a 1-based staff style ID (not necessarily sequential).
  * This class is identified by the XML node name "staffStyle".
  */
-class StaffStyle : public Staff
+class StaffStyle : public Staff, std::enable_shared_from_this<StaffStyle>
 {
 protected:
-    /** @brief protected constructor for @ref StaffComposite */
+    /** @brief protected constructor for @ref StaffComposite. This constructor must be followed by a call to createMasks. */
     explicit StaffStyle(const MusxInstance<Staff>& staff)
-        : Staff(*staff), masks(std::make_shared<Masks>(staff->getDocument())) {}
+        : Staff(*staff) {}
+
+    /// @brief Separate creator for masks.
+    /// @param ptrToSelf This allows both external subclass creation (StaffComposite) and shared_from_this
+    void createMasks(const std::shared_ptr<const StaffStyle>& ptrToSelf)
+    {
+        masks = std::make_shared<Masks>(ptrToSelf);
+    }
 
 public:
     /** @brief Constructor function */
@@ -440,16 +447,10 @@ public:
         : Staff(document, partId, shareMode, cmper) {}
 
     /// @brief lists the masks that deterimine if this staff style overrides the staff settings
-    /// @todo add masks as needed. If we ever add them all, remove Base inheritance and #requireAllFields function.
-    class Masks : public CommonClassBase // Base inheritance needed for requireAllFields
+    class Masks : public ContainedClassBase
     {
     public:
-        /**
-         * @brief Default constructor
-         * @param document A weak pointer to the document object.
-         */
-        explicit Masks(const DocumentWeakPtr& document)
-            : CommonClassBase(document) {}
+        using ContainedClassBase::ContainedClassBase;
 
         bool floatNoteheadFont{};       ///< overrides notehead font settings
         bool flatBeams{};               ///< overrides #Staff::flatBeams
@@ -512,15 +513,13 @@ public:
     static MusxInstanceList<StaffStyle> findAllOverlappingStyles(const DocumentPtr& document,
         Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition);
 
-    bool requireAllFields() const override { return false; }
-
     void integrityCheck() override
     {
         if (!masks) {
             // Finale allows creation of staff styles with no masks, so this is just a verbose comment
             util::Logger::log(util::Logger::LogLevel::Verbose, "StaffStyle " + styleName
                 + " (" + std::to_string(getCmper()) + ") does not override anything.");
-            masks = std::make_shared<Masks>(getDocument());
+            createMasks(shared_from_this());
         }
         if (useNoteFont && !masks->floatNoteheadFont && !noteFont) {
             useNoteFont = false; // silence integrity check in Staff.
@@ -577,7 +576,7 @@ public:
 class StaffComposite : public StaffStyle
 {
 private:
-    /** @brief private constructor */
+    /** @brief private constructor. must be followed by a call to createMasks. */
     explicit StaffComposite(const MusxInstance<Staff>& staff, Cmper requestedPartId, MeasCmper measId, Edu eduPosition)
         : StaffStyle(staff), m_requestedPartId(requestedPartId), m_measureId(measId), m_eduPosition(eduPosition) {}
 

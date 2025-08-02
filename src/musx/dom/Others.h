@@ -1188,11 +1188,11 @@ public:
     };
 
     /// @brief Measure number data that can differ in score or part.
-    class ScorePartData : public CommonClassBase
+    class ScorePartData : public ContainedClassBase
     {
     public:
         /** @brief Constructor */
-        explicit ScorePartData(const DocumentWeakPtr& document) : CommonClassBase(document) {}
+        explicit ScorePartData(const std::shared_ptr<const MeasureNumberRegion>& parent) : ContainedClassBase(parent) {}
 
         std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
         std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.

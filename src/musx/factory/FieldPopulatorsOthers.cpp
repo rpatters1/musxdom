@@ -741,8 +741,8 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
-    {"scoreData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->scoreData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
-    {"partData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->partData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
+    {"scoreData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->scoreData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i); }},
+    {"partData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->partData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i); }},
     {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
     {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
     {"startChar", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startChar = e->getTextAs<char32_t>(); }},
@@ -989,11 +989,11 @@ MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::DashedParams, {
 MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine, {
     {"lineStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineStyle = toEnum<SmartShapeCustomLine::LineStyle>(e); }},
     {"charParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
-        { i->charParams = FieldPopulator<SmartShapeCustomLine::CharParams>::createAndPopulate(e, i->getDocument()); }},
+        { i->charParams = FieldPopulator<SmartShapeCustomLine::CharParams>::createAndPopulate(e, i); }},
     {"solidParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
-        { i->solidParams = FieldPopulator<SmartShapeCustomLine::SolidParams>::createAndPopulate(e, i->getDocument()); }},
+        { i->solidParams = FieldPopulator<SmartShapeCustomLine::SolidParams>::createAndPopulate(e, i); }},
     {"dashedParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
-        { i->dashedParams = FieldPopulator<SmartShapeCustomLine::DashedParams>::createAndPopulate(e, i->getDocument()); }},
+        { i->dashedParams = FieldPopulator<SmartShapeCustomLine::DashedParams>::createAndPopulate(e, i); }},
     {"lineCapStartType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapStartType = toEnum<SmartShapeCustomLine::LineCapType>(e); }},
     {"lineCapEndType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapEndType = toEnum<SmartShapeCustomLine::LineCapType>(e); }},
     {"lineCapStartArrowID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapStartArrowId = e->getTextAs<Cmper>(); }},
@@ -1199,7 +1199,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle, []() {
         {"styleName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->styleName = e->getText(); }},
         {"addToMenu", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->addToMenu = populateBoolean(e, i); }},
         {"mask", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) {
-            i->masks = FieldPopulator<StaffStyle::Masks>::createAndPopulate(e, i->getDocument()); }},
+            i->masks = FieldPopulator<StaffStyle::Masks>::createAndPopulate(e, i); }},
     };
     xml::XmlElementArray<StaffStyle> retval;
     retval.reserve(Staff::xmlMappingArray().size() + additionalFields.size());

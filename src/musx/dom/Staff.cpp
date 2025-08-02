@@ -759,6 +759,7 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
     if (!rawStaff) return nullptr;
 
     std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, partId, measId, eduPosition));
+    result->createMasks(result);
     if (result->hasStyles) {
         auto styles = StaffStyle::findAllOverlappingStyles(document, partId, staffId, measId, eduPosition);
         for (const auto& style : styles) {
