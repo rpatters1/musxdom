@@ -137,7 +137,7 @@ public:
         if (key.inci.has_value()) {
             ObjectKey noInciKey = key;
             noInciKey.inci = std::nullopt;
-            auto currentIncis = getArray<ObjectBaseType>(noInciKey);
+            auto currentIncis = getArray<ObjectBaseType>(noInciKey, key.partId);
             if (key.inci.value() != int(currentIncis.size())) {
                 MUSX_INTEGRITY_ERROR("Node " + key.nodeId + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
             }
@@ -172,7 +172,7 @@ public:
      * @return An MusxInstanceList of shared pointers to objects of type `T`.
      */
     template <typename T>
-    MusxInstanceList<T> getArray(const ObjectKey& key) const
+    MusxInstanceList<T> getArray(const ObjectKey& key, Cmper requestedPartId) const
     {
         MusxInstanceList<T> result(m_document, key.partId);
 
@@ -190,7 +190,7 @@ public:
         for (auto it = rangeStart; it != rangeEnd; ++it) {
             auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
             assert(typedPtr);
-            result.push_back(MusxInstance<T>(typedPtr));
+            result.push_back(MusxInstance<T>(typedPtr, requestedPartId));
         }
         return result;
     }
@@ -230,13 +230,13 @@ public:
                 }
             }
         }
-        auto keyResult = getArray<T>(key);
+        auto keyResult = getArray<T>(key, key.partId);
         if (!keyResult.empty() || key.partId == SCORE_PARTID || forShareMode == Base::ShareMode::None) {
             return keyResult;
         }
         ObjectKey scoreKey(key);
         scoreKey.partId = SCORE_PARTID;
-        return getArray<T>(scoreKey);
+        return getArray<T>(scoreKey, key.partId);
     }
 
     /**
@@ -251,7 +251,7 @@ public:
      * @return A shared_ptr to the type or nullptr if none exists
      */
     template <typename T>
-    MusxInstance<T> get(const ObjectKey& key) const
+    MusxInstance<T> get(const ObjectKey& key, Cmper requestedPartId) const
     {
         auto it = m_pool.find(key);
         if (it == m_pool.end()) {
@@ -259,7 +259,7 @@ public:
         }
         auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
         assert(typedPtr); // There is a program bug if the pointer cast fails.
-        return MusxInstance<T>(typedPtr);
+        return MusxInstance<T>(typedPtr, requestedPartId);
     }
 
     /**
@@ -275,7 +275,7 @@ public:
     template <typename T>
     MusxInstance<T> getEffectiveForPart(const ObjectKey& key) const
     {
-        if (auto partVersion = get<T>(key)) {
+        if (auto partVersion = get<T>(key, key.partId)) {
             return partVersion;
         }
         if (key.partId == SCORE_PARTID) {
@@ -284,7 +284,7 @@ public:
         }
         ObjectKey scoreKey(key);
         scoreKey.partId = SCORE_PARTID;
-        return get<T>(scoreKey);
+        return get<T>(scoreKey, key.partId);
     }
 
 protected:
@@ -313,10 +313,11 @@ public:
     /** @brief Scalar version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<OptionsBase>& instance)
     {
-        if (instance->getPartId()) {
-            MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-zero part id [" + std::to_string(instance->getPartId()) + "]");
+        const Base* basePtr = instance.get();
+        if (basePtr->getPartId()) {
+            MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-zero part id [" + std::to_string(basePtr->getPartId()) + "]");
         }
-        ObjectPool::add({ nodeName, instance->getPartId() }, instance);
+        ObjectPool::add({ nodeName, basePtr->getPartId() }, instance);
     }
 
     /** @brief Scalar version of #ObjectPool::getArray */
@@ -324,7 +325,7 @@ public:
     MusxInstanceList<T> getArray() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
+        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID }, SCORE_PARTID);
     }
 
     /** @brief Scalar version of #ObjectPool::get */
@@ -332,7 +333,7 @@ public:
     MusxInstance<T> get() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
+        return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID }, SCORE_PARTID);
     }
 };
 /** @brief Shared `OptionsPool` pointer */
@@ -483,13 +484,13 @@ public:
     }
 
     /** @brief Get an entry from the EntryPool. */
-    MusxInstance<Entry> get(EntryNumber entryNumber) const
+    std::shared_ptr<const Entry> get(EntryNumber entryNumber) const
     {
         const auto it = m_pool.find(entryNumber);
         if (it == m_pool.end()) {
             return nullptr;
         }
-        return MusxInstance<Entry>(it->second);
+        return it->second;
     }
 
 private:
@@ -508,10 +509,11 @@ public:
     /** @brief Texts version of #ObjectPool::add */
     void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
     {
-        if (instance->getPartId()) {
-            MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-zero part id [" + std::to_string(instance->getPartId()) + "]");
+        const Base* basePtr = instance.get();
+        if (basePtr->getPartId()) {
+            MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-zero part id [" + std::to_string(basePtr->getPartId()) + "]");
         }
-        ObjectPool::add({ nodeName, instance->getPartId(), instance->getTextNumber() }, instance);
+        ObjectPool::add({ nodeName, basePtr->getPartId(), instance->getTextNumber() }, instance);
     }
     
     /** @brief Texts version of #ObjectPool::getArray */
@@ -519,7 +521,7 @@ public:
     MusxInstanceList<T> getArray(std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper });
+        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper }, SCORE_PARTID);
     }
 
     /** @brief Texts version of #ObjectPool::get */
@@ -527,7 +529,7 @@ public:
     MusxInstance<T> get(Cmper cmper) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt });
+        return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt }, SCORE_PARTID);
     }
 };
 /** @brief Shared `OthersPool` pointer */

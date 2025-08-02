@@ -164,6 +164,8 @@ unsigned calcNumberOfBeamsInEdu(Edu duration);
  */
 class Note : public Base
 {
+    Cmper getPartId() = delete;
+
 public:
     /** @brief Constructor function */
     explicit Note(const DocumentWeakPtr& document, NoteNumber noteId)
@@ -213,7 +215,7 @@ public:
     /// @return A std::pair containing
     ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
-    std::pair<int, int> calcDefaultEnharmonic(const MusxInstance<KeySignature>& key) const;
+    std::pair<int, int> calcDefaultEnharmonic(const std::shared_ptr<const KeySignature>& key) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
@@ -239,7 +241,7 @@ public:
      * @param respellEnharmonic If true, the notes are enharmonically respelled using the default enharmonic spelling.
      * @return #NoteProperties
      */
-    NoteProperties calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
+    NoteProperties calcNoteProperties(const std::shared_ptr<const KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
         const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     bool requireAllFields() const override { return false; }
@@ -258,6 +260,8 @@ private:
  */
 class Entry : public Base
 {
+    Cmper getPartId() = delete;
+    
 public:
     /** @brief Constructor function
      *
@@ -321,12 +325,12 @@ public:
     /// @brief Gets the next entry in this list or nullptr if none.
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
-    MusxInstance<Entry> getNext() const;
+    std::shared_ptr<const Entry> getNext() const;
 
     /// @brief Gets the previous entry in this list or nullptr if none
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
-    MusxInstance<Entry> getPrevious() const;
+    std::shared_ptr<const Entry> getPrevious() const;
 
     /**
      * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
@@ -429,7 +433,7 @@ public:
     MeasCmper getMeasure() const;
 
     /// @brief Get the key signature of the entry
-    MusxInstance<KeySignature> getKeySignature() const;
+    std::shared_ptr<const KeySignature> getKeySignature() const;
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
     unsigned calcReverseGraceIndex() const;
@@ -724,7 +728,7 @@ public:
      * Finale does not display them.)
     */
     std::vector<TupletInfo> tupletInfo;
-    MusxInstance<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
+    std::shared_ptr<const KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
 
     /// @brief Get the document for the entry frame
     DocumentPtr getDocument() const;
@@ -812,8 +816,8 @@ class EntryInfo
      *
      * @param entry The entry.
     */
-    explicit EntryInfo(const MusxInstance<Entry>& entry)
-        : m_entry(entry.ptr()) {}
+    explicit EntryInfo(const std::shared_ptr<const Entry>& entry)
+        : m_entry(entry) {}
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
     friend details::GFrameHoldContext;
@@ -832,13 +836,13 @@ public:
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid 
-    MusxInstance<Entry> getEntry() const
+    std::shared_ptr<const Entry> getEntry() const
     {
         auto retval = m_entry.lock();
         if (!retval) {
             throw std::logic_error("Entry pointer is no longer valid");
         }
-        return MusxInstance<Entry>(retval);
+        return retval;
     }
 
     /// @brief Calculates the next duration position after this entry
@@ -882,7 +886,7 @@ public:
         MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
             throw std::logic_error("Note index is too large for notes array.");
         }
-        return MusxInstance<Note>(m_entry->getEntry()->notes[m_noteIndex]);
+        return MusxInstance<Note>(m_entry->getEntry()->notes[m_noteIndex], getEntryInfo().getFrame()->getRequestedPartId());
     }
 
     /// @brief Gets the entry info for this note

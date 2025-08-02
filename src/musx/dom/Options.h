@@ -280,12 +280,12 @@ public:
     /**
      * @brief Represents a single clef definition.
      */
-    class ClefDef : public Base
+    class ClefDef : public CommonClassBase
     {
     public:
         /** @brief the constructor */
         explicit ClefDef(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+            : CommonClassBase(document) {}
             
         int middleCPos{};               ///< Staff position of middle-C for this clef from reference staffline (usually the top). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
@@ -312,7 +312,7 @@ public:
         /// @brief Calculate the font that applies to this clef, based on the options in #ClefDef.
         /// @return A shared pointer to the font instance used by this #ClefDef.
         /// @throws std::invalid_argument if not found.
-        MusxInstance<FontInfo> calcFont() const;
+        std::shared_ptr<const FontInfo> calcFont() const;
 
         static const xml::XmlElementArray<ClefDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
@@ -335,12 +335,12 @@ public:
     /// @brief Bounds-checked accessor function for #clefDefs.
     /// @param clefIndex The index to retrieve.
     /// @throws std::out_of_range if index is out of range.
-    MusxInstance<ClefDef> getClefDef(ClefIndex clefIndex) const
+    std::shared_ptr<const ClefDef> getClefDef(ClefIndex clefIndex) const
     {
         MUSX_ASSERT_IF(clefIndex >= clefDefs.size()) {
             throw std::out_of_range("Clef index " + std::to_string(clefIndex) + " does not exist in document.");
         }
-        return MusxInstance<ClefDef>(clefDefs[clefIndex]);
+        return clefDefs[clefIndex];
     }
 
     /**
@@ -475,7 +475,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    MusxInstance<FontInfo> getFontInfo(FontType type) const;
+    std::shared_ptr<const FontInfo> getFontInfo(FontType type) const;
 
     /**
      * @brief get the `FontInfo` for a particular type from the document pool
@@ -484,7 +484,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    static MusxInstance<FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
+    static std::shared_ptr<const FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
 
     /**
      * @brief The XML node name for this type.
@@ -1001,7 +1001,7 @@ public:
      * @returns A pointer to a detached instance of @ref PageFormat that is a best approximation
      * to the settings for the input part.
      */
-    MusxInstance<PageFormat> calcPageFormatForPart(Cmper partId) const;
+    std::shared_ptr<const PageFormat> calcPageFormatForPart(Cmper partId) const;
 
     /**
      * @brief Constructor for PageFormatOptions.
@@ -1449,11 +1449,11 @@ public:
     bool textIsEdgeAligned{};                     ///< "Position from Page Edge"
 
     /// @brief Insert symbol information
-    struct InsertSymbolInfo : public Base
+    struct InsertSymbolInfo : public CommonClassBase
     {
         /** @brief the constructor */
         explicit InsertSymbolInfo(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+            : CommonClassBase(document) {}
 
         int trackingBefore{};                     ///< Tracking before in EMs (1/1000 font size units)
         int trackingAfter{};                      ///< Tracking after in EMs (1/1000 font size units)

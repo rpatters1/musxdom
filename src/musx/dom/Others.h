@@ -595,13 +595,13 @@ public:
 
     /// @brief Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops.
     /// @param iterator function.
-    void iterateRawEntries(std::function<bool(const MusxInstance<Entry>& entry)> iterator) const;
+    void iterateRawEntries(std::function<bool(const std::shared_ptr<const Entry>& entry)> iterator) const;
 
     /** @brief Returns a vector of entries contained in the frame.
      *
      * These are raw entries. Use #details::GFrameHoldContext::createEntryFrame for a vector of entries with computed values.
      */
-    MusxInstanceList<Entry> getEntries() const;
+    std::vector<std::shared_ptr<const Entry>> getEntries() const;
 
     void integrityCheck() override
     {
@@ -1063,16 +1063,16 @@ public:
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
     /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
-    MusxInstance<KeySignature> createKeySignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
+    std::shared_ptr<const KeySignature> createKeySignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
-    MusxInstance<TimeSignature> createTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
+    std::shared_ptr<const TimeSignature> createTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
     /// @return The display time signature if there is one, otherwise the actual time signature.
-    MusxInstance<TimeSignature> createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
+    std::shared_ptr<const TimeSignature> createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Calculates the duration of the measure according to the time signature
     /// @param forStaff  If present, specifies the specific staff for which to create duration.
@@ -1188,11 +1188,11 @@ public:
     };
 
     /// @brief Measure number data that can differ in score or part.
-    class ScorePartData : public Base
+    class ScorePartData : public CommonClassBase
     {
     public:
         /** @brief Constructor */
-        explicit ScorePartData(const DocumentWeakPtr& document) : Base(document, 0, ShareMode::All) {}
+        explicit ScorePartData(const DocumentWeakPtr& document) : CommonClassBase(document) {}
 
         std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
         std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.

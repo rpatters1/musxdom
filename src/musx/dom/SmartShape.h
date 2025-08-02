@@ -201,16 +201,16 @@ public:
         {
             Base::integrityCheck();
             if (!endPoint) {
-                endPoint = std::make_shared<smartshape::EndPoint>(getParent().ptr());
+                endPoint = std::make_shared<smartshape::EndPoint>(getParent());
             }
             if (!endPointAdj) {
-                endPointAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent().ptr());
+                endPointAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
             }
             if (!ctlPtAdj) {
-                ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(getParent().ptr());
+                ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(getParent());
             }
             if (!breakAdj) {
-                breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent().ptr());
+                breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
             }
             endPoint->integrityCheck();
             endPointAdj->integrityCheck();
@@ -403,12 +403,12 @@ public:
     enum class LineCapType { None, Hook, ArrowheadPreset, ArrowheadCustom };
 
     /// @brief Hold parameters for LineStyle::Char.
-    class CharParams : public Base
+    class CharParams : public CommonClassBase
     {
     public:
     /// @brief Constructor function
         explicit CharParams(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All), font(std::make_shared<FontInfo>(document))
+            : CommonClassBase(document), font(std::make_shared<FontInfo>(document))
         {
         }
 
@@ -420,12 +420,12 @@ public:
     };
 
     /// @brief Hold parameters for LineStyle::Solid.
-    class SolidParams : public Base
+    class SolidParams : public CommonClassBase
     {
     public:
     /// @brief Constructor function
         explicit SolidParams(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All)
+            : CommonClassBase(document)
         {
         }
 
@@ -435,11 +435,11 @@ public:
     };
 
     /// @brief Hold parameters for LineStyle::Dashed.
-    class DashedParams : public Base {
+    class DashedParams : public CommonClassBase {
     public:
     /// @brief Constructor function
         explicit DashedParams(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+            : CommonClassBase(document) {}
 
         Efix lineWidth{};             ///< Dashed line width
         Efix dashOn{};                ///< Dash length

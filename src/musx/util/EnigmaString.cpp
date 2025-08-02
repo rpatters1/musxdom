@@ -548,7 +548,7 @@ std::string EnigmaParsingContext::getText(bool trimTags, util::EnigmaString::Acc
     return result;
 }
 
-MusxInstance<FontInfo> EnigmaParsingContext::parseFirstFontInfo() const
+std::shared_ptr<const FontInfo> EnigmaParsingContext::parseFirstFontInfo() const
 {
     if (!m_rawText || !musx::util::EnigmaString::startsWithFontCommand(m_rawText->text)) {
         return nullptr;
@@ -558,7 +558,7 @@ MusxInstance<FontInfo> EnigmaParsingContext::parseFirstFontInfo() const
         result = styles.font;
         return false;
     });
-    return MusxInstance<FontInfo>(result);
+    return result;
 }
 
 } // namespace util

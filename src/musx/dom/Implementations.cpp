@@ -164,7 +164,7 @@ bool details::BeamAlterations::calcIsFeatheredBeamImpl(const EntryInfoPtr& entry
 bool options::ClefOptions::ClefDef::isBlank() const
 {
     if (isShape) {
-        if (const auto shape = shapeId ? getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId) : nullptr) {
+        if (const auto shape = shapeId ? getDocument()->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId) : MusxInstance<others::ShapeDef>(nullptr)) {
             return shape->isBlank();
         }
         return true;
@@ -192,7 +192,7 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const Mus
     auto calcTabType = [&]() -> music_theory::ClefType {
         music_theory::ClefType result = music_theory::ClefType::Tab;
         if (isShape) {
-            if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getPartId(), shapeId)) {
+            if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId)) {
                 shape->iterateInstructions([&](others::ShapeDef::InstructionType instructionType, std::vector<int> data) -> bool {
                     if (std::optional<FontInfo> fontInfo = others::ShapeInstruction::parseSetFont(getDocument(), instructionType, data)) {
                         if (fontInfo->getName().find("Times") != std::string::npos) { // Finale default file uses "Times" or "Times New Roman"
@@ -239,10 +239,10 @@ options::ClefOptions::ClefInfo options::ClefOptions::ClefDef::calcInfo(const Mus
     return std::make_pair(clefType, octave);
 }
 
-MusxInstance<FontInfo> options::ClefOptions::ClefDef::calcFont() const
+std::shared_ptr<const FontInfo> options::ClefOptions::ClefDef::calcFont() const
 {
     if (useOwnFont && font) {
-        return MusxInstance<FontInfo>(font);
+        return font;
     } else if (auto fontOptions = getDocument()->getOptions()->get<options::FontOptions>()) {
         return fontOptions->getFontInfo(options::FontOptions::FontType::Clef);
     }
@@ -438,7 +438,7 @@ bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
 // ***** Entry *****
 // *****************
 
-MusxInstance<Entry> Entry::getNext() const
+std::shared_ptr<const Entry> Entry::getNext() const
 {
     if (!m_next) return nullptr;
     auto retval = getDocument()->getEntries()->get(m_next);
@@ -448,7 +448,7 @@ MusxInstance<Entry> Entry::getNext() const
     return retval;
 }
 
-MusxInstance<Entry> Entry::getPrevious() const
+std::shared_ptr<const Entry> Entry::getPrevious() const
 {
     if (!m_prev) return nullptr;
     auto retval = getDocument()->getEntries()->get(m_prev);
@@ -802,7 +802,7 @@ StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
 
 MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); }
 
-MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
+std::shared_ptr<const KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
 
 MusxInstance<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<StaffCmper>& forStaffId) const
 {
@@ -1392,16 +1392,16 @@ bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
 // ***** FontOptions *****
 // ***********************
 
-MusxInstance<FontInfo> options::FontOptions::getFontInfo(options::FontOptions::FontType type) const
+std::shared_ptr<const FontInfo> options::FontOptions::getFontInfo(options::FontOptions::FontType type) const
 {
     auto it = fontOptions.find(type);
     if (it == fontOptions.end()) {
         throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
     }
-    return MusxInstance<FontInfo>(it->second);
+    return it->second;
 }
 
-MusxInstance<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
+std::shared_ptr<const FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& document, options::FontOptions::FontType type)
 {
     auto options = document->getOptions();
     if (!options) {
@@ -1420,7 +1420,7 @@ MusxInstance<FontInfo> options::FontOptions::getFontInfo(const DocumentPtr& docu
 
 std::string FontInfo::getName() const
 {
-    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId)) {
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(SCORE_PARTID, fontId)) {
         return fontDef->name;
     }
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
@@ -1428,7 +1428,7 @@ std::string FontInfo::getName() const
 
 void FontInfo::setFontIdByName(const std::string& name)
 {
-    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>(getPartId());
+    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID);
     for (auto fontDef : fontDefs) {
         if (fontDef->name == name) {
             fontId = fontDef->getCmper();
@@ -1477,7 +1477,7 @@ bool FontInfo::calcIsSMuFL() const
 
 bool FontInfo::calcIsSymbolFont() const
 {
-    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getPartId(), fontId)) {
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(SCORE_PARTID, fontId)) {
         return fontDef->calcIsSymbolFont();
     }
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
@@ -1582,7 +1582,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 // ***** Frame *****
 // *****************
 
-void others::Frame::iterateRawEntries(std::function<bool(const MusxInstance<Entry>& entry)> iterator) const
+void others::Frame::iterateRawEntries(std::function<bool(const std::shared_ptr<const Entry>& entry)> iterator) const
 {
     auto firstEntry = startEntry ? getDocument()->getEntries()->get(startEntry) : nullptr;
     if (!firstEntry) {
@@ -1595,10 +1595,10 @@ void others::Frame::iterateRawEntries(std::function<bool(const MusxInstance<Entr
     }
 }
 
-MusxInstanceList<Entry> others::Frame::getEntries() const
+std::vector<std::shared_ptr<const Entry>> others::Frame::getEntries() const
 {
-    MusxInstanceList<Entry> retval(getDocument(), getPartId());
-    iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
+    std::vector<std::shared_ptr<const Entry>> retval;
+    iterateRawEntries([&](const std::shared_ptr<const Entry>& entry) -> bool {
         retval.emplace_back(entry);
         return true;
     });
@@ -1819,7 +1819,7 @@ std::map<LayerIndex, bool> details::GFrameHoldContext::calcVoices() const
         if (frame) {
             bool gotLayer = false;
             bool gotV2 = false;
-            frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
+            frame->iterateRawEntries([&](const std::shared_ptr<const Entry>& entry) -> bool {
                 gotLayer = true;
                 if (entry->voice2) {
                     gotV2 = true;
@@ -1887,17 +1887,17 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 // ***** IndependentStaffDetails *****
 // ***********************************
 
-MusxInstance<TimeSignature> details::IndependentStaffDetails::createTimeSignature() const
+std::shared_ptr<const TimeSignature> details::IndependentStaffDetails::createTimeSignature() const
 {
-   return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, altNumTsig, altDenTsig));
+   return std::shared_ptr<const TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, altNumTsig, altDenTsig));
 }
 
-MusxInstance<TimeSignature> details::IndependentStaffDetails::createDisplayTimeSignature() const
+std::shared_ptr<const TimeSignature> details::IndependentStaffDetails::createDisplayTimeSignature() const
 {
     if (!displayAbbrvTime) {
         return createTimeSignature();
     }
-    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig, displayAbbrvTime));
+    return std::shared_ptr<const TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig, displayAbbrvTime));
 }
 
 // **************************
@@ -1970,7 +1970,7 @@ std::vector<unsigned> KeySignature::calcTonalCenterArrayForSharps() const
         return { 5, 2, 6, 3, 0, 4, 1, 5 };
     }
     if (!isBuiltIn()) {
-        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(getPartId(), getKeyMode())) {
+        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(SCORE_PARTID, getKeyMode())) {
             return centers->values;
         }
     }
@@ -1984,7 +1984,7 @@ std::vector<unsigned> KeySignature::calcTonalCenterArrayForFlats() const
         return { 5, 1, 4, 0, 3, 6, 2, 5 };
     }
     if (!isBuiltIn()) {
-        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(getPartId(), getKeyMode())) {
+        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(SCORE_PARTID, getKeyMode())) {
             return centers->values;
         }
     }
@@ -2008,11 +2008,11 @@ std::vector<int> KeySignature::calcAcciAmountsArray(KeyContext ctx) const
 
     if (!isBuiltIn()) {
         if (alter >= 0) {
-            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(getPartId(), getKeyMode())) {
+            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(SCORE_PARTID, getKeyMode())) {
                 return amounts->values;
             }
         } else {
-            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountFlats>(getPartId(), getKeyMode())) {
+            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountFlats>(SCORE_PARTID, getKeyMode())) {
                 return amounts->values;
             }
         }
@@ -2032,11 +2032,11 @@ std::vector<unsigned> KeySignature::calcAcciOrderArray(KeyContext ctx) const
 
     if (!isBuiltIn()) {
         if (alter >= 0) {
-            if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(getPartId(), getKeyMode())) {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(SCORE_PARTID, getKeyMode())) {
                 return order->values;
             }
         } else {
-            if (auto order = getDocument()->getOthers()->get<others::AcciOrderFlats>(getPartId(), getKeyMode())) {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderFlats>(SCORE_PARTID, getKeyMode())) {
                 return order->values;
             }
         }
@@ -2131,7 +2131,7 @@ void KeySignature::setTransposition(const MusxInstance<others::Staff>& staff)
 std::optional<std::vector<int>> KeySignature::calcKeyMap() const
 {
     size_t tonalCenter = static_cast<size_t>(calcTonalCenterArrayForSharps()[0]);
-    auto keyMap = getDocument()->getOthers()->get<others::KeyMapArray>(getPartId(), getKeyMode());
+    auto keyMap = getDocument()->getOthers()->get<others::KeyMapArray>(SCORE_PARTID, getKeyMode());
     if (!keyMap || keyMap->steps.empty()) {
         return std::nullopt;
     }
@@ -2168,7 +2168,7 @@ std::optional<std::vector<int>> KeySignature::calcKeyMap() const
 
 int KeySignature::calcEDODivisions() const
 {
-    if (auto keyFormat = getDocument()->getOthers()->get<others::KeyFormat>(getPartId(), getKeyMode())) {
+    if (auto keyFormat = getDocument()->getOthers()->get<others::KeyFormat>(SCORE_PARTID, getKeyMode())) {
         return static_cast<int>(keyFormat->semitones);
     }
     return music_theory::STANDARD_12EDO_STEPS;
@@ -2280,7 +2280,7 @@ int others::Measure::calcDisplayNumber() const
     return getCmper();
 }
 
-MusxInstance<KeySignature> others::Measure::createKeySignature(const std::optional<StaffCmper>& forStaff) const
+std::shared_ptr<const KeySignature> others::Measure::createKeySignature(const std::optional<StaffCmper>& forStaff) const
 {
     std::shared_ptr<KeySignature> result;
     MusxInstance<others::Staff> staff;
@@ -2300,10 +2300,10 @@ MusxInstance<KeySignature> others::Measure::createKeySignature(const std::option
     if (result && staff) {
         result->setTransposition(staff);
     }
-    return MusxInstance<KeySignature>(result);
+    return result;
 }
 
-MusxInstance<TimeSignature> others::Measure::createTimeSignature(const std::optional<StaffCmper>& forStaff) const
+std::shared_ptr<const TimeSignature> others::Measure::createTimeSignature(const std::optional<StaffCmper>& forStaff) const
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
@@ -2316,10 +2316,10 @@ MusxInstance<TimeSignature> others::Measure::createTimeSignature(const std::opti
             }
         }
     }
-   return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
+   return std::shared_ptr<const TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
 }
 
-MusxInstance<TimeSignature> others::Measure::createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff) const
+std::shared_ptr<const TimeSignature> others::Measure::createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff) const
 {
     if (forStaff) {
         if (auto staff = others::StaffComposite::createCurrent(getDocument(), getPartId(), forStaff.value(), getCmper(), 0)) {
@@ -2335,7 +2335,7 @@ MusxInstance<TimeSignature> others::Measure::createDisplayTimeSignature(const st
     if (!useDisplayTimesig) {
         return createTimeSignature(forStaff);
     }
-    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
+    return std::shared_ptr<const TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
 }
 
 util::Fraction others::Measure::calcDuration(const std::optional<StaffCmper>& forStaff) const
@@ -2510,7 +2510,7 @@ std::optional<std::pair<MeasCmper, Edu>> others::MusicRange::nextLocation(const 
 // ***** Note *****
 // ****************
 
-std::pair<int, int> Note::calcDefaultEnharmonic(const MusxInstance<KeySignature>& key) const
+std::pair<int, int> Note::calcDefaultEnharmonic(const std::shared_ptr<const KeySignature>& key) const
 {
     auto transposer = key->createTransposer(harmLev, harmAlt);
     if (harmAlt) {
@@ -2545,7 +2545,7 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const MusxInstance<KeySignature>
     return {upDisp, upAlt};
 }
 
-Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
+Note::NoteProperties Note::calcNoteProperties(const std::shared_ptr<const KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
     const MusxInstance<others::Staff>& staff, bool respellEnharmonic) const
 {
     auto [transposedLev, transposedAlt] = respellEnharmonic
@@ -2888,7 +2888,7 @@ void others::Page::calcSystemInfo(const DocumentPtr& document)
 // ***** PageFormatOptions *****
 // *****************************
 
-MusxInstance<options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
+std::shared_ptr<const options::PageFormatOptions::PageFormat> options::PageFormatOptions::calcPageFormatForPart(Cmper partId) const
 {
     const auto& baseOptions = (partId == SCORE_PARTID) ? pageFormatScore : pageFormatParts;
     auto retval = std::make_shared<options::PageFormatOptions::PageFormat>(*baseOptions);
@@ -2941,7 +2941,7 @@ MusxInstance<options::PageFormatOptions::PageFormat> options::PageFormatOptions:
             // do not change retval->firstSysMarginDistance because it varies so much depending on context
         }
     }
-    return MusxInstance<options::PageFormatOptions::PageFormat>(retval);
+    return std::shared_ptr<options::PageFormatOptions::PageFormat>(retval);
 }
 
 // **************************

@@ -441,7 +441,7 @@ public:
 
     /// @brief lists the masks that deterimine if this staff style overrides the staff settings
     /// @todo add masks as needed. If we ever add them all, remove Base inheritance and #requireAllFields function.
-    class Masks : public Base // Base inheritance needed for requireAllFields
+    class Masks : public CommonClassBase // Base inheritance needed for requireAllFields
     {
     public:
         /**
@@ -449,7 +449,7 @@ public:
          * @param document A weak pointer to the document object.
          */
         explicit Masks(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+            : CommonClassBase(document) {}
 
         bool floatNoteheadFont{};       ///< overrides notehead font settings
         bool flatBeams{};               ///< overrides #Staff::flatBeams

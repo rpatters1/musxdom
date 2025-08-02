@@ -179,6 +179,8 @@ private:
  */
 class CommonClassBase : public Base
 {
+    Cmper getPartId() = delete;
+
 public:
     /**
      * @brief Constructs a CommonClassBase object.
@@ -193,7 +195,6 @@ protected:
     // these Base functions do not return useful results. However, we allow our subclasses
     // to use their own versions of these functions (esp. `getPartId`) to avoid promiscuous
     // hard-coding of SCORE_PARTID. The rules may change in the future.
-    using Base::getPartId;
     using Base::getShareMode;
     using Base::getUnlinkedNodes;
 };
@@ -219,16 +220,16 @@ public:
 
     /// @brief Get the parent.
     template <typename ParentClass = Base>
-    MusxInstance<ParentClass> getParent() const
+    std::shared_ptr<const ParentClass> getParent() const
     {
         auto result = m_parent.lock();
         MUSX_ASSERT_IF (!result) {
             throw std::logic_error("Attempt to get parent of contained class, but the parent is no longer allocated.");
         }
         if constexpr (std::is_same_v<Base, ParentClass>) {
-            return MusxInstance<ParentClass>(result);        
+            return result;
         } else {
-            return MusxInstance<ParentClass>(std::dynamic_pointer_cast<const ParentClass>(result));
+            return std::dynamic_pointer_cast<const ParentClass>(result);
         }
     }
     
@@ -242,6 +243,8 @@ private:
  * Options types derive from this base class so they can reside in the options pool.
  */
 class OptionsBase : public Base {
+    Cmper getPartId() = delete;
+    
 protected:
     /**
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
@@ -474,6 +477,8 @@ class FontInfo;
  */
 class TextsBase : public Base, public std::enable_shared_from_this<TextsBase>
 {
+    Cmper getPartId() = delete;
+    
 public:
     /**
      * @brief Constructs a `TextsBase` object.

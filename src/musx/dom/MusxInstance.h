@@ -29,6 +29,8 @@
 namespace musx {
 namespace dom {
 
+class Base;
+
 /**
  * @brief A wrapper for shared instance pointers.
  * 
@@ -44,24 +46,33 @@ public:
     MusxInstance() = default;
 
     /// @brief Null constructor.
-    explicit MusxInstance(std::nullptr_t)
-        : m_ptr(nullptr) {}
+    MusxInstance(std::nullptr_t)
+        : m_ptr(nullptr), m_requestedPartId(0) {}
 
     /// @brief Copy constructor accepts T or any subclass of T
     template <typename U,
               typename = std::enable_if_t<std::is_base_of_v<T, U>>>
     MusxInstance(const MusxInstance<U>& other)
-        : m_ptr(other.ptr()) {}
+        : m_ptr(other.ptr()), m_requestedPartId(other.getRequestedPartId())
+    {
+        static_assert(std::is_base_of_v<Base, T>, "T must be derived from Base");        
+    }
 
     /// @brief Move constructor from pointer.
-    explicit MusxInstance(pointer_type ptr)
-        : m_ptr(std::move(ptr)) {}
+    explicit MusxInstance(pointer_type ptr, Cmper requestedPartId)
+        : m_ptr(std::move(ptr)), m_requestedPartId(requestedPartId)
+    {
+        static_assert(std::is_base_of_v<Base, T>, "T must be derived from Base");
+    }
 
     /// @brief Constructor from raw pointer (shared_ptr only)
     template <typename U = pointer_type,
-            typename = std::enable_if_t<std::is_same_v<U, std::shared_ptr<const T>>>>
-    MusxInstance(const element_type* rawPtr)
-        : m_ptr(rawPtr) {}
+              typename = std::enable_if_t<std::is_same_v<U, std::shared_ptr<const T>>>>
+    MusxInstance(const element_type* rawPtr, Cmper requestedPartId)
+        : m_ptr(rawPtr), m_requestedPartId(requestedPartId)
+    {
+        static_assert(std::is_base_of_v<Base, T>, "T must be derived from Base");
+    }
 
     /// @brief Returns true if the pointer is valid (non-null or not expired).
     explicit operator bool() const {
@@ -93,11 +104,17 @@ public:
               typename = std::enable_if_t<std::is_base_of_v<T, U>>>
     MusxInstance& operator=(const MusxInstance<U>& other) {
         m_ptr = other.ptr();  // use public accessor
+        m_requestedPartId = other.getRequestedPartId();
         return *this;
+    }
+
+    Cmper getRequestedPartId() const {
+        return m_requestedPartId;
     }
 
 private:
     pointer_type m_ptr;
+    Cmper m_requestedPartId{};
 };
 
 /// @brief Weak musx instance pointer (non-owning reference)

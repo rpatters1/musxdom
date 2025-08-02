@@ -476,7 +476,7 @@ public:
      * @brief Returns a shared pointer to a FontInfo instance that reflects
      * the first font information in the text.
      */
-    dom::MusxInstance<dom::FontInfo> parseFirstFontInfo() const;
+    std::shared_ptr<const dom::FontInfo> parseFirstFontInfo() const;
 
     /// @brief Get the raw text pointer
     std::shared_ptr<const dom::TextsBase> getRawText() const { return m_rawText; }

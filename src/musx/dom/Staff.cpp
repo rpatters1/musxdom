@@ -378,7 +378,7 @@ MusxInstance<NamePositioning> Staff::getNamePosition() const
     } else {
         MUSX_INTEGRITY_ERROR("Unable to retrieve staff options for returning default name positioning.");
     }
-    return MusxInstance<NamePositioning>(defaultValue);
+    return MusxInstance<NamePositioning>(defaultValue, getPartId());
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
@@ -766,7 +766,7 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
         }
     }
 
-    return MusxInstance<StaffComposite>(result);
+    return MusxInstance<StaffComposite>(result, partId);
 }
 
 } // namespace others
