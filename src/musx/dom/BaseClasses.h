@@ -293,7 +293,27 @@ protected:
     OthersBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, std::optional<Inci> inci = std::nullopt)
         : Base(document, partId, shareMode), m_requestedPartId(partId), m_cmper(cmper), m_inci(inci) {}
 
+    /// @brief Assignment operator delegates to base, preserving OthersBase state.
+    OthersBase& operator=(const OthersBase& other)
+    {
+        if (this != &other) {
+            Base::operator=(other);
+        }
+        return *this;
+    }
+    /// @brief Assignment operator delegates to base, preserving OthersBase state.
+    OthersBase& operator=(OthersBase&& other) noexcept
+    {
+        if (this != &other) {
+            Base::operator=(other);
+        }
+        return *this;
+    }
+
 public:
+    OthersBase(const OthersBase&) = default;        ///< explicit default copy constructor
+    OthersBase(OthersBase&&) noexcept = default;    ///< explicit default move constructor
+
     /**
      * @brief Gets the `cmper` key value.
      * 
@@ -398,7 +418,27 @@ protected:
     DetailsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt)
         : Base(document, partId, shareMode), m_requestedPartId(partId), m_cmper1(cmper1), m_cmper2(cmper2), m_inci(inci) {}
 
+    /// @brief Assignment operator delegates to base, preserving OthersBase state.
+    DetailsBase& operator=(const DetailsBase& other)
+    {
+        if (this != &other) {
+            Base::operator=(other);
+        }
+        return *this;
+    }
+    /// @brief Assignment operator delegates to base, preserving OthersBase state.
+    DetailsBase& operator=(DetailsBase&& other) noexcept
+    {
+        if (this != &other) {
+            Base::operator=(other);
+        }
+        return *this;
+    }
+
 public:
+    DetailsBase(const DetailsBase&) = default;        ///< explicit default copy constructor
+    DetailsBase(DetailsBase&&) noexcept = default;    ///< explicit default move constructor
+
     /**
      * @brief Gets the `cmper1` key value.
      */
