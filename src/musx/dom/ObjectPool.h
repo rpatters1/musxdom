@@ -138,7 +138,7 @@ public:
     virtual ~ObjectPool() = default;
 
     /**
-     * @brief Adds an `OthersBase` object to the pool.
+     * @brief Adds an `ObjectBaseType` object to the pool.
      * 
      * @param key The key with which to store the object 
      * @param object A shared pointer to the `ObjectBaseType` object to add.
@@ -178,7 +178,7 @@ public:
      * - get all the objects of a specific type, regardless of @ref Cmper value(s), such as getting a vector
      * of all the @ref others::TextExpressionDef instances.
      *
-     * @tparam T The derived type of `OthersBase` to retrieve.
+     * @tparam T The derived type of `ObjectBaseType` to retrieve.
      * @param key The key value used to filter the objects.
      * @return An MusxInstanceList of shared pointers to objects of type `T`.
      */
@@ -214,7 +214,7 @@ public:
      * - get all the objects of a specific type, regardless of @ref Cmper value(s), such as getting a vector
      * of all the @ref others::TextExpressionDef instances.
      *
-     * @tparam T The derived type of `OthersBase` to retrieve.
+     * @tparam T The derived type of `ObjectBaseType` to retrieve.
      * @param key The key value used to filter the objects.
      * @return An MusxInstanceList of shared pointers to objects of type `T`.
      */
@@ -250,11 +250,12 @@ public:
         return getArray<T>(scoreKey, key.partId);
     }
 
+protected:
     /**
      * @brief Retrieves the first (and usually only) object of a specific type from the pool.
-     *
-     * Many types are scalar values with only one instance per key. Use this function
-     * to retrieve them.
+     * @warning The returned value is the source item from the pool and is guaranteed not to be a copy.
+     * Because of this, it does not reflect the requested part id. External callers should not
+     * directly call this function.
      *
      * @tparam T The derived type of `OthersBase` to retrieve.
      *           Must have a `constexpr static std::string_view XmlNodeName` member.
@@ -262,19 +263,22 @@ public:
      * @return A shared_ptr to the type or nullptr if none exists
      */
     template <typename T>
-    MusxInstance<T> get(const ObjectKey& key, Cmper requestedPartId) const
+    MusxInstance<T> getSource(const ObjectKey& key) const
     {
         auto it = m_pool.find(key);
         if (it == m_pool.end()) {
             return nullptr;
         }
-        auto typedPtr = bindWithPartId<T>(std::dynamic_pointer_cast<T>(it->second), requestedPartId);
+        auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
         assert(typedPtr); // There is a program bug if the pointer cast fails.
         return typedPtr;
     }
 
     /**
      * @brief Retrieves the first (and usually only) object of a specific type from the pool for a part
+     * @warning The returned value is the source item from the pool and is guaranteed not to be a copy.
+     * Because of this, it does not reflect the requested part id. External callers should not
+     * directly call this function.
      *
      * If no part item exists, returns the score item.
      *
@@ -284,9 +288,9 @@ public:
      * @return A shared_ptr to the type or nullptr if none exists
      */
     template <typename T>
-    MusxInstance<T> getEffectiveForPart(const ObjectKey& key) const
+    MusxInstance<T> getEffectiveSourceForPart(const ObjectKey& key) const
     {
-        if (auto partVersion = get<T>(key, key.partId)) {
+        if (auto partVersion = getSource<T>(key)) {
             return partVersion;
         }
         if (key.partId == SCORE_PARTID) {
@@ -295,7 +299,29 @@ public:
         }
         ObjectKey scoreKey(key);
         scoreKey.partId = SCORE_PARTID;
-        return get<T>(scoreKey, key.partId);
+        return getSource<T>(scoreKey);
+    }
+
+    friend MusxInstance<others::StaffComposite> others::StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition);
+
+public:
+    /**
+     * @brief Retrieves the first (and usually only) object of a specific type from the pool for a part.
+     *
+     * If no part item exists, returns the score item.
+     *
+     * If the requestedPartId differs from the sourcePartId, a copy of the source is returned with the
+     * requestedPartId set correctly.
+     *
+     * @tparam T The derived type of `OthersBase` to retrieve.
+     *           Must have a `constexpr static std::string_view XmlNodeName` member.
+     * @param key The key value used to filter the objects.
+     * @return A shared_ptr to the type or nullptr if none exists
+     */
+    template <typename T>
+    MusxInstance<T> getEffectiveForPart(const ObjectKey& key) const
+    {
+        return bindWithPartId<T>(getEffectiveSourceForPart<T>(key), key.partId);
     }
 
 protected:
@@ -325,8 +351,8 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<OptionsBase>& instance)
     {
         const Base* basePtr = instance.get();
-        if (basePtr->getSourcePartId()) {
-            MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-zero part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
+        if (basePtr->getSourcePartId() != SCORE_PARTID) {
+            MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
         ObjectPool::add({ nodeName, basePtr->getSourcePartId() }, instance);
     }
@@ -344,7 +370,7 @@ public:
     MusxInstance<T> get() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID }, SCORE_PARTID);
+        return ObjectPool::getSource<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
     }
 };
 /** @brief Shared `OptionsPool` pointer */
@@ -521,8 +547,8 @@ public:
     void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
     {
         const Base* basePtr = instance.get();
-        if (basePtr->getSourcePartId()) {
-            MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-zero part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
+        if (basePtr->getSourcePartId() != SCORE_PARTID) {
+            MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
         ObjectPool::add({ nodeName, basePtr->getSourcePartId(), instance->getTextNumber() }, instance);
     }
@@ -540,7 +566,7 @@ public:
     MusxInstance<T> get(Cmper cmper) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return ObjectPool::get<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt }, SCORE_PARTID);
+        return ObjectPool::getSource<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt });
     }
 };
 /** @brief Shared `OthersPool` pointer */

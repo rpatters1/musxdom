@@ -60,9 +60,16 @@ using DocumentWeakPtr = std::weak_ptr<Document>;
 class PartContextCloner {
 public:
     template <typename T>
-    static std::shared_ptr<T> copyWithPartId(const std::shared_ptr<const T>& obj, Cmper partId) {
+    static void setRequestedPartId(const std::shared_ptr<T>& obj, Cmper partId)
+    {
+        obj->setRequestedPartId(partId);
+    }
+
+    template <typename T>
+    static std::shared_ptr<T> copyWithPartId(const std::shared_ptr<const T>& obj, Cmper partId)
+    {
         auto result = std::make_shared<T>(*obj);
-        result->setRequestedPartId(partId);
+        setRequestedPartId(result, partId);
         return result;
     }
 };
