@@ -1593,6 +1593,7 @@ public:
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
+        this->OthersBase::integrityCheck(ptrToThis);
         if (getCmper() != 0) {
             if (startPage != getCmper() || endPage != getCmper()) {
                 MUSX_INTEGRITY_ERROR("PageTextAssign " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(0)) +
@@ -2178,6 +2179,7 @@ public:
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
+        this->OthersBase::integrityCheck(ptrToThis);
         if (startMeas == 0 || endMeas == 0) {
             MUSX_INTEGRITY_ERROR("Layout for system " + std::to_string(getCmper())
                 + " of part " + std::to_string(getSourcePartId()) + " is in an unknown state.");

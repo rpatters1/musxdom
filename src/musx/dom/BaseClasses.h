@@ -297,7 +297,7 @@ protected:
     OthersBase& operator=(const OthersBase& other)
     {
         if (this != &other) {
-            Base::operator=(other);
+            this->Base::operator=(other);
         }
         return *this;
     }
@@ -305,7 +305,7 @@ protected:
     OthersBase& operator=(OthersBase&& other) noexcept
     {
         if (this != &other) {
-            Base::operator=(other);
+            this->Base::operator=(other);
         }
         return *this;
     }
@@ -422,7 +422,7 @@ protected:
     DetailsBase& operator=(const DetailsBase& other)
     {
         if (this != &other) {
-            Base::operator=(other);
+            this->Base::operator=(other);
         }
         return *this;
     }
@@ -430,7 +430,7 @@ protected:
     DetailsBase& operator=(DetailsBase&& other) noexcept
     {
         if (this != &other) {
-            Base::operator=(other);
+            this->Base::operator=(other);
         }
         return *this;
     }

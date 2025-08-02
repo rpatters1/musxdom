@@ -683,6 +683,7 @@ public:
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
+        this->OptionsBase::integrityCheck(ptrToThis);
         if (!altHyphenFont) {
             altHyphenFont = std::make_shared<FontInfo>(getDocument());
         }
@@ -1459,6 +1460,7 @@ public:
 
         void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
         {
+            this->OptionsBase::integrityCheck(ptrToThis);
             if (!symFont) {
                 symFont = std::make_shared<FontInfo>(getDocument(), /*sizeIsPercent*/ true);
                 symFont->fontSize = 100;
