@@ -604,7 +604,6 @@ private:
  */
 class EntryFrame : public std::enable_shared_from_this<EntryFrame>
 {
-public:
     /** @brief Constructor function
      *
      * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
@@ -618,6 +617,15 @@ public:
     {
     }
 
+    // prevent any shenanigans with shared_from_this
+    EntryFrame(const EntryFrame&) = delete;
+    EntryFrame(EntryFrame&&) = delete;
+    EntryFrame& operator=(const EntryFrame&) = delete;
+    EntryFrame& operator=(EntryFrame&&) = delete;
+
+    friend class details::GFrameHoldContext; // only this class can construct this
+
+public:
     /// @brief class to track tuplets in the frame
     struct TupletInfo
     {
@@ -791,6 +799,15 @@ public:
     bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
 private:
+    std::shared_ptr<const EntryFrame> safeSharedFromThis() const
+    {
+        auto result = weak_from_this().lock();
+        MUSX_ASSERT_IF(!result) {
+            throw std::bad_weak_ptr();
+        }
+        return result;
+    }
+
     details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
     util::Fraction m_timeStretch;

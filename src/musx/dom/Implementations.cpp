@@ -493,7 +493,7 @@ MeasCmper EntryFrame::getMeasure() const { return m_context->getMeasure(); }
 EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 {
     bool forV2 = voice == 2;
-    auto firstEntry = EntryInfoPtr(shared_from_this(), 0);
+    auto firstEntry = EntryInfoPtr(safeSharedFromThis(), 0);
     if (firstEntry->getEntry()->voice2) {
         MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(getStaff()) + " measure " + std::to_string(getMeasure())
             + " layer " + std::to_string(m_layerIndex + 1) + " starts with voice2.");
@@ -510,7 +510,7 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
 {
     bool forV2 = voice == 2;
-    auto lastEntry = EntryInfoPtr(shared_from_this(), m_entries.size() - 1);
+    auto lastEntry = EntryInfoPtr(safeSharedFromThis(), m_entries.size() - 1);
     if (!lastEntry || lastEntry->getEntry()->voice2 == forV2) {
         return lastEntry;
     }
@@ -551,7 +551,7 @@ bool EntryFrame::calcIsCueFrame(bool includeVisibleInScore) const
     bool foundCueEntry = false;
     for (size_t x = 0; x < m_entries.size(); x++) {
         if (!m_entries[x]->getEntry()->isHidden) {
-            EntryInfoPtr entryInfo(shared_from_this(), x);
+            EntryInfoPtr entryInfo(safeSharedFromThis(), x);
             if (entryInfo.calcIsCue(includeVisibleInScore)) {
                 foundCueEntry = true;
             } else {
@@ -1694,7 +1694,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         const util::Fraction timeStretch = staff->floatTime
                                          ? measure->calcTimeStretch(staff->getCmper())
                                          : 1;
-        entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch);
+        entryFrame = std::shared_ptr<EntryFrame>(new EntryFrame(*this, layerIndex, timeStretch));
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
