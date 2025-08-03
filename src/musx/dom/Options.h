@@ -1460,7 +1460,7 @@ public:
 
         void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
         {
-            this->OptionsBase::integrityCheck(ptrToThis);
+            this->ContainedClassBase::integrityCheck(ptrToThis);
             if (!symFont) {
                 symFont = std::make_shared<FontInfo>(getDocument(), /*sizeIsPercent*/ true);
                 symFont->fontSize = 100;

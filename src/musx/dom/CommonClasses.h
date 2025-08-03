@@ -358,7 +358,7 @@ public:
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        Base::integrityCheck(ptrToThis);
+        this->CommonClassBase::integrityCheck(ptrToThis);
         if (key >= 0x8000) {
             MUSX_INTEGRITY_ERROR("Key signature has invalid key value: " + std::to_string(key));
         }

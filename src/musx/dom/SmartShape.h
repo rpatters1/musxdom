@@ -199,7 +199,7 @@ public:
 
         void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
         {
-            Base::integrityCheck(ptrToThis);
+            ContainedClassBase::integrityCheck(ptrToThis);
             if (!endPoint) {
                 endPoint = std::make_shared<smartshape::EndPoint>(getParent());
             }
