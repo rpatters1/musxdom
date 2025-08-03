@@ -4,7 +4,7 @@ var searchData=
   ['nadaswaram_1',['Nadaswaram',['../namespacemusx_1_1dom_1_1uuid.html#abb2298d6f970f98aa4ad4fee7b0b2c9b',1,'musx::dom::uuid']]],
   ['nagadodaiko_2',['NagaDodaiko',['../namespacemusx_1_1dom_1_1uuid.html#a1f24e00f42fae57a7ed64b6a32750154',1,'musx::dom::uuid']]],
   ['nagara_3',['Nagara',['../namespacemusx_1_1dom_1_1uuid.html#ac0158df951eb73b27715fc3d0a516f6a',1,'musx::dom::uuid']]],
-  ['name_4',['name',['../classmusx_1_1dom_1_1others_1_1MarkingCategoryName.html#a4e6c007405ca54fe8567e5fd4fa6c88e',1,'musx::dom::others::MarkingCategoryName::name'],['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a8e7a9da4a78cac297c9e4fc8af40194e',1,'musx::dom::others::FontDefinition::name']]],
+  ['name_4',['name',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a8e7a9da4a78cac297c9e4fc8af40194e',1,'musx::dom::others::FontDefinition::name'],['../classmusx_1_1dom_1_1OthersName.html#af2cdb4d7fd87825d60aa8f3c833c93a6',1,'musx::dom::OthersName::name']]],
   ['nameid_5',['nameId',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#a0bf08d6f99a555bd17b80be7e8236723',1,'musx::dom::others::PartDefinition']]],
   ['namepos_6',['namePos',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#ab2a6aad8bcc9dd3472abe5e2cc59465c',1,'musx::dom::options::StaffOptions']]],
   ['nameposabbrv_7',['namePosAbbrv',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#abaea11b728f4bb2c0c4c265af70a525e',1,'musx::dom::options::StaffOptions']]],

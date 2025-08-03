@@ -31,7 +31,7 @@ var searchData=
   ['graceperc_28',['gracePerc',['../classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html#aaeeb66dc8b7e845b3aa03ef1b33ff024',1,'musx::dom::options::GraceNoteOptions']]],
   ['graceslashwidth_29',['graceSlashWidth',['../classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html#a5d1f224b15d03b98bf68bd5c3533321f',1,'musx::dom::options::GraceNoteOptions']]],
   ['grandstaff_30',['GrandStaff',['../namespacemusx_1_1dom_1_1uuid.html#a47724b92a310858c353489dcdccf9526',1,'musx::dom::uuid']]],
-  ['group_31',['group',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a6ce2806aa0a1033faa7e29a170749f39',1,'musx::dom::details::StaffGroupInfo']]],
+  ['group_31',['group',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#ab714b3fbc8edb1c592bccb013c4685e8',1,'musx::dom::details::StaffGroupInfo']]],
   ['groupbarlineoverride_32',['groupBarlineOverride',['../classmusx_1_1dom_1_1others_1_1Measure.html#a36468ede56f05fdf822842def92fd22f',1,'musx::dom::others::Measure']]],
   ['groupid_33',['groupId',['../structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#ad3b5fb88c7561bcec28f592c9e9b3081',1,'musx::dom::percussion::PercussionNoteType']]],
   ['groupnameabbrvpos_34',['groupNameAbbrvPos',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#ab1184f50329a789b93244eb2a0ea8dfd',1,'musx::dom::options::StaffOptions']]],

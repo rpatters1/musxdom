@@ -1,11 +1,11 @@
 var classmusx_1_1dom_1_1DetailsPool =
 [
-    [ "DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html#a60fc43a68cfac80ca787009b62c3e7c2", null ],
+    [ "DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html#a52947c8a9d3b86791664eaea1b45c61f", null ],
     [ "add", "classmusx_1_1dom_1_1DetailsPool.html#a180329de73653fa6ec58eff01ebf41a7", null ],
-    [ "get", "classmusx_1_1dom_1_1DetailsPool.html#a62844cd7b9425c5373a9a4155a1ed611", null ],
-    [ "get", "classmusx_1_1dom_1_1DetailsPool.html#afea2bf0b61b6aa1098b41b879e278fba", null ],
-    [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#a365b335033644aec259f6d32b0fb4f7b", null ],
-    [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#a375ed8c2e4309c3869a63cea9a4d4f98", null ],
-    [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#af9479bf552c6d55cb2c1e903ce040049", null ],
-    [ "getForNote", "classmusx_1_1dom_1_1DetailsPool.html#ace68ba03b25b9a481f8618e302159551", null ]
+    [ "get", "classmusx_1_1dom_1_1DetailsPool.html#adba9037364dfdb3a7278b9767e716263", null ],
+    [ "get", "classmusx_1_1dom_1_1DetailsPool.html#a772b8d43e530ed5eca3dbf092416579c", null ],
+    [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#a0224a443e4929da7bd5f65e86f75996f", null ],
+    [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#ae96cfb6ce724d71ba59dd417e168f1c2", null ],
+    [ "getArray", "classmusx_1_1dom_1_1DetailsPool.html#ac9dcf1534f5bb04ea2e8d68c1fae6376", null ],
+    [ "getForNote", "classmusx_1_1dom_1_1DetailsPool.html#a3653eb7ed71640fae3c795bad03327ce", null ]
 ];

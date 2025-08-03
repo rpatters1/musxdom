@@ -68,7 +68,7 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
     ] ],
     [ "SmartShape", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a20fcbbb1d0ad5796cbd5f9ffca84c82a", null ],
     [ "calcAppliesTo", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a43ee2d11faa58c363117cc0cdd843b7c", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShape.html#ac7f42fa6bbef8ea124fb233a3bd7ab2f", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShape.html#ad5faca45c7d8f9e3376fbde6405d109d", null ],
     [ "endLyricNum", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a8788a59bf45fc907bdc16daa4d3d639d", null ],
     [ "endLyricType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a349d187043a07bccc22108631e011fed", null ],
     [ "endNoteId", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a5fa83fc067c41f14b3cc56dc45af82dd", null ],

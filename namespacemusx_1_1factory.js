@@ -15,6 +15,6 @@ var namespacemusx_1_1factory =
     [ "RegisteredDetails", "namespacemusx_1_1factory.html#ad8bbbd766b4ff7b47d7cc1fee12c9825", null ],
     [ "RegisteredEntries", "namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b", null ],
     [ "RegisteredOptions", "namespacemusx_1_1factory.html#a1f789ad4f45943ddf03dad8507aec500", null ],
-    [ "RegisteredOthers", "namespacemusx_1_1factory.html#a6bca647ce8012d60920b3f9f2186af75", null ],
+    [ "RegisteredOthers", "namespacemusx_1_1factory.html#adf2df0059cadbdbb3b982c019846484d", null ],
     [ "RegisteredTexts", "namespacemusx_1_1factory.html#ab4b3b01a07b2ca81d2786686aeb69dd5", null ]
 ];

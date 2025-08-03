@@ -87,7 +87,7 @@ var searchData=
   ['clefchangeoffset_84',['clefChangeOffset',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html#a3ad1dd7beabd5dad400de11c5c0b4fe8',1,'musx::dom::options::ClefOptions']]],
   ['clefchangepercent_85',['clefChangePercent',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html#a4a39a07cd8f90bbdbb6a6decd2e2367c',1,'musx::dom::options::ClefOptions']]],
   ['clefchar_86',['clefChar',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a245559bc1ca2e893dd0dd86217e6d9c1',1,'musx::dom::options::ClefOptions::ClefDef']]],
-  ['clefdefs_87',['clefDefs',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html#a5c9e512196fc083b592a71aecda85653',1,'musx::dom::options::ClefOptions']]],
+  ['clefdefs_87',['clefDefs',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html#a4c29545222e1c6de9dc8db061aed8f04',1,'musx::dom::options::ClefOptions']]],
   ['cleffrontsepar_88',['clefFrontSepar',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html#a5877547109310897bc1e753279eed5aa',1,'musx::dom::options::ClefOptions']]],
   ['clefid_89',['clefId',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#a4299d95db06924be18c150b93a2310d9',1,'musx::dom::details::GFrameHold']]],
   ['clefindex_90',['clefindex',['../classmusx_1_1dom_1_1others_1_1ClefList.html#a43818c8c5ae6b09cf36e894ae24c6010',1,'musx::dom::others::ClefList::clefIndex'],['../classmusx_1_1dom_1_1EntryInfo.html#a2c9f7777709405db6e5d5ec2edd6369f',1,'musx::dom::EntryInfo::clefIndex']]],

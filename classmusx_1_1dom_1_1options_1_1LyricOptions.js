@@ -42,7 +42,7 @@ var classmusx_1_1dom_1_1options_1_1LyricOptions =
       [ "ZeroOffset", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#a52b101ad0e2b788521c8a88053f32b74a5224c06b53f2a3e82f1d010560d7b8d1", null ]
     ] ],
     [ "LyricOptions", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#aeb25a95b12368e678c7b6876b10e094a", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#af63453c49279777f0397cc1c6b001337", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#a5ca10100ac3515e225966ecc5e090d2a", null ],
     [ "altHyphenFont", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#a8183977300f8d9e2995acd64461806e4", null ],
     [ "hyphenChar", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#a38f462d4e0ea47acb1e187fc1144d92b", null ],
     [ "lyricAutoNumType", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#a83c642f7a1a24cb5dd686f3cd66ddad5", null ],

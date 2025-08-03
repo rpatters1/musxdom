@@ -51,7 +51,7 @@ var searchData=
   ['fontid_48',['fontId',['../classmusx_1_1dom_1_1FontInfo.html#a7b5eba0c729498d941368d97ee6fe51b',1,'musx::dom::FontInfo']]],
   ['fontmain_49',['fontMain',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a84147c487362b2fd6e32888a1244c0f4',1,'musx::dom::others::ArticulationDef']]],
   ['fontomfrom_50',['Fontomfrom',['../namespacemusx_1_1dom_1_1uuid.html#a07116a347d7dceab7bfdc79ec197a3ca',1,'musx::dom::uuid']]],
-  ['fontoptions_51',['fontOptions',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a3559facd81fa8574461a4a47d431deb3',1,'musx::dom::options::FontOptions']]],
+  ['fontoptions_51',['fontOptions',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a5d0b36d1d664fd4122ca7611f1d18e4f',1,'musx::dom::options::FontOptions']]],
   ['fontsize_52',['fontSize',['../classmusx_1_1dom_1_1FontInfo.html#add260a29c5ba23bf36e73c6604f40809',1,'musx::dom::FontInfo']]],
   ['fontsym_53',['fontSym',['../classmusx_1_1dom_1_1others_1_1KeyAttributes.html#ae0c12966ff8d7261066cee9e6784ec4f',1,'musx::dom::others::KeyAttributes']]],
   ['forwarddothpos_54',['forwardDotHPos',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a82569127d1768a98a8d6f585a37a0937',1,'musx::dom::options::RepeatOptions']]],

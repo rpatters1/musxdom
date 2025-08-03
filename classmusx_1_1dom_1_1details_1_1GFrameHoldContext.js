@@ -1,6 +1,6 @@
 var classmusx_1_1dom_1_1details_1_1GFrameHoldContext =
 [
-    [ "GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#af86fe43384e27b41aeb78ecf7d5e2a14", null ],
+    [ "GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a89ef5dfdff068697e127e6f583944ed2", null ],
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#af7dfee19597fcc58f5a0e518a9cb58d1", null ],
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a8fff05d40b94995cc544370b58f59af3", null ],
     [ "calcIsCuesOnly", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d", null ],

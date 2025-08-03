@@ -816,6 +816,9 @@ var namespacemusx_1_1dom =
     [ "is_pool_type< TextsPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01TextsPool_00_01T_01_4.html", null ],
     [ "KeySignature", "classmusx_1_1dom_1_1KeySignature.html", "classmusx_1_1dom_1_1KeySignature" ],
     [ "LyricsSyllableInfo", "classmusx_1_1dom_1_1LyricsSyllableInfo.html", "classmusx_1_1dom_1_1LyricsSyllableInfo" ],
+    [ "MusxInstanceList", "classmusx_1_1dom_1_1MusxInstanceList.html", null ],
+    [ "MusxInstanceList< others::StaffUsed >", "classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4.html", "classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4" ],
+    [ "MusxInstanceListBase", "classmusx_1_1dom_1_1MusxInstanceListBase.html", "classmusx_1_1dom_1_1MusxInstanceListBase" ],
     [ "Note", "classmusx_1_1dom_1_1Note.html", "classmusx_1_1dom_1_1Note" ],
     [ "NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", "classmusx_1_1dom_1_1NoteDetailsBase" ],
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", "classmusx_1_1dom_1_1NoteInfoPtr" ],
@@ -824,6 +827,7 @@ var namespacemusx_1_1dom =
     [ "OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", "classmusx_1_1dom_1_1OptionsPool" ],
     [ "OthersArray", "classmusx_1_1dom_1_1OthersArray.html", "classmusx_1_1dom_1_1OthersArray" ],
     [ "OthersBase", "classmusx_1_1dom_1_1OthersBase.html", "classmusx_1_1dom_1_1OthersBase" ],
+    [ "OthersName", "classmusx_1_1dom_1_1OthersName.html", "classmusx_1_1dom_1_1OthersName" ],
     [ "OthersPool", "classmusx_1_1dom_1_1OthersPool.html", "classmusx_1_1dom_1_1OthersPool" ],
     [ "TextsBase", "classmusx_1_1dom_1_1TextsBase.html", "classmusx_1_1dom_1_1TextsBase" ],
     [ "TextsPool", "classmusx_1_1dom_1_1TextsPool.html", "classmusx_1_1dom_1_1TextsPool" ],
@@ -843,15 +847,17 @@ var namespacemusx_1_1dom =
     [ "Evpu16ths", "namespacemusx_1_1dom.html#a724894a371aee2f8438f1dec8109e451", null ],
     [ "EvpuFloat", "namespacemusx_1_1dom.html#a901fc57f5455ae033180b2401434b6a9", null ],
     [ "Inci", "namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb", null ],
-    [ "InstCmper", "namespacemusx_1_1dom.html#a7ae5ca42c6a0d0fa0726e3131b84a48a", null ],
-    [ "InstrumentMap", "namespacemusx_1_1dom.html#a638216e8b0a5c70fc91f4d6259330e7b", null ],
+    [ "InstrumentMap", "namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69", null ],
     [ "LayerIndex", "namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981", null ],
     [ "MeasCmper", "namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817", null ],
+    [ "MusxInstance", "namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8", null ],
+    [ "MusxInstanceWeak", "namespacemusx_1_1dom.html#aee5506d8139b0409df00bff376061460", null ],
     [ "NoteNumber", "namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be", null ],
     [ "OptionsPoolPtr", "namespacemusx_1_1dom.html#a970ba333257a18f1f81abb356b3e6727", null ],
     [ "OthersPoolPtr", "namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e", null ],
     [ "PageCmper", "namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2", null ],
     [ "PercussionNoteTypeId", "namespacemusx_1_1dom.html#a2158a5e042da1a8511f2e3b604afaa7b", null ],
+    [ "StaffCmper", "namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c", null ],
     [ "SystemCmper", "namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237", null ],
     [ "TextsPoolPtr", "namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4", null ],
     [ "DefaultClefType", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67f", [
@@ -875,6 +881,7 @@ var namespacemusx_1_1dom =
       [ "Tab2", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fad4c2a0228d8e808f1ca012f63f429a38", null ]
     ] ],
     [ "KnownShapeDefType", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7", [
+      [ "Blank", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e", null ],
       [ "TenutoMark", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd", null ]
     ] ],
     [ "NoteType", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312", [

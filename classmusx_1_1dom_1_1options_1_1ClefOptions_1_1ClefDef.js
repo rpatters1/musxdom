@@ -1,8 +1,8 @@
 var classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef =
 [
-    [ "ClefDef", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#ae0847a4c98d9fa5597528d2d6b1af81b", null ],
-    [ "calcFont", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a23776d76607f75144c6171bf059dbaff", null ],
-    [ "calcInfo", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a34342cd84e8d9bf3109f0741ac5f91c5", null ],
+    [ "calcFont", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a1d261d01eba4adab202ac6a950e3dac3", null ],
+    [ "calcInfo", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#ac2fd63407fb4bf3d7f282e48f4dbcf24", null ],
+    [ "ContainedClassBase", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a53872e9c0b07633f81f5780d7ba13b9f", null ],
     [ "isBlank", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a1a918506ae66168708713d2bce24fa89", null ],
     [ "baselineAdjust", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a258831024841fc8f5ede65dc0db8a2f2", null ],
     [ "clefChar", "classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#a245559bc1ca2e893dd0dd86217e6d9c1", null ],

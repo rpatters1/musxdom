@@ -11,13 +11,6 @@ var classmusx_1_1dom_1_1options_1_1TextOptions =
       [ "Center", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4fee6124a674bcfdf9536c529579d865a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
       [ "Right", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4fee6124a674bcfdf9536c529579d865a92b09c7c48c520c3c55e497875da437c", null ]
     ] ],
-    [ "InsertSymbolType", "classmusx_1_1dom_1_1options_1_1TextOptions.html#aa0b48021e044fc55dc5e7e1604bb5013", [
-      [ "Sharp", "classmusx_1_1dom_1_1options_1_1TextOptions.html#aa0b48021e044fc55dc5e7e1604bb5013a60c17eb98355db0fe5ce016db6c6f444", null ],
-      [ "Flat", "classmusx_1_1dom_1_1options_1_1TextOptions.html#aa0b48021e044fc55dc5e7e1604bb5013a745e3db6a7ffd50e1a72b39482f0882d", null ],
-      [ "Natural", "classmusx_1_1dom_1_1options_1_1TextOptions.html#aa0b48021e044fc55dc5e7e1604bb5013a2bd8ab451a35759c5737128e35c8011a", null ],
-      [ "DblSharp", "classmusx_1_1dom_1_1options_1_1TextOptions.html#aa0b48021e044fc55dc5e7e1604bb5013a5b65b2d55674a31e21e38c91ede11139", null ],
-      [ "DblFlat", "classmusx_1_1dom_1_1options_1_1TextOptions.html#aa0b48021e044fc55dc5e7e1604bb5013ab6c369425d8fc3552382f73d1969ddef", null ]
-    ] ],
     [ "TextJustify", "classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3", [
       [ "Left", "classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3a945d5e233cf7d6240f6b783b36a374ff", null ],
       [ "Center", "classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
@@ -33,7 +26,7 @@ var classmusx_1_1dom_1_1options_1_1TextOptions =
     [ "TextOptions", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a2c785cf4704c1add23bdf6ddd9a6fd43", null ],
     [ "dateFormat", "classmusx_1_1dom_1_1options_1_1TextOptions.html#adeb68132c83937c4952fd6afaee5f34b", null ],
     [ "showTimeSeconds", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a401bb3727ec68761cc0cc711a37be381", null ],
-    [ "symbolInserts", "classmusx_1_1dom_1_1options_1_1TextOptions.html#ac9e8e0b308b492cdc2d0184c94ee54ed", null ],
+    [ "symbolInserts", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a9c7a66de9b0b31f331b9df2073d34c19", null ],
     [ "tabSpaces", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a6bb41105ddd9be49d8a5c9eb11bcf773", null ],
     [ "textBaselineShift", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a2a6a030dd729d7537ef4086951872a5b", null ],
     [ "textExpandSingleWord", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4eacac6421af5b41fb254ff6bd5cfafc", null ],

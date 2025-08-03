@@ -4,7 +4,7 @@ var classmusx_1_1dom_1_1others_1_1MultimeasureRest =
     [ "calcIsNumberVisible", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#ad3a74f444ae9e2a8595e0b4d2cb02a18", null ],
     [ "calcNumberOfMeasures", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a64755deadd3656f403667263bf73f3e7", null ],
     [ "getStartMeasure", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a8c726066a31ae5389a7e5ec7f563d2b7", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#ad22e8fe3b4cec7181a25f13439dd37c6", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a7bb3c35b2548555cbe64e52073a67afa", null ],
     [ "measWidth", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a9ac347a53b4b2e7acb97df93bfc35f13", null ],
     [ "nextMeas", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a80225f5b443e59dea06a441b7f22f0c5", null ],
     [ "numHorzAdj", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#ac080cafa4b4def09dd7706edee66958f", null ],

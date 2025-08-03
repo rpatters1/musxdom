@@ -24,7 +24,7 @@ var searchData=
   ['endedu_21',['endEdu',['../classmusx_1_1dom_1_1others_1_1MusicRange.html#aac17b17671eca550defdcb50e7cef39e',1,'musx::dom::others::MusicRange']]],
   ['endentry_22',['endEntry',['../classmusx_1_1dom_1_1others_1_1Frame.html#abb48ea9427c249672bfdd7d96d618d3e',1,'musx::dom::others::Frame']]],
   ['endindex_23',['endIndex',['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4767e3e0a24fb4dcf1645dea6ec5ae4a',1,'musx::dom::EntryFrame::TupletInfo']]],
-  ['endinst_24',['endInst',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#aa23da020d9452ee6d99945c59d9df54e',1,'musx::dom::details::StaffGroup']]],
+  ['endinst_24',['endInst',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#aa4d3b37711a512db07284afe78eb9095',1,'musx::dom::details::StaffGroup']]],
   ['endlinevpos_25',['endLineVPos',['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a332c329042deb2c0d923351c76c91e37',1,'musx::dom::others::RepeatEndingStart']]],
   ['endlyricnum_26',['endLyricNum',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a8788a59bf45fc907bdc16daa4d3d639d',1,'musx::dom::others::SmartShape']]],
   ['endlyrictype_27',['endLyricType',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a349d187043a07bccc22108631e011fed',1,'musx::dom::others::SmartShape']]],

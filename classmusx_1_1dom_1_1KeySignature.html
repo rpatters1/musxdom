@@ -169,21 +169,21 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMinor</b> () const<
 <tr class="memitem:a70d5a77caa9ad5f9e5e5c89653125e34" id="r_a70d5a77caa9ad5f9e5e5c89653125e34"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ce">music_theory::DiatonicMode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a70d5a77caa9ad5f9e5e5c89653125e34">calcDiatonicMode</a> () const</td></tr>
 <tr class="memdesc:a70d5a77caa9ad5f9e5e5c89653125e34"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this key specifies a diatonic mode, returns the mode. This value is independent of EDO divisions. Any correctly configured linear key signature should return a value.  <br /></td></tr>
 <tr class="separator:a70d5a77caa9ad5f9e5e5c89653125e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaa1f32c8341eb8893b4334596121518" id="r_abaa1f32c8341eb8893b4334596121518"><td class="memItemLeft" align="right" valign="top"><a id="abaa1f32c8341eb8893b4334596121518" name="abaa1f32c8341eb8893b4334596121518"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &amp;src)</td></tr>
-<tr class="memdesc:abaa1f32c8341eb8893b4334596121518"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same key signature, taking into account transposition. <br /></td></tr>
-<tr class="separator:abaa1f32c8341eb8893b4334596121518"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80eec6396d41eef55121a18efd7a73db" id="r_a80eec6396d41eef55121a18efd7a73db"><td class="memItemLeft" align="right" valign="top"><a id="a80eec6396d41eef55121a18efd7a73db" name="a80eec6396d41eef55121a18efd7a73db"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSameConcert</b> (const <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &amp;src)</td></tr>
-<tr class="memdesc:a80eec6396d41eef55121a18efd7a73db"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same concert key signature, ignoring transposition. <br /></td></tr>
-<tr class="separator:a80eec6396d41eef55121a18efd7a73db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a53673a9bddcf72adc048e1005ae8a7" id="r_a0a53673a9bddcf72adc048e1005ae8a7"><td class="memItemLeft" align="right" valign="top"><a id="a0a53673a9bddcf72adc048e1005ae8a7" name="a0a53673a9bddcf72adc048e1005ae8a7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &amp;src) const</td></tr>
+<tr class="memdesc:a0a53673a9bddcf72adc048e1005ae8a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same key signature, taking into account transposition. <br /></td></tr>
+<tr class="separator:a0a53673a9bddcf72adc048e1005ae8a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfbcd0e08eee41ac7a28447a379c4f31" id="r_abfbcd0e08eee41ac7a28447a379c4f31"><td class="memItemLeft" align="right" valign="top"><a id="abfbcd0e08eee41ac7a28447a379c4f31" name="abfbcd0e08eee41ac7a28447a379c4f31"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSameConcert</b> (const <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &amp;src) const</td></tr>
+<tr class="memdesc:abfbcd0e08eee41ac7a28447a379c4f31"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same concert key signature, ignoring transposition. <br /></td></tr>
+<tr class="separator:abfbcd0e08eee41ac7a28447a379c4f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87cb3c216ea12c1f911b4b289d3a2920" id="r_a87cb3c216ea12c1f911b4b289d3a2920"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a87cb3c216ea12c1f911b4b289d3a2920">setTransposition</a> (int interval, int keyAdjustment, bool simplify)</td></tr>
 <tr class="memdesc:a87cb3c216ea12c1f911b4b289d3a2920"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes the key by the specified amounts. Set them to zero to remove transposition.  <br /></td></tr>
 <tr class="separator:a87cb3c216ea12c1f911b4b289d3a2920"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bcdfe297481bbbc29a1fc56d87162a2" id="r_a3bcdfe297481bbbc29a1fc56d87162a2"><td class="memItemLeft" align="right" valign="top"><a id="a3bcdfe297481bbbc29a1fc56d87162a2" name="a3bcdfe297481bbbc29a1fc56d87162a2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransposition</b> (const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff)</td></tr>
-<tr class="memdesc:a3bcdfe297481bbbc29a1fc56d87162a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the key's transposition based on the input staff's transposition settings. <br /></td></tr>
-<tr class="separator:a3bcdfe297481bbbc29a1fc56d87162a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ea6f9f5a0b3de04a808466129732bd2" id="r_a8ea6f9f5a0b3de04a808466129732bd2"><td class="memItemLeft" align="right" valign="top"><a id="a8ea6f9f5a0b3de04a808466129732bd2" name="a8ea6f9f5a0b3de04a808466129732bd2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransposition</b> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff)</td></tr>
+<tr class="memdesc:a8ea6f9f5a0b3de04a808466129732bd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the key's transposition based on the input staff's transposition settings. <br /></td></tr>
+<tr class="separator:a8ea6f9f5a0b3de04a808466129732bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65212e6a66d75dbeb2f191b282e74359" id="r_a65212e6a66d75dbeb2f191b282e74359"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a65212e6a66d75dbeb2f191b282e74359">calcTonalCenterIndex</a> (<a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeyContext</a> ctx) const</td></tr>
 <tr class="memdesc:a65212e6a66d75dbeb2f191b282e74359"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the tonal center index for the key, where C=0, D=1, E=2, ...  <br /></td></tr>
 <tr class="separator:a65212e6a66d75dbeb2f191b282e74359"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,9 +204,9 @@ std::optional&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRigh
 <tr class="memitem:a6d5cf39e9f26c653b042251ff4f87f68" id="r_a6d5cf39e9f26c653b042251ff4f87f68"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classmusic__theory_1_1Transposer.html">music_theory::Transposer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a6d5cf39e9f26c653b042251ff4f87f68">createTransposer</a> (int displacement, int alteration) const</td></tr>
 <tr class="memdesc:a6d5cf39e9f26c653b042251ff4f87f68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a transposer for this <a class="el" href="classmusx_1_1dom_1_1KeySignature.html" title="Shared key signature class that is contained in other classes. (See others::Measure)">KeySignature</a> instance.  <br /></td></tr>
 <tr class="separator:a6d5cf39e9f26c653b042251ff4f87f68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6d83554fe3fac8e89bd2933880ab5f4" id="r_aa6d83554fe3fac8e89bd2933880ab5f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#aa6d83554fe3fac8e89bd2933880ab5f4">integrityCheck</a> () override</td></tr>
-<tr class="memdesc:aa6d83554fe3fac8e89bd2933880ab5f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
-<tr class="separator:aa6d83554fe3fac8e89bd2933880ab5f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a212ea816c3563a536f04b19ab3f2581f" id="r_a212ea816c3563a536f04b19ab3f2581f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a212ea816c3563a536f04b19ab3f2581f">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
+<tr class="memdesc:a212ea816c3563a536f04b19ab3f2581f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:a212ea816c3563a536f04b19ab3f2581f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace51e53d99e83c6ae95d2b89fd1733d7" id="r_ace51e53d99e83c6ae95d2b89fd1733d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#ace51e53d99e83c6ae95d2b89fd1733d7">CommonClassBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document)</td></tr>
 <tr class="memdesc:ace51e53d99e83c6ae95d2b89fd1733d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html" title="Base class for classes that are commonly used among others, details, entries, and/or texts....">CommonClassBase</a> object.  <br /></td></tr>
 <tr class="separator:ace51e53d99e83c6ae95d2b89fd1733d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,6 +222,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <tr class="memitem:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3284dc2e34ac0e59c06847587fe7201a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3284dc2e34ac0e59c06847587fe7201a">getDocument</a> () const</td></tr>
 <tr class="memdesc:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a reference to the <a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a>.  <br /></td></tr>
 <tr class="separator:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c2b4aab4fcb0e9ac1834d224528d166 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a4c2b4aab4fcb0e9ac1834d224528d166"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a4c2b4aab4fcb0e9ac1834d224528d166">getSourcePartId</a> () const</td></tr>
+<tr class="memdesc:a4c2b4aab4fcb0e9ac1834d224528d166 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <em>source</em> partId for this instance. If an instance is fully shared with the score, the source is SCORE_PARTID. If an instance is partially shared or non shared, the source is the ID of the part that sourced it.  <br /></td></tr>
+<tr class="separator:a4c2b4aab4fcb0e9ac1834d224528d166 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -262,9 +265,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideKeySigShowAccis</
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_classmusx_1_1dom_1_1CommonClassBase"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmusx_1_1dom_1_1CommonClassBase')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html">musx::dom::CommonClassBase</a></td></tr>
-<tr class="memitem:ae425c90d2a3dd212fd589803200fdd34 inherit pro_methods_classmusx_1_1dom_1_1CommonClassBase" id="r_ae425c90d2a3dd212fd589803200fdd34"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1CommonClassBase.html#ae425c90d2a3dd212fd589803200fdd34">getPartId</a> () const</td></tr>
-<tr class="memdesc:ae425c90d2a3dd212fd589803200fdd34 inherit pro_methods_classmusx_1_1dom_1_1CommonClassBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or SCORE_PARTID for score)  <br /></td></tr>
-<tr class="separator:ae425c90d2a3dd212fd589803200fdd34 inherit pro_methods_classmusx_1_1dom_1_1CommonClassBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pro_methods_classmusx_1_1dom_1_1CommonClassBase" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pro_methods_classmusx_1_1dom_1_1CommonClassBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -574,8 +574,8 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 
 </div>
 </div>
-<a id="aa6d83554fe3fac8e89bd2933880ab5f4" name="aa6d83554fe3fac8e89bd2933880ab5f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa6d83554fe3fac8e89bd2933880ab5f4">&#9670;&#160;</a></span>integrityCheck()</h2>
+<a id="a212ea816c3563a536f04b19ab3f2581f" name="a212ea816c3563a536f04b19ab3f2581f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a212ea816c3563a536f04b19ab3f2581f">&#9670;&#160;</a></span>integrityCheck()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -586,7 +586,8 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
         <tr>
           <td class="memname">void musx::dom::KeySignature::integrityCheck </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ptrToThis</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -599,6 +600,12 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 
 <p>Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes. </p>
 <p>The default implementation should always be called inside an overridden implementation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptrToThis</td><td>This instance in a shared_ptr. (Avoids need for shared_from_this.)</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html" title="Exception for integrity errors. (Used when MUSX_THROW_ON_INTEGRITY_CHECK_FAIL is defined....">musx::dom::integrity_error</a></td><td>if there is a problem. </td></tr>
@@ -606,7 +613,7 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">musx::dom::Base</a>.</p>
+<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">musx::dom::Base</a>.</p>
 
 </div>
 </div>

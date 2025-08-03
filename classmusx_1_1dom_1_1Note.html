@@ -146,12 +146,12 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteId</b> () const</td></tr>
 <tr class="memdesc:a6f0f8b7fc1ce284954140b26b2774d14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the note id for this note. This value does not change, even if the notes in a chord are rearranged (which affects the order of <a class="el" href="classmusx_1_1dom_1_1Entry.html#a533b919d0efa81b9d26fb16ade0b7773" title="Collection of notes that comprise the entry. These are in order from lowest to highest.">Entry::notes</a>.) <br /></td></tr>
 <tr class="separator:a6f0f8b7fc1ce284954140b26b2774d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70cff35a0297f05a6a7bf5157e0609d6" id="r_a70cff35a0297f05a6a7bf5157e0609d6"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a70cff35a0297f05a6a7bf5157e0609d6">calcDefaultEnharmonic</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key) const</td></tr>
-<tr class="memdesc:a70cff35a0297f05a6a7bf5157e0609d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true.  <br /></td></tr>
-<tr class="separator:a70cff35a0297f05a6a7bf5157e0609d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a871b0d6010606935b3e195d9eb9060b9" id="r_a871b0d6010606935b3e195d9eb9060b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a871b0d6010606935b3e195d9eb9060b9">calcNoteProperties</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeySignature::KeyContext</a> ctx, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex, const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff=nullptr, bool respellEnharmonic=false) const</td></tr>
-<tr class="memdesc:a871b0d6010606935b3e195d9eb9060b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override.  <br /></td></tr>
-<tr class="separator:a871b0d6010606935b3e195d9eb9060b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b42277ba09844d042d326b07c5ab867" id="r_a8b42277ba09844d042d326b07c5ab867"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a8b42277ba09844d042d326b07c5ab867">calcDefaultEnharmonic</a> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key) const</td></tr>
+<tr class="memdesc:a8b42277ba09844d042d326b07c5ab867"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true.  <br /></td></tr>
+<tr class="separator:a8b42277ba09844d042d326b07c5ab867"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a0a325e7fd6c567b84349af37d01abe" id="r_a4a0a325e7fd6c567b84349af37d01abe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a4a0a325e7fd6c567b84349af37d01abe">calcNoteProperties</a> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeySignature::KeyContext</a> ctx, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex, const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff=nullptr, bool respellEnharmonic=false) const</td></tr>
+<tr class="memdesc:a4a0a325e7fd6c567b84349af37d01abe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override.  <br /></td></tr>
+<tr class="separator:a4a0a325e7fd6c567b84349af37d01abe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36dc7428581bf94502b9e3a8ab2f0db1" id="r_a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a36dc7428581bf94502b9e3a8ab2f0db1">requireAllFields</a> () const override</td></tr>
 <tr class="memdesc:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,9 +163,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexc
 <tr class="memitem:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3284dc2e34ac0e59c06847587fe7201a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3284dc2e34ac0e59c06847587fe7201a">getDocument</a> () const</td></tr>
 <tr class="memdesc:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a reference to the <a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a>.  <br /></td></tr>
 <tr class="separator:a3284dc2e34ac0e59c06847587fe7201a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ae425c90d2a3dd212fd589803200fdd34"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ae425c90d2a3dd212fd589803200fdd34">getPartId</a> () const</td></tr>
-<tr class="memdesc:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the partId for this instance (or SCORE_PARTID for score)  <br /></td></tr>
-<tr class="separator:ae425c90d2a3dd212fd589803200fdd34 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c2b4aab4fcb0e9ac1834d224528d166 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a4c2b4aab4fcb0e9ac1834d224528d166"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a4c2b4aab4fcb0e9ac1834d224528d166">getSourcePartId</a> () const</td></tr>
+<tr class="memdesc:a4c2b4aab4fcb0e9ac1834d224528d166 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <em>source</em> partId for this instance. If an instance is fully shared with the score, the source is SCORE_PARTID. If an instance is partially shared or non shared, the source is the ID of the part that sourced it.  <br /></td></tr>
+<tr class="separator:a4c2b4aab4fcb0e9ac1834d224528d166 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a67e14feb232232fb0d2f395079f26c3c"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getShareMode</b> () const</td></tr>
 <tr class="memdesc:a67e14feb232232fb0d2f395079f26c3c inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the sharing mode for this instance. <br /></td></tr>
@@ -178,9 +178,9 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (const std::string &amp;nodeName)</td></tr>
 <tr class="memdesc:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a shared node for this instance. <br /></td></tr>
 <tr class="separator:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a368bf85332ce10bac71833627f858905"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a368bf85332ce10bac71833627f858905">integrityCheck</a> ()</td></tr>
-<tr class="memdesc:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
-<tr class="separator:a368bf85332ce10bac71833627f858905 inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_aaab6820828edca2a769b91999025ab5f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis)</td></tr>
+<tr class="memdesc:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -293,8 +293,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a70cff35a0297f05a6a7bf5157e0609d6" name="a70cff35a0297f05a6a7bf5157e0609d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70cff35a0297f05a6a7bf5157e0609d6">&#9670;&#160;</a></span>calcDefaultEnharmonic()</h2>
+<a id="a8b42277ba09844d042d326b07c5ab867" name="a8b42277ba09844d042d326b07c5ab867"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b42277ba09844d042d326b07c5ab867">&#9670;&#160;</a></span>calcDefaultEnharmonic()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -302,7 +302,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">std::pair&lt; int, int &gt; musx::dom::Note::calcDefaultEnharmonic </td>
           <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>key</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -310,7 +310,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true. </p>
-<p>Normally you do not have to call this function directly. It is called inside <a class="el" href="classmusx_1_1dom_1_1Note.html#a871b0d6010606935b3e195d9eb9060b9" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a>. But the function is available if you need it.</p>
+<p>Normally you do not have to call this function directly. It is called inside <a class="el" href="classmusx_1_1dom_1_1Note.html#a4a0a325e7fd6c567b84349af37d01abe" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a>. But the function is available if you need it.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>The key signature to use for transposition. </td></tr>
@@ -325,8 +325,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a871b0d6010606935b3e195d9eb9060b9" name="a871b0d6010606935b3e195d9eb9060b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a871b0d6010606935b3e195d9eb9060b9">&#9670;&#160;</a></span>calcNoteProperties()</h2>
+<a id="a4a0a325e7fd6c567b84349af37d01abe" name="a4a0a325e7fd6c567b84349af37d01abe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a0a325e7fd6c567b84349af37d01abe">&#9670;&#160;</a></span>calcNoteProperties()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -334,7 +334,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a> musx::dom::Note::calcNoteProperties </td>
           <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
@@ -352,7 +352,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>staff</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
@@ -371,14 +371,14 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override. </p>
 <p>Finale does not transpose correctly with microtonal key signatures. This function transposes mostly correctly for them, which means that microtonal key signatures may have different results than in Finale. Of particular note is Chromatic Transposition, which produces nonsense results in Finale but here produces correct results, provided that the alteration value is understood to be a chromatic half-step alteration rather than a step alteration in EDO divisions.</p>
-<dl class="section note"><dt>Note</dt><dd>In Finale, the default whole rest staff position is the middle staff line. Other music notation systems frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate the staff position returned by <a class="el" href="classmusx_1_1dom_1_1Note.html#a871b0d6010606935b3e195d9eb9060b9" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a> for whole rests.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>In Finale, the default whole rest staff position is the middle staff line. Other music notation systems frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate the staff position returned by <a class="el" href="classmusx_1_1dom_1_1Note.html#a4a0a325e7fd6c567b84349af37d01abe" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a> for whole rests.</dd></dl>
 <p>See <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a87cb3c216ea12c1f911b4b289d3a2920" title="Transposes the key by the specified amounts. Set them to zero to remove transposition.">KeySignature::setTransposition</a> for information about differences in key signature transposition.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>The key signature in effect. </td></tr>
     <tr><td class="paramname">ctx</td><td>The key context (concert or written pitch). </td></tr>
     <tr><td class="paramname">clefIndex</td><td>The index of the clef in effect. </td></tr>
-    <tr><td class="paramname">staff</td><td>If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If calling <a class="el" href="classmusx_1_1dom_1_1Note.html#a871b0d6010606935b3e195d9eb9060b9" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a> for Concert Pitch (sounding pitch) values, omit this parameter. </td></tr>
+    <tr><td class="paramname">staff</td><td>If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If calling <a class="el" href="classmusx_1_1dom_1_1Note.html#a4a0a325e7fd6c567b84349af37d01abe" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a> for Concert Pitch (sounding pitch) values, omit this parameter. </td></tr>
     <tr><td class="paramname">respellEnharmonic</td><td>If true, the notes are enharmonically respelled using the default enharmonic spelling. </td></tr>
   </table>
   </dd>

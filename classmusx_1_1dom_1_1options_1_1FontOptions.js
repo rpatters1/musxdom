@@ -48,6 +48,6 @@ var classmusx_1_1dom_1_1options_1_1FontOptions =
       [ "TimePlusParts", "classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aac597505b18dc52412c38199ab8999bec", null ]
     ] ],
     [ "FontOptions", "classmusx_1_1dom_1_1options_1_1FontOptions.html#ad02a81fefc0688893ddf06685aa6da8c", null ],
-    [ "getFontInfo", "classmusx_1_1dom_1_1options_1_1FontOptions.html#adc304adb420c3728b84f5de43419c7ae", null ],
-    [ "fontOptions", "classmusx_1_1dom_1_1options_1_1FontOptions.html#a3559facd81fa8574461a4a47d431deb3", null ]
+    [ "getFontInfo", "classmusx_1_1dom_1_1options_1_1FontOptions.html#a4043870e499f106a52098e0e179dd6d0", null ],
+    [ "fontOptions", "classmusx_1_1dom_1_1options_1_1FontOptions.html#a5d0b36d1d664fd4122ca7611f1d18e4f", null ]
 ];

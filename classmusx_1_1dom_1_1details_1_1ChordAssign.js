@@ -5,7 +5,7 @@ var classmusx_1_1dom_1_1details_1_1ChordAssign =
       [ "UnderRoot", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a179be6cb886cae6fa2f5e24f87e084b5a8a7a7da14f43c506c1a0637fd69eb8f0", null ],
       [ "Subtext", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a179be6cb886cae6fa2f5e24f87e084b5acaba28429fc284488fb7cd51772253ea", null ]
     ] ],
-    [ "ChordAssign", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a6dd8101463723e48524880b633213759", null ],
+    [ "ChordAssign", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a17e7f3ed2b61dc252ba5884b33641ed8", null ],
     [ "bassAlter", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a13c10345b0b6b211da8c95c4c6196576", null ],
     [ "bassLowerCase", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#af8dcec25026607e4f4be6c028243f44b", null ],
     [ "bassPosition", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#afe28c6478b19674453be92186bd6f127", null ],

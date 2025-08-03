@@ -174,11 +174,11 @@ $(document).ready(function(){initNavTree('DocumentFactory_8h_source.html',''); i
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>            }</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        }</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordflow">if</span> (!document-&gt;getHeader()) document-&gt;getHeader() = std::make_shared&lt;musx::dom::Header&gt;();</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keywordflow">if</span> (!document-&gt;getOptions()) document-&gt;getOptions() = std::make_shared&lt;musx::dom::OptionsPool&gt;();</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="keywordflow">if</span> (!document-&gt;getOthers()) document-&gt;getOthers() = std::make_shared&lt;musx::dom::OthersPool&gt;();</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keywordflow">if</span> (!document-&gt;getDetails()) document-&gt;getDetails() = std::make_shared&lt;musx::dom::DetailsPool&gt;();</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordflow">if</span> (!document-&gt;getEntries()) document-&gt;getEntries() = std::make_shared&lt;musx::dom::EntryPool&gt;();</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <span class="keywordflow">if</span> (!document-&gt;getTexts()) document-&gt;getTexts() = std::make_shared&lt;musx::dom::TextsPool&gt;();</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keywordflow">if</span> (!document-&gt;getOptions()) document-&gt;getOptions() = std::make_shared&lt;musx::dom::OptionsPool&gt;(document);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="keywordflow">if</span> (!document-&gt;getOthers()) document-&gt;getOthers() = std::make_shared&lt;musx::dom::OthersPool&gt;(document);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keywordflow">if</span> (!document-&gt;getDetails()) document-&gt;getDetails() = std::make_shared&lt;musx::dom::DetailsPool&gt;(document);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordflow">if</span> (!document-&gt;getEntries()) document-&gt;getEntries() = std::make_shared&lt;musx::dom::EntryPool&gt;(document);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <span class="keywordflow">if</span> (!document-&gt;getTexts()) document-&gt;getTexts() = std::make_shared&lt;musx::dom::TextsPool&gt;(document);</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        </div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="preprocessor">#ifdef MUSX_DISPLAY_NODE_NAMES</span></div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <a class="code hl_function" href="classmusx_1_1util_1_1Logger.html#a039905239762ae96745483d24588a68e">util::Logger::log</a>(<a class="code hl_enumvalue" href="classmusx_1_1util_1_1Logger.html#a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf">util::Logger::LogLevel::Verbose</a>, <span class="stringliteral">&quot;============&quot;</span>);</div>
@@ -189,41 +189,42 @@ $(document).ready(function(){initNavTree('DocumentFactory_8h_source.html',''); i
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        document-&gt;m_maxBlankPages = 0;</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keyword">auto</span> linkedParts = document-&gt;getOthers()-&gt;getArray&lt;PartDefinition&gt;(<a class="code hl_variable" href="namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0">SCORE_PARTID</a>);</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; part : linkedParts) {</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            part-&gt;numberOfLeadingBlankPages = 0;</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            <span class="keyword">auto</span> pages = document-&gt;getOthers()-&gt;getArray&lt;Page&gt;(part-&gt;getCmper());</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            part-&gt;numberOfPages = int(pages.size());</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; page : pages) {</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>                <span class="keywordflow">if</span> (!page-&gt;isBlank()) {</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>                }</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>                part-&gt;numberOfLeadingBlankPages++;</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            }</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            <span class="keywordflow">if</span> (part-&gt;numberOfLeadingBlankPages &gt; document-&gt;m_maxBlankPages) {</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                document-&gt;m_maxBlankPages = part-&gt;numberOfLeadingBlankPages;</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            }</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        }</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="keywordflow">return</span> document;</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    }</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            <span class="keyword">auto</span> mutablePart = <span class="keyword">const_cast&lt;</span>PartDefinition*<span class="keyword">&gt;</span>(part.get());</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            mutablePart-&gt;numberOfLeadingBlankPages = 0;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            <span class="keyword">auto</span> pages = document-&gt;getOthers()-&gt;getArray&lt;Page&gt;(part-&gt;getCmper());</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            mutablePart-&gt;numberOfPages = int(pages.size());</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; page : pages) {</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>                <span class="keywordflow">if</span> (!page-&gt;isBlank()) {</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>                }</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>                mutablePart-&gt;numberOfLeadingBlankPages++;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            }</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            <span class="keywordflow">if</span> (mutablePart-&gt;numberOfLeadingBlankPages &gt; document-&gt;m_maxBlankPages) {</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>                document-&gt;m_maxBlankPages = part-&gt;numberOfLeadingBlankPages;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            }</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        }</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <span class="keywordflow">return</span> document;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    }</div>
 </div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> XmlDocumentType&gt;</div>
-<div class="foldopen" id="foldopen00124" data-start="{" data-end="}">
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="classmusx_1_1factory_1_1DocumentFactory.html#aa100eb0e3454dd262497d3c2ff81572e">  124</a></span>    <span class="keyword">static</span> DocumentPtr <a class="code hl_function" href="classmusx_1_1factory_1_1DocumentFactory.html#aa100eb0e3454dd262497d3c2ff81572e">create</a>(<span class="keyword">const</span> std::vector&lt;char&gt;&amp; xmlBuffer)</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    {</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">return</span> create&lt;XmlDocumentType&gt;(xmlBuffer.data(), xmlBuffer.size());</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    }</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> XmlDocumentType&gt;</div>
+<div class="foldopen" id="foldopen00125" data-start="{" data-end="}">
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="classmusx_1_1factory_1_1DocumentFactory.html#aa100eb0e3454dd262497d3c2ff81572e">  125</a></span>    <span class="keyword">static</span> DocumentPtr <a class="code hl_function" href="classmusx_1_1factory_1_1DocumentFactory.html#aa100eb0e3454dd262497d3c2ff81572e">create</a>(<span class="keyword">const</span> std::vector&lt;char&gt;&amp; xmlBuffer)</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    {</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        <span class="keywordflow">return</span> create&lt;XmlDocumentType&gt;(xmlBuffer.data(), xmlBuffer.size());</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    }</div>
 </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>};</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>};</div>
 </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>} <span class="comment">// namespace factory</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>} <span class="comment">// namespace musx</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>} <span class="comment">// namespace factory</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>} <span class="comment">// namespace musx</span></div>
 <div class="ttc" id="aclassmusx_1_1dom_1_1Document_html"><div class="ttname"><a href="classmusx_1_1dom_1_1Document.html">musx::dom::Document</a></div><div class="ttdoc">Represents a document object that encapsulates the entire EnigmaXML structure.</div><div class="ttdef"><b>Definition</b> Document.h:67</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1DetailsFactory_html_aafc7c73784042c1569d10f34dec2d66a"><div class="ttname"><a href="classmusx_1_1factory_1_1DetailsFactory.html#aafc7c73784042c1569d10f34dec2d66a">musx::factory::DetailsFactory::create</a></div><div class="ttdeci">static std::shared_ptr&lt; PoolType &gt; create(const XmlElementPtr &amp;element, const dom::DocumentPtr &amp;document, ElementLinker &amp;elementLinker)</div><div class="ttdoc">Creates a OthersPool object from an XML element.</div><div class="ttdef"><b>Definition</b> PoolFactory.h:68</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1DocumentFactory_html"><div class="ttname"><a href="classmusx_1_1factory_1_1DocumentFactory.html">musx::factory::DocumentFactory</a></div><div class="ttdoc">Factory class for creating Document objects from XML.</div><div class="ttdef"><b>Definition</b> DocumentFactory.h:38</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1DocumentFactory_html_a99addb7044f05ca121c446568dc9045f"><div class="ttname"><a href="classmusx_1_1factory_1_1DocumentFactory.html#a99addb7044f05ca121c446568dc9045f">musx::factory::DocumentFactory::create</a></div><div class="ttdeci">static DocumentPtr create(const char *data, size_t size)</div><div class="ttdoc">Creates a Document object from an XML buffer.</div><div class="ttdef"><b>Definition</b> DocumentFactory.h:52</div></div>
-<div class="ttc" id="aclassmusx_1_1factory_1_1DocumentFactory_html_aa100eb0e3454dd262497d3c2ff81572e"><div class="ttname"><a href="classmusx_1_1factory_1_1DocumentFactory.html#aa100eb0e3454dd262497d3c2ff81572e">musx::factory::DocumentFactory::create</a></div><div class="ttdeci">static DocumentPtr create(const std::vector&lt; char &gt; &amp;xmlBuffer)</div><div class="ttdoc">Creates a Document object from an XML buffer.</div><div class="ttdef"><b>Definition</b> DocumentFactory.h:124</div></div>
+<div class="ttc" id="aclassmusx_1_1factory_1_1DocumentFactory_html_aa100eb0e3454dd262497d3c2ff81572e"><div class="ttname"><a href="classmusx_1_1factory_1_1DocumentFactory.html#aa100eb0e3454dd262497d3c2ff81572e">musx::factory::DocumentFactory::create</a></div><div class="ttdeci">static DocumentPtr create(const std::vector&lt; char &gt; &amp;xmlBuffer)</div><div class="ttdoc">Creates a Document object from an XML buffer.</div><div class="ttdef"><b>Definition</b> DocumentFactory.h:125</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1ElementLinker_html"><div class="ttname"><a href="classmusx_1_1factory_1_1ElementLinker.html">musx::factory::ElementLinker</a></div><div class="ttdoc">A utility class for managing deferred relationships between elements during document construction.</div><div class="ttdef"><b>Definition</b> FactoryBase.h:71</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1ElementLinker_html_a4bb1f28f858ea9c65dab5ac41565886e"><div class="ttname"><a href="classmusx_1_1factory_1_1ElementLinker.html#a4bb1f28f858ea9c65dab5ac41565886e">musx::factory::ElementLinker::resolveAll</a></div><div class="ttdeci">void resolveAll(const dom::DocumentPtr &amp;document)</div><div class="ttdoc">Resolves all deferred relationships.</div><div class="ttdef"><b>Definition</b> FactoryBase.h:109</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1EntryFactory_html_aafc7c73784042c1569d10f34dec2d66a"><div class="ttname"><a href="classmusx_1_1factory_1_1EntryFactory.html#aafc7c73784042c1569d10f34dec2d66a">musx::factory::EntryFactory::create</a></div><div class="ttdeci">static std::shared_ptr&lt; PoolType &gt; create(const XmlElementPtr &amp;element, const dom::DocumentPtr &amp;document, ElementLinker &amp;elementLinker)</div><div class="ttdoc">Creates a OthersPool object from an XML element.</div><div class="ttdef"><b>Definition</b> PoolFactory.h:68</div></div>
@@ -235,7 +236,7 @@ $(document).ready(function(){initNavTree('DocumentFactory_8h_source.html',''); i
 <div class="ttc" id="aclassmusx_1_1util_1_1Logger_html_a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf"><div class="ttname"><a href="classmusx_1_1util_1_1Logger.html#a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf">musx::util::Logger::LogLevel::Verbose</a></div><div class="ttdeci">@ Verbose</div><div class="ttdoc">Informational messages that should only displayed when verbose logging is requested.</div></div>
 <div class="ttc" id="aclassmusx_1_1util_1_1Logger_html_a039905239762ae96745483d24588a68e"><div class="ttname"><a href="classmusx_1_1util_1_1Logger.html#a039905239762ae96745483d24588a68e">musx::util::Logger::log</a></div><div class="ttdeci">static void log(LogLevel level, const std::string &amp;message)</div><div class="ttdoc">Logs a message with a specific severity level.</div><div class="ttdef"><b>Definition</b> Logger.h:87</div></div>
 <div class="ttc" id="anamespacemusx_1_1dom_html_a5dd453394b3375a5be17055a82ddd9f0"><div class="ttname"><a href="namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0">musx::dom::SCORE_PARTID</a></div><div class="ttdeci">constexpr Cmper SCORE_PARTID</div><div class="ttdoc">The part id of the score.</div><div class="ttdef"><b>Definition</b> Fundamentals.h:79</div></div>
-<div class="ttc" id="anamespacemusx_html"><div class="ttname"><a href="namespacemusx.html">musx</a></div><div class="ttdoc">object model for musx file (enigmaxml)</div><div class="ttdef"><b>Definition</b> BaseClasses.h:35</div></div>
+<div class="ttc" id="anamespacemusx_html"><div class="ttname"><a href="namespacemusx.html">musx</a></div><div class="ttdoc">object model for musx file (enigmaxml)</div><div class="ttdef"><b>Definition</b> BaseClasses.h:36</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

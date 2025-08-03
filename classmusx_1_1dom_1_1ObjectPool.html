@@ -127,30 +127,34 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ObjectPool</b> ()
 <tr class="memdesc:a2e7d562c09f29c7bc68a8a2508f26961"><td class="mdescLeft">&#160;</td><td class="mdescRight">virtual destructor <br /></td></tr>
 <tr class="separator:a2e7d562c09f29c7bc68a8a2508f26961"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf6e537bfbb29f360aec9039dec34227" id="r_aaf6e537bfbb29f360aec9039dec34227"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#aaf6e537bfbb29f360aec9039dec34227">add</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key, <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#ae26eae6f8358d93cb80b692680875176">ObjectPtr</a> object)</td></tr>
-<tr class="memdesc:aaf6e537bfbb29f360aec9039dec34227"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> object to the pool.  <br /></td></tr>
+<tr class="memdesc:aaf6e537bfbb29f360aec9039dec34227"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an <code>ObjectBaseType</code> object to the pool.  <br /></td></tr>
 <tr class="separator:aaf6e537bfbb29f360aec9039dec34227"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a398f1a80a680e55451e7f18c15df60e4" id="r_a398f1a80a680e55451e7f18c15df60e4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a398f1a80a680e55451e7f18c15df60e4"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a398f1a80a680e55451e7f18c15df60e4">getArray</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
-<tr class="memdesc:a398f1a80a680e55451e7f18c15df60e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a vector of objects of a specific type from the pool.  <br /></td></tr>
-<tr class="separator:a398f1a80a680e55451e7f18c15df60e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4caf497b1d1ce1705ca75a2083e32f6e" id="r_a4caf497b1d1ce1705ca75a2083e32f6e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a4caf497b1d1ce1705ca75a2083e32f6e"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a4caf497b1d1ce1705ca75a2083e32f6e">getArrayForPart</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
-<tr class="memdesc:a4caf497b1d1ce1705ca75a2083e32f6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a vector of objects of a specific type from the pool.  <br /></td></tr>
-<tr class="separator:a4caf497b1d1ce1705ca75a2083e32f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b9452e2c1812a966a5c608192cd5efd" id="r_a2b9452e2c1812a966a5c608192cd5efd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a2b9452e2c1812a966a5c608192cd5efd"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a2b9452e2c1812a966a5c608192cd5efd">get</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
-<tr class="memdesc:a2b9452e2c1812a966a5c608192cd5efd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first (and usually only) object of a specific type from the pool.  <br /></td></tr>
-<tr class="separator:a2b9452e2c1812a966a5c608192cd5efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07db25a9071de742bd0e37a38a56d193" id="r_a07db25a9071de742bd0e37a38a56d193"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a07db25a9071de742bd0e37a38a56d193"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a07db25a9071de742bd0e37a38a56d193">getEffectiveForPart</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
-<tr class="memdesc:a07db25a9071de742bd0e37a38a56d193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first (and usually only) object of a specific type from the pool for a part.  <br /></td></tr>
-<tr class="separator:a07db25a9071de742bd0e37a38a56d193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a07535329e364b5688c5745600533b0" id="r_a9a07535329e364b5688c5745600533b0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a9a07535329e364b5688c5745600533b0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a9a07535329e364b5688c5745600533b0">getArray</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> requestedPartId) const</td></tr>
+<tr class="memdesc:a9a07535329e364b5688c5745600533b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a vector of objects of a specific type from the pool.  <br /></td></tr>
+<tr class="separator:a9a07535329e364b5688c5745600533b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a848eecce838a7a09f0a36e3876ab1d00" id="r_a848eecce838a7a09f0a36e3876ab1d00"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a848eecce838a7a09f0a36e3876ab1d00"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a848eecce838a7a09f0a36e3876ab1d00">getArrayForPart</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
+<tr class="memdesc:a848eecce838a7a09f0a36e3876ab1d00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a vector of objects of a specific type from the pool.  <br /></td></tr>
+<tr class="separator:a848eecce838a7a09f0a36e3876ab1d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addf661a4327a0748043216b0824a3ab6" id="r_addf661a4327a0748043216b0824a3ab6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:addf661a4327a0748043216b0824a3ab6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#addf661a4327a0748043216b0824a3ab6">getEffectiveForPart</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
+<tr class="memdesc:addf661a4327a0748043216b0824a3ab6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first (and usually only) object of a specific type from the pool for a part.  <br /></td></tr>
+<tr class="separator:addf661a4327a0748043216b0824a3ab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a9704fc8091ffafc1b546ed582ba0be6d" id="r_a9704fc8091ffafc1b546ed582ba0be6d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a9704fc8091ffafc1b546ed582ba0be6d">ObjectPool</a> (const std::unordered_map&lt; std::string, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">dom::Base::ShareMode</a> &gt; &amp;knownShareModes={})</td></tr>
-<tr class="memdesc:a9704fc8091ffafc1b546ed582ba0be6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object pool.  <br /></td></tr>
-<tr class="separator:a9704fc8091ffafc1b546ed582ba0be6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a668f3d7153cbd1979e5b02360679101a" id="r_a668f3d7153cbd1979e5b02360679101a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a668f3d7153cbd1979e5b02360679101a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a668f3d7153cbd1979e5b02360679101a">getSource</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
+<tr class="memdesc:a668f3d7153cbd1979e5b02360679101a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first (and usually only) object of a specific type from the pool.  <br /></td></tr>
+<tr class="separator:a668f3d7153cbd1979e5b02360679101a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accf3b7fc76af7764f5fafbd25128a0a6" id="r_accf3b7fc76af7764f5fafbd25128a0a6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:accf3b7fc76af7764f5fafbd25128a0a6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#accf3b7fc76af7764f5fafbd25128a0a6">getEffectiveSourceForPart</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
+<tr class="memdesc:accf3b7fc76af7764f5fafbd25128a0a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first (and usually only) object of a specific type from the pool for a part.  <br /></td></tr>
+<tr class="separator:accf3b7fc76af7764f5fafbd25128a0a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4619e765484658f731e64cc4bcf44a18" id="r_a4619e765484658f731e64cc4bcf44a18"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a4619e765484658f731e64cc4bcf44a18">ObjectPool</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, const std::unordered_map&lt; std::string, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">dom::Base::ShareMode</a> &gt; &amp;knownShareModes={})</td></tr>
+<tr class="memdesc:a4619e765484658f731e64cc4bcf44a18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object pool.  <br /></td></tr>
+<tr class="separator:a4619e765484658f731e64cc4bcf44a18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename ObjectBaseType&gt;<br />
@@ -163,8 +167,8 @@ class musx::dom::ObjectPool&lt; ObjectBaseType &gt;</div><p>A pool that manages 
   </dd>
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9704fc8091ffafc1b546ed582ba0be6d" name="a9704fc8091ffafc1b546ed582ba0be6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9704fc8091ffafc1b546ed582ba0be6d">&#9670;&#160;</a></span>ObjectPool()</h2>
+<a id="a4619e765484658f731e64cc4bcf44a18" name="a4619e765484658f731e64cc4bcf44a18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4619e765484658f731e64cc4bcf44a18">&#9670;&#160;</a></span>ObjectPool()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -177,9 +181,19 @@ template&lt;typename ObjectBaseType &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::ObjectPool </td>
           <td>(</td>
-          <td class="paramtype">const std::unordered_map&lt; std::string, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">dom::Base::ShareMode</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>knownShareModes</em> = <code>{}</code></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::unordered_map&lt; std::string, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">dom::Base::ShareMode</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>knownShareModes</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -192,6 +206,7 @@ template&lt;typename ObjectBaseType &gt; </div>
 <p>Constructs the object pool. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">document</td><td>THe document for this pool. </td></tr>
     <tr><td class="paramname">knownShareModes</td><td>Optional parameter that specifies known share modes for certain elements. These can be particurly important for <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da6adf97f83acf6453d4a6a4b1070f3754">Base::ShareMode::None</a> because there may be no parts containing them. </td></tr>
   </table>
   </dd>
@@ -236,7 +251,7 @@ template&lt;typename ObjectBaseType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Adds an <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> object to the pool. </p>
+<p>Adds an <code>ObjectBaseType</code> object to the pool. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">key</td><td>The key with which to store the object </td></tr>
@@ -247,8 +262,8 @@ template&lt;typename ObjectBaseType &gt; </div>
 
 </div>
 </div>
-<a id="a2b9452e2c1812a966a5c608192cd5efd" name="a2b9452e2c1812a966a5c608192cd5efd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b9452e2c1812a966a5c608192cd5efd">&#9670;&#160;</a></span>get()</h2>
+<a id="a9a07535329e364b5688c5745600533b0" name="a9a07535329e364b5688c5745600533b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a07535329e364b5688c5745600533b0">&#9670;&#160;</a></span>getArray()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -261,7 +276,67 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; T &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::get </td>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; T &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::getArray </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>requestedPartId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves a vector of objects of a specific type from the pool. </p>
+<p>This function may be used to</p><ul>
+<li>retrieve a multi-inci array</li>
+<li>get all the objects of a specific type, regardless of <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> value(s), such as getting a vector of all the <a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html">others::TextExpressionDef</a> instances.</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The derived type of <code>ObjectBaseType</code> to retrieve. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key value used to filter the objects. </td></tr>
+    <tr><td class="paramname">requestedPartId</td><td>The part for which this array was requested. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html" title="Provides optional per-type extension methods for MusxInstanceList.">MusxInstanceList</a> of shared pointers to objects of type <code>T</code>. </dd></dl>
+
+</div>
+</div>
+<a id="a848eecce838a7a09f0a36e3876ab1d00" name="a848eecce838a7a09f0a36e3876ab1d00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a848eecce838a7a09f0a36e3876ab1d00">&#9670;&#160;</a></span>getArrayForPart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ObjectBaseType &gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; T &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::getArrayForPart </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;&#160;</td>
           <td class="paramname"><em>key</em></td><td>)</td>
@@ -275,8 +350,58 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Retrieves the first (and usually only) object of a specific type from the pool. </p>
-<p>Many types are scalar values with only one instance per key. Use this function to retrieve them.</p>
+<p>Retrieves a vector of objects of a specific type from the pool. </p>
+<p>This function may be used to</p><ul>
+<li>retrieve a multi-inci array</li>
+<li>get all the objects of a specific type, regardless of <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> value(s), such as getting a vector of all the <a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html">others::TextExpressionDef</a> instances.</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The derived type of <code>ObjectBaseType</code> to retrieve. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key value used to filter the objects. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html" title="Provides optional per-type extension methods for MusxInstanceList.">MusxInstanceList</a> of shared pointers to objects of type <code>T</code>. </dd></dl>
+
+</div>
+</div>
+<a id="addf661a4327a0748043216b0824a3ab6" name="addf661a4327a0748043216b0824a3ab6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addf661a4327a0748043216b0824a3ab6">&#9670;&#160;</a></span>getEffectiveForPart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ObjectBaseType &gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::getEffectiveForPart </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the first (and usually only) object of a specific type from the pool for a part. </p>
+<p>If no part item exists, returns the score item.</p>
+<p>If the requestedPartId differs from the sourcePartId, a copy of the source is returned with the requestedPartId set correctly.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>
@@ -293,8 +418,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a398f1a80a680e55451e7f18c15df60e4" name="a398f1a80a680e55451e7f18c15df60e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a398f1a80a680e55451e7f18c15df60e4">&#9670;&#160;</a></span>getArray()</h2>
+<a id="accf3b7fc76af7764f5fafbd25128a0a6" name="accf3b7fc76af7764f5fafbd25128a0a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accf3b7fc76af7764f5fafbd25128a0a6">&#9670;&#160;</a></span>getEffectiveSourceForPart()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -307,7 +432,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; std::shared_ptr&lt; T &gt; &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::getArray </td>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::getEffectiveSourceForPart </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;&#160;</td>
           <td class="paramname"><em>key</em></td><td>)</td>
@@ -316,111 +441,60 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieves a vector of objects of a specific type from the pool. </p>
-<p>This function may be used to</p><ul>
-<li>retrieve a multi-inci array</li>
-<li>get all the objects of a specific type, regardless of <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> value(s), such as getting a vector of all the <a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html">others::TextExpressionDef</a> instances.</li>
-</ul>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">key</td><td>The key value used to filter the objects. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A vector of shared pointers to objects of type <code>T</code>. </dd></dl>
-
-</div>
-</div>
-<a id="a4caf497b1d1ce1705ca75a2083e32f6e" name="a4caf497b1d1ce1705ca75a2083e32f6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4caf497b1d1ce1705ca75a2083e32f6e">&#9670;&#160;</a></span>getArrayForPart()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename ObjectBaseType &gt; </div>
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::shared_ptr&lt; T &gt; &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::getArrayForPart </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;&#160;</td>
-          <td class="paramname"><em>key</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieves a vector of objects of a specific type from the pool. </p>
-<p>This function may be used to</p><ul>
-<li>retrieve a multi-inci array</li>
-<li>get all the objects of a specific type, regardless of <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> value(s), such as getting a vector of all the <a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html">others::TextExpressionDef</a> instances.</li>
-</ul>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">key</td><td>The key value used to filter the objects. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A vector of shared pointers to objects of type <code>T</code>. </dd></dl>
-
-</div>
-</div>
-<a id="a07db25a9071de742bd0e37a38a56d193" name="a07db25a9071de742bd0e37a38a56d193"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07db25a9071de742bd0e37a38a56d193">&#9670;&#160;</a></span>getEffectiveForPart()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename ObjectBaseType &gt; </div>
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; T &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::getEffectiveForPart </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;&#160;</td>
-          <td class="paramname"><em>key</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Retrieves the first (and usually only) object of a specific type from the pool for a part. </p>
+<dl class="section warning"><dt>Warning</dt><dd>The returned value is the source item from the pool and is guaranteed not to be a copy. Because of this, it does not reflect the requested part id. External callers should not directly call this function.</dd></dl>
 <p>If no part item exists, returns the score item.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key value used to filter the objects. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A shared_ptr to the type or nullptr if none exists </dd></dl>
+
+</div>
+</div>
+<a id="a668f3d7153cbd1979e5b02360679101a" name="a668f3d7153cbd1979e5b02360679101a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a668f3d7153cbd1979e5b02360679101a">&#9670;&#160;</a></span>getSource()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ObjectBaseType &gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt; <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::getSource </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the first (and usually only) object of a specific type from the pool. </p>
+<dl class="section warning"><dt>Warning</dt><dd>The returned value is the source item from the pool and is guaranteed not to be a copy. Because of this, it does not reflect the requested part id. External callers should not directly call this function.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>

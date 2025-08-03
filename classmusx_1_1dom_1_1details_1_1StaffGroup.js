@@ -29,8 +29,8 @@ var classmusx_1_1dom_1_1details_1_1StaffGroup =
     [ "getAbbreviatedName", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a522fa14dc0f0cdef500b8a8799553cd2", null ],
     [ "getFullInstrumentName", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9aea79affb9e919862e89b465441924f", null ],
     [ "getFullName", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#abb02f772315f32f003af1cbd00329816", null ],
-    [ "getMultiStaffInstGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a4d54e325dd3d92da7bb64664631e120f", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a316bdb7ce044bbfb8e65f2dcab6c75d8", null ],
+    [ "getMultiStaffInstGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#ad8af3f6660c88c5e4ee3ae84d07b872c", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#aa918dbffc9eea1e36e5c4a404f98df96", null ],
     [ "isAllMeasures", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a33803bfcc8d55829b7f5bc167de7a0f6", null ],
     [ "abbrvNameAlign", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a7398aa1fd6718d1321acfdf2238441ce", null ],
     [ "abbrvNameExpand", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a0959e3ac3bebc25fea61d7c72f0224b8", null ],
@@ -42,7 +42,7 @@ var classmusx_1_1dom_1_1details_1_1StaffGroup =
     [ "barlineType", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a8cd4fb5427d54ab645dade0ad7eb6ebc", null ],
     [ "bracket", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a479a055383bd9de736989d73317644cc", null ],
     [ "drawBarlines", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a675720317dd09f9e1790da1354c114d2", null ],
-    [ "endInst", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#aa23da020d9452ee6d99945c59d9df54e", null ],
+    [ "endInst", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#aa4d3b37711a512db07284afe78eb9095", null ],
     [ "endMeas", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#adddfe45e412b366057550a19ee7b2179", null ],
     [ "fullNameAlign", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9385b8af4ff9501f06de107b557f6cdb", null ],
     [ "fullNameExpand", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1781192a5d31e17d12f0fca3cce61af6", null ],
@@ -55,7 +55,7 @@ var classmusx_1_1dom_1_1details_1_1StaffGroup =
     [ "hideStaves", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a8a80adf3855d15cbe7c6d500ddf7a099", null ],
     [ "multiStaffGroupId", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a0db3d25fd1ae0701499bb3ec899cdee0", null ],
     [ "ownBarline", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1cc6fb87b6b097c49e22644cad80b875", null ],
-    [ "startInst", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a68dcda07b11e148f39f2cf2c0b7c29de", null ],
+    [ "startInst", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a3a2abffec16c8806501b8f0dbd2b3d26", null ],
     [ "startMeas", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#ab48e49330087f0dcc5a32364d9f674f1", null ],
-    [ "staves", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a976f395e6ed9a505e873efc5d0f58d01", null ]
+    [ "staves", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a80b5514a6426b185528a1ad429bc9811", null ]
 ];

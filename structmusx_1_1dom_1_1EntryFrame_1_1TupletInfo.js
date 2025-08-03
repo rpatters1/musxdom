@@ -1,6 +1,6 @@
 var structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo =
 [
-    [ "TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#aa78c371a760bfb64f11f93c8380a19eb", null ],
+    [ "TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a38a1fd252ba907632f566ce9cf710672", null ],
     [ "calcCreatesBeamContinuationLeft", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#ae34807df262d10a74ca2a9bf08e798f1", null ],
     [ "calcCreatesBeamContinuationRight", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a5a9874b3716c123c2d54d853747950d6", null ],
     [ "calcCreatesSingletonLeft", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a47519a96ebb5871394c35e50c26c642c", null ],
@@ -11,6 +11,6 @@ var structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo =
     [ "endIndex", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4767e3e0a24fb4dcf1645dea6ec5ae4a", null ],
     [ "startDura", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a93565de828240b684eb6114a42221cde", null ],
     [ "startIndex", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a02cbdd31f6215041a82e00cf40b444be", null ],
-    [ "tuplet", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a5217ef480dfb459be677a5b6cbde3317", null ],
+    [ "tuplet", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#acf84efcd41314f2c3397cf62e8ff0e5b", null ],
     [ "voice2", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#ad296b9cbfc35e51318fd4fb9a22831c8", null ]
 ];

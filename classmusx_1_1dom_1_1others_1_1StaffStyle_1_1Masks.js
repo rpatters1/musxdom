@@ -1,6 +1,6 @@
 var classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks =
 [
-    [ "Masks", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a619f56abd875416835a965da528404f0", null ],
+    [ "ContainedClassBase", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a53872e9c0b07633f81f5780d7ba13b9f", null ],
     [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a0425bb33be67498a7d4c0915bd3ca25c", null ],
     [ "abrvName", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#aaf776012c904d79bc235de61f6135446", null ],
     [ "abrvNamePos", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ad28845b1f7d819e04dc0c3fb3b6337ed", null ],
