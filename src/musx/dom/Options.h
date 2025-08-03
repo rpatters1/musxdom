@@ -307,8 +307,8 @@ public:
         ClefInfo calcInfo(const MusxInstance<others::Staff>& currStaff = nullptr) const;
 
 
-        /// @brief Calculate the font that applies to this clef, based on the options in #ClefDef.
-        /// @return A shared pointer to the font instance used by this #ClefDef.
+        /// @brief Calculate the font that applies to this clef, based on the options in @ref ClefDef.
+        /// @return A shared pointer to the font instance used by this @ref ClefDef.
         /// @throws std::invalid_argument if not found.
         MusxInstance<FontInfo> calcFont() const;
 

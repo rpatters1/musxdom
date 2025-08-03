@@ -180,6 +180,7 @@ public:
      *
      * @tparam T The derived type of `ObjectBaseType` to retrieve.
      * @param key The key value used to filter the objects.
+     * @param requestedPartId The part for which this array was requested.
      * @return An MusxInstanceList of shared pointers to objects of type `T`.
      */
     template <typename T>
@@ -302,8 +303,10 @@ protected:
         return getSource<T>(scoreKey);
     }
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
     friend MusxInstance<others::StaffComposite> others::StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition);
-
+#endif
+    
 public:
     /**
      * @brief Retrieves the first (and usually only) object of a specific type from the pool for a part.
@@ -326,6 +329,7 @@ public:
 
 protected:
     /// @brief Constructs the object pool
+    /// @param document THe document for this pool.
     /// @param knownShareModes Optional parameter that specifies known share modes for certain elements.
     /// These can be particurly important for Base::ShareMode::None because there may be no parts containing them.
     ObjectPool(const DocumentWeakPtr& document, const std::unordered_map<std::string, dom::Base::ShareMode>& knownShareModes = {})
@@ -345,6 +349,7 @@ private:
 class OptionsPool : protected ObjectPool<OptionsBase>
 {
 public:
+    /// @brief Constructor function
     OptionsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
 
     /** @brief Scalar version of #ObjectPool::add */
@@ -365,7 +370,7 @@ public:
         return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID }, SCORE_PARTID);
     }
 
-    /** @brief Scalar version of #ObjectPool::get */
+    /** @brief Get a single item out of the pool */
     template <typename T>
     MusxInstance<T> get() const
     {
@@ -410,7 +415,7 @@ public:
         return ObjectPool::getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper });
     }
 
-    /** @brief OthersPool version of #ObjectPool::get */
+    /** @brief Get a single item out of the pool */
     template <typename T>
     MusxInstance<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
     {
@@ -463,7 +468,7 @@ public:
         return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
     }
 
-    /** @brief DetailsPool version of #ObjectPool::get */
+    /** @brief Get a single DetailsBase item out of the pool (not EntryDetailsBase) */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     MusxInstance<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
     {
@@ -471,7 +476,7 @@ public:
         return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2, inci });
     }
 
-    /** @brief EntryDetailsPool version of #ObjectPool::get */
+    /** @brief Get a single EntryDetailsBase item out of the pool */
     template <typename T, typename std::enable_if_t<std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     MusxInstance<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
     {
@@ -509,6 +514,7 @@ using DetailsPoolPtr = std::shared_ptr<DetailsPool>;
 class EntryPool // uses different implementation than other pools for more efficient access
 {
 public:
+    /// @brief Constructor function
     EntryPool(const DocumentWeakPtr& document) : m_document(document) {}
 
     /** @brief Add an entry to the EntryPool. (Used by the factory.) */
@@ -541,6 +547,7 @@ using EntryPoolPtr = std::shared_ptr<EntryPool>;
 class TextsPool : protected ObjectPool<TextsBase>
 {
 public:
+    /// @brief Constructor fundtion
     TextsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
 
     /** @brief Texts version of #ObjectPool::add */
@@ -561,7 +568,7 @@ public:
         return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper }, SCORE_PARTID);
     }
 
-    /** @brief Texts version of #ObjectPool::get */
+    /** @brief Get a single item out of the pool */
     template <typename T>
     MusxInstance<T> get(Cmper cmper) const
     {

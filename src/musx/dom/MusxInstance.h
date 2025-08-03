@@ -50,8 +50,7 @@ class Staff;
  * @class MusxInstanceListBase
  * @brief A container of pooled shared object instances from an ObjectPool.
  *
- * This class wraps a std::vector of std::shared_ptr<T> and optionally adds
- * type-specific helper methods via @ref MusxInstanceListExtension.
+ * This class wraps a std::vector of @ref MusxInstance<T>.
  *
  * @tparam T The object type stored in the list (e.g., StaffUsed, SmartShape, etc.).
  */
@@ -111,12 +110,12 @@ class MusxInstanceList<others::StaffUsed> : public MusxInstanceListBase<others::
 public:
     using MusxInstanceListBase<others::StaffUsed>::MusxInstanceListBase;
 
-    /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
+    /// @brief Returns the @ref others::Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
     /// @param index The 0-based index to find.
     MusxInstance<others::Staff> getStaffInstanceAtIndex(Cmper index) const;
 
     /// @brief Returns the 0-based index of the StaffCmper or std::nullopt if not found.
-    /// @param staffId The @ref Staff cmper value to find.
+    /// @param staffId The @ref others::Staff cmper value to find.
     std::optional<size_t> getIndexForStaff(StaffCmper staffId) const;
 };
 

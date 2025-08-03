@@ -182,6 +182,7 @@ MusxInstance<TimeSignature> IndependentStaffDetails::createDisplayTimeSignature(
 // ***** LyricsAssign *****
 // ************************
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 template <typename TextType>
 util::EnigmaParsingContext details::LyricAssign::getRawTextCtx() const
 {
@@ -193,7 +194,6 @@ util::EnigmaParsingContext details::LyricAssign::getRawTextCtx() const
     return {};
 }
 
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsVerse>() const;
 template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsChorus>() const;
 template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsSection>() const;
