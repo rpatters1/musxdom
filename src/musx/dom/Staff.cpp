@@ -772,6 +772,46 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
     return result;
 }
 
+// **********************
+// ***** StaffStyle *****
+// **********************
+
+MusxInstanceList<others::StaffStyle> others::StaffStyle::findAllOverlappingStyles(const DocumentPtr& document,
+        Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition)
+{
+    auto staffStyleAssignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
+    std::vector<MusxInstance<others::StaffStyleAssign>> applicableAssignments;
+    std::copy_if(staffStyleAssignments.begin(), staffStyleAssignments.end(), std::back_inserter(applicableAssignments),
+        [measId, eduPosition](const MusxInstance<others::StaffStyleAssign>& range) {
+            return range->contains(measId, eduPosition);
+        });
+
+    MusxInstanceList<others::StaffStyle> result(document, partId);
+    result.reserve(applicableAssignments.size());
+    for (const auto& assign : applicableAssignments) {
+        if (auto style = assign->getStaffStyle()) {
+            result.emplace_back(style);
+        }
+    }
+    return result;
+ }
+
+// ****************************
+// ***** StaffStyleAssign *****
+// ****************************
+
+MusxInstance<others::StaffStyle> others::StaffStyleAssign::getStaffStyle() const
+{
+    auto result = getDocument()->getOthers()->get<others::StaffStyle>(getRequestedPartId(), styleId);
+    if (!result) {
+        MUSX_INTEGRITY_ERROR("Staff style assignment has invalid staff style ID " + std::to_string(styleId)
+            + ": Part " + std::to_string(getRequestedPartId())
+            + " Staff " + std::to_string(getCmper())
+        );
+    }
+    return result;
+}
+
 } // namespace others
 } // namespace dom
 } // namespace musx
