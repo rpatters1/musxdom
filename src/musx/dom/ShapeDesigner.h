@@ -36,6 +36,7 @@ namespace dom {
 /// @brief Enumerates the shape types we can recognize semantically.
 enum class KnownShapeDefType
 {
+    Blank,                      ///< A blank shape containing no instructions.
     TenutoMark,                 ///< A horizontal tenuto mark, typically used as an articulation symbol.
 
     // Add more known types here

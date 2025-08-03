@@ -614,7 +614,7 @@ std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() co
             std::pair<util::Fraction, util::Fraction> result = std::make_pair((std::numeric_limits<util::Fraction>::max)(), (std::numeric_limits<util::Fraction>::min)());
             for (const auto& systemStaff : systemStaves) {
                 auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getRequestedPartId(), getCmper(), systemStaff->getCmper());
-                const util::Fraction val = staffSize ? double(staffSize->staffPercent) / 100.0 : 1.0;
+                const util::Fraction val = staffSize ? util::Fraction(staffSize->staffPercent / 100) : 1;
                 if (val < result.first) result.first = val;
                 if (val > result.second) result.second = val;
             }

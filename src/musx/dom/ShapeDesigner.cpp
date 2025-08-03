@@ -80,6 +80,9 @@ static bool isTenutoMark(const ShapeDef& shape)
 
 std::optional<KnownShapeDefType> ShapeDef::recognize() const
 {
+    if (isBlank()) {
+        return KnownShapeDefType::Blank;
+    }
     if (isTenutoMark(*this)) {
         return KnownShapeDefType::TenutoMark;
     }

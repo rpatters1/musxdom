@@ -51,7 +51,7 @@ namespace dom {
 
 std::string FontInfo::getName() const
 {
-    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getSourcePartId(), fontId)) {
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(SCORE_PARTID, fontId)) {
         return fontDef->name;
     }
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
@@ -59,7 +59,7 @@ std::string FontInfo::getName() const
 
 void FontInfo::setFontIdByName(const std::string& name)
 {
-    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>(getSourcePartId());
+    auto fontDefs = getDocument()->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID);
     for (auto fontDef : fontDefs) {
         if (fontDef->name == name) {
             fontId = fontDef->getCmper();
@@ -108,7 +108,7 @@ bool FontInfo::calcIsSMuFL() const
 
 bool FontInfo::calcIsSymbolFont() const
 {
-    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(getSourcePartId(), fontId)) {
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(SCORE_PARTID, fontId)) {
         return fontDef->calcIsSymbolFont();
     }
     throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
@@ -219,7 +219,7 @@ std::vector<unsigned> KeySignature::calcTonalCenterArrayForSharps() const
         return { 5, 2, 6, 3, 0, 4, 1, 5 };
     }
     if (!isBuiltIn()) {
-        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(getSourcePartId(), getKeyMode())) {
+        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterSharps>(SCORE_PARTID, getKeyMode())) {
             return centers->values;
         }
     }
@@ -233,7 +233,7 @@ std::vector<unsigned> KeySignature::calcTonalCenterArrayForFlats() const
         return { 5, 1, 4, 0, 3, 6, 2, 5 };
     }
     if (!isBuiltIn()) {
-        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(getSourcePartId(), getKeyMode())) {
+        if (auto centers = getDocument()->getOthers()->get<others::TonalCenterFlats>(SCORE_PARTID, getKeyMode())) {
             return centers->values;
         }
     }
@@ -257,11 +257,11 @@ std::vector<int> KeySignature::calcAcciAmountsArray(KeyContext ctx) const
 
     if (!isBuiltIn()) {
         if (alter >= 0) {
-            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(getSourcePartId(), getKeyMode())) {
+            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountSharps>(SCORE_PARTID, getKeyMode())) {
                 return amounts->values;
             }
         } else {
-            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountFlats>(getSourcePartId(), getKeyMode())) {
+            if (auto amounts = getDocument()->getOthers()->get<others::AcciAmountFlats>(SCORE_PARTID, getKeyMode())) {
                 return amounts->values;
             }
         }
@@ -281,11 +281,11 @@ std::vector<unsigned> KeySignature::calcAcciOrderArray(KeyContext ctx) const
 
     if (!isBuiltIn()) {
         if (alter >= 0) {
-            if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(getSourcePartId(), getKeyMode())) {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderSharps>(SCORE_PARTID, getKeyMode())) {
                 return order->values;
             }
         } else {
-            if (auto order = getDocument()->getOthers()->get<others::AcciOrderFlats>(getSourcePartId(), getKeyMode())) {
+            if (auto order = getDocument()->getOthers()->get<others::AcciOrderFlats>(SCORE_PARTID, getKeyMode())) {
                 return order->values;
             }
         }
@@ -380,7 +380,7 @@ void KeySignature::setTransposition(const MusxInstance<others::Staff>& staff)
 std::optional<std::vector<int>> KeySignature::calcKeyMap() const
 {
     size_t tonalCenter = static_cast<size_t>(calcTonalCenterArrayForSharps()[0]);
-    auto keyMap = getDocument()->getOthers()->get<others::KeyMapArray>(getSourcePartId(), getKeyMode());
+    auto keyMap = getDocument()->getOthers()->get<others::KeyMapArray>(SCORE_PARTID, getKeyMode());
     if (!keyMap || keyMap->steps.empty()) {
         return std::nullopt;
     }
@@ -417,7 +417,7 @@ std::optional<std::vector<int>> KeySignature::calcKeyMap() const
 
 int KeySignature::calcEDODivisions() const
 {
-    if (auto keyFormat = getDocument()->getOthers()->get<others::KeyFormat>(getSourcePartId(), getKeyMode())) {
+    if (auto keyFormat = getDocument()->getOthers()->get<others::KeyFormat>(SCORE_PARTID, getKeyMode())) {
         return static_cast<int>(keyFormat->semitones);
     }
     return music_theory::STANDARD_12EDO_STEPS;

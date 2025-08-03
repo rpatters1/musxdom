@@ -198,6 +198,8 @@ private:
  */
 class CommonClassBase : public Base
 {
+    Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
+
 public:
     /**
      * @brief Constructs a CommonClassBase object.
@@ -220,6 +222,8 @@ protected:
  */
 class ContainedClassBase : public Base
 {
+    Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
+
 public:
     /**
      * @brief Constructs a ContainedClassBase object.
@@ -255,6 +259,8 @@ private:
  * Options types derive from this base class so they can reside in the options pool.
  */
 class OptionsBase : public Base {
+    Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
+
 protected:
     /**
      * @brief Constructs the OptionsBase and validates XmlNodeName in the derived class.
@@ -549,6 +555,8 @@ class FontInfo;
  */
 class TextsBase : public Base
 {
+    Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
+
 public:
     /**
      * @brief Constructs a `TextsBase` object.

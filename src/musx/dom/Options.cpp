@@ -23,6 +23,7 @@
 #include <vector>
 #include <cstdlib>
 #include <exception>
+#include <cwctype>
 
 #include "musx/musx.h"
 
@@ -37,7 +38,7 @@ namespace options {
 bool ClefOptions::ClefDef::isBlank() const
 {
     if (isShape) {
-        if (const auto shape = shapeId ? getDocument()->getOthers()->get<others::ShapeDef>(getSourcePartId(), shapeId) : nullptr) {
+        if (const auto shape = shapeId ? getDocument()->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId) : nullptr) {
             return shape->isBlank();
         }
         return true;
@@ -65,7 +66,7 @@ ClefOptions::ClefInfo ClefOptions::ClefDef::calcInfo(const MusxInstance<others::
     auto calcTabType = [&]() -> music_theory::ClefType {
         music_theory::ClefType result = music_theory::ClefType::Tab;
         if (isShape) {
-            if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(getSourcePartId(), shapeId)) {
+            if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId)) {
                 shape->iterateInstructions([&](others::ShapeDef::InstructionType instructionType, std::vector<int> data) -> bool {
                     if (std::optional<FontInfo> fontInfo = others::ShapeInstruction::parseSetFont(getDocument(), instructionType, data)) {
                         if (fontInfo->getName().find("Times") != std::string::npos) { // Finale default file uses "Times" or "Times New Roman"
