@@ -96,6 +96,7 @@ constexpr static musxtest::string_view xml = R"xml(
 TEST(TextOptionsTest, PropertiesAndSymbolInserts)
 {
     using TextOptions = musx::dom::options::TextOptions;
+    using AccidentalInsertSymbolType = musx::dom::options::AccidentalInsertSymbolType;
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto options = doc->getOptions();
@@ -122,7 +123,7 @@ TEST(TextOptionsTest, PropertiesAndSymbolInserts)
     // insertSymbolInfo
     EXPECT_EQ(textOptions->symbolInserts.size(), 5);
 
-    auto sharpInfo = textOptions->symbolInserts[TextOptions::InsertSymbolType::Sharp];
+    auto sharpInfo = textOptions->symbolInserts.at(AccidentalInsertSymbolType::Sharp);
     ASSERT_TRUE(sharpInfo);
     EXPECT_EQ(sharpInfo->trackingBefore, 35);
     EXPECT_EQ(sharpInfo->trackingAfter, 23);
@@ -130,7 +131,7 @@ TEST(TextOptionsTest, PropertiesAndSymbolInserts)
     EXPECT_TRUE(sharpInfo->symFont);
     EXPECT_EQ(sharpInfo->symChar, U'#');
 
-    auto flatInfo = textOptions->symbolInserts[TextOptions::InsertSymbolType::Flat];
+    auto flatInfo = textOptions->symbolInserts.at(AccidentalInsertSymbolType::Flat);
     ASSERT_TRUE(flatInfo);
     EXPECT_EQ(flatInfo->trackingBefore, 60);
     EXPECT_EQ(flatInfo->trackingAfter, 0); // not in xml
@@ -138,7 +139,7 @@ TEST(TextOptionsTest, PropertiesAndSymbolInserts)
     EXPECT_TRUE(flatInfo->symFont);
     EXPECT_EQ(flatInfo->symChar, U'b');
 
-    auto naturalInfo = textOptions->symbolInserts[TextOptions::InsertSymbolType::Natural];
+    auto naturalInfo = textOptions->symbolInserts.at(AccidentalInsertSymbolType::Natural);
     ASSERT_TRUE(naturalInfo);
     EXPECT_EQ(naturalInfo->trackingBefore, 50);
     EXPECT_EQ(naturalInfo->trackingAfter, 0); // not in xml
@@ -146,14 +147,14 @@ TEST(TextOptionsTest, PropertiesAndSymbolInserts)
     EXPECT_TRUE(naturalInfo->symFont);
     EXPECT_EQ(naturalInfo->symChar, U'n');
 
-    auto dblSharpInfo = textOptions->symbolInserts[TextOptions::InsertSymbolType::DblSharp];
+    auto dblSharpInfo = textOptions->symbolInserts.at(AccidentalInsertSymbolType::DblSharp);
     ASSERT_TRUE(dblSharpInfo);
     EXPECT_EQ(dblSharpInfo->trackingBefore, 40);
     EXPECT_EQ(dblSharpInfo->baselineShiftPerc, 34);
     EXPECT_TRUE(dblSharpInfo->symFont);
     EXPECT_EQ(dblSharpInfo->symChar, U'\u00DC'); // Unicode 220 is Ü (you may adjust if your codepoint->char32_t mapping differs)
 
-    auto dblFlatInfo = textOptions->symbolInserts[TextOptions::InsertSymbolType::DblFlat];
+    auto dblFlatInfo = textOptions->symbolInserts.at(AccidentalInsertSymbolType::DblFlat);
     ASSERT_TRUE(dblFlatInfo);
     EXPECT_EQ(dblFlatInfo->trackingBefore, 60);
     EXPECT_EQ(dblFlatInfo->baselineShiftPerc, 19);

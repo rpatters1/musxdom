@@ -237,3 +237,43 @@ TEST(TextRepeatAssign, Populate)
     EXPECT_TRUE(textRepeatAssign->jumpIfIgnoring);
     EXPECT_EQ(textRepeatAssign->staffList, 1);
 }
+
+TEST(StaffListRepeat, Populate)
+{
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto names = others->getArray<others::StaffListRepeatName>(SCORE_PARTID);
+    ASSERT_GE(names.size(), 2);
+    EXPECT_EQ(names[0]->name, "Repeats Top Staff");
+    EXPECT_EQ(names[1]->name, "Repeats Other");
+
+    auto parts = others->getArray<others::StaffListRepeatParts>(SCORE_PARTID);
+    ASSERT_GE(parts.size(), names.size());
+    EXPECT_EQ(names[0]->getCmper(), parts[0]->getCmper());
+    musxtest::staffListCheck(names[0]->name, parts[0], { -1 });
+    EXPECT_EQ(names[1]->getCmper(), parts[1]->getCmper());
+    musxtest::staffListCheck(names[1]->name, parts[1], { -2, 2, 3 });
+
+    auto partsForced = others->getArray<others::StaffListRepeatPartsForced>(SCORE_PARTID);
+    ASSERT_GE(partsForced.size(), 1);
+    EXPECT_EQ(names[1]->getCmper(), partsForced[0]->getCmper()) << "partsForced is for the 2nd staff list";
+    musxtest::staffListCheck(names[1]->name, partsForced[0], { 3 });
+
+    auto score = others->getArray<others::StaffListRepeatScore>(SCORE_PARTID);
+    ASSERT_GE(score.size(), names.size());
+    EXPECT_EQ(names[0]->getCmper(), score[0]->getCmper());
+    musxtest::staffListCheck(names[0]->name, score[0], { -1 });
+    EXPECT_EQ(names[1]->getCmper(), score[1]->getCmper());
+    musxtest::staffListCheck(names[1]->name, score[1], { -2, 1, 3 });
+
+    auto scoreForced = others->getArray<others::StaffListRepeatScoreForced>(SCORE_PARTID);
+    ASSERT_GE(scoreForced.size(), 1);
+    EXPECT_EQ(names[1]->getCmper(), scoreForced[0]->getCmper()) << "partsForced is for the 2nd staff list";
+    musxtest::staffListCheck(names[1]->name, scoreForced[0], { -2, 1 });
+}

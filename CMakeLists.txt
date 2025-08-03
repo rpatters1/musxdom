@@ -37,14 +37,21 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(MUSX_SRC_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Implementations.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/CommonClasses.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Details.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Document.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Entries.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/MusxInstance.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Options.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Others.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/PercussionNoteType.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/ShapeDesigner.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/SmartShape.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Staff.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsEntries.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Texts.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsCommon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsDetails.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsEntries.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOptions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOthers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/EnigmaString.cpp

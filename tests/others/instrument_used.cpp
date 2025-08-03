@@ -64,9 +64,9 @@ TEST(InstrumentUsedTest, PopulateFields)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
-    // Test InstrumentUsed with cmper=1 (system) and inci=0
+    // Test StaffUsed with cmper=1 (system) and inci=0
     {
-        auto instUsed = others->get<others::InstrumentUsed>(SCORE_PARTID, 1, 0);
+        auto instUsed = others->get<others::StaffUsed>(SCORE_PARTID, 1, 0);
         ASSERT_TRUE(instUsed);
 
         EXPECT_EQ(instUsed->staffId, 6);
@@ -79,9 +79,9 @@ TEST(InstrumentUsedTest, PopulateFields)
         EXPECT_EQ(instUsed->range->endEdu, 2147483647);
     }
 
-    // Test InstrumentUsed with cmper=1 (system) and inci=1
+    // Test StaffUsed with cmper=1 (system) and inci=1
     {
-        auto instUsed = others->get<others::InstrumentUsed>(SCORE_PARTID, 1, 1);
+        auto instUsed = others->get<others::StaffUsed>(SCORE_PARTID, 1, 1);
         ASSERT_TRUE(instUsed);
 
         EXPECT_EQ(instUsed->staffId, 16);

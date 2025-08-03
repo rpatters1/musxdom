@@ -112,7 +112,7 @@ public:
     template <typename T>
     struct is_registered_type : std::disjunction<std::is_same<T, Types>...> {};
 
-    /// @brief Shorthand to get the value of #is_registered_type.
+    /// @brief Shorthand to get the value of @ref is_registered_type.
     /// @tparam T  The class to check.
     template <typename T>
     static constexpr bool is_registered_type_v = is_registered_type<T>::value;
@@ -233,7 +233,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TonalCenterFlats,
     dom::others::TonalCenterSharps,
     dom::others::SystemLock,        // xml node is "lockMeas", which is still sequenced non-alphabetically
-    dom::others::InstrumentUsed,
+    dom::others::StaffUsed,
     dom::others::KeyFormat,
     dom::others::KeyMapArray,
     dom::others::KeyAttributes,
@@ -260,6 +260,11 @@ using RegisteredOthers = TypeRegistry <
     dom::others::SmartShapeMeasureAssign,
     dom::others::SmartShapeCustomLine,      // node name is `ssLineStyle`
     dom::others::StaffSystem,
+    dom::others::StaffListRepeatName,
+    dom::others::StaffListRepeatParts,
+    dom::others::StaffListRepeatPartsForced,
+    dom::others::StaffListRepeatScore,
+    dom::others::StaffListRepeatScoreForced,
     dom::others::Staff,
     dom::others::StaffStyle,
     dom::others::StaffStyleAssign,
@@ -277,6 +282,9 @@ using RegisteredOthers = TypeRegistry <
     dom::others::PartGlobals,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName,
+    dom::others::StaffListCategoryName,
+    dom::others::StaffListCategoryParts,
+    dom::others::StaffListCategoryScore,
     dom::others::PercussionNoteInfo,
     dom::others::MultiStaffInstrumentGroup,
     dom::others::MultiStaffGroupId

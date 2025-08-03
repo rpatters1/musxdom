@@ -404,3 +404,38 @@ TEST(ShapeExpressionDef, Populate)
     ASSERT_NE(it, cat->shapeExpressions.end());
     ASSERT_TRUE(it->second.lock());
 }
+
+TEST(StaffListCategory, Populate)
+{
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto names = others->getArray<others::StaffListCategoryName>(SCORE_PARTID);
+    ASSERT_GE(names.size(), 3);
+    EXPECT_EQ(names[0]->name, "Top Staff");
+    EXPECT_EQ(names[1]->name, "Bottom Staff");
+    EXPECT_EQ(names[2]->name, "Tempo Staves");
+
+    auto parts = others->getArray<others::StaffListCategoryParts>(SCORE_PARTID);
+    ASSERT_EQ(parts.size(), 8) << " there should always be 8 canned staff lists (unless user removed all staff assignments for one)";
+    EXPECT_EQ(names[0]->getCmper(), parts[0]->getCmper());
+    musxtest::staffListCheck(names[0]->name, parts[0], { -1 });
+    EXPECT_EQ(names[1]->getCmper(), parts[1]->getCmper());
+    musxtest::staffListCheck(names[1]->name, parts[1], { -2 });
+    EXPECT_EQ(names[2]->getCmper(), parts[2]->getCmper());
+    musxtest::staffListCheck(names[2]->name, parts[2], { -1 });
+
+    auto score = others->getArray<others::StaffListCategoryScore>(SCORE_PARTID);
+    ASSERT_EQ(score.size(), 8) << " there should always be 8 canned staff lists (unless user removed all staff assignments for one)";
+    EXPECT_EQ(names[0]->getCmper(), score[0]->getCmper());
+    musxtest::staffListCheck(names[0]->name, score[0], { -1 });
+    EXPECT_EQ(names[1]->getCmper(), score[1]->getCmper());
+    musxtest::staffListCheck(names[1]->name, score[1], { -2 });
+    EXPECT_EQ(names[2]->getCmper(), score[2]->getCmper());
+    musxtest::staffListCheck(names[2]->name, score[2], { 1, 2, 3 });
+}

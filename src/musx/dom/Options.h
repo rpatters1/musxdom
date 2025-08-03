@@ -280,12 +280,10 @@ public:
     /**
      * @brief Represents a single clef definition.
      */
-    class ClefDef : public Base
+    class ClefDef : public ContainedClassBase
     {
     public:
-        /** @brief the constructor */
-        explicit ClefDef(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        using ContainedClassBase::ContainedClassBase;
             
         int middleCPos{};               ///< Staff position of middle-C for this clef from reference staffline (usually the top). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
@@ -306,13 +304,13 @@ public:
         /// of tablature always return a tab clef and staves with a notation style of percussion always return a percussion clef. Normal notation style
         /// detects clefs as if @p currStaff had not been supplied.
         /// @return See #ClefInfo.
-        ClefInfo calcInfo(const std::shared_ptr<const others::Staff>& currStaff = nullptr) const;
+        ClefInfo calcInfo(const MusxInstance<others::Staff>& currStaff = nullptr) const;
 
 
-        /// @brief Calculate the font that applies to this clef, based on the options in #ClefDef.
-        /// @return A shared pointer to the font instance used by this #ClefDef.
+        /// @brief Calculate the font that applies to this clef, based on the options in @ref ClefDef.
+        /// @return A shared pointer to the font instance used by this @ref ClefDef.
         /// @throws std::invalid_argument if not found.
-        std::shared_ptr<const FontInfo> calcFont() const;
+        MusxInstance<FontInfo> calcFont() const;
 
         static const xml::XmlElementArray<ClefDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
@@ -330,12 +328,12 @@ public:
     /**
      * @brief Vector of clef definitions (@ref ClefDef).
      */
-    std::vector<std::shared_ptr<ClefDef>> clefDefs;
+    std::vector<MusxInstance<ClefDef>> clefDefs;
 
     /// @brief Bounds-checked accessor function for #clefDefs.
     /// @param clefIndex The index to retrieve.
     /// @throws std::out_of_range if index is out of range.
-    std::shared_ptr<ClefDef> getClefDef(ClefIndex clefIndex) const
+    MusxInstance<ClefDef> getClefDef(ClefIndex clefIndex) const
     {
         MUSX_ASSERT_IF(clefIndex >= clefDefs.size()) {
             throw std::out_of_range("Clef index " + std::to_string(clefIndex) + " does not exist in document.");
@@ -467,7 +465,7 @@ public:
      *
      * An unordered map that associates each `FontType` with its corresponding `FontInfo` settings.
      */
-    std::unordered_map<FontType, std::shared_ptr<FontInfo>> fontOptions;
+    std::unordered_map<FontType, MusxInstance<FontInfo>> fontOptions;
 
     /**
      * @brief get the `FontInfo` for a particular type
@@ -475,7 +473,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    std::shared_ptr<FontInfo> getFontInfo(FontType type) const;
+    MusxInstance<FontInfo> getFontInfo(FontType type) const;
 
     /**
      * @brief get the `FontInfo` for a particular type from the document pool
@@ -484,7 +482,7 @@ public:
      * @return a shared pointer to the font info for that type
      * @throws std::invalid_paremter if the type is not found in the document
      */
-    static std::shared_ptr<FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
+    static MusxInstance<FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
 
     /**
      * @brief The XML node name for this type.
@@ -683,8 +681,9 @@ public:
     std::unordered_map<SyllablePosStyleType, std::shared_ptr<SyllablePosStyle>> syllablePosStyles;     ///< Syllable positioning styles
     std::unordered_map<WordExtConnectStyleType, std::shared_ptr<WordExtConnectStyle>> wordExtConnectStyles; ///< Word extension connection styles
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
+        this->OptionsBase::integrityCheck(ptrToThis);
         if (!altHyphenFont) {
             altHyphenFont = std::make_shared<FontInfo>(getDocument());
         }
@@ -1001,7 +1000,7 @@ public:
      * @returns A pointer to a detached instance of @ref PageFormat that is a best approximation
      * to the settings for the input part.
      */
-    std::shared_ptr<PageFormat> calcPageFormatForPart(Cmper partId) const;
+    MusxInstance<PageFormat> calcPageFormatForPart(Cmper partId) const;
 
     /**
      * @brief Constructor for PageFormatOptions.
@@ -1364,6 +1363,17 @@ public:
     static const xml::XmlElementArray<StemOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/// @enum AccidentalInsertSymbolType
+/// @brief Insert symbol types for accidentals
+enum class AccidentalInsertSymbolType
+{
+    Sharp,
+    Flat,
+    Natural,
+    DblSharp,
+    DblFlat
+};
+
 /**
  * @class TextOptions
  * @brief Options controlling text rendering in the musx file. Many of these options are default values that are inserted
@@ -1422,17 +1432,6 @@ public:
         Abbrev      ///< Abbreviated date format, based on locale. US format is Mon DD, YYYY.
     };
 
-    /// @enum InsertSymbolType
-    /// @brief Insert symbol types
-    enum class InsertSymbolType
-    {
-        Sharp,
-        Flat,
-        Natural,
-        DblSharp,
-        DblFlat
-    };
-
     int textLineSpacingPercent{};                 ///< "Line Spacing: Automatic" percent value
     bool showTimeSeconds{};                       ///< "Include Seconds in Time Stamp"
     DateFormat dateFormat{};                      ///< "Date Format"
@@ -1449,11 +1448,9 @@ public:
     bool textIsEdgeAligned{};                     ///< "Position from Page Edge"
 
     /// @brief Insert symbol information
-    struct InsertSymbolInfo : public Base
+    struct InsertSymbolInfo : public ContainedClassBase
     {
-        /** @brief the constructor */
-        explicit InsertSymbolInfo(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        using ContainedClassBase::ContainedClassBase;
 
         int trackingBefore{};                     ///< Tracking before in EMs (1/1000 font size units)
         int trackingAfter{};                      ///< Tracking after in EMs (1/1000 font size units)
@@ -1461,8 +1458,9 @@ public:
         std::shared_ptr<FontInfo> symFont;        ///< Symbol font (Percent-based size is a percent of the preceding font size in the Enigma string.)
         char32_t symChar{};                       ///< Symbol character
 
-        void integrityCheck() override
+        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
         {
+            this->ContainedClassBase::integrityCheck(ptrToThis);
             if (!symFont) {
                 symFont = std::make_shared<FontInfo>(getDocument(), /*sizeIsPercent*/ true);
                 symFont->fontSize = 100;
@@ -1473,7 +1471,7 @@ public:
         static const xml::XmlElementArray<InsertSymbolInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
-    std::unordered_map<InsertSymbolType, std::shared_ptr<InsertSymbolInfo>> symbolInserts; ///< Insert symbol information map
+    std::unordered_map<AccidentalInsertSymbolType, std::shared_ptr<InsertSymbolInfo>> symbolInserts; ///< Insert symbol information map
 
     constexpr static std::string_view XmlNodeName = "textOptions"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

@@ -45,23 +45,23 @@ static bool isTenutoMark(const ShapeDef& shape)
     };
 
     size_t nextIndex = 0;
-    shape.iterateInstructions([&](ShapeDef::InstructionType inst, std::vector<int> data) {
-        if (inst == ShapeDef::InstructionType::SetDash) {
+    shape.iterateInstructions([&](ShapeDef::InstructionType staffId, std::vector<int> data) {
+        if (staffId == ShapeDef::InstructionType::SetDash) {
             return true; // skip SetDash
         }
         if (nextIndex >= expectedInsts.size()) {
             nextIndex++; // assure no tenuto is returned
             return false;
         }
-        if (inst != expectedInsts[nextIndex]) {
+        if (staffId != expectedInsts[nextIndex]) {
             return false;
         }
-        if (const auto lineWidth = ShapeInstruction::parseLineWidth(inst, data)) {
+        if (const auto lineWidth = ShapeInstruction::parseLineWidth(staffId, data)) {
             if (lineWidth->efix < 4 * EFIX_PER_EVPU || lineWidth->efix > 6 * EFIX_PER_EVPU) {
                 return false;
             }
         }
-        else if (const auto rLineTo = ShapeInstruction::parseRLineTo(inst, data)) {
+        else if (const auto rLineTo = ShapeInstruction::parseRLineTo(staffId, data)) {
             if (rLineTo->dx < EVPU_PER_SPACE || rLineTo->dx > 1.5 * EVPU_PER_SPACE || rLineTo->dy != 0) {
                 return false;
             }
@@ -80,6 +80,9 @@ static bool isTenutoMark(const ShapeDef& shape)
 
 std::optional<KnownShapeDefType> ShapeDef::recognize() const
 {
+    if (isBlank()) {
+        return KnownShapeDefType::Blank;
+    }
     if (isTenutoMark(*this)) {
         return KnownShapeDefType::TenutoMark;
     }
@@ -88,8 +91,8 @@ std::optional<KnownShapeDefType> ShapeDef::recognize() const
 
 void ShapeDef::iterateInstructions(std::function<bool(ShapeDef::InstructionType, std::vector<int>)> callback) const
 {
-    auto insts = getDocument()->getOthers()->get<ShapeInstructionList>(getPartId(), instructionList);
-    auto data = getDocument()->getOthers()->get<ShapeData>(getPartId(), dataList);
+    auto insts = getDocument()->getOthers()->get<ShapeInstructionList>(getRequestedPartId(), instructionList);
+    auto data = getDocument()->getOthers()->get<ShapeData>(getRequestedPartId(), dataList);
     if (insts && data) {
         size_t currentDataIndex = 0;
         for (const auto& inst : insts->instructions) {

@@ -123,7 +123,7 @@ class LyricsTextBase : public TextsBase
 public:
     using TextsBase::TextsBase;
 
-    std::vector<std::shared_ptr<LyricsSyllableInfo>> syllables; ///< the syllable info for the lyric text, constructed by the factory
+    std::vector<std::shared_ptr<const LyricsSyllableInfo>> syllables; ///< the syllable info for the lyric text, constructed by the factory
 
     /// @brief Creates the syllables array. Used by the factory but available at any time.
     void createSyllableInfo();

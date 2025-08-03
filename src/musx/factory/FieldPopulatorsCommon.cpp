@@ -82,6 +82,10 @@ MUSX_XML_ELEMENT_ARRAY(KeySignature, {
     {"hideKeySigShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->hideKeySigShowAccis = populateBoolean(e, i); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(OthersName, {
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<OthersName>& i) { i->name = e->getText(); }},
+});
+
 namespace others {
 
 MUSX_XML_ELEMENT_ARRAY(Enclosure, {

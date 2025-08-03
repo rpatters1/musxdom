@@ -297,13 +297,13 @@ public:
     std::optional<music_theory::DiatonicMode> calcDiatonicMode() const;
 
     /// @brief returns whether the two key signatures represent the same key signature, taking into account transposition.
-    bool isSame(const KeySignature& src)
+    bool isSame(const KeySignature& src) const
     {
         return isSameConcert(src) && m_alterationOffset == src.m_alterationOffset && m_octaveDisplacement == src.m_octaveDisplacement;
     }
 
     /// @brief returns whether the two key signatures represent the same concert key signature, ignoring transposition.
-    bool isSameConcert(const KeySignature& src)
+    bool isSameConcert(const KeySignature& src) const
     {
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }
@@ -327,7 +327,7 @@ public:
     void setTransposition(int interval, int keyAdjustment, bool simplify);
 
     /// @brief Sets the key's transposition based on the input staff's transposition settings.
-    void setTransposition(const std::shared_ptr<const others::Staff>& staff);
+    void setTransposition(const MusxInstance<others::Staff>& staff);
 
     /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
     /// 
@@ -356,9 +356,9 @@ public:
     /// @return A unique pointer to a transposer for this key.
     std::unique_ptr<music_theory::Transposer> createTransposer(int displacement, int alteration) const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        Base::integrityCheck();
+        this->CommonClassBase::integrityCheck(ptrToThis);
         if (key >= 0x8000) {
             MUSX_INTEGRITY_ERROR("Key signature has invalid key value: " + std::to_string(key));
         }
@@ -460,7 +460,7 @@ public:
     }
 
     /// @brief returns whether the two time signatures represent the same time signature
-    bool isSame(const TimeSignature& src)
+    bool isSame(const TimeSignature& src) const
     {
         return components == src.components && m_abbreviate == src.m_abbreviate;
     }
@@ -468,10 +468,10 @@ public:
     /// @brief Creates a time signature corresponding to the component at @p index
     /// @param index The 0-based component index
     /// @throw std::invalid_argument if @p index is out of range
-    std::shared_ptr<TimeSignature> createComponent(size_t index) const
+    MusxInstance<TimeSignature> createComponent(size_t index) const
     {
         checkIndex(index);
-        return std::shared_ptr<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviate));
+        return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviate));
     }
 
     /// @brief Returns the abbreviated symbol (code point) for this time signature, or std::nullopt if none.
@@ -586,7 +586,7 @@ public:
      * @param document Shared pointer to the document.
      * @param partId The part ID if this range is unlinked, otherwise 0.
      * @param shareMode The share mode if this range is unlinked.
-     * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::InstrumentUsed.
+     * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::StaffUsed.
      * @param inci incident value, for subclasses that have them.
      */
     explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All,
@@ -615,7 +615,7 @@ public:
     ///         - MeasCmper: the measure of the next location
     ///         - Edu: the location within the measure of the next location
     ///         Return std::nullopt if the next location is past the end of the document, or other error.
-    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     static const xml::XmlElementArray<MusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

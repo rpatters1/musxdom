@@ -186,7 +186,7 @@ MUSX_XML_ELEMENT_ARRAY(ClefOctaveSharps, {
 
 MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
     {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<InstCmper>(); }},
+    {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<StaffCmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(CustomStem, {
@@ -308,8 +308,8 @@ MUSX_XML_ELEMENT_ARRAY(SmartShapeEntryAssign, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
-    {"startInst", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->startInst = e->getTextAs<InstCmper>(); }},
-    {"endInst", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->endInst = e->getTextAs<InstCmper>(); }},
+    {"startInst", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->startInst = e->getTextAs<StaffCmper>(); }},
+    {"endInst", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->endInst = e->getTextAs<StaffCmper>(); }},
     {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
     {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
     {"fullID", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameId = e->getTextAs<Cmper>(); }},

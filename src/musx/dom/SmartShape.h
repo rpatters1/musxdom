@@ -119,7 +119,7 @@ class EndPoint : public ContainedClassBase
 public:
     using ContainedClassBase::ContainedClassBase;
 
-    InstCmper staffId{};            ///< Staff ID (xml node is `<inst>`)
+    StaffCmper staffId{};           ///< Staff ID (xml node is `<inst>`)
     MeasCmper measId{};             ///< Measure ID (xml node is `<meas>`)
     Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
     EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
@@ -138,10 +138,10 @@ public:
     EntryInfoPtr calcAssociatedEntry(Cmper forPartId) const;
 
     /// @brief Gets the measure assignment for this endpoint or null if none.
-    std::shared_ptr<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
+    MusxInstance<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
 
     /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
-    std::shared_ptr<details::SmartShapeEntryAssign> getEntryAssignment() const;
+    MusxInstance<details::SmartShapeEntryAssign> getEntryAssignment() const;
 
     /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
     bool calcIsAssigned() const;
@@ -176,7 +176,7 @@ namespace others {
  *
  * This class is identified by the XML node name "smartShape".
  */
-class SmartShape : public OthersBase, public std::enable_shared_from_this<SmartShape>
+class SmartShape : public OthersBase
 {
 public:
     /** @brief Constructor function */
@@ -197,9 +197,9 @@ public:
         std::shared_ptr<smartshape::EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
                                                                         ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
-        void integrityCheck() override
+        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
         {
-            Base::integrityCheck();
+            ContainedClassBase::integrityCheck(ptrToThis);
             if (!endPoint) {
                 endPoint = std::make_shared<smartshape::EndPoint>(getParent());
             }
@@ -212,10 +212,10 @@ public:
             if (!breakAdj) {
                 breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
             }
-            endPoint->integrityCheck();
-            endPointAdj->integrityCheck();
-            ctlPtAdj->integrityCheck();
-            breakAdj->integrityCheck();
+            endPoint->integrityCheck(ptrToThis);
+            endPointAdj->integrityCheck(ptrToThis);
+            ctlPtAdj->integrityCheck(ptrToThis);
+            breakAdj->integrityCheck(ptrToThis);
         }
     
         static const xml::XmlElementArray<TerminationSeg>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
@@ -358,21 +358,21 @@ public:
     /// @param entryInfo The entry to check
     bool calcAppliesTo(const EntryInfoPtr& entryInfo) const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
         if (!startTermSeg) {
-            startTermSeg = std::make_shared<TerminationSeg>(shared_from_this());
+            startTermSeg = std::make_shared<TerminationSeg>(ptrToThis);
         }
         if (!endTermSeg) {
-            endTermSeg = std::make_shared<TerminationSeg>(shared_from_this());
+            endTermSeg = std::make_shared<TerminationSeg>(ptrToThis);
         }
         if (!fullCtlPtAdj) {
-            fullCtlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(shared_from_this());
+            fullCtlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(ptrToThis);
         }
-        startTermSeg->integrityCheck();
-        endTermSeg->integrityCheck();
-        fullCtlPtAdj->integrityCheck();
+        startTermSeg->integrityCheck(ptrToThis);
+        endTermSeg->integrityCheck(ptrToThis);
+        fullCtlPtAdj->integrityCheck(ptrToThis);
     }
 
     constexpr static std::string_view XmlNodeName = "smartShape"; ///< XML node name
@@ -403,12 +403,12 @@ public:
     enum class LineCapType { None, Hook, ArrowheadPreset, ArrowheadCustom };
 
     /// @brief Hold parameters for LineStyle::Char.
-    class CharParams : public Base
+    class CharParams : public ContainedClassBase
     {
     public:
     /// @brief Constructor function
-        explicit CharParams(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All), font(std::make_shared<FontInfo>(document))
+        explicit CharParams(const MusxInstance<Base>& parent)
+            : ContainedClassBase(parent), font(std::make_shared<FontInfo>(parent->getDocument()))
         {
         }
 
@@ -420,14 +420,10 @@ public:
     };
 
     /// @brief Hold parameters for LineStyle::Solid.
-    class SolidParams : public Base
+    class SolidParams : public ContainedClassBase
     {
     public:
-    /// @brief Constructor function
-        explicit SolidParams(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All)
-        {
-        }
+        using ContainedClassBase::ContainedClassBase;
 
         Efix lineWidth{};             ///< Solid line width
 
@@ -435,11 +431,9 @@ public:
     };
 
     /// @brief Hold parameters for LineStyle::Dashed.
-    class DashedParams : public Base {
+    class DashedParams : public ContainedClassBase {
     public:
-    /// @brief Constructor function
-        explicit DashedParams(const DocumentWeakPtr& document)
-            : Base(document, SCORE_PARTID, ShareMode::All) {}
+        using ContainedClassBase::ContainedClassBase;
 
         Efix lineWidth{};             ///< Dashed line width
         Efix dashOn{};                ///< Dash length
@@ -524,18 +518,18 @@ public:
     util::EnigmaParsingContext getCenterAbbrRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, centerAbbrRawTextId); }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
 
         if (lineStyle == LineStyle::Char && !charParams)
-            charParams = std::make_shared<CharParams>(getDocument());
+            charParams = std::make_shared<CharParams>(ptrToThis);
 
         if (lineStyle == LineStyle::Solid && !solidParams)
-            solidParams = std::make_shared<SolidParams>(getDocument());
+            solidParams = std::make_shared<SolidParams>(ptrToThis);
 
         if (lineStyle == LineStyle::Dashed && !dashedParams)
-            dashedParams = std::make_shared<DashedParams>(getDocument());
+            dashedParams = std::make_shared<DashedParams>(ptrToThis);
     }
 
     constexpr static std::string_view XmlNodeName = "ssLineStyle"; ///< The XML node name for this type.
@@ -589,7 +583,7 @@ namespace details {
  * Cmper1 is the shape number. Cmper2 is the center shape number. (See @ref others::SmartShapeMeasureAssign.)
  * This class is identified by the XML node name "centerShape".
  */
-class CenterShape : public DetailsBase, public std::enable_shared_from_this<CenterShape>
+class CenterShape : public DetailsBase
 {
 public:
 
@@ -609,16 +603,16 @@ public:
     std::shared_ptr<smartshape::EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
     std::shared_ptr<smartshape::ControlPointAdjustment> ctlPtAdj;  ///< Manual adjustments made to this center shape.
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         if (!startBreakAdj) {
-            startBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(shared_from_this());
+            startBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(ptrToThis);
         }
         if (!endBreakAdj) {
-            endBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(shared_from_this());
+            endBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(ptrToThis);
         }
         if (!ctlPtAdj) {
-            ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(shared_from_this());
+            ctlPtAdj = std::make_shared<smartshape::ControlPointAdjustment>(ptrToThis);
         }
     }
 

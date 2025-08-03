@@ -179,10 +179,10 @@ MUSX_RESOLVER_ENTRY(StaffGroup, {
         auto parts = document->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
         for (const auto& part : parts) {
             auto groups = document->getDetails()->getArray<StaffGroup>(part->getCmper(), BASE_SYSTEM_ID);
-            auto baseList = document->getOthers()->getArray<others::InstrumentUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            const auto baseList = document->getOthers()->getArray<others::StaffUsed>(part->getCmper(), BASE_SYSTEM_ID);
             for (const auto& instance : groups) {
-                auto startIndex = others::InstrumentUsed::getIndexForStaff(baseList, instance->startInst);
-                auto endIndex = others::InstrumentUsed::getIndexForStaff(baseList, instance->endInst);
+                auto startIndex = baseList.getIndexForStaff(instance->startInst);
+                auto endIndex = baseList.getIndexForStaff(instance->endInst);
                 if (!startIndex || !endIndex) {
                     // this situation arises fairly commonly in Finale files, so the message is demoted to a verbose logging message
                     // from an integrity error.
@@ -191,7 +191,8 @@ MUSX_RESOLVER_ENTRY(StaffGroup, {
                     continue;
                 }
                 for (size_t x = *startIndex; x <= *endIndex && x < baseList.size(); x++) {
-                    instance->staves.insert(baseList[x]->staffId);
+                    auto mutableInstance = const_cast<StaffGroup*>(instance.get());
+                    mutableInstance->staves.insert(baseList[x]->staffId);
                 }
             }
         }

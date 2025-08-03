@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-static void checkCrossStaff(const NoteInfoPtr& note, InstCmper expectedStaff, ClefIndex expectedClef, int expectedStaffPos)
+static void checkCrossStaff(const NoteInfoPtr& note, StaffCmper expectedStaff, ClefIndex expectedClef, int expectedStaffPos)
 {
     ASSERT_TRUE(note);
     auto entryInfo = note.getEntryInfo();

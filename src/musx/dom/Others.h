@@ -351,9 +351,9 @@ public:
     Evpu endPos{};     ///< End position of the beat span
     Evpu minPos{};     ///< Minimum position (see remarks in the class-level description of @ref BeatChartElement)
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
         if (control && getInci() != 0) {
             MUSX_INTEGRITY_ERROR("Beat chart for measure " + std::to_string(getCmper()) + " has a control instance in inci " + std::to_string(*getInci()));
         }
@@ -473,7 +473,7 @@ public:
 
 /**
  * @class DrumStaff
- * @brief Identifies the percussion map ("drum library") for a staff with percussion notations
+ * @brief Identifies the percussion map ("drum library") for a staff with percussion notation.
  *
  * The class is identified by the XML node name "drumStaff".
  */
@@ -493,7 +493,7 @@ public:
 
 /**
  * @class DrumStaffStyle
- * @brief Identifies the percussion map ("drum library") for a staff style with percussion notations
+ * @brief Identifies the percussion map ("drum library") for a staff style with percussion notation.
  *
  * The class is identified by the XML node name "drumStaffStyle".
  */
@@ -595,17 +595,17 @@ public:
 
     /// @brief Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops.
     /// @param iterator function.
-    void iterateRawEntries(std::function<bool(const std::shared_ptr<Entry>& entry)> iterator) const;
+    void iterateRawEntries(std::function<bool(const MusxInstance<Entry>& entry)> iterator) const;
 
     /** @brief Returns a vector of entries contained in the frame.
      *
      * These are raw entries. Use #details::GFrameHoldContext::createEntryFrame for a vector of entries with computed values.
      */
-    std::vector<std::shared_ptr<const Entry>> getEntries() const;
+    MusxInstanceList<Entry> getEntries() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->OthersBase::integrityCheck();
+        this->OthersBase::integrityCheck(ptrToThis);
         if (startTime && (startEntry || endEntry)) {
             MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " has non-zero startTime and non-zero startEntry or endEntry.");
         }
@@ -623,18 +623,18 @@ public:
 
 class Staff;
 /**
- * @class InstrumentUsed
- * @brief An array of InstrumentUsed defines a set of staves in a staff system or in Scroll View.
+ * @class StaffUsed
+ * @brief An array of StaffUsed defines a set of staves in a staff system or in Scroll View.
  *
  * This class is identified by the XML node name "instUsed".
  */
-class InstrumentUsed : public OthersBase {
+class StaffUsed : public OthersBase {
 public:
     /** @brief Constructor function */
-    explicit InstrumentUsed(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+    explicit StaffUsed(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
         : OthersBase(document, partId, shareMode, cmper, inci) {}
 
-    InstCmper staffId{};                    ///< Staff cmper (xml node is `<inst>`)
+    StaffCmper staffId{};                   ///< Staff cmper (xml node is `<inst>`)
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
     std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
@@ -642,23 +642,13 @@ public:
     util::Fraction calcEffectiveScaling() const;
 
     /// @brief Returns the @ref Staff instance for this element, without any staff styles applied
-    std::shared_ptr<Staff> getStaffInstance() const;
+    MusxInstance<Staff> getStaffInstance() const;
 
     /// @brief Returns the @ref Staff instance for this element with staff styles applied at the specified location.
-    std::shared_ptr<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
-
-    /// @brief Returns the @ref Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
-    /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
-    /// @param index The 0-based index to find.
-    static std::shared_ptr<Staff> getStaffInstanceAtIndex(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, Cmper index);
-
-    /// @brief Returns the 0-based index of the InstCmper or std::nullopt if not found.
-    /// @param iuArray And array of @ref InstrumentUsed instances, representing a staff system or staff view (e.g., Scroll View)
-    /// @param staffId The @ref Staff cmper value to find.
-    static std::optional<size_t> getIndexForStaff(const std::vector<std::shared_ptr<InstrumentUsed>>& iuArray, InstCmper staffId);
+    MusxInstance<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<InstrumentUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<StaffUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -934,13 +924,13 @@ public:
      *
      * (This in not in the xml but is created by the factory.)
      */
-    std::map<Cmper, std::weak_ptr<ShapeExpressionDef>> shapeExpressions;
+    std::map<Cmper, MusxInstanceWeak<ShapeExpressionDef>> shapeExpressions;
 
     /** @brief A list of text expressions in this category.
      *
      * (This in not in the xml but is created by the factory.)
      */
-    std::map<Cmper, std::weak_ptr<TextExpressionDef>> textExpressions;
+    std::map<Cmper, MusxInstanceWeak<TextExpressionDef>> textExpressions;
 
     /** @brief gets the name of the marking category */
     std::string getName() const;
@@ -957,16 +947,11 @@ public:
  *
  * This class is identified by the XML node name "markingsCategoryName".
  */
-class MarkingCategoryName : public OthersBase {
+class MarkingCategoryName : public OthersName {
 public:
-    /** @brief Constructor function */
-    explicit MarkingCategoryName(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper) {}
-
-    std::string name; ///< The name of the marking category.
+    using OthersName::OthersName;
 
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<MarkingCategoryName>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1078,33 +1063,33 @@ public:
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
     /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
-    std::shared_ptr<KeySignature> createKeySignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<KeySignature> createKeySignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
-    std::shared_ptr<TimeSignature> createTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<TimeSignature> createTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the display @ref TimeSignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the time signature.
     /// @return The display time signature if there is one, otherwise the actual time signature.
-    std::shared_ptr<TimeSignature> createDisplayTimeSignature(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    MusxInstance<TimeSignature> createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Calculates the duration of the measure according to the time signature
     /// @param forStaff  If present, specifies the specific staff for which to create duration.
     /// @return If forStaff is provided, the staff-level duration (taking into account independent time signatures.)
     /// Otherwise, it returns the global duration of the measure.
-    util::Fraction calcDuration(const std::optional<InstCmper>& forStaff = std::nullopt) const;
+    util::Fraction calcDuration(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus.
     /// @param forStaff The staff for wiuch to calculate the time stretch.
-    util::Fraction calcTimeStretch(InstCmper forStaff) const
+    util::Fraction calcTimeStretch(StaffCmper forStaff) const
     {
         return calcDuration() / calcDuration(forStaff);
     }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->OthersBase::integrityCheck();
+        this->OthersBase::integrityCheck(ptrToThis);
         if (!globalKeySig) {
             globalKeySig = std::make_shared<KeySignature>(getDocument());
         }
@@ -1137,24 +1122,25 @@ public:
     Evpu horzEvpuOff{};         ///< Horizontal Evpu offset from the default position.
     Edu eduPosition{};          ///< Horizontal Edu position (xml node is `<horzEduOff>`)
     Evpu vertEvpuOff{};         ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
-    InstCmper staffAssign{};    ///< The staff to which this expression is assigned, or -1 if it uses #staffList.
+    StaffCmper staffAssign{};   ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
     int layer{};                ///< The 1-based layer number to which this expression is assigned. (0 means all)
     bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
     Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
-    Cmper staffList{};          ///< The cmper of the staff list to use if #staffAssign is negative.
+    Cmper staffList{};          ///< The cmper of the marking category staff list that is controlling this assignment (if any).
+                                ///< There will be a separate #MeasureExprAssign instance for every staff in the staff list.
     bool hidden{};              ///< True if the dynamic is hidden.
 
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
-    std::shared_ptr<TextExpressionDef> getTextExpression() const;
+    MusxInstance<TextExpressionDef> getTextExpression() const;
 
     /// @brief Gets the assigned shape expression.
     /// @return The shape expression or nullptr if this assignment is for a text expression or #shapeExprId not found.
-    std::shared_ptr<ShapeExpressionDef> getShapeExpression() const;
+    MusxInstance<ShapeExpressionDef> getShapeExpression() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->OthersBase::integrityCheck();
+        this->OthersBase::integrityCheck(ptrToThis);
         if (!textExprId && !shapeExprId) {
             MUSX_INTEGRITY_ERROR("Expression assignment at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1))
                 + " has no expression definition ID.");
@@ -1202,11 +1188,11 @@ public:
     };
 
     /// @brief Measure number data that can differ in score or part.
-    class ScorePartData : public Base
+    class ScorePartData : public ContainedClassBase
     {
     public:
         /** @brief Constructor */
-        explicit ScorePartData(const DocumentWeakPtr& document) : Base(document, 0, ShareMode::All) {}
+        explicit ScorePartData(const MusxInstance<MeasureNumberRegion>& parent) : ContainedClassBase(parent) {}
 
         std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
         std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
@@ -1287,7 +1273,7 @@ public:
     /// @param document The document to search
     /// @param measureId The measure Id to search for
     /// @return The first MeasureNumberRegion instance that contains the @p measureId, or nullptr if not found.
-    static std::shared_ptr<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
+    static MusxInstance<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
 
     constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureNumberRegion>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1329,11 +1315,11 @@ public:
     /// @brief Calculates if the number on this multimeasure rest is visible.
     bool calcIsNumberVisible() const { return calcNumberOfMeasures() >= numStart; }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        this->OthersBase::integrityCheck();
+        this->OthersBase::integrityCheck(ptrToThis);
         if (nextMeas <= getStartMeasure()) {
-            MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getPartId()) + " spans 0 or fewer measures.");
+            MUSX_INTEGRITY_ERROR("Multimeasure rest at " + std::to_string(getCmper()) + " in part " + std::to_string(getSourcePartId()) + " spans 0 or fewer measures.");
         }
     }
 
@@ -1371,17 +1357,17 @@ public:
     explicit MultiStaffInstrumentGroup(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    std::vector<InstCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
+    std::vector<StaffCmper> staffNums; ///< Vector of Cmper values representing up to 3 staff numbers.
 
     /// @brief Returns the staff instance (without any staff styles applied) at the index position or null if out of range or not found.
     /// @param x the 0-based index to find
-    std::shared_ptr<Staff> getStaffInstanceAtIndex(size_t x) const;
+    MusxInstance<Staff> getStaffInstanceAtIndex(size_t x) const;
 
     /// @brief Returns the first staff instance without any staff styles applied (with integrity check)
-    std::shared_ptr<Staff> getFirstStaffInstance() const;
+    MusxInstance<Staff> getFirstStaffInstance() const;
 
     /// @brief Returns the index of the input staffId or std::nullopt if not found
-    std::optional<size_t> getIndexOf(InstCmper staffId) const
+    std::optional<size_t> getIndexOf(StaffCmper staffId) const
     {
         for (size_t x = 0; x < staffNums.size(); x++) {
             if (staffNums[x] == staffId) return x;        
@@ -1391,15 +1377,15 @@ public:
 
     /// @brief Gets the group associated with this multistaff instrument, or nullptr if not found
     /// @param forPartId The part for which to get the group. Pass SCORE_PARTID for the score.
-    std::shared_ptr<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
+    MusxInstance<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
 
     /// @brief Used by the factory to calculate all multistaff ids and visual ids for instances of @ref Staff.
     /// @param document 
     static void calcAllMultiStaffGroupIds(const DocumentPtr& document);
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
         if (staffNums.empty()) {
             MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
         } else if (staffNums.size() > 3) {
@@ -1574,7 +1560,7 @@ public:
     Evpu rightPgYDisp{};            ///< Vertical displacement for right pages (if #indRpPos is true). (xml tag is `<rightPgYdisp>`)
 
     /** @brief Gets the TextBlock for this assignment, or nullptr if none. */
-    std::shared_ptr<TextBlock> getTextBlock() const;
+    MusxInstance<TextBlock> getTextBlock() const;
 
     /// @brief Return the starting page number, taking into account leading blank pages in all parts.
     /// This calculation mimics observed behavior in Finale.
@@ -1605,8 +1591,9 @@ public:
     bool isMultiAssignedThruLastPage() const
     { return isMultiPage() && endPage == 0; }
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
+        this->OthersBase::integrityCheck(ptrToThis);
         if (getCmper() != 0) {
             if (startPage != getCmper() || endPage != getCmper()) {
                 MUSX_INTEGRITY_ERROR("PageTextAssign " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(0)) +
@@ -1621,14 +1608,14 @@ public:
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for multipage assignments.
     /// @param inci The inci of the specific page text assignment to retrieve.
-    static std::shared_ptr<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci);
+    static MusxInstance<others::PageTextAssign> getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci);
 
     /// @brief Returns all the page text assignments for a given page number in a given part.
     /// This allows the caller not to have to know the conversion to page assignment IDs.
     /// @param document The document to search.
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for all multipage assignments.
-    static std::vector<std::shared_ptr<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
+    static std::vector<MusxInstance<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1673,7 +1660,7 @@ public:
     /** @brief Return true if this part corresponds to the score */
     bool isScore() const { return getCmper() == SCORE_PARTID; }
 
-    /** @brief Return the @ref InstrumentUsed cmper by this part for the specified system.
+    /** @brief Return the @ref StaffUsed cmper by this part for the specified system.
      *
      * This function either returns the input @p systemId or the Special Part Extraction cmper.
      *
@@ -1693,10 +1680,10 @@ public:
     PageCmper calcAssignmentIdFromPageNumber(PageCmper pageId) const;
     
     /** @brief Return the instance for the score */
-    static std::shared_ptr<PartDefinition> getScore(const DocumentPtr& document);
+    static MusxInstance<PartDefinition> getScore(const DocumentPtr& document);
 
     /** @brief Return the linked parts sorted in UI order by #partOrder */
-    static std::vector<std::shared_ptr<PartDefinition>> getInUserOrder(const DocumentPtr& document);
+    static MusxInstanceList<PartDefinition> getInUserOrder(const DocumentPtr& document);
 
     bool requireAllFields() const override { return false; }
 
@@ -1722,7 +1709,7 @@ public:
     bool showTransposed{};                  ///< If true, "Display Concert Pitch" is unchecked for the part.
     Cmper scrollViewIUlist{};               ///< If this value is non-zero, it is the iuList @ref Cmper of the current Staff List in Scroll View.
     Cmper studioViewIUlist{};               ///< The iuList @ref Cmper for Studio View.
-    /** @brief If non-zero, Special Part Extraction is in effect and this is the @ref Cmper for its @ref InstrumentUsed array.
+    /** @brief If non-zero, Special Part Extraction is in effect and this is the @ref Cmper for its @ref StaffUsed array.
      *
      * When Special Part Extraction is in effect, staff systems no longer have their own instrument lists. Instead, they use this value.
      *
@@ -1884,9 +1871,9 @@ public:
     bool calcIsOpen() const;
 
 
-    void integrityCheck()
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        OthersBase::integrityCheck();
+        OthersBase::integrityCheck(ptrToThis);
         if (trigger != RepeatTriggerType::OnPass) {
             MUSX_INTEGRITY_ERROR("RepeatEndingStart at measure " + std::to_string(getCmper()) + " has an unexpected trigger value " +
                 std::to_string(int(trigger)));
@@ -1982,6 +1969,154 @@ public:
 };
 
 /**
+ * @class StaffList
+ * @brief Defines a staff list. See subclasses for how it is used.
+ *
+ * Each value is a specific staff cmper or one of the #StaffList::FloatingValues.
+ */
+class StaffList : public OthersArray<StaffCmper>
+{
+public:
+    using OthersArray::OthersArray;
+
+    /// @enum FloatingValues
+    /// @brief Defines special assignment values used for floating staff assignments
+    enum class FloatingValues : StaffCmper
+    {
+        TopStaff = -1,          ///< This value means the assignment is to the top staff of any system or part
+        BottomStaff = -2        ///< This value means the assignment is to the bottom staff of any system or part
+    };
+
+    static const xml::XmlElementArray<StaffList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class StaffListCategoryName
+ * @brief This class specified the name of a staff list used by @ ref MarkingCategory.
+ *
+ * The Cmper is a value from 1 to 8, corresponding to one of the eight canned staff lists available to marking categories.
+ */
+class StaffListCategoryName : public OthersName
+{
+public:
+    using OthersName::OthersName;
+
+    constexpr static std::string_view XmlNodeName = "categoryStaffListName"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListCategoryParts
+ * @brief This class is used by @ref MarkingCategory to define the staves for parts in a staff list.
+ *
+ * The Cmper is a value from 1 to 8, corresponding to one of the eight canned staff lists available to marking categories.
+ */
+class StaffListCategoryParts : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "categoryStaffListParts"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListCategoryScore
+ * @brief This class is used by @ref MarkingCategory to define the staves for parts in a staff list.
+ *
+ * The Cmper is a value from 1 to 8, corresponding to one of the eight canned staff lists available to marking categories.
+ */
+class StaffListCategoryScore : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "categoryStaffListScore"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatName
+ * @brief This class specified the name of a staff list used by @ref RepeatEndingStart, @ref RepeatBack, and @ref TextRepeatAssign.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatName : public OthersName
+{
+public:
+    using OthersName::OthersName;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListName"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatParts
+ * @brief This class is used by repeat classes to define the staves for parts in a staff list.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatParts : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListParts"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatPartsForced
+ * @brief This class is used by repeat classes to define the forced staves for parts in a staff list. Repeats on these
+ * staves appear even if the staff has turned them off with #Staff::hideRepeats or #Staff::hideRptBars.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatPartsForced : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListPartsOverride"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatScore
+ * @brief This class is used by repeat classes to define the staves for the score in a staff list.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatScore : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListScore"; ///< The XML node name for this type.
+};
+
+/**
+ * @class StaffListRepeatScoreForced
+ * @brief This class is used by repeat classes to define the forced staves for the score in a staff list. Repeats on these
+ * staves appear even if the staff has turned them off with #Staff::hideRepeats or #Staff::hideRptBars.
+ *
+ * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
+ */
+class StaffListRepeatScoreForced : public StaffList
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using StaffList::StaffList;
+
+    constexpr static std::string_view XmlNodeName = "repeatStaffListScoreOverride"; ///< The XML node name for this type.
+};
+
+/**
  * @class StaffSystem
  * @brief Represents the attributes of a staff system in the page layout.
  *
@@ -2029,7 +2164,7 @@ public:
     int calcNumMeasures() const { return endMeas - startMeas; }
 
     /// @brief Gets the page this system is on.
-    std::shared_ptr<others::Page> getPage() const;
+    MusxInstance<others::Page> getPage() const;
 
     /// @brief Calculate the effect system scaling.
     util::Fraction calcSystemScaling() const
@@ -2042,11 +2177,12 @@ public:
     ///         - util::Fraction: The scaling of the staff with the maximum (largest) scaling factor
     std::pair<util::Fraction, util::Fraction> calcMinMaxStaffSizes() const;
 
-    void integrityCheck() override
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
+        this->OthersBase::integrityCheck(ptrToThis);
         if (startMeas == 0 || endMeas == 0) {
             MUSX_INTEGRITY_ERROR("Layout for system " + std::to_string(getCmper())
-                + " of part " + std::to_string(getPartId()) + " is in an unknown state.");
+                + " of part " + std::to_string(getSourcePartId()) + " is in an unknown state.");
         }
     }
 
@@ -2223,7 +2359,7 @@ public:
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
     /** @brief Gets the TextBlock for this expression, or nullptr if none. */
-    std::shared_ptr<TextBlock> getTextBlock() const;
+    MusxInstance<TextBlock> getTextBlock() const;
 
     /**
      * @brief Gets the raw text context for parsing this expression, or nullptr if none.
@@ -2232,7 +2368,7 @@ public:
     util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
-    std::shared_ptr<Enclosure> getEnclosure() const;
+    MusxInstance<Enclosure> getEnclosure() const;
   
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

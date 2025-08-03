@@ -19,53 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#pragma once
-
-#include <string_view>
+#include <string>
 #include <vector>
-#include <filesystem>
-#include <iostream>
+#include <cstdlib>
+#include <exception>
 
 #include "musx/musx.h"
 
-namespace musx::dom::others {
-class StaffList;
+namespace musx {
+namespace dom {
+
+// ***************************************
+// ***** MusxInstanceList<StaffUsed> *****
+// ***************************************
+
+MusxInstance<others::Staff> MusxInstanceList<others::StaffUsed>::getStaffInstanceAtIndex(Cmper index) const
+{
+    const auto& iuArray = *this;
+    if (index >= iuArray.size()) return nullptr;
+    auto iuItem = iuArray[index];
+    return iuItem->getStaffInstance();
 }
 
-namespace musxtest {
-
-inline std::ostringstream g_endMessages;
-
-inline std::string pathString(const std::filesystem::path& path)
+std::optional<size_t> MusxInstanceList<others::StaffUsed>::getIndexForStaff(StaffCmper staffId) const
 {
-    auto s = path.u8string();
-    return std::string(reinterpret_cast<const char*>(s.data()), s.size());
-}
-
-class string_view : public std::string_view
-{
-public:
-    using std::string_view::string_view;
-
-    operator std::vector<char>() const
-    {
-        return std::vector<char>(begin(), end());
+    const auto& iuArray = *this;
+    for (size_t x = 0; x < iuArray.size(); x++) {
+        if (iuArray[x]->staffId == staffId) {
+            return x;
+        }
     }
-};
-
-inline std::filesystem::path getInputPath()
-{ return std::filesystem::current_path(); }
-
-// STOOPID Google test can't ASSERT out of a non-void function
-void readFile(const std::filesystem::path& filePath, std::vector<char>& contents);
-
-inline bool stringHasDigit(const std::string& s)
-{
-    return std::find_if(s.begin(), s.end(),
-                        [](unsigned char c){ return std::isdigit(c); })
-           != s.end();
+    return std::nullopt;
 }
 
-void staffListCheck(std::string_view staffListName, const musx::dom::MusxInstance<musx::dom::others::StaffList>& staffList, std::vector<int> expectedValues);
-
-} // namespace musxtext
+} // namespace dom
+} // namespace musx

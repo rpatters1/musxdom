@@ -189,3 +189,36 @@ TEST(StaffStyleInstrument, DetectInstrumentChange)
         EXPECT_EQ(staff->instUuid, uuid::EnglishHorn);
     }
 }
+
+TEST(StaffStyleChange, DetectDifferentScorePart)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "staffstyle_score_part.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 3, 0);
+        EXPECT_EQ(staff->getRequestedPartId(), SCORE_PARTID);
+        EXPECT_EQ(staff->calcNumberOfStafflines(), 5);
+        auto styleAssigns = doc->getOthers()->getArray<others::StaffStyleAssign>(SCORE_PARTID);
+        EXPECT_EQ(styleAssigns.getRequestedPartId(), SCORE_PARTID);
+        for (const auto& assign : styleAssigns) {
+            EXPECT_EQ(styleAssigns.getRequestedPartId(), assign->getRequestedPartId());
+            EXPECT_EQ(assign->getRequestedPartId(), assign->getSourcePartId());
+        }
+    }
+
+    {
+        static constexpr Cmper kFirstPart = 1;
+        auto staff = others::StaffComposite::createCurrent(doc, kFirstPart, 1, 3, 0);
+        EXPECT_EQ(staff->getRequestedPartId(), kFirstPart);
+        EXPECT_EQ(staff->calcNumberOfStafflines(), 1);
+        auto styleAssigns = doc->getOthers()->getArray<others::StaffStyleAssign>(kFirstPart);
+        EXPECT_EQ(styleAssigns.getRequestedPartId(), kFirstPart);
+        for (const auto& assign : styleAssigns) {
+            EXPECT_EQ(styleAssigns.getRequestedPartId(), assign->getRequestedPartId());
+            EXPECT_EQ(assign->getRequestedPartId(), assign->getSourcePartId());
+        }
+    }
+}

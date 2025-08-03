@@ -405,12 +405,12 @@ TEST(SmartShapeOptions, ArrayTests)
         // Verify slurConnectStyles
     ASSERT_EQ(smartShapeOptions->slurConnectStyles.size(), 29);
 
-    auto overNoteStart = smartShapeOptions->slurConnectStyles[SmartShapeOptions::SlurConnectStyleType::OverNoteStart];
+    auto overNoteStart = smartShapeOptions->slurConnectStyles.at(SmartShapeOptions::SlurConnectStyleType::OverNoteStart);
     ASSERT_TRUE(overNoteStart);
     EXPECT_EQ(overNoteStart->connectIndex, SmartShapeOptions::ConnectionIndex::HeadRightTop);
     EXPECT_EQ(overNoteStart->yOffset, 10);
 
-    auto underStemStart = smartShapeOptions->slurConnectStyles[SmartShapeOptions::SlurConnectStyleType::UnderStemStart];
+    auto underStemStart = smartShapeOptions->slurConnectStyles.at(SmartShapeOptions::SlurConnectStyleType::UnderStemStart);
     ASSERT_TRUE(underStemStart);
     EXPECT_EQ(underStemStart->connectIndex, SmartShapeOptions::ConnectionIndex::StemRightBottom);
     EXPECT_EQ(underStemStart->xOffset, 12);
@@ -419,13 +419,13 @@ TEST(SmartShapeOptions, ArrayTests)
     // Verify slurControlStyles
     ASSERT_EQ(smartShapeOptions->slurControlStyles.size(), 4);
 
-    auto shortSpan = smartShapeOptions->slurControlStyles[SmartShapeOptions::SlurControlStyleType::ShortSpan];
+    auto shortSpan = smartShapeOptions->slurControlStyles.at(SmartShapeOptions::SlurControlStyleType::ShortSpan);
     ASSERT_TRUE(shortSpan);
     EXPECT_EQ(shortSpan->span, 36);
     EXPECT_EQ(shortSpan->inset, 512);
     EXPECT_EQ(shortSpan->height, 16);
 
-    auto longSpan = smartShapeOptions->slurControlStyles[SmartShapeOptions::SlurControlStyleType::LongSpan];
+    auto longSpan = smartShapeOptions->slurControlStyles.at(SmartShapeOptions::SlurControlStyleType::LongSpan);
     ASSERT_TRUE(longSpan);
     EXPECT_EQ(longSpan->span, 864);
     EXPECT_EQ(longSpan->inset, 341);
@@ -434,12 +434,12 @@ TEST(SmartShapeOptions, ArrayTests)
     // Verify tabSlideConnectStyles
     ASSERT_EQ(smartShapeOptions->tabSlideConnectStyles.size(), 18);
 
-    auto diffLevelPitchUpLineStart = smartShapeOptions->tabSlideConnectStyles[SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpLineStart];
+    auto diffLevelPitchUpLineStart = smartShapeOptions->tabSlideConnectStyles.at(SmartShapeOptions::TabSlideConnectStyleType::DiffLevelPitchUpLineStart);
     ASSERT_TRUE(diffLevelPitchUpLineStart);
     EXPECT_EQ(diffLevelPitchUpLineStart->connectIndex, SmartShapeOptions::ConnectionIndex::NoteRightCenter);
     EXPECT_EQ(diffLevelPitchUpLineStart->xOffset, -6);
 
-    auto sameLevelPitchUpLineEnd = smartShapeOptions->tabSlideConnectStyles[SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchUpLineEnd];
+    auto sameLevelPitchUpLineEnd = smartShapeOptions->tabSlideConnectStyles.at(SmartShapeOptions::TabSlideConnectStyleType::SameLevelPitchUpLineEnd);
     ASSERT_TRUE(sameLevelPitchUpLineEnd);
     EXPECT_EQ(sameLevelPitchUpLineEnd->connectIndex, SmartShapeOptions::ConnectionIndex::NoteLeftTop);
     EXPECT_EQ(sameLevelPitchUpLineEnd->xOffset, -6);
@@ -448,13 +448,13 @@ TEST(SmartShapeOptions, ArrayTests)
     // Verify glissandoConnectStyles
     ASSERT_EQ(smartShapeOptions->glissandoConnectStyles.size(), 2);
 
-    auto glissDefaultStart = smartShapeOptions->glissandoConnectStyles[SmartShapeOptions::GlissandoConnectStyleType::DefaultStart];
+    auto glissDefaultStart = smartShapeOptions->glissandoConnectStyles.at(SmartShapeOptions::GlissandoConnectStyleType::DefaultStart);
     ASSERT_TRUE(glissDefaultStart);
     EXPECT_EQ(glissDefaultStart->connectIndex, SmartShapeOptions::ConnectionIndex::NoteRightCenter);
     EXPECT_EQ(glissDefaultStart->xOffset, 8);
     EXPECT_EQ(glissDefaultStart->yOffset, -1);
 
-    auto glissDefaultEnd = smartShapeOptions->glissandoConnectStyles[SmartShapeOptions::GlissandoConnectStyleType::DefaultEnd];
+    auto glissDefaultEnd = smartShapeOptions->glissandoConnectStyles.at(SmartShapeOptions::GlissandoConnectStyleType::DefaultEnd);
     ASSERT_TRUE(glissDefaultEnd);
     EXPECT_EQ(glissDefaultEnd->connectIndex, SmartShapeOptions::ConnectionIndex::NoteLeftCenter);
     EXPECT_EQ(glissDefaultEnd->xOffset, -8);
@@ -463,12 +463,12 @@ TEST(SmartShapeOptions, ArrayTests)
     // Verify bendCurveConnectStyles
     ASSERT_EQ(smartShapeOptions->bendCurveConnectStyles.size(), 8);
 
-    auto bendNoteStart = smartShapeOptions->bendCurveConnectStyles[SmartShapeOptions::BendCurveConnectStyleType::NoteStart];
+    auto bendNoteStart = smartShapeOptions->bendCurveConnectStyles.at(SmartShapeOptions::BendCurveConnectStyleType::NoteStart);
     ASSERT_TRUE(bendNoteStart);
     EXPECT_EQ(bendNoteStart->connectIndex, SmartShapeOptions::ConnectionIndex::NoteRightTop);
     EXPECT_EQ(bendNoteStart->xOffset, 8);
 
-    auto bendStaffEndOffset = smartShapeOptions->bendCurveConnectStyles[SmartShapeOptions::BendCurveConnectStyleType::StaffEndOffset];
+    auto bendStaffEndOffset = smartShapeOptions->bendCurveConnectStyles.at(SmartShapeOptions::BendCurveConnectStyleType::StaffEndOffset);
     ASSERT_TRUE(bendStaffEndOffset);
     EXPECT_EQ(bendStaffEndOffset->connectIndex, SmartShapeOptions::ConnectionIndex::NoteRightTop);
     EXPECT_EQ(bendStaffEndOffset->xOffset, 36);

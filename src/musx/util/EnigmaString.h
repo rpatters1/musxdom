@@ -30,6 +30,7 @@
 #include <unordered_set>
 
 #include "musx/dom/Fundamentals.h"
+#include "musx/dom/MusxInstance.h"
 
 namespace musx {
 
@@ -37,6 +38,11 @@ namespace dom {
 class FontInfo;
 class Document;
 class TextsBase;
+
+namespace options {
+enum class AccidentalInsertSymbolType;
+}
+
 } // namespace dom
 
 namespace util {
@@ -281,7 +287,10 @@ public:
 
     /** @brief Returns true if the enigma string starts with a style insert. */
     static bool startsWithStyleCommand(const std::string& text);
-    
+
+    /// @brief Returns the accidental insert symbol type if the input command is an accidental insert
+    static std::optional<dom::options::AccidentalInsertSymbolType> commandIsAccidentalType(std::string_view commandText);
+
     /**
      * @brief Parses an enigma text insert into its constituent components.
      *
@@ -405,7 +414,7 @@ private:
 class EnigmaParsingContext
 {
 private:
-    std::shared_ptr<const dom::TextsBase> m_rawText;
+    dom::MusxInstance<dom::TextsBase> m_rawText;
     dom::Cmper m_forPartId;
     std::optional<int> m_forPageNumber;
     EnigmaString::TextInsertCallback m_insertFunc;
@@ -421,10 +430,10 @@ public:
     /// @param forPartId The linked part ID to use for ^partname and ^totpages inserts
     /// @param forPageId The value to use as page number for ^page inserts. ("#" is inserted if not provided, mimicing Finale behavior.)
     /// @param insertFunc A common handler for insert conversions.
-    EnigmaParsingContext(const std::shared_ptr<const dom::TextsBase>& rawText, dom::Cmper forPartId,
+    EnigmaParsingContext(dom::MusxInstance<dom::TextsBase> rawText, dom::Cmper forPartId,
             std::optional<dom::Cmper> forPageId = std::nullopt,
             EnigmaString::TextInsertCallback insertFunc = EnigmaString::defaultInsertsCallback)
-        : m_rawText(rawText), m_forPartId(forPartId), m_forPageNumber(forPageId), m_insertFunc(insertFunc)
+        : m_rawText(std::move(rawText)), m_forPartId(forPartId), m_forPageNumber(forPageId), m_insertFunc(insertFunc)
     {}
 
     /// @brief Check whether the context holds a valid raw text pointer.
@@ -467,10 +476,10 @@ public:
      * @brief Returns a shared pointer to a FontInfo instance that reflects
      * the first font information in the text.
      */
-    std::shared_ptr<dom::FontInfo> parseFirstFontInfo() const;
+    dom::MusxInstance<dom::FontInfo> parseFirstFontInfo() const;
 
     /// @brief Get the raw text pointer
-    std::shared_ptr<const dom::TextsBase> getRawText() const { return m_rawText; }
+    dom::MusxInstance<dom::TextsBase> getRawText() const { return m_rawText; }
 
     // If there is ever a need for a non-const version of the pointer, we can always
     // look it up again.

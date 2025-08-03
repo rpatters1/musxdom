@@ -437,7 +437,7 @@ MUSX_XML_ELEMENT_ARRAY(ControlPointAdjustment, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(EndPoint, {
-    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->staffId = e->getTextAs<InstCmper>(); }},
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->staffId = e->getTextAs<StaffCmper>(); }},
     {"meas", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->measId = e->getTextAs<MeasCmper>(); }},
     {"edu", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
     {"entryNum", [](const XmlElementPtr& e, const std::shared_ptr<EndPoint>& i) { i->entryNumber = e->getTextAs<EntryNumber>(); }},
@@ -579,11 +579,11 @@ MUSX_XML_ELEMENT_ARRAY(Frame, {
     {"startTime", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->startTime = e->getTextAs<Edu>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(InstrumentUsed, {
-    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
-    {"trackType", [](const XmlElementPtr&, const std::shared_ptr<InstrumentUsed>&) { /* this field seems like it was for future enhancement */ }},
-    {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
-    {"range", [](const XmlElementPtr& e, const std::shared_ptr<InstrumentUsed>& i)
+MUSX_XML_ELEMENT_ARRAY(StaffUsed, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
+    {"trackType", [](const XmlElementPtr&, const std::shared_ptr<StaffUsed>&) { /* this field seems like it was for future enhancement */ }},
+    {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
+    {"range", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i)
         { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
 });
 
@@ -649,10 +649,6 @@ MUSX_XML_ELEMENT_ARRAY(MarkingCategory, {
     {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategory>& i) { i->staffList = e->getTextAs<Cmper>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(MarkingCategoryName, {
-    {"name", [](const XmlElementPtr& e, const std::shared_ptr<MarkingCategoryName>& i) { i->name = e->getText(); }},
-});
-
 MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->width = e->getTextAs<Evpu>(); }},
     {"keySig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) {
@@ -701,7 +697,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
     {"horzEvpuOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->horzEvpuOff = e->getTextAs<Evpu>(); }},
     {"horzEduOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->eduPosition = e->getTextAs<Edu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->vertEvpuOff = e->getTextAs<Evpu>(); }},
-    {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<InstCmper>(); }},
+    {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<StaffCmper>(); }},
     {"layer", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->layer = e->getTextAs<int>(); }},
     {"dontScaleWithEntry", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = populateBoolean(e, i); }},
     {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
@@ -745,8 +741,8 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {
-    {"scoreData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->scoreData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
-    {"partData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->partData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i->getDocument()); }},
+    {"scoreData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->scoreData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i); }},
+    {"partData", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->partData = FieldPopulator<MeasureNumberRegion::ScorePartData>::createAndPopulate(e, i); }},
     {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
     {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
     {"startChar", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion>& i) { i->startChar = e->getTextAs<char32_t>(); }},
@@ -787,9 +783,9 @@ MUSX_XML_ELEMENT_ARRAY(MultiStaffGroupId, {
 
 // NOTE: zero values are not exported in the xml, so this mapping only pushes non-zero values to the vector of staffNums.
 MUSX_XML_ELEMENT_ARRAY(MultiStaffInstrumentGroup, {
-    {"staffNum1", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
-    {"staffNum2", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
-    {"staffNum3", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<InstCmper>()); }},
+    {"staffNum1", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<StaffCmper>()); }},
+    {"staffNum2", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<StaffCmper>()); }},
+    {"staffNum3", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<StaffCmper>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(Page, {
@@ -993,11 +989,11 @@ MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::DashedParams, {
 MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine, {
     {"lineStyle", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineStyle = toEnum<SmartShapeCustomLine::LineStyle>(e); }},
     {"charParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
-        { i->charParams = FieldPopulator<SmartShapeCustomLine::CharParams>::createAndPopulate(e, i->getDocument()); }},
+        { i->charParams = FieldPopulator<SmartShapeCustomLine::CharParams>::createAndPopulate(e, i); }},
     {"solidParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
-        { i->solidParams = FieldPopulator<SmartShapeCustomLine::SolidParams>::createAndPopulate(e, i->getDocument()); }},
+        { i->solidParams = FieldPopulator<SmartShapeCustomLine::SolidParams>::createAndPopulate(e, i); }},
     {"dashedParams", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i)
-        { i->dashedParams = FieldPopulator<SmartShapeCustomLine::DashedParams>::createAndPopulate(e, i->getDocument()); }},
+        { i->dashedParams = FieldPopulator<SmartShapeCustomLine::DashedParams>::createAndPopulate(e, i); }},
     {"lineCapStartType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapStartType = toEnum<SmartShapeCustomLine::LineCapType>(e); }},
     {"lineCapEndType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapEndType = toEnum<SmartShapeCustomLine::LineCapType>(e); }},
     {"lineCapStartArrowID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeCustomLine>& i) { i->lineCapStartArrowId = e->getTextAs<Cmper>(); }},
@@ -1151,6 +1147,10 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"hideKeySigsShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideKeySigsShowAccis = populateBoolean(e, i); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(StaffList, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffList>& i) { i->values.push_back(e->getTextAs<StaffCmper>()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"floatNoteheadFont", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatNoteheadFont = populateBoolean(e, i); }},
     {"flatBeams", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->flatBeams = populateBoolean(e, i); }},
@@ -1199,7 +1199,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle, []() {
         {"styleName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->styleName = e->getText(); }},
         {"addToMenu", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->addToMenu = populateBoolean(e, i); }},
         {"mask", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) {
-            i->masks = FieldPopulator<StaffStyle::Masks>::createAndPopulate(e, i->getDocument()); }},
+            i->masks = FieldPopulator<StaffStyle::Masks>::createAndPopulate(e, i); }},
     };
     xml::XmlElementArray<StaffStyle> retval;
     retval.reserve(Staff::xmlMappingArray().size() + additionalFields.size());
