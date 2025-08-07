@@ -153,3 +153,12 @@ gtest_discover_tests(musxdomtests
         ENVIRONMENT "GTEST_COLOR=1"
     EXTRA_ARGS --gtest_color=yes
 )
+
+# Allow users to disable building benchmarks
+option(musx_BUILD_BENCHMARKS "Build musx benchmark binary" ON)
+if(musx_BUILD_BENCHMARKS)
+    message(STATUS "Benchmarks enabled for musx_BUILD_BENCHMARKS.")
+    add_subdirectory(benchmarks)
+else()
+    message(STATUS "Benchmarks not enabled for musx_BUILD_BENCHMARKS.")
+endif()
