@@ -101,7 +101,7 @@ void benchmarkOthersArrays(const DocumentPtr& doc)
     constexpr Cmper partId = SCORE_PARTID;
     const std::vector<std::string> nodeIds = {
         "articDef", "beatChart", "frameSpec",
-        "instUsed", "layerAttributes", "measSpec", "measNumbRegion",
+        "instUsed", "layerAtts", "measSpec", "measNumbRegion",
         "miscNoExist", "mmRest", "multiStaffInstGroup", "pageSpec",
         "pageTextAssign", "partDef", "partGlobals", "repeatEndingStart",
         "shapeDef", "smartShape", "staffSpec", "staffStyle", "staffSystemSpec",
@@ -124,6 +124,84 @@ void benchmarkOthersArrays(const DocumentPtr& doc)
                   << result.size() << " objects found in "
                   << elapsedMs << " μs\n";
     }
+}
+
+template <typename T>
+class BenchmarkPoolShim : public ObjectPool<T>
+{
+public:
+    using Base = ObjectPool<T>;
+    using ObjectKey = typename Base::ObjectKey;
+
+    // Construct from an existing pool by shallow-copying shared_ptrs
+    explicit BenchmarkPoolShim(const Base& source)
+        : Base(source) // invokes ObjectPool<T>'s copy constructor
+    {
+    }
+
+    // Expose the protected getSource<T> method for benchmarking
+    using Base::getSource;
+};
+
+void benchmarkOthers(const DocumentPtr& doc)
+{
+    using clock = std::chrono::high_resolution_clock;
+
+    std::cout << "Benchmarking individual Others lookups:\n";
+
+    // These part IDs should exist in the file; adjust if needed
+    constexpr Cmper score = SCORE_PARTID;
+    constexpr Cmper part1 = 1;
+    constexpr Cmper part2 = 2;
+    constexpr Cmper meas5 = 5;
+    constexpr Cmper staff2 = 2;
+
+    struct TestCase {
+        std::string nodeId;
+        Cmper partId;
+        std::optional<Cmper> cmper1;
+        std::optional<Inci> inci;
+    };
+
+    const std::vector<TestCase> cases = {
+        {"staffSpec", score, staff2, std::nullopt},
+        {"staffStyle", score, 2, std::nullopt},
+        {"smartShape", score, 337, std::nullopt},
+        {"instUsed", score, 17, 3},
+        {"partGlobals", part1, MUSX_GLOBALS_CMPER, std::nullopt},
+        {"textBlock", score, 345, std::nullopt},
+        {"measSpec", part2, meas5, std::nullopt},
+        {"repeatEndingStart", score, meas5, std::nullopt},
+        {"layerAtts", score, 1, std::nullopt},
+        {"pageSpec", part2, 4, std::nullopt},
+        {"frameSpec", score, 678, 0},
+        {"nonExistent", part2, 12345, 0}
+    };
+
+    int foundCount = 0;
+    auto shim = std::make_shared<BenchmarkPoolShim<OthersBase>>(*doc->getOthers());
+
+    for (const auto& c : cases) {
+        using ObjectPool = ObjectPool<OthersBase>;
+        ObjectPool::ObjectKey key(c.nodeId, c.partId, c.cmper1, std::nullopt, c.inci);
+
+        auto start = clock::now();
+        auto result = shim->getSource<OthersBase>(key);
+        auto end = clock::now();
+
+        const auto elapsedUs = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+
+        std::cout << "  " << c.nodeId
+                  << " (part=" << c.partId
+                  << (c.cmper1 ? ", cmper1=" + std::to_string(*c.cmper1) : "")
+                  << (c.inci ? ", inci=" + std::to_string(*c.inci) : "")
+                  << "): " << (result ? "found" : "NOT FOUND")
+                  << " in " << elapsedUs << " μs\n";
+
+        if (result) ++foundCount;
+    }
+
+    std::cout << foundCount << " of " << cases.size() << " cases found.\n";
 }
 
 int main(int argc, char* argv[])
@@ -164,6 +242,7 @@ int main(int argc, char* argv[])
 
     benchmarkEntries(doc);
     benchmarkOthersArrays(doc);
+    benchmarkOthers(doc);
 
     return 0;
 }
