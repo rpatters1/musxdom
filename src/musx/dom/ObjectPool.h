@@ -83,14 +83,14 @@ public:
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
-        std::string nodeId;             ///< the identifier for this node. usually the XML node name.
+        std::string_view nodeId;        ///< the identifier for this node. usually the XML node name.
         Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
         std::optional<Cmper> cmper2;    ///< optional cmper2 for Details.
         std::optional<Inci> inci;       ///< optional inci for multi-inci classes
 
         /** @brief explicit constructor for optional parameters */
-        ObjectKey(const std::string n,
+        ObjectKey(std::string_view n,
             Cmper p,
             std::optional<Cmper> c1 = std::nullopt,
             std::optional<Cmper> c2 = std::nullopt,
@@ -119,7 +119,7 @@ public:
         /** @brief provides a description of the key for diagnostic purposes */
         std::string description() const
         {
-            std::string result = nodeId + " part " + std::to_string(partId);
+            std::string result = std::string(nodeId) + " part " + std::to_string(partId);
             if (cmper1) {
                 if (cmper2) {
                     result += " cmpers [" + std::to_string(cmper1.value()) + ", " + std::to_string(cmper2.value()) + "]";
@@ -143,29 +143,29 @@ public:
      * @param key The key with which to store the object 
      * @param object A shared pointer to the `ObjectBaseType` object to add.
      */
-    void add(const ObjectKey& key, ObjectPtr object)
+    void add(ObjectKey key, ObjectPtr object)
     {
         if (key.inci.has_value()) {
             ObjectKey noInciKey = key;
             noInciKey.inci = std::nullopt;
             auto currentIncis = getArray<ObjectBaseType>(noInciKey, key.partId);
             if (key.inci.value() != int(currentIncis.size())) {
-                MUSX_INTEGRITY_ERROR("Node " + key.nodeId + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
+                MUSX_INTEGRITY_ERROR("Node " + std::string(key.nodeId) + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
             }
         }
-        auto [poolIt, emplaced] = m_pool.emplace(key, object);
+        auto shareModeIt = m_shareMode.find(key.nodeId);
+        auto [poolIt, emplaced] = m_pool.emplace(std::move(key), object);
         if (!emplaced) {
-            MUSX_INTEGRITY_ERROR("Attempted to add same key more than once: " + key.description());
+            MUSX_INTEGRITY_ERROR("Attempted to add same key more than once: " + poolIt->first.description());
         }
-        auto it = m_shareMode.find(key.nodeId);
-        if (it == m_shareMode.end()) {
-            m_shareMode.emplace(key.nodeId, object->getShareMode());
-        } else if (object->getShareMode() != it->second && object->getShareMode() != Base::ShareMode::All) {
-            if (it->second == Base::ShareMode::All) {
-                m_shareMode[key.nodeId] = object->getShareMode();
+        if (shareModeIt == m_shareMode.end()) {
+            m_shareMode.emplace(poolIt->first.nodeId, object->getShareMode());
+        } else if (object->getShareMode() != shareModeIt->second && object->getShareMode() != Base::ShareMode::All) {
+            if (shareModeIt->second == Base::ShareMode::All) {
+                m_shareMode[poolIt->first.nodeId] = object->getShareMode();
             } else {
-                MUSX_INTEGRITY_ERROR("Share mode for added " + key.nodeId + " object [" + std::to_string(int(object->getShareMode()))
-                    + "] does not match previous [" + std::to_string(int(it->second)) + "]");                
+                MUSX_INTEGRITY_ERROR("Share mode for added " + std::string(poolIt->first.nodeId) + " object [" + std::to_string(int(object->getShareMode()))
+                    + "] does not match previous [" + std::to_string(int(shareModeIt->second)) + "]");                
             }
         }
     }
@@ -332,12 +332,12 @@ protected:
     /// @param document THe document for this pool.
     /// @param knownShareModes Optional parameter that specifies known share modes for certain elements.
     /// These can be particurly important for Base::ShareMode::None because there may be no parts containing them.
-    ObjectPool(const DocumentWeakPtr& document, const std::unordered_map<std::string, dom::Base::ShareMode>& knownShareModes = {})
+    ObjectPool(const DocumentWeakPtr& document, const std::unordered_map<std::string_view, dom::Base::ShareMode>& knownShareModes = {})
         : m_document(document), m_shareMode(knownShareModes) {}
 
 private:
     DocumentWeakPtr m_document;
-    std::unordered_map<std::string, dom::Base::ShareMode> m_shareMode;
+    std::unordered_map<std::string_view, dom::Base::ShareMode> m_shareMode;
 
     std::map<ObjectKey, ObjectPtr> m_pool;
 };
@@ -353,11 +353,11 @@ public:
     OptionsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
 
     /** @brief Scalar version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<OptionsBase>& instance)
+    void add(std::string_view nodeName, const std::shared_ptr<OptionsBase>& instance)
     {
         const Base* basePtr = instance.get();
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
-            MUSX_INTEGRITY_ERROR("Options node " + nodeName + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
+            MUSX_INTEGRITY_ERROR("Options node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
         ObjectPool::add({ nodeName, basePtr->getSourcePartId() }, instance);
     }
@@ -367,7 +367,7 @@ public:
     MusxInstanceList<T> getArray() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID }, SCORE_PARTID);
+        return ObjectPool::getArray<T>({ T::XmlNodeName, SCORE_PARTID }, SCORE_PARTID);
     }
 
     /** @brief Get a single item out of the pool */
@@ -375,7 +375,7 @@ public:
     MusxInstance<T> get() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return ObjectPool::getSource<T>({ std::string(T::XmlNodeName), SCORE_PARTID });
+        return ObjectPool::getSource<T>({ T::XmlNodeName, SCORE_PARTID });
     }
 };
 /** @brief Shared `OptionsPool` pointer */
@@ -390,21 +390,21 @@ class OthersPool : public ObjectPool<OthersBase>
 public:
     /// @brief Constructor
     OthersPool(const DocumentWeakPtr& document) : ObjectPool(document, {
-        { std::string(others::BeatChartElement::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::StaffUsed::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::SystemLock::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::MultiStaffInstrumentGroup::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::MultimeasureRest::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::MultiStaffGroupId::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::Page::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::PartGlobals::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::StaffSystem::XmlNodeName), Base::ShareMode::None },
-        { std::string(others::StaffStyleAssign::XmlNodeName), Base::ShareMode::None },
+        { others::BeatChartElement::XmlNodeName, Base::ShareMode::None },
+        { others::StaffUsed::XmlNodeName, Base::ShareMode::None },
+        { others::SystemLock::XmlNodeName, Base::ShareMode::None },
+        { others::MultiStaffInstrumentGroup::XmlNodeName, Base::ShareMode::None },
+        { others::MultimeasureRest::XmlNodeName, Base::ShareMode::None },
+        { others::MultiStaffGroupId::XmlNodeName, Base::ShareMode::None },
+        { others::Page::XmlNodeName, Base::ShareMode::None },
+        { others::PartGlobals::XmlNodeName, Base::ShareMode::None },
+        { others::StaffSystem::XmlNodeName, Base::ShareMode::None },
+        { others::StaffStyleAssign::XmlNodeName, Base::ShareMode::None },
         // add other known sharemode none items as they are identified.
     }) {}
 
     /** @brief OthersPool version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<OthersBase>& instance)
+    void add(std::string_view nodeName, const std::shared_ptr<OthersBase>& instance)
     { ObjectPool::add({nodeName, instance->getSourcePartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
     
     /** @brief OthersPool version of #ObjectPool::getArray */
@@ -412,7 +412,7 @@ public:
     MusxInstanceList<T> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
-        return ObjectPool::getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper });
+        return ObjectPool::getArrayForPart<T>({ T::XmlNodeName, partId, cmper });
     }
 
     /** @brief Get a single item out of the pool */
@@ -420,7 +420,7 @@ public:
     MusxInstance<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
-        return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, cmper, std::nullopt, inci });
+        return ObjectPool::getEffectiveForPart<T>({ T::XmlNodeName, partId, cmper, std::nullopt, inci });
     }
 };
 /** @brief Shared `OthersPool` pointer */
@@ -437,27 +437,27 @@ class DetailsPool : protected ObjectPool<DetailsBase>
 public:
     /// @brief Constructor
     DetailsPool(const DocumentWeakPtr& document) : ObjectPool(document, {
-        { std::string(details::CenterShape::XmlNodeName), Base::ShareMode::None },
-        { std::string(details::StaffGroup::XmlNodeName), Base::ShareMode::None },
-        { std::string(details::StaffSize::XmlNodeName), Base::ShareMode::None },
+        { details::CenterShape::XmlNodeName, Base::ShareMode::None },
+        { details::StaffGroup::XmlNodeName, Base::ShareMode::None },
+        { details::StaffSize::XmlNodeName, Base::ShareMode::None },
         // add other known sharemode none items as they are identified.
     }) {}
 
     /** @brief DetailsPool version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<DetailsBase>& instance)
+    void add(std::string_view nodeName, const std::shared_ptr<DetailsBase>& instance)
     { ObjectPool::add({nodeName, instance->getSourcePartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
 
     /** @brief version of #ObjectPool::getArray for getting all of them */
     template <typename T, typename = std::enable_if_t<is_pool_type_v<DetailsPool, T>>>
     MusxInstanceList<T> getArray(Cmper partId) const
-    { return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId }); }
+    { return ObjectPool::template getArrayForPart<T>({ T::XmlNodeName, partId }); }
 
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     MusxInstanceList<T> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2 });
+        return ObjectPool::template getArrayForPart<T>({ T::XmlNodeName, partId, cmper1, cmper2 });
     }
 
     /** @brief EntryDetailsPool version of #ObjectPool::getArray */
@@ -465,7 +465,7 @@ public:
     MusxInstanceList<T> getArray(Cmper partId, EntryNumber entnum) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return ObjectPool::template getArrayForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
+        return ObjectPool::template getArrayForPart<T>({ T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
     }
 
     /** @brief Get a single DetailsBase item out of the pool (not EntryDetailsBase) */
@@ -473,7 +473,7 @@ public:
     MusxInstance<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, cmper1, cmper2, inci });
+        return ObjectPool::getEffectiveForPart<T>({ T::XmlNodeName, partId, cmper1, cmper2, inci });
     }
 
     /** @brief Get a single EntryDetailsBase item out of the pool */
@@ -481,7 +481,7 @@ public:
     MusxInstance<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return ObjectPool::getEffectiveForPart<T>({ std::string(T::XmlNodeName), partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci });
+        return ObjectPool::getEffectiveForPart<T>({ T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci });
     }
 
     /// @brief Returns the detail for a particular note
@@ -551,11 +551,11 @@ public:
     TextsPool(const DocumentWeakPtr& document) : ObjectPool(document) {}
 
     /** @brief Texts version of #ObjectPool::add */
-    void add(const std::string& nodeName, const std::shared_ptr<TextsBase>& instance)
+    void add(std::string_view nodeName, const std::shared_ptr<TextsBase>& instance)
     {
         const Base* basePtr = instance.get();
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
-            MUSX_INTEGRITY_ERROR("Texts node " + nodeName + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
+            MUSX_INTEGRITY_ERROR("Texts node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
         ObjectPool::add({ nodeName, basePtr->getSourcePartId(), instance->getTextNumber() }, instance);
     }
@@ -565,7 +565,7 @@ public:
     MusxInstanceList<T> getArray(std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return ObjectPool::getArray<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper }, SCORE_PARTID);
+        return ObjectPool::getArray<T>({ T::XmlNodeName, SCORE_PARTID, cmper }, SCORE_PARTID);
     }
 
     /** @brief Get a single item out of the pool */
@@ -573,7 +573,7 @@ public:
     MusxInstance<T> get(Cmper cmper) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return ObjectPool::getSource<T>({ std::string(T::XmlNodeName), SCORE_PARTID, cmper, std::nullopt, std::nullopt });
+        return ObjectPool::getSource<T>({ T::XmlNodeName, SCORE_PARTID, cmper, std::nullopt, std::nullopt });
     }
 };
 /** @brief Shared `OthersPool` pointer */

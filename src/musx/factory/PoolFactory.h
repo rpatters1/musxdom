@@ -77,8 +77,7 @@ public:
 #endif
 
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {            
-            auto basePtr = DerivedType::extractFromXml(childElement, document, elementLinker, pool);
-            if (basePtr) {
+            if (auto instanceInfo = DerivedType::extractFromXml(childElement, document, elementLinker, pool)) {
 #ifdef MUSX_DISPLAY_NODE_NAMES
                 auto it = alreadyDisplayed.find(childElement->getTagName());
                 if (it == alreadyDisplayed.end()) {
@@ -86,12 +85,17 @@ public:
                     alreadyDisplayed.emplace(childElement->getTagName());
                 }
 #endif
-                auto typedPtr = std::dynamic_pointer_cast<ObjectBase>(basePtr);
-                assert(typedPtr); // program bug if null
+                MUSX_ASSERT_IF(childElement->getTagName() != instanceInfo->xmlNodeName) {
+                    throw std::logic_error("Instance of " + std::string(instanceInfo->xmlNodeName) + " does not match xml tag " + element->getTagName());
+                }
+                auto typedPtr = std::dynamic_pointer_cast<ObjectBase>(instanceInfo->instance);
+                MUSX_ASSERT_IF(!typedPtr) {
+                    throw std::logic_error("Unable to cast instance to correct type for " + std::string(instanceInfo->xmlNodeName));
+                }
                 if constexpr (std::is_same_v<PoolType, EntryPool>) {
                     pool->add(typedPtr->getEntryNumber(), typedPtr);
                 } else {
-                    pool->add(childElement->getTagName(), typedPtr);
+                    pool->add(instanceInfo->xmlNodeName, typedPtr);
                 }
             }
         }

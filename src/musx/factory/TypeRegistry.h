@@ -86,7 +86,7 @@ private:
      * @param nodeName The XML node name to search for.
      * @return A pair consisting of a boolean indicating success and a type pointer if found.
      */
-    static std::optional<VariantType> findRegisteredType(const std::string_view& nodeName)
+    static std::optional<VariantType> findRegisteredType(std::string_view nodeName)
     {
         const auto it = registry.find(nodeName);
         if (it == registry.end()) {
@@ -117,6 +117,18 @@ public:
     template <typename T>
     static constexpr bool is_registered_type_v = is_registered_type<T>::value;
 
+    /// @struct CreatedInstanceInfo
+    /// @brief Information about a created instance returned by #createInstance
+    struct CreatedInstanceInfo
+    {
+        /// @brief Constructor
+        CreatedInstanceInfo(std::shared_ptr<Base> inst, std::string_view nodeName)
+            : instance(inst), xmlNodeName(nodeName) {}
+
+        std::shared_ptr<Base> instance; ///< The newly created instance.
+        std::string_view xmlNodeName;   ///< The static std::string_view containing the instance's node name.
+    };
+
     /**
      * @brief Creates an instance of the registered type corresponding to the provided node name.
      *
@@ -132,15 +144,15 @@ public:
      * @return A shared pointer to the created instance of the base type, or nullptr if not found.
      */
     template <typename PoolPtr, typename... Args>
-    static std::shared_ptr<Base> createInstance([[maybe_unused]]const PoolPtr& pool, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
+    static std::optional<CreatedInstanceInfo> createInstance([[maybe_unused]]const PoolPtr& pool, const XmlElementPtr& node, ElementLinker& elementLinker, const DocumentPtr& document, Args&&... args)
     {
         auto typePtr = TypeRegistry::findRegisteredType(node->getTagName());
         if (!typePtr.has_value()) {
-            return nullptr; // Type not yet implemented
+            return std::nullopt; // Type not yet implemented
         }
-
+        
         return std::visit(
-            [&](auto const& ptr) -> std::shared_ptr<Base> {
+            [&](auto const& ptr) -> CreatedInstanceInfo {
                 using T = std::remove_pointer_t<std::remove_reference_t<decltype(ptr)>>;
                 // Only enable this part if T is constructible with Args...
                 if constexpr (std::is_constructible_v<T, const DocumentPtr&, Cmper, Base::ShareMode, Args...>) {
@@ -165,7 +177,7 @@ public:
                         }
                     }
                     factory::FieldPopulator<T>::populate(instance, node, elementLinker);
-                    return instance;
+                    return CreatedInstanceInfo(instance,T::XmlNodeName);
                 } else {
                     assert(false); // This path should never actually be taken, but it is required for std::visit.
                     throw std::logic_error("Type for " + node->getTagName() + " is not constructible with given arguments");
