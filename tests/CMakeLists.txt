@@ -1,3 +1,7 @@
+message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Configution Types: ${CMAKE_CONFIGURATION_TYPES}")
+message(STATUS "Generator: ${CMAKE_GENERATOR}")
+
 # Add Google Test
 include(FetchContent)
 FetchContent_Declare(
