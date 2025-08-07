@@ -577,6 +577,41 @@ TEST(TextsTest, OtherText)
     EXPECT_EQ(texts->getArray<BookmarkText>(2).size(), 0);
 }
 
+TEST(TextsText, EmbeddedNewLine)
+{
+    using texts::SmartShapeText;
+
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+        auto texts = doc->getTexts();
+        ASSERT_TRUE(texts);
+        auto text = texts->get<SmartShapeText>(52);
+        ASSERT_TRUE(text);
+        ASSERT_FALSE(text->text.empty());
+        EXPECT_EQ(text->text[text->text.size() - 1], '\n') << "trailing newlines not preserved in tinyxml2";
+    }
+
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+        auto texts = doc->getTexts();
+        ASSERT_TRUE(texts);
+        auto text = texts->get<SmartShapeText>(52);
+        ASSERT_TRUE(text);
+        ASSERT_FALSE(text->text.empty());
+        EXPECT_EQ(text->text[text->text.size() - 1], '\n') << "trailing newlines not preserved in rapidxml";
+    }
+
+    {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+        auto texts = doc->getTexts();
+        ASSERT_TRUE(texts);
+        auto text = texts->get<SmartShapeText>(52);
+        ASSERT_TRUE(text);
+        ASSERT_FALSE(text->text.empty());
+        EXPECT_EQ(text->text[text->text.size() - 1], '\n') << "trailing newlines not preserved in pugi";
+    }
+}
+
 TEST(TextsTest, EnigmaComponents)
 {
     constexpr auto constexpr_strlen = [](const auto& str) constexpr {

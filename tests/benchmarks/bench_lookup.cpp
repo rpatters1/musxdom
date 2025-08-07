@@ -100,12 +100,12 @@ void benchmarkOthersArrays(const DocumentPtr& doc)
 
     constexpr Cmper partId = SCORE_PARTID;
     const std::vector<std::string> nodeIds = {
-        "articulation", "beatChart", "enclosure", "expression", "fonts", "frame",
-        "instrumentUsed", "layerAttributes", "measure", "measureNumberRegion",
-        "miscellaneous", "mmrest", "multiStaffInstrumentGroup", "page",
-        "partDefinition", "partGlobals", "percussionNote", "repeats",
-        "shape", "smartShape", "staff", "staffStyle", "staffSystem",
-        "text", "textBlock"
+        "articDef", "beatChart", "frameSpec",
+        "instUsed", "layerAttributes", "measSpec", "measNumbRegion",
+        "miscNoExist", "mmRest", "multiStaffInstGroup", "pageSpec",
+        "pageTextAssign", "partDef", "partGlobals", "repeatEndingStart",
+        "shapeDef", "smartShape", "staffSpec", "staffStyle", "staffSystemSpec",
+        "textBlock"
     };
 
     std::cout << "Benchmarking others arrays:\n";
