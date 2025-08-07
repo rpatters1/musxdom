@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view textXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <header>
@@ -431,7 +431,7 @@ TEST(TextsTest, FileInfoText)
     using texts::FileInfoText;
     using Type = texts::FileInfoText::TextType;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
     
@@ -496,7 +496,7 @@ TEST(TextsTest, LyricsText)
     using texts::LyricsChorus;
     using texts::LyricsSection;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
     
@@ -535,7 +535,7 @@ TEST(TextsTest, OtherText)
     using texts::ExpressionText;
     using texts::BookmarkText;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
     
@@ -582,7 +582,7 @@ TEST(TextsText, EmbeddedNewLine)
     using texts::SmartShapeText;
 
     {
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(textXml);
         auto texts = doc->getTexts();
         ASSERT_TRUE(texts);
         auto text = texts->get<SmartShapeText>(52);
@@ -592,7 +592,7 @@ TEST(TextsText, EmbeddedNewLine)
     }
 
     {
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textXml);
         auto texts = doc->getTexts();
         ASSERT_TRUE(texts);
         auto text = texts->get<SmartShapeText>(52);
@@ -602,7 +602,7 @@ TEST(TextsText, EmbeddedNewLine)
     }
 
     {
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(textXml);
         auto texts = doc->getTexts();
         ASSERT_TRUE(texts);
         auto text = texts->get<SmartShapeText>(52);
@@ -648,7 +648,7 @@ TEST(TextsTest, FontFromEnigma)
 {
     using texts::ExpressionText;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
@@ -681,7 +681,7 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
 {
     using namespace musx::util;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
@@ -763,7 +763,7 @@ TEST(TextsTest, EnigmaAccidentalSubstitution)
 {
     using EnigmaString = musx::util::EnigmaString;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(textXml);
 
     auto replaceAccidentalTags = [&](const std::string& text, EnigmaString::AccidentalStyle accidentalStyle = EnigmaString::AccidentalStyle::Ascii) -> std::string {
         std::string result;
@@ -875,7 +875,7 @@ TEST(TextsTest, ParseEnigmaWithAccidentals)
 {
     using namespace musx::util;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
@@ -897,7 +897,7 @@ TEST(TextsTest, ParseEnigmaInsertsBaseLevel)
 {
     using namespace musx::util;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
@@ -930,7 +930,7 @@ TEST(TextsTest, ParseEnigmaFontInfo)
 {
     using namespace musx::util;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 

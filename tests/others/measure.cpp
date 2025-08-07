@@ -25,7 +25,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view measureXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -109,7 +109,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(MeasureTest, PopulateScore)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(measureXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -227,7 +227,7 @@ TEST(MeasureTest, PopulateScore)
 
 TEST(MeasureTest, PopulatePart)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(measureXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -297,7 +297,7 @@ TEST(MeasureTest, PopulatePart)
 
 TEST(MeasureTest, UnlinkedNodes)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(measureXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 

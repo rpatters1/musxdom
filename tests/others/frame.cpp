@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view frameXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -51,7 +51,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(FrameTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(frameXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     

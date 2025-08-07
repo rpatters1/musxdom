@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view multiStaffXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -161,7 +161,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(MultiStaffGroupTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(multiStaffXml);
     ASSERT_TRUE(doc);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);

@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view staffXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -131,7 +131,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(StaffTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(staffXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -199,7 +199,7 @@ TEST(StaffTest, PopulateFields)
 
 TEST(StaffTest, AutoNumbering)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(staffXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 

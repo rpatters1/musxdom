@@ -24,7 +24,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view smartShapeOptsXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <options>
@@ -341,7 +341,7 @@ TEST(SmartShapeOptionsTest, PropertiesTest)
 {
     using SmartShapeOptions = musx::dom::options::SmartShapeOptions;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(smartShapeOptsXml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
 
@@ -396,7 +396,7 @@ TEST(SmartShapeOptions, ArrayTests)
 {
     using SmartShapeOptions = musx::dom::options::SmartShapeOptions;
     
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(smartShapeOptsXml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
 

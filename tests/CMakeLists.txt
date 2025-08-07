@@ -118,6 +118,9 @@ add_executable(musxdomtests
     util/fraction.cpp
 )
 
+# Enable Unity/Jumbo build for this target
+set_target_properties(musxdomtests PROPERTIES UNITY_BUILD ON)
+
 set(CMAKE_WARN_DEPRECATED ON CACHE BOOL "Suppress deprecation warnings for external projects" FORCE)
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
     # Extra warnings for Clang/AppleClang
