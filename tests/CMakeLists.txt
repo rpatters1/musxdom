@@ -1,3 +1,7 @@
+message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Configution Types: ${CMAKE_CONFIGURATION_TYPES}")
+message(STATUS "Generator: ${CMAKE_GENERATOR}")
+
 # Add Google Test
 include(FetchContent)
 FetchContent_Declare(
@@ -114,6 +118,9 @@ add_executable(musxdomtests
     util/fraction.cpp
 )
 
+# Enable Unity/Jumbo build for this target
+set_target_properties(musxdomtests PROPERTIES UNITY_BUILD ON)
+
 set(CMAKE_WARN_DEPRECATED ON CACHE BOOL "Suppress deprecation warnings for external projects" FORCE)
 if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
     # Extra warnings for Clang/AppleClang
@@ -153,3 +160,12 @@ gtest_discover_tests(musxdomtests
         ENVIRONMENT "GTEST_COLOR=1"
     EXTRA_ARGS --gtest_color=yes
 )
+
+# Allow users to disable building benchmarks
+option(musx_BUILD_BENCHMARKS "Build musx benchmark binary" ON)
+if(musx_BUILD_BENCHMARKS)
+    message(STATUS "Benchmarks enabled for musx_BUILD_BENCHMARKS.")
+    add_subdirectory(benchmarks)
+else()
+    message(STATUS "Benchmarks not enabled for musx_BUILD_BENCHMARKS.")
+endif()

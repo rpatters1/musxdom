@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view poolTestXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -218,7 +218,7 @@ using namespace musx::dom;
 
 TEST(PoolTest, Scalar)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(poolTestXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     EXPECT_TRUE(others->get<others::TextExpressionDef>(SCORE_PARTID, 3));
@@ -229,7 +229,7 @@ TEST(PoolTest, Scalar)
 
 TEST(PoolTest, Vector)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(poolTestXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     EXPECT_EQ(others->getArray<others::MarkingCategory>(SCORE_PARTID).size(), 7);

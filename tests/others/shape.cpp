@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view shapeXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
     <others>
@@ -86,7 +86,7 @@ constexpr static musxtest::string_view xml = R"xml(
     
 TEST(ShapeDefTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -126,7 +126,7 @@ TEST(ShapeDefTest, PopulateFields)
 
 TEST(ShapeDefTest, InterateInstructions)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(shapeXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 

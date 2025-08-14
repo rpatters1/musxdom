@@ -24,7 +24,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view lyricOptionsXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <options>
@@ -102,7 +102,7 @@ TEST(LyricOptionsTest, PropertiesAndSubnodes)
 {
     using LyricOptions = musx::dom::options::LyricOptions;
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(lyricOptionsXml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
 

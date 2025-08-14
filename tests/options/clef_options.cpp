@@ -2,7 +2,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view clefOptionsXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <options>
@@ -119,7 +119,7 @@ using namespace musx::dom;
 
 TEST(ClefOptionsTest, ClefDefPropertiesTest)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(clefOptionsXml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
     auto clefOptions = options->get<options::ClefOptions>();

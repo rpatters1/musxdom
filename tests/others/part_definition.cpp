@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view partDefXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <options>
@@ -185,7 +185,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(PartDefinitionTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(partDefXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
     
@@ -203,7 +203,7 @@ TEST(PartDefinitionTest, PopulateFields)
 
 TEST(PartDefinitionTest, GetName)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(partDefXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -234,7 +234,7 @@ TEST(PartDefinitionTest, GetName)
 
 TEST(PartDefinitionTest, GetArrayForScore)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(partDefXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 

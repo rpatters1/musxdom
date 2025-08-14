@@ -26,7 +26,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view tupletXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <details>
@@ -109,7 +109,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(TupletDefTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(tupletXml);
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
     
@@ -148,7 +148,7 @@ TEST(TupletDefTest, PopulateFields)
 
 TEST(TupletDefTest, PartCheck)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(tupletXml);
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
     

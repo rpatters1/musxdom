@@ -25,7 +25,7 @@
 
 using namespace musx::dom;
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view pageOptionsXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <options>
@@ -87,7 +87,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(PageFormatOptionsTest, PropertiesTest)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(pageOptionsXml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
     auto pageFormatOptions = options->get<options::PageFormatOptions>();

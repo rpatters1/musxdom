@@ -54,7 +54,7 @@ TEST(PercussionNoteCodeTest, PopulateFields)
     EXPECT_EQ(pcode->noteCode, PercussionNoteTypeId(11));
 }
 
-constexpr static musxtest::string_view xml = R"xml(
+constexpr static musxtest::string_view percNoteXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
@@ -88,7 +88,7 @@ constexpr static musxtest::string_view xml = R"xml(
 
 TEST(PercussionNoteInfoTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(percNoteXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -118,7 +118,7 @@ TEST(PercussionNoteInfoTest, PopulateFields)
 
 TEST(PercussionNoteInfoTest, PercussionNoteTypes)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(percNoteXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
