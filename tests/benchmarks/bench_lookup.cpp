@@ -226,8 +226,11 @@ int main(int argc, char* argv[])
     }
 
     const std::streamsize size = file.tellg();
+    if (size < 0) {
+        throw std::runtime_error("tellg() failed");
+    }
     file.seekg(0, std::ios::beg);
-    std::vector<char> buffer(size);
+    std::vector<char> buffer(static_cast<size_t>(size));
     if (!file.read(buffer.data(), size)) {
         std::cerr << "Failed to read musx file.\n";
         return 1;
