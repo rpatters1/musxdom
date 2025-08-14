@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['objectkey_0',['ObjectKey',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#abdf0e2547d353d97f442b1532ef8e96a',1,'musx::dom::ObjectPool::ObjectKey']]],
-  ['objectpool_1',['ObjectPool',['../classmusx_1_1dom_1_1ObjectPool.html#a4619e765484658f731e64cc4bcf44a18',1,'musx::dom::ObjectPool']]],
+  ['objectkey_0',['ObjectKey',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a0487a7b424f99735f451b65547db2e51',1,'musx::dom::ObjectPool::ObjectKey']]],
+  ['objectpool_1',['ObjectPool',['../classmusx_1_1dom_1_1ObjectPool.html#a20457025039eff1abba8c2e81cb4d25c',1,'musx::dom::ObjectPool']]],
   ['operator_20bool_2',['operator bool',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a75770f02addcc36e261584142e5910c6',1,'musx::dom::EntryInfoPtr::operator bool()'],['../classmusx_1_1dom_1_1NoteInfoPtr.html#a6ce7e900bd85f90b8e7b83e3d61c2094',1,'musx::dom::NoteInfoPtr::operator bool()'],['../classmusx_1_1util_1_1EnigmaParsingContext.html#ab0f1e95ab3aef8cfb056a401c49023af',1,'musx::util::EnigmaParsingContext::operator bool()'],['../classmusx_1_1util_1_1Fraction.html#ae592aa64cce35b9b27d903567842df30',1,'musx::util::Fraction::operator bool()'],['../classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a761d54ac8d9acb4bf574024948075326',1,'musx::dom::details::GFrameHoldContext::operator bool()']]],
   ['operator_21_3d_3',['operator!=',['../classmusx_1_1util_1_1Fraction.html#adae152da7f042ba42251b99979f74310',1,'musx::util::Fraction']]],
   ['operator_2a_4',['operator*',['../classmusx_1_1util_1_1Fraction.html#a828c64522d3fbb26ceda512df4aa792d',1,'musx::util::Fraction']]],

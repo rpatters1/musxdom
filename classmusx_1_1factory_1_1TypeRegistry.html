@@ -108,16 +108,19 @@ $(document).ready(function(){initNavTree('classmusx_1_1factory_1_1TypeRegistry.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html">CreatedInstanceInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information about a created instance returned by <a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html#a5c231e3c3f759add19113ab6f3d8ca49" title="Creates an instance of the registered type corresponding to the provided node name.">createInstance</a>.  <a href="structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html">is_registered_type</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine at compile-time if type T is a class in this registry.  <a href="structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aee737a2017ce16eff12504e47596d9f1" id="r_aee737a2017ce16eff12504e47596d9f1"><td class="memTemplParams" colspan="2">template&lt;typename PoolPtr , typename... Args&gt; </td></tr>
-<tr class="memitem:aee737a2017ce16eff12504e47596d9f1"><td class="memTemplItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html#aee737a2017ce16eff12504e47596d9f1">createInstance</a> (const PoolPtr &amp;pool, const <a class="el" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a> &amp;node, <a class="el" href="classmusx_1_1factory_1_1ElementLinker.html">ElementLinker</a> &amp;elementLinker, const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, Args &amp;&amp;... args)</td></tr>
-<tr class="memdesc:aee737a2017ce16eff12504e47596d9f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an instance of the registered type corresponding to the provided node name.  <br /></td></tr>
-<tr class="separator:aee737a2017ce16eff12504e47596d9f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c231e3c3f759add19113ab6f3d8ca49" id="r_a5c231e3c3f759add19113ab6f3d8ca49"><td class="memTemplParams" colspan="2">template&lt;typename PoolPtr , typename... Args&gt; </td></tr>
+<tr class="memitem:a5c231e3c3f759add19113ab6f3d8ca49"><td class="memTemplItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html">CreatedInstanceInfo</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html#a5c231e3c3f759add19113ab6f3d8ca49">createInstance</a> (const PoolPtr &amp;pool, const <a class="el" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a> &amp;node, <a class="el" href="classmusx_1_1factory_1_1ElementLinker.html">ElementLinker</a> &amp;elementLinker, const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, Args &amp;&amp;... args)</td></tr>
+<tr class="memdesc:a5c231e3c3f759add19113ab6f3d8ca49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an instance of the registered type corresponding to the provided node name.  <br /></td></tr>
+<tr class="separator:a5c231e3c3f759add19113ab6f3d8ca49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -137,8 +140,8 @@ class musx::factory::TypeRegistry&lt; Types &gt;</div><p>A registry of types for
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="aee737a2017ce16eff12504e47596d9f1" name="aee737a2017ce16eff12504e47596d9f1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee737a2017ce16eff12504e47596d9f1">&#9670;&#160;</a></span>createInstance()</h2>
+<a id="a5c231e3c3f759add19113ab6f3d8ca49" name="a5c231e3c3f759add19113ab6f3d8ca49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c231e3c3f759add19113ab6f3d8ca49">&#9670;&#160;</a></span>createInstance()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -151,7 +154,7 @@ template&lt;typename PoolPtr , typename... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; <a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html">musx::factory::TypeRegistry</a>&lt; Types &gt;::createInstance </td>
+          <td class="memname">static std::optional&lt; <a class="el" href="structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html">CreatedInstanceInfo</a> &gt; <a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html">musx::factory::TypeRegistry</a>&lt; Types &gt;::createInstance </td>
           <td>(</td>
           <td class="paramtype">const PoolPtr &amp;&#160;</td>
           <td class="paramname"><em>pool</em>, </td>

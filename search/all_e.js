@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['objectkey_0',['objectkey',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html',1,'musx::dom::ObjectPool&lt; ObjectBaseType &gt;::ObjectKey'],['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#abdf0e2547d353d97f442b1532ef8e96a',1,'musx::dom::ObjectPool::ObjectKey::ObjectKey()']]],
-  ['objectpool_1',['objectpool',['../classmusx_1_1dom_1_1ObjectPool.html',1,'musx::dom::ObjectPool&lt; ObjectBaseType &gt;'],['../classmusx_1_1dom_1_1ObjectPool.html#a4619e765484658f731e64cc4bcf44a18',1,'musx::dom::ObjectPool::ObjectPool()']]],
+  ['objectkey_0',['objectkey',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html',1,'musx::dom::ObjectPool&lt; ObjectBaseType &gt;::ObjectKey'],['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a0487a7b424f99735f451b65547db2e51',1,'musx::dom::ObjectPool::ObjectKey::ObjectKey()']]],
+  ['objectpool_1',['objectpool',['../classmusx_1_1dom_1_1ObjectPool.html',1,'musx::dom::ObjectPool&lt; ObjectBaseType &gt;'],['../classmusx_1_1dom_1_1ObjectPool.html#a20457025039eff1abba8c2e81cb4d25c',1,'musx::dom::ObjectPool::ObjectPool()']]],
   ['objectpool_3c_20detailsbase_20_3e_2',['ObjectPool&lt; DetailsBase &gt;',['../classmusx_1_1dom_1_1ObjectPool.html',1,'musx::dom']]],
   ['objectpool_3c_20optionsbase_20_3e_3',['ObjectPool&lt; OptionsBase &gt;',['../classmusx_1_1dom_1_1ObjectPool.html',1,'musx::dom']]],
   ['objectpool_3c_20othersbase_20_3e_4',['ObjectPool&lt; OthersBase &gt;',['../classmusx_1_1dom_1_1ObjectPool.html',1,'musx::dom']]],
@@ -27,7 +27,7 @@ var searchData=
   ['oldfinalerestbeams_24',['oldFinaleRestBeams',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a849549dd2adf0a60d1f7db36bd2441ae',1,'musx::dom::options::BeamOptions']]],
   ['on_25',['on',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a401ee7c12c872ce9f039ab9994a6708ba521c36a31c2762741cf0f8890cbe05e3',1,'musx::dom::others::SmartShape::On'],['../structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html#aa7401b464c6676e0c4f8053d36415837',1,'musx::dom::options::LyricOptions::SyllablePosStyle::on'],['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a20422aebb4bbb4adb8330aed4bf29d51a521c36a31c2762741cf0f8890cbe05e3',1,'musx::dom::others::SmartShape::On']]],
   ['ondesmartenot_26',['OndesMartenot',['../namespacemusx_1_1dom_1_1uuid.html#aad3c394e0619e7d265bcfeed96a518cb',1,'musx::dom::uuid']]],
-  ['onebarrepeat_27',['onebarrepeat',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a355bb56e4a4dee1ab7f1e5c226c80e5e',1,'musx::dom::options::MusicSymbolOptions::oneBarRepeat'],['../classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a25320a755aed9eeb52d4687818dcee86',1,'musx::dom::others::Staff::OneBarRepeat']]],
+  ['onebarrepeat_27',['onebarrepeat',['../classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9a25320a755aed9eeb52d4687818dcee86',1,'musx::dom::others::Staff::OneBarRepeat'],['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a355bb56e4a4dee1ab7f1e5c226c80e5e',1,'musx::dom::options::MusicSymbolOptions::oneBarRepeat']]],
   ['onendnotes_28',['OnEndNotes',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a2541087e462f18f756e654dea7089ed9',1,'musx::dom::options::BeamOptions']]],
   ['onextremenote_29',['OnExtremeNote',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a1d9842eee97b7379c537a45fa78ed80e',1,'musx::dom::options::BeamOptions']]],
   ['onlyifotherlayershavenotes_30',['onlyIfOtherLayersHaveNotes',['../classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae2a33f78ad890261180cddf1c3eaf112',1,'musx::dom::others::LayerAttributes']]],

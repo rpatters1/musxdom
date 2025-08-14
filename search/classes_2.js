@@ -13,7 +13,7 @@ var searchData=
   ['clefoctavesharps_10',['ClefOctaveSharps',['../classmusx_1_1dom_1_1details_1_1ClefOctaveSharps.html',1,'musx::dom::details']]],
   ['clefoptions_11',['ClefOptions',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html',1,'musx::dom::options']]],
   ['commonclassbase_12',['CommonClassBase',['../classmusx_1_1dom_1_1CommonClassBase.html',1,'musx::dom']]],
-  ['compositeitem_13',['compositeitem',['../classmusx_1_1dom_1_1others_1_1TimeCompositeLower_1_1CompositeItem.html',1,'musx::dom::others::TimeCompositeLower::CompositeItem'],['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html',1,'musx::dom::others::TimeCompositeUpper::CompositeItem']]],
+  ['compositeitem_13',['compositeitem',['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html',1,'musx::dom::others::TimeCompositeUpper::CompositeItem'],['../classmusx_1_1dom_1_1others_1_1TimeCompositeLower_1_1CompositeItem.html',1,'musx::dom::others::TimeCompositeLower::CompositeItem']]],
   ['connectionstyle_14',['ConnectionStyle',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ConnectionStyle.html',1,'musx::dom::options::SmartShapeOptions']]],
   ['connectstyle_15',['ConnectStyle',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html',1,'musx::dom::options::TieOptions']]],
   ['containedclassbase_16',['ContainedClassBase',['../classmusx_1_1dom_1_1ContainedClassBase.html',1,'musx::dom']]],
@@ -21,8 +21,9 @@ var searchData=
   ['controlpoint_18',['ControlPoint',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html',1,'musx::dom::options::TieOptions']]],
   ['controlpointadjustment_19',['ControlPointAdjustment',['../classmusx_1_1dom_1_1smartshape_1_1ControlPointAdjustment.html',1,'musx::dom::smartshape']]],
   ['controlstyle_20',['controlstyle',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html',1,'musx::dom::options::SmartShapeOptions::ControlStyle'],['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html',1,'musx::dom::options::TieOptions::ControlStyle']]],
-  ['crossstaff_21',['CrossStaff',['../classmusx_1_1dom_1_1details_1_1CrossStaff.html',1,'musx::dom::details']]],
-  ['customdownstem_22',['CustomDownStem',['../classmusx_1_1dom_1_1details_1_1CustomDownStem.html',1,'musx::dom::details']]],
-  ['customstem_23',['CustomStem',['../classmusx_1_1dom_1_1details_1_1CustomStem.html',1,'musx::dom::details']]],
-  ['customupstem_24',['CustomUpStem',['../classmusx_1_1dom_1_1details_1_1CustomUpStem.html',1,'musx::dom::details']]]
+  ['createdinstanceinfo_21',['CreatedInstanceInfo',['../structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html',1,'musx::factory::TypeRegistry']]],
+  ['crossstaff_22',['CrossStaff',['../classmusx_1_1dom_1_1details_1_1CrossStaff.html',1,'musx::dom::details']]],
+  ['customdownstem_23',['CustomDownStem',['../classmusx_1_1dom_1_1details_1_1CustomDownStem.html',1,'musx::dom::details']]],
+  ['customstem_24',['CustomStem',['../classmusx_1_1dom_1_1details_1_1CustomStem.html',1,'musx::dom::details']]],
+  ['customupstem_25',['CustomUpStem',['../classmusx_1_1dom_1_1details_1_1CustomUpStem.html',1,'musx::dom::details']]]
 ];

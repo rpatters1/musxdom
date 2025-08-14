@@ -84,7 +84,7 @@ var searchData=
   ['hidescroll_81',['hideScroll',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a355ae4607c0b1ca931d18d068c0c6b88',1,'musx::dom::others::MeasureNumberRegion']]],
   ['hidestaff_82',['hideStaff',['../classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ae87e0764a2ce56c8739178adee24da61',1,'musx::dom::others::StaffStyle::Masks']]],
   ['hidestafflines_83',['hidestafflines',['../classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a32f9ab2e9d1553ef92ff254084f15423',1,'musx::dom::others::StaffStyle::Masks::hideStaffLines'],['../classmusx_1_1dom_1_1others_1_1Staff.html#a1fbc7c710b38c37212612941bc75f9a9',1,'musx::dom::others::Staff::hideStaffLines']]],
-  ['hidestaves_84',['hidestaves',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cd',1,'musx::dom::details::StaffGroup::HideStaves'],['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a8a80adf3855d15cbe7c6d500ddf7a099',1,'musx::dom::details::StaffGroup::hideStaves']]],
+  ['hidestaves_84',['hidestaves',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a8a80adf3855d15cbe7c6d500ddf7a099',1,'musx::dom::details::StaffGroup::hideStaves'],['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cd',1,'musx::dom::details::StaffGroup::HideStaves']]],
   ['hidestems_85',['hideStems',['../classmusx_1_1dom_1_1others_1_1Staff.html#a43a8a4d6e40a765ac43c63205336a494',1,'musx::dom::others::Staff']]],
   ['hideties_86',['hideTies',['../classmusx_1_1dom_1_1others_1_1Staff.html#a7d0c45ab546f69cd879cff02b12a4b19',1,'musx::dom::others::Staff']]],
   ['hidetimesigs_87',['hideTimeSigs',['../classmusx_1_1dom_1_1others_1_1Staff.html#a20935b2133b099f3f12920b4a45b825b',1,'musx::dom::others::Staff']]],
