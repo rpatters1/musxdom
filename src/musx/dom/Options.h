@@ -709,7 +709,7 @@ public:
         : OptionsBase(document, partId, shareMode) {}
 
     bool showRepeatsForParts{};             ///< "Show Repeats for Parts"
-    bool showSoundingOctaveInConcertPitch{}; ///< Inverse of "Keep Octave Transposition in Concert Pitch" (xml node is `<retainOctaveTransInConcertPitch>`)
+    bool keepWrittenOctaveInConcertPitch{}; ///< "Keep Octave Transposition in Concert Pitch" (xml node is `<retainOctaveTransInConcertPitch>`)
     bool showActiveLayerOnly{};             ///< "Show Active Layer Only" (xml node is `<showCurrentLayerOnly>`)
     bool consolidateRestsAcrossLayers{};    ///< "Consolidate Rests Across Layers" (xml node is `<combineRestsAcrossLayers>`)
     Evpu shapeDesignerDashLength{};         ///< Shape Designer dash length in @ref Evpu. (xml node is `<sdDashOn>`)
