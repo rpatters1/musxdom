@@ -238,6 +238,7 @@ var hierarchy =
     [ "musx::dom::options::TieOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html", null ],
     [ "musx::factory::TypeRegistry< Types >::CreatedInstanceInfo", "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html", null ],
     [ "musx::util::DateTime", "structmusx_1_1util_1_1DateTime.html", null ],
+    [ "musx::dom::DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", null ],
     [ "std::disjunction", null, [
       [ "musx::factory::TypeRegistry< Types >::is_registered_type< T >", "structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html", null ]
     ] ],
@@ -304,18 +305,12 @@ var hierarchy =
     [ "musx::dom::NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType >::ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
-    [ "musx::dom::ObjectPool< DetailsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
-      [ "musx::dom::DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", null ]
-    ] ],
-    [ "musx::dom::ObjectPool< OptionsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
-      [ "musx::dom::OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", null ]
-    ] ],
-    [ "musx::dom::ObjectPool< OthersBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
-      [ "musx::dom::OthersPool", "classmusx_1_1dom_1_1OthersPool.html", null ]
-    ] ],
-    [ "musx::dom::ObjectPool< TextsBase >", "classmusx_1_1dom_1_1ObjectPool.html", [
-      [ "musx::dom::TextsPool", "classmusx_1_1dom_1_1TextsPool.html", null ]
-    ] ],
+    [ "musx::dom::ObjectPool< musx::dom::DetailsBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
+    [ "musx::dom::ObjectPool< musx::dom::OptionsBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
+    [ "musx::dom::ObjectPool< musx::dom::OthersBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
+    [ "musx::dom::ObjectPool< musx::dom::TextsBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
+    [ "musx::dom::OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", null ],
+    [ "musx::dom::OthersPool", "classmusx_1_1dom_1_1OthersPool.html", null ],
     [ "musx::dom::options::PageFormatOptions::PageFormat", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html", null ],
     [ "musx::dom::percussion::PercussionNoteType", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html", null ],
     [ "musx::dom::others::ShapeInstruction::RLineTo", "structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1RLineTo.html", null ],
@@ -344,6 +339,7 @@ var hierarchy =
       [ "musx::dom::is_pool_type< TextsPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01TextsPool_00_01T_01_4.html", null ]
     ] ],
     [ "musx::util::TestConfiguration", "classmusx_1_1util_1_1TestConfiguration.html", null ],
+    [ "musx::dom::TextsPool", "classmusx_1_1dom_1_1TextsPool.html", null ],
     [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
     [ "music_theory::Transposer", "classmusic__theory_1_1Transposer.html", null ],
     [ "musx::dom::others::Staff::Transposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html", null ],
