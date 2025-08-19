@@ -70,7 +70,8 @@ public:
         auto pool = std::make_shared<PoolType>(document);
 
 #ifdef MUSX_DISPLAY_NODE_NAMES
-        std::set<std::string> alreadyDisplayed;
+        std::string currentTag;
+        size_t currentTagCount = 0;
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
         util::Logger::log(util::Logger::LogLevel::Verbose, element->getTagName());
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
@@ -79,11 +80,14 @@ public:
         for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {            
             if (auto instanceInfo = DerivedType::extractFromXml(childElement, document, elementLinker, pool)) {
 #ifdef MUSX_DISPLAY_NODE_NAMES
-                auto it = alreadyDisplayed.find(childElement->getTagName());
-                if (it == alreadyDisplayed.end()) {
-                    util::Logger::log(util::Logger::LogLevel::Verbose, "  " + childElement->getTagName());
-                    alreadyDisplayed.emplace(childElement->getTagName());
+                if (currentTag != childElement->getTagName()) {
+                    if (!currentTag.empty()) {
+                        util::Logger::log(util::Logger::LogLevel::Verbose, "  " + currentTag + " [" + std::to_string(currentTagCount) + "]");
+                    }
+                    currentTag = childElement->getTagName();
+                    currentTagCount = 0;
                 }
+                currentTagCount++;
 #endif
                 MUSX_ASSERT_IF(childElement->getTagName() != instanceInfo->xmlNodeName) {
                     throw std::logic_error("Instance of " + std::string(instanceInfo->xmlNodeName) + " does not match xml tag " + element->getTagName());
@@ -99,6 +103,12 @@ public:
                 }
             }
         }
+
+#ifdef MUSX_DISPLAY_NODE_NAMES
+        if (!currentTag.empty() && currentTagCount != 0) {
+            util::Logger::log(util::Logger::LogLevel::Verbose, "  " + currentTag + " [" + std::to_string(currentTagCount) + "]");
+        }
+#endif
 
         return pool;
     }

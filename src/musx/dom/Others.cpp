@@ -253,7 +253,8 @@ void MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const DocumentPtr& doc
                 if (staff->multiStaffInstId != instance->getCmper()) {
                     if (staff->multiStaffInstId) {
                         musx::util::Logger::log(musx::util::Logger::LogLevel::Verbose,
-                            "Staff " + std::to_string(staff->getCmper()) + " appears in more than one instance of MultiStaffInstrumentGroup.");
+                            "Staff " + std::to_string(staff->getCmper()) + " (" + staff->getFullName()
+                                + ") appears in more than one instance of MultiStaffInstrumentGroup.");
                     } else {
                         Staff* staffMutable = const_cast<Staff*>(staff.get());
                         staffMutable->multiStaffInstId = instance->getCmper();

@@ -64,12 +64,7 @@ TEST(PartGlobalsTest, PartGlobalsPropertiesTest)
     EXPECT_EQ(partGlobalsForScore->studioViewIUlist, 65400);
     EXPECT_EQ(partGlobalsForScore->specialPartExtractionIUList, 65528);
 
-    // This should return the score value
+    // This should return nothing: correctly formatted enigmaxml should have a part global for every part
     auto partGlobalsForNonexistent = doc->getOthers()->get<others::PartGlobals>(1, MUSX_GLOBALS_CMPER);
-    ASSERT_TRUE(partGlobalsForNonexistent);
-
-    EXPECT_TRUE(partGlobalsForNonexistent->showTransposed);
-    EXPECT_EQ(partGlobalsForNonexistent->scrollViewIUlist, 65507);
-    EXPECT_EQ(partGlobalsForNonexistent->studioViewIUlist, 65400);
-    EXPECT_EQ(partGlobalsForNonexistent->specialPartExtractionIUList, 65528);
+    ASSERT_FALSE(partGlobalsForNonexistent);
 }

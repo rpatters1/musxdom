@@ -77,3 +77,20 @@ TEST(PageTest, PopulateFields)
     ASSERT_TRUE(page) << "Page with cmper 2 not found";
     EXPECT_TRUE(page->isBlank());
 }
+
+TEST(PageTest, PartPage)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "part_page.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    static constexpr Cmper kPartId = 1;
+    auto page1 = doc->getOthers()->get<others::Page>(kPartId, 1);
+    ASSERT_TRUE(page1);
+    EXPECT_EQ(page1->getSourcePartId(), kPartId);
+    EXPECT_EQ(page1->firstMeasureId, 1);
+    EXPECT_EQ(page1->lastMeasureId, 101);
+    auto page2 = doc->getOthers()->get<others::Page>(kPartId, 2);
+    ASSERT_FALSE(page2);
+}

@@ -31,6 +31,16 @@
 
 using namespace musx::dom;
 
+// provide access to the raw others pool
+namespace bench {
+template<>
+class PoolAccessor<OthersPool>
+{
+    public:
+    static ObjectPool<OthersBase>& get(OthersPool& o) { return o.m_pool; }
+};
+} // namespace bench
+
 DocumentPtr loadDocument(const std::vector<char>& buffer)
 {
     using clock = std::chrono::high_resolution_clock;
@@ -110,12 +120,14 @@ void benchmarkOthersArrays(const DocumentPtr& doc)
 
     std::cout << "Benchmarking others arrays:\n";
 
+    auto othersPool = bench::PoolAccessor<OthersPool>::get(*doc->getOthers());
+
     for (const auto& nodeId : nodeIds) {
         using ObjectPool = ObjectPool<OthersBase>;
         ObjectPool::ObjectKey key(nodeId, partId);
 
         auto start = clock::now();
-        auto result = doc->getOthers()->ObjectPool::getArray<OthersBase>(key, partId);
+        auto result = othersPool.getArray<OthersBase>(key, partId);
         auto end = clock::now();
 
         const auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
@@ -179,14 +191,14 @@ void benchmarkOthers(const DocumentPtr& doc)
     };
 
     int foundCount = 0;
-    auto shim = std::make_shared<BenchmarkPoolShim<OthersBase>>(*doc->getOthers());
+    auto othersPool = bench::PoolAccessor<OthersPool>::get(*doc->getOthers());
 
     for (const auto& c : cases) {
         using ObjectPool = ObjectPool<OthersBase>;
         ObjectPool::ObjectKey key(c.nodeId, c.partId, c.cmper1, std::nullopt, c.inci);
 
         auto start = clock::now();
-        auto result = shim->getSource<OthersBase>(key);
+        auto result = othersPool.getSource<OthersBase>(key);
         auto end = clock::now();
 
         const auto elapsedUs = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
@@ -200,7 +212,6 @@ void benchmarkOthers(const DocumentPtr& doc)
 
         if (result) ++foundCount;
     }
-
     std::cout << foundCount << " of " << cases.size() << " cases found.\n";
 }
 

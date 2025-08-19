@@ -755,8 +755,8 @@ MusxInstance<Staff> StaffComposite::getRawStaff() const
 MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& document, Cmper partId,
     StaffCmper staffId, MeasCmper measId, Edu eduPosition)
 {
-    // Use getEffectiveSourceForPart to guarantee no copy out of the pool.
-    auto rawStaff = document->getOthers()->getEffectiveSourceForPart<Staff>({ std::string(Staff::XmlNodeName), partId, staffId, std::nullopt, std::nullopt });
+    // Use getRawStaff to guarantee no copy out of the pool.
+    auto rawStaff = document->getOthers()->getRawStaff(partId, staffId);
     if (!rawStaff) return nullptr;
 
     std::shared_ptr<StaffComposite> result(new StaffComposite(rawStaff, measId, eduPosition));

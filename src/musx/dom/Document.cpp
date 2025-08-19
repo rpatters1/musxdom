@@ -83,26 +83,26 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
             if (rawStaff->multiStaffInstId != 0) {
                 if (multiStaffInstsFound.find(rawStaff->multiStaffInstId) == multiStaffInstsFound.end()) {
                     if (auto multiStaffInst = getOthers()->get<others::MultiStaffInstrumentGroup>(forPartId, rawStaff->multiStaffInstId)) {
+                        multiStaffInstsFound.emplace(rawStaff->multiStaffInstId);
+                        const auto [it, created] = result.emplace(rawStaff->getCmper(), InstrumentInfo());
+                        MUSX_ASSERT_IF(!created) {
+                            throw std::logic_error("Attempted to insert multi-instrument id " + std::to_string(rawStaff->multiStaffInstId) + " more than once.");
+                        }
                         if (auto multiStaffGroupId = getOthers()->get<others::MultiStaffGroupId>(forPartId, rawStaff->multiStaffInstId)) {
-                            multiStaffInstsFound.emplace(rawStaff->multiStaffInstId);
-                            const auto [it, created] = result.emplace(rawStaff->getCmper(), InstrumentInfo());
-                            MUSX_ASSERT_IF(!created) {
-                                throw std::logic_error("Attempted to insert multi-instrument id " + std::to_string(rawStaff->multiStaffInstId) + " more than once.");
-                            }
                             it->second.staffGroupId = multiStaffGroupId->staffGroupId;
-                            it->second.multistaffGroupId = rawStaff->multiStaffInstId;
-                            std::optional<size_t> topIndex = scrollView.getIndexForStaff(rawStaff->getCmper());
-                            MUSX_ASSERT_IF(!topIndex.has_value()) {
-                                throw std::logic_error("Unable to find " + std::to_string(rawStaff->getCmper()) + " in scrollView.");
+                        }
+                        it->second.multistaffGroupId = rawStaff->multiStaffInstId;
+                        std::optional<size_t> topIndex = scrollView.getIndexForStaff(rawStaff->getCmper());
+                        MUSX_ASSERT_IF(!topIndex.has_value()) {
+                            throw std::logic_error("Unable to find " + std::to_string(rawStaff->getCmper()) + " in scrollView.");
+                        }
+                        for (StaffCmper staffId : multiStaffInst->staffNums) {
+                            std::optional<size_t> staffIndex = scrollView.getIndexForStaff(staffId);
+                            MUSX_ASSERT_IF(!staffIndex.has_value()) {
+                                throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
                             }
-                            for (StaffCmper staffId : multiStaffInst->staffNums) {
-                                std::optional<size_t> staffIndex = scrollView.getIndexForStaff(staffId);
-                                MUSX_ASSERT_IF(!staffIndex.has_value()) {
-                                    throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
-                                }
-                                it->second.staves.emplace(staffId, staffIndex.value() - topIndex.value());
-                                mappedStaves.emplace(staffId);
-                            }
+                            it->second.staves.emplace(staffId, staffIndex.value() - topIndex.value());
+                            mappedStaves.emplace(staffId);
                         }
                     }
                 }

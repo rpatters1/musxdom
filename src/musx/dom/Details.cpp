@@ -40,9 +40,6 @@ void BeamAlterations::calcAllActiveFlags(const DocumentPtr& document)
 {
     if (const auto beamOptions = document->getOptions()->get<options::BeamOptions>()) {
         const auto values = document->getDetails()->getArray<T>(SCORE_PARTID);
-#ifdef MUSX_DISPLAY_NODE_NAMES
-        util::Logger::log(util::Logger::LogLevel::Verbose, std::string(T::XmlNodeName) + " has " + std::to_string(values.size()) + " elements.");
-#endif
         for (const auto& value : values) {
             T* mutableValue = const_cast<T*>(value.get());
             mutableValue->m_active = (value->flattenStyle == beamOptions->beamingStyle);
