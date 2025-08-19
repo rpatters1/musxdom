@@ -166,6 +166,14 @@ constexpr static musxtest::string_view partDefXml = R"xml(
       <useAsSmpInst/>
       <smartMusicInst>-1</smartMusicInst>
     </partDef>
+    <partGlobals cmper="65534">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <partGlobals cmper="65534" part="1" shared="false">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
     <textBlock cmper="42">
       <textID>33</textID>
       <lineSpacingPercent>100</lineSpacingPercent>
@@ -234,9 +242,36 @@ TEST(PartDefinitionTest, GetName)
 
 TEST(PartDefinitionTest, GetArrayForScore)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(partDefXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(partDefXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
-    EXPECT_EQ(others->getArray<others::MeasureNumberRegion>(1).size(), 1) << "getArray should return the score's list, since meas numbs always linked";
+    static constexpr Cmper kPartId = 1;
+    auto measNums = others->getArray<others::MeasureNumberRegion>(kPartId);
+    ASSERT_EQ(measNums.size(), 1) << "getArray should return the score's list, since meas numbs always linked";
+    EXPECT_EQ(measNums[0]->getSourcePartId(), SCORE_PARTID);
+    EXPECT_EQ(measNums[0]->getRequestedPartId(), kPartId);
+    EXPECT_EQ(measNums.getRequestedPartId(), kPartId);
+}
+
+TEST(PartDefinitionTest, MissingPartGlobals)
+{
+    constexpr static musxtest::string_view missingPartGlobalXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <partDef cmper="0">
+      <partOrder>0</partOrder>
+      <copies>1</copies>
+      <printPart/>
+      <needsRecalc/>
+    </partDef>
+  </others>
+</finale>
+)xml";
+
+    EXPECT_THROW(
+        musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(missingPartGlobalXml),
+        musx::dom::integrity_error
+    );
 }

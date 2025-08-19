@@ -221,6 +221,18 @@ MUSX_RESOLVER_ENTRY(MultiStaffInstrumentGroup, MultiStaffInstrumentGroup::calcAl
 
 MUSX_RESOLVER_ENTRY(Page, Page::calcSystemInfo);
 
+MUSX_RESOLVER_ENTRY(PartDefinition, {
+    [](const dom::DocumentPtr& document) {
+        auto parts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
+        for (const auto& part : parts) {
+            auto partGlobals = document->getOthers()->get<others::PartGlobals>(part->getCmper(), MUSX_GLOBALS_CMPER);
+            if (!partGlobals) {
+                MUSX_INTEGRITY_ERROR("Part " + std::to_string(part->getCmper()) + " has no PartGlobals.");
+            }
+        }
+    }
+});
+
 MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
     [](const dom::DocumentPtr& document) {
         auto exps = document->getOthers()->getArray<ShapeExpressionDef>(SCORE_PARTID);

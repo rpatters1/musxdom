@@ -186,7 +186,7 @@ public:
     template <typename T>
     MusxInstanceList<T> getArray(const ObjectKey& key, Cmper requestedPartId) const
     {
-        MusxInstanceList<T> result(m_document, key.partId);
+        MusxInstanceList<T> result(m_document, requestedPartId);
 
         auto rangeStart = m_pool.lower_bound(key);
         auto rangeEnd = m_pool.upper_bound(
@@ -297,6 +297,12 @@ protected:
         if (key.partId == SCORE_PARTID) {
             // if this is already the score version, there is nothing to return.
             return nullptr;
+        } else {
+            // if this is for a part, do not search score for unshared types.
+            auto it = m_shareMode.find(key.nodeId);
+            if (it != m_shareMode.end() && it->second == Base::ShareMode::None) {
+                return nullptr;
+            }
         }
         ObjectKey scoreKey(key);
         scoreKey.partId = SCORE_PARTID;
@@ -393,7 +399,6 @@ public:
         { others::BeatChartElement::XmlNodeName, Base::ShareMode::None },
         { others::StaffUsed::XmlNodeName, Base::ShareMode::None },
         { others::SystemLock::XmlNodeName, Base::ShareMode::None },
-        { others::MultiStaffInstrumentGroup::XmlNodeName, Base::ShareMode::None },
         { others::MultimeasureRest::XmlNodeName, Base::ShareMode::None },
         { others::MultiStaffGroupId::XmlNodeName, Base::ShareMode::None },
         { others::Page::XmlNodeName, Base::ShareMode::None },

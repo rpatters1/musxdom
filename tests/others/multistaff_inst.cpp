@@ -77,6 +77,10 @@ constexpr static musxtest::string_view multiStaffXml = R"xml(
       <copies>1</copies>
       <printPart/>
     </partDef>
+    <partGlobals cmper="65534">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
     <staffSpec cmper="1">
       <staffLines>5</staffLines>
       <lineSpace>24</lineSpace>
@@ -247,7 +251,6 @@ TEST(MultiStaffGroupTest, Autonumbering)
     checkInstrument(doc, "2. sdfdsf", 9, 1);
 }
 
-
 TEST(MultiStaffGroupTest, InstrumentDetection)
 {
     std::vector<char> enigmaXml;
@@ -265,4 +268,32 @@ TEST(MultiStaffGroupTest, InstrumentDetection)
     checkInstrument(doc, "Harpsichord (adhoc brace)", 6, 3);
     checkInstrument(doc, "Piano Extra Staves", 10, 4);
     checkInstrument(doc, "Flute", 9, 1);
+}
+
+TEST(MultiStaffGroupTest, InstrumentDetectionPart)
+{
+    std::vector<char> enigmaXml;
+    // NOTE: This enigmaxml has been hand-edited to remove Part 3's non-shared MultiStaffGroupId record.
+    musxtest::readFile(musxtest::getInputPath() / "multistaff_inst_groups_EDITED.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    const auto& instruments = doc->getInstruments();
+    ASSERT_EQ(instruments.size(), 3);
+
+    checkInstrument(doc, "Violin", 1, 1);
+    checkInstrument(doc, "Cello", 2, 1);
+    checkInstrument(doc, "Piano", 3, 2);
+
+    const auto partInstruments = doc->createInstrumentMap(3);
+    ASSERT_EQ(partInstruments.size(), 1);
+    auto [topInst, instInfo] = *partInstruments.begin();
+    EXPECT_EQ(topInst, 3);
+    EXPECT_EQ(instInfo.multistaffGroupId, 1);
+    EXPECT_EQ(instInfo.staffGroupId, 0);
+    ASSERT_EQ(instInfo.staves.size(), 2);
+    EXPECT_EQ(instInfo.staves.at(3), 0);
+    EXPECT_EQ(instInfo.staves.at(4), 1);
 }

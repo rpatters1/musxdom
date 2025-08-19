@@ -80,6 +80,10 @@ constexpr static musxtest::string_view staffGroupXml = R"xml(
       <copies>1</copies>
       <printPart/>
     </partDef>
+    <partGlobals cmper="65534">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
   </others>
   <details>
     <staffGroup cmper1="0" cmper2="1">
