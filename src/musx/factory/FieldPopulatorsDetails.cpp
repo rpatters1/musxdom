@@ -295,6 +295,27 @@ MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
     {"beamThrough", [](const XmlElementPtr& e, const std::shared_ptr<SecondaryBeamBreak>& i) { i->breakThrough = populateBoolean(e, i); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(ShapeNoteBase::NoteShapes, {
+    {"d", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->doubleWhole = e->getTextAs<char32_t>(); }},
+    {"w", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->whole = e->getTextAs<char32_t>(); }},
+    {"h", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->half = e->getTextAs<char32_t>(); }},
+    {"q", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->quarter = e->getTextAs<char32_t>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ShapeNoteBase, {
+    {"noteShapes", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase>& i) {
+            auto idxAttr = e->findAttribute("index");
+            size_t index = idxAttr ? idxAttr->getValueAs<size_t>() : static_cast<size_t>(-1);
+            if (i->noteShapes.size() != index) {
+                throw std::invalid_argument("noteShapes index mismatch. Expected: " + std::to_string(i->noteShapes.size())
+                                            + ", Found: " + std::to_string(index));
+            }
+            i->noteShapes.push_back(FieldPopulator<ShapeNoteBase::NoteShapes>::createAndPopulate(e));
+        }
+    },
+    {"arrangedByPitch", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase>& i) { i->arrangedByPitch = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(StaffGroup::Bracket, {
     {"id", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->style = toEnum<StaffGroup::BracketStyle>(e->getTextAs<int>()); }},
     {"bracPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->horzAdjLeft = e->getTextAs<Evpu>(); }},

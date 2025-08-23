@@ -26,6 +26,8 @@
 #include <cmath>
 #include <map>
 
+#include "music_theory/music_theory.hpp"
+
 #include "musx/util/EnigmaString.h"
 #include "MusxInstance.h"
 #include "BaseClasses.h"
@@ -1167,7 +1169,87 @@ public:
     constexpr static std::string_view XmlNodeName = "secBeamBreak"; ///< The XML node name for this type.
     static const xml::XmlElementArray<SecondaryBeamBreak>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
+/**
+ * @class ShapeNoteBase
+ * @brief Shape Note settings for staves and staffs style.
+ *
+ * See @ref ShapeNote and @ref ShapeNoteStyle for cmper1 and cmper2 values.
+ */
+class ShapeNoteBase : public DetailsBase
+{
+public:
+    /**
+     * @brief Embedded shape record for a single index in #noteShapes.
+     */
+    class NoteShapes
+    {
+    public:
+        char32_t doubleWhole{};     ///< Double-whole notehead symbol (xml nodename is <d>).
+        char32_t whole{};           ///< Whole notehead symbol (xml nodename is <w>).
+        char32_t half{};            ///< Half notehead symbol (xml nodename is <h>).
+        char32_t quarter{};         ///< Filled (quarter) notehead symbol (xml nodename is <q>).
+
+        static const xml::XmlElementArray<NoteShapes>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+    };
+
+public:
+    /**
+     * @brief Constructor function. */
+    explicit ShapeNoteBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2)
+    {}
+
+    std::vector<std::shared_ptr<const NoteShapes>> noteShapes; ///< Notehead shapes (only the first seven elements are used).
+    bool arrangedByPitch{};     ///< If true, the shapes correspond to pitches (C, D, E, F, G, A, B).
+                                ///< If false, the shapes correspond to scale degrees 0..6.
+                                            
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->DetailsBase::integrityCheck(ptrToThis);
+        const size_t currentSize = noteShapes.size();
+        if (currentSize < music_theory::STANDARD_DIATONIC_STEPS) {
+            for (size_t x = currentSize; x < music_theory::STANDARD_DIATONIC_STEPS; x++) {
+                noteShapes.emplace_back(std::make_shared<NoteShapes>());
+            }
+            MUSX_INTEGRITY_ERROR("For ShapeNoteBase cmper " + std::to_string(getCmper1()) + ", only " + std::to_string(currentSize)
+                + " note shapes were provided but at least " + std::to_string(music_theory::STANDARD_DIATONIC_STEPS) + " were expected.");
+        }
+    }
+
+    static const xml::XmlElementArray<ShapeNoteBase>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class ShapeNote
+ * @brief Shape Note settings for staves.
+ *
+ * cmper1: The StaffCmper of the staff using this instance.
+ * cmper2: Seems to always be zero.
+ */
+class ShapeNote: public ShapeNoteBase
+{
+public:
+    using ShapeNoteBase::ShapeNoteBase;
+
+    constexpr static std::string_view XmlNodeName = "shapeNote"; ///< XML node name for this type.
+};
+
+/**
+ * @class ShapeNoteStyle
+ * @brief Shape Note settings for staff styles.
+ *
+ * cmper1: The StaffCmper of the staff using this instance.
+ * cmper2: Seems to always be zero.
+ */
+class ShapeNoteStyle: public ShapeNoteBase
+{
+public:
+    using ShapeNoteBase::ShapeNoteBase;
+
+    constexpr static std::string_view XmlNodeName = "shapeNoteStyle"; ///< XML node name for this type.
+};
+
 /**
  * @class StaffGroup
  * @brief Represents the attributes of a Finale staff group that brackets staves

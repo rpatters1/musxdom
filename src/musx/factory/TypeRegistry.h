@@ -338,6 +338,8 @@ using RegisteredDetails = TypeRegistry <
     dom::details::StaffGroup,
     dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it
     dom::details::SecondaryBeamBreak,
+    dom::details::ShapeNote,
+    dom::details::ShapeNoteStyle,
     dom::details::SmartShapeEntryAssign,
     dom::details::StemAlterations,
     dom::details::CustomDownStem,           // "stemDefDown" is the xml key

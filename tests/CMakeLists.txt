@@ -111,6 +111,7 @@ add_executable(musxdomtests
 	details/floats.cpp
 	details/gfhold.cpp
 	details/secondary_beams.cpp
+    details/shape_note.cpp
 	details/staff_group.cpp
     details/tuplet_def.cpp
     # music_theory

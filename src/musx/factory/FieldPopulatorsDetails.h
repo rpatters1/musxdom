@@ -141,6 +141,18 @@ struct FieldPopulator<SecondaryBeamAlterationsUpStem> : private FieldPopulator<B
 };
 
 template <>
+struct FieldPopulator<ShapeNote> : private FieldPopulator<ShapeNoteBase>
+{
+    using FieldPopulator<ShapeNoteBase>::populate;
+};
+
+template <>
+struct FieldPopulator<ShapeNoteStyle> : private FieldPopulator<ShapeNoteBase>
+{
+    using FieldPopulator<ShapeNoteBase>::populate;
+};
+
+template <>
 struct FieldPopulator<StemAlterationsUnderBeam> : private FieldPopulator<StemAlterations>
 {
     using FieldPopulator<StemAlterations>::populate;
