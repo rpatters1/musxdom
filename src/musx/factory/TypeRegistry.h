@@ -211,6 +211,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::MultimeasureRestOptions,
     dom::options::MusicSpacingOptions,
     dom::options::MusicSymbolOptions,
+    dom::options::NoteRestOptions,
     dom::options::PageFormatOptions,
     dom::options::PianoBraceBracketOptions,
     dom::options::RepeatOptions,

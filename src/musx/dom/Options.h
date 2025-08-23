@@ -910,6 +910,64 @@ public:
 };
 
 /**
+ * @class NoteRestOptions
+ * @brief Options controlling note/rest display and positioning.
+ */
+class NoteRestOptions : public OptionsBase {
+public:
+    /** @brief Constructor function. */
+    explicit NoteRestOptions(const DocumentPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    /**
+     * @class NoteColor
+     * @brief 16-bit per-channel note color (RGB) used by Finale.
+     *
+     * Instances are indexed according to 12-EDO pitch class, 0 - C, 1 - C#/Db, 2 - D, 3 - D#/Eb, ...
+     */
+    class NoteColor {
+    public:
+        uint16_t red{};         ///< Red component in Finale's 16-bit range.
+        uint16_t green{};       ///< Green component in Finale's 16-bit range.
+        uint16_t blue{};        ///< Blue component in Finale's 16-bit range.
+
+        /// Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<NoteColor>& xmlMappingArray();
+    };
+
+    bool doShapeNotes{};            ///< "Use Shape Notes" - the shapes to use are stored in Cmper 0 of @ref others::NoteShapes.
+    bool doCrossStaffNotes{};       ///< Inverse of "Display Cross-Staff Notes in Original Staff" (xml node is `<doCrossOver>`)
+    Evpu drop8thRest{};             ///< Vertical 8th rest positioning from staff default line. (Usually the center line.)
+    Evpu drop16thRest{};            ///< Vertical 16th rest positioning from staff default line. (Usually the center line.)
+    Evpu drop32ndRest{};            ///< Vertical 32nd rest positioning from staff default line. (Usually the center line.)
+    Evpu drop64thRest{};            ///< Vertical 64th rest positioning from staff default line. (Usually the center line.)
+    Evpu drop128thRest{};           ///< Vertical 128th (and smaller) rest positioning from staff default line. (Usually the center line.)
+    bool scaleManualPositioning{};  ///< "Scale Manual Positioning of Notes"
+    bool drawOutline{};             ///< "Show border around colored noteheads"
+    std::vector<std::shared_ptr<NoteColor>> noteColors{}; ///< Notehead colors, one per pitch-class.
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OptionsBase::integrityCheck(ptrToThis);
+        const size_t currentSize = noteColors.size();
+        if (currentSize < music_theory::STANDARD_12EDO_STEPS) {
+            for (size_t x = currentSize; x < music_theory::STANDARD_12EDO_STEPS; x++) {
+                noteColors.emplace_back(std::make_shared<NoteColor>());  // default values are all zero, so this is setting missing values to black color
+            }
+            MUSX_INTEGRITY_ERROR("Only " + std::to_string(currentSize) + " note colors provided. "
+                + std::to_string(music_theory::STANDARD_12EDO_STEPS) + " were expected.");
+        } else if (currentSize > music_theory::STANDARD_12EDO_STEPS) {
+            noteColors.resize(music_theory::STANDARD_12EDO_STEPS);
+            MUSX_INTEGRITY_ERROR(std::to_string(currentSize) + " note colors provided. Only "
+                + std::to_string(music_theory::STANDARD_12EDO_STEPS) + " were expected.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "noteRestOptions";      ///< XML node name for this type.
+    static const xml::XmlElementArray<NoteRestOptions>& xmlMappingArray();  ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class PageFormatOptions
  * @brief Options for page formatting in the document.
  * 

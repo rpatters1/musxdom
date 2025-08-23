@@ -747,6 +747,34 @@ MUSX_XML_ELEMENT_ARRAY(MusicSymbolOptions, {
     {"flagStraightDown", [](const XmlElementPtr& e, const std::shared_ptr<MusicSymbolOptions>& i) { i->flagStraightDown = e->getTextAs<char32_t>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(NoteRestOptions::NoteColor, {
+    {"red", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions::NoteColor>& i) { i->red = e->getTextAs<uint16_t>(); }},
+    {"green", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions::NoteColor>& i) { i->green = e->getTextAs<uint16_t>(); }},
+    {"blue", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions::NoteColor>& i) { i->blue = e->getTextAs<uint16_t>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(NoteRestOptions, {
+    {"doShapeNotes", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->doShapeNotes = populateBoolean(e, i); }},
+    {"doCrossOver", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->doCrossStaffNotes = populateBoolean(e, i); }},
+    {"drop8thRest", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->drop8thRest = e->getTextAs<Evpu>(); }},
+    {"drop16thRest", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->drop16thRest = e->getTextAs<Evpu>(); }},
+    {"drop32ndRest", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->drop32ndRest = e->getTextAs<Evpu>(); }},
+    {"drop64thRest", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->drop64thRest = e->getTextAs<Evpu>(); }},
+    {"drop128thRest", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->drop128thRest = e->getTextAs<Evpu>(); }},
+    {"scaleManualPositioning", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->scaleManualPositioning = populateBoolean(e, i); }},
+    {"drawOutline", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) { i->drawOutline = populateBoolean(e, i); }},
+    {"noteColor", [](const XmlElementPtr& e, const std::shared_ptr<NoteRestOptions>& i) {
+            auto idAttr = e->findAttribute("id");
+            size_t id = idAttr ? idAttr->getValueAs<size_t>() : static_cast<size_t>(-1);
+            if (i->noteColors.size() != id) {
+                throw std::invalid_argument("NoteColor id mismatch. Expected: " + std::to_string(i->noteColors.size())
+                                            + ", Found: " + std::to_string(id));
+            }
+            i->noteColors.push_back(FieldPopulator<NoteRestOptions::NoteColor>::createAndPopulate(e));
+        }
+    },
+});
+
 MUSX_XML_ELEMENT_ARRAY(PageFormatOptions::PageFormat, {
     {"pageHeight", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->pageHeight = e->getTextAs<Evpu>(); }},
     {"pageWidth", [](const XmlElementPtr& e, const std::shared_ptr<PageFormatOptions::PageFormat>& i) { i->pageWidth = e->getTextAs<Evpu>(); }},

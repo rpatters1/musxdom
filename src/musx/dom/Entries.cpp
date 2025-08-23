@@ -1427,8 +1427,12 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
 StaffCmper NoteInfoPtr::calcStaff() const
 {
     if ((*this)->crossStaff) {
-        if (auto crossStaff = m_entry->getEntry()->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
-            return crossStaff->staff;
+        const auto entry = m_entry->getEntry();
+        const auto noteRestOptions = entry->getDocument()->getOptions()->get<options::NoteRestOptions>();
+        if (!noteRestOptions || noteRestOptions->doCrossStaffNotes) {
+            if (auto crossStaff = entry->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
+                return crossStaff->staff;
+            }
         }
     }
     return m_entry.getStaff();
