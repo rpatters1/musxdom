@@ -1180,25 +1180,24 @@ class ShapeNoteBase : public DetailsBase
 {
 public:
     /**
+     * @brief Constructor function. */
+    explicit ShapeNoteBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2)
+    {}
+
+    /**
      * @brief Embedded shape record for a single index in #noteShapes.
      */
     class NoteShapes
     {
     public:
-        char32_t doubleWhole{};     ///< Double-whole notehead symbol (xml nodename is <d>).
-        char32_t whole{};           ///< Whole notehead symbol (xml nodename is <w>).
-        char32_t half{};            ///< Half notehead symbol (xml nodename is <h>).
-        char32_t quarter{};         ///< Filled (quarter) notehead symbol (xml nodename is <q>).
+        char32_t doubleWhole{};     ///< Double-whole notehead symbol (xml nodename is `<d>`).
+        char32_t whole{};           ///< Whole notehead symbol (xml nodename is `<w>`).
+        char32_t half{};            ///< Half notehead symbol (xml nodename is `<h>`).
+        char32_t quarter{};         ///< Filled (quarter) notehead symbol (xml nodename is `<q>`).
 
         static const xml::XmlElementArray<NoteShapes>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
     };
-
-public:
-    /**
-     * @brief Constructor function. */
-    explicit ShapeNoteBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2)
-        : DetailsBase(document, partId, shareMode, cmper1, cmper2)
-    {}
 
     std::vector<std::shared_ptr<const NoteShapes>> noteShapes; ///< Notehead shapes (only the first seven elements are used).
     bool arrangedByPitch{};     ///< If true, the shapes correspond to pitches (C, D, E, F, G, A, B).
@@ -1224,8 +1223,8 @@ public:
  * @class ShapeNote
  * @brief Shape Note settings for staves.
  *
- * cmper1: The StaffCmper of the staff using this instance.
- * cmper2: Seems to always be zero.
+ * cmper1: If zero, the note shapes for @ref options::NoteRestOptions. If non-zero, the StaffCmper of the staff using this instance.
+ * cmper2: Seems always to be zero.
  */
 class ShapeNote: public ShapeNoteBase
 {
@@ -1239,8 +1238,8 @@ public:
  * @class ShapeNoteStyle
  * @brief Shape Note settings for staff styles.
  *
- * cmper1: The StaffCmper of the staff using this instance.
- * cmper2: Seems to always be zero.
+ * cmper1: The Cmper of the staff style using this instance.
+ * cmper2: Seems always to be zero.
  */
 class ShapeNoteStyle: public ShapeNoteBase
 {

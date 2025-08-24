@@ -935,7 +935,7 @@ public:
         static const xml::XmlElementArray<NoteColor>& xmlMappingArray();
     };
 
-    bool doShapeNotes{};            ///< "Use Shape Notes" - the shapes to use are stored in Cmper 0 of @ref others::ShapeNote.
+    bool doShapeNotes{};            ///< "Use Shape Notes" - the shapes to use are stored in Cmper 0 of @ref details::ShapeNote.
     bool doCrossStaffNotes{};       ///< Inverse of "Display Cross-Staff Notes in Original Staff" (xml node is `<doCrossOver>`)
     Evpu drop8thRest{};             ///< Vertical 8th rest positioning from staff default line. (Usually the center line.)
     Evpu drop16thRest{};            ///< Vertical 16th rest positioning from staff default line. (Usually the center line.)
