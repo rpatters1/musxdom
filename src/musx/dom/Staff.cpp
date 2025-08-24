@@ -154,11 +154,10 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
             // is a staff style, we should only set noteShapeFromStyle if there is a separate note shapes record for the style.
             if (auto shapes = document->getDetails()->get<NoteShapesType>(SCORE_PARTID, item->getCmper(), 0)) {
                 mutableItem->noteShapesId = item->getCmper();
-                mutableItem->noteShapesFromStyle = isForStyle;
             } else {
                 mutableItem->noteShapesId = Cmper(0);
-                mutableItem->noteShapesFromStyle = false;
             }
+            mutableItem->noteShapesFromStyle = isForStyle;
         }
         bool checkFullNeeded = true;
         if constexpr (isForStyle) {
@@ -375,12 +374,18 @@ std::string Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalSt
 MusxInstance<details::ShapeNoteBase> Staff::getNoteShapes() const
 {
     if (useNoteShapes) {
-        if (noteShapesFromStyle) {
-            return getDocument()->getDetails()->get<details::ShapeNoteStyle>(getRequestedPartId(), noteShapesId, 0);
+        if (noteShapesId) {
+            if (noteShapesFromStyle) {
+                return getDocument()->getDetails()->get<details::ShapeNoteStyle>(getRequestedPartId(), noteShapesId, 0);
+            }
+            return getDocument()->getDetails()->get<details::ShapeNote>(getRequestedPartId(), noteShapesId, 0);
         }
-        // if noteShapesFromStyle is false, we might be picking up the default values, which are at cmper 0 of
-        // staff noteshapes, even for a staff style. The following line takes care of this.
-        return getDocument()->getDetails()->get<details::ShapeNote>(getRequestedPartId(), noteShapesId, 0);
+    } else {
+        if (auto noteRestOptions = getDocument()->getOptions()->get<options::NoteRestOptions>()) {
+            if (noteRestOptions->doShapeNotes) {
+                return getDocument()->getDetails()->get<details::ShapeNote>(getRequestedPartId(), 0, 0);
+            }
+        }
     }
     return nullptr;
 }
@@ -575,7 +580,7 @@ void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
     if (srcMasks->useNoteShapes) {
         useNoteShapes = staffStyle->useNoteShapes;
         noteShapesId = staffStyle->noteShapesId;
-        noteShapesFromStyle = staffStyle->noteShapesFromStyle; // might be false if noteShapesId is 0.
+        noteShapesFromStyle = true;
         masks->useNoteShapes = true;
     }
     if (srcMasks->flatBeams) {

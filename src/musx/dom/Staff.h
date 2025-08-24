@@ -167,7 +167,7 @@ public:
     // Public properties corresponding to the XML structure
     NotationStyle notationStyle{};  ///< Standard, percussion, or tablature
     std::shared_ptr<FontInfo> noteFont; ///< The custom font to use for noteheads. Guaranteed non-null by #integrityCheck if #useNoteFont is `true`.
-    bool useNoteShapes{};           ///< Indicates that note shapes should be used.
+    bool useNoteShapes{};           ///< Indicates that note shapes should be used. It is ignored is no staff- or staffstyle-specific note shapes exist.
     bool useNoteFont{};             ///< Indicates if #noteFont should be used.
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff. Only used if #Transposition::setToClef is true.

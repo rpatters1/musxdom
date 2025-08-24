@@ -511,26 +511,28 @@ TEST(StaffTest, Transposition31Edo)
 
 TEST(StaffTest, PercussionMapStyle)
 {
-    std::vector<char> transposeXml;
-    musxtest::readFile(musxtest::getInputPath() / "percstaffstyle.enigmaxml", transposeXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "percstaffstyle.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
     auto staff1 = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 1, 0);
+    ASSERT_TRUE(staff1);
     EXPECT_EQ(staff1->percussionMapId, 12);
 
     auto staff2 = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 2, 0);
+    ASSERT_TRUE(staff2);
     EXPECT_EQ(staff2->percussionMapId, 25);
 }
 
 TEST(StaffTest, NamePositioning)
 {
-    std::vector<char> transposeXml;
-    musxtest::readFile(musxtest::getInputPath() / "namepos.enigmaxml", transposeXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "namepos.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();
@@ -569,4 +571,109 @@ TEST(StaffTest, NamePositioning)
     // bar 11 (5th system)
     checkNamePos(1, 11, -72, -24, Align::Center, -64, -12, Align::Right);  // staff values (full is overridden in the staff)
     checkNamePos(2, 11, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overridden in the staff)
+}
+
+TEST(StaffTest, NoteShapesStaff)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "note_shapes.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 1, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_TRUE(staff->useNoteShapes);
+        EXPECT_EQ(staff->noteShapesId, 0);
+        EXPECT_FALSE(staff->noteShapesFromStyle);
+        auto noteShapes = staff->getNoteShapes();
+        EXPECT_FALSE(noteShapes);
+    }
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 2, 1, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_TRUE(staff->useNoteShapes);
+        EXPECT_EQ(staff->noteShapesId, staff->getCmper());
+        EXPECT_FALSE(staff->noteShapesFromStyle);
+        auto noteShapes = staff->getNoteShapes();
+        ASSERT_TRUE(noteShapes);
+        EXPECT_EQ(noteShapes->getCmper1(), staff->getCmper());
+        EXPECT_TRUE(noteShapes->arrangedByPitch);
+    }
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 3, 1, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_FALSE(staff->useNoteShapes);
+        EXPECT_EQ(staff->noteShapesId, 0);
+        EXPECT_FALSE(staff->noteShapesFromStyle);
+        auto noteShapes = staff->getNoteShapes();
+        ASSERT_TRUE(noteShapes);
+        EXPECT_EQ(noteShapes->getCmper1(), 0);
+        EXPECT_FALSE(noteShapes->arrangedByPitch);
+    }
+}
+
+TEST(StaffTest, NoteShapesStaffStyle)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "note_shapes.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 2, 2, 0);
+        ASSERT_TRUE(staff);
+        static constexpr Cmper kExpectedStaffStyleId = 4;
+        EXPECT_TRUE(staff->useNoteShapes);
+        EXPECT_EQ(staff->noteShapesId, kExpectedStaffStyleId);
+        EXPECT_TRUE(staff->noteShapesFromStyle);
+        auto noteShapes = staff->getNoteShapes();
+        ASSERT_TRUE(noteShapes);
+        EXPECT_EQ(noteShapes->getCmper1(), kExpectedStaffStyleId);
+        EXPECT_FALSE(noteShapes->arrangedByPitch);
+    }
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 3, 2, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_TRUE(staff->useNoteShapes);
+        EXPECT_EQ(staff->noteShapesId, 0);
+        EXPECT_TRUE(staff->noteShapesFromStyle);
+        auto noteShapes = staff->getNoteShapes();
+        EXPECT_FALSE(noteShapes);
+    }
+}
+
+TEST(StaffTest, NoteShapeDefaultOff)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "note_shapes.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto noteRestOptions = doc->getOptions()->get<options::NoteRestOptions>();
+    ASSERT_TRUE(noteRestOptions);
+    options::NoteRestOptions* mutableNoteRestOptions = const_cast<options::NoteRestOptions*>(noteRestOptions.get());
+    mutableNoteRestOptions->doShapeNotes = false;
+
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 2, 2, 0);
+        ASSERT_TRUE(staff);
+        static constexpr Cmper kExpectedStaffStyleId = 4;
+        EXPECT_TRUE(staff->useNoteShapes);
+        EXPECT_EQ(staff->noteShapesId, kExpectedStaffStyleId);
+        EXPECT_TRUE(staff->noteShapesFromStyle);
+        auto noteShapes = staff->getNoteShapes();
+        ASSERT_TRUE(noteShapes);
+        EXPECT_EQ(noteShapes->getCmper1(), kExpectedStaffStyleId);
+        EXPECT_FALSE(noteShapes->arrangedByPitch);
+    }
+    {
+        auto staff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 3, 1, 0);
+        ASSERT_TRUE(staff);
+        EXPECT_FALSE(staff->useNoteShapes);
+        EXPECT_EQ(staff->noteShapesId, 0);
+        EXPECT_FALSE(staff->noteShapesFromStyle);
+        auto noteShapes = staff->getNoteShapes();
+        EXPECT_FALSE(noteShapes);
+    }
 }

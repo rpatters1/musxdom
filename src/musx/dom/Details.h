@@ -1176,7 +1176,7 @@ public:
  *
  * See @ref ShapeNote and @ref ShapeNoteStyle for cmper1 and cmper2 values.
  *
- * The glyph codes are from font #options::FontInfo::FontType::Noteheads unless the notehead font
+ * The glyph codes are from font #options::FontOptions::FontType::Noteheads unless the notehead font
  * is overridden by the applicable @ref others::Staff or @ref others::StaffStyle.
  */
 class ShapeNoteBase : public DetailsBase
