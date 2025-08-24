@@ -502,7 +502,7 @@ MUSX_XML_ELEMENT_ARRAY(ClefOptions, {
     {"cautionaryClefChanges", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) { i->cautionaryClefChanges = populateBoolean(e, i); }},
     {"clefDef", [](const XmlElementPtr& e, const std::shared_ptr<ClefOptions>& i) {
             auto indexAttr = e->findAttribute("index");
-            size_t index = indexAttr ? indexAttr->getValueAs<size_t>() : -1;
+            size_t index = indexAttr ? indexAttr->getValueAs<size_t>() : static_cast<size_t>(-1);;
             if (i->clefDefs.size() != index) {
                 throw std::invalid_argument("ClefDef index mismatch. Expected: " + std::to_string(i->clefDefs.size()) + ", Found: " + std::to_string(index));
             }
@@ -928,6 +928,15 @@ MUSX_XML_ELEMENT_ARRAY(StaffOptions, {
         { i->groupNameAbbrvPos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(StemOptions::StemConnection, {
+    {"font", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions::StemConnection>& i) { i->fontId = e->getTextAs<Cmper>(); }},
+    {"symbol", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions::StemConnection>& i) { i->symbol = static_cast<char32_t>(e->getTextAs<uint32_t>()); }},
+    {"upStemVert", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions::StemConnection>& i) { i->upStemVert = e->getTextAs<Efix>(); }},
+    {"downStemVert", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions::StemConnection>& i) { i->downStemVert = e->getTextAs<Efix>(); }},
+    {"upStemHorz", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions::StemConnection>& i) { i->upStemHorz = e->getTextAs<Efix>(); }},
+    {"downStemHorz", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions::StemConnection>& i) { i->downStemHorz = e->getTextAs<Efix>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(StemOptions, {
     {"halfStemLength", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->halfStemLength = e->getTextAs<Evpu>(); }},
     {"stemLength", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemLength = e->getTextAs<Evpu>(); }},
@@ -937,7 +946,19 @@ MUSX_XML_ELEMENT_ARRAY(StemOptions, {
     {"stemWidth", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemWidth = e->getTextAs<Efix>(); }},
     {"stemLift", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->stemOffset = e->getTextAs<Efix>(); }},
     {"useStemConnections", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) { i->useStemConnections = populateBoolean(e, i); }},
-    {"stemConnect", [](const XmlElementPtr&, const std::shared_ptr<StemOptions>&) { /** @todo: parse stem connections. */ }},
+    {"stemConnect", [](const XmlElementPtr& e, const std::shared_ptr<StemOptions>& i) {
+            auto indexAttr = e->findAttribute("index");
+            size_t index = indexAttr ? indexAttr->getValueAs<size_t>() : static_cast<size_t>(-1);
+            if (i->stemConnections.size() > index) {
+                throw std::invalid_argument("StemConnections index mismatch. Expected: " + std::to_string(i->stemConnections.size()) + ", Found: " + std::to_string(index));
+            } else {
+                for (size_t x = i->stemConnections.size(); x < index; x++) {
+                    i->stemConnections.push_back(std::make_shared<StemOptions::StemConnection>());
+                }
+            }
+            i->stemConnections.push_back(FieldPopulator<StemOptions::StemConnection>::createAndPopulate(e));
+        }
+    },
 });
 
 MUSX_XML_ELEMENT_ARRAY(TextOptions::InsertSymbolInfo, {

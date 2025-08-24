@@ -1408,7 +1408,26 @@ class StemOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit StemOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
-        : OptionsBase(document, partId, shareMode) {}
+        : OptionsBase(document, partId, shareMode)
+    {
+    }
+    
+    /**
+     * @class StemConnection
+     * @brief Information about one stemConnections element.
+     */
+    class StemConnection
+    {
+    public:
+        Cmper fontId{};       ///< The font ID of the font this connection applies to. Zero means default music font. (xml nodename is `<font>`)
+        char32_t symbol{};    ///< The codepoint of the symbol glyph in the font specified by #fontId.
+        Efix upStemVert{};    ///< Upstem vertical adjustment.
+        Efix downStemVert{};  ///< Downstem vertical adjustment.
+        Efix upStemHorz{};    ///< Upstem horizontal adjustment.
+        Efix downStemHorz{};  ///< Downstem horizontal adjustment.
+
+        static const xml::XmlElementArray<StemConnection>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
 
     Evpu halfStemLength{};     ///< Half stem length in @ref Evpu.
     Evpu stemLength{};         ///< Stem length in @ref Evpu.
@@ -1418,6 +1437,19 @@ public:
     Efix stemWidth{};          ///< Stem width in @ref Efix.
     Efix stemOffset{};         ///< Stem offset in @ref Efix. (xml node is `<stemLift>`)
     bool useStemConnections{}; ///< "Use Stem Connections"
+
+    /// @brief Array of stem connection definitions.
+    ///
+    /// The document factory builds this as a contiguous array up to the highest index
+    /// encountered, inserting zero-initialized placeholders for any missing indices.
+    ///
+    /// @note Finale appears to treat the first @ref StemConnection with a zero @c symbol
+    /// as a terminator and ignores that entry and all following ones. Nevertheless,
+    /// Finale-produced files may still contain additional `<stemConnect>` elements after
+    /// this point, sometimes with nonsensical or out-of-range values (e.g. 33554432).
+    /// Such trailing entries are preserved here verbatim but are probably ignored
+    /// by Finale.
+    std::vector<std::shared_ptr<StemConnection>> stemConnections;
 
     constexpr static std::string_view XmlNodeName = "stemOptions"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StemOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
