@@ -1054,6 +1054,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"notationStyle", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->notationStyle = toEnum<Staff::NotationStyle>(e); }},
     {"noteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
         { i->noteFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"useNoteShapes", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useNoteShapes = populateBoolean(e, i); }},
     {"useNoteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useNoteFont = populateBoolean(e, i); }},
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
     {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},
@@ -1153,6 +1154,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffList, {
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"floatNoteheadFont", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatNoteheadFont = populateBoolean(e, i); }},
+    {"useNoteShapes", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->useNoteShapes = populateBoolean(e, i); }},
     {"flatBeams", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->flatBeams = populateBoolean(e, i); }},
     {"blankMeasureRest", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->blankMeasureRest = populateBoolean(e, i); }},
     {"noOptimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->noOptimize = populateBoolean(e, i); }},
@@ -1197,6 +1199,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
 MUSX_XML_ELEMENT_ARRAY(StaffStyle, []() {
     xml::XmlElementArray<StaffStyle> additionalFields = {
         {"styleName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->styleName = e->getText(); }},
+        {"copyable", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->copyable = populateBoolean(e, i); }},
         {"addToMenu", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->addToMenu = populateBoolean(e, i); }},
         {"mask", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) {
             i->masks = FieldPopulator<StaffStyle::Masks>::createAndPopulate(e, i); }},

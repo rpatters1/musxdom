@@ -123,6 +123,7 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
     using DrumStaffType = std::conditional_t<std::is_same_v<SubType, Staff>, DrumStaff, DrumStaffStyle>;
     using NamePositionFullType = std::conditional_t<std::is_same_v<SubType, Staff>, NamePositionFull, NamePositionStyleFull>;
     using NamePositionAbrvType = std::conditional_t<std::is_same_v<SubType, Staff>, NamePositionAbbreviated, NamePositionStyleAbbreviated>;
+    using NoteShapesType = std::conditional_t<std::is_same_v<SubType, Staff>, details::ShapeNote, details::ShapeNoteStyle>;
     constexpr bool isForStyle = std::is_same_v<SubType, StaffStyle>;
 
     auto list = document->getOthers()->getArray<SubType>(SCORE_PARTID);
@@ -138,6 +139,27 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
         } else {
             mutableItem->percussionMapId = std::nullopt;
         }
+        auto check = [&](bool mask) -> bool {
+            if constexpr (isForStyle) {
+                return mask;
+            }
+            return true;
+        };
+        bool checkNoteShapes = true;
+        if constexpr (isForStyle) {
+            checkNoteShapes = item->masks->useNoteShapes;
+        }
+        if (checkNoteShapes) {
+            // Note shapes are slightly odd because their default values are at staff cmper 0. Therefore, even if this
+            // is a staff style, we should only set noteShapeFromStyle if there is a separate note shapes record for the style.
+            if (auto shapes = document->getDetails()->get<NoteShapesType>(SCORE_PARTID, item->getCmper(), 0)) {
+                mutableItem->noteShapesId = item->getCmper();
+                mutableItem->noteShapesFromStyle = isForStyle;
+            } else {
+                mutableItem->noteShapesId = Cmper(0);
+                mutableItem->noteShapesFromStyle = false;
+            }
+        }
         bool checkFullNeeded = true;
         if constexpr (isForStyle) {
             checkFullNeeded = item->masks->fullNamePos;
@@ -146,7 +168,7 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
             if (auto full = document->getOthers()->get<NamePositionFullType>(SCORE_PARTID, item->getCmper())) {
                 mutableItem->fullNamePosId = item->getCmper();
             } else {
-                mutableItem->fullNamePosId = 0;
+                mutableItem->fullNamePosId = Cmper(0);
             }
             mutableItem->fullNamePosFromStyle = isForStyle;
         }
@@ -158,7 +180,7 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
             if (auto abrv = document->getOthers()->get<NamePositionAbrvType>(SCORE_PARTID, item->getCmper())) {
                 mutableItem->abrvNamePosId = item->getCmper();
             } else {
-                mutableItem->abrvNamePosId = 0;
+                mutableItem->abrvNamePosId = Cmper(0);
             }
             mutableItem->abrvNamePosFromStyle = isForStyle;
         }
@@ -350,6 +372,19 @@ std::string Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalSt
     return {};
 }
 
+MusxInstance<details::ShapeNoteBase> Staff::getNoteShapes() const
+{
+    if (useNoteShapes) {
+        if (noteShapesFromStyle) {
+            return getDocument()->getDetails()->get<details::ShapeNoteStyle>(getRequestedPartId(), noteShapesId, 0);
+        }
+        // if noteShapesFromStyle is false, we might be picking up the default values, which are at cmper 0 of
+        // staff noteshapes, even for a staff style. The following line takes care of this.
+        return getDocument()->getDetails()->get<details::ShapeNote>(getRequestedPartId(), noteShapesId, 0);
+    }
+    return nullptr;
+}
+
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 template <typename NamePositionType>
 MusxInstance<NamePositioning> Staff::getNamePosition() const
@@ -536,6 +571,12 @@ void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
         noteFont = staffStyle->noteFont;
         useNoteFont = staffStyle->useNoteFont;
         masks->floatNoteheadFont = true;
+    }
+    if (srcMasks->useNoteShapes) {
+        useNoteShapes = staffStyle->useNoteShapes;
+        noteShapesId = staffStyle->noteShapesId;
+        noteShapesFromStyle = staffStyle->noteShapesFromStyle; // might be false if noteShapesId is 0.
+        masks->useNoteShapes = true;
     }
     if (srcMasks->flatBeams) {
         flatBeams = staffStyle->flatBeams;

@@ -1175,6 +1175,9 @@ public:
  * @brief Shape Note settings for staves and staffs style.
  *
  * See @ref ShapeNote and @ref ShapeNoteStyle for cmper1 and cmper2 values.
+ *
+ * The glyph codes are from font #options::FontInfo::FontType::Noteheads unless the notehead font
+ * is overridden by the applicable @ref others::Staff or @ref others::StaffStyle.
  */
 class ShapeNoteBase : public DetailsBase
 {
@@ -1199,9 +1202,9 @@ public:
         static const xml::XmlElementArray<NoteShapes>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
     };
 
-    std::vector<std::shared_ptr<const NoteShapes>> noteShapes; ///< Notehead shapes (only the first seven elements are used).
+    std::vector<std::shared_ptr<NoteShapes>> noteShapes; ///< Notehead shapes (only the first seven elements are used).
     bool arrangedByPitch{};     ///< If true, the shapes correspond to pitches (C, D, E, F, G, A, B).
-                                ///< If false, the shapes correspond to scale degrees 0..6.
+                                ///< If false, the shapes correspond to scale degrees 0..6 in the key signauture.
                                             
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
