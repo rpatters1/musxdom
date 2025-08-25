@@ -416,6 +416,7 @@ public:
         { others::MultiStaffGroupId::XmlNodeName, Base::ShareMode::None },
         { others::Page::XmlNodeName, Base::ShareMode::None },
         { others::PartGlobals::XmlNodeName, Base::ShareMode::None },
+        { others::PartVoicing::XmlNodeName, Base::ShareMode::None },
         { others::StaffSystem::XmlNodeName, Base::ShareMode::None },
         { others::StaffStyleAssign::XmlNodeName, Base::ShareMode::None },
         // add other known sharemode none items as they are identified.

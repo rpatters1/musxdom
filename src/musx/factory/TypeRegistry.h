@@ -293,6 +293,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TextRepeatText,
     dom::others::PartDefinition,
     dom::others::PartGlobals,
+    dom::others::PartVoicing,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName,
     dom::others::StaffListCategoryName,

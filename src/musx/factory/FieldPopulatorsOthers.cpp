@@ -123,6 +123,18 @@ MUSX_XML_ENUM_MAPPING(PageTextAssign::PageAssignType, {
     {"odd", PageTextAssign::PageAssignType::Odd},
 });
 
+MUSX_XML_ENUM_MAPPING(PartVoicing::VoicingType, {
+    {"useSingleLayer", PartVoicing::VoicingType::UseSingleLayer}, // Default value, may not appear in XML, but the Finale binary contains the string.
+    {"useMultipleLayers", PartVoicing::VoicingType::UseMultipleLayers},
+});
+
+MUSX_XML_ENUM_MAPPING(PartVoicing::SingleLayerVoiceType, {
+    {"allNotes", PartVoicing::SingleLayerVoiceType::AllNotes}, // Default value, may not appear in XML, but the Finale binary contains the string.
+    {"topNote", PartVoicing::SingleLayerVoiceType::TopNote},
+    {"botNote", PartVoicing::SingleLayerVoiceType::BottomNote},
+    {"selected", PartVoicing::SingleLayerVoiceType::SelectedNotes},
+});
+
 MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
     // {"undocumented", ShapeDef::InstructionType::Undocumented}, // Default value does not appear in the xml
     {"bracket", ShapeDef::InstructionType::Bracket},
@@ -835,6 +847,21 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
     {"scrollViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->scrollViewIUlist = e->getTextAs<Cmper>(); }},
     {"studioViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->studioViewIUlist = e->getTextAs<Cmper>(); }},
     {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(PartVoicing, {
+    {"enabled", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->enabled = populateBoolean(e, i); }},
+    {"voicingType", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->voicingType = toEnum<PartVoicing::VoicingType>(e); }},
+    {"singleVoiceType", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->singleLayerVoiceType = toEnum<PartVoicing::SingleLayerVoiceType>(e); }},
+    {"select1st", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select1st = populateBoolean(e, i); }},
+    {"select2nd", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select2nd = populateBoolean(e, i); }},
+    {"select3rd", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select3rd = populateBoolean(e, i); }},
+    {"select4th", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select4th = populateBoolean(e, i); }},
+    {"select5th", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select5th = populateBoolean(e, i); }},
+    {"selectFromBottom", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->selectFromBottom = populateBoolean(e, i); }},
+    {"selectSingleNote", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->selectSingleNote = populateBoolean(e, i); }},
+    {"singleLayer", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->singleLayer = e->getTextAs<LayerIndex>(); }},
+    {"multiLayer", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->multiLayer = e->getTextAs<LayerIndex>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PercussionNoteInfo, {
