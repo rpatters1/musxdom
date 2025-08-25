@@ -186,9 +186,9 @@ public:
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
     bool isValid{};     ///< Should always be true but otherwise appears to be used internally by Finale.
-    bool crossStaff{};  ///< Signifies that the note has a @ref details::CrossStaff note detail.
     bool tieStart{};    ///< Indicates a tie starts on this note.
     bool tieEnd{};      ///< Indicates a tie ends on this note.
+    bool crossStaff{};  ///< Signifies that the note has a @ref details::CrossStaff note detail.
     bool upStemSecond{}; ///< Indicates that this note is the upper note of a second.
                         ///< When the entry is upstem, it is drawn on the "wrong" side of the stem.
     bool downStemSecond{}; ///< Indicates that this note is the lower note of a second.
@@ -197,7 +197,10 @@ public:
                         ///< should have #upSplitStem set to `true`. Only takes effect if #Entry::splitStem is `true`.
     bool showAcci{};    ///< True if the note has an accidental. (Dynamically changed by Finale unless `freezeAcci` is set.)
     bool parenAcci{};   ///< True if the accidental has parentheses.
+    bool noPlayback{};  ///< Indicates that this note should not be played back.
+    bool noSpacing{};   ///< Indicates that this note should ignored when calculating spacing.
     bool freezeAcci{};  ///< True if the accidental should be forced on or off (based on `showAcci`.)
+    bool playDisabledByHP{}; ///< Used by Finale's smart playback engine.
 
     /// @brief Gets the note id for this note. This value does not change, even if the notes
     /// in a chord are rearranged (which affects the order of #Entry::notes.)
@@ -242,8 +245,6 @@ public:
     NoteProperties calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
         const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
-    bool requireAllFields() const override { return false; }
-
     static const xml::XmlElementArray<Note>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
@@ -281,35 +282,45 @@ public:
     Evpu hOffset{};          ///< Manual offset created with the Note Position Tool. (xml node is `<posi>`.)
     bool isValid{};          ///< Should always be true but otherwise appears to be used internally by Finale.
     bool isNote{};           ///< If this value is false, the entry is a rest.
+    bool v2Launch{};         ///< Indicates if this entry (which is voice1) launches a voice2 sequence. (xml node is `<controller>`)
+    bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
+    bool createdByHP{};      ///< Indicates the entry was created by Finale's smart playback engine.
+    bool playDisabledByHP{}; ///< Used by Finale's smart playback engine.
     bool graceNote{};        ///< Indicate the entry is a grace note.
+    bool noteDetail{};       ///< Indicates there is a note detail or EntrySize record for the entry.
+    bool articDetail{};      ///< Indicates there is an articulation on the entry
+    bool lyricDetail{};      ///< Indicates there is a lyric assignment on the entry.
+    bool tupletStart{};      ///< Indicates that a tuplet start on the entry.
+    bool splitRest{};        ///< Indicates that rests in different layers are not combined on this entry.
+    bool performanceData{};  ///< Indicates there is performance data on the entry.
     bool floatRest{};        ///< Is floating rest. If false, the first note element gives the staff position of the rest.
     bool isHidden{};         ///< Indicates the entry is hidden, (xml node is `<ignore>`)
-    bool voice2{};           ///< This is a V2 note. (xml node `<v2>`)
-    bool articDetail{};      ///< Indicates there is an articulation on the entry
-    bool noteDetail{};       ///< Indicates there is a note detail or EntrySize record for the entry.
-    bool dotTieAlt{};        ///< Indicates dot or tie alterations are present.
-    bool tupletStart{};      ///< Indicates that a tuplet start on the entry.
     bool beamExt{};          ///< Indicates that there is a beam extension on the entry.
+    bool flipTie{};          ///< Indicates the existence of a flipped tie, either in Speedy Entry or Layer Attributes.
+    bool dotTieAlt{};        ///< Indicates dot or tie alterations are present.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
     bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
+    bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
+    bool stemDetail{};       ///< Indicates there are stem modifications.
+    bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
+    bool reverseUpStem{};    ///< Indicates that a stem normally up is reversed.
+    bool reverseDownStem{};  ///< Indicates that a stem normally down is reversed.
     bool doubleStem{};       ///< Creates a double stem on the entry. (Appears to be exclusive with #splitStem.)
     bool splitStem{};        ///< Indicates the presence of a note with #Note::upSplitStem set.
                              ///< If no note has a split stem, it shows as a double stem. (Appears to be exclusive with #doubleStem.)
-    bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
-    bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
     bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
+    bool checkAccis{};       ///< Used by Finale to convert pre-2014 `.mus` files. May never be saved in `.musx`.
+    bool dummy{};            ///< An entry (usually a rest) inserted for alignment. It may not be meaningful outside the Finale runtime environment
+                             ///< and is probably safe to ignore.
+    bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
     bool noLeger{};          ///< Hide ledger lines.
-    bool stemDetail{};       ///< Indicates there are stem modifications.
-    bool reverseUpStem{};    ///< Indicates that a stem normally up is reversed.
-    bool reverseDownStem{};  ///< Indicates that a stem normally down is reversed.
+    bool sorted{};           ///< Sorted flag.
     bool slashGrace{};       ///< Indicates that a non-beamed grace note with flags (8th note or smaller) should have a slash on the stem.
                              ///< If #options::GraceNoteOptions::slashFlaggedGraceNotes is true, this options has no effect. The stem
                              ///< always has a slash in that case.
-    bool smartShapeDetail{}; ///< Indicates this entry has a smart shape assignment.
-    bool sorted{};           ///< Sorted flag.
+    bool flatBeam{};         ///< Forces any beam that starts on this entry to be flat by default.
     bool noPlayback{};       ///< Indicates that the entry should not be played back.
-    bool lyricDetail{};      ///< Indicates there is a lyric assignment on the entry.
-    bool performanceData{};  ///< Indicates there is performance data on the entry.
+    bool noSpacing{};        ///< Indicates that the entry should be ignored when calculating music spacing.
     bool freezeBeam{};       ///< Freeze beam flag (Derived from the presence of `<freezeBeam>` node.)
 
     /** @brief Collection of notes that comprise the entry. These are in order from lowest to highest. */
@@ -357,8 +368,6 @@ public:
         }
     }
 
-    bool requireAllFields() const override { return false; }
-
     constexpr static std::string_view XmlNodeName = "entry"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
@@ -366,7 +375,6 @@ private:
     EntryNumber m_entnum;   ///< Entry number.
     EntryNumber m_prev;     ///< Previous entry number in the list. (0 if none)
     EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
-    
 };
 
 class EntryInfo;
@@ -824,7 +832,6 @@ public:
                                         ///< This is a staff-level position and must be scaled for the global value. (Use #EntryInfoPtr::calcGlobalElapsedDuration.)
     util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
                                         ///< This is a staff-level value and must be scaled for the global value. (Use #EntryInfoPtr::calcGlobalActualDuration.)
-    bool v2Launch{};                    ///< indicates if this entry (which is voice1) launches a voice2 sequence
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
     ClefIndex clefIndex{};              ///< the clef index in effect for the entry.

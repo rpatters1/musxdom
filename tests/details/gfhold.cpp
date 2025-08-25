@@ -455,7 +455,7 @@ TEST(GFrameHold, V1V2TupletTest)
             }
         }
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
-        if (entryInfo->v2Launch) {
+        if (entryInfo->getEntry()->v2Launch) {
           v2Total = v1Total;
         }
         Fraction& total = entryInfo->getEntry()->voice2 ? v2Total : v1Total;
@@ -515,7 +515,7 @@ TEST(GFrameHold, NestedEndTuplets)
             }
         }
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
-        if (entryInfo->v2Launch) {
+        if (entryInfo->getEntry()->v2Launch) {
             v2Total = v1Total;
         }
         Fraction& total = entryInfo->getEntry()->voice2 ? v2Total : v1Total;
@@ -614,7 +614,7 @@ TEST(GFrameHold, IncompleteTupletV2)
             }
         }
         EXPECT_EQ(expectedValues[x], entryInfo->actualDuration);
-        if (entryInfo->v2Launch) {
+        if (entryInfo->getEntry()->v2Launch) {
             v2Total = v1Total;
         }
         Fraction& total = entryInfo->getEntry()->voice2 ? v2Total : v1Total;
