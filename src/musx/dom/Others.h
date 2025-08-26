@@ -1755,7 +1755,7 @@ public:
         AllNotes,                   ///< Select all notes. (This is the default value and may never appear in the xml.)
         TopNote,                    ///< Select the top note.
         BottomNote,                 ///< Select the bottom note. (xml value is "botNote")
-        SelectedNotes               ///< Use flags #selected1st, #selected2nd, etc., to select notes. (xml value is "selected")
+        SelectedNotes               ///< Use flags #select1st, #select2nd, etc., to select notes. (xml value is "selected")
     };
 
     bool enabled{};                             ///< Indicates that this voicing is enabled.
