@@ -152,9 +152,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4a0a325e7fd6c567b84349af37d01abe" id="r_a4a0a325e7fd6c567b84349af37d01abe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a4a0a325e7fd6c567b84349af37d01abe">calcNoteProperties</a> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt; &amp;key, <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeySignature::KeyContext</a> ctx, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex, const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt; &amp;staff=nullptr, bool respellEnharmonic=false) const</td></tr>
 <tr class="memdesc:a4a0a325e7fd6c567b84349af37d01abe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override.  <br /></td></tr>
 <tr class="separator:a4a0a325e7fd6c567b84349af37d01abe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36dc7428581bf94502b9e3a8ab2f0db1" id="r_a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a36dc7428581bf94502b9e3a8ab2f0db1">requireAllFields</a> () const override</td></tr>
-<tr class="memdesc:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
-<tr class="separator:a36dc7428581bf94502b9e3a8ab2f0db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
 <tr class="memitem:ae20dd597127cd4a1bd8b8aa53c2ee08e inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_ae20dd597127cd4a1bd8b8aa53c2ee08e"><td class="memItemLeft" align="right" valign="top">
 virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~Base</b> () noexcept(false)=default</td></tr>
@@ -181,6 +178,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 <tr class="memitem:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_aaab6820828edca2a769b91999025ab5f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis)</td></tr>
 <tr class="memdesc:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3bee36f4048e813c0f267b8eb84ec68e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">requireAllFields</a> () const</td></tr>
+<tr class="memdesc:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
+<tr class="separator:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -203,10 +203,6 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>harmAlt</b> {}</td></t
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> {}</td></tr>
 <tr class="memdesc:a3e9ab0528cef1b53791ad277da67b26b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should always be true but otherwise appears to be used internally by Finale. <br /></td></tr>
 <tr class="separator:a3e9ab0528cef1b53791ad277da67b26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84dc0efada748e96ca668df2e1c5c6ec" id="r_a84dc0efada748e96ca668df2e1c5c6ec"><td class="memItemLeft" align="right" valign="top"><a id="a84dc0efada748e96ca668df2e1c5c6ec" name="a84dc0efada748e96ca668df2e1c5c6ec"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>crossStaff</b> {}</td></tr>
-<tr class="memdesc:a84dc0efada748e96ca668df2e1c5c6ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies that the note has a <a class="el" href="classmusx_1_1dom_1_1details_1_1CrossStaff.html">details::CrossStaff</a> note detail. <br /></td></tr>
-<tr class="separator:a84dc0efada748e96ca668df2e1c5c6ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8020db4ad0f674e86e386af23a6d0eca" id="r_a8020db4ad0f674e86e386af23a6d0eca"><td class="memItemLeft" align="right" valign="top"><a id="a8020db4ad0f674e86e386af23a6d0eca" name="a8020db4ad0f674e86e386af23a6d0eca"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>tieStart</b> {}</td></tr>
 <tr class="memdesc:a8020db4ad0f674e86e386af23a6d0eca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates a tie starts on this note. <br /></td></tr>
@@ -215,6 +211,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>tieStart</b> {}</td><
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>tieEnd</b> {}</td></tr>
 <tr class="memdesc:a6f312eed82f216e8b14500319fa36549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates a tie ends on this note. <br /></td></tr>
 <tr class="separator:a6f312eed82f216e8b14500319fa36549"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84dc0efada748e96ca668df2e1c5c6ec" id="r_a84dc0efada748e96ca668df2e1c5c6ec"><td class="memItemLeft" align="right" valign="top"><a id="a84dc0efada748e96ca668df2e1c5c6ec" name="a84dc0efada748e96ca668df2e1c5c6ec"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>crossStaff</b> {}</td></tr>
+<tr class="memdesc:a84dc0efada748e96ca668df2e1c5c6ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signifies that the note has a <a class="el" href="classmusx_1_1dom_1_1details_1_1CrossStaff.html">details::CrossStaff</a> note detail. <br /></td></tr>
+<tr class="separator:a84dc0efada748e96ca668df2e1c5c6ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a250d2ca7df9eda392d0860ac6c67534f" id="r_a250d2ca7df9eda392d0860ac6c67534f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Note.html#a250d2ca7df9eda392d0860ac6c67534f">upStemSecond</a> {}</td></tr>
 <tr class="memdesc:a250d2ca7df9eda392d0860ac6c67534f"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the entry is upstem, it is drawn on the "wrong" side of the stem.  <br /></td></tr>
 <tr class="separator:a250d2ca7df9eda392d0860ac6c67534f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,10 +231,22 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>showAcci</b> {}</td><
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>parenAcci</b> {}</td></tr>
 <tr class="memdesc:ade47003e81ad02ce2dd18e19da706a53"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the accidental has parentheses. <br /></td></tr>
 <tr class="separator:ade47003e81ad02ce2dd18e19da706a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1e834d9c71ff73dd32f3d4f96063c5f" id="r_ad1e834d9c71ff73dd32f3d4f96063c5f"><td class="memItemLeft" align="right" valign="top"><a id="ad1e834d9c71ff73dd32f3d4f96063c5f" name="ad1e834d9c71ff73dd32f3d4f96063c5f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>noPlayback</b> {}</td></tr>
+<tr class="memdesc:ad1e834d9c71ff73dd32f3d4f96063c5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that this note should not be played back. <br /></td></tr>
+<tr class="separator:ad1e834d9c71ff73dd32f3d4f96063c5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef6bad0ddda73179ef6f4058570b121a" id="r_aef6bad0ddda73179ef6f4058570b121a"><td class="memItemLeft" align="right" valign="top"><a id="aef6bad0ddda73179ef6f4058570b121a" name="aef6bad0ddda73179ef6f4058570b121a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>noSpacing</b> {}</td></tr>
+<tr class="memdesc:aef6bad0ddda73179ef6f4058570b121a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that this note should ignored when calculating spacing. <br /></td></tr>
+<tr class="separator:aef6bad0ddda73179ef6f4058570b121a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe747089f18d125be7a444492a9db822" id="r_afe747089f18d125be7a444492a9db822"><td class="memItemLeft" align="right" valign="top"><a id="afe747089f18d125be7a444492a9db822" name="afe747089f18d125be7a444492a9db822"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>freezeAcci</b> {}</td></tr>
 <tr class="memdesc:afe747089f18d125be7a444492a9db822"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the accidental should be forced on or off (based on <code>showAcci</code>.) <br /></td></tr>
 <tr class="separator:afe747089f18d125be7a444492a9db822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5158495f6284d0f6fec47d2447c6dab4" id="r_a5158495f6284d0f6fec47d2447c6dab4"><td class="memItemLeft" align="right" valign="top"><a id="a5158495f6284d0f6fec47d2447c6dab4" name="a5158495f6284d0f6fec47d2447c6dab4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>playDisabledByHP</b> {}</td></tr>
+<tr class="memdesc:a5158495f6284d0f6fec47d2447c6dab4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by Finale's smart playback engine. <br /></td></tr>
+<tr class="separator:a5158495f6284d0f6fec47d2447c6dab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -384,37 +396,6 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68" title="Note properites. A tuple containing:">NoteProperties</a> </dd></dl>
-
-</div>
-</div>
-<a id="a36dc7428581bf94502b9e3a8ab2f0db1" name="a36dc7428581bf94502b9e3a8ab2f0db1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36dc7428581bf94502b9e3a8ab2f0db1">&#9670;&#160;</a></span>requireAllFields()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::Note::requireAllFields </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class. </p>
-<p>Some classes make it difficult to discover all the possible xml tags that might be used for all its options. An example is <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html">others::TextBlock</a>. By overriding this function, a class can allow its members to be discovered as needed without causing error messages or throwing exceptions.</p>
-<dl class="section remark"><dt>Remarks</dt><dd>This value only escapes errors on fields. Enum values must still have all values provided to avoid error messages or exceptions. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">musx::dom::Base</a>.</p>
 
 </div>
 </div>

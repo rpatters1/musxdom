@@ -8,5 +8,7 @@ var searchData=
   ['unknown5_5',['Unknown5',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672a9438fee56697232b35b5fddd839f5557',1,'musx::dom::details::StaffGroup']]],
   ['unknown7_6',['Unknown7',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6eb915dd3c60edee8dceb1cc56fd6672a5d0feb5e862d1330b3932ebc38be7d40',1,'musx::dom::details::StaffGroup']]],
   ['untilpass_7',['UntilPass',['../namespacemusx_1_1dom_1_1others.html#aeecd954125aace2233c1d1320a910f3cae70900d6d341d1555b4f9430522537e2',1,'musx::dom::others']]],
-  ['useratio_8',['UseRatio',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1',1,'musx::dom::options::TupletOptions']]]
+  ['usemultiplelayers_8',['UseMultipleLayers',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996a6816d1b8f2ced4932bf87776b46e8233',1,'musx::dom::others::PartVoicing']]],
+  ['useratio_9',['UseRatio',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1',1,'musx::dom::options::TupletOptions']]],
+  ['usesinglelayer_10',['UseSingleLayer',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996a205181b9b154d27146ce86dd8c3d0c43',1,'musx::dom::others::PartVoicing']]]
 ];

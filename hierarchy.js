@@ -79,6 +79,10 @@ var hierarchy =
         [ "musx::dom::details::IndependentStaffDetails", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html", null ],
         [ "musx::dom::details::KeySymbolListElement", "classmusx_1_1dom_1_1details_1_1KeySymbolListElement.html", null ],
         [ "musx::dom::details::MeasureTextAssign", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html", null ],
+        [ "musx::dom::details::ShapeNoteBase", "classmusx_1_1dom_1_1details_1_1ShapeNoteBase.html", [
+          [ "musx::dom::details::ShapeNote", "classmusx_1_1dom_1_1details_1_1ShapeNote.html", null ],
+          [ "musx::dom::details::ShapeNoteStyle", "classmusx_1_1dom_1_1details_1_1ShapeNoteStyle.html", null ]
+        ] ],
         [ "musx::dom::details::StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html", null ],
         [ "musx::dom::details::StaffSize", "classmusx_1_1dom_1_1details_1_1StaffSize.html", null ]
       ] ],
@@ -102,6 +106,7 @@ var hierarchy =
         [ "musx::dom::options::MultimeasureRestOptions", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html", null ],
         [ "musx::dom::options::MusicSpacingOptions", "classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html", null ],
         [ "musx::dom::options::MusicSymbolOptions", "classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html", null ],
+        [ "musx::dom::options::NoteRestOptions", "classmusx_1_1dom_1_1options_1_1NoteRestOptions.html", null ],
         [ "musx::dom::options::PageFormatOptions", "classmusx_1_1dom_1_1options_1_1PageFormatOptions.html", null ],
         [ "musx::dom::options::PianoBraceBracketOptions", "classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html", null ],
         [ "musx::dom::options::RepeatOptions", "classmusx_1_1dom_1_1options_1_1RepeatOptions.html", null ],
@@ -186,6 +191,7 @@ var hierarchy =
         [ "musx::dom::others::PageTextAssign", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html", null ],
         [ "musx::dom::others::PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", null ],
         [ "musx::dom::others::PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", null ],
+        [ "musx::dom::others::PartVoicing", "classmusx_1_1dom_1_1others_1_1PartVoicing.html", null ],
         [ "musx::dom::others::PercussionNoteInfo", "classmusx_1_1dom_1_1others_1_1PercussionNoteInfo.html", null ],
         [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
         [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
@@ -302,7 +308,9 @@ var hierarchy =
     [ "musx::dom::others::Staff::KeySigTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html", null ],
     [ "musx::dom::others::ShapeInstruction::LineWidth", "structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1LineWidth.html", null ],
     [ "musx::util::Logger", "classmusx_1_1util_1_1Logger.html", null ],
+    [ "musx::dom::options::NoteRestOptions::NoteColor", "classmusx_1_1dom_1_1options_1_1NoteRestOptions_1_1NoteColor.html", null ],
     [ "musx::dom::NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", null ],
+    [ "musx::dom::details::ShapeNoteBase::NoteShapes", "classmusx_1_1dom_1_1details_1_1ShapeNoteBase_1_1NoteShapes.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType >::ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
     [ "musx::dom::ObjectPool< musx::dom::DetailsBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
@@ -321,6 +329,7 @@ var hierarchy =
     ] ],
     [ "musx::dom::others::ShapeInstruction", "structmusx_1_1dom_1_1others_1_1ShapeInstruction.html", null ],
     [ "musx::dom::details::StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html", null ],
+    [ "musx::dom::options::StemOptions::StemConnection", "classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html", null ],
     [ "musx::dom::others::KeyMapArray::StepElement", "classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html", null ],
     [ "musx::dom::options::LyricOptions::SyllablePosStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html", null ],
     [ "musx::factory::RegisteredDetails::template is_registered_type", null, [

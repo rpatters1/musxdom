@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1options_1_1StemOpt
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
@@ -119,6 +120,12 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1options_1_1StemOpt
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html">StemConnection</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information about one stemConnections element.  <a href="classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5c48c35393259a1e2ff79abcd5495acf" id="r_a5c48c35393259a1e2ff79abcd5495acf"><td class="memItemLeft" align="right" valign="top"><a id="a5c48c35393259a1e2ff79abcd5495acf" name="a5c48c35393259a1e2ff79abcd5495acf"></a>
@@ -196,6 +203,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>noReverseStems</b> {}
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>useStemConnections</b> {}</td></tr>
 <tr class="memdesc:a1a40d64302d87b911a00ab2ec250cd8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Use Stem Connections" <br /></td></tr>
 <tr class="separator:a1a40d64302d87b911a00ab2ec250cd8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65ea0a643eb311c3dfed620cbdccffc6" id="r_a65ea0a643eb311c3dfed620cbdccffc6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html">StemConnection</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1StemOptions.html#a65ea0a643eb311c3dfed620cbdccffc6">stemConnections</a></td></tr>
+<tr class="memdesc:a65ea0a643eb311c3dfed620cbdccffc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of stem connection definitions.  <br /></td></tr>
+<tr class="separator:a65ea0a643eb311c3dfed620cbdccffc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -245,7 +255,26 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Options controlling the appearance of stems. </p>
 <p>This class is identified by the XML node name "stemOptions". </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a65ea0a643eb311c3dfed620cbdccffc6" name="a65ea0a643eb311c3dfed620cbdccffc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65ea0a643eb311c3dfed620cbdccffc6">&#9670;&#160;</a></span>stemConnections</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html">StemConnection</a>&gt; &gt; musx::dom::options::StemOptions::stemConnections</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Array of stem connection definitions. </p>
+<p>The document factory builds this as a contiguous array up to the highest index encountered, inserting zero-initialized placeholders for any missing indices.</p>
+<dl class="section note"><dt>Note</dt><dd>Finale appears to treat the first <a class="el" href="classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html">StemConnection</a> with a zero <code>symbol</code> as a terminator and ignores that entry and all following ones. Nevertheless, Finale-produced files may still contain additional <code>&lt;stemConnect&gt;</code> elements after this point, sometimes with nonsensical or out-of-range values (e.g. 33554432). Such trailing entries are preserved here verbatim but are probably ignored by Finale. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

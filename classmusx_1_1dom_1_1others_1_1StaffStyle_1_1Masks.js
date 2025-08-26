@@ -1,7 +1,6 @@
 var classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks =
 [
     [ "ContainedClassBase", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a53872e9c0b07633f81f5780d7ba13b9f", null ],
-    [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a0425bb33be67498a7d4c0915bd3ca25c", null ],
     [ "abrvName", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#aaf776012c904d79bc235de61f6135446", null ],
     [ "abrvNamePos", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ad28845b1f7d819e04dc0c3fb3b6337ed", null ],
     [ "altNotation", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#aba6dd4f444ec3bd10e087a715850075b", null ],
@@ -41,5 +40,6 @@ var classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks =
     [ "showStems", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ace6de717138d94ea77f15b5e74a90466", null ],
     [ "showTies", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a284e1129f5705fcea869dc925d00c490", null ],
     [ "staffType", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a72af72420034d3b49f2323b787373ae9", null ],
-    [ "transposition", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#aa2b44b342cc74cb8d8b91bdf4be27905", null ]
+    [ "transposition", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#aa2b44b342cc74cb8d8b91bdf4be27905", null ],
+    [ "useNoteShapes", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ae4ab47740583bb80c288e0db25be20db", null ]
 ];

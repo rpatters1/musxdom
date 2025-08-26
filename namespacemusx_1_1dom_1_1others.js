@@ -36,6 +36,7 @@ var namespacemusx_1_1dom_1_1others =
     [ "PageTextAssign", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html", "classmusx_1_1dom_1_1others_1_1PageTextAssign" ],
     [ "PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", "classmusx_1_1dom_1_1others_1_1PartDefinition" ],
     [ "PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", "classmusx_1_1dom_1_1others_1_1PartGlobals" ],
+    [ "PartVoicing", "classmusx_1_1dom_1_1others_1_1PartVoicing.html", "classmusx_1_1dom_1_1others_1_1PartVoicing" ],
     [ "PercussionNoteInfo", "classmusx_1_1dom_1_1others_1_1PercussionNoteInfo.html", "classmusx_1_1dom_1_1others_1_1PercussionNoteInfo" ],
     [ "RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", "classmusx_1_1dom_1_1others_1_1RepeatBack" ],
     [ "RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart" ],

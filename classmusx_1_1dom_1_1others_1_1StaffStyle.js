@@ -6,6 +6,7 @@ var classmusx_1_1dom_1_1others_1_1StaffStyle =
     [ "createMasks", "classmusx_1_1dom_1_1others_1_1StaffStyle.html#ad727432575192b53a602731dab606f53", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1StaffStyle.html#a17226c4c2ec84398025d418e64954b02", null ],
     [ "addToMenu", "classmusx_1_1dom_1_1others_1_1StaffStyle.html#af2c60ab875aa9b7073e3419fdb760455", null ],
+    [ "copyable", "classmusx_1_1dom_1_1others_1_1StaffStyle.html#aa8e2e9679b22d19e35acfa60fe7cfceb", null ],
     [ "masks", "classmusx_1_1dom_1_1others_1_1StaffStyle.html#a215523f64dc212426eab4de8607dd3f5", null ],
     [ "styleName", "classmusx_1_1dom_1_1others_1_1StaffStyle.html#ad2f2709fedf382325dbb5e520f58f740", null ]
 ];

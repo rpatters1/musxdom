@@ -120,9 +120,6 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1StaffSty
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0425bb33be67498a7d4c0915bd3ca25c" id="r_a0425bb33be67498a7d4c0915bd3ca25c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a0425bb33be67498a7d4c0915bd3ca25c">requireAllFields</a> () const override</td></tr>
-<tr class="memdesc:a0425bb33be67498a7d4c0915bd3ca25c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
-<tr class="separator:a0425bb33be67498a7d4c0915bd3ca25c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53872e9c0b07633f81f5780d7ba13b9f" id="r_a53872e9c0b07633f81f5780d7ba13b9f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a53872e9c0b07633f81f5780d7ba13b9f">ContainedClassBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;parent)</td></tr>
 <tr class="memdesc:a53872e9c0b07633f81f5780d7ba13b9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1dom_1_1ContainedClassBase.html" title="Base class for classes that are contained by other classes.">ContainedClassBase</a> object.  <br /></td></tr>
 <tr class="separator:a53872e9c0b07633f81f5780d7ba13b9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,6 +158,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 <tr class="memitem:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_aaab6820828edca2a769b91999025ab5f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis)</td></tr>
 <tr class="memdesc:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3bee36f4048e813c0f267b8eb84ec68e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">requireAllFields</a> () const</td></tr>
+<tr class="memdesc:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
+<tr class="separator:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -175,6 +175,10 @@ Public Attributes</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>floatNoteheadFont</b> {}</td></tr>
 <tr class="memdesc:a3741210853700f813074b8dee6cf1115"><td class="mdescLeft">&#160;</td><td class="mdescRight">overrides notehead font settings <br /></td></tr>
 <tr class="separator:a3741210853700f813074b8dee6cf1115"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4ab47740583bb80c288e0db25be20db" id="r_ae4ab47740583bb80c288e0db25be20db"><td class="memItemLeft" align="right" valign="top"><a id="ae4ab47740583bb80c288e0db25be20db" name="ae4ab47740583bb80c288e0db25be20db"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>useNoteShapes</b> {}</td></tr>
+<tr class="memdesc:ae4ab47740583bb80c288e0db25be20db"><td class="mdescLeft">&#160;</td><td class="mdescRight">overrides <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7509e76a1a2f92db7572b34965a8b73f" title="Indicates that note shapes should be used. It is ignored is no staff- or staffstyle-specific note sha...">Staff::useNoteShapes</a> <br /></td></tr>
+<tr class="separator:ae4ab47740583bb80c288e0db25be20db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50d64f70ebd119f6b92714b63396169e" id="r_a50d64f70ebd119f6b92714b63396169e"><td class="memItemLeft" align="right" valign="top"><a id="a50d64f70ebd119f6b92714b63396169e" name="a50d64f70ebd119f6b92714b63396169e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>flatBeams</b> {}</td></tr>
 <tr class="memdesc:a50d64f70ebd119f6b92714b63396169e"><td class="mdescLeft">&#160;</td><td class="mdescRight">overrides <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#af4793add52f71ae89f424e4d0d6e4c44" title="&quot;Flat Beams&quot;">Staff::flatBeams</a> <br /></td></tr>
@@ -400,37 +404,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a0425bb33be67498a7d4c0915bd3ca25c" name="a0425bb33be67498a7d4c0915bd3ca25c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0425bb33be67498a7d4c0915bd3ca25c">&#9670;&#160;</a></span>requireAllFields()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::others::StaffStyle::Masks::requireAllFields </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class. </p>
-<p>Some classes make it difficult to discover all the possible xml tags that might be used for all its options. An example is <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html">others::TextBlock</a>. By overriding this function, a class can allow its members to be discovered as needed without causing error messages or throwing exceptions.</p>
-<dl class="section remark"><dt>Remarks</dt><dd>This value only escapes errors on fields. Enum values must still have all values provided to avoid error messages or exceptions. </dd></dl>
-
-<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">musx::dom::Base</a>.</p>
 
 </div>
 </div>

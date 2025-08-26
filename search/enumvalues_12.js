@@ -24,7 +24,7 @@ var searchData=
   ['timesignature_21',['TimeSignature',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fab257862f6113a65ca9c23ad50d8676a6',1,'musx::dom::others::Measure']]],
   ['timesigpluspositioning_22',['TimeSigPlusPositioning',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1a2145e4dfc1cbddbb720b384c2fd88fac23c5ff7432156275a4927a6e0bbba26',1,'musx::dom::others::Measure']]],
   ['title_23',['Title',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aab78a3223503896721cca1303f776159b',1,'musx::dom::texts::FileInfoText']]],
-  ['topnote_24',['TopNote',['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371ab1a05c4a10b09f21b56525156ff36d2b',1,'musx::dom::others']]],
+  ['topnote_24',['topnote',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a021c50bccc2430c402141b9b4e1cb852ab1a05c4a10b09f21b56525156ff36d2b',1,'musx::dom::others::PartVoicing::TopNote'],['../namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371ab1a05c4a10b09f21b56525156ff36d2b',1,'musx::dom::others::TopNote']]],
   ['topstaff_25',['TopStaff',['../classmusx_1_1dom_1_1others_1_1StaffList.html#afbbdd01cfb25b89c94a1aa6a30758d69ace2b778fe6530b664cfbca0b7fe5823a',1,'musx::dom::others::StaffList']]],
   ['transpose_26',['Transpose',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaaf70b1ac863830a4e1ce6268c8399f54',1,'musx::dom::others']]],
   ['treble_27',['Treble',['../namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa56694ab2f8017b01b4284af08186b5fd',1,'musx::dom']]],
