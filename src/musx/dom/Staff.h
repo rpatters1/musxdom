@@ -26,10 +26,15 @@
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
- // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
+ // do not add other dom class dependencies. Use .cpp files for implementations that need total class access.
 
 namespace musx {
 namespace dom {
+
+namespace details {
+class ShapeNoteBase;
+}
+
 namespace others {
 
 class StaffStyle;
@@ -162,6 +167,7 @@ public:
     // Public properties corresponding to the XML structure
     NotationStyle notationStyle{};  ///< Standard, percussion, or tablature
     std::shared_ptr<FontInfo> noteFont; ///< The custom font to use for noteheads. Guaranteed non-null by #integrityCheck if #useNoteFont is `true`.
+    bool useNoteShapes{};           ///< Indicates that note shapes should be used. It is ignored is no staff- or staffstyle-specific note shapes exist.
     bool useNoteFont{};             ///< Indicates if #noteFont should be used.
     ClefIndex defaultClef{};        ///< Index of default clef for the staff.
     ClefIndex transposedClef{};     ///< Index of transposed clef for the staff. Only used if #Transposition::setToClef is true.
@@ -253,6 +259,9 @@ public:
 
     // The following values are not in xml but computed by the factory.
 
+    Cmper noteShapesId{};           ///< Calculated cmper for note shapes. If not overridden by a staff style, it is the same as the 
+                                    ///< staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
+    bool noteShapesFromStyle{};     ///< True if #noteShapesId is for a staff style. (Determines which note shapes class to retrieve.)
     Cmper fullNamePosId{};          ///< Calculated cmper for full name position id. If not overridden by a staff style, it is the
                                     ///< same as the staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
     bool fullNamePosFromStyle{};    ///< True if #fullNamePosId is for a staff style. (Determines which full name pos class to retrieve.)
@@ -301,6 +310,9 @@ public:
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
     std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
+
+    /// @brief Returns the note shape record in effect for this staff instance
+    MusxInstance<details::ShapeNoteBase> getNoteShapes() const;
 
     /// @brief Returns the full name positioning in effect for this staff instance
     MusxInstance<NamePositioning> getFullNamePosition() const;
@@ -410,8 +422,6 @@ public:
         }
     }
 
-    bool requireAllFields() const override { return false; }
-
     constexpr static std::string_view XmlNodeName = "staffSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Staff>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
@@ -453,6 +463,7 @@ public:
         using ContainedClassBase::ContainedClassBase;
 
         bool floatNoteheadFont{};       ///< overrides notehead font settings
+        bool useNoteShapes{};           ///< overrides #Staff::useNoteShapes
         bool flatBeams{};               ///< overrides #Staff::flatBeams
         bool blankMeasureRest{};        ///< overrides #Staff::blankMeasure
         bool noOptimize{};              ///< overrides #Staff::noOptimize
@@ -493,13 +504,12 @@ public:
         bool negTimeParts{};            ///< overrides #Staff::hideTimeSigsInParts
         bool hideKeySigsShowAccis{};    ///< overrides #Staff::hideKeySigsShowAccis
 
-        bool requireAllFields() const override { return false; }
-
         static const xml::XmlElementArray<Masks>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
     };
 
     std::string styleName;              ///< name of staff style
-    bool addToMenu;                     ///< add this staff style to the context menu for staff styles
+    bool copyable{};                    ///< whether the staff style assignments for this style should be copied when copy/pasting music
+    bool addToMenu{};                   ///< add this staff style to the context menu for staff styles
     std::shared_ptr<Masks> masks;       ///< override masks: guaranteed to exist by #integrityCheck, which is called by the factory
                                         ///< (xml node is `<mask>`)
 

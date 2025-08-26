@@ -95,8 +95,7 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
         if (!forV2) {
             firstEntry = firstEntry.getNextInVoice(voice);
         }
-    }
-    else if (forV2) {
+    } else if (forV2) {
         firstEntry = firstEntry.getNextInVoice(voice);
     }
     return firstEntry;
@@ -453,13 +452,14 @@ EntryInfoPtr EntryInfoPtr::getNextInFrame() const
 EntryInfoPtr EntryInfoPtr::getNextSameV() const
 {
     auto next = getNextInFrame();
-    if ((*this)->getEntry()->voice2) {
+    auto entry = (*this)->getEntry();
+    if (entry->voice2) {
         if (next && next->getEntry()->voice2) {
             return next;
         }
         return EntryInfoPtr();
     }
-    if ((*this)->v2Launch) {
+    if (entry->v2Launch) {
         while (next && next->getEntry()->voice2) {
             next = next.getNextInFrame();
         }
@@ -959,7 +959,7 @@ bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
     if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
         return false;
     }
-    if (entry->isHidden && (*this)->v2Launch) {
+    if (entry->isHidden && entry->v2Launch) {
         // if this is a hidden v2 launch rest, check to see if there is an equivalent visible stand-alone v2 rest of the same type
         if (auto next = getNextInFrame()) {
             auto nextEntry = next->getEntry();
@@ -972,7 +972,7 @@ bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
     } else if (!entry->isHidden && entry->voice2) {
         // if this is a visible stand-alone v2 rest, check to see if there is an equivalent invisible v2 launch rest preceding it
         if (auto next = getNextInFrame(); !next || !next->getEntry()->voice2) {
-            if (auto prev = getPreviousInFrame(); prev && prev->v2Launch) {
+            if (auto prev = getPreviousInFrame(); prev && prev->getEntry()->v2Launch) {
                 auto prevEntry = prev->getEntry();
                 if (!prevEntry->isNote && prevEntry->isHidden && prevEntry->duration == entry->duration) {
                     return true;
@@ -1069,10 +1069,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
             auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry));
-            if (!entry->voice2 && (i + 1) < entries.size() && entries[i + 1]->voice2) {
-                entryInfo->v2Launch = true;
-            }
-            if (entryInfo->v2Launch) {
+            if (entry->v2Launch) {
                 // Note: v1 tuplets do not appear to affect v2 entries. If they did this would be correct:
                 //      v2ActiveTuplets = v1ActiveTuplets;
                 // But since they do not:
@@ -1354,7 +1351,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
     if (m_entry->getEntry()->isNote) {
         auto nextEntry = m_entry;
         while (nextEntry) {
-            if (nextEntry->v2Launch) {
+            if (nextEntry->getEntry()->v2Launch) {
                 nextEntry = nextEntry.getNextSameV();
                 if (!nextEntry) {
                     if (auto nextFrame = m_entry.getFrame()->getNext()) {
@@ -1384,7 +1381,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
             if (auto result = findEqualPitch(nextEntry)) {
                 return result;
             }
-            if (nextEntry->v2Launch) {
+            if (nextEntry->getEntry()->v2Launch) {
                 nextEntry = nextEntry.getNextInLayer();
                 return findEqualPitch(nextEntry);
             }
@@ -1427,8 +1424,12 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
 StaffCmper NoteInfoPtr::calcStaff() const
 {
     if ((*this)->crossStaff) {
-        if (auto crossStaff = m_entry->getEntry()->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
-            return crossStaff->staff;
+        const auto entry = m_entry->getEntry();
+        const auto noteRestOptions = entry->getDocument()->getOptions()->get<options::NoteRestOptions>();
+        if (!noteRestOptions || noteRestOptions->doCrossStaffNotes) {
+            if (auto crossStaff = entry->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
+                return crossStaff->staff;
+            }
         }
     }
     return m_entry.getStaff();

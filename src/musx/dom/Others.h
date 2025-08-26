@@ -1715,10 +1715,65 @@ public:
      *
      * (xml node is `<pageViewIUlist>`)
     */
-    Cmper specialPartExtractionIUList{};    ///< If non-zero, Special Part Extraction is in effect and this is the iuList @ref Cmper. 
+    Cmper specialPartExtractionIUList{};
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartGlobals>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class PartVoicing
+ * @brief Defines voicing options for linked parts, either by selection rules or by assigning a layer.
+ *
+ * In Finale, a linked part can contain multiple staves. When a staff is shared across more than one linked part,
+ * each occurrence of that staff has its own voicing definition, represented by a separate PartVoicing record.
+ * If no PartVoicing record is present, or if the PartVoicing record is disabled, the staff is included
+ * in the linked part in full.
+ *
+ * This class is identified by the XML node name "voicingDef".
+ */
+class PartVoicing : public OthersBase {
+public:
+    /// @brief Constructor function.
+    /// @param document The document.
+    /// @param partId The part ID (never SCORE_PARTID).
+    /// @param shareMode The share mode (always ShareMode::None).
+    /// @param staff The staff in the part that this voicing applies to.
+    explicit PartVoicing(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staff)
+        : OthersBase(document, partId, shareMode, staff) {}
+
+    /// @brief Choices for how notes are selected from the staff.
+    enum class VoicingType
+    {
+        UseSingleLayer,             ///< Display all notes from the layer specified by #singleLayer. (This is the default value and may never appear in the xml.)
+        UseMultipleLayers           ///< Display selected notes from one or more layer(s)
+    };
+
+    /// @brief Choices for how notes are selected when the staff contains only one layer.
+    enum class SingleLayerVoiceType
+    {
+        AllNotes,                   ///< Select all notes. (This is the default value and may never appear in the xml.)
+        TopNote,                    ///< Select the top note.
+        BottomNote,                 ///< Select the bottom note. (xml value is "botNote")
+        SelectedNotes               ///< Use flags #selected1st, #selected2nd, etc., to select notes. (xml value is "selected")
+    };
+
+    bool enabled{};                             ///< Indicates that this voicing is enabled.
+    VoicingType voicingType{};                  ///< Determines how notes are selected from the staff.
+    SingleLayerVoiceType singleLayerVoiceType{}; ///< Determines how notes are selected when the staff contains only one layer. (xml node is `<singleVoiceType>`)
+    bool select1st{};                           ///< Select the first note from top or bottom. (See #selectFromBottom.)
+    bool select2nd{};                           ///< Select the second note from top or bottom. (See #selectFromBottom.)
+    bool select3rd{};                           ///< Select the third note from top or bottom. (See #selectFromBottom.)
+    bool select4th{};                           ///< Select the fourth note from top or bottom. (See #selectFromBottom.)
+    bool select5th{};                           ///< Select the fifth note from top or bottom. (See #selectFromBottom.)
+    bool selectFromBottom{};                    ///< If true, select notes starting at the bottom of a chord going up.
+                                                ///< If false, select notes starting at the top of a chord going down.
+    bool selectSingleNote{};                    ///< If true, always include any passages containing only a single note.
+    LayerIndex singleLayer{};                   ///< The 0-based LayerIndex of the layer to uses when #voicingType is `UseSingleLayer`.
+    LayerIndex multiLayer{};                    ///< The 0-based LayerIndex of the layer to include when the staff contains multiple layers and #voicingType is `UseMultipleLayers`.
+
+    constexpr static std::string_view XmlNodeName = "voicingDef"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PartVoicing>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

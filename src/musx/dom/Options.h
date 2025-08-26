@@ -910,6 +910,66 @@ public:
 };
 
 /**
+ * @class NoteRestOptions
+ * @brief Options controlling note/rest display and positioning.
+ */
+class NoteRestOptions : public OptionsBase {
+public:
+    /** @brief Constructor function. */
+    explicit NoteRestOptions(const DocumentPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
+        : OptionsBase(document, partId, shareMode) {}
+
+    /**
+     * @class NoteColor
+     * @brief 16-bit per-channel note color (RGB) used by Finale.
+     *
+     * Instances are indexed according to 12-EDO pitch class, 0 - C, 1 - C#/Db, 2 - D, 3 - D#/Eb, ...
+     */
+    class NoteColor {
+    public:
+        uint16_t red{};         ///< Red component in Finale's 16-bit range.
+        uint16_t green{};       ///< Green component in Finale's 16-bit range.
+        uint16_t blue{};        ///< Blue component in Finale's 16-bit range.
+
+        /// Required for musx::factory::FieldPopulator.
+        static const xml::XmlElementArray<NoteColor>& xmlMappingArray();
+    };
+
+    bool doShapeNotes{};            ///< "Use Shape Notes" - the default set of note shapes is stored in Cmper 0 of @ref details::ShapeNote.
+                                    ///< If true, this overrides the staff-level flag. However, if a staff or staff style has individual
+                                    ///< note-shape settings, those take precedence over the default shapes.
+    bool doCrossStaffNotes{};       ///< Inverse of "Display Cross-Staff Notes in Original Staff" (xml node is `<doCrossOver>`)
+    Evpu drop8thRest{};             ///< Vertical 8th rest positioning from staff default line. (Usually the center line.)
+    Evpu drop16thRest{};            ///< Vertical 16th rest positioning from staff default line. (Usually the center line.)
+    Evpu drop32ndRest{};            ///< Vertical 32nd rest positioning from staff default line. (Usually the center line.)
+    Evpu drop64thRest{};            ///< Vertical 64th rest positioning from staff default line. (Usually the center line.)
+    Evpu drop128thRest{};           ///< Vertical 128th (and smaller) rest positioning from staff default line. (Usually the center line.)
+    bool scaleManualPositioning{};  ///< "Scale Manual Positioning of Notes"
+    bool drawOutline{};             ///< "Show border around colored noteheads"
+    std::vector<std::shared_ptr<NoteColor>> noteColors{}; ///< Notehead colors, one per pitch-class.
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OptionsBase::integrityCheck(ptrToThis);
+        const size_t currentSize = noteColors.size();
+        if (currentSize < music_theory::STANDARD_12EDO_STEPS) {
+            for (size_t x = currentSize; x < music_theory::STANDARD_12EDO_STEPS; x++) {
+                noteColors.emplace_back(std::make_shared<NoteColor>());  // default values are all zero, so this is setting missing values to black color
+            }
+            MUSX_INTEGRITY_ERROR("Only " + std::to_string(currentSize) + " note colors provided. "
+                + std::to_string(music_theory::STANDARD_12EDO_STEPS) + " were expected.");
+        } else if (currentSize > music_theory::STANDARD_12EDO_STEPS) {
+            noteColors.resize(music_theory::STANDARD_12EDO_STEPS);
+            MUSX_INTEGRITY_ERROR(std::to_string(currentSize) + " note colors provided. Only "
+                + std::to_string(music_theory::STANDARD_12EDO_STEPS) + " were expected.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "noteRestOptions";      ///< XML node name for this type.
+    static const xml::XmlElementArray<NoteRestOptions>& xmlMappingArray();  ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class PageFormatOptions
  * @brief Options for page formatting in the document.
  * 
@@ -1348,7 +1408,26 @@ class StemOptions : public OptionsBase {
 public:
     /** @brief Constructor function */
     explicit StemOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
-        : OptionsBase(document, partId, shareMode) {}
+        : OptionsBase(document, partId, shareMode)
+    {
+    }
+    
+    /**
+     * @class StemConnection
+     * @brief Information about one stemConnections element.
+     */
+    class StemConnection
+    {
+    public:
+        Cmper fontId{};       ///< The font ID of the font this connection applies to. Zero means default music font. (xml nodename is `<font>`)
+        char32_t symbol{};    ///< The codepoint of the symbol glyph in the font specified by #fontId.
+        Efix upStemVert{};    ///< Upstem vertical adjustment.
+        Efix downStemVert{};  ///< Downstem vertical adjustment.
+        Efix upStemHorz{};    ///< Upstem horizontal adjustment.
+        Efix downStemHorz{};  ///< Downstem horizontal adjustment.
+
+        static const xml::XmlElementArray<StemConnection>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
 
     Evpu halfStemLength{};     ///< Half stem length in @ref Evpu.
     Evpu stemLength{};         ///< Stem length in @ref Evpu.
@@ -1358,6 +1437,19 @@ public:
     Efix stemWidth{};          ///< Stem width in @ref Efix.
     Efix stemOffset{};         ///< Stem offset in @ref Efix. (xml node is `<stemLift>`)
     bool useStemConnections{}; ///< "Use Stem Connections"
+
+    /// @brief Array of stem connection definitions.
+    ///
+    /// The document factory builds this as a contiguous array up to the highest index
+    /// encountered, inserting zero-initialized placeholders for any missing indices.
+    ///
+    /// @note Finale appears to treat the first @ref StemConnection with a zero @c symbol
+    /// as a terminator and ignores that entry and all following ones. Nevertheless,
+    /// Finale-produced files may still contain additional `<stemConnect>` elements after
+    /// this point, sometimes with nonsensical or out-of-range values (e.g. 33554432).
+    /// Such trailing entries are preserved here verbatim but are probably ignored
+    /// by Finale.
+    std::vector<std::shared_ptr<StemConnection>> stemConnections;
 
     constexpr static std::string_view XmlNodeName = "stemOptions"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StemOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

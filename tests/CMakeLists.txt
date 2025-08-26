@@ -67,6 +67,7 @@ add_executable(musxdomtests
     options/multimeasure_rest_options.cpp
     options/music_spacing_options.cpp
     options/music_symbol_options.cpp
+    options/note_rest_options.cpp
     options/page_options.cpp
     options/piano_brace_bracket_options.cpp
     options/repeat_options.cpp
@@ -94,6 +95,7 @@ add_executable(musxdomtests
     others/page.cpp
     others/part_definition.cpp
 	others/part_globals.cpp
+	others/part_voicing.cpp
 	others/percussion_notes.cpp
     others/repeats.cpp
     others/shape.cpp
@@ -110,6 +112,7 @@ add_executable(musxdomtests
 	details/floats.cpp
 	details/gfhold.cpp
 	details/secondary_beams.cpp
+    details/shape_note.cpp
 	details/staff_group.cpp
     details/tuplet_def.cpp
     # music_theory

@@ -211,6 +211,7 @@ using RegisteredOptions = TypeRegistry <
     dom::options::MultimeasureRestOptions,
     dom::options::MusicSpacingOptions,
     dom::options::MusicSymbolOptions,
+    dom::options::NoteRestOptions,
     dom::options::PageFormatOptions,
     dom::options::PianoBraceBracketOptions,
     dom::options::RepeatOptions,
@@ -292,6 +293,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TextRepeatText,
     dom::others::PartDefinition,
     dom::others::PartGlobals,
+    dom::others::PartVoicing,
     dom::others::MarkingCategory,
     dom::others::MarkingCategoryName,
     dom::others::StaffListCategoryName,
@@ -337,6 +339,8 @@ using RegisteredDetails = TypeRegistry <
     dom::details::StaffGroup,
     dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it
     dom::details::SecondaryBeamBreak,
+    dom::details::ShapeNote,
+    dom::details::ShapeNoteStyle,
     dom::details::SmartShapeEntryAssign,
     dom::details::StemAlterations,
     dom::details::CustomDownStem,           // "stemDefDown" is the xml key

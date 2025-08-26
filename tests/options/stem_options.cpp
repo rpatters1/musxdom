@@ -39,6 +39,19 @@ TEST(StemOptionsTest, PropertiesTest)
       <stemWidth>128</stemWidth>
       <stemLift>64</stemLift>
       <useStemConnections/>
+      <stemConnect index="0">
+        <symbol>192</symbol>
+        <upStemVert>768</upStemVert>
+        <downStemVert>-768</downStemVert>
+      </stemConnect>
+      <stemConnect index="4">
+        <font>15</font>
+        <symbol>57534</symbol>
+        <upStemVert>-1024</upStemVert>
+        <downStemVert>-512</downStemVert>
+        <upStemHorz>-32</upStemHorz>
+        <downStemHorz>45</downStemHorz>
+      </stemConnect>
     </stemOptions>
   </options>
 </finale>
@@ -60,4 +73,44 @@ TEST(StemOptionsTest, PropertiesTest)
     EXPECT_EQ(stemOptions->stemWidth, 128);
     EXPECT_EQ(stemOptions->stemOffset, 64);
     EXPECT_TRUE(stemOptions->useStemConnections);
+
+    // Test stemConnections population (factory fills missing indices with zero-initialized entries)
+    ASSERT_FALSE(stemOptions->stemConnections.empty());
+    ASSERT_EQ(stemOptions->stemConnections.size(), 5); // indices 0..4 present
+
+    // Index 0 (from XML)
+    ASSERT_NE(stemOptions->stemConnections[0], nullptr);
+    {
+        const auto& c = *stemOptions->stemConnections[0];
+        EXPECT_EQ(c.fontId, 0); // default music font when <font> omitted
+        EXPECT_EQ(c.symbol, static_cast<char32_t>(192));
+        EXPECT_EQ(c.upStemVert, 768);
+        EXPECT_EQ(c.downStemVert, -768);
+        EXPECT_EQ(c.upStemHorz, 0);
+        EXPECT_EQ(c.downStemHorz, 0);
+    }
+
+    // Index 1 (missing in XML) should be zero-initialized by factory
+    ASSERT_NE(stemOptions->stemConnections[1], nullptr);
+    {
+        const auto& c = *stemOptions->stemConnections[1];
+        EXPECT_EQ(c.fontId, 0);
+        EXPECT_EQ(c.symbol, static_cast<char32_t>(0));
+        EXPECT_EQ(c.upStemVert, 0);
+        EXPECT_EQ(c.downStemVert, 0);
+        EXPECT_EQ(c.upStemHorz, 0);
+        EXPECT_EQ(c.downStemHorz, 0);
+    }
+
+    // Index 4 (from XML)
+    ASSERT_NE(stemOptions->stemConnections[4], nullptr);
+    {
+        const auto& c = *stemOptions->stemConnections[4];
+        EXPECT_EQ(c.fontId, 15);
+        EXPECT_EQ(c.symbol, static_cast<char32_t>(57534));
+        EXPECT_EQ(c.upStemVert, -1024);
+        EXPECT_EQ(c.downStemVert, -512);
+        EXPECT_EQ(c.upStemHorz, -32);
+        EXPECT_EQ(c.downStemHorz, 45);
+    }
 }

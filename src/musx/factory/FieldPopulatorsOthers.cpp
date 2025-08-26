@@ -123,6 +123,18 @@ MUSX_XML_ENUM_MAPPING(PageTextAssign::PageAssignType, {
     {"odd", PageTextAssign::PageAssignType::Odd},
 });
 
+MUSX_XML_ENUM_MAPPING(PartVoicing::VoicingType, {
+    {"useSingleLayer", PartVoicing::VoicingType::UseSingleLayer}, // Default value, may not appear in XML, but the Finale binary contains the string.
+    {"useMultipleLayers", PartVoicing::VoicingType::UseMultipleLayers},
+});
+
+MUSX_XML_ENUM_MAPPING(PartVoicing::SingleLayerVoiceType, {
+    {"allNotes", PartVoicing::SingleLayerVoiceType::AllNotes}, // Default value, may not appear in XML, but the Finale binary contains the string.
+    {"topNote", PartVoicing::SingleLayerVoiceType::TopNote},
+    {"botNote", PartVoicing::SingleLayerVoiceType::BottomNote},
+    {"selected", PartVoicing::SingleLayerVoiceType::SelectedNotes},
+});
+
 MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
     // {"undocumented", ShapeDef::InstructionType::Undocumented}, // Default value does not appear in the xml
     {"bracket", ShapeDef::InstructionType::Bracket},
@@ -837,6 +849,21 @@ MUSX_XML_ELEMENT_ARRAY(PartGlobals, {
     {"pageViewIUlist", [](const XmlElementPtr& e, const std::shared_ptr<PartGlobals>& i) { i->specialPartExtractionIUList = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(PartVoicing, {
+    {"enabled", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->enabled = populateBoolean(e, i); }},
+    {"voicingType", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->voicingType = toEnum<PartVoicing::VoicingType>(e); }},
+    {"singleVoiceType", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->singleLayerVoiceType = toEnum<PartVoicing::SingleLayerVoiceType>(e); }},
+    {"select1st", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select1st = populateBoolean(e, i); }},
+    {"select2nd", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select2nd = populateBoolean(e, i); }},
+    {"select3rd", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select3rd = populateBoolean(e, i); }},
+    {"select4th", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select4th = populateBoolean(e, i); }},
+    {"select5th", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->select5th = populateBoolean(e, i); }},
+    {"selectFromBottom", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->selectFromBottom = populateBoolean(e, i); }},
+    {"selectSingleNote", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->selectSingleNote = populateBoolean(e, i); }},
+    {"singleLayer", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->singleLayer = e->getTextAs<LayerIndex>(); }},
+    {"multiLayer", [](const XmlElementPtr& e, const std::shared_ptr<PartVoicing>& i) { i->multiLayer = e->getTextAs<LayerIndex>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(PercussionNoteInfo, {
     {"percNoteType",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->percNoteType = e->getTextAs<PercussionNoteTypeId>(); }},
     {"harmLev",         [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->staffPosition = e->getTextAs<int>(); }},
@@ -1054,6 +1081,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"notationStyle", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->notationStyle = toEnum<Staff::NotationStyle>(e); }},
     {"noteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
         { i->noteFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"useNoteShapes", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useNoteShapes = populateBoolean(e, i); }},
     {"useNoteFont", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useNoteFont = populateBoolean(e, i); }},
     {"defaultClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->defaultClef = e->getTextAs<ClefIndex>(); }},
     {"transposedClef", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->transposedClef = e->getTextAs<ClefIndex>(); }},
@@ -1153,6 +1181,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffList, {
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
     {"floatNoteheadFont", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->floatNoteheadFont = populateBoolean(e, i); }},
+    {"useNoteShapes", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->useNoteShapes = populateBoolean(e, i); }},
     {"flatBeams", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->flatBeams = populateBoolean(e, i); }},
     {"blankMeasureRest", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->blankMeasureRest = populateBoolean(e, i); }},
     {"noOptimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle::Masks>& i) { i->noOptimize = populateBoolean(e, i); }},
@@ -1197,6 +1226,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {
 MUSX_XML_ELEMENT_ARRAY(StaffStyle, []() {
     xml::XmlElementArray<StaffStyle> additionalFields = {
         {"styleName", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->styleName = e->getText(); }},
+        {"copyable", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->copyable = populateBoolean(e, i); }},
         {"addToMenu", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) { i->addToMenu = populateBoolean(e, i); }},
         {"mask", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyle>& i) {
             i->masks = FieldPopulator<StaffStyle::Masks>::createAndPopulate(e, i); }},
