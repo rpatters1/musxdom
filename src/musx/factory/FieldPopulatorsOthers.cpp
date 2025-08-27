@@ -591,12 +591,49 @@ MUSX_XML_ELEMENT_ARRAY(Frame, {
     {"startTime", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->startTime = e->getTextAs<Edu>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(StaffUsed, {
-    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
-    {"trackType", [](const XmlElementPtr&, const std::shared_ptr<StaffUsed>&) { /* this field seems like it was for future enhancement */ }},
-    {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
-    {"range", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i)
-        { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
+MUSX_XML_ELEMENT_ARRAY(FretboardInstrument::StringInfo, {
+    {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument::StringInfo>& i) { i->pitch = e->getTextAs<int>(); }},
+    {"nutOffset", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument::StringInfo>& i) { i->nutOffset = e->getTextAs<int>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(FretboardInstrument, {
+    {"numFrets", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->numFrets = e->getTextAs<int>(); }},
+    {"numStrings", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->numStrings = e->getTextAs<int>(); }},
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->name = e->getText(); }},
+    {"string", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i)
+        { i->strings.push_back(FieldPopulator<FretboardInstrument::StringInfo>::createAndPopulate(e)); }},
+    {"diatonic", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->fretSteps = populateEmbeddedArray<int>(e, "fret"); }},
+    {"speedyClef", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->speedyClef = e->getTextAs<ClefIndex>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(FretboardStyle, {
+    {"showLastFret", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->showLastFret = populateBoolean(e, i); }},
+    {"rotate", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->rotate = populateBoolean(e, i); }},
+    {"fingNumWhite", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->fingNumWhite = populateBoolean(e, i); }},
+    {"fingStrShapeID", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->fingStrShapeId = e->getTextAs<Cmper>(); }},
+    {"openStrShapeID", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->openStrShapeId = e->getTextAs<Cmper>(); }},
+    {"muteStrShapeID", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->muteStrShapeId = e->getTextAs<Cmper>(); }},
+    {"barreShapeID", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->barreShapeId = e->getTextAs<Cmper>(); }},
+    {"customShapeID", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->customShapeId = e->getTextAs<Cmper>(); }},
+    {"defNumFrets", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->defNumFrets = e->getTextAs<int>(); }},
+    {"stringGap", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->stringGap = e->getTextAs<Efix>(); }},
+    {"fretGap", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->fretGap = e->getTextAs<Efix>(); }},
+    {"stringWidth", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->stringWidth = e->getTextAs<Efix>(); }},
+    {"fretWidth", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->fretWidth = e->getTextAs<Efix>(); }},
+    {"nutWidth", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->nutWidth = e->getTextAs<Efix>(); }},
+    {"vertTextOff", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->vertTextOff = e->getTextAs<Efix>(); }},
+    {"horzTextOff", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->horzTextOff = e->getTextAs<Efix>(); }},
+    {"horzHandleOff", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->horzHandleOff = e->getTextAs<Efix>(); }},
+    {"vertHandleOff", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->vertHandleOff = e->getTextAs<Efix>(); }},
+    {"whiteout", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->whiteout = e->getTextAs<Efix>(); }},
+    {"fretNumFont", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i)
+        { i->fretNumFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"fingNumFont", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i)
+        { i->fingNumFont = FieldPopulator<FontInfo>::createAndPopulate(e, i->getDocument()); }},
+    {"horzFingNumOff", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->horzFingNumOff = e->getTextAs<Efix>(); }},
+    {"vertFingNumOff", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->vertFingNumOff = e->getTextAs<Efix>(); }},
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->name = e->getTextAs<std::string>(); }},
+    {"fretNumText", [](const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->fretNumText = e->getTextAs<std::string>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(KeyFormat, {
@@ -1273,6 +1310,14 @@ MUSX_XML_ELEMENT_ARRAY(StaffSystem, {
     {"distanceToPrev", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->distanceToPrev = e->getTextAs<Evpu>(); }},
     {"extraStartSystemSpace", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->extraStartSystemSpace = e->getTextAs<Evpu>(); }},
     {"extraEndSystemSpace", [](const XmlElementPtr& e, const std::shared_ptr<StaffSystem>& i) { i->extraEndSystemSpace = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(StaffUsed, {
+    {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->staffId = e->getTextAs<Cmper>(); }},
+    {"trackType", [](const XmlElementPtr&, const std::shared_ptr<StaffUsed>&) { /* this field seems like it was for future enhancement */ }},
+    {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
+    {"range", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i)
+        { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SystemLock, {

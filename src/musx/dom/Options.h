@@ -242,8 +242,8 @@ public:
     Evpu chordFlatLift{};            ///< Vertical offset for flat chord symbols.
     Evpu chordNaturalLift{};         ///< Vertical offset for natural chord symbols.
     bool showFretboards{};           ///< Display fretboards.
-    Cmper fretStyleId{};             ///< Fret style identifier.
-    Cmper fretInstId{};              ///< Fret instrument identifier.
+    Cmper fretStyleId{};             ///< Default @ref others::FretboardStyle ID.
+    Cmper fretInstId{};              ///< Default @ref others::FretboardInstrument ID.
     bool multiFretItemsPerStr{};     ///< Allow multiple fret items per string.
     bool italicizeCapoChords{};      ///< Italicize capo chords.
     ChordAlignment chordAlignment{}; ///< Horizontal alignment for chord symbols.

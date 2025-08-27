@@ -56,6 +56,8 @@ class StaffGroup;
  */
 namespace others {
 
+class Staff;
+
 /**
  * @class AcciAmountFlats
  * @brief Lists the aleration values of each nth flat in a custom key signature.
@@ -621,34 +623,120 @@ public:
     static const xml::XmlElementArray<Frame>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
-class Staff;
 /**
- * @class StaffUsed
- * @brief An array of StaffUsed defines a set of staves in a staff system or in Scroll View.
+ * @class FretboardInstrument
+ * @brief Describes a fretted instrument (strings, frets, name, clef).
  *
- * This class is identified by the XML node name "instUsed".
+ * The cmper is an arbitrary number referenced by @ref Staff, @ref details::ChordAssign, and @ref options::ChordOptions.
+ *
+ * This class is identified by the XML node name "fretInst".
  */
-class StaffUsed : public OthersBase {
+class FretboardInstrument : public OthersBase
+{
 public:
-    /** @brief Constructor function */
-    explicit StaffUsed(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
-        : OthersBase(document, partId, shareMode, cmper, inci) {}
+    /** @brief Constructor */
+    explicit FretboardInstrument(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
 
-    StaffCmper staffId{};                   ///< Staff cmper (xml node is `<inst>`)
-    Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
-    std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
+    /**
+     * @class StringInfo
+     * @brief Information for a single string of the fretted instrument.
+     */
+    class StringInfo
+    {
+    public:
+        int  pitch{};       ///< Open-string MIDI pitch (60 is middle-C.)
+        int  nutOffset{};   ///< Optional nut offset in frets (half-steps). The Finale U.I. does not appear to have
+                            ///< a way to modify it, so normally it will be zero. A Plugin could have modified it, however.
 
-    /// @brief Calculates the effective scaling on this instance.
-    util::Fraction calcEffectiveScaling() const;
+        static const xml::XmlElementArray<StringInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
 
-    /// @brief Returns the @ref Staff instance for this element, without any staff styles applied
-    MusxInstance<Staff> getStaffInstance() const;
+    int numFrets{};                 ///< Number of frets
+    int numStrings{};               ///< Number of strings (max is 24)
+    std::string name;               ///< Display name
+    std::vector<std::shared_ptr<StringInfo>> strings;  ///< One entry per string. strings.size() should equal #numStrings.
+    std::vector<int> fretSteps;     ///< Sequence of fret intervals (in half-steps) measured from the open string.
+                                    ///< If empty, all frets are treated as consecutive half-steps (chromatic).
+                                    ///< If shorter than #numFrets, any unspecified frets default to one half-step
+                                    ///< above the previous value. (xml node is `<diatonic>`)
+    ClefIndex speedyClef{};         ///< The clef to use when entering notes for this instrument in Speedy Entry.
 
-    /// @brief Returns the @ref Staff instance for this element with staff styles applied at the specified location.
-    MusxInstance<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OthersBase::integrityCheck(ptrToThis);
+        if (numStrings != strings.size()) {
+            MUSX_INTEGRITY_ERROR("Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numStrings)
+                + " strings but only has " + std::to_string(strings.size()) + " StringInfo instances.");
+        }
+        if (!fretSteps.empty() && numFrets > fretSteps.size()) {
+            util::Logger::log(util::Logger::LogLevel::Info, "Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numFrets)
+                + " frets but only has " + std::to_string(fretSteps.size()) + " diatonic fret steps specified.");
+        }
+    }
 
-    constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<StaffUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    constexpr static std::string_view XmlNodeName = "fretInst"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<FretboardInstrument>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class FretboardStyle
+ * @brief Fretboard diagram style: shapes, spacing, fonts, and offsets.
+ *
+ * The cmper is a unique identifier used in the document. For example, see #details::ChordAssign::fbStyleId.
+ *
+ * This class is identified by the XML node name "fretStyle".
+ */
+class FretboardStyle : public OthersBase
+{
+public:
+    /** @brief Constructor */
+    explicit FretboardStyle(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    bool showLastFret{};     ///< Show the last fret marker.
+    bool rotate{};           ///< Rotate the diagram so the nut is on the left.
+    bool fingNumWhite{};     ///< Render fingering numbers in white.
+    Cmper fingStrShapeId{};  ///< Fingering string shape ID. (xml node `<fingStrShapeID>`)
+    Cmper openStrShapeId{};  ///< Open string shape ID. (xml node `<openStrShapeID>`)
+    Cmper muteStrShapeId{};  ///< Muted string shape ID. (xml node `<muteStrShapeID>`)
+    Cmper barreShapeId{};    ///< Barre shape ID. (xml node `<barreShapeID>`)
+    Cmper customShapeId{};   ///< Custom shape ID. (xml node `<customShapeID>`)
+    int defNumFrets{};       ///< Default number of frets.
+    Efix stringGap{};        ///< Gap between strings.
+    Efix fretGap{};          ///< Gap between frets.
+    Efix stringWidth{};      ///< Line width of strings.
+    Efix fretWidth{};        ///< Line width of frets.
+    Efix nutWidth{};         ///< Width of the nut.
+    Efix vertTextOff{};      ///< Vertical text offset.
+    Efix horzTextOff{};      ///< Horizontal text offset.
+    Efix horzHandleOff{};    ///< Horizontal handle offset.
+    Efix vertHandleOff{};    ///< Vertical handle offset.
+    Efix whiteout{};         ///< Whiteout thickness/extent. (xml node `<whiteout>`)
+    std::shared_ptr<FontInfo> fretNumFont; ///< Font for fret numbers.
+    std::shared_ptr<FontInfo> fingNumFont; ///< Font for fingering numbers.
+    Efix horzFingNumOff{};   ///< Horizontal fingering number offset.
+    Efix vertFingNumOff{};   ///< Vertical fingering number offset.
+    std::string name;        ///< Style name. (xml node `<name>`)
+    std::string fretNumText; ///< Label preceding fret number (e.g., "fr."). (xml node `<fretNumText>`)
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OthersBase::integrityCheck(ptrToThis);
+        if (!fretNumFont) {
+            fretNumFont = std::make_shared<FontInfo>(getDocument());
+        }
+        if (!fingNumFont) {
+            fingNumFont = std::make_shared<FontInfo>(getDocument());
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "fretStyle"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<FretboardStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -2246,6 +2334,35 @@ public:
 };
 
 /**
+ * @class StaffUsed
+ * @brief An array of StaffUsed defines a set of staves in a staff system or in Scroll View.
+ *
+ * This class is identified by the XML node name "instUsed".
+ */
+class StaffUsed : public OthersBase {
+public:
+    /** @brief Constructor function */
+    explicit StaffUsed(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
+
+    StaffCmper staffId{};                   ///< Staff cmper (xml node is `<inst>`)
+    Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
+    std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
+
+    /// @brief Calculates the effective scaling on this instance.
+    util::Fraction calcEffectiveScaling() const;
+
+    /// @brief Returns the @ref Staff instance for this element, without any staff styles applied
+    MusxInstance<Staff> getStaffInstance() const;
+
+    /// @brief Returns the @ref Staff instance for this element with staff styles applied at the specified location.
+    MusxInstance<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
+
+    constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<StaffUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class SystemLock
  * @brief Locks a span of one or more measures so that they always appear in a @ref StaffSystem together.
  *
@@ -2519,8 +2636,8 @@ public:
     bool useThisFont{};                             ///< "Use This Font" (for the `#` substitution)
     PoundReplaceOption poundReplace{};              ///< "Replace # With" choice.
     HorizontalTextJustification justification{};    ///< Although called "justification" in Finale's U.I, this value is used
-    ///< for both the alignment of the text within the measure as well as its justification.
-    ///< (xml node is `<justify >`)
+                                                    ///< for both the alignment of the text within the measure as well as its justification.
+                                                    ///< (xml node is `<justify >`)
     std::vector<int> passList;                      ///< If this vector contains elements, they define the repeat passes that apply to this instance.
 
     constexpr static std::string_view XmlNodeName = "textRepeatDef"; ///< The XML node name for this type.
