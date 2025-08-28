@@ -5940,10 +5940,11 @@
       <xdisp>2</xdisp>
     </chordSuffix>
     <chordSuffix cmper="77" inci="1">
-      <suffix>57</suffix>
+      <suffix>9</suffix>
       <fontID>9</fontID>
       <fontSize>11</fontSize>
       <xdisp>39</xdisp>
+      <isNumber/>
     </chordSuffix>
     <chordSuffix cmper="77" inci="2">
       <suffix>40</suffix>
@@ -13201,6 +13202,13 @@
       <family>0</family>
       <name>Finale Maestro</name>
     </fontName>
+    <fontName cmper="14">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Finale Maestro Text</name>
+    </fontName>
     <fontName cmper="15">
       <charsetBank>Mac</charsetBank>
       <charsetVal>4095</charsetVal>
@@ -15509,6 +15517,21 @@
     <metaArtic cmper="90">
       <artic>6</artic>
     </metaArtic>
+    <metaChord cmper="45">
+      <suffix>67</suffix>
+      <fbStyleID>2</fbStyleID>
+      <rootScaleNum>6</rootScaleNum>
+      <rootAlter>-1</rootAlter>
+      <playSuffix/>
+      <showRoot/>
+      <playRoot/>
+      <showFretboard/>
+      <showSuffix/>
+      <horzOff>12</horzOff>
+      <horzEdu>2048</horzEdu>
+      <chPercent>100</chPercent>
+      <fbPercent>100</fbPercent>
+    </metaChord>
     <metaClef cmper="49">
       <clef>0</clef>
     </metaClef>
@@ -16397,6 +16420,7 @@
       <hasSmartShape/>
       <posMode>timesigPlusPos</posMode>
       <barline>normal</barline>
+      <hasChord/>
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="3" part="1" shared="true">
@@ -130603,6 +130627,21 @@
       </noteShapes>
       <arrangedByPitch/>
     </shapeNoteStyle>
+    <chordAssign cmper1="1" cmper2="3" inci="0">
+      <suffix>77</suffix>
+      <fbStyleID>2</fbStyleID>
+      <rootScaleNum>6</rootScaleNum>
+      <rootAlter>-1</rootAlter>
+      <playSuffix/>
+      <showRoot/>
+      <playRoot/>
+      <showFretboard/>
+      <showSuffix/>
+      <horzOff>12</horzOff>
+      <horzEdu>2048</horzEdu>
+      <chPercent>100</chPercent>
+      <fbPercent>100</fbPercent>
+    </chordAssign>
     <activeLyric cmper1="1" cmper2="1">
       <assignmentTag>verse</assignmentTag>
       <lyricNumber>1</lyricNumber>

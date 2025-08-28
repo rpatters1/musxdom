@@ -405,10 +405,10 @@ public:
     }
 
     std::shared_ptr<FontInfo> font; ///< Font info for this symbol (xml nodes are `<fontID>`, `<fontSize>`, and `<efx>`)
-    char32_t symbol{};              ///< Unicode symbol (xml node is `<suffix>`)
+    char32_t symbol{};              ///< Codepoint of glyph in #font. (xml node is `<suffix>`)
     Evpu xdisp{};                   ///< Horizontal displacement in EVPU
     Evpu ydisp{};                   ///< Vertical displacement in EVPU
-    bool isNumber{};                ///< Indicates the #symbol value is numeric rather than a UTF-32 character
+    bool isNumber{};                ///< Indicates the #symbol value is numeric rather than a codepoint.
     Prefix prefix{};                ///< Optional prefix for the symbol, e.g., "plus"
 
     constexpr static std::string_view XmlNodeName = "chordSuffix"; ///< The XML node name for this type.
@@ -629,7 +629,7 @@ class FretboardInstrument;
  * @class FretboardGroup
  * @brief A named group of fretboard diagrams associated with a specific fretboard instrument.
  *
- * The cmper is the same cmper as is used for @ref ChordSuffix. (See #details::ChordAssign::suffixId.)
+ * The cmper is the same cmper as is used for @ref ChordSuffixElement. (See #details::ChordAssign::suffixId.)
  * There are two special hard-coded cmpers that are used when a chord has no suffix. Value 65533 is used
  * for minor (lowercase) chords and value 65534 is for major (uppercase) chords.
  *

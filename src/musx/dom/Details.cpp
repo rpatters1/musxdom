@@ -158,6 +158,11 @@ Cmper ChordAssign::calcFretboardGroupCmper() const
     return 65534; // hard-coded major triad fretboard group
 }
 
+MusxInstanceList<others::ChordSuffixElement> ChordAssign::getChordSuffix() const
+{
+    return getDocument()->getOthers()->getArray<others::ChordSuffixElement>(getRequestedPartId(), suffixId);
+}
+
 MusxInstance<others::FretboardGroup> ChordAssign::getFretboardGroup() const
 {
     const Cmper groupCmper = calcFretboardGroupCmper();

@@ -45,6 +45,7 @@ class EntryFrame;
 class EntryInfo;
 
 namespace others {
+class ChordSuffixElement;
 class FretboardGroup;
 class FretboardInstrument;
 class FretboardStyle;
@@ -422,7 +423,7 @@ public:
         Subtext
     };
     
-    Cmper suffixId{};               ///< The Cmper of the @ref others::ChordSuffix. Zero means there is no suffix.
+    Cmper suffixId{};               ///< The Cmper of the @ref others::ChordSuffixElement instances. Zero means there is no suffix.
                                     ///< When #useFretboardFont is false, this same Cmper is also used to look up the
                                     ///< @ref others::FretboardGroup and related fretboard data.
                                     ///< When #useFretboardFont is true, only the chord-suffix lookup applies (no fretboard group lookup).
@@ -456,6 +457,9 @@ public:
     Edu horzEdu{};                  ///< Edu position in measure
     int chPercent{};                ///< Chord scaling (100 means 100%)
     int fbPercent{};                ///< FretboardDiagram scaling (100 means 100%)
+
+    /// @brief Returns the chord suffix as an array of @ref others::ChordSuffixElement.
+    MusxInstanceList<others::ChordSuffixElement> getChordSuffix() const;
 
     /// @brief Get the @ref others::FretboardGroup instance for this chord assignment. You can use this to get the fret instrument.
     /// @return The fretboard group, if it exists, or @c nullptr if #useFretboardFont is true.

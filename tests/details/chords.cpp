@@ -186,3 +186,34 @@ TEST(ChordSuffixPlayTest, PopulateFields)
     EXPECT_EQ(playback->values[4], 5);
     EXPECT_EQ(playback->values[5], 0);
 }
+
+TEST(ChordAssignTest, TestHelperFunctions)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "finale_maestro_default.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    const auto chordAssign = doc->getDetails()->get<details::ChordAssign>(SCORE_PARTID, 1, 3, 0);
+    ASSERT_TRUE(chordAssign);
+    EXPECT_EQ(chordAssign->horzEdu, 2048);
+    EXPECT_EQ(chordAssign->rootScaleNum, 6);
+
+    const auto suffix = chordAssign->getChordSuffix();
+    ASSERT_EQ(suffix.size(), 6);
+    EXPECT_EQ(suffix[0]->symbol, 'm');
+    EXPECT_TRUE(suffix[1]->isNumber);
+    EXPECT_EQ(suffix[1]->symbol, 9);
+    EXPECT_EQ(suffix[2]->symbol, '(');
+    EXPECT_EQ(suffix[3]->symbol, U'\uE260');  // SMuFL flat symbol
+    EXPECT_EQ(suffix[4]->symbol, '5');
+    EXPECT_EQ(suffix[5]->symbol, ')');
+
+    const auto fretGroup = chordAssign->getFretboardGroup();
+    ASSERT_TRUE(fretGroup);
+    EXPECT_EQ(fretGroup->name, "Min 9 (b5)");
+
+    const auto fretStyle = chordAssign->getFretboardStyle();
+    ASSERT_TRUE(fretStyle);
+    EXPECT_EQ(fretStyle->name, "Seville");
+}
