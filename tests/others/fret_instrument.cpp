@@ -26,7 +26,50 @@
 
 using namespace musx::dom;
 
-TEST(PopulateTest, FretboardInstrument)
+TEST(FretboardGroup, PopulateTest)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <fretGroup cmper="4" inci="0">
+      <fretInstID>2</fretInstID>
+      <name>6/9 R5  </name>
+    </fretGroup>
+    <fretGroup cmper="4" inci="1">
+      <fretInstID>2</fretInstID>
+      <name>6/9 R6 </name>
+    </fretGroup>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    // First group (cmper=4, inci=0)
+    auto g0 = others->get<others::FretboardGroup>(SCORE_PARTID, 4, 0);
+    ASSERT_TRUE(g0);
+
+    EXPECT_EQ(g0->fretInstId, 2);
+    // Verify that trailing spaces are preserved
+    EXPECT_EQ(g0->name, "6/9 R5  ");
+
+    // Second group (cmper=4, inci=1)
+    auto g1 = others->get<others::FretboardGroup>(SCORE_PARTID, 4, 1);
+    ASSERT_TRUE(g1);
+
+    EXPECT_EQ(g1->fretInstId, 2);
+    // One trailing space here
+    EXPECT_EQ(g1->name, "6/9 R6 ");
+
+    // Sanity: both groups belong to the same cmper (4)
+    EXPECT_EQ(g0->getCmper(), 4);
+    EXPECT_EQ(g1->getCmper(), 4);
+}
+
+TEST(FretboardInstrument, PopulateTest)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -129,7 +172,7 @@ TEST(PopulateTest, FretboardInstrument)
     EXPECT_EQ(static_cast<int>(fi->strings.size()), fi->numStrings);
 }
 
-TEST(PopulateTest, FretboardStyle)
+TEST(FretboardStyle, PopulateTest)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>

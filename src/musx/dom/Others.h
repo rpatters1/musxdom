@@ -624,6 +624,34 @@ public:
 };
 
 /**
+ * @class FretboardGroup
+ * @brief A named group of fretboard diagrams associated with a specific fretboard instrument.
+ *
+ * The cmper is the same cmper as is used for @ref ChordSuffix. (See #details::ChordAssign::suffixId.)
+ * There are two special hard-coded cmpers that are used when a chord has no suffix. Value 65533 is used
+ * for minor (lowercase) chords and value 65534 is for major (uppercase) chords.
+ *
+ * The inci comes from #details::ChordAssign::fretInci.
+ *
+ * This class is identified by the XML node name "fretGroup".
+ */
+class FretboardGroup : public OthersBase
+{
+public:
+    /** @brief Constructor */
+    explicit FretboardGroup(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    Cmper fretInstId{};   ///< Fretboard instrument ID. (xml node `<fretInstID>`)
+    std::string name;     ///< Group name.
+
+    constexpr static std::string_view XmlNodeName = "fretGroup"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<FretboardGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class FretboardInstrument
  * @brief Describes a fretted instrument (strings, frets, name, clef).
  *

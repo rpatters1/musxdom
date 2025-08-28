@@ -591,6 +591,11 @@ MUSX_XML_ELEMENT_ARRAY(Frame, {
     {"startTime", [](const XmlElementPtr& e, const std::shared_ptr<Frame>& i) { i->startTime = e->getTextAs<Edu>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(FretboardGroup, {
+    {"fretInstID", [](const XmlElementPtr& e, const std::shared_ptr<FretboardGroup>& i) { i->fretInstId = e->getTextAs<Cmper>(); }},
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretboardGroup>& i) { i->name = e->getText(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(FretboardInstrument::StringInfo, {
     {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument::StringInfo>& i) { i->pitch = e->getTextAs<int>(); }},
     {"nutOffset", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument::StringInfo>& i) { i->nutOffset = e->getTextAs<int>(); }},

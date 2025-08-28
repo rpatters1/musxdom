@@ -417,8 +417,10 @@ public:
         Subtext
     };
     
-    Cmper suffixId{};               ///< `<suffix>`: Chord suffix ID
-    Cmper fbStyleId{};              ///< `<fbStyleID>`: Fretboard style ID
+    Cmper suffixId{};               ///< If non-zero, the @ref others::ChordSuffix ID. (xml node is `<suffix>`).
+                                    ///< When non-zero, this value is also used to retrieve the @ref others::FretboardGroup
+                                    ///< and related data. (But #useFretFont makes a fretboard group not applicable.)
+    Cmper fbStyleId{};              ///< The @ref others::FretboardStyle ID
     int rootScaleNum{};             ///< `<rootScaleNum>`: Root scale degree (0–76)
     int rootAlter{};                ///< `<rootAlter>`: Root alteration
     bool rootLowerCase{};           ///< `<rootLowerCase/>`: Display root in lowercase
@@ -436,8 +438,10 @@ public:
     bool playAltBass{};             ///< `<playAltBass/>`: Playback alternate bass
     int capoValue{};                ///< `<capoValue>`: Capo value (if #useLocalCapo is true)
     bool useLocalCapo{};            ///< `<useLocalCapo/>`: Use local capo
-    Cmper fretInci{};               ///< One less than the 1-based Cmper value for the fretboard group. (Meaningless if #useFretFont is true.)
-    bool useFretFont{};             ///< `<useFretFont/>`: Use fret font
+    Inci fretInci{};                ///< The inci for retrieving the @ref others::FretboardGroup. (Meaningless if #useFretFont is true.)
+                                    ///< The cmper is the #suffixId above (when it is non-zero) or one of the hard-coded values 65533
+                                    ///< for minor (lowercase) chords and 65534 for major (uppercase) chords.
+    bool useFretFont{};             ///< Use fret font. When true, this overrides any fretboard group.
     Evpu horzOff{};                 ///< `<horzOff>`: Horizontal offset of chord (in EVPU)
     Evpu vertOff{};                 ///< `<vertOff>`: Vertical offset of chord (in EVPU)
     Evpu fbHorzOff{};               ///< `<fbHorzOff>`: Horizontal offset of fretboard (in EVPU)

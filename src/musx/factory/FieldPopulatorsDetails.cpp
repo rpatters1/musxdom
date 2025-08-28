@@ -165,7 +165,7 @@ MUSX_XML_ELEMENT_ARRAY(ChordAssign, {
     {"playAltBass", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playAltBass = populateBoolean(e, i); }},
     {"capoValue", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->capoValue = e->getTextAs<int>(); }},
     {"useLocalCapo", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useLocalCapo = populateBoolean(e, i); }},
-    {"fretInci", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fretInci = e->getTextAs<Cmper>(); }},
+    {"fretInci", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fretInci = e->getTextAs<Inci>(); }},
     {"useFretFont", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useFretFont = populateBoolean(e, i); }},
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
