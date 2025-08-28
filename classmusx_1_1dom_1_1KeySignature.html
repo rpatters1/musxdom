@@ -177,6 +177,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a 
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSameConcert</b> (const <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &amp;src) const</td></tr>
 <tr class="memdesc:abfbcd0e08eee41ac7a28447a379c4f31"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two key signatures represent the same concert key signature, ignoring transposition. <br /></td></tr>
 <tr class="separator:abfbcd0e08eee41ac7a28447a379c4f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f60adfec2163361c8d27952b1d4b0ba" id="r_a2f60adfec2163361c8d27952b1d4b0ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a2f60adfec2163361c8d27952b1d4b0ba">calcScaleDegree</a> (int displacement) const</td></tr>
+<tr class="memdesc:a2f60adfec2163361c8d27952b1d4b0ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the scale degree for the given displacement, where 0 is the tonic.  <br /></td></tr>
+<tr class="separator:a2f60adfec2163361c8d27952b1d4b0ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87cb3c216ea12c1f911b4b289d3a2920" id="r_a87cb3c216ea12c1f911b4b289d3a2920"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a87cb3c216ea12c1f911b4b289d3a2920">setTransposition</a> (int interval, int keyAdjustment, bool simplify)</td></tr>
 <tr class="memdesc:a87cb3c216ea12c1f911b4b289d3a2920"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes the key by the specified amounts. Set them to zero to remove transposition.  <br /></td></tr>
 <tr class="separator:a87cb3c216ea12c1f911b4b289d3a2920"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -384,6 +387,33 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 
 <p>If this key specifies a diatonic mode, returns the mode. This value is independent of EDO divisions. Any correctly configured linear key signature should return a value. </p>
 <dl class="section return"><dt>Returns</dt><dd>The diatonic mode or std::nullopt if it is not one. </dd></dl>
+
+</div>
+</div>
+<a id="a2f60adfec2163361c8d27952b1d4b0ba" name="a2f60adfec2163361c8d27952b1d4b0ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f60adfec2163361c8d27952b1d4b0ba">&#9670;&#160;</a></span>calcScaleDegree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::KeySignature::calcScaleDegree </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>displacement</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the scale degree for the given displacement, where 0 is the tonic. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacement</td><td>The diatonic displacement value. Zero is the tonic in the middle-C octave. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The scale degree, where 0 is the tonic. </dd></dl>
 
 </div>
 </div>

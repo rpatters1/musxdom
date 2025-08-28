@@ -32,7 +32,7 @@ var searchData=
   ['mask_29',['mask',['../classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html#acc8889213317dd33ee69a7b2967a344e',1,'musx::dom::details::SecondaryBeamBreak::mask'],['../classmusx_1_1dom_1_1details_1_1BeamStubDirection.html#a1a32be217fb964df5d6fdd9cf577f356',1,'musx::dom::details::BeamStubDirection::mask'],['../classmusx_1_1dom_1_1details_1_1BeamExtension.html#aad04c88ded0b8d3134c0988c435308f6',1,'musx::dom::details::BeamExtension::mask']]],
   ['masks_30',['masks',['../classmusx_1_1dom_1_1others_1_1StaffStyle.html#a215523f64dc212426eab4de8607dd3f5',1,'musx::dom::others::StaffStyle']]],
   ['mastershape_31',['masterShape',['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a0d4d312ef89a4e29beab6b951fd39abd',1,'musx::dom::others::ShapeExpressionDef']]],
-  ['matchhooks_32',['matchhooks',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a64f303f78ee0390876f6d58b925bdae1',1,'musx::dom::options::TupletOptions::matchHooks'],['../classmusx_1_1dom_1_1details_1_1TupletDef.html#ae6c97e351dc0c7ec31e4ae008d1cf0bb',1,'musx::dom::details::TupletDef::matchHooks']]],
+  ['matchhooks_32',['matchhooks',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#ae6c97e351dc0c7ec31e4ae008d1cf0bb',1,'musx::dom::details::TupletDef::matchHooks'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a64f303f78ee0390876f6d58b925bdae1',1,'musx::dom::options::TupletOptions::matchHooks']]],
   ['matchplayback_33',['matchPlayback',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a1b22dd5b0cb6dc1d10398b6839524ce3',1,'musx::dom::others::TextExpressionDef']]],
   ['max_5falterations_34',['MAX_ALTERATIONS',['../namespacemusx_1_1dom.html#a077fc40e1a52fb0aa59a78a138133ae5',1,'musx::dom']]],
   ['max_5fcue_5fpercentage_35',['MAX_CUE_PERCENTAGE',['../namespacemusx_1_1dom.html#a31c92a4751443e096b5a99100828f6e0',1,'musx::dom']]],
@@ -93,7 +93,7 @@ var searchData=
   ['multiplejustify_90',['multipleJustify',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a4e6e247716cd5ab0259cbe9563cf43dd',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['multiplexdisp_91',['multipleXdisp',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a1b95011cef5e69deab03d79ec7956f61',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['multipleydisp_92',['multipleYdisp',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#aa67582dc31dc569314b872745cc7516b',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
-  ['multistaffgroupid_93',['multistaffgroupid',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a0db3d25fd1ae0701499bb3ec899cdee0',1,'musx::dom::details::StaffGroup::multiStaffGroupId'],['../structmusx_1_1dom_1_1InstrumentInfo.html#a23d79d297b88cf05185184d30dfc86cd',1,'musx::dom::InstrumentInfo::multistaffGroupId']]],
+  ['multistaffgroupid_93',['multistaffgroupid',['../structmusx_1_1dom_1_1InstrumentInfo.html#a23d79d297b88cf05185184d30dfc86cd',1,'musx::dom::InstrumentInfo::multistaffGroupId'],['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a0db3d25fd1ae0701499bb3ec899cdee0',1,'musx::dom::details::StaffGroup::multiStaffGroupId']]],
   ['multistaffinstid_94',['multiStaffInstId',['../classmusx_1_1dom_1_1others_1_1Staff.html#a1be91c741b22c61b0184d8f255733764',1,'musx::dom::others::Staff']]],
   ['murchang_95',['Murchang',['../namespacemusx_1_1dom_1_1uuid.html#a33a60ef19230e7b84220dd9d4e6f117c',1,'musx::dom::uuid']]],
   ['musback_96',['musBack',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a872c74fb4fc6c7a736e6af846cc75ef5',1,'musx::dom::options::MusicSpacingOptions']]],
@@ -101,5 +101,6 @@ var searchData=
   ['musicalbow_98',['MusicalBow',['../namespacemusx_1_1dom_1_1uuid.html#a85ba54b8ce5d2cbee4aa04e8e5502ae2',1,'musx::dom::uuid']]],
   ['musicalsaw_99',['MusicalSaw',['../namespacemusx_1_1dom_1_1uuid.html#a40a30d5ac65fea0ab4a6d459548127a3',1,'musx::dom::uuid']]],
   ['musicfont_100',['musicFont',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7e97659c8727ca49809ba173718c96f3',1,'musx::dom::others::MarkingCategory']]],
-  ['musx_5fglobals_5fcmper_101',['MUSX_GLOBALS_CMPER',['../namespacemusx_1_1dom.html#a484882ede2c8bb64570f45fce4c0edef',1,'musx::dom']]]
+  ['musx_5fglobals_5fcmper_101',['MUSX_GLOBALS_CMPER',['../namespacemusx_1_1dom.html#a484882ede2c8bb64570f45fce4c0edef',1,'musx::dom']]],
+  ['mutestrshapeid_102',['muteStrShapeId',['../classmusx_1_1dom_1_1others_1_1FretboardStyle.html#ae0fb83ab2ab988e970c27d2dbc65e68d',1,'musx::dom::others::FretboardStyle']]]
 ];

@@ -43,6 +43,7 @@ var searchData=
   ['stemconnection_40',['StemConnection',['../classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html',1,'musx::dom::options::StemOptions']]],
   ['stemoptions_41',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html',1,'musx::dom::options']]],
   ['stepelement_42',['StepElement',['../classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html',1,'musx::dom::others::KeyMapArray']]],
-  ['syllableposstyle_43',['SyllablePosStyle',['../structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html',1,'musx::dom::options::LyricOptions']]],
-  ['systemlock_44',['SystemLock',['../classmusx_1_1dom_1_1others_1_1SystemLock.html',1,'musx::dom::others']]]
+  ['stringinfo_43',['StringInfo',['../classmusx_1_1dom_1_1others_1_1FretboardInstrument_1_1StringInfo.html',1,'musx::dom::others::FretboardInstrument']]],
+  ['syllableposstyle_44',['SyllablePosStyle',['../structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html',1,'musx::dom::options::LyricOptions']]],
+  ['systemlock_45',['SystemLock',['../classmusx_1_1dom_1_1others_1_1SystemLock.html',1,'musx::dom::others']]]
 ];

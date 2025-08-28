@@ -8,6 +8,7 @@ var classmusx_1_1dom_1_1KeySignature =
     [ "calcDiatonicMode", "classmusx_1_1dom_1_1KeySignature.html#a70d5a77caa9ad5f9e5e5c89653125e34", null ],
     [ "calcEDODivisions", "classmusx_1_1dom_1_1KeySignature.html#a483682cbfa79240872d9e11dbed6af2e", null ],
     [ "calcKeyMap", "classmusx_1_1dom_1_1KeySignature.html#ad49a2938ad8ab254bb2362a626a06aef", null ],
+    [ "calcScaleDegree", "classmusx_1_1dom_1_1KeySignature.html#a2f60adfec2163361c8d27952b1d4b0ba", null ],
     [ "calcTonalCenterIndex", "classmusx_1_1dom_1_1KeySignature.html#a65212e6a66d75dbeb2f191b282e74359", null ],
     [ "CommonClassBase", "classmusx_1_1dom_1_1KeySignature.html#ace51e53d99e83c6ae95d2b89fd1733d7", null ],
     [ "createTransposer", "classmusx_1_1dom_1_1KeySignature.html#a6d5cf39e9f26c653b042251ff4f87f68", null ],

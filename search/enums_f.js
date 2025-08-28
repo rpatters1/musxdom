@@ -1,7 +1,7 @@
 var searchData=
 [
   ['secondsplacement_0',['SecondsPlacement',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a291f7a4f2892f12f8f77afbd030c1e58',1,'musx::dom::options::TieOptions']]],
-  ['shape_1',['Shape',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256',1,'musx::dom::others::Enclosure']]],
+  ['shape_1',['shape',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256',1,'musx::dom::others::Enclosure::Shape'],['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html#a6d4d2c889167564a58c02dcdc073f231',1,'musx::dom::details::FretboardDiagram::Shape']]],
   ['shapetype_2',['shapetype',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621',1,'musx::dom::others::ShapeDef::ShapeType'],['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6f',1,'musx::dom::others::SmartShape::ShapeType']]],
   ['sharemode_3',['ShareMode',['../classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d',1,'musx::dom::Base']]],
   ['showclefmode_4',['ShowClefMode',['../namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215',1,'musx::dom']]],

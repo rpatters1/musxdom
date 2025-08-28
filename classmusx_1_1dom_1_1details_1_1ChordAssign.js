@@ -6,6 +6,9 @@ var classmusx_1_1dom_1_1details_1_1ChordAssign =
       [ "Subtext", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a179be6cb886cae6fa2f5e24f87e084b5acaba28429fc284488fb7cd51772253ea", null ]
     ] ],
     [ "ChordAssign", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a17e7f3ed2b61dc252ba5884b33641ed8", null ],
+    [ "getChordSuffix", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a33eb55dbb07ed875296304c01ee06ace", null ],
+    [ "getFretboardGroup", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a4dbdc2a49e0bbf181e0d7c4534c932f3", null ],
+    [ "getFretboardStyle", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a9f7e9d079bc41c1350139428ed1115e8", null ],
     [ "bassAlter", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a13c10345b0b6b211da8c95c4c6196576", null ],
     [ "bassLowerCase", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#af8dcec25026607e4f4be6c028243f44b", null ],
     [ "bassPosition", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#afe28c6478b19674453be92186bd6f127", null ],
@@ -16,7 +19,7 @@ var classmusx_1_1dom_1_1details_1_1ChordAssign =
     [ "fbPercent", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a79f1cf63d360f5020c9bf8da323f1f5f", null ],
     [ "fbStyleId", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a6f8cee3e1af98e1a0101d2809c406e47", null ],
     [ "fbVertOff", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a1c7cde7acf2b51a9cd7b66a39ccfb5e8", null ],
-    [ "fretInci", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#aab30e21436a0099b9190054f4b657ec0", null ],
+    [ "fretboardGroupInci", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a5bcdb528c54b66b42dff9632531c3aa0", null ],
     [ "horzEdu", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a07b57b3923e11c20bf1351c078f7454e", null ],
     [ "horzOff", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a3e9d783d48728dc1fd168f66b96ea584", null ],
     [ "playAltBass", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a9e9299ba3e5d21311c0ec021fca15b65", null ],
@@ -31,7 +34,7 @@ var classmusx_1_1dom_1_1details_1_1ChordAssign =
     [ "showRoot", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a12781953747f8e34b66ebd0287f49155", null ],
     [ "showSuffix", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a4439c8ee588b1a196bca01717ab6f9ed", null ],
     [ "suffixId", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a57e2cb3355421b326db65c5c3cdaf69e", null ],
-    [ "useFretFont", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a117d457a7c8bfd64b45f97719665db33", null ],
+    [ "useFretboardFont", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a5a405a9eed2f2977bd84f146baca590b", null ],
     [ "useLocalCapo", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#ad3c771e2f7197544885fa58f5a240e32", null ],
     [ "vertOff", "classmusx_1_1dom_1_1details_1_1ChordAssign.html#a96a13bae437953a123fe8ec957d5efb1", null ]
 ];

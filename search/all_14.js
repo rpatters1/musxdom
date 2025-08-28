@@ -42,7 +42,7 @@ var searchData=
   ['usecategorypos_39',['usecategorypos',['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a915b5fd65f33a87b6d3ba0ed9616a448',1,'musx::dom::others::ShapeExpressionDef::useCategoryPos'],['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#ae38ed27be05877e0006ac1fe2154ab3a',1,'musx::dom::others::TextExpressionDef::useCategoryPos']]],
   ['usedisplaytimesig_40',['useDisplayTimesig',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1e0fa48f6f2a9e28cdcc9ff10941eced',1,'musx::dom::others::Measure']]],
   ['useengraverslurs_41',['useEngraverSlurs',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a9fc0f0394f178ed69bab7ef0f8f3fbe4',1,'musx::dom::options::SmartShapeOptions']]],
-  ['usefretfont_42',['useFretFont',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#a117d457a7c8bfd64b45f97719665db33',1,'musx::dom::details::ChordAssign']]],
+  ['usefretboardfont_42',['useFretboardFont',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#a5a405a9eed2f2977bd84f146baca590b',1,'musx::dom::details::ChordAssign']]],
   ['useinterpolation_43',['useInterpolation',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#afff69dbeb165745b5fc54a8f5446d2e2',1,'musx::dom::options::TieOptions']]],
   ['uselegacyflippedstempositioning_44',['useLegacyFlippedStemPositioning',['../classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html#a0448a1f00e7bfb1474c77969d9268b99',1,'musx::dom::options::AugmentationDotOptions']]],
   ['uselocalcapo_45',['useLocalCapo',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#ad3c771e2f7197544885fa58f5a240e32',1,'musx::dom::details::ChordAssign']]],

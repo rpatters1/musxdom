@@ -81,7 +81,7 @@ var searchData=
   ['piccolotrumpeta_78',['PiccoloTrumpetA',['../namespacemusx_1_1dom_1_1uuid.html#aa571b8e2938e13ec7cd4a2b282e75ed3',1,'musx::dom::uuid']]],
   ['pipa_79',['Pipa',['../namespacemusx_1_1dom_1_1uuid.html#aa5d58cb342f101c06db8b826de28fda3',1,'musx::dom::uuid']]],
   ['piri_80',['Piri',['../namespacemusx_1_1dom_1_1uuid.html#a106f470fe85e324171401d0dbb16f620',1,'musx::dom::uuid']]],
-  ['pitch_81',['pitch',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#af762ba4f6477051d106eb142ae9265dd',1,'musx::dom::others::FontDefinition']]],
+  ['pitch_81',['pitch',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#af762ba4f6477051d106eb142ae9265dd',1,'musx::dom::others::FontDefinition::pitch'],['../classmusx_1_1dom_1_1others_1_1FretboardInstrument_1_1StringInfo.html#a355bba36f4ac458b1872858ce7a5cc95',1,'musx::dom::others::FretboardInstrument::StringInfo::pitch']]],
   ['placeendspacebeforebarline_82',['placeEndSpaceBeforeBarline',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a660f81113aba8c791ef40fa33e0f720b',1,'musx::dom::others::StaffSystem']]],
   ['platform_83',['platform',['../namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133',1,'musx::dom::header::Platform'],['../structmusx_1_1dom_1_1header_1_1FileInfo.html#a4b619edff1f1025f07bd4d15f3848e01',1,'musx::dom::header::FileInfo::platform']]],
   ['playaltbass_84',['playAltBass',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#a9e9299ba3e5d21311c0ec021fca15b65',1,'musx::dom::details::ChordAssign']]],

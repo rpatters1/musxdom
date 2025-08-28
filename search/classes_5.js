@@ -9,5 +9,9 @@ var searchData=
   ['fontinfo_6',['FontInfo',['../classmusx_1_1dom_1_1FontInfo.html',1,'musx::dom']]],
   ['fontoptions_7',['FontOptions',['../classmusx_1_1dom_1_1options_1_1FontOptions.html',1,'musx::dom::options']]],
   ['fraction_8',['Fraction',['../classmusx_1_1util_1_1Fraction.html',1,'musx::util']]],
-  ['frame_9',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html',1,'musx::dom::others']]]
+  ['frame_9',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html',1,'musx::dom::others']]],
+  ['fretboarddiagram_10',['FretboardDiagram',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html',1,'musx::dom::details']]],
+  ['fretboardgroup_11',['FretboardGroup',['../classmusx_1_1dom_1_1others_1_1FretboardGroup.html',1,'musx::dom::others']]],
+  ['fretboardinstrument_12',['FretboardInstrument',['../classmusx_1_1dom_1_1others_1_1FretboardInstrument.html',1,'musx::dom::others']]],
+  ['fretboardstyle_13',['FretboardStyle',['../classmusx_1_1dom_1_1others_1_1FretboardStyle.html',1,'musx::dom::others']]]
 ];
