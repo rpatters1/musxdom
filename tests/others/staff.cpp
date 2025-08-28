@@ -123,6 +123,7 @@ constexpr static musxtest::string_view staffXml = R"xml(
       <hideBeams/>
       <stemDir>alwaysDown</stemDir>
       <autoNum>arabicPrefix</autoNum>
+      <fretInstID>1</fretInstID>
       <useAutoNum/>
     </staffSpec>
   </others>
@@ -189,6 +190,7 @@ TEST(StaffTest, PopulateFields)
     EXPECT_TRUE(staff2->hideBeams);
     EXPECT_EQ(staff2->stemDirection, others::Staff::StemDirection::AlwaysDown);
     EXPECT_EQ(staff2->autoNumbering, others::Staff::AutoNumberingStyle::ArabicPrefix);
+    EXPECT_EQ(staff2->fretInstrumentId, 1);
     EXPECT_EQ(staff2->useAutoNumbering, true);
     
     auto staff3 = others->get<others::Staff>(SCORE_PARTID, 11);

@@ -342,6 +342,17 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex, KeyContext ctx) const
     return keySigAlteration;
 }
 
+int KeySignature::calcScaleDegree(int displacement) const
+{
+    const int diatonicSteps = [&]() {
+        if (const auto keyMap = calcKeyMap()) {
+            return int(keyMap.value().size());
+        }
+        return music_theory::STANDARD_DIATONIC_STEPS;
+    }();
+    return music_theory::positiveModulus(displacement, diatonicSteps);
+}
+
 void KeySignature::setTransposition(int interval, int keyAdjustment, bool simplify)
 {
     if (!isLinear()) {

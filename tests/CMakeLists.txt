@@ -85,6 +85,7 @@ add_executable(musxdomtests
 	others/expression.cpp
 	others/fonts.cpp
     others/frame.cpp
+    others/fret_instrument.cpp
 	others/layer_attributes.cpp
 	others/instrument_used.cpp
     others/measure.cpp
@@ -110,6 +111,7 @@ add_executable(musxdomtests
 	details/chords.cpp
     details/entry_details.cpp
 	details/floats.cpp
+    details/fretboards_diagrams.cpp
 	details/gfhold.cpp
 	details/secondary_beams.cpp
     details/shape_note.cpp

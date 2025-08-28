@@ -246,7 +246,10 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TonalCenterFlats,
     dom::others::TonalCenterSharps,
     dom::others::SystemLock,        // xml node is "lockMeas", which is still sequenced non-alphabetically
-    dom::others::StaffUsed,
+    dom::others::FretboardGroup,
+    dom::others::FretboardInstrument,
+    dom::others::FretboardStyle,
+    dom::others::StaffUsed,         // xml node is "instUsed"
     dom::others::KeyFormat,
     dom::others::KeyMapArray,
     dom::others::KeyAttributes,
@@ -332,6 +335,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::DotAlterations,
     dom::details::IndependentStaffDetails,  // "floats" is the xml key
     dom::details::StaffSize,
+    dom::details::FretboardDiagram,
     dom::details::GFrameHold,
     dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,
@@ -345,6 +349,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::StemAlterations,
     dom::details::CustomDownStem,           // "stemDefDown" is the xml key
     dom::details::CustomUpStem,             // "stemDefUp" is the xml key
+    dom::details::TablatureNoteMods,
     dom::details::TieAlterEnd,
     dom::details::TieAlterStart,
     dom::details::TupletDef,

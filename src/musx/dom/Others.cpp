@@ -57,6 +57,37 @@ MusxInstanceList<Entry> Frame::getEntries() const
     return retval;
 }
 
+// **************************
+// ***** FretboardGroup *****
+// **************************
+
+MusxInstance<FretboardInstrument> FretboardGroup::getFretboardInstrument() const
+{
+    return getDocument()->getOthers()->get<FretboardInstrument>(getRequestedPartId(), fretInstId);
+}
+
+MusxInstanceList<details::FretboardDiagram> FretboardGroup::getFretboardDiagrams() const
+{
+    MusxInstanceList<details::FretboardDiagram> result(getDocument(), getRequestedPartId());
+    MUSX_ASSERT_IF(!getInci().has_value()) {
+        throw std::logic_error("FretboardGroup " + std::to_string(getCmper()) + " has no inci.");
+    }
+    Cmper cmper2Base = Cmper(getInci().value()) * 16;
+    for (Cmper cmper2Offset = 0; cmper2Offset < music_theory::STANDARD_12EDO_STEPS; cmper2Offset++) {
+        if (auto nextDiagram = getDocument()->getDetails()->get<details::FretboardDiagram>(getRequestedPartId(), getCmper(), cmper2Base + cmper2Offset)) {
+            result.push_back(nextDiagram);
+        } else {
+            result.clear();
+            MUSX_INTEGRITY_ERROR("FretboardGroup " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value())
+                + " is missing a fretboard diagram for pitch class " + std::to_string(cmper2Offset));
+#ifndef MUSX_THROW_ON_INTEGRITY_CHECK_FAIL
+            break;
+#endif        
+        }
+    }
+    return result;
+}
+
 // ****************************
 // ***** MarkingCategiory *****
 // ****************************

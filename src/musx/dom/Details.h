@@ -45,6 +45,10 @@ class EntryFrame;
 class EntryInfo;
 
 namespace others {
+class ChordSuffixElement;
+class FretboardGroup;
+class FretboardInstrument;
+class FretboardStyle;
 class StaffUsed;
 class Measure;
 class MultiStaffInstrumentGroup;
@@ -391,6 +395,8 @@ public:
  */
 class ChordAssign : public DetailsBase
 {
+    Cmper calcFretboardGroupCmper() const;
+
 public:
     /**
      * @brief Constructor
@@ -417,34 +423,51 @@ public:
         Subtext
     };
     
-    Cmper suffixId{};               ///< `<suffix>`: Chord suffix ID
-    Cmper fbStyleId{};              ///< `<fbStyleID>`: Fretboard style ID
-    int rootScaleNum{};             ///< `<rootScaleNum>`: Root scale degree (0–76)
-    int rootAlter{};                ///< `<rootAlter>`: Root alteration
-    bool rootLowerCase{};           ///< `<rootLowerCase/>`: Display root in lowercase
-    bool playSuffix{};              ///< `<playSuffix/>`: Playback suffix
-    bool showRoot{};                ///< `<showRoot/>`: Show root
-    bool playRoot{};                ///< `<playRoot/>`: Playback root
-    bool showFretboard{};           ///< `<showFretboard/>`: Show fretboard
-    bool showSuffix{};              ///< `<showSuffix/>`: Show suffix
-    bool playFretboard{};           ///< `<playFretboard/>`: Playback fretboard
-    int bassScaleNum{};             ///< `<bassScaleNum>`: Bass scale degree (0-6)
-    int bassAlter{};                ///< `<bassAlter>`: Bass alteration
-    bool bassLowerCase{};           ///< `<bassLowerCase/>`: Display bass in lowercase
-    BassPosition bassPosition{};    ///< `<bassPosition>`: Position of bass relative to root
-    bool showAltBass{};             ///< `<showAltBass/>`: Show alternate bass
-    bool playAltBass{};             ///< `<playAltBass/>`: Playback alternate bass
-    int capoValue{};                ///< `<capoValue>`: Capo value (if #useLocalCapo is true)
-    bool useLocalCapo{};            ///< `<useLocalCapo/>`: Use local capo
-    Cmper fretInci{};               ///< One less than the 1-based Cmper value for the fretboard group. (Meaningless if #useFretFont is true.)
-    bool useFretFont{};             ///< `<useFretFont/>`: Use fret font
-    Evpu horzOff{};                 ///< `<horzOff>`: Horizontal offset of chord (in EVPU)
-    Evpu vertOff{};                 ///< `<vertOff>`: Vertical offset of chord (in EVPU)
-    Evpu fbHorzOff{};               ///< `<fbHorzOff>`: Horizontal offset of fretboard (in EVPU)
-    Evpu fbVertOff{};               ///< `<fbVertOff>`: Vertical offset of fretboard (in EVPU)
-    Edu horzEdu{};                  ///< `<horzEdu>`: Edu position in measure
-    int chPercent{};                ///< `<chPercent>`: Chord percent scaling (100 is 100%)
-    int fbPercent{};                ///< `<fbPercent>`: Fretboard percent scaling (100 is 100%)
+    Cmper suffixId{};               ///< The Cmper of the @ref others::ChordSuffixElement instances. Zero means there is no suffix.
+                                    ///< When #useFretboardFont is false, this same Cmper is also used to look up the
+                                    ///< @ref others::FretboardGroup and related fretboard data.
+                                    ///< When #useFretboardFont is true, only the chord-suffix lookup applies (no fretboard group lookup).
+    Cmper fbStyleId{};              ///< The @ref others::FretboardStyle ID. (Ignored when #useFretboardFont is true.)
+    int rootScaleNum{};             ///< Root scale degree: 0–6, where zero is the tonic
+    int rootAlter{};                ///< Root alteration
+    bool rootLowerCase{};           ///< Display root in lowercase (minor triad)
+    bool playSuffix{};              ///< Playback suffix
+    bool showRoot{};                ///< Show root
+    bool playRoot{};                ///< Playback root
+    bool showFretboard{};           ///< Show fretboard
+    bool showSuffix{};              ///< Show suffix
+    bool playFretboard{};           ///< Playback fretboard
+    int bassScaleNum{};             ///< Bass scale degree: 0–6, where zero is the tonic
+    int bassAlter{};                ///< Bass alteration
+    bool bassLowerCase{};           ///< Display bass in lowercase
+    BassPosition bassPosition{};    ///< Visual position of bass relative to root
+    bool showAltBass{};             ///< Show alternate bass
+    bool playAltBass{};             ///< Playback alternate bass
+    int capoValue{};                ///< Capo value (if #useLocalCapo is true)
+    bool useLocalCapo{};            ///< Use local capo
+    Inci fretboardGroupInci{};      ///< The inci for retrieving the @ref others::FretboardGroup. (Meaningless if #useFretboardFont is true.)
+                                    ///< The cmper is the #suffixId above (when it is non-zero) or one of the hard-coded values 65533
+                                    ///< for minor (lowercase) chords and 65534 for major (uppercase) chords. (xml node is `<fretInci>`)
+    bool useFretboardFont{};        ///< When true, this overrides any fretboard group or style and uses the fretboard font instead. (xml node is `<useFretFont >`)
+                                    ///< See #options::FontOptions::FontType::Fretboard.
+    Evpu horzOff{};                 ///< Horizontal offset of chord (in EVPU)
+    Evpu vertOff{};                 ///< Vertical offset of chord (in EVPU)
+    Evpu fbHorzOff{};               ///< Horizontal offset of fretboard (in EVPU)
+    Evpu fbVertOff{};               ///< Vertical offset of fretboard (in EVPU)
+    Edu horzEdu{};                  ///< Edu position in measure
+    int chPercent{};                ///< Chord scaling (100 means 100%)
+    int fbPercent{};                ///< FretboardDiagram scaling (100 means 100%)
+
+    /// @brief Returns the chord suffix as an array of @ref others::ChordSuffixElement.
+    MusxInstanceList<others::ChordSuffixElement> getChordSuffix() const;
+
+    /// @brief Get the @ref others::FretboardGroup instance for this chord assignment. You can use this to get the fret instrument.
+    /// @return The fretboard group, if it exists, or @c nullptr if #useFretboardFont is true.
+    MusxInstance<others::FretboardGroup> getFretboardGroup() const;
+
+    /// @brief Returns the @ref others::FretboardStyle instance for this chord assignment.
+    /// @return The fretboard style, if it exists, or @c nullptr #useFretboardFont is true or #fbStyleId is zero.
+    MusxInstance<others::FretboardStyle> getFretboardStyle() const;
 
     constexpr static std::string_view XmlNodeName = "chordAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ChordAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -647,6 +670,104 @@ public:
 
     static const xml::XmlElementArray<EntrySize>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "entrySize"; ///< The XML node name for this type.
+};
+
+/**
+ * @class FretboardDiagram
+ * @brief FretboardDiagram diagram for chord symbols.
+ *
+ * cmper1: Corresponds to the cmper for @ref others::FretboardGroup.
+ *
+ * cmper2: Calculated sequence number. The inci from @ref others::FretboardGroup multiplied
+ * by sixteen and then a value from (0..11) added. These correspond to the twelve pitch classes A, A#, B, ... G#.
+ *
+ * Contains fret count, display options, and a collection of
+ * individual string/fret cells and optional barres.
+ */
+class FretboardDiagram : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor function.
+     */
+    explicit FretboardDiagram(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2)
+    {}
+
+    /**
+     * @enum Shape
+     * @brief Shape type for a fretboard cell.
+     * @note The actual symbol shapes are obtained from the associated @ref others::FretboardStyle used by
+     * the @ref ChordAssign that references this instance. They do not have to correspond to the descriptions in this
+     * enum, but they nearly always do.
+     */
+    enum class Shape
+    {
+        None,       ///< No explicit shape. This is the default value and may not occur in the xml.
+        Closed,     ///< Closed dot (filled).
+        Open,       ///< Open circle.
+        Muted,      ///< Muted string (X).
+        Custom      ///< Custom symbol. By default this is an open diamond signifying a harmonic.
+    };
+
+    /**
+     * @class Cell
+     * @brief Represents a single fretboard cell (string/fret position).
+     */
+    class Cell
+    {
+    public:
+        int string{};       ///< 1-based string number.
+        int fret{};         ///< 0-based fret number, where 0 signifies the open string.
+        Shape shape{};      ///< Cell shape.
+        int fingerNum{};    ///< Finger number 0..5, where 0 means there is no finger number and 5 means T (thumb).
+
+        static const xml::XmlElementArray<Cell>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    /**
+     * @class Barre
+     * @brief Represents a barre (spanning multiple strings).
+     */
+    class Barre
+    {
+    public:
+        int fret{};         ///< 0-based fret number, where 0 signifies the open string. (Finale allows nut barres.)
+        int startString{};  ///< Starting 1-based string number.
+        int endString{};    ///< Ending 1-based string number.
+
+        static const xml::XmlElementArray<Barre>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    int numFrets{};         ///< Number of frets.
+    int fretboardNum{};     ///< FretboardDiagram number: the starting fret of the fretboard diagram (xml node `<fretNum>`).
+    bool lock{};            ///< Lock flag (xml node `<lock>`).
+    bool showNum{};         ///< Show fretboard number.
+    int numFretCells{};     ///< Number of fret cells (xml node `<numFretCells>`).
+    int numFretBarres{};    ///< Number of fret barres (xml node `<numFretBarres>`).
+
+    std::vector<std::shared_ptr<Cell>> cells;   ///< Array of fretboard cells.
+    std::vector<std::shared_ptr<Barre>> barres; ///< Array of fretboard barres.
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->DetailsBase::integrityCheck(ptrToThis);
+        if (numFretCells != cells.size()) {
+            const int oldVal = numFretCells;
+            numFretCells = int(cells.size());
+            MUSX_INTEGRITY_ERROR("FretboardDiagram " + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
+                + " specifies the wrong number of cells (" + std::to_string(oldVal) + ").");
+        }
+        if (numFretBarres != barres.size()) {
+            const int oldVal = numFretBarres;
+            numFretBarres = int(barres.size());
+            MUSX_INTEGRITY_ERROR("FretboardDiagram " + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
+                + " specifies the wrong number of barres (" + std::to_string(oldVal) + ").");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "fretboard"; ///< XML node name for this type.
+    static const xml::XmlElementArray<FretboardDiagram>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1526,6 +1647,33 @@ public:
     using StemAlterations::StemAlterations;
 
     constexpr static std::string_view XmlNodeName = "beamStemAdjust"; ///< The XML node name for this type.
+};
+
+/**
+ * @class TablatureNoteMods
+ * @brief Specifies the TAB string a note appears on. Finale automatically figures out the fret number from
+ * the open string note and fret intervals specified in the staff's associated @ref others::FretboardInstrument.
+ *
+ * #Entry::noteDetail is set if any note in the entry has tablature note mods.
+ *
+ * This class is identified by the XML node name "tabAlter".
+ */
+class TablatureNoteMods : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TablatureNoteMods(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};   ///< The ID of the tablature note being modified. (xml node is `<noteID>`)
+    int stringNumber{};    ///< The string number on which the note is played.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "tabAlter"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TablatureNoteMods>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

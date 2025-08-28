@@ -173,7 +173,7 @@ inline int calc12EdoHalfstepsInInterval(int interval, int chromaticAlteration)
 /// @brief Calculates the alteration in chromatic halfsteps for the specified interval/halfsteps combination
 /// @param interval         The diatonic displacement (negative for downward transposition).
 /// @param halfsteps        The number of 12-EDO chromatic halfsteps in the interval (negative means down).
-/// @return The number of 12-EDO divisions (chromatic halfsteps) in the interval
+/// @return The alteration value that, with @p interval, defines the chromatic interval. This return value can be used to initialize a @ref Transposer.
 inline int calcAlterationFrom12EdoHalfsteps(int interval, int halfsteps)
 {
     int octaves{};

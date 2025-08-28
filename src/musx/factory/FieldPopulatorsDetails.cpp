@@ -45,6 +45,14 @@ MUSX_XML_ENUM_MAPPING(ChordAssign::BassPosition, {
     {"subtext",   ChordAssign::BassPosition::Subtext}
 });
 
+MUSX_XML_ENUM_MAPPING(FretboardDiagram::Shape, {
+    // {"none", FretboardDiagram::Shape::None}, // Default value, may not appear in the XML
+    {"closed", FretboardDiagram::Shape::Closed},
+    {"open", FretboardDiagram::Shape::Open},
+    {"muted", FretboardDiagram::Shape::Muted},
+    {"custom", FretboardDiagram::Shape::Custom}
+});
+
 MUSX_XML_ENUM_MAPPING(StaffGroup::HideStaves, {
     // {"normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
     {"asGroup", StaffGroup::HideStaves::AsGroup},
@@ -165,8 +173,8 @@ MUSX_XML_ELEMENT_ARRAY(ChordAssign, {
     {"playAltBass", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playAltBass = populateBoolean(e, i); }},
     {"capoValue", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->capoValue = e->getTextAs<int>(); }},
     {"useLocalCapo", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useLocalCapo = populateBoolean(e, i); }},
-    {"fretInci", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fretInci = e->getTextAs<Cmper>(); }},
-    {"useFretFont", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useFretFont = populateBoolean(e, i); }},
+    {"fretInci", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fretboardGroupInci = e->getTextAs<Inci>(); }},
+    {"useFretFont", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useFretboardFont = populateBoolean(e, i); }},
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
     {"fbHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbHorzOff = e->getTextAs<Evpu>(); }},
@@ -204,6 +212,32 @@ MUSX_XML_ELEMENT_ARRAY(DotAlterations, {
 
 MUSX_XML_ELEMENT_ARRAY(EntrySize, {
     {"percent", [](const XmlElementPtr& e, const std::shared_ptr<EntrySize>& i) { i->percent = e->getTextAs<int>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(FretboardDiagram::Cell, {
+    {"string",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i) { i->string = e->getTextAs<int>(); }},
+    {"fret",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->fret = e->getTextAs<int>(); }},
+    {"shape",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->shape = toEnum<FretboardDiagram::Shape>(e); }},
+    {"fingerNum",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->fingerNum = e->getTextAs<int>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(FretboardDiagram::Barre, {
+    {"fret",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->fret = e->getTextAs<int>(); }},
+    {"startString",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->startString = e->getTextAs<int>(); }},
+    {"endString",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->endString = e->getTextAs<int>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(FretboardDiagram, {
+    {"numFrets",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFrets = e->getTextAs<int>(); }},
+    {"fretNum",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->fretboardNum = e->getTextAs<int>(); }},
+    {"lock",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->lock = populateBoolean(e, i); }},
+    {"showNum",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->showNum = populateBoolean(e, i); }},
+    {"numFretCells",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFretCells = e->getTextAs<int>(); }},
+    {"numFretBarres",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFretBarres = e->getTextAs<int>(); }},
+    {"cell",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i)
+        { i->cells.push_back(FieldPopulator<FretboardDiagram::Cell>::createAndPopulate(e)); }},
+    {"barre",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i)
+        { i->barres.push_back(FieldPopulator<FretboardDiagram::Barre>::createAndPopulate(e)); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
@@ -364,6 +398,11 @@ MUSX_XML_ELEMENT_ARRAY(StemAlterations, {
     {"downVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downVertAdjust = e->getTextAs<Evpu>(); }},
     {"upHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upHorzAdjust = e->getTextAs<Evpu>(); }},
     {"downHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downHorzAdjust = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(TablatureNoteMods, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<TablatureNoteMods>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"stringNumber", [](const XmlElementPtr& e, const std::shared_ptr<TablatureNoteMods>& i) { i->stringNumber = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
