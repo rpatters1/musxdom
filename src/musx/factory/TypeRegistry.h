@@ -335,6 +335,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::DotAlterations,
     dom::details::IndependentStaffDetails,  // "floats" is the xml key
     dom::details::StaffSize,
+    dom::details::FretboardDiagram,
     dom::details::GFrameHold,
     dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,

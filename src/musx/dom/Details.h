@@ -448,14 +448,14 @@ public:
                                     ///< The cmper is the #suffixId above (when it is non-zero) or one of the hard-coded values 65533
                                     ///< for minor (lowercase) chords and 65534 for major (uppercase) chords. (xml node is `<fretInci>`)
     bool useFretboardFont{};        ///< When true, this overrides any fretboard group or style and uses the fretboard font instead. (xml node is `<useFretFont >`)
-                                    ///< See #options::FontOptions::FontType::Fretboard.
+                                    ///< See #options::FontOptions::FontType::FretboardDiagram.
     Evpu horzOff{};                 ///< Horizontal offset of chord (in EVPU)
     Evpu vertOff{};                 ///< Vertical offset of chord (in EVPU)
     Evpu fbHorzOff{};               ///< Horizontal offset of fretboard (in EVPU)
     Evpu fbVertOff{};               ///< Vertical offset of fretboard (in EVPU)
     Edu horzEdu{};                  ///< Edu position in measure
     int chPercent{};                ///< Chord scaling (100 means 100%)
-    int fbPercent{};                ///< Fretboard scaling (100 means 100%)
+    int fbPercent{};                ///< FretboardDiagram scaling (100 means 100%)
 
     /// @brief Get the @ref others::FretboardGroup instance for this chord assignment.
     /// @return The fretboard group, if it exists, or @c nullptr if #useFretboardFont is true.
@@ -666,6 +666,104 @@ public:
 
     static const xml::XmlElementArray<EntrySize>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "entrySize"; ///< The XML node name for this type.
+};
+
+/**
+ * @class FretboardDiagram
+ * @brief FretboardDiagram diagram for chord symbols.
+ *
+ * cmper1: Corresponds to the cmper for @ref others::FretboardGroup.
+ *
+ * cmper2: Calculated sequence number. The inci from @ref others::FretboardGroup multiplied
+ * by sixteen and then a value from (0..11) added. These correspond to the twelve pitch classes A, A#, B, ... G#.
+ *
+ * Contains fret count, display options, and a collection of
+ * individual string/fret cells and optional barres.
+ */
+class FretboardDiagram : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor function.
+     */
+    explicit FretboardDiagram(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2)
+    {}
+
+    /**
+     * @enum Shape
+     * @brief Shape type for a fretboard cell.
+     * @note The actual symbol shapes are obtained from the associated @ref others::FretboardStyle used by
+     * the @ref ChordAssign that references this instance. They do not have to correspond to the descriptions in this
+     * enum, but they nearly always do.
+     */
+    enum class Shape
+    {
+        None,       ///< No explicit shape. This is the default value and may not occur in the xml.
+        Closed,     ///< Closed dot (filled).
+        Open,       ///< Open circle.
+        Muted,      ///< Muted string (X).
+        Custom      ///< Custom symbol. By default this is an open diamond signifying a harmonic.
+    };
+
+    /**
+     * @class Cell
+     * @brief Represents a single fretboard cell (string/fret position).
+     */
+    class Cell
+    {
+    public:
+        int string{};       ///< 1-based string number.
+        int fret{};         ///< 0-based fret number, where 0 signifies the open string.
+        Shape shape{};      ///< Cell shape.
+        int fingerNum{};    ///< Finger number 0..5, where 0 means there is no finger number and 5 means T (thumb).
+
+        static const xml::XmlElementArray<Cell>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    /**
+     * @class Barre
+     * @brief Represents a barre (spanning multiple strings).
+     */
+    class Barre
+    {
+    public:
+        int fret{};         ///< 0-based fret number, where 0 signifies the open string. (Finale allows nut barres.)
+        int startString{};  ///< Starting 1-based string number.
+        int endString{};    ///< Ending 1-based string number.
+
+        static const xml::XmlElementArray<Barre>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    int numFrets{};         ///< Number of frets.
+    int fretboardNum{};     ///< FretboardDiagram number: the starting fret of the fretboard diagram (xml node `<fretNum>`).
+    bool lock{};            ///< Lock flag (xml node `<lock>`).
+    bool showNum{};         ///< Show fretboard number.
+    int numFretCells{};     ///< Number of fret cells (xml node `<numFretCells>`).
+    int numFretBarres{};    ///< Number of fret barres (xml node `<numFretBarres>`).
+
+    std::vector<std::shared_ptr<Cell>> cells;   ///< Array of fretboard cells.
+    std::vector<std::shared_ptr<Barre>> barres; ///< Array of fretboard barres.
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->DetailsBase::integrityCheck(ptrToThis);
+        if (numFretCells != cells.size()) {
+            const int oldVal = numFretCells;
+            numFretCells = int(cells.size());
+            MUSX_INTEGRITY_ERROR("FretboardDiagram " + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
+                + " specifies the wrong number of cells (" + std::to_string(oldVal) + ").");
+        }
+        if (numFretBarres != barres.size()) {
+            const int oldVal = numFretBarres;
+            numFretBarres = int(barres.size());
+            MUSX_INTEGRITY_ERROR("FretboardDiagram " + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
+                + " specifies the wrong number of barres (" + std::to_string(oldVal) + ").");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "fretboard"; ///< XML node name for this type.
+    static const xml::XmlElementArray<FretboardDiagram>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
