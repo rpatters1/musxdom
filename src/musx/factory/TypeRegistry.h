@@ -349,6 +349,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::StemAlterations,
     dom::details::CustomDownStem,           // "stemDefDown" is the xml key
     dom::details::CustomUpStem,             // "stemDefUp" is the xml key
+    dom::details::TablatureNoteMods,
     dom::details::TieAlterEnd,
     dom::details::TieAlterStart,
     dom::details::TupletDef,

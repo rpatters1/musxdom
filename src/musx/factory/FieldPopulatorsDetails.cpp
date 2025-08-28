@@ -400,6 +400,11 @@ MUSX_XML_ELEMENT_ARRAY(StemAlterations, {
     {"downHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downHorzAdjust = e->getTextAs<Evpu>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(TablatureNoteMods, {
+    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<TablatureNoteMods>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"stringNumber", [](const XmlElementPtr& e, const std::shared_ptr<TablatureNoteMods>& i) { i->stringNumber = e->getTextAs<int>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
     {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
     {"xStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xStart = e->getTextAs<Evpu>(); }},

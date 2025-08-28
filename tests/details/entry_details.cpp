@@ -561,6 +561,31 @@ TEST(StemAlterationsUnderBeamTest, PopulateFields)
     EXPECT_EQ(adjust->downHorzAdjust, Evpu(-23));
 }
 
+TEST(TablatureNoteModsTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <tabAlter entnum="125" inci="0">
+      <noteID>1</noteID>
+      <stringNumber>3</stringNumber>
+    </tabAlter>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto mods = details->get<details::TablatureNoteMods>(SCORE_PARTID, 125, 0);
+    ASSERT_TRUE(mods) << "TablatureNoteMods with entnum 125 and inci 0 not found";
+
+    EXPECT_EQ(mods->noteId, NoteNumber(1));
+    EXPECT_EQ(mods->stringNumber, 3);
+}
+
 TEST(TieAlterTest, PopulateFields)
 {
   constexpr static musxtest::string_view xml = R"xml(

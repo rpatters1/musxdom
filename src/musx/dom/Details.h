@@ -1650,6 +1650,33 @@ public:
 };
 
 /**
+ * @class TablatureNoteMods
+ * @brief Specifies the TAB string a note appears on. Finale automatically figures out the fret number from
+ * the open string note and fret intervals specified in the staff's associated @ref others::FretboardInstrument.
+ *
+ * #Entry::noteDetail is set if any note in the entry has tablature note mods.
+ *
+ * This class is identified by the XML node name "tabAlter".
+ */
+class TablatureNoteMods : public NoteDetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit TablatureNoteMods(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, Inci inci)
+        : NoteDetailsBase(document, partId, shareMode, entnum, inci)
+    {
+    }
+
+    NoteNumber noteId{};   ///< The ID of the tablature note being modified. (xml node is `<noteID>`)
+    int stringNumber{};    ///< The string number on which the note is played.
+
+    NoteNumber getNoteId() const override { return noteId; }
+
+    constexpr static std::string_view XmlNodeName = "tabAlter"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<TablatureNoteMods>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class TieAlterBase
  * @brief Base class for tie alteration properties. (Used for both ties and tie ends.)
  */
