@@ -144,6 +144,37 @@ template bool BeamAlterations::calcIsFeatheredBeamImpl<SecondaryBeamAlterationsU
 template bool BeamAlterations::calcIsFeatheredBeamImpl<SecondaryBeamAlterationsDownStem>(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY);
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
+// ***********************
+// ***** ChordAssign *****
+// ***********************
+
+Cmper ChordAssign::calcFretboardGroupCmper() const
+{
+    if (suffixId != 0) {
+        return suffixId;
+    } else if (rootLowerCase) {
+        return 65533; // hard-coded minor triad fretboard group
+    }
+    return 65534; // hard-coded major triad fretboard group
+}
+
+MusxInstance<others::FretboardGroup> ChordAssign::getFretboardGroup() const
+{
+    const Cmper groupCmper = calcFretboardGroupCmper();
+    if (!useFretboardFont && groupCmper != 0) {
+        return getDocument()->getOthers()->get<others::FretboardGroup>(getRequestedPartId(), groupCmper, fretboardGroupInci);
+    }
+    return nullptr;
+}
+
+MusxInstance<others::FretboardStyle> ChordAssign::getFretboardStyle() const
+{
+    if (!useFretboardFont && fbStyleId != 0) {
+        return getDocument()->getOthers()->get<others::FretboardStyle>(getRequestedPartId(), fbStyleId);
+    }
+    return nullptr;
+}
+
 // **********************
 // ***** CustomStem *****
 // **********************

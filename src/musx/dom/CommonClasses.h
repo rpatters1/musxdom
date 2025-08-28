@@ -308,6 +308,11 @@ public:
         return key == src.key && keyless == src.keyless && hideKeySigShowAccis == src.hideKeySigShowAccis;
     }
 
+    /// @brief Calculates the scale degree for the given displacement, where 0 is the tonic
+    /// @param displacement The diatonic displacement value. Zero is the tonic in the middle-C octave.
+    /// @return The scale degree, where 0 is the tonic.
+    int calcScaleDegree(int displacement) const;
+
     /**
      * @brief Transposes the key by the specified amounts. Set them to zero to remove transposition.
      *

@@ -94,7 +94,7 @@
     EXPECT_TRUE(assign->playAltBass);
     EXPECT_EQ(assign->capoValue, 13);
     EXPECT_TRUE(assign->useLocalCapo);
-    EXPECT_TRUE(assign->useFretFont);
+    EXPECT_TRUE(assign->useFretboardFont);
     EXPECT_EQ(assign->horzOff, Evpu{11});
     EXPECT_EQ(assign->vertOff, Evpu{-142});
     EXPECT_EQ(assign->fbHorzOff, Evpu{-116});

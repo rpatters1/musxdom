@@ -45,6 +45,9 @@ class EntryFrame;
 class EntryInfo;
 
 namespace others {
+class FretboardGroup;
+class FretboardInstrument;
+class FretboardStyle;
 class StaffUsed;
 class Measure;
 class MultiStaffInstrumentGroup;
@@ -391,6 +394,8 @@ public:
  */
 class ChordAssign : public DetailsBase
 {
+    Cmper calcFretboardGroupCmper() const;
+
 public:
     /**
      * @brief Constructor
@@ -417,38 +422,48 @@ public:
         Subtext
     };
     
-    Cmper suffixId{};               ///< If non-zero, the @ref others::ChordSuffix ID. (xml node is `<suffix>`).
-                                    ///< When non-zero, this value is also used to retrieve the @ref others::FretboardGroup
-                                    ///< and related data. (But #useFretFont makes a fretboard group not applicable.)
-    Cmper fbStyleId{};              ///< The @ref others::FretboardStyle ID
-    int rootScaleNum{};             ///< `<rootScaleNum>`: Root scale degree (0–76)
-    int rootAlter{};                ///< `<rootAlter>`: Root alteration
-    bool rootLowerCase{};           ///< `<rootLowerCase/>`: Display root in lowercase
-    bool playSuffix{};              ///< `<playSuffix/>`: Playback suffix
-    bool showRoot{};                ///< `<showRoot/>`: Show root
-    bool playRoot{};                ///< `<playRoot/>`: Playback root
-    bool showFretboard{};           ///< `<showFretboard/>`: Show fretboard
-    bool showSuffix{};              ///< `<showSuffix/>`: Show suffix
-    bool playFretboard{};           ///< `<playFretboard/>`: Playback fretboard
-    int bassScaleNum{};             ///< `<bassScaleNum>`: Bass scale degree (0-6)
-    int bassAlter{};                ///< `<bassAlter>`: Bass alteration
-    bool bassLowerCase{};           ///< `<bassLowerCase/>`: Display bass in lowercase
-    BassPosition bassPosition{};    ///< `<bassPosition>`: Position of bass relative to root
-    bool showAltBass{};             ///< `<showAltBass/>`: Show alternate bass
-    bool playAltBass{};             ///< `<playAltBass/>`: Playback alternate bass
-    int capoValue{};                ///< `<capoValue>`: Capo value (if #useLocalCapo is true)
-    bool useLocalCapo{};            ///< `<useLocalCapo/>`: Use local capo
-    Inci fretInci{};                ///< The inci for retrieving the @ref others::FretboardGroup. (Meaningless if #useFretFont is true.)
+    Cmper suffixId{};               ///< The Cmper of the @ref others::ChordSuffix. Zero means there is no suffix.
+                                    ///< When #useFretboardFont is false, this same Cmper is also used to look up the
+                                    ///< @ref others::FretboardGroup and related fretboard data.
+                                    ///< When #useFretboardFont is true, only the chord-suffix lookup applies (no fretboard group lookup).
+    Cmper fbStyleId{};              ///< The @ref others::FretboardStyle ID. (Ignored when #useFretboardFont is true.)
+    int rootScaleNum{};             ///< Root scale degree: 0–6, where zero is the tonic
+    int rootAlter{};                ///< Root alteration
+    bool rootLowerCase{};           ///< Display root in lowercase (minor triad)
+    bool playSuffix{};              ///< Playback suffix
+    bool showRoot{};                ///< Show root
+    bool playRoot{};                ///< Playback root
+    bool showFretboard{};           ///< Show fretboard
+    bool showSuffix{};              ///< Show suffix
+    bool playFretboard{};           ///< Playback fretboard
+    int bassScaleNum{};             ///< Bass scale degree: 0–6, where zero is the tonic
+    int bassAlter{};                ///< Bass alteration
+    bool bassLowerCase{};           ///< Display bass in lowercase
+    BassPosition bassPosition{};    ///< Visual position of bass relative to root
+    bool showAltBass{};             ///< Show alternate bass
+    bool playAltBass{};             ///< Playback alternate bass
+    int capoValue{};                ///< Capo value (if #useLocalCapo is true)
+    bool useLocalCapo{};            ///< Use local capo
+    Inci fretboardGroupInci{};      ///< The inci for retrieving the @ref others::FretboardGroup. (Meaningless if #useFretboardFont is true.)
                                     ///< The cmper is the #suffixId above (when it is non-zero) or one of the hard-coded values 65533
-                                    ///< for minor (lowercase) chords and 65534 for major (uppercase) chords.
-    bool useFretFont{};             ///< Use fret font. When true, this overrides any fretboard group.
-    Evpu horzOff{};                 ///< `<horzOff>`: Horizontal offset of chord (in EVPU)
-    Evpu vertOff{};                 ///< `<vertOff>`: Vertical offset of chord (in EVPU)
-    Evpu fbHorzOff{};               ///< `<fbHorzOff>`: Horizontal offset of fretboard (in EVPU)
-    Evpu fbVertOff{};               ///< `<fbVertOff>`: Vertical offset of fretboard (in EVPU)
-    Edu horzEdu{};                  ///< `<horzEdu>`: Edu position in measure
-    int chPercent{};                ///< `<chPercent>`: Chord percent scaling (100 is 100%)
-    int fbPercent{};                ///< `<fbPercent>`: Fretboard percent scaling (100 is 100%)
+                                    ///< for minor (lowercase) chords and 65534 for major (uppercase) chords. (xml node is `<fretInci>`)
+    bool useFretboardFont{};        ///< When true, this overrides any fretboard group or style and uses the fretboard font instead. (xml node is `<useFretFont >`)
+                                    ///< See #options::FontOptions::FontType::Fretboard.
+    Evpu horzOff{};                 ///< Horizontal offset of chord (in EVPU)
+    Evpu vertOff{};                 ///< Vertical offset of chord (in EVPU)
+    Evpu fbHorzOff{};               ///< Horizontal offset of fretboard (in EVPU)
+    Evpu fbVertOff{};               ///< Vertical offset of fretboard (in EVPU)
+    Edu horzEdu{};                  ///< Edu position in measure
+    int chPercent{};                ///< Chord scaling (100 means 100%)
+    int fbPercent{};                ///< Fretboard scaling (100 means 100%)
+
+    /// @brief Get the @ref others::FretboardGroup instance for this chord assignment.
+    /// @return The fretboard group, if it exists, or @c nullptr if #useFretboardFont is true.
+    MusxInstance<others::FretboardGroup> getFretboardGroup() const;
+
+    /// @brief Returns the @ret ot
+    /// @return The fretboard style, if it exists, or @c nullptr #useFretboardFont is true or #fbStyleId is zero.
+    MusxInstance<others::FretboardStyle> getFretboardStyle() const;
 
     constexpr static std::string_view XmlNodeName = "chordAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ChordAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
