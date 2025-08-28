@@ -188,3 +188,29 @@ TEST(FretboardDiagramTest, PopulateFields)
         EXPECT_EQ(b0->endString, 5);
     }
 }
+
+TEST(FretboardDiagramTest, RetrieveFretboardDiagrams)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "finale_maestro_default.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto fretGroup = doc->getOthers()->get<others::FretboardGroup>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(fretGroup);
+    EXPECT_EQ(fretGroup->fretInstId, 2);
+    EXPECT_EQ(fretGroup->name, "Major   (copy)");
+
+    auto fretInst = fretGroup->getFretboardInstrument();
+    ASSERT_TRUE(fretInst);
+    EXPECT_EQ(fretInst->numFrets, 21);
+    EXPECT_EQ(fretInst->numStrings, 6);
+    EXPECT_EQ(fretInst->name, " Standard Guitar");
+
+    auto fretDiagrams = fretGroup->getFretboardDiagrams();
+    ASSERT_EQ(fretDiagrams.size(), 12);
+    EXPECT_EQ(fretDiagrams[0]->getCmper1(), 1);
+    EXPECT_EQ(fretDiagrams[0]->getCmper2(), 16);
+    EXPECT_EQ(fretDiagrams[11]->getCmper1(), 1);
+    EXPECT_EQ(fretDiagrams[11]->getCmper2(), 27);
+}

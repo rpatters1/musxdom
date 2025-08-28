@@ -1196,7 +1196,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"useTabLetters", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useTabLetters = populateBoolean(e, i); }},
     {"breakTabLinesAtNotes", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->breakTabLinesAtNotes = populateBoolean(e, i); }},
     {"hideTuplets", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTuplets = populateBoolean(e, i); }},
-    {"fretInstrumentId", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fretInstrumentId = e->getTextAs<Cmper>(); }},
+    {"fretInstID", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fretInstrumentId = e->getTextAs<Cmper>(); }},
     {"hideStems", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideStems = populateBoolean(e, i); }},
     {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection = toEnum<Staff::StemDirection>(e); }},
     {"hideBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBeams = populateBoolean(e, i); }},

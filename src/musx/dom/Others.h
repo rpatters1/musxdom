@@ -45,6 +45,7 @@ namespace dom {
 class Entry;
 
 namespace details {
+class FretboardDiagram;
 class GFrameHold;
 class IndependentStaffDetails;
 class StaffGroup;
@@ -623,6 +624,7 @@ public:
     static const xml::XmlElementArray<Frame>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
+class FretboardInstrument;
 /**
  * @class FretboardGroup
  * @brief A named group of fretboard diagrams associated with a specific fretboard instrument.
@@ -631,7 +633,7 @@ public:
  * There are two special hard-coded cmpers that are used when a chord has no suffix. Value 65533 is used
  * for minor (lowercase) chords and value 65534 is for major (uppercase) chords.
  *
- * The inci comes from #details::ChordAssign::fretInci.
+ * The inci comes from #details::ChordAssign::fretboardGroupInci.
  *
  * This class is identified by the XML node name "fretGroup".
  */
@@ -646,6 +648,12 @@ public:
 
     Cmper fretInstId{};   ///< Fretboard instrument ID. (xml node `<fretInstID>`)
     std::string name;     ///< Group name.
+
+    /// @brief Get the @ref FretboardInstrument associated with this fretboard group.
+    MusxInstance<FretboardInstrument> getFretboardInstrument() const;
+
+    /// @brief Gets the array of @ref details::FretboardDiagram instances associated with this fretboard group.
+    MusxInstanceList<details::FretboardDiagram> getFretboardDiagrams() const;
 
     constexpr static std::string_view XmlNodeName = "fretGroup"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FretboardGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

@@ -235,7 +235,7 @@ public:
     bool useTabLetters{};           ///< "Use Letters" (Tablature Staff Attributes)
     bool breakTabLinesAtNotes{};    ///< "Break Tablature Lines At Numbers" (Tablature Staff Attributes)
     bool hideTuplets{};             ///< Inverse of "Show Tuplets" (Tablature Staff Attributes)
-    Cmper fretInstrumentId{};       ///< Cmper of @ref FretboardInstrument. (Tablature Staff Attributes)
+    Cmper fretInstrumentId{};       ///< Cmper of @ref FretboardInstrument. (Tablature Staff Attributes) (xml node is `<fretInstID>`)
     bool hideStems{};               ///< Inverse of "Display Stems"
     StemDirection stemDirection{};  ///< stem direction for staff (xml node is `<stemDir>`)
     bool hideBeams{};               ///< Inverse of "Show Beams"

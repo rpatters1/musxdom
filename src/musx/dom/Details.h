@@ -448,7 +448,7 @@ public:
                                     ///< The cmper is the #suffixId above (when it is non-zero) or one of the hard-coded values 65533
                                     ///< for minor (lowercase) chords and 65534 for major (uppercase) chords. (xml node is `<fretInci>`)
     bool useFretboardFont{};        ///< When true, this overrides any fretboard group or style and uses the fretboard font instead. (xml node is `<useFretFont >`)
-                                    ///< See #options::FontOptions::FontType::FretboardDiagram.
+                                    ///< See #options::FontOptions::FontType::Fretboard.
     Evpu horzOff{};                 ///< Horizontal offset of chord (in EVPU)
     Evpu vertOff{};                 ///< Vertical offset of chord (in EVPU)
     Evpu fbHorzOff{};               ///< Horizontal offset of fretboard (in EVPU)
@@ -457,11 +457,11 @@ public:
     int chPercent{};                ///< Chord scaling (100 means 100%)
     int fbPercent{};                ///< FretboardDiagram scaling (100 means 100%)
 
-    /// @brief Get the @ref others::FretboardGroup instance for this chord assignment.
+    /// @brief Get the @ref others::FretboardGroup instance for this chord assignment. You can use this to get the fret instrument.
     /// @return The fretboard group, if it exists, or @c nullptr if #useFretboardFont is true.
     MusxInstance<others::FretboardGroup> getFretboardGroup() const;
 
-    /// @brief Returns the @ret ot
+    /// @brief Returns the @ref others::FretboardStyle instance for this chord assignment.
     /// @return The fretboard style, if it exists, or @c nullptr #useFretboardFont is true or #fbStyleId is zero.
     MusxInstance<others::FretboardStyle> getFretboardStyle() const;
 
