@@ -339,6 +339,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::GFrameHold,
     dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,
+    dom::details::MeasureNumberIndividualPositioning,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
     dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it

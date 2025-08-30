@@ -53,6 +53,12 @@ MUSX_XML_ENUM_MAPPING(FretboardDiagram::Shape, {
     {"custom", FretboardDiagram::Shape::Custom}
 });
 
+MUSX_XML_ENUM_MAPPING(MeasureNumberIndividualPositioning::ForceVisibility, {
+    // {"none", MeasureNumberIndividualPositioning::ForceVisibility::None}, // Default value, may not appear in the XML
+    {"force", MeasureNumberIndividualPositioning::ForceVisibility::Show},
+    {"hide", MeasureNumberIndividualPositioning::ForceVisibility::Hide}
+});
+
 MUSX_XML_ENUM_MAPPING(StaffGroup::HideStaves, {
     // {"normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
     {"asGroup", StaffGroup::HideStaves::AsGroup},
@@ -287,6 +293,18 @@ MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
 MUSX_XML_ELEMENT_ARRAY(LyricEntryInfo, {
     {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->justify = toEnum<LyricEntryInfo::AlignJustify>(e); }},
     {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<LyricEntryInfo::AlignJustify>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(MeasureNumberIndividualPositioning, {
+    {"region", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->measNumRegion = e->getTextAs<Cmper>(); }},
+    {"x1add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"y1add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"x2add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset2 = e->getTextAs<Evpu>(); }},
+    {"forceHide", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
+        { i->forceVisibility = toEnum<MeasureNumberIndividualPositioning::ForceVisibility>(e); }},
+    {"useEncl", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->useEnclosure = populateBoolean(e, i); }},
+    {"encl", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
+        { i->enclosure = FieldPopulator<others::Enclosure>::createAndPopulate(e, i->getDocument()); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {

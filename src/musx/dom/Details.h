@@ -1060,6 +1060,53 @@ public:
 };
 
 /**
+ * @class MeasureNumberIndividualPositioning
+ * @brief Per-staff/per-measure overrides for the position and appearance of a measure number.
+ *
+ * Cmper1 is the staff (staffId) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ * This class is identified by the XML node name "measNumbIndivPos".
+ */
+class MeasureNumberIndividualPositioning : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this #MeasureNumberIndividualPositioning (probably always #ShareMode::All).
+     * @param staffId The staff ID for this instance.
+     * @param meas The measure ID for this instance.
+     * @param inci The 0-based incident.
+     */
+    explicit MeasureNumberIndividualPositioning(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staffId, Cmper meas, Inci inci)
+        : DetailsBase(document, partId, shareMode, staffId, meas, inci)
+    {
+    }
+
+    /**
+     * @enum ForceVisibility
+     * @brief Force-visibility options for the measure number at this location.
+     */
+    enum class ForceVisibility
+    {
+        None,       ///< No override (default; node may be omitted in XML)
+        Show,       ///< Force the number to display (xml text value: "force")
+        Hide        ///< Force the number to be hidden (xml text value: "hide")
+    };
+
+    Cmper measNumRegion{};                          ///< The Cmper of the @ref others::MeasureNumberRegion that this override applies to. (xml node is `<region>`)
+    Evpu xOffset{};                                 ///< Horizontal offset for the measure number. (xml node is `<x1add>`)
+    Evpu yOffset{};                                 ///< Vertical offset for the measure number. (xml node is `<y1add>`)
+    Evpu xOffset2{};                                ///< Horizontal offset for the measure number range under a multimeasure rest (Page View only). (xml node is `<x2add>`)
+    ForceVisibility forceVisibility{};              ///< Force-visibility behavior. (xml node is `<forceHide>`)
+    bool useEnclosure{};                            ///< Whether to use an enclosure for this number. (xml node is `<useEncl>`)
+    std::shared_ptr<others::Enclosure> enclosure;   ///< Optional enclosure settings. (xml node is `<encl>`)
+
+    constexpr static std::string_view XmlNodeName = "measNumbIndivPos"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureNumberIndividualPositioning>& xmlMappingArray(); ///< Required for musx::
+};
+
+/**
  * @class MeasureTextAssign
  * @brief Represents a text block assignment for a staff and measure.
  *
