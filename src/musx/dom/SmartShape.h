@@ -485,35 +485,35 @@ public:
 
     /**
      * @brief Gets the raw text context for parsing the left-start, or nullptr if none.
-     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
     util::EnigmaParsingContext getLeftStartRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, leftStartRawTextId); }
 
     /**
      * @brief Gets the raw text context for parsing the left-continuation text, or nullptr if none.
-     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
     util::EnigmaParsingContext getLeftContRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, leftContRawTextId); }
 
     /**
      * @brief Gets the raw text context for parsing the right-end text, or nullptr if none.
-     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
     util::EnigmaParsingContext getRightEndRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, rightEndRawTextId); }
 
     /**
      * @brief Gets the raw text context for parsing the center-full text, or nullptr if none.
-     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
     util::EnigmaParsingContext getCenterFullRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, centerFullRawTextId); }
 
     /**
      * @brief Gets the raw text context for parsing the center-abbreviated text, or nullptr if none.
-     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
     util::EnigmaParsingContext getCenterAbbrRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, centerAbbrRawTextId); }

@@ -2572,7 +2572,7 @@ public:
 
     /**
      * @brief Gets the raw text context for parsing this expression, or nullptr if none.
-     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
     util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
 
