@@ -47,7 +47,7 @@ class EntryInfo;
 namespace others {
 class ChordSuffixElement;
 class FretboardGroup;
-class FretboardInstrument;
+class FretInstrument;
 class FretboardStyle;
 class StaffUsed;
 class Measure;
@@ -1652,7 +1652,7 @@ public:
 /**
  * @class TablatureNoteMods
  * @brief Specifies the TAB string a note appears on. Finale automatically figures out the fret number from
- * the open string note and fret intervals specified in the staff's associated @ref others::FretboardInstrument.
+ * the open string note and fret intervals specified in the staff's associated @ref others::FretInstrument.
  *
  * #Entry::noteDetail is set if any note in the entry has tablature note mods.
  *

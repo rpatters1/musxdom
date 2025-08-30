@@ -624,7 +624,7 @@ public:
     static const xml::XmlElementArray<Frame>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
-class FretboardInstrument;
+class FretInstrument;
 /**
  * @class FretboardGroup
  * @brief A named group of fretboard diagrams associated with a specific fretboard instrument.
@@ -646,75 +646,17 @@ public:
     {
     }
 
-    Cmper fretInstId{};   ///< Fretboard instrument ID. (xml node `<fretInstID>`)
+    Cmper fretInstId{};   ///< Fret instrument ID. (xml node `<fretInstID>`)
     std::string name;     ///< Group name.
 
-    /// @brief Get the @ref FretboardInstrument associated with this fretboard group.
-    MusxInstance<FretboardInstrument> getFretboardInstrument() const;
+    /// @brief Get the @ref FretInstrument associated with this fretboard group.
+    MusxInstance<FretInstrument> getFretInstrument() const;
 
     /// @brief Gets the array of @ref details::FretboardDiagram instances associated with this fretboard group.
     MusxInstanceList<details::FretboardDiagram> getFretboardDiagrams() const;
 
     constexpr static std::string_view XmlNodeName = "fretGroup"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FretboardGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-};
-
-/**
- * @class FretboardInstrument
- * @brief Describes a fretted instrument (strings, frets, name, clef).
- *
- * The cmper is an arbitrary number referenced by @ref Staff, @ref details::ChordAssign, and @ref options::ChordOptions.
- *
- * This class is identified by the XML node name "fretInst".
- */
-class FretboardInstrument : public OthersBase
-{
-public:
-    /** @brief Constructor */
-    explicit FretboardInstrument(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
-
-    /**
-     * @class StringInfo
-     * @brief Information for a single string of the fretted instrument.
-     */
-    class StringInfo
-    {
-    public:
-        int  pitch{};       ///< Open-string MIDI pitch (60 is middle-C.)
-        int  nutOffset{};   ///< Optional nut offset in frets (half-steps). The Finale U.I. does not appear to have
-                            ///< a way to modify it, so normally it will be zero. A Plugin could have modified it, however.
-
-        static const xml::XmlElementArray<StringInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-
-    int numFrets{};                 ///< Number of frets
-    int numStrings{};               ///< Number of strings (max is 24)
-    std::string name;               ///< Display name
-    std::vector<std::shared_ptr<StringInfo>> strings;  ///< One entry per string. strings.size() should equal #numStrings.
-    std::vector<int> fretSteps;     ///< Sequence of fret intervals (in half-steps) measured from the open string.
-                                    ///< If empty, all frets are treated as consecutive half-steps (chromatic).
-                                    ///< If shorter than #numFrets, any unspecified frets default to one half-step
-                                    ///< above the previous value. (xml node is `<diatonic>`)
-    ClefIndex speedyClef{};         ///< The clef to use when entering notes for this instrument in Speedy Entry.
-
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
-    {
-        this->OthersBase::integrityCheck(ptrToThis);
-        if (numStrings != strings.size()) {
-            MUSX_INTEGRITY_ERROR("Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numStrings)
-                + " strings but only has " + std::to_string(strings.size()) + " StringInfo instances.");
-        }
-        if (!fretSteps.empty() && numFrets > fretSteps.size()) {
-            util::Logger::log(util::Logger::LogLevel::Info, "Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numFrets)
-                + " frets but only has " + std::to_string(fretSteps.size()) + " diatonic fret steps specified.");
-        }
-    }
-
-    constexpr static std::string_view XmlNodeName = "fretInst"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<FretboardInstrument>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -773,6 +715,64 @@ public:
 
     constexpr static std::string_view XmlNodeName = "fretStyle"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FretboardStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class FretInstrument
+ * @brief Describes a fretted instrument (strings, frets, name, clef). It is used for both TAB notation and @ref FretboardGroup instances.
+ *
+ * The cmper is an arbitrary unique number referenced by @ref Staff, @ref FretboardGroup, and @ref options::ChordOptions.
+ *
+ * This class is identified by the XML node name "fretInst".
+ */
+class FretInstrument : public OthersBase
+{
+public:
+    /** @brief Constructor */
+    explicit FretInstrument(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    /**
+     * @class StringInfo
+     * @brief Information for a single string of the fretted instrument.
+     */
+    class StringInfo
+    {
+    public:
+        int  pitch{};       ///< Open-string MIDI pitch (60 is middle-C.)
+        int  nutOffset{};   ///< Optional nut offset in frets (half-steps). The Finale U.I. does not appear to have
+                            ///< a way to modify it, so normally it will be zero. A Plugin could have modified it, however.
+
+        static const xml::XmlElementArray<StringInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    int numFrets{};                 ///< Number of frets
+    int numStrings{};               ///< Number of strings (max is 24)
+    std::string name;               ///< Display name
+    std::vector<std::shared_ptr<StringInfo>> strings;  ///< One entry per string: strings.size() should equal #numStrings.
+    std::vector<int> fretSteps;     ///< Sequence of fret intervals (in half-steps) measured from the open string.
+                                    ///< If empty, all frets are treated as consecutive half-steps (chromatic).
+                                    ///< If shorter than #numFrets, any unspecified frets default to one half-step
+                                    ///< above the previous value. (xml node is `<diatonic>`)
+    ClefIndex speedyClef{};         ///< The clef to use when entering notes for this instrument in Speedy Entry.
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OthersBase::integrityCheck(ptrToThis);
+        if (numStrings != strings.size()) {
+            MUSX_INTEGRITY_ERROR("Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numStrings)
+                + " strings but has " + std::to_string(strings.size()) + " StringInfo instances.");
+        }
+        if (!fretSteps.empty() && numFrets != fretSteps.size()) {
+            util::Logger::log(util::Logger::LogLevel::Info, "Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numFrets)
+                + " frets but has " + std::to_string(fretSteps.size()) + " diatonic fret steps specified.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "fretInst"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<FretInstrument>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

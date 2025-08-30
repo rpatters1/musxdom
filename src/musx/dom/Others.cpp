@@ -61,9 +61,9 @@ MusxInstanceList<Entry> Frame::getEntries() const
 // ***** FretboardGroup *****
 // **************************
 
-MusxInstance<FretboardInstrument> FretboardGroup::getFretboardInstrument() const
+MusxInstance<FretInstrument> FretboardGroup::getFretInstrument() const
 {
-    return getDocument()->getOthers()->get<FretboardInstrument>(getRequestedPartId(), fretInstId);
+    return getDocument()->getOthers()->get<FretInstrument>(getRequestedPartId(), fretInstId);
 }
 
 MusxInstanceList<details::FretboardDiagram> FretboardGroup::getFretboardDiagrams() const

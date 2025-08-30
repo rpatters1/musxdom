@@ -604,7 +604,7 @@ void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
         useTabLetters = staffStyle->useTabLetters;
         breakTabLinesAtNotes = staffStyle->breakTabLinesAtNotes;
         hideTuplets = staffStyle->hideTuplets;
-        fretInstrumentId = staffStyle->fretInstrumentId;
+        fretInstId = staffStyle->fretInstId;
         percussionMapId = staffStyle->percussionMapId;
         masks->notationStyle = true;
     }

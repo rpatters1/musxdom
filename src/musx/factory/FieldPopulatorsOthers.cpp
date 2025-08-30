@@ -596,19 +596,19 @@ MUSX_XML_ELEMENT_ARRAY(FretboardGroup, {
     {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretboardGroup>& i) { i->name = e->getText(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(FretboardInstrument::StringInfo, {
-    {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument::StringInfo>& i) { i->pitch = e->getTextAs<int>(); }},
-    {"nutOffset", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument::StringInfo>& i) { i->nutOffset = e->getTextAs<int>(); }},
+MUSX_XML_ELEMENT_ARRAY(FretInstrument::StringInfo, {
+    {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument::StringInfo>& i) { i->pitch = e->getTextAs<int>(); }},
+    {"nutOffset", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument::StringInfo>& i) { i->nutOffset = e->getTextAs<int>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(FretboardInstrument, {
-    {"numFrets", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->numFrets = e->getTextAs<int>(); }},
-    {"numStrings", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->numStrings = e->getTextAs<int>(); }},
-    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->name = e->getText(); }},
-    {"string", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i)
-        { i->strings.push_back(FieldPopulator<FretboardInstrument::StringInfo>::createAndPopulate(e)); }},
-    {"diatonic", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->fretSteps = populateEmbeddedArray<int>(e, "fret"); }},
-    {"speedyClef", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->speedyClef = e->getTextAs<ClefIndex>(); }},
+MUSX_XML_ELEMENT_ARRAY(FretInstrument, {
+    {"numFrets", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->numFrets = e->getTextAs<int>(); }},
+    {"numStrings", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->numStrings = e->getTextAs<int>(); }},
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->name = e->getText(); }},
+    {"string", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i)
+        { i->strings.push_back(FieldPopulator<FretInstrument::StringInfo>::createAndPopulate(e)); }},
+    {"diatonic", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->fretSteps = populateEmbeddedArray<int>(e, "fret"); }},
+    {"speedyClef", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->speedyClef = e->getTextAs<ClefIndex>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FretboardStyle, {
@@ -1196,7 +1196,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"useTabLetters", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useTabLetters = populateBoolean(e, i); }},
     {"breakTabLinesAtNotes", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->breakTabLinesAtNotes = populateBoolean(e, i); }},
     {"hideTuplets", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTuplets = populateBoolean(e, i); }},
-    {"fretInstID", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fretInstrumentId = e->getTextAs<Cmper>(); }},
+    {"fretInstID", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fretInstId = e->getTextAs<Cmper>(); }},
     {"hideStems", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideStems = populateBoolean(e, i); }},
     {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection = toEnum<Staff::StemDirection>(e); }},
     {"hideBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBeams = populateBoolean(e, i); }},

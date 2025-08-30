@@ -69,7 +69,7 @@ TEST(FretboardGroup, PopulateTest)
     EXPECT_EQ(g1->getCmper(), 4);
 }
 
-TEST(FretboardInstrument, PopulateTest)
+TEST(FretInstrument, PopulateTest)
 {
     constexpr static musxtest::string_view xml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
@@ -123,7 +123,7 @@ TEST(FretboardInstrument, PopulateTest)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
-    auto fi = others->get<others::FretboardInstrument>(SCORE_PARTID, 6);
+    auto fi = others->get<others::FretInstrument>(SCORE_PARTID, 6);
     ASSERT_TRUE(fi);
 
     // Top-level fields

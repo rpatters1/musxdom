@@ -201,7 +201,7 @@ TEST(FretboardDiagramTest, RetrieveFretboardDiagrams)
     EXPECT_EQ(fretGroup->fretInstId, 2);
     EXPECT_EQ(fretGroup->name, "Major   (copy)");
 
-    auto fretInst = fretGroup->getFretboardInstrument();
+    auto fretInst = fretGroup->getFretInstrument();
     ASSERT_TRUE(fretInst);
     EXPECT_EQ(fretInst->numFrets, 21);
     EXPECT_EQ(fretInst->numStrings, 6);
