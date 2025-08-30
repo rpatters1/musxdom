@@ -237,12 +237,15 @@ public:
     char32_t charMain{};                           ///< Main symbol character (utf32).
     std::shared_ptr<FontInfo> fontMain;            ///< The font info for the main symbol. (xml nodes `<fontMain>`, `<sizeMain>`, and `<efxMain>`)
     CopyMode copyMode{};                           ///< "Copy Main Symbol" option.
+    bool useTopNote{};                             ///< "Attach to top note"
     bool autoHorz{};                               ///< Whether horizontal auto-positioning is enabled.
     bool autoVert{};                               ///< Whether vertical auto-positioning is enabled.
     AutoVerticalMode autoVertMode{};               ///< Auto vertical positioning mode.
+    bool outsideStaff{};                           ///< Whether the articulation is outside the staff.
     bool aboveSymbolAlt{};                         ///< Whether the alternate symbol is used above. (Otherwise main symbol is used.)
     bool belowSymbolAlt{};                         ///< Whether the alternate symbol is used below. (Otherwise main symbol is used.)
     bool insideSlur{};                             ///< Whether the articulation is inside a slur. (Used *in addition* to #SlurInteractionMode::InsideSlur)
+    bool noPrint{};                                ///< "Display on screen only (do not print)"
     bool autoStack{};                              ///< Whether automatic stacking is enabled.
     bool centerOnStem{};                           ///< Whether centering on the stem is enabled.
     SlurInteractionMode slurInteractionMode{};     ///< Slur interaction mode.
@@ -252,6 +255,7 @@ public:
     Evpu yOffsetMain{};                            ///< Vertical offset for the main symbol.
     Evpu defVertPos{};                             ///< Default vertical position.
     bool avoidStaffLines{};                        ///< Whether to avoid staff lines.
+    bool isStemSideWhenMultipleLayers{};           ///< "Place stem side when multiple layers are present"
     bool playArtic{};                              ///< Whether playback articulation is enabled.
     Evpu xOffsetAlt{};                             ///< Horizontal offset for the alternate symbol.
     Evpu yOffsetAlt{};                             ///< Vertical offset for the alternate symbol.
@@ -271,9 +275,7 @@ public:
     int ampBotNoteDelta{};                         ///< Key velocity change for the bottom note.
     int ampTopNotePercent{};                       ///< Key velocity percentage for the top note.
     int ampBotNotePercent{};                       ///< Key velocity percentage for the bottom note.
-    bool outsideStaff{};                           ///< Whether the articulation is outside the staff.
-
-    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
+    Evpu distanceFromStemEnd{};                    ///< "On-stem distance from stem end/flag/beam"
 
     constexpr static std::string_view XmlNodeName = "articDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ArticulationDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1232,7 +1234,7 @@ public:
  *
  * Only one of #textExprId or #shapeExprId is non-zero.
  *
- * The Cmper for a MeasureExprAssign is the cmper of the Measure to which it is attached.
+ * The Cmper for a MeasureExprAssign is the Cmper of the Measure to which it is attached.
  */
 class MeasureExprAssign : public OthersBase
 {
@@ -1241,19 +1243,57 @@ public:
     explicit MeasureExprAssign(const DocumentWeakPtr& document, Cmper ID, ShareMode shareMode, Cmper cmper, Inci inci)
         : OthersBase(document, ID, shareMode, cmper, inci) {}
 
+    /// @enum ChannelSwitchTarget
+    /// @brief The values for "On Playback Affect". The target channels are specified in the Score Manager dropdown for staves.
+    enum class ChannelSwitchTarget
+    {
+        Current,            ///< Current channel. (Default value may not appear in xml.)
+        ToLayer1,           ///< Switch to layer 1 channel. (xml value is "toL1")
+        ToLayer2,           ///< Switch to layer 2 channel. (xml value is "toL2")
+        ToLayer3,           ///< Switch to layer 3 channel. (xml value is "toL3")
+        ToLayer4,           ///< Switch to layer 4 channel. (xml value is "toL4")
+        ToChord,            ///< Switch to chord channel. (xml value is "toChord")
+        ToExpression,       ///< Switch to expression channel. (xml value is "toDyn")
+    };
+
+    /// @enum PlaybackStart
+    /// @brief The choice where to start playback.
+    enum class PlaybackStart
+    {
+        BeginningOfMeasure,     ///< Start playback at beginning of measure. (Default value may not appear in xml.)
+        AlignmentPoint,         ///< Start playback at alignment point as determined by the associated @ref TextExpressionDef or @ref ShapeExpressionDef.
+                                ///< (xml value is "attach")
+        PositionInMeasure       ///< Start playback at the Edu position of the assignment. (xml value is "measPos")
+    };
+
+    /// @enum ShowStaffList
+    /// @brief Where to show the assignment (when there is no staff list.)
+    enum class ShowStaffList
+    {
+        ScoreAndPart,           ///< Score and Part(s). (Default value may not appear in xml.)
+        ScoreOnly,              ///< Score Only
+        PartOnly,               ///< Part(s) Only
+    };
+
     // Public properties corresponding to the XML structure
-    Cmper textExprId{};         ///< The @ref Cmper of a text expression (xml node is `<textExprID>`)
-    Cmper shapeExprId{};        ///< The @ref Cmper of a shape expression (xml node is `<shapeExprID>`)
-    Evpu horzEvpuOff{};         ///< Horizontal Evpu offset from the default position.
-    Edu eduPosition{};          ///< Horizontal Edu position (xml node is `<horzEduOff>`)
-    Evpu vertEvpuOff{};         ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
-    StaffCmper staffAssign{};   ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
-    int layer{};                ///< The 1-based layer number to which this expression is assigned. (0 means all)
-    bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
-    Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
-    Cmper staffList{};          ///< The cmper of the marking category staff list that is controlling this assignment (if any).
-                                ///< There will be a separate #MeasureExprAssign instance for every staff in the staff list.
-    bool hidden{};              ///< True if the dynamic is hidden.
+    Cmper textExprId{};                     ///< The @ref Cmper of a text expression (xml node is `<textExprID>`)
+    Cmper shapeExprId{};                    ///< The @ref Cmper of a shape expression (xml node is `<shapeExprID>`)
+    Evpu horzEvpuOff{};                     ///< Horizontal Evpu offset from the default position.
+    Edu eduPosition{};                      ///< Horizontal Edu position (xml node is `<horzEduOff>`)
+    Evpu vertEvpuOff{};                     ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
+    StaffCmper staffAssign{};               ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
+    int layer{};                            ///< The 1-based layer number (1..4) to which this expression is assigned. (0 = all layers.)
+    ChannelSwitchTarget channelSwitch{};    ///< "On Playback Affect" value.
+    bool dontScaleWithEntry{};              ///< Inverse of "Scale Expression with Attached Note".
+    PlaybackStart playbackStart{};          ///< Where to start playback.
+    ShowStaffList showStaffList{};          ///< "Show On Score and Part(s)|Score Only|Part(s) Only".
+    bool createdByHp{};                     ///< This assignment was created by Finale's smart playback engine.
+    bool hidden{};                          ///< True if the expression is hidden.
+    int staffGroup{};                       ///< Assignment is part of a group of assignments associated with a staff list and should be modified as a group.
+    Cmper staffList{};                      ///< The cmper of the marking category staff list that is controlling this assignment (if any).
+                                            ///< There will be a separate #MeasureExprAssign instance for every staff in the staff list.
+    int graceNoteIndex{};                   ///< 1-based index from leftmost grace note. 0 = main note.
+    int rehearsalMarkOffset{};              ///< Restarts the rehearsal mark sequence at this 1-based sequence value. If this is zero, the sequence continues normally.
 
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
@@ -1274,8 +1314,6 @@ public:
                 + " has both text expr ID " + std::to_string(textExprId) + " and shape expr ID " + std::to_string(shapeExprId));
         }
     }
-
-    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
 
     constexpr static std::string_view XmlNodeName = "measExprAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureExprAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1750,8 +1788,6 @@ public:
  * @class PartDefinition
  * @brief Represents the attributes of a Finale "partDef".
  *
- * @todo After identifying all possible fields, remove the override of #PartDefinition::requireAllFields.
- *
  * The cmper is the part definition ID, representing unique part definitions in the Finale document.
  * This class is identified by the XML node name "partDef".
  */
@@ -1766,7 +1802,9 @@ public:
     Cmper nameId{};                     ///< @ref Cmper of the part name @ref TextBlock. (xml tag is `<nameID>`)
     int partOrder{};                    ///< Value that determines the order of listed parts in Finale's UI.
     int copies{};                       ///< Number of copies to print.
+    bool printPart{};                   ///< Indicates the part should be printed.
     bool extractPart{};                 ///< Indicates if the part should be extracted.
+    bool applyFormat{};                 ///< Meaning uncertain. May have to do with page format for parts and whether it has been applied.
     bool needsRecalc{};                 ///< Indicates if the part needs update layout.
     bool useAsSmpInst{};                ///< Indicates if the part is used as a SmartMusic instrument.
     int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
@@ -1809,8 +1847,6 @@ public:
 
     /** @brief Return the linked parts sorted in UI order by #partOrder */
     static MusxInstanceList<PartDefinition> getInUserOrder(const DocumentPtr& document);
-
-    bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "partDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

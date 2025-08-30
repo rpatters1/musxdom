@@ -72,6 +72,28 @@ MUSX_XML_ENUM_MAPPING(musx::dom::others::ChordSuffixElement::Prefix, {
     {"flat", ChordSuffixElement::Prefix::Flat},
 });
 
+MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::ChannelSwitchTarget, {
+    // {"", MeasureExprAssign::ChannelSwitchTarget::Current}, // Default; may not appear in the XML.
+    {"toL1", MeasureExprAssign::ChannelSwitchTarget::ToLayer1},
+    {"toL2", MeasureExprAssign::ChannelSwitchTarget::ToLayer2},
+    {"toL3", MeasureExprAssign::ChannelSwitchTarget::ToLayer3},
+    {"toL4", MeasureExprAssign::ChannelSwitchTarget::ToLayer4},
+    {"toChord", MeasureExprAssign::ChannelSwitchTarget::ToChord},
+    {"toDyn", MeasureExprAssign::ChannelSwitchTarget::ToExpression},
+});
+
+MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::PlaybackStart, {
+    // {"", MeasureExprAssign::PlaybackStart::BeginningOfMeasure}, // Default; may not appear in the XML.
+    {"attach", MeasureExprAssign::PlaybackStart::AlignmentPoint},
+    {"measPos", MeasureExprAssign::PlaybackStart::PositionInMeasure},
+});
+
+MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::ShowStaffList, {
+    // {"", MeasureExprAssign::ShowStaffList::ScoreAndPart}, // Default; may not appear in the XML.
+    {"scoreOnly", MeasureExprAssign::ShowStaffList::ScoreOnly},
+    {"partOnly", MeasureExprAssign::ShowStaffList::PartOnly},
+});
+
 MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
     //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", MeasureNumberRegion::AlignJustify::Center},
@@ -492,12 +514,15 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
     {"sizeMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->fontMain->fontSize = e->getTextAs<int>(); }},
     {"efxMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { factory::populateFontEfx(e, i->fontMain); }},
     {"copyMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->copyMode = toEnum<ArticulationDef::CopyMode>(e); }},
+    {"useTopNote", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->useTopNote = populateBoolean(e, i); }},
     {"autoHorz", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoHorz = populateBoolean(e, i); }},
     {"autoVert", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoVert = populateBoolean(e, i); }},
     {"autoVertMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoVertMode = toEnum<ArticulationDef::AutoVerticalMode>(e); }},
+    {"outsideStaff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->outsideStaff = populateBoolean(e, i); }},
     {"aboveSymbolAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->aboveSymbolAlt = populateBoolean(e, i); }},
     {"belowSymbolAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->belowSymbolAlt = populateBoolean(e, i); }},
     {"insideSlur", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->insideSlur = populateBoolean(e, i); }},
+    {"noPrint", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->noPrint = populateBoolean(e, i); }},
     {"autoStack", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoStack = populateBoolean(e, i); }},
     {"centerOnStem", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->centerOnStem = populateBoolean(e, i); }},
     {"slurInteractionMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->slurInteractionMode = toEnum<ArticulationDef::SlurInteractionMode>(e); }},
@@ -509,6 +534,7 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
     {"yOffsetMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->yOffsetMain = e->getTextAs<Evpu>(); }},
     {"defVertPos", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->defVertPos = e->getTextAs<Evpu>(); }},
     {"avoidStaffLines", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->avoidStaffLines = populateBoolean(e, i); }},
+    {"isStemSideWhenMultipleLayers", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->isStemSideWhenMultipleLayers = populateBoolean(e, i); }},
     {"playArtic", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->playArtic = populateBoolean(e, i); }},
     {"xOffsetAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->xOffsetAlt = e->getTextAs<Evpu>(); }},
     {"yOffsetAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->yOffsetAlt = e->getTextAs<Evpu>(); }},
@@ -528,7 +554,7 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
     {"ampBotNoteDelta", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampBotNoteDelta = e->getTextAs<int>(); }},
     {"ampTopNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampTopNotePercent = e->getTextAs<int>(); }},
     {"ampBotNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampBotNotePercent = e->getTextAs<int>(); }},
-    {"outsideStaff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->outsideStaff = populateBoolean(e, i); }},
+    {"distanceFromStemEnd", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->distanceFromStemEnd = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(BeatChartElement::Control, {
@@ -756,10 +782,16 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->vertEvpuOff = e->getTextAs<Evpu>(); }},
     {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<StaffCmper>(); }},
     {"layer", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->layer = e->getTextAs<int>(); }},
+    {"channelSwitch", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->channelSwitch = toEnum<MeasureExprAssign::ChannelSwitchTarget>(e); }},
     {"dontScaleWithEntry", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = populateBoolean(e, i); }},
-    {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
-    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+    {"playbackStart", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->playbackStart = toEnum<MeasureExprAssign::PlaybackStart>(e); }},
+    {"showStaffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->showStaffList = toEnum<MeasureExprAssign::ShowStaffList>(e); }},
+    {"createdByHp", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->createdByHp = populateBoolean(e, i); }},
     {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<int>(); }},
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+    {"graceNoteIndex", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->graceNoteIndex = e->getTextAs<int>(); }},
+    {"rehearsalMarkOffset", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->rehearsalMarkOffset = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
@@ -879,7 +911,9 @@ MUSX_XML_ELEMENT_ARRAY(PartDefinition, {
     {"nameID", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->nameId = e->getTextAs<Cmper>(); }},
     {"partOrder", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->partOrder = e->getTextAs<int>(); }},
     {"copies", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->copies = e->getTextAs<int>(); }},
+    {"printPart", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->printPart = populateBoolean(e, i); }},
     {"extractPart", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->extractPart = populateBoolean(e, i); }},
+    {"applyFormat", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->applyFormat = populateBoolean(e, i); }},
     {"needsRecalc", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->needsRecalc = populateBoolean(e, i); }},
     {"useAsSmpInst", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->useAsSmpInst = populateBoolean(e, i); }},
     {"smartMusicInst", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->smartMusicInst = e->getTextAs<int>(); }},
