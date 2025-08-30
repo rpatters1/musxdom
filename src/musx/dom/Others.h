@@ -1135,44 +1135,47 @@ public:
     };
 
     Evpu width{};               ///< "Ideal" measure width in Evpu. Page layout determines actual width.
-    std::shared_ptr<KeySignature> globalKeySig; ///< the key global signature on this measure. Guaranteed to be non-null. (xml node is `<keySig>`)
+    std::shared_ptr<KeySignature> globalKeySig; ///< the global key signature on this measure. Guaranteed to be non-null. (xml node is `<keySig>`)
     Cmper beats{};              ///< Number of beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
     Cmper divBeat{};            ///< Divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
     Cmper dispBeats{};          ///< Displayed beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
     Cmper dispDivbeat{};        ///< Displayed divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
+    Cmper customBarShape{};     ///< Cmper of Shape Designer @ref ShapeDef for custom right barline
+    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer @ref ShapeDef for custom left barline
     Evpu frontSpaceExtra{};     ///< Extra space at front of bar.
     Evpu backSpaceExtra{};      ///< Extra space at end of bar.
     bool breakWordExt{};        ///< Barline ends word extensions on lyrics.
     bool hideCaution{};         ///< "Hide Cautionary Clefs, Key, and Time Signature"
     bool hasSmartShape{};       ///< Indicates if the measure has a smart shape.
-    bool showFullNames{};       ///< "Show Full Staff & Group Names"
-    bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
     bool groupBarlineOverride{}; ///< Override the barline specified by a @ref details::StaffGroup (if any)
-    Cmper customBarShape{};     ///< Cmper of Shape Designer @ref ShapeDef for custom right barline
-    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer @ref ShapeDef for custom left barline
-    ShowKeySigMode showKey{};   ///< Show mode for key signatures
-    ShowTimeSigMode showTime{}; ///< Show mode for time signatures
-    PositioningType positioningMode{}; ///< Positioning type for the measure. (xml node is `<posMode>`)
-    bool beginNewSystem{};      ///< "Begin a New Staff System" (xml node is `<lineBreak>`)
-    bool breakMmRest{};         ///< "Break a Multimeasure Rests" (xml node is `<breakRest>`)
-    bool noMeasNum{};           ///< Inverse of "Include in Measure Numbering"
-    BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
-    bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
-    bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
-    bool hasTextBlock{};        ///< Indicates if the measure has a measure-assigned text block. See @ref details::MeasureTextAssign.
-    bool forwardRepeatBar{};    ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
-    bool backwardsRepeatBar{};  ///< Indicates a forward repeat bar on this measure. (xml node is `<bacRepBar>`)
-    bool hasEnding{};           ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
-    bool hasTextRepeat{};       ///< Indicates the presence of one or more text repeat assigments. (xml node is `<txtRepeats>`)
-    bool hasChord{};            ///< Indicates the presence of one or more chords.
+    bool showFullNames{};       ///< "Show Full Staff & Group Names"
+    bool hasMeasNumbIndivPos{}; ///< Has individual measure numbering positioning. (xml node is `<mnSepPlace>`)
+    bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
     bool compositeNumerator{};  ///< Indicates a composite numerator for the time signature. (xml node is `<altNumTsig>`)
     bool compositeDenominator{}; ///< Indicates a composite denominator for the time signature. (xml node is `<altDenTsig>`)
+    ShowKeySigMode showKey{};   ///< Show mode for key signatures
+    ShowTimeSigMode showTime{}; ///< Show mode for time signatures
+    bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
+    PositioningType positioningMode{}; ///< Positioning type for the measure. (xml node is `<posMode>`)
+    bool beginNewSystem{};      ///< "Begin a New Staff System" (xml node is `<lineBreak>`)
+    bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
+    bool breakMmRest{};         ///< "Break a Multimeasure Rests" (xml node is `<breakRest>`)
+    bool noMeasNum{};           ///< Inverse of "Include in Measure Numbering"
+    bool isOssiaSource{};       ///< Indicates this measure is the source for an ossia. (xml node is `<arbitMusic>`)
+    bool hasTextBlock{};        ///< Indicates if the measure has a measure-assigned text block. See @ref details::MeasureTextAssign.
+    BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
+    bool forwardRepeatBar{};    ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
+    bool backwardsRepeatBar{};  ///< Indicates a backwards repeat bar on this measure. (xml node is `<bacRepBar>`)
+    bool hasEnding{};           ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
+    bool hasTextRepeat{};       ///< Indicates the presence of one or more text repeat assigments. (xml node is `<txtRepeats>`)
     bool abbrvTime{};           ///< Indicates abbreviated time signature (e.g., Common or Cut time.) Applies to the display time signature only.
                                 ///< The actual time signature's abbreviation is controlled by the values in @ref options::TimeSignatureOptions.
     bool useDisplayTimesig{};   ///< Indicates whether to use the display time signature.
+    bool hasChord{};            ///< Indicates the presence of one or more chords.
     BarlineType leftBarlineType{}; ///< Left barline type. (xml node is `<leftBarline>`)
     bool compositeDispNumerator{};  ///< Indicates a composite numerator for the display time signature. (xml node is `<displayAltNumTsig>`)
     bool compositeDispDenominator{}; ///< Indicates a composite denominator for the display time signature. (xml node is `<displayAltDenTsig>`)
+    bool pageBreak{};           ///< If true, begin new page here. (Behavior is weird if the measure is not the first of its system.)
 
     /// @brief Calculates if a measure should show full names vs. abbreviated names
     bool calcShouldShowFullNames() const
@@ -1186,7 +1189,7 @@ public:
 
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
-    /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
+    /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for transposition) without affecting the values in the document.
     MusxInstance<KeySignature> createKeySignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
@@ -1205,7 +1208,7 @@ public:
     util::Fraction calcDuration(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus.
-    /// @param forStaff The staff for wiuch to calculate the time stretch.
+    /// @param forStaff The staff for which to calculate the time stretch.
     util::Fraction calcTimeStretch(StaffCmper forStaff) const
     {
         return calcDuration() / calcDuration(forStaff);
@@ -1218,8 +1221,6 @@ public:
             globalKeySig = std::make_shared<KeySignature>(getDocument());
         }
     }
-
-    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
 
     constexpr static std::string_view XmlNodeName = "measSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Measure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
