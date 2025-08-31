@@ -796,13 +796,13 @@ public:
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         this->DetailsBase::integrityCheck(ptrToThis);
-        if (numFretCells != cells.size()) {
+        if (numFretCells != int(cells.size())) {
             const int oldVal = numFretCells;
             numFretCells = int(cells.size());
             MUSX_INTEGRITY_ERROR("FretboardDiagram " + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
                 + " specifies the wrong number of cells (" + std::to_string(oldVal) + ").");
         }
-        if (numFretBarres != barres.size()) {
+        if (numFretBarres != int(barres.size())) {
             const int oldVal = numFretBarres;
             numFretBarres = int(barres.size());
             MUSX_INTEGRITY_ERROR("FretboardDiagram " + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
