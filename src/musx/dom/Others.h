@@ -763,11 +763,11 @@ public:
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
-        if (numStrings != strings.size()) {
+        if (numStrings != int(strings.size())) {
             MUSX_INTEGRITY_ERROR("Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numStrings)
                 + " strings but has " + std::to_string(strings.size()) + " StringInfo instances.");
         }
-        if (!fretSteps.empty() && numFrets != fretSteps.size()) {
+        if (!fretSteps.empty() && numFrets != int(fretSteps.size())) {
             util::Logger::log(util::Logger::LogLevel::Info, "Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numFrets)
                 + " frets but has " + std::to_string(fretSteps.size()) + " diatonic fret steps specified.");
         }
