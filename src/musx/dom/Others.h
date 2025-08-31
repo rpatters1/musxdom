@@ -1163,7 +1163,7 @@ public:
     bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
     bool breakMmRest{};         ///< "Break a Multimeasure Rests" (xml node is `<breakRest>`)
     bool noMeasNum{};           ///< Inverse of "Include in Measure Numbering"
-    bool isOssiaSource{};       ///< Indicates this measure is the source for an ossia. (xml node is `<arbitMusic>`)
+    bool hasOssia{};            ///< Indicates if the measure has an ossia assigned. (xml node is `<arbitMusic>`)
     bool hasTextBlock{};        ///< Indicates if the measure has a measure-assigned text block. See @ref details::MeasureTextAssign.
     BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
     bool forwardRepeatBar{};    ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)

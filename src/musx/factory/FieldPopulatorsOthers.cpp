@@ -758,7 +758,7 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"hasExpr", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasExpression = populateBoolean(e, i); }},
     {"breakRest", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->breakMmRest = populateBoolean(e, i); }},
     {"noMeasNum", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->noMeasNum = populateBoolean(e, i); }},
-    {"arbitMusic", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->isOssiaSource = populateBoolean(e, i); }},
+    {"arbitMusic", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasOssia = populateBoolean(e, i); }},
     {"hasTextBlock", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasTextBlock = populateBoolean(e, i); }},
     {"barline", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->barlineType = toEnum<Measure::BarlineType>(e); }},
     {"forRepBar", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->forwardRepeatBar = populateBoolean(e, i); }},
