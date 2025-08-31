@@ -2161,6 +2161,7 @@ public:
     Cmper categoryId{};                             ///< Identifier for the category of the text expression. (xml node is "categoryID")
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
+    Cmper execShape{};                              ///< Executable shape Cmper for playback (@ref ShapeDef)
     int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
     int playPass{};                                 ///< "Play Only on Pass" value.
     bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
@@ -2177,8 +2178,6 @@ public:
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
-
-    bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2506,8 +2505,6 @@ public:
  * @class TextBlock
  * @brief Represents the attributes of a Finale "textBlock".
  *
- * @todo After identifying all possible fields, remove the override of #TextBlock::requireAllFields.
- *
  * The cmper is the textBlock ID, representing unique text blocks in the Finale document.
  * This class is identified by the XML node name "textBlock".
  */
@@ -2531,8 +2528,13 @@ public:
         : OthersBase(document, partId, shareMode, cmper) {}
 
     // Public properties corresponding to the XML structure
-    Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
+    Cmper textId{};                    ///< Cmper of the text block. (xml tag is `<textID>`)
+    Cmper shapeId{};                   ///< If non-zero, the Cmper of the custom frame shape. (xml tag is `<shapeID>`)
+    Evpu width{};                      ///< Width of standard frame. If zero, the width expands to fit the text.
+    Evpu height{};                     ///< Height of standard frame. If zero, the height expands to fit the text.
     int lineSpacingPercentage{};       ///< Line spacing percentage.
+    Evpu xAdd{};                       ///< Horizontal offset from handle.
+    Evpu yAdd{};                       ///< Vertical offset from handle.
     TextJustify justify{};             ///< Justification (left, center, right, full, force full)
     bool newPos36{};                   ///< "Position from Edge of Frame" compatibility setting.
                                        ///< Best guess is that blocks created before Finale 3.6 do not have this set.
@@ -2540,8 +2542,8 @@ public:
     bool showShape{};                  ///< Show shape
     bool noExpandSingleWord{};         ///< Do not expand single word
     bool wordWrap{};                   ///< Wrap words (in frames)
-    Evpu width{};                      ///< Width of frame
-    Evpu height{};                     ///< Height of frame
+    Efix inset{};                      ///< Text inset from frame (all sides)
+    Efix stdLineThickness{};           ///< Thickness of standard frame line. (xml tag is `<stdLine>`)
     bool roundCorners{};               ///< Use rounded corners on frame
     Efix cornerRadius{};               ///< Corner radius for rounded corners.
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
@@ -2557,8 +2559,6 @@ public:
     /** @brief return displayable text with Enigma tags removed */
     static std::string getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii);
-
-    bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextBlock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2584,6 +2584,7 @@ public:
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
+    Cmper execShape{};                              ///< Executable shape Cmper for playback (@ref ShapeDef)
     int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
     int playPass{};                                 ///< "Play Only on Pass" value.
     bool hideMeasureNum;                            ///< "Hide Measure Numbers" (used on Rehearsal Marks)
