@@ -327,6 +327,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::BeamAlterationsUpStem,
     dom::details::SecondaryBeamAlterationsDownStem,
     dom::details::SecondaryBeamAlterationsUpStem,
+    dom::details::Bracket,
     dom::details::CenterShape,
     dom::details::ChordAssign,
     dom::details::ClefOctaveFlats,

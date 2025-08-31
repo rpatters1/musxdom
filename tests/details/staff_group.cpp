@@ -140,7 +140,7 @@ TEST(StaffGroupTest, PopulateFields)
     EXPECT_EQ(staffGroup->fullNameYadj, 6);
 
     ASSERT_TRUE(staffGroup->bracket);
-    EXPECT_EQ(staffGroup->bracket->style, details::StaffGroup::BracketStyle::DeskBracket);
+    EXPECT_EQ(staffGroup->bracket->style, details::Bracket::BracketStyle::DeskBracket);
     EXPECT_EQ(staffGroup->bracket->horzAdjLeft, -13);
     EXPECT_EQ(staffGroup->bracket->vertAdjTop, 1);
     EXPECT_EQ(staffGroup->bracket->vertAdjBot, 2);

@@ -150,6 +150,14 @@ MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
     {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(Bracket, {
+    {"id", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->style = toEnum<Bracket::BracketStyle>(e->getTextAs<int>()); }},
+    {"bracPos", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->horzAdjLeft = e->getTextAs<Evpu>(); }},
+    {"bracTop", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->vertAdjTop = e->getTextAs<Evpu>(); }},
+    {"bracBot", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->vertAdjBot = e->getTextAs<Evpu>(); }},
+    {"onSingle", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->showOnSingleStaff = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(CenterShape, {
     {"startBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
         { i->startBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i); }},
@@ -368,14 +376,6 @@ MUSX_XML_ELEMENT_ARRAY(ShapeNoteBase, {
     {"arrangedByPitch", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase>& i) { i->arrangedByPitch = populateBoolean(e, i); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(StaffGroup::Bracket, {
-    {"id", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->style = toEnum<StaffGroup::BracketStyle>(e->getTextAs<int>()); }},
-    {"bracPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->horzAdjLeft = e->getTextAs<Evpu>(); }},
-    {"bracTop", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->vertAdjTop = e->getTextAs<Evpu>(); }},
-    {"bracBot", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->vertAdjBot = e->getTextAs<Evpu>(); }},
-    {"onSingle", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->showOnSingleStaff = populateBoolean(e, i); }},
-});
-
 MUSX_XML_ELEMENT_ARRAY(SmartShapeEntryAssign, {
     {"shapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeEntryAssign>& i) { i->shapeNum = e->getTextAs<Cmper>(); }},
 });
@@ -388,7 +388,8 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"fullID", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameId = e->getTextAs<Cmper>(); }},
     {"fullXadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameXadj = e->getTextAs<int>(); }},
     {"fullYadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameYadj = e->getTextAs<int>(); }},
-    {"bracket", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->bracket = FieldPopulator<StaffGroup::Bracket>::createAndPopulate(e); }},
+    {"bracket", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i)
+        { i->bracket = FieldPopulator<Bracket>::createAndPopulate(e, i->getDocument(), SCORE_PARTID, Base::ShareMode::All, 0, 0, 0); }},
     {"barline", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->barlineType = toEnum<StaffGroup::BarlineType>(e); }},
     {"fullJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameJustify = toEnum<StaffGroup::AlignJustify>(e); }},
     {"abbrvJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameJustify = toEnum<StaffGroup::AlignJustify>(e); }},

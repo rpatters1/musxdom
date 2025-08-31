@@ -557,7 +557,7 @@ public:
      * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      * @param cmper Comperator parameter. This value is zero for enclosures taken from @ref others::MeasureNumberRegion.
      */
-    explicit Enclosure(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
+    explicit Enclosure(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
         : OthersBase(document, partId, shareMode, cmper) {}
 
     Evpu xAdd{};              ///< Center X offset - offsets text from center (in EVPU).

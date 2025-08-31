@@ -387,6 +387,50 @@ public:
 };
 
 /**
+ * @class Bracket
+ * @brief Describes a bracket. This class stands a alone when part of a collection of classes that defines an ossia.
+ * It is embedded when it is part of a @ref StaffGroup.
+ *
+ * cmper1: The bracket group number (for ossias)
+ * cmper2: Appears always to be zero (for ossias)
+ * inci: The inci within an ossia bracket group.
+ */
+class Bracket : public DetailsBase
+{
+public:
+    explicit Bracket(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, Inci inci)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2, inci)
+    {
+    }
+
+    /**
+     * @enum BracketStyle
+     * @brief Bracket types
+     */
+    enum class BracketStyle : int
+    {
+        None = 0,                   ///< No bracket (the default)
+        ThickLine = 1,              ///< Thick line, no hooks
+        BracketStraightHooks = 2,   ///< Thick bracket with straight hooks
+        PianoBrace = 3,             ///< Piano brace
+        Unknown4,                   ///< Possibly never used
+        Unknown5,                   ///< Possibly never used
+        BracketCurvedHooks = 6,     ///< Thick bracket with curved hooks
+        Unknown7,                   ///< Possibly never used
+        DeskBracket = 8             ///< Thin bracket with horizontal hook lines
+    };
+
+    BracketStyle style{};       ///< Bracket style (xml node is `<id>`)
+    Evpu horzAdjLeft{};         ///< "Distance from Left Edge of Staff" (xml node is `<bracPos>`)
+    Evpu vertAdjTop{};          ///< "Vertical Adjust (Top of Bracket)" (xml node is `<bracTop>`)
+    Evpu vertAdjBot{};          ///< "Vertical Adjust (Bottom of Bracket)" (xml node is `<bracBot>`)
+    bool showOnSingleStaff{};   ///< "Show Bracket If Group Contains Only One Staff" (only applies to staff groups: xml node is `<onSingle>`)
+
+    constexpr static std::string_view XmlNodeName = "brackSpec"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<Bracket>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
  * @class ChordAssign
  * @brief Represents chord symbol assignment for a staff and measure.
  *
@@ -1467,41 +1511,6 @@ public:
         None            ///< Never hide the staves in this StaffGroup
     };
 
-    /**
-     * @enum BracketStyle
-     * @brief Bracket style enum for StaffGroup
-     */
-    enum class BracketStyle : int
-    {
-        None = 0,                   ///< No bracket (the default)
-        ThickLine = 1,              ///< Thick line, no hooks
-        BracketStraightHooks = 2,   ///< Thick bracket with straight hooks
-        PianoBrace = 3,             ///< Piano brace
-        Unknown4,                   ///< Possibly never used
-        Unknown5,                   ///< Possibly never used
-        BracketCurvedHooks = 6,     ///< Thick bracket with curved hooks
-        Unknown7,                   ///< Possibly never used
-        DeskBracket = 8             ///< Thin bracket with horizontal hook lines
-    };
-
-    /** @brief Embedded class to represent the "bracket" node */
-    class Bracket
-    {
-    public:
-        BracketStyle style{};       ///< Bracket style (xml node is `<id>`)
-        Evpu horzAdjLeft{};         ///< "Distance from Left Edge of Staff" (xml node is `<bracPos>`)
-        Evpu vertAdjTop{};          ///< "Vertical Adjust (Top of Bracket)" (xml node is `<bracTop>`)
-        Evpu vertAdjBot{};          ///< "Vertical Adjust (Bottom of Bracket)" (xml node is `<bracBot>`)
-        bool showOnSingleStaff{};   ///< "Show Bracket If Group Contains Only One Staff" (xml node is `<onSingle>`)
-
-        /**
-         * @brief Default constructor for Bracket.
-         */
-        Bracket() = default;
-
-        static const xml::XmlElementArray<Bracket>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-
     // Public properties corresponding to the XML structure, ordered as they appear in the XML
     StaffCmper startInst{};                   ///< Starting staff ID
     StaffCmper endInst{};                     ///< Ending staff ID
@@ -1571,7 +1580,7 @@ public:
         }
         if (!bracket) {
             // this is not an error. Finale omits the bracket node for groups with entirely default bracket info.
-            bracket = std::make_shared<Bracket>();
+            bracket = std::make_shared<Bracket>(getDocument(), SCORE_PARTID, Base::ShareMode::All, 0, 0, 0);
         }
     }
 

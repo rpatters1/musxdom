@@ -171,13 +171,13 @@ struct FieldPopulator<TieAlterStart> : private FieldPopulator<TieAlterBase>
 };
 
 template <>
-inline StaffGroup::BracketStyle toEnum<StaffGroup::BracketStyle>(const int& value)
+inline Bracket::BracketStyle toEnum<Bracket::BracketStyle>(const int& value)
 {
-    if (value >= static_cast<int>(StaffGroup::BracketStyle::None) &&
-        value <= static_cast<int>(StaffGroup::BracketStyle::DeskBracket)) {
-        return static_cast<StaffGroup::BracketStyle>(value);
+    if (value >= static_cast<int>(Bracket::BracketStyle::None) &&
+        value <= static_cast<int>(Bracket::BracketStyle::DeskBracket)) {
+        return static_cast<Bracket::BracketStyle>(value);
     }
-    MUSX_UNKNOWN_XML("Invalid <bracket><id> value in XML for StaffGroup: " + std::to_string(value));
+    MUSX_UNKNOWN_XML("Invalid <bracket><id> value in XML for Bracket: " + std::to_string(value));
     return {};
 }
 
