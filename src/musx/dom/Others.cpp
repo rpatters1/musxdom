@@ -152,7 +152,7 @@ MusxInstance<TimeSignature> Measure::createTimeSignature(const std::optional<Sta
             }
         }
     }
-   return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
 }
 
 MusxInstance<TimeSignature> Measure::createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff) const

@@ -877,6 +877,39 @@ MUSX_XML_ELEMENT_ARRAY(MultiStaffInstrumentGroup, {
     {"staffNum3", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<StaffCmper>()); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(OssiaBounds, {
+    {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->topMargin = e->getTextAs<Evpu>(); }},
+    {"leftAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->leftMargin = e->getTextAs<Evpu>(); }},
+    {"rightAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->rightAdd = e->getTextAs<Evpu>(); }},
+    {"centerPull", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->centerPull = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(OssiaHeader, {
+    {"clef", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->clefId = e->getTextAs<ClefIndex>(); }},
+    {"keySig", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) {
+        i->keySig = FieldPopulator<KeySignature>::createAndPopulate(e, i->getDocument()); }},
+    {"beats", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->beats = e->getTextAs<Cmper>(); }},
+    {"divbeat", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->divBeat = e->getTextAs<Cmper>(); }},
+    {"group", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->bracketGroup = e->getTextAs<Cmper>(); }},
+    {"altNumTsig", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->compositeNumerator = populateBoolean(e, i); }},
+    {"altDenTsig", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->compositeDenominator = populateBoolean(e, i); }},
+    {"barline", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->barlineType = toEnum<Measure::BarlineType>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(OssiaMusic, {
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->percent = e->getTextAs<int>(); }},
+    {"qinst", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->sourceStaffId = e->getTextAs<StaffCmper>(); }},
+    {"qmeasure", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->sourceMeasureId = e->getTextAs<MeasCmper>(); }},
+    {"negLeftLine", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideLeftLine = populateBoolean(e, i); }},
+    {"negKey", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideKey = populateBoolean(e, i); }},
+    {"negTime", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideTime = populateBoolean(e, i); }},
+    {"negDynamic", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideDynamic = populateBoolean(e, i); }},
+    {"negStaff", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideStaff = populateBoolean(e, i); }},
+    {"negRepeat", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideRepeat = populateBoolean(e, i); }},
+    {"negClef", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideClef = populateBoolean(e, i); }},
+    {"posMode", [](const XmlElementPtr&, const std::shared_ptr<OssiaMusic>&) { /* no-op: intentionally suppressed */ }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Page, {
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->width = e->getTextAs<Evpu>(); }},

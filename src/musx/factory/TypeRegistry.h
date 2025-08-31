@@ -32,6 +32,7 @@
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
 #include "musx/dom/Details.h"
+#include "musx/dom/Ossia.h"
 #include "musx/dom/ShapeDesigner.h"
 #include "musx/dom/SmartShape.h"
 #include "musx/dom/Staff.h"
@@ -234,6 +235,9 @@ using RegisteredOthers = TypeRegistry <
     dom::others::AcciAmountSharps,
     dom::others::AcciOrderFlats,
     dom::others::AcciOrderSharps,
+    dom::others::OssiaBounds,           // this was possibly internally "arbitBounds" at one time, which may be why it serializes here  
+    dom::others::OssiaHeader,           // this was possibly internally "arbitHeader" at one time, which may be why it serializes here  
+    dom::others::OssiaMusic,            // this was possibly internally "arbitMusic" at one time, which may be why it serializes here
     dom::others::ArticulationDef,
     dom::others::BeatChartElement,
     dom::others::ChordSuffixElement,

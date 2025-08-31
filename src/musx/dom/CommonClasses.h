@@ -41,8 +41,9 @@ class IndependentStaffDetails; // forward delcaration
 } // namespace details
 
 namespace others {
-    class Measure;  // forward declaration
-    class Staff;    // forward declaration
+class Measure;      // forward declaration
+class OssiaHeader;  // forward declaration
+class Staff;        // forward declaration
 } // namespace others
 
 // This file contains common classes that are shared among Options, Others, and Details.
@@ -519,6 +520,7 @@ private:
     std::optional<bool> m_abbreviate;
 
     friend class others::Measure;
+    friend class others::OssiaHeader;
     friend class details::IndependentStaffDetails;
 };
 
