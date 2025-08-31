@@ -43,6 +43,15 @@ MusxInstance<TimeSignature> OssiaHeader::createTimeSignature() const
     return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator, false));
 }
 
+MusxInstanceList<details::Bracket> OssiaHeader::getBrackets() const
+{
+    // It appears that cmper2 is always zero. The fact that there is even a cmper2 at all may be a holdover
+    // from some legacy plan to use top-level brackets with staff groups rather than embedding the brackets
+    // in the staff groups. Or maybe there was an ancient design where brackets were entirely independent
+    // of staff groups and instead attached to system or staves. We may never know the reason.
+    return getDocument()->getDetails()->getArray<details::Bracket>(getRequestedPartId(), bracketGroup, 0);
+}
+
 } // namespace others
 } // namespace dom
 } // namespace musx

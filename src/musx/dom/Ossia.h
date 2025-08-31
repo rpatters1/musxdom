@@ -28,6 +28,11 @@
 
 namespace musx {
 namespace dom {
+
+namespace details {
+class Bracket;
+}
+
 namespace others {
 
 /**
@@ -82,6 +87,10 @@ public:
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this ossia.
     MusxInstance<TimeSignature> createTimeSignature() const;
+
+    /// @brief Gets the brackets associated with this ossia. The are in the order created. The
+    /// #details::Bracket::horzAdjLeft member controls the order in which they display.
+    MusxInstanceList<details::Bracket> getBrackets() const;
 
     constexpr static std::string_view XmlNodeName = "ossiaHeader"; ///< The XML node name for this type.
     static const xml::XmlElementArray<OssiaHeader>&
