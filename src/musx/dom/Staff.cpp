@@ -139,12 +139,6 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
         } else {
             mutableItem->percussionMapId = std::nullopt;
         }
-        auto check = [&](bool mask) -> bool {
-            if constexpr (isForStyle) {
-                return mask;
-            }
-            return true;
-        };
         bool checkNoteShapes = true;
         if constexpr (isForStyle) {
             checkNoteShapes = item->masks->useNoteShapes;

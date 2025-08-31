@@ -388,18 +388,28 @@ public:
 
 /**
  * @class Bracket
- * @brief Describes a bracket. This class stands a alone when part of a collection of classes that defines an ossia.
- * It is embedded when it is part of a @ref StaffGroup.
+ * @brief Represents a bracket, used in two different contexts:
  *
- * cmper1: The bracket group number (for ossias)
- * cmper2: Appears always to be zero (for ossias)
- * inci: The inci within an ossia bracket group.
+ * - **Ossia bracket groups**: Bracket is a top-level object that helps define an ossia.
+ *   - cmper1: The bracket group number for the ossia.
+ *   - cmper2: Always appears to be zero.
+ *   - inci: The index within the ossia bracket group.
+ *
+ * - **Staff groups**: Bracket is embedded inside @ref StaffGroup.
+ *   - In this case cmper1, cmper2, and inci have no meaning and should be zero.
  */
 class Bracket : public DetailsBase
 {
 public:
+    /// @brief Constructor for top-level instances.
     explicit Bracket(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, Inci inci)
         : DetailsBase(document, partId, shareMode, cmper1, cmper2, inci)
+    {
+    }
+
+    /// @brief Constructor for embedded instances.
+    explicit Bracket(const DocumentWeakPtr& document)
+        : DetailsBase(document, SCORE_PARTID, Base::ShareMode::All, 0, 0, 0)
     {
     }
 
@@ -1580,7 +1590,7 @@ public:
         }
         if (!bracket) {
             // this is not an error. Finale omits the bracket node for groups with entirely default bracket info.
-            bracket = std::make_shared<Bracket>(getDocument(), SCORE_PARTID, Base::ShareMode::All, 0, 0, 0);
+            bracket = std::make_shared<Bracket>(getDocument());
         }
     }
 

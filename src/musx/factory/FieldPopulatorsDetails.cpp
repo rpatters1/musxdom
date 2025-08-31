@@ -388,8 +388,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"fullID", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameId = e->getTextAs<Cmper>(); }},
     {"fullXadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameXadj = e->getTextAs<int>(); }},
     {"fullYadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameYadj = e->getTextAs<int>(); }},
-    {"bracket", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i)
-        { i->bracket = FieldPopulator<Bracket>::createAndPopulate(e, i->getDocument(), SCORE_PARTID, Base::ShareMode::All, 0, 0, 0); }},
+    {"bracket", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->bracket = FieldPopulator<Bracket>::createAndPopulate(e, i->getDocument()); }},
     {"barline", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->barlineType = toEnum<StaffGroup::BarlineType>(e); }},
     {"fullJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameJustify = toEnum<StaffGroup::AlignJustify>(e); }},
     {"abbrvJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameJustify = toEnum<StaffGroup::AlignJustify>(e); }},
