@@ -18,5 +18,5 @@ var searchData=
   ['beatchartelement_15',['BeatChartElement',['../classmusx_1_1dom_1_1others_1_1BeatChartElement.html',1,'musx::dom::others']]],
   ['blocktext_16',['BlockText',['../classmusx_1_1dom_1_1texts_1_1BlockText.html',1,'musx::dom::texts']]],
   ['bookmarktext_17',['BookmarkText',['../classmusx_1_1dom_1_1texts_1_1BookmarkText.html',1,'musx::dom::texts']]],
-  ['bracket_18',['Bracket',['../classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html',1,'musx::dom::details::StaffGroup']]]
+  ['bracket_18',['Bracket',['../classmusx_1_1dom_1_1details_1_1Bracket.html',1,'musx::dom::details']]]
 ];

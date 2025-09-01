@@ -4,6 +4,7 @@ var classmusx_1_1dom_1_1options_1_1MiscOptions =
     [ "alignMeasureNumbersWithBarlines", "classmusx_1_1dom_1_1options_1_1MiscOptions.html#a5e0d78c81d636b9da7bf9fc29268df82", null ],
     [ "consolidateRestsAcrossLayers", "classmusx_1_1dom_1_1options_1_1MiscOptions.html#a468b44c8ac1c4c9b15a73f333432968b", null ],
     [ "keepWrittenOctaveInConcertPitch", "classmusx_1_1dom_1_1options_1_1MiscOptions.html#a8cf93fee9d505c83ed107be980a8f5e3", null ],
+    [ "pickupValue", "classmusx_1_1dom_1_1options_1_1MiscOptions.html#a6086bdeb8760809f48fb370e448c8670", null ],
     [ "shapeDesignerDashLength", "classmusx_1_1dom_1_1options_1_1MiscOptions.html#af2732b25eab7eb1991e180c5ec155568", null ],
     [ "shapeDesignerDashSpace", "classmusx_1_1dom_1_1options_1_1MiscOptions.html#aba6017ce6ed80dd7b154bf9ed2dd8c81", null ],
     [ "showActiveLayerOnly", "classmusx_1_1dom_1_1options_1_1MiscOptions.html#a600fb6f99f3619c809db467017822fb1", null ],

@@ -90,7 +90,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "flatBeams", "classmusx_1_1dom_1_1others_1_1Staff.html#af4793add52f71ae89f424e4d0d6e4c44", null ],
     [ "floatKeys", "classmusx_1_1dom_1_1others_1_1Staff.html#a79e69fc3ef29191f6ae6f1083c91256b", null ],
     [ "floatTime", "classmusx_1_1dom_1_1others_1_1Staff.html#a854bc20336492ffbfbe80d07e4a48da7", null ],
-    [ "fretInstrumentId", "classmusx_1_1dom_1_1others_1_1Staff.html#aad4ca826cafe1bd0e0fc96daa9fe96c0", null ],
+    [ "fretInstId", "classmusx_1_1dom_1_1others_1_1Staff.html#abbf8d659d12daa732bc8894b14fbeee4", null ],
     [ "fullNamePosFromStyle", "classmusx_1_1dom_1_1others_1_1Staff.html#a3249c8d8f460350671a08bea4f464f48", null ],
     [ "fullNamePosId", "classmusx_1_1dom_1_1others_1_1Staff.html#ac9034c5f9adfd6a5a3e498f64590eb20", null ],
     [ "fullNameTextId", "classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af", null ],

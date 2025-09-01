@@ -75,12 +75,15 @@ var hierarchy =
           [ "musx::dom::details::BaselineLyricsSection", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html", null ],
           [ "musx::dom::details::BaselineLyricsVerse", "classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html", null ]
         ] ],
+        [ "musx::dom::details::Bracket", "classmusx_1_1dom_1_1details_1_1Bracket.html", null ],
         [ "musx::dom::details::CenterShape", "classmusx_1_1dom_1_1details_1_1CenterShape.html", null ],
         [ "musx::dom::details::ChordAssign", "classmusx_1_1dom_1_1details_1_1ChordAssign.html", null ],
         [ "musx::dom::details::FretboardDiagram", "classmusx_1_1dom_1_1details_1_1FretboardDiagram.html", null ],
         [ "musx::dom::details::GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", null ],
         [ "musx::dom::details::IndependentStaffDetails", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html", null ],
         [ "musx::dom::details::KeySymbolListElement", "classmusx_1_1dom_1_1details_1_1KeySymbolListElement.html", null ],
+        [ "musx::dom::details::MeasureNumberIndividualPositioning", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html", null ],
+        [ "musx::dom::details::MeasureOssiaAssign", "classmusx_1_1dom_1_1details_1_1MeasureOssiaAssign.html", null ],
         [ "musx::dom::details::MeasureTextAssign", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html", null ],
         [ "musx::dom::details::ShapeNoteBase", "classmusx_1_1dom_1_1details_1_1ShapeNoteBase.html", [
           [ "musx::dom::details::ShapeNote", "classmusx_1_1dom_1_1details_1_1ShapeNote.html", null ],
@@ -137,6 +140,9 @@ var hierarchy =
           [ "musx::dom::others::RepeatPassList", "classmusx_1_1dom_1_1others_1_1RepeatPassList.html", null ],
           [ "musx::dom::others::ShapeData", "classmusx_1_1dom_1_1others_1_1ShapeData.html", null ]
         ] ],
+        [ "musx::dom::OthersArray< Evpu >", "classmusx_1_1dom_1_1OthersArray.html", [
+          [ "musx::dom::others::SplitMeasure", "classmusx_1_1dom_1_1others_1_1SplitMeasure.html", null ]
+        ] ],
         [ "musx::dom::OthersArray< StaffCmper >", "classmusx_1_1dom_1_1OthersArray.html", [
           [ "musx::dom::others::StaffList", "classmusx_1_1dom_1_1others_1_1StaffList.html", [
             [ "musx::dom::others::StaffListCategoryParts", "classmusx_1_1dom_1_1others_1_1StaffListCategoryParts.html", null ],
@@ -170,8 +176,8 @@ var hierarchy =
         ] ],
         [ "musx::dom::others::FontDefinition", "classmusx_1_1dom_1_1others_1_1FontDefinition.html", null ],
         [ "musx::dom::others::Frame", "classmusx_1_1dom_1_1others_1_1Frame.html", null ],
+        [ "musx::dom::others::FretInstrument", "classmusx_1_1dom_1_1others_1_1FretInstrument.html", null ],
         [ "musx::dom::others::FretboardGroup", "classmusx_1_1dom_1_1others_1_1FretboardGroup.html", null ],
-        [ "musx::dom::others::FretboardInstrument", "classmusx_1_1dom_1_1others_1_1FretboardInstrument.html", null ],
         [ "musx::dom::others::FretboardStyle", "classmusx_1_1dom_1_1others_1_1FretboardStyle.html", null ],
         [ "musx::dom::others::KeyAttributes", "classmusx_1_1dom_1_1others_1_1KeyAttributes.html", null ],
         [ "musx::dom::others::KeyFormat", "classmusx_1_1dom_1_1others_1_1KeyFormat.html", null ],
@@ -193,7 +199,11 @@ var hierarchy =
           [ "musx::dom::others::NamePositionStyleAbbreviated", "classmusx_1_1dom_1_1others_1_1NamePositionStyleAbbreviated.html", null ],
           [ "musx::dom::others::NamePositionStyleFull", "classmusx_1_1dom_1_1others_1_1NamePositionStyleFull.html", null ]
         ] ],
+        [ "musx::dom::others::OssiaBounds", "classmusx_1_1dom_1_1others_1_1OssiaBounds.html", null ],
+        [ "musx::dom::others::OssiaHeader", "classmusx_1_1dom_1_1others_1_1OssiaHeader.html", null ],
+        [ "musx::dom::others::OssiaMusic", "classmusx_1_1dom_1_1others_1_1OssiaMusic.html", null ],
         [ "musx::dom::others::Page", "classmusx_1_1dom_1_1others_1_1Page.html", null ],
+        [ "musx::dom::others::PageOssiaAssign", "classmusx_1_1dom_1_1others_1_1PageOssiaAssign.html", null ],
         [ "musx::dom::others::PageTextAssign", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html", null ],
         [ "musx::dom::others::PartDefinition", "classmusx_1_1dom_1_1others_1_1PartDefinition.html", null ],
         [ "musx::dom::others::PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", null ],
@@ -238,7 +248,6 @@ var hierarchy =
         [ "musx::dom::texts::SmartShapeText", "classmusx_1_1dom_1_1texts_1_1SmartShapeText.html", null ]
       ] ]
     ] ],
-    [ "musx::dom::details::StaffGroup::Bracket", "classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html", null ],
     [ "musx::dom::details::FretboardDiagram::Cell", "classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Cell.html", null ],
     [ "musx::dom::others::Staff::ChromaticTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html", null ],
     [ "musx::dom::others::TimeCompositeLower::CompositeItem", "classmusx_1_1dom_1_1others_1_1TimeCompositeLower_1_1CompositeItem.html", null ],
@@ -338,7 +347,7 @@ var hierarchy =
     [ "musx::dom::details::StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html", null ],
     [ "musx::dom::options::StemOptions::StemConnection", "classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html", null ],
     [ "musx::dom::others::KeyMapArray::StepElement", "classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html", null ],
-    [ "musx::dom::others::FretboardInstrument::StringInfo", "classmusx_1_1dom_1_1others_1_1FretboardInstrument_1_1StringInfo.html", null ],
+    [ "musx::dom::others::FretInstrument::StringInfo", "classmusx_1_1dom_1_1others_1_1FretInstrument_1_1StringInfo.html", null ],
     [ "musx::dom::options::LyricOptions::SyllablePosStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html", null ],
     [ "musx::factory::RegisteredDetails::template is_registered_type", null, [
       [ "musx::dom::is_pool_type< DetailsPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01DetailsPool_00_01T_01_4.html", null ]

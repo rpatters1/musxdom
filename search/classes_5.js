@@ -12,6 +12,6 @@ var searchData=
   ['frame_9',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html',1,'musx::dom::others']]],
   ['fretboarddiagram_10',['FretboardDiagram',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html',1,'musx::dom::details']]],
   ['fretboardgroup_11',['FretboardGroup',['../classmusx_1_1dom_1_1others_1_1FretboardGroup.html',1,'musx::dom::others']]],
-  ['fretboardinstrument_12',['FretboardInstrument',['../classmusx_1_1dom_1_1others_1_1FretboardInstrument.html',1,'musx::dom::others']]],
-  ['fretboardstyle_13',['FretboardStyle',['../classmusx_1_1dom_1_1others_1_1FretboardStyle.html',1,'musx::dom::others']]]
+  ['fretboardstyle_12',['FretboardStyle',['../classmusx_1_1dom_1_1others_1_1FretboardStyle.html',1,'musx::dom::others']]],
+  ['fretinstrument_13',['FretInstrument',['../classmusx_1_1dom_1_1others_1_1FretInstrument.html',1,'musx::dom::others']]]
 ];

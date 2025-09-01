@@ -10,5 +10,5 @@ var searchData=
   ['beamoptions_7',['BeamOptions',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a148a81f46d754a292b4825d46874c477',1,'musx::dom::options::BeamOptions']]],
   ['beamstubdirection_8',['BeamStubDirection',['../classmusx_1_1dom_1_1details_1_1BeamStubDirection.html#afcf9ce5888da9b563830c7e05d4b45a9',1,'musx::dom::details::BeamStubDirection']]],
   ['beatchartelement_9',['BeatChartElement',['../classmusx_1_1dom_1_1others_1_1BeatChartElement.html#ac997138bee0f6bbac68ab5d0f78d46d4',1,'musx::dom::others::BeatChartElement']]],
-  ['bracket_10',['Bracket',['../classmusx_1_1dom_1_1details_1_1StaffGroup_1_1Bracket.html#abc59c0d7b28f71ff579b57a0081ce9ad',1,'musx::dom::details::StaffGroup::Bracket']]]
+  ['bracket_10',['bracket',['../classmusx_1_1dom_1_1details_1_1Bracket.html#a58c69e19142094d9941e905e34ded602',1,'musx::dom::details::Bracket::Bracket(const DocumentWeakPtr &amp;document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, Inci inci)'],['../classmusx_1_1dom_1_1details_1_1Bracket.html#a6bab72a68be812452c300e03744ac57a',1,'musx::dom::details::Bracket::Bracket(const DocumentWeakPtr &amp;document)']]]
 ];

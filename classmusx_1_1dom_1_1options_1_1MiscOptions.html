@@ -168,6 +168,8 @@ Public Attributes</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>showRepeatsForParts</b> {}</td></tr>
 <tr class="memdesc:a24a27d948cdc5c208a086fafaa7356eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Show Repeats for Parts" <br /></td></tr>
 <tr class="separator:a24a27d948cdc5c208a086fafaa7356eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6086bdeb8760809f48fb370e448c8670" id="r_a6086bdeb8760809f48fb370e448c8670"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1MiscOptions.html#a6086bdeb8760809f48fb370e448c8670">pickupValue</a> {}</td></tr>
+<tr class="separator:a6086bdeb8760809f48fb370e448c8670"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cf93fee9d505c83ed107be980a8f5e3" id="r_a8cf93fee9d505c83ed107be980a8f5e3"><td class="memItemLeft" align="right" valign="top"><a id="a8cf93fee9d505c83ed107be980a8f5e3" name="a8cf93fee9d505c83ed107be980a8f5e3"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>keepWrittenOctaveInConcertPitch</b> {}</td></tr>
 <tr class="memdesc:a8cf93fee9d505c83ed107be980a8f5e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Keep Octave Transposition in Concert Pitch" (xml node is <code>&lt;retainOctaveTransInConcertPitch&gt;</code>) <br /></td></tr>
@@ -241,7 +243,23 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Options controlling miscellaneous settings. </p>
 <p>This class is identified by the XML node name "miscOptions". </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6086bdeb8760809f48fb370e448c8670" name="a6086bdeb8760809f48fb370e448c8670"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6086bdeb8760809f48fb370e448c8670">&#9670;&#160;</a></span>pickupValue</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> musx::dom::options::MiscOptions::pickupValue {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The length of a pickup note on the first bar. This value is informational. It is only populated if you used the "Document-&gt;Pickup Measure" menu to create the pickup. If the pickup was created in a legacy version of Finale, the value is probably not populated. The pickup itself is implemented with a spacer. See <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html">others::Frame</a> for more information. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

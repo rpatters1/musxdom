@@ -11,7 +11,7 @@ var classmusx_1_1dom_1_1others_1_1Enclosure =
       [ "Heptagon", "classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256a1d9f8e8738a04a9dfadac18e2f49cee9", null ],
       [ "Octogon", "classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256aa9a626f4a3f3747e5a2acc8efa20dc41", null ]
     ] ],
-    [ "Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html#a39d0c31eae681878ba382b93f7e7df27", null ],
+    [ "Enclosure", "classmusx_1_1dom_1_1others_1_1Enclosure.html#a16eb6d6996b874384713fe3b28a5b81c", null ],
     [ "cornerRadius", "classmusx_1_1dom_1_1others_1_1Enclosure.html#adc9364ffa5ba9b3ff0a269aec8b9cb8e", null ],
     [ "equalAspect", "classmusx_1_1dom_1_1others_1_1Enclosure.html#adc45c942c6c8c141bd8988779134d319", null ],
     [ "fixedSize", "classmusx_1_1dom_1_1others_1_1Enclosure.html#ad5912285fb1fdcf7b3e4dc87a596bcb9", null ],

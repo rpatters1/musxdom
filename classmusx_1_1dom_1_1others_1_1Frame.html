@@ -257,10 +257,11 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the attributes of a TGF entry frame. </p>
-<p>The inci is almost always zero. It appears there can be multiple incis when there is an old-style pickup. In this case, the observed order of <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html" title="Represents the attributes of a TGF entry frame.">Frame</a> incis is</p><ul>
-<li><code>inci 0</code>: startTime</li>
+<p>The inci is almost always zero. Multiple incis are used to implement legacy pickup measures ("spacers"). In this case, the observed order of <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html" title="Represents the attributes of a TGF entry frame.">Frame</a> incis is</p><ul>
+<li><code>inci 0</code>: startTime (which implements the spacer)</li>
 <li><code>inci 1</code>: startEntry &amp; endEntry</li>
 </ul>
+<p>The <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a5ee488176e8e510a181cc59b9bcfeef9" title="Returns the EntryFrame for all entries in the given layer.">details::GFrameHoldContext::createEntryFrame</a> function implements spacers by starting the first entry in the frame after the spacer.</p>
 <p>The class is identified by the XML node name "frameSpec". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a3a38f8583dcd4d369e69464c7dcdc200" name="a3a38f8583dcd4d369e69464c7dcdc200"></a>

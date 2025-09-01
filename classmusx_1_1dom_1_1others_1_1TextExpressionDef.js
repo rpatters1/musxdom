@@ -9,6 +9,7 @@ var classmusx_1_1dom_1_1others_1_1TextExpressionDef =
     [ "categoryId", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a39dcf072ed000bc74e7528a20d8f16d1", null ],
     [ "createdByHp", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#abbc4d1c28faeb968b7618ec5455c6176", null ],
     [ "description", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a8f224e9a49e51d763f1dc9f3450712d5", null ],
+    [ "execShape", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a8bc1cf3ea84e9929249650addd857e60", null ],
     [ "hasEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a9ba76845bcfbba2956e56a31237fc748", null ],
     [ "hideMeasureNum", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a203d2da849aa2ce8f0695ca26ce22a85", null ],
     [ "horzExprJustification", "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#aea7a05e0e5282961b5a8bddc1c0903c3", null ],

@@ -23,7 +23,7 @@ var searchData=
   ['innertiph_20',['innerTipH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ac90d1313561f018beb94fdc8a74541c3',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['innertipv_21',['innerTipV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ac430f0c09a7cdc3ff1fabbf2fb103674',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['inserthandling_22',['insertHandling',['../structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#abedd7b2e4770b5ac09e3c2b2413037e0',1,'musx::util::EnigmaString::EnigmaParsingOptions']]],
-  ['inset_23',['inset',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html#a57f2e610406323a25fa00ea7554e2899',1,'musx::dom::options::SmartShapeOptions::ControlStyle']]],
+  ['inset_23',['inset',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#afaaee136aeca861afd7196a00498d6df',1,'musx::dom::others::TextBlock::inset'],['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html#a57f2e610406323a25fa00ea7554e2899',1,'musx::dom::options::SmartShapeOptions::ControlStyle::inset']]],
   ['insetfixed_24',['insetFixed',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76',1,'musx::dom::options::TieOptions::ControlPoint']]],
   ['insetratio_25',['insetRatio',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521',1,'musx::dom::options::TieOptions::ControlPoint']]],
   ['insetratio1_26',['insetRatio1',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a6cab3eb2d7f1f4b822924694b3c6f3f2',1,'musx::dom::details::TieAlterBase']]],
@@ -49,8 +49,9 @@ var searchData=
   ['isnumber_46',['isNumber',['../classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html#a97456d2f505490bd97c244cb13aae1bb',1,'musx::dom::others::ChordSuffixElement']]],
   ['isrelative_47',['isRelative',['../classmusx_1_1dom_1_1others_1_1TempoChange.html#af64f51c9326806753eac09a1e8501e12',1,'musx::dom::others::TempoChange']]],
   ['isshape_48',['isShape',['../classmusx_1_1dom_1_1options_1_1ClefOptions_1_1ClefDef.html#aafb0704b240bf7675074b1eb4879487b',1,'musx::dom::options::ClefOptions::ClefDef']]],
-  ['isvalid_49',['isvalid',['../classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b',1,'musx::dom::Entry::isValid'],['../classmusx_1_1dom_1_1Note.html#a3e9ab0528cef1b53791ad277da67b26b',1,'musx::dom::Note::isValid']]],
-  ['italic_50',['italic',['../classmusx_1_1dom_1_1FontInfo.html#ace55cebaa51ad5c68f5e177301938e2f',1,'musx::dom::FontInfo']]],
-  ['italicizecapochords_51',['italicizeCapoChords',['../classmusx_1_1dom_1_1options_1_1ChordOptions.html#a1aae380524b833c9fa2a1586b8aefdb2',1,'musx::dom::options::ChordOptions']]],
-  ['items_52',['items',['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html#aa55d5b45346d9efc22a5d80909a19723',1,'musx::dom::others::TimeCompositeUpper::items'],['../classmusx_1_1dom_1_1others_1_1TimeCompositeLower.html#ac05b4c16b962e0ff0afb19766fe75e8f',1,'musx::dom::others::TimeCompositeLower::items']]]
+  ['isstemsidewhenmultiplelayers_49',['isStemSideWhenMultipleLayers',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ade92fae0e13b79f2e38d5387a2de956c',1,'musx::dom::others::ArticulationDef']]],
+  ['isvalid_50',['isvalid',['../classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b',1,'musx::dom::Entry::isValid'],['../classmusx_1_1dom_1_1Note.html#a3e9ab0528cef1b53791ad277da67b26b',1,'musx::dom::Note::isValid']]],
+  ['italic_51',['italic',['../classmusx_1_1dom_1_1FontInfo.html#ace55cebaa51ad5c68f5e177301938e2f',1,'musx::dom::FontInfo']]],
+  ['italicizecapochords_52',['italicizeCapoChords',['../classmusx_1_1dom_1_1options_1_1ChordOptions.html#a1aae380524b833c9fa2a1586b8aefdb2',1,'musx::dom::options::ChordOptions']]],
+  ['items_53',['items',['../classmusx_1_1dom_1_1others_1_1TimeCompositeLower.html#ac05b4c16b962e0ff0afb19766fe75e8f',1,'musx::dom::others::TimeCompositeLower::items'],['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html#aa55d5b45346d9efc22a5d80909a19723',1,'musx::dom::others::TimeCompositeUpper::items']]]
 ];

@@ -273,13 +273,13 @@ $(document).ready(function(){initNavTree('FieldPopulatorsDetails_8h_source.html'
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>};</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="keyword">template</span> &lt;&gt;</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="keyword">inline</span> StaffGroup::BracketStyle toEnum&lt;StaffGroup::BracketStyle&gt;(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; value)</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="keyword">inline</span> Bracket::BracketStyle toEnum&lt;Bracket::BracketStyle&gt;(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; value)</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>{</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="keywordflow">if</span> (value &gt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(StaffGroup::BracketStyle::None) &amp;&amp;</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        value &lt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(StaffGroup::BracketStyle::DeskBracket)) {</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>StaffGroup::BracketStyle<span class="keyword">&gt;</span>(value);</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="keywordflow">if</span> (value &gt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Bracket::BracketStyle::None) &amp;&amp;</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        value &lt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Bracket::BracketStyle::DeskBracket)) {</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>Bracket::BracketStyle<span class="keyword">&gt;</span>(value);</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    }</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;Invalid &lt;bracket&gt;&lt;id&gt; value in XML for StaffGroup: &quot;</span> + std::to_string(value));</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;Invalid &lt;bracket&gt;&lt;id&gt; value in XML for Bracket: &quot;</span> + std::to_string(value));</div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <span class="keywordflow">return</span> {};</div>
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>}</div>
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>

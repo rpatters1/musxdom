@@ -1,11 +1,11 @@
 var classmusx_1_1dom_1_1others_1_1ShapeExpressionDef =
 [
     [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#ab0266e213ac598c09cd07c1faf308eaf", null ],
-    [ "requireAllFields", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a2167c3cc2135191d548f84f7d9770b38", null ],
     [ "auxData1", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a0a07cc9fa9bd3d839c1c978ccf364e62", null ],
     [ "breakMmRest", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a1971654a73f4d730511130a7a276cdac", null ],
     [ "categoryId", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a13f2061288fa15a54abef3cd212956f8", null ],
     [ "description", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a3eb33310221bde902596c9dae45acfa8", null ],
+    [ "execShape", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#ae6a1538ca186e0e02f58802f6191f9d4", null ],
     [ "horzExprJustification", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a6bab0d97ab08035515a79008243e646c", null ],
     [ "horzMeasExprAlign", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a6e3e92258ef45ec1b11b2f9f8669166b", null ],
     [ "masterShape", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a0d4d312ef89a4e29beab6b951fd39abd", null ],
