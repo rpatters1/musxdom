@@ -579,10 +579,12 @@ public:
  * @class Frame
  * @brief Represents the attributes of a TGF entry frame.
  *
- * The inci is almost always zero. It appears there can be multiple incis when there is an old-style pickup.
+ * The inci is almost always zero. Multiple incis are used to implement legacy pickup measures ("spacers").
  * In this case, the observed order of Frame incis is
- * - `inci 0`: startTime
+ * - `inci 0`: startTime (which implements the spacer)
  * - `inci 1`: startEntry & endEntry
+ *
+ * The #details::GFrameHoldContext::createEntryFrame function implements spacers by starting the first entry in the frame after the spacer.
  *
  * The class is identified by the XML node name "frameSpec".
  */
@@ -593,7 +595,6 @@ public:
     explicit Frame(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci = 0)
         : OthersBase(document, partId, shareMode, cmper, inci) {}
 
-    // Public properties corresponding to the XML structure
     EntryNumber startEntry{}; ///< Start entry number for this frame. (Appears to be zero when #startTime is supplied.)
     EntryNumber endEntry{};   ///< End entry number for this frame. (Appears to be zero when #startTime is supplied.)
     Edu startTime{};          ///< The starting position within the measure. (Appears to be zero when #startEntry and #endEntry are supplied.)

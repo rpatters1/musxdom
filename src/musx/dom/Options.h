@@ -709,6 +709,10 @@ public:
         : OptionsBase(document, partId, shareMode) {}
 
     bool showRepeatsForParts{};             ///< "Show Repeats for Parts"
+    Edu pickupValue{};                      ///< The length of a pickup note on the first bar. This value is informational. It is only populated if you used
+                                            ///< the "Document->Pickup Measure" menu to create the pickup. If the pickup was created in a legacy version of Finale,
+                                            ///< the value is probably not populated. The pickup itself is implemented with a spacer.
+                                            ///< See @ref others::Frame for more information.
     bool keepWrittenOctaveInConcertPitch{}; ///< "Keep Octave Transposition in Concert Pitch" (xml node is `<retainOctaveTransInConcertPitch>`)
     bool showActiveLayerOnly{};             ///< "Show Active Layer Only" (xml node is `<showCurrentLayerOnly>`)
     bool consolidateRestsAcrossLayers{};    ///< "Consolidate Rests Across Layers" (xml node is `<combineRestsAcrossLayers>`)
