@@ -1153,7 +1153,7 @@ public:
     bool groupBarlineOverride{}; ///< Override the barline specified by a @ref details::StaffGroup (if any)
     bool showFullNames{};       ///< "Show Full Staff & Group Names"
     bool hasMeasNumbIndivPos{}; ///< Has individual measure numbering positioning. (xml node is `<mnSepPlace>`)
-    bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
+    bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" See @ref SplitMeasure. (xml node is `<posSplit>`)
     bool compositeNumerator{};  ///< Indicates a composite numerator for the time signature. (xml node is `<altNumTsig>`)
     bool compositeDenominator{}; ///< Indicates a composite denominator for the time signature. (xml node is `<altDenTsig>`)
     ShowKeySigMode showKey{};   ///< Show mode for key signatures
@@ -2182,6 +2182,40 @@ public:
 
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
+ * @class SplitMeasure
+ * @brief Contains the split point(s) where a measure may be split between two systems. A measure can only
+ * split once, but multiple split points in theory provide multiple split possibilities depending on the spacing.
+ * (However, see the warning below for the actual situation.)
+ *
+ * The value array is Evpu values in Scroll View. Knowing where to split the music requires being able
+ * to interpolate between Scroll View Evpu and beat position. That, in turn, requires understanding beat charts
+ * and how Finale does layout.
+ *
+ * @note This is a legacy feature of Finale. It was never well-implemented across the entire app,
+ * and as the years passed it became increasingly less useful due to newer features not knowing about it.
+ * The result is that very few Finale files are likely to be using split points, and the longer ago they were
+ * created, the more likely they are (though still unlikely).
+ *
+ * @warning The earliest Finale versions could create multiple split points, but the most recent can only
+ * create a single split point. However, any Finale version can upgrade an older file with multiple values
+ * and continue to have them, so even a file most recently saved by Finale 27.4 can have multiple split points.
+ * Either way, both in legacy and recent Finale versions, multiple split points cause program crashes or
+ * weird recurring meaure layouts. Multiple split points are unusable in any Finale version.
+ *
+ * This class is identified by the XML node name "splitMeas".
+ */
+class SplitMeasure : public OthersArray<Evpu>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "splitMeas"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SplitMeasure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

@@ -277,6 +277,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ShapeData,
     dom::others::ShapeDef,
     dom::others::ShapeInstructionList,
+    dom::others::SplitMeasure,
     dom::others::SmartShape,
     dom::others::SmartShapeMeasureAssign,
     dom::others::SmartShapeCustomLine,      // node name is `ssLineStyle`

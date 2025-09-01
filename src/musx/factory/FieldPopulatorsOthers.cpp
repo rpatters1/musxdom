@@ -1179,6 +1179,10 @@ MUSX_XML_ELEMENT_ARRAY(SmartShapeMeasureAssign, {
     {"centerShapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeMeasureAssign>& i) { i->centerShapeNum = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(SplitMeasure, {
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<SplitMeasure>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Staff::KeySigTransposition, {
     {"interval", [](const XmlElementPtr& e, const std::shared_ptr<Staff::KeySigTransposition>& i) { i->interval = e->getTextAs<int>(); }},
     {"adjust", [](const XmlElementPtr& e, const std::shared_ptr<Staff::KeySigTransposition>& i) { i->adjust = e->getTextAs<int>(); }},
