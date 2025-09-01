@@ -880,7 +880,7 @@ MUSX_XML_ELEMENT_ARRAY(MultiStaffInstrumentGroup, {
 MUSX_XML_ELEMENT_ARRAY(OssiaBounds, {
     {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->topMargin = e->getTextAs<Evpu>(); }},
     {"leftAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->leftMargin = e->getTextAs<Evpu>(); }},
-    {"rightAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->rightAdd = e->getTextAs<Evpu>(); }},
+    {"rightAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->rightMargin = e->getTextAs<Evpu>(); }},
     {"centerPull", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->centerPull = e->getTextAs<Evpu>(); }},
 });
 

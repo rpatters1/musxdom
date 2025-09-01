@@ -53,7 +53,7 @@ public:
 
     Evpu topMargin{};       ///< Top margin (negative moves music down) (xml node is `<topAdd>`)
     Evpu leftMargin{};      ///< Left margin (xml node is `<leftAdd>`)
-    Evpu rightAdd{};        ///< Right margin (xml node is `<rightAdd>`)
+    Evpu rightMargin{};     ///< Right margin (xml node is `<rightAdd>`)
     Evpu centerPull{};      ///< Centering adjustment,
 
     constexpr static std::string_view XmlNodeName = "ossiaBounds"; ///< The XML node name for this type.
@@ -184,7 +184,7 @@ public:
     {
     }
 
-    Cmper ossiaId{};     ///< Cmper of related @ref OssiaBounds, @ref OssiaHeader, and @ref OssiaMusic classes. (xml node is `<arbnum>`)
+    Cmper ossiaId{};     ///< Cmper of related @ref others::OssiaBounds, @ref others::OssiaHeader, and @ref others::OssiaMusic classes. (xml node is `<arbnum>`)
     Evpu xOffset{};      ///< Horizontal offset (xml node is `<topAdd>`)
     Evpu yOffset{};      ///< Vertical offset (xml node is `<leftAdd>`)
     bool hidden{};       ///< Whether the ossia is hidden.

@@ -131,14 +131,14 @@ TEST(OssiaBoundsTest, PopulateFields)
     ASSERT_TRUE(b1) << "OssiaBounds with cmper 1 not found";
     EXPECT_EQ(b1->topMargin,   Evpu(-12));
     EXPECT_EQ(b1->leftMargin,  Evpu(5));
-    EXPECT_EQ(b1->rightAdd,    Evpu(7));
+    EXPECT_EQ(b1->rightMargin,    Evpu(7));
     EXPECT_EQ(b1->centerPull,  Evpu(11));
 
     auto b2 = others->get<others::OssiaBounds>(SCORE_PARTID, 2);
     ASSERT_TRUE(b2) << "OssiaBounds with cmper 2 not found";
     EXPECT_EQ(b2->topMargin,   Evpu(2));
     EXPECT_EQ(b2->leftMargin,  Evpu(4));
-    EXPECT_EQ(b2->rightAdd,    Evpu(6));
+    EXPECT_EQ(b2->rightMargin,    Evpu(6));
     EXPECT_EQ(b2->centerPull,  Evpu(8));
 }
 
