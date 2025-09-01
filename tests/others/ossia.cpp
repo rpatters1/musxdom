@@ -98,6 +98,26 @@ constexpr static musxtest::string_view ossiaXml = R"xml(
       </tudata>
     </timeUpper>
   </others>
+  <details>
+    <brackSpec cmper1="1" cmper2="0" inci="0">
+      <id>6</id>
+      <bracPos>-12</bracPos>
+      <bracTop>13</bracTop>
+      <bracBot>-13</bracBot>
+    </brackSpec>
+    <brackSpec cmper1="2" cmper2="0" inci="0">
+      <id>3</id>
+      <bracPos>-24</bracPos>
+      <bracTop>13</bracTop>
+      <bracBot>-13</bracBot>
+    </brackSpec>
+    <brackSpec cmper1="2" cmper2="0" inci="1">
+      <id>8</id>
+      <bracPos>-12</bracPos>
+      <bracTop>1</bracTop>
+      <bracBot>-1</bracBot>
+    </brackSpec>
+  </details>
 </finale>
 )xml";
 
@@ -124,7 +144,7 @@ TEST(OssiaBoundsTest, PopulateFields)
 
 TEST(OssiaHeaderTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(ossiaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(ossiaXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -132,12 +152,17 @@ TEST(OssiaHeaderTest, PopulateFields)
     ASSERT_TRUE(h1) << "OssiaHeader with cmper 1 not found";
     EXPECT_EQ(h1->clefId, static_cast<ClefIndex>(5));
     ASSERT_TRUE(h1->keySig) << "keySig should be populated";
+    EXPECT_EQ(h1->keySig->getAlteration(KeySignature::KeyContext::Concert), 1);
     EXPECT_EQ(h1->beats, 1);
     EXPECT_EQ(h1->divBeat, 1);
     EXPECT_EQ(h1->bracketGroup, 1);
     EXPECT_TRUE(h1->compositeNumerator);
     EXPECT_TRUE(h1->compositeDenominator);
     EXPECT_EQ(h1->barlineType, others::Measure::BarlineType::Double);
+
+    auto h1Brackets = h1->getBrackets();
+    ASSERT_EQ(h1Brackets.size(), 1);
+    EXPECT_EQ(h1Brackets[0]->style, details::Bracket::BracketStyle::BracketCurvedHooks);
 
     auto h1TimeSig = h1->createTimeSignature();
     ASSERT_TRUE(h1TimeSig);
@@ -149,13 +174,19 @@ TEST(OssiaHeaderTest, PopulateFields)
     auto h2 = others->get<others::OssiaHeader>(SCORE_PARTID, 2);
     ASSERT_TRUE(h2) << "OssiaHeader with cmper 2 not found";
     EXPECT_EQ(h2->clefId, static_cast<ClefIndex>(3));
-    EXPECT_FALSE(h2->keySig) << "no <keySig> present";
+    ASSERT_TRUE(h2->keySig) << "no <keySig> present, C Major populated anyway";
+    EXPECT_EQ(h2->keySig->getAlteration(KeySignature::KeyContext::Concert), 0);
     EXPECT_EQ(h2->beats, 4);
     EXPECT_EQ(h2->divBeat, 1024);
     EXPECT_EQ(h2->bracketGroup, 2);
     EXPECT_FALSE(h2->compositeNumerator);
     EXPECT_FALSE(h2->compositeDenominator);
     EXPECT_EQ(h2->barlineType, others::Measure::BarlineType::None);
+
+    auto h2Brackets = h2->getBrackets();
+    ASSERT_EQ(h2Brackets.size(), 2);
+    EXPECT_EQ(h2Brackets[0]->style, details::Bracket::BracketStyle::PianoBrace);
+    EXPECT_EQ(h2Brackets[1]->style, details::Bracket::BracketStyle::DeskBracket);
 
     auto h2TimeSig = h2->createTimeSignature();
     ASSERT_TRUE(h2TimeSig);
@@ -167,7 +198,7 @@ TEST(OssiaHeaderTest, PopulateFields)
 
 TEST(OssiaMusicTest, PopulateFields)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(ossiaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(ossiaXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
@@ -196,4 +227,79 @@ TEST(OssiaMusicTest, PopulateFields)
     EXPECT_FALSE(m2->hideStaff);
     EXPECT_FALSE(m2->hideRepeat);
     EXPECT_FALSE(m2->hideClef);
+}
+
+TEST(PageOssiaAssignTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <pageOssiaAssign cmper="1" inci="0">
+      <arbnum>2</arbnum>
+      <topAdd>-2202</topAdd>
+      <leftAdd>401</leftAdd>
+      <mwidth>216</mwidth>
+      <hidden/>
+    </pageOssiaAssign>
+  </others>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto assign = others->get<others::PageOssiaAssign>(SCORE_PARTID, 1, 0);
+    ASSERT_TRUE(assign) << "PageOssiaAssign cmper 1 inci 0 not found";
+
+    EXPECT_EQ(assign->ossiaId, Cmper(2));
+    EXPECT_EQ(assign->xOffset, Evpu(-2202));
+    EXPECT_EQ(assign->yOffset, Evpu(401));
+    EXPECT_EQ(assign->measureWidth, Evpu(216));
+    EXPECT_TRUE(assign->hidden);
+}
+
+TEST(MeasureOssiaAssignTest, Populate)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+    <?xml version="1.0" encoding="UTF-8"?>
+    <finale>
+      <details>
+        <measOssiaAssign cmper1="1" cmper2="2" inci="0">
+          <arbnum>1</arbnum>
+          <topAdd>145</topAdd>
+          <leftAdd>124</leftAdd>
+          <hidden/>
+        </measOssiaAssign>
+        <measOssiaAssign cmper1="2" cmper2="2" inci="0">
+          <arbnum>3</arbnum>
+          <topAdd>-241</topAdd>
+          <leftAdd>331</leftAdd>
+        </measOssiaAssign>
+      </details>
+    </finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    // Test case 1: staffId = 1, measureId = 2
+    auto assign1 = details->get<details::MeasureOssiaAssign>(SCORE_PARTID, 1, 2, 0);
+    ASSERT_TRUE(assign1) << "MeasureOssiaAssign with staff 1, meas 2, inci 0 not found";
+
+    EXPECT_EQ(assign1->ossiaId, Cmper(1));
+    EXPECT_EQ(assign1->xOffset, Evpu(145));
+    EXPECT_EQ(assign1->yOffset, Evpu(124));
+    EXPECT_TRUE(assign1->hidden);
+
+    // Test case 2: staffId = 2, measureId = 2
+    auto assign2 = details->get<details::MeasureOssiaAssign>(SCORE_PARTID, 2, 2, 0);
+    ASSERT_TRUE(assign2) << "MeasureOssiaAssign with staff 2, meas 2, inci 0 not found";
+
+    EXPECT_EQ(assign2->ossiaId, Cmper(3));
+    EXPECT_EQ(assign2->xOffset, Evpu(-241));
+    EXPECT_EQ(assign2->yOffset, Evpu(331));
+    EXPECT_FALSE(assign2->hidden);
 }

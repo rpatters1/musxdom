@@ -268,6 +268,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::NamePositionStyleFull,
     dom::others::TextBlock,
     dom::others::Page,
+    dom::others::PageOssiaAssign,
     dom::others::PageTextAssign,
     dom::others::RepeatBack,
     dom::others::RepeatEndingStart,
@@ -345,6 +346,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,
     dom::details::MeasureNumberIndividualPositioning,
+    dom::details::MeasureOssiaAssign,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
     dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it

@@ -922,6 +922,14 @@ MUSX_XML_ELEMENT_ARRAY(Page, {
     {"margRight", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margRight = e->getTextAs<Evpu>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(PageOssiaAssign, {
+    {"arbnum", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->ossiaId = e->getTextAs<Cmper>(); }},
+    {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"leftAdd", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"mwidth", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->measureWidth = e->getTextAs<Evpu>(); }},
+    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->hidden = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(PageTextAssign, {
     {"block", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->block = e->getTextAs<Cmper>(); }},
     {"xdisp", [](const XmlElementPtr& e, const std::shared_ptr<PageTextAssign>& i) { i->xDisp = e->getTextAs<Evpu>(); }},

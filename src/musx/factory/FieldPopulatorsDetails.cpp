@@ -315,6 +315,13 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberIndividualPositioning, {
         { i->enclosure = FieldPopulator<others::Enclosure>::createAndPopulate(e, i->getDocument()); }}
 });
 
+MUSX_XML_ELEMENT_ARRAY(MeasureOssiaAssign, {
+    {"arbnum", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->ossiaId = e->getTextAs<Cmper>(); }},
+    {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"leftAdd", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->hidden = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {
     {"block", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->block = e->getTextAs<Cmper>(); }},
     {"xdispEdu", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEdu = e->getTextAs<Edu>(); }},

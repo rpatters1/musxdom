@@ -77,7 +77,7 @@ public:
     }
 
     ClefIndex clefId{};                         ///< Clef index (xml node is `<clef>`)
-    std::shared_ptr<KeySignature> keySig;       ///< If non-null, display this key signature.
+    std::shared_ptr<KeySignature> keySig;       ///< Display the music with this key signature. It does not transpose. The factory guarantees this is not null.
     Cmper beats{};                              ///< Time signature numerator or beats per measure (xml node is `<beats>`)
     Cmper divBeat{};                            ///< Time signature denominator division unit (xml node is `<divbeat>`)
     Cmper bracketGroup{};                       ///< Ossia bracket group number (xml node is `<group>`)
@@ -92,9 +92,16 @@ public:
     /// #details::Bracket::horzAdjLeft member controls the order in which they display.
     MusxInstanceList<details::Bracket> getBrackets() const;
 
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OthersBase::integrityCheck(ptrToThis);
+        if (!keySig) {
+            keySig = std::make_shared<KeySignature>(getDocument());
+        }
+    }
+
     constexpr static std::string_view XmlNodeName = "ossiaHeader"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<OssiaHeader>&
-        xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<OssiaHeader>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -116,7 +123,6 @@ public:
     int percent{};                  ///< Percent size of the ossia relative to normal (100 = 100%)
     StaffCmper sourceStaffId{};     ///< Source staff (xml node is `<qinst>`)
     MeasCmper sourceMeasureId{};    ///< Source measure (xml node is `<qmeasure>`)
-
     bool hideLeftLine{};            ///< Hide the left bar/line (xml node is `<negLeftLine>`)
     bool hideKey{};                 ///< Hide the key signature (xml node is `<negKey>`)
     bool hideTime{};                ///< Hide the time signature (xml node is `<negTime>`)
@@ -124,15 +130,70 @@ public:
     bool hideStaff{};               ///< Hide staff lines (xml node is `<negStaff>`)
     bool hideRepeat{};              ///< Hide repeat marks (xml node is `<negRepeat>`)
     bool hideClef{};                ///< Hide clef (xml node is `<negClef>`)
-
     // posMode: Positioning behavior for the ossia (xml node is `<posMode>`).
-    // This appears to be an unused legacy spacing feature and is intentionally not stored. Its value seems
-    // always to be "ossiaDefault".
+    // posMode appears to be an unused legacy spacing feature and is intentionally not stored. The only value ever seen
+    // is "ossiaDefault".
 
     constexpr static std::string_view XmlNodeName = "ossiaMusic"; ///< The XML node name for this type.
     static const xml::XmlElementArray<OssiaMusic>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class PageOssiaAssign
+ * @brief Represents the assignment of an ossia passage to a specific page.
+ *
+ * Each record references an ossia instance and positions it from the upper left corner of the page.
+ * This class is identified by the XML node name "pageOssiaAssign".
+ */
+class PageOssiaAssign : public OthersBase
+{
+public:
+    /** @brief Constructor function */
+    explicit PageOssiaAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    Cmper ossiaId{};        ///< Cmper of related @ref OssiaBounds, @ref OssiaHeader, and @ref OssiaMusic classes. (xml node is `<arbnum>`)
+    Evpu xOffset{};         ///< Horizontal offset (xml node is `<topAdd>`)
+    Evpu yOffset{};         ///< Vertical offset (xml node is `<leftAdd>`)
+    Evpu measureWidth{};    ///< Measure width for this ossia (xml node is `<mwidth>`)
+    bool hidden{};          ///< Whether the ossia is hidden.
+
+    constexpr static std::string_view XmlNodeName = "pageOssiaAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PageOssiaAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 } //namespace others
+
+namespace details {
+
+/**
+ * @class MeasureOssiaAssign
+ * @brief Assigns an ossia passage to a specific staff/measure location.
+ *
+ * Cmper1 is the staff @ref Cmper and Cmper2 is the measure @ref Cmper.
+ * This class is identified by the XML node name "measOssiaAssign".
+ */
+class MeasureOssiaAssign : public DetailsBase
+{
+public:
+    /** @brief Constructor function */
+    explicit MeasureOssiaAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staffId, Cmper measureId, Inci inci)
+        : DetailsBase(document, partId, shareMode, staffId, measureId, inci)
+    {
+    }
+
+    Cmper ossiaId{};     ///< Cmper of related @ref OssiaBounds, @ref OssiaHeader, and @ref OssiaMusic classes. (xml node is `<arbnum>`)
+    Evpu xOffset{};      ///< Horizontal offset (xml node is `<topAdd>`)
+    Evpu yOffset{};      ///< Vertical offset (xml node is `<leftAdd>`)
+    bool hidden{};       ///< Whether the ossia is hidden.
+
+    constexpr static std::string_view XmlNodeName = "measOssiaAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureOssiaAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+} //namespace details
+
 } //namespace dom
 } //namespace musx
