@@ -53,6 +53,12 @@ MUSX_XML_ENUM_MAPPING(FretboardDiagram::Shape, {
     {"custom", FretboardDiagram::Shape::Custom}
 });
 
+MUSX_XML_ENUM_MAPPING(MeasureNumberIndividualPositioning::ForceVisibility, {
+    // {"none", MeasureNumberIndividualPositioning::ForceVisibility::None}, // Default value, may not appear in the XML
+    {"force", MeasureNumberIndividualPositioning::ForceVisibility::Show},
+    {"hide", MeasureNumberIndividualPositioning::ForceVisibility::Hide}
+});
+
 MUSX_XML_ENUM_MAPPING(StaffGroup::HideStaves, {
     // {"normally", StaffGroup::HideStaves::Normally}, // Default value, may not appear in the XML
     {"asGroup", StaffGroup::HideStaves::AsGroup},
@@ -142,6 +148,14 @@ MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
     {"do1024th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
     {"do2048th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
     {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(Bracket, {
+    {"id", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->style = toEnum<Bracket::BracketStyle>(e->getTextAs<int>()); }},
+    {"bracPos", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->horzAdjLeft = e->getTextAs<Evpu>(); }},
+    {"bracTop", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->vertAdjTop = e->getTextAs<Evpu>(); }},
+    {"bracBot", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->vertAdjBot = e->getTextAs<Evpu>(); }},
+    {"onSingle", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->showOnSingleStaff = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(CenterShape, {
@@ -289,6 +303,25 @@ MUSX_XML_ELEMENT_ARRAY(LyricEntryInfo, {
     {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<LyricEntryInfo::AlignJustify>(e); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(MeasureNumberIndividualPositioning, {
+    {"region", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->measNumRegion = e->getTextAs<Cmper>(); }},
+    {"x1add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"y1add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"x2add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset2 = e->getTextAs<Evpu>(); }},
+    {"forceHide", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
+        { i->forceVisibility = toEnum<MeasureNumberIndividualPositioning::ForceVisibility>(e); }},
+    {"useEncl", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->useEnclosure = populateBoolean(e, i); }},
+    {"encl", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
+        { i->enclosure = FieldPopulator<others::Enclosure>::createAndPopulate(e, i->getDocument()); }}
+});
+
+MUSX_XML_ELEMENT_ARRAY(MeasureOssiaAssign, {
+    {"arbnum", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->ossiaId = e->getTextAs<Cmper>(); }},
+    {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"leftAdd", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->hidden = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {
     {"block", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->block = e->getTextAs<Cmper>(); }},
     {"xdispEdu", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEdu = e->getTextAs<Edu>(); }},
@@ -350,14 +383,6 @@ MUSX_XML_ELEMENT_ARRAY(ShapeNoteBase, {
     {"arrangedByPitch", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase>& i) { i->arrangedByPitch = populateBoolean(e, i); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(StaffGroup::Bracket, {
-    {"id", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->style = toEnum<StaffGroup::BracketStyle>(e->getTextAs<int>()); }},
-    {"bracPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->horzAdjLeft = e->getTextAs<Evpu>(); }},
-    {"bracTop", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->vertAdjTop = e->getTextAs<Evpu>(); }},
-    {"bracBot", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->vertAdjBot = e->getTextAs<Evpu>(); }},
-    {"onSingle", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup::Bracket>& i) { i->showOnSingleStaff = populateBoolean(e, i); }},
-});
-
 MUSX_XML_ELEMENT_ARRAY(SmartShapeEntryAssign, {
     {"shapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeEntryAssign>& i) { i->shapeNum = e->getTextAs<Cmper>(); }},
 });
@@ -370,7 +395,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"fullID", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameId = e->getTextAs<Cmper>(); }},
     {"fullXadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameXadj = e->getTextAs<int>(); }},
     {"fullYadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameYadj = e->getTextAs<int>(); }},
-    {"bracket", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->bracket = FieldPopulator<StaffGroup::Bracket>::createAndPopulate(e); }},
+    {"bracket", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->bracket = FieldPopulator<Bracket>::createAndPopulate(e, i->getDocument()); }},
     {"barline", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->barlineType = toEnum<StaffGroup::BarlineType>(e); }},
     {"fullJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameJustify = toEnum<StaffGroup::AlignJustify>(e); }},
     {"abbrvJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameJustify = toEnum<StaffGroup::AlignJustify>(e); }},

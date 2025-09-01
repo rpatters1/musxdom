@@ -47,7 +47,7 @@ class EntryInfo;
 namespace others {
 class ChordSuffixElement;
 class FretboardGroup;
-class FretboardInstrument;
+class FretInstrument;
 class FretboardStyle;
 class StaffUsed;
 class Measure;
@@ -384,6 +384,60 @@ public:
 
     constexpr static std::string_view XmlNodeName = "beamStub"; ///< The XML node name for this type.
     static const xml::XmlElementArray<BeamStubDirection>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class Bracket
+ * @brief Represents a bracket, used in two different contexts:
+ *
+ * - **Ossia bracket groups**: Bracket is a top-level object that helps define an ossia.
+ *   - cmper1: The bracket group number for the ossia.
+ *   - cmper2: Always appears to be zero.
+ *   - inci: The index within the ossia bracket group.
+ *
+ * - **Staff groups**: Bracket is embedded inside @ref StaffGroup.
+ *   - In this case cmper1, cmper2, and inci have no meaning and should be zero.
+ */
+class Bracket : public DetailsBase
+{
+public:
+    /// @brief Constructor for top-level instances.
+    explicit Bracket(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, Inci inci)
+        : DetailsBase(document, partId, shareMode, cmper1, cmper2, inci)
+    {
+    }
+
+    /// @brief Constructor for embedded instances.
+    explicit Bracket(const DocumentWeakPtr& document)
+        : DetailsBase(document, SCORE_PARTID, Base::ShareMode::All, 0, 0, 0)
+    {
+    }
+
+    /**
+     * @enum BracketStyle
+     * @brief Bracket types
+     */
+    enum class BracketStyle : int
+    {
+        None = 0,                   ///< No bracket (the default)
+        ThickLine = 1,              ///< Thick line, no hooks
+        BracketStraightHooks = 2,   ///< Thick bracket with straight hooks
+        PianoBrace = 3,             ///< Piano brace
+        Unknown4,                   ///< Possibly never used
+        Unknown5,                   ///< Possibly never used
+        BracketCurvedHooks = 6,     ///< Thick bracket with curved hooks
+        Unknown7,                   ///< Possibly never used
+        DeskBracket = 8             ///< Thin bracket with horizontal hook lines
+    };
+
+    BracketStyle style{};       ///< Bracket style (xml node is `<id>`)
+    Evpu horzAdjLeft{};         ///< "Distance from Left Edge of Staff" (xml node is `<bracPos>`)
+    Evpu vertAdjTop{};          ///< "Vertical Adjust (Top of Bracket)" (xml node is `<bracTop>`)
+    Evpu vertAdjBot{};          ///< "Vertical Adjust (Bottom of Bracket)" (xml node is `<bracBot>`)
+    bool showOnSingleStaff{};   ///< "Show Bracket If Group Contains Only One Staff" (only applies to staff groups: xml node is `<onSingle>`)
+
+    constexpr static std::string_view XmlNodeName = "brackSpec"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<Bracket>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -752,13 +806,13 @@ public:
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         this->DetailsBase::integrityCheck(ptrToThis);
-        if (numFretCells != cells.size()) {
+        if (numFretCells != int(cells.size())) {
             const int oldVal = numFretCells;
             numFretCells = int(cells.size());
             MUSX_INTEGRITY_ERROR("FretboardDiagram " + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
                 + " specifies the wrong number of cells (" + std::to_string(oldVal) + ").");
         }
-        if (numFretBarres != barres.size()) {
+        if (numFretBarres != int(barres.size())) {
             const int oldVal = numFretBarres;
             numFretBarres = int(barres.size());
             MUSX_INTEGRITY_ERROR("FretboardDiagram " + std::to_string(getCmper1()) + ", " + std::to_string(getCmper2())
@@ -1057,6 +1111,53 @@ public:
 
     static const xml::XmlElementArray<LyricEntryInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "lyricEntryInfo"; ///< The XML node name for this type.
+};
+
+/**
+ * @class MeasureNumberIndividualPositioning
+ * @brief Per-staff/per-measure overrides for the position and appearance of a measure number.
+ *
+ * Cmper1 is the staff (staffId) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ * This class is identified by the XML node name "measNumbIndivPos".
+ */
+class MeasureNumberIndividualPositioning : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this #MeasureNumberIndividualPositioning (probably always #ShareMode::All).
+     * @param staffId The staff ID for this instance.
+     * @param meas The measure ID for this instance.
+     * @param inci The 0-based incident.
+     */
+    explicit MeasureNumberIndividualPositioning(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staffId, Cmper meas, Inci inci)
+        : DetailsBase(document, partId, shareMode, staffId, meas, inci)
+    {
+    }
+
+    /**
+     * @enum ForceVisibility
+     * @brief Force-visibility options for the measure number at this location.
+     */
+    enum class ForceVisibility
+    {
+        None,       ///< No override (default; node may be omitted in XML)
+        Show,       ///< Force the number to display (xml text value: "force")
+        Hide        ///< Force the number to be hidden (xml text value: "hide")
+    };
+
+    Cmper measNumRegion{};                          ///< The Cmper of the @ref others::MeasureNumberRegion that this override applies to. (xml node is `<region>`)
+    Evpu xOffset{};                                 ///< Horizontal offset for the measure number. (xml node is `<x1add>`)
+    Evpu yOffset{};                                 ///< Vertical offset for the measure number. (xml node is `<y1add>`)
+    Evpu xOffset2{};                                ///< Horizontal offset for the measure number range under a multimeasure rest (Page View only). (xml node is `<x2add>`)
+    ForceVisibility forceVisibility{};              ///< Force-visibility behavior. (xml node is `<forceHide>`)
+    bool useEnclosure{};                            ///< Whether to use an enclosure for this number. (xml node is `<useEncl>`)
+    std::shared_ptr<others::Enclosure> enclosure;   ///< Optional enclosure settings. (xml node is `<encl>`)
+
+    constexpr static std::string_view XmlNodeName = "measNumbIndivPos"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureNumberIndividualPositioning>& xmlMappingArray(); ///< Required for musx::
 };
 
 /**
@@ -1420,41 +1521,6 @@ public:
         None            ///< Never hide the staves in this StaffGroup
     };
 
-    /**
-     * @enum BracketStyle
-     * @brief Bracket style enum for StaffGroup
-     */
-    enum class BracketStyle : int
-    {
-        None = 0,                   ///< No bracket (the default)
-        ThickLine = 1,              ///< Thick line, no hooks
-        BracketStraightHooks = 2,   ///< Thick bracket with straight hooks
-        PianoBrace = 3,             ///< Piano brace
-        Unknown4,                   ///< Possibly never used
-        Unknown5,                   ///< Possibly never used
-        BracketCurvedHooks = 6,     ///< Thick bracket with curved hooks
-        Unknown7,                   ///< Possibly never used
-        DeskBracket = 8             ///< Thin bracket with horizontal hook lines
-    };
-
-    /** @brief Embedded class to represent the "bracket" node */
-    class Bracket
-    {
-    public:
-        BracketStyle style{};       ///< Bracket style (xml node is `<id>`)
-        Evpu horzAdjLeft{};         ///< "Distance from Left Edge of Staff" (xml node is `<bracPos>`)
-        Evpu vertAdjTop{};          ///< "Vertical Adjust (Top of Bracket)" (xml node is `<bracTop>`)
-        Evpu vertAdjBot{};          ///< "Vertical Adjust (Bottom of Bracket)" (xml node is `<bracBot>`)
-        bool showOnSingleStaff{};   ///< "Show Bracket If Group Contains Only One Staff" (xml node is `<onSingle>`)
-
-        /**
-         * @brief Default constructor for Bracket.
-         */
-        Bracket() = default;
-
-        static const xml::XmlElementArray<Bracket>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-
     // Public properties corresponding to the XML structure, ordered as they appear in the XML
     StaffCmper startInst{};                   ///< Starting staff ID
     StaffCmper endInst{};                     ///< Ending staff ID
@@ -1524,7 +1590,7 @@ public:
         }
         if (!bracket) {
             // this is not an error. Finale omits the bracket node for groups with entirely default bracket info.
-            bracket = std::make_shared<Bracket>();
+            bracket = std::make_shared<Bracket>(getDocument());
         }
     }
 
@@ -1652,7 +1718,7 @@ public:
 /**
  * @class TablatureNoteMods
  * @brief Specifies the TAB string a note appears on. Finale automatically figures out the fret number from
- * the open string note and fret intervals specified in the staff's associated @ref others::FretboardInstrument.
+ * the open string note and fret intervals specified in the staff's associated @ref others::FretInstrument.
  *
  * #Entry::noteDetail is set if any note in the entry has tablature note mods.
  *

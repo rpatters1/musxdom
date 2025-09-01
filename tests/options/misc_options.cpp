@@ -32,6 +32,7 @@ TEST(MiscOptionsTest, PropertiesTest)
   <options>
     <miscOptions>
       <showRepeatsForParts/>
+      <pickupValue>1024</pickupValue>
       <retainOctaveTransInConcertPitch/>
       <showCurrentLayerOnly/>
       <combineRestsAcrossLayers/>
@@ -52,6 +53,7 @@ TEST(MiscOptionsTest, PropertiesTest)
 
     // Test all properties of MiscOptions
     EXPECT_TRUE(miscOptions->showRepeatsForParts);
+    EXPECT_EQ(miscOptions->pickupValue, 1024);
     EXPECT_TRUE(miscOptions->keepWrittenOctaveInConcertPitch);
     EXPECT_TRUE(miscOptions->showActiveLayerOnly);
     EXPECT_TRUE(miscOptions->consolidateRestsAcrossLayers);

@@ -202,3 +202,68 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_TRUE(scoreData->excludeOthers);
     EXPECT_TRUE(scoreData->breakMmRest);
 }
+TEST(MeasureNumberIndividualPositioningTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <measNumbIndivPos cmper1="1" cmper2="8" inci="0">
+      <region>1</region>
+      <x1add>-70</x1add>
+      <y1add>-21</y1add>
+      <forceHide>force</forceHide>
+      <useEncl/>
+      <encl>
+        <xAdd>3</xAdd>
+        <yAdd>5</yAdd>
+        <xMargin>21</xMargin>
+        <yMargin>20</yMargin>
+        <lineWidth>256</lineWidth>
+        <sides>1</sides>
+        <fixedSize/>
+        <equalAspect/>
+        <opaque/>
+        <roundCorners/>
+        <cornerRadius>768</cornerRadius>
+      </encl>
+    </measNumbIndivPos>
+    <measNumbIndivPos cmper1="1" cmper2="8" inci="0" part="1" shared="true">
+      <x1add>131</x1add>
+      <y1add>-44</y1add>
+      <x2add>201</x2add>
+    </measNumbIndivPos>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    // First instance: part 0, staff 1, measure 8, inci 0
+    auto pos1 = details->get<details::MeasureNumberIndividualPositioning>(SCORE_PARTID, 1, 8, 0);
+    ASSERT_TRUE(pos1);
+
+    EXPECT_EQ(pos1->measNumRegion, Cmper{1});
+    EXPECT_EQ(pos1->xOffset, Evpu{-70});
+    EXPECT_EQ(pos1->yOffset, Evpu{-21});
+    EXPECT_EQ(pos1->xOffset2, Evpu{0}); // not present -> default
+    EXPECT_EQ(pos1->forceVisibility, details::MeasureNumberIndividualPositioning::ForceVisibility::Show);
+    EXPECT_TRUE(pos1->useEnclosure);
+    EXPECT_TRUE(pos1->enclosure);
+
+    // Second instance: part 1, staff 1, measure 8, inci 0
+    auto pos2 = details->get<details::MeasureNumberIndividualPositioning>(1, 1, 8, 0);
+    ASSERT_TRUE(pos2);
+
+    EXPECT_EQ(pos2->measNumRegion, Cmper{1}); // not present -> shared from score.
+    EXPECT_EQ(pos2->xOffset, Evpu{131});
+    EXPECT_EQ(pos2->yOffset, Evpu{-44});
+    EXPECT_EQ(pos2->xOffset2, Evpu{201});
+    EXPECT_EQ(pos2->forceVisibility, details::MeasureNumberIndividualPositioning::ForceVisibility::Show);
+    EXPECT_TRUE(pos2->useEnclosure); // not present -> shared from score.
+    EXPECT_TRUE(bool(pos2->enclosure)); // not present -> shared from score.
+}

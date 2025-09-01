@@ -113,7 +113,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
     for (const auto& staffGroup : staffGroups) {
         const auto& group = staffGroup.group;
         // for now, only identify piano braces as visual staff groups
-        if (group->bracket && group->bracket->style == details::StaffGroup::BracketStyle::PianoBrace) {
+        if (group->bracket && group->bracket->style == details::Bracket::BracketStyle::PianoBrace) {
             if (const auto topStaff = getOthers()->get<others::Staff>(forPartId, group->startInst)) {
                 std::unordered_map<StaffCmper, size_t> candidateStaves;
                 size_t sequenceIndex = 0;

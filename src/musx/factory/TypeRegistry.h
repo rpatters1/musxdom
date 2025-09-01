@@ -32,6 +32,7 @@
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
 #include "musx/dom/Details.h"
+#include "musx/dom/Ossia.h"
 #include "musx/dom/ShapeDesigner.h"
 #include "musx/dom/SmartShape.h"
 #include "musx/dom/Staff.h"
@@ -234,6 +235,9 @@ using RegisteredOthers = TypeRegistry <
     dom::others::AcciAmountSharps,
     dom::others::AcciOrderFlats,
     dom::others::AcciOrderSharps,
+    dom::others::OssiaBounds,           // this was possibly internally "arbitBounds" at one time, which may be why it serializes here  
+    dom::others::OssiaHeader,           // this was possibly internally "arbitHeader" at one time, which may be why it serializes here  
+    dom::others::OssiaMusic,            // this was possibly internally "arbitMusic" at one time, which may be why it serializes here
     dom::others::ArticulationDef,
     dom::others::BeatChartElement,
     dom::others::ChordSuffixElement,
@@ -247,7 +251,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::TonalCenterSharps,
     dom::others::SystemLock,        // xml node is "lockMeas", which is still sequenced non-alphabetically
     dom::others::FretboardGroup,
-    dom::others::FretboardInstrument,
+    dom::others::FretInstrument,
     dom::others::FretboardStyle,
     dom::others::StaffUsed,         // xml node is "instUsed"
     dom::others::KeyFormat,
@@ -264,6 +268,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::NamePositionStyleFull,
     dom::others::TextBlock,
     dom::others::Page,
+    dom::others::PageOssiaAssign,
     dom::others::PageTextAssign,
     dom::others::RepeatBack,
     dom::others::RepeatEndingStart,
@@ -272,6 +277,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ShapeData,
     dom::others::ShapeDef,
     dom::others::ShapeInstructionList,
+    dom::others::SplitMeasure,
     dom::others::SmartShape,
     dom::others::SmartShapeMeasureAssign,
     dom::others::SmartShapeCustomLine,      // node name is `ssLineStyle`
@@ -327,6 +333,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::BeamAlterationsUpStem,
     dom::details::SecondaryBeamAlterationsDownStem,
     dom::details::SecondaryBeamAlterationsUpStem,
+    dom::details::Bracket,
     dom::details::CenterShape,
     dom::details::ChordAssign,
     dom::details::ClefOctaveFlats,
@@ -339,6 +346,8 @@ using RegisteredDetails = TypeRegistry <
     dom::details::GFrameHold,
     dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,
+    dom::details::MeasureNumberIndividualPositioning,
+    dom::details::MeasureOssiaAssign,
     dom::details::MeasureTextAssign,
     dom::details::StaffGroup,
     dom::details::NoteAlterations,          // this is out of alpha sequence, but that's how Finale serializes it

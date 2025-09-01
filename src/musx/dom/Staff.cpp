@@ -139,12 +139,6 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
         } else {
             mutableItem->percussionMapId = std::nullopt;
         }
-        auto check = [&](bool mask) -> bool {
-            if constexpr (isForStyle) {
-                return mask;
-            }
-            return true;
-        };
         bool checkNoteShapes = true;
         if constexpr (isForStyle) {
             checkNoteShapes = item->masks->useNoteShapes;
@@ -604,7 +598,7 @@ void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
         useTabLetters = staffStyle->useTabLetters;
         breakTabLinesAtNotes = staffStyle->breakTabLinesAtNotes;
         hideTuplets = staffStyle->hideTuplets;
-        fretInstrumentId = staffStyle->fretInstrumentId;
+        fretInstId = staffStyle->fretInstId;
         percussionMapId = staffStyle->percussionMapId;
         masks->notationStyle = true;
     }

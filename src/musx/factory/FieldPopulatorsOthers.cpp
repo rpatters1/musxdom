@@ -72,6 +72,28 @@ MUSX_XML_ENUM_MAPPING(musx::dom::others::ChordSuffixElement::Prefix, {
     {"flat", ChordSuffixElement::Prefix::Flat},
 });
 
+MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::ChannelSwitchTarget, {
+    // {"", MeasureExprAssign::ChannelSwitchTarget::Current}, // Default; may not appear in the XML.
+    {"toL1", MeasureExprAssign::ChannelSwitchTarget::ToLayer1},
+    {"toL2", MeasureExprAssign::ChannelSwitchTarget::ToLayer2},
+    {"toL3", MeasureExprAssign::ChannelSwitchTarget::ToLayer3},
+    {"toL4", MeasureExprAssign::ChannelSwitchTarget::ToLayer4},
+    {"toChord", MeasureExprAssign::ChannelSwitchTarget::ToChord},
+    {"toDyn", MeasureExprAssign::ChannelSwitchTarget::ToExpression},
+});
+
+MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::PlaybackStart, {
+    // {"", MeasureExprAssign::PlaybackStart::BeginningOfMeasure}, // Default; may not appear in the XML.
+    {"attach", MeasureExprAssign::PlaybackStart::AlignmentPoint},
+    {"measPos", MeasureExprAssign::PlaybackStart::PositionInMeasure},
+});
+
+MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::ShowStaffList, {
+    // {"", MeasureExprAssign::ShowStaffList::ScoreAndPart}, // Default; may not appear in the XML.
+    {"scoreOnly", MeasureExprAssign::ShowStaffList::ScoreOnly},
+    {"partOnly", MeasureExprAssign::ShowStaffList::PartOnly},
+});
+
 MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
     //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", MeasureNumberRegion::AlignJustify::Center},
@@ -492,12 +514,15 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
     {"sizeMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->fontMain->fontSize = e->getTextAs<int>(); }},
     {"efxMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { factory::populateFontEfx(e, i->fontMain); }},
     {"copyMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->copyMode = toEnum<ArticulationDef::CopyMode>(e); }},
+    {"useTopNote", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->useTopNote = populateBoolean(e, i); }},
     {"autoHorz", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoHorz = populateBoolean(e, i); }},
     {"autoVert", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoVert = populateBoolean(e, i); }},
     {"autoVertMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoVertMode = toEnum<ArticulationDef::AutoVerticalMode>(e); }},
+    {"outsideStaff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->outsideStaff = populateBoolean(e, i); }},
     {"aboveSymbolAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->aboveSymbolAlt = populateBoolean(e, i); }},
     {"belowSymbolAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->belowSymbolAlt = populateBoolean(e, i); }},
     {"insideSlur", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->insideSlur = populateBoolean(e, i); }},
+    {"noPrint", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->noPrint = populateBoolean(e, i); }},
     {"autoStack", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->autoStack = populateBoolean(e, i); }},
     {"centerOnStem", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->centerOnStem = populateBoolean(e, i); }},
     {"slurInteractionMode", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->slurInteractionMode = toEnum<ArticulationDef::SlurInteractionMode>(e); }},
@@ -509,6 +534,7 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
     {"yOffsetMain", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->yOffsetMain = e->getTextAs<Evpu>(); }},
     {"defVertPos", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->defVertPos = e->getTextAs<Evpu>(); }},
     {"avoidStaffLines", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->avoidStaffLines = populateBoolean(e, i); }},
+    {"isStemSideWhenMultipleLayers", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->isStemSideWhenMultipleLayers = populateBoolean(e, i); }},
     {"playArtic", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->playArtic = populateBoolean(e, i); }},
     {"xOffsetAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->xOffsetAlt = e->getTextAs<Evpu>(); }},
     {"yOffsetAlt", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->yOffsetAlt = e->getTextAs<Evpu>(); }},
@@ -528,7 +554,7 @@ MUSX_XML_ELEMENT_ARRAY(ArticulationDef, {
     {"ampBotNoteDelta", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampBotNoteDelta = e->getTextAs<int>(); }},
     {"ampTopNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampTopNotePercent = e->getTextAs<int>(); }},
     {"ampBotNotePercent", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->ampBotNotePercent = e->getTextAs<int>(); }},
-    {"outsideStaff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->outsideStaff = populateBoolean(e, i); }},
+    {"distanceFromStemEnd", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationDef>& i) { i->distanceFromStemEnd = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(BeatChartElement::Control, {
@@ -596,19 +622,19 @@ MUSX_XML_ELEMENT_ARRAY(FretboardGroup, {
     {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretboardGroup>& i) { i->name = e->getText(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(FretboardInstrument::StringInfo, {
-    {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument::StringInfo>& i) { i->pitch = e->getTextAs<int>(); }},
-    {"nutOffset", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument::StringInfo>& i) { i->nutOffset = e->getTextAs<int>(); }},
+MUSX_XML_ELEMENT_ARRAY(FretInstrument::StringInfo, {
+    {"pitch", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument::StringInfo>& i) { i->pitch = e->getTextAs<int>(); }},
+    {"nutOffset", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument::StringInfo>& i) { i->nutOffset = e->getTextAs<int>(); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(FretboardInstrument, {
-    {"numFrets", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->numFrets = e->getTextAs<int>(); }},
-    {"numStrings", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->numStrings = e->getTextAs<int>(); }},
-    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->name = e->getText(); }},
-    {"string", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i)
-        { i->strings.push_back(FieldPopulator<FretboardInstrument::StringInfo>::createAndPopulate(e)); }},
-    {"diatonic", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->fretSteps = populateEmbeddedArray<int>(e, "fret"); }},
-    {"speedyClef", [](const XmlElementPtr& e, const std::shared_ptr<FretboardInstrument>& i) { i->speedyClef = e->getTextAs<ClefIndex>(); }},
+MUSX_XML_ELEMENT_ARRAY(FretInstrument, {
+    {"numFrets", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->numFrets = e->getTextAs<int>(); }},
+    {"numStrings", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->numStrings = e->getTextAs<int>(); }},
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->name = e->getText(); }},
+    {"string", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i)
+        { i->strings.push_back(FieldPopulator<FretInstrument::StringInfo>::createAndPopulate(e)); }},
+    {"diatonic", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->fretSteps = populateEmbeddedArray<int>(e, "fret"); }},
+    {"speedyClef", [](const XmlElementPtr& e, const std::shared_ptr<FretInstrument>& i) { i->speedyClef = e->getTextAs<ClefIndex>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FretboardStyle, {
@@ -711,38 +737,41 @@ MUSX_XML_ELEMENT_ARRAY(Measure, {
     {"divbeat", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->divBeat = e->getTextAs<Cmper>(); }},
     {"dispBeats", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->dispBeats = e->getTextAs<Cmper>(); }},
     {"dispDivbeat", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->dispDivbeat = e->getTextAs<Cmper>(); }},
+    {"customBarShape", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->customBarShape = e->getTextAs<Cmper>(); }},
+    {"customLeftBarShape", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->customLeftBarShape = e->getTextAs<Cmper>(); }},
     {"frontSpaceExtra", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->frontSpaceExtra = e->getTextAs<Evpu>(); }},
     {"backSpaceExtra", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->backSpaceExtra = e->getTextAs<Evpu>(); }},
     {"breakWordExt", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->breakWordExt = populateBoolean(e, i); }},
     {"hideCaution", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hideCaution = populateBoolean(e, i); }},
     {"hasSmartShape", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasSmartShape = populateBoolean(e, i); }},
-    {"showFullNames", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->showFullNames = populateBoolean(e, i); }},
-    {"allowSplitPoints", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->allowSplitPoints = populateBoolean(e, i); }},
     {"groupBarlineOverride", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->groupBarlineOverride = populateBoolean(e, i); }},
-    {"customBarShape", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->customBarShape = e->getTextAs<Cmper>(); }},
-    {"customLeftBarShape", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->customLeftBarShape = e->getTextAs<Cmper>(); }},
+    {"showFullNames", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->showFullNames = populateBoolean(e, i); }},
+    {"mnSepPlace", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasMeasNumbIndivPos = populateBoolean(e, i); }},
+    {"posSplit", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->allowSplitPoints = populateBoolean(e, i); }},
+    {"altNumTsig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->compositeNumerator = populateBoolean(e, i); }},
+    {"altDenTsig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->compositeDenominator = populateBoolean(e, i); }},
     {"showKey", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->showKey = toEnum<Measure::ShowKeySigMode>(e); }},
     {"showTime", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->showTime = toEnum<Measure::ShowTimeSigMode>(e); }},
+    {"indivPosDef", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->evenlyAcrossMeasure = populateBoolean(e, i); }},
     {"posMode", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->positioningMode = toEnum<Measure::PositioningType>(e); }},
     {"lineBreak", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->beginNewSystem = populateBoolean(e, i); }},
+    {"hasExpr", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasExpression = populateBoolean(e, i); }},
     {"breakRest", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->breakMmRest = populateBoolean(e, i); }},
     {"noMeasNum", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->noMeasNum = populateBoolean(e, i); }},
+    {"arbitMusic", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasOssia = populateBoolean(e, i); }},
+    {"hasTextBlock", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasTextBlock = populateBoolean(e, i); }},
     {"barline", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->barlineType = toEnum<Measure::BarlineType>(e); }},
-    {"indivPosDef", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->evenlyAcrossMeasure = populateBoolean(e, i); }},
     {"forRepBar", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->forwardRepeatBar = populateBoolean(e, i); }},
     {"bacRepBar", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->backwardsRepeatBar = populateBoolean(e, i); }},
     {"barEnding", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasEnding = populateBoolean(e, i); }},
     {"txtRepeats", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasTextRepeat = populateBoolean(e, i); }},
-    {"hasChord", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasChord = populateBoolean(e, i); }},
-    {"hasExpr", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasExpression = populateBoolean(e, i); }},
-    {"hasTextBlock", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasTextBlock = populateBoolean(e, i); }},
-    {"altNumTsig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->compositeNumerator = populateBoolean(e, i); }},
-    {"altDenTsig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->compositeDenominator = populateBoolean(e, i); }},
     {"abbrvTime", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->abbrvTime = populateBoolean(e, i); }},
     {"useDisplayTimesig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->useDisplayTimesig = populateBoolean(e, i); }},
+    {"hasChord", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->hasChord = populateBoolean(e, i); }},
     {"leftBarline", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->leftBarlineType = toEnum<Measure::BarlineType>(e); }},
     {"displayAltNumTsig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->compositeDispNumerator = populateBoolean(e, i); }},
     {"displayAltDenTsig", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->compositeDispDenominator = populateBoolean(e, i); }},
+    {"pageBreak", [](const XmlElementPtr& e, const std::shared_ptr<Measure>& i) { i->pageBreak = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
@@ -753,10 +782,16 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->vertEvpuOff = e->getTextAs<Evpu>(); }},
     {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<StaffCmper>(); }},
     {"layer", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->layer = e->getTextAs<int>(); }},
+    {"channelSwitch", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->channelSwitch = toEnum<MeasureExprAssign::ChannelSwitchTarget>(e); }},
     {"dontScaleWithEntry", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = populateBoolean(e, i); }},
-    {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<Cmper>(); }},
-    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+    {"playbackStart", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->playbackStart = toEnum<MeasureExprAssign::PlaybackStart>(e); }},
+    {"showStaffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->showStaffList = toEnum<MeasureExprAssign::ShowStaffList>(e); }},
+    {"createdByHp", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->createdByHp = populateBoolean(e, i); }},
     {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<int>(); }},
+    {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
+    {"graceNoteIndex", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->graceNoteIndex = e->getTextAs<int>(); }},
+    {"rehearsalMarkOffset", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->rehearsalMarkOffset = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
@@ -842,6 +877,39 @@ MUSX_XML_ELEMENT_ARRAY(MultiStaffInstrumentGroup, {
     {"staffNum3", [](const XmlElementPtr& e, const std::shared_ptr<MultiStaffInstrumentGroup>& i) { i->staffNums.push_back(e->getTextAs<StaffCmper>()); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(OssiaBounds, {
+    {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->topMargin = e->getTextAs<Evpu>(); }},
+    {"leftAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->leftMargin = e->getTextAs<Evpu>(); }},
+    {"rightAdd", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->rightMargin = e->getTextAs<Evpu>(); }},
+    {"centerPull", [](const XmlElementPtr& e, const std::shared_ptr<OssiaBounds>& i) { i->centerPull = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(OssiaHeader, {
+    {"clef", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->clefId = e->getTextAs<ClefIndex>(); }},
+    {"keySig", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) {
+        i->keySig = FieldPopulator<KeySignature>::createAndPopulate(e, i->getDocument()); }},
+    {"beats", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->beats = e->getTextAs<Cmper>(); }},
+    {"divbeat", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->divBeat = e->getTextAs<Cmper>(); }},
+    {"group", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->bracketGroup = e->getTextAs<Cmper>(); }},
+    {"altNumTsig", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->compositeNumerator = populateBoolean(e, i); }},
+    {"altDenTsig", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->compositeDenominator = populateBoolean(e, i); }},
+    {"barline", [](const XmlElementPtr& e, const std::shared_ptr<OssiaHeader>& i) { i->barlineType = toEnum<Measure::BarlineType>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(OssiaMusic, {
+    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->percent = e->getTextAs<int>(); }},
+    {"qinst", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->sourceStaffId = e->getTextAs<StaffCmper>(); }},
+    {"qmeasure", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->sourceMeasureId = e->getTextAs<MeasCmper>(); }},
+    {"negLeftLine", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideLeftLine = populateBoolean(e, i); }},
+    {"negKey", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideKey = populateBoolean(e, i); }},
+    {"negTime", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideTime = populateBoolean(e, i); }},
+    {"negDynamic", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideDynamic = populateBoolean(e, i); }},
+    {"negStaff", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideStaff = populateBoolean(e, i); }},
+    {"negRepeat", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideRepeat = populateBoolean(e, i); }},
+    {"negClef", [](const XmlElementPtr& e, const std::shared_ptr<OssiaMusic>& i) { i->hideClef = populateBoolean(e, i); }},
+    {"posMode", [](const XmlElementPtr&, const std::shared_ptr<OssiaMusic>&) { /* no-op: intentionally suppressed */ }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Page, {
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->width = e->getTextAs<Evpu>(); }},
@@ -852,6 +920,14 @@ MUSX_XML_ELEMENT_ARRAY(Page, {
     {"margLeft", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margLeft = e->getTextAs<Evpu>(); }},
     {"margBottom", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margBottom = e->getTextAs<Evpu>(); }},
     {"margRight", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margRight = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(PageOssiaAssign, {
+    {"arbnum", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->ossiaId = e->getTextAs<Cmper>(); }},
+    {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"leftAdd", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"mwidth", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->measureWidth = e->getTextAs<Evpu>(); }},
+    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->hidden = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PageTextAssign, {
@@ -876,7 +952,9 @@ MUSX_XML_ELEMENT_ARRAY(PartDefinition, {
     {"nameID", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->nameId = e->getTextAs<Cmper>(); }},
     {"partOrder", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->partOrder = e->getTextAs<int>(); }},
     {"copies", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->copies = e->getTextAs<int>(); }},
+    {"printPart", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->printPart = populateBoolean(e, i); }},
     {"extractPart", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->extractPart = populateBoolean(e, i); }},
+    {"applyFormat", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->applyFormat = populateBoolean(e, i); }},
     {"needsRecalc", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->needsRecalc = populateBoolean(e, i); }},
     {"useAsSmpInst", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->useAsSmpInst = populateBoolean(e, i); }},
     {"smartMusicInst", [](const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->smartMusicInst = e->getTextAs<int>(); }},
@@ -970,6 +1048,7 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"categoryID", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->categoryId = e->getTextAs<Cmper>(); }},
     {"rehearsalMarkStyle", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->rehearsalMarkStyle = toEnum<RehearsalMarkStyle>(e); }},
     {"value", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->value = e->getTextAs<int>(); }},
+    {"execShape", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->execShape = e->getTextAs<Cmper>(); }},
     {"auxdata1", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->auxData1 = e->getTextAs<int>(); }},
     {"playPass", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->playPass = e->getTextAs<int>(); }},
     {"breakMmRest", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->breakMmRest = populateBoolean(e, i); }},
@@ -1100,6 +1179,10 @@ MUSX_XML_ELEMENT_ARRAY(SmartShapeMeasureAssign, {
     {"centerShapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeMeasureAssign>& i) { i->centerShapeNum = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(SplitMeasure, {
+    {"data", [](const XmlElementPtr& e, const std::shared_ptr<SplitMeasure>& i) { i->values.push_back(e->getTextAs<int>()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(Staff::KeySigTransposition, {
     {"interval", [](const XmlElementPtr& e, const std::shared_ptr<Staff::KeySigTransposition>& i) { i->interval = e->getTextAs<int>(); }},
     {"adjust", [](const XmlElementPtr& e, const std::shared_ptr<Staff::KeySigTransposition>& i) { i->adjust = e->getTextAs<int>(); }},
@@ -1196,7 +1279,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"useTabLetters", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->useTabLetters = populateBoolean(e, i); }},
     {"breakTabLinesAtNotes", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->breakTabLinesAtNotes = populateBoolean(e, i); }},
     {"hideTuplets", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTuplets = populateBoolean(e, i); }},
-    {"fretInstID", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fretInstrumentId = e->getTextAs<Cmper>(); }},
+    {"fretInstID", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fretInstId = e->getTextAs<Cmper>(); }},
     {"hideStems", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideStems = populateBoolean(e, i); }},
     {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection = toEnum<Staff::StemDirection>(e); }},
     {"hideBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBeams = populateBoolean(e, i); }},
@@ -1340,14 +1423,19 @@ MUSX_XML_ELEMENT_ARRAY(TempoChange, {
 
 MUSX_XML_ELEMENT_ARRAY(TextBlock, {
     {"textID", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textId = e->getTextAs<Cmper>(); }},
+    {"shapeID", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->shapeId = e->getTextAs<Cmper>(); }},
+    {"width", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"lineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},
+    {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
+    {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
     {"justify", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->justify = toEnum<TextBlock::TextJustify>(e); }},
     {"newPos36", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->newPos36 = populateBoolean(e, i); }},
     {"showShape", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->showShape = populateBoolean(e, i); }},
     {"noExpandSingleWord", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->noExpandSingleWord = populateBoolean(e, i); }},
     {"wordWrap", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->wordWrap = populateBoolean(e, i); }},
-    {"width", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->width = e->getTextAs<Evpu>(); }},
-    {"height", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"inset", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->inset = e->getTextAs<Efix>(); }},
+    {"stdLine", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->stdLineThickness = e->getTextAs<Efix>(); }},
     {"roundCorners", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->roundCorners = populateBoolean(e, i); }},
     {"cornerRadius", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
     {"textTag", [](const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->textType = toEnum<TextBlock::TextType>(e); }}
@@ -1358,6 +1446,7 @@ MUSX_XML_ELEMENT_ARRAY(TextExpressionDef, {
     {"categoryID", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->categoryId = e->getTextAs<Cmper>(); }},
     {"rehearsalMarkStyle", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->rehearsalMarkStyle = toEnum<RehearsalMarkStyle>(e); }},
     {"value", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->value = e->getTextAs<int>(); }},
+    {"execShape", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->execShape = e->getTextAs<Cmper>(); }},
     {"auxdata1", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->auxData1 = e->getTextAs<int>(); }},
     {"playPass", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->playPass = e->getTextAs<int>(); }},
     {"hideMeasureNum", [](const XmlElementPtr& e, const std::shared_ptr<TextExpressionDef>& i) { i->hideMeasureNum = populateBoolean(e, i); }},

@@ -627,6 +627,7 @@ MUSX_XML_ELEMENT_ARRAY(LyricOptions, {
 
 MUSX_XML_ELEMENT_ARRAY(MiscOptions, {
     {"showRepeatsForParts", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) { i->showRepeatsForParts = populateBoolean(e, i); }},
+    {"pickupValue", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->pickupValue = e->getTextAs<Edu>();}},
     {"retainOctaveTransInConcertPitch", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) { i->keepWrittenOctaveInConcertPitch = populateBoolean(e, i); }},
     {"showCurrentLayerOnly", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) { i->showActiveLayerOnly = populateBoolean(e, i); }},
     {"combineRestsAcrossLayers", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) { i->consolidateRestsAcrossLayers = populateBoolean(e, i); }},

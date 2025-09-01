@@ -61,9 +61,9 @@ MusxInstanceList<Entry> Frame::getEntries() const
 // ***** FretboardGroup *****
 // **************************
 
-MusxInstance<FretboardInstrument> FretboardGroup::getFretboardInstrument() const
+MusxInstance<FretInstrument> FretboardGroup::getFretInstrument() const
 {
-    return getDocument()->getOthers()->get<FretboardInstrument>(getRequestedPartId(), fretInstId);
+    return getDocument()->getOthers()->get<FretInstrument>(getRequestedPartId(), fretInstId);
 }
 
 MusxInstanceList<details::FretboardDiagram> FretboardGroup::getFretboardDiagrams() const
@@ -152,7 +152,7 @@ MusxInstance<TimeSignature> Measure::createTimeSignature(const std::optional<Sta
             }
         }
     }
-   return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator));
 }
 
 MusxInstance<TimeSignature> Measure::createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff) const

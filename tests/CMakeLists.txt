@@ -93,6 +93,7 @@ add_executable(musxdomtests
     others/miscellaneous.cpp
     others/mmrest.cpp
     others/multistaff_inst.cpp
+    others/ossia.cpp
     others/page.cpp
     others/part_definition.cpp
 	others/part_globals.cpp

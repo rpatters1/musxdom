@@ -513,3 +513,27 @@ TEST(MeasureTest, CompositeTimeSig2)
     }
 }
 
+TEST(SplitMeasureText, Populate)
+{
+    constexpr static musxtest::string_view testXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <splitMeas cmper="1">
+      <data>112</data>
+      <data>368</data>
+    </splitMeas>
+  </others>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(testXml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto splits = others->get<others::SplitMeasure>(SCORE_PARTID, 1);
+    ASSERT_TRUE(splits);
+    ASSERT_EQ(splits->values.size(), 2);
+    EXPECT_EQ(splits->values[0], Evpu{112});
+    EXPECT_EQ(splits->values[1], Evpu{368});
+}

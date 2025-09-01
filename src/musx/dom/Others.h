@@ -237,12 +237,15 @@ public:
     char32_t charMain{};                           ///< Main symbol character (utf32).
     std::shared_ptr<FontInfo> fontMain;            ///< The font info for the main symbol. (xml nodes `<fontMain>`, `<sizeMain>`, and `<efxMain>`)
     CopyMode copyMode{};                           ///< "Copy Main Symbol" option.
+    bool useTopNote{};                             ///< "Attach to top note"
     bool autoHorz{};                               ///< Whether horizontal auto-positioning is enabled.
     bool autoVert{};                               ///< Whether vertical auto-positioning is enabled.
     AutoVerticalMode autoVertMode{};               ///< Auto vertical positioning mode.
+    bool outsideStaff{};                           ///< Whether the articulation is outside the staff.
     bool aboveSymbolAlt{};                         ///< Whether the alternate symbol is used above. (Otherwise main symbol is used.)
     bool belowSymbolAlt{};                         ///< Whether the alternate symbol is used below. (Otherwise main symbol is used.)
     bool insideSlur{};                             ///< Whether the articulation is inside a slur. (Used *in addition* to #SlurInteractionMode::InsideSlur)
+    bool noPrint{};                                ///< "Display on screen only (do not print)"
     bool autoStack{};                              ///< Whether automatic stacking is enabled.
     bool centerOnStem{};                           ///< Whether centering on the stem is enabled.
     SlurInteractionMode slurInteractionMode{};     ///< Slur interaction mode.
@@ -252,6 +255,7 @@ public:
     Evpu yOffsetMain{};                            ///< Vertical offset for the main symbol.
     Evpu defVertPos{};                             ///< Default vertical position.
     bool avoidStaffLines{};                        ///< Whether to avoid staff lines.
+    bool isStemSideWhenMultipleLayers{};           ///< "Place stem side when multiple layers are present"
     bool playArtic{};                              ///< Whether playback articulation is enabled.
     Evpu xOffsetAlt{};                             ///< Horizontal offset for the alternate symbol.
     Evpu yOffsetAlt{};                             ///< Vertical offset for the alternate symbol.
@@ -271,9 +275,7 @@ public:
     int ampBotNoteDelta{};                         ///< Key velocity change for the bottom note.
     int ampTopNotePercent{};                       ///< Key velocity percentage for the top note.
     int ampBotNotePercent{};                       ///< Key velocity percentage for the bottom note.
-    bool outsideStaff{};                           ///< Whether the articulation is outside the staff.
-
-    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
+    Evpu distanceFromStemEnd{};                    ///< "On-stem distance from stem end/flag/beam"
 
     constexpr static std::string_view XmlNodeName = "articDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ArticulationDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -577,10 +579,12 @@ public:
  * @class Frame
  * @brief Represents the attributes of a TGF entry frame.
  *
- * The inci is almost always zero. It appears there can be multiple incis when there is an old-style pickup.
+ * The inci is almost always zero. Multiple incis are used to implement legacy pickup measures ("spacers").
  * In this case, the observed order of Frame incis is
- * - `inci 0`: startTime
+ * - `inci 0`: startTime (which implements the spacer)
  * - `inci 1`: startEntry & endEntry
+ *
+ * The #details::GFrameHoldContext::createEntryFrame function implements spacers by starting the first entry in the frame after the spacer.
  *
  * The class is identified by the XML node name "frameSpec".
  */
@@ -591,7 +595,6 @@ public:
     explicit Frame(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci = 0)
         : OthersBase(document, partId, shareMode, cmper, inci) {}
 
-    // Public properties corresponding to the XML structure
     EntryNumber startEntry{}; ///< Start entry number for this frame. (Appears to be zero when #startTime is supplied.)
     EntryNumber endEntry{};   ///< End entry number for this frame. (Appears to be zero when #startTime is supplied.)
     Edu startTime{};          ///< The starting position within the measure. (Appears to be zero when #startEntry and #endEntry are supplied.)
@@ -624,7 +627,7 @@ public:
     static const xml::XmlElementArray<Frame>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
-class FretboardInstrument;
+class FretInstrument;
 /**
  * @class FretboardGroup
  * @brief A named group of fretboard diagrams associated with a specific fretboard instrument.
@@ -646,75 +649,17 @@ public:
     {
     }
 
-    Cmper fretInstId{};   ///< Fretboard instrument ID. (xml node `<fretInstID>`)
+    Cmper fretInstId{};   ///< Fret instrument ID. (xml node `<fretInstID>`)
     std::string name;     ///< Group name.
 
-    /// @brief Get the @ref FretboardInstrument associated with this fretboard group.
-    MusxInstance<FretboardInstrument> getFretboardInstrument() const;
+    /// @brief Get the @ref FretInstrument associated with this fretboard group.
+    MusxInstance<FretInstrument> getFretInstrument() const;
 
     /// @brief Gets the array of @ref details::FretboardDiagram instances associated with this fretboard group.
     MusxInstanceList<details::FretboardDiagram> getFretboardDiagrams() const;
 
     constexpr static std::string_view XmlNodeName = "fretGroup"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FretboardGroup>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-};
-
-/**
- * @class FretboardInstrument
- * @brief Describes a fretted instrument (strings, frets, name, clef).
- *
- * The cmper is an arbitrary number referenced by @ref Staff, @ref details::ChordAssign, and @ref options::ChordOptions.
- *
- * This class is identified by the XML node name "fretInst".
- */
-class FretboardInstrument : public OthersBase
-{
-public:
-    /** @brief Constructor */
-    explicit FretboardInstrument(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
-        : OthersBase(document, partId, shareMode, cmper)
-    {
-    }
-
-    /**
-     * @class StringInfo
-     * @brief Information for a single string of the fretted instrument.
-     */
-    class StringInfo
-    {
-    public:
-        int  pitch{};       ///< Open-string MIDI pitch (60 is middle-C.)
-        int  nutOffset{};   ///< Optional nut offset in frets (half-steps). The Finale U.I. does not appear to have
-                            ///< a way to modify it, so normally it will be zero. A Plugin could have modified it, however.
-
-        static const xml::XmlElementArray<StringInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
-    };
-
-    int numFrets{};                 ///< Number of frets
-    int numStrings{};               ///< Number of strings (max is 24)
-    std::string name;               ///< Display name
-    std::vector<std::shared_ptr<StringInfo>> strings;  ///< One entry per string. strings.size() should equal #numStrings.
-    std::vector<int> fretSteps;     ///< Sequence of fret intervals (in half-steps) measured from the open string.
-                                    ///< If empty, all frets are treated as consecutive half-steps (chromatic).
-                                    ///< If shorter than #numFrets, any unspecified frets default to one half-step
-                                    ///< above the previous value. (xml node is `<diatonic>`)
-    ClefIndex speedyClef{};         ///< The clef to use when entering notes for this instrument in Speedy Entry.
-
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
-    {
-        this->OthersBase::integrityCheck(ptrToThis);
-        if (numStrings != strings.size()) {
-            MUSX_INTEGRITY_ERROR("Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numStrings)
-                + " strings but only has " + std::to_string(strings.size()) + " StringInfo instances.");
-        }
-        if (!fretSteps.empty() && numFrets > fretSteps.size()) {
-            util::Logger::log(util::Logger::LogLevel::Info, "Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numFrets)
-                + " frets but only has " + std::to_string(fretSteps.size()) + " diatonic fret steps specified.");
-        }
-    }
-
-    constexpr static std::string_view XmlNodeName = "fretInst"; ///< The XML node name for this type.
-    static const xml::XmlElementArray<FretboardInstrument>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -773,6 +718,64 @@ public:
 
     constexpr static std::string_view XmlNodeName = "fretStyle"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FretboardStyle>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class FretInstrument
+ * @brief Describes a fretted instrument (strings, frets, name, clef). It is used for both TAB notation and @ref FretboardGroup instances.
+ *
+ * The cmper is an arbitrary unique number referenced by @ref Staff, @ref FretboardGroup, and @ref options::ChordOptions.
+ *
+ * This class is identified by the XML node name "fretInst".
+ */
+class FretInstrument : public OthersBase
+{
+public:
+    /** @brief Constructor */
+    explicit FretInstrument(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
+        : OthersBase(document, partId, shareMode, cmper)
+    {
+    }
+
+    /**
+     * @class StringInfo
+     * @brief Information for a single string of the fretted instrument.
+     */
+    class StringInfo
+    {
+    public:
+        int  pitch{};       ///< Open-string MIDI pitch (60 is middle-C.)
+        int  nutOffset{};   ///< Optional nut offset in frets (half-steps). The Finale U.I. does not appear to have
+                            ///< a way to modify it, so normally it will be zero. A Plugin could have modified it, however.
+
+        static const xml::XmlElementArray<StringInfo>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    };
+
+    int numFrets{};                 ///< Number of frets
+    int numStrings{};               ///< Number of strings (max is 24)
+    std::string name;               ///< Display name
+    std::vector<std::shared_ptr<StringInfo>> strings;  ///< One entry per string: strings.size() should equal #numStrings.
+    std::vector<int> fretSteps;     ///< Sequence of fret intervals (in half-steps) measured from the open string.
+                                    ///< If empty, all frets are treated as consecutive half-steps (chromatic).
+                                    ///< If shorter than #numFrets, any unspecified frets default to one half-step
+                                    ///< above the previous value. (xml node is `<diatonic>`)
+    ClefIndex speedyClef{};         ///< The clef to use when entering notes for this instrument in Speedy Entry.
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OthersBase::integrityCheck(ptrToThis);
+        if (numStrings != int(strings.size())) {
+            MUSX_INTEGRITY_ERROR("Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numStrings)
+                + " strings but has " + std::to_string(strings.size()) + " StringInfo instances.");
+        }
+        if (!fretSteps.empty() && numFrets != int(fretSteps.size())) {
+            util::Logger::log(util::Logger::LogLevel::Info, "Fret instrument " + std::to_string(getCmper()) + " specifies " + std::to_string(numFrets)
+                + " frets but has " + std::to_string(fretSteps.size()) + " diatonic fret steps specified.");
+        }
+    }
+
+    constexpr static std::string_view XmlNodeName = "fretInst"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<FretInstrument>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -1135,44 +1138,47 @@ public:
     };
 
     Evpu width{};               ///< "Ideal" measure width in Evpu. Page layout determines actual width.
-    std::shared_ptr<KeySignature> globalKeySig; ///< the key global signature on this measure. Guaranteed to be non-null. (xml node is `<keySig>`)
+    std::shared_ptr<KeySignature> globalKeySig; ///< the global key signature on this measure. Guaranteed to be non-null. (xml node is `<keySig>`)
     Cmper beats{};              ///< Number of beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
     Cmper divBeat{};            ///< Divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
     Cmper dispBeats{};          ///< Displayed beats in the measure or the Cmper to a `timesigUpper` composite numerator list.
     Cmper dispDivbeat{};        ///< Displayed divisions per beat (Edu) or the Cmper to a `timesigLower` composite denominator list.
+    Cmper customBarShape{};     ///< Cmper of Shape Designer @ref ShapeDef for custom right barline
+    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer @ref ShapeDef for custom left barline
     Evpu frontSpaceExtra{};     ///< Extra space at front of bar.
     Evpu backSpaceExtra{};      ///< Extra space at end of bar.
     bool breakWordExt{};        ///< Barline ends word extensions on lyrics.
     bool hideCaution{};         ///< "Hide Cautionary Clefs, Key, and Time Signature"
     bool hasSmartShape{};       ///< Indicates if the measure has a smart shape.
-    bool showFullNames{};       ///< "Show Full Staff & Group Names"
-    bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" (xml node is `<posSplit>`)
     bool groupBarlineOverride{}; ///< Override the barline specified by a @ref details::StaffGroup (if any)
-    Cmper customBarShape{};     ///< Cmper of Shape Designer @ref ShapeDef for custom right barline
-    Cmper customLeftBarShape{}; ///< Cmper of Shape Designer @ref ShapeDef for custom left barline
-    ShowKeySigMode showKey{};   ///< Show mode for key signatures
-    ShowTimeSigMode showTime{}; ///< Show mode for time signatures
-    PositioningType positioningMode{}; ///< Positioning type for the measure. (xml node is `<posMode>`)
-    bool beginNewSystem{};      ///< "Begin a New Staff System" (xml node is `<lineBreak>`)
-    bool breakMmRest{};         ///< "Break a Multimeasure Rests" (xml node is `<breakRest>`)
-    bool noMeasNum{};           ///< Inverse of "Include in Measure Numbering"
-    BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
-    bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
-    bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
-    bool hasTextBlock{};        ///< Indicates if the measure has a measure-assigned text block. See @ref details::MeasureTextAssign.
-    bool forwardRepeatBar{};    ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
-    bool backwardsRepeatBar{};  ///< Indicates a forward repeat bar on this measure. (xml node is `<bacRepBar>`)
-    bool hasEnding{};           ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
-    bool hasTextRepeat{};       ///< Indicates the presence of one or more text repeat assigments. (xml node is `<txtRepeats>`)
-    bool hasChord{};            ///< Indicates the presence of one or more chords.
+    bool showFullNames{};       ///< "Show Full Staff & Group Names"
+    bool hasMeasNumbIndivPos{}; ///< Has individual measure numbering positioning. (xml node is `<mnSepPlace>`)
+    bool allowSplitPoints{};    ///< "Allow Horizontal Split Points" See @ref SplitMeasure. (xml node is `<posSplit>`)
     bool compositeNumerator{};  ///< Indicates a composite numerator for the time signature. (xml node is `<altNumTsig>`)
     bool compositeDenominator{}; ///< Indicates a composite denominator for the time signature. (xml node is `<altDenTsig>`)
+    ShowKeySigMode showKey{};   ///< Show mode for key signatures
+    ShowTimeSigMode showTime{}; ///< Show mode for time signatures
+    bool evenlyAcrossMeasure{}; ///< "Position Evenly Across Measure" (xml node is `<indivPosDef>`)
+    PositioningType positioningMode{}; ///< Positioning type for the measure. (xml node is `<posMode>`)
+    bool beginNewSystem{};      ///< "Begin a New Staff System" (xml node is `<lineBreak>`)
+    bool hasExpression{};       ///< Indicates if the measure has an expression assigned. See @ref MeasureExprAssign. (xml node is `<hasExpr>`)
+    bool breakMmRest{};         ///< "Break a Multimeasure Rests" (xml node is `<breakRest>`)
+    bool noMeasNum{};           ///< Inverse of "Include in Measure Numbering"
+    bool hasOssia{};            ///< Indicates if the measure has an ossia assigned. (xml node is `<arbitMusic>`)
+    bool hasTextBlock{};        ///< Indicates if the measure has a measure-assigned text block. See @ref details::MeasureTextAssign.
+    BarlineType barlineType{};  ///< Barline type. (xml node is `<barline>`)
+    bool forwardRepeatBar{};    ///< Indicates a forward repeat bar on this measure. (xml node is `<forRepBar>`)
+    bool backwardsRepeatBar{};  ///< Indicates a backwards repeat bar on this measure. (xml node is `<bacRepBar>`)
+    bool hasEnding{};           ///< Indicates the presence of a repeat ending. (xml node is `<barEnding>`)
+    bool hasTextRepeat{};       ///< Indicates the presence of one or more text repeat assigments. (xml node is `<txtRepeats>`)
     bool abbrvTime{};           ///< Indicates abbreviated time signature (e.g., Common or Cut time.) Applies to the display time signature only.
                                 ///< The actual time signature's abbreviation is controlled by the values in @ref options::TimeSignatureOptions.
     bool useDisplayTimesig{};   ///< Indicates whether to use the display time signature.
+    bool hasChord{};            ///< Indicates the presence of one or more chords.
     BarlineType leftBarlineType{}; ///< Left barline type. (xml node is `<leftBarline>`)
     bool compositeDispNumerator{};  ///< Indicates a composite numerator for the display time signature. (xml node is `<displayAltNumTsig>`)
     bool compositeDispDenominator{}; ///< Indicates a composite denominator for the display time signature. (xml node is `<displayAltDenTsig>`)
+    bool pageBreak{};           ///< If true, begin new page here. (Behavior is weird if the measure is not the first of its system.)
 
     /// @brief Calculates if a measure should show full names vs. abbreviated names
     bool calcShouldShowFullNames() const
@@ -1186,7 +1192,7 @@ public:
 
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
-    /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for tranposition) without affecting the values in the document.
+    /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for transposition) without affecting the values in the document.
     MusxInstance<KeySignature> createKeySignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Create a shared pointer to an instance of the @ref TimeSignature for this measure and staff.
@@ -1205,7 +1211,7 @@ public:
     util::Fraction calcDuration(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
     /// @brief Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus.
-    /// @param forStaff The staff for wiuch to calculate the time stretch.
+    /// @param forStaff The staff for which to calculate the time stretch.
     util::Fraction calcTimeStretch(StaffCmper forStaff) const
     {
         return calcDuration() / calcDuration(forStaff);
@@ -1219,8 +1225,6 @@ public:
         }
     }
 
-    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
-
     constexpr static std::string_view XmlNodeName = "measSpec"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Measure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -1231,7 +1235,7 @@ public:
  *
  * Only one of #textExprId or #shapeExprId is non-zero.
  *
- * The Cmper for a MeasureExprAssign is the cmper of the Measure to which it is attached.
+ * The Cmper for a MeasureExprAssign is the Cmper of the Measure to which it is attached.
  */
 class MeasureExprAssign : public OthersBase
 {
@@ -1240,19 +1244,57 @@ public:
     explicit MeasureExprAssign(const DocumentWeakPtr& document, Cmper ID, ShareMode shareMode, Cmper cmper, Inci inci)
         : OthersBase(document, ID, shareMode, cmper, inci) {}
 
+    /// @enum ChannelSwitchTarget
+    /// @brief The values for "On Playback Affect". The target channels are specified in the Score Manager dropdown for staves.
+    enum class ChannelSwitchTarget
+    {
+        Current,            ///< Current channel. (Default value may not appear in xml.)
+        ToLayer1,           ///< Switch to layer 1 channel. (xml value is "toL1")
+        ToLayer2,           ///< Switch to layer 2 channel. (xml value is "toL2")
+        ToLayer3,           ///< Switch to layer 3 channel. (xml value is "toL3")
+        ToLayer4,           ///< Switch to layer 4 channel. (xml value is "toL4")
+        ToChord,            ///< Switch to chord channel. (xml value is "toChord")
+        ToExpression,       ///< Switch to expression channel. (xml value is "toDyn")
+    };
+
+    /// @enum PlaybackStart
+    /// @brief The choice where to start playback.
+    enum class PlaybackStart
+    {
+        BeginningOfMeasure,     ///< Start playback at beginning of measure. (Default value may not appear in xml.)
+        AlignmentPoint,         ///< Start playback at alignment point as determined by the associated @ref TextExpressionDef or @ref ShapeExpressionDef.
+                                ///< (xml value is "attach")
+        PositionInMeasure       ///< Start playback at the Edu position of the assignment. (xml value is "measPos")
+    };
+
+    /// @enum ShowStaffList
+    /// @brief Where to show the assignment (when there is no staff list.)
+    enum class ShowStaffList
+    {
+        ScoreAndPart,           ///< Score and Part(s). (Default value may not appear in xml.)
+        ScoreOnly,              ///< Score Only
+        PartOnly,               ///< Part(s) Only
+    };
+
     // Public properties corresponding to the XML structure
-    Cmper textExprId{};         ///< The @ref Cmper of a text expression (xml node is `<textExprID>`)
-    Cmper shapeExprId{};        ///< The @ref Cmper of a shape expression (xml node is `<shapeExprID>`)
-    Evpu horzEvpuOff{};         ///< Horizontal Evpu offset from the default position.
-    Edu eduPosition{};          ///< Horizontal Edu position (xml node is `<horzEduOff>`)
-    Evpu vertEvpuOff{};         ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
-    StaffCmper staffAssign{};   ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
-    int layer{};                ///< The 1-based layer number to which this expression is assigned. (0 means all)
-    bool dontScaleWithEntry{};  ///< Inverse of "Scale Expression with Attached Note".
-    Cmper staffGroup{};         ///< Not sure what this is used for, but it seems to be a @ref details::StaffGroup cmper.
-    Cmper staffList{};          ///< The cmper of the marking category staff list that is controlling this assignment (if any).
-                                ///< There will be a separate #MeasureExprAssign instance for every staff in the staff list.
-    bool hidden{};              ///< True if the dynamic is hidden.
+    Cmper textExprId{};                     ///< The @ref Cmper of a text expression (xml node is `<textExprID>`)
+    Cmper shapeExprId{};                    ///< The @ref Cmper of a shape expression (xml node is `<shapeExprID>`)
+    Evpu horzEvpuOff{};                     ///< Horizontal Evpu offset from the default position.
+    Edu eduPosition{};                      ///< Horizontal Edu position (xml node is `<horzEduOff>`)
+    Evpu vertEvpuOff{};                     ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
+    StaffCmper staffAssign{};               ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
+    int layer{};                            ///< The 1-based layer number (1..4) to which this expression is assigned. (0 = all layers.)
+    ChannelSwitchTarget channelSwitch{};    ///< "On Playback Affect" value.
+    bool dontScaleWithEntry{};              ///< Inverse of "Scale Expression with Attached Note".
+    PlaybackStart playbackStart{};          ///< Where to start playback.
+    ShowStaffList showStaffList{};          ///< "Show On Score and Part(s)|Score Only|Part(s) Only".
+    bool createdByHp{};                     ///< This assignment was created by Finale's smart playback engine.
+    bool hidden{};                          ///< True if the expression is hidden.
+    int staffGroup{};                       ///< Assignment is part of a group of assignments associated with a staff list and should be modified as a group.
+    Cmper staffList{};                      ///< The cmper of the marking category staff list that is controlling this assignment (if any).
+                                            ///< There will be a separate #MeasureExprAssign instance for every staff in the staff list.
+    int graceNoteIndex{};                   ///< 1-based index from leftmost grace note. 0 = main note.
+    int rehearsalMarkOffset{};              ///< Restarts the rehearsal mark sequence at this 1-based sequence value. If this is zero, the sequence continues normally.
 
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
@@ -1273,8 +1315,6 @@ public:
                 + " has both text expr ID " + std::to_string(textExprId) + " and shape expr ID " + std::to_string(shapeExprId));
         }
     }
-
-    bool requireAllFields() const override { return false; } ///< @todo: remove this override after identifying all fields.
 
     constexpr static std::string_view XmlNodeName = "measExprAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureExprAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1749,8 +1789,6 @@ public:
  * @class PartDefinition
  * @brief Represents the attributes of a Finale "partDef".
  *
- * @todo After identifying all possible fields, remove the override of #PartDefinition::requireAllFields.
- *
  * The cmper is the part definition ID, representing unique part definitions in the Finale document.
  * This class is identified by the XML node name "partDef".
  */
@@ -1765,7 +1803,9 @@ public:
     Cmper nameId{};                     ///< @ref Cmper of the part name @ref TextBlock. (xml tag is `<nameID>`)
     int partOrder{};                    ///< Value that determines the order of listed parts in Finale's UI.
     int copies{};                       ///< Number of copies to print.
+    bool printPart{};                   ///< Indicates the part should be printed.
     bool extractPart{};                 ///< Indicates if the part should be extracted.
+    bool applyFormat{};                 ///< Meaning uncertain. May have to do with page format for parts and whether it has been applied.
     bool needsRecalc{};                 ///< Indicates if the part needs update layout.
     bool useAsSmpInst{};                ///< Indicates if the part is used as a SmartMusic instrument.
     int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
@@ -1808,8 +1848,6 @@ public:
 
     /** @brief Return the linked parts sorted in UI order by #partOrder */
     static MusxInstanceList<PartDefinition> getInUserOrder(const DocumentPtr& document);
-
-    bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "partDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2124,6 +2162,7 @@ public:
     Cmper categoryId{};                             ///< Identifier for the category of the text expression. (xml node is "categoryID")
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
+    Cmper execShape{};                              ///< Executable shape Cmper for playback (@ref ShapeDef)
     int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
     int playPass{};                                 ///< "Play Only on Pass" value.
     bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
@@ -2141,10 +2180,44 @@ public:
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 
-    bool requireAllFields() const override { return false; }
-
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+    
+/**
+ * @class SplitMeasure
+ * @brief Contains the split point(s) where a measure may be split between two systems. A measure can only
+ * split once, but multiple split points in theory provide multiple split possibilities depending on the spacing.
+ * (However, see the warning below for the actual situation.)
+ *
+ * The value array is Evpu values in Scroll View. Knowing where to split the music may require being able
+ * to interpolate between Scroll View Evpu and beat position. That, in turn, requires understanding beat charts
+ * and how Finale does layout. A crude first approximation might be simply to divide the split value by
+ * the value in #Measure::width. This might yield a usable value for the fraction of the (graphical) measure
+ * to display on the previous system.
+ *
+ * @note This is a legacy feature of Finale. It was never well-implemented across the entire app,
+ * and as the years passed it became increasingly less useful due to newer features not knowing about it.
+ * The result is that very few Finale files are likely to be using split points, and the longer ago they were
+ * created, the more likely they are (though still unlikely).
+ *
+ * @warning The earliest Finale versions could create multiple split points, but the most recent can only
+ * create a single split point. However, any Finale version can upgrade an older file with multiple values
+ * and continue to have them, so even a file most recently saved by Finale 27.4 can have multiple split points.
+ * Either way, both in legacy and recent Finale versions, multiple split points cause program crashes or
+ * weird recurring meaure layouts. Multiple split points are unusable in any Finale version tested.
+ *
+ * This class is identified by the XML node name "splitMeas".
+ */
+class SplitMeasure : public OthersArray<Evpu>
+{
+    std::string_view xmlTag() const override { return XmlNodeName; }
+
+public:
+    using OthersArray::OthersArray;
+
+    constexpr static std::string_view XmlNodeName = "splitMeas"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<SplitMeasure>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
@@ -2469,8 +2542,6 @@ public:
  * @class TextBlock
  * @brief Represents the attributes of a Finale "textBlock".
  *
- * @todo After identifying all possible fields, remove the override of #TextBlock::requireAllFields.
- *
  * The cmper is the textBlock ID, representing unique text blocks in the Finale document.
  * This class is identified by the XML node name "textBlock".
  */
@@ -2494,8 +2565,13 @@ public:
         : OthersBase(document, partId, shareMode, cmper) {}
 
     // Public properties corresponding to the XML structure
-    Cmper textId{};                    ///< @ref Cmper of the text block. (xml tag is `<textID>`)
+    Cmper textId{};                    ///< Cmper of the text block. (xml tag is `<textID>`)
+    Cmper shapeId{};                   ///< If non-zero, the Cmper of the custom frame shape. (xml tag is `<shapeID>`)
+    Evpu width{};                      ///< Width of standard frame. If zero, the width expands to fit the text.
+    Evpu height{};                     ///< Height of standard frame. If zero, the height expands to fit the text.
     int lineSpacingPercentage{};       ///< Line spacing percentage.
+    Evpu xAdd{};                       ///< Horizontal offset from handle.
+    Evpu yAdd{};                       ///< Vertical offset from handle.
     TextJustify justify{};             ///< Justification (left, center, right, full, force full)
     bool newPos36{};                   ///< "Position from Edge of Frame" compatibility setting.
                                        ///< Best guess is that blocks created before Finale 3.6 do not have this set.
@@ -2503,8 +2579,8 @@ public:
     bool showShape{};                  ///< Show shape
     bool noExpandSingleWord{};         ///< Do not expand single word
     bool wordWrap{};                   ///< Wrap words (in frames)
-    Evpu width{};                      ///< Width of frame
-    Evpu height{};                     ///< Height of frame
+    Efix inset{};                      ///< Text inset from frame (all sides)
+    Efix stdLineThickness{};           ///< Thickness of standard frame line. (xml tag is `<stdLine>`)
     bool roundCorners{};               ///< Use rounded corners on frame
     Efix cornerRadius{};               ///< Corner radius for rounded corners.
     TextType textType{};               ///< Text tag indicating the type of text block. (xml tag is `<textTag>`)
@@ -2520,8 +2596,6 @@ public:
     /** @brief return displayable text with Enigma tags removed */
     static std::string getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii);
-
-    bool requireAllFields() const override { return false; }
 
     constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextBlock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2547,6 +2621,7 @@ public:
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
+    Cmper execShape{};                              ///< Executable shape Cmper for playback (@ref ShapeDef)
     int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
     int playPass{};                                 ///< "Play Only on Pass" value.
     bool hideMeasureNum;                            ///< "Hide Measure Numbers" (used on Rehearsal Marks)
@@ -2571,7 +2646,7 @@ public:
 
     /**
      * @brief Gets the raw text context for parsing this expression, or nullptr if none.
-     * @param forPartId The linked part to used for ^partname and ^totpages inserts.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
     util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
 
