@@ -2190,9 +2190,11 @@ public:
  * split once, but multiple split points in theory provide multiple split possibilities depending on the spacing.
  * (However, see the warning below for the actual situation.)
  *
- * The value array is Evpu values in Scroll View. Knowing where to split the music requires being able
+ * The value array is Evpu values in Scroll View. Knowing where to split the music may require being able
  * to interpolate between Scroll View Evpu and beat position. That, in turn, requires understanding beat charts
- * and how Finale does layout.
+ * and how Finale does layout. A crude first approximation might be simply to divide the split value by
+ * the value in #Measure::width. This might yield a usable value for the fraction of the (graphical) measure
+ * to display on the previous system.
  *
  * @note This is a legacy feature of Finale. It was never well-implemented across the entire app,
  * and as the years passed it became increasingly less useful due to newer features not knowing about it.
@@ -2203,7 +2205,7 @@ public:
  * create a single split point. However, any Finale version can upgrade an older file with multiple values
  * and continue to have them, so even a file most recently saved by Finale 27.4 can have multiple split points.
  * Either way, both in legacy and recent Finale versions, multiple split points cause program crashes or
- * weird recurring meaure layouts. Multiple split points are unusable in any Finale version.
+ * weird recurring meaure layouts. Multiple split points are unusable in any Finale version tested.
  *
  * This class is identified by the XML node name "splitMeas".
  */
