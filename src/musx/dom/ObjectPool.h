@@ -90,39 +90,40 @@ public:
     /** @brief shared pointer to `ObjectBaseType` */
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
-    class ObjectKey
-    {
-        // GCC -O3 emits spurious warnings if we directly compare std::optional values.
-        // `as_key_tuple` does the comparisons without dereferencing the std::optional explicitly and avoids the warning.
-
-        inline auto as_key_tuple() const noexcept
-        {
-            auto opt_key = [](auto const& opt) noexcept {
-                using T = std::remove_reference_t<decltype(*opt)>;
-                return std::make_pair(opt.has_value(), opt.value_or(T{}));
-            };
-            return std::make_tuple(nodeId, partId, opt_key(cmper1), opt_key(cmper2), opt_key(inci));
-        }
-
-    public:
+    struct ObjectKey {
         std::string_view nodeId;        ///< the identifier for this node. usually the XML node name.
         Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
         std::optional<Cmper> cmper2;    ///< optional cmper2 for Details.
-        std::optional<Inci> inci;       ///< optional inci for multi-inci classes
+        // Use `int` instead of `Inci` to work around GCC spurious -Wmaybe-uninitialized warning
+        std::optional<int> inci;        ///< optional inci for multi-inci classes
 
         /** @brief explicit constructor for optional parameters */
         ObjectKey(std::string_view n,
             Cmper p,
             std::optional<Cmper> c1 = std::nullopt,
             std::optional<Cmper> c2 = std::nullopt,
-            std::optional<Inci> i = std::nullopt) : nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
+            std::optional<int> i = std::nullopt) : nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
         {
         }
 
         /** @brief comparison operator for std::map */
-        inline bool operator<(const ObjectKey& o) const noexcept
-        { return as_key_tuple() < o.as_key_tuple(); }
+        bool operator<(const ObjectKey& other) const
+        {
+            if (nodeId != other.nodeId) {
+                return nodeId < other.nodeId;
+            }
+            if (partId != other.partId) {
+                return partId < other.partId;
+            }
+            if (cmper1 != other.cmper1) {
+                return cmper1 < other.cmper1;
+            }
+            if (cmper2 != other.cmper2) {
+                return cmper2 < other.cmper2;
+            }
+            return inci < other.inci;
+        }
 
         /** @brief provides a description of the key for diagnostic purposes */
         std::string description() const
