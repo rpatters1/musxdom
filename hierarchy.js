@@ -327,7 +327,7 @@ var hierarchy =
     [ "musx::dom::options::NoteRestOptions::NoteColor", "classmusx_1_1dom_1_1options_1_1NoteRestOptions_1_1NoteColor.html", null ],
     [ "musx::dom::NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", null ],
     [ "musx::dom::details::ShapeNoteBase::NoteShapes", "classmusx_1_1dom_1_1details_1_1ShapeNoteBase_1_1NoteShapes.html", null ],
-    [ "musx::dom::ObjectPool< ObjectBaseType >::ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
+    [ "musx::dom::ObjectPool< ObjectBaseType >::ObjectKey", "classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", null ],
     [ "musx::dom::ObjectPool< ObjectBaseType >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
     [ "musx::dom::ObjectPool< musx::dom::DetailsBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],
     [ "musx::dom::ObjectPool< musx::dom::OptionsBase >", "classmusx_1_1dom_1_1ObjectPool.html", null ],

@@ -21,7 +21,7 @@ var searchData=
   ['parensharp_18',['parenSharp',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a4f94dcdd815789128257ae21015d56f0',1,'musx::dom::options::MusicSymbolOptions']]],
   ['parentinstrumentid_19',['parentInstrumentId',['../structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#a5eac2b7120a8cf60f9b6aef64c1efd1c',1,'musx::dom::percussion::PercussionNoteType']]],
   ['partdata_20',['partData',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#af89c8fbb75e599b2fb44d34b9122bf92',1,'musx::dom::others::MeasureNumberRegion']]],
-  ['partid_21',['partId',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a5a9830417056caccedfd9acf91fb4334',1,'musx::dom::ObjectPool::ObjectKey']]],
+  ['partid_21',['partId',['../classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a5a9830417056caccedfd9acf91fb4334',1,'musx::dom::ObjectPool::ObjectKey']]],
   ['partorder_22',['partOrder',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#a905607c86784a417ba48bbd86cc01f4a',1,'musx::dom::others::PartDefinition']]],
   ['passlist_23',['passList',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a512dc7bfe908183a1cdf60d113709044',1,'musx::dom::others::TextRepeatDef']]],
   ['passnumber_24',['passnumber',['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#a6826e7b065b66012fbe3147f6fb73ae2',1,'musx::dom::others::RepeatBack::passNumber'],['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a7c57a85174a105cba6449df99534f81e',1,'musx::dom::others::TextRepeatAssign::passNumber']]],
