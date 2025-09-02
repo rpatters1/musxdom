@@ -107,21 +107,30 @@ public:
         }
 
         /** @brief comparison operator for std::map */
-        bool operator<(const ObjectKey& other) const
+        inline bool operator<(const ObjectKey& other) const noexcept
         {
-            if (nodeId != other.nodeId) {
-                return nodeId < other.nodeId;
-            }
-            if (partId != other.partId) {
-                return partId < other.partId;
-            }
-            if (cmper1 != other.cmper1) {
-                return cmper1 < other.cmper1;
-            }
-            if (cmper2 != other.cmper2) {
-                return cmper2 < other.cmper2;
-            }
-            return inci < other.inci;
+            if (nodeId != other.nodeId) return nodeId < other.nodeId;
+            if (partId != other.partId) return partId < other.partId;
+
+            // GCC O3 emits spurious warnings if we directly compare std::optional values,
+            // so this code does the comparisons explicitly.
+
+            // cmper1: disengaged < engaged; if both engaged, compare payloads
+            const bool a1 = cmper1.has_value(), b1 = other.cmper1.has_value();
+            if (a1 != b1) return !a1 && b1;
+            if (a1 && *cmper1 != *other.cmper1) return *cmper1 < *other.cmper1;
+
+            // cmper2
+            const bool a2 = cmper2.has_value(), b2 = other.cmper2.has_value();
+            if (a2 != b2) return !a2 && b2;
+            if (a2 && *cmper2 != *other.cmper2) return *cmper2 < *other.cmper2;
+
+            // inci
+            const bool ai = inci.has_value(), bi = other.inci.has_value();
+            if (ai != bi) return !ai && bi;
+            if (ai) return *inci < *other.inci;
+
+            return false;
         }
 
         /** @brief provides a description of the key for diagnostic purposes */
