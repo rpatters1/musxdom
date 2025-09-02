@@ -12,7 +12,7 @@ var searchData=
   ['ignorestyletags_9',['ignoreStyleTags',['../structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a1955dca68d1c248dd2d2e097a311522e',1,'musx::util::EnigmaString::EnigmaParsingOptions']]],
   ['ignoretags_10',['ignoreTags',['../structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a8cf0bc9198c167dee7a437dc3ed07ec9',1,'musx::util::EnigmaString::EnigmaParsingOptions']]],
   ['ignoretempotoolchanges_11',['IgnoreTempoToolChanges',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea6e8edf0bd8647219fee1d262c878f73a',1,'musx::dom::others']]],
-  ['inci_12',['inci',['../namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb',1,'musx::dom::Inci'],['../classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ac6fd3fa0193a98eadc827e3aea63cabe',1,'musx::dom::ObjectPool::ObjectKey::inci']]],
+  ['inci_12',['inci',['../namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb',1,'musx::dom::Inci'],['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ad2e5a90b7b815427fc5f1ea91fe30a97',1,'musx::dom::ObjectPool::ObjectKey::inci']]],
   ['incidence_13',['incidence',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a632b780c6dc8e819d29ccb5f7c67d019',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['includehours_14',['includeHours',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#afa750557598400b578275e692ec9054b',1,'musx::dom::others::MeasureNumberRegion']]],
   ['incorporate_15',['Incorporate',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a8ccf7f18be6c0552e426fbb788b8a402ad33cda90e352eb45efcd5cb894565562',1,'musx::dom::options::MusicSpacingOptions']]],

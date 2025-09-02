@@ -1,6 +1,6 @@
 var classmusx_1_1dom_1_1ObjectPool =
 [
-    [ "ObjectKey", "classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", "classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey" ],
+    [ "ObjectKey", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html", "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey" ],
     [ "ObjectPtr", "classmusx_1_1dom_1_1ObjectPool.html#ae26eae6f8358d93cb80b692680875176", null ],
     [ "~ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html#a2e7d562c09f29c7bc68a8a2508f26961", null ],
     [ "ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html#a20457025039eff1abba8c2e81cb4d25c", null ],

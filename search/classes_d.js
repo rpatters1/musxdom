@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['objectkey_0',['ObjectKey',['../classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html',1,'musx::dom::ObjectPool']]],
+  ['objectkey_0',['ObjectKey',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html',1,'musx::dom::ObjectPool']]],
   ['objectpool_1',['ObjectPool',['../classmusx_1_1dom_1_1ObjectPool.html',1,'musx::dom']]],
   ['objectpool_3c_20musx_3a_3adom_3a_3adetailsbase_20_3e_2',['ObjectPool&lt; musx::dom::DetailsBase &gt;',['../classmusx_1_1dom_1_1ObjectPool.html',1,'musx::dom']]],
   ['objectpool_3c_20musx_3a_3adom_3a_3aoptionsbase_20_3e_3',['ObjectPool&lt; musx::dom::OptionsBase &gt;',['../classmusx_1_1dom_1_1ObjectPool.html',1,'musx::dom']]],

@@ -34,7 +34,7 @@ var searchData=
   ['ney_31',['Ney',['../namespacemusx_1_1dom_1_1uuid.html#a4dd92871233ba3ab065d8ca62710bc0b',1,'musx::dom::uuid']]],
   ['ngoni_32',['Ngoni',['../namespacemusx_1_1dom_1_1uuid.html#a06acbe1f79585cf2baa72de7f0bc6f28',1,'musx::dom::uuid']]],
   ['nigerianlogdrum_33',['NigerianLogDrum',['../namespacemusx_1_1dom_1_1uuid.html#ab2aeca5f69e3c3332d9ee46843f9600b',1,'musx::dom::uuid']]],
-  ['nodeid_34',['nodeId',['../classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#acf2e6818f0cea369ce48784084d0c86b',1,'musx::dom::ObjectPool::ObjectKey']]],
+  ['nodeid_34',['nodeId',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#acf2e6818f0cea369ce48784084d0c86b',1,'musx::dom::ObjectPool::ObjectKey']]],
   ['noenclosure_35',['NoEnclosure',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256a4438abe8f7173f55d44d0c54f061e274',1,'musx::dom::others::Enclosure']]],
   ['noexpandsingleword_36',['noExpandSingleWord',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a34633d8ec36d5f5e8457c6fe7fd18ec4',1,'musx::dom::others::TextBlock']]],
   ['nohkan_37',['Nohkan',['../namespacemusx_1_1dom_1_1uuid.html#a57c70f801882af3c0df68afbedf091fb',1,'musx::dom::uuid']]],

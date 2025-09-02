@@ -9,7 +9,7 @@ var searchData=
   ['ignorehorznumoffset_6',['ignorehorznumoffset',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#abe6c4075e78c34a630f4465cc5ddc3e2',1,'musx::dom::options::TupletOptions::ignoreHorzNumOffset'],['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a894ff328c4cf7937f162d4842efb9659',1,'musx::dom::details::TupletDef::ignoreHorzNumOffset']]],
   ['ignorestyletags_7',['ignoreStyleTags',['../structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a1955dca68d1c248dd2d2e097a311522e',1,'musx::util::EnigmaString::EnigmaParsingOptions']]],
   ['ignoretags_8',['ignoreTags',['../structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a8cf0bc9198c167dee7a437dc3ed07ec9',1,'musx::util::EnigmaString::EnigmaParsingOptions']]],
-  ['inci_9',['inci',['../classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ac6fd3fa0193a98eadc827e3aea63cabe',1,'musx::dom::ObjectPool::ObjectKey']]],
+  ['inci_9',['inci',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ad2e5a90b7b815427fc5f1ea91fe30a97',1,'musx::dom::ObjectPool::ObjectKey']]],
   ['incidence_10',['incidence',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a632b780c6dc8e819d29ccb5f7c67d019',1,'musx::dom::others::MeasureNumberRegion::ScorePartData']]],
   ['includehours_11',['includeHours',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#afa750557598400b578275e692ec9054b',1,'musx::dom::others::MeasureNumberRegion']]],
   ['increstsinfourgroups_12',['incRestsInFourGroups',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a5927aa74943a8cd65ba5f7bd6dd17ce9',1,'musx::dom::options::BeamOptions']]],

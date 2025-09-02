@@ -25,7 +25,7 @@ var searchData=
   ['ney_22',['Ney',['../namespacemusx_1_1dom_1_1uuid.html#a4dd92871233ba3ab065d8ca62710bc0b',1,'musx::dom::uuid']]],
   ['ngoni_23',['Ngoni',['../namespacemusx_1_1dom_1_1uuid.html#a06acbe1f79585cf2baa72de7f0bc6f28',1,'musx::dom::uuid']]],
   ['nigerianlogdrum_24',['NigerianLogDrum',['../namespacemusx_1_1dom_1_1uuid.html#ab2aeca5f69e3c3332d9ee46843f9600b',1,'musx::dom::uuid']]],
-  ['nodeid_25',['nodeId',['../classmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#acf2e6818f0cea369ce48784084d0c86b',1,'musx::dom::ObjectPool::ObjectKey']]],
+  ['nodeid_25',['nodeId',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#acf2e6818f0cea369ce48784084d0c86b',1,'musx::dom::ObjectPool::ObjectKey']]],
   ['noexpandsingleword_26',['noExpandSingleWord',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a34633d8ec36d5f5e8457c6fe7fd18ec4',1,'musx::dom::others::TextBlock']]],
   ['nohkan_27',['Nohkan',['../namespacemusx_1_1dom_1_1uuid.html#a57c70f801882af3c0df68afbedf091fb',1,'musx::dom::uuid']]],
   ['nohorzstretch_28',['noHorzStretch',['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#af1b75802c3545136cec63b8751c96226',1,'musx::dom::others::ShapeExpressionDef']]],
