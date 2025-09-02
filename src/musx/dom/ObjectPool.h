@@ -95,21 +95,18 @@ public:
         Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
         std::optional<Cmper> cmper2;    ///< optional cmper2 for Details.
-        std::optional<Inci> inci;       ///< optional inci for multi-inci classes
+        // Use `int` instead of `Inci` to work around GCC spurious -Wmaybe-uninitialized warning
+        std::optional<int> inci;        ///< optional inci for multi-inci classes
 
         /** @brief explicit constructor for optional parameters */
         ObjectKey(std::string_view n,
             Cmper p,
             std::optional<Cmper> c1 = std::nullopt,
             std::optional<Cmper> c2 = std::nullopt,
-            std::optional<Inci> i = std::nullopt) : nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
+            std::optional<int> i = std::nullopt) : nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
         {
         }
 
-#if defined(__GNUC__) && !defined(__clang__)
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
         /** @brief comparison operator for std::map */
         bool operator<(const ObjectKey& other) const
         {
@@ -127,9 +124,6 @@ public:
             }
             return inci < other.inci;
         }
-#if defined(__GNUC__) && !defined(__clang__)
-  #pragma GCC diagnostic pop
-#endif
 
         /** @brief provides a description of the key for diagnostic purposes */
         std::string description() const
