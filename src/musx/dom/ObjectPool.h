@@ -90,21 +90,7 @@ public:
     /** @brief shared pointer to `ObjectBaseType` */
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
-    class ObjectKey
-    {
-        // GCC -O3 emits spurious warnings if we directly compare std::optional values.
-        // `as_key_tuple` does the comparisons without dereferencing the std::optional explicitly and avoids the warning.
-
-        inline auto as_key_tuple() const noexcept
-        {
-            auto opt_key = [](auto const& opt) noexcept {
-                using T = std::remove_reference_t<decltype(*opt)>;
-                return std::make_pair(opt.has_value(), opt.value_or(T{}));
-            };
-            return std::make_tuple(nodeId, partId, opt_key(cmper1), opt_key(cmper2), opt_key(inci));
-        }
-
-    public:
+    struct ObjectKey {
         std::string_view nodeId;        ///< the identifier for this node. usually the XML node name.
         Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
@@ -120,9 +106,30 @@ public:
         {
         }
 
+#if defined(__GNUC__) && !defined(__clang__)
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
         /** @brief comparison operator for std::map */
-        inline bool operator<(const ObjectKey& o) const noexcept
-        { return as_key_tuple() < o.as_key_tuple(); }
+        bool operator<(const ObjectKey& other) const
+        {
+            if (nodeId != other.nodeId) {
+                return nodeId < other.nodeId;
+            }
+            if (partId != other.partId) {
+                return partId < other.partId;
+            }
+            if (cmper1 != other.cmper1) {
+                return cmper1 < other.cmper1;
+            }
+            if (cmper2 != other.cmper2) {
+                return cmper2 < other.cmper2;
+            }
+            return inci < other.inci;
+        }
+#if defined(__GNUC__) && !defined(__clang__)
+  #pragma GCC diagnostic pop
+#endif
 
         /** @brief provides a description of the key for diagnostic purposes */
         std::string description() const
