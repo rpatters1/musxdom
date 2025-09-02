@@ -90,7 +90,21 @@ public:
     /** @brief shared pointer to `ObjectBaseType` */
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
-    struct ObjectKey {
+    class ObjectKey
+    {
+        // GCC -O3 emits spurious warnings if we directly compare std::optional values.
+        // `as_key_tuple` does the comparisons without dereferencing the std::optional explicitly and avoids the warning.
+
+        inline auto as_key_tuple() const noexcept
+        {
+            auto opt_key = [](auto const& opt) noexcept {
+                using T = std::remove_reference_t<decltype(*opt)>;
+                return std::make_pair(opt.has_value(), opt.value_or(T{}));
+            };
+            return std::make_tuple(nodeId, partId, opt_key(cmper1), opt_key(cmper2), opt_key(inci));
+        }
+
+    public:
         std::string_view nodeId;        ///< the identifier for this node. usually the XML node name.
         Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
@@ -107,31 +121,8 @@ public:
         }
 
         /** @brief comparison operator for std::map */
-        inline bool operator<(const ObjectKey& other) const noexcept
-        {
-            if (nodeId != other.nodeId) return nodeId < other.nodeId;
-            if (partId != other.partId) return partId < other.partId;
-
-            // GCC O3 emits spurious warnings if we directly compare std::optional values,
-            // so this code does the comparisons explicitly.
-
-            // cmper1: disengaged < engaged; if both engaged, compare payloads
-            const bool a1 = cmper1.has_value(), b1 = other.cmper1.has_value();
-            if (a1 != b1) return !a1 && b1;
-            if (a1 && *cmper1 != *other.cmper1) return *cmper1 < *other.cmper1;
-
-            // cmper2
-            const bool a2 = cmper2.has_value(), b2 = other.cmper2.has_value();
-            if (a2 != b2) return !a2 && b2;
-            if (a2 && *cmper2 != *other.cmper2) return *cmper2 < *other.cmper2;
-
-            // inci
-            const bool ai = inci.has_value(), bi = other.inci.has_value();
-            if (ai != bi) return !ai && bi;
-            if (ai) return *inci < *other.inci;
-
-            return false;
-        }
+        inline bool operator<(const ObjectKey& o) const noexcept
+        { return as_key_tuple() < o.as_key_tuple(); }
 
         /** @brief provides a description of the key for diagnostic purposes */
         std::string description() const
