@@ -69,8 +69,11 @@ DocumentPtr loadDocument(const std::vector<char>& buffer)
     }
 }
 
-void adHocTest(const DocumentPtr& doc)
+void adHocTest([[maybe_unused]]const DocumentPtr& doc)
 {
+/*
+    9/3/2025: Test how brackets are handled in ShapeDef.
+
     if (auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 6)) {
         shape->iterateInstructions([&](others::ShapeDef::InstructionType instruction, std::vector<int> data) -> bool {
             std::cout << "instruction: " << int(instruction) << std::endl;
@@ -82,6 +85,7 @@ void adHocTest(const DocumentPtr& doc)
             return true;
         });
     } 
+*/
 }
 
 void benchmarkEntries(const DocumentPtr& doc)
