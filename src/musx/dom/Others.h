@@ -2385,8 +2385,7 @@ public:
     MeasCmper startMeas{};          ///< Starting measure of the staff system. See @ref Measure.
     MeasCmper endMeas{};            ///< The ending measure of the staff system, stored as *one greater* than the last measure
                                     ///< on this system. In other words, it is the first measure of the next system, or one past
-                                    ///< the last measure in the document. See @ref Measure.
-                                    ///<
+                                    ///< the last measure in the document. See @ref Measure.  
                                     ///< If #endMeas is a split measure, its first part may still appear on this system depending
                                     ///< on spacing. (Finale does not record this in the data.) If the system is locked, the first
                                     ///< part of the split always appears on this system. See @ref SplitMeasure and @ref SystemLock.
