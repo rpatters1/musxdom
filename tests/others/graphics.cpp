@@ -129,3 +129,110 @@ TEST(GraphicsFileMetadataTest, PopulateAllFileInfoClasses)
         EXPECT_EQ(b1->urlBookmarkData[4], 0x06);
     }
 }
+
+TEST(PageGraphicAssignTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <pageGraphicAssign cmper="4" inci="0">
+      <version>256</version>
+      <left>13</left>
+      <bottom>-956</bottom>
+      <width>495</width>
+      <height>256</height>
+      <fDescID>2</fDescID>
+      <displayType>one</displayType>
+      <displayHidden/>
+      <halign>center</halign>
+      <valign>top</valign>
+      <posFrom>margins</posFrom>
+      <fixedPerc/>
+      <startPage>4</startPage>
+      <endPage>4</endPage>
+      <savedRecord/>
+      <origWidth>556</origWidth>
+      <origHeight>324</origHeight>
+      <rightPgHAlign>right</rightPgHAlign>
+      <rightPgVAlign>top</rightPgVAlign>
+      <rightPgPosFrom>margins</rightPgPosFrom>
+      <rightPgFixedPerc/>
+      <rightPgLeft>17</rightPgLeft>
+      <rightPgBottom>-956</rightPgBottom>
+      <graphicCmper>2</graphicCmper>
+    </pageGraphicAssign>
+    <pageGraphicAssign cmper="4" inci="0" part="1" shared="true">
+      <displayHidden>
+        <offInPart/>
+      </displayHidden>
+    </pageGraphicAssign>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    // Score assignment
+    auto g1 = others->get<others::PageGraphicAssign>(SCORE_PARTID, 4, 0);
+    ASSERT_TRUE(g1) << "PageGraphicAssign (cmper=4, inci=0) not found for SCORE_PARTID but does exist";
+
+    EXPECT_EQ(g1->version, 256u);
+    EXPECT_EQ(g1->left, 13);
+    EXPECT_EQ(g1->bottom, -956);
+    EXPECT_EQ(g1->width, 495);
+    EXPECT_EQ(g1->height, 256);
+    EXPECT_EQ(g1->fDescId, 2);
+    EXPECT_EQ(g1->displayType, others::PageGraphicAssign::PageAssignType::One);
+    EXPECT_TRUE(g1->hidden);
+    EXPECT_EQ(g1->hAlign, others::PageGraphicAssign::HorizontalAlignment::Center);
+    EXPECT_EQ(g1->vAlign, others::PageGraphicAssign::VerticalAlignment::Top);
+    EXPECT_EQ(g1->posFrom, others::PageGraphicAssign::PositionFrom::Margins);
+    EXPECT_TRUE(g1->fixedPerc);
+    EXPECT_EQ(g1->startPage, 4);
+    EXPECT_EQ(g1->endPage, 4);
+    EXPECT_TRUE(g1->savedRecord);
+    EXPECT_EQ(g1->origWidth, 556);
+    EXPECT_EQ(g1->origHeight, 324);
+    EXPECT_EQ(g1->rightPgHAlign, others::PageGraphicAssign::HorizontalAlignment::Right);
+    EXPECT_EQ(g1->rightPgVAlign, others::PageGraphicAssign::VerticalAlignment::Top);
+    EXPECT_EQ(g1->rightPgPosFrom, others::PageGraphicAssign::PositionFrom::Margins);
+    EXPECT_TRUE(g1->rightPgFixedPerc);
+    EXPECT_EQ(g1->rightPgLeft, 17);
+    EXPECT_EQ(g1->rightPgBottom, -956);
+    EXPECT_EQ(g1->graphicCmper, 2);
+
+    // Part 1 assignment (shared="true"): inherits from score, overridden fields apply
+    auto g2 = others->get<others::PageGraphicAssign>(1, 4, 0);
+    ASSERT_TRUE(g2) << "PageGraphicAssign (cmper=4, inci=0) not found for part 1 but does exist";
+
+    // Inherited fields
+    EXPECT_EQ(g2->version, g1->version);
+    EXPECT_EQ(g2->left, g1->left);
+    EXPECT_EQ(g2->bottom, g1->bottom);
+    EXPECT_EQ(g2->width, g1->width);
+    EXPECT_EQ(g2->height, g1->height);
+    EXPECT_EQ(g2->fDescId, g1->fDescId);
+    EXPECT_EQ(g2->displayType, g1->displayType);
+    EXPECT_EQ(g2->hAlign, g1->hAlign);
+    EXPECT_EQ(g2->vAlign, g1->vAlign);
+    EXPECT_EQ(g2->posFrom, g1->posFrom);
+    EXPECT_EQ(g2->fixedPerc, g1->fixedPerc);
+    EXPECT_EQ(g2->startPage, g1->startPage);
+    EXPECT_EQ(g2->endPage, g1->endPage);
+    EXPECT_EQ(g2->savedRecord, g1->savedRecord);
+    EXPECT_EQ(g2->origWidth, g1->origWidth);
+    EXPECT_EQ(g2->origHeight, g1->origHeight);
+    EXPECT_EQ(g2->rightPgHAlign, g1->rightPgHAlign);
+    EXPECT_EQ(g2->rightPgVAlign, g1->rightPgVAlign);
+    EXPECT_EQ(g2->rightPgPosFrom, g1->rightPgPosFrom);
+    EXPECT_EQ(g2->rightPgFixedPerc, g1->rightPgFixedPerc);
+    EXPECT_EQ(g2->rightPgLeft, g1->rightPgLeft);
+    EXPECT_EQ(g2->rightPgBottom, g1->rightPgBottom);
+    EXPECT_EQ(g2->graphicCmper, g1->graphicCmper);
+
+    // Overridden field
+    EXPECT_FALSE(g2->hidden); // displayHidden with <offInPart/> -> false in the part
+}

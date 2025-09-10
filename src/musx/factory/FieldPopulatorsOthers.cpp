@@ -147,6 +147,18 @@ MUSX_XML_ENUM_MAPPING(Measure::ShowTimeSigMode, {
     {"ignoreTime", Measure::ShowTimeSigMode::Never},
 });
 
+MUSX_XML_ENUM_MAPPING(PageGraphicAssign::PageAssignType, {
+    {"all", PageGraphicAssign::PageAssignType::AllPages},
+    {"even", PageGraphicAssign::PageAssignType::Even},
+    {"odd", PageGraphicAssign::PageAssignType::Odd},
+    {"one", PageGraphicAssign::PageAssignType::One},
+});
+
+MUSX_XML_ENUM_MAPPING(PageGraphicAssign::PositionFrom, {
+    {"margins", PageGraphicAssign::PositionFrom::Margins},
+    {"paper", PageGraphicAssign::PositionFrom::PageEdge},
+});
+
 MUSX_XML_ENUM_MAPPING(PageTextAssign::PageAssignType, {
     // {"all", PageTextAssign::PageAssignType::All}, // This is the default and is not known to occur in the XML.
     {"even", PageTextAssign::PageAssignType::Even},
@@ -953,6 +965,33 @@ MUSX_XML_ELEMENT_ARRAY(Page, {
     {"margLeft", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margLeft = e->getTextAs<Evpu>(); }},
     {"margBottom", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margBottom = e->getTextAs<Evpu>(); }},
     {"margRight", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margRight = e->getTextAs<Evpu>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(PageGraphicAssign, {
+    {"version", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->version = e->getTextAs<uint32_t>(); }},
+    {"left", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->left = e->getTextAs<Evpu>(); }},
+    {"bottom", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->bottom = e->getTextAs<Evpu>(); }},
+    {"width", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"fDescID", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->fDescId = e->getTextAs<Cmper>(); }},
+    {"displayType", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->displayType = toEnum<PageGraphicAssign::PageAssignType>(e); }},
+    {"displayHidden", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->hAlign = toEnum<PageGraphicAssign::HorizontalAlignment>(e); }},
+    {"valign", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->vAlign = toEnum<PageGraphicAssign::VerticalAlignment>(e); }},
+    {"posFrom", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->posFrom = toEnum<PageGraphicAssign::PositionFrom>(e); }},
+    {"fixedPerc", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->fixedPerc = populateBoolean(e, i); }},
+    {"startPage", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->startPage = e->getTextAs<PageCmper>(); }},
+    {"endPage", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->endPage = e->getTextAs<PageCmper>(); }},
+    {"savedRecord", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->savedRecord = populateBoolean(e, i); }},
+    {"origWidth", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},
+    {"origHeight", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->origHeight = e->getTextAs<Evpu>(); }},
+    {"rightPgHAlign", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgHAlign = toEnum<PageGraphicAssign::HorizontalAlignment>(e); }},
+    {"rightPgVAlign", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgVAlign = toEnum<PageGraphicAssign::VerticalAlignment>(e); }},
+    {"rightPgPosFrom", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgPosFrom = toEnum<PageGraphicAssign::PositionFrom>(e); }},
+    {"rightPgFixedPerc", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgFixedPerc = populateBoolean(e, i); }},
+    {"rightPgLeft", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgLeft = e->getTextAs<Evpu>(); }},
+    {"rightPgBottom", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgBottom = e->getTextAs<Evpu>(); }},
+    {"graphicCmper", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->graphicCmper = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PageOssiaAssign, {

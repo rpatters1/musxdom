@@ -287,13 +287,13 @@ MUSX_XML_ENUM_MAPPING(TextOptions::DateFormat, {
 });
 
 MUSX_XML_ENUM_MAPPING(TextOptions::HorizontalAlignment, {
-    // {"left", TextOptions::HorizontalAlignment::Left}, // This is the default and is not known to occur in the XML.
+    {"left", TextOptions::HorizontalAlignment::Left}, // This is the default.
     {"center", TextOptions::HorizontalAlignment::Center},
     {"right", TextOptions::HorizontalAlignment::Right},
 });
 
 MUSX_XML_ENUM_MAPPING(TextOptions::VerticalAlignment, {
-    // {"top", TextOptions::VerticalAlignment::Top}, // This is the default and is not known to occur in the XML.
+    {"top", TextOptions::VerticalAlignment::Top}, // This is the default.
     {"center", TextOptions::VerticalAlignment::Center},
     {"bottom", TextOptions::VerticalAlignment::Bottom},
 });

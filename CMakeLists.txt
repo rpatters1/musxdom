@@ -41,6 +41,7 @@ set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Details.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Document.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Entries.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Graphics.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/MusxInstance.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Options.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/dom/Others.cpp

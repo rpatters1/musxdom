@@ -272,6 +272,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::NamePositionStyleFull,
     dom::others::TextBlock,
     dom::others::Page,
+    dom::others::PageGraphicAssign,
     dom::others::PageOssiaAssign,
     dom::others::PageTextAssign,
     dom::others::RepeatBack,

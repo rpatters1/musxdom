@@ -142,6 +142,133 @@ public:
     static const xml::XmlElementArray<FileUrlBookmark>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/**
+ * @class PageGraphicAssign
+ * @brief Represents a page graphic assignment with positioning and page-range properties.
+ *
+ * Instances of #PageGraphicAssign use page assignment IDs rather than straightforward page numbers.
+ * If the cmper is non-0, #startPage is not used and the cmper specifies a page assignment ID that
+ * defines which page this graphic is assigned to. If the cmper is 0, #startPage specifies the first
+ * page assignment ID to which the graphic is assigned (and #displayType governs whether it repeats
+ * on odd/even/all pages thereafter).
+ *
+ * The inci value specifies a particular page graphic when more than one exists for a cmper value.
+ *
+ * This class is identified by the XML node name "pageGraphicAssign".
+ */
+class PageGraphicAssign : public OthersBase
+{
+public:
+
+    /**
+     * @enum PageAssignType
+     * @brief Which pages a multipage assignment appears on
+     */
+    enum class PageAssignType
+    {
+        AllPages,
+        Even,
+        Odd,
+        One
+    };
+
+    /**
+     * @enum PositionFrom
+     * @brief Reference frame for positioning.
+     */
+    enum class PositionFrom
+    {
+        Margins,    ///< Position is relative to page margins.
+        PageEdge    ///< Position is relative to page edge.
+    };
+
+    using HorizontalAlignment = options::TextOptions::HorizontalAlignment;  ///< Horizontal alignment options.
+    using VerticalAlignment   = options::TextOptions::VerticalAlignment;    ///< Vertical alignment options.
+
+    /** @brief Constructor */
+    explicit PageGraphicAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    uint32_t version{};                 ///< Version as written by Finale. (This was intended for tracking changes to the data format, but it was never used.)
+    Evpu left{};                        ///< Horizontal position from reference frame.
+    Evpu bottom{};                      ///< Vertical position from reference frame.
+    Evpu width{};                       ///< Display width of the placed graphic.
+    Evpu height{};                      ///< Display height of the placed graphic.
+    Cmper fDescId{};                    ///< The Cmper of the assigned @ref FileDescription . (xml tag is `<fDescID>`)
+    PageAssignType displayType{};       ///< Whether the assignment appears on all/even/odd pages.
+    bool hidden{};                      ///< If true, the graphic does not display: inverse of "Show" context menu option. (xml tag is `<displayHidden>`)
+    HorizontalAlignment hAlign{};       ///< Horizontal alignment for left/all pages. (xml tag is `<halign>`)
+    VerticalAlignment vAlign{};         ///< Vertical alignment for left/all pages. (xml tag is `<valign>`)
+    PositionFrom posFrom{};             ///< Position reference for left/all pages.
+    bool fixedPerc{};                   ///< If true, horizontal and vertical scaling is the same.
+    PageCmper startPage{};              ///< First page assignment ID where the graphic appears when cmper==0.
+    PageCmper endPage{};                ///< Last page assignment ID where the graphic appears when cmper==0.
+    bool savedRecord{};                 ///< Indicates a stored/saved record. (Used internally by Finale when a graphic is created.)
+    Evpu origWidth{};                   ///< Intrinsic/original width of the graphic.
+    Evpu origHeight{};                  ///< Intrinsic/original height of the graphic.
+    HorizontalAlignment rightPgHAlign{};///< Horizontal alignment on right pages.
+    VerticalAlignment rightPgVAlign{};  ///< Vertical alignment on right pages.
+    PositionFrom rightPgPosFrom{};      ///< Position reference for right pages.
+    bool rightPgFixedPerc{};            ///< If true, right-page horizontal and vertical scaling is the same.
+    Evpu rightPgLeft{};                 ///< Horizontal position for right pages.
+    Evpu rightPgBottom{};               ///< Vertical position for right pages.
+    Cmper graphicCmper{};               ///< Graphic instance Cmper. A non-zero value indicates that the graphic is embedded in the `musx` file.
+                                        ///< Embedded graphics are stored in the @c /graphics/ subdirectory of the musx zip archive. This value
+                                        ///< also identifies the filename within that directory. For example, if the @c graphicCmper is 3 and the
+                                        ///< embedded file has extendion @c .png then the file is called @c 3.png within the directory.
+
+    /// @brief Return the starting page number, taking into account leading blank pages in all parts.
+    /// This calculation mimics observed behavior in Finale.
+    /// @return The first page in @p forPartId on which the page graphic appears. If it does not appear on the part,
+    /// the function returns std::nullopt.
+    std::optional<PageCmper> calcStartPageNumber(Cmper forPartId) const;
+
+    /// @brief Return the ending page number, taking into account leading blank pages in all parts
+    /// This calculation mimics observed behavior in Finale.
+    /// @return The first page in @p forPartId on which the page graphic appears. If it does not appear on the part,
+    /// the function returns std::nullopt.
+    std::optional<PageCmper> calcEndPageNumber(Cmper forPartId) const;
+
+    /// @brief Returns true if this is a multi-page assignment.
+    bool isMultiPage() const
+    { return getCmper() == 0 && startPage != endPage; }
+
+    /// @brief Returns true if this is a multi-page assignment that is assigned to through last page, no matter how many.
+    bool isMultiAssignedThruLastPage() const
+    { return isMultiPage() && endPage == 0; }
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OthersBase::integrityCheck(ptrToThis);
+        if (getCmper() != 0) {
+            if (startPage != getCmper() || endPage != getCmper()) {
+                MUSX_INTEGRITY_ERROR("PageGraphicAssign " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(0)) +
+                    " has startPage or endPage value that does not match.");
+            }
+        }
+    }
+
+    /// @brief Returns a specific page graphic assignment for a given page number in a given part.
+    /// This allows the caller not to have to know the conversion to page assignment IDs.
+    /// @param document The document to search.
+    /// @param partId The ID of the linked part to search.
+    /// @param pageId The page number to search for, or zero for multipage assignments.
+    /// @param inci The inci of the specific page text assignment to retrieve.
+    static MusxInstance<others::PageGraphicAssign> getForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId, Inci inci);
+
+    /// @brief Returns all the page graphic assignments for a given page number in a given part.
+    /// This allows the caller not to have to know the conversion to page assignment IDs.
+    /// @param document The document to search.
+    /// @param partId The ID of the linked part to search.
+    /// @param pageId The page number to search for, or zero for all multipage assignments.
+    static MusxInstanceList<others::PageGraphicAssign> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
+
+    constexpr static std::string_view XmlNodeName = "pageGraphicAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<PageGraphicAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
 } //namespace others
 
 namespace details {

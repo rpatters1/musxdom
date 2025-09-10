@@ -1728,13 +1728,13 @@ public:
 
     /// @brief Return the starting page number, taking into account leading blank pages in all parts.
     /// This calculation mimics observed behavior in Finale.
-    /// @return The first page in @p forPartId on which the part appears. If the attachment does not appear on the part,
+    /// @return The first page in @p forPartId on which the page text appears. If it does not appear on the part,
     /// the function returns std::nullopt.
     std::optional<PageCmper> calcStartPageNumber(Cmper forPartId) const;
 
     /// @brief Return the ending page number, taking into account leading blank pages in all parts
     /// This calculation mimics observed behavior in Finale.
-    /// @return The first page in @p forPartId on which the part appears. If the attachment does not appear on the part,
+    /// @return The first page in @p forPartId on which the page text appears. If it does not appear on the part,
     /// the function returns std::nullopt.
     std::optional<PageCmper> calcEndPageNumber(Cmper forPartId) const;
 
@@ -1779,7 +1779,7 @@ public:
     /// @param document The document to search.
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for all multipage assignments.
-    static std::vector<MusxInstance<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
+    static MusxInstanceList<others::PageTextAssign> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
