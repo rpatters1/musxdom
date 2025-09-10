@@ -32,6 +32,7 @@
 #include <tuple>
 #include <sstream>
 #include <type_traits>
+#include <charconv>
 
 #include "musx/util/Logger.h"
 #include "musx/xml/XmlInterface.h"
@@ -352,7 +353,7 @@ private:
 /// @param e The xml node containing the class members
 /// @param listArray The unordred_map to which to add the new instance.
 template <typename EnumClass, typename EmbeddedClass, typename... Args>
-static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray, Args&&... args)
+inline void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray, Args&&... args)
 {
     auto typeAttr = e->findAttribute("type");
     if (!typeAttr) {
@@ -367,7 +368,7 @@ static void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
 /// @param elementNodeName The nodename for each element. In the case of `<customStaff>` this nodename is "staffLine".
 /// @return The populated array.
 template <typename T>
-static std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::string_view& elementNodeName)
+inline std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::string_view& elementNodeName)
 {
     std::vector<T> result;
     for (auto child = e->getFirstChildElement(); child; child = child->getNextSibling()) {
@@ -397,7 +398,7 @@ inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(con
 void populateFontEfx(const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i);
 
 template <typename T>
-static bool populateBoolean(const XmlElementPtr& element, const std::shared_ptr<T>& instance)
+inline bool populateBoolean(const XmlElementPtr& element, const std::shared_ptr<T>& instance)
 {
     MUSX_ASSERT_IF(!element) {
         throw std::logic_error("Null element passed to populateBoolean function.");
@@ -413,6 +414,25 @@ static bool populateBoolean(const XmlElementPtr& element, const std::shared_ptr<
     } else {
         return false; // I don't think we'll ever get an `offInPart` for the score, so assume it is for a part if we aren't a Base subclass
     }
+}
+
+inline std::vector<std::uint8_t> hexToBytes(std::string_view hex)
+{
+    if (hex.size() % 2 != 0)
+        throw std::invalid_argument("Odd-length hex string");
+
+    std::vector<std::uint8_t> out;
+    out.reserve(hex.size() / 2);
+
+    for (std::size_t i = 0; i < hex.size(); i += 2) {
+        unsigned value = 0;
+        auto [ptr, ec] = std::from_chars(&hex[i], &hex[i + 2], value, 16);
+        if (ec != std::errc()) {
+            throw std::invalid_argument("Invalid hex digit");
+        }
+        out.push_back(static_cast<std::uint8_t>(value));
+    }
+    return out;
 }
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS

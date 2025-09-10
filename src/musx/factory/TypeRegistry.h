@@ -32,6 +32,7 @@
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
 #include "musx/dom/Details.h"
+#include "musx/dom/Graphics.h"
 #include "musx/dom/Ossia.h"
 #include "musx/dom/ShapeDesigner.h"
 #include "musx/dom/SmartShape.h"
@@ -245,6 +246,9 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ClefList,
     dom::others::DrumStaff,
     dom::others::DrumStaffStyle,
+    dom::others::FileAlias,
+    dom::others::FileDescription,
+    dom::others::FilePath,
     dom::others::FontDefinition,
     dom::others::Frame,
     dom::others::TonalCenterFlats,
@@ -310,7 +314,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::StaffListCategoryScore,
     dom::others::PercussionNoteInfo,
     dom::others::MultiStaffInstrumentGroup,
-    dom::others::MultiStaffGroupId
+    dom::others::MultiStaffGroupId,
+    dom::others::FileUrlBookmark
 >;
 
 /**

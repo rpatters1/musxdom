@@ -72,6 +72,14 @@ MUSX_XML_ENUM_MAPPING(musx::dom::others::ChordSuffixElement::Prefix, {
     {"flat", ChordSuffixElement::Prefix::Flat},
 });
 
+MUSX_XML_ENUM_MAPPING(FileDescription::PathType, {
+    {"dosPath", FileDescription::PathType::DosPath},
+    {"macFsSpec", FileDescription::PathType::MacFsSpec},
+    {"macAlias", FileDescription::PathType::MacAlias},
+    {"macPosixPath", FileDescription::PathType::MacPosixPath},
+    {"macURLBookmark", FileDescription::PathType::MacUrlBookmark},
+});
+
 MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::ChannelSwitchTarget, {
     // {"", MeasureExprAssign::ChannelSwitchTarget::Current}, // Default; may not appear in the XML.
     {"toL1", MeasureExprAssign::ChannelSwitchTarget::ToLayer1},
@@ -601,6 +609,31 @@ MUSX_XML_ELEMENT_ARRAY(ClefList, {
 
 MUSX_XML_ELEMENT_ARRAY(DrumStaff, {
     {"whichDrumLib", [](const XmlElementPtr& e, const std::shared_ptr<DrumStaff>& i) { i->whichDrumLib = e->getTextAs<Cmper>(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(FileAlias, {
+    {"length", [](const XmlElementPtr& e, const std::shared_ptr<FileAlias>& i) { i->length = e->getTextAs<size_t>(); }},
+    {"aliasHandle", [](const XmlElementPtr& e, const std::shared_ptr<FileAlias>& i) { i->aliasHandle = hexToBytes(e->getText()); }},
+});
+
+
+MUSX_XML_ELEMENT_ARRAY(FileDescription, {
+    {"version", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i) { i->version = e->getTextAs<uint32_t>(); }},
+    {"volRefNum", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i){ i->volRefNum = e->getTextAs<int>(); }},
+    {"dirID", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i){ i->dirId = e->getTextAs<int>(); }},
+    {"pathType", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i) { i->pathType = toEnum<FileDescription::PathType>(e); }},
+    {"pathID", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i) { i->pathId = e->getTextAs<Cmper>(); }},
+});
+
+
+MUSX_XML_ELEMENT_ARRAY(FilePath, {
+    {"path", [](const XmlElementPtr& e, const std::shared_ptr<FilePath>& i) { i->path = e->getText(); }},
+});
+
+
+MUSX_XML_ELEMENT_ARRAY(FileUrlBookmark, {
+    {"length", [](const XmlElementPtr& e, const std::shared_ptr<FileUrlBookmark>& i) { i->length = e->getTextAs<size_t>(); }},
+    {"urlBookmarkData", [](const XmlElementPtr& e, const std::shared_ptr<FileUrlBookmark>& i) { i->urlBookmarkData = hexToBytes(e->getText()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
