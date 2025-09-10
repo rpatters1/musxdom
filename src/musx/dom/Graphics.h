@@ -83,7 +83,7 @@ public:
         MacUrlBookmark          ///< Path is a Mac URL bookmark. (See @ref FileUrlBookmark.)
     };
 
-    uint32_t version{};         ///< Version as written by Finale. (This was intended for tracking changes to the data format, but it was never used.)
+    uint32_t version{};         ///< Always 0x100, meaning perhaps "v1.0". (This was intended for tracking changes to the data format, but it was never used.)
     int volRefNum{};            ///< Classic Mac OS volume reference number, used with legacy MacFsSpec path.
     int dirId{};                ///< Classic Mac OS directory ID, used with legacy MacFsSpec path. (xml node is `<dirID>`)
     PathType pathType;          ///< Path type. (Determines which of @ref FileAlias and @ref FileUrlBookmark to use as well as how to interpret #FilePath::path.)
@@ -191,12 +191,12 @@ public:
     {
     }
 
-    uint32_t version{};                 ///< Version as written by Finale. (This was intended for tracking changes to the data format, but it was never used.)
+    uint32_t version{};                 ///< Always 0x100, meaning perhaps "v1.0". (This was intended for tracking changes to the data format, but it was never used.)
     Evpu left{};                        ///< Horizontal position from reference frame.
     Evpu bottom{};                      ///< Vertical position from reference frame.
     Evpu width{};                       ///< Display width of the placed graphic.
     Evpu height{};                      ///< Display height of the placed graphic.
-    Cmper fDescId{};                    ///< The Cmper of the assigned @ref FileDescription . (xml tag is `<fDescID>`)
+    Cmper fDescId{};                    ///< The Cmper of the assigned @ref FileDescription. (xml tag is `<fDescID>`)
     PageAssignType displayType{};       ///< Whether the assignment appears on all/even/odd pages.
     bool hidden{};                      ///< If true, the graphic does not display: inverse of "Show" context menu option. (xml tag is `<displayHidden>`)
     HorizontalAlignment hAlign{};       ///< Horizontal alignment for left/all pages. (xml tag is `<halign>`)
@@ -211,7 +211,7 @@ public:
     HorizontalAlignment rightPgHAlign{};///< Horizontal alignment on right pages.
     VerticalAlignment rightPgVAlign{};  ///< Vertical alignment on right pages.
     PositionFrom rightPgPosFrom{};      ///< Position reference for right pages.
-    bool rightPgFixedPerc{};            ///< If true, right-page horizontal and vertical scaling is the same.
+    bool rightPgFixedPerc{};            ///< If true, right-page horizontal and vertical scaling is the same. (The Finale UI appears to sync this with #fixedPerc.)
     Evpu rightPgLeft{};                 ///< Horizontal position for right pages.
     Evpu rightPgBottom{};               ///< Vertical position for right pages.
     Cmper graphicCmper{};               ///< Graphic instance Cmper. A non-zero value indicates that the graphic is embedded in the `musx` file.
@@ -273,6 +273,49 @@ public:
 
 namespace details {
 
+/**
+ * @class MeasureGraphicAssign
+ * @brief Represents a graphic assignment anchored to a specific staff and measure.
+ *
+ * Cmper1 is the staff (staffId) @ref Cmper and Cmper2 is the measure @ref Cmper.
+ *
+ * Positions and sizes are Finale layout units: horizontal values use Evpu from the measure’s
+ * left edge (system coordinates); vertical values use Evpu from the staff baseline.
+ *
+ * This class is identified by the XML node name "measGraphicAssign".
+ */
+class MeasureGraphicAssign : public DetailsBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (often 0 for score).
+     * @param shareMode The sharing mode for this #MeasureGraphicAssign (often #ShareMode::All).
+     * @param staffId The staff ID for this #MeasureGraphicAssign.
+     * @param meas The measure ID for this #MeasureGraphicAssign.
+     * @param inci The 0-based incident.
+     */
+    explicit MeasureGraphicAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper staffId, Cmper meas, Inci inci)
+        : DetailsBase(document, partId, shareMode, staffId, meas, inci)
+    {
+    }
+
+    uint32_t version{};     ///< Always 0x100, meaning perhaps "v1.0". (This was intended for tracking changes to the data format, but it was never used.)
+    Evpu left{};            ///< Graphic left coordinate in Evpu
+    Evpu bottom{};          ///< Graphic bottom coordinate in Evpu
+    Evpu width{};           ///< Graphic width in Evpu
+    Evpu height{};          ///< Graphic height in Evpu
+    Cmper fDescId{};        ///< The Cmper of the assigned @ref others::FileDescription. (xml tag is `<fDescID>`)
+    bool hidden{};          ///< Indicates the graphic is hidden from print/displayed as hidden (xml node is `<displayHidden>`)
+    bool savedRecord{};     ///< Indicates a stored/saved record. (Used internally by Finale when a graphic is created.)
+    Evpu origWidth{};       ///< Original (intrinsic) width in Evpu
+    Evpu origHeight{};      ///< Original (intrinsic) height in Evpu
+    Cmper graphicCmper{};   ///< Graphic instance Cmper. (See #others::PageGraphicAssign::graphicCmper for full explanation.)
+
+    constexpr static std::string_view XmlNodeName = "measGraphicAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<MeasureGraphicAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
 
 } //namespace details
 

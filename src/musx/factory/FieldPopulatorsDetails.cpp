@@ -303,6 +303,21 @@ MUSX_XML_ELEMENT_ARRAY(LyricEntryInfo, {
     {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<LyricEntryInfo::AlignJustify>(e); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(MeasureGraphicAssign, {
+    {"version", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->version = e->getTextAs<uint32_t>(); }},
+    {"left", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->left = e->getTextAs<Evpu>(); }},
+    {"bottom", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->bottom = e->getTextAs<Evpu>(); }},
+    {"width", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"fDescID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->fDescId = e->getTextAs<Cmper>(); }},
+    {"displayType", [](const XmlElementPtr&, const std::shared_ptr<MeasureGraphicAssign>&) { /* always "one"; ignore */ }},
+    {"displayHidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"savedRecord", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->savedRecord = populateBoolean(e, i); }},
+    {"origWidth", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},
+    {"origHeight", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origHeight = e->getTextAs<Evpu>(); }},
+    {"graphicCmper", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->graphicCmper = e->getTextAs<Cmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberIndividualPositioning, {
     {"region", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->measNumRegion = e->getTextAs<Cmper>(); }},
     {"x1add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset = e->getTextAs<Evpu>(); }},

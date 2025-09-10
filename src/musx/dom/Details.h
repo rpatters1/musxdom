@@ -1195,7 +1195,7 @@ public:
     Cmper block{};      ///< Text block ID
     Edu xDispEdu{};     ///< Positive horizontal displacement in Edu (xml node is `<xdispEdu>`)
                         ///< Note that the UI apparently interpolates between Evpu and Edu for this field.
-    Evpu xDispEvpu{};   ///< Negative horizontal displacement in Evpu (xml node is `<xdispEvpu>`)
+    Evpu xDispEvpu{};   ///< Negative horizontal displacement in Evpu, when #xDispEdu is zero. (xml node is `<xdispEvpu>`)
     Evpu yDisp{};       ///< Vertical displacement in Evpu (xml node is `<ydisp>`)
     bool hidden{};      ///< Indicates the text appears only on screen (xml node is `<postIt/>`)
 

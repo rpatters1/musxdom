@@ -352,6 +352,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::GFrameHold,
     dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,
+    dom::details::MeasureGraphicAssign,
     dom::details::MeasureNumberIndividualPositioning,
     dom::details::MeasureOssiaAssign,
     dom::details::MeasureTextAssign,

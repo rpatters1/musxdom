@@ -236,3 +236,49 @@ TEST(PageGraphicAssignTest, PopulateFields)
     // Overridden field
     EXPECT_FALSE(g2->hidden); // displayHidden with <offInPart/> -> false in the part
 }
+
+TEST(MeasureGraphicAssignTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <measGraphicAssign cmper1="1" cmper2="2" inci="0">
+      <version>256</version>
+      <left>184</left>
+      <bottom>82</bottom>
+      <width>121</width>
+      <height>16</height>
+      <fDescID>1</fDescID>
+      <displayType>one</displayType>
+      <displayHidden/>
+      <savedRecord/>
+      <origWidth>133</origWidth>
+      <origHeight>18</origHeight>
+      <graphicCmper>1</graphicCmper>
+    </measGraphicAssign>
+  </details>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto assign = details->get<details::MeasureGraphicAssign>(SCORE_PARTID, 1, 2, 0);
+    ASSERT_TRUE(assign);
+
+    EXPECT_EQ(assign->version, 256u);
+    EXPECT_EQ(assign->left, 184);
+    EXPECT_EQ(assign->bottom, 82);
+    EXPECT_EQ(assign->width, 121);
+    EXPECT_EQ(assign->height, 16);
+    EXPECT_EQ(assign->fDescId, 1);
+    EXPECT_TRUE(assign->hidden);
+    EXPECT_TRUE(assign->savedRecord);
+    EXPECT_EQ(assign->origWidth, 133);
+    EXPECT_EQ(assign->origHeight, 18);
+    EXPECT_EQ(assign->graphicCmper, 1);
+}
