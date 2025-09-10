@@ -418,20 +418,25 @@ inline bool populateBoolean(const XmlElementPtr& element, const std::shared_ptr<
 
 inline std::vector<std::uint8_t> hexToBytes(std::string_view hex)
 {
-    if (hex.size() % 2 != 0)
-        throw std::invalid_argument("Odd-length hex string");
-
     std::vector<std::uint8_t> out;
-    out.reserve(hex.size() / 2);
 
-    for (std::size_t i = 0; i < hex.size(); i += 2) {
-        unsigned value = 0;
-        auto [ptr, ec] = std::from_chars(&hex[i], &hex[i + 2], value, 16);
-        if (ec != std::errc()) {
-            throw std::invalid_argument("Invalid hex digit");
+    if (hex.size() % 2 == 0) {
+        out.reserve(hex.size() / 2);
+        for (std::size_t i = 0; i < hex.size(); i += 2) {
+            unsigned value = 0;
+            const char* first = hex.data() + i;
+            const char* last  = first + 2;          // OK even when last == data()+size()
+            auto [ptr, ec] = std::from_chars(first, last, value, 16);
+            if (ec != std::errc()) {
+                i = hex.size(); // break out of loop if MUSX_INTEGRITY_ERROR does not throw
+                MUSX_INTEGRITY_ERROR("Invalid hex digit in hex string.");
+            }
+            out.push_back(static_cast<std::uint8_t>(value));
         }
-        out.push_back(static_cast<std::uint8_t>(value));
+    } else {
+        MUSX_INTEGRITY_ERROR("Encountered odd-length hex string.");
     }
+
     return out;
 }
 
