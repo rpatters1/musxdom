@@ -814,17 +814,25 @@ MusxInstance<StaffComposite> StaffComposite::createCurrent(const DocumentPtr& do
 // ***** StaffStyle *****
 // **********************
 
-MusxInstanceList<others::StaffStyle> others::StaffStyle::findAllOverlappingStyles(const DocumentPtr& document,
+bool StaffStyle::containsInstrumentChange() const
+{
+    if (masks->notationStyle || masks->defaultClef || masks->showNoteColors || masks->hideKeySigsShowAccis) {
+        return true;
+    }
+    return this->hasInstrumentAssigned();
+}
+
+MusxInstanceList<StaffStyle> StaffStyle::findAllOverlappingStyles(const DocumentPtr& document,
         Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition)
 {
-    auto staffStyleAssignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
-    std::vector<MusxInstance<others::StaffStyleAssign>> applicableAssignments;
+    auto staffStyleAssignments = document->getOthers()->getArray<StaffStyleAssign>(partId, staffId);
+    std::vector<MusxInstance<StaffStyleAssign>> applicableAssignments;
     std::copy_if(staffStyleAssignments.begin(), staffStyleAssignments.end(), std::back_inserter(applicableAssignments),
-        [measId, eduPosition](const MusxInstance<others::StaffStyleAssign>& range) {
+        [measId, eduPosition](const MusxInstance<StaffStyleAssign>& range) {
             return range->contains(measId, eduPosition);
         });
 
-    MusxInstanceList<others::StaffStyle> result(document, partId);
+    MusxInstanceList<StaffStyle> result(document, partId);
     result.reserve(applicableAssignments.size());
     for (const auto& assign : applicableAssignments) {
         if (auto style = assign->getStaffStyle()) {
