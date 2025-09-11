@@ -86,6 +86,7 @@ add_executable(musxdomtests
 	others/fonts.cpp
     others/frame.cpp
     others/fret_instrument.cpp
+    others/graphics.cpp
 	others/layer_attributes.cpp
 	others/instrument_used.cpp
     others/measure.cpp

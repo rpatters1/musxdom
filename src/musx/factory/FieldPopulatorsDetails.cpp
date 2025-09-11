@@ -32,6 +32,7 @@ using namespace ::musx::dom::details;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<others::Measure::BarlineType> XmlEnumMapping<others::Measure::BarlineType>::mapping;
 extern template const XmlEnumMappingElement<others::NamePositioning::AlignJustify> XmlEnumMapping<others::NamePositioning::AlignJustify>::mapping;
+extern template const XmlEnumMappingElement<others::PageGraphicAssign::PageAssignType> XmlEnumMapping<others::PageGraphicAssign::PageAssignType>::mapping;
 extern template const XmlEnumMappingElement<options::BeamOptions::FlattenStyle> XmlEnumMapping<options::BeamOptions::FlattenStyle>::mapping;
 extern template const XmlEnumMappingElement<options::LyricOptions::AlignJustify> XmlEnumMapping<options::LyricOptions::AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::AutoBracketStyle> XmlEnumMapping<options::TupletOptions::AutoBracketStyle>::mapping;
@@ -301,6 +302,27 @@ MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
 MUSX_XML_ELEMENT_ARRAY(LyricEntryInfo, {
     {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->justify = toEnum<LyricEntryInfo::AlignJustify>(e); }},
     {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<LyricEntryInfo::AlignJustify>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(MeasureGraphicAssign, {
+    {"version", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->version = e->getTextAs<uint32_t>(); }},
+    {"left", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->left = e->getTextAs<Evpu>(); }},
+    {"bottom", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->bottom = e->getTextAs<Evpu>(); }},
+    {"width", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"fDescID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->fDescId = e->getTextAs<Cmper>(); }},
+    {"displayType", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>&)
+        {
+            if (toEnum<others::PageGraphicAssign::PageAssignType>(e) != others::PageGraphicAssign::PageAssignType::One) {
+                util::Logger::log(util::Logger::LogLevel::Warning, "Encountered measure graphic with multipage positioning.");
+            }
+        }
+    },
+    {"displayHidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"savedRecord", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->savedRecord = populateBoolean(e, i); }},
+    {"origWidth", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},
+    {"origHeight", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origHeight = e->getTextAs<Evpu>(); }},
+    {"graphicCmper", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->graphicCmper = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberIndividualPositioning, {

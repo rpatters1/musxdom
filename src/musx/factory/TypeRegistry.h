@@ -32,6 +32,7 @@
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
 #include "musx/dom/Details.h"
+#include "musx/dom/Graphics.h"
 #include "musx/dom/Ossia.h"
 #include "musx/dom/ShapeDesigner.h"
 #include "musx/dom/SmartShape.h"
@@ -245,6 +246,9 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ClefList,
     dom::others::DrumStaff,
     dom::others::DrumStaffStyle,
+    dom::others::FileAlias,
+    dom::others::FileDescription,
+    dom::others::FilePath,
     dom::others::FontDefinition,
     dom::others::Frame,
     dom::others::TonalCenterFlats,
@@ -268,6 +272,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::NamePositionStyleFull,
     dom::others::TextBlock,
     dom::others::Page,
+    dom::others::PageGraphicAssign,
     dom::others::PageOssiaAssign,
     dom::others::PageTextAssign,
     dom::others::RepeatBack,
@@ -277,6 +282,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ShapeData,
     dom::others::ShapeDef,
     dom::others::ShapeInstructionList,
+    dom::others::ShapeGraphicAssign,
     dom::others::SplitMeasure,
     dom::others::SmartShape,
     dom::others::SmartShapeMeasureAssign,
@@ -310,7 +316,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::StaffListCategoryScore,
     dom::others::PercussionNoteInfo,
     dom::others::MultiStaffInstrumentGroup,
-    dom::others::MultiStaffGroupId
+    dom::others::MultiStaffGroupId,
+    dom::others::FileUrlBookmark
 >;
 
 /**
@@ -346,6 +353,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::GFrameHold,
     dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,
+    dom::details::MeasureGraphicAssign,
     dom::details::MeasureNumberIndividualPositioning,
     dom::details::MeasureOssiaAssign,
     dom::details::MeasureTextAssign,

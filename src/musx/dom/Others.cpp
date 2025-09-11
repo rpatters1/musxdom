@@ -417,13 +417,13 @@ MusxInstance<PageTextAssign> PageTextAssign::getForPageId(const DocumentPtr& doc
     return nullptr;
 }
 
-std::vector<MusxInstance<PageTextAssign>> PageTextAssign::getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId)
+MusxInstanceList<PageTextAssign> PageTextAssign::getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId)
 {
     if (auto part = document->getOthers()->get<PartDefinition>(SCORE_PARTID, partId)) {
         const PageCmper pageAssignmentId = part->calcAssignmentIdFromPageNumber(pageId);
         return document->getOthers()->getArray<PageTextAssign>(partId, pageAssignmentId);
     }
-    return {};
+    return MusxInstanceList<PageTextAssign>(document, partId);
 }
 
 std::optional<PageCmper> PageTextAssign::calcStartPageNumber(Cmper forPartId) const

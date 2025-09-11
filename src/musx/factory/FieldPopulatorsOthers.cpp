@@ -72,6 +72,14 @@ MUSX_XML_ENUM_MAPPING(musx::dom::others::ChordSuffixElement::Prefix, {
     {"flat", ChordSuffixElement::Prefix::Flat},
 });
 
+MUSX_XML_ENUM_MAPPING(FileDescription::PathType, {
+    {"dosPath", FileDescription::PathType::DosPath},
+    {"macFsSpec", FileDescription::PathType::MacFsSpec},
+    {"macAlias", FileDescription::PathType::MacAlias},
+    {"macPosixPath", FileDescription::PathType::MacPosixPath},
+    {"macURLBookmark", FileDescription::PathType::MacUrlBookmark},
+});
+
 MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::ChannelSwitchTarget, {
     // {"", MeasureExprAssign::ChannelSwitchTarget::Current}, // Default; may not appear in the XML.
     {"toL1", MeasureExprAssign::ChannelSwitchTarget::ToLayer1},
@@ -137,6 +145,18 @@ MUSX_XML_ENUM_MAPPING(Measure::ShowTimeSigMode, {
     // {"ifNeeded", Measure::ShowTimeSigMode::IfNeeded}, // This is the default and is not known to occur in the XML.
     {"deltaTime", Measure::ShowTimeSigMode::Always},
     {"ignoreTime", Measure::ShowTimeSigMode::Never},
+});
+
+MUSX_XML_ENUM_MAPPING(PageGraphicAssign::PageAssignType, {
+    {"all", PageGraphicAssign::PageAssignType::AllPages},
+    {"even", PageGraphicAssign::PageAssignType::Even},
+    {"odd", PageGraphicAssign::PageAssignType::Odd},
+    {"one", PageGraphicAssign::PageAssignType::One},
+});
+
+MUSX_XML_ENUM_MAPPING(PageGraphicAssign::PositionFrom, {
+    {"margins", PageGraphicAssign::PositionFrom::Margins},
+    {"paper", PageGraphicAssign::PositionFrom::PageEdge},
 });
 
 MUSX_XML_ENUM_MAPPING(PageTextAssign::PageAssignType, {
@@ -603,6 +623,31 @@ MUSX_XML_ELEMENT_ARRAY(DrumStaff, {
     {"whichDrumLib", [](const XmlElementPtr& e, const std::shared_ptr<DrumStaff>& i) { i->whichDrumLib = e->getTextAs<Cmper>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(FileAlias, {
+    {"length", [](const XmlElementPtr& e, const std::shared_ptr<FileAlias>& i) { i->length = e->getTextAs<size_t>(); }},
+    {"aliasHandle", [](const XmlElementPtr& e, const std::shared_ptr<FileAlias>& i) { i->aliasHandle = hexToBytes(e->getText()); }},
+});
+
+
+MUSX_XML_ELEMENT_ARRAY(FileDescription, {
+    {"version", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i) { i->version = e->getTextAs<uint32_t>(); }},
+    {"volRefNum", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i){ i->volRefNum = e->getTextAs<int>(); }},
+    {"dirID", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i){ i->dirId = e->getTextAs<int>(); }},
+    {"pathType", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i) { i->pathType = toEnum<FileDescription::PathType>(e); }},
+    {"pathID", [](const XmlElementPtr& e, const std::shared_ptr<FileDescription>& i) { i->pathId = e->getTextAs<Cmper>(); }},
+});
+
+
+MUSX_XML_ELEMENT_ARRAY(FilePath, {
+    {"path", [](const XmlElementPtr& e, const std::shared_ptr<FilePath>& i) { i->path = e->getText(); }},
+});
+
+
+MUSX_XML_ELEMENT_ARRAY(FileUrlBookmark, {
+    {"length", [](const XmlElementPtr& e, const std::shared_ptr<FileUrlBookmark>& i) { i->length = e->getTextAs<size_t>(); }},
+    {"urlBookmarkData", [](const XmlElementPtr& e, const std::shared_ptr<FileUrlBookmark>& i) { i->urlBookmarkData = hexToBytes(e->getText()); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(FontDefinition, {
     {"charsetBank", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetBank = toEnum<FontDefinition::CharacterSetBank>(e); }},
     {"charsetVal", [](const XmlElementPtr& e, const std::shared_ptr<FontDefinition>& i) { i->charsetVal = e->getTextAs<int>(); }},
@@ -922,6 +967,33 @@ MUSX_XML_ELEMENT_ARRAY(Page, {
     {"margRight", [](const XmlElementPtr& e, const std::shared_ptr<Page>& i) { i->margRight = e->getTextAs<Evpu>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(PageGraphicAssign, {
+    {"version", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->version = e->getTextAs<uint32_t>(); }},
+    {"left", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->left = e->getTextAs<Evpu>(); }},
+    {"bottom", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->bottom = e->getTextAs<Evpu>(); }},
+    {"width", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"fDescID", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->fDescId = e->getTextAs<Cmper>(); }},
+    {"displayType", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->displayType = toEnum<PageGraphicAssign::PageAssignType>(e); }},
+    {"displayHidden", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->hAlign = toEnum<PageGraphicAssign::HorizontalAlignment>(e); }},
+    {"valign", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->vAlign = toEnum<PageGraphicAssign::VerticalAlignment>(e); }},
+    {"posFrom", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->posFrom = toEnum<PageGraphicAssign::PositionFrom>(e); }},
+    {"fixedPerc", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->fixedPerc = populateBoolean(e, i); }},
+    {"startPage", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->startPage = e->getTextAs<PageCmper>(); }},
+    {"endPage", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->endPage = e->getTextAs<PageCmper>(); }},
+    {"savedRecord", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->savedRecord = populateBoolean(e, i); }},
+    {"origWidth", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},
+    {"origHeight", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->origHeight = e->getTextAs<Evpu>(); }},
+    {"rightPgHAlign", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgHAlign = toEnum<PageGraphicAssign::HorizontalAlignment>(e); }},
+    {"rightPgVAlign", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgVAlign = toEnum<PageGraphicAssign::VerticalAlignment>(e); }},
+    {"rightPgPosFrom", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgPosFrom = toEnum<PageGraphicAssign::PositionFrom>(e); }},
+    {"rightPgFixedPerc", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgFixedPerc = populateBoolean(e, i); }},
+    {"rightPgLeft", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgLeft = e->getTextAs<Evpu>(); }},
+    {"rightPgBottom", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->rightPgBottom = e->getTextAs<Evpu>(); }},
+    {"graphicCmper", [](const XmlElementPtr& e, const std::shared_ptr<PageGraphicAssign>& i) { i->graphicCmper = e->getTextAs<Cmper>(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(PageOssiaAssign, {
     {"arbnum", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->ossiaId = e->getTextAs<Cmper>(); }},
     {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<PageOssiaAssign>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
@@ -1065,6 +1137,37 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
     {"useCategoryPos", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->useCategoryPos = populateBoolean(e, i); }},
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(ShapeGraphicAssign, {
+    {"version", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->version = e->getTextAs<uint32_t>(); }},
+    {"left", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->left = e->getTextAs<Evpu>(); }},
+    {"bottom", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->bottom = e->getTextAs<Evpu>(); }},
+    {"width", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"fDescID", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->fDescId = e->getTextAs<Cmper>(); }},
+    {"displayType", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>&)
+        {
+            if (toEnum<PageGraphicAssign::PageAssignType>(e) != PageGraphicAssign::PageAssignType::One) {
+                util::Logger::log(util::Logger::LogLevel::Warning, "Encountered shape graphic with multipage positioning.");
+            }
+        }
+    },
+    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->hAlign = toEnum<ShapeGraphicAssign::HorizontalAlignment>(e); }},
+    {"valign", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->vAlign = toEnum<ShapeGraphicAssign::VerticalAlignment>(e); } },
+    {"posFrom", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>&)
+        {
+            if (toEnum<PageGraphicAssign::PositionFrom>(e) != PageGraphicAssign::PositionFrom::PageEdge) {
+                util::Logger::log(util::Logger::LogLevel::Warning, "Encountered shape graphic with page margin positioning.");
+            }
+        }
+    },
+    {"displayHidden", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"fixedPerc", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->fixedPerc = populateBoolean(e, i); }},
+    {"savedRecord", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->savedRecord = populateBoolean(e, i); }},
+    {"origWidth", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},
+    {"origHeight", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->origHeight = e->getTextAs<Evpu>(); }},
+    {"graphicCmper", [](const XmlElementPtr& e, const std::shared_ptr<ShapeGraphicAssign>& i) { i->graphicCmper = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList::InstructionInfo, {

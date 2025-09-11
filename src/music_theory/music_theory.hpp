@@ -48,7 +48,7 @@ constexpr int STANDARD_12EDO_STEPS = 12;   ///< this can be overriden when const
 constexpr std::array<int, STANDARD_DIATONIC_STEPS> MAJOR_KEYMAP = { 0, 2, 4, 5, 7, 9, 11 };     ///< keymap for 12-EDO major keys
 constexpr std::array<int, STANDARD_DIATONIC_STEPS> MINOR_KEYMAP = { 0, 2, 3, 5, 7, 8, 10 };     ///< keymap for 12-EDO minor keys
 
-/// @brief Array of diatonic intervals. Each member array contains
+/// @brief Array of chromatic intervals. Each member array contains
 ///     - the number of fifths to add, which is also the key signature adjustment for the interval
 ///     - the number of octaves to subtract
 constexpr std::array<std::array<int, 2>, 7> DIATONIC_INTERVAL_ADJUSTMENTS = { {

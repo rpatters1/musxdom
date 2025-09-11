@@ -86,6 +86,8 @@ public:
 
         /// bracket  
         /// data items: (1) bracket type (piano brace, bracket, etc.)
+        /// @note This does not actually draw the bracket. It simply indicates the start of automatically created instructions
+        /// that draw the bracket, ending with ClosePath.
         Bracket,
 
         /// cloned character for horizontal lines (e.g. trills)  
@@ -118,7 +120,7 @@ public:
         EndGroup,
 
         /// external graphic (eps, pict, tiff, etc)  
-        /// data items: (3) width, height of graphic, cmper of graphic
+        /// data items: (3) width, height of graphic, cmper of corresponding @ref ShapeGraphicAssign record
         ExternalGraphic,
 
         /// fill path (alternating, or even-odd rule)  
@@ -194,7 +196,7 @@ public:
         /// - 2..5: bounding rect (left, top, right, bottom)
         /// - 6, 7: x and y transform (scale ratio * 1000)
         /// - 8:    rotation transform
-        /// - 9,10: always zero
+        /// - 9,10: unused/undocumented
         StartObject,
 
         /// stroke path  

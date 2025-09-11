@@ -1728,13 +1728,13 @@ public:
 
     /// @brief Return the starting page number, taking into account leading blank pages in all parts.
     /// This calculation mimics observed behavior in Finale.
-    /// @return The first page in @p forPartId on which the part appears. If the attachment does not appear on the part,
+    /// @return The first page in @p forPartId on which the page text appears. If it does not appear on the part,
     /// the function returns std::nullopt.
     std::optional<PageCmper> calcStartPageNumber(Cmper forPartId) const;
 
     /// @brief Return the ending page number, taking into account leading blank pages in all parts
     /// This calculation mimics observed behavior in Finale.
-    /// @return The first page in @p forPartId on which the part appears. If the attachment does not appear on the part,
+    /// @return The first page in @p forPartId on which the page text appears. If it does not appear on the part,
     /// the function returns std::nullopt.
     std::optional<PageCmper> calcEndPageNumber(Cmper forPartId) const;
 
@@ -1779,7 +1779,7 @@ public:
     /// @param document The document to search.
     /// @param partId The ID of the linked part to search.
     /// @param pageId The page number to search for, or zero for all multipage assignments.
-    static std::vector<MusxInstance<others::PageTextAssign>> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
+    static MusxInstanceList<others::PageTextAssign> getArrayForPageId(const DocumentPtr& document, Cmper partId, PageCmper pageId);
 
     constexpr static std::string_view XmlNodeName = "pageTextAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageTextAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2186,26 +2186,25 @@ public:
     
 /**
  * @class SplitMeasure
- * @brief Contains the split point(s) where a measure may be split between two systems. A measure can only
- * split once, but multiple split points in theory provide multiple split possibilities depending on the spacing.
- * (However, see the warning below for the actual situation.)
+ * @brief Defines the split point(s) where a measure may be divided between two systems. A measure can only
+ * split once, but Finale stores them as an array. Perhaps this was intended to support alternative
+ * break positions depending on spacing. See the warning below for the actual behavior.
  *
- * The value array is Evpu values in Scroll View. Knowing where to split the music may require being able
- * to interpolate between Scroll View Evpu and beat position. That, in turn, requires understanding beat charts
- * and how Finale does layout. A crude first approximation might be simply to divide the split value by
- * the value in #Measure::width. This might yield a usable value for the fraction of the (graphical) measure
- * to display on the previous system.
+ * The array entries are Evpu offsets in Scroll View. Determining the exact split location would require
+ * converting between Scroll View Evpu positions and beat positions, which in turn depends on understanding
+ * beat charts and Finale’s layout process. A crude first approximation may be to divide the split position by
+ * #Measure::width, which might yield a usable fraction of the graphical measure width to display on the
+ * previous system.
  *
- * @note This is a legacy feature of Finale. It was never well-implemented across the entire app,
- * and as the years passed it became increasingly less useful due to newer features not knowing about it.
- * The result is that very few Finale files are likely to be using split points, and the longer ago they were
- * created, the more likely they are (though still unlikely).
+ * @note This is a legacy Finale feature. It was never consistently implemented across the program,
+ * and over time it became less useful as newer features were developed without support for it.
+ * As a result, split points are rare in Finale files. The older the file, the more likely they are to appear,
+ * but even then they remain uncommon.
  *
- * @warning The earliest Finale versions could create multiple split points, but the most recent can only
- * create a single split point. However, any Finale version can upgrade an older file with multiple values
- * and continue to have them, so even a file most recently saved by Finale 27.4 can have multiple split points.
- * Either way, both in legacy and recent Finale versions, multiple split points cause program crashes or
- * weird recurring meaure layouts. Multiple split points are unusable in any Finale version tested.
+ * @warning Early versions of Finale could create multiple split points, while recent versions allow only one.  
+ * Older files that contain multiple split points can still be opened and saved in newer Finale releases (even as
+ * recent as 27.4) without removing them. In all versions tested, however, multiple split points lead to crashes
+ * or unstable measure layouts. They are effectively unusable in any version of Finale.
  *
  * This class is identified by the XML node name "splitMeas".
  */
@@ -2384,8 +2383,12 @@ public:
     }
 
     MeasCmper startMeas{};          ///< Starting measure of the staff system. See @ref Measure.
-    MeasCmper endMeas{};            ///< Ending measure of the staff system *plus one*. This is effectively the first measure of the next system or
-                                    ///< one measure past the last measure in the document. (Finale being Finale.) See @ref Measure.
+    MeasCmper endMeas{};            ///< The ending measure of the staff system, stored as *one greater* than the last measure
+                                    ///< on this system. In other words, it is the first measure of the next system, or one past
+                                    ///< the last measure in the document. See @ref Measure.  
+                                    ///< If #endMeas is a split measure, its first part may still appear on this system depending
+                                    ///< on spacing. (Finale does not record this in the data.) If the system is locked, the first
+                                    ///< part of the split always appears on this system. See @ref SplitMeasure and @ref SystemLock.
     double horzPercent{};           ///< Horizontal scaling percentage (fractional, 100.0 means no scaling).
                                     ///< This value affects "stretchable" items such as word extensions on lyrics.
     int ssysPercent{};              ///< Staff system scaling percentage (100 means no scaling).
@@ -2489,6 +2492,8 @@ public:
 
     MeasCmper endMeas{}; ///< The first measure after the locked system,
                          ///< or one measure past the end of document if this is the last system.
+                         ///< If #endMeas has a split, the first part of the measure is on the locked system
+                         ///< and the second part is on the next. See @ref SplitMeasure.
 
     constexpr static std::string_view XmlNodeName = "lockMeas"; ///< The XML node name for this type.
     static const xml::XmlElementArray<SystemLock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

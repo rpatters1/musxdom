@@ -69,6 +69,25 @@ DocumentPtr loadDocument(const std::vector<char>& buffer)
     }
 }
 
+void adHocTest([[maybe_unused]]const DocumentPtr& doc)
+{
+/*
+    9/3/2025: Test how brackets are handled in ShapeDef.
+
+    if (auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 6)) {
+        shape->iterateInstructions([&](others::ShapeDef::InstructionType instruction, std::vector<int> data) -> bool {
+            std::cout << "instruction: " << int(instruction) << std::endl;
+            std::cout << "    data:";
+            for (const auto& item : data) {
+                std::cout << ' ' << item;
+            }
+            std::cout << std::endl;
+            return true;
+        });
+    } 
+*/
+}
+
 void benchmarkEntries(const DocumentPtr& doc)
 {
     using clock = std::chrono::high_resolution_clock;
@@ -254,6 +273,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    adHocTest(doc);
     benchmarkEntries(doc);
     benchmarkOthersArrays(doc);
     benchmarkOthers(doc);
