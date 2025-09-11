@@ -282,6 +282,7 @@ using RegisteredOthers = TypeRegistry <
     dom::others::ShapeData,
     dom::others::ShapeDef,
     dom::others::ShapeInstructionList,
+    dom::others::ShapeGraphicAssign,
     dom::others::SplitMeasure,
     dom::others::SmartShape,
     dom::others::SmartShapeMeasureAssign,

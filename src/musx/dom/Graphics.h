@@ -183,7 +183,7 @@ public:
     };
 
     using HorizontalAlignment = options::TextOptions::HorizontalAlignment;  ///< Horizontal alignment options.
-    using VerticalAlignment   = options::TextOptions::VerticalAlignment;    ///< Vertical alignment options.
+    using VerticalAlignment = options::TextOptions::VerticalAlignment;      ///< Vertical alignment options.
 
     /** @brief Constructor */
     explicit PageGraphicAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
@@ -202,7 +202,7 @@ public:
     HorizontalAlignment hAlign{};       ///< Horizontal alignment for left/all pages. (xml tag is `<halign>`)
     VerticalAlignment vAlign{};         ///< Vertical alignment for left/all pages. (xml tag is `<valign>`)
     PositionFrom posFrom{};             ///< Position reference for left/all pages.
-    bool fixedPerc{};                   ///< If true, horizontal and vertical scaling is the same.
+    bool fixedPerc{};                   ///< If true, preserve aspect ratio. This is a UI setting. Use width/origWidth and height/origHeight for actual scaling.
     PageCmper startPage{};              ///< First page assignment ID where the graphic appears when cmper==0.
     PageCmper endPage{};                ///< Last page assignment ID where the graphic appears when cmper==0.
     bool savedRecord{};                 ///< Indicates a stored/saved record. (Used internally by Finale when a graphic is created.)
@@ -210,8 +210,9 @@ public:
     Evpu origHeight{};                  ///< Intrinsic/original height of the graphic.
     HorizontalAlignment rightPgHAlign{};///< Horizontal alignment on right pages.
     VerticalAlignment rightPgVAlign{};  ///< Vertical alignment on right pages.
-    PositionFrom rightPgPosFrom{};      ///< Position reference for right pages.
-    bool rightPgFixedPerc{};            ///< If true, right-page horizontal and vertical scaling is the same. (The Finale UI appears to sync this with #fixedPerc.)
+    PositionFrom rightPgPosFrom{};      ///< Position reference for right pages. This is a UI setting. Use width/origWidth and height/origHeight for actual scaling.
+                                        ///< The Finale UI appears to sync this with #posFrom.
+    bool rightPgFixedPerc{};            ///< If true, preserve aspect ratio on right-pages (UI setting only). The Finale UI appears to sync this with #fixedPerc.
     Evpu rightPgLeft{};                 ///< Horizontal position for right pages.
     Evpu rightPgBottom{};               ///< Vertical position for right pages.
     Cmper graphicCmper{};               ///< Graphic instance Cmper. A non-zero value indicates that the graphic is embedded in the `musx` file.
@@ -267,6 +268,52 @@ public:
 
     constexpr static std::string_view XmlNodeName = "pageGraphicAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PageGraphicAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class ShapeGraphicAssign
+ * @brief Represents a graphic assignment anchored to a specific staff and measure.
+ *
+ * The Cmper comes from a #ShapeDef::InstructionType::ExternalGraphic instruction.
+ *
+ * This class is identified by the XML node name "shapeGraphicAssign".
+ */
+class ShapeGraphicAssign : public OthersBase
+{
+public:
+    /**
+     * @brief Constructor
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (often 0 for score).
+     * @param shareMode The sharing mode for this #ShapeGraphicAssign (often #ShareMode::All).
+     * @param cmper The measure ID for this #ShapeGraphicAssign.
+     * @param inci The 0-based incident. (Possibly always zero in this case.)
+     */
+    explicit ShapeGraphicAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci)
+    {
+    }
+
+    using HorizontalAlignment = options::TextOptions::HorizontalAlignment;  ///< Horizontal alignment options.
+    using VerticalAlignment = options::TextOptions::VerticalAlignment;      ///< Vertical alignment options.
+
+    uint32_t version{};     ///< Always 0x100, meaning perhaps "v1.0". (This was intended for tracking changes to the data format, but it was never used.)
+    Evpu left{};            ///< Graphic left coordinate in Evpu
+    Evpu bottom{};          ///< Graphic bottom coordinate in Evpu
+    Evpu width{};           ///< Graphic width in Evpu
+    Evpu height{};          ///< Graphic height in Evpu
+    Cmper fDescId{};        ///< The Cmper of the assigned @ref others::FileDescription. (xml tag is `<fDescID>`)
+    HorizontalAlignment hAlign{};  ///< Horizontal alignment of the placed graphic: possibly always `Left`. (xml tag is `<halign>`)
+    VerticalAlignment vAlign{};    ///< Vertical alignment the placed graphic: possibly always `Top`. (xml tag is `<valign>`)
+    bool fixedPerc{};       ///< UI setting to preserve aspect ratio. It may be meaningless here, since there is no UI setting for shape graphics.
+    bool hidden{};          ///< Indicates the graphic is hidden from print/displayed as hidden: possibly always `false` for @ref ShapeGraphicAssign. (xml node is `<displayHidden>`)
+    bool savedRecord{};     ///< Indicates a stored/saved record. (Used internally by Finale when a graphic is created.)
+    Evpu origWidth{};       ///< Original (intrinsic) width in Evpu
+    Evpu origHeight{};      ///< Original (intrinsic) height in Evpu
+    Cmper graphicCmper{};   ///< Graphic instance Cmper. (See #others::PageGraphicAssign::graphicCmper for full explanation.)
+
+    constexpr static std::string_view XmlNodeName = "shapeGraphicAssign"; ///< The XML node name for this type.
+    static const xml::XmlElementArray<ShapeGraphicAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 } //namespace others

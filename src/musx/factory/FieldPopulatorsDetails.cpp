@@ -32,6 +32,7 @@ using namespace ::musx::dom::details;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<others::Measure::BarlineType> XmlEnumMapping<others::Measure::BarlineType>::mapping;
 extern template const XmlEnumMappingElement<others::NamePositioning::AlignJustify> XmlEnumMapping<others::NamePositioning::AlignJustify>::mapping;
+extern template const XmlEnumMappingElement<others::PageGraphicAssign::PageAssignType> XmlEnumMapping<others::PageGraphicAssign::PageAssignType>::mapping;
 extern template const XmlEnumMappingElement<options::BeamOptions::FlattenStyle> XmlEnumMapping<options::BeamOptions::FlattenStyle>::mapping;
 extern template const XmlEnumMappingElement<options::LyricOptions::AlignJustify> XmlEnumMapping<options::LyricOptions::AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::AutoBracketStyle> XmlEnumMapping<options::TupletOptions::AutoBracketStyle>::mapping;
@@ -310,7 +311,13 @@ MUSX_XML_ELEMENT_ARRAY(MeasureGraphicAssign, {
     {"width", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->width = e->getTextAs<Evpu>(); }},
     {"height", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"fDescID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->fDescId = e->getTextAs<Cmper>(); }},
-    {"displayType", [](const XmlElementPtr&, const std::shared_ptr<MeasureGraphicAssign>&) { /* always "one"; ignore */ }},
+    {"displayType", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>&)
+        {
+            if (toEnum<others::PageGraphicAssign::PageAssignType>(e) != others::PageGraphicAssign::PageAssignType::One) {
+                util::Logger::log(util::Logger::LogLevel::Warning, "Encountered measure graphic with multipage positioning.");
+            }
+        }
+    },
     {"displayHidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->hidden = populateBoolean(e, i); }},
     {"savedRecord", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->savedRecord = populateBoolean(e, i); }},
     {"origWidth", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},

@@ -282,3 +282,64 @@ TEST(MeasureGraphicAssignTest, PopulateFields)
     EXPECT_EQ(assign->origHeight, 18);
     EXPECT_EQ(assign->graphicCmper, 1);
 }
+
+TEST(ShapeGraphicAssignTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <shapeGraphicAssign cmper="1" inci="0">
+      <version>256</version>
+      <left>728</left>
+      <bottom>-580</bottom>
+      <width>336</width>
+      <height>168</height>
+      <fDescID>1</fDescID>
+      <displayType>one</displayType>
+      <halign>left</halign>
+      <valign>top</valign>
+      <posFrom>paper</posFrom>
+      <fixedPerc/>
+      <savedRecord/>
+      <origWidth>336</origWidth>
+      <origHeight>168</origHeight>
+      <graphicCmper>1</graphicCmper>
+    </shapeGraphicAssign>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    // Score assignment (partId = SCORE_PARTID)
+    auto g = others->get<others::ShapeGraphicAssign>(SCORE_PARTID, 1, 0);
+    ASSERT_TRUE(g) << "ShapeGraphicAssign (cmper=1, inci=0) not found for SCORE_PARTID but does exist";
+
+    EXPECT_EQ(g->version, 256u);
+    EXPECT_EQ(g->left, 728);
+    EXPECT_EQ(g->bottom, -580);
+    EXPECT_EQ(g->width, 336);
+    EXPECT_EQ(g->height, 168);
+    EXPECT_EQ(g->fDescId, 1);
+
+    // Invariants displayType/posFrom are intentionally not modeled on the class.
+    // We still verify alignment & flags populated as expected.
+    EXPECT_EQ(g->hAlign, others::ShapeGraphicAssign::HorizontalAlignment::Left);
+    EXPECT_EQ(g->vAlign, others::ShapeGraphicAssign::VerticalAlignment::Top);
+
+    // Boolean-presence nodes
+    EXPECT_TRUE(g->fixedPerc);
+    EXPECT_TRUE(g->savedRecord);
+
+    // Not present in XML -> default false
+    EXPECT_FALSE(g->hidden);
+
+    EXPECT_EQ(g->origWidth, 336);
+    EXPECT_EQ(g->origHeight, 168);
+    EXPECT_EQ(g->graphicCmper, 1);
+}
