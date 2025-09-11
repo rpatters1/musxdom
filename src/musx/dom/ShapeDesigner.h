@@ -120,7 +120,7 @@ public:
         EndGroup,
 
         /// external graphic (eps, pict, tiff, etc)  
-        /// data items: (3) width, height of graphic, cmper of graphic
+        /// data items: (3) width, height of graphic, cmper of corresponding @ref ShapeGraphicAssign record
         ExternalGraphic,
 
         /// fill path (alternating, or even-odd rule)  
