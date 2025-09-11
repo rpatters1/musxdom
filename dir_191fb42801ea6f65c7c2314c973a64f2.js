@@ -6,6 +6,7 @@ var dir_191fb42801ea6f65c7c2314c973a64f2 =
     [ "Document.h", "Document_8h_source.html", null ],
     [ "Entries.h", "Entries_8h_source.html", null ],
     [ "Fundamentals.h", "Fundamentals_8h_source.html", null ],
+    [ "Graphics.h", "Graphics_8h_source.html", null ],
     [ "Header.h", "Header_8h_source.html", null ],
     [ "InstrumentUuids.h", "InstrumentUuids_8h_source.html", null ],
     [ "MusxInstance.h", "MusxInstance_8h_source.html", null ],

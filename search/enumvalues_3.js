@@ -23,8 +23,9 @@ var searchData=
   ['diamond_20',['Diamond',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256a8f7671185d590914ac21c7511767b699',1,'musx::dom::others::Enclosure']]],
   ['diffnoteheads_21',['DiffNoteheads',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a96ca65be0c05687b0533cc64bd1fcd49a4cf1776f846a94e9559fd58a0fe4bda2',1,'musx::dom::options::MusicSpacingOptions']]],
   ['dorian_22',['Dorian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ceab8dd79e4a88047dee0f3bf56dcb37ca8',1,'music_theory']]],
-  ['double_23',['Double',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117ad909d38d705ce75386dd86e611a82f5b',1,'musx::dom::others::Measure']]],
-  ['drawchar_24',['DrawChar',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#ad608f81b2142073a05da65fc4454a768ade9a94c8c7949a8fc462d3bdf33a76cc',1,'musx::dom::others::ShapeDef']]],
-  ['dump_25',['Dump',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaeba2f52f64e17ff27e6c5cfefd7e32fa',1,'musx::dom::others']]],
-  ['dynamics_26',['Dynamics',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa405d9a69e5139b9df0df6b66e18fc9e2',1,'musx::dom::others::MarkingCategory']]]
+  ['dospath_23',['DosPath',['../classmusx_1_1dom_1_1others_1_1FileDescription.html#a8d9d0ade14e9072cd17e2e3707c6b9f2a8ebe746732424e7b54959e5286fe8548',1,'musx::dom::others::FileDescription']]],
+  ['double_24',['Double',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117ad909d38d705ce75386dd86e611a82f5b',1,'musx::dom::others::Measure']]],
+  ['drawchar_25',['DrawChar',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#ad608f81b2142073a05da65fc4454a768ade9a94c8c7949a8fc462d3bdf33a76cc',1,'musx::dom::others::ShapeDef']]],
+  ['dump_26',['Dump',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaeba2f52f64e17ff27e6c5cfefd7e32fa',1,'musx::dom::others']]],
+  ['dynamics_27',['Dynamics',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa405d9a69e5139b9df0df6b66e18fc9e2',1,'musx::dom::others::MarkingCategory']]]
 ];

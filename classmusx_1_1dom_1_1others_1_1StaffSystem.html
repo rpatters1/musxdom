@@ -472,7 +472,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Ending measure of the staff system <em>plus one</em>. This is effectively the first measure of the next system or one measure past the last measure in the document. (Finale being Finale.) See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a>. </p>
+<p>The ending measure of the staff system, stored as <em>one greater</em> than the last measure on this system. In other words, it is the first measure of the next system, or one past the last measure in the document. See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a>. <br  />
+ If <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12">endMeas</a> is a split measure, its first part may still appear on this system depending on spacing. (Finale does not record this in the data.) If the system is locked, the first part of the split always appears on this system. See <a class="el" href="classmusx_1_1dom_1_1others_1_1SplitMeasure.html">SplitMeasure</a> and <a class="el" href="classmusx_1_1dom_1_1others_1_1SystemLock.html">SystemLock</a>. </p>
 
 </div>
 </div>

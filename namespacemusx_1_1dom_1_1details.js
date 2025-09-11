@@ -34,6 +34,7 @@ var namespacemusx_1_1dom_1_1details =
     [ "LyricAssignSection", "classmusx_1_1dom_1_1details_1_1LyricAssignSection.html", "classmusx_1_1dom_1_1details_1_1LyricAssignSection" ],
     [ "LyricAssignVerse", "classmusx_1_1dom_1_1details_1_1LyricAssignVerse.html", "classmusx_1_1dom_1_1details_1_1LyricAssignVerse" ],
     [ "LyricEntryInfo", "classmusx_1_1dom_1_1details_1_1LyricEntryInfo.html", "classmusx_1_1dom_1_1details_1_1LyricEntryInfo" ],
+    [ "MeasureGraphicAssign", "classmusx_1_1dom_1_1details_1_1MeasureGraphicAssign.html", "classmusx_1_1dom_1_1details_1_1MeasureGraphicAssign" ],
     [ "MeasureNumberIndividualPositioning", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning" ],
     [ "MeasureOssiaAssign", "classmusx_1_1dom_1_1details_1_1MeasureOssiaAssign.html", "classmusx_1_1dom_1_1details_1_1MeasureOssiaAssign" ],
     [ "MeasureTextAssign", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign.html", "classmusx_1_1dom_1_1details_1_1MeasureTextAssign" ],

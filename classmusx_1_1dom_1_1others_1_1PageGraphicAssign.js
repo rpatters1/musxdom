@@ -1,0 +1,45 @@
+var classmusx_1_1dom_1_1others_1_1PageGraphicAssign =
+[
+    [ "HorizontalAlignment", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#ab647210e09f07abf12718e152859c64e", null ],
+    [ "VerticalAlignment", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a7483447fc5e2ad7e1138de514c2e43fe", null ],
+    [ "PageAssignType", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aa8cfdb1044328430af397b7642a55657", [
+      [ "AllPages", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aa8cfdb1044328430af397b7642a55657a2de75620cd2a59b38e262156d6abe818", null ],
+      [ "Even", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aa8cfdb1044328430af397b7642a55657a35537fbc25d87ffe59e4f35fefcd34b7", null ],
+      [ "Odd", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aa8cfdb1044328430af397b7642a55657a37b6bd7fe61d651735cec3d3b0356c66", null ],
+      [ "One", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aa8cfdb1044328430af397b7642a55657a06c2cea18679d64399783748fa367bdd", null ]
+    ] ],
+    [ "PositionFrom", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a86dbc04a484fc61c46f3d39f0a84ee56", [
+      [ "Margins", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a86dbc04a484fc61c46f3d39f0a84ee56abd32648160fec8b96d24f7f2e1d4f1f1", null ],
+      [ "PageEdge", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a86dbc04a484fc61c46f3d39f0a84ee56adc1391f0c771b7d9e9a965427fc71008", null ]
+    ] ],
+    [ "PageGraphicAssign", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a62d642d620e7183e14ad751a53f983de", null ],
+    [ "calcEndPageNumber", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aa1ab1e29b8c9ecc037b2baafe4a31d76", null ],
+    [ "calcStartPageNumber", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a97db257a44af11246a3c12003ab1e721", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a10221441d5b77ebd1868722a89283982", null ],
+    [ "isMultiAssignedThruLastPage", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a5fe956145972e6c0efd4b64bd535811f", null ],
+    [ "isMultiPage", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a389eb7117b051124209d3b65f9916a16", null ],
+    [ "bottom", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a5746ee7d089df9b840dfd00bee2da4be", null ],
+    [ "displayType", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a8cf44c6fdaa00d4fc81a7e26269d3664", null ],
+    [ "endPage", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aef5c87fa064f8d2eaf1c7302d4592b37", null ],
+    [ "fDescId", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a92dbcdf67221be0e324653b707a17e94", null ],
+    [ "fixedPerc", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a550279e8b81eeff743b0b89efbe2ef24", null ],
+    [ "graphicCmper", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a6d50d2dba40196c05bf990d629a48470", null ],
+    [ "hAlign", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#ad12c87be4e9af924815253f3b863eaa9", null ],
+    [ "height", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#ad4a61b620ef5c740888fe5640461a3fc", null ],
+    [ "hidden", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a60637a8856c4635d2cb6f7e8fb82f12a", null ],
+    [ "left", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a70b0f129eaac1109308c140f135bd064", null ],
+    [ "origHeight", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a63435588071397dbd4065e556afd4f81", null ],
+    [ "origWidth", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a894ce3f4aa6e3778637930b5718ae6fd", null ],
+    [ "posFrom", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#ae37280c774820ee404c86b4a86e4bf13", null ],
+    [ "rightPgBottom", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aae4968ddd861f1706b8874b03a2838f9", null ],
+    [ "rightPgFixedPerc", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#afffbda7a372ff23e5cf29dd50617cd69", null ],
+    [ "rightPgHAlign", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a0c8d65a266e3de8cabd3e4914f4b33a5", null ],
+    [ "rightPgLeft", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a05e3547ebb9aade7270ad01127b18573", null ],
+    [ "rightPgPosFrom", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a40c9c2dc0b6ec5d3cc75dc13c4d3f955", null ],
+    [ "rightPgVAlign", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a8c99cdbc23bf97fe9a6ad0937e101a1e", null ],
+    [ "savedRecord", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a264ad1ac50c26e517057bbf2dca7c24b", null ],
+    [ "startPage", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#aa0aa8bf81c74d6f54ff6115737f4d8ed", null ],
+    [ "vAlign", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#abe058b6a676a51e19e2d15105fccecea", null ],
+    [ "version", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a8bce8547fd82fe8bde59cbf9f800d258", null ],
+    [ "width", "classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#ac0c5f268a8c2a57179fd2fef09f219e6", null ]
+];
