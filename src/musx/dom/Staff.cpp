@@ -564,8 +564,6 @@ void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
         instUuid = staffStyle->instUuid;
         // there appears to be no mask for instUuid.
     }
-
-    /// @todo the rest of the masks as we discover/create them
     if (srcMasks->floatNoteheadFont) {
         noteFont = staffStyle->noteFont;
         useNoteFont = staffStyle->useNoteFont;
