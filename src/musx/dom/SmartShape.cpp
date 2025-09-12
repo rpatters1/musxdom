@@ -21,6 +21,7 @@
  */
 #include <string>
 #include <cmath>
+#include <limits>
 
 #include "musx/musx.h"
 
@@ -31,17 +32,22 @@ namespace dom {
 // ***** EndPoint *****
 // ********************
 
-EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId) const
+EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId, bool findExact) const
 {
     EntryInfoPtr result;
     if (entryNumber != 0) {
         result = EntryInfoPtr::fromPositionOrNull(getDocument(), forPartId, staffId, measId, entryNumber);
     } else if (auto gfhold = details::GFrameHoldContext(getDocument(), forPartId, staffId, measId)) {
+        unsigned bestDiff = std::numeric_limits<unsigned>::max();
         gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
             unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
             if (eduDiff <= 1) {
                 result = entryInfo;
                 return false; // stop iterating
+            }
+            if (!findExact && eduDiff < bestDiff) {
+                bestDiff = eduDiff;
+                result = entryInfo;
             }
             return true;
         });
