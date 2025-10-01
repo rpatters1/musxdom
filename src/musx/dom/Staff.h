@@ -521,8 +521,8 @@ public:
     /// `hideKeySigsShowAccis`. If the #instUuid is a real instrument (rather than Blank or Unknown),
     /// that also indicates an instrument change.
     ///
-    /// Earlier Finale files may not follow this convention. The could potentially contain
-    /// staff styles where one or more instrument-change masks is set independently. To handle both
+    /// Earlier Finale files may not follow this convention. They could potentially contain
+    /// staff styles where one or more instrument-change masks are set independently. To handle both
     /// modern and legacy cases, this function tests whether *any* of the instrument-change masks is
     /// active in the current staff style.
     ///
