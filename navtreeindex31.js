@@ -1,5 +1,7 @@
 var NAVTREEINDEX31 =
 {
+"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a47519a96ebb5871394c35e50c26c642c":[2,0,1,0,16,0,3],
+"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a47519a96ebb5871394c35e50c26c642c":[1,0,1,0,15,0,3],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4767e3e0a24fb4dcf1645dea6ec5ae4a":[2,0,1,0,16,0,8],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4767e3e0a24fb4dcf1645dea6ec5ae4a":[1,0,1,0,15,0,8],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4cc361a243e8b23fd5dcd39edc570a00":[1,0,1,0,15,0,7],

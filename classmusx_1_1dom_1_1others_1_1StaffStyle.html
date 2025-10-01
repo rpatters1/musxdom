@@ -135,6 +135,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>StaffStyle</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:a5762f50554830a25eb185acc5808dcbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a5762f50554830a25eb185acc5808dcbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa01cf92e7bdcd6abd67156023d29ac2e" id="r_aa01cf92e7bdcd6abd67156023d29ac2e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html#aa01cf92e7bdcd6abd67156023d29ac2e">containsInstrumentChange</a> () const</td></tr>
+<tr class="memdesc:aa01cf92e7bdcd6abd67156023d29ac2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether this staff style represents or includes an instrument change.  <br /></td></tr>
+<tr class="separator:aa01cf92e7bdcd6abd67156023d29ac2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17226c4c2ec84398025d418e64954b02" id="r_a17226c4c2ec84398025d418e64954b02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html#a17226c4c2ec84398025d418e64954b02">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a17226c4c2ec84398025d418e64954b02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a17226c4c2ec84398025d418e64954b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -271,9 +274,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a7b9b1f99f7570bf152e8cf341ed9e8dd" id="r_a7b9b1f99f7570bf152e8cf341ed9e8dd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html">StaffStyle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html#a7b9b1f99f7570bf152e8cf341ed9e8dd">findAllOverlappingStyles</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measId, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition)</td></tr>
-<tr class="memdesc:a7b9b1f99f7570bf152e8cf341ed9e8dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a subset from all <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html" title="Represents a Finale staff style.">StaffStyle</a> instances that overlap with the specified metric position on a given staff in a give linked part or score.  <br /></td></tr>
-<tr class="separator:a7b9b1f99f7570bf152e8cf341ed9e8dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6e01f661376318a5c7322271504f7ea" id="r_aa6e01f661376318a5c7322271504f7ea"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html">StaffStyle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html#aa6e01f661376318a5c7322271504f7ea">findAllOverlappingStyles</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measId, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition)</td></tr>
+<tr class="memdesc:aa6e01f661376318a5c7322271504f7ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a subset from all <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html" title="Represents a Finale staff style.">StaffStyle</a> instances that overlap with the specified metric position on a given staff in a give linked part or score.  <br /></td></tr>
+<tr class="separator:aa6e01f661376318a5c7322271504f7ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25e47c246f5cf2ce1dfe0f18a42a21aa" id="r_a25e47c246f5cf2ce1dfe0f18a42a21aa"><td class="memItemLeft" align="right" valign="top"><a id="a25e47c246f5cf2ce1dfe0f18a42a21aa" name="a25e47c246f5cf2ce1dfe0f18a42a21aa"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html">StaffStyle</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:a25e47c246f5cf2ce1dfe0f18a42a21aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -806,6 +809,30 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <div class="textblock"><p>Represents a Finale staff style. </p>
 <p>The cmper is a 1-based staff style ID (not necessarily sequential). This class is identified by the XML node name "staffStyle". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa01cf92e7bdcd6abd67156023d29ac2e" name="aa01cf92e7bdcd6abd67156023d29ac2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa01cf92e7bdcd6abd67156023d29ac2e">&#9670;&#160;</a></span>containsInstrumentChange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::StaffStyle::containsInstrumentChange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines whether this staff style represents or includes an instrument change. </p>
+<p>Beginning with Finale 2012, a dedicated group of staff style masks was reserved exclusively for instrument changes. These masks always appear together and never occur in staff styles used for other purposes. The masks are <code>notationStyle</code>, <code>defaultClef</code>, <code>showNoteColors</code>, and <code>hideKeySigsShowAccis</code>. If the <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#aed8dd51f5f3d7128990113c16925589a" title="Unique identifier for the type of instrument.">instUuid</a> is a real instrument (rather than Blank or Unknown), that also indicates an instrument change.</p>
+<p>Earlier Finale files may not follow this convention. They could potentially contain staff styles where one or more instrument-change masks are set independently. To handle both modern and legacy cases, this function tests whether <em>any</em> of the instrument-change masks is active in the current staff style.</p>
+<p>In addition, there is a set of masks that may be included in an instrument change staff style or also may be included in a regular staff style. These are <code>staffType</code>, <code>transposition</code>, <code>fullName</code>, and <code>abrvName</code>. This function ignores these optional masks.</p>
+<dl class="section note"><dt>Note</dt><dd>If the current instance is a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">StaffComposite</a>, it incorporates all masks in effect at the music location for which it was created. For this reason, testing for any instrument-change masks (rather than all) remains useful even in modern files. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if one or more instrument-change masks are set in the current his staff style; <code>false</code> otherwise. </dd></dl>
+
+</div>
+</div>
 <a id="ad727432575192b53a602731dab606f53" name="ad727432575192b53a602731dab606f53"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad727432575192b53a602731dab606f53">&#9670;&#160;</a></span>createMasks()</h2>
 
@@ -840,8 +867,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 </div>
 </div>
-<a id="a7b9b1f99f7570bf152e8cf341ed9e8dd" name="a7b9b1f99f7570bf152e8cf341ed9e8dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b9b1f99f7570bf152e8cf341ed9e8dd">&#9670;&#160;</a></span>findAllOverlappingStyles()</h2>
+<a id="aa6e01f661376318a5c7322271504f7ea" name="aa6e01f661376318a5c7322271504f7ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6e01f661376318a5c7322271504f7ea">&#9670;&#160;</a></span>findAllOverlappingStyles()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -850,7 +877,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html">others::StaffStyle</a> &gt; musx::dom::others::StaffStyle::findAllOverlappingStyles </td>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html">StaffStyle</a> &gt; musx::dom::others::StaffStyle::findAllOverlappingStyles </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
           <td class="paramname"><em>document</em>, </td>

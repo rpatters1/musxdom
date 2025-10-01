@@ -128,9 +128,9 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcGlobalPosition</b> () const</td></tr>
 <tr class="memdesc:a00d74b5dfaf87ddf5cd91b0d34922332"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached. <br /></td></tr>
 <tr class="separator:a00d74b5dfaf87ddf5cd91b0d34922332"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad00b33526d0fbb50412cc0718aebefee" id="r_ad00b33526d0fbb50412cc0718aebefee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#ad00b33526d0fbb50412cc0718aebefee">calcAssociatedEntry</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
-<tr class="memdesc:ad00b33526d0fbb50412cc0718aebefee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the endpoint.  <br /></td></tr>
-<tr class="separator:ad00b33526d0fbb50412cc0718aebefee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fafc34d9ae9fe64231166a647bd703c" id="r_a6fafc34d9ae9fe64231166a647bd703c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a6fafc34d9ae9fe64231166a647bd703c">calcAssociatedEntry</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, bool findExact=true) const</td></tr>
+<tr class="memdesc:a6fafc34d9ae9fe64231166a647bd703c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the endpoint.  <br /></td></tr>
+<tr class="separator:a6fafc34d9ae9fe64231166a647bd703c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6348bd306404e772e995dc0ef1820cd4" id="r_a6348bd306404e772e995dc0ef1820cd4"><td class="memItemLeft" align="right" valign="top"><a id="a6348bd306404e772e995dc0ef1820cd4" name="a6348bd306404e772e995dc0ef1820cd4"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShapeMeasureAssign.html">others::SmartShapeMeasureAssign</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMeasureAssignment</b> () const</td></tr>
 <tr class="memdesc:a6348bd306404e772e995dc0ef1820cd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the measure assignment for this endpoint or null if none. <br /></td></tr>
@@ -248,8 +248,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents an endpoint of the smart shape. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad00b33526d0fbb50412cc0718aebefee" name="ad00b33526d0fbb50412cc0718aebefee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad00b33526d0fbb50412cc0718aebefee">&#9670;&#160;</a></span>calcAssociatedEntry()</h2>
+<a id="a6fafc34d9ae9fe64231166a647bd703c" name="a6fafc34d9ae9fe64231166a647bd703c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fafc34d9ae9fe64231166a647bd703c">&#9670;&#160;</a></span>calcAssociatedEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,8 +258,18 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::smartshape::EndPoint::calcAssociatedEntry </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
-          <td class="paramname"><em>forPartId</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>forPartId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>findExact</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -269,6 +279,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forPartId</td><td>The linked part or score for which to create the <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>. </td></tr>
+    <tr><td class="paramname">findExact</td><td>If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure. </td></tr>
   </table>
   </dd>
 </dl>
