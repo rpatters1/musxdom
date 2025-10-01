@@ -42,7 +42,7 @@ EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId, bool fin
                 + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
         }
     } else if (auto gfhold = details::GFrameHoldContext(getDocument(), forPartId, staffId, measId)) {
-        unsigned bestDiff = std::numeric_limits<unsigned>::max();
+        unsigned bestDiff = (std::numeric_limits<unsigned>::max)();
         gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
             if (entryInfo->getEntry()->graceNote) {
                 return true; // iterate past grace notes
