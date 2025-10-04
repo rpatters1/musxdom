@@ -43,7 +43,8 @@ bool ClefOptions::ClefDef::isBlank() const
         }
         return true;
     }
-    return !clefChar || (clefChar <= 0xffff && std::iswspace(static_cast<wint_t>(clefChar)));
+    // do not let std::iswspace compare outside the ASCII range, because, for example, non-breaking space is used for 8va treble cleff
+    return !clefChar || (clefChar < 128 && std::iswspace(static_cast<wint_t>(clefChar)));
 }
 
 ClefOptions::ClefInfo ClefOptions::ClefDef::calcInfo(const MusxInstance<others::Staff>& currStaff) const
