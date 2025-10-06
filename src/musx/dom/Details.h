@@ -1734,7 +1734,8 @@ public:
     }
 
     NoteNumber noteId{};   ///< The ID of the tablature note being modified. (xml node is `<noteID>`)
-    int stringNumber{};    ///< The string number on which the note is played.
+    int stringNumber{};    ///< The 1-based string number on which the note is played. String numbers go from top to bottom on the tablature staff.
+                           ///< Subtract 1 for an index into #others::FretInstrument::strings.
 
     NoteNumber getNoteId() const override { return noteId; }
 
