@@ -270,3 +270,120 @@ TEST(ClefOptionsTest, ClefInfoTest)
         EXPECT_EQ(def->isBlank(), x == 15) << "x is " << x;
     }
 }
+
+TEST(ClefOptionsTest, LegactClefDefs)
+{
+constexpr static musxtest::string_view legacyClefDefsXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <clefOptions>
+      <endMeasClefPercent>75</endMeasClefPercent>
+      <endMeasClefPosAdd>-8</endMeasClefPosAdd>
+      <clefFront>24</clefFront>
+      <cautionaryClefChanges/>
+      <clefDef index="0">
+        <adjust>-10</adjust>
+        <clefChar>38</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="1">
+        <adjust>-4</adjust>
+        <clefChar>66</clefChar>
+        <clefYDisp>-4</clefYDisp>
+      </clefDef>
+      <clefDef index="2">
+        <adjust>-2</adjust>
+        <clefChar>66</clefChar>
+        <clefYDisp>-2</clefYDisp>
+      </clefDef>
+      <clefDef index="3">
+        <adjust>2</adjust>
+        <clefChar>63</clefChar>
+        <clefYDisp>-2</clefYDisp>
+      </clefDef>
+      <clefDef index="4">
+        <adjust>-10</adjust>
+        <clefChar>214</clefChar>
+        <clefYDisp>-4</clefYDisp>
+      </clefDef>
+      <clefDef index="5">
+        <adjust>-3</adjust>
+        <clefChar>86</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="6">
+        <adjust>9</adjust>
+        <clefChar>116</clefChar>
+        <clefYDisp>-2</clefYDisp>
+      </clefDef>
+      <clefDef index="7">
+        <clefChar>63</clefChar>
+        <clefYDisp>-4</clefYDisp>
+      </clefDef>
+      <clefDef index="8">
+        <adjust>-12</adjust>
+        <clefChar>38</clefChar>
+        <clefYDisp>-8</clefYDisp>
+      </clefDef>
+      <clefDef index="9">
+        <clefChar>66</clefChar>
+      </clefDef>
+      <clefDef index="10">
+        <adjust>-6</adjust>
+        <clefChar>66</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="11">
+        <adjust>-8</adjust>
+        <clefChar>66</clefChar>
+        <clefYDisp>-8</clefYDisp>
+      </clefDef>
+      <clefDef index="12">
+        <adjust>-10</adjust>
+        <clefChar>139</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="13">
+        <adjust>-17</adjust>
+        <clefChar>160</clefChar>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="14">
+        <adjust>-5</adjust>
+        <clefChar>230</clefChar>
+        <clefYDisp>-2</clefYDisp>
+      </clefDef>
+      <clefDef index="15">
+        <adjust>-10</adjust>
+        <clefYDisp>-6</clefYDisp>
+      </clefDef>
+      <clefDef index="16">
+        <adjust>-10</adjust>
+        <shapeID>4</shapeID>
+        <isShape/>
+        <scaleToStaffHeight/>
+      </clefDef>
+      <clefDef index="17">
+        <adjust>-10</adjust>
+        <shapeID>5</shapeID>
+        <isShape/>
+        <scaleToStaffHeight/>
+      </clefDef>
+    </clefOptions>
+   </options>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(legacyClefDefsXml);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+    auto clefOptions = options->get<options::ClefOptions>();
+    ASSERT_TRUE(clefOptions);
+
+    for (size_t x = 0; x < clefOptions->clefDefs.size(); x++) {
+        if (!clefOptions->clefDefs[x]->isShape) {
+            EXPECT_EQ(clefOptions->clefDefs[x]->isBlank(), x == 15) << "Blank clef status does not match for clef index " << x;
+        }
+    }
+}

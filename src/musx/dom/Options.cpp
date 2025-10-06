@@ -43,7 +43,7 @@ bool ClefOptions::ClefDef::isBlank() const
         }
         return true;
     }
-    // do not let std::iswspace compare outside the ASCII range, because, for example, non-breaking space is used for 8va treble cleff
+    // do not let std::iswspace compare outside the ASCII range, because, for example, non-breaking space is used for legacy 8va treble clef
     return !clefChar || (clefChar < 128 && std::iswspace(static_cast<wint_t>(clefChar)));
 }
 
