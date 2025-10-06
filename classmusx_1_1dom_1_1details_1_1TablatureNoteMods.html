@@ -203,9 +203,7 @@ Public Attributes</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>noteId</b> {}</td></tr>
 <tr class="memdesc:ad4ca1ac4b08866cb2568b352d4fb13b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ID of the tablature note being modified. (xml node is <code>&lt;noteID&gt;</code>) <br /></td></tr>
 <tr class="separator:ad4ca1ac4b08866cb2568b352d4fb13b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed561886037cb9999ba8bfad72554e4e" id="r_aed561886037cb9999ba8bfad72554e4e"><td class="memItemLeft" align="right" valign="top"><a id="aed561886037cb9999ba8bfad72554e4e" name="aed561886037cb9999ba8bfad72554e4e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>stringNumber</b> {}</td></tr>
-<tr class="memdesc:aed561886037cb9999ba8bfad72554e4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The string number on which the note is played. <br /></td></tr>
+<tr class="memitem:aed561886037cb9999ba8bfad72554e4e" id="r_aed561886037cb9999ba8bfad72554e4e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1TablatureNoteMods.html#aed561886037cb9999ba8bfad72554e4e">stringNumber</a> {}</td></tr>
 <tr class="separator:aed561886037cb9999ba8bfad72554e4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
@@ -301,6 +299,22 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <p>Required virtual function that returns the note id. </p>
 
 <p>Implements <a class="el" href="classmusx_1_1dom_1_1NoteDetailsBase.html#af8d25667cf7935bb6329736e870b581c">musx::dom::NoteDetailsBase</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aed561886037cb9999ba8bfad72554e4e" name="aed561886037cb9999ba8bfad72554e4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed561886037cb9999ba8bfad72554e4e">&#9670;&#160;</a></span>stringNumber</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::details::TablatureNoteMods::stringNumber {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The 1-based string number on which the note is played. String numbers go from top to bottom on the tablature staff. Subtract 1 for an index into <a class="el" href="classmusx_1_1dom_1_1others_1_1FretInstrument.html#a719848abb8aaf4b7bdcf311756f016c0" title="One entry per string: strings.size() should equal numStrings.">others::FretInstrument::strings</a>. </p>
 
 </div>
 </div>
