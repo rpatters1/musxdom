@@ -243,7 +243,6 @@ class BaselineFretboards : public BaselineNoInci
 public:
     using BaselineNoInci::BaselineNoInci;
 
-    using TextType = texts::ExpressionText; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesFingerboards"; ///< The XML node name for this type.
 };
 
@@ -291,6 +290,94 @@ public:
 
     using TextType = texts::LyricsVerse; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesLyricsVerse"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemChords
+ * @brief Contains the baseline offsets for chords.
+ */
+class BaselineSystemChords : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysChords"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemExpressionsAbove
+ * @brief Contains the baseline offsets for expressions above the staff.
+ */
+class BaselineSystemExpressionsAbove : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysExprAboveStaff"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemExpressionsBelow
+ * @brief Contains the baseline offsets for expressions below the staff.
+ */
+class BaselineSystemExpressionsBelow : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysExprBelowStaff"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemFretboards
+ * @brief Contains the baseline offsets for chords.
+ */
+class BaselineSystemFretboards : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysFingerboards"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemLyricsChorus
+ * @brief Contains the baseline offsets for lyrics chorus records.
+ */
+class BaselineSystemLyricsChorus : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+
+    using TextType = texts::LyricsChorus; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesSysLyricsChorus"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemLyricsSection
+ * @brief Contains the baseline offsets for lyrics chorus records.
+ */
+class BaselineSystemLyricsSection : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    using TextType = texts::LyricsSection; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesSysLyricsSection"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemLyricsVerse
+ * @brief Contains the baseline offsets for lyrics verse records.
+ */
+class BaselineSystemLyricsVerse : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    using TextType = texts::LyricsVerse; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesSysLyricsVerse"; ///< The XML node name for this type.
 };
 
 /**

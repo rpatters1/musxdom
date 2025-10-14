@@ -79,6 +79,48 @@ struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
 };
 
 template <>
+struct FieldPopulator<BaselineSystemChords> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemExpressionsAbove> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemExpressionsBelow> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemFretboards> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemLyricsChorus> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemLyricsSection> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemLyricsVerse> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
 struct FieldPopulator<BeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
 {
     static void populate(const std::shared_ptr<BeamAlterationsDownStem>& instance,
