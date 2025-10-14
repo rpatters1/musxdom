@@ -139,6 +139,15 @@ public:
 /**
  * @class Baseline
  * @brief Contains the baseline information for all baseline types
+ *
+ * Cmper1 and cmper2 are used as follows.
+ *
+ * | cmper1   | cmper2  | Meaning                                                       | Related classes   |
+ * |:--------:|:-------:|:--------------------------------------------------------------|:------------------|
+ * | `0`      | `0`     | Global baseline                                               | `Baseline*`       |
+ * | `0`      | `staff` | Staff baseline                                                | `Baseline*`       |
+ * | `system` | `staff` | System & staff baseline (a specific staff within a system)    | `BaselineSystem*` |
+ *
  */
 class Baseline : public DetailsBase
 {
