@@ -56,9 +56,10 @@ class TextBlock;
 } // namespace others
 
 namespace texts {
-    class LyricsChorus;
-    class LyricsSection;
-    class LyricsVerse;
+class ExpressionText;
+class LyricsChorus;
+class LyricsSection;
+class LyricsVerse;
 } // namespace others
 
 /**
@@ -149,20 +150,99 @@ public:
      * @param shareMode The sharing mode for this @ref Baseline.
      * @param system For system baselines, the system number. For global baselines, 0.
      * @param staff For staff-level baselines, the staff number. For global baselines, 0.
-     * @param inci The 0-based inci, if needed. (Lyrics baselines have multiple instances per #lyricNumber.)
+     * @param inci The 0-based inci. (For lyrics baselines only. Others use std::nullopt.)
      */
-    explicit Baseline(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff, std::optional<Inci> inci = std::nullopt)
+    explicit Baseline(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff, std::optional<Inci> inci)
         : DetailsBase(document, partId, shareMode, system, staff, inci) {}
 
     Evpu baselineDisplacement{};    ///< the displacment of the baseline from default position. (xml node is `<basedisp`>)
+                                    ///< @note The cumulative value of all displacements offets from the middle staff position.
     Cmper lyricNumber{};            ///< the text number of the lyric, if this is a lyrics baseline. Otherwise unused and should be zero.
 
     static const xml::XmlElementArray<Baseline>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
+ * @class BaselineNoInci
+ * @brief Encapsulates inci handling for non-inci baselines.
+ */
+class BaselineNoInci : public Baseline
+{
+public:
+    /**
+     * @brief Constructor function
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this @ref Baseline.
+     * @param system For system baselines, the system number. For global baselines, 0.
+     * @param staff For staff-level baselines, the staff number. For global baselines, 0.
+     */
+    explicit BaselineNoInci(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff)
+        : Baseline(document, partId, shareMode, system, staff, std::nullopt) {}
+};
+
+/**
+ * @class BaselineChords
+ * @brief Contains the baseline offsets for chords.
+ *
+ * System (cmper1) is always zero.
+ */
+class BaselineChords : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesChords"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineExpressionsAbove
+ * @brief Contains the baseline offsets for expressions above the staff.
+ *
+ * System (cmper1) is always zero.
+ */
+class BaselineExpressionsAbove : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesExprAboveStaff"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineExpressionsBelow
+ * @brief Contains the baseline offsets for expressions below the staff.
+ *
+ * System (cmper1) is always zero.
+ */
+class BaselineExpressionsBelow : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesExprBelowStaff"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineFretboards
+ * @brief Contains the baseline offsets for chords.
+ *
+ * System (cmper1) is always zero.
+ */
+class BaselineFretboards : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    using TextType = texts::ExpressionText; ///< The text type for this item.
+    constexpr static std::string_view XmlNodeName = "baselinesFingerboards"; ///< The XML node name for this type.
+};
+
+/**
  * @class BaselineLyricsChorus
  * @brief Contains the baseline offsets for lyrics chorus records.
+ *
+ * System (cmper1) is always zero.
  */
 class BaselineLyricsChorus : public Baseline
 {
@@ -177,6 +257,8 @@ public:
 /**
  * @class BaselineLyricsSection
  * @brief Contains the baseline offsets for lyrics chorus records.
+ *
+ * System (cmper1) is always zero.
  */
 class BaselineLyricsSection : public Baseline
 {
@@ -190,6 +272,8 @@ public:
 /**
  * @class BaselineLyricsVerse
  * @brief Contains the baseline offsets for lyrics verse records.
+ *
+ * System (cmper1) is always zero.
  */
 class BaselineLyricsVerse : public Baseline
 {
