@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <type_traits>
+
 #include "musx/util/Logger.h"
 #include "musx/util/Fraction.h"
 
@@ -32,6 +34,8 @@ namespace musx {
 namespace dom {
 
 namespace details {
+class Baseline;
+class BaselineNoInci;
 class ShapeNoteBase;
 }
 
@@ -383,6 +387,30 @@ public:
     /// bottom staff line, which is the value computed by this function.
     Evpu calcBaselineZeroPosition() const;
 
+    /// @brief Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system.
+    /// @tparam BaselineType The type of baseline. (@ref details::BaselineChords, @ref details::BaselineExpressionAbove, etc.: not the `BaselineSystem` variants)
+    /// @param system The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values.
+    /// @return The accumulated positiong of the baseline, relative to the staff's reference line.
+    template<typename BaselineType,
+             std::enable_if_t<std::is_base_of<details::BaselineNoInci, BaselineType>::value, int> = 0>
+     Evpu calcBaselinePosition(SystemCmper system) const
+    {
+        return calcBaselinePositionImpl<BaselineType>(system, std::nullopt);
+    }
+
+    /// @brief Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system.
+    /// @tparam BaselineType The type of baseline. (@ref details::BaselineChords, @ref details::BaselineExpressionAbove, etc.: not the `BaselineSystem` variants)
+    /// @param system The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values.
+    /// @param lyricNumber The Cmper of the lyric text block to find.
+    /// @return The accumulated positiong of the baseline, relative to the staff's reference line.
+    template<typename BaselineType,
+             std::enable_if_t<std::is_base_of<details::Baseline, BaselineType>::value &&
+                              !std::is_base_of<details::BaselineNoInci, BaselineType>::value, int> = 0>
+    Evpu calcBaselinePosition(SystemCmper system, Cmper lyricNumber) const
+    {
+        return calcBaselinePositionImpl<BaselineType>(system, lyricNumber);
+    }
+
     /// @brief Calculates the position of the top staff line, relative to the reference line.
     int calcTopLinePosition() const;
 
@@ -438,6 +466,9 @@ public:
 private:
     template <typename NamePositionType>
     MusxInstance<NamePositioning> getNamePosition() const;
+
+    template<typename BaselineType>
+    Evpu calcBaselinePositionImpl(SystemCmper system, std::optional<Cmper> lyricNumber) const;
 };
 
 /**
