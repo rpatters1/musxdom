@@ -388,9 +388,9 @@ public:
     Evpu calcBaselineZeroPosition() const;
 
     /// @brief Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system.
-    /// @tparam BaselineType The type of baseline. (@ref details::BaselineChords, @ref details::BaselineExpressionAbove, etc.: not the `BaselineSystem` variants)
+    /// @tparam BaselineType The type of baseline. (@ref details::BaselineChords, @ref details::BaselineExpressionsAbove, etc.: not the `BaselineSystem` variants)
     /// @param system The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values.
-    /// @return The accumulated positiong of the baseline, relative to the staff's reference line.
+    /// @return The accumulated position of the baseline, relative to the staff's reference line.
     template<typename BaselineType,
              std::enable_if_t<std::is_base_of<details::BaselineNoInci, BaselineType>::value, int> = 0>
      Evpu calcBaselinePosition(SystemCmper system) const
@@ -399,10 +399,10 @@ public:
     }
 
     /// @brief Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system.
-    /// @tparam BaselineType The type of baseline. (@ref details::BaselineChords, @ref details::BaselineExpressionAbove, etc.: not the `BaselineSystem` variants)
+    /// @tparam BaselineType The type of baseline. (@ref details::BaselineChords, @ref details::BaselineExpressionsAbove, etc.: not the `BaselineSystem` variants)
     /// @param system The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values.
     /// @param lyricNumber The Cmper of the lyric text block to find.
-    /// @return The accumulated positiong of the baseline, relative to the staff's reference line.
+    /// @return The accumulated position of the baseline, relative to the staff's reference line.
     template<typename BaselineType,
              std::enable_if_t<std::is_base_of<details::Baseline, BaselineType>::value &&
                               !std::is_base_of<details::BaselineNoInci, BaselineType>::value, int> = 0>

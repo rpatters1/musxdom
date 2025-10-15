@@ -559,6 +559,7 @@ Evpu Staff::calcBaselinePositionImpl(SystemCmper system, std::optional<Cmper> ly
     return result;
 }
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 template Evpu Staff::calcBaselinePositionImpl<details::BaselineChords>(SystemCmper, std::optional<Cmper>) const;
 template Evpu Staff::calcBaselinePositionImpl<details::BaselineExpressionsAbove>(SystemCmper, std::optional<Cmper>) const;
 template Evpu Staff::calcBaselinePositionImpl<details::BaselineExpressionsBelow>(SystemCmper, std::optional<Cmper>) const;
@@ -566,6 +567,7 @@ template Evpu Staff::calcBaselinePositionImpl<details::BaselineFretboards>(Syste
 template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsChorus>(SystemCmper, std::optional<Cmper>) const;
 template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsSection>(SystemCmper, std::optional<Cmper>) const;
 template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsVerse>(SystemCmper, std::optional<Cmper>) const;
+#endif //DOXYGEN_SHOULD_IGNORE_THIS
 
 bool Staff::hasInstrumentAssigned() const
 {

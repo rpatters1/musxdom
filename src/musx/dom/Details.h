@@ -165,7 +165,8 @@ public:
         : DetailsBase(document, partId, shareMode, system, staff, inci) {}
 
     Evpu baselineDisplacement{};        ///< The displacement of the baseline from its default position. (xml node is `<basedisp>`)
-                                        ///< @note The cumulative sum of all displacements is measured relative to the middle staff position.
+                                        ///< @note The cumulative sum of all displacements is measured relative to value returned by #others::Staff::calcBaselineZeroPosition.
+                                        ///< The full calculation is encapsulated in the #others::Staff::calcBaselinePosition method.
     std::optional<Cmper> lyricNumber{}; ///< The 1-based text number of the lyric, if this is a lyrics baseline. Otherwise unused and should be std::nullopt.
 
     static const xml::XmlElementArray<Baseline>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
