@@ -69,7 +69,7 @@ var searchData=
   ['lyre_66',['Lyre',['../namespacemusx_1_1dom_1_1uuid.html#a1d9b97947c29232b5dfd0f4a91fb0363',1,'musx::dom::uuid']]],
   ['lyricautonumtype_67',['lyricAutoNumType',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a83c642f7a1a24cb5dd686f3cd66ddad5',1,'musx::dom::options::LyricOptions']]],
   ['lyricdetail_68',['lyricDetail',['../classmusx_1_1dom_1_1Entry.html#ab39cf53be02d0856378fd81602a118a2',1,'musx::dom::Entry']]],
-  ['lyricnumber_69',['lyricnumber',['../classmusx_1_1dom_1_1details_1_1LyricAssign.html#a835b70469f40e850d46e9a0bac78be95',1,'musx::dom::details::LyricAssign::lyricNumber'],['../classmusx_1_1dom_1_1details_1_1Baseline.html#a3bd522bfd221f6134b27c5954b57e57d',1,'musx::dom::details::Baseline::lyricNumber']]],
+  ['lyricnumber_69',['lyricnumber',['../classmusx_1_1dom_1_1details_1_1LyricAssign.html#a835b70469f40e850d46e9a0bac78be95',1,'musx::dom::details::LyricAssign::lyricNumber'],['../classmusx_1_1dom_1_1details_1_1Baseline.html#a142ea135a18d4b8ff0c7a010eae16f72',1,'musx::dom::details::Baseline::lyricNumber']]],
   ['lyricpunctuationtoignore_70',['lyricPunctuationToIgnore',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a6463a3281567d21a1651fc788c9d6881',1,'musx::dom::options::LyricOptions']]],
   ['lyricuseedgepunctuation_71',['lyricUseEdgePunctuation',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a46a4aed7a4afe66d1b3d377741167c83',1,'musx::dom::options::LyricOptions']]]
 ];

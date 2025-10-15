@@ -261,10 +261,25 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfStafflines
 int&#160;</td><td class="memItemRight" valign="bottom"><b>calcMiddleStaffPosition</b> () const</td></tr>
 <tr class="memdesc:a8a4e8f3326884d02be7b00d5b956748f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the middle staff position. For staves with even numbers of lines, it is the middle space. <br /></td></tr>
 <tr class="separator:a8a4e8f3326884d02be7b00d5b956748f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15e7f63445a059196d1fbd3cf92f57f1" id="r_a15e7f63445a059196d1fbd3cf92f57f1"><td class="memItemLeft" align="right" valign="top"><a id="a15e7f63445a059196d1fbd3cf92f57f1" name="a15e7f63445a059196d1fbd3cf92f57f1"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>calcToplinePosition</b> () const</td></tr>
-<tr class="memdesc:a15e7f63445a059196d1fbd3cf92f57f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the position of the top staff line, relative to the reference line. <br /></td></tr>
-<tr class="separator:a15e7f63445a059196d1fbd3cf92f57f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af722a8287d3d1cfc0c27232aab4133de" id="r_af722a8287d3d1cfc0c27232aab4133de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#af722a8287d3d1cfc0c27232aab4133de">calcBaselineZeroPosition</a> () const</td></tr>
+<tr class="memdesc:af722a8287d3d1cfc0c27232aab4133de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the baseline zero position for this staff, relative to the reference line, before any displacements are applied.  <br /></td></tr>
+<tr class="separator:af722a8287d3d1cfc0c27232aab4133de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a5cc91829d396e2eaf2bb9a1b91a063" id="r_a5a5cc91829d396e2eaf2bb9a1b91a063"><td class="memTemplParams" colspan="2">template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1BaselineNoInci.html">details::BaselineNoInci</a>, BaselineType &gt;::value, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:a5a5cc91829d396e2eaf2bb9a1b91a063"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a5a5cc91829d396e2eaf2bb9a1b91a063">calcBaselinePosition</a> (<a class="el" href="namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237">SystemCmper</a> system) const</td></tr>
+<tr class="memdesc:a5a5cc91829d396e2eaf2bb9a1b91a063"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system.  <br /></td></tr>
+<tr class="separator:a5a5cc91829d396e2eaf2bb9a1b91a063"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3de8f126e008d5ac28ac34d1acc74631" id="r_a3de8f126e008d5ac28ac34d1acc74631"><td class="memTemplParams" colspan="2">template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1Baseline.html">details::Baseline</a>, BaselineType &gt;::value &amp;&amp;!std::is_base_of&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1BaselineNoInci.html">details::BaselineNoInci</a>, BaselineType &gt;::value, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:a3de8f126e008d5ac28ac34d1acc74631"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a3de8f126e008d5ac28ac34d1acc74631">calcBaselinePosition</a> (<a class="el" href="namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237">SystemCmper</a> system, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> lyricNumber) const</td></tr>
+<tr class="memdesc:a3de8f126e008d5ac28ac34d1acc74631"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system.  <br /></td></tr>
+<tr class="separator:a3de8f126e008d5ac28ac34d1acc74631"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c75047945694c8b8dac3cc2585664db" id="r_a3c75047945694c8b8dac3cc2585664db"><td class="memItemLeft" align="right" valign="top"><a id="a3c75047945694c8b8dac3cc2585664db" name="a3c75047945694c8b8dac3cc2585664db"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>calcTopLinePosition</b> () const</td></tr>
+<tr class="memdesc:a3c75047945694c8b8dac3cc2585664db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the position of the top staff line, relative to the reference line. <br /></td></tr>
+<tr class="separator:a3c75047945694c8b8dac3cc2585664db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac82881355305cd7440b4ff44ac34426d" id="r_ac82881355305cd7440b4ff44ac34426d"><td class="memItemLeft" align="right" valign="top"><a id="ac82881355305cd7440b4ff44ac34426d" name="ac82881355305cd7440b4ff44ac34426d"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>calcBottomLinePosition</b> () const</td></tr>
+<tr class="memdesc:ac82881355305cd7440b4ff44ac34426d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the position of the top staff line, relative to the reference line. <br /></td></tr>
+<tr class="separator:ac82881355305cd7440b4ff44ac34426d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76f425b19ecab6f653dedb641f226748" id="r_a76f425b19ecab6f653dedb641f226748"><td class="memItemLeft" align="right" valign="top"><a id="a76f425b19ecab6f653dedb641f226748" name="a76f425b19ecab6f653dedb641f226748"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasInstrumentAssigned</b> () const</td></tr>
 <tr class="memdesc:a76f425b19ecab6f653dedb641f226748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this staff has an instrument assigned. <br /></td></tr>
@@ -1023,6 +1038,123 @@ template&lt;typename SubType &gt; </div>
 <li>A bool that if true indicates the string is a prefix and if false a suffix. </li>
 </ul>
 </dd></dl>
+
+</div>
+</div>
+<a id="a5a5cc91829d396e2eaf2bb9a1b91a063" name="a5a5cc91829d396e2eaf2bb9a1b91a063"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a5cc91829d396e2eaf2bb9a1b91a063">&#9670;&#160;</a></span>calcBaselinePosition() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1BaselineNoInci.html">details::BaselineNoInci</a>, BaselineType &gt;::value, int &gt;  = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> musx::dom::others::Staff::calcBaselinePosition </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237">SystemCmper</a>&#160;</td>
+          <td class="paramname"><em>system</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BaselineType</td><td>The type of baseline. (<a class="el" href="classmusx_1_1dom_1_1details_1_1BaselineChords.html">details::BaselineChords</a>, <a class="el" href="classmusx_1_1dom_1_1details_1_1BaselineExpressionsAbove.html">details::BaselineExpressionsAbove</a>, etc.: not the <code>BaselineSystem</code> variants) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">system</td><td>The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The accumulated position of the baseline, relative to the staff's reference line. </dd></dl>
+
+</div>
+</div>
+<a id="a3de8f126e008d5ac28ac34d1acc74631" name="a3de8f126e008d5ac28ac34d1acc74631"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3de8f126e008d5ac28ac34d1acc74631">&#9670;&#160;</a></span>calcBaselinePosition() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1Baseline.html">details::Baseline</a>, BaselineType &gt;::value &amp;&amp;!std::is_base_of&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1BaselineNoInci.html">details::BaselineNoInci</a>, BaselineType &gt;::value, int &gt;  = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> musx::dom::others::Staff::calcBaselinePosition </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237">SystemCmper</a>&#160;</td>
+          <td class="paramname"><em>system</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>lyricNumber</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BaselineType</td><td>The type of baseline. (<a class="el" href="classmusx_1_1dom_1_1details_1_1BaselineChords.html">details::BaselineChords</a>, <a class="el" href="classmusx_1_1dom_1_1details_1_1BaselineExpressionsAbove.html">details::BaselineExpressionsAbove</a>, etc.: not the <code>BaselineSystem</code> variants) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">system</td><td>The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values. </td></tr>
+    <tr><td class="paramname">lyricNumber</td><td>The Cmper of the lyric text block to find. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The accumulated position of the baseline, relative to the staff's reference line. </dd></dl>
+
+</div>
+</div>
+<a id="af722a8287d3d1cfc0c27232aab4133de" name="af722a8287d3d1cfc0c27232aab4133de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af722a8287d3d1cfc0c27232aab4133de">&#9670;&#160;</a></span>calcBaselineZeroPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> musx::dom::others::Staff::calcBaselineZeroPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the baseline zero position for this staff, relative to the reference line, before any displacements are applied. </p>
+<p>This function reproduces Finale’s observed behavior but may yield inaccurate results in unusual configurations of custom staff lines. In the most common cases, Finale defines the baseline zero position as the midpoint between the reference line and the bottom staff line, which is the value computed by this function. </p>
 
 </div>
 </div>

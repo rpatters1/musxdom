@@ -73,7 +73,20 @@ var hierarchy =
         [ "musx::dom::details::Baseline", "classmusx_1_1dom_1_1details_1_1Baseline.html", [
           [ "musx::dom::details::BaselineLyricsChorus", "classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html", null ],
           [ "musx::dom::details::BaselineLyricsSection", "classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html", null ],
-          [ "musx::dom::details::BaselineLyricsVerse", "classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html", null ]
+          [ "musx::dom::details::BaselineLyricsVerse", "classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html", null ],
+          [ "musx::dom::details::BaselineNoInci", "classmusx_1_1dom_1_1details_1_1BaselineNoInci.html", [
+            [ "musx::dom::details::BaselineChords", "classmusx_1_1dom_1_1details_1_1BaselineChords.html", null ],
+            [ "musx::dom::details::BaselineExpressionsAbove", "classmusx_1_1dom_1_1details_1_1BaselineExpressionsAbove.html", null ],
+            [ "musx::dom::details::BaselineExpressionsBelow", "classmusx_1_1dom_1_1details_1_1BaselineExpressionsBelow.html", null ],
+            [ "musx::dom::details::BaselineFretboards", "classmusx_1_1dom_1_1details_1_1BaselineFretboards.html", null ],
+            [ "musx::dom::details::BaselineSystemChords", "classmusx_1_1dom_1_1details_1_1BaselineSystemChords.html", null ],
+            [ "musx::dom::details::BaselineSystemExpressionsAbove", "classmusx_1_1dom_1_1details_1_1BaselineSystemExpressionsAbove.html", null ],
+            [ "musx::dom::details::BaselineSystemExpressionsBelow", "classmusx_1_1dom_1_1details_1_1BaselineSystemExpressionsBelow.html", null ],
+            [ "musx::dom::details::BaselineSystemFretboards", "classmusx_1_1dom_1_1details_1_1BaselineSystemFretboards.html", null ]
+          ] ],
+          [ "musx::dom::details::BaselineSystemLyricsChorus", "classmusx_1_1dom_1_1details_1_1BaselineSystemLyricsChorus.html", null ],
+          [ "musx::dom::details::BaselineSystemLyricsSection", "classmusx_1_1dom_1_1details_1_1BaselineSystemLyricsSection.html", null ],
+          [ "musx::dom::details::BaselineSystemLyricsVerse", "classmusx_1_1dom_1_1details_1_1BaselineSystemLyricsVerse.html", null ]
         ] ],
         [ "musx::dom::details::Bracket", "classmusx_1_1dom_1_1details_1_1Bracket.html", null ],
         [ "musx::dom::details::CenterShape", "classmusx_1_1dom_1_1details_1_1CenterShape.html", null ],
