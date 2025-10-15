@@ -481,7 +481,7 @@ int Staff::calcMiddleStaffPosition() const
     return 0;
 }
 
-int Staff::calcToplinePosition() const
+int Staff::calcTopLinePosition() const
 {
     if (staffLines.has_value()) {
         return 0;
@@ -489,12 +489,37 @@ int Staff::calcToplinePosition() const
     if (customStaff.has_value()) {
         const auto& lines = customStaff.value();
         if (!lines.empty()) {
-            return 2 * (11 - lines[0]);
+            return 2 * (11 - lines.front());
         }
     }
     return 0;
 }
 
+int Staff::calcBottomLinePosition() const
+{
+    if (staffLines.has_value()) {
+        return 2 * (1 - staffLines.value());
+    }
+    if (customStaff.has_value()) {
+        const auto& lines = customStaff.value();
+        if (!lines.empty()) {
+            return 2 * (11 - lines.back());
+        }
+    }
+    return 0;
+}
+
+Evpu Staff::calcBaselineZeroPosition() const
+{
+    // Weird cases involving custom lines above the reference line may require additional logic, but
+    // this gets us going for the vast majority of staves in Finale.
+    int bottomLinePosition = calcBottomLinePosition();
+    if (calcNumberOfStafflines() == 0) {
+        bottomLinePosition = -8; // Finale treats a blank staff like a standard staff for baselines
+    }
+    constexpr int EVPU_PER_STAFF_POSITION = static_cast<int>(EVPU_PER_SPACE) / 2;
+    return static_cast<Evpu>((bottomLinePosition * EVPU_PER_STAFF_POSITION) / 2); // halfway between reference (0) and bottom line
+}
 
 bool Staff::hasInstrumentAssigned() const
 {

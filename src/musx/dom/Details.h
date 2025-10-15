@@ -140,7 +140,7 @@ public:
  * @class Baseline
  * @brief Contains the baseline information for all baseline types
  *
- * Cmper1 and cmper2 are used as follows.
+ * `cmper1` and `cmper2` are used as follows.
  *
  * | cmper1   | cmper2  | Meaning                                                       | Related classes   |
  * |:--------:|:-------:|:--------------------------------------------------------------|:------------------|
@@ -164,9 +164,9 @@ public:
     explicit Baseline(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff, std::optional<Inci> inci)
         : DetailsBase(document, partId, shareMode, system, staff, inci) {}
 
-    Evpu baselineDisplacement{};    ///< the displacment of the baseline from default position. (xml node is `<basedisp`>)
-                                    ///< @note The cumulative value of all displacements offets from the middle staff position.
-    Cmper lyricNumber{};            ///< the text number of the lyric, if this is a lyrics baseline. Otherwise unused and should be zero.
+    Evpu baselineDisplacement{};        ///< The displacement of the baseline from its default position. (xml node is `<basedisp>`)
+                                        ///< @note The cumulative sum of all displacements is measured relative to the middle staff position.
+    std::optional<Cmper> lyricNumber{}; ///< The 1-based text number of the lyric, if this is a lyrics baseline. Otherwise unused and should be std::nullopt.
 
     static const xml::XmlElementArray<Baseline>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };
@@ -234,7 +234,7 @@ public:
 
 /**
  * @class BaselineFretboards
- * @brief Contains the baseline offsets for chords.
+ * @brief Contains the baseline offsets for fretboards.
  *
  * System (cmper1) is always zero.
  */
@@ -257,14 +257,12 @@ class BaselineLyricsChorus : public Baseline
 public:
     using Baseline::Baseline;
 
-
-    using TextType = texts::LyricsChorus; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesLyricsChorus"; ///< The XML node name for this type.
 };
 
 /**
  * @class BaselineLyricsSection
- * @brief Contains the baseline offsets for lyrics chorus records.
+ * @brief Contains the baseline offsets for lyrics section records.
  *
  * System (cmper1) is always zero.
  */
@@ -273,7 +271,6 @@ class BaselineLyricsSection : public Baseline
 public:
     using Baseline::Baseline;
 
-    using TextType = texts::LyricsSection; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesLyricsSection"; ///< The XML node name for this type.
 };
 
@@ -288,7 +285,6 @@ class BaselineLyricsVerse : public Baseline
 public:
     using Baseline::Baseline;
 
-    using TextType = texts::LyricsVerse; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesLyricsVerse"; ///< The XML node name for this type.
 };
 
@@ -330,7 +326,7 @@ public:
 
 /**
  * @class BaselineSystemFretboards
- * @brief Contains the baseline offsets for chords.
+ * @brief Contains the baseline offsets for fretboards.
  */
 class BaselineSystemFretboards : public BaselineNoInci
 {
@@ -349,21 +345,18 @@ class BaselineSystemLyricsChorus : public Baseline
 public:
     using Baseline::Baseline;
 
-
-    using TextType = texts::LyricsChorus; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesSysLyricsChorus"; ///< The XML node name for this type.
 };
 
 /**
  * @class BaselineSystemLyricsSection
- * @brief Contains the baseline offsets for lyrics chorus records.
+ * @brief Contains the baseline offsets for lyrics section records.
  */
 class BaselineSystemLyricsSection : public Baseline
 {
 public:
     using Baseline::Baseline;
 
-    using TextType = texts::LyricsSection; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesSysLyricsSection"; ///< The XML node name for this type.
 };
 
@@ -376,7 +369,6 @@ class BaselineSystemLyricsVerse : public Baseline
 public:
     using Baseline::Baseline;
 
-    using TextType = texts::LyricsVerse; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesSysLyricsVerse"; ///< The XML node name for this type.
 };
 

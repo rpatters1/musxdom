@@ -376,8 +376,18 @@ public:
     /// @brief Calculates the middle staff position. For staves with even numbers of lines, it is the middle space.
     int calcMiddleStaffPosition() const;
 
+    /// @brief Calculates the baseline zero position for this staff, relative to the reference line, before any displacements are applied.
+    ///
+    /// This function reproduces Finale’s observed behavior but may yield inaccurate results in unusual configurations of custom staff lines.
+    /// In the most common cases, Finale defines the baseline zero position as the midpoint between the reference line and the
+    /// bottom staff line, which is the value computed by this function.
+    Evpu calcBaselineZeroPosition() const;
+
     /// @brief Calculates the position of the top staff line, relative to the reference line.
-    int calcToplinePosition() const;
+    int calcTopLinePosition() const;
+
+    /// @brief Calculates the position of the top staff line, relative to the reference line.
+    int calcBottomLinePosition() const;
 
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;
