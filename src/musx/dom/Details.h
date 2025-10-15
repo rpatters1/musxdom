@@ -56,9 +56,10 @@ class TextBlock;
 } // namespace others
 
 namespace texts {
-    class LyricsChorus;
-    class LyricsSection;
-    class LyricsVerse;
+class ExpressionText;
+class LyricsChorus;
+class LyricsSection;
+class LyricsVerse;
 } // namespace others
 
 /**
@@ -138,6 +139,15 @@ public:
 /**
  * @class Baseline
  * @brief Contains the baseline information for all baseline types
+ *
+ * `cmper1` and `cmper2` are used as follows.
+ *
+ * | cmper1   | cmper2  | Meaning                                                       | Related classes   |
+ * |:--------:|:-------:|:--------------------------------------------------------------|:------------------|
+ * | `0`      | `0`     | Global baseline                                               | `Baseline*`       |
+ * | `0`      | `staff` | Staff baseline                                                | `Baseline*`       |
+ * | `system` | `staff` | System & staff baseline (a specific staff within a system)    | `BaselineSystem*` |
+ *
  */
 class Baseline : public DetailsBase
 {
@@ -149,40 +159,210 @@ public:
      * @param shareMode The sharing mode for this @ref Baseline.
      * @param system For system baselines, the system number. For global baselines, 0.
      * @param staff For staff-level baselines, the staff number. For global baselines, 0.
-     * @param inci The 0-based inci, if needed. (Lyrics baselines have multiple instances per #lyricNumber.)
+     * @param inci The 0-based inci. (For lyrics baselines only. Others use std::nullopt.)
      */
-    explicit Baseline(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff, std::optional<Inci> inci = std::nullopt)
+    explicit Baseline(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff, std::optional<Inci> inci)
         : DetailsBase(document, partId, shareMode, system, staff, inci) {}
 
-    Evpu baselineDisplacement{};    ///< the displacment of the baseline from default position. (xml node is `<basedisp`>)
-    Cmper lyricNumber{};            ///< the text number of the lyric, if this is a lyrics baseline. Otherwise unused and should be zero.
+    Evpu baselineDisplacement{};        ///< The displacement of the baseline from its default position. (xml node is `<basedisp>`)
+                                        ///< @note The cumulative sum of all displacements is measured relative to value returned by #others::Staff::calcBaselineZeroPosition.
+                                        ///< The full calculation is encapsulated in the #others::Staff::calcBaselinePosition method.
+    std::optional<Cmper> lyricNumber{}; ///< The 1-based text number of the lyric, if this is a lyrics baseline. Otherwise unused and should be std::nullopt.
 
     static const xml::XmlElementArray<Baseline>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
+ * @class BaselineNoInci
+ * @brief Encapsulates inci handling for non-inci baselines.
+ */
+class BaselineNoInci : public Baseline
+{
+public:
+    /**
+     * @brief Constructor function
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this is for (probably always 0).
+     * @param shareMode The sharing mode for this @ref Baseline.
+     * @param system For system baselines, the system number. For global baselines, 0.
+     * @param staff For staff-level baselines, the staff number. For global baselines, 0.
+     */
+    explicit BaselineNoInci(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper system, Cmper staff)
+        : Baseline(document, partId, shareMode, system, staff, std::nullopt) {}
+};
+
+/**
+ * @class BaselineSystemChords
+ * @brief Contains the baseline offsets for chords.
+ */
+class BaselineSystemChords : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysChords"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemExpressionsAbove
+ * @brief Contains the baseline offsets for expressions above the staff.
+ */
+class BaselineSystemExpressionsAbove : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysExprAboveStaff"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemExpressionsBelow
+ * @brief Contains the baseline offsets for expressions below the staff.
+ */
+class BaselineSystemExpressionsBelow : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysExprBelowStaff"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemFretboards
+ * @brief Contains the baseline offsets for fretboards.
+ */
+class BaselineSystemFretboards : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysFingerboards"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemLyricsChorus
+ * @brief Contains the baseline offsets for lyrics chorus records.
+ */
+class BaselineSystemLyricsChorus : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysLyricsChorus"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemLyricsSection
+ * @brief Contains the baseline offsets for lyrics section records.
+ */
+class BaselineSystemLyricsSection : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysLyricsSection"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineSystemLyricsVerse
+ * @brief Contains the baseline offsets for lyrics verse records.
+ */
+class BaselineSystemLyricsVerse : public Baseline
+{
+public:
+    using Baseline::Baseline;
+
+    constexpr static std::string_view XmlNodeName = "baselinesSysLyricsVerse"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineChords
+ * @brief Contains the baseline offsets for chords.
+ *
+ * System (cmper1) is always zero.
+ */
+class BaselineChords : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    using PerSystemType = BaselineSystemChords; ///< The associated type for staff records on each system
+    constexpr static std::string_view XmlNodeName = "baselinesChords"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineExpressionsAbove
+ * @brief Contains the baseline offsets for expressions above the staff.
+ *
+ * System (cmper1) is always zero.
+ */
+class BaselineExpressionsAbove : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    using PerSystemType = BaselineSystemExpressionsAbove; ///< The associated type for staff records on each system
+    constexpr static std::string_view XmlNodeName = "baselinesExprAboveStaff"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineExpressionsBelow
+ * @brief Contains the baseline offsets for expressions below the staff.
+ *
+ * System (cmper1) is always zero.
+ */
+class BaselineExpressionsBelow : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    using PerSystemType = BaselineSystemExpressionsBelow; ///< The associated type for staff records on each system
+    constexpr static std::string_view XmlNodeName = "baselinesExprBelowStaff"; ///< The XML node name for this type.
+};
+
+/**
+ * @class BaselineFretboards
+ * @brief Contains the baseline offsets for fretboards.
+ *
+ * System (cmper1) is always zero.
+ */
+class BaselineFretboards : public BaselineNoInci
+{
+public:
+    using BaselineNoInci::BaselineNoInci;
+
+    using PerSystemType = BaselineSystemFretboards; ///< The associated type for staff records on each system
+    constexpr static std::string_view XmlNodeName = "baselinesFingerboards"; ///< The XML node name for this type.
+};
+
+/**
  * @class BaselineLyricsChorus
  * @brief Contains the baseline offsets for lyrics chorus records.
+ *
+ * System (cmper1) is always zero.
  */
 class BaselineLyricsChorus : public Baseline
 {
 public:
     using Baseline::Baseline;
 
-
+    using PerSystemType = BaselineSystemLyricsChorus; ///< The associated type for staff records on each system
     using TextType = texts::LyricsChorus; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesLyricsChorus"; ///< The XML node name for this type.
 };
 
 /**
  * @class BaselineLyricsSection
- * @brief Contains the baseline offsets for lyrics chorus records.
+ * @brief Contains the baseline offsets for lyrics section records.
+ *
+ * System (cmper1) is always zero.
  */
 class BaselineLyricsSection : public Baseline
 {
 public:
     using Baseline::Baseline;
 
+    using PerSystemType = BaselineSystemLyricsSection; ///< The associated type for staff records on each system
     using TextType = texts::LyricsSection; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesLyricsSection"; ///< The XML node name for this type.
 };
@@ -190,12 +370,15 @@ public:
 /**
  * @class BaselineLyricsVerse
  * @brief Contains the baseline offsets for lyrics verse records.
+ *
+ * System (cmper1) is always zero.
  */
 class BaselineLyricsVerse : public Baseline
 {
 public:
     using Baseline::Baseline;
 
+    using PerSystemType = BaselineSystemLyricsVerse; ///< The associated type for staff records on each system
     using TextType = texts::LyricsVerse; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "baselinesLyricsVerse"; ///< The XML node name for this type.
 };

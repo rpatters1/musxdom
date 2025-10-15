@@ -481,7 +481,7 @@ int Staff::calcMiddleStaffPosition() const
     return 0;
 }
 
-int Staff::calcToplinePosition() const
+int Staff::calcTopLinePosition() const
 {
     if (staffLines.has_value()) {
         return 0;
@@ -489,12 +489,85 @@ int Staff::calcToplinePosition() const
     if (customStaff.has_value()) {
         const auto& lines = customStaff.value();
         if (!lines.empty()) {
-            return 2 * (11 - lines[0]);
+            return 2 * (11 - lines.front());
         }
     }
     return 0;
 }
 
+int Staff::calcBottomLinePosition() const
+{
+    if (staffLines.has_value()) {
+        return 2 * (1 - staffLines.value());
+    }
+    if (customStaff.has_value()) {
+        const auto& lines = customStaff.value();
+        if (!lines.empty()) {
+            return 2 * (11 - lines.back());
+        }
+    }
+    return 0;
+}
+
+Evpu Staff::calcBaselineZeroPosition() const
+{
+    // Weird cases involving custom lines above the reference line may require additional logic, but
+    // this gets us going for the vast majority of staves in Finale.
+    int bottomLinePosition = calcBottomLinePosition();
+    if (calcNumberOfStafflines() == 0) {
+        bottomLinePosition = -8; // Finale treats a blank staff like a standard staff for baselines
+    }
+    constexpr int EVPU_PER_STAFF_POSITION = static_cast<int>(EVPU_PER_SPACE) / 2;
+    return static_cast<Evpu>((bottomLinePosition * EVPU_PER_STAFF_POSITION) / 2); // halfway between reference (0) and bottom line
+}
+
+template<typename BaselineType>
+Evpu Staff::calcBaselinePositionImpl(SystemCmper system, std::optional<Cmper> lyricNumber) const
+{
+    static_assert(std::is_base_of<details::Baseline, BaselineType>::value, "BaselineType must derive from Baseline");
+
+    // Shared finder lambda (used for all baseline arrays)
+    const auto findBaseline = [&](const auto& array)
+    {
+        using Elem = typename std::remove_cv_t<
+                     typename std::remove_reference_t<decltype(array)>::value_type>; // e.g. std::shared_ptr<const BaselineType>
+        const auto it = std::find_if(array.begin(), array.end(),
+            [&](const auto& ptr)
+            {
+                assert(ptr && "input array should not contain nulls!");
+                if (!lyricNumber) return true;
+                return ptr->lyricNumber == lyricNumber;
+            });
+        return (it != array.end()) ? *it : Elem{};
+    };
+
+    Evpu result = calcBaselineZeroPosition();
+
+    auto globalArray = getDocument()->getDetails()->getArray<BaselineType>(getRequestedPartId(), 0, 0);
+    if (auto globalBaseline = findBaseline(globalArray)) {
+        result += globalBaseline->baselineDisplacement;
+    }
+    auto staffArray = getDocument()->getDetails()->getArray<BaselineType>(getRequestedPartId(), 0, getCmper());
+    if (auto staffBaseline = findBaseline(staffArray)) {
+        result += staffBaseline->baselineDisplacement;
+    }
+    auto systemArray = getDocument()->getDetails()->getArray<typename BaselineType::PerSystemType>(getRequestedPartId(), system, getCmper());
+    if (auto systemBaseline = findBaseline(systemArray)) {
+        result += systemBaseline->baselineDisplacement;
+    }
+
+    return result;
+}
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template Evpu Staff::calcBaselinePositionImpl<details::BaselineChords>(SystemCmper, std::optional<Cmper>) const;
+template Evpu Staff::calcBaselinePositionImpl<details::BaselineExpressionsAbove>(SystemCmper, std::optional<Cmper>) const;
+template Evpu Staff::calcBaselinePositionImpl<details::BaselineExpressionsBelow>(SystemCmper, std::optional<Cmper>) const;
+template Evpu Staff::calcBaselinePositionImpl<details::BaselineFretboards>(SystemCmper, std::optional<Cmper>) const;
+template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsChorus>(SystemCmper, std::optional<Cmper>) const;
+template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsSection>(SystemCmper, std::optional<Cmper>) const;
+template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsVerse>(SystemCmper, std::optional<Cmper>) const;
+#endif //DOXYGEN_SHOULD_IGNORE_THIS
 
 bool Staff::hasInstrumentAssigned() const
 {

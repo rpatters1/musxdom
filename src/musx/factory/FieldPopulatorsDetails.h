@@ -37,6 +37,30 @@ using namespace ::musx::xml;
 using namespace ::musx::dom::details;
 
 template <>
+struct FieldPopulator<BaselineChords> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineExpressionsAbove> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineExpressionsBelow> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineFretboards> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
 struct FieldPopulator<BaselineLyricsChorus> : private FieldPopulator<Baseline>
 {
     using FieldPopulator<Baseline>::populate;
@@ -50,6 +74,48 @@ struct FieldPopulator<BaselineLyricsSection> : private FieldPopulator<Baseline>
 
 template <>
 struct FieldPopulator<BaselineLyricsVerse> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemChords> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemExpressionsAbove> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemExpressionsBelow> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemFretboards> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemLyricsChorus> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemLyricsSection> : private FieldPopulator<Baseline>
+{
+    using FieldPopulator<Baseline>::populate;
+};
+
+template <>
+struct FieldPopulator<BaselineSystemLyricsVerse> : private FieldPopulator<Baseline>
 {
     using FieldPopulator<Baseline>::populate;
 };
