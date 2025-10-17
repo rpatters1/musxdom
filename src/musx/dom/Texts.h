@@ -125,8 +125,17 @@ public:
 
     std::vector<std::shared_ptr<const LyricsSyllableInfo>> syllables; ///< the syllable info for the lyric text, constructed by the factory
 
+    /// @brief Return the font and text styles for a given syllable.
+    /// @param syllableIndex The 0-based index of the syllable in #syllables.
+    /// @return The @ref util::EnigmaStyles for the syllable, or std::nullopt if index out of range or not found.
+    std::optional<util::EnigmaStyles> getStylesForSyllable(size_t syllableIndex);
+
     /// @brief Creates the syllables array. Used by the factory but available at any time.
-    void createSyllableInfo();
+    /// @param ptrToThis MusxInstance ptr to this (to avoid need for shared_for_this)
+    void createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis);
+
+private:
+    std::vector<util::EnigmaStyles> syllableStyles; ///< the list of font styles in this text.    
 };
 
 /**

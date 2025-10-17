@@ -409,10 +409,13 @@ private:
     /// @param text The syllable text.
     /// @param before Whether there is a hyphen before the syllable.
     /// @param after Whether there is a hyphen after the syllable.
-    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after)
-        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after)
+    /// @param enigmaStylesIndex The enigma style (in LyricsTextBase) for this syllable.
+    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, size_t enigmaStylesIndex)
+        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), m_enigmaStylesIndex(enigmaStylesIndex)
     {
     }
+
+    size_t m_enigmaStylesIndex; ///< the enigma style (in LyricsTextBase) for this syllable.
 
     friend class texts::LyricsTextBase;
 };

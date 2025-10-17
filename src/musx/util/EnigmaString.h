@@ -66,8 +66,8 @@ struct EnigmaStyles
     };
 
     /// @brief constructor
-    EnigmaStyles(const std::weak_ptr<dom::Document>& document)
-        : font(std::make_shared<dom::FontInfo>(document))
+    EnigmaStyles(const std::weak_ptr<dom::Document>& document, const std::shared_ptr<dom::FontInfo>& inpFont = nullptr)
+        : font(inpFont ? inpFont : std::make_shared<dom::FontInfo>(document))
     {
     }
 
