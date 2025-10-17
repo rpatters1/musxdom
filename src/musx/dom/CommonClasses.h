@@ -398,24 +398,35 @@ class LyricsTextBase; // forward delcaration
 class LyricsSyllableInfo : CommonClassBase
 {
 public:
-
     std::string syllable;       ///< the syllable text with no hyphenation or font information.
     bool hasHyphenBefore;       ///< indicates the syllable is preceded by a hyphen.
     bool hasHyphenAfter;        ///< indicates the syllable if followed by a hyphen.
 
 private:
+    /**
+     * @class LyricsSyllableStyleSpan
+     * @brief Contains font style information for a lyrics syllable. (See @ref texts::LyricsSyllableInfo)
+     */
+    class StyleSpan
+    {
+    public:
+        size_t start;        // start byte
+        size_t end;          // end byte (exclusive)
+        size_t styleIndex;   // index into LyricsTextBase's style table
+    };
+
     /// @brief Constructor function
     /// @param document Shared pointer to the document.
     /// @param text The syllable text.
     /// @param before Whether there is a hyphen before the syllable.
     /// @param after Whether there is a hyphen after the syllable.
     /// @param enigmaStylesIndex The enigma style (in LyricsTextBase) for this syllable.
-    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, size_t enigmaStylesIndex)
-        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), m_enigmaStylesIndex(enigmaStylesIndex)
+    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, std::vector<StyleSpan>&& enigmaStyleMap)
+        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), m_enigmaStyleMap(std::move(enigmaStyleMap))
     {
     }
 
-    size_t m_enigmaStylesIndex; ///< the enigma style (in LyricsTextBase) for this syllable.
+    std::vector<StyleSpan> m_enigmaStyleMap; ///< the enigma style (in LyricsTextBase) for this syllable.
 
     friend class texts::LyricsTextBase;
 };

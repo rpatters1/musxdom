@@ -1022,7 +1022,7 @@ TEST(TextsTest, LyricSyllableParsing)
     };
 
     auto lyrics = texts->getArray<LyricsVerse>();
-    ASSERT_GE(lyrics.size(), 5);
+    ASSERT_GE(lyrics.size(), 6);
 
     checkSyllable(lyrics[0], 0, "fi@#", false, false);
     checkSyllable(lyrics[0], 1, "na", false, false);
@@ -1041,6 +1041,11 @@ TEST(TextsTest, LyricSyllableParsing)
     checkSyllable(lyrics[3], 2, "le", true, true);
 
     EXPECT_TRUE(lyrics[4]->syllables.empty());
+
+    checkSyllable(lyrics[5], 0, "finale", false, false);
+    checkSyllable(lyrics[5], 1, "fi", false, true);
+    checkSyllable(lyrics[5], 2, "na", true, true);
+    checkSyllable(lyrics[5], 3, "le", true, false);
 }
 
 TEST(TextsTest, ExpressionsAndTitles)

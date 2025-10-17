@@ -48,6 +48,7 @@ namespace texts {
 void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis)
 {
     std::string current;
+    std::vector<LyricsSyllableInfo::StyleSpan> currentEnigmaStyles;
     bool inSeparator = false;
     bool currSeparatorHasHyphen = false;
     bool lastSeparatorHadHyphen = false;
@@ -56,35 +57,39 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
     syllableStyles.clear();
     auto parsingContext = getRawTextCtx(ptrToThis, SCORE_PARTID);
     parsingContext.parseEnigmaText([&](const std::string& nextChunk, const util::EnigmaStyles& styles) -> bool {
-        syllableStyles.push_back(styles);
+        syllableStyles.push_back(styles.createDeepCopy());
+        currentEnigmaStyles.push_back({ current.size(), current.size(), syllableStyles.size() - 1 });
         for (auto c : nextChunk) {
             if (c == '-' || isspace(static_cast<unsigned char>(c))) {
                 if (c == '-') {
                     currSeparatorHasHyphen = true;
                 }
                 inSeparator = true;
-            }
-            else {
+            } else {
                 if (inSeparator) {
                     if (!current.empty()) {
-                        syllables.push_back(std::shared_ptr<const LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, syllableStyles.size() - 1)));
+                        syllables.push_back(std::shared_ptr<const LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, std::move(currentEnigmaStyles))));
                         current.clear();
+                        currentEnigmaStyles.clear();
+                        currentEnigmaStyles.push_back({ current.size(), current.size(), syllableStyles.size() - 1 });
                     }
                     lastSeparatorHadHyphen = currSeparatorHasHyphen;
                     currSeparatorHasHyphen = false;
                     inSeparator = false;
                 }
                 current += c;
+                currentEnigmaStyles.back().end++;
             }
         }
         return true;
     });
 
     if (!current.empty()) {
-        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, syllableStyles.size() - 1)));
+        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, std::move(currentEnigmaStyles))));
     }
 }
 
+/*
 std::optional<util::EnigmaStyles> LyricsTextBase::getStylesForSyllable(size_t syllableIndex)
 {
     if (syllableIndex >= syllables.size()) {
@@ -96,6 +101,7 @@ std::optional<util::EnigmaStyles> LyricsTextBase::getStylesForSyllable(size_t sy
     }
     return syllableStyles[syllable->m_enigmaStylesIndex];
 }
+*/
 
 } // namespace texts
 } // namespace dom

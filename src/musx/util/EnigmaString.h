@@ -66,9 +66,17 @@ struct EnigmaStyles
     };
 
     /// @brief constructor
-    EnigmaStyles(const std::weak_ptr<dom::Document>& document, const std::shared_ptr<dom::FontInfo>& inpFont = nullptr)
-        : font(inpFont ? inpFont : std::make_shared<dom::FontInfo>(document))
+    EnigmaStyles(const std::weak_ptr<dom::Document>& document)
+        : font(std::make_shared<dom::FontInfo>(document))
     {
+    }
+
+    /// @brief Creates a deep copy of the styles, including copying any shared pointer instances
+    EnigmaStyles createDeepCopy() const
+    {
+        EnigmaStyles result = *this;
+        result.font = std::make_shared<dom::FontInfo>(*this->font);
+        return result;
     }
 
     std::shared_ptr<dom::FontInfo> font;    ///< the font to use
