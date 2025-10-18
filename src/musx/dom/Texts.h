@@ -29,7 +29,8 @@
 
 #include "BaseClasses.h"
 #include "CommonClasses.h"
-// do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
+#include "musx/util/EnigmaString.h"
+ // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
 namespace dom {
@@ -125,10 +126,11 @@ public:
 
     std::vector<std::shared_ptr<const LyricsSyllableInfo>> syllables; ///< the syllable info for the lyric text, constructed by the factory
 
-    /// @brief Return the font and text styles for a given syllable.
+    /// @brief Parse a given syllable into chunks with EnigmaStyles for that chunk. In the most common case, the callback is called exactly once.
+    /// However, this design allows for detecting uncommon cases of style changes within a syllable.
     /// @param syllableIndex The 0-based index of the syllable in #syllables.
-    /// @return The @ref util::EnigmaStyles for the syllable, or std::nullopt if index out of range or not found.
-    std::optional<util::EnigmaStyles> getStylesForSyllable(size_t syllableIndex);
+    /// @return True if the syllable was fully parsed. False if @p syllableIndex was out of range or if parsing was aborted.
+    bool iterateStylesForSyllable(size_t syllableIndex, util::EnigmaString::TextChunkCallback callback) const;
 
     /// @brief Creates the syllables array. Used by the factory but available at any time.
     /// @param ptrToThis MusxInstance ptr to this (to avoid need for shared_for_this)

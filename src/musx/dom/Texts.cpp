@@ -89,19 +89,33 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
     }
 }
 
-/*
-std::optional<util::EnigmaStyles> LyricsTextBase::getStylesForSyllable(size_t syllableIndex)
+bool LyricsTextBase::iterateStylesForSyllable(size_t syllableIndex, util::EnigmaString::TextChunkCallback callback) const
 {
     if (syllableIndex >= syllables.size()) {
-        return std::nullopt;
+        return false;
     }
     const auto& syllable = syllables[syllableIndex];
-    if (syllable->m_enigmaStylesIndex >= syllableStyles.size()) {
-        return std::nullopt;
+    for (const auto& span : syllable->m_enigmaStyleMap) {
+        MUSX_ASSERT_IF(span.start > syllable->syllable.size() || span.end > syllable->syllable.size()) {
+            throw std::logic_error("syllable's enigmaStyles map contained out-of-range start or end values.");
+        }
+        MUSX_ASSERT_IF(span.start > span.end) {
+            throw std::logic_error("syllable's enigmaStyles map contained start value greater than end value.");
+        }
+        if (span.start == syllable->syllable.size()) {
+            continue;
+        }
+        MUSX_ASSERT_IF(span.styleIndex >= syllableStyles.size()) {
+            throw std::logic_error("syllable's enigmaStyles map contained out-of-range styleIndex.");
+        }
+        std::string_view segment(syllable->syllable.data() + span.start, span.end - span.start);
+        const auto& style = syllableStyles.at(span.styleIndex);
+        if (!callback(std::string(segment), style)) {
+            return false;
+        }
     }
-    return syllableStyles[syllable->m_enigmaStylesIndex];
+    return true;
 }
-*/
 
 } // namespace texts
 } // namespace dom
