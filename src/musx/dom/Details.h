@@ -1183,12 +1183,12 @@ public:
         : EntryDetailsBase(document, partId, shareMode, entnum, inci) {}
 
     Cmper lyricNumber{};            ///< the text number of the lyric.
-    unsigned syllable{};            ///< the 1-based syllable number. Subtract 1 to get the index. (xml node is `<syll>`)
+    unsigned syllable{};            ///< the 1-based syllable number. Subtract 1 for an index into #texts::LyricsTextBase::syllables. (xml node is `<syll>`)
     Evpu horzOffset{};              ///< horizontal offset from default position. (xml node is `<horzOff>`)
     Evpu vertOffset{};              ///< horizontal offset from default position. (xml node is `<vertOff>`)
     Evpu floatingHorzOff{};         ///< This appears to have something to do with note spacing. It may simply be a cache that Finale changes as needed.
     Evpu wext{};                    ///< If smart word extensions are being used, a non-zero value indicates the existence of a word extension SmartShape.
-                                    ///< If smart word extensions are not being used, this is the actual length of word extension in Evpu.
+                                    ///< If smart word extensions are not being used, this is the actual length of the word extension in Evpu.
                                     ///< See #options::LyricOptions::useSmartWordExtensions.
     bool displayVerseNum{};         ///< If set, the text block number displays to the left of the syllable. (E.g., when numbering verses in a hymn.)
 

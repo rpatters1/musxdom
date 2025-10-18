@@ -692,9 +692,14 @@ TEST(StaffTest, LyricsLineInfo)
     {
         auto lyricsLineInfo = staff->createLyricsLineInfo(1);
         ASSERT_EQ(lyricsLineInfo.size(), 3);
+        EXPECT_EQ(lyricsLineInfo[0].lyricNumber, 1);
+        EXPECT_EQ(lyricsLineInfo[1].lyricNumber, 2);
+        EXPECT_EQ(lyricsLineInfo[2].lyricNumber, 3);
     }
     {
         auto lyricsLineInfo = staff->createLyricsLineInfo(2);
         ASSERT_EQ(lyricsLineInfo.size(), 2);
+        EXPECT_EQ(lyricsLineInfo[0].lyricNumber, 4);
+        EXPECT_EQ(lyricsLineInfo[1].lyricNumber, 6);
     }
 }
