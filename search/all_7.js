@@ -79,7 +79,7 @@ var searchData=
   ['hidelyrics_76',['hidelyrics',['../classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a9e24a1ba4e185ecbf216a67352e5f1b5',1,'musx::dom::others::StaffStyle::Masks::hideLyrics'],['../classmusx_1_1dom_1_1others_1_1Staff.html#a9d9db3e303ed468b4dc81f3a0e7377dd',1,'musx::dom::others::Staff::hideLyrics']]],
   ['hidemeasnums_77',['hideMeasNums',['../classmusx_1_1dom_1_1others_1_1Staff.html#aeed40d65826e45fb81db171fe9312a4f',1,'musx::dom::others::Staff']]],
   ['hidemeasurenum_78',['hideMeasureNum',['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a203d2da849aa2ce8f0695ca26ce22a85',1,'musx::dom::others::TextExpressionDef']]],
-  ['hidemode_79',['hidemode',['../classmusx_1_1dom_1_1others_1_1Staff.html#ab23c7e94e4782a34d7f06e54e6fed7d0',1,'musx::dom::others::Staff::HideMode'],['../classmusx_1_1dom_1_1others_1_1Staff.html#a6826754239c7be37da8658967af6cf9c',1,'musx::dom::others::Staff::hideMode']]],
+  ['hidemode_79',['hidemode',['../classmusx_1_1dom_1_1others_1_1Staff.html#a6826754239c7be37da8658967af6cf9c',1,'musx::dom::others::Staff::hideMode'],['../classmusx_1_1dom_1_1others_1_1Staff.html#ab23c7e94e4782a34d7f06e54e6fed7d0',1,'musx::dom::others::Staff::HideMode']]],
   ['hidename_80',['hideName',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#ae477cbade4e5b0f7a736f19471554ce4',1,'musx::dom::details::StaffGroup']]],
   ['hidenameinscore_81',['hideNameInScore',['../classmusx_1_1dom_1_1others_1_1Staff.html#aed6165003ca9a17e35f5a81284b123ae',1,'musx::dom::others::Staff']]],
   ['hidepage_82',['hidePage',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a2dd12df5c5644a9dcbc7daf379447083',1,'musx::dom::others::MeasureNumberRegion']]],

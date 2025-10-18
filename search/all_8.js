@@ -35,7 +35,7 @@ var searchData=
   ['insetratio_32',['insetRatio',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521',1,'musx::dom::options::TieOptions::ControlPoint']]],
   ['insetratio1_33',['insetRatio1',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a6cab3eb2d7f1f4b822924694b3c6f3f2',1,'musx::dom::details::TieAlterBase']]],
   ['insetratio2_34',['insetRatio2',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a869e3f2b83bb2b049ff1a58197c3dce2',1,'musx::dom::details::TieAlterBase']]],
-  ['insetstyle_35',['insetstyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions::insetStyle'],['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa595700238a8bcb2327afec614f402cf',1,'musx::dom::options::TieOptions::InsetStyle']]],
+  ['insetstyle_35',['insetstyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa595700238a8bcb2327afec614f402cf',1,'musx::dom::options::TieOptions::InsetStyle'],['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions::insetStyle']]],
   ['insideslur_36',['insideSlur',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a6204b87271ca01b4d909ad85f2bdc8de',1,'musx::dom::others::ArticulationDef']]],
   ['instance_37',['instance',['../structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a2231cc7f88c9deb59d9e005dc3299ca5',1,'musx::factory::TypeRegistry::CreatedInstanceInfo']]],
   ['instructioninfo_38',['InstructionInfo',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1InstructionInfo.html',1,'musx::dom::others::ShapeInstructionList']]],
@@ -100,7 +100,8 @@ var searchData=
   ['iterateinstructions_97',['iterateInstructions',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#aa03419ba6ed074c201d402c2a21abc80',1,'musx::dom::others::ShapeDef']]],
   ['iteraterawentries_98',['iterateRawEntries',['../classmusx_1_1dom_1_1others_1_1Frame.html#a3b12a7c2495b3e2170ffcaafbd447623',1,'musx::dom::others::Frame']]],
   ['iteratestaves_99',['iterateStaves',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#adf05ab035de85c9dc4bd194eeeebef41',1,'musx::dom::details::StaffGroupInfo']]],
-  ['ixmlattribute_100',['IXmlAttribute',['../classmusx_1_1xml_1_1IXmlAttribute.html',1,'musx::xml']]],
-  ['ixmldocument_101',['IXmlDocument',['../classmusx_1_1xml_1_1IXmlDocument.html',1,'musx::xml']]],
-  ['ixmlelement_102',['IXmlElement',['../classmusx_1_1xml_1_1IXmlElement.html',1,'musx::xml']]]
+  ['iteratestylesforsyllable_100',['iterateStylesForSyllable',['../classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb',1,'musx::dom::texts::LyricsTextBase']]],
+  ['ixmlattribute_101',['IXmlAttribute',['../classmusx_1_1xml_1_1IXmlAttribute.html',1,'musx::xml']]],
+  ['ixmldocument_102',['IXmlDocument',['../classmusx_1_1xml_1_1IXmlDocument.html',1,'musx::xml']]],
+  ['ixmlelement_103',['IXmlElement',['../classmusx_1_1xml_1_1IXmlElement.html',1,'musx::xml']]]
 ];

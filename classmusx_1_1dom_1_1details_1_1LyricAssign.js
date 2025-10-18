@@ -1,7 +1,8 @@
 var classmusx_1_1dom_1_1details_1_1LyricAssign =
 [
     [ "LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html#a4d818b89d0b749c698d7f53234e9df73", null ],
-    [ "getRawTextCtx", "classmusx_1_1dom_1_1details_1_1LyricAssign.html#acef084b0ea8941da45903c36f5e6a65f", null ],
+    [ "getLyricText", "classmusx_1_1dom_1_1details_1_1LyricAssign.html#abafbd47ad0c89dd492d36a5c7c101772", null ],
+    [ "getRawTextCtx", "classmusx_1_1dom_1_1details_1_1LyricAssign.html#a1684e94583edd0e11d90af26e4d8c96e", null ],
     [ "displayVerseNum", "classmusx_1_1dom_1_1details_1_1LyricAssign.html#ac90922bece7c709b2f87782368cd34bf", null ],
     [ "floatingHorzOff", "classmusx_1_1dom_1_1details_1_1LyricAssign.html#a9bd22f77f0f14a698023eadee1eb9dc5", null ],
     [ "horzOffset", "classmusx_1_1dom_1_1details_1_1LyricAssign.html#ab392a53d82e6af6fbcdb71b289132ae6", null ],

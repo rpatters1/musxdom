@@ -247,6 +247,7 @@ var annotated_dup =
         [ "is_pool_type< OthersPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01OthersPool_00_01T_01_4.html", null ],
         [ "is_pool_type< TextsPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01TextsPool_00_01T_01_4.html", null ],
         [ "KeySignature", "classmusx_1_1dom_1_1KeySignature.html", "classmusx_1_1dom_1_1KeySignature" ],
+        [ "LyricsLineInfo", "classmusx_1_1dom_1_1LyricsLineInfo.html", "classmusx_1_1dom_1_1LyricsLineInfo" ],
         [ "LyricsSyllableInfo", "classmusx_1_1dom_1_1LyricsSyllableInfo.html", "classmusx_1_1dom_1_1LyricsSyllableInfo" ],
         [ "MusxInstanceList", "classmusx_1_1dom_1_1MusxInstanceList.html", null ],
         [ "MusxInstanceList< others::StaffUsed >", "classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4.html", "classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4" ],

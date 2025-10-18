@@ -58,7 +58,7 @@ var searchData=
   ['voice_55',['Voice',['../namespacemusx_1_1dom_1_1uuid.html#a2b51aedd740ce1295ae61f90d9a5ae80',1,'musx::dom::uuid']]],
   ['voice2_56',['voice2',['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#ad296b9cbfc35e51318fd4fb9a22831c8',1,'musx::dom::EntryFrame::TupletInfo::voice2'],['../classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41',1,'musx::dom::Entry::voice2']]],
   ['voicenoname_57',['VoiceNoName',['../namespacemusx_1_1dom_1_1uuid.html#a5f83c84f8de38b13a93aa16c9cb52d49',1,'musx::dom::uuid']]],
-  ['voicingtype_58',['voicingtype',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996',1,'musx::dom::others::PartVoicing::VoicingType'],['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a17cf8f7bc74489355af9fd10c1988e2a',1,'musx::dom::others::PartVoicing::voicingType']]],
+  ['voicingtype_58',['voicingtype',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a17cf8f7bc74489355af9fd10c1988e2a',1,'musx::dom::others::PartVoicing::voicingType'],['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996',1,'musx::dom::others::PartVoicing::VoicingType']]],
   ['volrefnum_59',['volRefNum',['../classmusx_1_1dom_1_1others_1_1FileDescription.html#a8fc46e6515c7f7299a0e548ffc9b0840',1,'musx::dom::others::FileDescription']]],
   ['vpos_60',['vPos',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad413f9c23f03c1443ecb3d0853b4c448',1,'musx::dom::others::PageTextAssign']]],
   ['vpospageedge_61',['vPosPageEdge',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#af8af2a15c3f67b46deb39466e2afd552',1,'musx::dom::others::PageTextAssign']]],

@@ -19,9 +19,11 @@ var searchData=
   ['musicspacingoptions_16',['MusicSpacingOptions',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html',1,'musx::dom::options']]],
   ['musicsymboloptions_17',['MusicSymbolOptions',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html',1,'musx::dom::options']]],
   ['musxinstancelist_18',['MusxInstanceList',['../classmusx_1_1dom_1_1MusxInstanceList.html',1,'musx::dom']]],
-  ['musxinstancelist_3c_20musx_3a_3adom_3a_3aothers_3a_3astaffused_20_3e_19',['MusxInstanceList&lt; musx::dom::others::StaffUsed &gt;',['../classmusx_1_1dom_1_1MusxInstanceList.html',1,'musx::dom']]],
-  ['musxinstancelist_3c_20others_3a_3astaffused_20_3e_20',['MusxInstanceList&lt; others::StaffUsed &gt;',['../classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4.html',1,'musx::dom']]],
-  ['musxinstancelistbase_21',['MusxInstanceListBase',['../classmusx_1_1dom_1_1MusxInstanceListBase.html',1,'musx::dom']]],
-  ['musxinstancelistbase_3c_20musx_3a_3adom_3a_3aothers_3a_3astaffused_20_3e_22',['MusxInstanceListBase&lt; musx::dom::others::StaffUsed &gt;',['../classmusx_1_1dom_1_1MusxInstanceListBase.html',1,'musx::dom']]],
-  ['musxinstancelistbase_3c_20others_3a_3astaffused_20_3e_23',['MusxInstanceListBase&lt; others::StaffUsed &gt;',['../classmusx_1_1dom_1_1MusxInstanceListBase.html',1,'musx::dom']]]
+  ['musxinstancelist_3c_20musx_3a_3adom_3a_3adetails_3a_3alyricassign_20_3e_19',['MusxInstanceList&lt; musx::dom::details::LyricAssign &gt;',['../classmusx_1_1dom_1_1MusxInstanceList.html',1,'musx::dom']]],
+  ['musxinstancelist_3c_20musx_3a_3adom_3a_3aothers_3a_3astaffused_20_3e_20',['MusxInstanceList&lt; musx::dom::others::StaffUsed &gt;',['../classmusx_1_1dom_1_1MusxInstanceList.html',1,'musx::dom']]],
+  ['musxinstancelist_3c_20others_3a_3astaffused_20_3e_21',['MusxInstanceList&lt; others::StaffUsed &gt;',['../classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4.html',1,'musx::dom']]],
+  ['musxinstancelistbase_22',['MusxInstanceListBase',['../classmusx_1_1dom_1_1MusxInstanceListBase.html',1,'musx::dom']]],
+  ['musxinstancelistbase_3c_20musx_3a_3adom_3a_3adetails_3a_3alyricassign_20_3e_23',['MusxInstanceListBase&lt; musx::dom::details::LyricAssign &gt;',['../classmusx_1_1dom_1_1MusxInstanceListBase.html',1,'musx::dom']]],
+  ['musxinstancelistbase_3c_20musx_3a_3adom_3a_3aothers_3a_3astaffused_20_3e_24',['MusxInstanceListBase&lt; musx::dom::others::StaffUsed &gt;',['../classmusx_1_1dom_1_1MusxInstanceListBase.html',1,'musx::dom']]],
+  ['musxinstancelistbase_3c_20others_3a_3astaffused_20_3e_25',['MusxInstanceListBase&lt; others::StaffUsed &gt;',['../classmusx_1_1dom_1_1MusxInstanceListBase.html',1,'musx::dom']]]
 ];

@@ -122,10 +122,12 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1texts_1_1LyricsTex
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8f105fb8afe1cf0630afb06249768a73" id="r_a8f105fb8afe1cf0630afb06249768a73"><td class="memItemLeft" align="right" valign="top"><a id="a8f105fb8afe1cf0630afb06249768a73" name="a8f105fb8afe1cf0630afb06249768a73"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createSyllableInfo</b> ()</td></tr>
-<tr class="memdesc:a8f105fb8afe1cf0630afb06249768a73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the syllables array. Used by the factory but available at any time. <br /></td></tr>
-<tr class="separator:a8f105fb8afe1cf0630afb06249768a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa07f7d49633f9ff62d6441cc696f7eb" id="r_aaa07f7d49633f9ff62d6441cc696f7eb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb">iterateStylesForSyllable</a> (size_t syllableIndex, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">util::EnigmaString::TextChunkCallback</a> callback) const</td></tr>
+<tr class="memdesc:aaa07f7d49633f9ff62d6441cc696f7eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a given syllable into chunks with EnigmaStyles for that chunk. In the most common case, the callback is called exactly once. However, this design allows for detecting uncommon cases of style changes within a syllable.  <br /></td></tr>
+<tr class="separator:aaa07f7d49633f9ff62d6441cc696f7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad53b94532b92f2f6a9ddaa892c87f3e5" id="r_ad53b94532b92f2f6a9ddaa892c87f3e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#ad53b94532b92f2f6a9ddaa892c87f3e5">createSyllableInfo</a> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1TextsBase.html">TextsBase</a> &gt; &amp;ptrToThis)</td></tr>
+<tr class="memdesc:ad53b94532b92f2f6a9ddaa892c87f3e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the syllables array. Used by the factory but available at any time.  <br /></td></tr>
+<tr class="separator:ad53b94532b92f2f6a9ddaa892c87f3e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba62017f8e8a23f2657322d1d245c1a1" id="r_aba62017f8e8a23f2657322d1d245c1a1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aba62017f8e8a23f2657322d1d245c1a1">TextsBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> textNumber)</td></tr>
 <tr class="memdesc:aba62017f8e8a23f2657322d1d245c1a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <code><a class="el" href="classmusx_1_1dom_1_1TextsBase.html" title="Base class for all text blocks.">TextsBase</a></code> object.  <br /></td></tr>
 <tr class="separator:aba62017f8e8a23f2657322d1d245c1a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,6 +225,70 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a> class for lyrics text. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad53b94532b92f2f6a9ddaa892c87f3e5" name="ad53b94532b92f2f6a9ddaa892c87f3e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad53b94532b92f2f6a9ddaa892c87f3e5">&#9670;&#160;</a></span>createSyllableInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::texts::LyricsTextBase::createSyllableInfo </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1TextsBase.html">TextsBase</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ptrToThis</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the syllables array. Used by the factory but available at any time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptrToThis</td><td>MusxInstance ptr to this (to avoid need for shared_for_this) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaa07f7d49633f9ff62d6441cc696f7eb" name="aaa07f7d49633f9ff62d6441cc696f7eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa07f7d49633f9ff62d6441cc696f7eb">&#9670;&#160;</a></span>iterateStylesForSyllable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::texts::LyricsTextBase::iterateStylesForSyllable </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>syllableIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">util::EnigmaString::TextChunkCallback</a>&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parse a given syllable into chunks with EnigmaStyles for that chunk. In the most common case, the callback is called exactly once. However, this design allows for detecting uncommon cases of style changes within a syllable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">syllableIndex</td><td>The 0-based index of the syllable in <a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#a94ada56b9cce11b0102c7f295020bf3d" title="the syllable info for the lyric text, constructed by the factory">syllables</a>. </td></tr>
+    <tr><td class="paramname">callback</td><td>The callback for each chunk of syllable with a different style. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the syllable was fully parsed. False if <code>syllableIndex</code> was out of range or if parsing was aborted by the callback function. </dd></dl>
+
+</div>
+</div>
 <a id="aba62017f8e8a23f2657322d1d245c1a1" name="aba62017f8e8a23f2657322d1d245c1a1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aba62017f8e8a23f2657322d1d245c1a1">&#9670;&#160;</a></span>TextsBase()</h2>
 

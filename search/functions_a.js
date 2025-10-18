@@ -7,5 +7,6 @@ var searchData=
   ['log_4',['log',['../classmusx_1_1util_1_1Logger.html#a039905239762ae96745483d24588a68e',1,'musx::util::Logger']]],
   ['lyricassign_5',['lyricassign',['../classmusx_1_1dom_1_1details_1_1LyricAssign.html#a4d818b89d0b749c698d7f53234e9df73',1,'musx::dom::details::LyricAssign::LyricAssign()'],['../classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html#a4d818b89d0b749c698d7f53234e9df73',1,'musx::dom::details::LyricAssignChorus::LyricAssign()'],['../classmusx_1_1dom_1_1details_1_1LyricAssignSection.html#a4d818b89d0b749c698d7f53234e9df73',1,'musx::dom::details::LyricAssignSection::LyricAssign()'],['../classmusx_1_1dom_1_1details_1_1LyricAssignVerse.html#a4d818b89d0b749c698d7f53234e9df73',1,'musx::dom::details::LyricAssignVerse::LyricAssign()']]],
   ['lyricentryinfo_6',['LyricEntryInfo',['../classmusx_1_1dom_1_1details_1_1LyricEntryInfo.html#aac04b83fb3be0d10f58bc129f6d6f495',1,'musx::dom::details::LyricEntryInfo']]],
-  ['lyricoptions_7',['LyricOptions',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#aeb25a95b12368e678c7b6876b10e094a',1,'musx::dom::options::LyricOptions']]]
+  ['lyricoptions_7',['LyricOptions',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#aeb25a95b12368e678c7b6876b10e094a',1,'musx::dom::options::LyricOptions']]],
+  ['lyricslineinfo_8',['LyricsLineInfo',['../classmusx_1_1dom_1_1LyricsLineInfo.html#ae5e04a5064d8eb2b2cc0628f480dc959',1,'musx::dom::LyricsLineInfo']]]
 ];

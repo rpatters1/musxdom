@@ -7,6 +7,7 @@ var structmusx_1_1util_1_1EnigmaStyles =
       [ "NumberFont", "structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768da2db06b134b30d1a9303e42979b213050", null ]
     ] ],
     [ "EnigmaStyles", "structmusx_1_1util_1_1EnigmaStyles.html#a44d9baabb1ff9f1a44c0d201936bd39e", null ],
+    [ "createDeepCopy", "structmusx_1_1util_1_1EnigmaStyles.html#a6f6cd93795becf51ee465644f5d69021", null ],
     [ "baseline", "structmusx_1_1util_1_1EnigmaStyles.html#a75b852b17968ff4204e9f0f934bcca3c", null ],
     [ "categoryFont", "structmusx_1_1util_1_1EnigmaStyles.html#a92285674ae24bafdeba952d44f95d20c", null ],
     [ "font", "structmusx_1_1util_1_1EnigmaStyles.html#a5a7ee150f534afc35cc5a5545742ed80", null ],

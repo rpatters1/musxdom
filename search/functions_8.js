@@ -25,5 +25,6 @@ var searchData=
   ['iterateentries_22',['iterateentries',['../classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ac47fad1bde3761d088c24d265272db70',1,'musx::dom::details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)'],['../classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ae2e299ae69fc2d94b57969772fc6e23c',1,'musx::dom::details::GFrameHoldContext::iterateEntries(std::function&lt; bool(const EntryInfoPtr &amp;)&gt; iterator)']]],
   ['iterateinstructions_23',['iterateInstructions',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#aa03419ba6ed074c201d402c2a21abc80',1,'musx::dom::others::ShapeDef']]],
   ['iteraterawentries_24',['iterateRawEntries',['../classmusx_1_1dom_1_1others_1_1Frame.html#a3b12a7c2495b3e2170ffcaafbd447623',1,'musx::dom::others::Frame']]],
-  ['iteratestaves_25',['iterateStaves',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#adf05ab035de85c9dc4bd194eeeebef41',1,'musx::dom::details::StaffGroupInfo']]]
+  ['iteratestaves_25',['iterateStaves',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#adf05ab035de85c9dc4bd194eeeebef41',1,'musx::dom::details::StaffGroupInfo']]],
+  ['iteratestylesforsyllable_26',['iterateStylesForSyllable',['../classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb',1,'musx::dom::texts::LyricsTextBase']]]
 ];

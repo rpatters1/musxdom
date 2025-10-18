@@ -35,7 +35,7 @@ var searchData=
   ['legerfrontlength_32',['legerFrontLength',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#a35287128c61930a9bfca1b06cb19bfc5',1,'musx::dom::options::LineCurveOptions']]],
   ['legerlinewidth_33',['legerLineWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#a5976d785dfbd20e9c108e6a6cd1d4e84',1,'musx::dom::options::LineCurveOptions']]],
   ['leiqin_34',['Leiqin',['../namespacemusx_1_1dom_1_1uuid.html#af6eba2778727f14b28298953b90aa083',1,'musx::dom::uuid']]],
-  ['length_35',['length',['../classmusx_1_1dom_1_1others_1_1FileAlias.html#a7f1cfb2a865ade503bd93b022a64c96b',1,'musx::dom::others::FileAlias::length'],['../classmusx_1_1dom_1_1others_1_1FileUrlBookmark.html#a137a55f4a1b2e058271c1a4ee338f336',1,'musx::dom::others::FileUrlBookmark::length']]],
+  ['length_35',['length',['../classmusx_1_1dom_1_1others_1_1FileUrlBookmark.html#a137a55f4a1b2e058271c1a4ee338f336',1,'musx::dom::others::FileUrlBookmark::length'],['../classmusx_1_1dom_1_1others_1_1FileAlias.html#a7f1cfb2a865ade503bd93b022a64c96b',1,'musx::dom::others::FileAlias::length']]],
   ['likembe_36',['Likembe',['../namespacemusx_1_1dom_1_1uuid.html#ad4bb0a2e2967f45b0b0e9519f6306eeb',1,'musx::dom::uuid']]],
   ['lineafterleftconttext_37',['lineAfterLeftContText',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#a8fc6efcb65262658a5f70bbcf5d45917',1,'musx::dom::others::SmartShapeCustomLine']]],
   ['lineafterleftstarttext_38',['lineAfterLeftStartText',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#aa006f5aacbb87becda0a26fc6970e7ec',1,'musx::dom::others::SmartShapeCustomLine']]],
@@ -69,7 +69,8 @@ var searchData=
   ['lyre_66',['Lyre',['../namespacemusx_1_1dom_1_1uuid.html#a1d9b97947c29232b5dfd0f4a91fb0363',1,'musx::dom::uuid']]],
   ['lyricautonumtype_67',['lyricAutoNumType',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a83c642f7a1a24cb5dd686f3cd66ddad5',1,'musx::dom::options::LyricOptions']]],
   ['lyricdetail_68',['lyricDetail',['../classmusx_1_1dom_1_1Entry.html#ab39cf53be02d0856378fd81602a118a2',1,'musx::dom::Entry']]],
-  ['lyricnumber_69',['lyricnumber',['../classmusx_1_1dom_1_1details_1_1LyricAssign.html#a835b70469f40e850d46e9a0bac78be95',1,'musx::dom::details::LyricAssign::lyricNumber'],['../classmusx_1_1dom_1_1details_1_1Baseline.html#a142ea135a18d4b8ff0c7a010eae16f72',1,'musx::dom::details::Baseline::lyricNumber']]],
+  ['lyricnumber_69',['lyricnumber',['../classmusx_1_1dom_1_1details_1_1LyricAssign.html#a835b70469f40e850d46e9a0bac78be95',1,'musx::dom::details::LyricAssign::lyricNumber'],['../classmusx_1_1dom_1_1details_1_1Baseline.html#a142ea135a18d4b8ff0c7a010eae16f72',1,'musx::dom::details::Baseline::lyricNumber'],['../classmusx_1_1dom_1_1LyricsLineInfo.html#aba48852fd88e8f0c2e0082fd192ea256',1,'musx::dom::LyricsLineInfo::lyricNumber']]],
   ['lyricpunctuationtoignore_70',['lyricPunctuationToIgnore',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a6463a3281567d21a1651fc788c9d6881',1,'musx::dom::options::LyricOptions']]],
-  ['lyricuseedgepunctuation_71',['lyricUseEdgePunctuation',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a46a4aed7a4afe66d1b3d377741167c83',1,'musx::dom::options::LyricOptions']]]
+  ['lyricstype_71',['lyricsType',['../classmusx_1_1dom_1_1LyricsLineInfo.html#a13023893b63b19cbc92c6a386cbf4c47',1,'musx::dom::LyricsLineInfo']]],
+  ['lyricuseedgepunctuation_72',['lyricUseEdgePunctuation',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a46a4aed7a4afe66d1b3d377741167c83',1,'musx::dom::options::LyricOptions']]]
 ];

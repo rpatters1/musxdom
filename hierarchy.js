@@ -5,6 +5,7 @@ var hierarchy =
       [ "musx::dom::CommonClassBase", "classmusx_1_1dom_1_1CommonClassBase.html", [
         [ "musx::dom::FontInfo", "classmusx_1_1dom_1_1FontInfo.html", null ],
         [ "musx::dom::KeySignature", "classmusx_1_1dom_1_1KeySignature.html", null ],
+        [ "musx::dom::LyricsLineInfo", "classmusx_1_1dom_1_1LyricsLineInfo.html", null ],
         [ "musx::dom::LyricsSyllableInfo", "classmusx_1_1dom_1_1LyricsSyllableInfo.html", null ],
         [ "musx::dom::TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", null ]
       ] ],
@@ -395,8 +396,10 @@ var hierarchy =
       [ "musx::dom::MusxInstanceListBase< others::StaffUsed >", "classmusx_1_1dom_1_1MusxInstanceListBase.html", [
         [ "musx::dom::MusxInstanceList< others::StaffUsed >", "classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4.html", null ]
       ] ],
+      [ "musx::dom::MusxInstanceListBase< musx::dom::details::LyricAssign >", "classmusx_1_1dom_1_1MusxInstanceListBase.html", null ],
       [ "musx::dom::MusxInstanceListBase< musx::dom::others::StaffUsed >", "classmusx_1_1dom_1_1MusxInstanceListBase.html", null ],
       [ "musx::dom::MusxInstanceListBase< T >", "classmusx_1_1dom_1_1MusxInstanceListBase.html", [
+        [ "musx::dom::MusxInstanceList< musx::dom::details::LyricAssign >", "classmusx_1_1dom_1_1MusxInstanceList.html", null ],
         [ "musx::dom::MusxInstanceList< musx::dom::others::StaffUsed >", "classmusx_1_1dom_1_1MusxInstanceList.html", null ],
         [ "musx::dom::MusxInstanceList< T >", "classmusx_1_1dom_1_1MusxInstanceList.html", null ]
       ] ]

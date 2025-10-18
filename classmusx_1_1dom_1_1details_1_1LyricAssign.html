@@ -96,9 +96,8 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1details_1_1LyricAs
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classmusx_1_1dom_1_1details_1_1LyricAssign-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">musx::dom::details::LyricAssign Class Reference</div></div>
+  <div class="headertitle"><div class="title">musx::dom::details::LyricAssign Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -128,6 +127,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4d818b89d0b749c698d7f53234e9df73" id="r_a4d818b89d0b749c698d7f53234e9df73"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssign.html#a4d818b89d0b749c698d7f53234e9df73">LyricAssign</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entnum, <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> inci)</td></tr>
 <tr class="memdesc:a4d818b89d0b749c698d7f53234e9df73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function.  <br /></td></tr>
 <tr class="separator:a4d818b89d0b749c698d7f53234e9df73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abafbd47ad0c89dd492d36a5c7c101772" id="r_abafbd47ad0c89dd492d36a5c7c101772"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html">texts::LyricsTextBase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssign.html#abafbd47ad0c89dd492d36a5c7c101772">getLyricText</a> () const =0</td></tr>
+<tr class="memdesc:abafbd47ad0c89dd492d36a5c7c101772"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the raw lyric text for this assignment.  <br /></td></tr>
+<tr class="separator:abafbd47ad0c89dd492d36a5c7c101772"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1684e94583edd0e11d90af26e4d8c96e" id="r_a1684e94583edd0e11d90af26e4d8c96e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssign.html#a1684e94583edd0e11d90af26e4d8c96e">getRawTextCtx</a> () const</td></tr>
+<tr class="memdesc:a1684e94583edd0e11d90af26e4d8c96e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an Enigma parsing context for the associated lyrics text block.  <br /></td></tr>
+<tr class="separator:a1684e94583edd0e11d90af26e4d8c96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1EntryDetailsBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">musx::dom::EntryDetailsBase</a></td></tr>
 <tr class="memitem:a2a4a374edc4b5ee0dcc1a13dca0bf64d inherit pub_methods_classmusx_1_1dom_1_1EntryDetailsBase" id="r_a2a4a374edc4b5ee0dcc1a13dca0bf64d"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getEntryNumber</b> () const</td></tr>
@@ -203,7 +208,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a835b70469f40e850d46e9a0bac78be95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8843d1a31de385bbea22d9126d21ba92" id="r_a8843d1a31de385bbea22d9126d21ba92"><td class="memItemLeft" align="right" valign="top"><a id="a8843d1a31de385bbea22d9126d21ba92" name="a8843d1a31de385bbea22d9126d21ba92"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>syllable</b> {}</td></tr>
-<tr class="memdesc:a8843d1a31de385bbea22d9126d21ba92"><td class="mdescLeft">&#160;</td><td class="mdescRight">the 1-based syllable number. Subtract 1 to get the index. (xml node is <code>&lt;syll&gt;</code>) <br /></td></tr>
+<tr class="memdesc:a8843d1a31de385bbea22d9126d21ba92"><td class="mdescLeft">&#160;</td><td class="mdescRight">the 1-based syllable number. Subtract 1 for an index into <a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#a94ada56b9cce11b0102c7f295020bf3d" title="the syllable info for the lyric text, constructed by the factory">texts::LyricsTextBase::syllables</a>. (xml node is <code>&lt;syll&gt;</code>) <br /></td></tr>
 <tr class="separator:a8843d1a31de385bbea22d9126d21ba92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab392a53d82e6af6fbcdb71b289132ae6" id="r_ab392a53d82e6af6fbcdb71b289132ae6"><td class="memItemLeft" align="right" valign="top"><a id="ab392a53d82e6af6fbcdb71b289132ae6" name="ab392a53d82e6af6fbcdb71b289132ae6"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>horzOffset</b> {}</td></tr>
@@ -224,12 +229,19 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>displayVerseNum</b> {
 <tr class="memdesc:ac90922bece7c709b2f87782368cd34bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">If set, the text block number displays to the left of the syllable. (E.g., when numbering verses in a hymn.) <br /></td></tr>
 <tr class="separator:ac90922bece7c709b2f87782368cd34bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:acef084b0ea8941da45903c36f5e6a65f" id="r_acef084b0ea8941da45903c36f5e6a65f"><td class="memTemplParams" colspan="2">template&lt;typename TextType &gt; </td></tr>
-<tr class="memitem:acef084b0ea8941da45903c36f5e6a65f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssign.html#acef084b0ea8941da45903c36f5e6a65f">getRawTextCtx</a> () const</td></tr>
-<tr class="memdesc:acef084b0ea8941da45903c36f5e6a65f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an Enigma parsing context for the associated lyrics text block.  <br /></td></tr>
-<tr class="separator:acef084b0ea8941da45903c36f5e6a65f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
+<tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
+, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
+, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da6adf97f83acf6453d4a6a4b1070f3754">None</a>
+ }</td></tr>
+<tr class="memdesc:ac50192040fe22fca9805ae4af5d88b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes how this instance is shared between part and score.  <a href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">More...</a><br /></td></tr>
+<tr class="separator:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base" id="r_a8ef0ccef928154f1865d1f693e76ad0a"><td class="memItemLeft" align="right" valign="top">
+using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = std::set&lt; std::string &gt;</td></tr>
+<tr class="memdesc:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The container type for shared nodes. <br /></td></tr>
+<tr class="separator:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classmusx_1_1dom_1_1EntryDetailsBase')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">musx::dom::EntryDetailsBase</a></td></tr>
 <tr class="memitem:a105bc2acdcb24b5a3c10bcad1d3c5955 inherit pro_methods_classmusx_1_1dom_1_1EntryDetailsBase" id="r_a105bc2acdcb24b5a3c10bcad1d3c5955"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a105bc2acdcb24b5a3c10bcad1d3c5955">EntryDetailsBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entnum, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt; inci=std::nullopt)</td></tr>
 <tr class="memdesc:a105bc2acdcb24b5a3c10bcad1d3c5955 inherit pro_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html" title="Base class for all &quot;details&quot; types that use entnum rather than cmper and cmper.">EntryDetailsBase</a> object.  <br /></td></tr>
@@ -266,20 +278,6 @@ Protected Member Functions</h2></td></tr>
 <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &amp;&amp;) noexcept</td></tr>
 <tr class="memdesc:a9857862e0e9c329715dfda1df47bb5b9 inherit pro_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">no-op move assignment operator allows subclasses to move their values. <br /></td></tr>
 <tr class="separator:a9857862e0e9c329715dfda1df47bb5b9 inherit pro_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
-<tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
-, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
-, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da6adf97f83acf6453d4a6a4b1070f3754">None</a>
- }</td></tr>
-<tr class="memdesc:ac50192040fe22fca9805ae4af5d88b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes how this instance is shared between part and score.  <a href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">More...</a><br /></td></tr>
-<tr class="separator:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base" id="r_a8ef0ccef928154f1865d1f693e76ad0a"><td class="memItemLeft" align="right" valign="top">
-using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = std::set&lt; std::string &gt;</td></tr>
-<tr class="memdesc:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The container type for shared nodes. <br /></td></tr>
-<tr class="separator:a8ef0ccef928154f1865d1f693e76ad0a inherit pub_types_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains assignment data for a lyric assignment (a single syllable) </p>
@@ -340,7 +338,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">document</td><td>A weak pointer to the associated document. </td></tr>
-    <tr><td class="paramname">partId</td><td>The part that this is for (probably always 0). </td></tr>
+    <tr><td class="paramname">partId</td><td>The part that this is for. </td></tr>
     <tr><td class="paramname">shareMode</td><td>The sharing mode for this <a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssign.html">LyricAssign</a> </td></tr>
     <tr><td class="paramname">entnum</td><td>The entry number of this assignment. </td></tr>
     <tr><td class="paramname">inci</td><td>The 0-based inci. Each lyric text block has a separate instance, if assigned. </td></tr>
@@ -351,16 +349,40 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="acef084b0ea8941da45903c36f5e6a65f" name="acef084b0ea8941da45903c36f5e6a65f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acef084b0ea8941da45903c36f5e6a65f">&#9670;&#160;</a></span>getRawTextCtx()</h2>
+<a id="abafbd47ad0c89dd492d36a5c7c101772" name="abafbd47ad0c89dd492d36a5c7c101772"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abafbd47ad0c89dd492d36a5c7c101772">&#9670;&#160;</a></span>getLyricText()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;typename TextType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html">texts::LyricsTextBase</a> &gt; musx::dom::details::LyricAssign::getLyricText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the raw lyric text for this assignment. </p>
+
+<p>Implemented in <a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html#a02d8f051d99e21b168017af080ecd8c9">musx::dom::details::LyricAssignChorus</a>, <a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssignSection.html#a1d115991f428335ef895b27ee79da88d">musx::dom::details::LyricAssignSection</a>, and <a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssignVerse.html#a67476e67562c55ad03d8d01fb4e02e03">musx::dom::details::LyricAssignVerse</a>.</p>
+
+</div>
+</div>
+<a id="a1684e94583edd0e11d90af26e4d8c96e" name="a1684e94583edd0e11d90af26e4d8c96e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1684e94583edd0e11d90af26e4d8c96e">&#9670;&#160;</a></span>getRawTextCtx()</h2>
+
+<div class="memitem">
+<div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a> musx::dom::details::LyricAssign::getRawTextCtx </td>
@@ -369,11 +391,6 @@ template&lt;typename TextType &gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Return an Enigma parsing context for the associated lyrics text block. </p>
@@ -393,7 +410,7 @@ template&lt;typename TextType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>If smart word extensions are being used, a non-zero value indicates the existence of a word extension SmartShape. If smart word extensions are not being used, this is the actual length of word extension in Evpu. See <a class="el" href="classmusx_1_1dom_1_1options_1_1LyricOptions.html#a889138ddaa38509e80fb33e8d54fe4c2" title="&quot;Use Smart Word Extensions&quot;">options::LyricOptions::useSmartWordExtensions</a>. </p>
+<p>If smart word extensions are being used, a non-zero value indicates the existence of a word extension SmartShape. If smart word extensions are not being used, this is the actual length of the word extension in Evpu. See <a class="el" href="classmusx_1_1dom_1_1options_1_1LyricOptions.html#a889138ddaa38509e80fb33e8d54fe4c2" title="&quot;Use Smart Word Extensions&quot;">options::LyricOptions::useSmartWordExtensions</a>. </p>
 
 </div>
 </div>
