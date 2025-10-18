@@ -36,14 +36,15 @@ enum class DiatonicMode : int;
 namespace musx {
 namespace dom {
 
-namespace details {
-class IndependentStaffDetails; // forward delcaration
+namespace details { // forward declarations
+class IndependentStaffDetails;
+class LyricAssign;
 } // namespace details
 
-namespace others {
-class Measure;      // forward declaration
-class OssiaHeader;  // forward declaration
-class Staff;        // forward declaration
+namespace others { // forward declarations
+class Measure;
+class OssiaHeader;
+class Staff;
 } // namespace others
 
 // This file contains common classes that are shared among Options, Others, and Details.
@@ -392,27 +393,65 @@ class LyricsTextBase; // forward delcaration
 } // namespace texts
 
 /**
+ * @class LyricsLineInfo
+ * @brief Contains information about a line of lyrics on a system.
+ */
+class LyricsLineInfo : CommonClassBase
+{
+public:
+    /// @brief Constructor function
+    /// @param document The document for this lyric line
+    /// @param requestedPartId The requested part ID for this lyric line.
+    /// @param type The type of lyric (from XmlNodeName string)
+    /// @param lyricNo The lyric number for this line info.
+    /// @param baseline Use #others::Staff::calcBaselinePosition for this value.
+    LyricsLineInfo(const DocumentWeakPtr& document, Cmper requestedPartId, std::string_view type, Cmper lyricNo, Evpu baseline) :
+        CommonClassBase(document), baselinePosition(baseline), lyricsType(type), lyricNumber(lyricNo), assignments(document, requestedPartId)
+    {
+    }
+    
+    Evpu baselinePosition;              ///< baseline position of this line on this system, relative to the staff's reference line
+    std::string_view lyricsType;        ///< the type of lyric ("chorus", "verse", or "section", corresponding to the xml tags for lyrics text)
+    Cmper lyricNumber;                  ///< the text number for all lyric assignments on this line.
+    MusxInstanceList<details::LyricAssign> assignments; ///< The lyric assignments on this line. The all should share the same `lyricNumber` value.
+};
+
+/**
  * @class LyricsSyllableInfo
  * @brief Contains the syllable information for a single syllable. (See @ref texts::LyricsTextBase)
  */
 class LyricsSyllableInfo : CommonClassBase
 {
 public:
-
     std::string syllable;       ///< the syllable text with no hyphenation or font information.
     bool hasHyphenBefore;       ///< indicates the syllable is preceded by a hyphen.
     bool hasHyphenAfter;        ///< indicates the syllable if followed by a hyphen.
 
 private:
+    /**
+     * @class LyricsSyllableStyleSpan
+     * @brief Contains font style information for a lyrics syllable. (See @ref texts::LyricsSyllableInfo)
+     */
+    class StyleSpan
+    {
+    public:
+        size_t start;        // start byte
+        size_t end;          // end byte (exclusive)
+        size_t styleIndex;   // index into LyricsTextBase's style table
+    };
+
     /// @brief Constructor function
     /// @param document Shared pointer to the document.
     /// @param text The syllable text.
     /// @param before Whether there is a hyphen before the syllable.
     /// @param after Whether there is a hyphen after the syllable.
-    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after)
-        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after)
+    /// @param enigmaStylesIndex The enigma style (in LyricsTextBase) for this syllable.
+    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, std::vector<StyleSpan>&& enigmaStyleMap)
+        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), m_enigmaStyleMap(std::move(enigmaStyleMap))
     {
     }
+
+    std::vector<StyleSpan> m_enigmaStyleMap; ///< the enigma style (in LyricsTextBase) for this syllable.
 
     friend class texts::LyricsTextBase;
 };

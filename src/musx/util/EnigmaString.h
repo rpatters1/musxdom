@@ -71,6 +71,14 @@ struct EnigmaStyles
     {
     }
 
+    /// @brief Creates a deep copy of the styles, including copying any shared pointer instances
+    EnigmaStyles createDeepCopy() const
+    {
+        EnigmaStyles result = *this;
+        result.font = std::make_shared<dom::FontInfo>(*this->font);
+        return result;
+    }
+
     std::shared_ptr<dom::FontInfo> font;    ///< the font to use
     CategoryTracking categoryFont{};        ///< how this font is tracked against a marking category
     dom::Evpu baseline{};                   ///< baseline setting (positive means up)

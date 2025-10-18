@@ -1169,19 +1169,12 @@ public:
  * @brief Contains assignment data for a lyric assignment (a single syllable)
  */
 class LyricAssign : public EntryDetailsBase
-{
-protected:
-    /// @brief Return an Enigma parsing context for the associated lyrics text block.
-    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
-    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
-    template <typename TextType>
-    util::EnigmaParsingContext getRawTextCtx() const;
-    
+{    
 public:
     /**
      * @brief Constructor function
      * @param document A weak pointer to the associated document.
-     * @param partId The part that this is for (probably always 0).
+     * @param partId The part that this is for.
      * @param shareMode The sharing mode for this @ref LyricAssign
      * @param entnum The entry number of this assignment.
      * @param inci The 0-based inci. Each lyric text block has a separate instance, if assigned.
@@ -1190,14 +1183,22 @@ public:
         : EntryDetailsBase(document, partId, shareMode, entnum, inci) {}
 
     Cmper lyricNumber{};            ///< the text number of the lyric.
-    unsigned syllable{};            ///< the 1-based syllable number. Subtract 1 to get the index. (xml node is `<syll>`)
+    unsigned syllable{};            ///< the 1-based syllable number. Subtract 1 for an index into #texts::LyricsTextBase::syllables. (xml node is `<syll>`)
     Evpu horzOffset{};              ///< horizontal offset from default position. (xml node is `<horzOff>`)
     Evpu vertOffset{};              ///< horizontal offset from default position. (xml node is `<vertOff>`)
     Evpu floatingHorzOff{};         ///< This appears to have something to do with note spacing. It may simply be a cache that Finale changes as needed.
     Evpu wext{};                    ///< If smart word extensions are being used, a non-zero value indicates the existence of a word extension SmartShape.
-                                    ///< If smart word extensions are not being used, this is the actual length of word extension in Evpu.
+                                    ///< If smart word extensions are not being used, this is the actual length of the word extension in Evpu.
                                     ///< See #options::LyricOptions::useSmartWordExtensions.
     bool displayVerseNum{};         ///< If set, the text block number displays to the left of the syllable. (E.g., when numbering verses in a hymn.)
+
+    /// @brief Get the raw lyric text for this assignment.
+    virtual MusxInstance<texts::LyricsTextBase> getLyricText() const = 0;
+
+    /// @brief Return an Enigma parsing context for the associated lyrics text block.
+    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
+    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
+    util::EnigmaParsingContext getRawTextCtx() const;
 
     static const xml::XmlElementArray<LyricAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };
@@ -1213,12 +1214,9 @@ class LyricAssignChorus : public LyricAssign
 public:
     using LyricAssign::LyricAssign;
 
-    /// @brief Return an Enigma parsing context for the associated lyrics text block.
-    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
-    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
-    util::EnigmaParsingContext getRawTextCtx() const
-    { return LyricAssign::getRawTextCtx<TextType>(); }
+    MusxInstance<texts::LyricsTextBase> getLyricText() const override;
 
+    using BaselineType = BaselineLyricsChorus; ///< The baseline type for this item.
     using TextType = texts::LyricsChorus; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "lyrDataChorus"; ///< The XML node name for this type.
 };
@@ -1234,12 +1232,9 @@ class LyricAssignSection : public LyricAssign
 public:
     using LyricAssign::LyricAssign;
 
-    /// @brief Return an Enigma parsing context for the associated lyrics text block.
-    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
-    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
-    util::EnigmaParsingContext getRawTextCtx() const
-    { return LyricAssign::getRawTextCtx<TextType>(); }
+    MusxInstance<texts::LyricsTextBase> getLyricText() const override;
 
+    using BaselineType = BaselineLyricsSection; ///< The baseline type for this item.
     using TextType = texts::LyricsSection; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "lyrDataSection"; ///< The XML node name for this type.
 };
@@ -1255,12 +1250,9 @@ class LyricAssignVerse : public LyricAssign
 public:
     using LyricAssign::LyricAssign;
 
-    /// @brief Return an Enigma parsing context for the associated lyrics text block.
-    /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
-    /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
-    util::EnigmaParsingContext getRawTextCtx() const
-    { return LyricAssign::getRawTextCtx<TextType>(); }
+    MusxInstance<texts::LyricsTextBase> getLyricText() const override;
 
+    using BaselineType = BaselineLyricsVerse; ///< The baseline type for this item.
     using TextType = texts::LyricsVerse; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "lyrDataVerse"; ///< The XML node name for this type.
 };

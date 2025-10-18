@@ -60,8 +60,8 @@
       </created>
       <modified>
         <year>2025</year>
-        <month>3</month>
-        <day>4</day>
+        <month>10</month>
+        <day>18</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -1510,6 +1510,13 @@
       <family>0</family>
       <name>Broadway Copyist Text</name>
     </fontName>
+    <fontName cmper="11">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Arial Bold</name>
+    </fontName>
     <fontName cmper="13">
       <charsetBank>Mac</charsetBank>
       <charsetVal>0</charsetVal>
@@ -1573,6 +1580,10 @@
     <frameSpec cmper="9" inci="0">
       <startEntry>33</startEntry>
       <endEntry>36</endEntry>
+    </frameSpec>
+    <frameSpec cmper="10" inci="0">
+      <startEntry>37</startEntry>
+      <endEntry>40</endEntry>
     </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
@@ -1915,6 +1926,7 @@
       <divbeat>1024</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
+      <hasSmartShape/>
       <posMode>timesigPlusPos</posMode>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
@@ -2767,6 +2779,94 @@
       <startLyricTag>verse</startLyricTag>
       <endLyricTag>verse</endLyricTag>
     </smartShape>
+    <smartShape cmper="13">
+      <shapeType>wordExt</shapeType>
+      <makeHorz/>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>37</entryNum>
+        </endPt>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>37</entryNum>
+        </endPt>
+      </endTermSeg>
+      <startLyricNum>6</startLyricNum>
+      <endLyricNum>-2</endLyricNum>
+      <startLyricTag>verse</startLyricTag>
+      <endLyricTag>verse</endLyricTag>
+    </smartShape>
+    <smartShape cmper="14">
+      <shapeType>hyphen</shapeType>
+      <makeHorz/>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>38</entryNum>
+        </endPt>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>39</entryNum>
+        </endPt>
+      </endTermSeg>
+      <startLyricNum>6</startLyricNum>
+      <endLyricNum>6</endLyricNum>
+      <startLyricTag>verse</startLyricTag>
+      <endLyricTag>verse</endLyricTag>
+    </smartShape>
+    <smartShape cmper="15">
+      <shapeType>hyphen</shapeType>
+      <makeHorz/>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>39</entryNum>
+        </endPt>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>40</entryNum>
+        </endPt>
+      </endTermSeg>
+      <startLyricNum>6</startLyricNum>
+      <endLyricNum>6</endLyricNum>
+      <startLyricTag>verse</startLyricTag>
+      <endLyricTag>verse</endLyricTag>
+    </smartShape>
+    <smartShape cmper="16">
+      <shapeType>wordExt</shapeType>
+      <makeHorz/>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>40</entryNum>
+        </endPt>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>40</entryNum>
+        </endPt>
+      </endTermSeg>
+      <startLyricNum>6</startLyricNum>
+      <endLyricNum>-2</endLyricNum>
+      <startLyricTag>verse</startLyricTag>
+      <endLyricTag>verse</endLyricTag>
+    </smartShape>
     <smartShapeMeasMark cmper="1" inci="0">
       <shapeNum>1</shapeNum>
     </smartShapeMeasMark>
@@ -2803,6 +2903,18 @@
     <smartShapeMeasMark cmper="4" inci="2">
       <shapeNum>12</shapeNum>
     </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="5" inci="0">
+      <shapeNum>13</shapeNum>
+    </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="5" inci="1">
+      <shapeNum>14</shapeNum>
+    </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="5" inci="2">
+      <shapeNum>15</shapeNum>
+    </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="5" inci="3">
+      <shapeNum>16</shapeNum>
+    </smartShapeMeasMark>
     <ssLineStyle cmper="1">
       <lineStyle>char</lineStyle>
       <charParams>
@@ -2827,8 +2939,8 @@
     </ssLineStyle>
     <staffSystemSpec cmper="1">
       <startMeas>1</startMeas>
-      <endMeas>2</endMeas>
-      <horzPercent>36500</horzPercent>
+      <endMeas>4</endMeas>
+      <horzPercent>12144</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-432</top>
@@ -2838,9 +2950,9 @@
       <scaleContentOnly/>
     </staffSystemSpec>
     <staffSystemSpec cmper="2">
-      <startMeas>2</startMeas>
+      <startMeas>4</startMeas>
       <endMeas>6</endMeas>
-      <horzPercent>10117</horzPercent>
+      <horzPercent>20267</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-68</top>
@@ -3343,6 +3455,11 @@
       <clefPercent>75</clefPercent>
       <frame1>9</frame1>
     </gfhold>
+    <gfhold cmper1="1" cmper2="5">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>10</frame1>
+    </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
@@ -3440,6 +3557,30 @@
     <smartShapeEntryMark entnum="35" inci="1">
       <shapeNum>12</shapeNum>
     </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="37" inci="0">
+      <shapeNum>13</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="37" inci="1">
+      <shapeNum>13</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="38" inci="0">
+      <shapeNum>14</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="39" inci="0">
+      <shapeNum>14</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="39" inci="1">
+      <shapeNum>15</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="40" inci="0">
+      <shapeNum>15</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="40" inci="1">
+      <shapeNum>16</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="40" inci="2">
+      <shapeNum>16</shapeNum>
+    </smartShapeEntryMark>
     <lyrDataVerse entnum="21" inci="0">
       <lyricNumber>1</lyricNumber>
       <syll>1</syll>
@@ -3488,10 +3629,26 @@
       <lyricNumber>4</lyricNumber>
       <syll>3</syll>
     </lyrDataVerse>
+    <lyrDataVerse entnum="37" inci="0">
+      <lyricNumber>6</lyricNumber>
+      <syll>1</syll>
+    </lyrDataVerse>
+    <lyrDataVerse entnum="38" inci="0">
+      <lyricNumber>6</lyricNumber>
+      <syll>2</syll>
+    </lyrDataVerse>
+    <lyrDataVerse entnum="39" inci="0">
+      <lyricNumber>6</lyricNumber>
+      <syll>3</syll>
+    </lyrDataVerse>
+    <lyrDataVerse entnum="40" inci="0">
+      <lyricNumber>6</lyricNumber>
+      <syll>4</syll>
+    </lyrDataVerse>
     <activeLyric cmper1="1" cmper2="1">
       <assignmentTag>verse</assignmentTag>
-      <lyricNumber>5</lyricNumber>
-      <syll>1</syll>
+      <lyricNumber>6</lyricNumber>
+      <syll>3</syll>
     </activeLyric>
   </details>
   <entries>
@@ -3948,12 +4105,75 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="36" prev="35" next="0">
+    <entry entnum="36" prev="35" next="37">
       <dura>1024</dura>
       <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
+    </entry>
+    <entry entnum="37" prev="36" next="38">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <lyricDetail/>
+      <beam/>
+      <upStem/>
+      <smartShapeDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>3</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="38" prev="37" next="39">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <lyricDetail/>
+      <beam/>
+      <upStem/>
+      <smartShapeDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>4</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="39" prev="38" next="40">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <lyricDetail/>
+      <beam/>
+      <upStem/>
+      <smartShapeDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>5</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="40" prev="39" next="0">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <lyricDetail/>
+      <beam/>
+      <smartShapeDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
   </entries>
   <texts>
@@ -3967,7 +4187,7 @@ na ---
 -le --
 </verse>
     <verse number="5">^fontid(1)^size(12)^nfx(0) - </verse>
-    <verse number="6"/>
+    <verse number="6">^fontid(1)^size(12)^nfx(0)fi^nfx(2)na^nfx(0)le fi-^fontid(11)na^fontid(1)-le</verse>
     <blockText number="1">^fontid(1)^size(12)^nfx(0)Score</blockText>
   </texts>
 </finale>

@@ -1022,7 +1022,7 @@ TEST(TextsTest, LyricSyllableParsing)
     };
 
     auto lyrics = texts->getArray<LyricsVerse>();
-    ASSERT_GE(lyrics.size(), 5);
+    ASSERT_GE(lyrics.size(), 6);
 
     checkSyllable(lyrics[0], 0, "fi@#", false, false);
     checkSyllable(lyrics[0], 1, "na", false, false);
@@ -1041,6 +1041,69 @@ TEST(TextsTest, LyricSyllableParsing)
     checkSyllable(lyrics[3], 2, "le", true, true);
 
     EXPECT_TRUE(lyrics[4]->syllables.empty());
+
+    checkSyllable(lyrics[5], 0, "finale", false, false);
+    checkSyllable(lyrics[5], 1, "fi", false, true);
+    checkSyllable(lyrics[5], 2, "na", true, true);
+    checkSyllable(lyrics[5], 3, "le", true, false);
+}
+
+TEST(TextsTest, LyricSyllableStyles)
+{
+    using texts::LyricsVerse;
+
+    std::vector<char> syllXml;
+    musxtest::readFile(musxtest::getInputPath() / "syllables.enigmaxml", syllXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(syllXml);
+    ASSERT_TRUE(doc);
+
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    auto lyrics = texts->getArray<LyricsVerse>();
+    ASSERT_GE(lyrics.size(), 6);
+
+    std::vector<std::string> expectedChunks = { "fi", "na", "le" };
+    std::vector<bool> expectedItalics = { false, true, false };
+    std::vector<Cmper> expectedFontId = { 1, 1, 1 };
+    {
+        size_t nextIndex = 0;
+        lyrics[5]->iterateStylesForSyllable(0, [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+            EXPECT_LT(nextIndex, expectedChunks.size());
+            if (nextIndex >= expectedChunks.size()) return false;
+            EXPECT_EQ(chunk, expectedChunks[nextIndex]);
+            EXPECT_EQ(styles.font->italic, expectedItalics[nextIndex]);
+            EXPECT_EQ(styles.font->fontId, expectedFontId[nextIndex]);
+            nextIndex++;
+            return true;
+        });
+    }
+    {
+        size_t nextIndex = 0;
+        lyrics[5]->iterateStylesForSyllable(2, [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+            EXPECT_LT(nextIndex, 1);
+            if (nextIndex >= 1) return false;
+            EXPECT_EQ(chunk, "na");
+            EXPECT_EQ(styles.font->italic, false);
+            EXPECT_EQ(styles.font->bold, false);
+            EXPECT_EQ(styles.font->fontId, 11);
+            nextIndex++;
+            return true;
+        });
+    }
+    {
+        size_t nextIndex = 0;
+        lyrics[5]->iterateStylesForSyllable(3, [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+            EXPECT_LT(nextIndex, 1);
+            if (nextIndex >= 1) return false;
+            EXPECT_EQ(chunk, "le");
+            EXPECT_EQ(styles.font->italic, false);
+            EXPECT_EQ(styles.font->bold, false);
+            EXPECT_EQ(styles.font->fontId, 1);
+            nextIndex++;
+            return true;
+        });
+    }
 }
 
 TEST(TextsTest, ExpressionsAndTitles)

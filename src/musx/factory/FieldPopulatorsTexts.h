@@ -39,7 +39,7 @@ MUSX_RESOLVER_ENTRY(LyricsVerse, {
         auto lyricsTexts = document->getTexts()->getArray<LyricsVerse>();
         for (auto& text : lyricsTexts) {
             auto mutableText = const_cast<LyricsVerse*>(text.get());
-            mutableText->createSyllableInfo();
+            mutableText->createSyllableInfo(text);
         }
     }
 });
@@ -49,7 +49,7 @@ MUSX_RESOLVER_ENTRY(LyricsChorus, {
         auto lyricsTexts = document->getTexts()->getArray<LyricsChorus>();
         for (auto& text : lyricsTexts) {
             auto mutableText = const_cast<LyricsChorus*>(text.get());
-            mutableText->createSyllableInfo();
+            mutableText->createSyllableInfo(text);
         }
     }
 });
@@ -59,7 +59,7 @@ MUSX_RESOLVER_ENTRY(LyricsSection, {
         auto lyricsTexts = document->getTexts()->getArray<LyricsSection>();
         for (auto& text : lyricsTexts) {
             auto mutableText = const_cast<LyricsSection*>(text.get());
-            mutableText->createSyllableInfo();
+            mutableText->createSyllableInfo(text);
         }
     }
 });
