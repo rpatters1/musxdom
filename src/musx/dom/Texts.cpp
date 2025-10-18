@@ -54,11 +54,11 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
     bool lastSeparatorHadHyphen = false;
 
     syllables.clear();
-    syllableStyles.clear();
+    m_syllableStyles.clear();
     auto parsingContext = getRawTextCtx(ptrToThis, SCORE_PARTID);
     parsingContext.parseEnigmaText([&](const std::string& nextChunk, const util::EnigmaStyles& styles) -> bool {
-        syllableStyles.push_back(styles.createDeepCopy());
-        currentEnigmaStyles.push_back({ current.size(), current.size(), syllableStyles.size() - 1 });
+        m_syllableStyles.push_back(styles.createDeepCopy());
+        currentEnigmaStyles.push_back({ current.size(), current.size(), m_syllableStyles.size() - 1 });
         for (auto c : nextChunk) {
             if (c == '-' || isspace(static_cast<unsigned char>(c))) {
                 if (c == '-') {
@@ -71,7 +71,7 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
                         syllables.push_back(std::shared_ptr<const LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, std::move(currentEnigmaStyles))));
                         current.clear();
                         currentEnigmaStyles.clear();
-                        currentEnigmaStyles.push_back({ current.size(), current.size(), syllableStyles.size() - 1 });
+                        currentEnigmaStyles.push_back({ current.size(), current.size(), m_syllableStyles.size() - 1 });
                     }
                     lastSeparatorHadHyphen = currSeparatorHasHyphen;
                     currSeparatorHasHyphen = false;
@@ -105,11 +105,11 @@ bool LyricsTextBase::iterateStylesForSyllable(size_t syllableIndex, util::Enigma
         if (span.start == syllable->syllable.size()) {
             continue;
         }
-        MUSX_ASSERT_IF(span.styleIndex >= syllableStyles.size()) {
+        MUSX_ASSERT_IF(span.styleIndex >= m_syllableStyles.size()) {
             throw std::logic_error("syllable's enigmaStyles map contained out-of-range styleIndex.");
         }
         std::string_view segment(syllable->syllable.data() + span.start, span.end - span.start);
-        const auto& style = syllableStyles.at(span.styleIndex);
+        const auto& style = m_syllableStyles.at(span.styleIndex);
         if (!callback(std::string(segment), style)) {
             return false;
         }

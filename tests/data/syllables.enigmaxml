@@ -61,7 +61,7 @@
       <modified>
         <year>2025</year>
         <month>10</month>
-        <day>17</day>
+        <day>18</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -2939,8 +2939,8 @@
     </ssLineStyle>
     <staffSystemSpec cmper="1">
       <startMeas>1</startMeas>
-      <endMeas>2</endMeas>
-      <horzPercent>36500</horzPercent>
+      <endMeas>4</endMeas>
+      <horzPercent>12144</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-432</top>
@@ -2950,9 +2950,9 @@
       <scaleContentOnly/>
     </staffSystemSpec>
     <staffSystemSpec cmper="2">
-      <startMeas>2</startMeas>
+      <startMeas>4</startMeas>
       <endMeas>6</endMeas>
-      <horzPercent>10117</horzPercent>
+      <horzPercent>20267</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-68</top>

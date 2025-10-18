@@ -522,7 +522,7 @@ Evpu Staff::calcBaselineZeroPosition() const
 }
 
 template<typename BaselineType>
-Evpu Staff::calcBaselinePositionImpl(SystemCmper system, std::optional<Cmper> lyricNumber) const
+Evpu Staff::calcBaselinePositionImpl(SystemCmper systemId, std::optional<Cmper> lyricNumber) const
 {
     static_assert(std::is_base_of<details::Baseline, BaselineType>::value, "BaselineType must derive from Baseline");
 
@@ -551,7 +551,7 @@ Evpu Staff::calcBaselinePositionImpl(SystemCmper system, std::optional<Cmper> ly
     if (auto staffBaseline = findBaseline(staffArray)) {
         result += staffBaseline->baselineDisplacement;
     }
-    auto systemArray = getDocument()->getDetails()->getArray<typename BaselineType::PerSystemType>(getRequestedPartId(), system, getCmper());
+    auto systemArray = getDocument()->getDetails()->getArray<typename BaselineType::PerSystemType>(getRequestedPartId(), systemId, getCmper());
     if (auto systemBaseline = findBaseline(systemArray)) {
         result += systemBaseline->baselineDisplacement;
     }
@@ -568,6 +568,74 @@ template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsChorus>(Sys
 template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsSection>(SystemCmper, std::optional<Cmper>) const;
 template Evpu Staff::calcBaselinePositionImpl<details::BaselineLyricsVerse>(SystemCmper, std::optional<Cmper>) const;
 #endif //DOXYGEN_SHOULD_IGNORE_THIS
+
+std::vector<LyricsLineInfo> Staff::createLyricsLineInfo(SystemCmper systemId) const
+{
+    std::vector<LyricsLineInfo> result;
+
+    auto addLyricsLines = [&](const auto& lyricAssigns) {
+        using PtrType = typename std::decay_t<decltype(lyricAssigns)>::value_type;
+        using T = typename PtrType::element_type;
+        static_assert(std::is_base_of_v<details::LyricAssign, T>, "lyricAssigns must be a subtype of LyricAssign");
+        if (lyricAssigns.empty()) {
+            return;
+        }
+        // All items in this range share these:
+        constexpr std::string_view typeStr = T::TextType::XmlNodeName;                  // safe: static storage
+        for (const auto& lyr : lyricAssigns) {
+            const Cmper lyricNo = lyr->lyricNumber;
+            // Find an existing line with the same type and lyric number.
+            auto it = std::find_if(result.begin(), result.end(),
+                [&](const LyricsLineInfo& line) {
+                    if (line.lyricsType != typeStr) {
+                        return false;
+                    }
+                    return line.lyricNumber == lyricNo;
+                });
+            // Create the line once if not found.
+            if (it == result.end()) {
+                const Evpu baseline = calcBaselinePosition<typename T::BaselineType>(systemId, lyricNo);
+                result.emplace_back(getDocument(), getRequestedPartId(), typeStr, lyricNo, baseline);
+                it = std::prev(result.end());
+            }
+            MUSX_ASSERT_IF(it->lyricNumber != lyricNo) {
+                throw std::logic_error("lyricNumber mismatch in LyricsLineInfo.");
+            }
+            it->assignments.emplace_back(lyr);
+        }
+    };
+
+    if (auto system = getDocument()->getOthers()->get<StaffSystem>(getRequestedPartId(), systemId)) {
+        for (MeasCmper measId = system->startMeas; measId < system->endMeas; measId++) {
+            if (auto gfHold = getDocument()->getDetails()->get<details::GFrameHold>(getRequestedPartId(), getCmper(), measId)) {
+                for (Cmper frameId : gfHold->frames) {
+                    if (frameId != 0) {
+                        auto frames = getDocument()->getOthers()->getArray<Frame>(getRequestedPartId(), frameId);
+                        for (const auto& frame : frames) {
+                            if (!frame->startEntry) {
+                                continue;
+                            }
+                            frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
+                                if (entry->lyricDetail) {
+                                    addLyricsLines(getDocument()->getDetails()->getArray<details::LyricAssignVerse>(getRequestedPartId(), entry->getEntryNumber()));
+                                    addLyricsLines(getDocument()->getDetails()->getArray<details::LyricAssignChorus>(getRequestedPartId(), entry->getEntryNumber()));
+                                    addLyricsLines(getDocument()->getDetails()->getArray<details::LyricAssignSection>(getRequestedPartId(), entry->getEntryNumber()));
+                                }
+                                return true;
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    std::sort(result.begin(), result.end(),
+        [](const LyricsLineInfo& a, const LyricsLineInfo& b) {
+            return a.baselinePosition > b.baselinePosition;
+        });
+    return result;
+}
 
 bool Staff::hasInstrumentAssigned() const
 {

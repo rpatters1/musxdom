@@ -36,14 +36,15 @@ enum class DiatonicMode : int;
 namespace musx {
 namespace dom {
 
-namespace details {
-class IndependentStaffDetails; // forward delcaration
+namespace details { // forward declarations
+class IndependentStaffDetails;
+class LyricAssign;
 } // namespace details
 
-namespace others {
-class Measure;      // forward declaration
-class OssiaHeader;  // forward declaration
-class Staff;        // forward declaration
+namespace others { // forward declarations
+class Measure;
+class OssiaHeader;
+class Staff;
 } // namespace others
 
 // This file contains common classes that are shared among Options, Others, and Details.
@@ -390,6 +391,30 @@ private:
 namespace texts {
 class LyricsTextBase; // forward delcaration
 } // namespace texts
+
+/**
+ * @class LyricsLineInfo
+ * @brief Contains information about a line of lyrics on a system.
+ */
+class LyricsLineInfo : CommonClassBase
+{
+public:
+    /// @brief Constructor function
+    /// @param document The document for this lyric line
+    /// @param requestedPartId The requested part ID for this lyric line.
+    /// @param type The type of lyric (from XmlNodeName string)
+    /// @param lyricNo The lyric number for this line info.
+    /// @param baseline Use #others::Staff::calcBaselinePosition for this value.
+    LyricsLineInfo(const DocumentWeakPtr& document, Cmper requestedPartId, std::string_view type, Cmper lyricNo, Evpu baseline) :
+        CommonClassBase(document), baselinePosition(baseline), lyricsType(type), lyricNumber(lyricNo), assignments(document, requestedPartId)
+    {
+    }
+    
+    Evpu baselinePosition;              ///< baseline position of this line on this system, relative to the staff's reference line
+    std::string_view lyricsType;        ///< the type of lyric ("chorus", "verse", or "section", corresponding to the xml tags for lyrics text)
+    Cmper lyricNumber;                  ///< the text number for all lyric assignments on this line.
+    MusxInstanceList<details::LyricAssign> assignments; ///< The lyric assignments on this line. The all should share the same `lyricNumber` value.
+};
 
 /**
  * @class LyricsSyllableInfo

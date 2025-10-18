@@ -215,22 +215,29 @@ MusxInstance<TimeSignature> IndependentStaffDetails::createDisplayTimeSignature(
 // ***** LyricsAssign *****
 // ************************
 
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
-template <typename TextType>
-util::EnigmaParsingContext details::LyricAssign::getRawTextCtx() const
+MusxInstance<texts::LyricsTextBase> LyricAssignVerse::getLyricText() const
 {
-    static_assert(std::is_base_of_v<texts::LyricsTextBase, TextType>, "TextType must be a subclass of texts::LyricsTextBase.");
+    return getDocument()->getTexts()->get<TextType>(lyricNumber);
+}
+
+MusxInstance<texts::LyricsTextBase> LyricAssignChorus::getLyricText() const
+{
+    return getDocument()->getTexts()->get<TextType>(lyricNumber);
+}
+
+MusxInstance<texts::LyricsTextBase> LyricAssignSection::getLyricText() const
+{
+    return getDocument()->getTexts()->get<TextType>(lyricNumber);
+}
+
+util::EnigmaParsingContext LyricAssign::getRawTextCtx() const
+{
     // note that lyrics do not have text inserts. The UI doesn't permit them.
-    if (auto rawText = getDocument()->getTexts()->get<TextType>(lyricNumber)) {
+    if (auto rawText = getLyricText()) {
         return rawText->getRawTextCtx(rawText, SCORE_PARTID);
     }
     return {};
 }
-
-template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsVerse>() const;
-template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsChorus>() const;
-template util::EnigmaParsingContext details::LyricAssign::getRawTextCtx<texts::LyricsSection>() const;
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 // *****************************
 // ***** MeasureTextAssign *****

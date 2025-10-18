@@ -679,3 +679,22 @@ TEST(StaffTest, NoteShapeDefaultOff)
         EXPECT_FALSE(noteShapes);
     }
 }
+
+TEST(StaffTest, LyricsLineInfo)
+{
+    std::vector<char> syllXml;
+    musxtest::readFile(musxtest::getInputPath() / "syllables.enigmaxml", syllXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(syllXml);
+    ASSERT_TRUE(doc);
+
+    auto staff = doc->getOthers()->get<others::Staff>(SCORE_PARTID, 1);
+    ASSERT_TRUE(staff);
+    {
+        auto lyricsLineInfo = staff->createLyricsLineInfo(1);
+        ASSERT_EQ(lyricsLineInfo.size(), 3);
+    }
+    {
+        auto lyricsLineInfo = staff->createLyricsLineInfo(2);
+        ASSERT_EQ(lyricsLineInfo.size(), 2);
+    }
+}
