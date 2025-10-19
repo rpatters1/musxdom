@@ -52,6 +52,15 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
     bool inSeparator = false;
     bool currSeparatorHasHyphen = false;
     bool lastSeparatorHadHyphen = false;
+    bool sepSawSpaceOrUnderscore = false;
+    int underscores = 0;
+
+    const bool stripUnderscores = [&]() {
+        if (auto lyricOptions = getDocument()->getOptions()->get<options::LyricOptions>()) {
+            return lyricOptions->useSmartWordExtensions;   
+        }
+        return false;
+    }();
 
     syllables.clear();
     m_syllableStyles.clear();
@@ -60,15 +69,28 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
         m_syllableStyles.push_back(styles.createDeepCopy());
         currentEnigmaStyles.push_back({ current.size(), current.size(), m_syllableStyles.size() - 1 });
         for (auto c : nextChunk) {
-            if (c == '-' || isspace(static_cast<unsigned char>(c))) {
-                if (c == '-') {
-                    currSeparatorHasHyphen = true;
+            const unsigned char uc = static_cast<unsigned char>(c);
+            if (c == '-' || (uc < 128 && isspace(uc)) || (stripUnderscores && c == '_')) {
+                if (!inSeparator) {
+                    inSeparator = true;
+                    sepSawSpaceOrUnderscore = false;
                 }
-                inSeparator = true;
+                if (c == '-') {
+                    // Count hyphen only if it immediately follows an existing syllable,
+                    // and no space/underscore has appeared yet in this separator run.
+                    if (!sepSawSpaceOrUnderscore && !current.empty()) {
+                        currSeparatorHasHyphen = true;
+                    }
+                } else {
+                    if (c == '_') {
+                        underscores++;
+                    }
+                    sepSawSpaceOrUnderscore = true;
+                }
             } else {
                 if (inSeparator) {
                     if (!current.empty()) {
-                        syllables.push_back(std::shared_ptr<const LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, std::move(currentEnigmaStyles))));
+                        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, underscores, std::move(currentEnigmaStyles))));
                         current.clear();
                         currentEnigmaStyles.clear();
                         currentEnigmaStyles.push_back({ current.size(), current.size(), m_syllableStyles.size() - 1 });
@@ -76,6 +98,8 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
                     lastSeparatorHadHyphen = currSeparatorHasHyphen;
                     currSeparatorHasHyphen = false;
                     inSeparator = false;
+                    sepSawSpaceOrUnderscore = false;
+                    underscores = 0;
                 }
                 current += c;
                 currentEnigmaStyles.back().end++;
@@ -85,7 +109,7 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
     });
 
     if (!current.empty()) {
-        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, std::move(currentEnigmaStyles))));
+        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, underscores, std::move(currentEnigmaStyles))));
     }
 }
 
