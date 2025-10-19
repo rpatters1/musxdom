@@ -651,6 +651,14 @@ public:
             return endIndex - startIndex + 1;
         }
 
+        /// @brief Return true if the entry is part of this tuplet.
+        /// @param entryInfo The entry to check.
+        bool includesEntry(const EntryInfoPtr& entryInfo) const
+        {
+            const size_t x = entryInfo.getIndexInFrame();
+            return (x >= startIndex && x <= endIndex);
+        }
+
         /// @brief Calculates if this tuplet represents a tremolo based on the following criteria.
         ///     - the tuplet ratio is a positive integral power of 2.
         ///     - the tuplet contains exactly 2 entries of equal duration and actual duration.

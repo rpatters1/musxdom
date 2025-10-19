@@ -175,6 +175,12 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         }
     }
 
+    // must have a ratio that is a positive integer power of 2 (i.e., >= 2)
+    util::Fraction ratio = tuplet->calcRatio();
+    if (ratio.denominator() != 1 || ratio.numerator() < 2 || ((ratio.numerator() & (ratio.numerator() - 1)) != 0)) {
+        return false;
+    }
+
     // entries must have the same duration and actual duration.
     auto frame = getParent();
     MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
@@ -197,12 +203,6 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
             return false;
         }
     }
-    
-    // the reference duration must be equal to the number of entries * targetActual
-    const auto totalRef = tuplet->calcReferenceDuration();
-    if (totalRef <= 0 || targetActual * static_cast<int>(entryCount) != totalRef) {
-        return false;
-    }
 
     // entries must form a contiguous beamed-together chain
     // i.e., each entry's "next in beam group" must be exactly the next tuplet entry
@@ -215,6 +215,18 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         chain = nextInBeam; // advance along the beamed chain
     }
 
+    // if the actual duration is less than a quarter, at least one beam must be detached.
+    if (targetActual.calcEduDuration() < Edu(NoteType::Quarter)) {
+        auto [targetNoteType, _] = calcNoteInfoFromEdu(targetNotated);
+        auto checkBeamExt = [&](const MusxInstance<details::BeamExtension>& beamExt) -> bool {
+            return beamExt && (beamExt->mask >= Edu(targetNoteType)) && beamExt->leftOffset && beamExt->rightOffset;
+        };
+        if (!checkBeamExt(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), first->getEntry()->getEntryNumber()))) {
+            if (!checkBeamExt(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), first->getEntry()->getEntryNumber()))) {
+                return false;
+            }
+        }
+    }
     return true;
 }
 
