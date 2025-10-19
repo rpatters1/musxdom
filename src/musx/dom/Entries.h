@@ -569,6 +569,10 @@ public:
     /// @return True if this is either the replacement rest in v2 or the hidden rest in v1.
     bool calcIsBeamedRestWorkaroud() const;
 
+    /// @brief Finds the tuplet info for tuplets that include this entry
+    /// @return A list of indices of TupletInfo records that include the entry.
+    std::vector<size_t> findTupletInfo() const;
+
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
     {
@@ -637,6 +641,15 @@ public:
             : tuplet(tup), startIndex(index), endIndex((std::numeric_limits<size_t>::max)()),
                 startDura(start), endDura(-1), voice2(forVoice2), m_parent(parent)
         {}
+
+        /// @brief Return the number of entries in the tuplet
+        size_t numEntries() const
+        {
+            MUSX_ASSERT_IF(startIndex > endIndex) {
+                throw std::logic_error("TupletInfo has invalid start and end indices.");
+            }
+            return endIndex - startIndex + 1;
+        }
 
         /// @brief Calculates if this tuplet represents a tremolo based on the following criteria.
         ///     - the tuplet ratio is a positive integral power of 2.

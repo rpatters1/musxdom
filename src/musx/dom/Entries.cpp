@@ -161,21 +161,20 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     MUSX_ASSERT_IF(!tuplet) {
         throw std::logic_error("TupletInfo contains no tuplet.");
     }
-    // must have exactly 2 entries
-    if (endIndex != startIndex + 1) {
+
+    // must have at least 2 entries
+    const auto entryCount = numEntries();
+    if (entryCount < 2) {
         return false;
     }
+
     // must be invisible
     if (!tuplet->hidden) {
         if (tuplet->numStyle != details::TupletDef::NumberStyle::Nothing || tuplet->brackStyle != details::TupletDef::BracketStyle::Nothing) {
             return false;
         }
     }
-    // must have a ratio that is a positive integer power of 2 (i.e., >= 2)
-    util::Fraction ratio = tuplet->calcRatio();
-    if (ratio.denominator() != 1 || ratio.numerator() < 2 || ((ratio.numerator() & (ratio.numerator() - 1)) != 0)) {
-        return false;
-    }
+
     // entries must have the same duration and actual duration.
     auto frame = getParent();
     MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
@@ -184,16 +183,39 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     MUSX_ASSERT_IF(endIndex >= frame->getEntries().size()) {
         throw std::logic_error("TupletInfo instance contains invalid end index.");
     }
+
+    // all entries must have the same notated and actual durations
     EntryInfoPtr first(frame, startIndex);
-    EntryInfoPtr second(frame, endIndex);
-    if (first->actualDuration != second->actualDuration) {
+    const auto targetActual = first->actualDuration;
+    const auto targetNotated = first->getEntry()->duration;
+    for (size_t i = startIndex + 1; i <= endIndex; ++i) {
+        EntryInfoPtr curr(frame, i);
+        if (curr->actualDuration != targetActual) {
+            return false;
+        }
+        if (curr->getEntry()->duration != targetNotated) {
+            return false;
+        }
+    }
+    
+    // the reference duration must be equal to the number of entries * targetActual
+    const auto totalRef = tuplet->calcReferenceDuration();
+    if (totalRef <= 0 || targetActual * static_cast<int>(entryCount) != totalRef) {
         return false;
     }
-    if (first->getEntry()->duration != second->getEntry()->duration) {
-        return false;
+
+    // entries must form a contiguous beamed-together chain
+    // i.e., each entry's "next in beam group" must be exactly the next tuplet entry
+    EntryInfoPtr chain(frame, startIndex);
+    for (size_t i = startIndex + 1; i <= endIndex; ++i) {
+        auto nextInBeam = chain.getNextInBeamGroup();
+        if (!nextInBeam.isSameEntry(EntryInfoPtr(frame, i))) {
+            return false;
+        }
+        chain = nextInBeam; // advance along the beamed chain
     }
-    // entries must be beamed-together neighbors
-    return second.isSameEntry(first.getNextInBeamGroup());
+
+    return true;
 }
 
 bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
@@ -982,7 +1004,21 @@ bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
     }
     return false;
 }
- 
+
+std::vector<size_t> EntryInfoPtr::findTupletInfo() const
+{
+    std::vector<size_t> result;
+    if (auto entryFrame = this->getFrame()) {
+        for (size_t x = 0; x < entryFrame->tupletInfo.size(); x++) {
+            const auto& info = entryFrame->tupletInfo[x];
+            if (getIndexInFrame() >= info.startIndex && getIndexInFrame() <= info.endIndex) {
+                result.push_back(x);
+            }
+        }
+    }
+    return result;
+}
+
 // *****************************
 // ***** GFrameHoldContext *****
 // *****************************
