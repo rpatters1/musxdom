@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"functions_vars_v.html":[2,3,2,21],
+"functions_vars_w.html":[2,3,2,22],
 "functions_vars_x.html":[2,3,2,23],
 "functions_vars_y.html":[2,3,2,24],
 "functions_w.html":[2,3,0,22],
@@ -10,8 +12,8 @@ var NAVTREEINDEX27 =
 "index.html":[],
 "music__theory_8hpp_source.html":[3,0,0,0,0],
 "musx_8h_source.html":[3,0,0,1,4],
-"namespacemembers.html":[1,1,0],
 "namespacemembers.html":[1,1,0,0],
+"namespacemembers.html":[1,1,0],
 "namespacemembers_b.html":[1,1,0,1],
 "namespacemembers_c.html":[1,1,0,2],
 "namespacemembers_d.html":[1,1,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea5398156d08432d407c11a5f8c200caa4":[1,0,1,0,3,92,0],
 "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea550842164f2962cafe26c0fed711e299":[1,0,1,0,3,92,5],
 "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea6535aba8781467eb4f849e48cd5a7891":[1,0,1,0,3,92,11],
-"namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea82498ecb359d0b2f4a5868a968e82d00":[1,0,1,0,3,92,6],
-"namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eaa520875f5e831f5487362ba2ab5d56d7":[1,0,1,0,3,92,12],
-"namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eabc55b6028fc1941b241fcdb9affe5d30":[1,0,1,0,3,92,2]
+"namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea82498ecb359d0b2f4a5868a968e82d00":[1,0,1,0,3,92,6]
 };
