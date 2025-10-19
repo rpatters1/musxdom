@@ -1000,6 +1000,19 @@ TEST(TextsTest, ParseEnigmaFontInfo)
     EXPECT_FALSE(result);
 }
 
+static void checkSyllable(const MusxInstance<texts::LyricsVerse>& lyr, size_t index, const std::string& expSyl, bool expBefore, bool expAfter, int underscores = 0)
+{
+    auto mutableText = const_cast<texts::LyricsVerse*>(lyr.get());
+    mutableText->createSyllableInfo(lyr);
+    ASSERT_GT(lyr->syllables.size(), index);
+    const auto& syl = lyr->syllables[index];
+    ASSERT_TRUE(syl);
+    EXPECT_EQ(syl->syllable, expSyl);
+    EXPECT_EQ(syl->hasHyphenBefore, expBefore);
+    EXPECT_EQ(syl->hasHyphenAfter, expAfter);
+    EXPECT_EQ(syl->strippedUnderscores, underscores);
+}
+
 TEST(TextsTest, LyricSyllableParsing)
 {
     using texts::LyricsVerse;
@@ -1012,15 +1025,6 @@ TEST(TextsTest, LyricSyllableParsing)
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
 
-    auto checkSyllable = [&](const MusxInstance<LyricsVerse>& lyr, size_t index, const std::string& expSyl, bool expBefore, bool expAfter) -> void {
-        ASSERT_GT(lyr->syllables.size(), index);
-        const auto& syl = lyr->syllables[index];
-        ASSERT_TRUE(syl);
-        EXPECT_EQ(syl->syllable, expSyl);
-        EXPECT_EQ(syl->hasHyphenBefore, expBefore);
-        EXPECT_EQ(syl->hasHyphenAfter, expAfter);
-    };
-
     auto lyrics = texts->getArray<LyricsVerse>();
     ASSERT_GE(lyrics.size(), 6);
 
@@ -1028,17 +1032,17 @@ TEST(TextsTest, LyricSyllableParsing)
     checkSyllable(lyrics[0], 1, "na", false, false);
     checkSyllable(lyrics[0], 2, "le", false, false);
 
-    checkSyllable(lyrics[1], 0, "fi", true, true);
-    checkSyllable(lyrics[1], 1, "na.;—", true, false);
-    checkSyllable(lyrics[1], 2, "le", false, true);
+    checkSyllable(lyrics[1], 0, "fi", false, false);
+    checkSyllable(lyrics[1], 1, "na.;—", false, false);
+    checkSyllable(lyrics[1], 2, "le", false, false);
 
     checkSyllable(lyrics[2], 0, "fi", false, true);
     checkSyllable(lyrics[2], 1, "na", true, true);
     checkSyllable(lyrics[2], 2, "le", true, false);
 
     checkSyllable(lyrics[3], 0, "fi", false, false);
-    checkSyllable(lyrics[3], 1, "na", false, true);
-    checkSyllable(lyrics[3], 2, "le", true, true);
+    checkSyllable(lyrics[3], 1, "na", false, false);
+    checkSyllable(lyrics[3], 2, "le", false, false);
 
     EXPECT_TRUE(lyrics[4]->syllables.empty());
 
@@ -1046,6 +1050,78 @@ TEST(TextsTest, LyricSyllableParsing)
     checkSyllable(lyrics[5], 1, "fi", false, true);
     checkSyllable(lyrics[5], 2, "na", true, true);
     checkSyllable(lyrics[5], 3, "le", true, false);
+}
+
+TEST(TextsTest, LyricSyllableUnderscoreParsing)
+{
+    using texts::LyricsVerse;
+
+    std::vector<char> syllXml;
+    musxtest::readFile(musxtest::getInputPath() / "wordexts.enigmaxml", syllXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(syllXml);
+    ASSERT_TRUE(doc);
+
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    auto lyrics = texts->getArray<LyricsVerse>();
+    ASSERT_GE(lyrics.size(), 2);
+
+    checkSyllable(lyrics[1], 0, "lets", false, false, 6);
+    checkSyllable(lyrics[1], 1, "play", false, false, 2);
+    checkSyllable(lyrics[1], 2, "ball", false, true, 5);
+    checkSyllable(lyrics[1], 3, "ing", true, false, 1);
+
+    {
+        size_t nextIndex = 0;
+        lyrics[1]->iterateStylesForSyllable(1, [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+            EXPECT_LT(nextIndex, 1);
+            if (nextIndex >= 1) return false;
+            EXPECT_EQ(chunk, "play");
+            EXPECT_EQ(styles.font->fontId, 11);
+            nextIndex++;
+            return true;
+        });
+    }
+
+    {
+        size_t nextIndex = 0;
+        lyrics[1]->iterateStylesForSyllable(2, [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+            EXPECT_LT(nextIndex, 1);
+            if (nextIndex >= 1) return false;
+            EXPECT_EQ(chunk, "ball");
+            EXPECT_EQ(styles.font->fontId, 12);
+            nextIndex++;
+            return true;
+        });
+    }
+
+    auto lyricOptions = doc->getOptions()->get<options::LyricOptions>();
+    ASSERT_TRUE(lyricOptions);
+    auto mutableOpts = const_cast<options::LyricOptions*>(lyricOptions.get());
+    mutableOpts->useSmartWordExtensions = false;
+
+    checkSyllable(lyrics[1], 0, "_lets__", false, true);
+    checkSyllable(lyrics[1], 1, "_", true, false);
+    checkSyllable(lyrics[1], 2, "___", false, false);
+    checkSyllable(lyrics[1], 3, "play__", false, false);
+    checkSyllable(lyrics[1], 4, "ball", false, true);
+    checkSyllable(lyrics[1], 5, "___", true, false);
+    checkSyllable(lyrics[1], 6, "__ing_", false, false);
+
+    std::vector<std::string> expectedChunks = { "play", "_", "_" };
+    std::vector<Cmper> expectedFontId = { 11, 1, 12 };
+    {
+        size_t nextIndex = 0;
+        lyrics[1]->iterateStylesForSyllable(3, [&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+            EXPECT_LT(nextIndex, expectedChunks.size());
+            if (nextIndex >= expectedChunks.size()) return false;
+            EXPECT_EQ(chunk, expectedChunks[nextIndex]);
+            EXPECT_EQ(styles.font->fontId, expectedFontId[nextIndex]);
+            nextIndex++;
+            return true;
+        });
+    }
 }
 
 TEST(TextsTest, LyricSyllableStyles)

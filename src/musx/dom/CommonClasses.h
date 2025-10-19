@@ -426,6 +426,7 @@ public:
     std::string syllable;       ///< the syllable text with no hyphenation or font information.
     bool hasHyphenBefore;       ///< indicates the syllable is preceded by a hyphen.
     bool hasHyphenAfter;        ///< indicates the syllable if followed by a hyphen.
+    int strippedUnderscores;    ///< indicates the number of trailing underscores stripped (because smart wort extensions convert them to word extensions).
 
 private:
     /**
@@ -445,9 +446,10 @@ private:
     /// @param text The syllable text.
     /// @param before Whether there is a hyphen before the syllable.
     /// @param after Whether there is a hyphen after the syllable.
+    /// @param underscores The number of trailing underscores stripped.
     /// @param enigmaStylesIndex The enigma style (in LyricsTextBase) for this syllable.
-    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, std::vector<StyleSpan>&& enigmaStyleMap)
-        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), m_enigmaStyleMap(std::move(enigmaStyleMap))
+    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, int underscores, std::vector<StyleSpan>&& enigmaStyleMap)
+        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), strippedUnderscores(underscores), m_enigmaStyleMap(std::move(enigmaStyleMap))
     {
     }
 
