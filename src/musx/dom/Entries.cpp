@@ -163,7 +163,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     }
 
     // must have at least 2 entries
-    const auto entryCount = numEntries();
+    const auto entryCount = static_cast<int>(numEntries());
     if (entryCount < 2) {
         return false;
     }
@@ -175,12 +175,6 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         }
     }
 
-    // must have a ratio that is a positive integer power of 2 (i.e., >= 2)
-    util::Fraction ratio = tuplet->calcRatio();
-    if (ratio.denominator() != 1 || ratio.numerator() < 2 || ((ratio.numerator() & (ratio.numerator() - 1)) != 0)) {
-        return false;
-    }
-
     // entries must have the same duration and actual duration.
     auto frame = getParent();
     MUSX_ASSERT_IF(startIndex >= frame->getEntries().size()) {
@@ -190,10 +184,16 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         throw std::logic_error("TupletInfo instance contains invalid end index.");
     }
 
-    // all entries must have the same notated and actual durations
     EntryInfoPtr first(frame, startIndex);
     const auto targetActual = first->actualDuration;
     const auto targetNotated = first->getEntry()->duration;
+
+    // actual duration must be >= 2x notated duration.
+    if (targetActual < util::Fraction::fromEdu(targetNotated) * 2) {
+        return false;
+    }
+    
+    // all entries must have the same notated and actual durations
     for (size_t i = startIndex + 1; i <= endIndex; ++i) {
         EntryInfoPtr curr(frame, i);
         if (curr->actualDuration != targetActual) {
@@ -215,8 +215,8 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         chain = nextInBeam; // advance along the beamed chain
     }
 
-    // if the actual duration is less than a quarter, at least one beam must be detached.
-    if (targetActual.calcEduDuration() < Edu(NoteType::Quarter)) {
+    // if the actual duration of the tuplet is less than a quarter, at least one beam must be detached.
+    if (tuplet->calcReferenceDuration().calcEduDuration() < Edu(NoteType::Half)) {
         auto [targetNoteType, _] = calcNoteInfoFromEdu(targetNotated);
         auto checkBeamExt = [&](const MusxInstance<details::BeamExtension>& beamExt) -> bool {
             return beamExt && (beamExt->mask >= Edu(targetNoteType)) && beamExt->leftOffset && beamExt->rightOffset;
