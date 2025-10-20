@@ -253,6 +253,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 <tr class="memitem:ad82e20770828b57b9c8dad206e9e92dd" id="r_ad82e20770828b57b9c8dad206e9e92dd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad82e20770828b57b9c8dad206e9e92dd">calcIsBeamedRestWorkaroud</a> () const</td></tr>
 <tr class="memdesc:ad82e20770828b57b9c8dad206e9e92dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.  <br /></td></tr>
 <tr class="separator:ad82e20770828b57b9c8dad206e9e92dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd810deb36d0bf21b99d27486533ba21" id="r_afd810deb36d0bf21b99d27486533ba21"><td class="memItemLeft" align="right" valign="top">std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#afd810deb36d0bf21b99d27486533ba21">findTupletInfo</a> () const</td></tr>
+<tr class="memdesc:afd810deb36d0bf21b99d27486533ba21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the tuplet info for tuplets that include this entry.  <br /></td></tr>
+<tr class="separator:afd810deb36d0bf21b99d27486533ba21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa247de0fb2eb2be22aaa12cf14266768" id="r_aa247de0fb2eb2be22aaa12cf14266768"><td class="memItemLeft" align="right" valign="top"><a id="aa247de0fb2eb2be22aaa12cf14266768" name="aa247de0fb2eb2be22aaa12cf14266768"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;other) const</td></tr>
 <tr class="memdesc:aa247de0fb2eb2be22aaa12cf14266768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicit operator&lt; for std::map. <br /></td></tr>
@@ -628,6 +631,26 @@ Static Public Member Functions</h2></td></tr>
 <p>Finds the first entry of a beamed group or returns the current entry if it is not beams. </p>
 <dl class="section note"><dt>Note</dt><dd>This behavior is different than other beam functions in that it returns the current entry if there is no beam rather than returning NULL. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The first entry of a beamed group or the current entry if no beam. </dd></dl>
+
+</div>
+</div>
+<a id="afd810deb36d0bf21b99d27486533ba21" name="afd810deb36d0bf21b99d27486533ba21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd810deb36d0bf21b99d27486533ba21">&#9670;&#160;</a></span>findTupletInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; size_t &gt; musx::dom::EntryInfoPtr::findTupletInfo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Finds the tuplet info for tuplets that include this entry. </p>
+<dl class="section return"><dt>Returns</dt><dd>A list of indices of TupletInfo records that include the entry. </dd></dl>
 
 </div>
 </div>

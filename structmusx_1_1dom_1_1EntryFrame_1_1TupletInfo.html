@@ -111,6 +111,13 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TupletInfo</b> (const std::weak_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt; &amp;parent, const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1TupletDef.html">details::TupletDef</a> &gt; &amp;tup, size_t index, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> start, bool forVoice2)</td></tr>
 <tr class="memdesc:a38a1fd252ba907632f566ce9cf710672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
 <tr class="separator:a38a1fd252ba907632f566ce9cf710672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e2e2986bd5202416eccef9167ee7d30" id="r_a7e2e2986bd5202416eccef9167ee7d30"><td class="memItemLeft" align="right" valign="top"><a id="a7e2e2986bd5202416eccef9167ee7d30" name="a7e2e2986bd5202416eccef9167ee7d30"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>numEntries</b> () const</td></tr>
+<tr class="memdesc:a7e2e2986bd5202416eccef9167ee7d30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of entries in the tuplet. <br /></td></tr>
+<tr class="separator:a7e2e2986bd5202416eccef9167ee7d30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b987c1ed0b3462317fc1577d6273cc7" id="r_a4b987c1ed0b3462317fc1577d6273cc7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4b987c1ed0b3462317fc1577d6273cc7">includesEntry</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;entryInfo) const</td></tr>
+<tr class="memdesc:a4b987c1ed0b3462317fc1577d6273cc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if the entry is part of this tuplet.  <br /></td></tr>
+<tr class="separator:a4b987c1ed0b3462317fc1577d6273cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f505387d04fded946fe24bb75fa01a1" id="r_a3f505387d04fded946fe24bb75fa01a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a3f505387d04fded946fe24bb75fa01a1">calcIsTremolo</a> () const</td></tr>
 <tr class="memdesc:a3f505387d04fded946fe24bb75fa01a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this tuplet represents a tremolo based on the following criteria.  <br /></td></tr>
 <tr class="separator:a3f505387d04fded946fe24bb75fa01a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -319,6 +326,40 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>voice2</b></td></tr>
 </ul>
 <dl class="section note"><dt>Note</dt><dd>The TGTools Tremolo plugin always creates beam extensions for both upstem and downstem cases. To detect the type of stem connections for the tremolo, it is recommended to look for either an upstem or a downstem extension. This covers the TGTools plugin as well as any that might have been created by hand. See <a class="el" href="classmusx_1_1dom_1_1details_1_1BeamExtension.html">details::BeamExtension</a>.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the tuplet is a tremolo. If so, use <code><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a8149bc295e394a775747727cf3d9a5c4" title="Calculates the number of beams or flags on the entry.">EntryInfoPtr::calcNumberOfBeams</a></code> on either entry to determine the number of beams. Use <code><a class="el" href="classmusx_1_1dom_1_1details_1_1TupletDef.html#a9c9b0b9acff5dbed23c74b55ef53fee3" title="return the reference duration as a util::Fraction of a whole note">details::TupletDef::calcReferenceDuration</a></code> to get the total length of the tremolo. </dd></dl>
+
+</div>
+</div>
+<a id="a4b987c1ed0b3462317fc1577d6273cc7" name="a4b987c1ed0b3462317fc1577d6273cc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b987c1ed0b3462317fc1577d6273cc7">&#9670;&#160;</a></span>includesEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryFrame::TupletInfo::includesEntry </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>entryInfo</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return true if the entry is part of this tuplet. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entryInfo</td><td>The entry to check. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

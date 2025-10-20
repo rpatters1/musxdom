@@ -23,6 +23,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "createCurrentStaff", "classmusx_1_1dom_1_1EntryInfoPtr.html#ab40a451640d656fe77deb6ad8aa6f278", null ],
     [ "findBeamEnd", "classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5", null ],
     [ "findBeamStartOrCurrent", "classmusx_1_1dom_1_1EntryInfoPtr.html#a8f1ab79a6faa2d52435f59224e788b0b", null ],
+    [ "findTupletInfo", "classmusx_1_1dom_1_1EntryInfoPtr.html#afd810deb36d0bf21b99d27486533ba21", null ],
     [ "getFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a87802553e72c2d71f8e23f4cb01f6a56", null ],
     [ "getIndexInFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a11f59be0da355d4fc06ed79f4465f067", null ],
     [ "getKeySignature", "classmusx_1_1dom_1_1EntryInfoPtr.html#a91de76e696c547eccfe0bf49ae82c7ed", null ],
