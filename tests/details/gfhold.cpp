@@ -713,17 +713,75 @@ TEST(GFrameHold, TremolosTest)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    std::vector<bool> expectedValues = { true, false };
-
-    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
-    ASSERT_TRUE(gfhold);
-
-    auto entryFrame = gfhold.createEntryFrame(0);
-    ASSERT_TRUE(entryFrame);
-    ASSERT_EQ(entryFrame->tupletInfo.size(), expectedValues.size());
-    for (size_t x = 0; x < entryFrame->tupletInfo.size(); x++) {
-        const bool isTremolo = entryFrame->tupletInfo[x].calcIsTremolo();
-        EXPECT_EQ(isTremolo, expectedValues[x]);
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+        std::vector<bool> expectedValues = { true, false };
+        std::vector<size_t> expectedCounts = { 2, 3 };
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_EQ(entryFrame->tupletInfo.size(), expectedValues.size());
+        for (size_t x = 0; x < entryFrame->tupletInfo.size(); x++) {
+            const bool isTremolo = entryFrame->tupletInfo[x].calcIsTremolo();
+            EXPECT_EQ(isTremolo, expectedValues[x]);
+            EXPECT_EQ(entryFrame->tupletInfo[x].numEntries(), expectedCounts[x]);
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold);
+        std::vector<bool> expectedValues = { true, false };
+        std::vector<size_t> expectedCounts = { 3, 3 };
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_EQ(entryFrame->tupletInfo.size(), expectedValues.size());
+        for (size_t x = 0; x < entryFrame->tupletInfo.size(); x++) {
+            const bool isTremolo = entryFrame->tupletInfo[x].calcIsTremolo();
+            EXPECT_EQ(isTremolo, expectedValues[x]);
+            EXPECT_EQ(entryFrame->tupletInfo[x].numEntries(), expectedCounts[x]);
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold);
+        std::vector<bool> expectedValues = { true, true, true };
+        std::vector<size_t> expectedCounts = { 2, 2, 3 };
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_EQ(entryFrame->tupletInfo.size(), expectedValues.size());
+        for (size_t x = 0; x < entryFrame->tupletInfo.size(); x++) {
+            const bool isTremolo = entryFrame->tupletInfo[x].calcIsTremolo();
+            EXPECT_EQ(isTremolo, expectedValues[x]);
+            EXPECT_EQ(entryFrame->tupletInfo[x].numEntries(), expectedCounts[x]);
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold);
+        std::vector<bool> expectedValues = { true, false };
+        std::vector<size_t> expectedCounts = { 3, 3 };
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_EQ(entryFrame->tupletInfo.size(), expectedValues.size());
+        for (size_t x = 0; x < entryFrame->tupletInfo.size(); x++) {
+            const bool isTremolo = entryFrame->tupletInfo[x].calcIsTremolo();
+            EXPECT_EQ(isTremolo, expectedValues[x]);
+            EXPECT_EQ(entryFrame->tupletInfo[x].numEntries(), expectedCounts[x]);
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold);
+        std::vector<bool> expectedValues = { false };
+        std::vector<size_t> expectedCounts = { 2 };
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_EQ(entryFrame->tupletInfo.size(), expectedValues.size());
+        for (size_t x = 0; x < entryFrame->tupletInfo.size(); x++) {
+            const bool isTremolo = entryFrame->tupletInfo[x].calcIsTremolo();
+            EXPECT_EQ(isTremolo, expectedValues[x]);
+            EXPECT_EQ(entryFrame->tupletInfo[x].numEntries(), expectedCounts[x]);
+        }
     }
 }
 
