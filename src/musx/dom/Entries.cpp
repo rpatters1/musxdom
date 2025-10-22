@@ -215,7 +215,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         chain = nextInBeam; // advance along the beamed chain
     }
 
-    // if the actual duration of the tuplet is less than a quarter, at least one beam must be detached.
+    // if the actual duration of the tuplet is less than a half, at least one beam must be detached.
     if (tuplet->calcReferenceDuration().calcEduDuration() < Edu(NoteType::Half)) {
         auto [targetNoteType, _] = calcNoteInfoFromEdu(targetNotated);
         auto checkBeamExt = [&](const MusxInstance<details::BeamExtension>& beamExt) -> bool {
