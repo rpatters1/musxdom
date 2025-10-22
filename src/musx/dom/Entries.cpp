@@ -219,7 +219,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     if (tuplet->calcReferenceDuration().calcEduDuration() < Edu(NoteType::Half)) {
         auto [targetNoteType, _] = calcNoteInfoFromEdu(targetNotated);
         auto checkBeamExt = [&](const MusxInstance<details::BeamExtension>& beamExt) -> bool {
-            return beamExt && (beamExt->mask >= Edu(targetNoteType)) && beamExt->leftOffset && beamExt->rightOffset;
+            return beamExt && (beamExt->mask >= unsigned(targetNoteType)) && beamExt->leftOffset && beamExt->rightOffset;
         };
         if (!checkBeamExt(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), first->getEntry()->getEntryNumber()))) {
             if (!checkBeamExt(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), first->getEntry()->getEntryNumber()))) {
