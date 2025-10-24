@@ -132,6 +132,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>calcEndingLength</b> (
 <tr class="memitem:a6618cedd712507d7c23636c548e20afe" id="r_a6618cedd712507d7c23636c548e20afe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a6618cedd712507d7c23636c548e20afe">calcIsOpen</a> () const</td></tr>
 <tr class="memdesc:a6618cedd712507d7c23636c548e20afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the ending is open or closed, based on a number of factors.  <br /></td></tr>
 <tr class="separator:a6618cedd712507d7c23636c548e20afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ae78f007ba53f6937697b1e3cd48984" id="r_a4ae78f007ba53f6937697b1e3cd48984"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a4ae78f007ba53f6937697b1e3cd48984">getIndividualPositioning</a> (<a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId) const</td></tr>
+<tr class="memdesc:a4ae78f007ba53f6937697b1e3cd48984"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> record for a given staff. Check <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#aef6cfefe89ec6444c0bf476a53f2cda9" title="&quot;Allow Individual Edits Per Staff&quot; (xml tag is &lt;indivPlac&gt;)">individualPlacement</a> to see if this record is used by Finale.  <br /></td></tr>
+<tr class="separator:a4ae78f007ba53f6937697b1e3cd48984"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c5739fe6d953508f13d76895cd929cb" id="r_a9c5739fe6d953508f13d76895cd929cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a9c5739fe6d953508f13d76895cd929cb">getTextIndividualPositioning</a> (<a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId) const</td></tr>
+<tr class="memdesc:a9c5739fe6d953508f13d76895cd929cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> record for the text a given staff. Check <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#aef6cfefe89ec6444c0bf476a53f2cda9" title="&quot;Allow Individual Edits Per Staff&quot; (xml tag is &lt;indivPlac&gt;)">individualPlacement</a> to see if this record is used by Finale.  <br /></td></tr>
+<tr class="separator:a9c5739fe6d953508f13d76895cd929cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab11b6f79e6c2685f965e5e409494e63e" id="r_ab11b6f79e6c2685f965e5e409494e63e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#ab11b6f79e6c2685f965e5e409494e63e">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:ab11b6f79e6c2685f965e5e409494e63e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:ab11b6f79e6c2685f965e5e409494e63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,6 +224,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>individualPlacement</
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>topStaffOnly</b> {}</td></tr>
 <tr class="memdesc:a94e678a93aa71c30e9ffc9795c7f95c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Show On: Top Staff Only" <br /></td></tr>
 <tr class="separator:a94e678a93aa71c30e9ffc9795c7f95c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81842e9dd3f63fe2fe59984369fa0c0a" id="r_a81842e9dd3f63fe2fe59984369fa0c0a"><td class="memItemLeft" align="right" valign="top"><a id="a81842e9dd3f63fe2fe59984369fa0c0a" name="a81842e9dd3f63fe2fe59984369fa0c0a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hidden</b> {}</td></tr>
+<tr class="memdesc:a81842e9dd3f63fe2fe59984369fa0c0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Show" checkbox. <br /></td></tr>
+<tr class="separator:a81842e9dd3f63fe2fe59984369fa0c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acffb6ba9f840a266d33df76f154e9a3d" id="r_acffb6ba9f840a266d33df76f154e9a3d"><td class="memItemLeft" align="right" valign="top"><a id="acffb6ba9f840a266d33df76f154e9a3d" name="acffb6ba9f840a266d33df76f154e9a3d"></a>
 <a class="el" href="namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852da">RepeatActionType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>jumpAction</b> {}</td></tr>
 <tr class="memdesc:acffb6ba9f840a266d33df76f154e9a3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The jump action for this repeat ending. The automatic jump is to the next ending. (xml tag is <code>&lt;action&gt;</code>) <br /></td></tr>
@@ -319,7 +329,61 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div><div class="memdoc">
 
 <p>Calculates if the ending is open or closed, based on a number of factors. </p>
-<p>Openness is a visual feature. If true, it means that the ending bracket has a downward stroke on the right. </p>
+<p>Openness is a visual feature. If true, it means that the ending bracket has no downward stroke on the right. </p>
+
+</div>
+</div>
+<a id="a4ae78f007ba53f6937697b1e3cd48984" name="a4ae78f007ba53f6937697b1e3cd48984"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ae78f007ba53f6937697b1e3cd48984">&#9670;&#160;</a></span>getIndividualPositioning()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> &gt; musx::dom::others::RepeatEndingStart::getIndividualPositioning </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td>
+          <td class="paramname"><em>staffId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> record for a given staff. Check <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#aef6cfefe89ec6444c0bf476a53f2cda9" title="&quot;Allow Individual Edits Per Staff&quot; (xml tag is &lt;indivPlac&gt;)">individualPlacement</a> to see if this record is used by Finale. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">staffId</td><td>The StaffCmper of the staff to search for individual positioning. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The individual positioning record or nullptr if not found. </dd></dl>
+
+</div>
+</div>
+<a id="a9c5739fe6d953508f13d76895cd929cb" name="a9c5739fe6d953508f13d76895cd929cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c5739fe6d953508f13d76895cd929cb">&#9670;&#160;</a></span>getTextIndividualPositioning()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> &gt; musx::dom::others::RepeatEndingStart::getTextIndividualPositioning </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td>
+          <td class="paramname"><em>staffId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> record for the text a given staff. Check <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#aef6cfefe89ec6444c0bf476a53f2cda9" title="&quot;Allow Individual Edits Per Staff&quot; (xml tag is &lt;indivPlac&gt;)">individualPlacement</a> to see if this record is used by Finale. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">staffId</td><td>The StaffCmper of the staff to search for individual positioning. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The individual positioning record or nullptr if not found. </dd></dl>
 
 </div>
 </div>

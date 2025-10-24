@@ -1,6 +1,8 @@
 var classmusx_1_1dom_1_1others_1_1RepeatBack =
 [
     [ "RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#aeabe38945b7ff7f56111051f19d90aae", null ],
+    [ "getIndividualPositioning", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#aed8c34aad223624102672f2f6779adfb", null ],
+    [ "hidden", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#a9485423359008d12830cebc4bc4ed618", null ],
     [ "individualPlacement", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#aeb80d596e4f1dd32398ad9686dea5a41", null ],
     [ "jumpAction", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#a9df76f94da775e2aa5f0bffe5d0a47c8", null ],
     [ "leftHPos", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#a97121eb14d1431e52e77929dc70d1c0c", null ],

@@ -232,6 +232,12 @@ var hierarchy =
         [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
         [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
         [ "musx::dom::others::RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", null ],
+        [ "musx::dom::others::RepeatIndividualPositioning", "classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html", [
+          [ "musx::dom::others::RepeatBackIndividualPositioning", "classmusx_1_1dom_1_1others_1_1RepeatBackIndividualPositioning.html", null ],
+          [ "musx::dom::others::RepeatEndingStartIndividualPositioning", "classmusx_1_1dom_1_1others_1_1RepeatEndingStartIndividualPositioning.html", null ],
+          [ "musx::dom::others::RepeatEndingTextIndividualPositioning", "classmusx_1_1dom_1_1others_1_1RepeatEndingTextIndividualPositioning.html", null ],
+          [ "musx::dom::others::TextRepeatIndividualPositioning", "classmusx_1_1dom_1_1others_1_1TextRepeatIndividualPositioning.html", null ]
+        ] ],
         [ "musx::dom::others::ShapeDef", "classmusx_1_1dom_1_1others_1_1ShapeDef.html", null ],
         [ "musx::dom::others::ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html", null ],
         [ "musx::dom::others::ShapeGraphicAssign", "classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html", null ],

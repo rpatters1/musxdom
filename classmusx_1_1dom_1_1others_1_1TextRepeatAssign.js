@@ -1,7 +1,9 @@
 var classmusx_1_1dom_1_1others_1_1TextRepeatAssign =
 [
     [ "TextRepeatAssign", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a45947e8e8419d8ccd3a95f7c534f43e1", null ],
+    [ "getIndividualPositioning", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#aabd770841d589cee580f2f8fb0e5655e", null ],
     [ "autoUpdate", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a5690345963a1f60a652a1669e418f503", null ],
+    [ "hidden", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#ab4078cf953cfd40f67c2c8da4c327a68", null ],
     [ "horzPos", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#af36a143cde1aca6e1efb931774e5612d", null ],
     [ "individualPlacement", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a3172c50b52402ab034de6ed841cea31c", null ],
     [ "jumpAction", "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#acf32e424ca8df7b36e34e399b40d6263", null ],
