@@ -564,6 +564,31 @@ const percussion::PercussionNoteType& PercussionNoteInfo::getNoteType() const
     return percussion::getPercussionNoteTypeFromId(getBaseNoteTypeId());
 }
 
+// **********************
+// ***** RepeatBack *****
+// **********************
+
+static MusxInstance<RepeatIndividualPositioning> getIndividualPositioningImpl(auto indivPos, StaffCmper staffId, std::optional<MeasCmper> measureId = std::nullopt)
+{
+    const auto it = std::find_if(indivPos.begin(), indivPos.end(),
+        [&](const auto& ptr)
+        {
+            MUSX_ASSERT_IF(!ptr) {
+                throw std::logic_error("Individual position array should not contain nulls!");
+            }
+            if (ptr->staffId != staffId) {
+                return false;
+            }
+            return !measureId || ptr->measureId == measureId.value();
+        });
+    return (it != indivPos.end()) ? *it : nullptr;
+}
+
+MusxInstance<RepeatIndividualPositioning> RepeatBack::getIndividualPositioning(StaffCmper staffId) const
+{
+    return getIndividualPositioningImpl(getDocument()->getOthers()->getArray<RepeatBackIndividualPositioning>(getRequestedPartId(), getCmper()), staffId);
+}
+
 // *****************************
 // ***** RepeatEndingStart *****
 // *****************************
@@ -627,6 +652,16 @@ bool RepeatEndingStart::calcIsOpen() const
         }
     }
     return false;
+}
+
+MusxInstance<RepeatIndividualPositioning> RepeatEndingStart::getIndividualPositioning(StaffCmper staffId) const
+{
+    return getIndividualPositioningImpl(getDocument()->getOthers()->getArray<RepeatEndingStartIndividualPositioning>(getRequestedPartId(), getCmper()), staffId);
+}
+
+MusxInstance<RepeatIndividualPositioning> RepeatEndingStart::getTextIndividualPositioning(StaffCmper staffId) const
+{
+    return getIndividualPositioningImpl(getDocument()->getOthers()->getArray<RepeatEndingTextIndividualPositioning>(getRequestedPartId(), getCmper()), staffId);
 }
 
 // ***********************
@@ -777,6 +812,16 @@ MusxInstance<Staff> StaffUsed::getStaffInstance(MeasCmper measureId, Edu eduPosi
             + " at measure " + std::to_string(measureId) + " eduPosition " + std::to_string(eduPosition));
     }
     return retval;
+}
+
+// ****************************
+// ***** TextRepeatAssign *****
+// ****************************
+
+MusxInstance<RepeatIndividualPositioning> TextRepeatAssign::getIndividualPositioning(StaffCmper staffId) const
+{
+    return getIndividualPositioningImpl(getDocument()->getOthers()->getArray<TextRepeatIndividualPositioning>(getRequestedPartId(), textRepeatId),
+        staffId, static_cast<MeasCmper>(getCmper()));
 }
 
 } // namespace others

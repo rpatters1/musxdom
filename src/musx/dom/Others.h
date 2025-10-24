@@ -2011,6 +2011,8 @@ enum class RepeatTriggerType
     UntilPass               ///< Jump until a specified pass number is reached.
 };
 
+class RepeatIndividualPositioning;
+
 /**
  * @class RepeatBack
  * @brief Represents a repeat-backward marker with positioning and behavior properties.
@@ -2034,13 +2036,20 @@ public:
     Evpu leftVPos{};                ///< The vertical position of the lower left bracket, relative to the default. (xml tag is `<line1>`)
     bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
     bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    bool hidden{};                  ///< Inverse of "Show" checkbox.
     bool resetOnAction{};           ///< "Reset on Repeat Action" (xml tag is `<clrOnChange>`)
     RepeatActionType jumpAction{};  ///< The jump action for this repeat ending. The automatic jump is to the next ending. (xml tag is `<action>`)
     RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
     Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
     Evpu rightHPos{};               ///< The horizontal position of the upper right bracket, relative to the default. (xml tag is `<pos2>`)
     Evpu rightVPos{};               ///< The vertical position of the upper right bracket, relative to the default. (xml tag is `<line2>`)
-    
+
+    /// @brief Returns the @ref RepeatIndividualPositioning record for a given staff.
+    /// Check #individualPlacement to see if this record is used by Finale.
+    /// @param staffId The StaffCmper of the staff to search for individual positioning.
+    /// @return The individual positioning record or nullptr if not found.
+    MusxInstance<RepeatIndividualPositioning> getIndividualPositioning(StaffCmper staffId) const;
+
     constexpr static std::string_view XmlNodeName = "repeatBack"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatBack>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -2069,6 +2078,7 @@ public:
     Evpu leftVPos{};                ///< The vertical position of the lower left bracket, relative to the default. (xml tag is `<line1>`)
     bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
     bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    bool hidden{};                  ///< Inverse of "Show" checkbox.
     RepeatActionType jumpAction{};  ///< The jump action for this repeat ending. The automatic jump is to the next ending. (xml tag is `<action>`)
     RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
                                     ///< For `RepeatEndingStart` this value is always `OnPass`, and it seems to mean that
@@ -2084,9 +2094,20 @@ public:
 
     /// @brief Calculates if the ending is open or closed, based on a number of factors.
     ///
-    /// Openness is a visual feature. If true, it means that the ending bracket has a downward stroke on the right.
+    /// Openness is a visual feature. If true, it means that the ending bracket has no downward stroke on the right.
     bool calcIsOpen() const;
 
+    /// @brief Returns the @ref RepeatIndividualPositioning record for a given staff.
+    /// Check #individualPlacement to see if this record is used by Finale.
+    /// @param staffId The StaffCmper of the staff to search for individual positioning.
+    /// @return The individual positioning record or nullptr if not found.
+    MusxInstance<RepeatIndividualPositioning> getIndividualPositioning(StaffCmper staffId) const;
+
+    /// @brief Returns the @ref RepeatIndividualPositioning record for the text a given staff.
+    /// Check #individualPlacement to see if this record is used by Finale.
+    /// @param staffId The StaffCmper of the staff to search for individual positioning.
+    /// @return The individual positioning record or nullptr if not found.
+    MusxInstance<RepeatIndividualPositioning> getTextIndividualPositioning(StaffCmper staffId) const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
@@ -2140,6 +2161,103 @@ public:
 
     constexpr static std::string_view XmlNodeName = "repeatPassList"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatPassList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+};
+
+/**
+ * @class RepeatIndividualPositioning
+ * @brief Per-instance positioning overrides for repeat elements.
+ *
+ * This class captures individual offsets and visibility for repeat endings and repeat text that can be positioned
+ * per instance on a staff/system.
+ *
+ * This is a base class, and the meaning of the cmper and inci varies according to the subclass.
+ */
+class RepeatIndividualPositioning : public OthersBase
+{
+public:
+    /**
+     * @brief Constructs a RepeatIndividualPositioning object.
+     * @param document Shared pointer to the document.
+     * @param partId The part ID if this positioning is unlinked.
+     * @param shareMode The share mode if this positioning is unlinked.
+     * @param cmper Identifier for this record. (See subclasses.)
+     * @param inci The specific record with this @p cmper.
+     */
+    explicit RepeatIndividualPositioning(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
+
+    StaffCmper staffId{};       ///< Staff for this individual positioning. (xml tag is `<instno>`)
+    MeasCmper  measureId{};     ///< Measure for text repeats, otherwise zero. (xml tag is `<id>`)
+    bool       hidden{};        ///< Overrides the value in the main record. (Ignored for @ref RepeatEndingTextIndividualPositioning)
+    Evpu       x1add{};         ///< Left/start X offset in @ref Evpu.
+    Evpu       y1add{};         ///< Left/start Y offset in @ref Evpu.
+    Evpu       x2add{};         ///< Right/end X offset in @ref Evpu. (Always zero for @ref RepeatEndingTextIndividualPositioning and @ref TextRepeatIndividualPositioning.)
+    Evpu       y2add{};         ///< Right/end Y offset in @ref Evpu. (Always zero for @ref RepeatEndingTextIndividualPositioning and @ref TextRepeatIndividualPositioning.)
+
+    /// Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<RepeatIndividualPositioning>& xmlMappingArray();
+};
+
+/**
+ * @class RepeatBackIndividualPositioning
+ * @brief Per-instance positioning overrides for @ref RepeatBack
+ *
+ * The cmper is the measureId containing the @ref RepeatBack. The inci allows multiple instances per measure.
+ * #RepeatIndividualPositioning::measureId is always zero.
+ */
+class RepeatBackIndividualPositioning : public RepeatIndividualPositioning
+{
+public:
+    using RepeatIndividualPositioning::RepeatIndividualPositioning;
+
+    constexpr static std::string_view XmlNodeName = "separatesRepeatBack"; ///< The XML node name for this type.
+};
+/**
+ * @class RepeatEndingStartIndividualPositioning
+ * @brief Per-instance positioning overrides for the line positioning of @ref RepeatEndingStart
+ *
+ * @note The #hidden property of this class controls the hidden/show state of both the ending line and the ending text.
+ *
+ * The cmper is the measureId containing the @ref RepeatEndingStart. The inci allows multiple instances per measure.
+ * #RepeatIndividualPositioning::measureId is always zero.
+ */
+class RepeatEndingStartIndividualPositioning : public RepeatIndividualPositioning
+{
+public:
+    using RepeatIndividualPositioning::RepeatIndividualPositioning;
+
+    constexpr static std::string_view XmlNodeName = "separatesRepeatEndingLine"; ///< The XML node name for this type.
+};
+
+/**
+ * @class RepeatEndingTextIndividualPositioning
+ * @brief Per-instance positioning overrides for text positioning of @ref RepeatEndingStart
+ *
+ * The cmper is the measureId containing the @ref RepeatEndingStart. The inci allows multiple instances per measure.
+ * #RepeatIndividualPositioning::measureId is always zero.
+ * #RepeatIndividualPositioning::hidden is always false. (The show status of ending text is controlled by @ref RepeatEndingStart or @ref RepeatEndingStartIndividualPositioning.)
+ */
+class RepeatEndingTextIndividualPositioning : public RepeatIndividualPositioning
+{
+public:
+    using RepeatIndividualPositioning::RepeatIndividualPositioning;
+
+    constexpr static std::string_view XmlNodeName = "separatesRepeatEndingText"; ///< The XML node name for this type.
+};
+
+/**
+ * @class TextRepeatIndividualPositioning
+ * @brief Per-instance positioning overrides for @ref TextRepeatDef
+ *
+ * The cmper is the cmper for the corresponding @ref TextRepeatDef. The inci allows multiple instances for this definition
+ * throughout the document. Use #RepeatIndividualPositioning::measureId to find the instance for a specific measure.
+ */
+class TextRepeatIndividualPositioning : public RepeatIndividualPositioning
+{
+public:
+    using RepeatIndividualPositioning::RepeatIndividualPositioning;
+
+    constexpr static std::string_view XmlNodeName = "separatesTextRepeat"; ///< The XML node name for this type.
 };
 
 /**
@@ -2703,6 +2821,7 @@ public:
     Evpu vertPos{};                 ///< The vertical offset from default of the text repeat marker.
     bool individualPlacement{};     ///< "Allow Individual Edits Per Staff" (xml tag is `<indivPlac>`)
     bool topStaffOnly{};            ///< "Show On: Top Staff Only"
+    bool hidden{};                  ///< Inverse of "Show" checkbox
     bool resetOnAction{};           ///< "Reset on Repeat Action" (xml tag is `<clrOnChange>`)
     bool jumpOnMultiplePasses{};    ///< If true, use #TextRepeatDef::passList to get the passes and ignore #passNumber. (xml tag is `<multiActuate>`)
     RepeatActionType jumpAction{};  ///< The jump action for this repeat assignment. (xml tag is `<action>`)
@@ -2710,6 +2829,12 @@ public:
     RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
     bool jumpIfIgnoring{};          ///< "Jump if Ignoring Repeats" (xml tag is `<jmpIgnore>`)
     Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
+
+    /// @brief Returns the @ref RepeatIndividualPositioning record for a given staff.
+    /// Check #individualPlacement to see if this record is used by Finale.
+    /// @param staffId The StaffCmper of the staff to search for individual positioning.
+    /// @return The individual positioning record or nullptr if not found.
+    MusxInstance<RepeatIndividualPositioning> getIndividualPositioning(StaffCmper staffId) const;
 
     constexpr static std::string_view XmlNodeName = "textRepeatAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextRepeatAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

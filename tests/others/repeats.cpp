@@ -38,6 +38,7 @@
                  <pos1>-35</pos1>
                  <indivPlac/>
                  <topStaffOnly/>
+                 <hidden/>
                  <clrOnChange/>
                  <action>jumpRelative</action>
                  <trigger>onPass</trigger>
@@ -61,6 +62,7 @@
      EXPECT_EQ(repeatBack->leftHPos, -35);
      EXPECT_TRUE(repeatBack->individualPlacement);
      EXPECT_TRUE(repeatBack->topStaffOnly);
+     EXPECT_TRUE(repeatBack->hidden);
      EXPECT_TRUE(repeatBack->resetOnAction);
      EXPECT_EQ(repeatBack->jumpAction, others::RepeatActionType::JumpRelative);
      EXPECT_EQ(repeatBack->trigger, others::RepeatTriggerType::OnPass);
@@ -81,6 +83,7 @@ TEST(RepeatEndingStart, Populate)
                 <pos1>39</pos1>
                 <indivPlac/>
                 <topStaffOnly/>
+                <hidden/>
                 <action>jumpAbsolute</action>
                 <trigger>onPass</trigger>
                 <jmpIgnore/>
@@ -112,6 +115,7 @@ TEST(RepeatEndingStart, Populate)
     EXPECT_EQ(repeatEndingStart->leftHPos, 39);
     EXPECT_TRUE(repeatEndingStart->individualPlacement);
     EXPECT_TRUE(repeatEndingStart->topStaffOnly);
+    EXPECT_TRUE(repeatEndingStart->hidden);
     EXPECT_EQ(repeatEndingStart->jumpAction, others::RepeatActionType::JumpAbsolute);
     EXPECT_EQ(repeatEndingStart->trigger, others::RepeatTriggerType::OnPass);
     EXPECT_TRUE(repeatEndingStart->jumpIfIgnoring);
@@ -206,6 +210,8 @@ TEST(TextRepeatAssign, Populate)
                 <repnum>1</repnum>
                 <vertPos>-116</vertPos>
                 <indivPlac/>
+                <topStaffOnly/>
+                <hidden/>
                 <clrOnChange/>
                 <action>jumpAbsolute</action>
                 <autoUpdate/>
@@ -230,6 +236,8 @@ TEST(TextRepeatAssign, Populate)
     EXPECT_EQ(textRepeatAssign->textRepeatId, 1);
     EXPECT_EQ(textRepeatAssign->vertPos, -116);
     EXPECT_TRUE(textRepeatAssign->individualPlacement);
+    EXPECT_TRUE(textRepeatAssign->topStaffOnly);
+    EXPECT_TRUE(textRepeatAssign->hidden);
     EXPECT_TRUE(textRepeatAssign->resetOnAction);
     EXPECT_EQ(textRepeatAssign->jumpAction, others::RepeatActionType::JumpAbsolute);
     EXPECT_TRUE(textRepeatAssign->autoUpdate);
@@ -276,4 +284,101 @@ TEST(StaffListRepeat, Populate)
     ASSERT_GE(scoreForced.size(), 1);
     EXPECT_EQ(names[1]->getCmper(), scoreForced[0]->getCmper()) << "partsForced is for the 2nd staff list";
     musxtest::staffListCheck(names[1]->name, scoreForced[0], { -2, 1 });
+}
+
+TEST(RepeatBack, IndividualPositioning)
+{
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto repeatItem = others->get<others::RepeatBack>(SCORE_PARTID, 4);
+        ASSERT_TRUE(repeatItem);
+        auto indivPos = repeatItem->getIndividualPositioning(1);
+        ASSERT_TRUE(indivPos);
+        EXPECT_TRUE(indivPos->hidden);
+        EXPECT_EQ(indivPos->x1add, 0);
+        EXPECT_EQ(indivPos->y1add, 0);
+        EXPECT_EQ(indivPos->x2add, 0);
+        EXPECT_EQ(indivPos->y2add, 0);
+    }
+    {
+        auto repeatItem = others->get<others::RepeatBack>(SCORE_PARTID, 4);
+        ASSERT_TRUE(repeatItem);
+        auto indivPos = repeatItem->getIndividualPositioning(2);
+        ASSERT_TRUE(indivPos);
+        EXPECT_FALSE(indivPos->hidden);
+        EXPECT_EQ(indivPos->x1add, -36);
+        EXPECT_EQ(indivPos->y1add, 31);
+        EXPECT_EQ(indivPos->x2add, -104);
+        EXPECT_EQ(indivPos->y2add, -31);
+    }
+    {
+        auto repeatItem = others->get<others::RepeatBack>(SCORE_PARTID, 8);
+        ASSERT_TRUE(repeatItem);
+        auto indivPos = repeatItem->getIndividualPositioning(2);
+        EXPECT_FALSE(indivPos);
+    }
+}
+
+TEST(RepeatEndingStart, IndividualPositioning)
+{
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto repeatItem = others->get<others::RepeatEndingStart>(SCORE_PARTID, 4);
+        ASSERT_TRUE(repeatItem);
+        auto indivPos = repeatItem->getIndividualPositioning(1);
+        ASSERT_TRUE(indivPos);
+        EXPECT_TRUE(indivPos->hidden);
+        EXPECT_EQ(indivPos->x1add, -12);
+        EXPECT_EQ(indivPos->y1add, 37);
+        EXPECT_EQ(indivPos->x2add, -244);
+        EXPECT_EQ(indivPos->y2add, 35);
+    }
+    {
+        auto repeatItem = others->get<others::RepeatEndingStart>(SCORE_PARTID, 4);
+        ASSERT_TRUE(repeatItem);
+        auto indivPos = repeatItem->getTextIndividualPositioning(1);
+        ASSERT_TRUE(indivPos);
+        EXPECT_FALSE(indivPos->hidden);
+        EXPECT_EQ(indivPos->x1add, 66);
+        EXPECT_EQ(indivPos->y1add, -53);
+        EXPECT_EQ(indivPos->x2add, 0);
+        EXPECT_EQ(indivPos->y2add, 0);
+    }
+}
+
+TEST(TextRepeatAssign, IndividualPositioning)
+{
+    std::vector<char> transposeXml;
+    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", transposeXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto repeatItem = others->get<others::TextRepeatAssign>(SCORE_PARTID, 2, 0);
+        ASSERT_TRUE(repeatItem);
+        auto indivPos = repeatItem->getIndividualPositioning(2);
+        ASSERT_TRUE(indivPos);
+        EXPECT_TRUE(indivPos->hidden);
+        EXPECT_EQ(indivPos->x1add, -119);
+        EXPECT_EQ(indivPos->y1add, -8);
+        EXPECT_EQ(indivPos->x2add, 0);
+        EXPECT_EQ(indivPos->y2add, 0);
+    }
 }

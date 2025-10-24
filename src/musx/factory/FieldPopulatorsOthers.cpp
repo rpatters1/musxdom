@@ -1072,6 +1072,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatBack, {
     {"line1", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->leftVPos = e->getTextAs<Evpu>(); }},
     {"indivPlac", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->individualPlacement = populateBoolean(e, i); }},
     {"topStaffOnly", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->topStaffOnly = populateBoolean(e, i); }},
+    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->hidden = populateBoolean(e, i); }},
     {"clrOnChange", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->resetOnAction = populateBoolean(e, i); }},
     {"action", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->jumpAction = toEnum<RepeatActionType>(e); }},
     {"trigger", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->trigger = toEnum<RepeatTriggerType>(e); }},
@@ -1088,6 +1089,7 @@ MUSX_XML_ELEMENT_ARRAY(RepeatEndingStart, {
     {"line1", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->leftVPos = e->getTextAs<Evpu>(); }},
     {"indivPlac", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->individualPlacement = populateBoolean(e, i); }},
     {"topStaffOnly", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->topStaffOnly = populateBoolean(e, i); }},
+    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->hidden = populateBoolean(e, i); }},
     {"action", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->jumpAction = toEnum<RepeatActionType>(e); }},
     {"trigger", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->trigger = toEnum<RepeatTriggerType>(e); }},
     {"jmpIgnore", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingStart>& i) { i->jumpIfIgnoring = populateBoolean(e, i); }},
@@ -1099,6 +1101,16 @@ MUSX_XML_ELEMENT_ARRAY(RepeatEndingStart, {
 
 MUSX_XML_ELEMENT_ARRAY(RepeatEndingText, {
     {"rptText", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingText>& i) { i->text = e->getText(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(RepeatIndividualPositioning, {
+    { "instno", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->staffId = e->getTextAs<StaffCmper>(); }},
+    { "id", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->measureId = e->getTextAs<MeasCmper>(); }},
+    { "hidden", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->hidden = populateBoolean(e, i); }},
+    { "x1add", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->x1add = e->getTextAs<Evpu>(); }},
+    { "y1add", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->y1add = e->getTextAs<Evpu>(); }},
+    { "x2add", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->x2add = e->getTextAs<Evpu>(); }},
+    { "y2add", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->y2add = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
@@ -1578,6 +1590,7 @@ MUSX_XML_ELEMENT_ARRAY(TextRepeatAssign, {
     {"vertPos", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->vertPos = e->getTextAs<Evpu>(); }},
     {"indivPlac", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->individualPlacement = populateBoolean(e, i); }},
     {"topStaffOnly", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->topStaffOnly = populateBoolean(e, i); }},
+    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->hidden = populateBoolean(e, i); }},
     {"clrOnChange", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->resetOnAction = populateBoolean(e, i); }},
     {"multiActuate", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->jumpOnMultiplePasses = populateBoolean(e, i); }},
     {"action", [](const XmlElementPtr& e, const std::shared_ptr<TextRepeatAssign>& i) { i->jumpAction = toEnum<RepeatActionType>(e); }},
