@@ -568,8 +568,11 @@ const percussion::PercussionNoteType& PercussionNoteInfo::getNoteType() const
 // ***** RepeatBack *****
 // **********************
 
-static MusxInstance<RepeatIndividualPositioning> getIndividualPositioningImpl(auto indivPos, StaffCmper staffId, std::optional<MeasCmper> measureId = std::nullopt)
+template<typename T>
+static MusxInstance<T> getIndividualPositioningImpl(const MusxInstanceList<T> indivPos, StaffCmper staffId, std::optional<MeasCmper> measureId = std::nullopt)
 {
+    static_assert(std::is_base_of<others::RepeatIndividualPositioning, T>::value, "T must derive from RepeatIndividualPositioning");
+
     const auto it = std::find_if(indivPos.begin(), indivPos.end(),
         [&](const auto& ptr)
         {
