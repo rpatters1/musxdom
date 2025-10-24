@@ -2187,8 +2187,8 @@ public:
     MeasCmper  measureId{};     ///< Measure for text repeats, otherwise zero. (xml tag is `<id>`)
     Evpu       x1add{};         ///< Left/start X offset in @ref Evpu.
     Evpu       y1add{};         ///< Left/start Y offset in @ref Evpu.
-    Evpu       x2add{};         ///< Right/end X offset in @ref Evpu. (Always zero for @ref RepeatEndingText and @ref TextRepeatDef.)
-    Evpu       y2add{};         ///< Right/end Y offset in @ref Evpu. (Always zero for @ref RepeatEndingText and @ref TextRepeatDef.)
+    Evpu       x2add{};         ///< Right/end X offset in @ref Evpu. (Always zero for @ref RepeatEndingTextIndividualPositioning and @ref TextRepeatIndividualPositioning.)
+    Evpu       y2add{};         ///< Right/end Y offset in @ref Evpu. (Always zero for @ref RepeatEndingTextIndividualPositioning and @ref TextRepeatIndividualPositioning.)
     bool       hidden{};        ///< Overrides the value in the main record.
 
     /// Required for musx::factory::FieldPopulator.
@@ -2211,7 +2211,7 @@ public:
 };
 /**
  * @class RepeatEndingStartIndividualPositioning
- * @brief Per-instance positioning overrides for @ref RepeatEndingStart
+ * @brief Per-instance positioning overrides for the line positioning of @ref RepeatEndingStart
  *
  * The cmper is the measureId containing the @ref RepeatEndingStart. The inci allows multiple instances per measure.
  * #RepeatIndividualPositioning::measureId is always zero.
@@ -2226,9 +2226,9 @@ public:
 
 /**
  * @class RepeatEndingTextIndividualPositioning
- * @brief Per-instance positioning overrides for @ref RepeatEndingText
+ * @brief Per-instance positioning overrides for text positioning of @ref RepeatEndingStart
  *
- * The cmper is the measureId containing the @ref RepeatEndingText. The inci allows multiple instances per measure.
+ * The cmper is the measureId containing the @ref RepeatEndingStart. The inci allows multiple instances per measure.
  * #RepeatIndividualPositioning::measureId is always zero.
  */
 class RepeatEndingTextIndividualPositioning : public RepeatIndividualPositioning
