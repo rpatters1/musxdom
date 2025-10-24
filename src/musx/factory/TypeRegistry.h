@@ -279,6 +279,10 @@ using RegisteredOthers = TypeRegistry <
     dom::others::RepeatEndingStart,
     dom::others::RepeatEndingText,
     dom::others::RepeatPassList,
+    dom::others::RepeatBackIndividualPositioning,           // node name is "separatesRepeatBack"
+    dom::others::RepeatEndingStartIndividualPositioning,    // node name is "separatesRepeatEndingLine"
+    dom::others::RepeatEndingTextIndividualPositioning,     // node name is "separatesRepeatEndingText"
+    dom::others::TextRepeatIndividualPositioning,           // node name is "separatesTextRepeat"
     dom::others::ShapeData,
     dom::others::ShapeDef,
     dom::others::ShapeInstructionList,

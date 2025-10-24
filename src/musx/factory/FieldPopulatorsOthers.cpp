@@ -1101,6 +1101,16 @@ MUSX_XML_ELEMENT_ARRAY(RepeatEndingText, {
     {"rptText", [](const XmlElementPtr& e, const std::shared_ptr<RepeatEndingText>& i) { i->text = e->getText(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(RepeatIndividualPositioning, {
+    { "instno", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->staffId = e->getTextAs<StaffCmper>(); }},
+    { "id", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->measureId = e->getTextAs<MeasCmper>(); }},
+    { "x1add", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->x1add = e->getTextAs<Evpu>(); }},
+    { "y1add", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->y1add = e->getTextAs<Evpu>(); }},
+    { "x2add", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->x2add = e->getTextAs<Evpu>(); }},
+    { "y2add", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->y2add = e->getTextAs<Evpu>(); }},
+    { "hidden", [](const XmlElementPtr& e, const std::shared_ptr<RepeatIndividualPositioning>& i) { i->hidden = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(RepeatPassList, {
     {"act", [](const XmlElementPtr& e, const std::shared_ptr<RepeatPassList>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });

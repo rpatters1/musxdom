@@ -2143,6 +2143,100 @@ public:
 };
 
 /**
+ * @class RepeatIndividualPositioning
+ * @brief Per-instance positioning overrides for repeat elements.
+ *
+ * This class captures individual offsets and visibility for repeat endings and repeat text that can be positioned
+ * per instance on a staff/system.
+ *
+ * This is a base class, and the meaning of the cmper and inci varies according to the subclass.
+ */
+class RepeatIndividualPositioning : public OthersBase
+{
+public:
+    /**
+     * @brief Constructs a RepeatIndividualPositioning object.
+     * @param document Shared pointer to the document.
+     * @param partId The part ID if this positioning is unlinked.
+     * @param shareMode The share mode if this positioning is unlinked.
+     * @param cmper Identifier for this record. (See subclasses.)
+     * @param inci The specific record with this @p cmper.
+     */
+    explicit RepeatIndividualPositioning(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
+        : OthersBase(document, partId, shareMode, cmper, inci) {}
+
+    StaffCmper staffId{};       ///< Staff for this individual positioning. (xml tag is `<instno>`)
+    MeasCmper  measureId{};     ///< Measure for text repeats, otherwise zero. (xml tag is `<id>`)
+    Evpu       x1add{};         ///< Left/start X offset in @ref Evpu.
+    Evpu       y1add{};         ///< Left/start Y offset in @ref Evpu.
+    Evpu       x2add{};         ///< Right/end X offset in @ref Evpu. (Always zero for @ref RepeatEndingText and @ref TextRepeatDef.)
+    Evpu       y2add{};         ///< Right/end Y offset in @ref Evpu. (Always zero for @ref RepeatEndingText and @ref TextRepeatDef.)
+    bool       hidden{};        ///< Overrides the value in the main record.
+
+    /// Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<RepeatIndividualPositioning>& xmlMappingArray();
+};
+
+/**
+ * @class RepeatBackIndividualPositioning
+ * @brief Per-instance positioning overrides for @ref RepeatBack
+ *
+ * The cmper is the measureId containing the @ref RepeatBack. The inci allows multiple instances per measure.
+ * #RepeatIndividualPositioning::measureId is always zero.
+ */
+class RepeatBackIndividualPositioning : public RepeatIndividualPositioning
+{
+public:
+    using RepeatIndividualPositioning::RepeatIndividualPositioning;
+
+    constexpr static std::string_view XmlNodeName = "separatesRepeatBack"; ///< The XML node name for this type.
+};
+/**
+ * @class RepeatEndingStartIndividualPositioning
+ * @brief Per-instance positioning overrides for @ref RepeatEndingStart
+ *
+ * The cmper is the measureId containing the @ref RepeatEndingStart. The inci allows multiple instances per measure.
+ * #RepeatIndividualPositioning::measureId is always zero.
+ */
+class RepeatEndingStartIndividualPositioning : public RepeatIndividualPositioning
+{
+public:
+    using RepeatIndividualPositioning::RepeatIndividualPositioning;
+
+    constexpr static std::string_view XmlNodeName = "separatesRepeatEndingLine"; ///< The XML node name for this type.
+};
+
+/**
+ * @class RepeatEndingTextIndividualPositioning
+ * @brief Per-instance positioning overrides for @ref RepeatEndingText
+ *
+ * The cmper is the measureId containing the @ref RepeatEndingText. The inci allows multiple instances per measure.
+ * #RepeatIndividualPositioning::measureId is always zero.
+ */
+class RepeatEndingTextIndividualPositioning : public RepeatIndividualPositioning
+{
+public:
+    using RepeatIndividualPositioning::RepeatIndividualPositioning;
+
+    constexpr static std::string_view XmlNodeName = "separatesRepeatEndingText"; ///< The XML node name for this type.
+};
+
+/**
+ * @class TextRepeatIndividualPositioning
+ * @brief Per-instance positioning overrides for @ref TextRepeatDef
+ *
+ * The cmper is the cmper for the corresponding @ref TextRepeatDef. The inci allows multiple instances for this definition
+ * throughout the document. Use #RepeatIndividualPositioning::measureId to find the instance for a specific measure.
+ */
+class TextRepeatIndividualPositioning : public RepeatIndividualPositioning
+{
+public:
+    using RepeatIndividualPositioning::RepeatIndividualPositioning;
+
+    constexpr static std::string_view XmlNodeName = "separatesTextRepeat"; ///< The XML node name for this type.
+};
+
+/**
  * @class ShapeExpressionDef
  * @brief Stores the properties and behaviors of shape expressions.
  *

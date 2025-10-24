@@ -86,6 +86,30 @@ struct FieldPopulator<NamePositionStyleFull> : private FieldPopulator<NamePositi
 };
 
 template <>
+struct FieldPopulator<RepeatBackIndividualPositioning> : private FieldPopulator<RepeatIndividualPositioning>
+{
+    using FieldPopulator<RepeatIndividualPositioning>::populate;
+};
+
+template <>
+struct FieldPopulator<RepeatEndingStartIndividualPositioning> : private FieldPopulator<RepeatIndividualPositioning>
+{
+    using FieldPopulator<RepeatIndividualPositioning>::populate;
+};
+
+template <>
+struct FieldPopulator<RepeatEndingTextIndividualPositioning> : private FieldPopulator<RepeatIndividualPositioning>
+{
+    using FieldPopulator<RepeatIndividualPositioning>::populate;
+};
+
+template <>
+struct FieldPopulator<TextRepeatIndividualPositioning> : private FieldPopulator<RepeatIndividualPositioning>
+{
+    using FieldPopulator<RepeatIndividualPositioning>::populate;
+};
+
+template <>
 struct FieldPopulator<StaffListCategoryName> : private FieldPopulator<OthersName>
 {
     using FieldPopulator<OthersName>::populate;
