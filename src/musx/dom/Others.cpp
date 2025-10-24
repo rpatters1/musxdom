@@ -23,6 +23,7 @@
 #include <vector>
 #include <cstdlib>
 #include <exception>
+#include <type_traits>
 
 #include "musx/musx.h"
 
