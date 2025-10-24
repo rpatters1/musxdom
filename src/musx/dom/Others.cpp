@@ -564,6 +564,24 @@ const percussion::PercussionNoteType& PercussionNoteInfo::getNoteType() const
     return percussion::getPercussionNoteTypeFromId(getBaseNoteTypeId());
 }
 
+// **********************
+// ***** RepeatBack *****
+// **********************
+
+MusxInstance<RepeatIndividualPositioning> RepeatBack::getIndividualPositioning(StaffCmper staffId)
+{
+    auto invidPos = getDocument()->getOthers()->getArray<RepeatBackIndividualPositioning>(getRequestedPartId(), getCmper());
+    const auto it = std::find_if(invidPos.begin(), invidPos.end(),
+        [&](const auto& ptr)
+        {
+            MUSX_ASSERT_IF(!ptr) {
+                throw std::logic_error("Individual position array should not contain nulls!");
+            }
+            return ptr->staffId == staffId;
+        });
+    return (it != invidPos.end()) ? *it : nullptr;
+}
+
 // *****************************
 // ***** RepeatEndingStart *****
 // *****************************
@@ -627,6 +645,34 @@ bool RepeatEndingStart::calcIsOpen() const
         }
     }
     return false;
+}
+
+MusxInstance<RepeatIndividualPositioning> RepeatEndingStart::getIndividualPositioning(StaffCmper staffId)
+{
+    auto invidPos = getDocument()->getOthers()->getArray<RepeatEndingStartIndividualPositioning>(getRequestedPartId(), getCmper());
+    const auto it = std::find_if(invidPos.begin(), invidPos.end(),
+        [&](const auto& ptr)
+        {
+            MUSX_ASSERT_IF(!ptr) {
+                throw std::logic_error("Individual position array should not contain nulls!");
+            }
+            return ptr->staffId == staffId;
+        });
+    return (it != invidPos.end()) ? *it : nullptr;
+}
+
+MusxInstance<RepeatIndividualPositioning> RepeatEndingStart::getTextIndividualPositioning(StaffCmper staffId)
+{
+    auto invidPos = getDocument()->getOthers()->getArray<RepeatEndingTextIndividualPositioning>(getRequestedPartId(), getCmper());
+    const auto it = std::find_if(invidPos.begin(), invidPos.end(),
+        [&](const auto& ptr)
+        {
+            MUSX_ASSERT_IF(!ptr) {
+                throw std::logic_error("Individual position array should not contain nulls!");
+            }
+            return ptr->staffId == staffId;
+        });
+    return (it != invidPos.end()) ? *it : nullptr;
 }
 
 // ***********************
@@ -777,6 +823,24 @@ MusxInstance<Staff> StaffUsed::getStaffInstance(MeasCmper measureId, Edu eduPosi
             + " at measure " + std::to_string(measureId) + " eduPosition " + std::to_string(eduPosition));
     }
     return retval;
+}
+
+// ****************************
+// ***** TextRepeatAssign *****
+// ****************************
+
+MusxInstance<RepeatIndividualPositioning> TextRepeatAssign::getIndividualPositioning(StaffCmper staffId)
+{
+    auto invidPos = getDocument()->getOthers()->getArray<TextRepeatIndividualPositioning>(getRequestedPartId(), textRepeatId);
+    const auto it = std::find_if(invidPos.begin(), invidPos.end(),
+        [&](const auto& ptr)
+        {
+            MUSX_ASSERT_IF(!ptr) {
+                throw std::logic_error("Individual position array should not contain nulls!");
+            }
+            return ptr->staffId == staffId && ptr->measureId == static_cast<MeasCmper>(getCmper());
+        });
+    return (it != invidPos.end()) ? *it : nullptr;
 }
 
 } // namespace others

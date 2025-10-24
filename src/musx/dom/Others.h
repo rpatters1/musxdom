@@ -2011,6 +2011,8 @@ enum class RepeatTriggerType
     UntilPass               ///< Jump until a specified pass number is reached.
 };
 
+class RepeatIndividualPositioning;
+
 /**
  * @class RepeatBack
  * @brief Represents a repeat-backward marker with positioning and behavior properties.
@@ -2040,7 +2042,13 @@ public:
     Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
     Evpu rightHPos{};               ///< The horizontal position of the upper right bracket, relative to the default. (xml tag is `<pos2>`)
     Evpu rightVPos{};               ///< The vertical position of the upper right bracket, relative to the default. (xml tag is `<line2>`)
-    
+
+    /// @brief Returns the @ref RepeatIndividualPositioning record for a given staff.
+    /// Check #individualPlacement to see if this record is used by Finale.
+    /// @param staffId The StaffCmper of the staff to search for individual positioning.
+    /// @return The individual positioning record or nullptr if not found.
+    MusxInstance<RepeatIndividualPositioning> getIndividualPositioning(StaffCmper staffId);
+
     constexpr static std::string_view XmlNodeName = "repeatBack"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatBack>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -2084,9 +2092,19 @@ public:
 
     /// @brief Calculates if the ending is open or closed, based on a number of factors.
     ///
-    /// Openness is a visual feature. If true, it means that the ending bracket has a downward stroke on the right.
+    /// Openness is a visual feature. If true, it means that the ending bracket has no downward stroke on the right.
     bool calcIsOpen() const;
 
+    /// @brief Returns the @ref RepeatIndividualPositioning record for a given staff.
+    /// Check #individualPlacement to see if this record is used by Finale.
+    /// @param staffId The StaffCmper of the staff to search for individual positioning.
+    /// @return The individual positioning record or nullptr if not found.
+    MusxInstance<RepeatIndividualPositioning> getIndividualPositioning(StaffCmper staffId);
+
+    /// @brief Returns the @ref RepeatIndividualPositioning record for the text a given staff.
+    /// @param staffId The StaffCmper of the staff to search for individual positioning.
+    /// @return The individual positioning record or nullptr if not found.
+    MusxInstance<RepeatIndividualPositioning> getTextIndividualPositioning(StaffCmper staffId);
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
@@ -2804,6 +2822,12 @@ public:
     RepeatTriggerType trigger{};    ///< The condition that triggers the #jumpAction.
     bool jumpIfIgnoring{};          ///< "Jump if Ignoring Repeats" (xml tag is `<jmpIgnore>`)
     Cmper staffList{};              ///< If non-zero, specifies a staff list for which staves to show the ending.
+
+    /// @brief Returns the @ref RepeatIndividualPositioning record for a given staff.
+    /// Check #individualPlacement to see if this record is used by Finale.
+    /// @param staffId The StaffCmper of the staff to search for individual positioning.
+    /// @return The individual positioning record or nullptr if not found.
+    MusxInstance<RepeatIndividualPositioning> getIndividualPositioning(StaffCmper staffId);
 
     constexpr static std::string_view XmlNodeName = "textRepeatAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextRepeatAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
