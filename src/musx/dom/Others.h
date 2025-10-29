@@ -2109,6 +2109,10 @@ public:
     /// @return The individual positioning record or nullptr if not found.
     MusxInstance<RepeatIndividualPositioning> getTextIndividualPositioning(StaffCmper staffId) const;
 
+    /// @brief Taking into account all options, creates a string containing the text for this ending. The font for this text
+    /// is given by #options::FontOptions::FontType::Ending.
+    std::string createEndingText() const;
+
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
