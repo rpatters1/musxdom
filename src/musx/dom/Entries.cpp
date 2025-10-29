@@ -217,7 +217,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
 
     // if the actual duration of the tuplet is less than a half, at least one beam must be detached.
     if (tuplet->calcReferenceDuration().calcEduDuration() < Edu(NoteType::Half)) {
-        auto [targetNoteType, _] = calcNoteInfoFromEdu(targetNotated);
+        auto targetNoteType = std::get<0>(calcNoteInfoFromEdu(targetNotated)); // C++17 complains about structured bindings captured in a lamda.
         auto checkBeamExt = [&](const MusxInstance<details::BeamExtension>& beamExt) -> bool {
             return beamExt && (beamExt->mask >= unsigned(targetNoteType)) && beamExt->leftOffset && beamExt->rightOffset;
         };
