@@ -1,5 +1,7 @@
 var NAVTREEINDEX26 =
 {
+"classmusx_1_1factory_1_1PoolFactory.html":[1,0,1,1,8],
+"classmusx_1_1factory_1_1TextsFactory.html":[1,0,1,1,9],
 "classmusx_1_1factory_1_1TextsFactory.html":[2,0,1,1,9],
 "classmusx_1_1factory_1_1TypeRegistry.html":[1,0,1,1,10],
 "classmusx_1_1factory_1_1TypeRegistry.html":[2,0,1,1,10],
@@ -247,7 +249,5 @@ var NAVTREEINDEX26 =
 "functions_func_f.html":[2,3,1,5],
 "functions_func_g.html":[2,3,1,6],
 "functions_func_h.html":[2,3,1,7],
-"functions_func_i.html":[2,3,1,8],
-"functions_func_k.html":[2,3,1,9],
-"functions_func_l.html":[2,3,1,10]
+"functions_func_i.html":[2,3,1,8]
 };

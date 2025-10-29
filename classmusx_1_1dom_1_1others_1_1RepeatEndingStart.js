@@ -3,6 +3,7 @@ var classmusx_1_1dom_1_1others_1_1RepeatEndingStart =
     [ "RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#af8478fb7f0350b4ff8a7931fc421ed8d", null ],
     [ "calcEndingLength", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#ae5fe3bb711966475b784c1ad13d80e11", null ],
     [ "calcIsOpen", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a6618cedd712507d7c23636c548e20afe", null ],
+    [ "createEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a2a01ebc445e42d4b597150af15908654", null ],
     [ "getIndividualPositioning", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a4ae78f007ba53f6937697b1e3cd48984", null ],
     [ "getTextIndividualPositioning", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a9c5739fe6d953508f13d76895cd929cb", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#ab11b6f79e6c2685f965e5e409494e63e", null ],

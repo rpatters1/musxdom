@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"functions_func_k.html":[2,3,1,9],
+"functions_func_l.html":[2,3,1,10],
 "functions_func_m.html":[2,3,1,11],
 "functions_func_n.html":[2,3,1,12],
 "functions_func_o.html":[2,3,1,13],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "namespacemusx_1_1dom.html#af72aa98bddad049ec18ef7858aea2168":[1,0,1,0,47],
 "namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69":[1,0,1,0,62],
 "namespacemusx_1_1dom_1_1details.html":[1,0,1,0,0],
-"namespacemusx_1_1dom_1_1header.html":[1,0,1,0,1],
-"namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391":[1,0,1,0,1,5],
-"namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391a1748c0644a50090814d3e170723ccc5c":[1,0,1,0,1,5,0]
+"namespacemusx_1_1dom_1_1header.html":[1,0,1,0,1]
 };
