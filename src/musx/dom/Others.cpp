@@ -668,6 +668,29 @@ MusxInstance<RepeatIndividualPositioning> RepeatEndingStart::getTextIndividualPo
     return getIndividualPositioningImpl(getDocument()->getOthers()->getArray<RepeatEndingTextIndividualPositioning>(getRequestedPartId(), getCmper()), staffId);
 }
 
+std::string RepeatEndingStart::createEndingText() const
+{
+    if (auto userText = getDocument()->getOthers()->get<RepeatEndingText>(getRequestedPartId(), getCmper())) {
+        return userText->text;
+    }
+    std::string result;
+    if (auto passList = getDocument()->getOthers()->get<RepeatPassList>(getRequestedPartId(), getCmper())) {
+        for (int pass : passList->values) {
+            if (!result.empty()) {
+                result += ',';
+                result += ' ';
+            }
+            result += std::to_string(pass);
+        }
+        if (auto repeatOptions = getDocument()->getOptions()->get<options::RepeatOptions>()) {
+            if (repeatOptions->addPeriod) {
+                result += '.';
+            }
+        }
+    }
+    return result;
+}
+
 // ***********************
 // ***** StaffSystem *****
 // ***********************

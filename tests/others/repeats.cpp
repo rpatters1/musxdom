@@ -362,9 +362,9 @@ TEST(RepeatEndingStart, IndividualPositioning)
 
 TEST(TextRepeatAssign, IndividualPositioning)
 {
-    std::vector<char> transposeXml;
-    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", transposeXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();
@@ -380,5 +380,53 @@ TEST(TextRepeatAssign, IndividualPositioning)
         EXPECT_EQ(indivPos->y1add, -8);
         EXPECT_EQ(indivPos->x2add, 0);
         EXPECT_EQ(indivPos->y2add, 0);
+    }
+}
+
+TEST(RepeatEndingStart, EndingText)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "endingtext.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto repeatEnding = others->get<others::RepeatEndingStart>(SCORE_PARTID, 5);
+        ASSERT_TRUE(repeatEnding);
+        EXPECT_EQ(repeatEnding->createEndingText(), "1, 2, 3, 6.");
+    }
+    {
+        auto repeatEnding = others->get<others::RepeatEndingStart>(SCORE_PARTID, 6);
+        ASSERT_TRUE(repeatEnding);
+        EXPECT_EQ(repeatEnding->createEndingText(), "2.");
+    }
+    {
+        auto repeatEnding = others->get<others::RepeatEndingStart>(SCORE_PARTID, 9);
+        ASSERT_TRUE(repeatEnding);
+        EXPECT_EQ(repeatEnding->createEndingText(), "user text");
+    }
+    
+    auto repeatOptions = doc->getOptions()->get<options::RepeatOptions>();
+    ASSERT_TRUE(repeatOptions);
+    auto mutableOpts = const_cast<options::RepeatOptions*>(repeatOptions.get());
+    mutableOpts->addPeriod = false;
+
+    {
+        auto repeatEnding = others->get<others::RepeatEndingStart>(SCORE_PARTID, 5);
+        ASSERT_TRUE(repeatEnding);
+        EXPECT_EQ(repeatEnding->createEndingText(), "1, 2, 3, 6");
+    }
+    {
+        auto repeatEnding = others->get<others::RepeatEndingStart>(SCORE_PARTID, 6);
+        ASSERT_TRUE(repeatEnding);
+        EXPECT_EQ(repeatEnding->createEndingText(), "2");
+    }
+    {
+        auto repeatEnding = others->get<others::RepeatEndingStart>(SCORE_PARTID, 9);
+        ASSERT_TRUE(repeatEnding);
+        EXPECT_EQ(repeatEnding->createEndingText(), "user text");
     }
 }
