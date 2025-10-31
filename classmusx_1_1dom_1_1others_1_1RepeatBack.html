@@ -128,6 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed8c34aad223624102672f2f6779adfb" id="r_aed8c34aad223624102672f2f6779adfb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatBack.html#aed8c34aad223624102672f2f6779adfb">getIndividualPositioning</a> (<a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId) const</td></tr>
 <tr class="memdesc:aed8c34aad223624102672f2f6779adfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatIndividualPositioning.html">RepeatIndividualPositioning</a> record for a given staff. Check <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatBack.html#aeb80d596e4f1dd32398ad9686dea5a41" title="&quot;Allow Individual Edits Per Staff&quot; (xml tag is &lt;indivPlac&gt;)">individualPlacement</a> to see if this record is used by Finale.  <br /></td></tr>
 <tr class="separator:aed8c34aad223624102672f2f6779adfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab836c97b4011601012c038a3a7880faf" id="r_ab836c97b4011601012c038a3a7880faf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom_1_1others.html#ac9d5626156658b3ae2d3313963311a37">RepeatStaffListSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatBack.html#ab836c97b4011601012c038a3a7880faf">createStaffListSet</a> () const</td></tr>
+<tr class="memdesc:ab836c97b4011601012c038a3a7880faf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set.  <br /></td></tr>
+<tr class="separator:ab836c97b4011601012c038a3a7880faf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1OthersBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1OthersBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">musx::dom::OthersBase</a></td></tr>
 <tr class="memitem:aeea2dce2bc876010d075adcba280c1ab inherit pub_methods_classmusx_1_1dom_1_1OthersBase" id="r_aeea2dce2bc876010d075adcba280c1ab"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>OthersBase</b> (const <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">OthersBase</a> &amp;)=default</td></tr>
@@ -295,6 +298,26 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <p>The cmper is the cmper of the <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a> that has this item.</p>
 <p>This class is identified by the XML node name "repeatBack". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab836c97b4011601012c038a3a7880faf" name="ab836c97b4011601012c038a3a7880faf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab836c97b4011601012c038a3a7880faf">&#9670;&#160;</a></span>createStaffListSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom_1_1others.html#ac9d5626156658b3ae2d3313963311a37">RepeatStaffListSet</a> musx::dom::others::RepeatBack::createStaffListSet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set. </p>
+<dl class="section return"><dt>Returns</dt><dd>The created staff list set. If <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatBack.html#aa95e1f778d07f8d0a39d1c31ff32a9d7" title="If non-zero, specifies a staff list for which staves to show the ending.">staffList</a> is zero, it will never find any staves for the staff list. </dd></dl>
+
+</div>
+</div>
 <a id="aed8c34aad223624102672f2f6779adfb" name="aed8c34aad223624102672f2f6779adfb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aed8c34aad223624102672f2f6779adfb">&#9670;&#160;</a></span>getIndividualPositioning()</h2>
 

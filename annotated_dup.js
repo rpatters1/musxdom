@@ -191,6 +191,7 @@ var annotated_dup =
           [ "StaffListRepeatPartsForced", "classmusx_1_1dom_1_1others_1_1StaffListRepeatPartsForced.html", null ],
           [ "StaffListRepeatScore", "classmusx_1_1dom_1_1others_1_1StaffListRepeatScore.html", null ],
           [ "StaffListRepeatScoreForced", "classmusx_1_1dom_1_1others_1_1StaffListRepeatScoreForced.html", null ],
+          [ "StaffListSet", "classmusx_1_1dom_1_1others_1_1StaffListSet.html", "classmusx_1_1dom_1_1others_1_1StaffListSet" ],
           [ "StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", "classmusx_1_1dom_1_1others_1_1StaffStyle" ],
           [ "StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign" ],
           [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", "classmusx_1_1dom_1_1others_1_1StaffSystem" ],

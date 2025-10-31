@@ -142,6 +142,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>calcEndingLength</b> (
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>createEndingText</b> () const</td></tr>
 <tr class="memdesc:a2a01ebc445e42d4b597150af15908654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Taking into account all options, creates a string containing the text for this ending. The font for this text is given by <a class="el" href="classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa753c34bcdd8eac2abb9042f7a93c2e75" title="Repeat ending number font.">options::FontOptions::FontType::Ending</a>. <br /></td></tr>
 <tr class="separator:a2a01ebc445e42d4b597150af15908654"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abee241d2b994f42f031279c4d0f4116f" id="r_abee241d2b994f42f031279c4d0f4116f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom_1_1others.html#ac9d5626156658b3ae2d3313963311a37">RepeatStaffListSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#abee241d2b994f42f031279c4d0f4116f">createStaffListSet</a> () const</td></tr>
+<tr class="memdesc:abee241d2b994f42f031279c4d0f4116f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set.  <br /></td></tr>
+<tr class="separator:abee241d2b994f42f031279c4d0f4116f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab11b6f79e6c2685f965e5e409494e63e" id="r_ab11b6f79e6c2685f965e5e409494e63e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#ab11b6f79e6c2685f965e5e409494e63e">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:ab11b6f79e6c2685f965e5e409494e63e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:ab11b6f79e6c2685f965e5e409494e63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -334,6 +337,26 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 <p>Calculates if the ending is open or closed, based on a number of factors. </p>
 <p>Openness is a visual feature. If true, it means that the ending bracket has no downward stroke on the right. </p>
+
+</div>
+</div>
+<a id="abee241d2b994f42f031279c4d0f4116f" name="abee241d2b994f42f031279c4d0f4116f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abee241d2b994f42f031279c4d0f4116f">&#9670;&#160;</a></span>createStaffListSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom_1_1others.html#ac9d5626156658b3ae2d3313963311a37">RepeatStaffListSet</a> musx::dom::others::RepeatEndingStart::createStaffListSet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set. </p>
+<dl class="section return"><dt>Returns</dt><dd>The created staff list set. If <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a9615966cecde39ed29399a8e305f4285" title="If non-zero, specifies a staff list for which staves to show the ending.">staffList</a> is zero, it will never find any staves for the staff list. </dd></dl>
 
 </div>
 </div>

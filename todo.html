@@ -102,32 +102,34 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dd><a class="anchor" id="_todo000001"></a>Eventually calcDisplaysAsRest should take into account voiced parts.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#ad766742621a9d1e43a68c2779d30d7c8">musx::dom::others::PartDefinition::getNameRawTextCtx</a>  () const</dt>
 <dd><a class="anchor" id="_todo000003"></a>perhaps additional logic as in getName, but not until something is broken.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html#a881c319547c5309dda20863a1846a1b3">musx::dom::others::StaffListSet&lt; ScoreList, PartsList, ScoreForcedList, PartsForcedList &gt;::contains</a>  (StaffCmper staffId, const MusxInstanceList&lt; StaffUsed &gt; &amp;systemStaves, bool isHidden=false) const noexcept</dt>
+<dd><a class="anchor" id="_todo000004"></a>It may be necessary to add some fuzzy logic around StaffGroup here, at least for category staff lists. Finale includes a staff if it is the top staff in a group, when the top staff of a group is included. We defer this to another day.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a3a95749410ef64c078d957fc4d659900">musx::util::Fraction::Fraction</a>  (int num=0, int den=1)</dt>
-<dd><a class="anchor" id="_todo000004"></a>Make this constructor constexpr when we drop C++17 support.  </dd>
+<dd><a class="anchor" id="_todo000005"></a>Make this constructor constexpr when we drop C++17 support.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a924ed5b847651515fd88faa9862704c5">musx::util::Fraction::fromEdu</a>  (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5" title="&quot;Enigma Durational Units&quot; value (1024 per quarter note)">dom::Edu</a> edu)</dt>
-<dd><a class="anchor" id="_todo000005"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a01e484cf2a0f4174404458089c5f611d">musx::util::Fraction::fromPercent</a>  (int percent)</dt>
 <dd><a class="anchor" id="_todo000006"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a01e484cf2a0f4174404458089c5f611d">musx::util::Fraction::fromPercent</a>  (int percent)</dt>
+<dd><a class="anchor" id="_todo000007"></a>Make this function constexpr when we drop C++17 support.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a828c64522d3fbb26ceda512df4aa792d">musx::util::Fraction::operator*</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other) const</dt>
-<dd><a class="anchor" id="_todo000011"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#aa6c87ea2e1a5319d6f9d6ecf6bbf516c">musx::util::Fraction::operator*=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
-<dd><a class="anchor" id="_todo000015"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a2b0737b8a8a7e9fc91747cc60ef1b896">musx::util::Fraction::operator+</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other) const</dt>
-<dd><a class="anchor" id="_todo000009"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a77206cf4e6af1031bd4e53e004926914">musx::util::Fraction::operator+=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
-<dd><a class="anchor" id="_todo000013"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ac959f8f7471fb6526a1b05da660a25ff">musx::util::Fraction::operator-</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other) const</dt>
-<dd><a class="anchor" id="_todo000010"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#aae1c426c8783355ce98760a5756fef92">musx::util::Fraction::operator-=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
-<dd><a class="anchor" id="_todo000014"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ae099c1bdde8f857a3542fcf812fa3b4c">musx::util::Fraction::operator/</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other) const</dt>
 <dd><a class="anchor" id="_todo000012"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ae3505b301fa50b2ada26a6345a871e1c">musx::util::Fraction::operator/=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#aa6c87ea2e1a5319d6f9d6ecf6bbf516c">musx::util::Fraction::operator*=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
 <dd><a class="anchor" id="_todo000016"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a2b0737b8a8a7e9fc91747cc60ef1b896">musx::util::Fraction::operator+</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other) const</dt>
+<dd><a class="anchor" id="_todo000010"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a77206cf4e6af1031bd4e53e004926914">musx::util::Fraction::operator+=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
+<dd><a class="anchor" id="_todo000014"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ac959f8f7471fb6526a1b05da660a25ff">musx::util::Fraction::operator-</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other) const</dt>
+<dd><a class="anchor" id="_todo000011"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#aae1c426c8783355ce98760a5756fef92">musx::util::Fraction::operator-=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
+<dd><a class="anchor" id="_todo000015"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ae099c1bdde8f857a3542fcf812fa3b4c">musx::util::Fraction::operator/</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other) const</dt>
+<dd><a class="anchor" id="_todo000013"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ae3505b301fa50b2ada26a6345a871e1c">musx::util::Fraction::operator/=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
+<dd><a class="anchor" id="_todo000017"></a>Make this function constexpr when we drop C++17 support.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a451dee1ae0c731665ef51318e3613e95">musx::util::Fraction::reciprocal</a>  () const</dt>
-<dd><a class="anchor" id="_todo000008"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dd><a class="anchor" id="_todo000009"></a>Make this function constexpr when we drop C++17 support.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a13dccd0b177ec18d649c0457efaa2a4e">musx::util::Fraction::remainder</a>  () const</dt>
-<dd><a class="anchor" id="_todo000007"></a>Make this function constexpr when we drop C++17 support. </dd>
+<dd><a class="anchor" id="_todo000008"></a>Make this function constexpr when we drop C++17 support. </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

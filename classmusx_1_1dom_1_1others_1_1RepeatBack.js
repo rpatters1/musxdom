@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1RepeatBack =
 [
     [ "RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#aeabe38945b7ff7f56111051f19d90aae", null ],
+    [ "createStaffListSet", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#ab836c97b4011601012c038a3a7880faf", null ],
     [ "getIndividualPositioning", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#aed8c34aad223624102672f2f6779adfb", null ],
     [ "hidden", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#a9485423359008d12830cebc4bc4ed618", null ],
     [ "individualPlacement", "classmusx_1_1dom_1_1others_1_1RepeatBack.html#aeb80d596e4f1dd32398ad9686dea5a41", null ],

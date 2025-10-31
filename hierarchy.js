@@ -372,6 +372,7 @@ var hierarchy =
     ] ],
     [ "musx::dom::others::ShapeInstruction", "structmusx_1_1dom_1_1others_1_1ShapeInstruction.html", null ],
     [ "musx::dom::details::StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html", null ],
+    [ "musx::dom::others::StaffListSet< ScoreList, PartsList, ScoreForcedList, PartsForcedList >", "classmusx_1_1dom_1_1others_1_1StaffListSet.html", null ],
     [ "musx::dom::options::StemOptions::StemConnection", "classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html", null ],
     [ "musx::dom::others::KeyMapArray::StepElement", "classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html", null ],
     [ "musx::dom::others::FretInstrument::StringInfo", "classmusx_1_1dom_1_1others_1_1FretInstrument_1_1StringInfo.html", null ],

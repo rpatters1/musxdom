@@ -123,6 +123,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>OthersArray</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:a97a0e9923a385187b52a76ae6f0a30d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a97a0e9923a385187b52a76ae6f0a30d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9dc09d3948ff1ed73a4fa64ebe67ebc" id="r_ac9dc09d3948ff1ed73a4fa64ebe67ebc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1OthersArray.html#ac9dc09d3948ff1ed73a4fa64ebe67ebc">containsValue</a> (const ElementType &amp;value) const noexcept</td></tr>
+<tr class="memdesc:ac9dc09d3948ff1ed73a4fa64ebe67ebc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the array contains the specified value.  <br /></td></tr>
+<tr class="separator:ac9dc09d3948ff1ed73a4fa64ebe67ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e40313b4241a7972d4e040d8eb7d1af" id="r_a3e40313b4241a7972d4e040d8eb7d1af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1OthersArray.html#a3e40313b4241a7972d4e040d8eb7d1af">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a3e40313b4241a7972d4e040d8eb7d1af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override of <a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f" title="Allows a class to determine if it has been properly contructed by the factory and fix issues that it ...">Base::integrityCheck</a>.  <br /></td></tr>
 <tr class="separator:a3e40313b4241a7972d4e040d8eb7d1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -234,6 +237,42 @@ class musx::dom::OthersArray&lt; ElementType, REQUIRED_SIZE &gt;</div><p>Templat
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac9dc09d3948ff1ed73a4fa64ebe67ebc" name="ac9dc09d3948ff1ed73a4fa64ebe67ebc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9dc09d3948ff1ed73a4fa64ebe67ebc">&#9670;&#160;</a></span>containsValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ElementType , size_t REQUIRED_SIZE = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classmusx_1_1dom_1_1OthersArray.html">musx::dom::OthersArray</a>&lt; ElementType, REQUIRED_SIZE &gt;::containsValue </td>
+          <td>(</td>
+          <td class="paramtype">const ElementType &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the array contains the specified value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a3e40313b4241a7972d4e040d8eb7d1af" name="a3e40313b4241a7972d4e040d8eb7d1af"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3e40313b4241a7972d4e040d8eb7d1af">&#9670;&#160;</a></span>integrityCheck()</h2>
 

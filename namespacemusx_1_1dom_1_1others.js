@@ -79,6 +79,7 @@ var namespacemusx_1_1dom_1_1others =
     [ "StaffListRepeatPartsForced", "classmusx_1_1dom_1_1others_1_1StaffListRepeatPartsForced.html", null ],
     [ "StaffListRepeatScore", "classmusx_1_1dom_1_1others_1_1StaffListRepeatScore.html", null ],
     [ "StaffListRepeatScoreForced", "classmusx_1_1dom_1_1others_1_1StaffListRepeatScoreForced.html", null ],
+    [ "StaffListSet", "classmusx_1_1dom_1_1others_1_1StaffListSet.html", "classmusx_1_1dom_1_1others_1_1StaffListSet" ],
     [ "StaffStyle", "classmusx_1_1dom_1_1others_1_1StaffStyle.html", "classmusx_1_1dom_1_1others_1_1StaffStyle" ],
     [ "StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign" ],
     [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", "classmusx_1_1dom_1_1others_1_1StaffSystem" ],
@@ -97,6 +98,8 @@ var namespacemusx_1_1dom_1_1others =
     [ "TimeCompositeUpper", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper" ],
     [ "TonalCenterFlats", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html", "classmusx_1_1dom_1_1others_1_1TonalCenterFlats" ],
     [ "TonalCenterSharps", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html", "classmusx_1_1dom_1_1others_1_1TonalCenterSharps" ],
+    [ "CategoryStaffListSet", "namespacemusx_1_1dom_1_1others.html#a8c831340a452cb492cff24c36447e317", null ],
+    [ "RepeatStaffListSet", "namespacemusx_1_1dom_1_1others.html#ac9d5626156658b3ae2d3313963311a37", null ],
     [ "HorizontalMeasExprAlign", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8e", [
       [ "LeftBarline", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea5398156d08432d407c11a5f8c200caa4", null ],
       [ "Manual", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eae1ba155a9f2e8c3be94020eef32a0301", null ],

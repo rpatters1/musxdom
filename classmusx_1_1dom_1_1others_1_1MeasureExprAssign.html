@@ -171,6 +171,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeb5727858ee3ab49a03814b3663c559f" id="r_aeb5727858ee3ab49a03814b3663c559f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html">ShapeExpressionDef</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeb5727858ee3ab49a03814b3663c559f">getShapeExpression</a> () const</td></tr>
 <tr class="memdesc:aeb5727858ee3ab49a03814b3663c559f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the assigned shape expression.  <br /></td></tr>
 <tr class="separator:aeb5727858ee3ab49a03814b3663c559f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6cfc0be17f9e8e6be2f683884794da1" id="r_aa6cfc0be17f9e8e6be2f683884794da1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom_1_1others.html#a8c831340a452cb492cff24c36447e317">CategoryStaffListSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa6cfc0be17f9e8e6be2f683884794da1">createStaffListSet</a> () const</td></tr>
+<tr class="memdesc:aa6cfc0be17f9e8e6be2f683884794da1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set.  <br /></td></tr>
+<tr class="separator:aa6cfc0be17f9e8e6be2f683884794da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7892dab985b7a36570cccc10e40e196c" id="r_a7892dab985b7a36570cccc10e40e196c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a7892dab985b7a36570cccc10e40e196c">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a7892dab985b7a36570cccc10e40e196c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a7892dab985b7a36570cccc10e40e196c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -448,6 +451,26 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa6cfc0be17f9e8e6be2f683884794da1" name="aa6cfc0be17f9e8e6be2f683884794da1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6cfc0be17f9e8e6be2f683884794da1">&#9670;&#160;</a></span>createStaffListSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom_1_1others.html#a8c831340a452cb492cff24c36447e317">CategoryStaffListSet</a> musx::dom::others::MeasureExprAssign::createStaffListSet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set. </p>
+<dl class="section return"><dt>Returns</dt><dd>The created staff list set. If <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a403a1bdaab1e95edb4d13f2ecb6d7f87">staffList</a> is zero, it will never find any staves for the staff list. </dd></dl>
+
+</div>
+</div>
 <a id="aeb5727858ee3ab49a03814b3663c559f" name="aeb5727858ee3ab49a03814b3663c559f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb5727858ee3ab49a03814b3663c559f">&#9670;&#160;</a></span>getShapeExpression()</h2>
 
