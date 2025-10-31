@@ -1937,6 +1937,7 @@ public:
     Evpu yStart{};                         ///< Vertical start position of the tie.
     Evpu yEnd{};                           ///< Vertical end position of the tie.
     bool outerLocal{};                     ///< Local setting for "Outer Tie".
+    bool outerOn{};                        ///< Enable "Outer" placement.
     bool afterSingleDotLocal{};            ///< Local setting for "After Single Dot".
     bool afterSingleDotOn{};               ///< Enable "After Single Dot".
     bool afterMultiDotsLocal{};            ///< Local setting for "After Multiple Dots".

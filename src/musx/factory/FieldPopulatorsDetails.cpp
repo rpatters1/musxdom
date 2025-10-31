@@ -459,6 +459,7 @@ MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
     {"yStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yStart = e->getTextAs<Evpu>(); }},
     {"yEnd", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yEnd = e->getTextAs<Evpu>(); }},
     {"outerLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->outerLocal = populateBoolean(e, i); }},
+    {"outerOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->outerOn = populateBoolean(e, i); }},
     {"afterSingleDotLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotLocal = populateBoolean(e, i); }},
     {"afterSingleDotOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotOn = populateBoolean(e, i); }},
     {"afterMultiDotsLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsLocal = populateBoolean(e, i); }},
