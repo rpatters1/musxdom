@@ -304,6 +304,8 @@ TEST(RepeatStaffListSet, TestContains)
         EXPECT_FALSE(staffListSet.contains(2, scrollViewStaves, scrollViewStaves.getStaffInstanceAtIndex(1, 2)->hideRepeats));
         EXPECT_TRUE(staffListSet.contains(3, scrollViewStaves, scrollViewStaves.getStaffInstanceAtIndex(2, 2)->hideRepeats));
     }
+
+    /// @todo more tests
 }
 
 TEST(RepeatBack, IndividualPositioning)

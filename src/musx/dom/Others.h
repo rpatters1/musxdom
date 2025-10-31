@@ -70,7 +70,10 @@ class StaffListRepeatPartsForced;
 template<class ScoreList, class PartsList, class ScoreForcedList, class PartsForcedList>
 class StaffListSet;
 
+/// @brief The type of @ref StaffListSet used by @ref MarkingCategory.
 using CategoryStaffListSet = StaffListSet<StaffListCategoryScore, StaffListCategoryParts, void, void>;
+
+/// @brief The type of @ref StaffListSet used by @ref RepeatBack, @ref RepeatEndingStart, and @ref TextRepeatAssign.
 using RepeatStaffListSet = StaffListSet<StaffListRepeatScore, StaffListRepeatParts, StaffListRepeatScoreForced, StaffListRepeatPartsForced>;
 
 /**
