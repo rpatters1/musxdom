@@ -597,6 +597,7 @@ TEST(TieAlterTest, PopulateFields)
       <xStart>9</xStart>
       <xEnd>-9</xEnd>
       <outerLocal/>
+      <outerOn/>
       <afterSingleDotLocal/>
       <afterSingleDotOn/>
       <afterMultiDotsLocal/>
@@ -639,6 +640,7 @@ TEST(TieAlterTest, PopulateFields)
     EXPECT_EQ(tieAlter->yEnd, Evpu(7));
 
     EXPECT_TRUE(tieAlter->outerLocal);
+    EXPECT_TRUE(tieAlter->outerOn);
     EXPECT_TRUE(tieAlter->afterSingleDotLocal);
     EXPECT_TRUE(tieAlter->afterSingleDotOn);
     EXPECT_TRUE(tieAlter->afterMultiDotsLocal);
