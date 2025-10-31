@@ -58,6 +58,23 @@ class StaffGroup;
 namespace others {
 
 class Staff;
+class StaffComposite;
+class StaffList;
+class StaffListCategoryScore;
+class StaffListCategoryParts;
+class StaffListRepeatScore;
+class StaffListRepeatParts;
+class StaffListRepeatScoreForced;
+class StaffListRepeatPartsForced;
+
+template<class ScoreList, class PartsList, class ScoreForcedList, class PartsForcedList>
+class StaffListSet;
+
+/// @brief The type of @ref StaffListSet used by @ref MarkingCategory.
+using CategoryStaffListSet = StaffListSet<StaffListCategoryScore, StaffListCategoryParts, void, void>;
+
+/// @brief The type of @ref StaffListSet used by @ref RepeatBack, @ref RepeatEndingStart, and @ref TextRepeatAssign.
+using RepeatStaffListSet = StaffListSet<StaffListRepeatScore, StaffListRepeatParts, StaffListRepeatScoreForced, StaffListRepeatPartsForced>;
 
 /**
  * @class AcciAmountFlats
@@ -1304,6 +1321,10 @@ public:
     /// @return The shape expression or nullptr if this assignment is for a text expression or #shapeExprId not found.
     MusxInstance<ShapeExpressionDef> getShapeExpression() const;
 
+    /// @brief Create a @ref StaffListSet for the given instance. This can be used to interrogate whether a staff appears in the staff set.
+    /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
+    CategoryStaffListSet createStaffListSet() const;
+
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
@@ -2050,6 +2071,10 @@ public:
     /// @return The individual positioning record or nullptr if not found.
     MusxInstance<RepeatIndividualPositioning> getIndividualPositioning(StaffCmper staffId) const;
 
+    /// @brief Create a @ref StaffListSet for the given instance. This can be used to interrogate whether a staff appears in the staff set.
+    /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
+    RepeatStaffListSet createStaffListSet() const;
+
     constexpr static std::string_view XmlNodeName = "repeatBack"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatBack>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -2112,6 +2137,10 @@ public:
     /// @brief Taking into account all options, creates a string containing the text for this ending. The font for this text
     /// is given by #options::FontOptions::FontType::Ending.
     std::string createEndingText() const;
+
+    /// @brief Create a @ref StaffListSet for the given instance. This can be used to interrogate whether a staff appears in the staff set.
+    /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
+    RepeatStaffListSet createStaffListSet() const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
@@ -2442,7 +2471,7 @@ public:
 /**
  * @class StaffListRepeatPartsForced
  * @brief This class is used by repeat classes to define the forced staves for parts in a staff list. Repeats on these
- * staves appear even if the staff has turned them off with #Staff::hideRepeats or #Staff::hideRptBars.
+ * staves appear even if the staff has turned them off with #Staff::hideRepeats.
  *
  * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
  */
@@ -2475,7 +2504,7 @@ public:
 /**
  * @class StaffListRepeatScoreForced
  * @brief This class is used by repeat classes to define the forced staves for the score in a staff list. Repeats on these
- * staves appear even if the staff has turned them off with #Staff::hideRepeats or #Staff::hideRptBars.
+ * staves appear even if the staff has turned them off with #Staff::hideRepeats.
  *
  * The Cmper is the value of the staff list created in the repeat or text repeat dialog. It ties all components of the staff list together.
  */
@@ -2487,6 +2516,32 @@ public:
     using StaffList::StaffList;
 
     constexpr static std::string_view XmlNodeName = "repeatStaffListScoreOverride"; ///< The XML node name for this type.
+};
+
+/**
+ * @brief Generic resolver for a family of staff lists.
+ *
+ * @tparam ScoreList         list class used for score
+ * @tparam PartsList         list class used for parts
+ * @tparam ScoreForcedList   (optional) forced list class for score
+ * @tparam PartsForcedList   (optional) forced list class for parts
+ */
+template<class ScoreList, class PartsList, class ScoreForcedList = void, class PartsForcedList  = void>
+class StaffListSet
+{
+public:
+    /// @brief Constructor function
+    StaffListSet(const DocumentPtr& document, Cmper partId, Cmper staffListId) noexcept;
+
+    /// @brief Returns true is the staff list includes a particular staff on a particular system.
+    /// @param staffId The StaffCmper to check.
+    /// @param systemStaves The staves for a particular system (or #BASE_SYSTEM_ID).
+    /// @param isHidden If true, only the forced staff list is checked. Normally you will omit this for categories or pass #Staff::hideRepeats for repeats.
+    bool contains(StaffCmper staffId, const MusxInstanceList<StaffUsed>& systemStaves, bool isHidden = false) const noexcept;
+
+private:
+    MusxInstance<StaffList> m_staffList;
+    MusxInstance<StaffList> m_forcedStaffList;
 };
 
 /**
@@ -2590,7 +2645,7 @@ public:
     MusxInstance<Staff> getStaffInstance() const;
 
     /// @brief Returns the @ref Staff instance for this element with staff styles applied at the specified location.
-    MusxInstance<Staff> getStaffInstance(MeasCmper measureId, Edu eduPosition) const;
+    MusxInstance<StaffComposite> getStaffInstance(MeasCmper measureId, Edu eduPosition = 0) const;
 
     constexpr static std::string_view XmlNodeName = "instUsed"; ///< The XML node name for this type.
     static const xml::XmlElementArray<StaffUsed>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2839,6 +2894,10 @@ public:
     /// @param staffId The StaffCmper of the staff to search for individual positioning.
     /// @return The individual positioning record or nullptr if not found.
     MusxInstance<RepeatIndividualPositioning> getIndividualPositioning(StaffCmper staffId) const;
+
+    /// @brief Create a @ref StaffListSet for the given instance. This can be used to interrogate whether a staff appears in the staff set.
+    /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
+    RepeatStaffListSet createStaffListSet() const;
 
     constexpr static std::string_view XmlNodeName = "textRepeatAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextRepeatAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

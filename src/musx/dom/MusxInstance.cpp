@@ -41,6 +41,14 @@ MusxInstance<others::Staff> MusxInstanceList<others::StaffUsed>::getStaffInstanc
     return iuItem->getStaffInstance();
 }
 
+MusxInstance<others::StaffComposite> MusxInstanceList<others::StaffUsed>::getStaffInstanceAtIndex(Cmper index, MeasCmper measureId, Edu eduPosition) const
+{
+    const auto& iuArray = *this;
+    if (index >= iuArray.size()) return nullptr;
+    auto iuItem = iuArray[index];
+    return iuItem->getStaffInstance(measureId, eduPosition);
+}
+
 std::optional<size_t> MusxInstanceList<others::StaffUsed>::getIndexForStaff(StaffCmper staffId) const
 {
     const auto& iuArray = *this;
@@ -50,6 +58,16 @@ std::optional<size_t> MusxInstanceList<others::StaffUsed>::getIndexForStaff(Staf
         }
     }
     return std::nullopt;
+}
+
+StaffCmper MusxInstanceList<others::StaffUsed>::getTopStaffId() const
+{
+    return this->empty() ? 0 : this->front()->staffId;
+}
+
+StaffCmper MusxInstanceList<others::StaffUsed>::getBottomStaffId() const
+{
+    return this->empty() ? 0 : this->back()->staffId;
 }
 
 } // namespace dom

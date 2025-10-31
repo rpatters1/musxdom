@@ -44,6 +44,7 @@ class Document;
 namespace others {
 class StaffUsed;
 class Staff;
+class StaffComposite;
 }
 
 /**
@@ -114,9 +115,21 @@ public:
     /// @param index The 0-based index to find.
     MusxInstance<others::Staff> getStaffInstanceAtIndex(Cmper index) const;
 
+    /// @brief Returns the current @ref others::StaffComposite instance at a specified index of iuArray or nullptr if not found
+    /// @param index The 0-based index to find.
+    /// @param measureId The measure of the location to get.
+    /// @param eduPosition The edu position of the location to get.
+    MusxInstance<others::StaffComposite> getStaffInstanceAtIndex(Cmper index, MeasCmper measureId, Edu eduPosition = 0) const;
+
     /// @brief Returns the 0-based index of the StaffCmper or std::nullopt if not found.
     /// @param staffId The @ref others::Staff cmper value to find.
     std::optional<size_t> getIndexForStaff(StaffCmper staffId) const;
+
+    /// @brief Returns the top staff id or zero if none
+    StaffCmper getTopStaffId() const;
+
+    /// @brief Returns the bottom staff id or zero if none
+    StaffCmper getBottomStaffId() const;
 };
 
 } // namespace dom
