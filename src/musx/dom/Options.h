@@ -284,7 +284,7 @@ public:
     {
     public:
         using ContainedClassBase::ContainedClassBase;
-            
+
         int middleCPos{};               ///< Staff position of middle-C for this clef from reference staffline (usually the top). (xml node is `<adjust>`.)
         char32_t clefChar{};            ///< UTF-32 character code for the clef symbol.
         int staffPosition{};             ///< Staff position of the clef symbol's baseline, from reference staffline (usually the top). (xml node is `<clefYDisp>`)
@@ -297,7 +297,7 @@ public:
 
         /// @brief Returns true if this is a blank clef.
         bool isBlank() const;
-        
+
         /// @brief Calculates and returns the clef information.
         /// @param currStaff For most accurate results, pass the current @ref others::StaffComposite instance. If you omit this parameter,
         /// percussion and tab staves are identified based on the Finale SMuFL default file settings. If you supply it, staves with a notation style
@@ -763,7 +763,7 @@ public:
     /** @brief Constructor function */
     explicit MusicSpacingOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
- 
+
     /// @enum ColUnisonsChoice
     /// @brief Options for how to handle unisons
     enum class ColUnisonsChoice
@@ -976,8 +976,8 @@ public:
 /**
  * @class PageFormatOptions
  * @brief Options for page formatting in the document.
- * 
- * This class provides configuration options for page formatting, including 
+ *
+ * This class provides configuration options for page formatting, including
  * scope adjustment, page format score, and page format parts.
  */
 class PageFormatOptions : public OptionsBase {
@@ -1415,7 +1415,7 @@ public:
         : OptionsBase(document, partId, shareMode)
     {
     }
-    
+
     /**
      * @class StemConnection
      * @brief Information about one stemConnections element.

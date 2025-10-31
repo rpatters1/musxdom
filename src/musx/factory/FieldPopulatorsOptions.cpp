@@ -919,13 +919,13 @@ MUSX_XML_ELEMENT_ARRAY(StaffOptions, {
     {"staffSeparation", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->staffSeparation = e->getTextAs<Evpu>(); }},
     {"staffSeparIncr", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->staffSeparIncr = e->getTextAs<Evpu>(); }},
     {"autoAdjustStaffSepar", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) { i->autoAdjustStaffSepar = populateBoolean(e, i); }},
-    {"namePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
+    {"namePos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i)
         { i->namePos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
-    {"namePosAbbrv", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
+    {"namePosAbbrv", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i)
         { i->namePosAbbrv = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
-    {"groupNameFullPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
+    {"groupNameFullPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i)
         { i->groupNameFullPos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
-    {"groupNameAbbrvPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i) 
+    {"groupNameAbbrvPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffOptions>& i)
         { i->groupNameAbbrvPos = FieldPopulator<others::NamePositioning>::createAndPopulate(e, i->getDocument()); }},
 });
 
