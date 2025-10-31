@@ -1,5 +1,7 @@
 var NAVTREEINDEX32 =
 {
+"structmusx_1_1dom_1_1header_1_1FileInfo.html#a7bbff7d1ddd77dd367185b5732d4c280":[1,0,1,0,1,0,7],
+"structmusx_1_1dom_1_1header_1_1FileInfo.html#a7bbff7d1ddd77dd367185b5732d4c280":[2,0,1,0,1,0,7],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#a9670c8dbeb9c9633427b459db92f9aac":[2,0,1,0,1,0,2],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#a9670c8dbeb9c9633427b459db92f9aac":[1,0,1,0,1,0,2],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#a9d00dfc66a829f980bbd8645f438582d":[2,0,1,0,1,0,3],

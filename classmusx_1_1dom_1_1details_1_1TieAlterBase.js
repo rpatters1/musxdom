@@ -23,6 +23,7 @@ var classmusx_1_1dom_1_1details_1_1TieAlterBase =
     [ "insetRatio2", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a869e3f2b83bb2b049ff1a58197c3dce2", null ],
     [ "noteId", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a04af03ac8246c5cbf7038c8deadc0502", null ],
     [ "outerLocal", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a1fa415fa6d27451e9f5be35bd082c3f2", null ],
+    [ "outerOn", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a0fd7f0cfc3ce65a96d12698d2826d22b", null ],
     [ "shiftForSecondsLocal", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a8086c58a32aaab111dd7a2f8fff085f0", null ],
     [ "shiftForSecondsOn", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a3f60f8090fa2ea9ddc2a6517367098fb", null ],
     [ "stPtAdjOn", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#ab6f88dc1e9c283874a71d4337b32544b", null ],
