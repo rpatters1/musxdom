@@ -201,6 +201,11 @@ MusxInstance<ShapeExpressionDef> MeasureExprAssign::getShapeExpression() const
     return getDocument()->getOthers()->get<ShapeExpressionDef>(getRequestedPartId(), shapeExprId);
 }
 
+CategoryStaffListSet MeasureExprAssign::createStaffListSet() const
+{
+    return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
+}
+
 // *******************************
 // ***** MeasureNumberRegion *****
 // *******************************
@@ -593,6 +598,11 @@ MusxInstance<RepeatIndividualPositioning> RepeatBack::getIndividualPositioning(S
     return getIndividualPositioningImpl(getDocument()->getOthers()->getArray<RepeatBackIndividualPositioning>(getRequestedPartId(), getCmper()), staffId);
 }
 
+RepeatStaffListSet RepeatBack::createStaffListSet() const
+{
+    return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
+}
+
 // *****************************
 // ***** RepeatEndingStart *****
 // *****************************
@@ -690,6 +700,69 @@ std::string RepeatEndingStart::createEndingText() const
     }
     return result;
 }
+
+RepeatStaffListSet RepeatEndingStart::createStaffListSet() const
+{
+    return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
+}
+
+// ************************
+// ***** StaffListSet *****
+// ************************
+
+template <class ScoreList, class PartsList, class ScoreForcedList, class PartsForcedList>
+StaffListSet<ScoreList, PartsList, ScoreForcedList, PartsForcedList>::StaffListSet(
+    const DocumentPtr& document, Cmper partId, Cmper staffListId) noexcept
+{
+    if (partId == SCORE_PARTID) {
+        m_staffList = document->getOthers()->get<ScoreList>(partId, staffListId);
+        if constexpr (!std::is_same_v<ScoreForcedList, void>) {
+            m_forcedStaffList = document->getOthers()->get<ScoreForcedList>(partId, staffListId);
+        }
+    } else {
+        m_staffList = document->getOthers()->get<PartsList>(partId, staffListId);
+        if constexpr (!std::is_same_v<PartsForcedList, void>) {
+            m_forcedStaffList = document->getOthers()->get<PartsForcedList>(partId, staffListId);
+        }
+    }
+}
+
+template <class ScoreList, class PartsList, class ScoreForcedList, class PartsForcedList>
+bool StaffListSet<ScoreList, PartsList, ScoreForcedList, PartsForcedList>::contains(
+    StaffCmper staffId, const MusxInstanceList<StaffUsed>& systemStaves, bool isHidden) const noexcept
+{
+    const StaffCmper topStaffId = systemStaves.getTopStaffId();
+    const StaffCmper botStaffId = systemStaves.getBottomStaffId();
+
+    auto staffListContainsStaff = [&](const MusxInstance<StaffList>& staffList) -> bool {
+        if (!staffList) {
+            return false;
+        }
+        MUSX_ASSERT_IF(staffList->getRequestedPartId() != systemStaves.getRequestedPartId()) {
+            throw std::logic_error("Staff system part id [" + std::to_string(systemStaves.getRequestedPartId())
+                + "] does not match part id for staff list set [" + std::to_string(staffList->getRequestedPartId()) + "].");
+        }
+        if (staffId == topStaffId && staffList->containsValue(static_cast<StaffCmper>(StaffList::FloatingValues::TopStaff))) {
+            return true;
+        }
+        if (staffId == botStaffId && staffList->containsValue(static_cast<StaffCmper>(StaffList::FloatingValues::BottomStaff))) {
+            return true;
+        }
+        /// @todo It may be necessary to add some fuzzy logic around StaffGroup here, at least for category staff lists.
+        /// Finale includes a staff if it is the top staff in a group, when the top staff of a group is included. We defer this
+        /// to another day.
+        return staffList->containsValue(staffId);
+    };
+
+    if (!isHidden && staffListContainsStaff(m_staffList)) {
+        return true;
+    }
+    
+    return staffListContainsStaff(m_forcedStaffList);
+}
+
+template class StaffListSet< StaffListCategoryScore, StaffListCategoryParts>;
+template class StaffListSet<StaffListRepeatScore, StaffListRepeatParts, StaffListRepeatScoreForced, StaffListRepeatPartsForced>;
 
 // ***********************
 // ***** StaffSystem *****
@@ -831,7 +904,7 @@ MusxInstance<Staff> StaffUsed::getStaffInstance() const
     return retval;
 }
 
-MusxInstance<Staff> StaffUsed::getStaffInstance(MeasCmper measureId, Edu eduPosition) const
+MusxInstance<StaffComposite> StaffUsed::getStaffInstance(MeasCmper measureId, Edu eduPosition) const
 {
     auto retval = StaffComposite::createCurrent(getDocument(), getRequestedPartId(), staffId, measureId, eduPosition);
     if (!retval) {
@@ -849,6 +922,11 @@ MusxInstance<RepeatIndividualPositioning> TextRepeatAssign::getIndividualPositio
 {
     return getIndividualPositioningImpl(getDocument()->getOthers()->getArray<TextRepeatIndividualPositioning>(getRequestedPartId(), textRepeatId),
         staffId, static_cast<MeasCmper>(getCmper()));
+}
+
+RepeatStaffListSet TextRepeatAssign::createStaffListSet() const
+{
+    return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
 } // namespace others

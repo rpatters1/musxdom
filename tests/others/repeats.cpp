@@ -248,9 +248,9 @@ TEST(TextRepeatAssign, Populate)
 
 TEST(StaffListRepeat, Populate)
 {
-    std::vector<char> transposeXml;
-    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", transposeXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();
@@ -286,11 +286,31 @@ TEST(StaffListRepeat, Populate)
     musxtest::staffListCheck(names[1]->name, scoreForced[0], { -2, 1 });
 }
 
+TEST(RepeatStaffListSet, TestContains)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto scrollViewStaves = others->getArray<others::StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+        auto repeatItem = others->get<others::RepeatEndingStart>(SCORE_PARTID, 2);
+        auto staffListSet = repeatItem->createStaffListSet();
+        EXPECT_TRUE(staffListSet.contains(1, scrollViewStaves, scrollViewStaves.getStaffInstanceAtIndex(0, 2)->hideRepeats));
+        EXPECT_FALSE(staffListSet.contains(2, scrollViewStaves, scrollViewStaves.getStaffInstanceAtIndex(1, 2)->hideRepeats));
+        EXPECT_TRUE(staffListSet.contains(3, scrollViewStaves, scrollViewStaves.getStaffInstanceAtIndex(2, 2)->hideRepeats));
+    }
+}
+
 TEST(RepeatBack, IndividualPositioning)
 {
-    std::vector<char> transposeXml;
-    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", transposeXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();
@@ -328,9 +348,9 @@ TEST(RepeatBack, IndividualPositioning)
 
 TEST(RepeatEndingStart, IndividualPositioning)
 {
-    std::vector<char> transposeXml;
-    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", transposeXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "endings-indivpos.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();

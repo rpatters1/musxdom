@@ -364,6 +364,14 @@ public:
     std::vector<ElementType> values;    ///< Values in the array
                                         ///< Guaranteed to have REQUIRED_SIZE elements, if REQUIRED_SIZE is non-zero.
 
+    /// @brief Returns true if the array contains the specified value.
+    /// @param value The value to check.
+    bool containsValue(const ElementType& value) const noexcept
+    {
+        const auto& v = this->values;
+        return std::find(v.begin(), v.end(), value) != v.end();
+    }
+
     /// @brief Override of #Base::integrityCheck
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
