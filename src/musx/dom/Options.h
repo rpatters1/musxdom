@@ -184,7 +184,7 @@ public:
     Evpu beamStubLength{};                   ///< "Broken Beam Length" in @ref Evpu.
     Evpu maxSlope{};                         ///< Maximum slope in @ref Evpu.
     Evpu beamSepar{};                        ///< Secondary beam separation in @ref Evpu. This is the distance between the top of one beam to the top of the next.
-    Evpu maxFromMiddle{};                    ///< "Maximum Distance from Middle Staff Line" in @ref Evpu. (xml node is `<hmBeamTip>`)
+    int maxFromMiddle{};                     ///< "Maximum Distance from Middle Staff Line" in staff spaces. (xml node is `<hmBeamTip>`)
     FlattenStyle beamingStyle{};             ///< Beaming style.
     bool extendBeamsOverRests{};             ///< "Extend Beams Over Rests" (xml node is `<incEdgeRestsInBeamGroups>`)
     bool incRestsInFourGroups{};             ///< "Include Rests when Beaming in Group of Four" (xml node is `<incRestsInClassicBeams>`)

@@ -448,7 +448,7 @@ MUSX_XML_ELEMENT_ARRAY(BeamOptions, {
     {"beamStubLength", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamStubLength = e->getTextAs<Evpu>(); }},
     {"maxSlope", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->maxSlope = e->getTextAs<Evpu>(); }},
     {"beamSepar", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamSepar = e->getTextAs<Evpu>(); }},
-    {"hmBeamTip", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->maxFromMiddle = e->getTextAs<Evpu>(); }},
+    {"hmBeamTip", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->maxFromMiddle = e->getTextAs<int>(); }},
     {"beamingStyle", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->beamingStyle = toEnum<BeamOptions::FlattenStyle>(e); }},
     {"incEdgeRestsInBeamGroups", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->extendBeamsOverRests = populateBoolean(e, i); }},
     {"incRestsInClassicBeams", [](const XmlElementPtr& e, const std::shared_ptr<BeamOptions>& i) { i->incRestsInFourGroups = populateBoolean(e, i); }},

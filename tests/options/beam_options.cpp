@@ -34,7 +34,7 @@ TEST(BeamOptionsTest, PropertiesTest)
       <beamStubLength>18</beamStubLength>
       <maxSlope>12</maxSlope>
       <beamSepar>18</beamSepar>
-      <hmBeamTip>24</hmBeamTip>
+      <hmBeamTip>1</hmBeamTip>
       <beamingStyle>onExtremeNote</beamingStyle>
       <incEdgeRestsInBeamGroups/>
       <incRestsInClassicBeams/>
@@ -63,7 +63,7 @@ TEST(BeamOptionsTest, PropertiesTest)
     EXPECT_EQ(beamOptions->beamStubLength, 18);
     EXPECT_EQ(beamOptions->maxSlope, 12);
     EXPECT_EQ(beamOptions->beamSepar, 18);
-    EXPECT_EQ(beamOptions->maxFromMiddle, 24);
+    EXPECT_EQ(beamOptions->maxFromMiddle, 1);
     EXPECT_EQ(beamOptions->beamingStyle, FlattenStyle::OnExtremeNote);
     EXPECT_TRUE(beamOptions->extendBeamsOverRests);
     EXPECT_TRUE(beamOptions->incRestsInFourGroups);
