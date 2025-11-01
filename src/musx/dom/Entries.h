@@ -550,7 +550,7 @@ public:
     bool canBeBeamed() const;
 
     /// @brief Returns the entry size as a percentage, taking into account the beaming.
-    /// @return Interger percentage where 100 means 100%.
+    /// @return Integer percentage where 100 means 100%.
     int calcEntrySize() const;
 
     /// @brief Calculates if this entry is part of a cue.
@@ -564,7 +564,7 @@ public:
     /// @note Note that in Finale, only whole rests are used as full measure rests.
     bool calcIsFullMeasureRest() const;
 
-    /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with
+    /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with
     /// a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.
     /// @return True if this is either the replacement rest in v2 or the hidden rest in v1.
     bool calcIsBeamedRestWorkaroud() const;
