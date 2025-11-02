@@ -84,7 +84,7 @@ TEST(KeySigs, Test12EDO)
             if (x >= expectedNotes.size()) return false;
             //ASSERT_GE(entryInfo->getEntry()->notes.size(), 1);
             auto note = entryInfo->getEntry()->notes[0];
-            auto [noteName, octave, alter, position] = note->calcNoteProperties(key, KeySignature::KeyContext::Written, entryInfo->clefIndex);
+            auto [noteName, octave, alter, position] = note->calcNoteProperties(key, KeySignature::KeyContext::Written, entryInfo->clefIndex, nullptr);
             EXPECT_EQ(expectedOctaves[x], octave);
             EXPECT_EQ(expectedAlters[x], alter);
             EXPECT_EQ(expectedPositions[x], position);
@@ -151,7 +151,7 @@ TEST(KeySigs, Test31EDO)
             if (x >= expectedNotes.size()) return false;
             //ASSERT_GE(entryInfo->getEntry()->notes.size(), 1);
             auto note = entryInfo->getEntry()->notes[0];
-            auto [noteName, octave, alter, position] = note->calcNoteProperties(key,KeySignature::KeyContext::Written, entryInfo->clefIndex);
+            auto [noteName, octave, alter, position] = note->calcNoteProperties(key,KeySignature::KeyContext::Written, entryInfo->clefIndex, nullptr);
             EXPECT_EQ(expectedOctaves[x], octave);
             EXPECT_EQ(expectedAlters[x], alter);
             EXPECT_EQ(expectedPositions[x], position);

@@ -558,6 +558,127 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
 bool EntryInfoPtr::calcDisplaysAsRest() const
 {
     return !(*this)->getEntry()->isNote;
+    /// @todo Add code to detect that the entry is converted to a rest by voiced part settings
+}
+
+std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
+{
+    const auto& entry = (*this)->getEntry();
+    MUSX_ASSERT_IF(entry->notes.empty() || entry->floatRest) {
+        throw std::logic_error("calcTopBottomStaffPositions cannot be called for a floating rest.");
+    }
+    int topLine = (std::numeric_limits<int>::min)();
+    int botLine = (std::numeric_limits<int>::max)();
+
+    auto updateLines = [&](const NoteInfoPtr note) {
+        const int staffLine = std::get<3>(note.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+        if (staffLine > topLine) {
+            topLine = staffLine;
+        }
+        if (staffLine < botLine) {
+            botLine = staffLine;
+        }
+    };
+
+    updateLines(NoteInfoPtr(*this, 0));
+    updateLines(NoteInfoPtr(*this, entry->notes.size() - 1));
+
+    return std::make_pair(topLine, botLine);
+}
+
+bool EntryInfoPtr::calcUpStemDefault() const
+{
+    //stem direction is determined by the beam a note or rest is part of, if any, so
+	//we must always look for a beam to calculate direction.
+    auto beamStart = findBeamStartOrCurrent();
+
+  	int maxTopDiff = (std::numeric_limits<int>::min)();
+	int minBotDiff = (std::numeric_limits<int>::max)();
+	int numAbove = 0;
+	int numBelow = 0;
+    bool gotNonGrace = false;
+    bool gotNonFloatRest = false;
+
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const auto& entry = next->getEntry();
+        if (!entry->graceNote) {
+            gotNonGrace = true;
+            if (entry->notes.empty() || entry->floatRest) {
+                continue;
+            }
+            gotNonFloatRest = true;
+            auto staff = next.createCurrentStaff();
+            auto [topLine, botLine] = next.calcTopBottomStaffPositions();
+            const int currTopDiff = topLine - staff->stemReversal;
+            if (maxTopDiff < currTopDiff) {
+                maxTopDiff = currTopDiff;
+            }
+            const int currBotDiff = botLine - staff->stemReversal;
+            if (minBotDiff > currBotDiff) {
+                minBotDiff = currBotDiff;
+            }
+            const int valForStem = std::abs(currBotDiff) > std::abs(currTopDiff) ? currBotDiff : currTopDiff;
+            if (valForStem > 0) {
+                numAbove++;
+            } else if (valForStem < 0) {
+                numBelow++;
+            }
+        }
+    }
+
+    if (!gotNonGrace) {
+        return true;
+    }
+
+    if (!gotNonFloatRest) {
+        return (*this)->getEntry()->upStem; // Use whatever Finale last calculated.
+    }
+
+    // for beams, if the diffs don't determine it, then the number above & below do
+    // (Function calcUnBeamed is false for beamed groups.)
+    if (minBotDiff < 0 && minBotDiff == -maxTopDiff && !calcUnbeamed()) {
+        return numBelow > numAbove;
+    }
+
+    const int valForBeam = std::abs(minBotDiff) > std::abs(maxTopDiff) ? minBotDiff : maxTopDiff;
+
+    return valForBeam < 0;
+}
+
+bool EntryInfoPtr::calcUpStem() const
+{
+    /// @todo Add cross-staff support some day?
+
+    //stem direction is determined by the beam a note or rest is part of, if any, so
+    //we must always look for a beam to calculate direction.
+    auto beamStart = findBeamStartOrCurrent();
+
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        auto staff = next.createCurrentStaff();
+        // This is the precedence as tested by RGP in ~2001.
+        if (staff->altNotation == others::Staff::AlternateNotation::Rhythmic) {
+            return staff->altRhythmStemsUp;
+        }
+        const auto& entry = next->getEntry();
+        if (entry->freezeStem) {
+            return entry->upStem;
+        }
+        if (auto layerAtts = getFrame()->getDocument()->getOthers()->get<others::LayerAttributes>(getFrame()->getRequestedPartId(), getLayerIndex())) {
+            if (layerAtts->freezeLayer) {
+                /// @todo what a mess the layer calc is. Need fresh brain.
+            }
+        }
+        if (staff->stemDirection == others::Staff::StemDirection::AlwaysUp) {
+            return true;
+        } else if (staff->stemDirection == others::Staff::StemDirection::AlwaysDown) {
+            return false;
+        }
+        if (entry->v2Launch || entry->voice2) {
+            return entry->upStem;
+        }
+    }
+
+    return calcUpStemDefault();
 }
 
 bool EntryInfoPtr::calcUnbeamed() const
@@ -1332,7 +1453,7 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const MusxInstance<KeySignature>
 }
 
 Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
-    const MusxInstance<others::Staff>& staff, bool respellEnharmonic) const
+    const MusxInstance<others::PercussionNoteInfo>& percNoteInfo, const MusxInstance<others::Staff>& staff, bool respellEnharmonic) const
 {
     auto [transposedLev, transposedAlt] = respellEnharmonic
                                         ? calcDefaultEnharmonic(key)
@@ -1355,16 +1476,22 @@ Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& 
     }
 
     // Calculate the actual alteration
-    int actualAlteration = transposedAlt + key->calcAlterationOnNote(step, ctx);
+    const int actualAlteration = transposedAlt + key->calcAlterationOnNote(step, ctx);
 
     // Calculate the staff line
-    const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
-    if (!clefOptions) {
-        throw std::invalid_argument("Document contains no clef options!");
-    }
-    int middleCLine = clefOptions->getClefDef(clefIndex)->middleCPos;
+    const int staffLine = [&]() {
+        if (percNoteInfo) {
+            return percNoteInfo->staffPosition;
+        }
+        const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
+        if (!clefOptions) {
+            throw std::invalid_argument("Document contains no clef options!");
+        }
+        int middleCLine = clefOptions->getClefDef(clefIndex)->middleCPos;
+        return keyAdjustedLev + middleCLine;
+    }();
 
-    return { music_theory::noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
+    return { music_theory::noteNames[step], octave, actualAlteration, staffLine };
 }
 
 // ***********************
@@ -1483,43 +1610,46 @@ StaffCmper NoteInfoPtr::calcStaff() const
     return m_entry.getStaff();
 }
 
-Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell) const
+Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell, bool alwaysUseEntryStaff) const
 {
-    StaffCmper staffId = calcStaff();
-    const ClefIndex clefIndex = [&]() {
+    StaffCmper staffId = getEntryInfo().getStaff();
+    ClefIndex clefIndex = getEntryInfo()->clefIndex;
+    if (!alwaysUseEntryStaff) {
+        staffId = calcStaff();
         if (staffId != m_entry.getStaff()) {
             if (auto staff = m_entry.createCurrentStaff(staffId)) {
-                return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ true);
+                clefIndex = staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ true);
             }
         }
-        return m_entry->clefIndex;
-    }();
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Written, clefIndex, m_entry.createCurrentStaff(staffId),
+    }
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Written, clefIndex, calcPercussionNoteInfo(), m_entry.createCurrentStaff(staffId),
             enharmonicRespell.value_or(calcIsEnharmonicRespell()));
 }
 
-Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert() const
+Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert(bool alwaysUseEntryStaff) const
 {
     const ClefIndex clefIndex = [&]() {
-        StaffCmper staffId = calcStaff();
-        if (staffId != m_entry.getStaff()) {
-            if (auto staff = m_entry.createCurrentStaff(staffId)) {
-                return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ false);
+        if (!alwaysUseEntryStaff) {
+            StaffCmper staffId = calcStaff();
+            if (staffId != m_entry.getStaff()) {
+                if (auto staff = m_entry.createCurrentStaff(staffId)) {
+                    return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ false);
+                }
             }
         }
         return m_entry->clefIndexConcert;
     }();
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Concert, clefIndex, nullptr, calcIsEnharmonicRespell());
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Concert, clefIndex, calcPercussionNoteInfo(), nullptr, calcIsEnharmonicRespell());
 }
 
-Note::NoteProperties NoteInfoPtr::calcNotePropertiesInView() const
+Note::NoteProperties NoteInfoPtr::calcNotePropertiesInView(bool alwaysUseEntryStaff) const
 {
     bool forWrittenPitch = false;
     auto entryFrame = m_entry.getFrame();
     if (auto partGlobals = entryFrame->getDocument()->getOthers()->get<others::PartGlobals>(entryFrame->getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
         forWrittenPitch = partGlobals->showTransposed;
     }
-    return forWrittenPitch ? calcNoteProperties() : calcNotePropertiesConcert();
+    return forWrittenPitch ? calcNoteProperties(std::nullopt, alwaysUseEntryStaff) : calcNotePropertiesConcert(alwaysUseEntryStaff);
 }
 
 MusxInstance<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const

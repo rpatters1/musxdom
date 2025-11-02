@@ -119,6 +119,7 @@ add_executable(musxdomtests
 	details/secondary_beams.cpp
     details/shape_note.cpp
 	details/staff_group.cpp
+    details/stems.cpp
     details/tuplet_def.cpp
     # music_theory
     music_theory/transpose.cpp

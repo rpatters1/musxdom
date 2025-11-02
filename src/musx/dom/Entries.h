@@ -243,7 +243,7 @@ public:
      * @return #NoteProperties
      */
     NoteProperties calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
-        const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
+        const MusxInstance<others::PercussionNoteInfo>& percNoteInfo, const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     static const xml::XmlElementArray<Note>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
@@ -494,6 +494,23 @@ public:
     /// @brief Calculates if an entry displays as a rest.
     /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
     bool calcDisplaysAsRest() const;
+
+    /// @brief Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not
+    /// be called on a floating rest. It asserts and throws if so.
+    /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
+    std::pair<int, int> calcTopBottomStaffPositions() const;
+
+    /// @brief Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing or
+    /// manual overrides.
+    /// @return True if the entry is upstem barring any other factors that would override the stem direction. False if it is downstem.
+    bool calcUpStemDefault() const;
+
+    /// @brief Calculates the stem direction of the entry, taking into account voices, layers, staff options, and manual overrides.
+    /// @note The #Entry::upStem flag comes close to providing this information. Unfortunately, the flag can be stale if the layer context
+    /// or staff context changes and the entry frame was never re-edited. The flag also does not reflect cross-staff stem directions.
+    /// @warning Entries that are part of a cross-staff beam or have cross-staff notes are not supported. They will produce incorrect results.
+    /// @return True if the stem is up and false if it is down.
+    bool calcUpStem() const;
 
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
@@ -919,36 +936,43 @@ public:
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
-     * not take into account percussion notes and their staff position override. To discover if a note is a percussion
-     * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * not take into account percussion notes and their staff position override. To get the staff position taking
+     * into account percussion notes, use #calcStaffPosition.
      * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
      * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
      * the staff position returned by #calcNoteProperties for whole rests.
      * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
      * this value is calculated automatically based on the score or part settings. Normally you will omit it.
+     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
-    Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
+    Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt, bool alwaysUseEntryStaff = false) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does
      * not take into account percussion notes and their staff position override. To discover if a note is a percussion
      * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
-    Note::NoteProperties calcNotePropertiesConcert() const;
+    Note::NoteProperties calcNotePropertiesConcert(bool alwaysUseEntryStaff = false) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in view. This may be
      * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not
      * handle the staff position override of percussion notes.
+     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
-    Note::NoteProperties calcNotePropertiesInView() const;
+    Note::NoteProperties calcNotePropertiesInView(bool alwaysUseEntryStaff = false) const;
 
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
     MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
+
+    /// @brief Calculates the staff position for this note, taking into account percussion notes.
+    /// @return 
+    int calcStaffPosition() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)
