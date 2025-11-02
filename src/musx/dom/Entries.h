@@ -619,6 +619,9 @@ private:
 
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
+
+    /// @brief Cache the staff for this entry here to avoid repeated calls to `StaffComposite::createCurrent` for the same information.
+    mutable MusxInstance<others::StaffComposite> m_cachedStaff;
 };
 
 /**
@@ -636,10 +639,11 @@ public:
      * @param layerIndex The @ref LayerIndex (0..3) of the entry frame
      * @param timeStretch The ratio of global Edu to staff edu.
     */
-    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, util::Fraction timeStretch) :
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, util::Fraction timeStretch, const MusxInstance<others::StaffComposite>& startStaff) :
         m_context(gfhold),
         m_layerIndex(layerIndex),
-        m_timeStretch(timeStretch)
+        m_timeStretch(timeStretch),
+        m_startStaff(startStaff)
     {
     }
 
@@ -816,7 +820,11 @@ public:
     /// @brief Gets the entry frame for the previous measure with the same staff and layer.
     /// @return Frame or nullpter if the previous measure has no matching frame,
     std::shared_ptr<const EntryFrame> getPrevious() const;
-    
+
+    /// @brief Gets the staff at eduPosition 0 without needing to create it again.
+    MusxInstance<others::StaffComposite> getStartStaffInstance() const
+    { return m_startStaff; }
+
     /// @brief Creates a current StaffComposite for the entry frame.
     /// @param eduPosition The Edu position for which to create the staff.
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
@@ -832,12 +840,19 @@ public:
     /// @return true if all entries in the frame are either cue entries or hidden.
     bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
+    /// @brief Calculates if this entry frame is hidden, either with a staff style or with every entry hidden.
+    /// @return true if all entries in the frame are hidden.
+    bool calcIssHiddenFrame() const;
+
 private:
     details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
     util::Fraction m_timeStretch;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
+
+    /// @brief Cache the start staff to avoid getting it again every time it is needed.
+    MusxInstance<others::StaffComposite> m_startStaff;
 };
 
 namespace details {

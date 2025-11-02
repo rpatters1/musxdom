@@ -131,8 +131,11 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 
 MusxInstance<others::StaffComposite> EntryFrame::createCurrentStaff(Edu eduPosition, const std::optional<StaffCmper>& forStaffId) const
 {
-    return others::StaffComposite::createCurrent(getDocument(), getRequestedPartId(), forStaffId.value_or(getStaff()),
-        getMeasure(), eduPosition);
+    const StaffCmper requestedStaffId = forStaffId.value_or(getStaff());
+    if (eduPosition == 0 && getStartStaffInstance()->getCmper() == requestedStaffId) {
+        return getStartStaffInstance();
+    }
+    return others::StaffComposite::createCurrent(getDocument(), getRequestedPartId(), requestedStaffId, getMeasure(), eduPosition);
 }
 
 MusxInstance<others::Measure> EntryFrame::getMeasureInstance() const
@@ -154,6 +157,11 @@ bool EntryFrame::calcIsCueFrame(bool includeVisibleInScore) const
         }
     }
     return foundCueEntry;
+}
+
+bool EntryFrame::calcIssHiddenFrame() const
+{
+    return false;
 }
 
 bool EntryFrame::TupletInfo::calcIsTremolo() const
@@ -434,7 +442,10 @@ MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entr
 
 MusxInstance<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<StaffCmper>& forStaffId) const
 {
-    return m_entryFrame->createCurrentStaff((*this)->elapsedDuration.calcEduDuration(), forStaffId);
+    if (!m_cachedStaff || m_cachedStaff->getCmper() != forStaffId.value_or(m_entryFrame->getStaff())) {
+        m_cachedStaff = m_entryFrame->createCurrentStaff((*this)->elapsedDuration.calcEduDuration(), forStaffId);
+    }
+    return m_cachedStaff;
 }
 
 unsigned EntryInfoPtr::calcReverseGraceIndex() const
@@ -1077,7 +1088,7 @@ bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
             return true;
         }
         auto doc = m_entryFrame->getDocument();
-        if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+        if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), (*this)->elapsedDuration.calcEduDuration())) {
             bool hidden = (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank)
                 && (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes);
             if (!hidden) {
@@ -1086,7 +1097,7 @@ bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
             if (hidden) {
                 auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
                 for (const auto& part : parts) {
-                    if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+                    if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), (*this)->elapsedDuration.calcEduDuration())) {
                         if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
                             return true;
                         }
@@ -1227,7 +1238,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         const util::Fraction timeStretch = staff->floatTime
                                          ? measure->calcTimeStretch(staff->getCmper())
                                          : 1;
-        entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch);
+        entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch, staff);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1

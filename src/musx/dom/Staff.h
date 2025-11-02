@@ -615,6 +615,8 @@ public:
  * @class StaffStyleAssign
  * @brief Represents an assignment
  *
+ * @note Staff style assignments use staff EDU ranges.
+ *
  * The cmper is the staff ID. This class is identified by the XML node name "staffStyleAssign".
  */
 class StaffStyleAssign : public MusicRange
