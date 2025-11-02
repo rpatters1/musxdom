@@ -590,6 +590,11 @@ public:
     /// @return A list of indices of TupletInfo records that include the entry.
     std::vector<size_t> findTupletInfo() const;
 
+    /// @brief Calculates whether the conditions are met for the layer attributes dependent on #others::LayerAttributes::onlyIfOtherLayersHaveNotes.
+    /// This also takes into account #others::LayerAttributes::ignoreHiddenNotesOnly and #others::LayerAttributes::ignoreHiddenLayers.
+    /// @return true if the layer settings dependent on #others::LayerAttributes::onlyIfOtherLayersHaveNotes are in effect. Otherwise false.
+    bool calcIfLayerSettingsApply() const;
+
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
     {
@@ -779,6 +784,9 @@ public:
     /// @brief Get the document for the entry frame
     DocumentPtr getDocument() const;
 
+    /// @brief Get the frame context for this frame
+    const details::GFrameHoldContext& getContext() const { return m_context; }
+
     /// @brief Get the requested part ID for the entry frame
     Cmper getRequestedPartId() const { return m_context.getRequestedPartId(); }
 
@@ -790,6 +798,9 @@ public:
 
     /// @brief Get the layer index (0..3) of the entry frame
     LayerIndex getLayerIndex() const { return m_layerIndex; }
+
+    /// @brief Get the LayerAttributes for this entry frame.
+    MusxInstance<others::LayerAttributes> getLayerAttributes() const;
 
     /// @brief Get the time stretch in this frame. Rather than accessing this value directly,
     /// consider using #EntryInfoPtr::calcGlobalElapsedDuration or #EntryInfoPtr::calcGlobalActualDuration instead.
@@ -840,9 +851,12 @@ public:
     /// @return true if all entries in the frame are either cue entries or hidden.
     bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
-    /// @brief Calculates if this entry frame is hidden, either with a staff style or with every entry hidden.
+    /// @brief Calculates if this all notes in the frame are hidden.
+    /// This routine only checks that entries are individually hidden. The caller must separately check #others::Staff::calcAlternateNotationHidesEntries
+    /// according to its specific needs. For example, to determine if a layer is hidden for the purposes of checking validity of layer attributes,
+    /// only the staff at edu position 0 should be checked.
     /// @return true if all entries in the frame are hidden.
-    bool calcIssHiddenFrame() const;
+    bool calcAreAllEntriesHiddenInFrame() const;
 
 private:
     details::GFrameHoldContext m_context;
@@ -853,6 +867,9 @@ private:
 
     /// @brief Cache the start staff to avoid getting it again every time it is needed.
     MusxInstance<others::StaffComposite> m_startStaff;
+
+    /// @brief Cache the layer attributes to avoid constantly re-retrieving them.
+    mutable MusxInstance<others::LayerAttributes> m_cachedLayerAttributes;
 };
 
 namespace details {

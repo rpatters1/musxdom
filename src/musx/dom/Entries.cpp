@@ -85,6 +85,14 @@ StaffCmper EntryFrame::getStaff() const { return m_context->getStaff(); }
 
 MeasCmper EntryFrame::getMeasure() const { return m_context->getMeasure(); }
 
+MusxInstance<others::LayerAttributes> EntryFrame::getLayerAttributes() const
+{
+    if (!m_cachedLayerAttributes) {
+        m_cachedLayerAttributes = getDocument()->getOthers()->get<others::LayerAttributes>(getRequestedPartId(), getLayerIndex());
+    }
+    return m_cachedLayerAttributes;
+}
+
 EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 {
     bool forV2 = voice == 2;
@@ -159,9 +167,15 @@ bool EntryFrame::calcIsCueFrame(bool includeVisibleInScore) const
     return foundCueEntry;
 }
 
-bool EntryFrame::calcIssHiddenFrame() const
+bool EntryFrame::calcAreAllEntriesHiddenInFrame() const
 {
-    return false;
+    for (const auto& entry : m_entries) {
+        if (!entry->getEntry()->isHidden) {
+            /// @todo check if the entry is hidden by voiced parts.
+            return false;
+        }
+    }
+    return true;
 }
 
 bool EntryFrame::TupletInfo::calcIsTremolo() const
@@ -663,6 +677,7 @@ bool EntryInfoPtr::calcUpStem() const
     //stem direction is determined by the beam a note or rest is part of, if any, so
     //we must always look for a beam to calculate direction.
     auto beamStart = findBeamStartOrCurrent();
+    const auto frame = getFrame();
 
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         auto staff = next.createCurrentStaff();
@@ -674,9 +689,9 @@ bool EntryInfoPtr::calcUpStem() const
         if (entry->freezeStem) {
             return entry->upStem;
         }
-        if (auto layerAtts = getFrame()->getDocument()->getOthers()->get<others::LayerAttributes>(getFrame()->getRequestedPartId(), getLayerIndex())) {
-            if (layerAtts->freezeLayer) {
-                /// @todo what a mess the layer calc is. Need fresh brain.
+        if (auto layerAtts = frame->getLayerAttributes()) {
+            if (layerAtts->freezeLayer && calcIfLayerSettingsApply()) {
+                return layerAtts->freezeStemsUp;
             }
         }
         if (staff->stemDirection == others::Staff::StemDirection::AlwaysUp) {
@@ -1089,11 +1104,7 @@ bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
         }
         auto doc = m_entryFrame->getDocument();
         if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), (*this)->elapsedDuration.calcEduDuration())) {
-            bool hidden = (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank)
-                && (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes);
-            if (!hidden) {
-                hidden = scoreStaff->hideMode != others::Staff::HideMode::None;
-            }
+            const bool hidden = scoreStaff->calcAlternateNotationHidesEntries(getLayerIndex()) || scoreStaff->hideMode != others::Staff::HideMode::None;
             if (hidden) {
                 auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
                 for (const auto& part : parts) {
@@ -1161,6 +1172,47 @@ std::vector<size_t> EntryInfoPtr::findTupletInfo() const
         }
     }
     return result;
+}
+
+bool EntryInfoPtr::calcIfLayerSettingsApply() const
+{
+    const auto frame = getFrame();
+    const auto layerAtts = frame->getLayerAttributes();
+    if (!layerAtts->onlyIfOtherLayersHaveNotes) {
+        return true;
+    }
+    const auto context = frame->getContext();
+    if (!context->calcIsMultiLayer()) {
+        return false;
+    }
+    const LayerIndex layerIndex = frame->getLayerIndex();
+    const auto startStaff = frame->getStartStaffInstance();
+    for (size_t nextLayerIndex = 0; nextLayerIndex < context->frames.size(); nextLayerIndex++) {
+        if (nextLayerIndex == layerIndex || context->frames[nextLayerIndex] == 0) {
+            continue;
+        }
+        const auto nextLayerAtts = frame->getDocument()->getOthers()->get<others::LayerAttributes>(frame->getRequestedPartId(), static_cast<Cmper>(nextLayerIndex));
+        MUSX_ASSERT_IF(!nextLayerAtts) {
+            throw integrity_error("Layer attributes for layer " + std::to_string(nextLayerIndex) + " do not exist.");
+        }
+        if (layerAtts->ignoreHiddenLayers && nextLayerAtts->hideLayer) {
+            continue;
+        }
+        if (layerAtts->ignoreHiddenNotesOnly) {
+            if (startStaff->calcAlternateNotationHidesEntries(nextLayerIndex)) {
+                continue; // layers are considered hidden if alternate notation at the beginning of the measure hides them, even if it doesn't go to the end.
+            }
+            if (auto layerFrame = context.createEntryFrame(nextLayerIndex)) {
+                if (layerFrame->calcAreAllEntriesHiddenInFrame()) {
+                    continue;
+                }
+            } else {
+                continue; // do not count non-existent layer frames as having notes
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 // *****************************
