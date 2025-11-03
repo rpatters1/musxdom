@@ -36,7 +36,7 @@ var searchData=
   ['insetratio_33',['insetRatio',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521',1,'musx::dom::options::TieOptions::ControlPoint']]],
   ['insetratio1_34',['insetRatio1',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a6cab3eb2d7f1f4b822924694b3c6f3f2',1,'musx::dom::details::TieAlterBase']]],
   ['insetratio2_35',['insetRatio2',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a869e3f2b83bb2b049ff1a58197c3dce2',1,'musx::dom::details::TieAlterBase']]],
-  ['insetstyle_36',['insetstyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions::insetStyle'],['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa595700238a8bcb2327afec614f402cf',1,'musx::dom::options::TieOptions::InsetStyle']]],
+  ['insetstyle_36',['insetstyle',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#aa595700238a8bcb2327afec614f402cf',1,'musx::dom::options::TieOptions::InsetStyle'],['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a601ca1940db5a946260e1eacab6c1bd8',1,'musx::dom::options::TieOptions::insetStyle']]],
   ['insideslur_37',['insideSlur',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a6204b87271ca01b4d909ad85f2bdc8de',1,'musx::dom::others::ArticulationDef']]],
   ['instance_38',['instance',['../structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a2231cc7f88c9deb59d9e005dc3299ca5',1,'musx::factory::TypeRegistry::CreatedInstanceInfo']]],
   ['instructioninfo_39',['InstructionInfo',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1InstructionInfo.html',1,'musx::dom::others::ShapeInstructionList']]],

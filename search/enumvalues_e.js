@@ -17,5 +17,6 @@ var searchData=
   ['optionsdefault_14',['OptionsDefault',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117aa92deda61e5101f6c17e7fb660ff17a8',1,'musx::dom::others::Measure']]],
   ['ordinalprefix_15',['OrdinalPrefix',['../classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1ae1892b548bbf904471fd4f2e03c249bf',1,'musx::dom::others::Staff']]],
   ['other_16',['other',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621a6311ae17c1ee52b36e68aaf4ad066387',1,'musx::dom::others::ShapeDef::Other'],['../namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391a6311ae17c1ee52b36e68aaf4ad066387',1,'musx::dom::header::Other'],['../namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133a6311ae17c1ee52b36e68aaf4ad066387',1,'musx::dom::header::Other']]],
-  ['outsideinside_17',['OutsideInside',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa18b7c5400f904c5ebe1f2501f87e526e',1,'musx::dom::options::TieOptions']]]
+  ['outsideinside_17',['OutsideInside',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa18b7c5400f904c5ebe1f2501f87e526e',1,'musx::dom::options::TieOptions']]],
+  ['over_18',['Over',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a01450d31978c4de387ad4b1f80c9083daef087651eb482bae4624478696f4ad4f',1,'musx::dom::details::TieAlterBase']]]
 ];

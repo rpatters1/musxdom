@@ -10,7 +10,8 @@ var searchData=
   ['cleftype_7',['ClefType',['../namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946',1,'music_theory']]],
   ['colunisonschoice_8',['ColUnisonsChoice',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a96ca65be0c05687b0533cc64bd1fcd49',1,'musx::dom::options::MusicSpacingOptions']]],
   ['connectionindex_9',['ConnectionIndex',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3c',1,'musx::dom::options::SmartShapeOptions']]],
-  ['connectstyletype_10',['ConnectStyleType',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59',1,'musx::dom::options::TieOptions']]],
-  ['controlstyletype_11',['ControlStyleType',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555',1,'musx::dom::options::TieOptions']]],
-  ['copymode_12',['CopyMode',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#abf40637f5c0f246bfdfe40603bf9a5cc',1,'musx::dom::others::ArticulationDef']]]
+  ['connectiontype_10',['ConnectionType',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a568325ed0d5aa2b159b889d25e8b3755',1,'musx::dom::details::TieAlterBase']]],
+  ['connectstyletype_11',['ConnectStyleType',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59',1,'musx::dom::options::TieOptions']]],
+  ['controlstyletype_12',['ControlStyleType',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555',1,'musx::dom::options::TieOptions']]],
+  ['copymode_13',['CopyMode',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#abf40637f5c0f246bfdfe40603bf9a5cc',1,'musx::dom::others::ArticulationDef']]]
 ];
