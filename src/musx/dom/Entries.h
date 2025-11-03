@@ -42,6 +42,7 @@ class Frame;
 class PercussionNoteInfo;
 class Staff;
 class StaffComposite;
+class StaffUsed;
 } // namespace others
 
 namespace details {
@@ -243,7 +244,7 @@ public:
      * @return #NoteProperties
      */
     NoteProperties calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
-        const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
+        const MusxInstance<others::PercussionNoteInfo>& percNoteInfo, const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
     static const xml::XmlElementArray<Note>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
@@ -495,6 +496,32 @@ public:
     /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
     bool calcDisplaysAsRest() const;
 
+    /// @brief Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not
+    /// be called on a floating rest. It asserts and throws if so.
+    /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
+    std::pair<int, int> calcTopBottomStaffPositions() const;
+
+    /// @brief Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or
+    /// manual overrides.
+    /// @return True if the entry is upstem barring any other factors that would override the stem direction. False if it is downstem.
+    bool calcUpStemDefault() const;
+
+    /// @brief Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides,
+    /// and cross-staff notation.
+    ///
+    /// The function is designed to handle all common combinations of musical options and contexts, although some rare cases may still produce
+    /// incorrect results. The concept of an "up stem" becomes ambiguous when the entry uses a reverse stem.
+    /// (See #Entry::reverseStemUp and #Entry::reverseStemDown.) The goal is to compute the logical stem direction that governs
+    /// the entry's behavior. This allows selecting the correct up or down variant for any entry detail records or entry properties that have them,
+    /// including which reverse-stem value to recognize.
+    /// In cases involving reverse stems, the result of `calcUpStem` may not match the visible direction in a Finale-generated PDF.
+    ///
+    /// @note The #Entry::upStem flag may appear to provide this information, but it can be wrong if the layer context changed
+    /// without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.
+    ///
+    /// @return True if the stem is up; false if it is down.
+    bool calcUpStem() const;
+
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
     bool calcUnbeamed() const;
@@ -550,7 +577,7 @@ public:
     bool canBeBeamed() const;
 
     /// @brief Returns the entry size as a percentage, taking into account the beaming.
-    /// @return Interger percentage where 100 means 100%.
+    /// @return Integer percentage where 100 means 100%.
     int calcEntrySize() const;
 
     /// @brief Calculates if this entry is part of a cue.
@@ -564,7 +591,7 @@ public:
     /// @note Note that in Finale, only whole rests are used as full measure rests.
     bool calcIsFullMeasureRest() const;
 
-    /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with
+    /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with
     /// a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.
     /// @return True if this is either the replacement rest in v2 or the hidden rest in v1.
     bool calcIsBeamedRestWorkaroud() const;
@@ -572,6 +599,23 @@ public:
     /// @brief Finds the tuplet info for tuplets that include this entry
     /// @return A list of indices of TupletInfo records that include the entry.
     std::vector<size_t> findTupletInfo() const;
+
+    /// @brief Calculates whether the conditions are met for the layer attributes dependent on #others::LayerAttributes::onlyIfOtherLayersHaveNotes.
+    /// This also takes into account #others::LayerAttributes::ignoreHiddenNotesOnly and #others::LayerAttributes::ignoreHiddenLayers.
+    /// @return true if the layer settings dependent on #others::LayerAttributes::onlyIfOtherLayersHaveNotes are in effect. Otherwise false.
+    bool calcIfLayerSettingsApply() const;
+
+    /// @brief Calculates if this entry has cross-staffed notes all in a single direction.
+    /// @param staffList Optional staff list used to determine staff order.
+    ///        If `nullptr`, the function automatically retrieves the scroll-view staff order
+    ///        from the document.
+    ///        Supplying an explicit list can be used to avoid repeatedly fetching the
+    ///        staff list when calling this function in a loop (for example, within a beam).
+    /// @return
+    ///   - **1**  if all cross-staffed notes cross upward to a higher staff.
+    ///   - **0**  if the note is not cross-staffed, or if notes are crossed both up and down.
+    ///   - **−1** if all cross-staffed notes cross downward to a lower staff.
+    int calcCrossStaffDirectionForAll(const MusxInstanceList<others::StaffUsed>* staffList = nullptr) const;
 
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
@@ -602,6 +646,9 @@ private:
 
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
+
+    /// @brief Cache the staff for this entry here to avoid repeated calls to `StaffComposite::createCurrent` for the same information.
+    mutable MusxInstance<others::StaffComposite> m_cachedStaff;
 };
 
 /**
@@ -619,10 +666,11 @@ public:
      * @param layerIndex The @ref LayerIndex (0..3) of the entry frame
      * @param timeStretch The ratio of global Edu to staff edu.
     */
-    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, util::Fraction timeStretch) :
+    explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, util::Fraction timeStretch, const MusxInstance<others::StaffComposite>& startStaff) :
         m_context(gfhold),
         m_layerIndex(layerIndex),
-        m_timeStretch(timeStretch)
+        m_timeStretch(timeStretch),
+        m_startStaff(startStaff)
     {
     }
 
@@ -758,6 +806,9 @@ public:
     /// @brief Get the document for the entry frame
     DocumentPtr getDocument() const;
 
+    /// @brief Get the frame context for this frame
+    const details::GFrameHoldContext& getContext() const { return m_context; }
+
     /// @brief Get the requested part ID for the entry frame
     Cmper getRequestedPartId() const { return m_context.getRequestedPartId(); }
 
@@ -769,6 +820,9 @@ public:
 
     /// @brief Get the layer index (0..3) of the entry frame
     LayerIndex getLayerIndex() const { return m_layerIndex; }
+
+    /// @brief Get the LayerAttributes for this entry frame.
+    MusxInstance<others::LayerAttributes> getLayerAttributes() const;
 
     /// @brief Get the time stretch in this frame. Rather than accessing this value directly,
     /// consider using #EntryInfoPtr::calcGlobalElapsedDuration or #EntryInfoPtr::calcGlobalActualDuration instead.
@@ -799,7 +853,11 @@ public:
     /// @brief Gets the entry frame for the previous measure with the same staff and layer.
     /// @return Frame or nullpter if the previous measure has no matching frame,
     std::shared_ptr<const EntryFrame> getPrevious() const;
-    
+
+    /// @brief Gets the staff at eduPosition 0 without needing to create it again.
+    MusxInstance<others::StaffComposite> getStartStaffInstance() const
+    { return m_startStaff; }
+
     /// @brief Creates a current StaffComposite for the entry frame.
     /// @param eduPosition The Edu position for which to create the staff.
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
@@ -815,12 +873,25 @@ public:
     /// @return true if all entries in the frame are either cue entries or hidden.
     bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
+    /// @brief Calculates if this all notes in the frame are hidden.
+    /// This routine only checks that entries are individually hidden. The caller must separately check #others::Staff::calcAlternateNotationHidesEntries
+    /// according to its specific needs. For example, to determine if a layer is hidden for the purposes of checking validity of layer attributes,
+    /// only the staff at edu position 0 should be checked.
+    /// @return true if all entries in the frame are hidden.
+    bool calcAreAllEntriesHiddenInFrame() const;
+
 private:
     details::GFrameHoldContext m_context;
     LayerIndex m_layerIndex;
     util::Fraction m_timeStretch;
 
     std::vector<std::shared_ptr<const EntryInfo>> m_entries;
+
+    /// @brief Cache the start staff to avoid getting it again every time it is needed.
+    MusxInstance<others::StaffComposite> m_startStaff;
+
+    /// @brief Cache the layer attributes to avoid constantly re-retrieving them.
+    mutable MusxInstance<others::LayerAttributes> m_cachedLayerAttributes;
 };
 
 namespace details {
@@ -919,36 +990,43 @@ public:
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
-     * not take into account percussion notes and their staff position override. To discover if a note is a percussion
-     * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * not take into account percussion notes and their staff position override. To get the staff position taking
+     * into account percussion notes, use #calcStaffPosition.
      * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
      * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
      * the staff position returned by #calcNoteProperties for whole rests.
      * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
      * this value is calculated automatically based on the score or part settings. Normally you will omit it.
+     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
-    Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt) const;
+    Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt, bool alwaysUseEntryStaff = false) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does
      * not take into account percussion notes and their staff position override. To discover if a note is a percussion
      * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
-    Note::NoteProperties calcNotePropertiesConcert() const;
+    Note::NoteProperties calcNotePropertiesConcert(bool alwaysUseEntryStaff = false) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in view. This may be
      * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not
      * handle the staff position override of percussion notes.
+     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
-    Note::NoteProperties calcNotePropertiesInView() const;
+    Note::NoteProperties calcNotePropertiesInView(bool alwaysUseEntryStaff = false) const;
 
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
     MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
+
+    /// @brief Calculates the staff position for this note, taking into account percussion notes.
+    /// @return 
+    int calcStaffPosition() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)
@@ -1002,6 +1080,18 @@ public:
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
     std::pair<int, int> calcDefaultEnharmonic() const
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
+
+    /// @brief Calculates if this note is cross-staffed and if so, which direction.
+    /// @param staffList Optional staff list used to determine staff order.
+    ///        If `nullptr`, the function automatically retrieves the scroll-view staff order
+    ///        from the document.
+    ///        Supplying an explicit list can be used to avoid repeatedly fetching the
+    ///        staff list when calling this function in a loop (for example, within a beam).
+    /// @return
+    ///   - **1**  if the note crosses upward to a higher staff  
+    ///   - **0**  if the note is not cross-staffed  
+    ///   - **−1** if the note crosses downward to a lower staff
+    int calcCrossStaffDirection(const MusxInstanceList<others::StaffUsed>* staffList = nullptr) const;
 
     /// @brief Explicit operator< for std::map
     bool operator<(const NoteInfoPtr& other) const

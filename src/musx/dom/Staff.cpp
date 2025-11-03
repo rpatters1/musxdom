@@ -693,6 +693,12 @@ MusxInstance<PartDefinition> Staff::firstContainingPart() const
     return nullptr;
 }
 
+bool Staff::calcAlternateNotationHidesEntries(LayerIndex forLayerIndex) const
+{
+    return (altNotation == others::Staff::AlternateNotation::BlankWithRests || altNotation == others::Staff::AlternateNotation::Blank)
+        && (altLayer == forLayerIndex || altHideOtherNotes);
+}
+
 // **************************
 // ***** StaffComposite *****
 // **************************

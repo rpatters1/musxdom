@@ -51,11 +51,13 @@ MusxInstance<others::StaffComposite> MusxInstanceList<others::StaffUsed>::getSta
 
 std::optional<size_t> MusxInstanceList<others::StaffUsed>::getIndexForStaff(StaffCmper staffId) const
 {
-    const auto& iuArray = *this;
-    for (size_t x = 0; x < iuArray.size(); x++) {
-        if (iuArray[x]->staffId == staffId) {
-            return x;
-        }
+    const auto it = std::find_if(this->begin(), this->end(),
+        [&](const auto& inst) {
+            assert(inst && "inst should never be null");
+            return inst->staffId == staffId;
+        });
+    if (it != this->end()) {
+        return static_cast<size_t>(std::distance(this->begin(), it));
     }
     return std::nullopt;
 }

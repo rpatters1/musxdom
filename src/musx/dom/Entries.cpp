@@ -85,6 +85,14 @@ StaffCmper EntryFrame::getStaff() const { return m_context->getStaff(); }
 
 MeasCmper EntryFrame::getMeasure() const { return m_context->getMeasure(); }
 
+MusxInstance<others::LayerAttributes> EntryFrame::getLayerAttributes() const
+{
+    if (!m_cachedLayerAttributes) {
+        m_cachedLayerAttributes = getDocument()->getOthers()->get<others::LayerAttributes>(getRequestedPartId(), getLayerIndex());
+    }
+    return m_cachedLayerAttributes;
+}
+
 EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 {
     bool forV2 = voice == 2;
@@ -131,8 +139,11 @@ std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
 
 MusxInstance<others::StaffComposite> EntryFrame::createCurrentStaff(Edu eduPosition, const std::optional<StaffCmper>& forStaffId) const
 {
-    return others::StaffComposite::createCurrent(getDocument(), getRequestedPartId(), forStaffId.value_or(getStaff()),
-        getMeasure(), eduPosition);
+    const StaffCmper requestedStaffId = forStaffId.value_or(getStaff());
+    if (eduPosition == 0 && getStartStaffInstance()->getCmper() == requestedStaffId) {
+        return getStartStaffInstance();
+    }
+    return others::StaffComposite::createCurrent(getDocument(), getRequestedPartId(), requestedStaffId, getMeasure(), eduPosition);
 }
 
 MusxInstance<others::Measure> EntryFrame::getMeasureInstance() const
@@ -154,6 +165,17 @@ bool EntryFrame::calcIsCueFrame(bool includeVisibleInScore) const
         }
     }
     return foundCueEntry;
+}
+
+bool EntryFrame::calcAreAllEntriesHiddenInFrame() const
+{
+    for (const auto& entry : m_entries) {
+        if (!entry->getEntry()->isHidden) {
+            /// @todo check if the entry is hidden by voiced parts.
+            return false;
+        }
+    }
+    return true;
 }
 
 bool EntryFrame::TupletInfo::calcIsTremolo() const
@@ -434,7 +456,10 @@ MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entr
 
 MusxInstance<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<StaffCmper>& forStaffId) const
 {
-    return m_entryFrame->createCurrentStaff((*this)->elapsedDuration.calcEduDuration(), forStaffId);
+    if (!m_cachedStaff || m_cachedStaff->getCmper() != forStaffId.value_or(m_entryFrame->getStaff())) {
+        m_cachedStaff = m_entryFrame->createCurrentStaff((*this)->elapsedDuration.calcEduDuration(), forStaffId);
+    }
+    return m_cachedStaff;
 }
 
 unsigned EntryInfoPtr::calcReverseGraceIndex() const
@@ -558,6 +583,160 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
 bool EntryInfoPtr::calcDisplaysAsRest() const
 {
     return !(*this)->getEntry()->isNote;
+    /// @todo Add code to detect that the entry is converted to a rest by voiced part settings
+}
+
+std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
+{
+    const auto& entry = (*this)->getEntry();
+    MUSX_ASSERT_IF(entry->notes.empty() || entry->floatRest) {
+        throw std::logic_error("calcTopBottomStaffPositions cannot be called for a floating rest.");
+    }
+    int topLine = (std::numeric_limits<int>::min)();
+    int botLine = (std::numeric_limits<int>::max)();
+
+    auto updateLines = [&](const NoteInfoPtr note) {
+        const int staffLine = std::get<3>(note.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+        if (staffLine > topLine) {
+            topLine = staffLine;
+        }
+        if (staffLine < botLine) {
+            botLine = staffLine;
+        }
+    };
+
+    updateLines(NoteInfoPtr(*this, 0));
+    updateLines(NoteInfoPtr(*this, entry->notes.size() - 1));
+
+    return std::make_pair(topLine, botLine);
+}
+
+bool EntryInfoPtr::calcUpStemDefault() const
+{
+    //stem direction is determined by the beam a note or rest is part of, if any, so
+	//we must always look for a beam to calculate direction.
+    auto beamStart = findBeamStartOrCurrent();
+
+  	int maxTopDiff = (std::numeric_limits<int>::min)();
+	int minBotDiff = (std::numeric_limits<int>::max)();
+	int numAbove = 0;
+	int numBelow = 0;
+    bool gotNonGrace = false;
+    bool gotNonFloatRest = false;
+
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const auto& entry = next->getEntry();
+        if (!entry->graceNote) {
+            gotNonGrace = true;
+            if (entry->notes.empty() || entry->floatRest) {
+                continue;
+            }
+            gotNonFloatRest = true;
+            auto staff = next.createCurrentStaff();
+            auto [topLine, botLine] = next.calcTopBottomStaffPositions();
+            const int currTopDiff = topLine - staff->stemReversal;
+            if (maxTopDiff < currTopDiff) {
+                maxTopDiff = currTopDiff;
+            }
+            const int currBotDiff = botLine - staff->stemReversal;
+            if (minBotDiff > currBotDiff) {
+                minBotDiff = currBotDiff;
+            }
+            const int valForStem = std::abs(currBotDiff) > std::abs(currTopDiff) ? currBotDiff : currTopDiff;
+            if (valForStem > 0) {
+                numAbove++;
+            } else if (valForStem < 0) {
+                numBelow++;
+            }
+        }
+    }
+
+    if (!gotNonGrace) {
+        return true;
+    }
+
+    if (!gotNonFloatRest) {
+        return (*this)->getEntry()->upStem; // Use whatever Finale last calculated.
+    }
+
+    // for beams, if the diffs don't determine it, then the number above & below do
+    // (Function calcUnBeamed is false for beamed groups.)
+    if (minBotDiff < 0 && minBotDiff == -maxTopDiff && !calcUnbeamed()) {
+        return numBelow > numAbove;
+    }
+
+    const int valForBeam = std::abs(minBotDiff) > std::abs(maxTopDiff) ? minBotDiff : maxTopDiff;
+
+    return valForBeam < 0;
+}
+
+bool EntryInfoPtr::calcUpStem() const
+{
+    /// @todo Add cross-staff support some day?
+
+    //stem direction is determined by the beam a note or rest is part of, if any, so
+    //we must always look for a beam to calculate direction.
+    auto beamStart = findBeamStartOrCurrent();
+    const auto frame = getFrame();
+
+    // This is the precedence as tested by RGP in ~2001.
+    // rhythmic slash notation
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        auto staff = next.createCurrentStaff(); // the staff is cached by createCurrentStaff after first retrieval.
+        if (staff->altNotation == others::Staff::AlternateNotation::Rhythmic) {
+            return staff->altRhythmStemsUp;
+        }
+    }
+    // manual override of stem direction
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const auto& entry = next->getEntry();
+        if (next->getEntry()->freezeStem) {
+            return entry->upStem;
+        }
+    }
+    // layer override of stem direction
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        if (auto layerAtts = frame->getLayerAttributes()) {
+            if (layerAtts->freezeLayer && calcIfLayerSettingsApply()) {
+                return layerAtts->freezeStemsUp;
+            }
+        }
+    }
+    // staff override of stem direction
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        auto staff = next.createCurrentStaff();
+        if (staff->stemDirection == others::Staff::StemDirection::AlwaysUp) {
+            return true;
+        } else if (staff->stemDirection == others::Staff::StemDirection::AlwaysDown) {
+            return false;
+        }
+    }
+    // v1/v2 direction
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const auto& entry = next->getEntry();
+        if (entry->v2Launch || entry->voice2) {
+            return entry->upStem;
+        }
+    }
+    // cross-staff direction was not part of the 2001 testing, but this seems the right place for it for now.
+    const auto scrollViewStaves = frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID);
+    int foundCrossDirection = 0;
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const int currDirection = next.calcCrossStaffDirectionForAll(&scrollViewStaves);
+        if (currDirection != 0) {
+            if (foundCrossDirection == 0) {
+                foundCrossDirection = currDirection;
+            } else if (currDirection != foundCrossDirection) {
+                foundCrossDirection = 0;
+                break;
+            }
+        }
+    }
+    if (foundCrossDirection != 0) {
+        return foundCrossDirection < 0; // stem direction is opposite the cross direction, so cross down means stem up.
+    }
+
+    return calcUpStemDefault();
 }
 
 bool EntryInfoPtr::calcUnbeamed() const
@@ -872,8 +1051,7 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup(bool includeHiddenEntries) const
         auto resultEntry = result->getEntry();
         if (calcDisplaysAsRest() || result.calcDisplaysAsRest()) {
             auto beamOpts = getFrame()->getDocument()->getOptions()->get<options::BeamOptions>();
-            MUSX_ASSERT_IF(!beamOpts)
-            {
+            MUSX_ASSERT_IF(!beamOpts) {
                 throw std::logic_error("Document has no BeamOptions.");
             }
             auto searchForNoteFrom = [includeHiddenEntries](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)(bool) const) -> bool {
@@ -956,16 +1134,12 @@ bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
             return true;
         }
         auto doc = m_entryFrame->getDocument();
-        if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
-            bool hidden = (scoreStaff->altNotation == others::Staff::AlternateNotation::BlankWithRests || scoreStaff->altNotation == others::Staff::AlternateNotation::Blank)
-                && (scoreStaff->altLayer == getLayerIndex() || scoreStaff->altHideOtherNotes);
-            if (!hidden) {
-                hidden = scoreStaff->hideMode != others::Staff::HideMode::None;
-            }
+        if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), (*this)->elapsedDuration.calcEduDuration())) {
+            const bool hidden = scoreStaff->calcAlternateNotationHidesEntries(getLayerIndex()) || scoreStaff->hideMode != others::Staff::HideMode::None;
             if (hidden) {
                 auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
                 for (const auto& part : parts) {
-                    if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), calcGlobalElapsedDuration().calcEduDuration())) {
+                    if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), (*this)->elapsedDuration.calcEduDuration())) {
                         if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
                             return true;
                         }
@@ -1029,6 +1203,76 @@ std::vector<size_t> EntryInfoPtr::findTupletInfo() const
         }
     }
     return result;
+}
+
+bool EntryInfoPtr::calcIfLayerSettingsApply() const
+{
+    const auto frame = getFrame();
+    const auto layerAtts = frame->getLayerAttributes();
+    if (!layerAtts->onlyIfOtherLayersHaveNotes) {
+        return true;
+    }
+    const auto context = frame->getContext();
+    if (!context->calcIsMultiLayer()) {
+        return false;
+    }
+    const LayerIndex layerIndex = frame->getLayerIndex();
+    const auto startStaff = frame->getStartStaffInstance();
+    for (size_t nextLayerIndex = 0; nextLayerIndex < context->frames.size(); nextLayerIndex++) {
+        if (nextLayerIndex == layerIndex || context->frames[nextLayerIndex] == 0) {
+            continue;
+        }
+        const auto nextLayerAtts = frame->getDocument()->getOthers()->get<others::LayerAttributes>(frame->getRequestedPartId(), static_cast<Cmper>(nextLayerIndex));
+        MUSX_ASSERT_IF(!nextLayerAtts) {
+            throw integrity_error("Layer attributes for layer " + std::to_string(nextLayerIndex) + " do not exist.");
+        }
+        if (layerAtts->ignoreHiddenLayers && nextLayerAtts->hideLayer) {
+            continue;
+        }
+        if (layerAtts->ignoreHiddenNotesOnly) {
+            if (startStaff->calcAlternateNotationHidesEntries(nextLayerIndex)) {
+                continue; // layers are considered hidden if alternate notation at the beginning of the measure hides them, even if it doesn't go to the end.
+            }
+            if (auto layerFrame = context.createEntryFrame(nextLayerIndex)) {
+                if (layerFrame->calcAreAllEntriesHiddenInFrame()) {
+                    continue;
+                }
+            } else {
+                continue; // do not count non-existent layer frames as having notes
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+int EntryInfoPtr::calcCrossStaffDirectionForAll(const MusxInstanceList<others::StaffUsed>* staffList) const
+{
+    const auto frame = getFrame();
+    const MusxInstanceList<others::StaffUsed>* listPtr = nullptr;
+    std::optional<MusxInstanceList<others::StaffUsed>> tmp; // only constructed if we need to fetch
+
+    if (staffList) {
+        listPtr = staffList;
+    } else {
+        tmp.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
+        listPtr = &*tmp;
+    }
+
+    int crossStaffDirectionFound = 0;
+    auto entry = (*this)->getEntry();
+    for (size_t x = 0; x < entry->notes.size(); x++) {
+        const auto noteInfo = NoteInfoPtr(*this, x);
+        const int currDirection = noteInfo.calcCrossStaffDirection(listPtr);
+        if (currDirection != 0) {
+            if (crossStaffDirectionFound == 0) {
+                crossStaffDirectionFound = currDirection;
+            } else if (currDirection != crossStaffDirectionFound) {
+                return 0; // mixed directions, so short-circuit out
+            }
+        }
+    }
+    return crossStaffDirectionFound;
 }
 
 // *****************************
@@ -1106,7 +1350,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         const util::Fraction timeStretch = staff->floatTime
                                          ? measure->calcTimeStretch(staff->getCmper())
                                          : 1;
-        entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch);
+        entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch, staff);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
@@ -1332,7 +1576,7 @@ std::pair<int, int> Note::calcDefaultEnharmonic(const MusxInstance<KeySignature>
 }
 
 Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
-    const MusxInstance<others::Staff>& staff, bool respellEnharmonic) const
+    const MusxInstance<others::PercussionNoteInfo>& percNoteInfo, const MusxInstance<others::Staff>& staff, bool respellEnharmonic) const
 {
     auto [transposedLev, transposedAlt] = respellEnharmonic
                                         ? calcDefaultEnharmonic(key)
@@ -1355,16 +1599,22 @@ Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& 
     }
 
     // Calculate the actual alteration
-    int actualAlteration = transposedAlt + key->calcAlterationOnNote(step, ctx);
+    const int actualAlteration = transposedAlt + key->calcAlterationOnNote(step, ctx);
 
     // Calculate the staff line
-    const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
-    if (!clefOptions) {
-        throw std::invalid_argument("Document contains no clef options!");
-    }
-    int middleCLine = clefOptions->getClefDef(clefIndex)->middleCPos;
+    const int staffLine = [&]() {
+        if (percNoteInfo) {
+            return percNoteInfo->staffPosition;
+        }
+        const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
+        if (!clefOptions) {
+            throw std::invalid_argument("Document contains no clef options!");
+        }
+        int middleCLine = clefOptions->getClefDef(clefIndex)->middleCPos;
+        return keyAdjustedLev + middleCLine;
+    }();
 
-    return { music_theory::noteNames[step], octave, actualAlteration, keyAdjustedLev + middleCLine };
+    return { music_theory::noteNames[step], octave, actualAlteration, staffLine };
 }
 
 // ***********************
@@ -1483,43 +1733,46 @@ StaffCmper NoteInfoPtr::calcStaff() const
     return m_entry.getStaff();
 }
 
-Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell) const
+Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell, bool alwaysUseEntryStaff) const
 {
-    StaffCmper staffId = calcStaff();
-    const ClefIndex clefIndex = [&]() {
+    StaffCmper staffId = getEntryInfo().getStaff();
+    ClefIndex clefIndex = getEntryInfo()->clefIndex;
+    if (!alwaysUseEntryStaff) {
+        staffId = calcStaff();
         if (staffId != m_entry.getStaff()) {
             if (auto staff = m_entry.createCurrentStaff(staffId)) {
-                return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ true);
+                clefIndex = staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ true);
             }
         }
-        return m_entry->clefIndex;
-    }();
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Written, clefIndex, m_entry.createCurrentStaff(staffId),
+    }
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Written, clefIndex, calcPercussionNoteInfo(), m_entry.createCurrentStaff(staffId),
             enharmonicRespell.value_or(calcIsEnharmonicRespell()));
 }
 
-Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert() const
+Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert(bool alwaysUseEntryStaff) const
 {
     const ClefIndex clefIndex = [&]() {
-        StaffCmper staffId = calcStaff();
-        if (staffId != m_entry.getStaff()) {
-            if (auto staff = m_entry.createCurrentStaff(staffId)) {
-                return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ false);
+        if (!alwaysUseEntryStaff) {
+            StaffCmper staffId = calcStaff();
+            if (staffId != m_entry.getStaff()) {
+                if (auto staff = m_entry.createCurrentStaff(staffId)) {
+                    return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ false);
+                }
             }
         }
         return m_entry->clefIndexConcert;
     }();
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Concert, clefIndex, nullptr, calcIsEnharmonicRespell());
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Concert, clefIndex, calcPercussionNoteInfo(), nullptr, calcIsEnharmonicRespell());
 }
 
-Note::NoteProperties NoteInfoPtr::calcNotePropertiesInView() const
+Note::NoteProperties NoteInfoPtr::calcNotePropertiesInView(bool alwaysUseEntryStaff) const
 {
     bool forWrittenPitch = false;
     auto entryFrame = m_entry.getFrame();
     if (auto partGlobals = entryFrame->getDocument()->getOthers()->get<others::PartGlobals>(entryFrame->getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
         forWrittenPitch = partGlobals->showTransposed;
     }
-    return forWrittenPitch ? calcNoteProperties() : calcNotePropertiesConcert();
+    return forWrittenPitch ? calcNoteProperties(std::nullopt, alwaysUseEntryStaff) : calcNotePropertiesConcert(alwaysUseEntryStaff);
 }
 
 MusxInstance<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
@@ -1585,6 +1838,34 @@ bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
     }
     return (*this)->harmLev == src->harmLev
         && (*this)->harmAlt == src->harmAlt;
+}
+
+int NoteInfoPtr::calcCrossStaffDirection(const MusxInstanceList<others::StaffUsed>* staffList) const
+{
+    const auto frame = getEntryInfo().getFrame();
+    const MusxInstanceList<others::StaffUsed>* listPtr = nullptr;
+    std::optional<MusxInstanceList<others::StaffUsed>> tmp; // only constructed if we need to fetch
+
+    if (staffList) {
+        listPtr = staffList;
+    } else {
+        tmp.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
+        listPtr = &*tmp;
+    }
+
+    const auto homeIndex = listPtr->getIndexForStaff(frame->getStaff());
+    MUSX_ASSERT_IF(!homeIndex) {
+        throw std::logic_error("Input staffList does not contain the entry frame staff.");
+    }
+    const size_t noteIndex = listPtr->getIndexForStaff(calcStaff()).value_or(*homeIndex);
+
+    if (noteIndex < *homeIndex) {
+        return 1;
+    } else if (noteIndex > *homeIndex) {
+        return -1;
+    }
+
+    return 0;
 }
 
 } // namespace dom

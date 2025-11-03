@@ -440,6 +440,10 @@ public:
     /// @return The first part that contains this staff or nullptr if none.
     MusxInstance<PartDefinition> firstContainingPart() const;
 
+    /// @brief Returns true if the given layer is hidden by alternate notation.
+    /// @param forLayerIndex 0-based layer index (0..3)
+    bool calcAlternateNotationHidesEntries(LayerIndex forLayerIndex) const;
+
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
@@ -614,6 +618,8 @@ public:
 /**
  * @class StaffStyleAssign
  * @brief Represents an assignment
+ *
+ * @note Staff style assignments use staff EDU ranges.
  *
  * The cmper is the staff ID. This class is identified by the XML node name "staffStyleAssign".
  */
