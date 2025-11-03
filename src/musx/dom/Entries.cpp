@@ -679,29 +679,61 @@ bool EntryInfoPtr::calcUpStem() const
     auto beamStart = findBeamStartOrCurrent();
     const auto frame = getFrame();
 
+    // This is the precedence as tested by RGP in ~2001.
+    // rhythmic slash notation
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        auto staff = next.createCurrentStaff();
-        // This is the precedence as tested by RGP in ~2001.
+        auto staff = next.createCurrentStaff(); // the staff is cached by createCurrentStaff after first retrieval.
         if (staff->altNotation == others::Staff::AlternateNotation::Rhythmic) {
             return staff->altRhythmStemsUp;
         }
+    }
+    // manual override of stem direction
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         const auto& entry = next->getEntry();
-        if (entry->freezeStem) {
+        if (next->getEntry()->freezeStem) {
             return entry->upStem;
         }
+    }
+    // layer override of stem direction
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         if (auto layerAtts = frame->getLayerAttributes()) {
             if (layerAtts->freezeLayer && calcIfLayerSettingsApply()) {
                 return layerAtts->freezeStemsUp;
             }
         }
+    }
+    // staff override of stem direction
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        auto staff = next.createCurrentStaff();
         if (staff->stemDirection == others::Staff::StemDirection::AlwaysUp) {
             return true;
         } else if (staff->stemDirection == others::Staff::StemDirection::AlwaysDown) {
             return false;
         }
+    }
+    // v1/v2 direction
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const auto& entry = next->getEntry();
         if (entry->v2Launch || entry->voice2) {
             return entry->upStem;
         }
+    }
+    // cross-staff direction was not part of the 2001 testing, but this seems the right place for it for now.
+    const auto scrollViewStaves = frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID);
+    int foundCrossDirection = 0;
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const int currDirection = next.calcCrossStaffDirectionForAll(&scrollViewStaves);
+        if (currDirection != 0) {
+            if (foundCrossDirection == 0) {
+                foundCrossDirection = currDirection;
+            } else if (currDirection != foundCrossDirection) {
+                foundCrossDirection = 0;
+                break;
+            }
+        }
+    }
+    if (foundCrossDirection != 0) {
+        return foundCrossDirection < 0; // stem direction is opposite the cross direction, so cross down means stem up.
     }
 
     return calcUpStemDefault();
@@ -1019,8 +1051,7 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup(bool includeHiddenEntries) const
         auto resultEntry = result->getEntry();
         if (calcDisplaysAsRest() || result.calcDisplaysAsRest()) {
             auto beamOpts = getFrame()->getDocument()->getOptions()->get<options::BeamOptions>();
-            MUSX_ASSERT_IF(!beamOpts)
-            {
+            MUSX_ASSERT_IF(!beamOpts) {
                 throw std::logic_error("Document has no BeamOptions.");
             }
             auto searchForNoteFrom = [includeHiddenEntries](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)(bool) const) -> bool {
@@ -1213,6 +1244,35 @@ bool EntryInfoPtr::calcIfLayerSettingsApply() const
         return true;
     }
     return false;
+}
+
+int EntryInfoPtr::calcCrossStaffDirectionForAll(const MusxInstanceList<others::StaffUsed>* staffList) const
+{
+    const auto frame = getFrame();
+    const MusxInstanceList<others::StaffUsed>* listPtr = nullptr;
+    std::optional<MusxInstanceList<others::StaffUsed>> tmp; // only constructed if we need to fetch
+
+    if (staffList) {
+        listPtr = staffList;
+    } else {
+        tmp.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
+        listPtr = &*tmp;
+    }
+
+    int crossStaffDirectionFound = 0;
+    auto entry = (*this)->getEntry();
+    for (size_t x = 0; x < entry->notes.size(); x++) {
+        const auto noteInfo = NoteInfoPtr(*this, x);
+        const int currDirection = noteInfo.calcCrossStaffDirection(listPtr);
+        if (currDirection != 0) {
+            if (crossStaffDirectionFound == 0) {
+                crossStaffDirectionFound = currDirection;
+            } else if (currDirection != crossStaffDirectionFound) {
+                return 0; // mixed directions, so short-circuit out
+            }
+        }
+    }
+    return crossStaffDirectionFound;
 }
 
 // *****************************
@@ -1778,6 +1838,34 @@ bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
     }
     return (*this)->harmLev == src->harmLev
         && (*this)->harmAlt == src->harmAlt;
+}
+
+int NoteInfoPtr::calcCrossStaffDirection(const MusxInstanceList<others::StaffUsed>* staffList) const
+{
+    const auto frame = getEntryInfo().getFrame();
+    const MusxInstanceList<others::StaffUsed>* listPtr = nullptr;
+    std::optional<MusxInstanceList<others::StaffUsed>> tmp; // only constructed if we need to fetch
+
+    if (staffList) {
+        listPtr = staffList;
+    } else {
+        tmp.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
+        listPtr = &*tmp;
+    }
+
+    const auto homeIndex = listPtr->getIndexForStaff(frame->getStaff());
+    MUSX_ASSERT_IF(!homeIndex) {
+        throw std::logic_error("Input staffList does not contain the entry frame staff.");
+    }
+    const size_t noteIndex = listPtr->getIndexForStaff(calcStaff()).value_or(*homeIndex);
+
+    if (noteIndex < *homeIndex) {
+        return 1;
+    } else if (noteIndex > *homeIndex) {
+        return -1;
+    }
+
+    return 0;
 }
 
 } // namespace dom

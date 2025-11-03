@@ -42,6 +42,7 @@ class Frame;
 class PercussionNoteInfo;
 class Staff;
 class StaffComposite;
+class StaffUsed;
 } // namespace others
 
 namespace details {
@@ -500,15 +501,16 @@ public:
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
     std::pair<int, int> calcTopBottomStaffPositions() const;
 
-    /// @brief Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing or
+    /// @brief Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or
     /// manual overrides.
     /// @return True if the entry is upstem barring any other factors that would override the stem direction. False if it is downstem.
     bool calcUpStemDefault() const;
 
-    /// @brief Calculates the stem direction of the entry, taking into account voices, layers, staff options, and manual overrides.
-    /// @note The #Entry::upStem flag comes close to providing this information. Unfortunately, the flag can be stale if the layer context
-    /// or staff context changes and the entry frame was never re-edited. The flag also does not reflect cross-staff stem directions.
-    /// @warning Entries that are part of a cross-staff beam or have cross-staff notes are not supported. They will produce incorrect results.
+    /// @brief Calculates the stem direction of the entry, taking into account voices, layers, staff options, manual overrides, and cross-staffing.
+    /// Every effort has been made to cover all the most common musical combinations of options and situations, but there are doubtless
+    /// edge cases for which the function computes an incorrect value.
+    /// @note The #Entry::upStem flag seems like it should provide this information. Unfortunately, the flag can be stale if the layer context
+    /// changed and the entry frame was never re-edited. The flag also does not reflect cross-staff stem directions or staff overrides of stem direction.
     /// @return True if the stem is up and false if it is down.
     bool calcUpStem() const;
 
@@ -594,6 +596,18 @@ public:
     /// This also takes into account #others::LayerAttributes::ignoreHiddenNotesOnly and #others::LayerAttributes::ignoreHiddenLayers.
     /// @return true if the layer settings dependent on #others::LayerAttributes::onlyIfOtherLayersHaveNotes are in effect. Otherwise false.
     bool calcIfLayerSettingsApply() const;
+
+    /// @brief Calculates if this entry has cross-staffed notes all in a single direction.
+    /// @param staffList Optional staff list used to determine staff order.
+    ///        If `nullptr`, the function automatically retrieves the scroll-view staff order
+    ///        from the document.
+    ///        Supplying an explicit list can be used to avoid repeatedly fetching the
+    ///        staff list when calling this function in a loop (for example, within a beam).
+    /// @return
+    ///   - **1**  if all cross-staffed notes cross upward to a higher staff.
+    ///   - **0**  if the note is not cross-staffed, or if notes are crossed both up and down.
+    ///   - **−1** if all cross-staffed notes cross downward to a lower staff.
+    int calcCrossStaffDirectionForAll(const MusxInstanceList<others::StaffUsed>* staffList = nullptr) const;
 
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
@@ -1058,6 +1072,18 @@ public:
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
     std::pair<int, int> calcDefaultEnharmonic() const
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
+
+    /// @brief Calculates if this note is cross-staffed and if so, which direction.
+    /// @param staffList Optional staff list used to determine staff order.
+    ///        If `nullptr`, the function automatically retrieves the scroll-view staff order
+    ///        from the document.
+    ///        Supplying an explicit list can be used to avoid repeatedly fetching the
+    ///        staff list when calling this function in a loop (for example, within a beam).
+    /// @return
+    ///   - **1**  if the note crosses upward to a higher staff  
+    ///   - **0**  if the note is not cross-staffed  
+    ///   - **−1** if the note crosses downward to a lower staff
+    int calcCrossStaffDirection(const MusxInstanceList<others::StaffUsed>* staffList = nullptr) const;
 
     /// @brief Explicit operator< for std::map
     bool operator<(const NoteInfoPtr& other) const
