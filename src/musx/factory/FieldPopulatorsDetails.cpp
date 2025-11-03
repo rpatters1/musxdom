@@ -500,6 +500,7 @@ MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
     {"breakKeyLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyLocal = populateBoolean(e, i); }},
     {"breakKeyOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyOn = populateBoolean(e, i); }},
     {"freeze", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->freezeDirection = populateBoolean(e, i); }},
+    {"noSpecialArc", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noSpecialArc = populateBoolean(e, i); }},
     {"stPtAdjOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtAdjOn = populateBoolean(e, i); }},
     {"stPtEntCnct", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtEntCnct = toEnum<TieAlterBase::ConnectionType>(e); }},
     {"stPtContext", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtContext = toEnum<TieAlterBase::DirectionContext>(e); }},
@@ -511,6 +512,7 @@ MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
     {"insetRatio2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio2 = e->getTextAs<Evpu>(); }},
     {"height2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height2 = e->getTextAs<Evpu>(); }},
     {"ctlPtAdjOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtAdjOn = populateBoolean(e, i); }},
+    {"ctlPtFixed", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtFixed = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TupletDef, {

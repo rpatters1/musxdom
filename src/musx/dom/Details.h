@@ -1991,6 +1991,7 @@ public:
     bool breakKeyLocal{};                  ///< Local setting for "Break at Key Signature".
     bool breakKeyOn{};                     ///< Enable "Break at Key Signature".
     bool freezeDirection{};                ///< Freeze tie direction. (xml node is `<freeze>`)
+    bool noSpecialArc{};                   ///< Inverse of "Avoid Staff Lines". (See @ref options::TieOptions for more information about the naming.)
     bool stPtAdjOn{};                      ///< Enable start point adjustment.
     ConnectionType stPtEntCnct{};          ///< Start point must match this connection type for #xStart & #yStart to apply.
     DirectionContext stPtContext{};        ///< Start point must match this direction context for #xStart & #yStart to apply.
@@ -2002,6 +2003,8 @@ public:
     Evpu insetRatio2{};                    ///< Inset ratio for the second control point.
     Evpu height2{};                        ///< Height of the second control point.
     bool ctlPtAdjOn{};                     ///< Enable control point adjustment.
+    bool ctlPtFixed{};                     ///< Indicates that the inset values are fixed Evpu rather than percentages.
+                                           ///< This is a legacy compatibility setting and cannot be set in the tie alteration UI.
 
     NoteNumber getNoteId() const override { return noteId; }
 
