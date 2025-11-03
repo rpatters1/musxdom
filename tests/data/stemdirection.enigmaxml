@@ -61,7 +61,7 @@
       <modified>
         <year>2025</year>
         <month>11</month>
-        <day>1</day>
+        <day>3</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -1510,20 +1510,6 @@
       <family>0</family>
       <name>Broadway Copyist Text</name>
     </fontName>
-    <fontName cmper="11">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Lucida Grande</name>
-    </fontName>
-    <fontName cmper="12">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>4095</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Symbol</name>
-    </fontName>
     <fontName cmper="13">
       <charsetBank>Mac</charsetBank>
       <charsetVal>0</charsetVal>
@@ -1537,6 +1523,20 @@
       <pitch>0</pitch>
       <family>0</family>
       <name>Engraver Text T</name>
+    </fontName>
+    <fontName cmper="15">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Lucida Grande</name>
+    </fontName>
+    <fontName cmper="16">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Symbol</name>
     </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
@@ -1565,6 +1565,18 @@
     <frameSpec cmper="12" inci="0">
       <startEntry>39</startEntry>
       <endEntry>43</endEntry>
+    </frameSpec>
+    <frameSpec cmper="13" inci="0">
+      <startEntry>46</startEntry>
+      <endEntry>48</endEntry>
+    </frameSpec>
+    <frameSpec cmper="14" inci="0">
+      <startEntry>55</startEntry>
+      <endEntry>54</endEntry>
+    </frameSpec>
+    <frameSpec cmper="15" inci="0">
+      <startEntry>57</startEntry>
+      <endEntry>59</endEntry>
     </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
@@ -1803,7 +1815,6 @@
       <flipTies/>
       <floatLayer/>
       <useRestOff/>
-      <freezeLayUp/>
       <freezeLayer/>
       <playback/>
       <spacing/>
@@ -1812,10 +1823,12 @@
     <layerAtts cmper="2">
       <playback/>
       <spacing/>
+      <ignoreHidden/>
     </layerAtts>
     <layerAtts cmper="3">
       <playback/>
       <spacing/>
+      <ignoreHidden/>
     </layerAtts>
     <measNumbRegion cmper="1">
       <scoreData>
@@ -2915,6 +2928,7 @@
       <staffLines>5</staffLines>
       <lineSpace>24</lineSpace>
       <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <hasStyles/>
       <dwRestOffset>-4</dwRestOffset>
       <wRestOffset>-4</wRestOffset>
       <hRestOffset>-4</hRestOffset>
@@ -2968,6 +2982,12 @@
       </mask>
     </staffStyle>
     <staffStyleAssign cmper="1" inci="0">
+      <style>1</style>
+      <startMeas>3</startMeas>
+      <endEdu>2147483647</endEdu>
+      <endMeas>3</endMeas>
+    </staffStyleAssign>
+    <staffStyleAssign cmper="3" inci="0">
       <style>1</style>
       <startMeas>3</startMeas>
       <endEdu>2147483647</endEdu>
@@ -3379,11 +3399,11 @@
     </beamAltPrimUpStem>
     <crossStaff entnum="17" inci="0">
       <noteID>1</noteID>
-      <instrument>1</instrument>
+      <instrument>3</instrument>
     </crossStaff>
     <crossStaff entnum="17" inci="1">
       <noteID>2</noteID>
-      <instrument>1</instrument>
+      <instrument>3</instrument>
     </crossStaff>
     <crossStaff entnum="19" inci="0">
       <noteID>1</noteID>
@@ -3421,9 +3441,20 @@
       <clefPercent>75</clefPercent>
       <frame1>9</frame1>
     </gfhold>
+    <gfhold cmper1="2" cmper2="3">
+      <clefID>3</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>13</frame1>
+    </gfhold>
     <gfhold cmper1="3" cmper2="1">
       <clefID>3</clefID>
       <clefPercent>75</clefPercent>
+    </gfhold>
+    <gfhold cmper1="3" cmper2="3">
+      <clefID>3</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>14</frame1>
+      <frame2>15</frame2>
     </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
@@ -3500,7 +3531,7 @@
       <isNote/>
       <graceNote/>
       <beam/>
-      <upStem/>
+      <freezeStem/>
       <sorted/>
       <note id="1">
         <harmLev>-5</harmLev>
@@ -3514,7 +3545,6 @@
       <isValid/>
       <isNote/>
       <graceNote/>
-      <upStem/>
       <sorted/>
       <note id="1">
         <harmLev>-4</harmLev>
@@ -3708,7 +3738,7 @@
       <beam/>
       <sorted/>
     </entry>
-    <entry entnum="26" prev="25" next="0">
+    <entry entnum="26" prev="25" next="46">
       <dura>2048</dura>
       <numNotes>0</numNotes>
       <isValid/>
@@ -3797,16 +3827,11 @@
     </entry>
     <entry entnum="33" prev="32" next="34">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="34" prev="33" next="39">
       <dura>1024</dura>
@@ -3911,13 +3936,6 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="42" prev="0" next="0">
-      <dura>2048</dura>
-      <numNotes>0</numNotes>
-      <isValid/>
-      <floatRest/>
-      <beam/>
-    </entry>
     <entry entnum="43" prev="45" next="0">
       <dura>1024</dura>
       <numNotes>0</numNotes>
@@ -3952,6 +3970,131 @@
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
+    </entry>
+    <entry entnum="46" prev="26" next="49">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <controller/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>-7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="47" prev="50" next="48">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+    </entry>
+    <entry entnum="48" prev="47" next="0">
+      <dura>2048</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+    </entry>
+    <entry entnum="49" prev="46" next="50">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <v2/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>-4</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="50" prev="49" next="47">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <v2/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>-3</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="53" prev="56" next="54">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="54" prev="53" next="0">
+      <dura>2048</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="55" prev="0" next="56">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>-4</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="56" prev="55" next="53">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>-3</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="57" prev="0" next="58">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>-7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="58" prev="57" next="59">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+    </entry>
+    <entry entnum="59" prev="58" next="0">
+      <dura>2048</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
     </entry>
   </entries>
   <texts>

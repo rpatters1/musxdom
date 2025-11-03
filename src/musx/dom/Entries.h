@@ -506,12 +506,20 @@ public:
     /// @return True if the entry is upstem barring any other factors that would override the stem direction. False if it is downstem.
     bool calcUpStemDefault() const;
 
-    /// @brief Calculates the stem direction of the entry, taking into account voices, layers, staff options, manual overrides, and cross-staffing.
-    /// Every effort has been made to cover all the most common musical combinations of options and situations, but there are doubtless
-    /// edge cases for which the function computes an incorrect value.
-    /// @note The #Entry::upStem flag seems like it should provide this information. Unfortunately, the flag can be stale if the layer context
-    /// changed and the entry frame was never re-edited. The flag also does not reflect cross-staff stem directions or staff overrides of stem direction.
-    /// @return True if the stem is up and false if it is down.
+    /// @brief Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides,
+    /// and cross-staff notation.
+    ///
+    /// The function is designed to handle all common combinations of musical options and contexts, although some rare cases may still produce
+    /// incorrect results. The concept of an "up stem" becomes ambiguous when the entry uses a reverse stem.
+    /// (See #Entry::reverseStemUp and #Entry::reverseStemDown.) The goal is to compute the logical stem direction that governs
+    /// the entry's behavior. This allows selecting the correct up or down variant for any entry detail records or entry properties that have them,
+    /// including which reverse-stem value to recognize.
+    /// In cases involving reverse stems, the result of `calcUpStem` may not match the visible direction in a Finale-generated PDF.
+    ///
+    /// @note The #Entry::upStem flag may appear to provide this information, but it can be wrong if the layer context changed
+    /// without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.
+    ///
+    /// @return True if the stem is up; false if it is down.
     bool calcUpStem() const;
 
     /// @brief Returns whether this is an unbeamed entry
