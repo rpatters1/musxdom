@@ -1623,8 +1623,8 @@ public:
      */
     enum class SpecialPosMode
     {
-        None, ///< the default
-        Avoid
+        None,       ///< the default
+        Avoid       ///< avoid staff lines
     };
 
     /**
@@ -1669,32 +1669,32 @@ public:
         TieEnds
     };
 
-    Evpu frontTieSepar{};                   ///< Separation for the front of ties
-    Evpu thicknessRight{};                 ///< Right thickness of the tie
-    Evpu thicknessLeft{};                  ///< Left thickness of the tie
-    bool breakForTimeSigs{}; ///< Break ties for time signatures
-    bool breakForKeySigs{};  ///< Break ties for key signatures
-    Evpu breakTimeSigLeftHOffset{};        ///< Left horizontal offset for breaking time signature
-    Evpu breakTimeSigRightHOffset{};       ///< Right horizontal offset for breaking time signature
-    Evpu breakKeySigLeftHOffset{};         ///< Left horizontal offset for breaking key signature
-    Evpu breakKeySigRightHOffset{};        ///< Right horizontal offset for breaking key signature
-    Evpu sysBreakLeftHAdj{};               ///< Left adjustment for system breaks
-    Evpu sysBreakRightHAdj{};              ///< Right adjustment for system breaks
-    bool useOuterPlacement{}; ///< Use outer placement for ties
-    SecondsPlacement secondsPlacement{}; ///< Placement of seconds
-    ChordTieDirType chordTieDirType{}; ///< Chord tie direction type
-    bool chordTieDirOpposingSeconds{}; ///< Chord tie opposing seconds
-    MixedStemDirection mixedStemDirection{}; ///< Mixed stem direction
-    bool afterSingleDot{}; ///< Special handling after a single dot
-    bool afterMultipleDots{}; ///< Special handling after multiple dots
-    bool beforeAcciSingleNote{}; ///< Special handling before accidental single notes
-    SpecialPosMode specialPosMode{}; ///< Special positioning mode
-    Evpu avoidStaffLinesDistance{};        ///< Distance to avoid staff lines
-    InsetStyle insetStyle{}; ///< Inset style for ties
-    bool useInterpolation{}; ///< "Interpolate Height Between Short and Long Span"
-    bool useTieEndCtlStyle{}; ///< Use tie end control style
-    bool avoidStaffLinesOnly{}; ///< Only avoid staff lines
-    EvpuFloat tieTipWidth{};               ///< Width of the tie tip
+    Evpu frontTieSepar{};                       ///< Separation for the front of ties
+    Evpu thicknessRight{};                      ///< Right thickness of the tie
+    Evpu thicknessLeft{};                       ///< Left thickness of the tie
+    bool breakForTimeSigs{};                    ///< Break ties for time signatures
+    bool breakForKeySigs{};                     ///< Break ties for key signatures
+    Evpu breakTimeSigLeftHOffset{};             ///< Left horizontal offset for breaking time signature
+    Evpu breakTimeSigRightHOffset{};            ///< Right horizontal offset for breaking time signature
+    Evpu breakKeySigLeftHOffset{};              ///< Left horizontal offset for breaking key signature
+    Evpu breakKeySigRightHOffset{};             ///< Right horizontal offset for breaking key signature
+    Evpu sysBreakLeftHAdj{};                    ///< Left adjustment for system breaks
+    Evpu sysBreakRightHAdj{};                   ///< Right adjustment for system breaks
+    bool useOuterPlacement{};                   ///< Use outer placement for ties
+    SecondsPlacement secondsPlacement{};        ///< Placement of seconds
+    ChordTieDirType chordTieDirType{};          ///< Chord tie direction type
+    bool chordTieDirOpposingSeconds{};          ///< Chord tie opposing seconds
+    MixedStemDirection mixedStemDirection{};    ///< Mixed stem direction
+    bool afterSingleDot{};                      ///< Special handling after a single dot
+    bool afterMultipleDots{};                   ///< Special handling after multiple dots
+    bool beforeAcciSingleNote{};                ///< Special handling before accidental single notes
+    SpecialPosMode specialPosMode{};            ///< Whether to avoid staff lines. (This may have been called `specialPosMode` for planned future behaviors never implemented.)
+    Evpu avoidStaffLinesDistance{};             ///< Distance to avoid staff lines
+    InsetStyle insetStyle{};                    ///< Inset style for ties
+    bool useInterpolation{};                    ///< "Interpolate Height Between Short and Long Span"
+    bool useTieEndCtlStyle{};                   ///< Use tie end control style
+    bool avoidStaffLinesOnly{};                 ///< Only avoid staff lines
+    EvpuFloat tieTipWidth{};                    ///< Width of the tie tip
 
     /** @brief Struct for tie connect style */
     struct ConnectStyle {

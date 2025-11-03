@@ -72,6 +72,32 @@ MUSX_XML_ENUM_MAPPING(StaffGroup::DrawBarlineStyle, {
     {"Mensurstriche", StaffGroup::DrawBarlineStyle::Mensurstriche}
 });
 
+MUSX_XML_ENUM_MAPPING(TieAlterBase::ConnectionType, {
+    // {"none", TieAlterBase::ConnectionType::None}, // Default value, may not appear in the XML
+    {"entryLeftNoteCenter", TieAlterBase::ConnectionType::EntryLeftNoteCenter},
+    {"entryRightNoteCenter", TieAlterBase::ConnectionType::EntryRightNoteCenter},
+    {"noteLeftNoteCenter", TieAlterBase::ConnectionType::NoteLeftNoteCenter},
+    {"noteRightNoteCenter", TieAlterBase::ConnectionType::NoteRightNoteCenter},
+    {"noteCenterNoteBottom", TieAlterBase::ConnectionType::NoteCenterNoteBottom},
+    {"noteCenterNoteTop", TieAlterBase::ConnectionType::NoteCenterNoteTop},
+    {"dotRightNoteCenter", TieAlterBase::ConnectionType::DotRightNoteCenter},
+    {"acciLeftNoteCenter", TieAlterBase::ConnectionType::AccidentalLeftNoteCenter},
+    {"entryCenterNoteBottom", TieAlterBase::ConnectionType::EntryCenterNoteBottom},
+    {"entryCenterNoteTop", TieAlterBase::ConnectionType::EntryCenterNoteTop},
+    {"noteLeftNoteBottom", TieAlterBase::ConnectionType::NoteLeftNoteBottom},
+    {"noteRightNoteBottom", TieAlterBase::ConnectionType::NoteRightNoteBottom},
+    {"noteLeftNoteTop", TieAlterBase::ConnectionType::NoteLeftNoteTop},
+    {"noteRightNoteTop", TieAlterBase::ConnectionType::NoteRightNoteTop},
+    {"systemEnd", TieAlterBase::ConnectionType::SystemEnd},
+    {"systemStart", TieAlterBase::ConnectionType::SystemStart}
+});
+
+MUSX_XML_ENUM_MAPPING(TieAlterBase::DirectionContext, {
+    // {"none", TieAlterBase::DirectionContext::None}, // Default value, may not appear in the XML
+    {"under", TieAlterBase::DirectionContext::Under},
+    {"over", TieAlterBase::DirectionContext::Over}
+});
+
 } // namespace factory
 
 namespace dom {
@@ -474,13 +500,19 @@ MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
     {"breakKeyLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyLocal = populateBoolean(e, i); }},
     {"breakKeyOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyOn = populateBoolean(e, i); }},
     {"freeze", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->freezeDirection = populateBoolean(e, i); }},
+    {"noSpecialArc", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noSpecialArc = populateBoolean(e, i); }},
     {"stPtAdjOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtAdjOn = populateBoolean(e, i); }},
+    {"stPtEntCnct", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtEntCnct = toEnum<TieAlterBase::ConnectionType>(e); }},
+    {"stPtContext", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtContext = toEnum<TieAlterBase::DirectionContext>(e); }},
     {"enPtAdjOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtAdjOn = populateBoolean(e, i); }},
+    {"enPtEntCnct", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtEntCnct = toEnum<TieAlterBase::ConnectionType>(e); }},
+    {"enPtContext", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtContext = toEnum<TieAlterBase::DirectionContext>(e); }},
     {"insetRatio1", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio1 = e->getTextAs<Evpu>(); }},
     {"height1", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height1 = e->getTextAs<Evpu>(); }},
     {"insetRatio2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio2 = e->getTextAs<Evpu>(); }},
     {"height2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height2 = e->getTextAs<Evpu>(); }},
     {"ctlPtAdjOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtAdjOn = populateBoolean(e, i); }},
+    {"ctlPtFixed", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtFixed = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TupletDef, {

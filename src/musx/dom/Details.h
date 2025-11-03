@@ -1931,6 +1931,45 @@ public:
     {
     }
 
+    /**
+     * @enum ConnectionType
+     * @brief Defines tie connection points for start and end attachment locations.
+     *
+     * These values correspond to Finale’s internal tie connection codes,
+     * represented in XML by tags such as `<stPtEntCnct>noteCenterNoteTop</stPtEntCnct>`.
+     */
+    enum class ConnectionType
+    {
+        None,                   ///< No connection
+        EntryLeftNoteCenter,    ///< Left of entry, center of note
+        EntryRightNoteCenter,   ///< Right of entry, center of note
+        NoteLeftNoteCenter,     ///< Left of note, center of note
+        NoteRightNoteCenter,    ///< Right of note, center of note
+        NoteCenterNoteBottom,   ///< Horizontal center of note, bottom of note
+        NoteCenterNoteTop,      ///< Horizontal center of note, top of note
+        DotRightNoteCenter,     ///< Right of dot(s), center of note
+        AccidentalLeftNoteCenter, ///< Left of accidental, center of note
+        EntryCenterNoteBottom,  ///< Horizontal center of entry, bottom of note
+        EntryCenterNoteTop,     ///< Horizontal center of entry, top of note
+        NoteLeftNoteBottom,     ///< Left of note, bottom of note
+        NoteRightNoteBottom,    ///< Right of note, bottom of note
+        NoteLeftNoteTop,        ///< Left of note, top of note
+        NoteRightNoteTop,       ///< Right of note, top of note
+        SystemEnd,              ///< System end (for the right side across systems)
+        SystemStart             ///< System start (for the left side across systems)
+    };
+
+    /**
+     * @enum DirectionContext
+     * @brief Indicates the placement context of end- and control-point adjustments.
+     */
+    enum class DirectionContext
+    {
+        None,       ///< No context specified.
+        Under,      ///< The tie is positioned below (e.g., tie under)
+        Over        ///< The tie is positioned above (e.g., tie over)
+    };
+
     NoteNumber noteId{};                   ///< Note ID associated with the tie alteration. (xml node is `<noteID>`)
     Evpu xStart{};                         ///< Horizontal start position of the tie.
     Evpu xEnd{};                           ///< Horizontal end position of the tie.
@@ -1952,17 +1991,23 @@ public:
     bool breakKeyLocal{};                  ///< Local setting for "Break at Key Signature".
     bool breakKeyOn{};                     ///< Enable "Break at Key Signature".
     bool freezeDirection{};                ///< Freeze tie direction. (xml node is `<freeze>`)
+    bool noSpecialArc{};                   ///< Inverse of "Avoid Staff Lines". (See @ref options::TieOptions for more information about the naming.)
     bool stPtAdjOn{};                      ///< Enable start point adjustment.
+    ConnectionType stPtEntCnct{};          ///< Start point must match this connection type for #xStart & #yStart to apply.
+    DirectionContext stPtContext{};        ///< Start point must match this direction context for #xStart & #yStart to apply.
     bool enPtAdjOn{};                      ///< Enable end point adjustment.
+    ConnectionType enPtEntCnct{};          ///< End point must match this connection type for #xEnd & #yEnd to apply.
+    DirectionContext enPtContext{};        ///< End point must match this direction context for #xEnd & #yEnd to apply.
     Evpu insetRatio1{};                    ///< Inset ratio for the first control point.
     Evpu height1{};                        ///< Height of the first control point.
     Evpu insetRatio2{};                    ///< Inset ratio for the second control point.
     Evpu height2{};                        ///< Height of the second control point.
     bool ctlPtAdjOn{};                     ///< Enable control point adjustment.
+    bool ctlPtFixed{};                     ///< Indicates that the inset values are fixed Evpu rather than percentages.
+                                           ///< This is a legacy compatibility setting and cannot be set in the tie alteration UI.
 
     NoteNumber getNoteId() const override { return noteId; }
 
-    bool requireAllFields() const override { return false; } ///< Unless we decide to figure out connection types, this will stay here.
     static const xml::XmlElementArray<TieAlterBase>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 

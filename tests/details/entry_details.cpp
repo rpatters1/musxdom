@@ -612,15 +612,21 @@ TEST(TieAlterTest, PopulateFields)
       <breakKeyLocal/>
       <breakKeyOn/>
       <freeze/>
+      <noSpecialArc/>
       <yStart>7</yStart>
       <yEnd>7</yEnd>
       <stPtAdjOn/>
+      <stPtEntCnct>noteCenterNoteBottom</stPtEntCnct>
+      <stPtContext>under</stPtContext>
       <enPtAdjOn/>
+      <enPtEntCnct>systemEnd</enPtEntCnct>
+      <enPtContext>under</enPtContext>
       <insetRatio1>410</insetRatio1>
       <height1>46</height1>
       <insetRatio2>410</insetRatio2>
       <height2>49</height2>
       <ctlPtAdjOn/>
+      <ctlPtFixed/>
     </tieAlterStart>
   </details>
 </finale>
@@ -655,9 +661,15 @@ TEST(TieAlterTest, PopulateFields)
     EXPECT_TRUE(tieAlter->breakKeyLocal);
     EXPECT_TRUE(tieAlter->breakKeyOn);
     EXPECT_TRUE(tieAlter->freezeDirection);
+    EXPECT_TRUE(tieAlter->noSpecialArc);
     EXPECT_TRUE(tieAlter->stPtAdjOn);
+    EXPECT_EQ(tieAlter->stPtEntCnct, details::TieAlterBase::ConnectionType::NoteCenterNoteBottom);
+    EXPECT_EQ(tieAlter->stPtContext, details::TieAlterBase::DirectionContext::Under);
     EXPECT_TRUE(tieAlter->enPtAdjOn);
+    EXPECT_EQ(tieAlter->enPtEntCnct, details::TieAlterBase::ConnectionType::SystemEnd);
+    EXPECT_EQ(tieAlter->enPtContext, details::TieAlterBase::DirectionContext::Under);
     EXPECT_TRUE(tieAlter->ctlPtAdjOn);
+    EXPECT_TRUE(tieAlter->ctlPtFixed);
 
     EXPECT_EQ(tieAlter->insetRatio1, Evpu(410));
     EXPECT_EQ(tieAlter->height1, Evpu(46));
