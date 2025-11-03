@@ -37,6 +37,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     ] ],
     [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html#a6b2463c519cd866520ed2116151334b5", null ],
     [ "addAutoNumbering", "classmusx_1_1dom_1_1others_1_1Staff.html#a428918fb57d8ff9b01b34f953b080904", null ],
+    [ "calcAlternateNotationHidesEntries", "classmusx_1_1dom_1_1others_1_1Staff.html#a9d7c3b2be150114583a4bc3f1cfee5c6", null ],
     [ "calcAutoNumberingAffix", "classmusx_1_1dom_1_1others_1_1Staff.html#a1429901c5fe356fd8f4ce7d63b680c04", null ],
     [ "calcBaselinePosition", "classmusx_1_1dom_1_1others_1_1Staff.html#a9a7297ea42e76c5b5836160412e72fc8", null ],
     [ "calcBaselinePosition", "classmusx_1_1dom_1_1others_1_1Staff.html#a3b3b84f9e7315d29b794311f290d4d08", null ],

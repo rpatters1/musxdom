@@ -296,6 +296,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasInstrumentAssigned
 <tr class="memitem:adcfe012e7e7d271bb328cb7f53141eae" id="r_adcfe012e7e7d271bb328cb7f53141eae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html">PartDefinition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#adcfe012e7e7d271bb328cb7f53141eae">firstContainingPart</a> () const</td></tr>
 <tr class="memdesc:adcfe012e7e7d271bb328cb7f53141eae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the first part that contains this staff, not including the score.  <br /></td></tr>
 <tr class="separator:adcfe012e7e7d271bb328cb7f53141eae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d7c3b2be150114583a4bc3f1cfee5c6" id="r_a9d7c3b2be150114583a4bc3f1cfee5c6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a9d7c3b2be150114583a4bc3f1cfee5c6">calcAlternateNotationHidesEntries</a> (<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> forLayerIndex) const</td></tr>
+<tr class="memdesc:a9d7c3b2be150114583a4bc3f1cfee5c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the given layer is hidden by alternate notation.  <br /></td></tr>
+<tr class="separator:a9d7c3b2be150114583a4bc3f1cfee5c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d2caeeeb15cb611f15ae650360a3824" id="r_a0d2caeeeb15cb611f15ae650360a3824"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0d2caeeeb15cb611f15ae650360a3824">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a0d2caeeeb15cb611f15ae650360a3824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a0d2caeeeb15cb611f15ae650360a3824"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1017,6 +1020,32 @@ template&lt;typename SubType &gt; </div>
 
 <p>Populate runtime values for all staves or staffstyles, such as percussion map Id if any. </p>
 <p>This function is called by the DocumentFactory when the document is created. </p>
+
+</div>
+</div>
+<a id="a9d7c3b2be150114583a4bc3f1cfee5c6" name="a9d7c3b2be150114583a4bc3f1cfee5c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d7c3b2be150114583a4bc3f1cfee5c6">&#9670;&#160;</a></span>calcAlternateNotationHidesEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::Staff::calcAlternateNotationHidesEntries </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td>
+          <td class="paramname"><em>forLayerIndex</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the given layer is hidden by alternate notation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forLayerIndex</td><td>0-based layer index (0..3) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

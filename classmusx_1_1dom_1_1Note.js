@@ -3,7 +3,7 @@ var classmusx_1_1dom_1_1Note =
     [ "NoteProperties", "classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68", null ],
     [ "Note", "classmusx_1_1dom_1_1Note.html#a7b5fc7c3dd8fe22c524c311b8eae5463", null ],
     [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1Note.html#a8b42277ba09844d042d326b07c5ab867", null ],
-    [ "calcNoteProperties", "classmusx_1_1dom_1_1Note.html#a4a0a325e7fd6c567b84349af37d01abe", null ],
+    [ "calcNoteProperties", "classmusx_1_1dom_1_1Note.html#afeba0d3ccb453653cdc2183a8d4129c0", null ],
     [ "getNoteId", "classmusx_1_1dom_1_1Note.html#a6f0f8b7fc1ce284954140b26b2774d14", null ],
     [ "crossStaff", "classmusx_1_1dom_1_1Note.html#a84dc0efada748e96ca668df2e1c5c6ec", null ],
     [ "downStemSecond", "classmusx_1_1dom_1_1Note.html#ab9f704935ab409ffc0f70481b710a820", null ],

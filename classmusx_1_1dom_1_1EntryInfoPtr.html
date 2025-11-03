@@ -197,6 +197,15 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:a91dd4f09e8c863732cfa52f13275995b" id="r_a91dd4f09e8c863732cfa52f13275995b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b">calcDisplaysAsRest</a> () const</td></tr>
 <tr class="memdesc:a91dd4f09e8c863732cfa52f13275995b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if an entry displays as a rest.  <br /></td></tr>
 <tr class="separator:a91dd4f09e8c863732cfa52f13275995b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7cecd561c595a6685ab1204b919e442" id="r_aa7cecd561c595a6685ab1204b919e442"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aa7cecd561c595a6685ab1204b919e442">calcTopBottomStaffPositions</a> () const</td></tr>
+<tr class="memdesc:aa7cecd561c595a6685ab1204b919e442"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not be called on a floating rest. It asserts and throws if so.  <br /></td></tr>
+<tr class="separator:aa7cecd561c595a6685ab1204b919e442"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a002aa6823c31b83897d351c3ba49f5a4" id="r_a002aa6823c31b83897d351c3ba49f5a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a002aa6823c31b83897d351c3ba49f5a4">calcUpStemDefault</a> () const</td></tr>
+<tr class="memdesc:a002aa6823c31b83897d351c3ba49f5a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or manual overrides.  <br /></td></tr>
+<tr class="separator:a002aa6823c31b83897d351c3ba49f5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87a183870482e7322a06c94d953a31aa" id="r_a87a183870482e7322a06c94d953a31aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a87a183870482e7322a06c94d953a31aa">calcUpStem</a> () const</td></tr>
+<tr class="memdesc:a87a183870482e7322a06c94d953a31aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides, and cross-staff notation.  <br /></td></tr>
+<tr class="separator:a87a183870482e7322a06c94d953a31aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accb023218f8bfd19cd3b3c4b82de530c" id="r_accb023218f8bfd19cd3b3c4b82de530c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#accb023218f8bfd19cd3b3c4b82de530c">calcUnbeamed</a> () const</td></tr>
 <tr class="memdesc:accb023218f8bfd19cd3b3c4b82de530c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is an unbeamed entry.  <br /></td></tr>
 <tr class="separator:accb023218f8bfd19cd3b3c4b82de530c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,11 +260,17 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () co
 <tr class="memdesc:aee6b5524df00cd1f2bbb41ebf760b58d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is a full measure rest.  <br /></td></tr>
 <tr class="separator:aee6b5524df00cd1f2bbb41ebf760b58d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad82e20770828b57b9c8dad206e9e92dd" id="r_ad82e20770828b57b9c8dad206e9e92dd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad82e20770828b57b9c8dad206e9e92dd">calcIsBeamedRestWorkaroud</a> () const</td></tr>
-<tr class="memdesc:ad82e20770828b57b9c8dad206e9e92dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.  <br /></td></tr>
+<tr class="memdesc:ad82e20770828b57b9c8dad206e9e92dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.  <br /></td></tr>
 <tr class="separator:ad82e20770828b57b9c8dad206e9e92dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd810deb36d0bf21b99d27486533ba21" id="r_afd810deb36d0bf21b99d27486533ba21"><td class="memItemLeft" align="right" valign="top">std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#afd810deb36d0bf21b99d27486533ba21">findTupletInfo</a> () const</td></tr>
 <tr class="memdesc:afd810deb36d0bf21b99d27486533ba21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the tuplet info for tuplets that include this entry.  <br /></td></tr>
 <tr class="separator:afd810deb36d0bf21b99d27486533ba21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b2399f12b3954defd1403ab7acc7b0b" id="r_a1b2399f12b3954defd1403ab7acc7b0b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a1b2399f12b3954defd1403ab7acc7b0b">calcIfLayerSettingsApply</a> () const</td></tr>
+<tr class="memdesc:a1b2399f12b3954defd1403ab7acc7b0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether the conditions are met for the layer attributes dependent on <a class="el" href="classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae2a33f78ad890261180cddf1c3eaf112" title="&quot;Apply Settings Only if Notes are in Other Layers&quot; (xml node is &lt;floatLayer&gt;)">others::LayerAttributes::onlyIfOtherLayersHaveNotes</a>. This also takes into account <a class="el" href="classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a9febb8189265d0741e82af73d02b5fe7" title="&quot;Ignore Layers Containing Only Hidden Notes&quot; (xml node is &lt;ignoreHidden&gt;)">others::LayerAttributes::ignoreHiddenNotesOnly</a> and <a class="el" href="classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a8bdb6eade6b17a1bc87cb2e65b02a0c4" title="&quot;Ignore Hidden Layers&quot;">others::LayerAttributes::ignoreHiddenLayers</a>.  <br /></td></tr>
+<tr class="separator:a1b2399f12b3954defd1403ab7acc7b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad38917cf1fc8417af6abccb707b6acb3" id="r_ad38917cf1fc8417af6abccb707b6acb3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad38917cf1fc8417af6abccb707b6acb3">calcCrossStaffDirectionForAll</a> (const <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt; *staffList=nullptr) const</td></tr>
+<tr class="memdesc:ad38917cf1fc8417af6abccb707b6acb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry has cross-staffed notes all in a single direction.  <br /></td></tr>
+<tr class="separator:ad38917cf1fc8417af6abccb707b6acb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa247de0fb2eb2be22aaa12cf14266768" id="r_aa247de0fb2eb2be22aaa12cf14266768"><td class="memItemLeft" align="right" valign="top"><a id="aa247de0fb2eb2be22aaa12cf14266768" name="aa247de0fb2eb2be22aaa12cf14266768"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;other) const</td></tr>
 <tr class="memdesc:aa247de0fb2eb2be22aaa12cf14266768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicit operator&lt; for std::map. <br /></td></tr>
@@ -337,6 +352,38 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ad38917cf1fc8417af6abccb707b6acb3" name="ad38917cf1fc8417af6abccb707b6acb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad38917cf1fc8417af6abccb707b6acb3">&#9670;&#160;</a></span>calcCrossStaffDirectionForAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::EntryInfoPtr::calcCrossStaffDirectionForAll </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt; *&#160;</td>
+          <td class="paramname"><em>staffList</em> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if this entry has cross-staffed notes all in a single direction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">staffList</td><td>Optional staff list used to determine staff order. If <code>nullptr</code>, the function automatically retrieves the scroll-view staff order from the document. Supplying an explicit list can be used to avoid repeatedly fetching the staff list when calling this function in a loop (for example, within a beam). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li><b>1</b> if all cross-staffed notes cross upward to a higher staff.</li>
+<li><b>0</b> if the note is not cross-staffed, or if notes are crossed both up and down.</li>
+<li><b>−1</b> if all cross-staffed notes cross downward to a lower staff. </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
 <a id="a91dd4f09e8c863732cfa52f13275995b" name="a91dd4f09e8c863732cfa52f13275995b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a91dd4f09e8c863732cfa52f13275995b">&#9670;&#160;</a></span>calcDisplaysAsRest()</h2>
 
@@ -353,7 +400,8 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculates if an entry displays as a rest. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Add code to detect that the entry is converted to a rest by voiced part settings </dd></dl>
 
 </div>
 </div>
@@ -373,7 +421,27 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the entry size as a percentage, taking into account the beaming. </p>
-<dl class="section return"><dt>Returns</dt><dd>Interger percentage where 100 means 100%. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Integer percentage where 100 means 100%. </dd></dl>
+
+</div>
+</div>
+<a id="a1b2399f12b3954defd1403ab7acc7b0b" name="a1b2399f12b3954defd1403ab7acc7b0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b2399f12b3954defd1403ab7acc7b0b">&#9670;&#160;</a></span>calcIfLayerSettingsApply()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIfLayerSettingsApply </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates whether the conditions are met for the layer attributes dependent on <a class="el" href="classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae2a33f78ad890261180cddf1c3eaf112" title="&quot;Apply Settings Only if Notes are in Other Layers&quot; (xml node is &lt;floatLayer&gt;)">others::LayerAttributes::onlyIfOtherLayersHaveNotes</a>. This also takes into account <a class="el" href="classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a9febb8189265d0741e82af73d02b5fe7" title="&quot;Ignore Layers Containing Only Hidden Notes&quot; (xml node is &lt;ignoreHidden&gt;)">others::LayerAttributes::ignoreHiddenNotesOnly</a> and <a class="el" href="classmusx_1_1dom_1_1others_1_1LayerAttributes.html#a8bdb6eade6b17a1bc87cb2e65b02a0c4" title="&quot;Ignore Hidden Layers&quot;">others::LayerAttributes::ignoreHiddenLayers</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if the layer settings dependent on <a class="el" href="classmusx_1_1dom_1_1others_1_1LayerAttributes.html#ae2a33f78ad890261180cddf1c3eaf112" title="&quot;Apply Settings Only if Notes are in Other Layers&quot; (xml node is &lt;floatLayer&gt;)">others::LayerAttributes::onlyIfOtherLayersHaveNotes</a> are in effect. Otherwise false. </dd></dl>
 
 </div>
 </div>
@@ -392,7 +460,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typicall it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation. </p>
+<p>A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if this is either the replacement rest in v2 or the hidden rest in v1. </dd></dl>
 
 </div>
@@ -546,6 +614,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aa7cecd561c595a6685ab1204b919e442" name="aa7cecd561c595a6685ab1204b919e442"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7cecd561c595a6685ab1204b919e442">&#9670;&#160;</a></span>calcTopBottomStaffPositions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; int, int &gt; musx::dom::EntryInfoPtr::calcTopBottomStaffPositions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not be called on a floating rest. It asserts and throws if so. </p>
+<dl class="section return"><dt>Returns</dt><dd>A std::pair&lt;int, int&gt; with the first being the top staff position and the second being the bottom staff position. </dd></dl>
+
+</div>
+</div>
 <a id="accb023218f8bfd19cd3b3c4b82de530c" name="accb023218f8bfd19cd3b3c4b82de530c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#accb023218f8bfd19cd3b3c4b82de530c">&#9670;&#160;</a></span>calcUnbeamed()</h2>
 
@@ -564,6 +652,49 @@ Static Public Member Functions</h2></td></tr>
 <p>Returns whether this is an unbeamed entry. </p>
 <dl class="section return"><dt>Returns</dt><dd><br  />
  </dd></dl>
+
+</div>
+</div>
+<a id="a87a183870482e7322a06c94d953a31aa" name="a87a183870482e7322a06c94d953a31aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87a183870482e7322a06c94d953a31aa">&#9670;&#160;</a></span>calcUpStem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcUpStem </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides, and cross-staff notation. </p>
+<p>The function is designed to handle all common combinations of musical options and contexts, although some rare cases may still produce incorrect results. The concept of an "up stem" becomes ambiguous when the entry uses a reverse stem. (See #Entry::reverseStemUp and #Entry::reverseStemDown.) The goal is to compute the logical stem direction that governs the entry's behavior. This allows selecting the correct up or down variant for any entry detail records or entry properties that have them, including which reverse-stem value to recognize. In cases involving reverse stems, the result of <code>calcUpStem</code> may not match the visible direction in a Finale-generated PDF.</p>
+<dl class="section note"><dt>Note</dt><dd>The <a class="el" href="classmusx_1_1dom_1_1Entry.html#a0a80d84ecac51e22cb87cfe7db9ceaa6" title="Whether a stem is up or down. (Only reliable when freezeStem is true.)">Entry::upStem</a> flag may appear to provide this information, but it can be wrong if the layer context changed without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the stem is up; false if it is down. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>Add cross-staff support some day? </dd></dl>
+
+</div>
+</div>
+<a id="a002aa6823c31b83897d351c3ba49f5a4" name="a002aa6823c31b83897d351c3ba49f5a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a002aa6823c31b83897d351c3ba49f5a4">&#9670;&#160;</a></span>calcUpStemDefault()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcUpStemDefault </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or manual overrides. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if the entry is upstem barring any other factors that would override the stem direction. False if it is downstem. </dd></dl>
 
 </div>
 </div>

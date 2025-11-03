@@ -50,7 +50,7 @@ var searchData=
   ['addunlinkednode_47',['addUnlinkedNode',['../classmusx_1_1dom_1_1Base.html#ab65d4a6942a09ecc3a2b6ae5c96d434a',1,'musx::dom::Base']]],
   ['adjmultiplevoices_48',['adjMultipleVoices',['../classmusx_1_1dom_1_1options_1_1AugmentationDotOptions.html#a3a9e7e378fb058eed87b9b81b0807270',1,'musx::dom::options::AugmentationDotOptions']]],
   ['adjust_49',['adjust',['../classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html#a0ae30729f86fac820cbfa5cf8c060687',1,'musx::dom::others::Staff::KeySigTransposition']]],
-  ['adjustpagescope_50',['adjustpagescope',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2',1,'musx::dom::options::PageFormatOptions::AdjustPageScope'],['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#a3cd6f930f0804d2f33046f2e0ecf920d',1,'musx::dom::options::PageFormatOptions::adjustPageScope']]],
+  ['adjustpagescope_50',['adjustpagescope',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#a3cd6f930f0804d2f33046f2e0ecf920d',1,'musx::dom::options::PageFormatOptions::adjustPageScope'],['../classmusx_1_1dom_1_1options_1_1PageFormatOptions.html#aa17c79218cebf6c01d00959a6eff87e2',1,'musx::dom::options::PageFormatOptions::AdjustPageScope']]],
   ['adodo_51',['Adodo',['../namespacemusx_1_1dom_1_1uuid.html#a06d8bcb79db7820169af34223538fdef',1,'musx::dom::uuid']]],
   ['aeolian_52',['Aeolian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea71c7913b150c35a82ad53ae6b3be4d21',1,'music_theory']]],
   ['aeolianharp_53',['AeolianHarp',['../namespacemusx_1_1dom_1_1uuid.html#ad85243f9f8e7e0a10ccb2fd862bf794c',1,'musx::dom::uuid']]],

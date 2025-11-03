@@ -9,7 +9,7 @@ var searchData=
   ['enigmastyles_6',['EnigmaStyles',['../structmusx_1_1util_1_1EnigmaStyles.html#a44d9baabb1ff9f1a44c0d201936bd39e',1,'musx::util::EnigmaStyles']]],
   ['entry_7',['Entry',['../classmusx_1_1dom_1_1Entry.html#a0d0212e38649a2376155155c477a138c',1,'musx::dom::Entry']]],
   ['entrydetailsbase_8',['entrydetailsbase',['../classmusx_1_1dom_1_1EntryDetailsBase.html#a105bc2acdcb24b5a3c10bcad1d3c5955',1,'musx::dom::EntryDetailsBase::EntryDetailsBase()'],['../classmusx_1_1dom_1_1NoteDetailsBase.html#a105bc2acdcb24b5a3c10bcad1d3c5955',1,'musx::dom::NoteDetailsBase::EntryDetailsBase()']]],
-  ['entryframe_9',['EntryFrame',['../classmusx_1_1dom_1_1EntryFrame.html#a8f25e673cfcc592f068b55d1368855bc',1,'musx::dom::EntryFrame']]],
+  ['entryframe_9',['EntryFrame',['../classmusx_1_1dom_1_1EntryFrame.html#a0d4e9c58c633b3a9f722c6d2a48179ba',1,'musx::dom::EntryFrame']]],
   ['entryinfoptr_10',['entryinfoptr',['../classmusx_1_1dom_1_1EntryInfoPtr.html#ad2b5a35a87aa853929fb934aa1d5fbc6',1,'musx::dom::EntryInfoPtr::EntryInfoPtr()'],['../classmusx_1_1dom_1_1EntryInfoPtr.html#a0b49081647bf2faa55ae9d0cfc6d8d7e',1,'musx::dom::EntryInfoPtr::EntryInfoPtr(const std::shared_ptr&lt; const EntryFrame &gt; &amp;entryFrame, size_t index=0)']]],
   ['entrypool_11',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html#a018d9a2910c13c97b028cb1f076c97fa',1,'musx::dom::EntryPool']]],
   ['entrysize_12',['EntrySize',['../classmusx_1_1dom_1_1details_1_1EntrySize.html#afd092d19aaf9ccf42725d0fd4ef51e32',1,'musx::dom::details::EntrySize']]],
