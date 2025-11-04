@@ -817,6 +817,7 @@ var namespacemusx_1_1dom =
     [ "KeySignature", "classmusx_1_1dom_1_1KeySignature.html", "classmusx_1_1dom_1_1KeySignature" ],
     [ "LyricsLineInfo", "classmusx_1_1dom_1_1LyricsLineInfo.html", "classmusx_1_1dom_1_1LyricsLineInfo" ],
     [ "LyricsSyllableInfo", "classmusx_1_1dom_1_1LyricsSyllableInfo.html", "classmusx_1_1dom_1_1LyricsSyllableInfo" ],
+    [ "MusicRange", "classmusx_1_1dom_1_1MusicRange.html", "classmusx_1_1dom_1_1MusicRange" ],
     [ "MusxInstanceList", "classmusx_1_1dom_1_1MusxInstanceList.html", null ],
     [ "MusxInstanceList< others::StaffUsed >", "classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4.html", "classmusx_1_1dom_1_1MusxInstanceList_3_01others_1_1StaffUsed_01_4" ],
     [ "MusxInstanceListBase", "classmusx_1_1dom_1_1MusxInstanceListBase.html", "classmusx_1_1dom_1_1MusxInstanceListBase" ],

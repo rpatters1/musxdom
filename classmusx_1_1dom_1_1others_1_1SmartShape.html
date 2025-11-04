@@ -233,6 +233,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a43ee2d11faa58c363117cc0cdd843b7c" id="r_a43ee2d11faa58c363117cc0cdd843b7c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a43ee2d11faa58c363117cc0cdd843b7c">calcAppliesTo</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;entryInfo) const</td></tr>
 <tr class="memdesc:a43ee2d11faa58c363117cc0cdd843b7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the smart shape applies to the specified entry.  <br /></td></tr>
 <tr class="separator:a43ee2d11faa58c363117cc0cdd843b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90603f232daf80405ea7bf56f840392a" id="r_a90603f232daf80405ea7bf56f840392a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusicRange.html">MusicRange</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a90603f232daf80405ea7bf56f840392a">createMusicRange</a> () const</td></tr>
+<tr class="memdesc:a90603f232daf80405ea7bf56f840392a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a music range for the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a> in staff EDUs. If the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a> spans staves with different EDUs, the start endpoint uses the start staff's EDUs and the endpoint uses the end staff's EDUs.  <br /></td></tr>
+<tr class="separator:a90603f232daf80405ea7bf56f840392a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade57de9fbb397dcee362925c636d29bd" id="r_ade57de9fbb397dcee362925c636d29bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusicRange.html">MusicRange</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#ade57de9fbb397dcee362925c636d29bd">createGlobalMusicRange</a> () const</td></tr>
+<tr class="memdesc:ade57de9fbb397dcee362925c636d29bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a music range for the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a> in global EDUs.  <br /></td></tr>
+<tr class="separator:ade57de9fbb397dcee362925c636d29bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5faca45c7d8f9e3376fbde6405d109d" id="r_ad5faca45c7d8f9e3376fbde6405d109d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#ad5faca45c7d8f9e3376fbde6405d109d">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:ad5faca45c7d8f9e3376fbde6405d109d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:ad5faca45c7d8f9e3376fbde6405d109d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -685,6 +691,46 @@ Over System Break" in the Finale U.I. </p>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ade57de9fbb397dcee362925c636d29bd" name="ade57de9fbb397dcee362925c636d29bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade57de9fbb397dcee362925c636d29bd">&#9670;&#160;</a></span>createGlobalMusicRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1MusicRange.html">MusicRange</a> musx::dom::others::SmartShape::createGlobalMusicRange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a music range for the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a> in global EDUs. </p>
+<dl class="section return"><dt>Returns</dt><dd>The created music range. </dd></dl>
+
+</div>
+</div>
+<a id="a90603f232daf80405ea7bf56f840392a" name="a90603f232daf80405ea7bf56f840392a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90603f232daf80405ea7bf56f840392a">&#9670;&#160;</a></span>createMusicRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1MusicRange.html">MusicRange</a> musx::dom::others::SmartShape::createMusicRange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a music range for the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a> in staff EDUs. If the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a> spans staves with different EDUs, the start endpoint uses the start staff's EDUs and the endpoint uses the end staff's EDUs. </p>
+<dl class="section return"><dt>Returns</dt><dd>The created music range. </dd></dl>
 
 </div>
 </div>

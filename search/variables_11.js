@@ -4,7 +4,7 @@ var searchData=
   ['rainstick_1',['Rainstick',['../namespacemusx_1_1dom_1_1uuid.html#abc35808f15e3e2117d876145c979f968',1,'musx::dom::uuid']]],
   ['ranateklek_2',['RanatEklek',['../namespacemusx_1_1dom_1_1uuid.html#a9a3d813f943fdca2410eca82448151a0',1,'musx::dom::uuid']]],
   ['ranatthumlek_3',['RanatThumLek',['../namespacemusx_1_1dom_1_1uuid.html#a325b4e10827fa82e12914ce1647a151b',1,'musx::dom::uuid']]],
-  ['range_4',['range',['../classmusx_1_1dom_1_1others_1_1StaffUsed.html#a8341865a1e1d0e63aa7e8f8e4479989e',1,'musx::dom::others::StaffUsed']]],
+  ['range_4',['range',['../classmusx_1_1dom_1_1others_1_1StaffUsed.html#a3deee66d2e9b36d676d0de0ddb5237f0',1,'musx::dom::others::StaffUsed']]],
   ['ratchet_5',['Ratchet',['../namespacemusx_1_1dom_1_1uuid.html#a7271a96d09bbd18ac8ec0a88e4879cdd',1,'musx::dom::uuid']]],
   ['ratio_6',['ratio',['../classmusx_1_1dom_1_1others_1_1TempoChange.html#a840cd69b82a8444e3722601abc5d9c59',1,'musx::dom::others::TempoChange']]],
   ['rattle_7',['Rattle',['../namespacemusx_1_1dom_1_1uuid.html#afbfbf1155d5b7caf5f6b58bdcc958f77',1,'musx::dom::uuid']]],

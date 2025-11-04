@@ -35,7 +35,7 @@ var searchData=
   ['dashslurup_32',['DashSlurUp',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa22a28a489bce439d342de19be85e3e77',1,'musx::dom::others::SmartShape']]],
   ['datalist_33',['dataList',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a1d59129fd827529cfd77431073ba3b47',1,'musx::dom::others::ShapeDef']]],
   ['datanguliondrum_34',['DatangulionDrum',['../namespacemusx_1_1dom_1_1uuid.html#a5ada51019388a4e23fa85ac09ecb68ae',1,'musx::dom::uuid']]],
-  ['dateformat_35',['dateformat',['../classmusx_1_1dom_1_1options_1_1TextOptions.html#afcc30134c44b1318ef6b0f13d834c46b',1,'musx::dom::options::TextOptions::DateFormat'],['../classmusx_1_1dom_1_1options_1_1TextOptions.html#adeb68132c83937c4952fd6afaee5f34b',1,'musx::dom::options::TextOptions::dateFormat']]],
+  ['dateformat_35',['dateformat',['../classmusx_1_1dom_1_1options_1_1TextOptions.html#adeb68132c83937c4952fd6afaee5f34b',1,'musx::dom::options::TextOptions::dateFormat'],['../classmusx_1_1dom_1_1options_1_1TextOptions.html#afcc30134c44b1318ef6b0f13d834c46b',1,'musx::dom::options::TextOptions::DateFormat']]],
   ['dateformatstyle_36',['DateFormatStyle',['../structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75',1,'musx::util::DateTime']]],
   ['datetime_37',['DateTime',['../structmusx_1_1util_1_1DateTime.html',1,'musx::util']]],
   ['dawuro_38',['Dawuro',['../namespacemusx_1_1dom_1_1uuid.html#aea8acc70313d55c98867289d25cf7223',1,'musx::dom::uuid']]],

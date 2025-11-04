@@ -14,7 +14,7 @@ var searchData=
   ['multimeasurerestoptions_11',['MultimeasureRestOptions',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#aa86e6aa984498378318c5518b4733d52',1,'musx::dom::options::MultimeasureRestOptions']]],
   ['multistaffgroupid_12',['MultiStaffGroupId',['../classmusx_1_1dom_1_1others_1_1MultiStaffGroupId.html#a829028749897d3929d634ed373b71d7c',1,'musx::dom::others::MultiStaffGroupId']]],
   ['multistaffinstrumentgroup_13',['MultiStaffInstrumentGroup',['../classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#adead5f9640da743c937a0cd1251d96dd',1,'musx::dom::others::MultiStaffInstrumentGroup']]],
-  ['musicrange_14',['MusicRange',['../classmusx_1_1dom_1_1others_1_1MusicRange.html#ac0edc793df48dcc55ec8e2b3c64d166a',1,'musx::dom::others::MusicRange']]],
+  ['musicrange_14',['MusicRange',['../classmusx_1_1dom_1_1MusicRange.html#a31fc2d57d874e28b9702f74092382de4',1,'musx::dom::MusicRange']]],
   ['musicspacingoptions_15',['MusicSpacingOptions',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a6ab90e0c9e2e5b716b3270b7d67ad8d8',1,'musx::dom::options::MusicSpacingOptions']]],
   ['musicsymboloptions_16',['MusicSymbolOptions',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a0c60243b84e6ca3ef2bc21aee88b6857',1,'musx::dom::options::MusicSymbolOptions']]],
   ['musxinstancelistbase_17',['MusxInstanceListBase',['../classmusx_1_1dom_1_1MusxInstanceListBase.html#a3c510af56ac0c4bb6f971419a0296dfd',1,'musx::dom::MusxInstanceListBase']]]

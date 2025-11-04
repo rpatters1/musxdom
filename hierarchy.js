@@ -7,6 +7,7 @@ var hierarchy =
         [ "musx::dom::KeySignature", "classmusx_1_1dom_1_1KeySignature.html", null ],
         [ "musx::dom::LyricsLineInfo", "classmusx_1_1dom_1_1LyricsLineInfo.html", null ],
         [ "musx::dom::LyricsSyllableInfo", "classmusx_1_1dom_1_1LyricsSyllableInfo.html", null ],
+        [ "musx::dom::MusicRange", "classmusx_1_1dom_1_1MusicRange.html", null ],
         [ "musx::dom::TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", null ]
       ] ],
       [ "musx::dom::ContainedClassBase", "classmusx_1_1dom_1_1ContainedClassBase.html", [
@@ -189,6 +190,9 @@ var hierarchy =
           [ "musx::dom::others::TextExpressionEnclosure", "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html", null ],
           [ "musx::dom::others::TextRepeatEnclosure", "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html", null ]
         ] ],
+        [ "musx::dom::others::EnigmaMusicRange", "classmusx_1_1dom_1_1others_1_1EnigmaMusicRange.html", [
+          [ "musx::dom::others::StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", null ]
+        ] ],
         [ "musx::dom::others::FileAlias", "classmusx_1_1dom_1_1others_1_1FileAlias.html", null ],
         [ "musx::dom::others::FileDescription", "classmusx_1_1dom_1_1others_1_1FileDescription.html", null ],
         [ "musx::dom::others::FilePath", "classmusx_1_1dom_1_1others_1_1FilePath.html", null ],
@@ -209,9 +213,6 @@ var hierarchy =
         [ "musx::dom::others::MultiStaffGroupId", "classmusx_1_1dom_1_1others_1_1MultiStaffGroupId.html", null ],
         [ "musx::dom::others::MultiStaffInstrumentGroup", "classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html", null ],
         [ "musx::dom::others::MultimeasureRest", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html", null ],
-        [ "musx::dom::others::MusicRange", "classmusx_1_1dom_1_1others_1_1MusicRange.html", [
-          [ "musx::dom::others::StaffStyleAssign", "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html", null ]
-        ] ],
         [ "musx::dom::others::NamePositioning", "classmusx_1_1dom_1_1others_1_1NamePositioning.html", [
           [ "musx::dom::others::NamePositionAbbreviated", "classmusx_1_1dom_1_1others_1_1NamePositionAbbreviated.html", null ],
           [ "musx::dom::others::NamePositionFull", "classmusx_1_1dom_1_1others_1_1NamePositionFull.html", null ],
