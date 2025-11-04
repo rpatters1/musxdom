@@ -103,11 +103,11 @@ MUSX_XML_ELEMENT_ARRAY(Enclosure, {
     {"roundCorners", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->roundCorners = populateBoolean(e, i); }},
 });
 
-MUSX_XML_ELEMENT_ARRAY(MusicRange, {
-    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
-    {"startEdu", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->startEdu = e->getTextAs<Edu>(); }},
-    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
-    {"endEdu", [](const XmlElementPtr& e, const std::shared_ptr<MusicRange>& i) { i->endEdu = e->getTextAs<Edu>(); }},
+MUSX_XML_ELEMENT_ARRAY(EnigmaMusicRange, {
+    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
+    {"startEdu", [](const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->startEdu = e->getTextAs<Edu>(); }},
+    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
+    {"endEdu", [](const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->endEdu = e->getTextAs<Edu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(NamePositioning, {

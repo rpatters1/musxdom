@@ -623,12 +623,12 @@ public:
  *
  * The cmper is the staff ID. This class is identified by the XML node name "staffStyleAssign".
  */
-class StaffStyleAssign : public MusicRange
+class StaffStyleAssign : public EnigmaMusicRange
 {
 public:
     /** @brief Constructor function */
     explicit StaffStyleAssign(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, Inci inci)
-        : MusicRange(document, partId, shareMode, cmper, inci) {}
+        : EnigmaMusicRange(document, partId, shareMode, cmper, inci) {}
 
     Cmper styleId{};        ///< The cmper of the assigned @ref StaffStyle.
 
@@ -639,7 +639,7 @@ public:
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
-        MusicRange::integrityCheck(ptrToThis);
+        EnigmaMusicRange::integrityCheck(ptrToThis);
         if (!styleId) {
             MUSX_INTEGRITY_ERROR(std::string("Staff style assignment has no staff style id:")
                 + " Part " + std::to_string(getSourcePartId())
