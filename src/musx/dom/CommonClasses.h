@@ -713,6 +713,20 @@ public:
                (endMeas > measId || (endMeas == measId && endEdu >= eduPosition));
     }
 
+    MusicRange createMusicRange() const
+    {
+        return MusicRange(getDocument(), startMeas, util::Fraction::fromEdu(startEdu), endMeas, util::Fraction::fromEdu(endEdu));
+    }
+
+    /// @brief Returns the next metric location following the music range.
+    /// @param forStaff If provided, calculates the next metric location using staff-level Edus.
+    /// @return An optional std::pair containing
+    ///         - MeasCmper: the measure of the next location
+    ///         - Edu: the location within the measure of the next location
+    ///         Return std::nullopt if the next location is past the end of the document, or other error.
+    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const
+    { return createMusicRange().nextLocation(forStaff); }
+
     static const xml::XmlElementArray<EnigmaMusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
