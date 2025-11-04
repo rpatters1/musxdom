@@ -440,3 +440,41 @@ TEST(SmartShapes, IndependentTimeSigs)
         EXPECT_FALSE(ss->endTermSeg->endPoint->getEntryAssignment());
     }
 }
+
+TEST(SmartShapes, EntriesInShapeTest)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "slur.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto slur = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, 1);
+    ASSERT_TRUE(slur);
+    EXPECT_EQ(slur->shapeType, others::SmartShape::ShapeType::SlurAuto);
+
+    auto scrollView = doc->getOthers()->getArray<others::StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    EXPECT_GE(scrollView.size(), 2);
+
+    {
+        std::vector<EntryNumber> expectedEntries = { 5, 6, 7, 9, 10 };
+        size_t x = 0;
+        scrollView.iterateEntries(0, 1, slur->createGlobalMusicRange(), [&](const EntryInfoPtr& entryInfo) {
+            EXPECT_LT(x, expectedEntries.size());
+            if (x >= expectedEntries.size()) return false;
+            EXPECT_EQ(entryInfo->getEntry()->getEntryNumber(), expectedEntries[x]);
+            x++;
+            return true;
+        });
+    }
+    {
+        std::vector<EntryNumber> expectedEntries = { 9, 10, 5, 6, 7 };
+        size_t x = 0;
+        scrollView.iterateEntries(1, 0, slur->createGlobalMusicRange(), [&](const EntryInfoPtr& entryInfo) {
+            EXPECT_LT(x, expectedEntries.size());
+            if (x >= expectedEntries.size()) return false;
+            EXPECT_EQ(entryInfo->getEntry()->getEntryNumber(), expectedEntries[x]);
+            x++;
+            return true;
+        });
+    }
+}

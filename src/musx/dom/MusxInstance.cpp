@@ -33,7 +33,7 @@ namespace dom {
 // ***** MusxInstanceList<StaffUsed> *****
 // ***************************************
 
-MusxInstance<others::Staff> MusxInstanceList<others::StaffUsed>::getStaffInstanceAtIndex(Cmper index) const
+MusxInstance<others::Staff> MusxInstanceList<others::StaffUsed>::getStaffInstanceAtIndex(size_t index) const
 {
     const auto& iuArray = *this;
     if (index >= iuArray.size()) return nullptr;
@@ -41,7 +41,7 @@ MusxInstance<others::Staff> MusxInstanceList<others::StaffUsed>::getStaffInstanc
     return iuItem->getStaffInstance();
 }
 
-MusxInstance<others::StaffComposite> MusxInstanceList<others::StaffUsed>::getStaffInstanceAtIndex(Cmper index, MeasCmper measureId, Edu eduPosition) const
+MusxInstance<others::StaffComposite> MusxInstanceList<others::StaffUsed>::getStaffInstanceAtIndex(size_t index, MeasCmper measureId, Edu eduPosition) const
 {
     const auto& iuArray = *this;
     if (index >= iuArray.size()) return nullptr;
@@ -70,6 +70,41 @@ StaffCmper MusxInstanceList<others::StaffUsed>::getTopStaffId() const
 StaffCmper MusxInstanceList<others::StaffUsed>::getBottomStaffId() const
 {
     return this->empty() ? 0 : this->back()->staffId;
+}
+
+bool MusxInstanceList<others::StaffUsed>::iterateEntries(size_t startIndex, size_t endIndex, const MusicRange& range, std::function<bool(const EntryInfoPtr&)> iterator) const
+{
+    MUSX_ASSERT_IF(startIndex >= this->size() || endIndex >= this->size()) {
+        throw std::logic_error("Start index [" + std::to_string(startIndex) + "] or end index [" + std::to_string(endIndex) + "] is out of range.");
+    }
+
+    using S = std::ptrdiff_t;
+    const S start = static_cast<S>(startIndex);
+    const S end = static_cast<S>(endIndex);
+    const S step = start > end ? -1 : 1;
+
+    for (S x = start; ; x += step) {
+        const StaffCmper staffId = (*this)[static_cast<size_t>(x)]->staffId;
+        for (MeasCmper nextMeasId = range.startMeasureId; nextMeasId <= range.endMeasureId; nextMeasId++) {
+            if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffId, nextMeasId)) {
+                const bool result = gfHold.iterateEntries([&](const EntryInfoPtr& entryInfo) -> bool {
+                    if (range.contains(nextMeasId, entryInfo.calcGlobalElapsedDuration())) {
+                        if (!iterator(entryInfo)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+                if (!result) {
+                    return false;
+                }
+            }
+        }
+        if (x == end) {
+            break;
+        }
+    }
+    return true;
 }
 
 } // namespace dom

@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "Fundamentals.h"
 
@@ -40,6 +41,8 @@ template <typename T>
 using MusxInstanceWeak = std::weak_ptr<const T>;
 
 class Document;
+class MusicRange;
+class EntryInfoPtr;
 
 namespace others {
 class StaffUsed;
@@ -113,13 +116,13 @@ public:
 
     /// @brief Returns the @ref others::Staff instance (without any staff styles applied) at a specified index of iuArray or nullptr if not found
     /// @param index The 0-based index to find.
-    MusxInstance<others::Staff> getStaffInstanceAtIndex(Cmper index) const;
+    MusxInstance<others::Staff> getStaffInstanceAtIndex(size_t index) const;
 
     /// @brief Returns the current @ref others::StaffComposite instance at a specified index of iuArray or nullptr if not found
     /// @param index The 0-based index to find.
     /// @param measureId The measure of the location to get.
     /// @param eduPosition The edu position of the location to get.
-    MusxInstance<others::StaffComposite> getStaffInstanceAtIndex(Cmper index, MeasCmper measureId, Edu eduPosition = 0) const;
+    MusxInstance<others::StaffComposite> getStaffInstanceAtIndex(size_t index, MeasCmper measureId, Edu eduPosition = 0) const;
 
     /// @brief Returns the 0-based index of the StaffCmper or std::nullopt if not found.
     /// @param staffId The @ref others::Staff cmper value to find.
@@ -130,6 +133,17 @@ public:
 
     /// @brief Returns the bottom staff id or zero if none
     StaffCmper getBottomStaffId() const;
+
+    /// @brief Iterates all the entries that start within the input @ref MusicRange. It iterates by staff and then measure.
+    /// If an entry starts before the range, it is excluded even if its duration takes it within the range. Conversely, an
+    /// entry is included if it starts within the range, even if its duration takes it outside the range.
+    /// If @p startIndex is less than @p endIndex, the staves are iterated upwards. Otherwise they are interated downwards.
+    /// @param startIndex The first staff index to iterate.
+    /// @param endIndex The last staff index to inerate.
+    /// @param range The music range to iterate. It should be expressed in *global* position values.
+    /// @param iterator The iterator function. Return `false` from this function to stop iterating.
+    /// @return True if all items were iterated. False if the @p iterator returned false and exited early.
+    bool iterateEntries(size_t startIndex, size_t endIndex, const MusicRange& range, std::function<bool(const EntryInfoPtr&)> iterator) const;
 };
 
 } // namespace dom

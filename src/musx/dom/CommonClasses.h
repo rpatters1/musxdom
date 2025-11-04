@@ -713,6 +713,8 @@ public:
                (endMeas > measId || (endMeas == measId && endEdu >= eduPosition));
     }
 
+    /// @brief Creates a @ref MusicRange instance corresponding to this instance. The @ref MusicRange
+    /// uses @ref util::Fraction for position rather than EDUs. It also has more utility functions.
     MusicRange createMusicRange() const
     {
         return MusicRange(getDocument(), startMeas, util::Fraction::fromEdu(startEdu), endMeas, util::Fraction::fromEdu(endEdu));

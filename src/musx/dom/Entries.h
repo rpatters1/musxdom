@@ -238,6 +238,7 @@ public:
      * @param key The key signature in effect.
      * @param ctx The key context (concert or written pitch).
      * @param clefIndex The index of the clef in effect.
+     * @param percNoteInfo If non-null, the percussion note info is used for the staff position.
      * @param staff If provided, the notes are transposed by any Chromatic Transposition specified for the staff. If
      * calling #calcNoteProperties for Concert Pitch (sounding pitch) values, omit this parameter.
      * @param respellEnharmonic If true, the notes are enharmonically respelled using the default enharmonic spelling.
@@ -511,7 +512,7 @@ public:
     ///
     /// The function is designed to handle all common combinations of musical options and contexts, although some rare cases may still produce
     /// incorrect results. The concept of an "up stem" becomes ambiguous when the entry uses a reverse stem.
-    /// (See #Entry::reverseStemUp and #Entry::reverseStemDown.) The goal is to compute the logical stem direction that governs
+    /// (See #Entry::reverseUpStem and #Entry::reverseDownStem.) The goal is to compute the logical stem direction that governs
     /// the entry's behavior. This allows selecting the correct up or down variant for any entry detail records or entry properties that have them,
     /// including which reverse-stem value to recognize.
     /// In cases involving reverse stems, the result of `calcUpStem` may not match the visible direction in a Finale-generated PDF.
@@ -662,9 +663,10 @@ class EntryFrame : public std::enable_shared_from_this<EntryFrame>
 public:
     /** @brief Constructor function
      *
-     * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame
-     * @param layerIndex The @ref LayerIndex (0..3) of the entry frame
+     * @param gfhold The @ref details::GFrameHoldContext instance creating this EntryFrame.
+     * @param layerIndex The @ref LayerIndex (0..3) of the entry frame.
      * @param timeStretch The ratio of global Edu to staff edu.
+     * @param startStaff The staff at the start of the measure containing this EntryFrame.
     */
     explicit EntryFrame(const details::GFrameHoldContext& gfhold, LayerIndex layerIndex, util::Fraction timeStretch, const MusxInstance<others::StaffComposite>& startStaff) :
         m_context(gfhold),

@@ -463,7 +463,7 @@ std::optional<std::pair<MeasCmper, Edu>> MusicRange::nextLocation(const std::opt
     const Edu endEdu = endPosition.calcEduDuration();
     if (auto currMeasure = getDocument()->getOthers()->get<others::Measure>(SCORE_PARTID, endMeasureId)) {
         MeasCmper nextMeas = endMeasureId;
-        Edu maxEdu = currMeasure->calcDuration(forStaff).calcEduDuration() - 1;
+        const Edu maxEdu = currMeasure->calcDuration(forStaff).calcEduDuration() - 1;
         Edu nextEdu = 0;
         if (endEdu < maxEdu) {
             nextEdu = endEdu + 1;
