@@ -359,6 +359,15 @@ public:
     /// @param entryInfo The entry to check
     bool calcAppliesTo(const EntryInfoPtr& entryInfo) const;
 
+    /// @brief Creates a music range for the SmartShape in staff EDUs. If the SmartShape spans staves with different
+    /// EDUs, the start endpoint uses the start staff's EDUs and the endpoint uses the end staff's EDUs.
+    /// @return The created music range.
+    MusicRange createMusicRange() const;
+
+    /// @brief Creates a music range for the SmartShape in global EDUs.
+    /// @return The created music range.
+    MusicRange createGlobalMusicRange() const;
+
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);

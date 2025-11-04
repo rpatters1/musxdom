@@ -36,6 +36,8 @@ enum class DiatonicMode : int;
 namespace musx {
 namespace dom {
 
+class EntryInfoPtr;
+
 namespace details { // forward declarations
 class IndependentStaffDetails;
 class LyricAssign;
@@ -457,7 +459,59 @@ private:
 
     friend class texts::LyricsTextBase;
 };
-    
+
+/**
+ *
+ * @class MusicRange
+ * @brief Utility class that represents of a range of musical time.
+ * 
+ * This class is used to specify start and end points in a musical range using measures and util::Fraction values.
+ *
+ * The class is agnostic as to whether the positions are global- or staff-position values. The consuming code
+ * makes this determination.
+ */
+class MusicRange : public CommonClassBase
+{
+public:
+    /// @brief Constructs a MusicRange object.
+    /// @param document Shared pointer to the document.
+    /// @param startMeasId The start measure ID.
+    /// @param startPos The start position. (Caller determines whether position is global- or staff-level.)
+    /// @param endMeasId The end measure ID.
+    /// @param endPos The end position. (Caller determines whether position is global- or staff-level.)
+    explicit MusicRange(const DocumentWeakPtr& document, MeasCmper startMeasId, util::Fraction startPos, MeasCmper endMeasId, util::Fraction endPos)
+        : CommonClassBase(document), startMeasureId(startMeasId), startPosition(startPos), endMeasureId(endMeasId), endPosition(endPos)
+    {
+    }
+
+    MeasCmper startMeasureId{};         ///< Starting measure in the range.
+    util::Fraction startPosition{};     ///< Starting EDU (Elapsed Durational Unit) in the range.
+    MeasCmper endMeasureId{};           ///< Ending measure in the range.
+    util::Fraction endPosition{};       ///< Ending EDU (Elapsed Durational Unit) in the range.
+
+    /// @brief Returns true of the given metric location is contained in this MusicRange instance.
+    /// @param measId The measure ID to search for.
+    /// @param eduPosition The Edu position within the measure to search for.
+    bool contains(MeasCmper measId, util::Fraction eduPosition) const
+    {
+        return (startMeasureId < measId || (startMeasureId == measId && startPosition <= eduPosition)) &&
+               (endMeasureId > measId || (endMeasureId == measId && endPosition >= eduPosition));
+    }
+
+    /// @brief Returns true if the metric location of the specified entry is contained in this MusicRange instance.
+    // The MusicRange must be expressed in the Staff EDUs of the entry.
+    /// @param entryInfo The entry to check.
+    bool contains(const EntryInfoPtr& entryInfo) const;
+
+    /// @brief Returns the next metric location following the music range.
+    /// @param forStaff If provided, calculates the next metric location using staff-level Edus.
+    /// @return An optional std::pair containing
+    ///         - MeasCmper: the measure of the next location
+    ///         - Edu: the location within the measure of the next location
+    ///         Return std::nullopt if the next location is past the end of the document, or other error.
+    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
+};
+
 /**
  * @class TimeSignature
  * @brief Shared time signature class that is derived from other classes. (See @ref others::Measure)
@@ -621,23 +675,25 @@ public:
 
 /**
  *
- * @class MusicRange
- * @brief Represents a range of music using measure and EDUs.
+ * @class EnigmaMusicRange
+ * @brief The representation of a range of music used by Enigma files.
  * 
  * This class is used to specify start and end points in a musical range using measures and EDUs.
+ * This is a data class and not a utility class. Internal and external callers should prefer
+ * @ref MusicRange, which uses Fraction values to capture the range rather than EDUs.
  */
-class MusicRange : public OthersBase
+class EnigmaMusicRange : public OthersBase
 {
 public:
     /**
-     * @brief Constructs a MusicRange object.
+     * @brief Constructs a EnigmaMusicRange object.
      * @param document Shared pointer to the document.
      * @param partId The part ID if this range is unlinked, otherwise 0.
      * @param shareMode The share mode if this range is unlinked.
      * @param cmper Comperator parameter. This value is zero for ranges taken from @ref others::StaffUsed.
      * @param inci incident value, for subclasses that have them.
      */
-    explicit MusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All,
+    explicit EnigmaMusicRange(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All,
             Cmper cmper = 0, std::optional<Inci> inci = std::nullopt)
         : OthersBase(document, partId, shareMode, cmper, inci)
     {
@@ -648,7 +704,7 @@ public:
     MeasCmper endMeas{};        ///< Ending measure in the range.
     Edu endEdu{};               ///< Ending EDU (Elapsed Durational Unit) in the range.
 
-    /// @brief Returns true of the given metric location is contained in this MusicRange instance.
+    /// @brief Returns true of the given metric location is contained in this EnigmaMusicRange instance.
     /// @param measId The measure ID to search for.
     /// @param eduPosition The Edu position within the measure to search for.
     bool contains(MeasCmper measId, Edu eduPosition) const
@@ -657,15 +713,23 @@ public:
                (endMeas > measId || (endMeas == measId && endEdu >= eduPosition));
     }
 
+    /// @brief Creates a @ref MusicRange instance corresponding to this instance. The @ref MusicRange
+    /// uses @ref util::Fraction for position rather than EDUs. It also has more utility functions.
+    MusicRange createMusicRange() const
+    {
+        return MusicRange(getDocument(), startMeas, util::Fraction::fromEdu(startEdu), endMeas, util::Fraction::fromEdu(endEdu));
+    }
+
     /// @brief Returns the next metric location following the music range.
     /// @param forStaff If provided, calculates the next metric location using staff-level Edus.
     /// @return An optional std::pair containing
     ///         - MeasCmper: the measure of the next location
     ///         - Edu: the location within the measure of the next location
     ///         Return std::nullopt if the next location is past the end of the document, or other error.
-    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
+    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const
+    { return createMusicRange().nextLocation(forStaff); }
 
-    static const xml::XmlElementArray<MusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    static const xml::XmlElementArray<EnigmaMusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**

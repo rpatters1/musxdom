@@ -453,6 +453,38 @@ std::optional<music_theory::DiatonicMode> KeySignature::calcDiatonicMode() const
     return std::nullopt;
 }
 
+// **********************
+// ***** MusicRange *****
+// **********************
+
+std::optional<std::pair<MeasCmper, Edu>> MusicRange::nextLocation(const std::optional<StaffCmper>& forStaff) const
+{
+    std::optional<std::pair<MeasCmper, Edu>> result;
+    const Edu endEdu = endPosition.calcEduDuration();
+    if (auto currMeasure = getDocument()->getOthers()->get<others::Measure>(SCORE_PARTID, endMeasureId)) {
+        MeasCmper nextMeas = endMeasureId;
+        const Edu maxEdu = currMeasure->calcDuration(forStaff).calcEduDuration() - 1;
+        Edu nextEdu = 0;
+        if (endEdu < maxEdu) {
+            nextEdu = endEdu + 1;
+        } else {
+            nextMeas++;
+            if (!getDocument()->getOthers()->get<others::Measure>(SCORE_PARTID, nextMeas)) {
+                return std::nullopt;
+            }
+        }
+        result = std::make_pair(nextMeas, nextEdu);
+    } else {
+        MUSX_INTEGRITY_ERROR("MusicRange has invalid end measure " + std::to_string(endMeasureId));
+    }
+    return result;
+}
+
+bool MusicRange::contains(const EntryInfoPtr& entryInfo) const
+{
+    return contains(entryInfo.getMeasure(), entryInfo->elapsedDuration);
+}
+
 // *************************
 // ***** TimeSignature *****
 // *************************

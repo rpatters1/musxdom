@@ -1486,12 +1486,12 @@ MUSX_XML_ELEMENT_ARRAY(StaffStyleAssign, []() {
         {"style", [](const XmlElementPtr& e, const std::shared_ptr<StaffStyleAssign>& i) { i->styleId = e->getTextAs<Cmper>(); }},
     };
     xml::XmlElementArray<StaffStyleAssign> retval;
-    retval.reserve(MusicRange::xmlMappingArray().size() + additionalFields.size());
+    retval.reserve(EnigmaMusicRange::xmlMappingArray().size() + additionalFields.size());
     // add to retval in order that it has been observed to appear in xml
     // move is okay because additionalFields is a local scratch variable.
     std::move(std::make_move_iterator(additionalFields.begin()), std::make_move_iterator(additionalFields.end()), std::back_inserter(retval));
     // copy: DO NOT move, because Staff::XmlElementArray is used by Staff as well.
-    std::copy(MusicRange::xmlMappingArray().begin(), MusicRange::xmlMappingArray().end(), std::back_inserter(retval));
+    std::copy(EnigmaMusicRange::xmlMappingArray().begin(), EnigmaMusicRange::xmlMappingArray().end(), std::back_inserter(retval));
     return retval;
 }());
 
@@ -1520,7 +1520,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffUsed, {
     {"trackType", [](const XmlElementPtr&, const std::shared_ptr<StaffUsed>&) { /* this field seems like it was for future enhancement */ }},
     {"distFromTop", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i) { i->distFromTop = e->getTextAs<Evpu>(); }},
     {"range", [](const XmlElementPtr& e, const std::shared_ptr<StaffUsed>& i)
-        { i->range = FieldPopulator<MusicRange>::createAndPopulate(e, i->getDocument()); }},
+        { i->range = FieldPopulator<EnigmaMusicRange>::createAndPopulate(e, i->getDocument()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SystemLock, {

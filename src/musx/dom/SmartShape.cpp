@@ -159,23 +159,23 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
         if (entry->getEntryNumber() == startTermSeg->endPoint->entryNumber) return true;
         if (entry->getEntryNumber() == endTermSeg->endPoint->entryNumber) return true;
     }
-    if (entryInfo.getStaff() != startTermSeg->endPoint->staffId && entryInfo.getStaff() != endTermSeg->endPoint->staffId) {
+    const StaffCmper entryStaffId = entryInfo.getStaff();
+    const MeasCmper entryMeasureId = entryInfo.getMeasure();
+    if (entryStaffId != startTermSeg->endPoint->staffId && entryStaffId != endTermSeg->endPoint->staffId) {
         return false;
     }
+    if (entryMeasureId < startTermSeg->endPoint->measId || entryMeasureId > endTermSeg->endPoint->measId) {
+        return false;
+    }
+    const auto entryPos = entryInfo->elapsedDuration;
+    auto range = createMusicRange();
     if (auto meas = entry->getDocument()->getOthers()->get<others::Measure>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure())) {
         if (meas->hasSmartShape) {
             auto shapeAssigns = entry->getDocument()->getOthers()->getArray<others::SmartShapeMeasureAssign>(entryInfo.getFrame()->getRequestedPartId(), entryInfo.getMeasure());
             for (const auto& asgn : shapeAssigns) {
                 if (asgn->shapeNum == getCmper()) {
-                    if (entryInfo.getMeasure() > startTermSeg->endPoint->measId && entryInfo.getMeasure() < endTermSeg->endPoint->measId) {
+                    if (range.contains(entryMeasureId, entryPos)) {
                         return true;
-                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId && entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration >= startTermSeg->endPoint->calcPosition()
-                               && entryInfo->elapsedDuration <= endTermSeg->endPoint->calcPosition();
-                    } else if (entryInfo.getMeasure() == startTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration >= startTermSeg->endPoint->calcPosition();
-                    } else if (entryInfo.getMeasure() == endTermSeg->endPoint->measId) {
-                        return entryInfo->elapsedDuration <= endTermSeg->endPoint->calcPosition();
                     }
                 }
             }
@@ -184,7 +184,17 @@ bool others::SmartShape::calcAppliesTo(const EntryInfoPtr& entryInfo) const
     return false;
 }
 
-// ******************&*************
+MusicRange others::SmartShape::createMusicRange() const
+{
+    return MusicRange(getDocument(), startTermSeg->endPoint->measId, startTermSeg->endPoint->calcPosition(), endTermSeg->endPoint->measId, endTermSeg->endPoint->calcPosition());
+}
+
+MusicRange others::SmartShape::createGlobalMusicRange() const
+{
+    return MusicRange(getDocument(), startTermSeg->endPoint->measId, startTermSeg->endPoint->calcGlobalPosition(), endTermSeg->endPoint->measId, endTermSeg->endPoint->calcGlobalPosition());
+}
+
+// ********************************
 // ***** SmartShapeCustomLine *****
 // ********************************
 

@@ -304,32 +304,6 @@ void MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(const DocumentPtr& doc
     Staff::calcAllAutoNumberValues(document);
 }
 
-// **********************
-// ***** MusicRange *****
-// **********************
-
-std::optional<std::pair<MeasCmper, Edu>> MusicRange::nextLocation(const std::optional<StaffCmper>& forStaff) const
-{
-    std::optional<std::pair<MeasCmper, Edu>> result;
-    if (auto currMeasure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), endMeas)) {
-        MeasCmper nextMeas = endMeas;
-        Edu maxEdu = currMeasure->calcDuration(forStaff).calcEduDuration() - 1;
-        Edu nextEdu = 0;
-        if (endEdu < maxEdu) {
-            nextEdu = endEdu + 1;
-        } else {
-            nextMeas++;
-            if (!getDocument()->getOthers()->get<Measure>(getRequestedPartId(), nextMeas)) {
-                return std::nullopt;
-            }
-        }
-        result = std::make_pair(nextMeas, nextEdu);
-    } else {
-        MUSX_INTEGRITY_ERROR("MusicRange has invalid end measure " + std::to_string(endMeas));
-    }
-    return result;
-}
-
 // ****************
 // ***** Page *****
 // ****************

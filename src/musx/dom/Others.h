@@ -2636,7 +2636,7 @@ public:
 
     StaffCmper staffId{};                   ///< Staff cmper (xml node is `<inst>`)
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
-    std::shared_ptr<MusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
+    std::shared_ptr<EnigmaMusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
     /// @brief Calculates the effective scaling on this instance.
     util::Fraction calcEffectiveScaling() const;
