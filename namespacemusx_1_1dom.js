@@ -795,6 +795,7 @@ var namespacemusx_1_1dom =
     [ "Base", "classmusx_1_1dom_1_1Base.html", "classmusx_1_1dom_1_1Base" ],
     [ "CommonClassBase", "classmusx_1_1dom_1_1CommonClassBase.html", "classmusx_1_1dom_1_1CommonClassBase" ],
     [ "ContainedClassBase", "classmusx_1_1dom_1_1ContainedClassBase.html", "classmusx_1_1dom_1_1ContainedClassBase" ],
+    [ "DeferredReference", "classmusx_1_1dom_1_1DeferredReference.html", "classmusx_1_1dom_1_1DeferredReference" ],
     [ "DetailsArray", "classmusx_1_1dom_1_1DetailsArray.html", "classmusx_1_1dom_1_1DetailsArray" ],
     [ "DetailsBase", "classmusx_1_1dom_1_1DetailsBase.html", "classmusx_1_1dom_1_1DetailsBase" ],
     [ "DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", "classmusx_1_1dom_1_1DetailsPool" ],

@@ -239,6 +239,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ade57de9fbb397dcee362925c636d29bd" id="r_ade57de9fbb397dcee362925c636d29bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusicRange.html">MusicRange</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#ade57de9fbb397dcee362925c636d29bd">createGlobalMusicRange</a> () const</td></tr>
 <tr class="memdesc:ade57de9fbb397dcee362925c636d29bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a music range for the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a> in global EDUs.  <br /></td></tr>
 <tr class="separator:ade57de9fbb397dcee362925c636d29bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a247e5ea76b94a8de228db134de7092c1" id="r_a247e5ea76b94a8de228db134de7092c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a247e5ea76b94a8de228db134de7092c1">iterateEntries</a> (std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt; iterator, <a class="el" href="classmusx_1_1dom_1_1DeferredReference.html">DeferredReference</a>&lt; <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">StaffUsed</a> &gt; &gt; staffList={}) const</td></tr>
+<tr class="memdesc:a247e5ea76b94a8de228db134de7092c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates all the entries that start within the staves and music range defined by the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a>. It iterates by staff and then measure.  <br /></td></tr>
+<tr class="separator:a247e5ea76b94a8de228db134de7092c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5faca45c7d8f9e3376fbde6405d109d" id="r_ad5faca45c7d8f9e3376fbde6405d109d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#ad5faca45c7d8f9e3376fbde6405d109d">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:ad5faca45c7d8f9e3376fbde6405d109d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:ad5faca45c7d8f9e3376fbde6405d109d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -774,6 +777,44 @@ Over System Break" in the Finale U.I. </p>
 </dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">musx::dom::Base</a>.</p>
+
+</div>
+</div>
+<a id="a247e5ea76b94a8de228db134de7092c1" name="a247e5ea76b94a8de228db134de7092c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a247e5ea76b94a8de228db134de7092c1">&#9670;&#160;</a></span>iterateEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::SmartShape::iterateEntries </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>iterator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1dom_1_1DeferredReference.html">DeferredReference</a>&lt; <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">StaffUsed</a> &gt; &gt;&#160;</td>
+          <td class="paramname"><em>staffList</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iterates all the entries that start within the staves and music range defined by the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a>. It iterates by staff and then measure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iterator</td><td>The iterator function. Return <code>false</code> from this function to stop iterating. </td></tr>
+    <tr><td class="paramname">staffList</td><td>Optional staff list to use for iteration. If omitted, the Scroll View staff list of the current part is used. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if all items were iterated. False if the <code>iterator</code> returned false and exited early. </dd></dl>
 
 </div>
 </div>

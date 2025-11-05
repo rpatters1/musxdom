@@ -3,7 +3,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html#ad2b5a35a87aa853929fb934aa1d5fbc6", null ],
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0b49081647bf2faa55ae9d0cfc6d8d7e", null ],
     [ "calcBeamStubIsLeft", "classmusx_1_1dom_1_1EntryInfoPtr.html#adf09eb8a3925a1799ff4dad693ed7c5e", null ],
-    [ "calcCrossStaffDirectionForAll", "classmusx_1_1dom_1_1EntryInfoPtr.html#ad38917cf1fc8417af6abccb707b6acb3", null ],
+    [ "calcCrossStaffDirectionForAll", "classmusx_1_1dom_1_1EntryInfoPtr.html#ab3bc2e754d93395c71759df365142d8e", null ],
     [ "calcDisplaysAsRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b", null ],
     [ "calcEntrySize", "classmusx_1_1dom_1_1EntryInfoPtr.html#aad8efac3646d0cfc7b3c193691b003e7", null ],
     [ "calcGlobalActualDuration", "classmusx_1_1dom_1_1EntryInfoPtr.html#aefab62e48990cb691af5a4975e102989", null ],

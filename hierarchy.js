@@ -288,6 +288,7 @@ var hierarchy =
     [ "musx::dom::options::TieOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html", null ],
     [ "musx::factory::TypeRegistry< Types >::CreatedInstanceInfo", "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html", null ],
     [ "musx::util::DateTime", "structmusx_1_1util_1_1DateTime.html", null ],
+    [ "musx::dom::DeferredReference< T >", "classmusx_1_1dom_1_1DeferredReference.html", null ],
     [ "musx::dom::DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", null ],
     [ "std::disjunction", null, [
       [ "musx::factory::TypeRegistry< Types >::is_registered_type< T >", "structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html", null ]
