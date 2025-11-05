@@ -194,6 +194,19 @@ MusicRange others::SmartShape::createGlobalMusicRange() const
     return MusicRange(getDocument(), startTermSeg->endPoint->measId, startTermSeg->endPoint->calcGlobalPosition(), endTermSeg->endPoint->measId, endTermSeg->endPoint->calcGlobalPosition());
 }
 
+bool others::SmartShape::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator, DeferredReference<MusxInstanceList<others::StaffUsed>> staffList) const
+{
+    if (!staffList) {
+        staffList.emplace(getDocument()->getOthers()->getArray<others::StaffUsed>(getRequestedPartId(), BASE_SYSTEM_ID));
+    }
+    auto startIndex = staffList->getIndexForStaff(startTermSeg->endPoint->staffId);
+    auto endIndex = staffList->getIndexForStaff(endTermSeg->endPoint->staffId);
+    MUSX_ASSERT_IF(!startIndex || !endIndex) {
+        throw std::logic_error("Smart shape spans staves that do not exist on the supplied staff list.");
+    }
+    return staffList->iterateEntries(*startIndex, *endIndex, createGlobalMusicRange(), iterator);
+}
+
 // ********************************
 // ***** SmartShapeCustomLine *****
 // ********************************

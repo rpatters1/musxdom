@@ -722,7 +722,7 @@ bool EntryInfoPtr::calcUpStem() const
     const auto scrollViewStaves = frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID);
     int foundCrossDirection = 0;
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        const int currDirection = next.calcCrossStaffDirectionForAll(&scrollViewStaves);
+        const int currDirection = next.calcCrossStaffDirectionForAll(scrollViewStaves);
         if (currDirection != 0) {
             if (foundCrossDirection == 0) {
                 foundCrossDirection = currDirection;
@@ -1246,24 +1246,19 @@ bool EntryInfoPtr::calcIfLayerSettingsApply() const
     return false;
 }
 
-int EntryInfoPtr::calcCrossStaffDirectionForAll(const MusxInstanceList<others::StaffUsed>* staffList) const
+int EntryInfoPtr::calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList) const
 {
     const auto frame = getFrame();
-    const MusxInstanceList<others::StaffUsed>* listPtr = nullptr;
-    std::optional<MusxInstanceList<others::StaffUsed>> tmp; // only constructed if we need to fetch
 
-    if (staffList) {
-        listPtr = staffList;
-    } else {
-        tmp.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
-        listPtr = &*tmp;
+    if (!staffList) {
+        staffList.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
     }
 
     int crossStaffDirectionFound = 0;
     auto entry = (*this)->getEntry();
     for (size_t x = 0; x < entry->notes.size(); x++) {
         const auto noteInfo = NoteInfoPtr(*this, x);
-        const int currDirection = noteInfo.calcCrossStaffDirection(listPtr);
+        const int currDirection = noteInfo.calcCrossStaffDirection(staffList);
         if (currDirection != 0) {
             if (crossStaffDirectionFound == 0) {
                 crossStaffDirectionFound = currDirection;
@@ -1840,24 +1835,19 @@ bool NoteInfoPtr::isSamePitchValues(const NoteInfoPtr& src) const
         && (*this)->harmAlt == src->harmAlt;
 }
 
-int NoteInfoPtr::calcCrossStaffDirection(const MusxInstanceList<others::StaffUsed>* staffList) const
+int NoteInfoPtr::calcCrossStaffDirection(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList) const
 {
     const auto frame = getEntryInfo().getFrame();
-    const MusxInstanceList<others::StaffUsed>* listPtr = nullptr;
-    std::optional<MusxInstanceList<others::StaffUsed>> tmp; // only constructed if we need to fetch
 
-    if (staffList) {
-        listPtr = staffList;
-    } else {
-        tmp.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
-        listPtr = &*tmp;
+    if (!staffList) {
+        staffList.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
     }
 
-    const auto homeIndex = listPtr->getIndexForStaff(frame->getStaff());
+    const auto homeIndex = staffList->getIndexForStaff(frame->getStaff());
     MUSX_ASSERT_IF(!homeIndex) {
         throw std::logic_error("Input staffList does not contain the entry frame staff.");
     }
-    const size_t noteIndex = listPtr->getIndexForStaff(calcStaff()).value_or(*homeIndex);
+    const size_t noteIndex = staffList->getIndexForStaff(calcStaff()).value_or(*homeIndex);
 
     if (noteIndex < *homeIndex) {
         return 1;

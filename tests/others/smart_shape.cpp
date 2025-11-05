@@ -456,6 +456,17 @@ TEST(SmartShapes, EntriesInShapeTest)
     EXPECT_GE(scrollView.size(), 2);
 
     {
+        std::vector<EntryNumber> expectedEntries = { 5, 6, 7 };
+        size_t x = 0;
+        slur->iterateEntries([&](const EntryInfoPtr& entryInfo) {
+            EXPECT_LT(x, expectedEntries.size());
+            if (x >= expectedEntries.size()) return false;
+            EXPECT_EQ(entryInfo->getEntry()->getEntryNumber(), expectedEntries[x]);
+            x++;
+            return true;
+        });
+    }
+    {
         std::vector<EntryNumber> expectedEntries = { 5, 6, 7, 9, 10 };
         size_t x = 0;
         scrollView.iterateEntries(0, 1, slur->createGlobalMusicRange(), [&](const EntryInfoPtr& entryInfo) {

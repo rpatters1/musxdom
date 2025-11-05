@@ -608,15 +608,14 @@ public:
 
     /// @brief Calculates if this entry has cross-staffed notes all in a single direction.
     /// @param staffList Optional staff list used to determine staff order.
-    ///        If `nullptr`, the function automatically retrieves the scroll-view staff order
-    ///        from the document.
-    ///        Supplying an explicit list can be used to avoid repeatedly fetching the
+    ///        If it is not supplied, the function automatically retrieves the scroll-view staff order
+    ///        from the document. Supplying an explicit list can be used to avoid repeatedly fetching the
     ///        staff list when calling this function in a loop (for example, within a beam).
     /// @return
     ///   - **1**  if all cross-staffed notes cross upward to a higher staff.
     ///   - **0**  if the note is not cross-staffed, or if notes are crossed both up and down.
     ///   - **−1** if all cross-staffed notes cross downward to a lower staff.
-    int calcCrossStaffDirectionForAll(const MusxInstanceList<others::StaffUsed>* staffList = nullptr) const;
+    int calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
 
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
@@ -1085,15 +1084,14 @@ public:
 
     /// @brief Calculates if this note is cross-staffed and if so, which direction.
     /// @param staffList Optional staff list used to determine staff order.
-    ///        If `nullptr`, the function automatically retrieves the scroll-view staff order
-    ///        from the document.
-    ///        Supplying an explicit list can be used to avoid repeatedly fetching the
+    ///        If it is not supplied, the function automatically retrieves the scroll-view staff order
+    ///        from the document. Supplying an explicit list can be used to avoid repeatedly fetching the
     ///        staff list when calling this function in a loop (for example, within a beam).
     /// @return
     ///   - **1**  if the note crosses upward to a higher staff  
     ///   - **0**  if the note is not cross-staffed  
     ///   - **−1** if the note crosses downward to a lower staff
-    int calcCrossStaffDirection(const MusxInstanceList<others::StaffUsed>* staffList = nullptr) const;
+    int calcCrossStaffDirection(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
 
     /// @brief Explicit operator< for std::map
     bool operator<(const NoteInfoPtr& other) const

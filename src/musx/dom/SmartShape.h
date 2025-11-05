@@ -368,6 +368,12 @@ public:
     /// @return The created music range.
     MusicRange createGlobalMusicRange() const;
 
+    /// @brief Iterates all the entries that start within the staves and music range defined by the SmartShape. It iterates by staff and then measure.
+    /// @param iterator The iterator function. Return `false` from this function to stop iterating.
+    /// @param staffList Optional staff list to use for iteration. If omitted, the Scroll View staff list of the current part is used.
+    /// @return True if all items were iterated. False if the @p iterator returned false and exited early.
+    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator, DeferredReference<MusxInstanceList<StaffUsed>> staffList = {}) const;
+
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
