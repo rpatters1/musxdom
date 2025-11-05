@@ -24,6 +24,9 @@
 #include <vector>
 #include <memory>
 #include <functional>
+#include <optional>
+#include <type_traits>
+#include <utility>
 
 #include "Fundamentals.h"
 
@@ -145,6 +148,92 @@ public:
     /// @return True if all items were iterated. False if the @p iterator returned false and exited early.
     bool iterateEntries(size_t startIndex, size_t endIndex, const MusicRange& range, std::function<bool(const EntryInfoPtr&)> iterator) const;
 };
+
+///
+/// @class DeferredReference
+/// @brief Wraps a reference to an existing object or owns a temporary value if needed.
+///
+/// This utility allows a function parameter to accept either a non-owning reference
+/// (bound implicitly from a `const T&` or `const T*`) or an owned value created
+/// later via `emplace()`. It avoids copies and enables lazy materialization.
+///
+/// Example usage:
+/// @code
+/// int func(DeferredReference<const Foo> foo = {})
+/// {
+///     if (!foo)
+///         foo.emplace(createFoo()); // owns the result
+///     return foo->bar();
+/// }
+///
+/// Foo f;
+/// func(f);                        // non-owning, no copy
+/// func();                         // omitted (empty), function will emplace()
+/// func(DeferredReference{&f});    // explicit pointer form
+/// @endcode
+///
+/// @tparam T The public reference type. May be const-qualified (e.g., `const Foo`).
+///            Ownership is always stored as a mutable `std::remove_const_t<T>` internally.
+///
+template<class T>
+class DeferredReference {
+    static_assert(!std::is_reference_v<T>, "T must not be a reference");
+    using OwnedT = std::remove_const_t<T>; ///< Mutable type for owned storage
+
+public:
+    /// @brief Constructs an empty DeferredReference with no bound reference.
+    DeferredReference() noexcept = default;
+
+    /// @brief Constructs a non-owning DeferredReference bound to an existing object.
+    /// @param ref The object to bind. No copy is made.
+    DeferredReference(const T& ref) noexcept : m_ref(&ref) {}
+
+    /// @brief Constructs a non-owning DeferredReference bound to a pointer.
+    /// @param ptr Pointer to the object. No copy is made.
+    explicit DeferredReference(const T* ptr) noexcept : m_ref(ptr) {}
+
+    /// @brief Moves a value into owned storage and binds to it.
+    ///
+    /// This replaces any previous binding (owned or non-owned) and ensures
+    /// that the DeferredReference has a valid internal reference thereafter.
+    ///
+    /// @param value The object to move into internal storage.
+    /// @return A const reference to the stored object.
+    const T& emplace(OwnedT&& value) noexcept(std::is_nothrow_move_constructible_v<OwnedT>) {
+        m_owned.emplace(std::move(value));
+        m_ref = std::addressof(*m_owned);
+        return *m_ref;
+    }
+
+    /// @brief Checks whether this DeferredReference currently references a valid object.
+    explicit operator bool() const noexcept { return m_ref != nullptr; }
+
+    /// @brief Gets a const reference to the referenced or owned object.
+    /// @warning Undefined behavior if called when `!(*this)`.
+    const T& get() const noexcept { return *m_ref; }
+
+    /// @brief Provides pointer-like access to the referenced or owned object.
+    const T* operator->() const noexcept { return m_ref; }
+
+    /// @brief Dereferences to the referenced or owned object.
+    const T& operator*() const noexcept { return *m_ref; }
+
+private:
+    std::optional<OwnedT> m_owned{}; ///< Optional owned storage (constructed on demand)
+    const T* m_ref = nullptr;        ///< Pointer to the referenced or owned object
+};
+
+///
+/// @name CTAD guides
+/// @brief Allow deduction of `T` when constructed from a reference or pointer.
+/// @details
+/// These guides enable `DeferredReference x{object};` or `DeferredReference x{&object};`
+/// to automatically deduce the template parameter `T`.
+/// @{
+///
+template<class T> DeferredReference(const T&) -> DeferredReference<T>;
+template<class T> DeferredReference(const T*) -> DeferredReference<T>;
+/// @}
 
 } // namespace dom
 } // namespace musx

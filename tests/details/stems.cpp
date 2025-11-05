@@ -97,6 +97,8 @@ TEST(StemTests, ActualDirection)
         EXPECT_TRUE(EntryInfoPtr(entryFrame, 5).calcUpStem()); // cross-staffed quarter
         EXPECT_TRUE(EntryInfoPtr(entryFrame, 6).calcUpStem()); // 1st note in cross-staffed beam
         EXPECT_TRUE(EntryInfoPtr(entryFrame, 7).calcUpStem()); // 1st note in cross-staffed beam
+
+        EXPECT_TRUE(EntryInfoPtr(entryFrame, 5).calcCrossStaffDirectionForAll());
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 2, 2);
