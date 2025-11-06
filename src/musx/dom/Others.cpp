@@ -211,7 +211,7 @@ EntryInfoPtr MeasureExprAssign::calcAssociatedEntry(Cmper forPartId, bool findEx
     if (staffAssign > 0) {
         if (auto gfHold = details::GFrameHoldContext(getDocument(), forPartId, staffAssign, getCmper())) {
             const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;
-            return gfHold.calcNearestEntry(forPartId, eduPosition, findExact, matchLayer);
+            return gfHold.calcNearestEntry(eduPosition, findExact, matchLayer);
         }
     }
     return {};

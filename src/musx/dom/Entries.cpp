@@ -1531,7 +1531,7 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
     return foundCue;
 }
 
-EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Cmper forPartId, Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer) const
+EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer) const
 {
     EntryInfoPtr result;
     unsigned bestDiff = (std::numeric_limits<unsigned>::max)();

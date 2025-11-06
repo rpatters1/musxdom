@@ -42,7 +42,7 @@ EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId, bool fin
                 + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
         }
     } else if (auto gfHold = details::GFrameHoldContext(getDocument(), forPartId, staffId, measId)) {
-        result = gfHold.calcNearestEntry(forPartId, eduPosition, findExact);
+        result = gfHold.calcNearestEntry(eduPosition, findExact);
     }
     return result;
 }
