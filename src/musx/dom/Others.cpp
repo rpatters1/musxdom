@@ -206,6 +206,17 @@ CategoryStaffListSet MeasureExprAssign::createStaffListSet() const
     return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
+EntryInfoPtr MeasureExprAssign::calcAssociatedEntry(Cmper forPartId, bool findExact) const
+{
+    if (staffAssign > 0) {
+        if (auto gfHold = details::GFrameHoldContext(getDocument(), forPartId, staffAssign, getCmper())) {
+            const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;
+            return gfHold.calcNearestEntry(forPartId, eduPosition, findExact, matchLayer);
+        }
+    }
+    return {};
+}
+
 // *******************************
 // ***** MeasureNumberRegion *****
 // *******************************
