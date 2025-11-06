@@ -132,12 +132,11 @@ public:
     bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
 
     /// @brief Calculates the nearest non-grace-note entry at the given @p eduPosition.
-    /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
     /// @param eduPosition The EDU position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
     /// @return The entry if found, otherwise `nullptr`.
-    EntryInfoPtr calcNearestEntry(Cmper forPartId, Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt) const;
+    EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt) const;
 
 private:
     /// @brief Find the layer frame and Edu start position for the given layer.
