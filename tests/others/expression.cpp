@@ -407,9 +407,9 @@ TEST(ShapeExpressionDef, Populate)
 
 TEST(StaffListCategory, Populate)
 {
-    std::vector<char> transposeXml;
-    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", transposeXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(transposeXml);
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto others = doc->getOthers();
@@ -438,4 +438,47 @@ TEST(StaffListCategory, Populate)
     musxtest::staffListCheck(names[1]->name, score[1], { -2 });
     EXPECT_EQ(names[2]->getCmper(), score[2]->getCmper());
     musxtest::staffListCheck(names[2]->name, score[2], { 1, 2, 3 });
+}
+
+
+TEST(ExpressionAssignments, CalcAssociatedEntry)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "exprlayers.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto exprs = others->getArray<others::MeasureExprAssign>(SCORE_PARTID, 1);
+    for (const auto& expr : exprs) {
+        if (expr->textExprId == 1) { // forte
+            auto entryInfo = expr->calcAssociatedEntry(SCORE_PARTID);
+            ASSERT_TRUE(entryInfo);
+            EXPECT_EQ(entryInfo.getLayerIndex(), 0);
+            EXPECT_EQ(entryInfo.getIndexInFrame(), 0);
+            EXPECT_EQ(entryInfo->elapsedDuration, 0);
+        } else if (expr->textExprId == 2) { // piano
+            auto entryInfo = expr->calcAssociatedEntry(SCORE_PARTID);
+            EXPECT_FALSE(entryInfo) << "no Layer 2 entry at 3rd triplet position";
+            entryInfo = expr->calcAssociatedEntry(SCORE_PARTID, /*findExact*/ false);
+            ASSERT_TRUE(entryInfo);
+            EXPECT_EQ(entryInfo.getLayerIndex(), 1);
+            EXPECT_EQ(entryInfo.getIndexInFrame(), 1);
+            EXPECT_EQ(entryInfo->elapsedDuration, musx::util::Fraction(1, 6));
+        } else if (expr->textExprId == 3) { // mezzopiano
+            auto entryInfo = expr->calcAssociatedEntry(SCORE_PARTID);
+            ASSERT_TRUE(entryInfo);
+            EXPECT_EQ(entryInfo.getLayerIndex(), 1);
+            EXPECT_EQ(entryInfo.getIndexInFrame(), 1);
+            EXPECT_EQ(entryInfo->elapsedDuration, musx::util::Fraction(1, 6));
+        } else if (expr->textExprId == 4) { // pianissimo
+            auto entryInfo = expr->calcAssociatedEntry(SCORE_PARTID);
+            ASSERT_TRUE(entryInfo);
+            EXPECT_EQ(entryInfo.getLayerIndex(), 0);
+            EXPECT_EQ(entryInfo.getIndexInFrame(), 2);
+            EXPECT_EQ(entryInfo->elapsedDuration, musx::util::Fraction(1, 3));
+        }
+    }
 }
