@@ -114,14 +114,14 @@ public:
      * @return true if higher-level iteration should continue. false if it should halt.
      * @throws std::invalid_argument if the layer index is out of range
      */
-    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator);
+    bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator) const;
 
     /**
      * @brief iterates the entries for this @ref GFrameHold from left to right for each layer in order
      * @param iterator The callback function for each iteration.
      * @return true if higher-level iteration should continue. false if it should halt.
      */
-    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator);
+    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
 
     /// @brief Calculates the number of voices used by the GFrameHold instance.
     /// @return A list of each layer that contains entries and whether that layer uses voice2.
@@ -130,6 +130,14 @@ public:
     /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
     bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
+
+    /// @brief Calculates the nearest non-grace-note entry at the given @p eduPosition.
+    /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
+    /// @param eduPosition The EDU position to find.
+    /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
+    /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
+    /// @return The entry if found, otherwise `nullptr`.
+    EntryInfoPtr calcNearestEntry(Cmper forPartId, Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt) const;
 
 private:
     /// @brief Find the layer frame and Edu start position for the given layer.

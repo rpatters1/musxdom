@@ -41,23 +41,8 @@ EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId, bool fin
             MUSX_INTEGRITY_ERROR("SmartShape at Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId)
                 + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
         }
-    } else if (auto gfhold = details::GFrameHoldContext(getDocument(), forPartId, staffId, measId)) {
-        unsigned bestDiff = (std::numeric_limits<unsigned>::max)();
-        gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
-            if (entryInfo->getEntry()->graceNote) {
-                return true; // iterate past grace notes
-            }
-            unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
-            if (eduDiff <= 1) {
-                result = entryInfo;
-                return false; // stop iterating
-            }
-            if (!findExact && eduDiff < bestDiff) {
-                bestDiff = eduDiff;
-                result = entryInfo;
-            }
-            return true;
-        });
+    } else if (auto gfHold = details::GFrameHoldContext(getDocument(), forPartId, staffId, measId)) {
+        result = gfHold.calcNearestEntry(forPartId, eduPosition, findExact);
     }
     return result;
 }

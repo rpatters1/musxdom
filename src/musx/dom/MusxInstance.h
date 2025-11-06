@@ -223,6 +223,7 @@ private:
     const T* m_ref = nullptr;        ///< Pointer to the referenced or owned object
 };
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 ///
 /// @name CTAD guides
 /// @brief Allow deduction of `T` when constructed from a reference or pointer.
@@ -234,6 +235,7 @@ private:
 template<class T> DeferredReference(const T&) -> DeferredReference<T>;
 template<class T> DeferredReference(const T*) -> DeferredReference<T>;
 /// @}
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 } // namespace dom
 } // namespace musx

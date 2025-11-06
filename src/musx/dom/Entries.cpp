@@ -1436,7 +1436,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     return entryFrame;
 }
 
-bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator)
+bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator) const
 {
     auto entryFrame = createEntryFrame(layerIndex);
     if (entryFrame) {
@@ -1449,7 +1449,7 @@ bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::func
     return true;
 }
 
-bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator)
+bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const
 {
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
         if (!iterateEntries(layerIndex, iterator)) {
@@ -1529,6 +1529,36 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
         }
     }
     return foundCue;
+}
+
+EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Cmper forPartId, Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer) const
+{
+    EntryInfoPtr result;
+    unsigned bestDiff = (std::numeric_limits<unsigned>::max)();
+
+    auto iterator = [&](const EntryInfoPtr& entryInfo) {
+        if (entryInfo->getEntry()->graceNote) {
+            return true; // iterate past grace notes
+        }
+        unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
+        if (eduDiff <= 1) {
+            result = entryInfo;
+            return false; // stop iterating
+        }
+        if (!findExact && eduDiff < bestDiff) {
+            bestDiff = eduDiff;
+            result = entryInfo;
+        }
+        return true;
+    };
+
+    if (matchLayer.has_value()) {
+        iterateEntries(*matchLayer, iterator);
+    } else {
+        iterateEntries(iterator);
+    }
+
+    return result;
 }
 
 // ****************

@@ -1325,6 +1325,13 @@ public:
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     CategoryStaffListSet createStaffListSet() const;
 
+    /// @brief Calculates the entry associated with the the measure expression. If the assignment is for a particular layer, only that
+    /// layer is searched.
+    /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
+    /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
+    /// @return The entry if the expression assignment has an associated entry. Null if not.
+    EntryInfoPtr calcAssociatedEntry(Cmper forPartId, bool findExact = true) const;
+
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
