@@ -82,7 +82,7 @@ var searchData=
   ['calclowestbreak_79',['calcLowestBreak',['../classmusx_1_1dom_1_1details_1_1SecondaryBeamBreak.html#aa0aad7aee3a75f14eba17216b4361521',1,'musx::dom::details::SecondaryBeamBreak']]],
   ['calcmiddlestaffposition_80',['calcMiddleStaffPosition',['../classmusx_1_1dom_1_1others_1_1Staff.html#a8a4e8f3326884d02be7b00d5b956748f',1,'musx::dom::others::Staff']]],
   ['calcminmaxstaffsizes_81',['calcMinMaxStaffSizes',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a7c389946c1c3da2aad1ee0f41066d5f2',1,'musx::dom::others::StaffSystem']]],
-  ['calcnearestentry_82',['calcNearestEntry',['../classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a91b1ec23f639d86330faf397c94a322f',1,'musx::dom::details::GFrameHoldContext']]],
+  ['calcnearestentry_82',['calcNearestEntry',['../classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a11a283ff3be7def799c3ef67bd3f892b',1,'musx::dom::details::GFrameHoldContext']]],
   ['calcnextelapsedduration_83',['calcNextElapsedDuration',['../classmusx_1_1dom_1_1EntryInfo.html#a417337db6ffa8dfdf40b8594493fb9b1',1,'musx::dom::EntryInfo']]],
   ['calcnexttupletindex_84',['calcNextTupletIndex',['../classmusx_1_1dom_1_1EntryInfoPtr.html#ad71d23df881b33cdd872760c05869db3',1,'musx::dom::EntryInfoPtr']]],
   ['calcnoteinfo_85',['calcNoteInfo',['../classmusx_1_1dom_1_1Entry.html#a1929de44334812a632e8a1ba1e27df9e',1,'musx::dom::Entry']]],

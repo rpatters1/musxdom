@@ -139,9 +139,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0e3d30b4a276c376b3e4b3a18d5d25d" id="r_aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d">calcIsCuesOnly</a> (bool includeVisibleInScore=false) const</td></tr>
 <tr class="memdesc:aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.  <br /></td></tr>
 <tr class="separator:aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91b1ec23f639d86330faf397c94a322f" id="r_a91b1ec23f639d86330faf397c94a322f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a91b1ec23f639d86330faf397c94a322f">calcNearestEntry</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition, bool findExact=true, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> &gt; matchLayer=std::nullopt) const</td></tr>
-<tr class="memdesc:a91b1ec23f639d86330faf397c94a322f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the nearest non-grace-note entry at the given <code>eduPosition</code>.  <br /></td></tr>
-<tr class="separator:a91b1ec23f639d86330faf397c94a322f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11a283ff3be7def799c3ef67bd3f892b" id="r_a11a283ff3be7def799c3ef67bd3f892b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a11a283ff3be7def799c3ef67bd3f892b">calcNearestEntry</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition, bool findExact=true, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> &gt; matchLayer=std::nullopt) const</td></tr>
+<tr class="memdesc:a11a283ff3be7def799c3ef67bd3f892b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the nearest non-grace-note entry at the given <code>eduPosition</code>.  <br /></td></tr>
+<tr class="separator:a11a283ff3be7def799c3ef67bd3f892b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A context wrapper for <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> associated with a specific part and location. </p>
@@ -285,8 +285,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a91b1ec23f639d86330faf397c94a322f" name="a91b1ec23f639d86330faf397c94a322f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91b1ec23f639d86330faf397c94a322f">&#9670;&#160;</a></span>calcNearestEntry()</h2>
+<a id="a11a283ff3be7def799c3ef67bd3f892b" name="a11a283ff3be7def799c3ef67bd3f892b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11a283ff3be7def799c3ef67bd3f892b">&#9670;&#160;</a></span>calcNearestEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -294,12 +294,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::details::GFrameHoldContext::calcNearestEntry </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
-          <td class="paramname"><em>forPartId</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
           <td class="paramname"><em>eduPosition</em>, </td>
         </tr>
@@ -326,7 +320,6 @@ Public Member Functions</h2></td></tr>
 <p>Calculates the nearest non-grace-note entry at the given <code>eduPosition</code>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">forPartId</td><td>The linked part or score for which to create the <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>. </td></tr>
     <tr><td class="paramname">eduPosition</td><td>The EDU position to find. </td></tr>
     <tr><td class="paramname">findExact</td><td>If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure. </td></tr>
     <tr><td class="paramname">matchLayer</td><td>If specified, only find entries in this 0-based layer index. (Values 0..3) </td></tr>
