@@ -281,6 +281,7 @@ TEST(MeasureExprAssign, Populate)
       <vertOff>2</vertOff>
       <staffAssign>-1</staffAssign>
       <layer>1</layer>
+      <v2/>
       <channelSwitch>toL1</channelSwitch>
       <dontScaleWithEntry/>
       <staffGroup>1</staffGroup>
@@ -298,7 +299,7 @@ TEST(MeasureExprAssign, Populate)
 </finale>
     )xml";
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others) << "Others node not found in XML";
 
@@ -310,6 +311,7 @@ TEST(MeasureExprAssign, Populate)
     EXPECT_EQ(expr1->vertEvpuOff, 2);  // From XML
     EXPECT_EQ(expr1->staffAssign, -1); // From XML
     EXPECT_EQ(expr1->layer, 1);        // From XML
+    EXPECT_TRUE(expr1->voice2); // From XML
     EXPECT_TRUE(expr1->dontScaleWithEntry); // From XML
     EXPECT_EQ(expr1->staffGroup, 1);   // From XML
     EXPECT_EQ(expr1->staffList, 1);    // From XML
@@ -324,6 +326,7 @@ TEST(MeasureExprAssign, Populate)
     EXPECT_EQ(expr2->vertEvpuOff, 73);  // From XML
     EXPECT_EQ(expr2->layer, 0);        // From XML
     EXPECT_FALSE(expr2->dontScaleWithEntry); // From XML
+    EXPECT_FALSE(expr2->voice2); // From XML
     EXPECT_EQ(expr2->staffAssign, 1);   // From XML
     EXPECT_EQ(expr2->staffGroup, 0);   // From XML
     EXPECT_EQ(expr2->staffList, 0);    // From XML
@@ -367,7 +370,7 @@ TEST(ShapeExpressionDef, Populate)
 </finale>
     )xml";
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others) << "Others node not found in XML";
 
@@ -440,7 +443,6 @@ TEST(StaffListCategory, Populate)
     musxtest::staffListCheck(names[2]->name, score[2], { 1, 2, 3 });
 }
 
-
 TEST(ExpressionAssignments, CalcAssociatedEntry)
 {
     std::vector<char> xml;
@@ -454,31 +456,51 @@ TEST(ExpressionAssignments, CalcAssociatedEntry)
     auto exprs = others->getArray<others::MeasureExprAssign>(SCORE_PARTID, 1);
     for (const auto& expr : exprs) {
         if (expr->textExprId == 1) { // forte
-            auto entryInfo = expr->calcAssociatedEntry(SCORE_PARTID);
+            auto entryInfo = expr->calcAssociatedEntry();
             ASSERT_TRUE(entryInfo);
             EXPECT_EQ(entryInfo.getLayerIndex(), 0);
             EXPECT_EQ(entryInfo.getIndexInFrame(), 0);
             EXPECT_EQ(entryInfo->elapsedDuration, 0);
         } else if (expr->textExprId == 2) { // piano
-            auto entryInfo = expr->calcAssociatedEntry(SCORE_PARTID);
+            auto entryInfo = expr->calcAssociatedEntry();
             EXPECT_FALSE(entryInfo) << "no Layer 2 entry at 3rd triplet position";
-            entryInfo = expr->calcAssociatedEntry(SCORE_PARTID, /*findExact*/ false);
+            entryInfo = expr->calcAssociatedEntry(/*findExact*/ false);
             ASSERT_TRUE(entryInfo);
             EXPECT_EQ(entryInfo.getLayerIndex(), 1);
             EXPECT_EQ(entryInfo.getIndexInFrame(), 1);
             EXPECT_EQ(entryInfo->elapsedDuration, musx::util::Fraction(1, 6));
         } else if (expr->textExprId == 3) { // mezzopiano
-            auto entryInfo = expr->calcAssociatedEntry(SCORE_PARTID);
+            auto entryInfo = expr->calcAssociatedEntry();
             ASSERT_TRUE(entryInfo);
             EXPECT_EQ(entryInfo.getLayerIndex(), 1);
             EXPECT_EQ(entryInfo.getIndexInFrame(), 1);
             EXPECT_EQ(entryInfo->elapsedDuration, musx::util::Fraction(1, 6));
         } else if (expr->textExprId == 4) { // pianissimo
-            auto entryInfo = expr->calcAssociatedEntry(SCORE_PARTID);
+            auto entryInfo = expr->calcAssociatedEntry();
             ASSERT_TRUE(entryInfo);
             EXPECT_EQ(entryInfo.getLayerIndex(), 0);
             EXPECT_EQ(entryInfo.getIndexInFrame(), 2);
             EXPECT_EQ(entryInfo->elapsedDuration, musx::util::Fraction(1, 3));
         }
     }
+}
+
+TEST(ExpressionAssignments, Voice2Entries)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "exprv2.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto exps = others->getArray<others::MeasureExprAssign>(SCORE_PARTID, 1);
+    ASSERT_GE(exps.size(), 2);
+
+    EXPECT_TRUE(exps[0]->voice2);
+    EXPECT_FALSE(exps[0]->calcAssociatedEntry());
+
+    EXPECT_FALSE(exps[1]->voice2);
+    EXPECT_FALSE(exps[1]->calcAssociatedEntry());
 }

@@ -1330,10 +1330,9 @@ public:
 
     /// @brief Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning.
     /// The entry must match the #voice2 setting for the assignment as well as the layer, if layer is specified.
-    /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @return The entry if the expression assignment has an associated entry. Null if not.
-    EntryInfoPtr calcAssociatedEntry(Cmper forPartId, bool findExact = true) const;
+    EntryInfoPtr calcAssociatedEntry(bool findExact = true) const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
