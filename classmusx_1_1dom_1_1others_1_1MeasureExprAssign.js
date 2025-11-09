@@ -20,7 +20,7 @@ var classmusx_1_1dom_1_1others_1_1MeasureExprAssign =
       [ "PartOnly", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3aafb379bf7f9643afb5bd85d1419cbfb5", null ]
     ] ],
     [ "MeasureExprAssign", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a84b2bc300f4329b27bfd7b9a9900c294", null ],
-    [ "calcAssociatedEntry", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#adb4002ae992a3d0f0e4185d7845f426d", null ],
+    [ "calcAssociatedEntry", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae8b82295580a2a0ef1cb16f52707a1e0", null ],
     [ "createStaffListSet", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa6cfc0be17f9e8e6be2f683884794da1", null ],
     [ "getShapeExpression", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeb5727858ee3ab49a03814b3663c559f", null ],
     [ "getTextExpression", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a716ebd4ef4627add9f354a02e65b4eee", null ],
@@ -41,5 +41,6 @@ var classmusx_1_1dom_1_1others_1_1MeasureExprAssign =
     [ "staffGroup", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a5e6cb588d8f9d3e378499e08613b91e9", null ],
     [ "staffList", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a403a1bdaab1e95edb4d13f2ecb6d7f87", null ],
     [ "textExprId", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a8b160e52e430dddc231bad2cd333f5bc", null ],
-    [ "vertEvpuOff", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae9134b699b4f91f0c4f68923eddf1b6d", null ]
+    [ "vertEvpuOff", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae9134b699b4f91f0c4f68923eddf1b6d", null ],
+    [ "voice2", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4", null ]
 ];

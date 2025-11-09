@@ -1,5 +1,7 @@
 var NAVTREEINDEX23 =
 {
+"classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1":[1,0,1,0,3,68,4],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1":[2,0,1,0,3,68,4],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1a059ce5872a2158ce93a9c3320f8acc33":[1,0,1,0,3,68,4,0],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1a059ce5872a2158ce93a9c3320f8acc33":[2,0,1,0,3,68,4,0],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1a3b84e373841bed8a59dfa4dd06584d26":[1,0,1,0,3,68,4,4],
@@ -42,8 +44,8 @@ var NAVTREEINDEX23 =
 "classmusx_1_1dom_1_1others_1_1Staff.html#a0d36ca2034285f5047e0e5e738fa935e":[2,0,1,0,3,68,77],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a0e01d469f9cc737b20efb8bd048b77d3":[2,0,1,0,3,68,28],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a0e01d469f9cc737b20efb8bd048b77d3":[1,0,1,0,3,68,28],
-"classmusx_1_1dom_1_1others_1_1Staff.html#a0f215976e7a0c9d9a5aa05fbe0285131":[1,0,1,0,3,68,53],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a0f215976e7a0c9d9a5aa05fbe0285131":[2,0,1,0,3,68,53],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a0f215976e7a0c9d9a5aa05fbe0285131":[1,0,1,0,3,68,53],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a1278b3e220d87facfd9161233ebf4166":[2,0,1,0,3,68,97],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a1278b3e220d87facfd9161233ebf4166":[1,0,1,0,3,68,97],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a1429901c5fe356fd8f4ce7d63b680c04":[1,0,1,0,3,68,11],
@@ -247,7 +249,5 @@ var NAVTREEINDEX23 =
 "classmusx_1_1dom_1_1others_1_1Staff.html#ac82881355305cd7440b4ff44ac34426d":[2,0,1,0,3,68,15],
 "classmusx_1_1dom_1_1others_1_1Staff.html#ac82881355305cd7440b4ff44ac34426d":[1,0,1,0,3,68,15],
 "classmusx_1_1dom_1_1others_1_1Staff.html#ac9034c5f9adfd6a5a3e498f64590eb20":[1,0,1,0,3,68,71],
-"classmusx_1_1dom_1_1others_1_1Staff.html#ac9034c5f9adfd6a5a3e498f64590eb20":[2,0,1,0,3,68,71],
-"classmusx_1_1dom_1_1others_1_1Staff.html#ac9c53dc5f21562bebfaf99be4d6d4cd5":[1,0,1,0,3,68,38],
-"classmusx_1_1dom_1_1others_1_1Staff.html#ac9c53dc5f21562bebfaf99be4d6d4cd5":[2,0,1,0,3,68,38]
+"classmusx_1_1dom_1_1others_1_1Staff.html#ac9034c5f9adfd6a5a3e498f64590eb20":[2,0,1,0,3,68,71]
 };

@@ -174,9 +174,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa6cfc0be17f9e8e6be2f683884794da1" id="r_aa6cfc0be17f9e8e6be2f683884794da1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom_1_1others.html#a8c831340a452cb492cff24c36447e317">CategoryStaffListSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa6cfc0be17f9e8e6be2f683884794da1">createStaffListSet</a> () const</td></tr>
 <tr class="memdesc:aa6cfc0be17f9e8e6be2f683884794da1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set.  <br /></td></tr>
 <tr class="separator:aa6cfc0be17f9e8e6be2f683884794da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb4002ae992a3d0f0e4185d7845f426d" id="r_adb4002ae992a3d0f0e4185d7845f426d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#adb4002ae992a3d0f0e4185d7845f426d">calcAssociatedEntry</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, bool findExact=true) const</td></tr>
-<tr class="memdesc:adb4002ae992a3d0f0e4185d7845f426d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the the measure expression. If the assignment is for a particular layer, only that layer is searched.  <br /></td></tr>
-<tr class="separator:adb4002ae992a3d0f0e4185d7845f426d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8b82295580a2a0ef1cb16f52707a1e0" id="r_ae8b82295580a2a0ef1cb16f52707a1e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae8b82295580a2a0ef1cb16f52707a1e0">calcAssociatedEntry</a> (bool findExact=true) const</td></tr>
+<tr class="memdesc:ae8b82295580a2a0ef1cb16f52707a1e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning. The entry must match the <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> setting for the assignment as well as the layer, if layer is specified.  <br /></td></tr>
+<tr class="separator:ae8b82295580a2a0ef1cb16f52707a1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7892dab985b7a36570cccc10e40e196c" id="r_a7892dab985b7a36570cccc10e40e196c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a7892dab985b7a36570cccc10e40e196c">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a7892dab985b7a36570cccc10e40e196c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a7892dab985b7a36570cccc10e40e196c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -263,6 +263,8 @@ Public Attributes</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>layer</b> {}</td></tr>
 <tr class="memdesc:aa03fd91f34ce3e8c86512e3ec9b5720c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The 1-based layer number (1..4) to which this expression is assigned. (0 = all layers.) <br /></td></tr>
 <tr class="separator:aa03fd91f34ce3e8c86512e3ec9b5720c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeac79b2ed22028a68b2c3add6081c3e4" id="r_aeac79b2ed22028a68b2c3add6081c3e4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> {}</td></tr>
+<tr class="separator:aeac79b2ed22028a68b2c3add6081c3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7290c0d1891bd777ce603e27dc7fecf3" id="r_a7290c0d1891bd777ce603e27dc7fecf3"><td class="memItemLeft" align="right" valign="top"><a id="a7290c0d1891bd777ce603e27dc7fecf3" name="a7290c0d1891bd777ce603e27dc7fecf3"></a>
 <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a1fa4163ac50553facdee63706e5302f1">ChannelSwitchTarget</a>&#160;</td><td class="memItemRight" valign="bottom"><b>channelSwitch</b> {}</td></tr>
 <tr class="memdesc:a7290c0d1891bd777ce603e27dc7fecf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">"On Playback Affect" value. <br /></td></tr>
@@ -454,8 +456,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="adb4002ae992a3d0f0e4185d7845f426d" name="adb4002ae992a3d0f0e4185d7845f426d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb4002ae992a3d0f0e4185d7845f426d">&#9670;&#160;</a></span>calcAssociatedEntry()</h2>
+<a id="ae8b82295580a2a0ef1cb16f52707a1e0" name="ae8b82295580a2a0ef1cb16f52707a1e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8b82295580a2a0ef1cb16f52707a1e0">&#9670;&#160;</a></span>calcAssociatedEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -463,27 +465,16 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::others::MeasureExprAssign::calcAssociatedEntry </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
-          <td class="paramname"><em>forPartId</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>findExact</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramname"><em>findExact</em> = <code>true</code></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the entry associated with the the measure expression. If the assignment is for a particular layer, only that layer is searched. </p>
+<p>Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning. The entry must match the <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> setting for the assignment as well as the layer, if layer is specified. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">forPartId</td><td>The linked part or score for which to create the <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>. </td></tr>
     <tr><td class="paramname">findExact</td><td>If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure. </td></tr>
   </table>
   </dd>
@@ -608,6 +599,21 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>The cmper of the marking category staff list that is controlling this assignment (if any). There will be a separate <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a84b2bc300f4329b27bfd7b9a9900c294" title="Constructor function.">MeasureExprAssign</a> instance for every staff in the staff list. </p>
+
+</div>
+</div>
+<a id="aeac79b2ed22028a68b2c3add6081c3e4" name="aeac79b2ed22028a68b2c3add6081c3e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeac79b2ed22028a68b2c3add6081c3e4">&#9670;&#160;</a></span>voice2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::MeasureExprAssign::voice2 {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If true, positioning is relative to a voice2 entry. This setting is a legacy setting that Finale sets when it upgrades a pre-Finale 2009 file. It is not available in the UI. However, an expression does not recognize entry positioning for a voice2 entry unless this value is true. And if it is true, entry-positioning ignores voice 1 entries. (xml node is <code>&lt;v2&gt;</code>) </p>
 
 </div>
 </div>
