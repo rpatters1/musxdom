@@ -1301,6 +1301,9 @@ public:
     Evpu vertEvpuOff{};                     ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
     StaffCmper staffAssign{};               ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
     int layer{};                            ///< The 1-based layer number (1..4) to which this expression is assigned. (0 = all layers.)
+    bool voice2{};                          ///< If true, positioning is relative to a voice2 entry. This setting is a legacy setting that Finale sets when it upgrades
+                                            ///< a pre-Finale 2009 file. It is not available in the UI. However, an expression does not recognize entry positioning for
+                                            ///< a voice2 entry unless this value is true. And if it is true, entry-positioning ignores voice 1 entries. (xml node is `<v2>`)
     ChannelSwitchTarget channelSwitch{};    ///< "On Playback Affect" value.
     bool dontScaleWithEntry{};              ///< Inverse of "Scale Expression with Attached Note".
     PlaybackStart playbackStart{};          ///< Where to start playback.
@@ -1325,8 +1328,8 @@ public:
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     CategoryStaffListSet createStaffListSet() const;
 
-    /// @brief Calculates the entry associated with the the measure expression. If the assignment is for a particular layer, only that
-    /// layer is searched.
+    /// @brief Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning.
+    /// The entry must match the #voice2 setting for the assignment as well as the layer, if layer is specified.
     /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @return The entry if the expression assignment has an associated entry. Null if not.

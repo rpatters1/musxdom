@@ -1531,14 +1531,18 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
     return foundCue;
 }
 
-EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer) const
+EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer, std::optional<bool> matchVoice2) const
 {
     EntryInfoPtr result;
     unsigned bestDiff = (std::numeric_limits<unsigned>::max)();
 
     auto iterator = [&](const EntryInfoPtr& entryInfo) {
-        if (entryInfo->getEntry()->graceNote) {
+        const auto entry = entryInfo->getEntry();
+        if (entry->graceNote) {
             return true; // iterate past grace notes
+        }
+        if (matchVoice2.has_value() && entry->voice2 != *matchVoice2) {
+            return true; // iterate past non-matching v1v2 values
         }
         unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
         if (eduDiff <= 1) {
