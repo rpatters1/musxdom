@@ -135,8 +135,9 @@ public:
     /// @param eduPosition The EDU position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
+    /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
     /// @return The entry if found, otherwise `nullptr`.
-    EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt) const;
+    EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt, std::optional<bool> matchVoice2 = std::nullopt) const;
 
 private:
     /// @brief Find the layer frame and Edu start position for the given layer.

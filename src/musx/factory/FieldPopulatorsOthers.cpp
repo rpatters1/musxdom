@@ -827,6 +827,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->vertEvpuOff = e->getTextAs<Evpu>(); }},
     {"staffAssign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffAssign = e->getTextAs<StaffCmper>(); }},
     {"layer", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->layer = e->getTextAs<int>(); }},
+    {"v2", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->voice2 = populateBoolean(e, i); }},
     {"channelSwitch", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->channelSwitch = toEnum<MeasureExprAssign::ChannelSwitchTarget>(e); }},
     {"dontScaleWithEntry", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->dontScaleWithEntry = populateBoolean(e, i); }},
     {"playbackStart", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->playbackStart = toEnum<MeasureExprAssign::PlaybackStart>(e); }},
