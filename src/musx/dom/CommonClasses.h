@@ -415,7 +415,7 @@ public:
     Evpu baselinePosition;              ///< baseline position of this line on this system, relative to the staff's reference line
     std::string_view lyricsType;        ///< the type of lyric ("chorus", "verse", or "section", corresponding to the xml tags for lyrics text)
     Cmper lyricNumber;                  ///< the text number for all lyric assignments on this line.
-    MusxInstanceList<details::LyricAssign> assignments; ///< The lyric assignments on this line. The all should share the same `lyricNumber` value.
+    MusxInstanceList<details::LyricAssign> assignments; ///< The lyric assignments on this line. They all share the same `lyricNumber` value.
 };
 
 /**
