@@ -20,8 +20,12 @@ var classmusx_1_1dom_1_1others_1_1MeasureExprAssign =
       [ "PartOnly", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3aafb379bf7f9643afb5bd85d1419cbfb5", null ]
     ] ],
     [ "MeasureExprAssign", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a84b2bc300f4329b27bfd7b9a9900c294", null ],
+    [ "calcAppliesToLayer", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa985f08e6397862d764623244b0d9b62", null ],
+    [ "calcAssignedStaffId", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ad064c2154b89dd126c0481dbe350002c", null ],
     [ "calcAssociatedEntry", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae8b82295580a2a0ef1cb16f52707a1e0", null ],
     [ "calcIsAssignedInRequestedPart", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae9e90e4549792cff809a44eeabc8435c", null ],
+    [ "calcIsHiddenByAlternateNotation", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a29eb375fb486646c106264a2fc98fda1", null ],
+    [ "createCurrentStaff", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#add8ad39ad4bd23c5a2e559cc832e8e6e", null ],
     [ "createStaffListSet", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa6cfc0be17f9e8e6be2f683884794da1", null ],
     [ "getShapeExpression", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeb5727858ee3ab49a03814b3663c559f", null ],
     [ "getTextExpression", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a716ebd4ef4627add9f354a02e65b4eee", null ],

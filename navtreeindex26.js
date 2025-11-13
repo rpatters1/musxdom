@@ -1,5 +1,13 @@
 var NAVTREEINDEX26 =
 {
+"classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a2c27148798454512844e57b3ec74dcb5":[2,0,1,0,3,90,2],
+"classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a2c27148798454512844e57b3ec74dcb5":[1,0,1,0,3,90,2],
+"classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a4e0cf82565351e6b4959f9cf041686e1":[1,0,1,0,3,90,7],
+"classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a4e0cf82565351e6b4959f9cf041686e1":[2,0,1,0,3,90,7],
+"classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a512dc7bfe908183a1cdf60d113709044":[2,0,1,0,3,90,5],
+"classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a512dc7bfe908183a1cdf60d113709044":[1,0,1,0,3,90,5],
+"classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a6b3a6c982061e1ff69373ed57faea885":[2,0,1,0,3,90,3],
+"classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a6b3a6c982061e1ff69373ed57faea885":[1,0,1,0,3,90,3],
 "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#afae0c3f06c0d4c6fec2619562b90f5c0":[1,0,1,0,3,90,4],
 "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#afae0c3f06c0d4c6fec2619562b90f5c0":[2,0,1,0,3,90,4],
 "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html":[1,0,1,0,3,91],
@@ -241,13 +249,5 @@ var NAVTREEINDEX26 =
 "classmusx_1_1xml_1_1IXmlDocument.html#a928c674094e777c54b524716fcc7b1f0":[1,0,1,2,4,2],
 "classmusx_1_1xml_1_1IXmlDocument.html#a928c674094e777c54b524716fcc7b1f0":[2,0,1,3,4,2],
 "classmusx_1_1xml_1_1IXmlDocument.html#a9f8306733e03b3be63d1de4f98500b8d":[2,0,1,3,4,1],
-"classmusx_1_1xml_1_1IXmlDocument.html#a9f8306733e03b3be63d1de4f98500b8d":[1,0,1,2,4,1],
-"classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80":[1,0,1,2,4,3],
-"classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80":[2,0,1,3,4,3],
-"classmusx_1_1xml_1_1IXmlElement.html":[1,0,1,2,5],
-"classmusx_1_1xml_1_1IXmlElement.html":[2,0,1,3,5],
-"classmusx_1_1xml_1_1IXmlElement.html#a073944bd7fbf7b932d82e05f7b3632cf":[2,0,1,3,5,5],
-"classmusx_1_1xml_1_1IXmlElement.html#a073944bd7fbf7b932d82e05f7b3632cf":[1,0,1,2,5,5],
-"classmusx_1_1xml_1_1IXmlElement.html#a14493677bab26f89d8e7ad160662e147":[2,0,1,3,5,4],
-"classmusx_1_1xml_1_1IXmlElement.html#a14493677bab26f89d8e7ad160662e147":[1,0,1,2,5,4]
+"classmusx_1_1xml_1_1IXmlDocument.html#a9f8306733e03b3be63d1de4f98500b8d":[1,0,1,2,4,1]
 };

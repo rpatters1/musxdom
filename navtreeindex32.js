@@ -1,5 +1,13 @@
 var NAVTREEINDEX32 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#af42e8efd63a85d5ec924d9e5e377c747":[1,0,1,0,5,483],
+"namespacemusx_1_1dom_1_1uuid.html#af43ea780c370eeff75d654e5bd07f007":[1,0,1,0,5,745],
+"namespacemusx_1_1dom_1_1uuid.html#af4498263b2e2981e62ff2eba57bb586f":[1,0,1,0,5,502],
+"namespacemusx_1_1dom_1_1uuid.html#af518409164394c5c798557f14cd12c41":[1,0,1,0,5,175],
+"namespacemusx_1_1dom_1_1uuid.html#af528ec1e044961da00f13db5cb9958c1":[1,0,1,0,5,231],
+"namespacemusx_1_1dom_1_1uuid.html#af576e52388e32f6aff7b0a0a9e75e5d4":[1,0,1,0,5,476],
+"namespacemusx_1_1dom_1_1uuid.html#af5e62a3cd828c8570c0216e0ad2b93b5":[1,0,1,0,5,386],
+"namespacemusx_1_1dom_1_1uuid.html#af68633f6941deef7621028f1fba245f6":[1,0,1,0,5,360],
 "namespacemusx_1_1dom_1_1uuid.html#af6c51cd6b120647a53ff857e7db7a924":[1,0,1,0,5,352],
 "namespacemusx_1_1dom_1_1uuid.html#af6eba2778727f14b28298953b90aa083":[1,0,1,0,5,415],
 "namespacemusx_1_1dom_1_1uuid.html#af6f126dbb69972700c3e77fccebb0f72":[1,0,1,0,5,41],
@@ -241,13 +249,5 @@ var NAVTREEINDEX32 =
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#afe4b6ea02c99a6cf888ebf50f9837d5f":[1,0,1,0,2,25,1,0],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#afe4b6ea02c99a6cf888ebf50f9837d5f":[2,0,1,0,2,25,1,0],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html":[2,0,1,0,2,25,2],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html":[1,0,1,0,2,25,2],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#a15c4ceea7ebe34998c32b3487835c231":[1,0,1,0,2,25,2,1],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#a15c4ceea7ebe34998c32b3487835c231":[2,0,1,0,2,25,2,1],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#aee47e87fb9f9e15a19eea7e7f0a83b47":[1,0,1,0,2,25,2,0],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#aee47e87fb9f9e15a19eea7e7f0a83b47":[2,0,1,0,2,25,2,0],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#aef79db715a9c3dd86b613daaa73dc23b":[1,0,1,0,2,25,2,2],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#aef79db715a9c3dd86b613daaa73dc23b":[2,0,1,0,2,25,2,2],
-"structmusx_1_1dom_1_1others_1_1ShapeInstruction.html":[1,0,1,0,3,62],
-"structmusx_1_1dom_1_1others_1_1ShapeInstruction.html":[2,0,1,0,3,62]
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html":[1,0,1,0,2,25,2]
 };

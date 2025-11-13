@@ -174,6 +174,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa6cfc0be17f9e8e6be2f683884794da1" id="r_aa6cfc0be17f9e8e6be2f683884794da1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom_1_1others.html#a8c831340a452cb492cff24c36447e317">CategoryStaffListSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa6cfc0be17f9e8e6be2f683884794da1">createStaffListSet</a> () const</td></tr>
 <tr class="memdesc:aa6cfc0be17f9e8e6be2f683884794da1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set.  <br /></td></tr>
 <tr class="separator:aa6cfc0be17f9e8e6be2f683884794da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad064c2154b89dd126c0481dbe350002c" id="r_ad064c2154b89dd126c0481dbe350002c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ad064c2154b89dd126c0481dbe350002c">calcAssignedStaffId</a> (bool forPageView=true) const</td></tr>
+<tr class="memdesc:ad064c2154b89dd126c0481dbe350002c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the effective staffId for the assignment, returning top or bottom staff if appropriate.  <br /></td></tr>
+<tr class="separator:ad064c2154b89dd126c0481dbe350002c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add8ad39ad4bd23c5a2e559cc832e8e6e" id="r_add8ad39ad4bd23c5a2e559cc832e8e6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">StaffComposite</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#add8ad39ad4bd23c5a2e559cc832e8e6e">createCurrentStaff</a> (bool forPageView=true) const</td></tr>
+<tr class="memdesc:add8ad39ad4bd23c5a2e559cc832e8e6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the current staff for this assignment.  <br /></td></tr>
+<tr class="separator:add8ad39ad4bd23c5a2e559cc832e8e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8b82295580a2a0ef1cb16f52707a1e0" id="r_ae8b82295580a2a0ef1cb16f52707a1e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae8b82295580a2a0ef1cb16f52707a1e0">calcAssociatedEntry</a> (bool findExact=true) const</td></tr>
 <tr class="memdesc:ae8b82295580a2a0ef1cb16f52707a1e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning. The entry must match the <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> setting for the assignment as well as the layer, if layer is specified.  <br /></td></tr>
 <tr class="separator:ae8b82295580a2a0ef1cb16f52707a1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +187,13 @@ Public Member Functions</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsAssignedInRequestedPart</b> () const</td></tr>
 <tr class="memdesc:ae9e90e4549792cff809a44eeabc8435c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this assignment is assigned in the current part or score, based on the requested part ID of the current instance and <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a11ed0e75e9db218768bd46f0b9adc7a6" title="&quot;Show On Score and Part(s)|Score Only|Part(s) Only&quot;.">showStaffList</a>. <br /></td></tr>
 <tr class="separator:ae9e90e4549792cff809a44eeabc8435c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa985f08e6397862d764623244b0d9b62" id="r_aa985f08e6397862d764623244b0d9b62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa985f08e6397862d764623244b0d9b62">calcAppliesToLayer</a> (<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> layerIndex) const</td></tr>
+<tr class="memdesc:aa985f08e6397862d764623244b0d9b62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this assignment applies to the specified layer.  <br /></td></tr>
+<tr class="separator:aa985f08e6397862d764623244b0d9b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29eb375fb486646c106264a2fc98fda1" id="r_a29eb375fb486646c106264a2fc98fda1"><td class="memItemLeft" align="right" valign="top"><a id="a29eb375fb486646c106264a2fc98fda1" name="a29eb375fb486646c106264a2fc98fda1"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsHiddenByAlternateNotation</b> () const</td></tr>
+<tr class="memdesc:a29eb375fb486646c106264a2fc98fda1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this assignment is hidden by alternate notation. <br /></td></tr>
+<tr class="separator:a29eb375fb486646c106264a2fc98fda1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7892dab985b7a36570cccc10e40e196c" id="r_a7892dab985b7a36570cccc10e40e196c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a7892dab985b7a36570cccc10e40e196c">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a7892dab985b7a36570cccc10e40e196c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a7892dab985b7a36570cccc10e40e196c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -460,6 +473,59 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa985f08e6397862d764623244b0d9b62" name="aa985f08e6397862d764623244b0d9b62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa985f08e6397862d764623244b0d9b62">&#9670;&#160;</a></span>calcAppliesToLayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::MeasureExprAssign::calcAppliesToLayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td>
+          <td class="paramname"><em>layerIndex</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if this assignment applies to the specified layer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">layerIndex</td><td>The 0-based LayerIndex to check (0..3). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad064c2154b89dd126c0481dbe350002c" name="ad064c2154b89dd126c0481dbe350002c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad064c2154b89dd126c0481dbe350002c">&#9670;&#160;</a></span>calcAssignedStaffId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> musx::dom::others::MeasureExprAssign::calcAssignedStaffId </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forPageView</em> = <code>true</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the effective staffId for the assignment, returning top or bottom staff if appropriate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forPageView</td><td>Return the top/bottom staff in page view (when appropriate). If the staff does not appear in page view, the function falls back to scroll view. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Either the actual staff or the top or bottom staff in page view or scroll view in the current requested part. </dd></dl>
+
+</div>
+</div>
 <a id="ae8b82295580a2a0ef1cb16f52707a1e0" name="ae8b82295580a2a0ef1cb16f52707a1e0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae8b82295580a2a0ef1cb16f52707a1e0">&#9670;&#160;</a></span>calcAssociatedEntry()</h2>
 
@@ -484,6 +550,32 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The entry if the expression assignment has an associated entry. Null if not. </dd></dl>
+
+</div>
+</div>
+<a id="add8ad39ad4bd23c5a2e559cc832e8e6e" name="add8ad39ad4bd23c5a2e559cc832e8e6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add8ad39ad4bd23c5a2e559cc832e8e6e">&#9670;&#160;</a></span>createCurrentStaff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">StaffComposite</a> &gt; musx::dom::others::MeasureExprAssign::createCurrentStaff </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forPageView</em> = <code>true</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the current staff for this assignment. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forPageView</td><td>If this value is true, calculates the current staff in page view, otherwise is scroll view. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
