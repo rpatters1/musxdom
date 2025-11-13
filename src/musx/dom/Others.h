@@ -1332,6 +1332,15 @@ public:
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     CategoryStaffListSet createStaffListSet() const;
 
+    /// @brief Calculates the effective staffId for the assignment, returning top or bottom staff if appropriate
+    /// @param forPageView Return the top/bottom staff in page view (when appropriate). If the staff does not appear in page view, the function falls back to scroll view.
+    /// @return Either the actual staff or the top or bottom staff in page view or scroll view in the current requested part.
+    StaffCmper calcAssignedStaffId(bool forPageView = true) const;
+
+    /// @brief Creates the current staff for this assignment
+    /// @param forPageView If this value is true, calculates the current staff in page view, otherwise is scroll view.
+    MusxInstance<StaffComposite> createCurrentStaff(bool forPageView = true) const;
+
     /// @brief Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning.
     /// The entry must match the #voice2 setting for the assignment as well as the layer, if layer is specified.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
@@ -1340,6 +1349,13 @@ public:
 
     /// @brief Calculates if this assignment is assigned in the current part or score, based on the requested part ID of the current instance and #showStaffList.
     bool calcIsAssignedInRequestedPart() const;
+
+    /// @brief Calculates if this assignment applies to the specified layer.
+    /// @param layerIndex The 0-based LayerIndex to check (0..3).
+    bool calcAppliesToLayer(LayerIndex layerIndex) const;
+
+    /// @brief Calculates if this assignment is hidden by alternate notation.
+    bool calcIsHiddenByAlternateNotation() const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {

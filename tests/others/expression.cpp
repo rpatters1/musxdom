@@ -504,3 +504,57 @@ TEST(ExpressionAssignments, Voice2Entries)
     EXPECT_FALSE(exps[1]->voice2);
     EXPECT_FALSE(exps[1]->calcAssociatedEntry());
 }
+
+TEST(ExpressionAssignments, HiddenByAltNotation)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "expdef.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto exps = others->getArray<others::MeasureExprAssign>(SCORE_PARTID, 1);
+    ASSERT_GE(exps.size(), 8);
+
+    int processedExps = 0;
+    for (const auto& exp : exps) {
+        switch (exp->textExprId) {
+        case 1:
+            if (exp->staffAssign < 0) {
+                EXPECT_EQ(exp->calcAssignedStaffId(), 2);
+            } else {
+                EXPECT_EQ(exp->calcAssignedStaffId(), 3);
+            }
+            EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());
+            processedExps++;
+            break;
+        case 2:
+            if (exp->staffAssign == 2) {
+                EXPECT_TRUE(exp->calcIsHiddenByAlternateNotation());
+            } else {
+                EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());            
+            }
+            processedExps++;
+            break;
+        case 3:
+            if (exp->staffAssign == 2) {
+                EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());
+            } else {
+                EXPECT_TRUE(exp->calcIsHiddenByAlternateNotation());            
+            }
+            processedExps++;
+            break;
+        case 4:
+            if (exp->staffAssign == 2) {
+                EXPECT_TRUE(exp->calcIsHiddenByAlternateNotation());
+            } else {
+                EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());            
+            }
+            processedExps++;
+            break;
+        }
+    }
+    EXPECT_EQ(processedExps, 8);
+}

@@ -230,6 +230,53 @@ bool MeasureExprAssign::calcIsAssignedInRequestedPart() const
     return showStaffList != ShowStaffList::PartOnly;
 }
 
+bool MeasureExprAssign::calcAppliesToLayer(LayerIndex layerIndex) const
+{
+    return (layer == 0 || layer - 1 == layerIndex);
+}
+
+StaffCmper MeasureExprAssign::calcAssignedStaffId(bool forPageView) const
+{
+    if (staffAssign >= 0) {
+        return staffAssign;
+    }
+    const auto systemStaves = [&]() -> std::optional<MusxInstanceList<StaffUsed>> {
+        if (forPageView) {
+            if (auto system = getDocument()->calculateSystemFromMeasure(getRequestedPartId(), getCmper())) {
+                return getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), system->getCmper());
+            }
+        }
+        return getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), BASE_SYSTEM_ID);
+    }();
+    switch (static_cast<StaffList::FloatingValues>(staffAssign)) {
+        case StaffList::FloatingValues::TopStaff: return systemStaves->getTopStaffId();
+        case StaffList::FloatingValues::BottomStaff: return systemStaves->getBottomStaffId();
+        default: break;
+    }
+    return 0;
+}
+
+MusxInstance<StaffComposite> MeasureExprAssign::createCurrentStaff(bool forPageView) const
+{
+    return StaffComposite::createCurrent(getDocument(), getRequestedPartId(), calcAssignedStaffId(forPageView), getCmper(), eduPosition);
+}
+
+bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
+{
+    if (staffList != 0) {
+        return false; // assignments with staff lists are never hidden by alternate notation: observed behavior
+    }
+    auto staff = createCurrentStaff();
+    MUSX_ASSERT_IF(!staff) {
+        throw std::logic_error("Unable to create current staff for expression assignment.");
+    }
+    if (calcAppliesToLayer(staff->altLayer)) {
+        return staff->altHideExpressions;
+    } else {
+        return staff->altHideOtherExpressions;
+    }
+}
+
 // *******************************
 // ***** MeasureNumberRegion *****
 // *******************************

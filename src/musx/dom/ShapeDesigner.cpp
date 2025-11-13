@@ -45,23 +45,22 @@ static bool isTenutoMark(const ShapeDef& shape)
     };
 
     size_t nextIndex = 0;
-    shape.iterateInstructions([&](ShapeDef::InstructionType staffId, std::vector<int> data) {
-        if (staffId == ShapeDef::InstructionType::SetDash) {
+    shape.iterateInstructions([&](ShapeDef::InstructionType instId, std::vector<int> data) {
+        if (instId == ShapeDef::InstructionType::SetDash) {
             return true; // skip SetDash
         }
         if (nextIndex >= expectedInsts.size()) {
             nextIndex++; // assure no tenuto is returned
             return false;
         }
-        if (staffId != expectedInsts[nextIndex]) {
+        if (instId != expectedInsts[nextIndex]) {
             return false;
         }
-        if (const auto lineWidth = ShapeInstruction::parseLineWidth(staffId, data)) {
+        if (const auto lineWidth = ShapeInstruction::parseLineWidth(instId, data)) {
             if (lineWidth->efix < 4 * EFIX_PER_EVPU || lineWidth->efix > 6 * EFIX_PER_EVPU) {
                 return false;
             }
-        }
-        else if (const auto rLineTo = ShapeInstruction::parseRLineTo(staffId, data)) {
+        } else if (const auto rLineTo = ShapeInstruction::parseRLineTo(instId, data)) {
             if (rLineTo->dx < EVPU_PER_SPACE || rLineTo->dx > 1.5 * EVPU_PER_SPACE || rLineTo->dy != 0) {
                 return false;
             }
