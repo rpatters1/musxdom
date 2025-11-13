@@ -1079,6 +1079,10 @@ public:
     /** @brief gets the name of the marking category */
     std::string getName() const;
 
+    /// @brief Create a @ref StaffListSet for the given instance. This can be used to interrogate whether a staff appears in the staff set.
+    /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
+    CategoryStaffListSet createStaffListSet() const;
+
     constexpr static std::string_view XmlNodeName = "markingsCategory"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MarkingCategory>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -1285,7 +1289,7 @@ public:
     };
 
     /// @enum ShowStaffList
-    /// @brief Where to show the assignment (when there is no staff list.)
+    /// @brief Where to show the assignment. (Used both for staff list and singleton assignments.)
     enum class ShowStaffList
     {
         ScoreAndPart,           ///< Score and Part(s). (Default value may not appear in xml.)
@@ -1333,6 +1337,9 @@ public:
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @return The entry if the expression assignment has an associated entry. Null if not.
     EntryInfoPtr calcAssociatedEntry(bool findExact = true) const;
+
+    /// @brief Calculates if this assignment is assigned in the current part or score, based on the requested part ID of the current instance and #showStaffList.
+    bool calcIsAssignedInRequestedPart() const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
@@ -2816,7 +2823,7 @@ public:
     int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
     int playPass{};                                 ///< "Play Only on Pass" value.
     bool hideMeasureNum;                            ///< "Hide Measure Numbers" (used on Rehearsal Marks)
-    bool matchPlayback;                             ///< purpose needs investigation.
+    bool matchPlayback;                             ///< "Match Playback to Metronome Marking Text"
     bool useAuxData{};                              ///< Whether auxiliary data is used.
     bool hasEnclosure{};                            ///< Whether the text expression has an enclosure. (xml node is "newEnclosure")
     bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.

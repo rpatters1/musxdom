@@ -102,6 +102,11 @@ std::string MarkingCategory::getName() const
     return {};
 }
 
+CategoryStaffListSet MarkingCategory::createStaffListSet() const
+{
+    return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
+}
+
 // *******************
 // ***** Measure *****
 // *******************
@@ -215,6 +220,14 @@ EntryInfoPtr MeasureExprAssign::calcAssociatedEntry(bool findExact) const
         }
     }
     return {};
+}
+
+bool MeasureExprAssign::calcIsAssignedInRequestedPart() const
+{
+    if (getRequestedPartId() != SCORE_PARTID) {
+        return showStaffList != ShowStaffList::ScoreOnly;
+    }
+    return showStaffList != ShowStaffList::PartOnly;
 }
 
 // *******************************
