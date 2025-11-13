@@ -145,7 +145,7 @@ Public Types</h2></td></tr>
 , <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3acd53fa916b261fb48fb78117cd459006">ScoreOnly</a>
 , <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3aafb379bf7f9643afb5bd85d1419cbfb5">PartOnly</a>
  }</td></tr>
-<tr class="memdesc:a086834c0cd00799bce31cdc0522ce0d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where to show the assignment (when there is no staff list.)  <a href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3">More...</a><br /></td></tr>
+<tr class="memdesc:a086834c0cd00799bce31cdc0522ce0d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where to show the assignment. (Used both for staff list and singleton assignments.)  <a href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3">More...</a><br /></td></tr>
 <tr class="separator:a086834c0cd00799bce31cdc0522ce0d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
 <tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
@@ -177,6 +177,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae8b82295580a2a0ef1cb16f52707a1e0" id="r_ae8b82295580a2a0ef1cb16f52707a1e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae8b82295580a2a0ef1cb16f52707a1e0">calcAssociatedEntry</a> (bool findExact=true) const</td></tr>
 <tr class="memdesc:ae8b82295580a2a0ef1cb16f52707a1e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning. The entry must match the <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> setting for the assignment as well as the layer, if layer is specified.  <br /></td></tr>
 <tr class="separator:ae8b82295580a2a0ef1cb16f52707a1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9e90e4549792cff809a44eeabc8435c" id="r_ae9e90e4549792cff809a44eeabc8435c"><td class="memItemLeft" align="right" valign="top"><a id="ae9e90e4549792cff809a44eeabc8435c" name="ae9e90e4549792cff809a44eeabc8435c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsAssignedInRequestedPart</b> () const</td></tr>
+<tr class="memdesc:ae9e90e4549792cff809a44eeabc8435c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this assignment is assigned in the current part or score, based on the requested part ID of the current instance and <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a11ed0e75e9db218768bd46f0b9adc7a6" title="&quot;Show On Score and Part(s)|Score Only|Part(s) Only&quot;.">showStaffList</a>. <br /></td></tr>
+<tr class="separator:ae9e90e4549792cff809a44eeabc8435c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7892dab985b7a36570cccc10e40e196c" id="r_a7892dab985b7a36570cccc10e40e196c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a7892dab985b7a36570cccc10e40e196c">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a7892dab985b7a36570cccc10e40e196c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a7892dab985b7a36570cccc10e40e196c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -443,7 +447,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Where to show the assignment (when there is no staff list.) </p>
+<p>Where to show the assignment. (Used both for staff list and singleton assignments.) </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a086834c0cd00799bce31cdc0522ce0d3a7538d62bd653b25559d4b13546fa7421" name="a086834c0cd00799bce31cdc0522ce0d3a7538d62bd653b25559d4b13546fa7421"></a>ScoreAndPart&#160;</td><td class="fielddoc"><p>Score and Part(s). (Default value may not appear in xml.) </p>
 </td></tr>

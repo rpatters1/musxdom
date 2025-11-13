@@ -11,6 +11,7 @@ var classmusx_1_1dom_1_1others_1_1MarkingCategory =
       [ "Misc", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa74248c725e00bf9fe04df4e35b249a19", null ]
     ] ],
     [ "MarkingCategory", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ac9704a53879f462ef45fe10d9404e554", null ],
+    [ "createStaffListSet", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a92e5216185bc191ba1daa98a160b4061", null ],
     [ "getName", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a15e05f61a10d3a92b4399feda7259506", null ],
     [ "breakMmRest", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ab5e72426d1e44dc8d12632441c8726a9", null ],
     [ "categoryType", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#af1ee5a4eb2f3864079627aebd99ff5b0", null ],

@@ -1,5 +1,9 @@
 var NAVTREEINDEX33 =
 {
+"structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1LineWidth.html":[1,0,1,0,3,62,0],
+"structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1LineWidth.html":[2,0,1,0,3,62,0],
+"structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1LineWidth.html#a79f1c7f5a5d2e05196e06565e1e5d4bb":[2,0,1,0,3,62,0,0],
+"structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1LineWidth.html#a79f1c7f5a5d2e05196e06565e1e5d4bb":[1,0,1,0,3,62,0,0],
 "structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1RLineTo.html":[1,0,1,0,3,62,1],
 "structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1RLineTo.html":[2,0,1,0,3,62,1],
 "structmusx_1_1dom_1_1others_1_1ShapeInstruction_1_1RLineTo.html#a03b9b1880bb9b30ea2f172c40576a9b2":[1,0,1,0,3,62,1,1],

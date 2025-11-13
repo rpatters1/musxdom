@@ -21,6 +21,7 @@ var classmusx_1_1dom_1_1others_1_1MeasureExprAssign =
     ] ],
     [ "MeasureExprAssign", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a84b2bc300f4329b27bfd7b9a9900c294", null ],
     [ "calcAssociatedEntry", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae8b82295580a2a0ef1cb16f52707a1e0", null ],
+    [ "calcIsAssignedInRequestedPart", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae9e90e4549792cff809a44eeabc8435c", null ],
     [ "createStaffListSet", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa6cfc0be17f9e8e6be2f683884794da1", null ],
     [ "getShapeExpression", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeb5727858ee3ab49a03814b3663c559f", null ],
     [ "getTextExpression", "classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a716ebd4ef4627add9f354a02e65b4eee", null ],
