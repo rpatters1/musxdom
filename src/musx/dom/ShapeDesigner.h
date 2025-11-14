@@ -266,11 +266,10 @@ struct ShapeDefInstruction
 
     /// @brief Holds the parsed data for a SetFont instruction.
     struct SetFont {
-        /// @brief 
-        /// @param document 
+        /// @brief Constructor function
         SetFont(const DocumentWeakPtr& document) : font(document)
         {}
-        FontInfo font;
+        FontInfo font;  ///< the parsed font
     };
 
     /// @brief Holds the parsed data for a SetGray instruction.
@@ -369,7 +368,7 @@ struct ShapeDefInstruction
 
         /// @brief Sets the payload
         /// @tparam T The instruction-specific type for the data.
-        /// @param opt The data supplied from the parse routine.
+        /// @param optData The data supplied from the parse routine.
         template <typename T>
         void setPayload(std::optional<T>&& optData)
         {
