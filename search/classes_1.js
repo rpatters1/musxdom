@@ -30,5 +30,5 @@ var searchData=
   ['beatchartelement_27',['BeatChartElement',['../classmusx_1_1dom_1_1others_1_1BeatChartElement.html',1,'musx::dom::others']]],
   ['blocktext_28',['BlockText',['../classmusx_1_1dom_1_1texts_1_1BlockText.html',1,'musx::dom::texts']]],
   ['bookmarktext_29',['BookmarkText',['../classmusx_1_1dom_1_1texts_1_1BookmarkText.html',1,'musx::dom::texts']]],
-  ['bracket_30',['Bracket',['../classmusx_1_1dom_1_1details_1_1Bracket.html',1,'musx::dom::details']]]
+  ['bracket_30',['bracket',['../classmusx_1_1dom_1_1details_1_1Bracket.html',1,'musx::dom::details::Bracket'],['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1Bracket.html',1,'musx::dom::ShapeDefInstruction::Bracket']]]
 ];

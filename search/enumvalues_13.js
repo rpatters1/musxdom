@@ -2,7 +2,7 @@ var searchData=
 [
   ['unbeamedonly_0',['UnbeamedOnly',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a6934b666a5a0ee40f9b20cac9f0f9fcaac309ef90f7b9602fb6be73eb81f3f47e',1,'musx::dom::options::TupletOptions']]],
   ['under_1',['Under',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a01450d31978c4de387ad4b1f80c9083da02552d3c116b8a96f9ff0001b6ae661c',1,'musx::dom::details::TieAlterBase']]],
-  ['undocumented_2',['Undocumented',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#ad608f81b2142073a05da65fc4454a768afcb2132b65cdd119b19be66fbc3622e2',1,'musx::dom::others::ShapeDef']]],
+  ['undocumented_2',['Undocumented',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113afcb2132b65cdd119b19be66fbc3622e2',1,'musx::dom']]],
   ['unicode_3',['Unicode',['../classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541',1,'musx::util::EnigmaString']]],
   ['unknown_4',['Unknown',['../namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a88183b946cc5f0e8c96b2e66e1c74a7e',1,'music_theory']]],
   ['unknown4_5',['Unknown4',['../classmusx_1_1dom_1_1details_1_1Bracket.html#a94b9ba6a2a06355200a730432e7788c2a5adad30d647e2e10b57045c5b488d77e',1,'musx::dom::details::Bracket']]],

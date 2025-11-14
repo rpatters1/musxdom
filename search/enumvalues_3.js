@@ -26,7 +26,7 @@ var searchData=
   ['dospath_23',['DosPath',['../classmusx_1_1dom_1_1others_1_1FileDescription.html#a8d9d0ade14e9072cd17e2e3707c6b9f2a8ebe746732424e7b54959e5286fe8548',1,'musx::dom::others::FileDescription']]],
   ['dotrightnotecenter_24',['DotRightNoteCenter',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a568325ed0d5aa2b159b889d25e8b3755a228bd02149cbef6ba244348d17e2efc6',1,'musx::dom::details::TieAlterBase']]],
   ['double_25',['Double',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117ad909d38d705ce75386dd86e611a82f5b',1,'musx::dom::others::Measure']]],
-  ['drawchar_26',['DrawChar',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#ad608f81b2142073a05da65fc4454a768ade9a94c8c7949a8fc462d3bdf33a76cc',1,'musx::dom::others::ShapeDef']]],
+  ['drawchar_26',['DrawChar',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113ade9a94c8c7949a8fc462d3bdf33a76cc',1,'musx::dom']]],
   ['dump_27',['Dump',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaeba2f52f64e17ff27e6c5cfefd7e32fa',1,'musx::dom::others']]],
   ['dynamics_28',['Dynamics',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa405d9a69e5139b9df0df6b66e18fc9e2',1,'musx::dom::others::MarkingCategory']]]
 ];

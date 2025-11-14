@@ -19,6 +19,7 @@ var functions_func =
     [ "r", "functions_func_r.html", null ],
     [ "s", "functions_func_s.html", null ],
     [ "t", "functions_func_t.html", null ],
+    [ "v", "functions_func_v.html", null ],
     [ "x", "functions_func_x.html", null ],
     [ "~", "functions_func_~.html", null ]
 ];

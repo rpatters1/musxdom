@@ -30,13 +30,12 @@ var searchData=
   ['arabicprefix_27',['ArabicPrefix',['../classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1a3b84e373841bed8a59dfa4dd06584d26',1,'musx::dom::others::Staff']]],
   ['arabicsuffix_28',['ArabicSuffix',['../classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1a059ce5872a2158ce93a9c3320f8acc33',1,'musx::dom::others::Staff']]],
   ['arranger_29',['Arranger',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aaaedfa8681c86bb45f343c0b0de33820c',1,'musx::dom::texts::FileInfoText']]],
-  ['arrowhead_30',['Arrowhead',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621af518eddc8549a2b15502d52c8f82ae63',1,'musx::dom::others::ShapeDef']]],
-  ['articulation_31',['articulation',['../classmusx_1_1dom_1_1others_1_1ShapeDef.html#a4e05317e58b0ffb056cf6db866448621ac19a0ac998185571f74ee5533c5a4c76',1,'musx::dom::others::ShapeDef::Articulation'],['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aac19a0ac998185571f74ee5533c5a4c76',1,'musx::dom::options::FontOptions::Articulation']]],
-  ['ascii_32',['Ascii',['../classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31',1,'musx::util::EnigmaString']]],
-  ['asgroup_33',['AsGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cda48060aa7465ec95ec6e9fd7a8e609e04',1,'musx::dom::details::StaffGroup']]],
-  ['augdots_34',['AugDots',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aabb52f098e1017a99bf6fee165dbd2175',1,'musx::dom::options::FontOptions']]],
-  ['auto_35',['auto',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a20422aebb4bbb4adb8330aed4bf29d51a06b9281e396db002010bde1de57262eb',1,'musx::dom::others::SmartShape::Auto'],['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a401ee7c12c872ce9f039ab9994a6708ba06b9281e396db002010bde1de57262eb',1,'musx::dom::others::SmartShape::Auto']]],
-  ['automatic_36',['Automatic',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a3d5fb29e48c2b11a942457e49d5d9a8ba086247a9b57fde6eefee2a0c4752242d',1,'musx::dom::options::MusicSpacingOptions']]],
-  ['autonotestem_37',['AutoNoteStem',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ac7293e071062ccde1f4c6d9de9cecd6ea61bc1fc4173f1aaa6d301ddd3fc2da33',1,'musx::dom::others::ArticulationDef']]],
-  ['avoid_38',['Avoid',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad53e3cd44d59908f22715495cab187bcac1cd92f759a4190b12182ac2c6b568bf',1,'musx::dom::options::TieOptions']]]
+  ['articulation_30',['Articulation',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aac19a0ac998185571f74ee5533c5a4c76',1,'musx::dom::options::FontOptions']]],
+  ['ascii_31',['Ascii',['../classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31',1,'musx::util::EnigmaString']]],
+  ['asgroup_32',['AsGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cda48060aa7465ec95ec6e9fd7a8e609e04',1,'musx::dom::details::StaffGroup']]],
+  ['augdots_33',['AugDots',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aabb52f098e1017a99bf6fee165dbd2175',1,'musx::dom::options::FontOptions']]],
+  ['auto_34',['auto',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a20422aebb4bbb4adb8330aed4bf29d51a06b9281e396db002010bde1de57262eb',1,'musx::dom::others::SmartShape::Auto'],['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a401ee7c12c872ce9f039ab9994a6708ba06b9281e396db002010bde1de57262eb',1,'musx::dom::others::SmartShape::Auto']]],
+  ['automatic_35',['Automatic',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a3d5fb29e48c2b11a942457e49d5d9a8ba086247a9b57fde6eefee2a0c4752242d',1,'musx::dom::options::MusicSpacingOptions']]],
+  ['autonotestem_36',['AutoNoteStem',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ac7293e071062ccde1f4c6d9de9cecd6ea61bc1fc4173f1aaa6d301ddd3fc2da33',1,'musx::dom::others::ArticulationDef']]],
+  ['avoid_37',['Avoid',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad53e3cd44d59908f22715495cab187bcac1cd92f759a4190b12182ac2c6b568bf',1,'musx::dom::options::TieOptions']]]
 ];

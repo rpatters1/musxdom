@@ -152,6 +152,7 @@ var menudata={children:[
 {text:"r",url:"functions_func_r.html#index_r"},
 {text:"s",url:"functions_func_s.html#index_s"},
 {text:"t",url:"functions_func_t.html#index_t"},
+{text:"v",url:"functions_func_v.html#index_v"},
 {text:"x",url:"functions_func_x.html#index_x"},
 {text:"~",url:"functions_func_~.html#index__7E"}]},
 {text:"Variables",url:"functions_vars.html",children:[
@@ -186,6 +187,7 @@ var menudata={children:[
 {text:"c",url:"functions_type.html#index_c"},
 {text:"f",url:"functions_type.html#index_f"},
 {text:"h",url:"functions_type.html#index_h"},
+{text:"i",url:"functions_type.html#index_i"},
 {text:"l",url:"functions_type.html#index_l"},
 {text:"n",url:"functions_type.html#index_n"},
 {text:"o",url:"functions_type.html#index_o"},

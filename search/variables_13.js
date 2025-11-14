@@ -49,7 +49,7 @@ var searchData=
   ['tantan_46',['Tantan',['../namespacemusx_1_1dom_1_1uuid.html#a42ac7e9f30d94a40aa2c35914467589d',1,'musx::dom::uuid']]],
   ['taphon_47',['Taphon',['../namespacemusx_1_1dom_1_1uuid.html#ad01863b5bec7142f7f3fe1a11d5b9d88',1,'musx::dom::uuid']]],
   ['tardrum_48',['TarDrum',['../namespacemusx_1_1dom_1_1uuid.html#a63acd2618e0b955c22bcb19bea5f83d7',1,'musx::dom::uuid']]],
-  ['targetvalue_49',['targetvalue',['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a448d07d3b12bccbab2548a8ea6da77c9',1,'musx::dom::others::TextRepeatAssign::targetValue'],['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a6db9fe0ba3670086076d1e559b101a19',1,'musx::dom::others::RepeatEndingStart::targetValue'],['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#ac5b895ba013d3a3308eaf6fa79714488',1,'musx::dom::others::RepeatBack::targetValue']]],
+  ['targetvalue_49',['targetvalue',['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#ac5b895ba013d3a3308eaf6fa79714488',1,'musx::dom::others::RepeatBack::targetValue'],['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a6db9fe0ba3670086076d1e559b101a19',1,'musx::dom::others::RepeatEndingStart::targetValue'],['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a448d07d3b12bccbab2548a8ea6da77c9',1,'musx::dom::others::TextRepeatAssign::targetValue']]],
   ['tarka_50',['Tarka',['../namespacemusx_1_1dom_1_1uuid.html#a97c1d18db8a82857f2402e0a18005b99',1,'musx::dom::uuid']]],
   ['tarplucked_51',['TarPlucked',['../namespacemusx_1_1dom_1_1uuid.html#afdbf28432652af6c8b6318b87dce5c0a',1,'musx::dom::uuid']]],
   ['tasha_52',['Tasha',['../namespacemusx_1_1dom_1_1uuid.html#a6be693dfa3da6ec1a028423d462b74ca',1,'musx::dom::uuid']]],
@@ -139,7 +139,7 @@ var searchData=
   ['toere_136',['Toere',['../namespacemusx_1_1dom_1_1uuid.html#a7d65d1c1c9d94de60a91e7e3079b2ed3',1,'musx::dom::uuid']]],
   ['tombak_137',['Tombak',['../namespacemusx_1_1dom_1_1uuid.html#a55493577cff3f8b9652bbccb45408033',1,'musx::dom::uuid']]],
   ['tonetang_138',['ToneTang',['../namespacemusx_1_1dom_1_1uuid.html#a7ca238d9018eb2482f0384b34f65bc19',1,'musx::dom::uuid']]],
-  ['top_139',['top',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a85a75cc8595b7d6aa151a65bca9cd45b',1,'musx::dom::others::StaffSystem']]],
+  ['top_139',['top',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a85a75cc8595b7d6aa151a65bca9cd45b',1,'musx::dom::others::StaffSystem::top'],['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html#a9815da31797f4e5caf6c71ec9a0128b7',1,'musx::dom::ShapeDefInstruction::StartObject::top'],['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#a71fdb0e3fcdc797eb5db530c787fe5d4',1,'musx::dom::ShapeDefInstruction::StartGroup::top']]],
   ['topbarlineoffset_140',['topBarlineOffset',['../classmusx_1_1dom_1_1others_1_1Staff.html#ab951460fbc50b0ab812b74778c13dbc2',1,'musx::dom::others::Staff']]],
   ['topmargin_141',['topMargin',['../classmusx_1_1dom_1_1others_1_1OssiaBounds.html#a386eec1055131e195476fe3c222543cd',1,'musx::dom::others::OssiaBounds']]],
   ['toprepeatdotoff_142',['topRepeatDotOff',['../classmusx_1_1dom_1_1others_1_1Staff.html#ab1d8d8b6db81f5b43c81d1528c42492d',1,'musx::dom::others::Staff']]],
@@ -153,7 +153,7 @@ var searchData=
   ['transposition_150',['transposition',['../classmusx_1_1dom_1_1others_1_1Staff.html#ae53f27cfa8452c84911a7227649d6b9b',1,'musx::dom::others::Staff::transposition'],['../classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#aa2b44b342cc74cb8d8b91bdf4be27905',1,'musx::dom::others::StaffStyle::Masks::transposition']]],
   ['tres_151',['Tres',['../namespacemusx_1_1dom_1_1uuid.html#af194f034831b328939a60b86188ede0d',1,'musx::dom::uuid']]],
   ['triangle_152',['Triangle',['../namespacemusx_1_1dom_1_1uuid.html#a2230699e01987edbd7069d61fcde2290',1,'musx::dom::uuid']]],
-  ['trigger_153',['trigger',['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#a4a7dd7bb3a304c9c1ad1b8fb19955773',1,'musx::dom::others::RepeatBack::trigger'],['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a2836992f5930b836a3e38f4b866d05af',1,'musx::dom::others::RepeatEndingStart::trigger'],['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#ac16ea83fe1cdf222b4c5ed1681bf45a2',1,'musx::dom::others::TextRepeatAssign::trigger']]],
+  ['trigger_153',['trigger',['../classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a2836992f5930b836a3e38f4b866d05af',1,'musx::dom::others::RepeatEndingStart::trigger'],['../classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#ac16ea83fe1cdf222b4c5ed1681bf45a2',1,'musx::dom::others::TextRepeatAssign::trigger'],['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#a4a7dd7bb3a304c9c1ad1b8fb19955773',1,'musx::dom::others::RepeatBack::trigger']]],
   ['trillchar_154',['trillChar',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a1b517950b87816a13ee1160849a1e843',1,'musx::dom::options::MusicSymbolOptions']]],
   ['trombamarina_155',['Trombamarina',['../namespacemusx_1_1dom_1_1uuid.html#afff56e7259e019905588649b28964199',1,'musx::dom::uuid']]],
   ['trombone_156',['Trombone',['../namespacemusx_1_1dom_1_1uuid.html#adaff1cf519a82d1d169d43c17f55f43c',1,'musx::dom::uuid']]],
@@ -181,5 +181,5 @@ var searchData=
   ['tupoffy_178',['tupoffy',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#aa53c7f1b844fbd4c29dae1c3dac07341',1,'musx::dom::details::TupletDef::tupOffY'],['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a53f6f79f64324d045ef5b585161ca509',1,'musx::dom::options::TupletOptions::tupOffY']]],
   ['twobarrepeat_179',['twoBarRepeat',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a9157c083a765a673850a79d497e8768f',1,'musx::dom::options::MusicSymbolOptions']]],
   ['twomeasnumlift_180',['twoMeasNumLift',['../classmusx_1_1dom_1_1options_1_1AlternateNotationOptions.html#ad7f218c11996aaa61edc1a51e37fdc44',1,'musx::dom::options::AlternateNotationOptions']]],
-  ['type_181',['type',['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1InstructionInfo.html#a29f66b24f415e25d87b06b10c15aa5f3',1,'musx::dom::others::ShapeInstructionList::InstructionInfo']]]
+  ['type_181',['type',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ad46f8542ff9cb7ce5628fe6909ca6ff8',1,'musx::dom::ShapeDefInstruction::Decoded::type'],['../classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1InstructionInfo.html#af61bc64cd9d6bd52089d9ea645985db0',1,'musx::dom::others::ShapeInstructionList::InstructionInfo::type']]]
 ];
