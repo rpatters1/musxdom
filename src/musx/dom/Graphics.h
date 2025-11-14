@@ -274,7 +274,7 @@ public:
  * @class ShapeGraphicAssign
  * @brief Represents a graphic assignment anchored to a specific staff and measure.
  *
- * The Cmper comes from a #ShapeDef::InstructionType::ExternalGraphic instruction.
+ * The Cmper comes from a #ShapeDefInstructionType::ExternalGraphic instruction.
  *
  * This class is identified by the XML node name "shapeGraphicAssign".
  */

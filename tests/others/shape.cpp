@@ -111,18 +111,31 @@ TEST(ShapeDefTest, PopulateFields)
     auto shapeList = others->get<others::ShapeInstructionList>(SCORE_PARTID, 7);
     ASSERT_TRUE(shapeList) << "ShapeInstructionList 7 not found but does exist";
     ASSERT_EQ(shapeList->instructions.size(), 6);
-    EXPECT_EQ(shapeList->instructions[0]->type, others::ShapeDef::InstructionType::StartObject);
+    EXPECT_EQ(shapeList->instructions[0]->type, ShapeDefInstructionType::StartObject);
     EXPECT_EQ(shapeList->instructions[0]->numData, 11);
-    EXPECT_EQ(shapeList->instructions[1]->type, others::ShapeDef::InstructionType::RMoveTo);
+    EXPECT_EQ(shapeList->instructions[1]->type, ShapeDefInstructionType::RMoveTo);
     EXPECT_EQ(shapeList->instructions[1]->numData, 2);
-    EXPECT_EQ(shapeList->instructions[2]->type, others::ShapeDef::InstructionType::LineWidth);
+    EXPECT_EQ(shapeList->instructions[2]->type, ShapeDefInstructionType::LineWidth);
     EXPECT_EQ(shapeList->instructions[2]->numData, 1);
-    EXPECT_EQ(shapeList->instructions[3]->type, others::ShapeDef::InstructionType::SetDash);
+    EXPECT_EQ(shapeList->instructions[3]->type, ShapeDefInstructionType::SetDash);
     EXPECT_EQ(shapeList->instructions[3]->numData, 2);
-    EXPECT_EQ(shapeList->instructions[4]->type, others::ShapeDef::InstructionType::RLineTo);
+    EXPECT_EQ(shapeList->instructions[4]->type, ShapeDefInstructionType::RLineTo);
     EXPECT_EQ(shapeList->instructions[4]->numData, 2);
-    EXPECT_EQ(shapeList->instructions[5]->type, others::ShapeDef::InstructionType::Stroke);
+    EXPECT_EQ(shapeList->instructions[5]->type, ShapeDefInstructionType::Stroke);
 }
+
+namespace musx::dom::others {
+class ShapeDefTestAccessor
+{
+public:
+    static bool iterateInstructions(
+        const MusxInstance<ShapeDef>& shape,
+        std::function<bool(ShapeDefInstructionType, std::vector<int>)> callback)
+    {
+        return shape->iterateInstructions(std::move(callback));
+    }
+};
+} // namespace musx::dom::others
 
 TEST(ShapeDefTest, InterateInstructions)
 {
@@ -147,7 +160,7 @@ TEST(ShapeDefTest, InterateInstructions)
     size_t nextIndex = 0;
     size_t nextDataIndex = 0;
 
-    shapeDef->iterateInstructions([&](others::ShapeDef::InstructionType type, std::vector<int> data) {
+    musx::dom::others::ShapeDefTestAccessor::iterateInstructions(shapeDef, [&](ShapeDefInstructionType type, std::vector<int> data) {
         EXPECT_LT(nextIndex, shapeList->instructions.size()) << "next index exceeds size of instructions array";
         if (nextIndex >= shapeList->instructions.size()) {
             return false;

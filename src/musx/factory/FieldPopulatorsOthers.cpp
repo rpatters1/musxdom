@@ -177,35 +177,35 @@ MUSX_XML_ENUM_MAPPING(PartVoicing::SingleLayerVoiceType, {
     {"selected", PartVoicing::SingleLayerVoiceType::SelectedNotes},
 });
 
-MUSX_XML_ENUM_MAPPING(ShapeDef::InstructionType, {
-    // {"undocumented", ShapeDef::InstructionType::Undocumented}, // Default value does not appear in the xml
-    {"bracket", ShapeDef::InstructionType::Bracket},
-    {"cloneChar", ShapeDef::InstructionType::CloneChar},
-    {"closePath", ShapeDef::InstructionType::ClosePath},
-    {"curveTo", ShapeDef::InstructionType::CurveTo},
-    {"drawChar", ShapeDef::InstructionType::DrawChar},
-    {"ellipse", ShapeDef::InstructionType::Ellipse},
-    {"endGroup", ShapeDef::InstructionType::EndGroup},
-    {"extGraphic", ShapeDef::InstructionType::ExternalGraphic},
-    {"fillAlt", ShapeDef::InstructionType::FillAlt},
-    {"fillSolid", ShapeDef::InstructionType::FillSolid},
-    {"goToOrigin", ShapeDef::InstructionType::GoToOrigin},
-    {"goToStart", ShapeDef::InstructionType::GoToStart},
-    {"lineWidth", ShapeDef::InstructionType::LineWidth},
-    {"rectangle", ShapeDef::InstructionType::Rectangle},
-    {"rLineTo", ShapeDef::InstructionType::RLineTo},
-    {"rMoveTo", ShapeDef::InstructionType::RMoveTo},
-    {"setArrowhead", ShapeDef::InstructionType::SetArrowhead},
-    {"setBlack", ShapeDef::InstructionType::SetBlack},
-    {"setDash", ShapeDef::InstructionType::SetDash},
-    {"setFont", ShapeDef::InstructionType::SetFont},
-    {"setGray", ShapeDef::InstructionType::SetGray},
-    {"setWhite", ShapeDef::InstructionType::SetWhite},
-    {"slur", ShapeDef::InstructionType::Slur},
-    {"startGroup", ShapeDef::InstructionType::StartGroup},
-    {"startObject", ShapeDef::InstructionType::StartObject},
-    {"stroke", ShapeDef::InstructionType::Stroke},
-    {"vertMode", ShapeDef::InstructionType::VerticalMode},
+MUSX_XML_ENUM_MAPPING(ShapeDefInstructionType, {
+    // {"undocumented", ShapeDefInstructionType::Undocumented}, // Default value does not appear in the xml
+    {"bracket", ShapeDefInstructionType::Bracket},
+    {"cloneChar", ShapeDefInstructionType::CloneChar},
+    {"closePath", ShapeDefInstructionType::ClosePath},
+    {"curveTo", ShapeDefInstructionType::CurveTo},
+    {"drawChar", ShapeDefInstructionType::DrawChar},
+    {"ellipse", ShapeDefInstructionType::Ellipse},
+    {"endGroup", ShapeDefInstructionType::EndGroup},
+    {"extGraphic", ShapeDefInstructionType::ExternalGraphic},
+    {"fillAlt", ShapeDefInstructionType::FillAlt},
+    {"fillSolid", ShapeDefInstructionType::FillSolid},
+    {"goToOrigin", ShapeDefInstructionType::GoToOrigin},
+    {"goToStart", ShapeDefInstructionType::GoToStart},
+    {"lineWidth", ShapeDefInstructionType::LineWidth},
+    {"rectangle", ShapeDefInstructionType::Rectangle},
+    {"rLineTo", ShapeDefInstructionType::RLineTo},
+    {"rMoveTo", ShapeDefInstructionType::RMoveTo},
+    {"setArrowhead", ShapeDefInstructionType::SetArrowhead},
+    {"setBlack", ShapeDefInstructionType::SetBlack},
+    {"setDash", ShapeDefInstructionType::SetDash},
+    {"setFont", ShapeDefInstructionType::SetFont},
+    {"setGray", ShapeDefInstructionType::SetGray},
+    {"setWhite", ShapeDefInstructionType::SetWhite},
+    {"slur", ShapeDefInstructionType::Slur},
+    {"startGroup", ShapeDefInstructionType::StartGroup},
+    {"startObject", ShapeDefInstructionType::StartObject},
+    {"stroke", ShapeDefInstructionType::Stroke},
+    {"vertMode", ShapeDefInstructionType::VerticalMode},
 });
 
 MUSX_XML_ENUM_MAPPING(DirectionType, {
@@ -1185,7 +1185,7 @@ MUSX_XML_ELEMENT_ARRAY(ShapeGraphicAssign, {
 
 MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList::InstructionInfo, {
     {"numData", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::InstructionInfo>& i) { i->numData = e->getTextAs<int>(); }},
-    {"tag", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::InstructionInfo>& i) { i->type = toEnum<ShapeDef::InstructionType, true>(e); }},
+    {"tag", [](const XmlElementPtr& e, const std::shared_ptr<ShapeInstructionList::InstructionInfo>& i) { i->type = toEnum<ShapeDefInstructionType, true>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList, {

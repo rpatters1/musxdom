@@ -68,9 +68,10 @@ ClefOptions::ClefInfo ClefOptions::ClefDef::calcInfo(const MusxInstance<others::
         music_theory::ClefType result = music_theory::ClefType::Tab;
         if (isShape) {
             if (auto shape = getDocument()->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId)) {
-                shape->iterateInstructions([&](others::ShapeDef::InstructionType instructionType, std::vector<int> data) -> bool {
-                    if (std::optional<FontInfo> fontInfo = others::ShapeInstruction::parseSetFont(getDocument(), instructionType, data)) {
-                        if (fontInfo->getName().find("Times") != std::string::npos) { // Finale default file uses "Times" or "Times New Roman"
+                shape->iterateInstructions([&](const ShapeDefInstruction::Decoded& inst) -> bool {
+                    if (inst.type == ShapeDefInstructionType::SetFont) {
+                        auto setFont = std::get<ShapeDefInstruction::SetFont>(inst.data);
+                        if (setFont.font.getName().find("Times") != std::string::npos) { // Finale default file uses "Times" or "Times New Roman"
                             result = music_theory::ClefType::TabSerif;
                         }
                         return false;

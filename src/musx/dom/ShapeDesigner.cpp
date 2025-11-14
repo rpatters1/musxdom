@@ -28,6 +28,274 @@
 
 namespace musx {
 namespace dom {
+
+// *******************************
+// ***** ShapeDefInstruction *****
+// *******************************
+
+std::optional<ShapeDefInstruction::Undocumented>
+ShapeDefInstruction::parseUndocumented(const std::vector<int>& data)
+{
+    // Always valid: just wrap the raw data
+    return Undocumented{data};
+}
+
+std::optional<ShapeDefInstruction::Bracket>
+ShapeDefInstruction::parseBracket(const std::vector<int>& data)
+{
+    if (data.empty())
+        return std::nullopt;
+
+    const int raw = data[0];
+
+    using BS = details::Bracket::BracketStyle;
+
+    switch (raw) {
+    case static_cast<int>(BS::None):
+    case static_cast<int>(BS::ThickLine):
+    case static_cast<int>(BS::BracketStraightHooks):
+    case static_cast<int>(BS::PianoBrace):
+    case static_cast<int>(BS::Unknown4):
+    case static_cast<int>(BS::Unknown5):
+    case static_cast<int>(BS::BracketCurvedHooks):
+    case static_cast<int>(BS::Unknown7):
+    case static_cast<int>(BS::DeskBracket):
+        return Bracket{static_cast<BS>(raw)};
+
+    default:
+        return std::nullopt;
+    }
+}
+
+std::optional<ShapeDefInstruction::CloneChar>
+ShapeDefInstruction::parseCloneChar(const std::vector<int>& data)
+{
+    if (data.size() >= 5) {
+        return CloneChar{
+            Evpu{data[0]},                      // dx
+            Evpu{data[1]},                      // dy
+            data[2],                            // unused2
+            data[3],                            // baselineShift
+            static_cast<char32_t>(data[4])      // codePoint
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::CurveTo>
+ShapeDefInstruction::parseCurveTo(const std::vector<int>& data)
+{
+    if (data.size() >= 6) {
+        return CurveTo{
+            Evpu{data[0]}, Evpu{data[1]}, // c1dx, c1dy
+            Evpu{data[2]}, Evpu{data[3]}, // c2dx, c2dy
+            Evpu{data[4]}, Evpu{data[5]}  // edx,  edy
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::DrawChar>
+ShapeDefInstruction::parseDrawChar(const std::vector<int>& data)
+{
+    if (data.size() >= 1) {
+        return DrawChar{static_cast<char32_t>(data[0])};
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::Ellipse>
+ShapeDefInstruction::parseEllipse(const std::vector<int>& data)
+{
+    if (data.size() >= 2) {
+        return Ellipse{
+            Evpu{data[0]}, // width
+            Evpu{data[1]}  // height
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::ExternalGraphic>
+ShapeDefInstruction::parseExternalGraphic(const std::vector<int>& data)
+{
+    if (data.size() >= 3) {
+        return ExternalGraphic{
+            Evpu{data[0]},          // width
+            Evpu{data[1]},          // height
+            Cmper(data[2])          // cmper
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::LineWidth>
+ShapeDefInstruction::parseLineWidth(const std::vector<int>& data)
+{
+    if (data.size() >= 1) {
+        return ShapeDefInstruction::LineWidth{Efix{data[0]}};
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::Rectangle>
+ShapeDefInstruction::parseRectangle(const std::vector<int>& data)
+{
+    if (data.size() >= 2) {
+        return Rectangle{
+            Evpu{data[0]}, // width
+            Evpu{data[1]}  // height
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::RLineTo>
+ShapeDefInstruction::parseRLineTo(const std::vector<int>& data)
+{
+    if (data.size() >= 2) {
+        return ShapeDefInstruction::RLineTo{Evpu{data[0]}, Evpu{data[1]}};
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::RMoveTo>
+ShapeDefInstruction::parseRMoveTo(const std::vector<int>& data)
+{
+    if (data.size() >= 2) {
+        return RMoveTo{
+            Evpu{data[0]}, // dx
+            Evpu{data[1]}  // dy
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::SetArrowhead>
+ShapeDefInstruction::parseSetArrowhead(const std::vector<int>& data)
+{
+    if (data.size() >= 4) {
+        return SetArrowhead{
+            data[0], // startArrowId
+            data[1], // endArrowId
+            data[2], // startFlags
+            data[3]  // endFlags
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::SetDash>
+ShapeDefInstruction::parseSetDash(const std::vector<int>& data)
+{
+    if (data.size() >= 2) {
+        return SetDash{
+            Efix{data[0]}, // dashLength
+            Efix{data[1]}  // spaceLength
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::SetFont>
+ShapeDefInstruction::parseSetFont(const DocumentWeakPtr& document, const std::vector<int>& data)
+{
+    if (data.size() >= 3) {
+        ShapeDefInstruction::SetFont result(document);
+        result.font.fontId = Cmper(data[0]);
+        result.font.fontSize = data[1];
+        result.font.setEnigmaStyles(static_cast<std::uint16_t>(data[2]));
+        return result;
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::SetGray>
+ShapeDefInstruction::parseSetGray(const std::vector<int>& data)
+{
+    if (data.size() >= 1) {
+        return SetGray{
+            data[0] // gray 0..100
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::Slur>
+ShapeDefInstruction::parseSlur(const std::vector<int>& data)
+{
+    if (data.size() >= 6) {
+        return Slur{
+            Evpu{data[0]}, Evpu{data[1]}, // c1dx, c1dy
+            Evpu{data[2]}, Evpu{data[3]}, // c2dx, c2dy
+            Evpu{data[4]}, Evpu{data[5]}  // edx,  edy
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::StartGroup>
+ShapeDefInstruction::parseStartGroup(const std::vector<int>& data)
+{
+    if (data.size() >= 11) {
+        return StartGroup{
+            Evpu{data[0]},  // originX
+            Evpu{data[1]},  // originY
+            Evpu{data[2]},  // left
+            Evpu{data[3]},  // top
+            Evpu{data[4]},  // right
+            Evpu{data[5]},  // bottom
+            data[6],        // scaleX
+            data[7],        // scaleY
+            data[8],        // rotation
+            data[9],        // unused9
+            data[10]        // unused10
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::StartObject>
+ShapeDefInstruction::parseStartObject(const std::vector<int>& data)
+{
+    if (data.size() >= 11) {
+        return StartObject{
+            Evpu{data[0]},  // originX
+            Evpu{data[1]},  // originY
+            Evpu{data[2]},  // left
+            Evpu{data[3]},  // top
+            Evpu{data[4]},  // right
+            Evpu{data[5]},  // bottom
+            data[6],        // scaleX
+            data[7],        // scaleY
+            data[8],        // rotation
+            data[9],        // unused9
+            data[10]        // unused10
+        };
+    }
+    return std::nullopt;
+}
+
+std::optional<ShapeDefInstruction::VerticalMode>
+ShapeDefInstruction::parseVerticalMode(const std::vector<int>& data)
+{
+    if (data.size() >= 1) {
+        auto modeValue = data[0];
+        switch (modeValue) {
+        case 1:
+        case 2:
+        case 3:
+            return VerticalMode{
+                static_cast<VerticalAlign>(modeValue)
+            };
+        default:
+            // Unknown vertical alignment mode
+            return std::nullopt;
+        }
+    }
+    return std::nullopt;
+}
+
 namespace others {
 
 // ***************************************
@@ -36,39 +304,48 @@ namespace others {
 
 static bool isTenutoMark(const ShapeDef& shape)
 {
-    static const std::vector<ShapeDef::InstructionType> expectedInsts = {
-        ShapeDef::InstructionType::StartObject,
-        ShapeDef::InstructionType::RMoveTo,
-        ShapeDef::InstructionType::LineWidth,
-        ShapeDef::InstructionType::RLineTo,
-        ShapeDef::InstructionType::Stroke,
+    static const std::vector<ShapeDefInstructionType> expectedInsts = {
+        ShapeDefInstructionType::StartObject,
+        ShapeDefInstructionType::RMoveTo,
+        ShapeDefInstructionType::LineWidth,
+        ShapeDefInstructionType::RLineTo,
+        ShapeDefInstructionType::Stroke,
     };
 
     size_t nextIndex = 0;
-    shape.iterateInstructions([&](ShapeDef::InstructionType instId, std::vector<int> data) {
-        if (instId == ShapeDef::InstructionType::SetDash) {
+    bool result = shape.iterateInstructions([&](const ShapeDefInstruction::Decoded& inst) {
+        if (inst.type == ShapeDefInstructionType::SetDash) {
             return true; // skip SetDash
         }
         if (nextIndex >= expectedInsts.size()) {
-            nextIndex++; // assure no tenuto is returned
             return false;
         }
-        if (instId != expectedInsts[nextIndex]) {
+        if (inst.type != expectedInsts[nextIndex]) {
             return false;
         }
-        if (const auto lineWidth = ShapeInstruction::parseLineWidth(instId, data)) {
-            if (lineWidth->efix < 4 * EFIX_PER_EVPU || lineWidth->efix > 6 * EFIX_PER_EVPU) {
-                return false;
+
+        bool result = true;
+        std::visit([&](auto&& instData) {
+            using T = std::decay_t<decltype(instData)>;
+            if constexpr (std::is_same_v<T, ShapeDefInstruction::LineWidth>) {
+                if (instData.efix < 4 * EFIX_PER_EVPU || instData.efix > 6 * EFIX_PER_EVPU) {
+                    result = false;
+                }
+            } else if constexpr (std::is_same_v<T, ShapeDefInstruction::RLineTo>) {
+                if (instData.dx < EVPU_PER_SPACE || instData.dx > 1.5 * EVPU_PER_SPACE || instData.dy != 0) {
+                    result = false;
+                }
             }
-        } else if (const auto rLineTo = ShapeInstruction::parseRLineTo(instId, data)) {
-            if (rLineTo->dx < EVPU_PER_SPACE || rLineTo->dx > 1.5 * EVPU_PER_SPACE || rLineTo->dy != 0) {
-                return false;
-            }
+        }, inst.data);
+        
+        if (!result) {
+            return false;
         }
+
         nextIndex++;
         return true;
     });
-    return nextIndex == expectedInsts.size();
+    return result && nextIndex == expectedInsts.size();
 }
 
 // add recognition functions as needed...
@@ -88,10 +365,12 @@ std::optional<KnownShapeDefType> ShapeDef::recognize() const
     return std::nullopt;
 }
 
-void ShapeDef::iterateInstructions(std::function<bool(ShapeDef::InstructionType, std::vector<int>)> callback) const
+bool ShapeDef::iterateInstructions(std::function<bool(ShapeDefInstructionType, std::vector<int>)> callback) const
 {
     auto insts = getDocument()->getOthers()->get<ShapeInstructionList>(getRequestedPartId(), instructionList);
     auto data = getDocument()->getOthers()->get<ShapeData>(getRequestedPartId(), dataList);
+    bool result = true;
+
     if (insts && data) {
         size_t currentDataIndex = 0;
         for (const auto& inst : insts->instructions) {
@@ -99,43 +378,132 @@ void ShapeDef::iterateInstructions(std::function<bool(ShapeDef::InstructionType,
                 throw std::invalid_argument("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
             }
             if (!callback(inst->type, { data->values.begin() + currentDataIndex, data->values.begin() + currentDataIndex + inst->numData })) {
-                break;
+                return false;
             }
             currentDataIndex += inst->numData;
         }
     } else {
+        result = false;
         MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) + " is missing instructions and/or data.");
     }
+    return result;
 }
 
-// ****************************
-// ***** ShapeInstruction *****
-// ****************************
-
-std::optional<ShapeInstruction::LineWidth> ShapeInstruction::parseLineWidth(ShapeDef::InstructionType type, const std::vector<int>& data)
+bool ShapeDef::iterateInstructions(std::function<bool(const ShapeDefInstruction::Decoded&)> callback) const
 {
-    if (type == ShapeDef::InstructionType::LineWidth && data.size() >= 1)
-        return ShapeInstruction::LineWidth{ data[0] };
-    return std::nullopt;
-}
+    return iterateInstructions([&](ShapeDefInstructionType instType, std::vector<int> instData) -> bool {
+        using IT = ShapeDefInstructionType;
+        ShapeDefInstruction::Decoded decoded;
+        decoded.type = instType;
+        bool result = true;
 
-std::optional<ShapeInstruction::RLineTo> ShapeInstruction::parseRLineTo(ShapeDef::InstructionType type, const std::vector<int>& data)
-{
-    if (type == ShapeDef::InstructionType::RLineTo && data.size() >= 2)
-        return ShapeInstruction::RLineTo{data[0], data[1]};
-    return std::nullopt;
-}
+        switch (instType) {
+            // --------------------------
+            // Payload-bearing instructions
+            // --------------------------
+        case IT::Undocumented:
+            decoded.setPayload(ShapeDefInstruction::parseUndocumented(instData));
+            break;
 
-std::optional<FontInfo> ShapeInstruction::parseSetFont(const DocumentWeakPtr& document, ShapeDef::InstructionType type, const std::vector<int>& data)
-{
-    if (type == ShapeDef::InstructionType::SetFont && data.size() >= 3) {
-        FontInfo result(document);
-        result.fontId = Cmper(data[0]);
-        result.fontSize = data[1];
-        result.setEnigmaStyles(uint16_t(data[2]));
+        case IT::Bracket:
+            decoded.setPayload(ShapeDefInstruction::parseBracket(instData));
+            break;
+
+        case IT::CloneChar:
+            decoded.setPayload(ShapeDefInstruction::parseCloneChar(instData));
+            break;
+
+        case IT::CurveTo:
+            decoded.setPayload(ShapeDefInstruction::parseCurveTo(instData));
+            break;
+
+        case IT::DrawChar:
+            decoded.setPayload(ShapeDefInstruction::parseDrawChar(instData));
+            break;
+
+        case IT::Ellipse:
+            decoded.setPayload(ShapeDefInstruction::parseEllipse(instData));
+            break;
+
+        case IT::ExternalGraphic:
+            decoded.setPayload(ShapeDefInstruction::parseExternalGraphic(instData));
+            break;
+
+        case IT::LineWidth:
+            decoded.setPayload(ShapeDefInstruction::parseLineWidth(instData));
+            break;
+
+        case IT::Rectangle:
+            decoded.setPayload(ShapeDefInstruction::parseRectangle(instData));
+            break;
+
+        case IT::RLineTo:
+            decoded.setPayload(ShapeDefInstruction::parseRLineTo(instData));
+            break;
+
+        case IT::RMoveTo:
+            decoded.setPayload(ShapeDefInstruction::parseRMoveTo(instData));
+            break;
+
+        case IT::SetArrowhead:
+            decoded.setPayload(ShapeDefInstruction::parseSetArrowhead(instData));
+            break;
+
+        case IT::SetDash:
+            decoded.setPayload(ShapeDefInstruction::parseSetDash(instData));
+            break;
+
+        case IT::SetFont:
+            decoded.setPayload(ShapeDefInstruction::parseSetFont(getDocument(), instData));
+            break;
+
+        case IT::SetGray:
+            decoded.setPayload(ShapeDefInstruction::parseSetGray(instData));
+            break;
+
+        case IT::Slur:
+            decoded.setPayload(ShapeDefInstruction::parseSlur(instData));
+            break;
+
+        case IT::StartGroup:
+            decoded.setPayload(ShapeDefInstruction::parseStartGroup(instData));
+            break;
+
+        case IT::StartObject:
+            decoded.setPayload(ShapeDefInstruction::parseStartObject(instData));
+            break;
+
+        case IT::VerticalMode:
+            decoded.setPayload(ShapeDefInstruction::parseVerticalMode(instData));
+            break;
+
+            // --------------------------
+            // No-payload instructions
+            // --------------------------
+        case IT::ClosePath:
+        case IT::EndGroup:
+        case IT::FillAlt:
+        case IT::FillSolid:
+        case IT::GoToOrigin:
+        case IT::GoToStart:
+        case IT::SetBlack:
+        case IT::SetWhite:
+        case IT::Stroke:
+            // Leave as monostate + valid
+            break;
+        }
+
+        if (!decoded.valid()) {
+            result = false;
+            MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) +
+                " has insufficient data for instruction type " + std::to_string(int(decoded.type)) + ".");
+        }
+        else if (!callback(decoded)) {
+            result = false;
+        }
+
         return result;
-    }
-    return std::nullopt;
+    });
 }
 
 } // namespace others
