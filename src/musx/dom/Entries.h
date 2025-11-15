@@ -546,13 +546,23 @@ public:
     /// See #EntryFrame::TupletInfo::calcCreatesSingletonBeamRight for more information.
     bool calcCreatesSingletonBeamRight() const;
 
-    /// @brief Determines if this entry contains a tuplet that creates a singleton beam left.
-    /// See #EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft for more information.
-    EntryInfoPtr calcCreatesBeamContinuationLeft() const;
+    /// @brief Determines if this entry continues a beam across a barline from the previous measure.
+    ///
+    /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
+    /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
+    ///
+    /// @return If the function returns non-null, the return value here is the previous real entry in the beam over a barline,
+    /// taking into account tuplets that create faux singleton beams.
+    EntryInfoPtr calcBeamContinuesLeftOverBarline() const;
 
-    /// @brief Determines if this entry contains a tuplet that creates a singleton beam right.
-    /// See #EntryFrame::TupletInfo::calcCreatesBeamContinuationRight for more information.
-    EntryInfoPtr calcCreatesBeamContinuationRight() const;
+    /// @brief Determines if this entry continues a beam across a barline to the next measure.
+    ///
+    /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
+    /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
+    ///
+    /// @return If the function returns non-null, the return value here is the next real entry in the beam over a barline,
+    /// taking into account tuplets that create faux singleton beams.
+    EntryInfoPtr calcBeamContinuesRightOverBarline() const;
 
     /// @brief Calculates if the entry starts a feathered beam and returns information about it if so.
     /// @param [out] outLeftY The height of the left side of the feathered beam
@@ -770,26 +780,6 @@ public:
         ///     - The current entry with the 0-length tuplet will have its leger lines suppressed and non-visible notehead(s) and stem.
         /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
         bool calcCreatesSingletonBeamLeft() const { return calcCreatesSingleton(true); }
-
-        /// @brief Calculates if this tuplet creates a beam continuation over a barline to the right,
-        /// as created by the Beam Over Barlines plugin.
-        ///
-        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
-        /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
-        ///
-        /// @return If the function returns non-null, you can treat the result similarly to the result from #calcCreatesSingletonBeamRight.
-        /// However, the return value here is the next real entry in the beam over a barline.
-        EntryInfoPtr calcCreatesBeamContinuationRight() const;
-
-        /// @brief Calculates if this tuplet creates a beam continuation over a barline to the left,
-        /// as created by the Beam Over Barlines plugin.
-        ///
-        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
-        /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
-        ///
-        /// @return If the function returns non-null, you can treat the result similarly to the result from #calcCreatesSingletonBeamLeft.
-        /// However, the return value here is the previous real entry in the beam over a barline.
-        EntryInfoPtr calcCreatesBeamContinuationLeft() const;
 
         /// @brief Detects tuplets being used to create time stretch in an independent time signature.
         ///
