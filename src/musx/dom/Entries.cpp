@@ -325,10 +325,10 @@ bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
     return true;
 }
 
-bool EntryFrame::TupletInfo::calcCreatesBeamContinuationRight() const
+EntryInfoPtr EntryFrame::TupletInfo::calcCreatesBeamContinuationRight() const
 {
-    if (!calcCreatesSingletonRight()) {
-        return false;
+    if (!calcCreatesSingletonBeamRight()) {
+        return {};
     }
     auto frame = getParent();
     int voice = int(voice2) + 1;
@@ -336,41 +336,51 @@ bool EntryFrame::TupletInfo::calcCreatesBeamContinuationRight() const
     auto nextInBeam = entryInfo.getNextInBeamGroup();
     // must be followed by exactly one beam
     if (!nextInBeam) {
-        return false;
+        return {};
     }
     // the next item must be the last item
     if (nextInBeam.getNextInVoice(voice)) {
-        return false;
+        return {};
     }
     auto nextFrame = frame->getNext();
     if (!nextFrame) {
-        return false;
+        return {};
     }
     if (auto nextEntryInfo = nextFrame->getFirstInVoice(voice)) {
-        return !nextEntryInfo.calcUnbeamed();
+        if (!nextEntryInfo.calcUnbeamed()) {
+            if (nextEntryInfo.calcCreatesSingletonBeamLeft()) {
+                return nextEntryInfo.getNextInBeamGroup();
+            }
+            return nextEntryInfo;
+        }
     }
-    return false;
+    return {};
 }
 
-bool EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft() const
+EntryInfoPtr EntryFrame::TupletInfo::calcCreatesBeamContinuationLeft() const
 {
-    if (!calcCreatesSingletonLeft()) {
-        return false;
+    if (!calcCreatesSingletonBeamLeft()) {
+        return {};
     }
     auto frame = getParent();
     int voice = int(voice2) + 1;
     EntryInfoPtr entryInfo = EntryInfoPtr(frame, startIndex);
     if (entryInfo.getPreviousInVoice(voice)) {
-        return false;
+        return {};
     }
     auto prevFrame = frame->getPrevious();
     if (!prevFrame) {
-        return false;
+        return {};
     }
     if (auto prevEntryInfo = prevFrame->getLastInVoice(voice)) {
-        return !prevEntryInfo.calcUnbeamed();
+        if (!prevEntryInfo.calcUnbeamed()) {
+            if (prevEntryInfo.calcCreatesSingletonBeamRight()) {
+                return prevEntryInfo.getPreviousInBeamGroup();
+            }
+            return prevEntryInfo;
+        }
     }
-    return false;
+    return {};
 }
 
 bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
@@ -766,6 +776,54 @@ bool EntryInfoPtr::calcIsBeamStart() const
     if ((*this)->getEntry()->isHidden) return false;
     if (!canBeBeamed()) return false;
     return (!getPreviousInBeamGroup() && getNextInBeamGroup());
+}
+
+bool EntryInfoPtr::calcCreatesSingletonBeamLeft() const
+{
+    auto entryFrame = getFrame();
+    for (const auto& tuplInfo : entryFrame->tupletInfo) {
+        if (tuplInfo.startIndex == getIndexInFrame() && tuplInfo.calcCreatesSingletonBeamLeft()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool EntryInfoPtr::calcCreatesSingletonBeamRight() const
+{
+    auto entryFrame = getFrame();
+    for (const auto& tuplInfo : entryFrame->tupletInfo) {
+        if (tuplInfo.startIndex == getIndexInFrame() && tuplInfo.calcCreatesSingletonBeamRight()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+EntryInfoPtr EntryInfoPtr::calcCreatesBeamContinuationLeft() const
+{
+    auto entryFrame = getFrame();
+    for (const auto& tuplInfo : entryFrame->tupletInfo) {
+        if (tuplInfo.startIndex == getIndexInFrame()) {
+            if (auto contEntryInfo = tuplInfo.calcCreatesBeamContinuationLeft()) {
+                return contEntryInfo;
+            }
+        }
+    }
+    return {};
+};
+
+EntryInfoPtr EntryInfoPtr::calcCreatesBeamContinuationRight() const
+{
+    auto entryFrame = getFrame();
+    for (const auto& tuplInfo : entryFrame->tupletInfo) {
+        if (tuplInfo.startIndex == getIndexInFrame()) {
+            if (auto contEntryInfo = tuplInfo.calcCreatesBeamContinuationRight()) {
+                return contEntryInfo;
+            }
+        }
+    }
+    return {};
 }
 
 EntryInfoPtr EntryInfoPtr::findBeamStartOrCurrent() const

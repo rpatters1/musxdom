@@ -796,8 +796,8 @@ TEST(GFrameHold, SingletonBeamsTest)
         std::string msg = "Staff " + std::to_string(entryFrame.getStaff()) + " measure " + std::to_string(entryFrame.getMeasure())
             + " tuplet index " + std::to_string(tupletIndex);
         ASSERT_LT(tupletIndex, entryFrame.tupletInfo.size()) << msg << " tuplet index is too big";
-        EXPECT_EQ(isSingletonRight, entryFrame.tupletInfo[tupletIndex].calcCreatesSingletonRight()) << msg << " mismatch on singleton right";
-        EXPECT_EQ(isSingletonLeft, entryFrame.tupletInfo[tupletIndex].calcCreatesSingletonLeft()) << msg << " mismatch on singleton left";
+        EXPECT_EQ(isSingletonRight, entryFrame.tupletInfo[tupletIndex].calcCreatesSingletonBeamRight()) << msg << " mismatch on singleton right";
+        EXPECT_EQ(isSingletonLeft, entryFrame.tupletInfo[tupletIndex].calcCreatesSingletonBeamLeft()) << msg << " mismatch on singleton left";
         EXPECT_EQ(isContinuationRight, entryFrame.tupletInfo[tupletIndex].calcCreatesBeamContinuationRight()) << msg << " mismatch on continuation left";
         EXPECT_EQ(isContinuationLeft, entryFrame.tupletInfo[tupletIndex].calcCreatesBeamContinuationLeft()) << msg << " mismatch on continuation right";
     };
