@@ -799,8 +799,8 @@ EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const
         }
     }
     if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
-        if (anchorEntryInfo.getIndexInFrame() <= getIndexInFrame()) {
-            auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
+        auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
+        if (beamStart.getIndexInFrame() <= getIndexInFrame()) {
             if (!beamStart.calcCreatesSingletonBeamRight()) {
                 if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
                     if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
@@ -841,8 +841,8 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
         }
     }
     if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
-        if (anchorEntryInfo.getIndexInFrame() >= getIndexInFrame()) {
-            auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
+        auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
+        if (beamStart.getIndexInFrame() >= getIndexInFrame()) {
             if (!beamStart.calcCreatesSingletonBeamLeft()) {
                 if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
                     if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
