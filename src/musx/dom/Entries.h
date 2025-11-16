@@ -462,10 +462,14 @@ public:
     /// @return  The next continguous entry. Returns nullptr if it encounters an empty frame or end of file.
     EntryInfoPtr getNextInLayer() const;
 
-    /// @brief Get the next entry in the frame in the same voice
+    /// @brief Get the next entry in the frame in the same voice.
     ///
     /// For V2, it returns null after the current V2 launch sequence.
     EntryInfoPtr getNextSameV() const;
+
+    /// @brief Get the next entry in the frame in the same voice, skipping grace notes.
+    /// @return The same as #getNextSameV except grace notes are skipped.
+    EntryInfoPtr getNextSameVNoGrace() const;
 
     /// @brief Get the previous entry in the same layer and staff. This can be in the previous measure.
     /// @return  The previous continguous entry. Returns nullptr if it encounters an empty frame or the beginning of the file.
@@ -478,6 +482,10 @@ public:
     ///
     /// For V2, it returns null when it hits the v2Launch note for the current V2 launch sequence.
     EntryInfoPtr getPreviousSameV() const;
+
+    /// @brief Get the previous entry in the frame in the same voice, skipping grace notes.
+    /// @return The same as #getPreviousSameV except grace notes are skipped.
+    EntryInfoPtr getPreviousSameVNoGrace() const;
 
     /// @brief Returns the next entry in the frame in the specified v1/v2 or null if none.
     ///
@@ -696,10 +704,14 @@ private:
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)(bool) const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)(bool) const>
     EntryInfoPtr iterateBeamGroup(bool includeHiddenEntries) const;
 
-    /// @brief Returns the beam anchor for a beam over barline left.
+    /// @brief Returns the beam anchor for a beam over barline left. This code captures the logic from the
+    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds a detect the entries
+    /// in a beam that crosses a barline.
     EntryInfoPtr findLeftBeamAnchorForBeamOverBarline() const;
 
-    /// @brief Returns the beam anchor for a beam over barline right.
+    /// @brief Returns the beam anchor for a beam over barline right. This code captures the logic from the
+    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds a detect the entries
+    /// in a beam that crosses a barline.
     EntryInfoPtr findRightBeamAnchorForBeamOverBarline() const;
 
     std::shared_ptr<const EntryFrame> m_entryFrame;

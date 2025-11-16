@@ -478,6 +478,16 @@ EntryInfoPtr EntryInfoPtr::getNextSameV() const
     return next;
 }
 
+EntryInfoPtr EntryInfoPtr::getNextSameVNoGrace() const
+{
+    for (auto next = getNextSameV(); next; next = next.getNextSameV()) {
+        if (!next->getEntry()->graceNote) {
+            return next;
+        }
+    }
+    return {};
+}
+
 EntryInfoPtr EntryInfoPtr::getPreviousInLayer() const
 {
     if (auto resultInFrame = getPreviousInFrame()) {
@@ -512,6 +522,15 @@ EntryInfoPtr EntryInfoPtr::getPreviousSameV() const
     return prev;
 }
 
+EntryInfoPtr EntryInfoPtr::getPreviousSameVNoGrace() const
+{
+    for (auto prev = getPreviousSameV(); prev; prev = prev.getPreviousSameV()) {
+        if (!prev->getEntry()->graceNote) {
+            return prev;
+        }
+    }
+    return {};
+}
 EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
 {
     bool forV2 = voice == 2;
@@ -785,10 +804,7 @@ EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const
         anchorEntryInfo = anchorEntryInfo.getPreviousSameV();
     }
     if (anchorEntryInfo && anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
-        for (auto entryInfo = anchorEntryInfo.getPreviousSameV(); entryInfo; entryInfo = entryInfo.getPreviousSameV()) {
-            if (entryInfo->getEntry()->graceNote) {
-                continue;
-            }
+        for (auto entryInfo = anchorEntryInfo.getPreviousSameVNoGrace(); entryInfo; entryInfo = entryInfo.getPreviousSameVNoGrace()) {
             if (!entryInfo.calcDisplaysAsRest()) {
                 anchorEntryInfo = entryInfo;
                 break;
@@ -827,10 +843,7 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
         anchorEntryInfo = anchorEntryInfo.getNextSameV();
     }
     if (anchorEntryInfo && anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
-        for (auto entryInfo = anchorEntryInfo.getNextSameV(); entryInfo; entryInfo = entryInfo.getNextSameV()) {
-            if (entryInfo->getEntry()->graceNote) {
-                continue;
-            }
+        for (auto entryInfo = anchorEntryInfo.getNextSameVNoGrace(); entryInfo; entryInfo = entryInfo.getNextSameVNoGrace()) {
             if (entryInfo.calcBeamMustStartHere()) {
                 break;
             }
@@ -922,10 +935,8 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesRightOverBarline() const
     MUSX_ASSERT_IF(!nextInVoice) {
         throw std::logic_error("getNextInVoice returned null when calcCreatesSingletonBeamRight was true.");
     }
-    for (nextInVoice = nextInVoice.getNextSameV(); nextInVoice; nextInVoice = nextInVoice.getNextSameV()) {
-        if (nextInVoice->getEntry()->graceNote) {
-            continue;
-        }
+    nextInVoice = nextInVoice.getNextSameVNoGrace();
+    if (nextInVoice) {
         return nextInVoice;
     }
 
