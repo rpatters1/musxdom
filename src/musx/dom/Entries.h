@@ -626,6 +626,9 @@ public:
     /// @brief Determines if this entry can be beamed.
     bool canBeBeamed() const;
 
+    /// @brief Determines if a beam *must* start on this entry.
+    bool calcBeamMustStartHere() const;
+
     /// @brief Returns the entry size as a percentage, taking into account the beaming.
     /// @return Integer percentage where 100 means 100%.
     int calcEntrySize() const;
@@ -692,6 +695,12 @@ private:
 
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)(bool) const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)(bool) const>
     EntryInfoPtr iterateBeamGroup(bool includeHiddenEntries) const;
+
+    /// @brief Returns the beam anchor for a beam over barline left.
+    EntryInfoPtr findLeftBeamAnchorForBeamOverBarline() const;
+
+    /// @brief Returns the beam anchor for a beam over barline right.
+    EntryInfoPtr findRightBeamAnchorForBeamOverBarline() const;
 
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.

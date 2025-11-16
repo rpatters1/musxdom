@@ -729,6 +729,11 @@ bool EntryInfoPtr::canBeBeamed() const
     return true;
 }
 
+bool EntryInfoPtr::calcBeamMustStartHere() const
+{
+    return (*this)->getEntry()->beam || !canBeBeamed();
+}
+
 bool EntryInfoPtr::calcIsBeamStart() const
 {
     if ((*this)->getEntry()->isHidden) return false;
@@ -758,13 +763,98 @@ bool EntryInfoPtr::calcCreatesSingletonBeamRight() const
     return false;
 }
 
-static bool checkBeamExtLeft(const MusxInstance<details::BeamExtension>& beamExt) {
+static bool checkBeamExtLeft(const MusxInstance<details::BeamExtension>& beamExt)
+{
     return beamExt && beamExt->leftOffset < 0;
 };
 
 static bool checkBeamExtRight(const MusxInstance<details::BeamExtension>& beamExt) {
     return beamExt && beamExt->rightOffset > 0;
 };
+
+EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const
+{
+    auto entry = (*this)->getEntry();
+    if (entry->graceNote) {
+        return {};
+    }
+    int voice = static_cast<int>(entry->voice2) + 1;
+    auto frame = getFrame();
+    auto anchorEntryInfo = frame->getLastInVoice(voice);
+    while (anchorEntryInfo && anchorEntryInfo->getEntry()->graceNote) {
+        anchorEntryInfo = anchorEntryInfo.getPreviousSameV();
+    }
+    if (anchorEntryInfo && anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
+        for (auto entryInfo = anchorEntryInfo.getPreviousSameV(); entryInfo; entryInfo = entryInfo.getPreviousSameV()) {
+            if (entryInfo->getEntry()->graceNote) {
+                continue;
+            }
+            if (!entryInfo.calcDisplaysAsRest()) {
+                anchorEntryInfo = entryInfo;
+                break;
+            }
+            if (entryInfo.calcBeamMustStartHere()) {
+                break;
+            }
+        }
+    }
+    if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
+        if (anchorEntryInfo.getIndexInFrame() <= getIndexInFrame()) {
+            auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
+            if (!beamStart.calcCreatesSingletonBeamRight()) {
+                if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
+                    if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
+                        return {};
+                    }
+                }
+            }
+            return beamStart;
+        }
+    }
+    return {};
+}
+
+EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
+{
+   auto entry = (*this)->getEntry();
+    if (entry->graceNote) {
+        return {};
+    }
+    int voice = static_cast<int>(entry->voice2) + 1;
+    auto frame = getFrame();
+    auto anchorEntryInfo = frame->getFirstInVoice(voice);
+    while (anchorEntryInfo && anchorEntryInfo->getEntry()->graceNote) {
+        anchorEntryInfo = anchorEntryInfo.getNextSameV();
+    }
+    if (anchorEntryInfo && anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
+        for (auto entryInfo = anchorEntryInfo.getNextSameV(); entryInfo; entryInfo = entryInfo.getNextSameV()) {
+            if (entryInfo->getEntry()->graceNote) {
+                continue;
+            }
+            if (entryInfo.calcBeamMustStartHere()) {
+                break;
+            }
+            if (!entryInfo.calcDisplaysAsRest()) {
+                anchorEntryInfo = entryInfo;
+                break;
+            }
+        }
+    }
+    if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
+        if (anchorEntryInfo.getIndexInFrame() >= getIndexInFrame()) {
+            auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
+            if (!beamStart.calcCreatesSingletonBeamLeft()) {
+                if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
+                    if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
+                        return {};
+                    }
+                }
+            }
+            return beamStart;
+        }
+    }
+    return {};
+}
 
 EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
 {
@@ -820,47 +910,45 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesRightOverBarline() const
         return {};
     }
 
-    const auto frame = getFrame();
-    int voice = static_cast<int>(entry->voice2) + 1;
-    bool createsSingletonRight = false;
-    auto nextInVoice = getNextInVoice(voice);
-    if (nextInVoice && calcCreatesSingletonBeamRight()) {
-        nextInVoice = nextInVoice.getNextInBeamGroup();
-        createsSingletonRight = true;
-    }
-    // must be the final item in the bar in that voice
-    if (nextInVoice) {
-        return {};
-    }
-    if (calcUnbeamed()) {
+    const auto anchor = findLeftBeamAnchorForBeamOverBarline();
+    if (!anchor) {
         return {};
     }
 
-    if (!createsSingletonRight) {
-        auto beamStart = findBeamStartOrCurrent();
-        if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-            if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-                return {};
-            }
+    auto nextInVoice = *this;
+    if (calcCreatesSingletonBeamRight()) {
+        nextInVoice = nextInVoice.getNextSameV();
+    }
+    MUSX_ASSERT_IF(!nextInVoice) {
+        throw std::logic_error("getNextInVoice returned null when calcCreatesSingletonBeamRight was true.");
+    }
+    for (nextInVoice = nextInVoice.getNextSameV(); nextInVoice; nextInVoice = nextInVoice.getNextSameV()) {
+        if (nextInVoice->getEntry()->graceNote) {
+            continue;
         }
+        return nextInVoice;
     }
 
-    auto nextFrame = frame->getNext();
+    auto nextFrame = getFrame()->getNext();
     if (!nextFrame) {
         return {};
     }
-    if (auto nextEntryInfo = nextFrame->getFirstInVoice(voice)) {
+    int voice = static_cast<int>(entry->voice2) + 1;
+    for (auto nextEntryInfo = nextFrame->getFirstInVoice(voice); nextEntryInfo; nextEntryInfo = nextEntryInfo.getNextSameV()) {
+        if (nextEntryInfo->getEntry()->graceNote) {
+            continue;
+        }
         if (nextEntryInfo.calcIsBeamStart()) {
+            auto rightAnchor = nextEntryInfo.findRightBeamAnchorForBeamOverBarline();
+            if (!rightAnchor) {
+                return {};
+            }
             if (nextEntryInfo.calcCreatesSingletonBeamLeft()) {
                 return nextEntryInfo.getNextInBeamGroup();
             }
-            if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), nextEntryInfo->getEntry()->getEntryNumber()))) {
-                if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), nextEntryInfo->getEntry()->getEntryNumber()))) {
-                    return {};
-                }
-            }
             return nextEntryInfo;
         }
+        break;
     }
     return {};
 }
@@ -1117,7 +1205,7 @@ EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
     // a non grace should skip grace notes
     if (!thisRawEntry->graceNote && resultEntry->graceNote) {
         do {
-            if (result->getEntry()->beam || !result.canBeBeamed()) {
+            if (result.calcBeamMustStartHere()) {
                 return EntryInfoPtr();
             }
             result = (result.*Iterator)();
