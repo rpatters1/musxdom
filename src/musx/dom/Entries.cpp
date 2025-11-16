@@ -532,6 +532,22 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
     return prev;
 }
 
+EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(bool includeHiddenEntries) const
+{
+    if (auto nextBarCont = calcBeamContinuesRightOverBarline()) {
+        return nextBarCont;
+    }
+    return getNextInBeamGroup(includeHiddenEntries);
+}
+
+EntryInfoPtr EntryInfoPtr::getPreviousInBeamGroupAcrossBars(bool includeHiddenEntries) const
+{
+    if (auto prevBarCont = calcBeamContinuesLeftOverBarline()) {
+        return prevBarCont;
+    }
+    return getPreviousInBeamGroup(includeHiddenEntries);
+}
+
 bool EntryInfoPtr::calcDisplaysAsRest() const
 {
     return !(*this)->getEntry()->isNote;
@@ -752,8 +768,12 @@ static bool checkBeamExtRight(const MusxInstance<details::BeamExtension>& beamEx
 
 EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
 {
-    const auto frame = getFrame();
     const auto entry = (*this)->getEntry();
+    if (entry->graceNote) {
+        return {};
+    }
+
+    const auto frame = getFrame();
     int voice = static_cast<int>(entry->voice2) + 1;
 
     const auto leftBeamStart = findBeamStartOrCurrent();
@@ -795,8 +815,12 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
 
 EntryInfoPtr EntryInfoPtr::calcBeamContinuesRightOverBarline() const
 {
-    const auto frame = getFrame();
     const auto entry = (*this)->getEntry();
+    if (entry->graceNote) {
+        return {};
+    }
+
+    const auto frame = getFrame();
     int voice = static_cast<int>(entry->voice2) + 1;
     bool createsSingletonRight = false;
     auto nextInVoice = getNextInVoice(voice);
@@ -992,6 +1016,20 @@ unsigned EntryInfoPtr::calcLowestBeamEnd() const
         return nextNumBeams + 1;
     }
     return 0;
+}
+
+unsigned EntryInfoPtr::calcLowestBeamEndAcrossBarlines() const
+{
+    if ((*this)->getEntry()->isHidden) return 0;
+    if (auto next = calcBeamContinuesRightOverBarline()) {
+        unsigned numBeams = calcVisibleBeams();
+        unsigned nextNumBeams = next.calcVisibleBeams();
+        if (numBeams > nextNumBeams) {
+            return nextNumBeams + 1;
+        }
+        return 0;
+    }
+    return calcLowestBeamEnd();
 }
 
 unsigned EntryInfoPtr::calcLowestBeamStub() const

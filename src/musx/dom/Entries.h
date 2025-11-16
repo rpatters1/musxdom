@@ -501,6 +501,16 @@ public:
     EntryInfoPtr getPreviousInBeamGroup(bool includeHiddenEntries = false) const
     { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(includeHiddenEntries); }
 
+    /// @brief Gets the next entry in a beamed group, or nullptr if the entry is not beamed or is the last in the group.
+    /// This function is simular to #getNextInBeamGroup but it traverses into the next bar when it detects a beam across a barline,
+    /// as created by the Beam Over Barline plugin.
+    EntryInfoPtr getNextInBeamGroupAcrossBars(bool includeHiddenEntries = false) const;
+
+    /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
+    /// This function is simular to #getPreviousInBeamGroup but it traverses into the previous bar when it detects a beam across a barline,
+    /// as created by the Beam Over Barline plugin.
+    EntryInfoPtr getPreviousInBeamGroupAcrossBars(bool includeHiddenEntries = false) const;
+
     /// @brief Calculates if an entry displays as a rest.
     /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
     bool calcDisplaysAsRest() const;
@@ -590,6 +600,11 @@ public:
     /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
     /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
     unsigned calcLowestBeamEnd() const;
+
+    /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
+    /// This function takes into account beams the cross barlines, as created by the Beam Over Barline plugin.
+    /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
+    unsigned calcLowestBeamEndAcrossBarlines() const;
 
     /// @brief Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc.
     /// @return 0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number

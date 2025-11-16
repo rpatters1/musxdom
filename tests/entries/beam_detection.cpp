@@ -396,11 +396,15 @@ TEST(BeamDetection, BeamsOverBarlines)
         if (nextRight) {
             auto tryPrev = nextRight.calcBeamContinuesLeftOverBarline();
             EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
+            tryPrev = nextRight.getPreviousInBeamGroupAcrossBars();
+            EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
         }
         auto prevLeft = entryInfo.calcBeamContinuesLeftOverBarline();
         EXPECT_EQ(prevLeft, isBeamOverLeft);
         if (prevLeft) {
             auto tryNext = prevLeft.calcBeamContinuesRightOverBarline();
+            EXPECT_TRUE(entryInfo.isSameEntry(tryNext));
+            tryNext = prevLeft.getNextInBeamGroupAcrossBars();
             EXPECT_TRUE(entryInfo.isSameEntry(tryNext));
         }
     };
