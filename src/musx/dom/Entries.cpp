@@ -755,16 +755,18 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
     const auto frame = getFrame();
     const auto entry = (*this)->getEntry();
     int voice = static_cast<int>(entry->voice2) + 1;
+
+    const auto leftBeamStart = findBeamStartOrCurrent();
     // must be the first item in the bar in that voice
-    if (getPreviousInVoice(voice)) {
+    if (leftBeamStart.getPreviousInVoice(voice)) {
         return {};
     }
-    if (calcUnbeamed()) {
+    if (leftBeamStart.calcUnbeamed()) {
         return {};
     }
-    if (!calcCreatesSingletonBeamLeft()) {
-        if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), (*this)->getEntry()->getEntryNumber()))) {
-            if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), (*this)->getEntry()->getEntryNumber()))) {
+    if (!leftBeamStart.calcCreatesSingletonBeamLeft()) {
+        if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), leftBeamStart->getEntry()->getEntryNumber()))) {
+            if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), leftBeamStart->getEntry()->getEntryNumber()))) {
                 return {};
             }
         }
@@ -776,12 +778,12 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
     }
     if (auto prevEntryInfo = prevFrame->getLastInVoice(voice)) {
         if (!prevEntryInfo.calcUnbeamed()) {
-            const auto beamStart = prevEntryInfo.findBeamStartOrCurrent();
-            if (beamStart.calcCreatesSingletonBeamRight()) {
-                return beamStart;
+            const auto rightBeamStart = prevEntryInfo.findBeamStartOrCurrent();
+            if (rightBeamStart.calcCreatesSingletonBeamRight()) {
+                return rightBeamStart;
             }
-            if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-                if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
+            if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), rightBeamStart->getEntry()->getEntryNumber()))) {
+                if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), rightBeamStart->getEntry()->getEntryNumber()))) {
                     return {};
                 }
             }

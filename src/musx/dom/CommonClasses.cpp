@@ -164,8 +164,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
 #else
         if (envVariable == "HOME") {
             paths.emplace_back(getHomePath());
-        }
-        else if (!envVariable.empty()) {
+        } else if (!envVariable.empty()) {
             if (auto envValue = getenv(envVariable.c_str())) {
                 std::stringstream ss(envValue);
                 std::string path;
@@ -181,12 +180,10 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
                 paths.emplace_back("/usr/local/share");
                 paths.emplace_back("/usr/share");
 #endif         
-            }
-            else {
+            } else {
                 return {};
             }
-        }
-        else {
+        } else {
             paths.emplace_back("/");
         }
 #endif

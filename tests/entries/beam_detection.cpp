@@ -341,3 +341,96 @@ TEST(BeamDetection, InvisibleEntries)
         checkEntry(entryFrame, 8, true, false, 0);              // quarter
     }
 }
+
+TEST(BeamDetection, SingletonBeams)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "singbeam.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto checkSingleton = [](const EntryInfoPtr entryInfo, bool isSingletonRight, bool isSingletonLeft) {
+        EXPECT_EQ(entryInfo.calcCreatesSingletonBeamRight(), isSingletonRight);
+        EXPECT_EQ(entryInfo.calcCreatesSingletonBeamLeft(), isSingletonLeft);
+    };
+    
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+
+        checkSingleton(EntryInfoPtr(entryFrame, 1), true, false);
+    }
+    
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
+
+        checkSingleton(EntryInfoPtr(entryFrame, 1), false, true);
+    }
+    
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 3";
+
+        checkSingleton(EntryInfoPtr(entryFrame, 1), false, false);
+        checkSingleton(EntryInfoPtr(entryFrame, 2), false, false);
+    }
+}
+
+TEST(BeamDetection, BeamsOverBarlines)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beams_over_barlines.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto checkBeamOvers = [](const EntryInfoPtr entryInfo, bool isBeamOverRight, bool isBeamOverLeft) -> void {
+        auto nextRight = entryInfo.calcBeamContinuesRightOverBarline();
+        EXPECT_EQ(nextRight, isBeamOverRight);
+        if (nextRight) {
+            auto tryPrev = nextRight.calcBeamContinuesLeftOverBarline();
+            EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
+        }
+        auto prevLeft = entryInfo.calcBeamContinuesLeftOverBarline();
+        EXPECT_EQ(prevLeft, isBeamOverLeft);
+        if (prevLeft) {
+            auto tryNext = prevLeft.calcBeamContinuesRightOverBarline();
+            EXPECT_TRUE(entryInfo.isSameEntry(tryNext));
+        }
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 3), true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 0), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 5), true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 3";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 0), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 5), true, false);
+    }
+}
