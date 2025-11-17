@@ -547,7 +547,14 @@ public:
     /// without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.
     ///
     /// @return True if the stem is up; false if it is down.
-    bool calcUpStem() const;
+    bool calcUpStem() const
+    {
+        if (m_upStem.has_value()) {
+            return m_upStem.value();
+        }
+        m_upStem = calcUpStemImpl();
+        return m_upStem.value();
+    }
 
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
@@ -688,6 +695,8 @@ public:
 private:
     unsigned calcVisibleBeams() const;
 
+    bool calcUpStemImpl() const;
+
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
     std::optional<unsigned> iterateFindRestsInSecondaryBeam(const EntryInfoPtr nextOrPrevInBeam) const;
 
@@ -719,6 +728,9 @@ private:
 
     /// @brief Cache the staff for this entry here to avoid repeated calls to `StaffComposite::createCurrent` for the same information.
     mutable MusxInstance<others::StaffComposite> m_cachedStaff;
+
+    /// @brief Cache the stem direction for this entry to avoid repeatedly calculating it.
+    mutable std::optional<bool> m_upStem;
 };
 
 /**

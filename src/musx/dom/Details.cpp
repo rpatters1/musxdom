@@ -23,11 +23,48 @@
 #include <vector>
 #include <cstdlib>
 #include <exception>
+#include <type_traits>
 
 #include "musx/musx.h"
 
 namespace musx {
 namespace dom {
+
+// ****************************
+// ***** EntryDetailsBase *****
+// ****************************
+
+template <typename EDUP, typename EDDOWN, typename EDBASE>
+MusxInstance<EDBASE> EntryDetailsBase::getStemDependentDetail(const EntryInfoPtr& entryInfo, std::optional<Inci> inci, StemSelection stemSelection)
+{
+    static_assert(std::is_base_of_v<EntryDetailsBase, EDBASE>, "EDBASE must be derived from EntryDetailsBase.");
+    static_assert(std::is_base_of_v<EDBASE, EDUP>, "EDUP must be derived from EDBASE");
+    static_assert(std::is_base_of_v<EDBASE, EDDOWN>, "EDDOWN must be derived from EDBASE");
+
+    const auto frame = entryInfo.getFrame();
+    const auto entry = entryInfo->getEntry();
+
+    bool doUpStem = stemSelection == StemSelection::Any || stemSelection == StemSelection::UpStem;
+    if (stemSelection == StemSelection::MatchEntry) {
+        doUpStem = entryInfo.calcUpStem();
+    }
+    if (doUpStem) {
+        if (auto upStemInstance = frame->getDocument()->getDetails()->get<EDUP>(frame->getRequestedPartId(), entry->getEntryNumber(), inci)) {
+            return upStemInstance;
+        }
+    }
+    bool doDownStem = stemSelection == StemSelection::Any || stemSelection == StemSelection::DownStem;
+    if (stemSelection == StemSelection::MatchEntry) {
+        doDownStem = !doUpStem;
+    }
+    if (doDownStem) {
+        if (auto downStemInstance = frame->getDocument()->getDetails()->get<EDDOWN>(frame->getRequestedPartId(), entry->getEntryNumber(), inci)) {
+            return downStemInstance;
+        }
+    }
+    return nullptr;
+}
+
 namespace details {
 
 // ***************************

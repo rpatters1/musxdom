@@ -673,7 +673,7 @@ bool EntryInfoPtr::calcUpStemDefault() const
     return valForBeam < 0;
 }
 
-bool EntryInfoPtr::calcUpStem() const
+bool EntryInfoPtr::calcUpStemImpl() const
 {
     /// @todo Add cross-staff support some day?
 
