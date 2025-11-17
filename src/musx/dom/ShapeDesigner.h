@@ -86,7 +86,7 @@ enum class ShapeDefInstructionType
     EndGroup,
 
     /// external graphic (eps, pict, tiff, etc)  
-    /// data items: (3) width, height of graphic, cmper of corresponding @ref ShapeGraphicAssign record
+    /// data items: (3) width, height of graphic, cmper of corresponding graphic. See #others::PageGraphicAssign::graphicCmper for explanation.
     ExternalGraphic,
 
     /// fill path (alternating, or even-odd rule)  
@@ -224,7 +224,7 @@ struct ShapeDefInstruction
     struct ExternalGraphic {
         Evpu width;   ///< The width of the placed graphic.
         Evpu height;  ///< The height of the placed graphic.
-        Cmper cmper;  ///< The cmper of the corresponding ShapeGraphicAssign record.
+        Cmper cmper;  ///< The cmper of the graphic. See #others::PageGraphicAssign::graphicCmper for explanation.
     };
 
     /// @brief Holds the parsed data for a LineWidth instruction.

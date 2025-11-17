@@ -514,9 +514,11 @@ protected:
     /// @tparam EDDOWN The downstem class.
     /// @tparam EDBASE The base class shared by upstem and downstem classes.
     /// @param entryInfo The entry to search.
+    /// @param inci The inci to search for (or std::nullopt if none)
+    /// @param stemSelection The choice of which stem direction to retrieve.
     /// @return The instance if found or null.
     template <typename EDUP, typename EDDOWN, typename EDBASE>
-    static MusxInstance<EDBASE> getStemDependentDetail(const EntryInfoPtr& entryInfo, std::optional<Inci> inci = std::nullopt, StemSelection stemSelection = StemSelection::MatchEntry);
+    static MusxInstance<EDBASE> getStemDependentDetail(const EntryInfoPtr& entryInfo, std::optional<Inci> inci, StemSelection stemSelection);
 
 public:
     /**
