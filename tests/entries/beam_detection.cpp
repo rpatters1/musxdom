@@ -437,4 +437,14 @@ TEST(BeamDetection, BeamsOverBarlines)
         checkBeamOvers(EntryInfoPtr(entryFrame, 0), false, true);
         checkBeamOvers(EntryInfoPtr(entryFrame, 5), true, false);
     }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 4";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 4";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 1), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 6), true, false);
+    }
 }

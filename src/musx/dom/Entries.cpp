@@ -763,9 +763,8 @@ bool EntryInfoPtr::calcIsBeamStart() const
 bool EntryInfoPtr::calcCreatesSingletonBeamLeft() const
 {
     auto entryFrame = getFrame();
-    auto beamStart = findBeamStartOrCurrent();
     for (const auto& tuplInfo : entryFrame->tupletInfo) {
-        if (tuplInfo.startIndex == beamStart.getIndexInFrame() && tuplInfo.calcCreatesSingletonBeamLeft()) {
+        if (tuplInfo.startIndex == getIndexInFrame() && tuplInfo.calcCreatesSingletonBeamLeft()) {
             return true;
         }
     }
@@ -775,9 +774,8 @@ bool EntryInfoPtr::calcCreatesSingletonBeamLeft() const
 bool EntryInfoPtr::calcCreatesSingletonBeamRight() const
 {
     auto entryFrame = getFrame();
-    auto beamStart = findBeamStartOrCurrent();
     for (const auto& tuplInfo : entryFrame->tupletInfo) {
-        if (tuplInfo.startIndex == beamStart.getIndexInFrame() && tuplInfo.calcCreatesSingletonBeamRight()) {
+        if (tuplInfo.startIndex == getIndexInFrame() && tuplInfo.calcCreatesSingletonBeamRight()) {
             return true;
         }
     }
@@ -857,12 +855,16 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
     }
     if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
         auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
+        if (beamStart.calcCreatesSingletonBeamLeft()) {
+            auto beamEnd = beamStart.findBeamEnd();
+            if (beamEnd.getIndexInFrame() >= getIndexInFrame()) {
+                return beamStart;
+            }
+        }
         if (beamStart.getIndexInFrame() >= getIndexInFrame()) {
-            if (!beamStart.calcCreatesSingletonBeamLeft()) {
-                if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-                    if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-                        return {};
-                    }
+            if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
+                if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
+                    return {};
                 }
             }
             return beamStart;
@@ -884,7 +886,7 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
     }
 
     auto prevInVoice = *this;
-    if (calcCreatesSingletonBeamLeft()) {
+    if (findBeamStartOrCurrent().calcCreatesSingletonBeamLeft()) {
         prevInVoice = prevInVoice.getPreviousSameVNoGrace();
     }
     if (prevInVoice) {
@@ -893,7 +895,6 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
     if (prevInVoice) {
         return prevInVoice;
     }
-
 
     auto prevFrame = getFrame()->getPrevious();
     if (!prevFrame) {
@@ -908,8 +909,8 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
         if (!leftAnchor) {
             return {};
         }
-        if (prevEntryInfo.calcCreatesSingletonBeamRight()) {
-            prevEntryInfo = prevEntryInfo.findBeamStartOrCurrent();
+        if (prevEntryInfo->actualDuration != 0 && prevEntryInfo.findBeamStartOrCurrent().calcCreatesSingletonBeamRight()) {
+            prevEntryInfo = prevEntryInfo.getPreviousSameV();
         }
         return prevEntryInfo;
     }
