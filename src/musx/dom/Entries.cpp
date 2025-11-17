@@ -556,6 +556,14 @@ EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(bool includeHiddenEntrie
     if (auto nextBarCont = calcBeamContinuesRightOverBarline()) {
         return nextBarCont;
     }
+    auto anchor = findRightBeamAnchorForBeamOverBarline();
+    if (anchor && !anchor.findBeamEnd().isSameEntry(*this)) {
+        auto result = getNextSameVNoGrace();
+        if (result && result.calcCreatesSingletonBeamLeft()) {
+            result = result.getNextInBeamGroup(includeHiddenEntries);
+        }
+        return result;
+    }
     return getNextInBeamGroup(includeHiddenEntries);
 }
 
@@ -563,6 +571,14 @@ EntryInfoPtr EntryInfoPtr::getPreviousInBeamGroupAcrossBars(bool includeHiddenEn
 {
     if (auto prevBarCont = calcBeamContinuesLeftOverBarline()) {
         return prevBarCont;
+    }
+    auto anchor = findLeftBeamAnchorForBeamOverBarline();
+    if (anchor && !anchor.isSameEntry(*this)) {
+        auto result = getPreviousSameVNoGrace();
+        if (result && result.findBeamStartOrCurrent().calcCreatesSingletonBeamRight()) {
+            result = result.getPreviousInBeamGroup(includeHiddenEntries);
+        }
+        return result;
     }
     return getPreviousInBeamGroup(includeHiddenEntries);
 }
@@ -950,17 +966,14 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesRightOverBarline() const
         if (nextEntryInfo->getEntry()->graceNote) {
             continue;
         }
-        if (nextEntryInfo.calcIsBeamStart()) {
-            auto rightAnchor = nextEntryInfo.findRightBeamAnchorForBeamOverBarline();
-            if (!rightAnchor) {
-                return {};
-            }
-            if (nextEntryInfo.calcCreatesSingletonBeamLeft()) {
-                return nextEntryInfo.getNextInBeamGroup();
-            }
-            return nextEntryInfo;
+        auto rightAnchor = nextEntryInfo.findRightBeamAnchorForBeamOverBarline();
+        if (!rightAnchor) {
+            return {};
         }
-        break;
+        if (nextEntryInfo.calcCreatesSingletonBeamLeft()) {
+            return nextEntryInfo.getNextInBeamGroup();
+        }
+        return nextEntryInfo;
     }
     return {};
 }

@@ -447,4 +447,73 @@ TEST(BeamDetection, BeamsOverBarlines)
         checkBeamOvers(EntryInfoPtr(entryFrame, 1), false, true);
         checkBeamOvers(EntryInfoPtr(entryFrame, 6), true, false);
     }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 5";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 5";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 1), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 7), true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 6";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 6";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 0), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 7), true, false);
+    }
+}
+
+TEST(BeamDetection, BeamsOverBarlinesTraversal)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beams_over_barlines.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto expectedEntries = std::vector<EntryNumber>{};
+    auto traverseBeam = [&](const EntryInfoPtr startEntry) {
+        EntryInfoPtr endEntry;
+        size_t nextIndex = 0;
+        for (auto entryInfo = startEntry; entryInfo; entryInfo = entryInfo.getNextInBeamGroupAcrossBars()) {
+            ASSERT_LT(nextIndex, expectedEntries.size());
+            EXPECT_EQ(entryInfo->getEntry()->getEntryNumber(), expectedEntries[nextIndex]);
+            endEntry = entryInfo;
+            nextIndex++;
+        }
+        EXPECT_EQ(nextIndex, expectedEntries.size());
+        for (auto entryInfo = endEntry; entryInfo; entryInfo = entryInfo.getPreviousInBeamGroupAcrossBars()) {
+            ASSERT_GT(nextIndex, 0);
+            nextIndex--;
+            EXPECT_EQ(entryInfo->getEntry()->getEntryNumber(), expectedEntries[nextIndex]);
+            endEntry = entryInfo;
+        }
+        EXPECT_EQ(nextIndex, 0);
+        EXPECT_TRUE(startEntry.isSameEntry(endEntry));
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 5";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 5";
+
+        expectedEntries = { 75, 76, 77, 91 };
+        traverseBeam(EntryInfoPtr(entryFrame, 5));
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 6";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 6";
+
+        expectedEntries = { 82, 83, 84, 85, 86, 87 };
+        traverseBeam(EntryInfoPtr(entryFrame, 5));
+    }
 }
