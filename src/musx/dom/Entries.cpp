@@ -240,13 +240,10 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     // if the actual duration of the tuplet is less than a half, at least one beam must be detached.
     if (tuplet->calcReferenceDuration().calcEduDuration() < Edu(NoteType::Half)) {
         auto targetNoteType = std::get<0>(calcNoteInfoFromEdu(targetNotated)); // C++17 complains about structured bindings captured in a lamda.
-        auto checkBeamExt = [&](const MusxInstance<details::BeamExtension>& beamExt) -> bool {
-            return beamExt && (beamExt->mask >= unsigned(targetNoteType)) && beamExt->leftOffset >= 0 && beamExt->rightOffset <= 0;
-        };
-        if (!checkBeamExt(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), first->getEntry()->getEntryNumber()))) {
-            if (!checkBeamExt(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), first->getEntry()->getEntryNumber()))) {
-                return false;
-            }
+        if (auto beamExt = details::BeamExtension::getForStem(first)) {
+            return beamExt->mask >= unsigned(targetNoteType) && beamExt->leftOffset > 0 && beamExt->rightOffset < 0;
+        } else {
+            return false;
         }
     }
     return true;
@@ -299,11 +296,8 @@ bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
             return false;
         }
     }
-    // if either direction has a custom stem, check it
-    MusxInstance<details::CustomStem> customStem = frame->getDocument()->getDetails()->get<details::CustomDownStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
-    if (!customStem) {
-        customStem = frame->getDocument()->getDetails()->get<details::CustomUpStem>(frame->getRequestedPartId(), hiddenEntry->getEntryNumber());
-    }
+    // entry must have a hidden stem
+    auto customStem = details::CustomStem::getForStem(hiddenEntryInfo);
     if (!customStem || !customStem->calcIsHiddenStem()) {
         return false;
     }
@@ -834,10 +828,8 @@ EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const
         auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
         if (beamStart.getIndexInFrame() <= getIndexInFrame()) {
             if (!beamStart.calcCreatesSingletonBeamRight()) {
-                if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-                    if (!checkBeamExtRight(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-                        return {};
-                    }
+                if (!checkBeamExtRight(details::BeamExtension::getForStem(beamStart))) {
+                    return {};
                 }
             }
             return beamStart;
@@ -878,10 +870,8 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
             }
         }
         if (beamStart.getIndexInFrame() >= getIndexInFrame()) {
-            if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionUpStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-                if (!checkBeamExtLeft(frame->getDocument()->getDetails()->get<details::BeamExtensionDownStem>(frame->getRequestedPartId(), beamStart->getEntry()->getEntryNumber()))) {
-                    return {};
-                }
+            if (!checkBeamExtLeft(details::BeamExtension::getForStem(beamStart))) {
+                return {};
             }
             return beamStart;
         }
