@@ -1124,9 +1124,16 @@ unsigned EntryInfoPtr::calcLowestBeamEnd() const
 unsigned EntryInfoPtr::calcLowestBeamEndAcrossBarlines() const
 {
     if ((*this)->getEntry()->isHidden) return 0;
-    if (auto next = calcBeamContinuesRightOverBarline()) {
+    if (calcBeamContinuesLeftOverBarline() && !getNextSameVNoGrace() || calcUnbeamed()) {
+        auto anchor = findLeftBeamAnchorForBeamOverBarline();
+        MUSX_ASSERT_IF(!anchor) {
+            throw std::logic_error("calcBeamContinuesLeftOverBarline was true but no anchor exists.");
+        }
         unsigned numBeams = calcVisibleBeams();
-        unsigned nextNumBeams = next.calcVisibleBeams();
+        unsigned nextNumBeams = numBeams;
+        if (auto beamExt = details::BeamExtension::getForStem(*this)) {
+            nextNumBeams = beamExt->calcMaxExtension();
+        }
         if (numBeams > nextNumBeams) {
             return nextNumBeams + 1;
         }
