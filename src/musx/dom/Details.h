@@ -514,6 +514,10 @@ public:
                             ///< Instead, the mask appears always to be used to determine the beams to be extended. However, if a false
                             ///< value were encountered, it would mean only the 8th beam is extended.
 
+    /// @brief Calculates the maximum beam extension
+    /// @return 0, 1, 2, 3, ... where 0 means no beam is extendeed, 1 is the 8th beam, 2 is 16th, etc.
+    unsigned calcMaxExtension() const;
+
     static const xml::XmlElementArray<BeamExtension>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 

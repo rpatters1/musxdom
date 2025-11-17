@@ -800,11 +800,11 @@ bool EntryInfoPtr::calcCreatesSingletonBeamRight() const
 
 static bool checkBeamExtLeft(const MusxInstance<details::BeamExtension>& beamExt)
 {
-    return beamExt && beamExt->leftOffset < 0;
+    return beamExt && beamExt->calcMaxExtension() && beamExt->leftOffset < 0;
 };
 
 static bool checkBeamExtRight(const MusxInstance<details::BeamExtension>& beamExt) {
-    return beamExt && beamExt->rightOffset > 0;
+    return beamExt && beamExt->calcMaxExtension() && beamExt->rightOffset > 0;
 };
 
 EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const

@@ -144,6 +144,32 @@ template bool BeamAlterations::calcIsFeatheredBeamImpl<SecondaryBeamAlterationsU
 template bool BeamAlterations::calcIsFeatheredBeamImpl<SecondaryBeamAlterationsDownStem>(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY);
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
+// *************************
+// ***** BeamExtension *****
+// *************************
+
+unsigned BeamExtension::calcMaxExtension() const
+{
+    // Legacy behavior: only the 8th-note beam is extended.
+    // Regardless of mask contents, Finale would extend only the first beam.
+    if (!extBeyond8th) {
+        return 1U;
+    }
+
+    if (mask) {
+        unsigned maxExtension = 10;      // 1 = 8th, ..., 10 = 4096th
+        unsigned workingMask  = mask;
+        while ((workingMask & 0x01U) == 0U && maxExtension > 0U) {
+            workingMask >>= 1U;
+            maxExtension--;
+        }
+        return maxExtension;             // always 1–10 for nonzero mask
+    }
+
+    // Fallback: treat as 8th.
+    return 0U;
+}
+
 // ***********************
 // ***** ChordAssign *****
 // ***********************
