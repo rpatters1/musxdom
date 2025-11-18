@@ -517,3 +517,22 @@ TEST(BeamDetection, BeamsOverBarlinesTraversal)
         traverseBeam(EntryInfoPtr(entryFrame, 5));
     }
 }
+
+TEST(BeamDetection, AdjacentRests)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beamrests.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+        ASSERT_GE(entryFrame->getEntries().size(), 6);
+
+        auto lastEntry = EntryInfoPtr(entryFrame, 5); // final rest
+        EXPECT_TRUE(lastEntry.calcUnbeamed());
+    }
+}

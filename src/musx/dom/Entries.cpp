@@ -1136,7 +1136,7 @@ unsigned EntryInfoPtr::calcLowestBeamEnd() const
 unsigned EntryInfoPtr::calcLowestBeamEndAcrossBarlines() const
 {
     if ((*this)->getEntry()->isHidden) return 0;
-    if (calcBeamContinuesRightOverBarline() && (!getNextSameVNoGrace() || calcUnbeamed())) {
+    if (calcBeamContinuesRightOverBarline() && !getNextInBeamGroup()) {
         auto anchor = findLeftBeamAnchorForBeamOverBarline();
         MUSX_ASSERT_IF(!anchor) {
             throw std::logic_error("calcBeamContinuesRightOverBarline was true but no anchor exists.");
