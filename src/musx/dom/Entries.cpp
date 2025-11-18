@@ -1127,11 +1127,11 @@ unsigned EntryInfoPtr::calcLowestBeamEndAcrossBarlines() const
     if (calcBeamContinuesRightOverBarline() && (!getNextSameVNoGrace() || calcUnbeamed())) {
         auto anchor = findLeftBeamAnchorForBeamOverBarline();
         MUSX_ASSERT_IF(!anchor) {
-            throw std::logic_error("calcBeamContinuesLeftOverBarline was true but no anchor exists.");
+            throw std::logic_error("calcBeamContinuesRightOverBarline was true but no anchor exists.");
         }
         unsigned numBeams = calcVisibleBeams();
         unsigned nextNumBeams = numBeams;
-        if (auto beamExt = details::BeamExtension::getForStem(*this)) {
+        if (auto beamExt = details::BeamExtension::getForStem(*this)) { // beamExt should always exist.
             nextNumBeams = beamExt->calcMaxExtension();
         }
         if (numBeams > nextNumBeams) {
