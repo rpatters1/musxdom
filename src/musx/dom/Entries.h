@@ -609,8 +609,9 @@ public:
     unsigned calcNumberOfBeams() const;
 
     /// @brief Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
+    /// @param considerBeamOverBarlines If true, consider beams over barlines as created for system breaks by the Beam Over Barlines plugin.
     /// @return 0 if not beamed or no beam starts this entry; otherwise, the beam number
-    unsigned calcLowestBeamStart() const;
+    unsigned calcLowestBeamStart(bool considerBeamOverBarlines = false) const;
 
     /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
     /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
@@ -639,7 +640,7 @@ public:
     util::Fraction calcGlobalActualDuration() const;
 
     /// @brief Determines if this entry can be beamed.
-    bool canBeBeamed() const;
+    bool calcCanBeBeamed() const;
 
     /// @brief Determines if a beam *must* start on this entry.
     bool calcBeamMustStartHere() const;

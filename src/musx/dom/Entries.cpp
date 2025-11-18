@@ -738,14 +738,14 @@ bool EntryInfoPtr::calcUpStemImpl() const
 
 bool EntryInfoPtr::calcUnbeamed() const
 {
-    if (!canBeBeamed()) return true;
+    if (!calcCanBeBeamed()) return true;
     if ((*this)->getEntry()->isHidden) {
         return (!getNextInBeamGroup() || !getPreviousInBeamGroup());
     }
     return (!getNextInBeamGroup() && !getPreviousInBeamGroup());
 }
 
-bool EntryInfoPtr::canBeBeamed() const
+bool EntryInfoPtr::calcCanBeBeamed() const
 {
     if ((*this)->getEntry()->duration >= Edu(NoteType::Quarter)) {
         return false;
@@ -760,13 +760,13 @@ bool EntryInfoPtr::canBeBeamed() const
 
 bool EntryInfoPtr::calcBeamMustStartHere() const
 {
-    return (*this)->getEntry()->beam || !canBeBeamed();
+    return (*this)->getEntry()->beam || !calcCanBeBeamed();
 }
 
 bool EntryInfoPtr::calcIsBeamStart() const
 {
     if ((*this)->getEntry()->isHidden) return false;
-    if (!canBeBeamed()) return false;
+    if (!calcCanBeBeamed()) return false;
     return (!getPreviousInBeamGroup() && getNextInBeamGroup());
 }
 
@@ -813,7 +813,7 @@ EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const
     while (anchorEntryInfo && anchorEntryInfo->getEntry()->graceNote) {
         anchorEntryInfo = anchorEntryInfo.getPreviousSameV();
     }
-    if (anchorEntryInfo && anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
+    if (anchorEntryInfo && anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.calcCanBeBeamed()) {
         for (auto entryInfo = anchorEntryInfo.getPreviousSameVNoGrace(); entryInfo; entryInfo = entryInfo.getPreviousSameVNoGrace()) {
             if (!entryInfo.calcDisplaysAsRest()) {
                 anchorEntryInfo = entryInfo;
@@ -824,7 +824,7 @@ EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const
             }
         }
     }
-    if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
+    if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.calcCanBeBeamed()) {
         auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
         if (beamStart.getIndexInFrame() <= getIndexInFrame()) {
             if (!beamStart.calcCreatesSingletonBeamRight()) {
@@ -850,7 +850,7 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
     while (anchorEntryInfo && anchorEntryInfo->getEntry()->graceNote) {
         anchorEntryInfo = anchorEntryInfo.getNextSameV();
     }
-    if (anchorEntryInfo && anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
+    if (anchorEntryInfo && anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.calcCanBeBeamed()) {
         for (auto entryInfo = anchorEntryInfo.getNextSameVNoGrace(); entryInfo; entryInfo = entryInfo.getNextSameVNoGrace()) {
             if (entryInfo.calcBeamMustStartHere()) {
                 break;
@@ -861,7 +861,7 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
             }
         }
     }
-    if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.canBeBeamed()) {
+    if (anchorEntryInfo && !anchorEntryInfo->getEntry()->isHidden && !anchorEntryInfo.calcDisplaysAsRest() && anchorEntryInfo.calcCanBeBeamed()) {
         auto beamStart = anchorEntryInfo.findBeamStartOrCurrent();
         if (beamStart.calcCreatesSingletonBeamLeft()) {
             auto beamEnd = beamStart.findBeamEnd();
@@ -970,7 +970,7 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesRightOverBarline() const
 
 EntryInfoPtr EntryInfoPtr::findBeamStartOrCurrent() const
 {
-    if (!canBeBeamed()) return *this;
+    if (!calcCanBeBeamed()) return *this;
     auto prev = getPreviousInBeamGroup();
     if (!prev) {
         return *this;
@@ -1068,10 +1068,22 @@ std::optional<unsigned> EntryInfoPtr::iterateFindRestsInSecondaryBeam(const Entr
     return std::nullopt;
 }
 
-unsigned EntryInfoPtr::calcLowestBeamStart() const
+unsigned EntryInfoPtr::calcLowestBeamStart(bool considerBeamOverBarlines) const
 {
     if ((*this)->getEntry()->isHidden) return 0;
-    if (!canBeBeamed()) return 0;
+    if (considerBeamOverBarlines) {
+        if (auto anchor = findRightBeamAnchorForBeamOverBarline()) {
+            if (auto beamExt = details::BeamExtension::getForStem(anchor)) {
+                unsigned prevNumberOfBeams = beamExt->calcMaxExtension();
+                if (calcVisibleBeams() > prevNumberOfBeams) {
+                    return prevNumberOfBeams + 1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
+    if (!calcCanBeBeamed()) return 0;
     auto prev = getPreviousInBeamGroup();
     if (!prev) {
         return getNextInBeamGroup() ? 1 : 0; // if this is the start of the beam, then the lowest is the primary (8th) beam.
@@ -1101,7 +1113,7 @@ unsigned EntryInfoPtr::calcLowestBeamStart() const
 unsigned EntryInfoPtr::calcLowestBeamEnd() const
 {
     if ((*this)->getEntry()->isHidden) return 0;
-    if (!canBeBeamed()) return 0;
+    if (!calcCanBeBeamed()) return 0;
     auto next = getNextInBeamGroup();
     if (!next) {
         return getPreviousInBeamGroup() ? 1 : 0; // if this is the end of the beam, then the lowest is the primary (8th) beam.
@@ -1131,7 +1143,7 @@ unsigned EntryInfoPtr::calcLowestBeamEndAcrossBarlines() const
         }
         unsigned numBeams = calcVisibleBeams();
         unsigned nextNumBeams = numBeams;
-        if (auto beamExt = details::BeamExtension::getForStem(*this)) { // beamExt should always exist.
+        if (auto beamExt = details::BeamExtension::getForStem(anchor)) { // beamExt should always exist.
             nextNumBeams = beamExt->calcMaxExtension();
         }
         if (numBeams > nextNumBeams) {
@@ -1215,7 +1227,7 @@ template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
 EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
 {
     EntryInfoPtr result = (this->*Iterator)();
-    if (!result || !result.canBeBeamed()) {
+    if (!result || !result.calcCanBeBeamed()) {
         return EntryInfoPtr();
     }
     auto thisRawEntry = (*this)->getEntry();
@@ -1263,7 +1275,7 @@ EntryInfoPtr EntryInfoPtr::previousPotentialInBeam(bool includeHiddenEntries) co
 template<EntryInfoPtr(EntryInfoPtr::* Iterator)(bool) const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)(bool) const>
 EntryInfoPtr EntryInfoPtr::iterateBeamGroup(bool includeHiddenEntries) const
 {
-    if (!canBeBeamed()) {
+    if (!calcCanBeBeamed()) {
         return EntryInfoPtr();
     }
     EntryInfoPtr result = (this->*Iterator)(includeHiddenEntries); // either nextPotentialInBeam or previousPotentialInBeam
