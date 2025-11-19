@@ -381,3 +381,37 @@ TEST(EntryTest, TransposedConcert)
         checkEntry(EntryInfoPtr(entryFrame, 2), music_theory::NoteName::F, 5, 1, music_theory::NoteName::B, 4, 0);
     }
 }
+
+TEST(EntryTest, IsTrillToNote)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "trill-to.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+    ASSERT_GE(entryFrame->getEntries().size(), 3);
+    EXPECT_TRUE(EntryInfoPtr(entryFrame, 1).calcIsTrillToGraceEntry());
+    EXPECT_FALSE(EntryInfoPtr(entryFrame, 1).calcIsGlissToGraceEntry());
+    EXPECT_FALSE(EntryInfoPtr(entryFrame, 2).calcIsTrillToGraceEntry());
+}
+
+TEST(EntryTest, IsGlissToNote)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "trill-to.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+    ASSERT_TRUE(gfhold);
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+    ASSERT_GE(entryFrame->getEntries().size(), 3);
+    EXPECT_FALSE(EntryInfoPtr(entryFrame, 1).calcIsTrillToGraceEntry());
+    EXPECT_TRUE(EntryInfoPtr(entryFrame, 1).calcIsGlissToGraceEntry());
+    EXPECT_FALSE(EntryInfoPtr(entryFrame, 2).calcIsTrillToGraceEntry());
+}
