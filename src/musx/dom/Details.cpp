@@ -62,6 +62,7 @@ MusxInstance<EDBASE> EntryDetailsBase::getStemDependentDetail(const EntryInfoPtr
             return frame->getDocument()->getDetails()->get<EDDOWN>(frame->getRequestedPartId(), entry->getEntryNumber());
         }
     }
+    return nullptr;
 }
 
 namespace details {
