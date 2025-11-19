@@ -1503,6 +1503,52 @@ int EntryInfoPtr::calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceLi
     return crossStaffDirectionFound;
 }
 
+bool EntryInfoPtr::calcIsSingletonGrace() const
+{
+    if ((*this)->getEntry()->graceNote) {
+        if (auto prev = getPreviousSameV(); !prev || !prev->getEntry()->graceNote) {
+            if (auto next = getNextSameV(); !next || !next->getEntry()->graceNote) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int EntryInfoPtr::calcIsAuxiliaryPitchMarker() const
+{
+    if (!calcIsSingletonGrace()) {
+        return false;
+    }
+    if (auto customStem = details::CustomStem::getForStem(*this); !customStem || !customStem->calcIsHiddenStem()) {
+        return false;
+    }
+    return true;
+}
+
+bool EntryInfoPtr::calcIsTrillToEntry() const
+{
+    if (!calcIsAuxiliaryPitchMarker()) {
+        return false;
+    }
+    auto mainEntry = getNextSameV();
+    if (!mainEntry) {
+        return false;
+    }
+    MUSX_ASSERT_IF(mainEntry->getEntry()->graceNote) {
+        throw std::logic_error("Next entry after calcIsAuxiliaryPitchMarker entry is still a grace note.");
+    }
+    Evpu graceDistance = EVPU_PER_SPACE;
+    if (auto graceOptions = getFrame()->getDocument()->getOptions()->get<options::GraceNoteOptions>()) {
+        graceDistance = graceOptions->entryOffset;
+    }
+    graceDistance = (*this)->getEntry()->hOffset - graceDistance;
+    if (graceDistance < EVPU_PER_SPACE) {
+        return false;
+    }
+    return true;
+}
+
 // *****************************
 // ***** GFrameHoldContext *****
 // *****************************
