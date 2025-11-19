@@ -156,10 +156,10 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexInFrame</b>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcReverseGraceIndex</b> () const</td></tr>
 <tr class="memdesc:a284505434c8a4a0b7fe8705062599b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caclulates the grace index counting leftward (used by other standards such as MNX) <br /></td></tr>
 <tr class="separator:a284505434c8a4a0b7fe8705062599b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad71d23df881b33cdd872760c05869db3" id="r_ad71d23df881b33cdd872760c05869db3"><td class="memItemLeft" align="right" valign="top"><a id="ad71d23df881b33cdd872760c05869db3" name="ad71d23df881b33cdd872760c05869db3"></a>
-std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcNextTupletIndex</b> (std::optional&lt; size_t &gt; currentIndex) const</td></tr>
-<tr class="memdesc:ad71d23df881b33cdd872760c05869db3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next higher tuplet index that this entry starts, or std::nullopt if none. <br /></td></tr>
-<tr class="separator:ad71d23df881b33cdd872760c05869db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5bf030123af0df89bd68230ec285713" id="r_aa5bf030123af0df89bd68230ec285713"><td class="memItemLeft" align="right" valign="top"><a id="aa5bf030123af0df89bd68230ec285713" name="aa5bf030123af0df89bd68230ec285713"></a>
+std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcNextTupletIndex</b> (std::optional&lt; size_t &gt; currentIndex=0) const</td></tr>
+<tr class="memdesc:aa5bf030123af0df89bd68230ec285713"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next higher tuplet index that this entry starts, or std::nullopt if none. <br /></td></tr>
+<tr class="separator:aa5bf030123af0df89bd68230ec285713"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a003e61490f1a175379baff25dae915ba" id="r_a003e61490f1a175379baff25dae915ba"><td class="memItemLeft" align="right" valign="top"><a id="a003e61490f1a175379baff25dae915ba" name="a003e61490f1a175379baff25dae915ba"></a>
 <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNextInFrame</b> () const</td></tr>
 <tr class="memdesc:a003e61490f1a175379baff25dae915ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the next entry in the frame. <br /></td></tr>
@@ -170,6 +170,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:a0e3ba69e5e87f779065e9fef99a0a171" id="r_a0e3ba69e5e87f779065e9fef99a0a171"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a0e3ba69e5e87f779065e9fef99a0a171">getNextSameV</a> () const</td></tr>
 <tr class="memdesc:a0e3ba69e5e87f779065e9fef99a0a171"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the next entry in the frame in the same voice.  <br /></td></tr>
 <tr class="separator:a0e3ba69e5e87f779065e9fef99a0a171"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d720901aec74e53e8e251cb3e5635f" id="r_af0d720901aec74e53e8e251cb3e5635f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#af0d720901aec74e53e8e251cb3e5635f">getNextSameVNoGrace</a> () const</td></tr>
+<tr class="memdesc:af0d720901aec74e53e8e251cb3e5635f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the next entry in the frame in the same voice, skipping grace notes.  <br /></td></tr>
+<tr class="separator:af0d720901aec74e53e8e251cb3e5635f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bfc297a5f61b9e7d63bad46953bc63b" id="r_a4bfc297a5f61b9e7d63bad46953bc63b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a4bfc297a5f61b9e7d63bad46953bc63b">getPreviousInLayer</a> () const</td></tr>
 <tr class="memdesc:a4bfc297a5f61b9e7d63bad46953bc63b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the previous entry in the same layer and staff. This can be in the previous measure.  <br /></td></tr>
 <tr class="separator:a4bfc297a5f61b9e7d63bad46953bc63b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,6 +183,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:ab1b0a9ba02cfc7985aa40ed3ae044eb0" id="r_ab1b0a9ba02cfc7985aa40ed3ae044eb0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ab1b0a9ba02cfc7985aa40ed3ae044eb0">getPreviousSameV</a> () const</td></tr>
 <tr class="memdesc:ab1b0a9ba02cfc7985aa40ed3ae044eb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the previous entry in the frame in the same voice.  <br /></td></tr>
 <tr class="separator:ab1b0a9ba02cfc7985aa40ed3ae044eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c436b3b3f34b3fe754f8fa587974c2b" id="r_a2c436b3b3f34b3fe754f8fa587974c2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a2c436b3b3f34b3fe754f8fa587974c2b">getPreviousSameVNoGrace</a> () const</td></tr>
+<tr class="memdesc:a2c436b3b3f34b3fe754f8fa587974c2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the previous entry in the frame in the same voice, skipping grace notes.  <br /></td></tr>
+<tr class="separator:a2c436b3b3f34b3fe754f8fa587974c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac32c7dc63fac40c07b1c4f4cabeca705" id="r_ac32c7dc63fac40c07b1c4f4cabeca705"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ac32c7dc63fac40c07b1c4f4cabeca705">getNextInVoice</a> (int voice) const</td></tr>
 <tr class="memdesc:ac32c7dc63fac40c07b1c4f4cabeca705"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next entry in the frame in the specified v1/v2 or null if none.  <br /></td></tr>
 <tr class="separator:ac32c7dc63fac40c07b1c4f4cabeca705"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,6 +200,14 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPreviousInBeamGroup</b> (bool includeHiddenEntries=false) const</td></tr>
 <tr class="memdesc:a687a8659229e26eef9febed16eeea460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group. <br /></td></tr>
 <tr class="separator:a687a8659229e26eef9febed16eeea460"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28ed66e817384705ba4db4bed23c4097" id="r_a28ed66e817384705ba4db4bed23c4097"><td class="memItemLeft" align="right" valign="top"><a id="a28ed66e817384705ba4db4bed23c4097" name="a28ed66e817384705ba4db4bed23c4097"></a>
+<a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getNextInBeamGroupAcrossBars</b> (bool includeHiddenEntries=false) const</td></tr>
+<tr class="memdesc:a28ed66e817384705ba4db4bed23c4097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the next entry in a beamed group, or nullptr if the entry is not beamed or is the last in the group. This function is simular to <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a6192cc28f317f8874486401988abbeb5" title="Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the gro...">getNextInBeamGroup</a> but it traverses into the next bar when it detects a beam across a barline, as created by the Beam Over Barline plugin. <br /></td></tr>
+<tr class="separator:a28ed66e817384705ba4db4bed23c4097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3253b5dc4e4c84c68de1799c00592421" id="r_a3253b5dc4e4c84c68de1799c00592421"><td class="memItemLeft" align="right" valign="top"><a id="a3253b5dc4e4c84c68de1799c00592421" name="a3253b5dc4e4c84c68de1799c00592421"></a>
+<a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPreviousInBeamGroupAcrossBars</b> (bool includeHiddenEntries=false) const</td></tr>
+<tr class="memdesc:a3253b5dc4e4c84c68de1799c00592421"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group. This function is simular to <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a687a8659229e26eef9febed16eeea460" title="Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in th...">getPreviousInBeamGroup</a> but it traverses into the previous bar when it detects a beam across a barline, as created by the Beam Over Barline plugin. <br /></td></tr>
+<tr class="separator:a3253b5dc4e4c84c68de1799c00592421"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91dd4f09e8c863732cfa52f13275995b" id="r_a91dd4f09e8c863732cfa52f13275995b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b">calcDisplaysAsRest</a> () const</td></tr>
 <tr class="memdesc:a91dd4f09e8c863732cfa52f13275995b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if an entry displays as a rest.  <br /></td></tr>
 <tr class="separator:a91dd4f09e8c863732cfa52f13275995b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,6 +227,20 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsBeamStart</b> () const</td></tr>
 <tr class="memdesc:ab127dfae15a3bb5c27b76cbd55c812a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is the start of a primary beam. <br /></td></tr>
 <tr class="separator:ab127dfae15a3bb5c27b76cbd55c812a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d1b60e641bfa618a7f8fe6b982aac66" id="r_a9d1b60e641bfa618a7f8fe6b982aac66"><td class="memItemLeft" align="right" valign="top"><a id="a9d1b60e641bfa618a7f8fe6b982aac66" name="a9d1b60e641bfa618a7f8fe6b982aac66"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcCreatesSingletonBeamLeft</b> () const</td></tr>
+<tr class="memdesc:a9d1b60e641bfa618a7f8fe6b982aac66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry contains a tuplet that creates a singleton beam left. See <a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#aca8c02fcebc19ce6307ebec95e133358" title="Calculates if this tuplet is being used to create a singleton beam to the left.">EntryFrame::TupletInfo::calcCreatesSingletonBeamLeft</a> for more information. <br /></td></tr>
+<tr class="separator:a9d1b60e641bfa618a7f8fe6b982aac66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb48db1bf8c0191d200259066363759a" id="r_adb48db1bf8c0191d200259066363759a"><td class="memItemLeft" align="right" valign="top"><a id="adb48db1bf8c0191d200259066363759a" name="adb48db1bf8c0191d200259066363759a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcCreatesSingletonBeamRight</b> () const</td></tr>
+<tr class="memdesc:adb48db1bf8c0191d200259066363759a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry contains a tuplet that creates a singleton beam right. See <a class="el" href="structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a2149bb5d012a0a22a0e4b76a0db00a5f" title="Calculates if this tuplet is being used to create a singleton beam to the right.">EntryFrame::TupletInfo::calcCreatesSingletonBeamRight</a> for more information. <br /></td></tr>
+<tr class="separator:adb48db1bf8c0191d200259066363759a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15d67f4ab95cc0685c21f2cb95f4e019" id="r_a15d67f4ab95cc0685c21f2cb95f4e019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a15d67f4ab95cc0685c21f2cb95f4e019">calcBeamContinuesLeftOverBarline</a> () const</td></tr>
+<tr class="memdesc:a15d67f4ab95cc0685c21f2cb95f4e019"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry continues a beam across a barline from the previous measure.  <br /></td></tr>
+<tr class="separator:a15d67f4ab95cc0685c21f2cb95f4e019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4c4eb59f8dc5b3c5b692f53508fca39" id="r_ac4c4eb59f8dc5b3c5b692f53508fca39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ac4c4eb59f8dc5b3c5b692f53508fca39">calcBeamContinuesRightOverBarline</a> () const</td></tr>
+<tr class="memdesc:ac4c4eb59f8dc5b3c5b692f53508fca39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry continues a beam across a barline to the next measure.  <br /></td></tr>
+<tr class="separator:ac4c4eb59f8dc5b3c5b692f53508fca39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe092ac6f686263ca7b26d6ca0d4b6ee" id="r_afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#afe092ac6f686263ca7b26d6ca0d4b6ee">calcIsFeatheredBeamStart</a> (<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &amp;outLeftY, <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &amp;outRightY) const</td></tr>
 <tr class="memdesc:afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the entry starts a feathered beam and returns information about it if so.  <br /></td></tr>
 <tr class="separator:afe092ac6f686263ca7b26d6ca0d4b6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,12 +254,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsBeamStart</b> (
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams</b> () const</td></tr>
 <tr class="memdesc:a8149bc295e394a775747727cf3d9a5c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of beams or flags on the entry. <br /></td></tr>
 <tr class="separator:a8149bc295e394a775747727cf3d9a5c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6697471c6b8e1765b3e81e4daf1e66a0" id="r_a6697471c6b8e1765b3e81e4daf1e66a0"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a6697471c6b8e1765b3e81e4daf1e66a0">calcLowestBeamStart</a> () const</td></tr>
-<tr class="memdesc:a6697471c6b8e1765b3e81e4daf1e66a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.  <br /></td></tr>
-<tr class="separator:a6697471c6b8e1765b3e81e4daf1e66a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a441c57e3ee92d6eb229a2383f343fb93" id="r_a441c57e3ee92d6eb229a2383f343fb93"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a441c57e3ee92d6eb229a2383f343fb93">calcLowestBeamStart</a> (bool considerBeamOverBarlines=false) const</td></tr>
+<tr class="memdesc:a441c57e3ee92d6eb229a2383f343fb93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.  <br /></td></tr>
+<tr class="separator:a441c57e3ee92d6eb229a2383f343fb93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a732360a72b106e98b7735f3991b9e173" id="r_a732360a72b106e98b7735f3991b9e173"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a732360a72b106e98b7735f3991b9e173">calcLowestBeamEnd</a> () const</td></tr>
 <tr class="memdesc:a732360a72b106e98b7735f3991b9e173"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.  <br /></td></tr>
 <tr class="separator:a732360a72b106e98b7735f3991b9e173"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f17a8678379ab539e273f2452245efa" id="r_a7f17a8678379ab539e273f2452245efa"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a7f17a8678379ab539e273f2452245efa">calcLowestBeamEndAcrossBarlines</a> () const</td></tr>
+<tr class="memdesc:a7f17a8678379ab539e273f2452245efa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc. This function takes into account beams the cross barlines, as created by the Beam Over Barline plugin.  <br /></td></tr>
+<tr class="separator:a7f17a8678379ab539e273f2452245efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b2706891a0d330518cc5a85fbf0c8aa" id="r_a5b2706891a0d330518cc5a85fbf0c8aa"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a5b2706891a0d330518cc5a85fbf0c8aa">calcLowestBeamStub</a> () const</td></tr>
 <tr class="memdesc:a5b2706891a0d330518cc5a85fbf0c8aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc.  <br /></td></tr>
 <tr class="separator:a5b2706891a0d330518cc5a85fbf0c8aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -246,10 +277,14 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcGlobalActualDuration</b> () const</td></tr>
 <tr class="memdesc:aefab62e48990cb691af5a4975e102989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the actual duration in global edu, removing any time stretch due to independent time signature. <br /></td></tr>
 <tr class="separator:aefab62e48990cb691af5a4975e102989"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2df5320c5c229417d41865cd7e56df48" id="r_a2df5320c5c229417d41865cd7e56df48"><td class="memItemLeft" align="right" valign="top"><a id="a2df5320c5c229417d41865cd7e56df48" name="a2df5320c5c229417d41865cd7e56df48"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>canBeBeamed</b> () const</td></tr>
-<tr class="memdesc:a2df5320c5c229417d41865cd7e56df48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry can be beamed. <br /></td></tr>
-<tr class="separator:a2df5320c5c229417d41865cd7e56df48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fe390fb7610741365bd69eef0f6a768" id="r_a0fe390fb7610741365bd69eef0f6a768"><td class="memItemLeft" align="right" valign="top"><a id="a0fe390fb7610741365bd69eef0f6a768" name="a0fe390fb7610741365bd69eef0f6a768"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcCanBeBeamed</b> () const</td></tr>
+<tr class="memdesc:a0fe390fb7610741365bd69eef0f6a768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry can be beamed. <br /></td></tr>
+<tr class="separator:a0fe390fb7610741365bd69eef0f6a768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09ad33c9878ef3faf3795842f12f3182" id="r_a09ad33c9878ef3faf3795842f12f3182"><td class="memItemLeft" align="right" valign="top"><a id="a09ad33c9878ef3faf3795842f12f3182" name="a09ad33c9878ef3faf3795842f12f3182"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamMustStartHere</b> () const</td></tr>
+<tr class="memdesc:a09ad33c9878ef3faf3795842f12f3182"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a beam <em>must</em> start on this entry. <br /></td></tr>
+<tr class="separator:a09ad33c9878ef3faf3795842f12f3182"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad8efac3646d0cfc7b3c193691b003e7" id="r_aad8efac3646d0cfc7b3c193691b003e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aad8efac3646d0cfc7b3c193691b003e7">calcEntrySize</a> () const</td></tr>
 <tr class="memdesc:aad8efac3646d0cfc7b3c193691b003e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the entry size as a percentage, taking into account the beaming.  <br /></td></tr>
 <tr class="separator:aad8efac3646d0cfc7b3c193691b003e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -331,6 +366,48 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a15d67f4ab95cc0685c21f2cb95f4e019" name="a15d67f4ab95cc0685c21f2cb95f4e019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15d67f4ab95cc0685c21f2cb95f4e019">&#9670;&#160;</a></span>calcBeamContinuesLeftOverBarline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::calcBeamContinuesLeftOverBarline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines if this entry continues a beam across a barline from the previous measure. </p>
+<dl class="section note"><dt>Note</dt><dd>The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance that a user may have manually setup v1/v2 the way Beam Over Barlines should have.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>If the function returns non-null, the return value here is the previous real entry in the beam over a barline, taking into account tuplets that create faux singleton beams. </dd></dl>
+
+</div>
+</div>
+<a id="ac4c4eb59f8dc5b3c5b692f53508fca39" name="ac4c4eb59f8dc5b3c5b692f53508fca39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4c4eb59f8dc5b3c5b692f53508fca39">&#9670;&#160;</a></span>calcBeamContinuesRightOverBarline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::calcBeamContinuesRightOverBarline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines if this entry continues a beam across a barline to the next measure. </p>
+<dl class="section note"><dt>Note</dt><dd>The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance that a user may have manually setup v1/v2 the way Beam Over Barlines should have.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>If the function returns non-null, the return value here is the next real entry in the beam over a barline, taking into account tuplets that create faux singleton beams. </dd></dl>
+
+</div>
+</div>
 <a id="adf09eb8a3925a1799ff4dad693ed7c5e" name="adf09eb8a3925a1799ff4dad693ed7c5e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adf09eb8a3925a1799ff4dad693ed7c5e">&#9670;&#160;</a></span>calcBeamStubIsLeft()</h2>
 
@@ -574,14 +651,14 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6697471c6b8e1765b3e81e4daf1e66a0" name="a6697471c6b8e1765b3e81e4daf1e66a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6697471c6b8e1765b3e81e4daf1e66a0">&#9670;&#160;</a></span>calcLowestBeamStart()</h2>
+<a id="a7f17a8678379ab539e273f2452245efa" name="a7f17a8678379ab539e273f2452245efa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f17a8678379ab539e273f2452245efa">&#9670;&#160;</a></span>calcLowestBeamEndAcrossBarlines()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned musx::dom::EntryInfoPtr::calcLowestBeamStart </td>
+          <td class="memname">unsigned musx::dom::EntryInfoPtr::calcLowestBeamEndAcrossBarlines </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -589,7 +666,34 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc. This function takes into account beams the cross barlines, as created by the Beam Over Barline plugin. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 if not beamed or no beam ends this entry; otherwise, the beam number </dd></dl>
+
+</div>
+</div>
+<a id="a441c57e3ee92d6eb229a2383f343fb93" name="a441c57e3ee92d6eb229a2383f343fb93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a441c57e3ee92d6eb229a2383f343fb93">&#9670;&#160;</a></span>calcLowestBeamStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned musx::dom::EntryInfoPtr::calcLowestBeamStart </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>considerBeamOverBarlines</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
 <p>Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">considerBeamOverBarlines</td><td>If true, consider beams over barlines as created for system breaks by the Beam Over Barlines plugin. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if not beamed or no beam starts this entry; otherwise, the beam number </dd></dl>
 
 </div>
@@ -660,6 +764,9 @@ Static Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool musx::dom::EntryInfoPtr::calcUpStem </td>
@@ -668,13 +775,17 @@ Static Public Member Functions</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides, and cross-staff notation. </p>
 <p>The function is designed to handle all common combinations of musical options and contexts, although some rare cases may still produce incorrect results. The concept of an "up stem" becomes ambiguous when the entry uses a reverse stem. (See <a class="el" href="classmusx_1_1dom_1_1Entry.html#abd0a94ec891ef665ec416a201e35e505" title="Indicates that a stem normally up is reversed.">Entry::reverseUpStem</a> and <a class="el" href="classmusx_1_1dom_1_1Entry.html#abafe04400b910721fcf16fe338a8ff3a" title="Indicates that a stem normally down is reversed.">Entry::reverseDownStem</a>.) The goal is to compute the logical stem direction that governs the entry's behavior. This allows selecting the correct up or down variant for any entry detail records or entry properties that have them, including which reverse-stem value to recognize. In cases involving reverse stems, the result of <code>calcUpStem</code> may not match the visible direction in a Finale-generated PDF.</p>
 <dl class="section note"><dt>Note</dt><dd>The <a class="el" href="classmusx_1_1dom_1_1Entry.html#a0a80d84ecac51e22cb87cfe7db9ceaa6" title="Whether a stem is up or down. (Only reliable when freezeStem is true.)">Entry::upStem</a> flag may appear to provide this information, but it can be wrong if the layer context changed without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the stem is up; false if it is down. </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>Add cross-staff support some day? </dd></dl>
 
 </div>
 </div>
@@ -919,6 +1030,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="af0d720901aec74e53e8e251cb3e5635f" name="af0d720901aec74e53e8e251cb3e5635f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0d720901aec74e53e8e251cb3e5635f">&#9670;&#160;</a></span>getNextSameVNoGrace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::getNextSameVNoGrace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the next entry in the frame in the same voice, skipping grace notes. </p>
+<dl class="section return"><dt>Returns</dt><dd>The same as <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a0e3ba69e5e87f779065e9fef99a0a171" title="Get the next entry in the frame in the same voice.">getNextSameV</a> except grace notes are skipped. </dd></dl>
+
+</div>
+</div>
 <a id="a4bfc297a5f61b9e7d63bad46953bc63b" name="a4bfc297a5f61b9e7d63bad46953bc63b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4bfc297a5f61b9e7d63bad46953bc63b">&#9670;&#160;</a></span>getPreviousInLayer()</h2>
 
@@ -983,6 +1114,26 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Get the previous entry in the frame in the same voice. </p>
 <p>For V2, it returns null when it hits the v2Launch note for the current V2 launch sequence. </p>
+
+</div>
+</div>
+<a id="a2c436b3b3f34b3fe754f8fa587974c2b" name="a2c436b3b3f34b3fe754f8fa587974c2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c436b3b3f34b3fe754f8fa587974c2b">&#9670;&#160;</a></span>getPreviousSameVNoGrace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::getPreviousSameVNoGrace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the previous entry in the frame in the same voice, skipping grace notes. </p>
+<dl class="section return"><dt>Returns</dt><dd>The same as <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ab1b0a9ba02cfc7985aa40ed3ae044eb0" title="Get the previous entry in the frame in the same voice.">getPreviousSameV</a> except grace notes are skipped. </dd></dl>
 
 </div>
 </div>

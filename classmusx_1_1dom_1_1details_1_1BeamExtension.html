@@ -126,6 +126,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad41ca63b84f933637908360e620dc93e" id="r_ad41ca63b84f933637908360e620dc93e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1BeamExtension.html#ad41ca63b84f933637908360e620dc93e">BeamExtension</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entnum)</td></tr>
 <tr class="memdesc:ad41ca63b84f933637908360e620dc93e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
 <tr class="separator:ad41ca63b84f933637908360e620dc93e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a187184868af20c14e6d6de7e0d1c1dc8" id="r_a187184868af20c14e6d6de7e0d1c1dc8"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1BeamExtension.html#a187184868af20c14e6d6de7e0d1c1dc8">calcMaxExtension</a> () const</td></tr>
+<tr class="memdesc:a187184868af20c14e6d6de7e0d1c1dc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the maximum beam extension.  <br /></td></tr>
+<tr class="separator:a187184868af20c14e6d6de7e0d1c1dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1EntryDetailsBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">musx::dom::EntryDetailsBase</a></td></tr>
 <tr class="memitem:a2a4a374edc4b5ee0dcc1a13dca0bf64d inherit pub_methods_classmusx_1_1dom_1_1EntryDetailsBase" id="r_a2a4a374edc4b5ee0dcc1a13dca0bf64d"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getEntryNumber</b> () const</td></tr>
@@ -188,6 +191,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a3867d7739e4a97e6cd186091d908d39f" id="r_a3867d7739e4a97e6cd186091d908d39f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1BeamExtension.html">BeamExtension</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1BeamExtension.html#a3867d7739e4a97e6cd186091d908d39f">getForStem</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;entryInfo, <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727ca">StemSelection</a> stemSelection=<a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727caa3f7f95b80b29635c1ec55f29f529960c">StemSelection::MatchEntry</a>)</td></tr>
+<tr class="memdesc:a3867d7739e4a97e6cd186091d908d39f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the beam extension record for the specified <code>stemSelection</code>.  <br /></td></tr>
+<tr class="separator:a3867d7739e4a97e6cd186091d908d39f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5b3ba1f4bdcc635b504dcdcd96b2111" id="r_ac5b3ba1f4bdcc635b504dcdcd96b2111"><td class="memItemLeft" align="right" valign="top"><a id="ac5b3ba1f4bdcc635b504dcdcd96b2111" name="ac5b3ba1f4bdcc635b504dcdcd96b2111"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1BeamExtension.html">BeamExtension</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:ac5b3ba1f4bdcc635b504dcdcd96b2111"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -210,6 +216,14 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classmusx_1_1dom_1_1EntryDetailsBase"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1EntryDetailsBase')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">musx::dom::EntryDetailsBase</a></td></tr>
+<tr class="memitem:a91249025ef9184270efb1e8a749727ca inherit pub_types_classmusx_1_1dom_1_1EntryDetailsBase" id="r_a91249025ef9184270efb1e8a749727ca"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727ca">StemSelection</a> { <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727caa3f7f95b80b29635c1ec55f29f529960c">MatchEntry</a>
+, <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727caa5deef8e71f8782a0ad03157838cf6b56">UpStem</a>
+, <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727caa0ab2dc28b79b3fe3b3664fa1a8a11480">DownStem</a>
+, <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727caaed36a1ef76a59ee3f15180e0441188ad">Any</a>
+ }</td></tr>
+<tr class="memdesc:a91249025ef9184270efb1e8a749727ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">The options for choosing which version to retrieve for stem-specific details.  <a href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727ca">More...</a><br /></td></tr>
+<tr class="separator:a91249025ef9184270efb1e8a749727ca inherit pub_types_classmusx_1_1dom_1_1EntryDetailsBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classmusx_1_1dom_1_1Base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classmusx_1_1dom_1_1Base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classmusx_1_1dom_1_1Base.html">musx::dom::Base</a></td></tr>
 <tr class="memitem:ac50192040fe22fca9805ae4af5d88b4d inherit pub_types_classmusx_1_1dom_1_1Base" id="r_ac50192040fe22fca9805ae4af5d88b4d"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> { <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4dab1c94ca2fbc3e78fc30069c8d0f01680">All</a>
 , <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da44ffd38a6dea695cbe2b34efdcc6cf27">Partial</a>
@@ -257,6 +271,11 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &amp;&amp;) noexcept</td></tr>
 <tr class="memdesc:a9857862e0e9c329715dfda1df47bb5b9 inherit pro_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">no-op move assignment operator allows subclasses to move their values. <br /></td></tr>
 <tr class="separator:a9857862e0e9c329715dfda1df47bb5b9 inherit pro_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_static_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classmusx_1_1dom_1_1EntryDetailsBase')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">musx::dom::EntryDetailsBase</a></td></tr>
+<tr class="memitem:ac48d613cac2dbf741a048f21e00d4f0a inherit pro_static_methods_classmusx_1_1dom_1_1EntryDetailsBase" id="r_ac48d613cac2dbf741a048f21e00d4f0a"><td class="memTemplParams" colspan="2">template&lt;typename EDUP , typename EDDOWN , typename EDBASE &gt; </td></tr>
+<tr class="memitem:ac48d613cac2dbf741a048f21e00d4f0a inherit pro_static_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; EDBASE &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#ac48d613cac2dbf741a048f21e00d4f0a">getStemDependentDetail</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;entryInfo, <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727ca">StemSelection</a> stemSelection)</td></tr>
+<tr class="memdesc:ac48d613cac2dbf741a048f21e00d4f0a inherit pro_static_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement retrieval of stem-specific details. (Actual functions are defined per stem-specific class)  <br /></td></tr>
+<tr class="separator:ac48d613cac2dbf741a048f21e00d4f0a inherit pro_static_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents both sides of a beam extension. It is attached to the first entry in the beam. Which stem direction this instance controls is determined by the subclass that inherits this class as a base. </p>
@@ -315,6 +334,72 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
     <tr><td class="paramname">partId</td><td>The part this is for. </td></tr>
     <tr><td class="paramname">shareMode</td><td>The sharing mode. </td></tr>
     <tr><td class="paramname">entnum</td><td>The entry number of the first entry in the beam this extension applies to. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a187184868af20c14e6d6de7e0d1c1dc8" name="a187184868af20c14e6d6de7e0d1c1dc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a187184868af20c14e6d6de7e0d1c1dc8">&#9670;&#160;</a></span>calcMaxExtension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned musx::dom::details::BeamExtension::calcMaxExtension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the maximum beam extension. </p>
+<dl class="section return"><dt>Returns</dt><dd>0, 1, 2, 3, ... where 0 means no beam is extendeed, 1 is the 8th beam, 2 is 16th, etc. </dd></dl>
+
+</div>
+</div>
+<a id="a3867d7739e4a97e6cd186091d908d39f" name="a3867d7739e4a97e6cd186091d908d39f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3867d7739e4a97e6cd186091d908d39f">&#9670;&#160;</a></span>getForStem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1BeamExtension.html">BeamExtension</a> &gt; musx::dom::details::BeamExtension::getForStem </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>entryInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727ca">StemSelection</a>&#160;</td>
+          <td class="paramname"><em>stemSelection</em> = <code><a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727caa3f7f95b80b29635c1ec55f29f529960c">StemSelection::MatchEntry</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the beam extension record for the specified <code>stemSelection</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entryInfo</td><td>The entry to search. </td></tr>
+    <tr><td class="paramname">stemSelection</td><td>The choice of which stem version to get. </td></tr>
   </table>
   </dd>
 </dl>
