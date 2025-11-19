@@ -705,7 +705,16 @@ public:
     /// Note that the main note is not checked for the existence of a trill. Callers should decide on their own
     /// whether this is important and, if so, how to check for it. Finale provides too many different fonts and options
     /// for creating trill markers to reliably check for it in this function.
-    bool calcIsTrillToEntry() const;
+    bool calcIsTrillToGraceEntry() const;
+
+    /// @brief Calculates if this entry is a gliss-to entry as created by the Parenthesize Trill-To Notes plugin.
+    ///
+    /// The conditions that must be met are:
+    /// - The entry is an auxiliary pitch marker. (See #calcIsAuxiliaryPitchMarker.)
+    /// - The entry must be the terminator for one of the standard entry-attached SmartShape gliss lines.
+    ///
+    /// Only the standard SmartShape gliss lines are checked. Other CustomLine values do no qualify.
+    bool calcIsGlissToGraceEntry() const;
 
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const

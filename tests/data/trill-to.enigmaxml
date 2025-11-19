@@ -913,7 +913,7 @@
       <articAvoidSlurAmt>8</articAvoidSlurAmt>
       <ssLineStyleCmpCustom>52</ssLineStyleCmpCustom>
       <ssLineStyleCmpGlissando>53</ssLineStyleCmpGlissando>
-      <ssLineStyleCmpTabSlide>54</ssLineStyleCmpTabSlide>
+      <ssLineStyleCmpTabSlide>2</ssLineStyleCmpTabSlide>
       <ssLineStyleCmpTabBendCurve>55</ssLineStyleCmpTabBendCurve>
       <smartSlurTipWidth>2.500000e-01</smartSlurTipWidth>
       <guitarBendUseParens/>
@@ -13267,6 +13267,14 @@
       <startEntry>5</startEntry>
       <endEntry>7</endEntry>
     </frameSpec>
+    <frameSpec cmper="3" inci="0">
+      <startEntry>8</startEntry>
+      <endEntry>11</endEntry>
+    </frameSpec>
+    <frameSpec cmper="4" inci="0">
+      <startEntry>12</startEntry>
+      <endEntry>14</endEntry>
+    </frameSpec>
     <lockMeas cmper="2">
       <endMeas>3</endMeas>
     </lockMeas>
@@ -14964,6 +14972,17 @@
         <endEdu>2147483647</endEdu>
       </range>
     </instUsed>
+    <instUsed cmper="2" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
     <instUsed cmper="65400" inci="0">
       <inst>32767</inst>
       <trackType>staff</trackType>
@@ -15588,8 +15607,8 @@
       <repeat>8</repeat>
     </metaRepeat>
     <metaShape cmper="45">
-      <toolID>customLine</toolID>
-      <lineID>52</lineID>
+      <toolID>slide</toolID>
+      <lineID>2</lineID>
     </metaShape>
     <metaShape cmper="48">
       <toolID>customLine</toolID>
@@ -16013,6 +16032,17 @@
     <measSpec cmper="1" part="1" shared="true">
       <width>376</width>
       <posMode>beatchartPlusPos</posMode>
+    </measSpec>
+    <measSpec cmper="2">
+      <width>600</width>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <hasSmartShape/>
+      <posMode>timesigPlusPos</posMode>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
     </measSpec>
     <measExprAssign cmper="1" inci="0">
       <textExprID>44</textExprID>
@@ -38281,6 +38311,31 @@
         <tag>stroke</tag>
       </instruct>
     </shapeList>
+    <smartShape cmper="1">
+      <shapeType>tabSlide</shapeType>
+      <entryBased/>
+      <yBreakType>opposite</yBreakType>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>2</meas>
+          <entryNum>12</entryNum>
+        </endPt>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>2</meas>
+          <entryNum>13</entryNum>
+        </endPt>
+      </endTermSeg>
+      <startNoteID>1</startNoteID>
+      <endNoteID>1</endNoteID>
+      <lineStyleID>2</lineStyleID>
+    </smartShape>
+    <smartShapeMeasMark cmper="2" inci="0">
+      <shapeNum>1</shapeNum>
+    </smartShapeMeasMark>
     <ssLineStyle cmper="1">
       <lineStyle>char</lineStyle>
       <charParams>
@@ -39012,6 +39067,18 @@
       <bottom>-200</bottom>
       <scaleVert/>
       <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2">
+      <startMeas>2</startMeas>
+      <endMeas>3</endMeas>
+      <horzPercent>52717</horzPercent>
+      <ssysPercent>70</ssysPercent>
+      <staffHeight>6144</staffHeight>
+      <left>24</left>
+      <bottom>-96</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-216</distanceToPrev>
     </staffSystemSpec>
     <repeatStaffListName cmper="1">
       <name>Staff List 1</name>
@@ -52954,6 +53021,20 @@
       <numSlursAvoided>-1</numSlursAvoided>
     </articAssign>
     <articAssign entnum="6" inci="1">
+      <articDef>71</articDef>
+      <horzOff>1</horzOff>
+      <numSlursAvoided>-1</numSlursAvoided>
+    </articAssign>
+    <articAssign entnum="7" inci="0">
+      <articDef>17</articDef>
+      <avoidSlur/>
+    </articAssign>
+    <articAssign entnum="13" inci="0">
+      <articDef>70</articDef>
+      <horzOff>29</horzOff>
+      <numSlursAvoided>-1</numSlursAvoided>
+    </articAssign>
+    <articAssign entnum="13" inci="1">
       <articDef>71</articDef>
       <horzOff>1</horzOff>
       <numSlursAvoided>-1</numSlursAvoided>
@@ -114055,10 +114136,20 @@
       <clefPercent>75</clefPercent>
       <frame1>2</frame1>
     </gfhold>
+    <gfhold cmper1="1" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>4</frame1>
+    </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
       <frame1>1</frame1>
+    </gfhold>
+    <gfhold cmper1="32767" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>3</frame1>
     </gfhold>
     <shapeNote cmper1="0" cmper2="0">
       <noteShapes index="0">
@@ -131105,8 +131196,16 @@
       </noteShapes>
       <arrangedByPitch/>
     </shapeNoteStyle>
+    <smartShapeEntryMark entnum="12" inci="0">
+      <shapeNum>1</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="13" inci="0">
+      <shapeNum>1</shapeNum>
+    </smartShapeEntryMark>
     <stemDefDown entnum="6"/>
+    <stemDefDown entnum="13"/>
     <stemDefUp entnum="6"/>
+    <stemDefUp entnum="13"/>
     <activeLyric cmper1="1" cmper2="1">
       <assignmentTag>verse</assignmentTag>
       <lyricNumber>1</lyricNumber>
@@ -131150,7 +131249,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="4" prev="3" next="0">
+    <entry entnum="4" prev="3" next="8">
       <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -131164,16 +131263,11 @@
     </entry>
     <entry entnum="5" prev="0" next="6">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="6" prev="5" next="7">
       <dura>1024</dura>
@@ -131194,11 +131288,12 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="7" prev="6" next="0">
+    <entry entnum="7" prev="6" next="12">
       <dura>3072</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
+      <articDetail/>
       <beam/>
       <sorted/>
       <note id="1">
@@ -131206,6 +131301,96 @@
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
+    </entry>
+    <entry entnum="8" prev="4" next="9">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="9" prev="8" next="10">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="10" prev="9" next="11">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="11" prev="10" next="0">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="12" prev="7" next="13">
+      <dura>2048</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <smartShapeDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>1</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="13" prev="12" next="14">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <posi>-20</posi>
+      <isValid/>
+      <isNote/>
+      <graceNote/>
+      <articDetail/>
+      <beam/>
+      <stemDetail/>
+      <upStem/>
+      <smartShapeDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="14" prev="13" next="0">
+      <dura>2048</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
     </entry>
   </entries>
   <texts>

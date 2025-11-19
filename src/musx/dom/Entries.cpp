@@ -1526,7 +1526,7 @@ int EntryInfoPtr::calcIsAuxiliaryPitchMarker() const
     return true;
 }
 
-bool EntryInfoPtr::calcIsTrillToEntry() const
+bool EntryInfoPtr::calcIsTrillToGraceEntry() const
 {
     if (!calcIsAuxiliaryPitchMarker()) {
         return false;
@@ -1547,6 +1547,33 @@ bool EntryInfoPtr::calcIsTrillToEntry() const
         return false;
     }
     return true;
+}
+
+bool EntryInfoPtr::calcIsGlissToGraceEntry() const
+{
+    if (!calcIsAuxiliaryPitchMarker()) {
+        return false;
+    }
+    const auto entry = (*this)->getEntry();
+    if (!entry->smartShapeDetail) {
+        return false;
+    }
+    const auto frame = getFrame();
+    const auto smartShapeAssigns = frame->getDocument()->getDetails()->getArray<details::SmartShapeEntryAssign>(frame->getRequestedPartId(), entry->getEntryNumber());
+    for (const auto& asgn : smartShapeAssigns) {
+        if (const auto shape = frame->getDocument()->getOthers()->get<others::SmartShape>(frame->getRequestedPartId(), asgn->shapeNum)) {
+            switch (shape->shapeType) {
+            case others::SmartShape::ShapeType::Glissando:
+            case others::SmartShape::ShapeType::TabSlide:
+                if (shape->endTermSeg->endPoint->entryNumber == entry->getEntryNumber()) {
+                    return true;
+                }
+            default:
+                break;
+            }
+        }
+    }
+    return false;
 }
 
 // *****************************
