@@ -399,6 +399,7 @@ protected:
     template <typename SecondaryBeamType>
     static bool calcIsFeatheredBeamImpl(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY);
 
+    /// @brief Generalized getter for secondary beam type arrays for either stem direction.
     template <typename SecondaryBeamType>
     static MusxInstanceList<SecondaryBeamType> getSecondaryBeamArray(const EntryInfoPtr& entryInfo);
 
