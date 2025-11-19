@@ -23,11 +23,47 @@
 #include <vector>
 #include <cstdlib>
 #include <exception>
+#include <type_traits>
 
 #include "musx/musx.h"
 
 namespace musx {
 namespace dom {
+
+// ****************************
+// ***** EntryDetailsBase *****
+// ****************************
+
+template <typename EDUP, typename EDDOWN, typename EDBASE>
+MusxInstance<EDBASE> EntryDetailsBase::getStemDependentDetail(const EntryInfoPtr& entryInfo, StemSelection stemSelection)
+{
+    static_assert(std::is_base_of_v<EntryDetailsBase, EDBASE>, "EDBASE must be derived from EntryDetailsBase.");
+    static_assert(std::is_base_of_v<EDBASE, EDUP>, "EDUP must be derived from EDBASE");
+    static_assert(std::is_base_of_v<EDBASE, EDDOWN>, "EDDOWN must be derived from EDBASE");
+
+    const auto frame = entryInfo.getFrame();
+    const auto entry = entryInfo->getEntry();
+
+    switch (stemSelection) {
+    case StemSelection::UpStem:
+        return frame->getDocument()->getDetails()->get<EDUP>(frame->getRequestedPartId(), entry->getEntryNumber());
+    case StemSelection::DownStem:
+        return frame->getDocument()->getDetails()->get<EDDOWN>(frame->getRequestedPartId(), entry->getEntryNumber());
+    case StemSelection::MatchEntry:
+        if (entryInfo.calcUpStem()) {
+            return frame->getDocument()->getDetails()->get<EDUP>(frame->getRequestedPartId(), entry->getEntryNumber());
+        } else {
+            return frame->getDocument()->getDetails()->get<EDDOWN>(frame->getRequestedPartId(), entry->getEntryNumber());
+        }
+    case StemSelection::Any:
+        if (auto upStem = frame->getDocument()->getDetails()->get<EDUP>(frame->getRequestedPartId(), entry->getEntryNumber())) {
+            return upStem;
+        } else {
+            return frame->getDocument()->getDetails()->get<EDDOWN>(frame->getRequestedPartId(), entry->getEntryNumber());
+        }
+    }
+}
+
 namespace details {
 
 // ***************************
@@ -144,6 +180,97 @@ template bool BeamAlterations::calcIsFeatheredBeamImpl<SecondaryBeamAlterationsU
 template bool BeamAlterations::calcIsFeatheredBeamImpl<SecondaryBeamAlterationsDownStem>(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY);
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
+template <typename SecondaryBeamType>
+MusxInstanceList<SecondaryBeamType> BeamAlterations::getSecondaryBeamArray(const EntryInfoPtr& entryInfo)
+{
+    static_assert(std::is_same_v<SecondaryBeamType, SecondaryBeamAlterationsDownStem>
+               || std::is_same_v<SecondaryBeamType, SecondaryBeamAlterationsUpStem>,
+        "SecondaryBeamType must be a secondary beam type.");
+
+    auto frame = entryInfo.getFrame();
+    return frame->getDocument()->getDetails()->getArray<SecondaryBeamType>(frame->getRequestedPartId(), entryInfo->getEntry()->getEntryNumber());
+}
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template MusxInstanceList<SecondaryBeamAlterationsUpStem> BeamAlterations::getSecondaryBeamArray<SecondaryBeamAlterationsUpStem>(const EntryInfoPtr& entryInfo);
+template MusxInstanceList<SecondaryBeamAlterationsDownStem> BeamAlterations::getSecondaryBeamArray<SecondaryBeamAlterationsDownStem>(const EntryInfoPtr& entryInfo);
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
+MusxInstance<BeamAlterations> BeamAlterations::getPrimaryForStem(const EntryInfoPtr& entryInfo, StemSelection stemSelection)
+{
+    if (entryInfo->getEntry()->stemDetail) {
+        return getStemDependentDetail<BeamAlterationsUpStem, BeamAlterationsDownStem, BeamAlterations>(entryInfo, stemSelection);
+    }
+    return nullptr;
+}
+
+MusxInstance<BeamAlterations> BeamAlterations::getSecondaryForStem(const EntryInfoPtr& entryInfo, Edu dura, StemSelection stemSelection)
+{
+    auto searchArray = [&](auto beamAlts) -> MusxInstance<BeamAlterations> {
+        auto it = std::find_if(beamAlts.begin(), beamAlts.end(), [&](const auto& beamAlt) {
+            return beamAlt->dura == dura;
+        });
+        if (it != beamAlts.end()) {
+            return *it;
+        }
+        return nullptr;
+    };
+    if (entryInfo->getEntry()->stemDetail) {
+        switch (stemSelection) {
+        case StemSelection::UpStem:
+            return searchArray(getSecondaryBeamArray<SecondaryBeamAlterationsUpStem>(entryInfo));
+        case StemSelection::DownStem:
+            return searchArray(getSecondaryBeamArray<SecondaryBeamAlterationsDownStem>(entryInfo));
+        case StemSelection::MatchEntry:
+            if (entryInfo.calcUpStem()) {
+                return searchArray(getSecondaryBeamArray<SecondaryBeamAlterationsUpStem>(entryInfo));
+            } else {
+                return searchArray(getSecondaryBeamArray<SecondaryBeamAlterationsDownStem>(entryInfo));
+            }
+        case StemSelection::Any:
+            if (auto upStem = searchArray(getSecondaryBeamArray<SecondaryBeamAlterationsUpStem>(entryInfo))) {
+                return upStem;
+            } else {
+                return searchArray(getSecondaryBeamArray<SecondaryBeamAlterationsDownStem>(entryInfo));
+            }
+        }
+    }
+    return {};
+}
+
+// *************************
+// ***** BeamExtension *****
+// *************************
+
+unsigned BeamExtension::calcMaxExtension() const
+{
+    // Legacy behavior: only the 8th-note beam is extended.
+    // Regardless of mask contents, Finale would extend only the first beam.
+    if (!extBeyond8th) {
+        return 1U;
+    }
+
+    if (mask) {
+        unsigned maxExtension = 10;      // 1 = 8th, ..., 10 = 4096th
+        unsigned workingMask  = mask;
+        while ((workingMask & 0x01U) == 0U && maxExtension > 0U) {
+            workingMask >>= 1U;
+            maxExtension--;
+        }
+        return maxExtension;             // always 1–10 for nonzero mask
+    }
+
+    // Fallback: treat as 8th.
+    return 0U;
+}
+
+MusxInstance<BeamExtension> BeamExtension::getForStem(const EntryInfoPtr& entryInfo, StemSelection stemSelection) {
+    if (entryInfo->getEntry()->beamExt) {
+        return getStemDependentDetail<BeamExtensionUpStem, BeamExtensionDownStem, BeamExtension>(entryInfo, stemSelection);
+    }
+    return nullptr;
+}
+
 // ***********************
 // ***** ChordAssign *****
 // ***********************
@@ -192,6 +319,14 @@ bool CustomStem::calcIsHiddenStem() const
         }
     }
     return true;
+}
+
+MusxInstance<CustomStem> CustomStem::getForStem(const EntryInfoPtr& entryInfo, StemSelection stemSelection)
+{
+    if (entryInfo->getEntry()->stemDetail) {
+        return getStemDependentDetail<CustomUpStem, CustomDownStem, CustomStem>(entryInfo, stemSelection);
+    }
+    return nullptr;
 }
 
 // ***********************************

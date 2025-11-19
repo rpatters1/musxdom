@@ -272,7 +272,7 @@ public:
      * @param partId Usually 0. This parameter is needed for the generic factory routine.
      * @param shareMode Usually `ShareMode::All`. This parameter is needed for the generic factory routine.
      *
-     * Constructs a FontOptions object that is associated with the provided document.
+     * Constructs a ClefOptions object that is associated with the provided document.
      */
     explicit ClefOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}

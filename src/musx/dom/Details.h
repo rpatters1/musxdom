@@ -399,6 +399,10 @@ protected:
     template <typename SecondaryBeamType>
     static bool calcIsFeatheredBeamImpl(const EntryInfoPtr& entryInfo, Evpu& outLeftY, Evpu& outRightY);
 
+    /// @brief Generalized getter for secondary beam type arrays for either stem direction.
+    template <typename SecondaryBeamType>
+    static MusxInstanceList<SecondaryBeamType> getSecondaryBeamArray(const EntryInfoPtr& entryInfo);
+
 public:
     /**
      * @brief Constructor
@@ -436,6 +440,17 @@ public:
     template <typename T,
               std::enable_if_t<std::is_base_of_v<BeamAlterations, T>, int> = 0>
     static void calcAllActiveFlags(const DocumentPtr& document);
+
+    /// @brief Gets the beam extension record for the specified @p stemSelection
+    /// @param entryInfo The entry to search.
+    /// @param stemSelection The choice of which stem version to get.
+    static MusxInstance<BeamAlterations> getPrimaryForStem(const EntryInfoPtr& entryInfo, StemSelection stemSelection = StemSelection::MatchEntry);  // must be defined in Details.cpp
+
+    /// @brief Gets the beam extension record for the specified @p stemSelection
+    /// @param entryInfo The entry to search.
+    /// @param dura The duration corresponding to the secondary beam to retrieve. (16th beam is 256, 32nd beam is 128, etc.)
+    /// @param stemSelection The choice of which stem version to get.
+    static MusxInstance<BeamAlterations> getSecondaryForStem(const EntryInfoPtr& entryInfo, Edu dura, StemSelection stemSelection = StemSelection::MatchEntry);  // must be defined in Details.cpp
 
     static const xml::XmlElementArray<BeamAlterations>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -513,6 +528,15 @@ public:
                             ///< a selection of beams. In musx files (Finale 2014+) this boolean has never been observed to be false.
                             ///< Instead, the mask appears always to be used to determine the beams to be extended. However, if a false
                             ///< value were encountered, it would mean only the 8th beam is extended.
+
+    /// @brief Calculates the maximum beam extension
+    /// @return 0, 1, 2, 3, ... where 0 means no beam is extendeed, 1 is the 8th beam, 2 is 16th, etc.
+    unsigned calcMaxExtension() const;
+
+    /// @brief Gets the beam extension record for the specified @p stemSelection
+    /// @param entryInfo The entry to search.
+    /// @param stemSelection The choice of which stem version to get.
+    static MusxInstance<BeamExtension> getForStem(const EntryInfoPtr& entryInfo, StemSelection stemSelection = StemSelection::MatchEntry);  // must be defined in Details.cpp
 
     static const xml::XmlElementArray<BeamExtension>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -822,6 +846,11 @@ public:
     ///
     /// @return If true, the associated entry has no stem in the direction controlled by the subclass.
     bool calcIsHiddenStem() const;
+
+    /// @brief Gets the beam extension record for the specified @p stemSelection
+    /// @param entryInfo The entry to search.
+    /// @param stemSelection The choice of which stem version to get.
+    static MusxInstance<CustomStem> getForStem(const EntryInfoPtr& entryInfo, StemSelection stemSelection = StemSelection::MatchEntry);  // must be defined in Details.cpp
 
     static const xml::XmlElementArray<CustomStem>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

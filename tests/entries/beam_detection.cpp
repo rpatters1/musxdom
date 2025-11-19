@@ -341,3 +341,198 @@ TEST(BeamDetection, InvisibleEntries)
         checkEntry(entryFrame, 8, true, false, 0);              // quarter
     }
 }
+
+TEST(BeamDetection, SingletonBeams)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "singbeam.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto checkSingleton = [](const EntryInfoPtr entryInfo, bool isSingletonRight, bool isSingletonLeft) {
+        EXPECT_EQ(entryInfo.calcCreatesSingletonBeamRight(), isSingletonRight);
+        EXPECT_EQ(entryInfo.calcCreatesSingletonBeamLeft(), isSingletonLeft);
+    };
+    
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+
+        checkSingleton(EntryInfoPtr(entryFrame, 1), true, false);
+    }
+    
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
+
+        checkSingleton(EntryInfoPtr(entryFrame, 1), false, true);
+    }
+    
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 3";
+
+        checkSingleton(EntryInfoPtr(entryFrame, 1), false, false);
+        checkSingleton(EntryInfoPtr(entryFrame, 2), false, false);
+    }
+}
+
+TEST(BeamDetection, BeamsOverBarlines)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beams_over_barlines.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto checkBeamOvers = [](const EntryInfoPtr entryInfo, bool isBeamOverRight, bool isBeamOverLeft) -> void {
+        auto nextRight = entryInfo.calcBeamContinuesRightOverBarline();
+        EXPECT_EQ(nextRight, isBeamOverRight);
+        if (nextRight) {
+            auto tryPrev = nextRight.calcBeamContinuesLeftOverBarline();
+            EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
+            tryPrev = nextRight.getPreviousInBeamGroupAcrossBars();
+            EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
+        }
+        auto prevLeft = entryInfo.calcBeamContinuesLeftOverBarline();
+        EXPECT_EQ(prevLeft, isBeamOverLeft);
+        if (prevLeft) {
+            auto tryNext = prevLeft.calcBeamContinuesRightOverBarline();
+            EXPECT_TRUE(entryInfo.isSameEntry(tryNext));
+            tryNext = prevLeft.getNextInBeamGroupAcrossBars();
+            EXPECT_TRUE(entryInfo.isSameEntry(tryNext));
+        }
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 3), true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 0), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 5), true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 3";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 0), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 5), true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 4";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 4";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 1), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 6), true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 5";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 5";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 1), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 7), true, false);
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 6";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 6";
+
+        checkBeamOvers(EntryInfoPtr(entryFrame, 0), false, true);
+        checkBeamOvers(EntryInfoPtr(entryFrame, 7), true, false);
+    }
+}
+
+TEST(BeamDetection, BeamsOverBarlinesTraversal)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beams_over_barlines.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto expectedEntries = std::vector<EntryNumber>{};
+    auto traverseBeam = [&](const EntryInfoPtr startEntry) {
+        EntryInfoPtr endEntry;
+        size_t nextIndex = 0;
+        for (auto entryInfo = startEntry; entryInfo; entryInfo = entryInfo.getNextInBeamGroupAcrossBars()) {
+            ASSERT_LT(nextIndex, expectedEntries.size());
+            EXPECT_EQ(entryInfo->getEntry()->getEntryNumber(), expectedEntries[nextIndex]);
+            endEntry = entryInfo;
+            nextIndex++;
+        }
+        EXPECT_EQ(nextIndex, expectedEntries.size());
+        for (auto entryInfo = endEntry; entryInfo; entryInfo = entryInfo.getPreviousInBeamGroupAcrossBars()) {
+            ASSERT_GT(nextIndex, 0);
+            nextIndex--;
+            EXPECT_EQ(entryInfo->getEntry()->getEntryNumber(), expectedEntries[nextIndex]);
+            endEntry = entryInfo;
+        }
+        EXPECT_EQ(nextIndex, 0);
+        EXPECT_TRUE(startEntry.isSameEntry(endEntry));
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 5";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 5";
+
+        expectedEntries = { 75, 76, 77, 91 };
+        traverseBeam(EntryInfoPtr(entryFrame, 5));
+    }
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 6";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 6";
+
+        expectedEntries = { 82, 83, 84, 85, 86, 87 };
+        traverseBeam(EntryInfoPtr(entryFrame, 5));
+    }
+}
+
+TEST(BeamDetection, AdjacentRests)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beamrests.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+        ASSERT_GE(entryFrame->getEntries().size(), 6);
+
+        auto lastEntry = EntryInfoPtr(entryFrame, 5); // final rest
+        EXPECT_TRUE(lastEntry.calcUnbeamed());
+    }
+}

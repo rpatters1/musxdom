@@ -453,7 +453,7 @@ public:
     unsigned calcReverseGraceIndex() const;
 
     /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
-    std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex) const;
+    std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex = 0) const;
 
     /// @brief Get the next entry in the frame
     EntryInfoPtr getNextInFrame() const;
@@ -462,10 +462,14 @@ public:
     /// @return  The next continguous entry. Returns nullptr if it encounters an empty frame or end of file.
     EntryInfoPtr getNextInLayer() const;
 
-    /// @brief Get the next entry in the frame in the same voice
+    /// @brief Get the next entry in the frame in the same voice.
     ///
     /// For V2, it returns null after the current V2 launch sequence.
     EntryInfoPtr getNextSameV() const;
+
+    /// @brief Get the next entry in the frame in the same voice, skipping grace notes.
+    /// @return The same as #getNextSameV except grace notes are skipped.
+    EntryInfoPtr getNextSameVNoGrace() const;
 
     /// @brief Get the previous entry in the same layer and staff. This can be in the previous measure.
     /// @return  The previous continguous entry. Returns nullptr if it encounters an empty frame or the beginning of the file.
@@ -478,6 +482,10 @@ public:
     ///
     /// For V2, it returns null when it hits the v2Launch note for the current V2 launch sequence.
     EntryInfoPtr getPreviousSameV() const;
+
+    /// @brief Get the previous entry in the frame in the same voice, skipping grace notes.
+    /// @return The same as #getPreviousSameV except grace notes are skipped.
+    EntryInfoPtr getPreviousSameVNoGrace() const;
 
     /// @brief Returns the next entry in the frame in the specified v1/v2 or null if none.
     ///
@@ -500,6 +508,16 @@ public:
     /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
     EntryInfoPtr getPreviousInBeamGroup(bool includeHiddenEntries = false) const
     { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(includeHiddenEntries); }
+
+    /// @brief Gets the next entry in a beamed group, or nullptr if the entry is not beamed or is the last in the group.
+    /// This function is simular to #getNextInBeamGroup but it traverses into the next bar when it detects a beam across a barline,
+    /// as created by the Beam Over Barline plugin.
+    EntryInfoPtr getNextInBeamGroupAcrossBars(bool includeHiddenEntries = false) const;
+
+    /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
+    /// This function is simular to #getPreviousInBeamGroup but it traverses into the previous bar when it detects a beam across a barline,
+    /// as created by the Beam Over Barline plugin.
+    EntryInfoPtr getPreviousInBeamGroupAcrossBars(bool includeHiddenEntries = false) const;
 
     /// @brief Calculates if an entry displays as a rest.
     /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
@@ -529,7 +547,14 @@ public:
     /// without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.
     ///
     /// @return True if the stem is up; false if it is down.
-    bool calcUpStem() const;
+    bool calcUpStem() const
+    {
+        if (m_upStem.has_value()) {
+            return m_upStem.value();
+        }
+        m_upStem = calcUpStemImpl();
+        return m_upStem.value();
+    }
 
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
@@ -537,6 +562,32 @@ public:
 
     /// @brief Returns whether this is the start of a primary beam
     bool calcIsBeamStart() const;
+
+    /// @brief Determines if this entry contains a tuplet that creates a singleton beam left.
+    /// See #EntryFrame::TupletInfo::calcCreatesSingletonBeamLeft for more information.
+    bool calcCreatesSingletonBeamLeft() const;
+
+    /// @brief Determines if this entry contains a tuplet that creates a singleton beam right.
+    /// See #EntryFrame::TupletInfo::calcCreatesSingletonBeamRight for more information.
+    bool calcCreatesSingletonBeamRight() const;
+
+    /// @brief Determines if this entry continues a beam across a barline from the previous measure.
+    ///
+    /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
+    /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
+    ///
+    /// @return If the function returns non-null, the return value here is the previous real entry in the beam over a barline,
+    /// taking into account tuplets that create faux singleton beams.
+    EntryInfoPtr calcBeamContinuesLeftOverBarline() const;
+
+    /// @brief Determines if this entry continues a beam across a barline to the next measure.
+    ///
+    /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
+    /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
+    ///
+    /// @return If the function returns non-null, the return value here is the next real entry in the beam over a barline,
+    /// taking into account tuplets that create faux singleton beams.
+    EntryInfoPtr calcBeamContinuesRightOverBarline() const;
 
     /// @brief Calculates if the entry starts a feathered beam and returns information about it if so.
     /// @param [out] outLeftY The height of the left side of the feathered beam
@@ -558,12 +609,18 @@ public:
     unsigned calcNumberOfBeams() const;
 
     /// @brief Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
+    /// @param considerBeamOverBarlines If true, consider beams over barlines as created for system breaks by the Beam Over Barlines plugin.
     /// @return 0 if not beamed or no beam starts this entry; otherwise, the beam number
-    unsigned calcLowestBeamStart() const;
+    unsigned calcLowestBeamStart(bool considerBeamOverBarlines = false) const;
 
     /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
     /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
     unsigned calcLowestBeamEnd() const;
+
+    /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
+    /// This function takes into account beams the cross barlines, as created by the Beam Over Barline plugin.
+    /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
+    unsigned calcLowestBeamEndAcrossBarlines() const;
 
     /// @brief Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc.
     /// @return 0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number
@@ -583,7 +640,10 @@ public:
     util::Fraction calcGlobalActualDuration() const;
 
     /// @brief Determines if this entry can be beamed.
-    bool canBeBeamed() const;
+    bool calcCanBeBeamed() const;
+
+    /// @brief Determines if a beam *must* start on this entry.
+    bool calcBeamMustStartHere() const;
 
     /// @brief Returns the entry size as a percentage, taking into account the beaming.
     /// @return Integer percentage where 100 means 100%.
@@ -636,6 +696,8 @@ public:
 private:
     unsigned calcVisibleBeams() const;
 
+    bool calcUpStemImpl() const;
+
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
     std::optional<unsigned> iterateFindRestsInSecondaryBeam(const EntryInfoPtr nextOrPrevInBeam) const;
 
@@ -652,11 +714,24 @@ private:
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)(bool) const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)(bool) const>
     EntryInfoPtr iterateBeamGroup(bool includeHiddenEntries) const;
 
+    /// @brief Returns the beam anchor for a beam over barline left. This code captures the logic from the
+    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds a detect the entries
+    /// in a beam that crosses a barline.
+    EntryInfoPtr findLeftBeamAnchorForBeamOverBarline() const;
+
+    /// @brief Returns the beam anchor for a beam over barline right. This code captures the logic from the
+    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds a detect the entries
+    /// in a beam that crosses a barline.
+    EntryInfoPtr findRightBeamAnchorForBeamOverBarline() const;
+
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
 
     /// @brief Cache the staff for this entry here to avoid repeated calls to `StaffComposite::createCurrent` for the same information.
     mutable MusxInstance<others::StaffComposite> m_cachedStaff;
+
+    /// @brief Cache the stem direction for this entry to avoid repeatedly calculating it.
+    mutable std::optional<bool> m_upStem;
 };
 
 /**
@@ -742,38 +817,18 @@ public:
         /// has the correct value.
         ///     - Ignore the entry's next neighbor in the same voice. It will have its leger lines suppressed and non-visible notehead(s) and stem.
         /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
-        bool calcCreatesSingletonRight() const { return calcCreatesSingleton(false); }
+        bool calcCreatesSingletonBeamRight() const { return calcCreatesSingleton(false); }
 
         /// @brief Calculates if this tuplet is being used to create a singleton beam to the left.
         ///
-        /// See comments at #calcCreatesSingletonRight.
+        /// See comments at #calcCreatesSingletonBeamRight.
         ///
         /// @return True if this tuplet creates a singleton beam to the left. You may handle this as follows.
         ///     - Skip the entry and its tuplet.
         ///     - You can mark the next entry in the same voice as having a singleton beam left, if your application allows it.
         ///     - The current entry with the 0-length tuplet will have its leger lines suppressed and non-visible notehead(s) and stem.
         /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
-        bool calcCreatesSingletonLeft() const { return calcCreatesSingleton(true); }
-
-        /// @brief Calculates if this tuplet creates a beam continuation over a barline to the right,
-        /// as created by the Beam Over Barlines plugin.
-        ///
-        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
-        /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
-        ///
-        /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonRight.
-        /// However, you simply extend a beam from the designated entry to the appropriate entries in the next measure.
-        bool calcCreatesBeamContinuationRight() const;
-
-        /// @brief Calculates if this tuplet creates a beam continuation over a barline to the left,
-        /// as created by the Beam Over Barlines plugin.
-        ///
-        /// @note The Beam Over Barlines plugin has poor support for v1/v2. This function detects v1/v2 correctly on the chance
-        /// that a user may have manually setup v1/v2 the way Beam Over Barlines should have.
-        ///
-        /// @return If the function returns true, you can treat the result similarly to the result from #calcCreatesSingletonLeft.
-        /// However, you simply extend a beam from the designated entry to the appropriate entries in the previous measure.
-        bool calcCreatesBeamContinuationLeft() const;
+        bool calcCreatesSingletonBeamLeft() const { return calcCreatesSingleton(true); }
 
         /// @brief Detects tuplets being used to create time stretch in an independent time signature.
         ///

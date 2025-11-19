@@ -485,6 +485,17 @@ private:
  */
 class EntryDetailsBase : public DetailsBase
 {
+public:
+    /// @enum StemSelection
+    /// @brief The options for choosing which version to retrieve for stem-specific details.
+    enum class StemSelection
+    {
+        MatchEntry,     ///< match entry's stem direction
+        UpStem,         ///< retrieve the upstem version
+        DownStem,       ///< retrieve the downstem version
+        Any             ///< retrieve the first one encountered (starting with upstem)
+    };
+
 protected:
     /**
      * @brief Constructs a EntryDetailsBase object.
@@ -497,6 +508,16 @@ protected:
      */
     EntryDetailsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, std::optional<Inci> inci = std::nullopt)
         : DetailsBase(document, partId, shareMode, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci) {}
+
+    /// @brief Implement retrieval of stem-specific details. (Actual functions are defined per stem-specific class)
+    /// @tparam EDUP The upstem class.
+    /// @tparam EDDOWN The downstem class.
+    /// @tparam EDBASE The base class shared by upstem and downstem classes.
+    /// @param entryInfo The entry to search.
+    /// @param stemSelection The choice of which stem direction to retrieve.
+    /// @return The instance if found or null.
+    template <typename EDUP, typename EDDOWN, typename EDBASE>
+    static MusxInstance<EDBASE> getStemDependentDetail(const EntryInfoPtr& entryInfo, StemSelection stemSelection);
 
 public:
     /**
