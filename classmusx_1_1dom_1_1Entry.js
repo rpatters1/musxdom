@@ -23,9 +23,9 @@ var classmusx_1_1dom_1_1Entry =
     [ "flipTie", "classmusx_1_1dom_1_1Entry.html#a50f63ff14e0f874d26e2156d4c3e442b", null ],
     [ "floatRest", "classmusx_1_1dom_1_1Entry.html#a9c47ab65cc891239e20462fa381e18ff", null ],
     [ "freezeBeam", "classmusx_1_1dom_1_1Entry.html#aeb7ecc28f468574c224acf57e4555841", null ],
-    [ "freezeStem", "classmusx_1_1dom_1_1Entry.html#a2053136682ff832921d71dc11bbcd7d4", null ],
+    [ "freezeStemScore", "classmusx_1_1dom_1_1Entry.html#ad9df46d7265afaf54f6f0b5886ce136c", null ],
     [ "graceNote", "classmusx_1_1dom_1_1Entry.html#af7fd31e1ab6653f7834729fafdd0933c", null ],
-    [ "hOffset", "classmusx_1_1dom_1_1Entry.html#a527b9cb106a6dda4d3a05a5f684183f0", null ],
+    [ "hOffsetScore", "classmusx_1_1dom_1_1Entry.html#a7a01a2edc89edb9930cce41f154e914e", null ],
     [ "isHidden", "classmusx_1_1dom_1_1Entry.html#aa140b2bc34357eee1085828bae9c9bae", null ],
     [ "isNote", "classmusx_1_1dom_1_1Entry.html#a1b7183f1bc2716b5eb961a2beab9e3c9", null ],
     [ "isValid", "classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b", null ],
@@ -48,7 +48,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "splitStem", "classmusx_1_1dom_1_1Entry.html#a0a325c8ef4a2eb745fc5d07c46a1742a", null ],
     [ "stemDetail", "classmusx_1_1dom_1_1Entry.html#a42b417cdb28ed1de83c586fb7c365069", null ],
     [ "tupletStart", "classmusx_1_1dom_1_1Entry.html#aafd015ce09d2b966d5317a0741388f9e", null ],
-    [ "upStem", "classmusx_1_1dom_1_1Entry.html#a0a80d84ecac51e22cb87cfe7db9ceaa6", null ],
+    [ "upStemScore", "classmusx_1_1dom_1_1Entry.html#a1734bd1b4c1a66e366de2129ca87b3f6", null ],
     [ "v2Launch", "classmusx_1_1dom_1_1Entry.html#ac219415d1a965e63bfaf2d9a6b18b28c", null ],
     [ "voice2", "classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41", null ]
 ];

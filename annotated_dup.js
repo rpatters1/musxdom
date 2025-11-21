@@ -41,6 +41,7 @@ var annotated_dup =
           [ "CustomStem", "classmusx_1_1dom_1_1details_1_1CustomStem.html", "classmusx_1_1dom_1_1details_1_1CustomStem" ],
           [ "CustomUpStem", "classmusx_1_1dom_1_1details_1_1CustomUpStem.html", "classmusx_1_1dom_1_1details_1_1CustomUpStem" ],
           [ "DotAlterations", "classmusx_1_1dom_1_1details_1_1DotAlterations.html", "classmusx_1_1dom_1_1details_1_1DotAlterations" ],
+          [ "EntryPartFieldDetail", "classmusx_1_1dom_1_1details_1_1EntryPartFieldDetail.html", "classmusx_1_1dom_1_1details_1_1EntryPartFieldDetail" ],
           [ "EntrySize", "classmusx_1_1dom_1_1details_1_1EntrySize.html", "classmusx_1_1dom_1_1details_1_1EntrySize" ],
           [ "FretboardDiagram", "classmusx_1_1dom_1_1details_1_1FretboardDiagram.html", "classmusx_1_1dom_1_1details_1_1FretboardDiagram" ],
           [ "GFrameHold", "classmusx_1_1dom_1_1details_1_1GFrameHold.html", "classmusx_1_1dom_1_1details_1_1GFrameHold" ],

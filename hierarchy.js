@@ -58,6 +58,7 @@ var hierarchy =
             [ "musx::dom::details::CustomDownStem", "classmusx_1_1dom_1_1details_1_1CustomDownStem.html", null ],
             [ "musx::dom::details::CustomUpStem", "classmusx_1_1dom_1_1details_1_1CustomUpStem.html", null ]
           ] ],
+          [ "musx::dom::details::EntryPartFieldDetail", "classmusx_1_1dom_1_1details_1_1EntryPartFieldDetail.html", null ],
           [ "musx::dom::details::EntrySize", "classmusx_1_1dom_1_1details_1_1EntrySize.html", null ],
           [ "musx::dom::details::LyricAssign", "classmusx_1_1dom_1_1details_1_1LyricAssign.html", [
             [ "musx::dom::details::LyricAssignChorus", "classmusx_1_1dom_1_1details_1_1LyricAssignChorus.html", null ],

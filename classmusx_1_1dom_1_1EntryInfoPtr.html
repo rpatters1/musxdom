@@ -152,6 +152,14 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexInFrame</b>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getKeySignature</b> () const</td></tr>
 <tr class="memdesc:a91de76e696c547eccfe0bf49ae82c7ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the key signature of the entry. <br /></td></tr>
 <tr class="separator:a91de76e696c547eccfe0bf49ae82c7ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e66f9a4903c145849fd1d908ff14dab" id="r_a2e66f9a4903c145849fd1d908ff14dab"><td class="memItemLeft" align="right" valign="top"><a id="a2e66f9a4903c145849fd1d908ff14dab" name="a2e66f9a4903c145849fd1d908ff14dab"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1EntryPartFieldDetail.html">details::EntryPartFieldDetail</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartFieldData</b> () const</td></tr>
+<tr class="memdesc:a2e66f9a4903c145849fd1d908ff14dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the applicable part data for the entry, or nullptr if none. <br /></td></tr>
+<tr class="separator:a2e66f9a4903c145849fd1d908ff14dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ea475c5e100002d3bdd58a7042b5d5b" id="r_a3ea475c5e100002d3bdd58a7042b5d5b"><td class="memItemLeft" align="right" valign="top"><a id="a3ea475c5e100002d3bdd58a7042b5d5b" name="a3ea475c5e100002d3bdd58a7042b5d5b"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcManuaOffset</b> () const</td></tr>
+<tr class="memdesc:a3ea475c5e100002d3bdd58a7042b5d5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the correct manual offset of the entry for the requested part id. <br /></td></tr>
+<tr class="separator:a3ea475c5e100002d3bdd58a7042b5d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a284505434c8a4a0b7fe8705062599b30" id="r_a284505434c8a4a0b7fe8705062599b30"><td class="memItemLeft" align="right" valign="top"><a id="a284505434c8a4a0b7fe8705062599b30" name="a284505434c8a4a0b7fe8705062599b30"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcReverseGraceIndex</b> () const</td></tr>
 <tr class="memdesc:a284505434c8a4a0b7fe8705062599b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caclulates the grace index counting leftward (used by other standards such as MNX) <br /></td></tr>
@@ -214,6 +222,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:aa7cecd561c595a6685ab1204b919e442" id="r_aa7cecd561c595a6685ab1204b919e442"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aa7cecd561c595a6685ab1204b919e442">calcTopBottomStaffPositions</a> () const</td></tr>
 <tr class="memdesc:aa7cecd561c595a6685ab1204b919e442"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not be called on a floating rest. It asserts and throws if so.  <br /></td></tr>
 <tr class="separator:aa7cecd561c595a6685ab1204b919e442"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1488efaf45f336465104bfb8f42349eb" id="r_a1488efaf45f336465104bfb8f42349eb"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a1488efaf45f336465104bfb8f42349eb">calcEntryStemSettings</a> () const</td></tr>
+<tr class="memdesc:a1488efaf45f336465104bfb8f42349eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> stem settings in the requested part.  <br /></td></tr>
+<tr class="separator:a1488efaf45f336465104bfb8f42349eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a002aa6823c31b83897d351c3ba49f5a4" id="r_a002aa6823c31b83897d351c3ba49f5a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a002aa6823c31b83897d351c3ba49f5a4">calcUpStemDefault</a> () const</td></tr>
 <tr class="memdesc:a002aa6823c31b83897d351c3ba49f5a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or manual overrides.  <br /></td></tr>
 <tr class="separator:a002aa6823c31b83897d351c3ba49f5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -512,6 +523,26 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Returns the entry size as a percentage, taking into account the beaming. </p>
 <dl class="section return"><dt>Returns</dt><dd>Integer percentage where 100 means 100%. </dd></dl>
+
+</div>
+</div>
+<a id="a1488efaf45f336465104bfb8f42349eb" name="a1488efaf45f336465104bfb8f42349eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1488efaf45f336465104bfb8f42349eb">&#9670;&#160;</a></span>calcEntryStemSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; bool, bool &gt; musx::dom::EntryInfoPtr::calcEntryStemSettings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the <a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> stem settings in the requested part. </p>
+<dl class="section return"><dt>Returns</dt><dd>A std::pair&lt;bool, bool&gt; with the first being the freezeStem setting and the second being the upStem setting. </dd></dl>
 
 </div>
 </div>
@@ -869,7 +900,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides, and cross-staff notation. </p>
 <p>The function is designed to handle all common combinations of musical options and contexts, although some rare cases may still produce incorrect results. The concept of an "up stem" becomes ambiguous when the entry uses a reverse stem. (See <a class="el" href="classmusx_1_1dom_1_1Entry.html#abd0a94ec891ef665ec416a201e35e505" title="Indicates that a stem normally up is reversed.">Entry::reverseUpStem</a> and <a class="el" href="classmusx_1_1dom_1_1Entry.html#abafe04400b910721fcf16fe338a8ff3a" title="Indicates that a stem normally down is reversed.">Entry::reverseDownStem</a>.) The goal is to compute the logical stem direction that governs the entry's behavior. This allows selecting the correct up or down variant for any entry detail records or entry properties that have them, including which reverse-stem value to recognize. In cases involving reverse stems, the result of <code>calcUpStem</code> may not match the visible direction in a Finale-generated PDF.</p>
-<dl class="section note"><dt>Note</dt><dd>The <a class="el" href="classmusx_1_1dom_1_1Entry.html#a0a80d84ecac51e22cb87cfe7db9ceaa6" title="Whether a stem is up or down. (Only reliable when freezeStem is true.)">Entry::upStem</a> flag may appear to provide this information, but it can be wrong if the layer context changed without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The <a class="el" href="classmusx_1_1dom_1_1Entry.html#a1734bd1b4c1a66e366de2129ca87b3f6" title="Whether a stem is up or down as set in the score. (Only reliable when freezeStemScore is true....">Entry::upStemScore</a> flag may appear to provide this information, but it can be wrong if the layer context changed without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the stem is up; false if it is down. </dd></dl>
 
 </div>

@@ -29,7 +29,7 @@ var classmusx_1_1dom_1_1others_1_1Measure =
       [ "Never", "classmusx_1_1dom_1_1others_1_1Measure.html#a9ddff943859253bd689e6c0a93c543b6a6e7b34fa59e1bd229b207892956dc41c", null ]
     ] ],
     [ "Measure", "classmusx_1_1dom_1_1others_1_1Measure.html#ad05b328fcda211b8f40931f69bcf4b08", null ],
-    [ "calcDisplayNumber", "classmusx_1_1dom_1_1others_1_1Measure.html#a7b892fb2143602bcbb3e21be8b4a9e46", null ],
+    [ "calcDisplayNumber", "classmusx_1_1dom_1_1others_1_1Measure.html#a3a0f5d6105af79216d3eb85fb4eabf89", null ],
     [ "calcDuration", "classmusx_1_1dom_1_1others_1_1Measure.html#acae376781db54c20039e5a6c6626f17b", null ],
     [ "calcShouldShowFullNames", "classmusx_1_1dom_1_1others_1_1Measure.html#a9ff1882e9350038250970527105eebc1", null ],
     [ "calcTimeStretch", "classmusx_1_1dom_1_1others_1_1Measure.html#af967a7eb6a48dbd1c5515884e593382f", null ],
