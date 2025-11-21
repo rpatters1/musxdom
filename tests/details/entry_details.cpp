@@ -676,3 +676,45 @@ TEST(TieAlterTest, PopulateFields)
     EXPECT_EQ(tieAlter->insetRatio2, Evpu(410));
     EXPECT_EQ(tieAlter->height2, Evpu(49));
 }
+
+TEST(EntryPartFieldDetailTest, PopulateFields)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <entryPartFieldDetail entnum="5">
+      <freezeStem/>
+      <upStem/>
+    </entryPartFieldDetail>
+    <entryPartFieldDetail entnum="5" part="1" shared="true">
+      <posi>28</posi>
+      <freezeStem/>
+      <upStem>
+        <offInPart/>
+      </upStem>
+     </entryPartFieldDetail>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    // Score-level detail (no part attribute)
+    auto baseDetail = details->get<details::EntryPartFieldDetail>(SCORE_PARTID, 5);
+    ASSERT_TRUE(baseDetail) << "EntryPartFieldDetail with entnum 5, SCORE_PARTID not found";
+
+    EXPECT_EQ(baseDetail->hOffset, Evpu(0));
+    EXPECT_TRUE(baseDetail->freezeStem);
+    EXPECT_TRUE(baseDetail->upStem);
+
+    // Part-specific override (part=\"1\", shared=\"true\")
+    auto partDetail = details->get<details::EntryPartFieldDetail>(Cmper(1), 5);
+    ASSERT_TRUE(partDetail) << "EntryPartFieldDetail with entnum 5, part 1 not found";
+
+    EXPECT_EQ(partDetail->hOffset, Evpu(28));
+    EXPECT_TRUE(partDetail->freezeStem);
+    EXPECT_FALSE(partDetail->upStem);
+}

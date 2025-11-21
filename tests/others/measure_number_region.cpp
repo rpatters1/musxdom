@@ -94,6 +94,7 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
         <multipleJustify>center</multipleJustify>
         <mmRestJustify>center</mmRestJustify>
       </scoreData>
+      <partData/>
       <startMeas>1</startMeas>
       <endMeas>1000</endMeas>
       <startChar>164</startChar>
@@ -142,7 +143,7 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_TRUE(measureNumberRegion->hideScroll);
 
     // Test ScorePartData fields
-    EXPECT_FALSE(measureNumberRegion->partData);
+    EXPECT_TRUE(measureNumberRegion->partData);
     const auto& scoreData = measureNumberRegion->scoreData;
     ASSERT_TRUE(scoreData);
 

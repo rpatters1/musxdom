@@ -119,7 +119,7 @@ std::optional<int> Measure::calcDisplayNumber() const
     if (const auto region = MeasureNumberRegion::findMeasure(getDocument(), getCmper())) {
         return region->calcDisplayNumberFor(getCmper());
     }
-    return getCmper();
+    return std::nullopt;
 }
 
 MusxInstance<KeySignature> Measure::createKeySignature(const std::optional<StaffCmper>& forStaff) const
@@ -281,15 +281,28 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
 // ***** MeasureNumberRegion *****
 // *******************************
 
-MusxInstance<MeasureNumberRegion> MeasureNumberRegion::findMeasure(const DocumentPtr& document, MeasCmper measureId)
+MusxInstance<MeasureNumberRegion> MeasureNumberRegion::findMeasure(const DocumentPtr& document,
+                                                                   MeasCmper measureId)
 {
     auto regions = document->getOthers()->getArray<MeasureNumberRegion>(SCORE_PARTID);
+
+    MusxInstance<MeasureNumberRegion> fallback;
+
     for (const auto& region : regions) {
-        if (region->calcIncludesMeasure(measureId)) {
+        if (!region->calcIncludesMeasure(measureId)) {
+            continue;
+        }
+        // Prefer regions that show on the start of the system
+        if (region->scoreData->showOnStart || region->partData->showOnStart) {
             return region;
         }
+        // Keep the first region that includes the measure as a fallback
+        if (!fallback) {
+            fallback = region;
+        }
     }
-    return nullptr;
+
+    return fallback; // may be nullptr if no region contains the measure
 }
 
 std::optional<int> MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const

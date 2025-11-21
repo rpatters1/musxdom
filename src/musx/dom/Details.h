@@ -912,6 +912,37 @@ public:
 };
 
 /**
+ * @class EntryPartFieldDetail
+ * @brief Per-part overrides for entry properties such as manual position and stem direction.
+ *
+ * @note: Finale creates this as a partially shared item, but it should be treated as non shared
+ * item. If a part does not have it (or if it is the score), this entity should be ignored.
+ *
+ * These details apply to a specific part and entry and override the default
+ * entry settings defined at the score level.
+ */
+class EntryPartFieldDetail : public EntryDetailsBase
+{
+public:
+    /**
+     * @brief Constructor function.
+     * @param document A weak pointer to the associated document.
+     * @param partId The part that this detail is for.
+     * @param shareMode The sharing mode for this @ref EntryPartFieldDetail.
+     * @param entnum The entry number for which these details apply.
+     */
+    explicit EntryPartFieldDetail(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum)
+        : EntryDetailsBase(document, partId, shareMode, entnum) {}
+
+    Evpu hOffset{};         ///< Manual offset created with the Note Position Tool. (xml node is `<posi>`.)
+    bool freezeStem{};      ///< Whether the stem direction is frozen for this entry in this part.
+    bool upStem{};          ///< When #freezeStem is true: whether the stem is forced up (otherwise down).
+
+    static const xml::XmlElementArray<EntryPartFieldDetail>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
+    constexpr static std::string_view XmlNodeName = "entryPartFieldDetail";     ///< The XML node name for this type.
+};
+
+/**
  * @class EntrySize
  * @brief Specifies a custom size for an entry. It scales the entire entry, including the stem and all noteheads.
  * For beamed entries, it only takes effect if it is applied to the first entry in a beamed group, and then it affects

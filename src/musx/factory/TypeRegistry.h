@@ -359,6 +359,7 @@ using RegisteredDetails = TypeRegistry <
     dom::details::StaffSize,
     dom::details::FretboardDiagram,
     dom::details::GFrameHold,
+    dom::details::EntryPartFieldDetail,
     dom::details::KeySymbolListElement,
     dom::details::LyricEntryInfo,
     dom::details::MeasureGraphicAssign,

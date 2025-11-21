@@ -428,7 +428,7 @@ public:
     std::string syllable;       ///< the syllable text with no hyphenation or font information.
     bool hasHyphenBefore;       ///< indicates the syllable is preceded by a hyphen.
     bool hasHyphenAfter;        ///< indicates the syllable if followed by a hyphen.
-    int strippedUnderscores;    ///< indicates the number of trailing underscores stripped (because smart wort extensions convert them to word extensions).
+    int strippedUnderscores;    ///< indicates the number of trailing underscores stripped (because smart word extensions convert them to word extensions).
 
 private:
     /**
