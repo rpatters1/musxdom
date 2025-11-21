@@ -1483,6 +1483,35 @@
       <endPos>336</endPos>
       <minPos>128</minPos>
     </beatChart>
+    <beatChart cmper="1" inci="0" part="3" shared="false">
+      <control>
+        <totalDur>4096</totalDur>
+        <totalWidth>336</totalWidth>
+        <minWidth>128</minWidth>
+        <allotWidth>168</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="1" inci="1" part="3" shared="false">
+      <endPos>84</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="2" part="3" shared="false">
+      <dur>1024</dur>
+      <pos>84</pos>
+      <endPos>168</endPos>
+      <minPos>42</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="3" part="3" shared="false">
+      <dur>2048</dur>
+      <pos>168</pos>
+      <endPos>252</endPos>
+      <minPos>82</minPos>
+    </beatChart>
+    <beatChart cmper="1" inci="4" part="3" shared="false">
+      <dur>3072</dur>
+      <pos>252</pos>
+      <endPos>336</endPos>
+      <minPos>128</minPos>
+    </beatChart>
     <durAllot cmper="0">
       <allotment>84</allotment>
     </durAllot>
@@ -1563,20 +1592,6 @@
       <family>0</family>
       <name>Broadway Copyist Text</name>
     </fontName>
-    <fontName cmper="11">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Lucida Grande</name>
-    </fontName>
-    <fontName cmper="12">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>4095</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Symbol</name>
-    </fontName>
     <fontName cmper="13">
       <charsetBank>Mac</charsetBank>
       <charsetVal>0</charsetVal>
@@ -1590,6 +1605,20 @@
       <pitch>0</pitch>
       <family>0</family>
       <name>Engraver Text T</name>
+    </fontName>
+    <fontName cmper="15">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Lucida Grande</name>
+    </fontName>
+    <fontName cmper="16">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Symbol</name>
     </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
@@ -1677,6 +1706,17 @@
         <endEdu>2147483647</endEdu>
       </range>
     </instUsed>
+    <instUsed cmper="0" inci="0" part="3" shared="false">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
     <instUsed cmper="1" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
@@ -1700,6 +1740,17 @@
       </range>
     </instUsed>
     <instUsed cmper="1" inci="0" part="2" shared="false">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0" part="3" shared="false">
       <inst>1</inst>
       <trackType>staff</trackType>
       <distFromTop>0</distFromTop>
@@ -1766,6 +1817,28 @@
       </range>
     </instUsed>
     <instUsed cmper="65400" inci="1" part="2" shared="false">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-316</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="0" part="3" shared="false">
+      <inst>32767</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="1" part="3" shared="false">
       <inst>1</inst>
       <trackType>staff</trackType>
       <distFromTop>-316</distFromTop>
@@ -1985,6 +2058,10 @@
       <width>368</width>
       <posMode>beatchartPlusPos</posMode>
     </measSpec>
+    <measSpec cmper="1" part="3" shared="true">
+      <width>368</width>
+      <posMode>beatchartPlusPos</posMode>
+    </measSpec>
     <textBlock cmper="1">
       <textID>1</textID>
       <lineSpacingPercent>100</lineSpacingPercent>
@@ -2025,6 +2102,17 @@
       <margRight>-144</margRight>
     </pageSpec>
     <pageSpec cmper="1" part="2" shared="false">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <pageSpec cmper="1" part="3" shared="false">
       <height>3168</height>
       <width>2448</width>
       <percent>100</percent>
@@ -2650,6 +2738,18 @@
       <scaleVert/>
       <scaleContentOnly/>
     </staffSystemSpec>
+    <staffSystemSpec cmper="1" part="3" shared="false">
+      <startMeas>1</startMeas>
+      <endMeas>2</endMeas>
+      <horzPercent>59511</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
     <staffPlayData cmper="1">
       <chords>
         <velControlLevel>101</velControlLevel>
@@ -2759,6 +2859,15 @@
       <partOrder>2</partOrder>
       <copies>1</copies>
       <extractPart/>
+      <needsRecalc/>
+      <useAsSmpInst/>
+      <smartMusicInst>-1</smartMusicInst>
+    </partDef>
+    <partDef cmper="3">
+      <nameID>0</nameID>
+      <partOrder>3</partOrder>
+      <copies>1</copies>
+      <extractPart/>
       <useAsSmpInst/>
       <smartMusicInst>-1</smartMusicInst>
     </partDef>
@@ -2771,6 +2880,10 @@
       <studioViewIUlist>65400</studioViewIUlist>
     </partGlobals>
     <partGlobals cmper="65534" part="2" shared="false">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <partGlobals cmper="65534" part="3" shared="false">
       <showTransposed/>
       <studioViewIUlist>65400</studioViewIUlist>
     </partGlobals>
@@ -3161,6 +3274,12 @@
       <posi>28</posi>
       <freezeStem/>
       <upStem/>
+    </entryPartFieldDetail>
+    <entryPartFieldDetail entnum="5" part="3" shared="true">
+      <freezeStem/>
+      <upStem>
+        <offInPart/>
+      </upStem>
     </entryPartFieldDetail>
   </details>
   <entries>

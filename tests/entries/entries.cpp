@@ -453,4 +453,14 @@ TEST(EntryTest, EntryPartFieldDetail)
         EXPECT_EQ(entryInfo.calcManuaOffset(), 0);
         EXPECT_EQ(entryInfo.calcEntryStemSettings(), std::make_pair(false, false));
     }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, 3, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_GE(entryFrame->getEntries().size(), 1);
+        auto entryInfo = EntryInfoPtr(entryFrame, 0);
+        EXPECT_EQ(entryInfo.calcManuaOffset(), 0);
+        EXPECT_EQ(entryInfo.calcEntryStemSettings(), std::make_pair(true, false));
+    }
 }
