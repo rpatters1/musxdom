@@ -1,5 +1,7 @@
 var NAVTREEINDEX26 =
 {
+"classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#aaae0d01831682dbb5952103f9cc3fb0a":[2,0,1,0,3,91,0,2],
+"classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#aaae0d01831682dbb5952103f9cc3fb0a":[1,0,1,0,3,91,0,2],
 "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html":[2,0,1,0,3,92],
 "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html":[1,0,1,0,3,92],
 "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html#a97a0e9923a385187b52a76ae6f0a30d9":[1,0,1,0,3,92,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX26 =
 "classmusx_1_1xml_1_1pugi_1_1Element.html#a13b2314f9c8a52e23709725667f245ec":[2,0,1,3,0,2,3],
 "classmusx_1_1xml_1_1pugi_1_1Element.html#a13b2314f9c8a52e23709725667f245ec":[1,0,1,2,0,2,3],
 "classmusx_1_1xml_1_1pugi_1_1Element.html#a1d21927359f5c0a5c0b5f2d126d4bd22":[2,0,1,3,0,2,0],
-"classmusx_1_1xml_1_1pugi_1_1Element.html#a1d21927359f5c0a5c0b5f2d126d4bd22":[1,0,1,2,0,2,0],
-"classmusx_1_1xml_1_1pugi_1_1Element.html#a54cfb76f8e2e5ff35e82bf34aa61b59d":[2,0,1,3,0,2,7],
-"classmusx_1_1xml_1_1pugi_1_1Element.html#a54cfb76f8e2e5ff35e82bf34aa61b59d":[1,0,1,2,0,2,7]
+"classmusx_1_1xml_1_1pugi_1_1Element.html#a1d21927359f5c0a5c0b5f2d126d4bd22":[1,0,1,2,0,2,0]
 };

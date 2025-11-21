@@ -165,11 +165,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a79f5f20ebb6da4fea2c176af966c6d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9553ec7ab9cefff863ce5d9bb1c3bc5" id="r_ac9553ec7ab9cefff863ce5d9bb1c3bc5"><td class="memItemLeft" align="right" valign="top"><a id="ac9553ec7ab9cefff863ce5d9bb1c3bc5" name="ac9553ec7ab9cefff863ce5d9bb1c3bc5"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getStartNumber</b> () const</td></tr>
-<tr class="memdesc:ac9553ec7ab9cefff863ce5d9bb1c3bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the starting measure number for this region. <br /></td></tr>
+<tr class="memdesc:ac9553ec7ab9cefff863ce5d9bb1c3bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the starting display measure number for this region. The value is irrespective of whether the number actually displays on the first measure of the region. (This depends on <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#ac60d53de74add9bef3f3ad0e48880f9d" title="Inverse of &quot;Include in Measure Numbering&quot;.">Measure::noMeasNum</a>.) The starting number appears on the first measure in the region that is included in measure numbering. <br /></td></tr>
 <tr class="separator:ac9553ec7ab9cefff863ce5d9bb1c3bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76433272f0465a9bb5a9ae61fd3c54c2" id="r_a76433272f0465a9bb5a9ae61fd3c54c2"><td class="memItemLeft" align="right" valign="top">std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a76433272f0465a9bb5a9ae61fd3c54c2">calcDisplayNumberFor</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId) const</td></tr>
 <tr class="memdesc:a76433272f0465a9bb5a9ae61fd3c54c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the visible number for a measure id with respect to the region.  <br /></td></tr>
 <tr class="separator:a76433272f0465a9bb5a9ae61fd3c54c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ce579359b8c9d2cec69a6b507dd4b1f" id="r_a9ce579359b8c9d2cec69a6b507dd4b1f"><td class="memItemLeft" align="right" valign="top">std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a9ce579359b8c9d2cec69a6b507dd4b1f">calcLastDisplayNumber</a> () const</td></tr>
+<tr class="memdesc:a9ce579359b8c9d2cec69a6b507dd4b1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the last visible number in the region. This function takes into account if the last measure is not included and falls back to the previous measure if so. (And repeats if necessary.)  <br /></td></tr>
+<tr class="separator:a9ce579359b8c9d2cec69a6b507dd4b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a816243f920e2584b9e4c6ce7520abf03" id="r_a816243f920e2584b9e4c6ce7520abf03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a816243f920e2584b9e4c6ce7520abf03">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a816243f920e2584b9e4c6ce7520abf03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a816243f920e2584b9e4c6ce7520abf03"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -474,6 +477,26 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a9ce579359b8c9d2cec69a6b507dd4b1f" name="a9ce579359b8c9d2cec69a6b507dd4b1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ce579359b8c9d2cec69a6b507dd4b1f">&#9670;&#160;</a></span>calcLastDisplayNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; int &gt; musx::dom::others::MeasureNumberRegion::calcLastDisplayNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the last visible number in the region. This function takes into account if the last measure is not included and falls back to the previous measure if so. (And repeats if necessary.) </p>
+<dl class="section return"><dt>Returns</dt><dd>The last visible number or std::nullopt if no measure in the region is included in numbering. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#ac60d53de74add9bef3f3ad0e48880f9d" title="Inverse of &quot;Include in Measure Numbering&quot;.">Measure::noMeasNum</a>.) </dd></dl>
 
 </div>
 </div>
