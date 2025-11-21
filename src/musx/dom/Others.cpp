@@ -255,7 +255,7 @@ bool MeasureExprAssign::calcIsAssignedInRequestedPart() const
 
 bool MeasureExprAssign::calcAppliesToLayer(LayerIndex layerIndex) const
 {
-    return (layer == 0 || layer - 1 == layerIndex);
+    return (layer == 0 || layer - 1 == static_cast<int>(layerIndex));
 }
 
 StaffCmper MeasureExprAssign::calcAssignedStaffId(bool forPageView) const
