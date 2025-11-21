@@ -553,7 +553,7 @@ public:
     /// including which reverse-stem value to recognize.
     /// In cases involving reverse stems, the result of `calcUpStem` may not match the visible direction in a Finale-generated PDF.
     ///
-    /// @note The #Entry::upStem flag may appear to provide this information, but it can be wrong if the layer context changed
+    /// @note The #Entry::upStemScore flag may appear to provide this information, but it can be wrong if the layer context changed
     /// without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.
     ///
     /// @return True if the stem is up; false if it is down.
