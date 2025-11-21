@@ -287,12 +287,13 @@ bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
         return false;
     }
     // must have manual note positioning in the correct direction.
+    const Evpu hiddenHOffset = hiddenEntryInfo.calcManuaOffset();
     if (left) {
-        if (hiddenEntry->hOffset >= 0) {
+        if (hiddenHOffset >= 0) {
             return false;
         }
     } else {
-        if (hiddenEntry->hOffset <= 0) {
+        if (hiddenHOffset <= 0) {
             return false;
         }
     }
@@ -399,6 +400,36 @@ StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
 MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); }
 
 MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
+
+MusxInstance<details::EntryPartFieldDetail> EntryInfoPtr::getPartFieldData() const
+{
+    const auto frame = getFrame();
+    const auto entry = (*this)->getEntry();
+    if (const auto partData = frame->getDocument()->getDetails()->get<details::EntryPartFieldDetail>(frame->getRequestedPartId(), entry->getEntryNumber())) {
+        // EntryPartFieldDetail is an outlier in that it is a partially shared entity that should be ignored if it comes from the score.
+        if (partData->getSourcePartId() != SCORE_PARTID) {
+            return partData;
+        }
+    }
+    return nullptr;
+}
+
+Evpu EntryInfoPtr::calcManuaOffset() const
+{
+    if (const auto partData = getPartFieldData()) {
+        return partData->hOffset;
+    }
+    return (*this)->getEntry()->hOffsetScore;
+}
+
+std::pair<bool, bool> EntryInfoPtr::calcEntryStemSettings() const
+{
+    if (const auto partData = getPartFieldData()) {
+        return std::make_pair(partData->freezeStem, partData->upStem);
+    }
+    const auto entry = (*this)->getEntry();
+    return std::make_pair(entry->freezeStemScore, entry->upStemScore);
+}
 
 MusxInstance<others::StaffComposite> EntryInfoPtr::createCurrentStaff(const std::optional<StaffCmper>& forStaffId) const
 {
@@ -653,7 +684,7 @@ bool EntryInfoPtr::calcUpStemDefault() const
     }
 
     if (!gotNonFloatRest) {
-        return (*this)->getEntry()->upStem; // Use whatever Finale last calculated.
+        return std::get<1>(calcEntryStemSettings()); // Use whatever Finale last calculated.
     }
 
     // for beams, if the diffs don't determine it, then the number above & below do
@@ -686,9 +717,9 @@ bool EntryInfoPtr::calcUpStemImpl() const
     }
     // manual override of stem direction
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        const auto& entry = next->getEntry();
-        if (next->getEntry()->freezeStem) {
-            return entry->upStem;
+        const auto [freezeStem, upStem] = next.calcEntryStemSettings();
+        if (freezeStem) {
+            return upStem;
         }
     }
     // layer override of stem direction
@@ -712,7 +743,7 @@ bool EntryInfoPtr::calcUpStemImpl() const
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         const auto& entry = next->getEntry();
         if (entry->v2Launch || entry->voice2) {
-            return entry->upStem;
+            return std::get<1>(next.calcEntryStemSettings());
         }
     }
     // cross-staff direction was not part of the 2001 testing, but this seems the right place for it for now.
@@ -1542,7 +1573,7 @@ bool EntryInfoPtr::calcIsTrillToGraceEntry() const
     if (auto graceOptions = getFrame()->getDocument()->getOptions()->get<options::GraceNoteOptions>()) {
         graceDistance = graceOptions->entryOffset;
     }
-    graceDistance = (*this)->getEntry()->hOffset - graceDistance;
+    graceDistance = calcManuaOffset() - graceDistance;
     if (graceDistance < EVPU_PER_SPACE) {
         return false;
     }

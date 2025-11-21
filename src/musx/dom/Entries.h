@@ -289,7 +289,7 @@ public:
     */
     Edu duration{};
     int numNotes{};          ///< Number of notes in the entry. There is an error if this is not the same as notes.size().
-    Evpu hOffset{};          ///< Manual offset created with the Note Position Tool. (xml node is `<posi>`.)
+    Evpu hOffsetScore{};     ///< Manual offset created with the Note Position Tool in the score. (xml node is `<posi>`.)
     bool isValid{};          ///< Should always be true but otherwise appears to be used internally by Finale.
     bool isNote{};           ///< If this value is false, the entry is a rest.
     bool v2Launch{};         ///< Indicates if this entry (which is voice1) launches a voice2 sequence. (xml node is `<controller>`)
@@ -310,7 +310,7 @@ public:
     bool dotTieAlt{};        ///< Indicates dot or tie alterations are present.
     bool beam{};             ///< Signifies the start of a beam or singleton entry. (That is, any beam breaks at this entry.)
     bool secBeam{};          ///< Signifies a secondary beam break occurs on the entry.
-    bool freezeStem{};       ///< Freeze stem flag (#upStem gives the direction.)
+    bool freezeStemScore{};  ///< Freeze stem flag in the score. (#upStemScore gives the direction.)
     bool stemDetail{};       ///< Indicates there are stem modifications.
     bool crossStaff{};       ///< Signifies that at least one note in the entry has been cross staffed.
     bool reverseUpStem{};    ///< Indicates that a stem normally up is reversed.
@@ -318,7 +318,7 @@ public:
     bool doubleStem{};       ///< Creates a double stem on the entry. (Appears to be exclusive with #splitStem.)
     bool splitStem{};        ///< Indicates the presence of a note with #Note::upSplitStem set.
                              ///< If no note has a split stem, it shows as a double stem. (Appears to be exclusive with #doubleStem.)
-    bool upStem{};           ///< Whether a stem is up or down. (Only reliable when #freezeStem is true.)
+    bool upStemScore{};      ///< Whether a stem is up or down as set in the score. (Only reliable when #freezeStemScore is true.)
     bool checkAccis{};       ///< Used by Finale to convert pre-2014 `.mus` files. May never be saved in `.musx`.
     bool dummy{};            ///< An entry (usually a rest) inserted for alignment. It may not be meaningful outside the Finale runtime environment
                              ///< and is probably safe to ignore.
@@ -449,6 +449,12 @@ public:
     /// @brief Get the key signature of the entry
     MusxInstance<KeySignature> getKeySignature() const;
 
+    /// @brief Gets the applicable part data for the entry, or nullptr if none.
+    MusxInstance<details::EntryPartFieldDetail> getPartFieldData() const;
+
+    /// @brief Calculates the correct manual offset of the entry for the requested part id.
+    Evpu calcManuaOffset() const;
+
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
     unsigned calcReverseGraceIndex() const;
 
@@ -527,6 +533,10 @@ public:
     /// be called on a floating rest. It asserts and throws if so.
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
     std::pair<int, int> calcTopBottomStaffPositions() const;
+
+    /// @brief Calculates the Entry stem settings in the requested part.
+    /// @return A std::pair<bool, bool> with the first being the freezeStem setting and the second being the upStem setting.
+    std::pair<bool, bool> calcEntryStemSettings() const;
 
     /// @brief Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or
     /// manual overrides.
