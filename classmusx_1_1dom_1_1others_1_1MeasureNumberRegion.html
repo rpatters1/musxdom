@@ -221,9 +221,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a28bc6e882827a20c4072c6a2344845e7" id="r_a28bc6e882827a20c4072c6a2344845e7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">MeasureNumberRegion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a28bc6e882827a20c4072c6a2344845e7">findMeasure</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId)</td></tr>
-<tr class="memdesc:a28bc6e882827a20c4072c6a2344845e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the measure number region containing a measure.  <br /></td></tr>
-<tr class="separator:a28bc6e882827a20c4072c6a2344845e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a335224f209860754bfb02d9bba052e74" id="r_a335224f209860754bfb02d9bba052e74"><td class="memItemLeft" align="right" valign="top"><a id="a335224f209860754bfb02d9bba052e74" name="a335224f209860754bfb02d9bba052e74"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">MeasureNumberRegion</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:a335224f209860754bfb02d9bba052e74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -477,52 +474,6 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a28bc6e882827a20c4072c6a2344845e7" name="a28bc6e882827a20c4072c6a2344845e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28bc6e882827a20c4072c6a2344845e7">&#9670;&#160;</a></span>findMeasure()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">MeasureNumberRegion</a> &gt; musx::dom::others::MeasureNumberRegion::findMeasure </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
-          <td class="paramname"><em>document</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
-          <td class="paramname"><em>measureId</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Finds the measure number region containing a measure. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">document</td><td>The document to search </td></tr>
-    <tr><td class="paramname">measureId</td><td>The measure Id to search for </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An appropriate <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> instance that contains the <code>measureId</code>, or nullptr if none found. (Preference is given to regions with <code>showOnStart</code> set in the score or part data.) </dd></dl>
 
 </div>
 </div>

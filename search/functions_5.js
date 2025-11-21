@@ -10,7 +10,7 @@ var searchData=
   ['findbeamend_7',['findBeamEnd',['../classmusx_1_1dom_1_1EntryInfoPtr.html#aacdf5499308ecdbe9f2e3357b5f984f5',1,'musx::dom::EntryInfoPtr']]],
   ['findbeamstartorcurrent_8',['findBeamStartOrCurrent',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a8f1ab79a6faa2d52435f59224e788b0b',1,'musx::dom::EntryInfoPtr']]],
   ['findequalpitch_9',['findEqualPitch',['../classmusx_1_1dom_1_1NoteInfoPtr.html#aed537f60968794044f42f4b6de7488c4',1,'musx::dom::NoteInfoPtr']]],
-  ['findmeasure_10',['findMeasure',['../classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a28bc6e882827a20c4072c6a2344845e7',1,'musx::dom::others::MeasureNumberRegion']]],
+  ['findmeasurenumberregion_10',['findMeasureNumberRegion',['../classmusx_1_1dom_1_1others_1_1Measure.html#a2249656898f9dbd3aaf9e5c3b031e665',1,'musx::dom::others::Measure']]],
   ['findtupletinfo_11',['findTupletInfo',['../classmusx_1_1dom_1_1EntryInfoPtr.html#afd810deb36d0bf21b99d27486533ba21',1,'musx::dom::EntryInfoPtr']]],
   ['firstcontainingpart_12',['firstContainingPart',['../classmusx_1_1dom_1_1others_1_1Staff.html#adcfe012e7e7d271bb328cb7f53141eae',1,'musx::dom::others::Staff']]],
   ['flagoptions_13',['FlagOptions',['../classmusx_1_1dom_1_1options_1_1FlagOptions.html#a0ea5087413766d3b48df80ff7916ade6',1,'musx::dom::options::FlagOptions']]],

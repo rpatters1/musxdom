@@ -183,6 +183,9 @@ Public Member Functions</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShouldShowFullNames</b> () const</td></tr>
 <tr class="memdesc:a9ff1882e9350038250970527105eebc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if a measure should show full names vs. abbreviated names. <br /></td></tr>
 <tr class="separator:a9ff1882e9350038250970527105eebc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2249656898f9dbd3aaf9e5c3b031e665" id="r_a2249656898f9dbd3aaf9e5c3b031e665"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">MeasureNumberRegion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a2249656898f9dbd3aaf9e5c3b031e665">findMeasureNumberRegion</a> () const</td></tr>
+<tr class="memdesc:a2249656898f9dbd3aaf9e5c3b031e665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the measure number region containing this measure.  <br /></td></tr>
+<tr class="separator:a2249656898f9dbd3aaf9e5c3b031e665"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a0f5d6105af79216d3eb85fb4eabf89" id="r_a3a0f5d6105af79216d3eb85fb4eabf89"><td class="memItemLeft" align="right" valign="top">std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a3a0f5d6105af79216d3eb85fb4eabf89">calcDisplayNumber</a> () const</td></tr>
 <tr class="memdesc:a3a0f5d6105af79216d3eb85fb4eabf89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the visible number of the measure, based on the first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> that contains it.  <br /></td></tr>
 <tr class="separator:a3a0f5d6105af79216d3eb85fb4eabf89"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -771,6 +774,26 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a2249656898f9dbd3aaf9e5c3b031e665" name="a2249656898f9dbd3aaf9e5c3b031e665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2249656898f9dbd3aaf9e5c3b031e665">&#9670;&#160;</a></span>findMeasureNumberRegion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html">MeasureNumberRegion</a> &gt; musx::dom::others::Measure::findMeasureNumberRegion </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Finds the measure number region containing this measure. </p>
+<dl class="section return"><dt>Returns</dt><dd>An appropriate <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> instance that contains the <code>measureId</code>, or nullptr if none found. (Preference is given to regions with <code>showOnStart</code> set in the score or part data.) </dd></dl>
 
 </div>
 </div>

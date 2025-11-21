@@ -36,6 +36,7 @@ var classmusx_1_1dom_1_1others_1_1Measure =
     [ "createDisplayTimeSignature", "classmusx_1_1dom_1_1others_1_1Measure.html#af87c40eb79db6e09ac99b05c46e8bedb", null ],
     [ "createKeySignature", "classmusx_1_1dom_1_1others_1_1Measure.html#a03099d87e8e56693e6451f03c7b717cc", null ],
     [ "createTimeSignature", "classmusx_1_1dom_1_1others_1_1Measure.html#a4b9991c8f4aa604174b113b3326964c1", null ],
+    [ "findMeasureNumberRegion", "classmusx_1_1dom_1_1others_1_1Measure.html#a2249656898f9dbd3aaf9e5c3b031e665", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1Measure.html#aa3f5f28d0620ee2de12f210dd8d1cf36", null ],
     [ "abbrvTime", "classmusx_1_1dom_1_1others_1_1Measure.html#a318bcc072af3523e0fb53f2f6900db4a", null ],
     [ "allowSplitPoints", "classmusx_1_1dom_1_1others_1_1Measure.html#acf85afbd9bc5bb5fd8aa886791728cb6", null ],
