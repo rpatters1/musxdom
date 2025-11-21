@@ -111,12 +111,35 @@ CategoryStaffListSet MarkingCategory::createStaffListSet() const
 // ***** Measure *****
 // *******************
 
+MusxInstance<MeasureNumberRegion> Measure::findMeasureNumberRegion() const
+{
+    auto regions = getDocument()->getOthers()->getArray<MeasureNumberRegion>(getRequestedPartId());
+
+    MusxInstance<MeasureNumberRegion> fallback;
+
+    for (const auto& region : regions) {
+        if (!region->calcIncludesMeasure(getCmper())) {
+            continue;
+        }
+        // Prefer regions that show on the start of the system
+        if (region->scoreData->showOnStart || region->partData->showOnStart) {
+            return region;
+        }
+        // Keep the first region that includes the measure as a fallback
+        if (!fallback) {
+            fallback = region;
+        }
+    }
+
+    return fallback; // may be nullptr if no region contains the measure
+}
+
 std::optional<int> Measure::calcDisplayNumber() const
 {
     if (noMeasNum) {
         return std::nullopt;
     }
-    if (const auto region = MeasureNumberRegion::findMeasure(getDocument(), getCmper())) {
+    if (const auto region = findMeasureNumberRegion()) {
         return region->calcDisplayNumberFor(getCmper());
     }
     return std::nullopt;
@@ -280,30 +303,6 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
 // *******************************
 // ***** MeasureNumberRegion *****
 // *******************************
-
-MusxInstance<MeasureNumberRegion> MeasureNumberRegion::findMeasure(const DocumentPtr& document,
-                                                                   MeasCmper measureId)
-{
-    auto regions = document->getOthers()->getArray<MeasureNumberRegion>(SCORE_PARTID);
-
-    MusxInstance<MeasureNumberRegion> fallback;
-
-    for (const auto& region : regions) {
-        if (!region->calcIncludesMeasure(measureId)) {
-            continue;
-        }
-        // Prefer regions that show on the start of the system
-        if (region->scoreData->showOnStart || region->partData->showOnStart) {
-            return region;
-        }
-        // Keep the first region that includes the measure as a fallback
-        if (!fallback) {
-            fallback = region;
-        }
-    }
-
-    return fallback; // may be nullptr if no region contains the measure
-}
 
 std::optional<int> MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
 {

@@ -1102,6 +1102,7 @@ public:
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
 };
 
+class MeasureNumberRegion;
 /**
  * @class Measure
  * @brief Represents the attributes of a measure.
@@ -1204,6 +1205,11 @@ public:
     /// @brief Calculates if a measure should show full names vs. abbreviated names
     bool calcShouldShowFullNames() const
     { return getCmper() == 1 || showFullNames; }
+
+    /// @brief Finds the measure number region containing this measure.
+    /// @return An appropriate MeasureNumberRegion instance that contains the @p measureId, or nullptr if none found.
+    /// (Preference is given to regions with `showOnStart` set in the score or part data.)
+    MusxInstance<MeasureNumberRegion> findMeasureNumberRegion() const;
 
     /// @brief Calculates the visible number of the measure, based on the first MeasureNumberRegion that contains it.
     ///
@@ -1487,13 +1493,6 @@ public:
     /// @return The display number or std::nullopt if the measure is not included in measure numbering
     /// @throw std::logic_error if measureId is not contained in the region
     std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
-
-    /// @brief Finds the measure number region containing a measure
-    /// @param document The document to search
-    /// @param measureId The measure Id to search for
-    /// @return An appropriate MeasureNumberRegion instance that contains the @p measureId, or nullptr if none found.
-    /// (Preference is given to regions with `showOnStart` set in the score or part data.)
-    static MusxInstance<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
