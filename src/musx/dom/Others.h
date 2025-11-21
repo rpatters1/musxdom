@@ -1486,13 +1486,20 @@ public:
         return measureId >= startMeas && measureId < endMeas; // endMeas is non-inclusive!
     }
 
-    /// @brief Returns the starting measure number for this region.
+    /// @brief Returns the starting display measure number for this region. The value is irrespective
+    /// of whether the number actually displays on the first measure of the region. (This depends on #Measure::noMeasNum.)
+    /// The starting number appears on the first measure in the region that is included in measure numbering.
     int getStartNumber() const { return int(numberOffset + 1); }
 
     /// @brief Returns the visible number for a measure id with respect to the region.
     /// @return The display number or std::nullopt if the measure is not included in measure numbering
     /// @throw std::logic_error if measureId is not contained in the region
     std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
+
+    /// @brief Returns the last visible number in the region. This function takes into account if the last measure
+    /// is not included and falls back to the previous measure if so. (And repeats if necessary.)
+    /// @return The last visible number or std::nullopt if no measure in the region is included in numbering. (See #Measure::noMeasNum.)
+    std::optional<int> calcLastDisplayNumber() const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {

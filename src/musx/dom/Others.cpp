@@ -310,8 +310,8 @@ std::optional<int> MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId
         throw std::logic_error("Measure id " + std::to_string(measureId) + " is not contained in measure number region " + std::to_string(getCmper()));
     }
     int result = int(measureId) - int(startMeas) + getStartNumber();
-    for (MeasCmper next = startMeas; next <= measureId; next++) {
-        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), next)) {
+    for (MeasCmper nextMeasId = startMeas; nextMeasId <= measureId; nextMeasId++) {
+        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), nextMeasId)) {
             if (measure->noMeasNum) {
                 if (measure->getCmper() == measureId) {
                     return std::nullopt;
@@ -321,6 +321,20 @@ std::optional<int> MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId
         }
     }
     return result;
+}
+
+std::optional<int> MeasureNumberRegion::calcLastDisplayNumber() const
+{
+    for (MeasCmper endMeasId = endMeas - 1; endMeasId >= startMeas; endMeasId--) {
+        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), endMeasId)) {
+            if (!measure->noMeasNum) {
+                return calcDisplayNumberFor(endMeasId);
+            }
+        } else {
+            break;
+        }
+    }
+    return std::nullopt;
 }
 
 // *************************************
