@@ -1209,7 +1209,8 @@ public:
     ///
     /// Depending on the display options of the found MeasureNumberRegion, the number may or may not appear in the score.
     /// And if it does, it may not appear as a number.
-    int calcDisplayNumber() const;
+    /// @return The display number or std::nullopt if the measure is not included in measure numbering
+    std::optional<int> calcDisplayNumber() const;
 
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
@@ -1483,8 +1484,9 @@ public:
     int getStartNumber() const { return int(numberOffset + 1); }
 
     /// @brief Returns the visible number for a measure id with respect to the region.
+    /// @return The display number or std::nullopt if the measure is not included in measure numbering
     /// @throw std::logic_error if measureId is not contained in the region
-    int calcDisplayNumberFor(MeasCmper measureId) const;
+    std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
 
     /// @brief Finds the measure number region containing a measure
     /// @param document The document to search

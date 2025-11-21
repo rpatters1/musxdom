@@ -111,10 +111,10 @@ CategoryStaffListSet MarkingCategory::createStaffListSet() const
 // ***** Measure *****
 // *******************
 
-int Measure::calcDisplayNumber() const
+std::optional<int> Measure::calcDisplayNumber() const
 {
     if (noMeasNum) {
-        return getCmper();
+        return std::nullopt;
     }
     if (const auto region = MeasureNumberRegion::findMeasure(getDocument(), getCmper())) {
         return region->calcDisplayNumberFor(getCmper());
@@ -292,9 +292,9 @@ MusxInstance<MeasureNumberRegion> MeasureNumberRegion::findMeasure(const Documen
     return nullptr;
 }
 
-int MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
+std::optional<int> MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
 {
-    if (!calcIncludesMeasure(measureId)) {
+    MUSX_ASSERT_IF(!calcIncludesMeasure(measureId)) {
         throw std::logic_error("Measure id " + std::to_string(measureId) + " is not contained in measure number region " + std::to_string(getCmper()));
     }
     int result = int(measureId) - int(startMeas) + getStartNumber();
@@ -302,7 +302,7 @@ int MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
         if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), next)) {
             if (measure->noMeasNum) {
                 if (measure->getCmper() == measureId) {
-                    return measureId;
+                    return std::nullopt;
                 }
                 result--;
             }
