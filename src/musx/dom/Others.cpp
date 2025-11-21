@@ -111,15 +111,15 @@ CategoryStaffListSet MarkingCategory::createStaffListSet() const
 // ***** Measure *****
 // *******************
 
-int Measure::calcDisplayNumber() const
+std::optional<int> Measure::calcDisplayNumber() const
 {
     if (noMeasNum) {
-        return getCmper();
+        return std::nullopt;
     }
     if (const auto region = MeasureNumberRegion::findMeasure(getDocument(), getCmper())) {
         return region->calcDisplayNumberFor(getCmper());
     }
-    return getCmper();
+    return std::nullopt;
 }
 
 MusxInstance<KeySignature> Measure::createKeySignature(const std::optional<StaffCmper>& forStaff) const
@@ -281,20 +281,33 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
 // ***** MeasureNumberRegion *****
 // *******************************
 
-MusxInstance<MeasureNumberRegion> MeasureNumberRegion::findMeasure(const DocumentPtr& document, MeasCmper measureId)
+MusxInstance<MeasureNumberRegion> MeasureNumberRegion::findMeasure(const DocumentPtr& document,
+                                                                   MeasCmper measureId)
 {
     auto regions = document->getOthers()->getArray<MeasureNumberRegion>(SCORE_PARTID);
+
+    MusxInstance<MeasureNumberRegion> fallback;
+
     for (const auto& region : regions) {
-        if (region->calcIncludesMeasure(measureId)) {
+        if (!region->calcIncludesMeasure(measureId)) {
+            continue;
+        }
+        // Prefer regions that show on the start of the system
+        if (region->scoreData->showOnStart || region->partData->showOnStart) {
             return region;
         }
+        // Keep the first region that includes the measure as a fallback
+        if (!fallback) {
+            fallback = region;
+        }
     }
-    return nullptr;
+
+    return fallback; // may be nullptr if no region contains the measure
 }
 
-int MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
+std::optional<int> MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
 {
-    if (!calcIncludesMeasure(measureId)) {
+    MUSX_ASSERT_IF(!calcIncludesMeasure(measureId)) {
         throw std::logic_error("Measure id " + std::to_string(measureId) + " is not contained in measure number region " + std::to_string(getCmper()));
     }
     int result = int(measureId) - int(startMeas) + getStartNumber();
@@ -302,7 +315,7 @@ int MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId) const
         if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), next)) {
             if (measure->noMeasNum) {
                 if (measure->getCmper() == measureId) {
-                    return measureId;
+                    return std::nullopt;
                 }
                 result--;
             }

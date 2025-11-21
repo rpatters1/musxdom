@@ -1209,7 +1209,9 @@ public:
     ///
     /// Depending on the display options of the found MeasureNumberRegion, the number may or may not appear in the score.
     /// And if it does, it may not appear as a number.
-    int calcDisplayNumber() const;
+    /// @return The display number or std::nullopt if the measure is not included in measure numbering or if it is not
+    /// covered by a measure number region.
+    std::optional<int> calcDisplayNumber() const;
 
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
@@ -1408,9 +1410,8 @@ public:
     class ScorePartData : public ContainedClassBase
     {
     public:
-        /** @brief Constructor */
-        explicit ScorePartData(const MusxInstance<MeasureNumberRegion>& parent) : ContainedClassBase(parent) {}
-
+        using ContainedClassBase::ContainedClassBase;
+     
         std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
         std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
         std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.
@@ -1483,14 +1484,29 @@ public:
     int getStartNumber() const { return int(numberOffset + 1); }
 
     /// @brief Returns the visible number for a measure id with respect to the region.
+    /// @return The display number or std::nullopt if the measure is not included in measure numbering
     /// @throw std::logic_error if measureId is not contained in the region
-    int calcDisplayNumberFor(MeasCmper measureId) const;
+    std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
 
     /// @brief Finds the measure number region containing a measure
     /// @param document The document to search
     /// @param measureId The measure Id to search for
-    /// @return The first MeasureNumberRegion instance that contains the @p measureId, or nullptr if not found.
+    /// @return An appropriate MeasureNumberRegion instance that contains the @p measureId, or nullptr if none found.
+    /// (Preference is given to regions with `showOnStart` set in the score or part data.)
     static MusxInstance<MeasureNumberRegion> findMeasure(const DocumentPtr& document, MeasCmper measureId);
+
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OthersBase::integrityCheck(ptrToThis);
+        if (!scoreData) {
+            scoreData = std::make_shared<ScorePartData>(ptrToThis);
+            MUSX_INTEGRITY_ERROR("Measure number region " + std::to_string(getCmper()) + " is missing score data.");
+        }
+        if (!partData) {
+            partData = std::make_shared<ScorePartData>(ptrToThis);
+            MUSX_INTEGRITY_ERROR("Measure number region " + std::to_string(getCmper()) + " is missing part data.");
+        }
+    }
 
     constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MeasureNumberRegion>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

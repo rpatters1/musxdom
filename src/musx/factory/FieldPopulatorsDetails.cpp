@@ -251,6 +251,12 @@ MUSX_XML_ELEMENT_ARRAY(DotAlterations, {
     {"posIncr", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->interdotSpacing = e->getTextAs<Evpu>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(EntryPartFieldDetail, {
+    {"posi", [](const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
+    {"freezeStem", [](const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->freezeStem = populateBoolean(e, i); }},
+    {"upStem", [](const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->upStem = populateBoolean(e, i); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(EntrySize, {
     {"percent", [](const XmlElementPtr& e, const std::shared_ptr<EntrySize>& i) { i->percent = e->getTextAs<int>(); }},
 });

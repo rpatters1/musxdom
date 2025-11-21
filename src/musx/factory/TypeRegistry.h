@@ -388,7 +388,8 @@ using RegisteredDetails = TypeRegistry <
     dom::details::PercussionNoteCode,
     dom::details::LyricAssignChorus,
     dom::details::LyricAssignSection,
-    dom::details::LyricAssignVerse
+    dom::details::LyricAssignVerse,
+    dom::details::EntryPartFieldDetail
 >;
 
 /**
