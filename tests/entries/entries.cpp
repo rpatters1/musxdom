@@ -415,3 +415,42 @@ TEST(EntryTest, IsGlissToNote)
     EXPECT_TRUE(EntryInfoPtr(entryFrame, 1).calcIsGlissToGraceEntry());
     EXPECT_FALSE(EntryInfoPtr(entryFrame, 2).calcIsTrillToGraceEntry());
 }
+
+TEST(EntryTest, EntryPartFieldDetail)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "entrypart.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_GE(entryFrame->getEntries().size(), 1);
+        auto entryInfo = EntryInfoPtr(entryFrame, 0);
+        EXPECT_EQ(entryInfo.calcManuaOffset(), 0);
+        EXPECT_EQ(entryInfo.calcEntryStemSettings(), std::make_pair(false, false));
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, 1, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_GE(entryFrame->getEntries().size(), 1);
+        auto entryInfo = EntryInfoPtr(entryFrame, 0);
+        EXPECT_EQ(entryInfo.calcManuaOffset(), 28);
+        EXPECT_EQ(entryInfo.calcEntryStemSettings(), std::make_pair(true, true));
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, 2, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_GE(entryFrame->getEntries().size(), 1);
+        auto entryInfo = EntryInfoPtr(entryFrame, 0);
+        EXPECT_EQ(entryInfo.calcManuaOffset(), 0);
+        EXPECT_EQ(entryInfo.calcEntryStemSettings(), std::make_pair(false, false));
+    }
+}

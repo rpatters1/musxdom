@@ -404,11 +404,13 @@ MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entr
 MusxInstance<details::EntryPartFieldDetail> EntryInfoPtr::getPartFieldData() const
 {
     const auto frame = getFrame();
-    const auto entry = (*this)->getEntry();
-    if (const auto partData = frame->getDocument()->getDetails()->get<details::EntryPartFieldDetail>(frame->getRequestedPartId(), entry->getEntryNumber())) {
-        // EntryPartFieldDetail is an outlier in that it is a partially shared entity that should be ignored if it comes from the score.
-        if (partData->getSourcePartId() != SCORE_PARTID) {
-            return partData;
+    if (frame->getRequestedPartId() != SCORE_PARTID) {
+        const auto entry = (*this)->getEntry();
+        if (const auto partData = frame->getDocument()->getDetails()->get<details::EntryPartFieldDetail>(frame->getRequestedPartId(), entry->getEntryNumber())) {
+            // EntryPartFieldDetail is an outlier in that it is a partially shared entity that should be ignored if it comes from the score.
+            if (partData->getSourcePartId() != SCORE_PARTID) {
+                return partData;
+            }
         }
     }
     return nullptr;
