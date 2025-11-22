@@ -561,10 +561,7 @@ public:
     }
 
     /// @brief returns whether the two time signatures represent the same time signature
-    bool isSame(const TimeSignature& src) const
-    {
-        return components == src.components && m_abbreviate == src.m_abbreviate;
-    }
+    bool isSame(const TimeSignature& src) const;
 
     /// @brief Creates a time signature corresponding to the component at @p index
     /// @param index The 0-based component index

@@ -558,6 +558,17 @@ std::optional<char32_t> TimeSignature::getAbbreviatedSymbol() const
     return std::nullopt;
 }
 
+bool TimeSignature::isSame(const TimeSignature& src) const
+{
+    if (components != src.components) {
+        return false;
+    }
+    if (isCutTime() || isCommonTime()) {
+        return getAbbreviatedSymbol() == src.getAbbreviatedSymbol();
+    }
+    return true;
+}
+
 bool TimeSignature::isCommonTime() const
 {
     if (components.size() != 1 || components[0].counts.size() != 1 || components[0].units.size() != 1) {
