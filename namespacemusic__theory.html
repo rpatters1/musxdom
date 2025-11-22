@@ -155,9 +155,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a80cb60f4b9f3dc625d5d957474f63364" id="r_a80cb60f4b9f3dc625d5d957474f63364"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a80cb60f4b9f3dc625d5d957474f63364">calcDisplacement</a> (int pitchClass, int octave)</td></tr>
-<tr class="memdesc:a80cb60f4b9f3dc625d5d957474f63364"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the displacement value for a given absolute pitch class and octave.  <br /></td></tr>
-<tr class="separator:a80cb60f4b9f3dc625d5d957474f63364"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c6451da69ad76a5cab37f007209c014" id="r_a9c6451da69ad76a5cab37f007209c014"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a9c6451da69ad76a5cab37f007209c014">calcDisplacement</a> (int pitchClass, int octave)</td></tr>
+<tr class="memdesc:a9c6451da69ad76a5cab37f007209c014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the displacement value for a given absolute pitch class and octave.  <br /></td></tr>
+<tr class="separator:a9c6451da69ad76a5cab37f007209c014"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cb3b3e4883819fd7f9acbca09b7cebe" id="r_a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a6cb3b3e4883819fd7f9acbca09b7cebe">sign</a> (T n)</td></tr>
 <tr class="memdesc:a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the sign of an integer.  <br /></td></tr>
@@ -170,15 +170,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ad044685489c9b3d008be12762a490463"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#ad044685489c9b3d008be12762a490463">positiveModulus</a> (T n, T d, T *q=nullptr)</td></tr>
 <tr class="memdesc:ad044685489c9b3d008be12762a490463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a positive modulus in the range [0, d-1], even for negative dividends.  <br /></td></tr>
 <tr class="separator:ad044685489c9b3d008be12762a490463"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0912509820e82f16719b9b0a7fdd09f9" id="r_a0912509820e82f16719b9b0a7fdd09f9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a0912509820e82f16719b9b0a7fdd09f9">calc12EdoHalfstepsInInterval</a> (int interval, int chromaticAlteration)</td></tr>
-<tr class="memdesc:a0912509820e82f16719b9b0a7fdd09f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of 12-EDO chromatic halfsteps in the specified interval.  <br /></td></tr>
-<tr class="separator:a0912509820e82f16719b9b0a7fdd09f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a837d29ac7905886bafa84f3e02569169" id="r_a837d29ac7905886bafa84f3e02569169"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a837d29ac7905886bafa84f3e02569169">calcAlterationFrom12EdoHalfsteps</a> (int interval, int halfsteps)</td></tr>
-<tr class="memdesc:a837d29ac7905886bafa84f3e02569169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the alteration in chromatic halfsteps for the specified interval/halfsteps combination.  <br /></td></tr>
-<tr class="separator:a837d29ac7905886bafa84f3e02569169"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac69472adc1182755b873452481cca889" id="r_ac69472adc1182755b873452481cca889"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#ac69472adc1182755b873452481cca889">calcAlterationFromKeySigChange</a> (int interval, int keySigChange)</td></tr>
-<tr class="memdesc:ac69472adc1182755b873452481cca889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the chromatic alteration needed for a diatonic interval to produce a desired key signature change.  <br /></td></tr>
-<tr class="separator:ac69472adc1182755b873452481cca889"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf8c49a568a6a6043714a796c4de89e4" id="r_acf8c49a568a6a6043714a796c4de89e4"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#acf8c49a568a6a6043714a796c4de89e4">calc12EdoHalfstepsInInterval</a> (int interval, int chromaticAlteration)</td></tr>
+<tr class="memdesc:acf8c49a568a6a6043714a796c4de89e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of 12-EDO chromatic halfsteps in the specified interval.  <br /></td></tr>
+<tr class="separator:acf8c49a568a6a6043714a796c4de89e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d580efb2fd53b410d55ecd25b268376" id="r_a5d580efb2fd53b410d55ecd25b268376"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a5d580efb2fd53b410d55ecd25b268376">calcAlterationFrom12EdoHalfsteps</a> (int interval, int halfsteps)</td></tr>
+<tr class="memdesc:a5d580efb2fd53b410d55ecd25b268376"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the alteration in chromatic halfsteps for the specified interval/halfsteps combination.  <br /></td></tr>
+<tr class="separator:a5d580efb2fd53b410d55ecd25b268376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8135fae68fcafc7da27d3540d2a04b3" id="r_aa8135fae68fcafc7da27d3540d2a04b3"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#aa8135fae68fcafc7da27d3540d2a04b3">calcAlterationFromKeySigChange</a> (int interval, int keySigChange)</td></tr>
+<tr class="memdesc:aa8135fae68fcafc7da27d3540d2a04b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the chromatic alteration needed for a diatonic interval to produce a desired key signature change.  <br /></td></tr>
+<tr class="separator:aa8135fae68fcafc7da27d3540d2a04b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf657cfd2d18ef5386cc35a5d1283ea4" id="r_aaf657cfd2d18ef5386cc35a5d1283ea4"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#aaf657cfd2d18ef5386cc35a5d1283ea4">calcTranspositionIsOctave</a> (int displacement, int alteration)</td></tr>
+<tr class="memdesc:aaf657cfd2d18ef5386cc35a5d1283ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the transposition values result in trasposing by one or more octaves.  <br /></td></tr>
+<tr class="separator:aaf657cfd2d18ef5386cc35a5d1283ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -202,9 +205,9 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5">STANDARD_DIATONIC_STEPS</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>MINOR_KEYMAP</b> = { 0, 2, 3, 5, 7, 8, 10 }</td></tr>
 <tr class="memdesc:af0e72207b9ce2605cdf0bae1e2176ef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">keymap for 12-EDO minor keys <br /></td></tr>
 <tr class="separator:af0e72207b9ce2605cdf0bae1e2176ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab15e3c9f32056a8a2b7c6991bcaa974d" id="r_ab15e3c9f32056a8a2b7c6991bcaa974d"><td class="memItemLeft" align="right" valign="top">constexpr std::array&lt; std::array&lt; int, 2 &gt;, 7 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#ab15e3c9f32056a8a2b7c6991bcaa974d">DIATONIC_INTERVAL_ADJUSTMENTS</a></td></tr>
-<tr class="memdesc:ab15e3c9f32056a8a2b7c6991bcaa974d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of chromatic intervals. Each member array contains.  <br /></td></tr>
-<tr class="separator:ab15e3c9f32056a8a2b7c6991bcaa974d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acca84f587bc2b11d1a42cfb98a869ed4" id="r_acca84f587bc2b11d1a42cfb98a869ed4"><td class="memItemLeft" align="right" valign="top">constexpr std::array&lt; std::array&lt; int, 2 &gt;, <a class="el" href="namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5">STANDARD_DIATONIC_STEPS</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#acca84f587bc2b11d1a42cfb98a869ed4">DIATONIC_INTERVAL_ADJUSTMENTS</a></td></tr>
+<tr class="memdesc:acca84f587bc2b11d1a42cfb98a869ed4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of chromatic intervals. Each member array contains.  <br /></td></tr>
+<tr class="separator:acca84f587bc2b11d1a42cfb98a869ed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A dependency-free, header-only collection of useful functions for music theory. </p>
@@ -293,8 +296,8 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a0912509820e82f16719b9b0a7fdd09f9" name="a0912509820e82f16719b9b0a7fdd09f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0912509820e82f16719b9b0a7fdd09f9">&#9670;&#160;</a></span>calc12EdoHalfstepsInInterval()</h2>
+<a id="acf8c49a568a6a6043714a796c4de89e4" name="acf8c49a568a6a6043714a796c4de89e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf8c49a568a6a6043714a796c4de89e4">&#9670;&#160;</a></span>calc12EdoHalfstepsInInterval()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -303,7 +306,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int music_theory::calc12EdoHalfstepsInInterval </td>
+          <td class="memname">constexpr int music_theory::calc12EdoHalfstepsInInterval </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>interval</em>, </td>
@@ -322,7 +325,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -339,8 +342,8 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 
 </div>
 </div>
-<a id="a837d29ac7905886bafa84f3e02569169" name="a837d29ac7905886bafa84f3e02569169"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a837d29ac7905886bafa84f3e02569169">&#9670;&#160;</a></span>calcAlterationFrom12EdoHalfsteps()</h2>
+<a id="a5d580efb2fd53b410d55ecd25b268376" name="a5d580efb2fd53b410d55ecd25b268376"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d580efb2fd53b410d55ecd25b268376">&#9670;&#160;</a></span>calcAlterationFrom12EdoHalfsteps()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -349,7 +352,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int music_theory::calcAlterationFrom12EdoHalfsteps </td>
+          <td class="memname">constexpr int music_theory::calcAlterationFrom12EdoHalfsteps </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>interval</em>, </td>
@@ -368,7 +371,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -385,8 +388,8 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 
 </div>
 </div>
-<a id="ac69472adc1182755b873452481cca889" name="ac69472adc1182755b873452481cca889"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac69472adc1182755b873452481cca889">&#9670;&#160;</a></span>calcAlterationFromKeySigChange()</h2>
+<a id="aa8135fae68fcafc7da27d3540d2a04b3" name="aa8135fae68fcafc7da27d3540d2a04b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8135fae68fcafc7da27d3540d2a04b3">&#9670;&#160;</a></span>calcAlterationFromKeySigChange()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -395,7 +398,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int music_theory::calcAlterationFromKeySigChange </td>
+          <td class="memname">constexpr int music_theory::calcAlterationFromKeySigChange </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>interval</em>, </td>
@@ -414,7 +417,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -423,7 +426,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">interval</td><td>The diatonic interval (e.g. +3 for a perfect fourth up). </td></tr>
-    <tr><td class="paramname">keySigChange</td><td>The desired change in key signature (positive for sharps added, negative for flats). </td></tr>
+    <tr><td class="paramname">keySigChange</td><td>The desired change in key signature (positive for sharps added or flats removed, negative for flats added or sharps removed). </td></tr>
   </table>
   </dd>
 </dl>
@@ -431,8 +434,8 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 
 </div>
 </div>
-<a id="a80cb60f4b9f3dc625d5d957474f63364" name="a80cb60f4b9f3dc625d5d957474f63364"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80cb60f4b9f3dc625d5d957474f63364">&#9670;&#160;</a></span>calcDisplacement()</h2>
+<a id="a9c6451da69ad76a5cab37f007209c014" name="a9c6451da69ad76a5cab37f007209c014"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c6451da69ad76a5cab37f007209c014">&#9670;&#160;</a></span>calcDisplacement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -441,7 +444,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int music_theory::calcDisplacement </td>
+          <td class="memname">constexpr int music_theory::calcDisplacement </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>pitchClass</em>, </td>
@@ -460,7 +463,7 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -474,6 +477,51 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A displacement value that can be used to create a <a class="el" href="classmusic__theory_1_1Transposer.html">Transposer</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="aaf657cfd2d18ef5386cc35a5d1283ea4" name="aaf657cfd2d18ef5386cc35a5d1283ea4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf657cfd2d18ef5386cc35a5d1283ea4">&#9670;&#160;</a></span>calcTranspositionIsOctave()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool music_theory::calcTranspositionIsOctave </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>displacement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>alteration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines if the transposition values result in trasposing by one or more octaves. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displacement</td><td>The diatonic displacement. </td></tr>
+    <tr><td class="paramname">alteration</td><td>The chromatic alteration. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -559,7 +607,7 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -630,8 +678,8 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="ab15e3c9f32056a8a2b7c6991bcaa974d" name="ab15e3c9f32056a8a2b7c6991bcaa974d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab15e3c9f32056a8a2b7c6991bcaa974d">&#9670;&#160;</a></span>DIATONIC_INTERVAL_ADJUSTMENTS</h2>
+<a id="acca84f587bc2b11d1a42cfb98a869ed4" name="acca84f587bc2b11d1a42cfb98a869ed4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acca84f587bc2b11d1a42cfb98a869ed4">&#9670;&#160;</a></span>DIATONIC_INTERVAL_ADJUSTMENTS</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -640,7 +688,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::array&lt;std::array&lt;int, 2&gt;, 7&gt; music_theory::DIATONIC_INTERVAL_ADJUSTMENTS</td>
+          <td class="memname">constexpr std::array&lt;std::array&lt;int, 2&gt;, <a class="el" href="namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5">STANDARD_DIATONIC_STEPS</a>&gt; music_theory::DIATONIC_INTERVAL_ADJUSTMENTS</td>
         </tr>
       </table>
   </td>

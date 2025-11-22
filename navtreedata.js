@@ -86,11 +86,11 @@ var NAVTREEINDEX =
 "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#aaae0d01831682dbb5952103f9cc3fb0a",
 "classmusx_1_1xml_1_1pugi_1_1Element.html#a54cfb76f8e2e5ff35e82bf34aa61b59d",
 "namespacemusic__theory.html#a6bd660ac8929dd467be2713bec8e4402",
-"namespacemusx_1_1dom_1_1uuid.html#a044fe12222138e4b0266779418a86430",
-"namespacemusx_1_1dom_1_1uuid.html#a574599f82e02f25da5b2c7797babce9a",
-"namespacemusx_1_1dom_1_1uuid.html#aa55dd130ed97568119af0e33bbc874d6",
-"namespacemusx_1_1dom_1_1uuid.html#afb055366f8ba0debbabca38ffd9eb216",
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html"
+"namespacemusx_1_1dom_1_1uuid.html#a03ecf9eb6d0bec144f87e55c7739bc10",
+"namespacemusx_1_1dom_1_1uuid.html#a56fd3a78bf866b6525e28493fd346b47",
+"namespacemusx_1_1dom_1_1uuid.html#aa5509d3c74c612b4dc70af516386ca48",
+"namespacemusx_1_1dom_1_1uuid.html#afaef3edbf0899a30c8b53c6de848efdf",
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#ae1f971f4f492a7e25870a16a880552af"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

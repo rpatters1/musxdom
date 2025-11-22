@@ -75,7 +75,7 @@ var searchData=
   ['dholak_72',['Dholak',['../namespacemusx_1_1dom_1_1uuid.html#a910bb4ab3f632800d33e1a0c46d8ead0',1,'musx::dom::uuid']]],
   ['diamond_73',['Diamond',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256a8f7671185d590914ac21c7511767b699',1,'musx::dom::others::Enclosure']]],
   ['diatonic_74',['diatonic',['../classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html#a3ae4027bdca0cb614b8c75ea71980746',1,'musx::dom::others::KeyMapArray::StepElement::diatonic'],['../classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html#a4c0e2b6fe00bce3fca264f84eb7d1a8f',1,'musx::dom::others::Staff::ChromaticTransposition::diatonic']]],
-  ['diatonic_5finterval_5fadjustments_75',['DIATONIC_INTERVAL_ADJUSTMENTS',['../namespacemusic__theory.html#ab15e3c9f32056a8a2b7c6991bcaa974d',1,'music_theory']]],
+  ['diatonic_5finterval_5fadjustments_75',['DIATONIC_INTERVAL_ADJUSTMENTS',['../namespacemusic__theory.html#acca84f587bc2b11d1a42cfb98a869ed4',1,'music_theory']]],
   ['diatonicmode_76',['DiatonicMode',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683ce',1,'music_theory']]],
   ['diatonictranspose_77',['diatonicTranspose',['../classmusic__theory_1_1Transposer.html#a8fc8178c83f5655e24b13165a968777a',1,'music_theory::Transposer']]],
   ['diddleybow_78',['DiddleyBow',['../namespacemusx_1_1dom_1_1uuid.html#ad7892fc908db8c001ce396624c5b070b',1,'musx::dom::uuid']]],

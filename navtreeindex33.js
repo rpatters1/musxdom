@@ -1,5 +1,6 @@
 var NAVTREEINDEX33 =
 {
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#ae1f971f4f492a7e25870a16a880552af":[2,0,1,0,47,16,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html":[2,0,1,0,47,17],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html":[1,0,1,0,46,17],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html#a04c140860c7feafb8d0cc8b8b050a3f6":[2,0,1,0,47,17,1],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX32 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#afaef3edbf0899a30c8b53c6de848efdf":[1,0,1,0,5,133],
 "namespacemusx_1_1dom_1_1uuid.html#afb055366f8ba0debbabca38ffd9eb216":[1,0,1,0,5,74],
 "namespacemusx_1_1dom_1_1uuid.html#afbe80fd7f09a70f22f963397ce83f325":[1,0,1,0,5,182],
 "namespacemusx_1_1dom_1_1uuid.html#afbf706029c477a13a9cf5b7a7b9e68cd":[1,0,1,0,5,664],
@@ -248,6 +249,5 @@ var NAVTREEINDEX32 =
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#accc26340dcf77e70f0a243936c5b29a8":[2,0,1,0,47,16,6],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#ad4b5789e669c516a041c7644d0f0da4a":[1,0,1,0,46,16,1],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#ad4b5789e669c516a041c7644d0f0da4a":[2,0,1,0,47,16,1],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#ae1f971f4f492a7e25870a16a880552af":[1,0,1,0,46,16,2],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#ae1f971f4f492a7e25870a16a880552af":[2,0,1,0,47,16,2]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html#ae1f971f4f492a7e25870a16a880552af":[1,0,1,0,46,16,2]
 };

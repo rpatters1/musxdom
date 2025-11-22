@@ -42,7 +42,7 @@ var searchData=
   ['dhol_39',['Dhol',['../namespacemusx_1_1dom_1_1uuid.html#a17a7e5b16abf129e91da4f3f8210662b',1,'musx::dom::uuid']]],
   ['dholak_40',['Dholak',['../namespacemusx_1_1dom_1_1uuid.html#a910bb4ab3f632800d33e1a0c46d8ead0',1,'musx::dom::uuid']]],
   ['diatonic_41',['diatonic',['../classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html#a3ae4027bdca0cb614b8c75ea71980746',1,'musx::dom::others::KeyMapArray::StepElement::diatonic'],['../classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html#a4c0e2b6fe00bce3fca264f84eb7d1a8f',1,'musx::dom::others::Staff::ChromaticTransposition::diatonic']]],
-  ['diatonic_5finterval_5fadjustments_42',['DIATONIC_INTERVAL_ADJUSTMENTS',['../namespacemusic__theory.html#ab15e3c9f32056a8a2b7c6991bcaa974d',1,'music_theory']]],
+  ['diatonic_5finterval_5fadjustments_42',['DIATONIC_INTERVAL_ADJUSTMENTS',['../namespacemusic__theory.html#acca84f587bc2b11d1a42cfb98a869ed4',1,'music_theory']]],
   ['diddleybow_43',['DiddleyBow',['../namespacemusx_1_1dom_1_1uuid.html#ad7892fc908db8c001ce396624c5b070b',1,'musx::dom::uuid']]],
   ['didgeridoo_44',['Didgeridoo',['../namespacemusx_1_1dom_1_1uuid.html#ac7b109a01eb92fae279692971458ec24',1,'musx::dom::uuid']]],
   ['differentfirstpagemargin_45',['differentFirstPageMargin',['../classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html#a3f8b6a160674ea87c856658e9162136c',1,'musx::dom::options::PageFormatOptions::PageFormat']]],
