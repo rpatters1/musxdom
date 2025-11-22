@@ -1718,7 +1718,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                     auto tuplets = document->getDetails()->getArray<details::TupletDef>(getRequestedPartId(), entry->getEntryNumber());
                     std::sort(tuplets.begin(), tuplets.end(), [](const auto& a, const auto& b) {
                         return a->calcReferenceDuration() > b->calcReferenceDuration(); // Sort descending by reference duration
-                        });
+                    });
                     for (const auto& tuplet : tuplets) {
                         size_t index = entryFrame->tupletInfo.size();
                         entryFrame->tupletInfo.emplace_back(entryFrame, tuplet, i, actualElapsedDuration, entry->voice2);
@@ -2029,7 +2029,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                 if (!tryEntry) { // if v2 sequence exhausted
                     auto nextDuration = m_entry->calcNextElapsedDuration();
                     nextEntry = nextEntry.getNextInLayer();
-                    while (nextEntry.getMeasure() == m_entry.getMeasure() && nextEntry->elapsedDuration < nextDuration) {
+                    while (nextEntry && nextEntry.getMeasure() == m_entry.getMeasure() && nextEntry->elapsedDuration < nextDuration) {
                         nextEntry = nextEntry.getNextInLayer();
                     }
                 } else {
