@@ -51,7 +51,7 @@ constexpr std::array<int, STANDARD_DIATONIC_STEPS> MINOR_KEYMAP = { 0, 2, 3, 5, 
 /// @brief Array of chromatic intervals. Each member array contains
 ///     - the number of fifths to add, which is also the key signature adjustment for the interval
 ///     - the number of octaves to subtract
-constexpr std::array<std::array<int, 2>, 7> DIATONIC_INTERVAL_ADJUSTMENTS = { {
+constexpr std::array<std::array<int, 2>, STANDARD_DIATONIC_STEPS> DIATONIC_INTERVAL_ADJUSTMENTS = { {
     { 0,  0 },  // unison
     { 2, -1 },  // second
     { 4, -2 },  // third
@@ -110,7 +110,7 @@ enum class ClefType
 /// @param pitchClass 0..6 corresponding to C..B
 /// @param octave Octave 4 is the middle-C octave
 /// @return A displacement value that can be used to create a @ref Transposer instance.
-inline int calcDisplacement(int pitchClass, int octave)
+constexpr int calcDisplacement(int pitchClass, int octave)
 {
     pitchClass %= STANDARD_DIATONIC_STEPS;
     const int relativeOctave = octave - 4;
@@ -122,7 +122,7 @@ inline int calcDisplacement(int pitchClass, int octave)
 /// @param n The integer to process.
 /// @return -1 for negative; 1 for non-negative.
 template <typename T>
-constexpr inline T sign(T n)
+constexpr T sign(T n)
 {
     static_assert(std::is_arithmetic_v<T>, "sign requires a numeric type");
     return n < T(0) ? T(-1) : T(1);
@@ -163,7 +163,7 @@ constexpr T positiveModulus(T n, T d, T* q = nullptr)
 /// @param interval              The diatonic displacement (negative for downward intervals).
 /// @param chromaticAlteration   The chromatic halfstep alteration that defines the chromatic interval.
 /// @return The number of 12-EDO divisions (chromatic halfsteps) in the interval (negative means down)
-inline int calc12EdoHalfstepsInInterval(int interval, int chromaticAlteration)
+constexpr int calc12EdoHalfstepsInInterval(int interval, int chromaticAlteration)
 {
     int octaves{};
     int diatonic = positiveModulus(interval, STANDARD_DIATONIC_STEPS, &octaves);
@@ -174,7 +174,7 @@ inline int calc12EdoHalfstepsInInterval(int interval, int chromaticAlteration)
 /// @param interval         The diatonic displacement (negative for downward transposition).
 /// @param halfsteps        The number of 12-EDO chromatic halfsteps in the interval (negative means down).
 /// @return The alteration value that, with @p interval, defines the chromatic interval. This return value can be used to initialize a @ref Transposer.
-inline int calcAlterationFrom12EdoHalfsteps(int interval, int halfsteps)
+constexpr int calcAlterationFrom12EdoHalfsteps(int interval, int halfsteps)
 {
     int octaves{};
     int diatonic = positiveModulus(interval, STANDARD_DIATONIC_STEPS, &octaves);
@@ -184,9 +184,9 @@ inline int calcAlterationFrom12EdoHalfsteps(int interval, int halfsteps)
 
 /// @brief Determines the chromatic alteration needed for a diatonic interval to produce a desired key signature change.
 /// @param interval            The diatonic interval (e.g. +3 for a perfect fourth up).
-/// @param keySigChange        The desired change in key signature (positive for sharps added, negative for flats).
+/// @param keySigChange        The desired change in key signature (positive for sharps added or flats removed, negative for flats added or sharps removed).
 /// @return The chromatic alteration in halfsteps required to produce that key signature change with the given diatonic interval.
-inline int calcAlterationFromKeySigChange(int interval, int keySigChange)
+constexpr int calcAlterationFromKeySigChange(int interval, int keySigChange)
 {
     int diatonic = positiveModulus(interval, STANDARD_DIATONIC_STEPS);
     int expectedKeyChange = DIATONIC_INTERVAL_ADJUSTMENTS[diatonic][0];
@@ -197,6 +197,14 @@ inline int calcAlterationFromKeySigChange(int interval, int keySigChange)
     }
     int alteration = (keySigChange - expectedKeyChange) / STANDARD_DIATONIC_STEPS;
     return alteration;
+}
+
+/// @brief Determines if the transposition values result in trasposing by one or more octaves.
+/// @param displacement The diatonic displacement.
+/// @param alteration The chromatic alteration.
+constexpr bool calcTranspositionIsOctave(int displacement, int alteration)
+{
+    return (displacement % STANDARD_DIATONIC_STEPS) == 0 && alteration == 0;
 }
 
 /// @class Transposer
