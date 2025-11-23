@@ -104,7 +104,7 @@ public:
      *
      * @param layerIndex The layer index (0..3) to iterate.
      * @param timeOffset Subtract this amount from elapsed durations. A common usage might be to pass in here the
-     * value returned by #others::Measure::calcMinLegacyPickupValue.
+     * value returned by #others::Measure::calcMinLegacyPickupSpacer.
      * @return EntryFrame for layer or nullptr if none.
      */
     std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, util::Fraction timeOffset = 0) const;
@@ -461,7 +461,8 @@ public:
     /// @brief Gets the applicable part data for the entry, or nullptr if none.
     MusxInstance<details::EntryPartFieldDetail> getPartFieldData() const;
 
-    /// @brief Calculates the correct manual offset of the entry for the requested part id.
+    /// @brief Returns the manual offset of the entry for the current requested part. This function encapsulates
+    /// handling of the case when the manual offset is unlinked and different in score and part(s).
     Evpu calcManuaOffset() const;
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
@@ -543,7 +544,10 @@ public:
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
     std::pair<int, int> calcTopBottomStaffPositions() const;
 
-    /// @brief Calculates the Entry stem settings in the requested part.
+    /// @brief Returns the Entry stem settings for the current requested part. This function encapsulates handling of the case when the
+    /// two booleans are unlinked and different in score and part(s).
+    /// @note This function is only for getting the entry's two boolean stem settings. Use #calcUpStem to get the entry's effective stem direction,
+    /// taking into account all options and situations.
     /// @return A std::pair<bool, bool> with the first being the freezeStem setting and the second being the upStem setting.
     std::pair<bool, bool> calcEntryStemSettings() const;
 
