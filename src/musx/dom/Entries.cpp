@@ -1662,7 +1662,7 @@ std::pair<MusxInstance<others::Frame>, Edu> details::GFrameHoldContext::findLaye
     return std::make_pair(layerFrame, startEdu);
 }
 
-std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex) const
+std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, util::Fraction timeOffset) const
 {
     if (!m_hold) return nullptr;
     if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
@@ -1689,7 +1689,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
-        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu);
+        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu) - timeOffset;
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
