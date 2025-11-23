@@ -341,7 +341,7 @@ MusxInstance<TimeSignature> IndependentStaffDetails::createTimeSignature() const
 
 MusxInstance<TimeSignature> IndependentStaffDetails::createDisplayTimeSignature() const
 {
-    if (!displayAbbrvTime) {
+    if (!hasDispTime) {
         return createTimeSignature();
     }
     return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig, displayAbbrvTime));

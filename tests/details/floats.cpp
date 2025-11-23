@@ -120,3 +120,23 @@ TEST(IndependentStaffDetailsTest, PopulateFields)
         EXPECT_FALSE(floats->keySig);
     }
 }
+
+TEST(IndependentStaffDetailsTest, DisplayTimeSig)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "timesig-inddisp.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto floats = doc->getDetails()->get<details::IndependentStaffDetails>(SCORE_PARTID, 2, 1);
+    ASSERT_TRUE(floats);
+
+    EXPECT_TRUE(floats->hasTime);
+    EXPECT_TRUE(floats->hasDispTime);
+    auto dispTimeSig = floats->createDisplayTimeSignature();
+    ASSERT_EQ(dispTimeSig->components.size(), 1);
+    ASSERT_EQ(dispTimeSig->components[0].counts.size(), 1);
+    ASSERT_EQ(dispTimeSig->components[0].units.size(), 1);
+    EXPECT_EQ(dispTimeSig->components[0].counts[0], 4);
+    EXPECT_EQ(dispTimeSig->components[0].units[0], 1536);
+}
