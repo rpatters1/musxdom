@@ -33,17 +33,19 @@ namespace dom {
 // ***** Document *****
 // ********************
 
-Cmper Document::calcScrollViewCmper(Cmper partId) const
+Cmper Document::calcScrollViewCmper(Cmper partId, bool ignoreSpecialPartExtraction) const
 {
-    if (auto partGlobs = getOthers()->get<others::PartGlobals>(partId, MUSX_GLOBALS_CMPER)) {
-        return partGlobs->calcSystemIuList(BASE_SYSTEM_ID);
+    if (!ignoreSpecialPartExtraction) {
+        if (auto partGlobs = getOthers()->get<others::PartGlobals>(partId, MUSX_GLOBALS_CMPER)) {
+            return partGlobs->calcSystemIuList(BASE_SYSTEM_ID);
+        }
     }
     return BASE_SYSTEM_ID;
 }
 
-MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId) const
+MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId, bool ignoreSpecialPartExtraction) const
 {
-    return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId));
+    return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId, ignoreSpecialPartExtraction));
 }
 
 MusxInstance<others::Page> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
@@ -86,7 +88,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
     InstrumentMap result;
 
     // use raw scroll view for creating instrument map, ignoring Special Part Extraction.
-    const auto rawScrollView = getOthers()->getArray<others::StaffUsed>(forPartId, BASE_SYSTEM_ID);
+    const auto rawScrollView = getScrollViewStaves(forPartId, /*ignoreSpecialPartExtraction*/true);
     if (rawScrollView.empty()) {
         return result;
     }

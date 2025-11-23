@@ -38,7 +38,7 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 {
     // use raw scroll view list, since auto-numbering probably does not depend on Special Part Extraction.
     /// @todo test if raw numbering depends on Special Part Extraction.
-    auto rawScrollViewList = document->getOthers()->getArray<StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto rawScrollViewList = document->getScrollViewStaves(SCORE_PARTID, /*ignoreSpecialPartExtraction*/true);
 
     // Map to track counts for instUuid
     std::unordered_map<std::string, int> instUuidCounts;

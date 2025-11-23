@@ -2610,7 +2610,7 @@ public:
 
     /// @brief Returns true is the staff list includes a particular staff on a particular system.
     /// @param staffId The StaffCmper to check.
-    /// @param systemStaves The staves for a particular system (or #BASE_SYSTEM_ID).
+    /// @param systemStaves The staves for a particular system (or #Document::calcScrollViewCmper).
     /// @param isHidden If true, only the forced staff list is checked. Normally you will omit this for categories or pass #Staff::hideRepeats for repeats.
     bool contains(StaffCmper staffId, const MusxInstanceList<StaffUsed>& systemStaves, bool isHidden = false) const noexcept;
 
