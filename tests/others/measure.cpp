@@ -528,12 +528,14 @@ TEST(MeasureTest, LegacyPickupSpacers)
         ASSERT_TRUE(measure);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), musx::util::Fraction(3, 4));
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), musx::util::Fraction(9, 8));
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(), musx::util::Fraction(3, 4));
     }
     {
         auto measure = others->get<others::Measure>(SCORE_PARTID, 2);
         ASSERT_TRUE(measure);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), 0);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), 0);
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(), 0);
     }
     {
         auto measure = others->get<others::Measure>(SCORE_PARTID, 3);

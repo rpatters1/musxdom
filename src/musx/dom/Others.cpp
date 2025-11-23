@@ -213,7 +213,17 @@ util::Fraction Measure::calcMinLegacyPickupSpacer(StaffCmper forStaffId) const
 
 util::Fraction Measure::calcMinLegacyPickupSpacer() const
 {
+    util::Fraction result = -1;
     auto scrollViewStaves = getDocument()->getScrollViewStaves(getRequestedPartId());
+    for (const auto& staffUsed : scrollViewStaves) {
+        const auto nextValue = calcMinLegacyPickupSpacer(staffUsed->staffId) * calcTimeStretch(staffUsed->staffId);
+        if (result < 0 || nextValue < result) {
+            result = nextValue;
+        }
+    }
+    if (result >= 0) {
+        return result;
+    }
     return 0;
 }
 
