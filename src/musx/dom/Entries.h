@@ -139,8 +139,15 @@ public:
     /// @return The entry if found, otherwise `nullptr`.
     EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt, std::optional<bool> matchVoice2 = std::nullopt) const;
 
+    /// @brief Calculates the minimum legacy pickup spacer, if any.
+    ///
+    /// Legacy pickup spacers, created by the legacy Mirror Tool, can differ for each staff and layer. The spacer takes away
+    /// time from the beginning of the layer, leaving the time at the end for the pickup to the next measure.
+    /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
+    util::Fraction calcMinLegacyPickupSpacer() const;
+
 private:
-    /// @brief Find the layer frame and Edu start position for the given layer.
+    /// @brief Find the layer frame and Edu start position for the given layer. A non-zero start position indicates a spacer for a legacy pickup.
     /// @param layerIndex The layer index to find (0..3)
     /// @return std::pair containing the frame and the start position.
     std::pair<MusxInstance<others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;

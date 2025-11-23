@@ -203,6 +203,14 @@ MusxInstance<TimeSignature> Measure::createDisplayTimeSignature(const std::optio
     return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
 }
 
+util::Fraction Measure::calcMinLegacyPickupSpacer(StaffCmper forStaffId) const
+{
+    if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), forStaffId, getCmper())) {
+        return gfHold.calcMinLegacyPickupSpacer();
+    }
+    return 0;
+}
+
 util::Fraction Measure::calcDuration(const std::optional<StaffCmper>& forStaff) const
 {
     auto timeSig = createTimeSignature(forStaff);

@@ -1233,6 +1233,13 @@ public:
     /// @return The display time signature if there is one, otherwise the actual time signature.
     MusxInstance<TimeSignature> createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
+    /// @brief Calculates the legacy pickup spacer, if any.
+    ///
+    /// See comments at #details::GFrameHoldContext::calcMinLegacyPickupSpacer.
+    /// @param forStaffId The staff to examine.
+    /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
+    util::Fraction calcMinLegacyPickupSpacer(StaffCmper forStaffId) const;
+
     /// @brief Calculates the duration of the measure according to the time signature
     /// @param forStaff  If present, specifies the specific staff for which to create duration.
     /// @return If forStaff is provided, the staff-level duration (taking into account independent time signatures.)

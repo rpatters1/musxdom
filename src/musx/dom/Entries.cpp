@@ -1904,6 +1904,23 @@ EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool 
     return result;
 }
 
+util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const
+{
+    Edu result = -1;
+    for (LayerIndex layerIndex = 0; layerIndex < MAX_LAYERS; layerIndex++) {
+        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        if (frame) {
+            if (result < 0 || startEdu < result) {
+                result = startEdu;
+            }
+        }
+    }
+    if (result >= 0) {
+        util::Fraction::fromEdu(result);
+    }
+    return 0;
+}
+
 // ****************
 // ***** Note *****
 // ****************
