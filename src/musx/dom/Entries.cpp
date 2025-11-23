@@ -1916,7 +1916,7 @@ util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const
         }
     }
     if (result >= 0) {
-        util::Fraction::fromEdu(result);
+        return util::Fraction::fromEdu(result);
     }
     return 0;
 }

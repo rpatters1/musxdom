@@ -513,7 +513,37 @@ TEST(MeasureTest, CompositeTimeSig2)
     }
 }
 
-TEST(SplitMeasureText, Populate)
+TEST(MeasureTest, LegacyPickupSpacers)
+{
+    std::vector<char> enigmaXml;
+    // NOTE: This enigmaxml has been hand-edited to remove Part 3's non-shared MultiStaffGroupId record.
+    musxtest::readFile(musxtest::getInputPath() / "pickup-legacy.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto measure = others->get<others::Measure>(SCORE_PARTID, 1);
+        ASSERT_TRUE(measure);
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), musx::util::Fraction(3, 4));
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), musx::util::Fraction(9, 8));
+    }
+    {
+        auto measure = others->get<others::Measure>(SCORE_PARTID, 2);
+        ASSERT_TRUE(measure);
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), 0);
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), 0);
+    }
+    {
+        auto measure = others->get<others::Measure>(SCORE_PARTID, 3);
+        ASSERT_TRUE(measure);
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), 0);
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), 0);
+    }
+}
+
+TEST(SplitMeasureTest, Populate)
 {
     constexpr static musxtest::string_view testXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
