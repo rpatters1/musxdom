@@ -229,7 +229,7 @@ MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
         for (const auto& part : parts) {
             auto instGroups = document->getOthers()->getArray<MultiStaffGroupId>(part->getCmper());
             for (const auto& instance : instGroups) {
-                if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), BASE_SYSTEM_ID, instance->staffGroupId)) {
+                if (auto group = document->getDetails()->get<details::StaffGroup>(part->getCmper(), document->calcScrollViewCmper(part->getCmper()), instance->staffGroupId)) {
                     details::StaffGroup* mutableGroup = const_cast<details::StaffGroup*>(group.get());
                     mutableGroup->multiStaffGroupId = instance->getCmper();
                 } else if (instance->staffGroupId != 0) {

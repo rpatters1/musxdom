@@ -182,7 +182,7 @@ MusicRange others::SmartShape::createGlobalMusicRange() const
 bool others::SmartShape::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator, DeferredReference<MusxInstanceList<others::StaffUsed>> staffList) const
 {
     if (!staffList) {
-        staffList.emplace(getDocument()->getOthers()->getArray<others::StaffUsed>(getRequestedPartId(), BASE_SYSTEM_ID));
+        staffList.emplace(getDocument()->getScrollViewStaves(getRequestedPartId()));
     }
     auto startIndex = staffList->getIndexForStaff(startTermSeg->endPoint->staffId);
     auto endIndex = staffList->getIndexForStaff(endTermSeg->endPoint->staffId);

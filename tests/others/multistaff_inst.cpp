@@ -200,7 +200,7 @@ TEST(MultiStaffGroupTest, PopulateFields)
 
 void checkInstrument(const DocumentPtr& doc, const std::string& name, StaffCmper topStaffId, size_t expectedNumStaves)
 {
-    const auto scrollView = doc->getOthers()->getArray<others::StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    const auto scrollView = doc->getScrollViewStaves(SCORE_PARTID);
     auto topIndex = scrollView.getIndexForStaff(topStaffId);
     ASSERT_TRUE(topIndex.has_value());
     const auto& instruments = doc->getInstruments();

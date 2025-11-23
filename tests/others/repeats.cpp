@@ -297,7 +297,7 @@ TEST(RepeatStaffListSet, TestContains)
     ASSERT_TRUE(others);
 
     {
-        auto scrollViewStaves = others->getArray<others::StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+        auto scrollViewStaves = doc->getScrollViewStaves(SCORE_PARTID);
         auto repeatItem = others->get<others::RepeatEndingStart>(SCORE_PARTID, 2);
         auto staffListSet = repeatItem->createStaffListSet();
         EXPECT_TRUE(staffListSet.contains(1, scrollViewStaves, scrollViewStaves.getStaffInstanceAtIndex(0, 2)->hideRepeats));

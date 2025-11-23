@@ -1240,6 +1240,12 @@ public:
     /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
     util::Fraction calcMinLegacyPickupSpacer(StaffCmper forStaffId) const;
 
+    /// @brief Calculates the legacy pickup spacer in any staff, in global Edu values.
+    ///
+    /// See comments at #details::GFrameHoldContext::calcMinLegacyPickupSpacer.
+    /// @return The smallest legacy pickup spacer encountered in any staff in global Edu values. Zero if none.
+    util::Fraction calcMinLegacyPickupSpacer() const;
+
     /// @brief Calculates the duration of the measure according to the time signature
     /// @param forStaff  If present, specifies the specific staff for which to create duration.
     /// @return If forStaff is provided, the staff-level duration (taking into account independent time signatures.)
@@ -1960,6 +1966,14 @@ public:
      * (xml node is `<pageViewIUlist>`)
     */
     Cmper specialPartExtractionIUList{};
+
+    /** @brief Return the @ref StaffUsed cmper by this part for the specified system.
+     *
+     * This function either returns the input @p systemId or the #specialPartExtractionIUList.
+     *
+     * @param systemId The staff system to find.
+    */
+    Cmper calcSystemIuList(Cmper systemId) const;
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartGlobals>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

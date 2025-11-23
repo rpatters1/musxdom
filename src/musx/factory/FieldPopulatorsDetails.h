@@ -256,8 +256,8 @@ MUSX_RESOLVER_ENTRY(StaffGroup, {
     [](const dom::DocumentPtr& document) {
         auto parts = document->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
         for (const auto& part : parts) {
-            auto groups = document->getDetails()->getArray<StaffGroup>(part->getCmper(), BASE_SYSTEM_ID);
-            const auto baseList = document->getOthers()->getArray<others::StaffUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            auto groups = document->getDetails()->getArray<StaffGroup>(part->getCmper(), document->calcScrollViewCmper(part->getCmper()));
+            const auto baseList = document->getScrollViewStaves(part->getCmper());
             for (const auto& instance : groups) {
                 auto startIndex = baseList.getIndexForStaff(instance->startInst);
                 auto endIndex = baseList.getIndexForStaff(instance->endInst);

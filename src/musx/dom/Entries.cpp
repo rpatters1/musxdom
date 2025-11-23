@@ -749,7 +749,7 @@ bool EntryInfoPtr::calcUpStemImpl() const
         }
     }
     // cross-staff direction was not part of the 2001 testing, but this seems the right place for it for now.
-    const auto scrollViewStaves = frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID);
+    const auto scrollViewStaves = frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId());
     int foundCrossDirection = 0;
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         const int currDirection = next.calcCrossStaffDirectionForAll(scrollViewStaves);
@@ -1517,7 +1517,7 @@ int EntryInfoPtr::calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceLi
     const auto frame = getFrame();
 
     if (!staffList) {
-        staffList.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
+        staffList.emplace(frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId()));
     }
 
     int crossStaffDirectionFound = 0;
@@ -2230,7 +2230,7 @@ int NoteInfoPtr::calcCrossStaffDirection(DeferredReference<MusxInstanceList<othe
     const auto frame = getEntryInfo().getFrame();
 
     if (!staffList) {
-        staffList.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
+        staffList.emplace(frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId()));
     }
 
     const auto homeIndex = staffList->getIndexForStaff(frame->getStaff());

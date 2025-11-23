@@ -33,6 +33,19 @@ namespace dom {
 // ***** Document *****
 // ********************
 
+Cmper Document::calcScrollViewCmper(Cmper partId) const
+{
+    if (auto partGlobs = getOthers()->get<others::PartGlobals>(partId, MUSX_GLOBALS_CMPER)) {
+        return partGlobs->calcSystemIuList(BASE_SYSTEM_ID);
+    }
+    return BASE_SYSTEM_ID;
+}
+
+MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId) const
+{
+    return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId));
+}
+
 MusxInstance<others::Page> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
 {
     MusxInstance<others::Page> result;
@@ -72,13 +85,14 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 {
     InstrumentMap result;
 
-    const auto scrollView = getOthers()->getArray<others::StaffUsed>(forPartId, BASE_SYSTEM_ID);
-    if (scrollView.empty()) {
+    // use raw scroll view for creating instrument map, ignoring Special Part Extraction.
+    const auto rawScrollView = getOthers()->getArray<others::StaffUsed>(forPartId, BASE_SYSTEM_ID);
+    if (rawScrollView.empty()) {
         return result;
     }
     std::unordered_set<Cmper> multiStaffInstsFound;
     std::unordered_set<StaffCmper> mappedStaves;
-    for (const auto& staffItem : scrollView) {
+    for (const auto& staffItem : rawScrollView) {
         if (auto rawStaff = getOthers()->get<others::Staff>(forPartId, staffItem->staffId)) { // do not use staffItem->getStaffInstance() because we want no throw here
             if (rawStaff->multiStaffInstId != 0) {
                 if (multiStaffInstsFound.find(rawStaff->multiStaffInstId) == multiStaffInstsFound.end()) {
@@ -92,12 +106,12 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                             it->second.staffGroupId = multiStaffGroupId->staffGroupId;
                         }
                         it->second.multistaffGroupId = rawStaff->multiStaffInstId;
-                        std::optional<size_t> topIndex = scrollView.getIndexForStaff(rawStaff->getCmper());
+                        std::optional<size_t> topIndex = rawScrollView.getIndexForStaff(rawStaff->getCmper());
                         MUSX_ASSERT_IF(!topIndex.has_value()) {
                             throw std::logic_error("Unable to find " + std::to_string(rawStaff->getCmper()) + " in scrollView.");
                         }
                         for (StaffCmper staffId : multiStaffInst->staffNums) {
-                            std::optional<size_t> staffIndex = scrollView.getIndexForStaff(staffId);
+                            std::optional<size_t> staffIndex = rawScrollView.getIndexForStaff(staffId);
                             MUSX_ASSERT_IF(!staffIndex.has_value()) {
                                 throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
                             }
@@ -109,7 +123,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
             }
         }
     }
-    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, forPartId, scrollView);
+    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, forPartId, rawScrollView);
     for (const auto& staffGroup : staffGroups) {
         const auto& group = staffGroup.group;
         // for now, only identify piano braces as visual staff groups
@@ -150,7 +164,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
             }
         }
     }
-    for (const auto& staffItem : scrollView) {
+    for (const auto& staffItem : rawScrollView) {
         if (mappedStaves.find(staffItem->staffId) == mappedStaves.end()) {
             const auto [it, created] = result.emplace(staffItem->staffId, InstrumentInfo());
             MUSX_ASSERT_IF(!created) {
@@ -198,10 +212,17 @@ const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 
 bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
 {
+    const auto partGlobs = getOthers()->get<others::PartGlobals>(forPartId, MUSX_GLOBALS_CMPER);
+    auto getSystemId = [&](Cmper systemId) -> Cmper {
+        if (partGlobs) {
+            return partGlobs->calcSystemIuList(systemId);
+        }
+        return systemId;
+    };
     auto staffSystems = getOthers()->getArray<others::StaffSystem>(forPartId);
-    auto scrollView = getOthers()->getArray<others::StaffUsed>(forPartId, BASE_SYSTEM_ID);
+    auto scrollView = getScrollViewStaves(forPartId);
     for (const auto& staffSystem : staffSystems) {
-        auto nextSystem = getOthers()->getArray<others::StaffUsed>(forPartId, staffSystem->getCmper());
+        auto nextSystem = getOthers()->getArray<others::StaffUsed>(forPartId, getSystemId(staffSystem->getCmper()));
         if (nextSystem.size() != scrollView.size()) {
             return true;
         }

@@ -389,7 +389,7 @@ public:
 
     /// @brief Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system.
     /// @tparam BaselineType The type of baseline. (@ref details::BaselineChords, @ref details::BaselineExpressionsAbove, etc.: not the `BaselineSystem` variants)
-    /// @param systemId The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values.
+    /// @param systemId The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values (ignoring Special Part Extraction).
     /// @return The accumulated position of the baseline, relative to the staff's reference line.
     template<typename BaselineType,
              std::enable_if_t<std::is_base_of<details::BaselineNoInci, BaselineType>::value, int> = 0>
@@ -400,7 +400,7 @@ public:
 
     /// @brief Returns the baseline position for the staff at the given system. The staff should be the staff at the beginning of the system.
     /// @tparam BaselineType The type of baseline. (@ref details::BaselineChords, @ref details::BaselineExpressionsAbove, etc.: not the `BaselineSystem` variants)
-    /// @param systemId The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values.
+    /// @param systemId The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values (ignoring Special Part Extraction).
     /// @param lyricNumber The Cmper of the lyric text block to find.
     /// @return The accumulated position of the baseline, relative to the staff's reference line.
     template<typename BaselineType,
