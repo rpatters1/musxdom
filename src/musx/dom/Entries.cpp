@@ -749,7 +749,7 @@ bool EntryInfoPtr::calcUpStemImpl() const
         }
     }
     // cross-staff direction was not part of the 2001 testing, but this seems the right place for it for now.
-    const auto scrollViewStaves = frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID);
+    const auto scrollViewStaves = frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId());
     int foundCrossDirection = 0;
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         const int currDirection = next.calcCrossStaffDirectionForAll(scrollViewStaves);
@@ -1484,7 +1484,7 @@ bool EntryInfoPtr::calcIfLayerSettingsApply() const
     }
     const LayerIndex layerIndex = frame->getLayerIndex();
     const auto startStaff = frame->getStartStaffInstance();
-    for (size_t nextLayerIndex = 0; nextLayerIndex < context->frames.size(); nextLayerIndex++) {
+    for (LayerIndex nextLayerIndex = 0; nextLayerIndex < static_cast<LayerIndex>(context->frames.size()); nextLayerIndex++) {
         if (nextLayerIndex == layerIndex || context->frames[nextLayerIndex] == 0) {
             continue;
         }
@@ -1517,7 +1517,7 @@ int EntryInfoPtr::calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceLi
     const auto frame = getFrame();
 
     if (!staffList) {
-        staffList.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
+        staffList.emplace(frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId()));
     }
 
     int crossStaffDirectionFound = 0;
@@ -1571,7 +1571,7 @@ bool EntryInfoPtr::calcIsTrillToGraceEntry() const
     MUSX_ASSERT_IF(mainEntry->getEntry()->graceNote) {
         throw std::logic_error("Next entry after calcIsAuxiliaryPitchMarker entry is still a grace note.");
     }
-    Evpu graceDistance = EVPU_PER_SPACE;
+    auto graceDistance = static_cast<Evpu>(EVPU_PER_SPACE);
     if (auto graceOptions = getFrame()->getDocument()->getOptions()->get<options::GraceNoteOptions>()) {
         graceDistance = graceOptions->entryOffset;
     }
@@ -1662,7 +1662,7 @@ std::pair<MusxInstance<others::Frame>, Edu> details::GFrameHoldContext::findLaye
     return std::make_pair(layerFrame, startEdu);
 }
 
-std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex) const
+std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, util::Fraction timeOffset) const
 {
     if (!m_hold) return nullptr;
     if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
@@ -1689,7 +1689,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
-        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu);
+        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu) - timeOffset;
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
@@ -1768,6 +1768,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 );
             }
         }
+        entryFrame->maxElapsedDuration = (std::max)(v1ActualElapsedDuration, v2ActualElapsedDuration);
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
             + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");
@@ -1902,6 +1903,23 @@ EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool 
     }
 
     return result;
+}
+
+util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const
+{
+    Edu result = -1;
+    for (LayerIndex layerIndex = 0; layerIndex < MAX_LAYERS; layerIndex++) {
+        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        if (frame) {
+            if (result < 0 || startEdu < result) {
+                result = startEdu;
+            }
+        }
+    }
+    if (result >= 0) {
+        return util::Fraction::fromEdu(result);
+    }
+    return 0;
 }
 
 // ****************
@@ -2213,7 +2231,7 @@ int NoteInfoPtr::calcCrossStaffDirection(DeferredReference<MusxInstanceList<othe
     const auto frame = getEntryInfo().getFrame();
 
     if (!staffList) {
-        staffList.emplace(frame->getDocument()->getOthers()->getArray<others::StaffUsed>(frame->getRequestedPartId(), BASE_SYSTEM_ID));
+        staffList.emplace(frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId()));
     }
 
     const auto homeIndex = staffList->getIndexForStaff(frame->getStaff());

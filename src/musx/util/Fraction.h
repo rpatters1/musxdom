@@ -35,7 +35,7 @@ namespace util {
  * @class Fraction
  * @brief A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to simplest form.
  */
-class Fraction {
+class [[nodiscard]] Fraction {
 private:
     int m_numerator; ///< The m_numerator of the fraction.
     int m_denominator; ///< The m_denominator of the fraction.

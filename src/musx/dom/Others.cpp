@@ -203,6 +203,44 @@ MusxInstance<TimeSignature> Measure::createDisplayTimeSignature(const std::optio
     return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
 }
 
+util::Fraction Measure::calcMinLegacyPickupSpacer(StaffCmper forStaffId) const
+{
+    const auto globalSpacer = calcMinLegacyPickupSpacer();
+    if (globalSpacer == 0) {
+        return 0; // save work in by far the most common case.
+    }
+    if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), forStaffId, getCmper())) {
+        if (gfHold->calcContainsMusic()) {
+            return gfHold.calcMinLegacyPickupSpacer();
+        }
+    }
+    return globalSpacer / calcTimeStretch(forStaffId); // return staff-level value.
+}
+
+util::Fraction Measure::calcMinLegacyPickupSpacer() const
+{
+    util::Fraction result = -1;
+    auto scrollViewStaves = getDocument()->getScrollViewStaves(getRequestedPartId());
+    for (const auto& staffUsed : scrollViewStaves) {
+        if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffUsed->staffId, getCmper())) {
+            if (gfHold->calcContainsMusic()) {
+                // only consider gfHold if it contains music, because pickup spacers are attached to frames.
+                const auto nextValue = gfHold.calcMinLegacyPickupSpacer() * calcTimeStretch(staffUsed->staffId);
+                if (nextValue == 0) { // no need to keep searching if we are at zero.
+                    return 0;
+                }
+                if (result < 0 || nextValue < result) {
+                    result = nextValue;
+                }
+            }
+        }
+    }
+    if (result >= 0) {
+        return result;
+    }
+    return 0;
+}
+
 util::Fraction Measure::calcDuration(const std::optional<StaffCmper>& forStaff) const
 {
     auto timeSig = createTimeSignature(forStaff);
@@ -269,7 +307,7 @@ StaffCmper MeasureExprAssign::calcAssignedStaffId(bool forPageView) const
                 return getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), system->getCmper());
             }
         }
-        return getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), BASE_SYSTEM_ID);
+        return getDocument()->getScrollViewStaves(getRequestedPartId());
     }();
     switch (static_cast<StaffList::FloatingValues>(staffAssign)) {
         case StaffList::FloatingValues::TopStaff: return systemStaves->getTopStaffId();
@@ -369,7 +407,7 @@ MusxInstance<details::StaffGroup> MultiStaffInstrumentGroup::getStaffGroup(Cmper
         // staffGroupId can be 0 in upgraded files where there is another StaffGroup showing the instrument name.
         return nullptr;
     }
-    auto result = document->getDetails()->get<details::StaffGroup>(forPartId, BASE_SYSTEM_ID, groupIdRecord->staffGroupId);
+    auto result = document->getDetails()->get<details::StaffGroup>(forPartId, document->calcScrollViewCmper(forPartId), groupIdRecord->staffGroupId);
     if (!result) {
         MUSX_INTEGRITY_ERROR("StaffGroup " + std::to_string(groupIdRecord->staffGroupId)
             + " not found for MultiStaffInstrumentGroup " + std::to_string(getCmper()));
@@ -567,23 +605,13 @@ std::string PartDefinition::getName(util::EnigmaString::AccidentalStyle accident
         }
     }
     if (defaultNameGroup) {
-        if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, defaultNameGroup)) {
+        if (auto group = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, getDocument()->calcScrollViewCmper(SCORE_PARTID), defaultNameGroup)) {
             return group->getFullInstrumentName(accidentalStyle);
         } else {
             MUSX_INTEGRITY_ERROR("Part " + std::to_string(getCmper()) + " uses nonexistent StaffGroup " + std::to_string(defaultNameGroup) + " for part name.");
         }
     }
     return {};
-}
-
-Cmper PartDefinition::calcSystemIuList(Cmper systemId) const
-{
-    if (auto partGlobs = getDocument()->getOthers()->get<PartGlobals>(getCmper(), MUSX_GLOBALS_CMPER)) {
-        if (partGlobs->specialPartExtractionIUList) {
-            return partGlobs->specialPartExtractionIUList;
-        }
-    }
-    return systemId;
 }
 
 MusxInstance<PartDefinition> PartDefinition::getScore(const DocumentPtr& document)
@@ -630,6 +658,26 @@ PageCmper PartDefinition::calcAssignmentIdFromPageNumber(PageCmper pageId) const
         }
     }
     return pageId;
+}
+
+Cmper PartDefinition::calcSystemIuList(Cmper systemId) const
+{
+    if (const auto partGlobs = getDocument()->getOthers()->get<others::PartGlobals>(getCmper(), MUSX_GLOBALS_CMPER)) {
+        return partGlobs->calcSystemIuList(systemId);
+    }
+    return systemId;
+}
+
+// ***********************
+// ***** PartGlobals *****
+// ***********************
+
+Cmper PartGlobals::calcSystemIuList(Cmper systemId) const
+{
+    if (specialPartExtractionIUList) {
+        return specialPartExtractionIUList;
+    }
+    return systemId;
 }
 
 // ******************************

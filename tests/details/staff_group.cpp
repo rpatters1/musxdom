@@ -128,7 +128,7 @@ TEST(StaffGroupTest, PopulateFields)
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    auto staffGroup = details->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, 1);
+    auto staffGroup = details->get<details::StaffGroup>(SCORE_PARTID, doc->calcScrollViewCmper(SCORE_PARTID), 1);
     ASSERT_TRUE(staffGroup) << "StaffGroup with cmper1 0 and cmper2 1 not found";
 
     EXPECT_EQ(staffGroup->startInst, 1);

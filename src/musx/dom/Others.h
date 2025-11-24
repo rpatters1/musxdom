@@ -1233,6 +1233,19 @@ public:
     /// @return The display time signature if there is one, otherwise the actual time signature.
     MusxInstance<TimeSignature> createDisplayTimeSignature(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
+    /// @brief Calculates the legacy pickup spacer, if any.
+    ///
+    /// See comments at #details::GFrameHoldContext::calcMinLegacyPickupSpacer.
+    /// @param forStaffId The staff to examine.
+    /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
+    util::Fraction calcMinLegacyPickupSpacer(StaffCmper forStaffId) const;
+
+    /// @brief Calculates the legacy pickup spacer in any staff, in global Edu values.
+    ///
+    /// See comments at #details::GFrameHoldContext::calcMinLegacyPickupSpacer.
+    /// @return The smallest legacy pickup spacer encountered in any staff in global Edu values. Zero if none.
+    util::Fraction calcMinLegacyPickupSpacer() const;
+
     /// @brief Calculates the duration of the measure according to the time signature
     /// @param forStaff  If present, specifies the specific staff for which to create duration.
     /// @return If forStaff is provided, the staff-level duration (taking into account independent time signatures.)
@@ -1954,6 +1967,14 @@ public:
     */
     Cmper specialPartExtractionIUList{};
 
+    /** @brief Return the @ref StaffUsed cmper by this part for the specified system.
+     *
+     * This function either returns the input @p systemId or the #specialPartExtractionIUList.
+     *
+     * @param systemId The staff system to find.
+    */
+    Cmper calcSystemIuList(Cmper systemId) const;
+
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartGlobals>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -2589,7 +2610,7 @@ public:
 
     /// @brief Returns true is the staff list includes a particular staff on a particular system.
     /// @param staffId The StaffCmper to check.
-    /// @param systemStaves The staves for a particular system (or #BASE_SYSTEM_ID).
+    /// @param systemStaves The staves for a particular system (or #Document::calcScrollViewCmper).
     /// @param isHidden If true, only the forced staff list is checked. Normally you will omit this for categories or pass #Staff::hideRepeats for repeats.
     bool contains(StaffCmper staffId, const MusxInstanceList<StaffUsed>& systemStaves, bool isHidden = false) const noexcept;
 

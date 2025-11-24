@@ -491,7 +491,8 @@ std::vector<StaffGroupInfo> StaffGroupInfo::getGroupsAtMeasure(MeasCmper measure
             + ", part " + std::to_string(linkedPartId) +"] Returning an empty vector.");
         return {};
     }
-    auto rawGroups = systemStaves.getDocument()->getDetails()->getArray<StaffGroup>(linkedPartId, BASE_SYSTEM_ID);
+    const auto doc = systemStaves.getDocument();
+    auto rawGroups = doc->getDetails()->getArray<StaffGroup>(linkedPartId, doc->calcScrollViewCmper(linkedPartId));
     std::vector<StaffGroupInfo> retval;
     for (const auto& rawGroup : rawGroups) {
         if (rawGroup->startMeas <= measureId && rawGroup->endMeas >= measureId) {

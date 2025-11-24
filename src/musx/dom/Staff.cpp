@@ -36,7 +36,9 @@ namespace others {
 
 void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 {
-    auto scrollViewList = document->getOthers()->getArray<StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    // use raw scroll view list, since auto-numbering probably does not depend on Special Part Extraction.
+    /// @todo test if raw numbering depends on Special Part Extraction.
+    auto rawScrollViewList = document->getScrollViewStaves(SCORE_PARTID, /*ignoreSpecialPartExtraction*/true);
 
     // Map to track counts for instUuid
     std::unordered_map<std::string, int> instUuidCounts;
@@ -44,7 +46,7 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
 
     // Pass 1: Check if any instUuid has auto-numbering disabled
     std::unordered_set<std::string> disabledInstUuids;
-    for (const auto& instrumentUsed : scrollViewList) {
+    for (const auto& instrumentUsed : rawScrollViewList) {
         auto staff = instrumentUsed->getStaffInstance();
         if (staff && !staff->useAutoNumbering) {
             disabledInstUuids.insert(staff->instUuid);
@@ -52,7 +54,7 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
     }
 
     // Pass 2: Count occurrences of instUuid, considering multistaff instruments
-    for (const auto& instrumentUsed : scrollViewList) {
+    for (const auto& instrumentUsed : rawScrollViewList) {
         auto staff = instrumentUsed->getStaffInstance();
         if (!staff || staff->instUuid.empty() || disabledInstUuids.count(staff->instUuid)) {
             continue;
@@ -80,7 +82,7 @@ void Staff::calcAllAutoNumberValues(const DocumentPtr& document)
     std::unordered_map<std::string, int> instUuidNumbers;
     countedMultistaffGroups.clear(); // Reset for numbering
 
-    for (const auto& instrumentUsed : scrollViewList) {
+    for (const auto& instrumentUsed : rawScrollViewList) {
         auto staff = instrumentUsed->getStaffInstance();
         Staff* mutableStaff = const_cast<Staff*>(staff.get());
         if (!staff) continue;
@@ -299,7 +301,7 @@ MusxInstance<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
 {
     Cmper groupId = getDocument()->getInstrumentForStaff(getCmper()).staffGroupId;
     if (groupId != 0) {
-        if (auto retval = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, BASE_SYSTEM_ID, groupId)) {
+        if (auto retval = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, getDocument()->calcScrollViewCmper(SCORE_PARTID), groupId)) {
             return retval;
         } else {
             MUSX_INTEGRITY_ERROR("Instrument map " + std::to_string(getCmper()) + " points to non-existent StaffGroup " + std::to_string(groupId)
@@ -666,7 +668,7 @@ MusxInstanceList<PartDefinition> Staff::getContainingParts(bool includeScore) co
         if (!includeScore && part->getCmper() == SCORE_PARTID) {
             continue;
         }
-        auto scrollView = getDocument()->getOthers()->getArray<StaffUsed>(part->getCmper(), BASE_SYSTEM_ID);
+        auto scrollView = getDocument()->getScrollViewStaves(part->getCmper());
         for (const auto& next : scrollView) {
             if (next->staffId == this->getCmper()) {
                 result.push_back(part);
@@ -682,7 +684,7 @@ MusxInstance<PartDefinition> Staff::firstContainingPart() const
     auto parts = getDocument()->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
     for (const auto& part : parts) {
         if (part->getCmper() != SCORE_PARTID) {
-            auto scrollView = getDocument()->getOthers()->getArray<StaffUsed>(part->getCmper(), BASE_SYSTEM_ID);
+            auto scrollView = getDocument()->getScrollViewStaves(part->getCmper());
             for (const auto& next : scrollView) {
                 if (next->staffId == this->getCmper()) {
                     return part;

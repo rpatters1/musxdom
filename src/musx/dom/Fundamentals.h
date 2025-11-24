@@ -78,6 +78,8 @@ constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a
 constexpr int MAX_ALTERATIONS = 7;  ///< Maximum absolute value for chromatic alterations supported in Finale.
 constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
 constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::StaffUsed cmper)
+                                    ///< Generally you should avoid using this directly and instead use #Document::calcScrollViewCmper or
+                                    ///< #Document::getScrollViewStaves for the list of scroll view staves.
 
 constexpr double EVPU_PER_INCH = 288.0;         ///< Number of Evpu units per inch
 constexpr double EVPU_PER_POINT = 4.0;          ///< Number of Evpu units per 72 DPI point

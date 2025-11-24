@@ -789,7 +789,7 @@ TEST(GFrameHold, SingletonBeamsTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "singleton_beams.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto checkTuplet = [](const std::shared_ptr<const EntryFrame>& entryFrame, size_t tupletIndex, bool isSingletonRight, bool isSingletonLeft, bool isContinuationRight, bool isContinuationLeft) {
@@ -835,7 +835,7 @@ TEST(GFrameHold, FeatheredBeamsTest)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "feathered_beams.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto checkEntry = [&](const EntryInfoPtr& entryInfo, bool expSuccess, Evpu expLeftY, Evpu expRightY) {
@@ -877,5 +877,38 @@ TEST(GFrameHold, FeatheredBeamsTest)
 
         checkEntry(EntryInfoPtr(entryFrame, 0), true, 12, 66);
         checkEntry(EntryInfoPtr(entryFrame, 14), true, 12, 30);
+    }
+}
+
+TEST(GFrameHold, MaxElapsedEntryTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "elapsed-dura.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold.createEntryFrame(0);
+        EXPECT_EQ(frame->maxElapsedDuration, musx::util::Fraction(1, 2));
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold.createEntryFrame(0);
+        EXPECT_EQ(frame->maxElapsedDuration, musx::util::Fraction(3, 8));
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold.createEntryFrame(0);
+        EXPECT_EQ(frame->maxElapsedDuration, musx::util::Fraction(1, 1));
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold);
+        auto frame = gfhold.createEntryFrame(0);
+        EXPECT_EQ(frame->maxElapsedDuration, musx::util::Fraction(5, 4));
     }
 }

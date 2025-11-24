@@ -103,9 +103,11 @@ public:
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
      * @param layerIndex The layer index (0..3) to iterate.
+     * @param timeOffset Subtract this amount from elapsed durations. A common usage might be to pass in here the
+     * value returned by #others::Measure::calcMinLegacyPickupSpacer.
      * @return EntryFrame for layer or nullptr if none.
      */
-    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex) const;
+    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, util::Fraction timeOffset = 0) const;
     
     /**
      * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
@@ -139,8 +141,15 @@ public:
     /// @return The entry if found, otherwise `nullptr`.
     EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt, std::optional<bool> matchVoice2 = std::nullopt) const;
 
+    /// @brief Calculates the minimum legacy pickup spacer, if any.
+    ///
+    /// Legacy pickup spacers, created by the legacy Mirror Tool, can differ for each staff and layer. The spacer takes away
+    /// time from the beginning of the layer, leaving the time at the end for the pickup to the next measure.
+    /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
+    util::Fraction calcMinLegacyPickupSpacer() const;
+
 private:
-    /// @brief Find the layer frame and Edu start position for the given layer.
+    /// @brief Find the layer frame and Edu start position for the given layer. A non-zero start position indicates a spacer for a legacy pickup.
     /// @param layerIndex The layer index to find (0..3)
     /// @return std::pair containing the frame and the start position.
     std::pair<MusxInstance<others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;
@@ -452,7 +461,8 @@ public:
     /// @brief Gets the applicable part data for the entry, or nullptr if none.
     MusxInstance<details::EntryPartFieldDetail> getPartFieldData() const;
 
-    /// @brief Calculates the correct manual offset of the entry for the requested part id.
+    /// @brief Returns the manual offset of the entry for the current requested part. This function encapsulates
+    /// handling of the case when the manual offset is unlinked and different in score and part(s).
     Evpu calcManuaOffset() const;
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
@@ -534,7 +544,10 @@ public:
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
     std::pair<int, int> calcTopBottomStaffPositions() const;
 
-    /// @brief Calculates the Entry stem settings in the requested part.
+    /// @brief Returns the Entry stem settings for the current requested part. This function encapsulates handling of the case when the
+    /// two booleans are unlinked and different in score and part(s).
+    /// @note This function is only for getting the entry's two boolean stem settings. Use #calcUpStem to get the entry's effective stem direction,
+    /// taking into account all options and situations.
     /// @return A std::pair<bool, bool> with the first being the freezeStem setting and the second being the upStem setting.
     std::pair<bool, bool> calcEntryStemSettings() const;
 
@@ -906,7 +919,9 @@ public:
      * Finale does not display them.)
     */
     std::vector<TupletInfo> tupletInfo;
-    MusxInstance<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
+    MusxInstance<KeySignature> keySignature;    ///< This can be different than the measure key sig if the staff has independent key signatures.
+    util::Fraction maxElapsedDuration;          ///< The max elapsed staff duration that was calculated for the frame. This does not
+                                                ///< have to equal the measure duration, but normally it does.
 
     /// @brief Get the document for the entry frame
     DocumentPtr getDocument() const;

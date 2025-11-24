@@ -96,6 +96,16 @@ public:
     /** @brief Retrieves the const texts pool */
     const TextsPoolPtr& getTexts() const { return m_texts; }
 
+    /// @brief Returns the Cmper for the given @p partId,  taking into account Special Part Extraction.
+    /// @param partId The linked part to check.
+    /// @param ignoreSpecialPartExtraction If true, do not check Special Part Extraction and return instead the raw Cmper.
+    Cmper calcScrollViewCmper(Cmper partId, bool ignoreSpecialPartExtraction = false) const;
+
+    /// @brief Returns the scroll view staves for the given @p partId, taking into account Special Part Extraction.
+    /// @param partId The linked part to check.
+    /// @param ignoreSpecialPartExtraction If true, do not check Special Part Extraction and return instead the raw Scroll View list.
+    MusxInstanceList<others::StaffUsed> getScrollViewStaves(Cmper partId, bool ignoreSpecialPartExtraction = false) const;
+
     /// @brief Searches pages to find the page that contains the measure.
     /// @param partId the linked part to search
     /// @param measureId the measure to find

@@ -452,7 +452,7 @@ TEST(SmartShapes, EntriesInShapeTest)
     ASSERT_TRUE(slur);
     EXPECT_EQ(slur->shapeType, others::SmartShape::ShapeType::SlurAuto);
 
-    auto scrollView = doc->getOthers()->getArray<others::StaffUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto scrollView = doc->getScrollViewStaves(SCORE_PARTID);
     EXPECT_GE(scrollView.size(), 2);
 
     {
