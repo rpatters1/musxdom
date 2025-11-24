@@ -1912,13 +1912,10 @@ public:
     /** @brief Return true if this part corresponds to the score */
     bool isScore() const { return getCmper() == SCORE_PARTID; }
 
-    /** @brief Return the @ref StaffUsed cmper by this part for the specified system.
-     *
-     * This function either returns the input @p systemId or the Special Part Extraction cmper.
-     *
-     * @param systemId The staff system to find.
+    /**
+     * @brief Returns the @ref StaffUsed cmper for Scroll View for this part. See #Document::calcScrollViewCmper.
     */
-    Cmper calcSystemIuList(Cmper systemId) const;
+    Cmper calcScrollViewCmper() const;
 
     /// @brief Calculates a page number in this part from a page assignment ID. (See @ref PageTextAssign.)
     /// @param pageAssignmentId The page assignment ID.
@@ -1967,13 +1964,11 @@ public:
     */
     Cmper specialPartExtractionIUList{};
 
-    /** @brief Return the @ref StaffUsed cmper by this part for the specified system.
-     *
-     * This function either returns the input @p systemId or the #specialPartExtractionIUList.
-     *
-     * @param systemId The staff system to find.
+    /**
+     * @brief Return the @ref StaffUsed cmper for Scroll View for this part.
+     * @returns Either #BASE_SYSTEM_ID or the #specialPartExtractionIUList.
     */
-    Cmper calcSystemIuList(Cmper systemId) const;
+    Cmper calcScrollViewCmper() const;
 
     constexpr static std::string_view XmlNodeName = "partGlobals"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartGlobals>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

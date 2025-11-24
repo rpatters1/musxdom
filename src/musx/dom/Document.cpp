@@ -37,7 +37,7 @@ Cmper Document::calcScrollViewCmper(Cmper partId, bool ignoreSpecialPartExtracti
 {
     if (!ignoreSpecialPartExtraction) {
         if (auto partGlobs = getOthers()->get<others::PartGlobals>(partId, MUSX_GLOBALS_CMPER)) {
-            return partGlobs->calcSystemIuList(BASE_SYSTEM_ID);
+            return partGlobs->calcScrollViewCmper();
         }
     }
     return BASE_SYSTEM_ID;
@@ -214,17 +214,10 @@ const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 
 bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
 {
-    const auto partGlobs = getOthers()->get<others::PartGlobals>(forPartId, MUSX_GLOBALS_CMPER);
-    auto getSystemId = [&](Cmper systemId) -> Cmper {
-        if (partGlobs) {
-            return partGlobs->calcSystemIuList(systemId);
-        }
-        return systemId;
-    };
     auto staffSystems = getOthers()->getArray<others::StaffSystem>(forPartId);
     auto scrollView = getScrollViewStaves(forPartId);
     for (const auto& staffSystem : staffSystems) {
-        auto nextSystem = getOthers()->getArray<others::StaffUsed>(forPartId, getSystemId(staffSystem->getCmper()));
+        auto nextSystem = getOthers()->getArray<others::StaffUsed>(forPartId, staffSystem->getCmper());
         if (nextSystem.size() != scrollView.size()) {
             return true;
         }
