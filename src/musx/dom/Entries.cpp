@@ -1484,7 +1484,7 @@ bool EntryInfoPtr::calcIfLayerSettingsApply() const
     }
     const LayerIndex layerIndex = frame->getLayerIndex();
     const auto startStaff = frame->getStartStaffInstance();
-    for (size_t nextLayerIndex = 0; nextLayerIndex < context->frames.size(); nextLayerIndex++) {
+    for (LayerIndex nextLayerIndex = 0; nextLayerIndex < static_cast<LayerIndex>(context->frames.size()); nextLayerIndex++) {
         if (nextLayerIndex == layerIndex || context->frames[nextLayerIndex] == 0) {
             continue;
         }
@@ -1571,7 +1571,7 @@ bool EntryInfoPtr::calcIsTrillToGraceEntry() const
     MUSX_ASSERT_IF(mainEntry->getEntry()->graceNote) {
         throw std::logic_error("Next entry after calcIsAuxiliaryPitchMarker entry is still a grace note.");
     }
-    Evpu graceDistance = EVPU_PER_SPACE;
+    auto graceDistance = static_cast<Evpu>(EVPU_PER_SPACE);
     if (auto graceOptions = getFrame()->getDocument()->getOptions()->get<options::GraceNoteOptions>()) {
         graceDistance = graceOptions->entryOffset;
     }
@@ -1768,7 +1768,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 );
             }
         }
-        entryFrame->maxElapsedDuration = std::max(v1ActualElapsedDuration, v2ActualElapsedDuration);
+        entryFrame->maxElapsedDuration = (std::max)(v1ActualElapsedDuration, v2ActualElapsedDuration);
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
             + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");
