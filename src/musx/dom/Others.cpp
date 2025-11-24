@@ -205,10 +205,16 @@ MusxInstance<TimeSignature> Measure::createDisplayTimeSignature(const std::optio
 
 util::Fraction Measure::calcMinLegacyPickupSpacer(StaffCmper forStaffId) const
 {
-    if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), forStaffId, getCmper())) {
-        return gfHold.calcMinLegacyPickupSpacer();
+    const auto globalSpacer = calcMinLegacyPickupSpacer();
+    if (globalSpacer == 0) {
+        return 0; // save work in by far the most common case.
     }
-    return 0;
+    if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), forStaffId, getCmper())) {
+        if (gfHold->calcContainsMusic()) {
+            return gfHold.calcMinLegacyPickupSpacer();
+        }
+    }
+    return globalSpacer / calcTimeStretch(forStaffId); // return staff-level value.
 }
 
 util::Fraction Measure::calcMinLegacyPickupSpacer() const
@@ -216,9 +222,17 @@ util::Fraction Measure::calcMinLegacyPickupSpacer() const
     util::Fraction result = -1;
     auto scrollViewStaves = getDocument()->getScrollViewStaves(getRequestedPartId());
     for (const auto& staffUsed : scrollViewStaves) {
-        const auto nextValue = calcMinLegacyPickupSpacer(staffUsed->staffId) * calcTimeStretch(staffUsed->staffId);
-        if (result < 0 || nextValue < result) {
-            result = nextValue;
+        if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffUsed->staffId, getCmper())) {
+            if (gfHold->calcContainsMusic()) {
+                // only consider gfHold if it contains music, because pickup spacers are attached to frames.
+                const auto nextValue = gfHold.calcMinLegacyPickupSpacer() * calcTimeStretch(staffUsed->staffId);
+                if (nextValue == 0) { // no need to keep searching if we are at zero.
+                    return 0;
+                }
+                if (result < 0 || nextValue < result) {
+                    result = nextValue;
+                }
+            }
         }
     }
     if (result >= 0) {
