@@ -63,7 +63,7 @@
       <modified>
         <year>2025</year>
         <month>11</month>
-        <day>23</day>
+        <day>24</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -1370,38 +1370,50 @@
     <beatChart cmper="1" inci="0">
       <control>
         <totalDur>4096</totalDur>
-        <totalWidth>144</totalWidth>
-        <minWidth>122</minWidth>
-        <allotWidth>138</allotWidth>
+        <totalWidth>360</totalWidth>
       </control>
     </beatChart>
     <beatChart cmper="1" inci="1">
-      <dur>3072</dur>
-      <endPos>72</endPos>
-      <minPos>6</minPos>
+      <endPos>90</endPos>
     </beatChart>
     <beatChart cmper="1" inci="2">
-      <dur>3755</dur>
-      <pos>72</pos>
-      <endPos>144</endPos>
-      <minPos>52</minPos>
+      <dur>1024</dur>
+      <pos>90</pos>
+      <endPos>180</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="3">
+      <dur>2048</dur>
+      <pos>180</pos>
+      <endPos>270</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="4">
+      <dur>3072</dur>
+      <pos>270</pos>
+      <endPos>360</endPos>
     </beatChart>
     <beatChart cmper="2" inci="0">
       <control>
         <totalDur>4096</totalDur>
-        <totalWidth>144</totalWidth>
-        <minWidth>131</minWidth>
-        <allotWidth>134</allotWidth>
+        <totalWidth>360</totalWidth>
       </control>
     </beatChart>
     <beatChart cmper="2" inci="1">
-      <endPos>72</endPos>
+      <endPos>90</endPos>
     </beatChart>
     <beatChart cmper="2" inci="2">
+      <dur>1024</dur>
+      <pos>90</pos>
+      <endPos>180</endPos>
+    </beatChart>
+    <beatChart cmper="2" inci="3">
       <dur>2048</dur>
-      <pos>72</pos>
-      <endPos>144</endPos>
-      <minPos>67</minPos>
+      <pos>180</pos>
+      <endPos>270</endPos>
+    </beatChart>
+    <beatChart cmper="2" inci="4">
+      <dur>3072</dur>
+      <pos>270</pos>
+      <endPos>360</endPos>
     </beatChart>
     <drumLibName cmper="1">
       <name>Percussion</name>
@@ -1664,6 +1676,28 @@
         <endEdu>2147483647</endEdu>
       </range>
     </instUsed>
+    <instUsed cmper="0" inci="2">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-560</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="3">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-840</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
     <instUsed cmper="1" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
@@ -1679,6 +1713,28 @@
       <inst>2</inst>
       <trackType>staff</trackType>
       <distFromTop>-300</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="2">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-560</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="3">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-840</distFromTop>
       <range>
         <startMeas>1</startMeas>
         <startEdu>0</startEdu>
@@ -1712,6 +1768,28 @@
       <inst>2</inst>
       <trackType>staff</trackType>
       <distFromTop>-736</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="3">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1156</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="4">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1576</distFromTop>
       <range>
         <startMeas>1</startMeas>
         <startEdu>0</startEdu>
@@ -1891,6 +1969,16 @@
     <metaKeySig cmper="57">
       <doKeyWrap/>
     </metaKeySig>
+    <metaTimeSig cmper="45">
+      <timeSig>
+        <beats>3</beats>
+        <divbeat>1024</divbeat>
+      </timeSig>
+      <dispSig>
+        <beats>3</beats>
+        <divbeat>1024</divbeat>
+      </dispSig>
+    </metaTimeSig>
     <measSpec cmper="1">
       <width>360</width>
       <beats>4</beats>
@@ -1938,7 +2026,21 @@
       <halign>right</halign>
       <expand/>
     </namePosAbbrv>
+    <namePosAbbrv cmper="4">
+      <horzOff>-72</horzOff>
+      <vertOff>-22</vertOff>
+      <justify>right</justify>
+      <halign>right</halign>
+      <expand/>
+    </namePosAbbrv>
     <namePosFull cmper="2">
+      <horzOff>-72</horzOff>
+      <vertOff>-22</vertOff>
+      <justify>right</justify>
+      <halign>right</halign>
+      <expand/>
+    </namePosFull>
+    <namePosFull cmper="4">
       <horzOff>-72</horzOff>
       <vertOff>-22</vertOff>
       <justify>right</justify>
@@ -1954,8 +2056,24 @@
       <textTag>block</textTag>
     </textBlock>
     <playbackRoute cmper="1"/>
+    <playbackRoute cmper="2">
+      <virtChannel>1</virtChannel>
+      <patchType>C0_C32_PC</patchType>
+      <msb>121</msb>
+    </playbackRoute>
+    <playbackRoute cmper="3">
+      <virtChannel>2</virtChannel>
+      <patchType>C0_C32_PC</patchType>
+      <msb>121</msb>
+    </playbackRoute>
     <playbackRouteName cmper="1">
       <name>Instrument  1</name>
+    </playbackRouteName>
+    <playbackRouteName cmper="2">
+      <name>SmartMusic SoftSynth 1</name>
+    </playbackRouteName>
+    <playbackRouteName cmper="3">
+      <name>SmartMusic SoftSynth 1</name>
     </playbackRouteName>
     <pageSpec cmper="1">
       <height>3168</height>
@@ -2460,6 +2578,118 @@
         <play/>
       </layer4>
     </staffPlayData>
+    <staffPlayData cmper="3">
+      <chords>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </chords>
+      <midiExpressions>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </midiExpressions>
+      <layer1>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer1>
+      <layer2>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer2>
+      <layer3>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer3>
+      <layer4>
+        <playbackRouteNum>1</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer4>
+    </staffPlayData>
+    <staffPlayData cmper="4">
+      <chords>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </chords>
+      <midiExpressions>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </midiExpressions>
+      <layer1>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer1>
+      <layer2>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer2>
+      <layer3>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer3>
+      <layer4>
+        <playbackRouteNum>2</playbackRouteNum>
+        <velControlLevel>101</velControlLevel>
+        <velControlSaveFlags>
+          <controlOn/>
+          <function>relative</function>
+        </velControlSaveFlags>
+        <play/>
+      </layer4>
+    </staffPlayData>
     <staffSpec cmper="1">
       <staffLines>5</staffLines>
       <lineSpace>24</lineSpace>
@@ -2492,6 +2722,36 @@
       <stemReversal>-4</stemReversal>
       <botRepeatDotOff>-5</botRepeatDotOff>
       <topRepeatDotOff>-3</topRepeatDotOff>
+    </staffSpec>
+    <staffSpec cmper="3">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+    </staffSpec>
+    <staffSpec cmper="4">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <noteFont>
+        <fontSize>24</fontSize>
+      </noteFont>
+      <floatTime/>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
     </staffSpec>
     <staffSpec cmper="32767">
       <customStaff>
@@ -2707,6 +2967,7 @@
         <hideFretboards/>
       </mask>
     </staffStyle>
+    <viSetup cmper="0"/>
     <partDef cmper="0">
       <nameID>1</nameID>
       <partOrder>0</partOrder>
@@ -6040,6 +6301,28 @@
       <wholeNotehead>119</wholeNotehead>
       <dwholeNotehead>87</dwholeNotehead>
     </percussionNoteInfo>
+    <volumeValue cmper="0">
+      <volume>1.000000e+00</volume>
+    </volumeValue>
+    <volumeValue cmper="1"/>
+    <volumeValue cmper="2"/>
+    <volumeValue cmper="3"/>
+    <volumeValue cmper="4"/>
+    <volumeValue cmper="5"/>
+    <volumeValue cmper="6"/>
+    <volumeValue cmper="7"/>
+    <volumeValue cmper="8"/>
+    <bypassFxValue cmper="1"/>
+    <bypassFxValue cmper="2"/>
+    <bypassFxValue cmper="3"/>
+    <bypassFxValue cmper="4"/>
+    <bypassFxValue cmper="5"/>
+    <bypassFxValue cmper="6"/>
+    <bypassFxValue cmper="7"/>
+    <bypassFxValue cmper="8"/>
+    <bypassFxValue cmper="100"/>
+    <bypassFxValue cmper="101"/>
+    <bypassFxValue cmper="102"/>
   </others>
   <details>
     <baselinesChords cmper1="0" cmper2="0">
@@ -6194,6 +6477,31 @@
     <floats cmper1="2" cmper2="5">
       <beats>4</beats>
       <divBeat>1536</divBeat>
+      <hasTime/>
+    </floats>
+    <floats cmper1="4" cmper2="1">
+      <beats>3</beats>
+      <divBeat>1024</divBeat>
+      <hasTime/>
+    </floats>
+    <floats cmper1="4" cmper2="2">
+      <beats>3</beats>
+      <divBeat>1024</divBeat>
+      <hasTime/>
+    </floats>
+    <floats cmper1="4" cmper2="3">
+      <beats>3</beats>
+      <divBeat>1024</divBeat>
+      <hasTime/>
+    </floats>
+    <floats cmper1="4" cmper2="4">
+      <beats>3</beats>
+      <divBeat>1024</divBeat>
+      <hasTime/>
+    </floats>
+    <floats cmper1="4" cmper2="5">
+      <beats>3</beats>
+      <divBeat>1024</divBeat>
       <hasTime/>
     </floats>
     <gfhold cmper1="1" cmper2="1">
