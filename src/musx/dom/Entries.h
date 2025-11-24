@@ -919,7 +919,9 @@ public:
      * Finale does not display them.)
     */
     std::vector<TupletInfo> tupletInfo;
-    MusxInstance<KeySignature> keySignature; ///< this can be different than the measure key sig if the staff has independent key signatures
+    MusxInstance<KeySignature> keySignature;    ///< This can be different than the measure key sig if the staff has independent key signatures.
+    util::Fraction maxElapsedDuration;          ///< The max elapsed staff duration that was calculated for the frame. This does not
+                                                ///< have to equal the measure duration, but normally it does.
 
     /// @brief Get the document for the entry frame
     DocumentPtr getDocument() const;
