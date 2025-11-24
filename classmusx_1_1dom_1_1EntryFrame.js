@@ -22,5 +22,6 @@ var classmusx_1_1dom_1_1EntryFrame =
     [ "getStartStaffInstance", "classmusx_1_1dom_1_1EntryFrame.html#a294909532014b24a6931e457d6bd52e7", null ],
     [ "getTimeStretch", "classmusx_1_1dom_1_1EntryFrame.html#a04e36a98f44eaa13851aa8df8acc6d9e", null ],
     [ "keySignature", "classmusx_1_1dom_1_1EntryFrame.html#aab6297925a034976e398f9bc9c6712da", null ],
+    [ "maxElapsedDuration", "classmusx_1_1dom_1_1EntryFrame.html#af9ece5e66a2f28cd69c4e4770ee4f284", null ],
     [ "tupletInfo", "classmusx_1_1dom_1_1EntryFrame.html#ad28c481c240edfb35fb300791604fd11", null ]
 ];

@@ -989,6 +989,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the auto-numbering value for this staff, if applicable. </p>
 <p>Calculates <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a4836d6d1ebe25d08f36b6530b25d8dd1" title="Calculated autonumbering value. It is computed by calcAllAutoNumberValues.">autoNumberValue</a> for every staff based on the occurrences of the instrument UUID and in each staff instance. If numbering is not applicable (e.g., auto numbering is disabled, the UUID is empty, or there is only one instance), <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a4836d6d1ebe25d08f36b6530b25d8dd1" title="Calculated autonumbering value. It is computed by calcAllAutoNumberValues.">autoNumberValue</a> has no value.</p>
 <p>This function is called by the DocumentFactory when the document is created. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>test if raw numbering depends on Special Part Extraction. </dd></dl>
 
 </div>
 </div>
@@ -1108,7 +1109,7 @@ template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a 
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">systemId</td><td>The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values. </td></tr>
+    <tr><td class="paramname">systemId</td><td>The system Cmper for which to get the per-system baseline offset. Use <a class="el" href="classmusx_1_1dom_1_1Document.html#a38b380670b7419a5f0b2e4ff3196eea3" title="Returns the Cmper for the given partId, taking into account Special Part Extraction.">Document::calcScrollViewCmper</a> for Scroll View values. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1161,7 +1162,7 @@ template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a 
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">systemId</td><td>The system Cmper for which to get the per-system baseline offset. Use BASE_SYSTEM_ID for Scroll View values. </td></tr>
+    <tr><td class="paramname">systemId</td><td>The system Cmper for which to get the per-system baseline offset. Use <a class="el" href="classmusx_1_1dom_1_1Document.html#a38b380670b7419a5f0b2e4ff3196eea3" title="Returns the Cmper for the given partId, taking into account Special Part Extraction.">Document::calcScrollViewCmper</a> for Scroll View values. </td></tr>
     <tr><td class="paramname">lyricNumber</td><td>The Cmper of the lyric text block to find. </td></tr>
   </table>
   </dd>

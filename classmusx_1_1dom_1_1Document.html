@@ -155,6 +155,12 @@ const <a class="el" href="namespacemusx_1_1dom.html#adb56e4e338213ad74040718738d
 const <a class="el" href="namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4">TextsPoolPtr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTexts</b> () const</td></tr>
 <tr class="memdesc:a2c77b6f1a626b8ce48552d4b58f72446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the const texts pool. <br /></td></tr>
 <tr class="separator:a2c77b6f1a626b8ce48552d4b58f72446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38b380670b7419a5f0b2e4ff3196eea3" id="r_a38b380670b7419a5f0b2e4ff3196eea3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a38b380670b7419a5f0b2e4ff3196eea3">calcScrollViewCmper</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, bool ignoreSpecialPartExtraction=false) const</td></tr>
+<tr class="memdesc:a38b380670b7419a5f0b2e4ff3196eea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Cmper for the given <code>partId</code>, taking into account Special Part Extraction.  <br /></td></tr>
+<tr class="separator:a38b380670b7419a5f0b2e4ff3196eea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba7c5fb654c1dae51fefc85d098b281d" id="r_aba7c5fb654c1dae51fefc85d098b281d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#aba7c5fb654c1dae51fefc85d098b281d">getScrollViewStaves</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, bool ignoreSpecialPartExtraction=false) const</td></tr>
+<tr class="memdesc:aba7c5fb654c1dae51fefc85d098b281d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the scroll view staves for the given <code>partId</code>, taking into account Special Part Extraction.  <br /></td></tr>
+<tr class="separator:aba7c5fb654c1dae51fefc85d098b281d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55deb9eede2e4d0faf4e9a8e70a912ca" id="r_a55deb9eede2e4d0faf4e9a8e70a912ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html">others::Page</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a55deb9eede2e4d0faf4e9a8e70a912ca">calculatePageFromMeasure</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId) const</td></tr>
 <tr class="memdesc:a55deb9eede2e4d0faf4e9a8e70a912ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches pages to find the page that contains the measure.  <br /></td></tr>
 <tr class="separator:a55deb9eede2e4d0faf4e9a8e70a912ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -208,6 +214,43 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>musx::factory::Docum
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forPartId</td><td>The linked score or part ID to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a38b380670b7419a5f0b2e4ff3196eea3" name="a38b380670b7419a5f0b2e4ff3196eea3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38b380670b7419a5f0b2e4ff3196eea3">&#9670;&#160;</a></span>calcScrollViewCmper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::Document::calcScrollViewCmper </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreSpecialPartExtraction</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the Cmper for the given <code>partId</code>, taking into account Special Part Extraction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partId</td><td>The linked part to check. </td></tr>
+    <tr><td class="paramname">ignoreSpecialPartExtraction</td><td>If true, do not check Special Part Extraction and return instead the raw Cmper. </td></tr>
   </table>
   </dd>
 </dl>
@@ -340,6 +383,43 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>musx::factory::Docum
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">staffId</td><td>The staffId to find. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aba7c5fb654c1dae51fefc85d098b281d" name="aba7c5fb654c1dae51fefc85d098b281d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba7c5fb654c1dae51fefc85d098b281d">&#9670;&#160;</a></span>getScrollViewStaves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt; musx::dom::Document::getScrollViewStaves </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreSpecialPartExtraction</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the scroll view staves for the given <code>partId</code>, taking into account Special Part Extraction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partId</td><td>The linked part to check. </td></tr>
+    <tr><td class="paramname">ignoreSpecialPartExtraction</td><td>If true, do not check Special Part Extraction and return instead the raw Scroll View list. </td></tr>
   </table>
   </dd>
 </dl>

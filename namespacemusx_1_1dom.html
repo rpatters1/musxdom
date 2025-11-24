@@ -509,9 +509,7 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_ALTERATI
 constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SCORE_PARTID</b> = 0</td></tr>
 <tr class="memdesc:a5dd453394b3375a5be17055a82ddd9f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The part id of the score. <br /></td></tr>
 <tr class="separator:a5dd453394b3375a5be17055a82ddd9f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac87f0744ae26e5eb9f08d9615fc15bc5" id="r_ac87f0744ae26e5eb9f08d9615fc15bc5"><td class="memItemLeft" align="right" valign="top"><a id="ac87f0744ae26e5eb9f08d9615fc15bc5" name="ac87f0744ae26e5eb9f08d9615fc15bc5"></a>
-constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BASE_SYSTEM_ID</b> = 0</td></tr>
-<tr class="memdesc:ac87f0744ae26e5eb9f08d9615fc15bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The base system cmper that gives a list of all available staves and their score order (<a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> cmper) <br /></td></tr>
+<tr class="memitem:ac87f0744ae26e5eb9f08d9615fc15bc5" id="r_ac87f0744ae26e5eb9f08d9615fc15bc5"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5">BASE_SYSTEM_ID</a> = 0</td></tr>
 <tr class="separator:ac87f0744ae26e5eb9f08d9615fc15bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7da4591a9b109eadbf985a0589a1251" id="r_ae7da4591a9b109eadbf985a0589a1251"><td class="memItemLeft" align="right" valign="top"><a id="ae7da4591a9b109eadbf985a0589a1251" name="ae7da4591a9b109eadbf985a0589a1251"></a>
 constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EVPU_PER_INCH</b> = 288.0</td></tr>
@@ -909,6 +907,30 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="ac87f0744ae26e5eb9f08d9615fc15bc5" name="ac87f0744ae26e5eb9f08d9615fc15bc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac87f0744ae26e5eb9f08d9615fc15bc5">&#9670;&#160;</a></span>BASE_SYSTEM_ID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::BASE_SYSTEM_ID = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The base system cmper that gives a list of all available staves and their score order (<a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> cmper) Generally you should avoid using this directly and instead use <a class="el" href="classmusx_1_1dom_1_1Document.html#a38b380670b7419a5f0b2e4ff3196eea3" title="Returns the Cmper for the given partId, taking into account Special Part Extraction.">Document::calcScrollViewCmper</a> or <a class="el" href="classmusx_1_1dom_1_1Document.html#aba7c5fb654c1dae51fefc85d098b281d" title="Returns the scroll view staves for the given partId, taking into account Special Part Extraction.">Document::getScrollViewStaves</a> for the list of scroll view staves. </p>
 
 </div>
 </div>

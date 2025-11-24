@@ -198,6 +198,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShouldShowFullNam
 <tr class="memitem:af87c40eb79db6e09ac99b05c46e8bedb" id="r_af87c40eb79db6e09ac99b05c46e8bedb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#af87c40eb79db6e09ac99b05c46e8bedb">createDisplayTimeSignature</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> &gt; &amp;forStaff=std::nullopt) const</td></tr>
 <tr class="memdesc:af87c40eb79db6e09ac99b05c46e8bedb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a shared pointer to an instance of the display <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> for this measure and staff.  <br /></td></tr>
 <tr class="separator:af87c40eb79db6e09ac99b05c46e8bedb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7292509dd15a52901b8b7e27b1c0fa1e" id="r_a7292509dd15a52901b8b7e27b1c0fa1e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a7292509dd15a52901b8b7e27b1c0fa1e">calcMinLegacyPickupSpacer</a> (<a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> forStaffId) const</td></tr>
+<tr class="memdesc:a7292509dd15a52901b8b7e27b1c0fa1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the legacy pickup spacer, if any.  <br /></td></tr>
+<tr class="separator:a7292509dd15a52901b8b7e27b1c0fa1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53580a7769b31e9aa51fee60790865c4" id="r_a53580a7769b31e9aa51fee60790865c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a53580a7769b31e9aa51fee60790865c4">calcMinLegacyPickupSpacer</a> () const</td></tr>
+<tr class="memdesc:a53580a7769b31e9aa51fee60790865c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the legacy pickup spacer in any staff, in global Edu values.  <br /></td></tr>
+<tr class="separator:a53580a7769b31e9aa51fee60790865c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acae376781db54c20039e5a6c6626f17b" id="r_acae376781db54c20039e5a6c6626f17b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#acae376781db54c20039e5a6c6626f17b">calcDuration</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> &gt; &amp;forStaff=std::nullopt) const</td></tr>
 <tr class="memdesc:acae376781db54c20039e5a6c6626f17b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the duration of the measure according to the time signature.  <br /></td></tr>
 <tr class="separator:acae376781db54c20039e5a6c6626f17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -660,6 +666,53 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>If forStaff is provided, the staff-level duration (taking into account independent time signatures.) Otherwise, it returns the global duration of the measure. </dd></dl>
+
+</div>
+</div>
+<a id="a53580a7769b31e9aa51fee60790865c4" name="a53580a7769b31e9aa51fee60790865c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53580a7769b31e9aa51fee60790865c4">&#9670;&#160;</a></span>calcMinLegacyPickupSpacer() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::others::Measure::calcMinLegacyPickupSpacer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the legacy pickup spacer in any staff, in global Edu values. </p>
+<p>See comments at <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4" title="Calculates the minimum legacy pickup spacer, if any.">details::GFrameHoldContext::calcMinLegacyPickupSpacer</a>. </p><dl class="section return"><dt>Returns</dt><dd>The smallest legacy pickup spacer encountered in any staff in global Edu values. Zero if none. </dd></dl>
+
+</div>
+</div>
+<a id="a7292509dd15a52901b8b7e27b1c0fa1e" name="a7292509dd15a52901b8b7e27b1c0fa1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7292509dd15a52901b8b7e27b1c0fa1e">&#9670;&#160;</a></span>calcMinLegacyPickupSpacer() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::others::Measure::calcMinLegacyPickupSpacer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td>
+          <td class="paramname"><em>forStaffId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the legacy pickup spacer, if any. </p>
+<p>See comments at <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4" title="Calculates the minimum legacy pickup spacer, if any.">details::GFrameHoldContext::calcMinLegacyPickupSpacer</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forStaffId</td><td>The staff to examine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none. </dd></dl>
 
 </div>
 </div>

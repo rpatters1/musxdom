@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1Document =
 [
     [ "calcHasVaryingSystemStaves", "classmusx_1_1dom_1_1Document.html#abf79aabe5f131018df3561b9302b3585", null ],
+    [ "calcScrollViewCmper", "classmusx_1_1dom_1_1Document.html#a38b380670b7419a5f0b2e4ff3196eea3", null ],
     [ "calculatePageFromMeasure", "classmusx_1_1dom_1_1Document.html#a55deb9eede2e4d0faf4e9a8e70a912ca", null ],
     [ "calculateSystemFromMeasure", "classmusx_1_1dom_1_1Document.html#a7ffeceb4ce06623a0878a0ae6dadc5d6", null ],
     [ "createInstrumentMap", "classmusx_1_1dom_1_1Document.html#ad7512a1daf902e8580a8b4418a31ded8", null ],
@@ -17,6 +18,7 @@ var classmusx_1_1dom_1_1Document =
     [ "getOptions", "classmusx_1_1dom_1_1Document.html#ac1157cd13a429ed6c2e27a0ca008551d", null ],
     [ "getOthers", "classmusx_1_1dom_1_1Document.html#a32f5bc74b654fdb67dbaa2508309cae5", null ],
     [ "getOthers", "classmusx_1_1dom_1_1Document.html#ad515ea56c2c7a1d8f10681bc84eff560", null ],
+    [ "getScrollViewStaves", "classmusx_1_1dom_1_1Document.html#aba7c5fb654c1dae51fefc85d098b281d", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#ac1bf9233c31c0ef654d2cead254f7ae7", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#a2c77b6f1a626b8ce48552d4b58f72446", null ]
 ];

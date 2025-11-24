@@ -158,7 +158,7 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexInFrame</b>
 <tr class="separator:a2e66f9a4903c145849fd1d908ff14dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ea475c5e100002d3bdd58a7042b5d5b" id="r_a3ea475c5e100002d3bdd58a7042b5d5b"><td class="memItemLeft" align="right" valign="top"><a id="a3ea475c5e100002d3bdd58a7042b5d5b" name="a3ea475c5e100002d3bdd58a7042b5d5b"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcManuaOffset</b> () const</td></tr>
-<tr class="memdesc:a3ea475c5e100002d3bdd58a7042b5d5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the correct manual offset of the entry for the requested part id. <br /></td></tr>
+<tr class="memdesc:a3ea475c5e100002d3bdd58a7042b5d5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the manual offset of the entry for the current requested part. This function encapsulates handling of the case when the manual offset is unlinked and different in score and part(s). <br /></td></tr>
 <tr class="separator:a3ea475c5e100002d3bdd58a7042b5d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a284505434c8a4a0b7fe8705062599b30" id="r_a284505434c8a4a0b7fe8705062599b30"><td class="memItemLeft" align="right" valign="top"><a id="a284505434c8a4a0b7fe8705062599b30" name="a284505434c8a4a0b7fe8705062599b30"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcReverseGraceIndex</b> () const</td></tr>
@@ -223,7 +223,7 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memdesc:aa7cecd561c595a6685ab1204b919e442"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not be called on a floating rest. It asserts and throws if so.  <br /></td></tr>
 <tr class="separator:aa7cecd561c595a6685ab1204b919e442"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1488efaf45f336465104bfb8f42349eb" id="r_a1488efaf45f336465104bfb8f42349eb"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a1488efaf45f336465104bfb8f42349eb">calcEntryStemSettings</a> () const</td></tr>
-<tr class="memdesc:a1488efaf45f336465104bfb8f42349eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> stem settings in the requested part.  <br /></td></tr>
+<tr class="memdesc:a1488efaf45f336465104bfb8f42349eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> stem settings for the current requested part. This function encapsulates handling of the case when the two booleans are unlinked and different in score and part(s).  <br /></td></tr>
 <tr class="separator:a1488efaf45f336465104bfb8f42349eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a002aa6823c31b83897d351c3ba49f5a4" id="r_a002aa6823c31b83897d351c3ba49f5a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a002aa6823c31b83897d351c3ba49f5a4">calcUpStemDefault</a> () const</td></tr>
 <tr class="memdesc:a002aa6823c31b83897d351c3ba49f5a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or manual overrides.  <br /></td></tr>
@@ -541,7 +541,8 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the <a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> stem settings in the requested part. </p>
+<p>Returns the <a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> stem settings for the current requested part. This function encapsulates handling of the case when the two booleans are unlinked and different in score and part(s). </p>
+<dl class="section note"><dt>Note</dt><dd>This function is only for getting the entry's two boolean stem settings. Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a87a183870482e7322a06c94d953a31aa" title="Determines the effective stem direction of the entry, taking into account voices, layers,...">calcUpStem</a> to get the entry's effective stem direction, taking into account all options and situations. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>A std::pair&lt;bool, bool&gt; with the first being the freezeStem setting and the second being the upStem setting. </dd></dl>
 
 </div>
