@@ -33,19 +33,9 @@ namespace dom {
 // ***** Document *****
 // ********************
 
-Cmper Document::calcScrollViewCmper(Cmper partId, bool ignoreSpecialPartExtraction) const
+MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId) const
 {
-    if (!ignoreSpecialPartExtraction) {
-        if (auto partGlobs = getOthers()->get<others::PartGlobals>(partId, MUSX_GLOBALS_CMPER)) {
-            return partGlobs->calcScrollViewCmper();
-        }
-    }
-    return BASE_SYSTEM_ID;
-}
-
-MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId, bool ignoreSpecialPartExtraction) const
-{
-    return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId, ignoreSpecialPartExtraction));
+    return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId));
 }
 
 MusxInstance<others::Page> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
@@ -87,14 +77,13 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 {
     InstrumentMap result;
 
-    // use raw scroll view for creating instrument map, ignoring Special Part Extraction.
-    const auto rawScrollView = getScrollViewStaves(forPartId, /*ignoreSpecialPartExtraction*/true);
-    if (rawScrollView.empty()) {
+    const auto scrollView = getScrollViewStaves(forPartId);
+    if (scrollView.empty()) {
         return result;
     }
     std::unordered_set<Cmper> multiStaffInstsFound;
     std::unordered_set<StaffCmper> mappedStaves;
-    for (const auto& staffItem : rawScrollView) {
+    for (const auto& staffItem : scrollView) {
         if (auto rawStaff = getOthers()->get<others::Staff>(forPartId, staffItem->staffId)) { // do not use staffItem->getStaffInstance() because we want no throw here
             if (rawStaff->multiStaffInstId != 0) {
                 if (multiStaffInstsFound.find(rawStaff->multiStaffInstId) == multiStaffInstsFound.end()) {
@@ -108,12 +97,12 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                             it->second.staffGroupId = multiStaffGroupId->staffGroupId;
                         }
                         it->second.multistaffGroupId = rawStaff->multiStaffInstId;
-                        std::optional<size_t> topIndex = rawScrollView.getIndexForStaff(rawStaff->getCmper());
+                        std::optional<size_t> topIndex = scrollView.getIndexForStaff(rawStaff->getCmper());
                         MUSX_ASSERT_IF(!topIndex.has_value()) {
                             throw std::logic_error("Unable to find " + std::to_string(rawStaff->getCmper()) + " in scrollView.");
                         }
                         for (StaffCmper staffId : multiStaffInst->staffNums) {
-                            std::optional<size_t> staffIndex = rawScrollView.getIndexForStaff(staffId);
+                            std::optional<size_t> staffIndex = scrollView.getIndexForStaff(staffId);
                             MUSX_ASSERT_IF(!staffIndex.has_value()) {
                                 throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
                             }
@@ -125,7 +114,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
             }
         }
     }
-    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, forPartId, rawScrollView);
+    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, forPartId, scrollView);
     for (const auto& staffGroup : staffGroups) {
         const auto& group = staffGroup.group;
         // for now, only identify piano braces as visual staff groups
@@ -166,7 +155,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
             }
         }
     }
-    for (const auto& staffItem : rawScrollView) {
+    for (const auto& staffItem : scrollView) {
         if (mappedStaves.find(staffItem->staffId) == mappedStaves.end()) {
             const auto [it, created] = result.emplace(staffItem->staffId, InstrumentInfo());
             MUSX_ASSERT_IF(!created) {

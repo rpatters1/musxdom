@@ -1956,9 +1956,19 @@ public:
     bool showTransposed{};                  ///< If true, "Display Concert Pitch" is unchecked for the part.
     Cmper scrollViewIUlist{};               ///< If this value is non-zero, it is the iuList @ref Cmper of the current Staff List in Scroll View.
     Cmper studioViewIUlist{};               ///< The iuList @ref Cmper for Studio View.
-    /** @brief If non-zero, Special Part Extraction is in effect and this is the @ref Cmper for its @ref StaffUsed array.
+    /**
+     * @brief If non-zero, Special Part Extraction is enabled and this is the @ref Cmper
+     * for its legacy @ref StaffUsed array.
      *
-     * When Special Part Extraction is in effect, staff systems no longer have their own instrument lists. Instead, they use this value.
+     * In older (pre-optimization) Finale files, this Cmper identified the staff list
+     * used for Page View layout of an extracted part. In modern Finale, including all
+     * versions that produce `musx` rather than legacy `mus`, every system is fully
+     * optimized and maintains its own system-level staff list. As a result, this value
+     * is no longer consulted when constructing Page View systems.
+     *
+     * Its only remaining purpose is as a flag that Special Part Extraction is active,
+     * and as a filter for the Finale UI: it limits which staves may be added to a
+     * Page View system when the user is working in the extracted-part layout.
      *
      * (xml node is `<pageViewIUlist>`)
     */
