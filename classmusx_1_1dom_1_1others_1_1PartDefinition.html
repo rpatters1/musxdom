@@ -136,9 +136,10 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> (<
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isScore</b> () const</td></tr>
 <tr class="memdesc:aef38a46b8dbac91906cd353ea2ef2830"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this part corresponds to the score. <br /></td></tr>
 <tr class="separator:aef38a46b8dbac91906cd353ea2ef2830"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e05a8343a39405509fa0ab4f0f268e6" id="r_a0e05a8343a39405509fa0ab4f0f268e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#a0e05a8343a39405509fa0ab4f0f268e6">calcSystemIuList</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> systemId) const</td></tr>
-<tr class="memdesc:a0e05a8343a39405509fa0ab4f0f268e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">StaffUsed</a> cmper by this part for the specified system.  <br /></td></tr>
-<tr class="separator:a0e05a8343a39405509fa0ab4f0f268e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f5e40b30a761d258d53abe10a93b9fc" id="r_a6f5e40b30a761d258d53abe10a93b9fc"><td class="memItemLeft" align="right" valign="top"><a id="a6f5e40b30a761d258d53abe10a93b9fc" name="a6f5e40b30a761d258d53abe10a93b9fc"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcScrollViewCmper</b> () const</td></tr>
+<tr class="memdesc:a6f5e40b30a761d258d53abe10a93b9fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">StaffUsed</a> cmper for Scroll View for this part. See <a class="el" href="classmusx_1_1dom_1_1Document.html#a8ea1ce4314627bcd01d5dcd48d279c94" title="Returns the Scroll View Cmper for the given partId.">Document::calcScrollViewCmper</a>. <br /></td></tr>
+<tr class="separator:a6f5e40b30a761d258d53abe10a93b9fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c0bd01a69fae93f59d9d693bb2d13d8" id="r_a3c0bd01a69fae93f59d9d693bb2d13d8"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2">PageCmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#a3c0bd01a69fae93f59d9d693bb2d13d8">calcPageNumberFromAssignmentId</a> (<a class="el" href="namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2">PageCmper</a> pageAssignmentId) const</td></tr>
 <tr class="memdesc:a3c0bd01a69fae93f59d9d693bb2d13d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a page number in this part from a page assignment ID. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1PageTextAssign.html">PageTextAssign</a>.)  <br /></td></tr>
 <tr class="separator:a3c0bd01a69fae93f59d9d693bb2d13d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -372,33 +373,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html" title="Represents the attributes of a page in the page layout.">Page</a> number or potential page number (if greater than the part's number of pages). If the assignment is for a leading blank page the part does not have, returns std::nullopt. </dd></dl>
-
-</div>
-</div>
-<a id="a0e05a8343a39405509fa0ab4f0f268e6" name="a0e05a8343a39405509fa0ab4f0f268e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e05a8343a39405509fa0ab4f0f268e6">&#9670;&#160;</a></span>calcSystemIuList()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::others::PartDefinition::calcSystemIuList </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
-          <td class="paramname"><em>systemId</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Return the <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">StaffUsed</a> cmper by this part for the specified system. </p>
-<p>This function either returns the input <code>systemId</code> or the Special Part Extraction cmper.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">systemId</td><td>The staff system to find. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
