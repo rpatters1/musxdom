@@ -484,6 +484,11 @@ public:
     {
     }
 
+    /// @brief Creates a music range for the entire document.
+    /// @param document The document to use as the source.
+    [[nodiscard]]
+    static MusicRange fromDocument(const DocumentPtr& document);
+
     MeasCmper startMeasureId{};         ///< Starting measure in the range.
     util::Fraction startPosition{};     ///< Starting EDU (Elapsed Durational Unit) in the range.
     MeasCmper endMeasureId{};           ///< Ending measure in the range.
@@ -509,6 +514,7 @@ public:
     ///         - MeasCmper: the measure of the next location
     ///         - Edu: the location within the measure of the next location
     ///         Return std::nullopt if the next location is past the end of the document, or other error.
+    [[nodiscard]]
     std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 };
 

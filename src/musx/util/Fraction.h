@@ -37,8 +37,8 @@ namespace util {
  */
 class [[nodiscard]] Fraction {
 private:
-    int m_numerator; ///< The m_numerator of the fraction.
-    int m_denominator; ///< The m_denominator of the fraction.
+    int m_numerator = 0;    ///< The m_numerator of the fraction.
+    int m_denominator = 1;  ///< The m_denominator of the fraction.
 
     /**
      * @brief Reduces the input to its simplest form.
@@ -58,7 +58,17 @@ private:
         return {num, den};
     }
 
+    constexpr static Fraction fromConstExpr(int num, int den)
+    {
+        auto [n, d] = reduce(num, den);
+        auto result = Fraction(n);
+        result.m_denominator = d;
+        return result;
+    }
+    
 public:
+    constexpr Fraction() = default;
+
     /**
      * @brief Constructs a Fraction object.
      * @param num The m_numerator of the fraction.
@@ -66,7 +76,7 @@ public:
      * @throws std::invalid_argument if the m_denominator is zero.
      * @todo Make this constructor constexpr when we drop C++17 support.
      */
-    Fraction(int num = 0, int den = 1)
+    Fraction(int num, int den)
     {
         if (den == 0) {
             throw std::invalid_argument("Denominator cannot be zero.");
@@ -77,16 +87,29 @@ public:
         m_denominator = d;
     }
 
+    /**
+     * @brief Constructs a Fraction object from an integer.
+     * @param num The m_numerator of the fraction.
+     * @param den The m_denominator of the fraction. Defaults to 1.
+     * @throws std::invalid_argument if the m_denominator is zero.
+     */
+    constexpr Fraction(int num) : m_numerator(num), m_denominator(1) {}
+
     /// @brief Constructs a Fraction from edu.
     /// @param edu The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is
     /// constructed as Fraction(1, 4).
     /// @todo Make this function constexpr when we drop C++17 support.
-    static Fraction fromEdu(dom::Edu edu) { return Fraction(edu, EDU_PER_WHOLE_NOTE); }
+    static constexpr Fraction fromEdu(dom::Edu edu) { return fromConstExpr(edu, EDU_PER_WHOLE_NOTE); }
+
+    /// @brief Constructs the max fractional value.
+    static constexpr Fraction max() noexcept
+    {
+        return Fraction(std::numeric_limits<int>::max());
+    }
 
     /// @brief Constructs a Fraction from a percent (where 100 is 100%)
     /// @param percent The integral percent value to convert.
-    /// @todo Make this function constexpr when we drop C++17 support.
-    static Fraction fromPercent(int percent) { return Fraction(percent, 100); }
+    static constexpr Fraction fromPercent(int percent) { return fromConstExpr(percent, 100); }
 
     /**
      * @brief Gets the m_numerator of the fraction.
@@ -111,10 +134,9 @@ public:
     /**
      * @brief Returns the fractional part of the fraction.
      * @return The remainder as a fraction, satisfying -1 < remainder < 1.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction remainder() const {
-        return Fraction(m_numerator % m_denominator, m_denominator);
+    Fraction constexpr remainder() const {
+        return fromConstExpr(m_numerator % m_denominator, m_denominator);
     }
 
     /// @brief Returns the reciprocal fraction
@@ -144,10 +166,9 @@ public:
      * @brief Adds two fractions.
      * @param other The other fraction to add.
      * @return The resulting fraction after addition.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction operator+(const Fraction& other) const {
-        return Fraction(
+    Fraction constexpr operator+(const Fraction& other) const {
+        return fromConstExpr(
             m_numerator * other.m_denominator + other.m_numerator * m_denominator,
             m_denominator * other.m_denominator
         );
@@ -157,10 +178,9 @@ public:
      * @brief Subtracts one fraction from another.
      * @param other The other fraction to subtract.
      * @return The resulting fraction after subtraction.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction operator-(const Fraction& other) const {
-        return Fraction(
+    Fraction constexpr operator-(const Fraction& other) const {
+        return fromConstExpr(
             m_numerator * other.m_denominator - other.m_numerator * m_denominator,
             m_denominator * other.m_denominator
         );
@@ -170,10 +190,9 @@ public:
      * @brief Multiplies two fractions.
      * @param other The other fraction to multiply.
      * @return The resulting fraction after multiplication.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction operator*(const Fraction& other) const {
-        return Fraction(
+    Fraction constexpr operator*(const Fraction& other) const {
+        return fromConstExpr(
             m_numerator * other.m_numerator,
             m_denominator * other.m_denominator
         );
@@ -197,9 +216,8 @@ public:
      * @brief Compound addition assignment operator.
      * @param other The other fraction to add.
      * @return A reference to the updated fraction.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction& operator+=(const Fraction& other) {
+    constexpr Fraction& operator+=(const Fraction& other) {
         *this = *this + other;
         return *this;
     }
@@ -208,9 +226,8 @@ public:
      * @brief Compound subtraction assignment operator.
      * @param other The other fraction to subtract.
      * @return A reference to the updated fraction.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction& operator-=(const Fraction& other) {
+    constexpr Fraction& operator-=(const Fraction& other) {
         *this = *this - other;
         return *this;
     }
@@ -219,9 +236,8 @@ public:
      * @brief Compound multiplication assignment operator.
      * @param other The other fraction to multiply.
      * @return A reference to the updated fraction.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction& operator*=(const Fraction& other) {
+    constexpr Fraction& operator*=(const Fraction& other) {
         *this = *this * other;
         return *this;
     }

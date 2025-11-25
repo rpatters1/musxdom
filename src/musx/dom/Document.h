@@ -148,10 +148,18 @@ public:
     /// @param forPartId The linked score or part ID to check.
     bool calcHasVaryingSystemStaves(Cmper forPartId) const;
 
+    /// @brief Iterate all entries in the document by staff and then measure. This function wraps #MusxInstanceList<others::StaffUsed>::iterateEntries.
+    /// @param partId The linked part id to iterate. (Use #SCORE_PARTID to iterate the score.)
+    /// @param iterator The callback function.
+    /// @return True if iteration completed. False if the @p iterator returned false and exited early.
+    bool iterateEntries(Cmper partId, std::function<bool(const EntryInfoPtr&)> iterator) const;
+
 private:
     /// @brief Constructs a `Document`
     explicit Document() = default;
-    
+
+    DocumentWeakPtr m_self;     ///< A weak pointer to self.
+
     HeaderPtr m_header;         ///< The <header>
     OptionsPoolPtr m_options;   ///< The <options> pool
     OthersPoolPtr m_others;     ///< The <others> pool
@@ -163,6 +171,9 @@ private:
 
     InstrumentMap m_instruments; ///< List of instruments in the document, indexed by the top staff in each instrument in Scroll View of the score.
                                 ///< This computed by the factory.
+
+    /// @brief Return a shared_ptr to this document.                                
+    DocumentPtr getSelf() const;
 
     // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;

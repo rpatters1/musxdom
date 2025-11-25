@@ -33,6 +33,15 @@ namespace dom {
 // ***** Document *****
 // ********************
 
+DocumentPtr Document::getSelf() const
+{
+    auto self = m_self.lock();
+    MUSX_ASSERT_IF(!self) {
+        throw std::logic_error("Attempted to get self pointer after Document was destroyed.");
+    }
+    return self;
+}
+
 MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId) const
 {
     return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId));
@@ -217,6 +226,15 @@ bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
         }
     }
     return false;
+}
+
+bool Document::iterateEntries(Cmper partId, std::function<bool(const EntryInfoPtr&)> iterator) const
+{
+    auto scrollView = getScrollViewStaves(partId);
+    if (scrollView.empty()) {
+        return true;
+    }
+    return scrollView.iterateEntries(0, scrollView.size() - 1, MusicRange::fromDocument(getSelf()), iterator);
 }
 
 // **************************
