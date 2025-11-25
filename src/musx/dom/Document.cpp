@@ -33,15 +33,6 @@ namespace dom {
 // ***** Document *****
 // ********************
 
-DocumentPtr Document::getSelf() const
-{
-    auto self = m_self.lock();
-    MUSX_ASSERT_IF(!self) {
-        throw std::logic_error("Attempted to get self pointer after Document was destroyed.");
-    }
-    return self;
-}
-
 MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId) const
 {
     return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId));
@@ -210,6 +201,12 @@ const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
     throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
 }
 
+MusicRange Document::calcEntireDocument() const
+{
+    auto measures = getOthers()->getArray<others::Measure>(SCORE_PARTID);
+    return MusicRange(m_self, 1, 0, static_cast<MeasCmper>(measures.size()), (util::Fraction::max)());
+}
+
 bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
 {
     auto staffSystems = getOthers()->getArray<others::StaffSystem>(forPartId);
@@ -234,7 +231,7 @@ bool Document::iterateEntries(Cmper partId, std::function<bool(const EntryInfoPt
     if (scrollView.empty()) {
         return true;
     }
-    return scrollView.iterateEntries(0, scrollView.size() - 1, MusicRange::fromDocument(getSelf()), iterator);
+    return scrollView.iterateEntries(0, scrollView.size() - 1, calcEntireDocument(), iterator);
 }
 
 // **************************

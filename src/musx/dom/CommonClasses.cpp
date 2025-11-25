@@ -454,12 +454,6 @@ std::optional<music_theory::DiatonicMode> KeySignature::calcDiatonicMode() const
 // ***** MusicRange *****
 // **********************
 
-MusicRange MusicRange::fromDocument(const DocumentPtr& document)
-{
-    auto measures = document->getOthers()->getArray<others::Measure>(SCORE_PARTID);
-    return MusicRange(document, 1, 0, static_cast<MeasCmper>(measures.size()), (util::Fraction::max)());
-}
-
 std::optional<std::pair<MeasCmper, Edu>> MusicRange::nextLocation(const std::optional<StaffCmper>& forStaff) const
 {
     std::optional<std::pair<MeasCmper, Edu>> result;

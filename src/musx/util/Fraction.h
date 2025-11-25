@@ -89,11 +89,10 @@ public:
 
     /**
      * @brief Constructs a Fraction object from an integer.
-     * @param num The m_numerator of the fraction.
-     * @param den The m_denominator of the fraction. Defaults to 1.
+     * @param value The integer value of the fraction.
      * @throws std::invalid_argument if the m_denominator is zero.
      */
-    constexpr Fraction(int num) : m_numerator(num), m_denominator(1) {}
+    constexpr Fraction(int value) : m_numerator(value), m_denominator(1) {}
 
     /// @brief Constructs a Fraction from edu.
     /// @param edu The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is

@@ -484,11 +484,6 @@ public:
     {
     }
 
-    /// @brief Creates a music range for the entire document.
-    /// @param document The document to use as the source.
-    [[nodiscard]]
-    static MusicRange fromDocument(const DocumentPtr& document);
-
     MeasCmper startMeasureId{};         ///< Starting measure in the range.
     util::Fraction startPosition{};     ///< Starting EDU (Elapsed Durational Unit) in the range.
     MeasCmper endMeasureId{};           ///< Ending measure in the range.

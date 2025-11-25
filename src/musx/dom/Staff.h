@@ -444,6 +444,11 @@ public:
     /// @param forLayerIndex 0-based layer index (0..3)
     bool calcAlternateNotationHidesEntries(LayerIndex forLayerIndex) const;
 
+    /// @brief Iterate all entries in the document by staff and then measure. This function wraps MusxInstanceList<StaffUsed>::iterateEntries.
+    /// @param iterator The callback function.
+    /// @return True if iteration completed. False if the @p iterator returned false and exited early.
+    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
+
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
