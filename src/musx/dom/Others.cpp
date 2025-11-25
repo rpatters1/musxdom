@@ -632,6 +632,11 @@ MusxInstanceList<PartDefinition> PartDefinition::getInUserOrder(const DocumentPt
     return result;
 }
 
+Cmper PartDefinition::calcScrollViewCmper() const
+{
+    return getDocument()->calcScrollViewCmper(getCmper());
+}
+
 std::optional<PageCmper> PartDefinition::calcPageNumberFromAssignmentId(PageCmper pageAssignmentId) const
 {
     MUSX_ASSERT_IF(pageAssignmentId < 0) {
@@ -660,24 +665,16 @@ PageCmper PartDefinition::calcAssignmentIdFromPageNumber(PageCmper pageId) const
     return pageId;
 }
 
-Cmper PartDefinition::calcSystemIuList(Cmper systemId) const
-{
-    if (const auto partGlobs = getDocument()->getOthers()->get<others::PartGlobals>(getCmper(), MUSX_GLOBALS_CMPER)) {
-        return partGlobs->calcSystemIuList(systemId);
-    }
-    return systemId;
-}
-
 // ***********************
 // ***** PartGlobals *****
 // ***********************
 
-Cmper PartGlobals::calcSystemIuList(Cmper systemId) const
+Cmper PartGlobals::calcScrollViewCmper() const
 {
     if (specialPartExtractionIUList) {
         return specialPartExtractionIUList;
     }
-    return systemId;
+    return BASE_SYSTEM_ID;
 }
 
 // ******************************
