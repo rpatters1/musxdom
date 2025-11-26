@@ -63,6 +63,7 @@ public:
         }
 
         DocumentPtr document(new Document);
+        document->m_self = document;
 
         ElementLinker elementLinker;
         for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {

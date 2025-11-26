@@ -509,6 +509,7 @@ public:
     ///         - MeasCmper: the measure of the next location
     ///         - Edu: the location within the measure of the next location
     ///         Return std::nullopt if the next location is past the end of the document, or other error.
+    [[nodiscard]]
     std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 };
 

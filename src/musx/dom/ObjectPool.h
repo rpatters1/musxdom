@@ -562,6 +562,8 @@ public:
 private:
     DocumentWeakPtr m_document;
     std::unordered_map<EntryNumber, std::shared_ptr<Entry>> m_pool;
+
+    friend class bench::PoolAccessor<EntryPool>;
 };
 /** @brief Shared `EntryPool` pointer */
 using EntryPoolPtr = std::shared_ptr<EntryPool>;

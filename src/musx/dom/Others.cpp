@@ -35,17 +35,24 @@ namespace others {
 // ***** Frame *****
 // *****************
 
-void Frame::iterateRawEntries(std::function<bool(const MusxInstance<Entry>& entry)> iterator) const
+bool Frame::iterateRawEntries(std::function<bool(const MusxInstance<Entry>& entry)> iterator) const
 {
+    bool result = true;
     auto firstEntry = startEntry ? getDocument()->getEntries()->get(startEntry) : nullptr;
-    if (!firstEntry) {
+    if (firstEntry) {
+        for (auto entry = firstEntry; entry; entry = entry->getNext()) {
+            if (!iterator(entry)) {
+                return false;
+            }
+            if (entry->getEntryNumber() == endEntry) {
+                return true;
+            }
+        }
+    } else {
+        result = false;
         MUSX_INTEGRITY_ERROR("Frame " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value_or(-1)) + " is not iterable.");
     }
-    for (auto entry = firstEntry; entry; entry = entry->getNext()) {
-        if (!iterator(entry) || entry->getEntryNumber() == endEntry) {
-            break;
-        }
-    }
+    return result;
 }
 
 MusxInstanceList<Entry> Frame::getEntries() const

@@ -699,6 +699,17 @@ bool Staff::calcAlternateNotationHidesEntries(LayerIndex forLayerIndex) const
         && (altLayer == forLayerIndex || altHideOtherNotes);
 }
 
+bool Staff::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const
+{
+    auto doc = getDocument();
+    auto scrollView = doc->getScrollViewStaves(getRequestedPartId());
+    auto index = scrollView.getIndexForStaff(getCmper());
+    MUSX_ASSERT_IF(!index) {
+        throw std::logic_error("Staff's requested part [" + std::to_string(getRequestedPartId()) + "] does not contain the staff [" + std::to_string(getCmper()) + "].");
+    }
+    return scrollView.iterateEntries(index.value(), index.value(), doc->calcEntireDocument(), iterator);
+}
+
 // **************************
 // ***** StaffComposite *****
 // **************************

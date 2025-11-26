@@ -75,6 +75,19 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
     return std::make_pair(NoteType(noteValueMsb), count);
 }
 
+void Entry::calcLocations(const DocumentPtr& document)
+{
+    auto gfholds = document->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
+    for (const auto& gfhold : gfholds) {
+        gfhold->iterateRawEntries([&](const MusxInstance<Entry>& entry, LayerIndex layerIndex) {
+            Entry* mutableEntry = const_cast<Entry*>(entry.get());
+            mutableEntry->locations.emplace_back(std::make_tuple(static_cast<StaffCmper>(gfhold->getCmper1()),
+                static_cast<MeasCmper>(gfhold->getCmper2()), layerIndex));
+            return true;
+        });
+    }
+}
+
 // **********************
 // ***** EntryFrame *****
 // **********************
@@ -367,6 +380,27 @@ EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper
         });
     }
     return result;
+}
+
+EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber)
+{
+    if (const auto entry = document->getEntries()->get(entryNumber)) {
+        if (!entry->locations.empty()) {
+            auto [staffId, measureId,layerIndex] = entry->locations[0];
+            if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId)) {
+                EntryInfoPtr result;
+                gfhold.iterateEntries(layerIndex, [&](const EntryInfoPtr& entryInfo) {
+                    if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
+                        result = entryInfo;
+                        return false; // stop iterating
+                    }
+                    return true;
+                });
+                return result;
+            }
+        }
+    }
+    return {};
 }
 
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const

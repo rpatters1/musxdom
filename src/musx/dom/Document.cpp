@@ -201,6 +201,12 @@ const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
     throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
 }
 
+MusicRange Document::calcEntireDocument() const
+{
+    auto measures = getOthers()->getArray<others::Measure>(SCORE_PARTID);
+    return MusicRange(m_self, 1, 0, static_cast<MeasCmper>(measures.size()), (util::Fraction::max)());
+}
+
 bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
 {
     auto staffSystems = getOthers()->getArray<others::StaffSystem>(forPartId);
@@ -217,6 +223,15 @@ bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
         }
     }
     return false;
+}
+
+bool Document::iterateEntries(Cmper partId, std::function<bool(const EntryInfoPtr&)> iterator) const
+{
+    auto scrollView = getScrollViewStaves(partId);
+    if (scrollView.empty()) {
+        return true;
+    }
+    return scrollView.iterateEntries(0, scrollView.size() - 1, calcEntireDocument(), iterator);
 }
 
 // **************************

@@ -36,9 +36,17 @@ namespace bench {
 template<>
 class PoolAccessor<OthersPool>
 {
-    public:
+public:
     static ObjectPool<OthersBase>& get(OthersPool& o) { return o.m_pool; }
 };
+
+template<>
+class PoolAccessor<EntryPool>
+{
+public:
+    static const std::unordered_map<EntryNumber, std::shared_ptr<Entry>>& get(EntryPool& e) { return e.m_pool; }
+};
+
 } // namespace bench
 
 DocumentPtr loadDocument(const std::vector<char>& buffer)
@@ -86,6 +94,75 @@ void adHocTest([[maybe_unused]]const DocumentPtr& doc)
         });
     } 
 */
+}
+
+void traverseEntries(const DocumentPtr& doc)
+{
+    auto entryPool = bench::PoolAccessor<EntryPool>::get(*doc->getEntries());
+
+    using clock = std::chrono::high_resolution_clock;
+
+    std::unordered_set<EntryNumber> entryList;
+    std::unordered_set<EntryNumber> entryListLightweight;
+
+    size_t entryCount = 0;
+    auto iterateStart = clock::now();
+    doc->iterateEntries(SCORE_PARTID, [&](const EntryInfoPtr& entryInfo) {
+        auto entryNum = entryInfo->getEntry()->getEntryNumber();
+        auto result = entryList.emplace(entryNum);
+        if (!result.second) {
+            std::cout << "Duplicate entry " << entryNum << " found at staff " << entryInfo.getStaff() << " measure " << entryInfo.getMeasure() << ".\n";
+        }
+        entryCount++;
+        return true;
+    });
+    auto iterateEnd = clock::now();
+    auto iterateMs = std::chrono::duration_cast<std::chrono::milliseconds>(iterateEnd - iterateStart).count();
+    std::cout << "Using full iterator, iterated " << entryCount << " entries in " << iterateMs << " ms\n";
+
+    entryCount = 0;
+    size_t extraEntries = 0;
+    iterateStart = clock::now();
+    auto gfHolds = doc->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
+    for (const auto& gfHold : gfHolds) {
+        gfHold->iterateRawEntries([&](const MusxInstance<Entry>& entry, LayerIndex) {
+            if (gfHold->getCmper1() != 32767) {
+                auto entryNum = entry->getEntryNumber();
+                auto result = entryList.emplace(entryNum);
+                if (result.second) {
+                    std::cout << "New entry " << entryNum << " added in lightweight search at staff " << gfHold->getCmper1() << " measure " << gfHold->getCmper2() << ".\n";
+                }
+                result = entryListLightweight.emplace(entryNum);
+                if (!result.second) {
+                    std::cout << "Duplicate lightweight entry " << entryNum << " found at staff " << gfHold->getCmper1() << " measure " << gfHold->getCmper2() << ".\n";
+                }
+            } else {
+                extraEntries++;
+            }
+            entryCount++;
+            return true;
+        });
+    }
+    iterateEnd = clock::now();
+    iterateMs = std::chrono::duration_cast<std::chrono::milliseconds>(iterateEnd - iterateStart).count();
+    std::cout << "Using lightweight search, iterated " << entryCount << " entries in " << iterateMs << " ms\n";
+    std::cout << "Encountered " << entryList.size() << " unique entries not including " << extraEntries << " extra entries.\n";
+
+    std::vector<EntryNumber> missing;
+    for (const auto& x : entryList) {
+        if (!entryListLightweight.contains(x)) {
+            missing.push_back(x);
+        }
+    }
+    std::cout << "Encountered " << missing.size() << " missing entries in the lightweight search.\n";
+                
+    std::vector<EntryNumber> orphanEntries;
+    for (const auto& [num, entry] : entryPool) {
+        if (entry->locations.empty()) {
+            orphanEntries.push_back(num);
+        }
+    }
+    std::cout << "Encountered " << orphanEntries.size() << " with no location.\n";
 }
 
 void benchmarkEntries(const DocumentPtr& doc)
@@ -274,6 +351,7 @@ int main(int argc, char* argv[])
     }
 
     adHocTest(doc);
+    traverseEntries(doc);
     benchmarkEntries(doc);
     benchmarkOthersArrays(doc);
     benchmarkOthers(doc);

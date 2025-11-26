@@ -43,6 +43,7 @@
 #include "FieldPopulatorsOptions.h"
 #include "FieldPopulatorsOthers.h"
 #include "FieldPopulatorsDetails.h"
+#include "FieldPopulatorsEntries.h"
 #include "FieldPopulatorsTexts.h"
 
 #ifdef _MSC_VER
