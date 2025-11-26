@@ -125,7 +125,7 @@ void traverseEntries(const DocumentPtr& doc)
     iterateStart = clock::now();
     auto gfHolds = doc->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
     for (const auto& gfHold : gfHolds) {
-        gfHold->iterateRawEntries([&](const MusxInstance<Entry>& entry) {
+        gfHold->iterateRawEntries([&](const MusxInstance<Entry>& entry, LayerIndex) {
             if (gfHold->getCmper1() != 32767) {
                 auto entryNum = entry->getEntryNumber();
                 auto result = entryList.emplace(entryNum);
