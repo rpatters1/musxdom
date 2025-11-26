@@ -346,7 +346,7 @@ public:
     std::vector<std::shared_ptr<Note>> notes;
 
     /** @brief The location(s) of this entry calculated by #calcLocations, which is called by the factory.
-     * An entry can have multiple locations if it is mirrored with the Mirror tool. Finale 27 flattens out
+     * An entry can have multiple locations if it is mirrored with the Mirror Tool. Finale 27 flattens out
      * all mirrors so musx files created by Finale 27 never should have more than one location. But if a musx
      * from an earlier version is read, the entry might have multiple locations.
      */
@@ -436,6 +436,16 @@ public:
     /// @param entryNumber The EntryNumber to search for.
     /// @return If found, an #EntryInfoPtr for the given entry number. Otherwise an null instance.
     static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber);
+
+    /// @brief Returns an EntryInfoPtr for the entry specified by @p entryNumber.
+    ///
+    /// If you are directly importing a musx file last saved in a version before Finale 25, it may contain mirrors.
+    /// If so, one of the locations is chosen. (This applies to musx files last saved by Finale 2014 or 2014.5.)
+    /// @param document The document to search.
+    /// @param partId The part within the document for which to create the #EntryInfoPtr.
+    /// @param entryNumber The entry to find.
+    /// @return An EntryInfoPtr corresponding to the input entryNumber or null if the entry is not in the requested part or otherwise is not found.
+    static EntryInfoPtr fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber);
 
     /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
     const std::shared_ptr<const EntryInfo> operator->() const;

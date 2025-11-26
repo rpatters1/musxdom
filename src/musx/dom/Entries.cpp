@@ -381,6 +381,17 @@ EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper
     return result;
 }
 
+EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber)
+{
+    if (const auto entry = document->getEntries()->get(entryNumber)) {
+        if (!entry->locations.empty()) {
+            auto [staffId, measureId] = entry->locations[0];
+            return fromPositionOrNull(document, partId, staffId, measureId, entryNumber);
+        }
+    }
+    return {};
+}
+
 const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
 {
     MUSX_ASSERT_IF(!m_entryFrame) {
