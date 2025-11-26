@@ -1118,7 +1118,7 @@ public:
     /// @brief Iterates all the raw entries in a the GFrameHold, passing them to the iterator function. If the iterator function returns false, iteration stops.
     /// @param iterator function.
     /// @return true if all entries iterated, false if the iterator function exited early by returning false.
-    bool iterateRawEntries(std::function<bool(const MusxInstance<Entry>&)> iterator) const;
+    bool iterateRawEntries(std::function<bool(const MusxInstance<Entry>&, LayerIndex)> iterator) const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {

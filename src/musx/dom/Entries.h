@@ -350,7 +350,7 @@ public:
      * all mirrors so musx files created by Finale 27 never should have more than one location. But if a musx
      * from an earlier version is read, the entry might have multiple locations.
      */
-    std::vector<std::pair<StaffCmper, MeasCmper>> locations;
+    std::vector<std::tuple<StaffCmper, MeasCmper, LayerIndex>> locations;
 
     /// @brief Gets the entry number for this entry
     EntryNumber getEntryNumber() const { return m_entnum; }

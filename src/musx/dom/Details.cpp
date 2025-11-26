@@ -334,14 +334,16 @@ MusxInstance<CustomStem> CustomStem::getForStem(const EntryInfoPtr& entryInfo, S
 // ***** GFrameHold *****
 // **********************
 
-bool GFrameHold::iterateRawEntries(std::function<bool(const MusxInstance<Entry>&)> iterator) const
+bool GFrameHold::iterateRawEntries(std::function<bool(const MusxInstance<Entry>&, LayerIndex)> iterator) const
 {
-    for (Cmper frameId : frames) {
-        if (frameId) {
+    for (size_t layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
+        if (Cmper frameId = frames[layerIndex]) {
             auto frames = getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), frameId);
             for (const auto& frame : frames) {
                 if (frame->startEntry) {
-                    if (!frame->iterateRawEntries(iterator)) {
+                    if (!frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) {
+                            return iterator(entry, static_cast<LayerIndex>(layerIndex));
+                        })) {
                         return false;
                     }
                 }
