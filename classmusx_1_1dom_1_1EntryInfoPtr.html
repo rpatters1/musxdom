@@ -340,6 +340,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a67d2964a49c8debf2b15d281745f3348" id="r_a67d2964a49c8debf2b15d281745f3348"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a67d2964a49c8debf2b15d281745f3348">fromPositionOrNull</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber)</td></tr>
 <tr class="memdesc:a67d2964a49c8debf2b15d281745f3348"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches the given position at <code>staffId</code> and <code>measureId</code> for the <code>entryNumber</code>.  <br /></td></tr>
 <tr class="separator:a67d2964a49c8debf2b15d281745f3348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a709dc5ff57acb464357e4b2af5571078" id="r_a709dc5ff57acb464357e4b2af5571078"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a709dc5ff57acb464357e4b2af5571078">fromEntryNumber</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber)</td></tr>
+<tr class="memdesc:a709dc5ff57acb464357e4b2af5571078"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> for the entry specified by <code>entryNumber</code>.  <br /></td></tr>
+<tr class="separator:a709dc5ff57acb464357e4b2af5571078"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ownership of the frame so that any instance of it keeps the frame alive without the need for circular references. </p>
@@ -1010,6 +1013,59 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Finds the tuplet info for tuplets that include this entry. </p>
 <dl class="section return"><dt>Returns</dt><dd>A list of indices of TupletInfo records that include the entry. </dd></dl>
+
+</div>
+</div>
+<a id="a709dc5ff57acb464357e4b2af5571078" name="a709dc5ff57acb464357e4b2af5571078"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a709dc5ff57acb464357e4b2af5571078">&#9670;&#160;</a></span>fromEntryNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::fromEntryNumber </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td>
+          <td class="paramname"><em>entryNumber</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns an <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> for the entry specified by <code>entryNumber</code>. </p>
+<p>If you are directly importing a musx file last saved in a version before Finale 25, it may contain mirrors. If so, one of the locations is chosen. (This applies to musx files last saved by Finale 2014 or 2014.5.) </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>The document to search. </td></tr>
+    <tr><td class="paramname">partId</td><td>The part within the document for which to create the <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad2b5a35a87aa853929fb934aa1d5fbc6" title="Default constructor.">EntryInfoPtr</a>. </td></tr>
+    <tr><td class="paramname">entryNumber</td><td>The entry to find. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> corresponding to the input entryNumber or null if the entry is not in the requested part or otherwise is not found. </dd></dl>
 
 </div>
 </div>

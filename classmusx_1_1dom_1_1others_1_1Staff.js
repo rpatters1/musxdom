@@ -65,6 +65,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "getNoteShapes", "classmusx_1_1dom_1_1others_1_1Staff.html#a65dddeed8b69726453a77e4d378f39b8", null ],
     [ "hasInstrumentAssigned", "classmusx_1_1dom_1_1others_1_1Staff.html#a76f425b19ecab6f653dedb641f226748", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1Staff.html#a0d2caeeeb15cb611f15ae650360a3824", null ],
+    [ "iterateEntries", "classmusx_1_1dom_1_1others_1_1Staff.html#a527875ed46af13e7e93d5469e064996a", null ],
     [ "showNamesForPart", "classmusx_1_1dom_1_1others_1_1Staff.html#ac9c53dc5f21562bebfaf99be4d6d4cd5", null ],
     [ "abbrvNameTextId", "classmusx_1_1dom_1_1others_1_1Staff.html#aa33a3c157327823a02f0f3a5e69fd76d", null ],
     [ "abrvNamePosFromStyle", "classmusx_1_1dom_1_1others_1_1Staff.html#a50309bf2268f58ff5ed76a7337c56912", null ],

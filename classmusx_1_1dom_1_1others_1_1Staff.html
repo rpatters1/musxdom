@@ -299,6 +299,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasInstrumentAssigned
 <tr class="memitem:a9d7c3b2be150114583a4bc3f1cfee5c6" id="r_a9d7c3b2be150114583a4bc3f1cfee5c6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a9d7c3b2be150114583a4bc3f1cfee5c6">calcAlternateNotationHidesEntries</a> (<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> forLayerIndex) const</td></tr>
 <tr class="memdesc:a9d7c3b2be150114583a4bc3f1cfee5c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the given layer is hidden by alternate notation.  <br /></td></tr>
 <tr class="separator:a9d7c3b2be150114583a4bc3f1cfee5c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a527875ed46af13e7e93d5469e064996a" id="r_a527875ed46af13e7e93d5469e064996a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a527875ed46af13e7e93d5469e064996a">iterateEntries</a> (std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt; iterator) const</td></tr>
+<tr class="memdesc:a527875ed46af13e7e93d5469e064996a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterate all entries in the document by staff and then measure. This function wraps MusxInstanceList&lt;StaffUsed&gt;::iterateEntries.  <br /></td></tr>
+<tr class="separator:a527875ed46af13e7e93d5469e064996a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d2caeeeb15cb611f15ae650360a3824" id="r_a0d2caeeeb15cb611f15ae650360a3824"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a0d2caeeeb15cb611f15ae650360a3824">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:a0d2caeeeb15cb611f15ae650360a3824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:a0d2caeeeb15cb611f15ae650360a3824"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1627,6 +1630,33 @@ template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">musx::dom::Base</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html#a17226c4c2ec84398025d418e64954b02">musx::dom::others::StaffStyle</a>.</p>
+
+</div>
+</div>
+<a id="a527875ed46af13e7e93d5469e064996a" name="a527875ed46af13e7e93d5469e064996a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a527875ed46af13e7e93d5469e064996a">&#9670;&#160;</a></span>iterateEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::Staff::iterateEntries </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>iterator</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iterate all entries in the document by staff and then measure. This function wraps MusxInstanceList&lt;StaffUsed&gt;::iterateEntries. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iterator</td><td>The callback function. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if iteration completed. False if the <code>iterator</code> returned false and exited early. </dd></dl>
 
 </div>
 </div>

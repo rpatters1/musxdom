@@ -36,7 +36,7 @@ var searchData=
   ['rehearsalmarkoffset_33',['rehearsalMarkOffset',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a1d29b58e1f68718f553d6f3d1db71029',1,'musx::dom::others::MeasureExprAssign']]],
   ['rehearsalmarks_34',['RehearsalMarks',['../classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7c1e56af5492f30cfe846f592e06039aa3949b44e2eeb012f8dafa6d11cd865c6',1,'musx::dom::others::MarkingCategory']]],
   ['rehearsalmarkstyle_35',['rehearsalmarkstyle',['../namespacemusx_1_1dom_1_1others.html#a0011ef89c1f8c2154d6d1a5de94f7c2c',1,'musx::dom::others::RehearsalMarkStyle'],['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a13bbf631cd6f1733b1ab5b728128c16d',1,'musx::dom::others::TextExpressionDef::rehearsalMarkStyle'],['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a8bc04f437e50caf6290359bc3ff3c549',1,'musx::dom::others::ShapeExpressionDef::rehearsalMarkStyle']]],
-  ['remainder_36',['remainder',['../classmusx_1_1util_1_1Fraction.html#a13dccd0b177ec18d649c0457efaa2a4e',1,'musx::util::Fraction']]],
+  ['remainder_36',['remainder',['../classmusx_1_1util_1_1Fraction.html#a8cca0fc2701d71de7db93a4b67edc20f',1,'musx::util::Fraction']]],
   ['repeat_37',['Repeat',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa7020426cfb0a204051be4b3053d2acc8',1,'musx::dom::options::FontOptions']]],
   ['repeatactiontype_38',['RepeatActionType',['../namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852da',1,'musx::dom::others']]],
   ['repeatback_39',['repeatback',['../classmusx_1_1dom_1_1others_1_1RepeatBack.html',1,'musx::dom::others::RepeatBack'],['../classmusx_1_1dom_1_1others_1_1RepeatBack.html#aeabe38945b7ff7f56111051f19d90aae',1,'musx::dom::others::RepeatBack::RepeatBack()']]],

@@ -125,9 +125,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Frame</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> inci=0)</td></tr>
 <tr class="memdesc:a264bdcc5b32fb5a8455e0d5ecfd6783b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a264bdcc5b32fb5a8455e0d5ecfd6783b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b12a7c2495b3e2170ffcaafbd447623" id="r_a3b12a7c2495b3e2170ffcaafbd447623"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#a3b12a7c2495b3e2170ffcaafbd447623">iterateRawEntries</a> (std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;entry)&gt; iterator) const</td></tr>
-<tr class="memdesc:a3b12a7c2495b3e2170ffcaafbd447623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops.  <br /></td></tr>
-<tr class="separator:a3b12a7c2495b3e2170ffcaafbd447623"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1e562d49d11702cd64344635ec7716e" id="r_ae1e562d49d11702cd64344635ec7716e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#ae1e562d49d11702cd64344635ec7716e">iterateRawEntries</a> (std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;entry)&gt; iterator) const</td></tr>
+<tr class="memdesc:ae1e562d49d11702cd64344635ec7716e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates all the raw entries in a frame, passing them to the iterator function. If the iterator function returns false, iteration stops.  <br /></td></tr>
+<tr class="separator:ae1e562d49d11702cd64344635ec7716e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a38f8583dcd4d369e69464c7dcdc200" id="r_a3a38f8583dcd4d369e69464c7dcdc200"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html#a3a38f8583dcd4d369e69464c7dcdc200">getEntries</a> () const</td></tr>
 <tr class="memdesc:a3a38f8583dcd4d369e69464c7dcdc200"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of entries contained in the frame.  <br /></td></tr>
 <tr class="separator:a3a38f8583dcd4d369e69464c7dcdc200"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -327,14 +327,14 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 </div>
 </div>
-<a id="a3b12a7c2495b3e2170ffcaafbd447623" name="a3b12a7c2495b3e2170ffcaafbd447623"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b12a7c2495b3e2170ffcaafbd447623">&#9670;&#160;</a></span>iterateRawEntries()</h2>
+<a id="ae1e562d49d11702cd64344635ec7716e" name="ae1e562d49d11702cd64344635ec7716e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1e562d49d11702cd64344635ec7716e">&#9670;&#160;</a></span>iterateRawEntries()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void musx::dom::others::Frame::iterateRawEntries </td>
+          <td class="memname">bool musx::dom::others::Frame::iterateRawEntries </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;entry)&gt;&#160;</td>
           <td class="paramname"><em>iterator</em></td><td>)</td>
@@ -350,6 +350,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if all entries iterated, false if the iterator function exited early by returning false. </dd></dl>
 
 </div>
 </div>

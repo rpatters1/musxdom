@@ -179,6 +179,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:affcba9b47d47787c529f9b8fd1413c1c" id="r_affcba9b47d47787c529f9b8fd1413c1c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#affcba9b47d47787c529f9b8fd1413c1c">calcLocations</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document)</td></tr>
+<tr class="memdesc:affcba9b47d47787c529f9b8fd1413c1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the locations for all entries in the document. This function is normally only called by the document factory.  <br /></td></tr>
+<tr class="separator:affcba9b47d47787c529f9b8fd1413c1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95ac6a59c164014487bad4d0df2b0f0c" id="r_a95ac6a59c164014487bad4d0df2b0f0c"><td class="memItemLeft" align="right" valign="top"><a id="a95ac6a59c164014487bad4d0df2b0f0c" name="a95ac6a59c164014487bad4d0df2b0f0c"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:a95ac6a59c164014487bad4d0df2b0f0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -347,6 +350,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>freezeBeam</b> {}</td
 std::vector&lt; std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Note.html">Note</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>notes</b></td></tr>
 <tr class="memdesc:a533b919d0efa81b9d26fb16ade0b7773"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collection of notes that comprise the entry. These are in order from lowest to highest. <br /></td></tr>
 <tr class="separator:a533b919d0efa81b9d26fb16ade0b7773"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0420ba6ff55a188f1952b6e6e81a1deb" id="r_a0420ba6ff55a188f1952b6e6e81a1deb"><td class="memItemLeft" align="right" valign="top"><a id="a0420ba6ff55a188f1952b6e6e81a1deb" name="a0420ba6ff55a188f1952b6e6e81a1deb"></a>
+std::vector&lt; std::tuple&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>, <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>locations</b></td></tr>
+<tr class="memdesc:a0420ba6ff55a188f1952b6e6e81a1deb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The location(s) of this entry calculated by <a class="el" href="classmusx_1_1dom_1_1Entry.html#affcba9b47d47787c529f9b8fd1413c1c" title="Calculates the locations for all entries in the document. This function is normally only called by th...">calcLocations</a>, which is called by the factory. An entry can have multiple locations if it is mirrored with the Mirror Tool. Finale 27 flattens out all mirrors so musx files created by Finale 27 never should have more than one location. But if a musx from an earlier version is read, the entry might have multiple locations. <br /></td></tr>
+<tr class="separator:a0420ba6ff55a188f1952b6e6e81a1deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -457,6 +464,40 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="affcba9b47d47787c529f9b8fd1413c1c" name="affcba9b47d47787c529f9b8fd1413c1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affcba9b47d47787c529f9b8fd1413c1c">&#9670;&#160;</a></span>calcLocations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::Entry::calcLocations </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the locations for all entries in the document. This function is normally only called by the document factory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>The document to search. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a23ec586ae3f82602d46c3b6368b69e76" name="a23ec586ae3f82602d46c3b6368b69e76"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a23ec586ae3f82602d46c3b6368b69e76">&#9670;&#160;</a></span>getNext()</h2>
 

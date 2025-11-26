@@ -140,6 +140,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsMultiLayer</b> 
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcContainsMusic</b> () const</td></tr>
 <tr class="memdesc:ab1f92bd76d9afb1a7bfd0ea1b25305a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a19a1c72ba46de55a0b948bf3556f7803" title="Constructor function.">GFrameHold</a> contains any layer frames. <br /></td></tr>
 <tr class="separator:ab1f92bd76d9afb1a7bfd0ea1b25305a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6489be37c60c0f65ec8476b4645c1b6b" id="r_a6489be37c60c0f65ec8476b4645c1b6b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a6489be37c60c0f65ec8476b4645c1b6b">iterateRawEntries</a> (std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;, <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>)&gt; iterator) const</td></tr>
+<tr class="memdesc:a6489be37c60c0f65ec8476b4645c1b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates all the raw entries in a the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html" title="Represents the attributes of a Finale frame holder.">GFrameHold</a>, passing them to the iterator function. If the iterator function returns false, iteration stops.  <br /></td></tr>
+<tr class="separator:a6489be37c60c0f65ec8476b4645c1b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6cedce0ec1d699508cffac0f5ab354d" id="r_af6cedce0ec1d699508cffac0f5ab354d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#af6cedce0ec1d699508cffac0f5ab354d">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:af6cedce0ec1d699508cffac0f5ab354d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
 <tr class="separator:af6cedce0ec1d699508cffac0f5ab354d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -397,6 +400,33 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </dl>
 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">musx::dom::Base</a>.</p>
+
+</div>
+</div>
+<a id="a6489be37c60c0f65ec8476b4645c1b6b" name="a6489be37c60c0f65ec8476b4645c1b6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6489be37c60c0f65ec8476b4645c1b6b">&#9670;&#160;</a></span>iterateRawEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::details::GFrameHold::iterateRawEntries </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;, <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>)&gt;&#160;</td>
+          <td class="paramname"><em>iterator</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iterates all the raw entries in a the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html" title="Represents the attributes of a Finale frame holder.">GFrameHold</a>, passing them to the iterator function. If the iterator function returns false, iteration stops. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iterator</td><td>function. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if all entries iterated, false if the iterator function exited early by returning false. </dd></dl>
 
 </div>
 </div>

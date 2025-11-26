@@ -1,5 +1,6 @@
 var classmusx_1_1dom_1_1Document =
 [
+    [ "calcEntireDocument", "classmusx_1_1dom_1_1Document.html#addda2caaa580246270bcbd1622bde086", null ],
     [ "calcHasVaryingSystemStaves", "classmusx_1_1dom_1_1Document.html#abf79aabe5f131018df3561b9302b3585", null ],
     [ "calcScrollViewCmper", "classmusx_1_1dom_1_1Document.html#a8ea1ce4314627bcd01d5dcd48d279c94", null ],
     [ "calculatePageFromMeasure", "classmusx_1_1dom_1_1Document.html#a55deb9eede2e4d0faf4e9a8e70a912ca", null ],
@@ -20,5 +21,6 @@ var classmusx_1_1dom_1_1Document =
     [ "getOthers", "classmusx_1_1dom_1_1Document.html#ad515ea56c2c7a1d8f10681bc84eff560", null ],
     [ "getScrollViewStaves", "classmusx_1_1dom_1_1Document.html#aaa777b3635d7f5c40c9dc99ccdedbac2", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#ac1bf9233c31c0ef654d2cead254f7ae7", null ],
-    [ "getTexts", "classmusx_1_1dom_1_1Document.html#a2c77b6f1a626b8ce48552d4b58f72446", null ]
+    [ "getTexts", "classmusx_1_1dom_1_1Document.html#a2c77b6f1a626b8ce48552d4b58f72446", null ],
+    [ "iterateEntries", "classmusx_1_1dom_1_1Document.html#a284ebc5093ab40aaa65ba82696003160", null ]
 ];

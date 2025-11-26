@@ -6,6 +6,7 @@ var classmusx_1_1dom_1_1details_1_1GFrameHold =
     [ "getMeasure", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#aafb1a25712ba546799697c43dbdf81ba", null ],
     [ "getStaff", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a0a7fb79250790ae14eaae17da0216cd7", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#af6cedce0ec1d699508cffac0f5ab354d", null ],
+    [ "iterateRawEntries", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a6489be37c60c0f65ec8476b4645c1b6b", null ],
     [ "clefAfterBarline", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#ae688daab6d9904b3a48029bd167d8174", null ],
     [ "clefId", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#a4299d95db06924be18c150b93a2310d9", null ],
     [ "clefListId", "classmusx_1_1dom_1_1details_1_1GFrameHold.html#aea171fa9898b2b7c14d1837eefe6c3b9", null ],
