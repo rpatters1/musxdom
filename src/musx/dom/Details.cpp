@@ -330,6 +330,27 @@ MusxInstance<CustomStem> CustomStem::getForStem(const EntryInfoPtr& entryInfo, S
     return nullptr;
 }
 
+// **********************
+// ***** GFrameHold *****
+// **********************
+
+bool GFrameHold::iterateRawEntries(std::function<bool(const MusxInstance<Entry>&)> iterator) const
+{
+    for (Cmper frameId : frames) {
+        if (frameId) {
+            auto frames = getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), frameId);
+            for (const auto& frame : frames) {
+                if (frame->startEntry) {
+                    if (!frame->iterateRawEntries(iterator)) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
+
 // ***********************************
 // ***** IndependentStaffDetails *****
 // ***********************************

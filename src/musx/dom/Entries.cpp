@@ -75,6 +75,18 @@ std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
     return std::make_pair(NoteType(noteValueMsb), count);
 }
 
+void Entry::calcLocations(const DocumentPtr& document)
+{
+    auto gfholds = document->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
+    for (const auto& gfhold : gfholds) {
+        gfhold->iterateRawEntries([&](const MusxInstance<Entry>& entry) {
+            Entry* mutableEntry = const_cast<Entry*>(entry.get());
+            mutableEntry->locations.emplace_back(std::make_pair(static_cast<StaffCmper>(gfhold->getCmper1()), static_cast<MeasCmper>(gfhold->getCmper2())));
+            return true;
+        });
+    }
+}
+
 // **********************
 // ***** EntryFrame *****
 // **********************

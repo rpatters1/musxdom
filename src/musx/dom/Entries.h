@@ -345,6 +345,13 @@ public:
     /** @brief Collection of notes that comprise the entry. These are in order from lowest to highest. */
     std::vector<std::shared_ptr<Note>> notes;
 
+    /** @brief The location(s) of this entry calculated by #calcLocations, which is called by the factory.
+     * An entry can have multiple locations if it is mirrored with the Mirror tool. Finale 27 flattens out
+     * all mirrors so musx files created by Finale 27 never should have more than one location. But if a musx
+     * from an earlier version is read, the entry might have multiple locations.
+     */
+    std::vector<std::pair<StaffCmper, MeasCmper>> locations;
+
     /// @brief Gets the entry number for this entry
     EntryNumber getEntryNumber() const { return m_entnum; }
 
@@ -386,6 +393,10 @@ public:
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }
     }
+
+    /// @brief Calculates the locations for all entries in the document. This function is normally only called by the document factory.
+    /// @param document The document to search.
+    static void calcLocations(const DocumentPtr& document);
 
     constexpr static std::string_view XmlNodeName = "entry"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
