@@ -138,8 +138,10 @@ public:
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
     /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
+    /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
-    EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt, std::optional<bool> matchVoice2 = std::nullopt) const;
+    EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
+        std::optional<bool> matchVoice2 = std::nullopt, util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Calculates the minimum legacy pickup spacer, if any.
     ///
@@ -489,6 +491,11 @@ public:
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
     unsigned calcReverseGraceIndex() const;
 
+    /// @brief Calculates a grace note's symbolic starting duration as a negative offset from the main note.
+    /// This is useful for comparing grace note sequences.
+    /// @return Negative symbolic offset from the main note, or zero if not a grace note.
+    util::Fraction calcGraceEllapsedDuration() const;
+
     /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
     std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex = 0) const;
 
@@ -799,6 +806,12 @@ private:
     /// in a beam that crosses a barline.
     EntryInfoPtr findRightBeamAnchorForBeamOverBarline() const;
 
+    /// @brief Find the hidden source entry for a mid-system beam created by the Beam Over Barline plugin.
+    /// This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind
+    /// that plugin's workarounds a detect the entries in a beam that crosses a barline.
+    /// @return The hidden source entry if found, otherwise nullptr.
+    EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
+
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
 
@@ -941,7 +954,8 @@ public:
     */
     std::vector<TupletInfo> tupletInfo;
     MusxInstance<KeySignature> keySignature;    ///< This can be different than the measure key sig if the staff has independent key signatures.
-    util::Fraction maxElapsedDuration;          ///< The max elapsed staff duration that was calculated for the frame. This does not
+    util::Fraction measureStaffDuration;        ///< The duration of the measure in staff duration units.
+    util::Fraction maxElapsedStaffDuration;     ///< The max elapsed staff duration that was calculated for the frame. This does not
                                                 ///< have to equal the measure duration, but normally it does.
 
     /// @brief Get the document for the entry frame

@@ -487,6 +487,19 @@ unsigned EntryInfoPtr::calcReverseGraceIndex() const
     return result;
 }
 
+util::Fraction EntryInfoPtr::calcGraceEllapsedDuration() const
+{
+    util::Fraction result = 0;
+    for (auto entryInfoPtr = *this; entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextSameV()) {
+        auto entry = entryInfoPtr->getEntry();
+        if (!entryInfoPtr->getEntry()->graceNote) {
+            break;
+        }
+        result -= util::Fraction::fromEdu(entry->duration);
+    }
+    return result;
+}
+
 std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> currentIndex) const
 {
     size_t firstIndex = currentIndex ? *currentIndex + 1 : 0;
@@ -942,6 +955,64 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
             }
             return beamStart;
         }
+    }
+    return {};
+}
+
+EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
+{
+    auto frame = getFrame();
+    if ((*this)->elapsedDuration <= frame->measureStaffDuration) {
+        return {};
+    }
+    // Note that calcNearestEntry skips grace notes unless a grace note ellapsed dura is supplied/
+    auto currEntry = frame->getContext().calcNearestEntry((*this)->elapsedDuration.calcEduDuration(), /*findExact*/true, frame->getLayerIndex());
+    if (!currEntry) {
+        return {};
+    }
+    util::Fraction normalizedStartDuration = (*this)->elapsedDuration - frame->measureStaffDuration;
+    bool firstIteration = true;
+    for (frame = frame->getNext(); frame && currEntry; frame = frame->getNext()) {
+        // find first non gracenote in frame
+        auto searchEntry = frame->getContext().calcNearestEntry(0, /*findExact*/true, frame->getLayerIndex());
+        if (firstIteration) {
+            firstIteration = false;
+            // backup for grace notes
+            while (searchEntry.getIndexInFrame() > 0) {
+                searchEntry = searchEntry.getPreviousInFrame();
+                currEntry = currEntry.getPreviousInFrame();
+                if (!currEntry) {
+                    return {};
+                }
+            }
+        }
+        for (; currEntry && searchEntry; currEntry = currEntry.getNextInFrame(), searchEntry = searchEntry.getNextInFrame()) {
+            auto rawSearchEntry = searchEntry->getEntry();
+            auto rawCurrEntry = currEntry->getEntry();
+            if (!rawSearchEntry->isHidden || rawSearchEntry->voice2 != rawCurrEntry->voice2) {
+                return {}; // if we encounter a non-hidden entry or not matching v1v2, no match
+            }
+            if (rawSearchEntry->duration != rawCurrEntry->duration) {
+                return {}; // if we encounter non-matching symbolic durations, no match
+            }
+            if (searchEntry->actualDuration != currEntry->actualDuration) {
+                return {}; // if we encounter non-matching actual durations, no match
+            }
+            if (searchEntry.calcGraceEllapsedDuration() != currEntry.calcGraceEllapsedDuration()) {
+                return {}; // if we encounter non-matching grace note durations, no match
+            }
+            /// @todo We should probably compare note values here too, with a helper function.
+            if (currEntry.calcDisplaysAsRest() != searchEntry.calcDisplaysAsRest()) {
+                return {}; // rest display must match.
+            }
+            if (searchEntry->elapsedDuration == normalizedStartDuration) {
+                return searchEntry; // got it!
+            }
+        }
+        if (normalizedStartDuration <= frame->measureStaffDuration) {
+            break;
+        }
+        normalizedStartDuration -= frame->measureStaffDuration;
     }
     return {};
 }
@@ -1720,6 +1791,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                                          : 1;
         entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch, staff);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
+        entryFrame->measureStaffDuration = measure->calcDuration(m_hold->getStaff());
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
@@ -1802,7 +1874,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 );
             }
         }
-        entryFrame->maxElapsedDuration = (std::max)(v1ActualElapsedDuration, v2ActualElapsedDuration);
+        entryFrame->maxElapsedStaffDuration = (std::max)(v1ActualElapsedDuration, v2ActualElapsedDuration);
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
             + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");
@@ -1905,17 +1977,17 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
     return foundCue;
 }
 
-EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer, std::optional<bool> matchVoice2) const
+EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer,
+    std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
 {
     EntryInfoPtr result;
     unsigned bestDiff = (std::numeric_limits<unsigned>::max)();
 
     auto iterator = [&](const EntryInfoPtr& entryInfo) {
-        const auto entry = entryInfo->getEntry();
-        if (entry->graceNote) {
+        if (entryInfo.calcGraceEllapsedDuration() != atGraceNoteDuration) {
             return true; // iterate past grace notes
         }
-        if (matchVoice2.has_value() && entry->voice2 != *matchVoice2) {
+        if (matchVoice2.has_value() && entryInfo->getEntry()->voice2 != *matchVoice2) {
             return true; // iterate past non-matching v1v2 values
         }
         unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
