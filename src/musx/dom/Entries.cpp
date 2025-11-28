@@ -367,10 +367,10 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
 // ***** EntryInfoPtr *****
 // ************************
 
-EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber)
+EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber, util::Fraction timeOffset)
 {
     EntryInfoPtr result;
-    if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId)) {
+    if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId, timeOffset)) {
         gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
             if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
                 result = entryInfo;
@@ -382,12 +382,12 @@ EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper
     return result;
 }
 
-EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber)
+EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber, util::Fraction timeOffset)
 {
     if (const auto entry = document->getEntries()->get(entryNumber)) {
         if (!entry->locations.empty()) {
             auto [staffId, measureId,layerIndex] = entry->locations[0];
-            if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId)) {
+            if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId, timeOffset)) {
                 EntryInfoPtr result;
                 gfhold.iterateEntries(layerIndex, [&](const EntryInfoPtr& entryInfo) {
                     if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
@@ -1804,10 +1804,10 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
 // ***** GFrameHoldContext *****
 // *****************************
 
-details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper meas)
-    : m_requestedPartId(partId)
+details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper measureId, util::Fraction timeOffset)
+    : m_requestedPartId(partId), m_timeOffset(timeOffset)
 {
-    m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, meas);
+    m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, measureId);
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -1832,7 +1832,7 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, util::Fraction timeOffset) const
+std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex) const
 {
     if (!m_hold) return nullptr;
     if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
@@ -1860,7 +1860,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
-        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu) - timeOffset;
+        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu) - m_timeOffset;
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
