@@ -139,9 +139,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0e3d30b4a276c376b3e4b3a18d5d25d" id="r_aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d">calcIsCuesOnly</a> (bool includeVisibleInScore=false) const</td></tr>
 <tr class="memdesc:aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.  <br /></td></tr>
 <tr class="separator:aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cc2a890c649f5345637acdf2c82f095" id="r_a3cc2a890c649f5345637acdf2c82f095"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a3cc2a890c649f5345637acdf2c82f095">calcNearestEntry</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition, bool findExact=true, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> &gt; matchLayer=std::nullopt, std::optional&lt; bool &gt; matchVoice2=std::nullopt) const</td></tr>
-<tr class="memdesc:a3cc2a890c649f5345637acdf2c82f095"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the nearest non-grace-note entry at the given <code>eduPosition</code>.  <br /></td></tr>
-<tr class="separator:a3cc2a890c649f5345637acdf2c82f095"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa595f74424d13c37f1a4405fa348614a" id="r_aa595f74424d13c37f1a4405fa348614a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa595f74424d13c37f1a4405fa348614a">calcNearestEntry</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition, bool findExact=true, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> &gt; matchLayer=std::nullopt, std::optional&lt; bool &gt; matchVoice2=std::nullopt, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> atGraceNoteDuration=0) const</td></tr>
+<tr class="memdesc:aa595f74424d13c37f1a4405fa348614a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the nearest non-grace-note entry at the given <code>eduPosition</code>.  <br /></td></tr>
+<tr class="separator:aa595f74424d13c37f1a4405fa348614a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a904e4afe0ed1e60e508d488f00b2fff4" id="r_a904e4afe0ed1e60e508d488f00b2fff4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4">calcMinLegacyPickupSpacer</a> () const</td></tr>
 <tr class="memdesc:a904e4afe0ed1e60e508d488f00b2fff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the minimum legacy pickup spacer, if any.  <br /></td></tr>
 <tr class="separator:a904e4afe0ed1e60e508d488f00b2fff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -308,8 +308,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3cc2a890c649f5345637acdf2c82f095" name="a3cc2a890c649f5345637acdf2c82f095"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cc2a890c649f5345637acdf2c82f095">&#9670;&#160;</a></span>calcNearestEntry()</h2>
+<a id="aa595f74424d13c37f1a4405fa348614a" name="aa595f74424d13c37f1a4405fa348614a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa595f74424d13c37f1a4405fa348614a">&#9670;&#160;</a></span>calcNearestEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -336,7 +336,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::optional&lt; bool &gt;&#160;</td>
-          <td class="paramname"><em>matchVoice2</em> = <code>std::nullopt</code>&#160;</td>
+          <td class="paramname"><em>matchVoice2</em> = <code>std::nullopt</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td>
+          <td class="paramname"><em>atGraceNoteDuration</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -353,6 +359,7 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">findExact</td><td>If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure. </td></tr>
     <tr><td class="paramname">matchLayer</td><td>If specified, only find entries in this 0-based layer index. (Values 0..3) </td></tr>
     <tr><td class="paramname">matchVoice2</td><td>If specified, the value of <a class="el" href="classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41" title="This is a V2 note. (xml node &lt;v2&gt;)">Entry::voice2</a> must match the specified value. </td></tr>
+    <tr><td class="paramname">atGraceNoteDuration</td><td>Match on this grace note duration. When it is zero, grace notes are skipped. </td></tr>
   </table>
   </dd>
 </dl>

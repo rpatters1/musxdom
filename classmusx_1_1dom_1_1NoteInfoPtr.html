@@ -117,9 +117,8 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const</td></tr>
 <tr class="memdesc:a6ce7e900bd85f90b8e7b83e3d61c2094"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a boolean conversion based on whether the <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> is valid and the note index is valid. <br /></td></tr>
 <tr class="separator:a6ce7e900bd85f90b8e7b83e3d61c2094"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44670e047067bd603fdb709fa695e2a0" id="r_a44670e047067bd603fdb709fa695e2a0"><td class="memItemLeft" align="right" valign="top"><a id="a44670e047067bd603fdb709fa695e2a0" name="a44670e047067bd603fdb709fa695e2a0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSameNote</b> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;src) const</td></tr>
-<tr class="memdesc:a44670e047067bd603fdb709fa695e2a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the input and the current instance refer to the same note. <br /></td></tr>
+<tr class="memitem:a44670e047067bd603fdb709fa695e2a0" id="r_a44670e047067bd603fdb709fa695e2a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a44670e047067bd603fdb709fa695e2a0">isSameNote</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;src) const</td></tr>
+<tr class="memdesc:a44670e047067bd603fdb709fa695e2a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the input and the current instance refer to the same note.  <br /></td></tr>
 <tr class="separator:a44670e047067bd603fdb709fa695e2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed537f60968794044f42f4b6de7488c4" id="r_aed537f60968794044f42f4b6de7488c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aed537f60968794044f42f4b6de7488c4">findEqualPitch</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;entry) const</td></tr>
 <tr class="memdesc:aed537f60968794044f42f4b6de7488c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a note with the same pitch in the supplied entry.  <br /></td></tr>
@@ -578,6 +577,40 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (con
 
 <p>Gets the next note in a chord on the same entry. </p>
 <dl class="section return"><dt>Returns</dt><dd>The next note or nullptr if none. </dd></dl>
+
+</div>
+</div>
+<a id="a44670e047067bd603fdb709fa695e2a0" name="a44670e047067bd603fdb709fa695e2a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44670e047067bd603fdb709fa695e2a0">&#9670;&#160;</a></span>isSameNote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::NoteInfoPtr::isSameNote </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether the input and the current instance refer to the same note. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

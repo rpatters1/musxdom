@@ -125,6 +125,9 @@ const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryInf
 <tr class="memitem:a45d85e3e02c2ce8fe6b5a891a9a0c795" id="r_a45d85e3e02c2ce8fe6b5a891a9a0c795"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795">isSameEntry</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src) const</td></tr>
 <tr class="memdesc:a45d85e3e02c2ce8fe6b5a891a9a0c795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the input and the current instance refer to the same entry.  <br /></td></tr>
 <tr class="separator:a45d85e3e02c2ce8fe6b5a891a9a0c795"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac00953798bf130062398b2b394d708c1" id="r_ac00953798bf130062398b2b394d708c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ac00953798bf130062398b2b394d708c1">calcIsSameChordOrRest</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src, bool compareConcert=true) const</td></tr>
+<tr class="memdesc:ac00953798bf130062398b2b394d708c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the input and the current instance represent the same chord or rest value(s). This function does not take into account duration. The two can have different durations.  <br /></td></tr>
+<tr class="separator:ac00953798bf130062398b2b394d708c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87802553e72c2d71f8e23f4cb01f6a56" id="r_a87802553e72c2d71f8e23f4cb01f6a56"><td class="memItemLeft" align="right" valign="top"><a id="a87802553e72c2d71f8e23f4cb01f6a56" name="a87802553e72c2d71f8e23f4cb01f6a56"></a>
 std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFrame</b> () const</td></tr>
 <tr class="memdesc:a87802553e72c2d71f8e23f4cb01f6a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the frame. <br /></td></tr>
@@ -164,6 +167,9 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexInFrame</b>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcReverseGraceIndex</b> () const</td></tr>
 <tr class="memdesc:a284505434c8a4a0b7fe8705062599b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caclulates the grace index counting leftward (used by other standards such as MNX) <br /></td></tr>
 <tr class="separator:a284505434c8a4a0b7fe8705062599b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53b696a9fe423e40299cc22831b25791" id="r_a53b696a9fe423e40299cc22831b25791"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a53b696a9fe423e40299cc22831b25791">calcGraceEllapsedDuration</a> () const</td></tr>
+<tr class="memdesc:a53b696a9fe423e40299cc22831b25791"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a grace note's symbolic starting duration as a negative offset from the main note. This is useful for comparing grace note sequences.  <br /></td></tr>
+<tr class="separator:a53b696a9fe423e40299cc22831b25791"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5bf030123af0df89bd68230ec285713" id="r_aa5bf030123af0df89bd68230ec285713"><td class="memItemLeft" align="right" valign="top"><a id="aa5bf030123af0df89bd68230ec285713" name="aa5bf030123af0df89bd68230ec285713"></a>
 std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcNextTupletIndex</b> (std::optional&lt; size_t &gt; currentIndex=0) const</td></tr>
 <tr class="memdesc:aa5bf030123af0df89bd68230ec285713"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next higher tuplet index that this entry starts, or std::nullopt if none. <br /></td></tr>
@@ -330,6 +336,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSingletonGrace<
 <tr class="memitem:ae8a320e15a3426a63b142b35003a922e" id="r_ae8a320e15a3426a63b142b35003a922e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ae8a320e15a3426a63b142b35003a922e">calcIsGlissToGraceEntry</a> () const</td></tr>
 <tr class="memdesc:ae8a320e15a3426a63b142b35003a922e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry is a gliss-to entry as created by the Parenthesize Trill-To Notes plugin.  <br /></td></tr>
 <tr class="separator:ae8a320e15a3426a63b142b35003a922e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59c0b80e223e99f95a8fd7682e527f98" id="r_a59c0b80e223e99f95a8fd7682e527f98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a59c0b80e223e99f95a8fd7682e527f98">findHiddenSourceForBeamOverBarline</a> () const</td></tr>
+<tr class="memdesc:a59c0b80e223e99f95a8fd7682e527f98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the hidden source entry for a mid-system beam created by the Beam Over Barline plugin. This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries in a beam that crosses a barline.  <br /></td></tr>
+<tr class="separator:a59c0b80e223e99f95a8fd7682e527f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11a03b83916995c156d7f6dcdb60a49a" id="r_a11a03b83916995c156d7f6dcdb60a49a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a11a03b83916995c156d7f6dcdb60a49a">findMainEntryForGraceNote</a> (bool ignoreRests=false) const</td></tr>
+<tr class="memdesc:a11a03b83916995c156d7f6dcdb60a49a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the main entry for a grace note, taking into account hidden entries for beams over barlines.  <br /></td></tr>
+<tr class="separator:a11a03b83916995c156d7f6dcdb60a49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa247de0fb2eb2be22aaa12cf14266768" id="r_aa247de0fb2eb2be22aaa12cf14266768"><td class="memItemLeft" align="right" valign="top"><a id="aa247de0fb2eb2be22aaa12cf14266768" name="aa247de0fb2eb2be22aaa12cf14266768"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;other) const</td></tr>
 <tr class="memdesc:aa247de0fb2eb2be22aaa12cf14266768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicit operator&lt; for std::map. <br /></td></tr>
@@ -550,6 +562,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a53b696a9fe423e40299cc22831b25791" name="a53b696a9fe423e40299cc22831b25791"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53b696a9fe423e40299cc22831b25791">&#9670;&#160;</a></span>calcGraceEllapsedDuration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::EntryInfoPtr::calcGraceEllapsedDuration </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates a grace note's symbolic starting duration as a negative offset from the main note. This is useful for comparing grace note sequences. </p>
+<dl class="section return"><dt>Returns</dt><dd>Negative symbolic offset from the main note, or zero if not a grace note. </dd></dl>
+
+</div>
+</div>
 <a id="a1b2399f12b3954defd1403ab7acc7b0b" name="a1b2399f12b3954defd1403ab7acc7b0b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1b2399f12b3954defd1403ab7acc7b0b">&#9670;&#160;</a></span>calcIfLayerSettingsApply()</h2>
 
@@ -723,6 +755,44 @@ Static Public Member Functions</h2></td></tr>
 <li>The entry must be the terminator for one of the standard entry-attached SmartShape gliss lines.</li>
 </ul>
 <p>Only the standard SmartShape gliss lines are checked. Other CustomLine values do no qualify. </p>
+
+</div>
+</div>
+<a id="ac00953798bf130062398b2b394d708c1" name="ac00953798bf130062398b2b394d708c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac00953798bf130062398b2b394d708c1">&#9670;&#160;</a></span>calcIsSameChordOrRest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsSameChordOrRest </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>compareConcert</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether the input and the current instance represent the same chord or rest value(s). This function does not take into account duration. The two can have different durations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> to compare. </td></tr>
+    <tr><td class="paramname">compareConcert</td><td>If true, the concert pitches of notes are compared. If false, the scale degrees of the pitches relative to the key are compared. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>false if either this or src is null and true if they are both represent the same chord or rest. </dd></dl>
 
 </div>
 </div>
@@ -993,6 +1063,53 @@ Static Public Member Functions</h2></td></tr>
 <p>Finds the first entry of a beamed group or returns the current entry if it is not beams. </p>
 <dl class="section note"><dt>Note</dt><dd>This behavior is different than other beam functions in that it returns the current entry if there is no beam rather than returning NULL. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The first entry of a beamed group or the current entry if no beam. </dd></dl>
+
+</div>
+</div>
+<a id="a59c0b80e223e99f95a8fd7682e527f98" name="a59c0b80e223e99f95a8fd7682e527f98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59c0b80e223e99f95a8fd7682e527f98">&#9670;&#160;</a></span>findHiddenSourceForBeamOverBarline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::findHiddenSourceForBeamOverBarline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find the hidden source entry for a mid-system beam created by the Beam Over Barline plugin. This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries in a beam that crosses a barline. </p>
+<dl class="section return"><dt>Returns</dt><dd>The hidden source entry if found, otherwise nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a11a03b83916995c156d7f6dcdb60a49a" name="a11a03b83916995c156d7f6dcdb60a49a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11a03b83916995c156d7f6dcdb60a49a">&#9670;&#160;</a></span>findMainEntryForGraceNote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::findMainEntryForGraceNote </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreRests</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Finds the main entry for a grace note, taking into account hidden entries for beams over barlines. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ignoreRests</td><td>If true, the returned entry must not be a rest. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The main entry if found. If the grace note is at the end of a measure or v2 sequence, or if ignoring rests and the next non-grace is a rest, returns null. Also returns null if this is not a grace note. </dd></dl>
 
 </div>
 </div>
