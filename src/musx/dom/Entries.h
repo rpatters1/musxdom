@@ -782,6 +782,13 @@ public:
     /// @return The hidden source entry if found, otherwise nullptr.
     EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
 
+    /// @brief Find the display entry for a hidden source entry. The display entry is one or more bars previous
+    /// to the source entry.
+    /// This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind
+    /// that plugin's workarounds and detect the entries in a beam that crosses a barline.
+    /// @return The display entry if this is a hidden source entry, otherwise nullptr.
+    EntryInfoPtr findDisplayEntryForBeamOverBarline() const;
+
     /// @brief Finds the main entry for a grace note, taking into account hidden entries for beams over barlines.
     /// @param ignoreRests If true, the returned entry must not be a rest.
     /// @return The main entry if found. If the grace note is at the end of a measure or v2 sequence,

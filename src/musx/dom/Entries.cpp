@@ -1079,6 +1079,75 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
     return {};
 }
 
+EntryInfoPtr EntryInfoPtr::findDisplayEntryForBeamOverBarline() const
+{
+    if (!(*this)->getEntry()->isHidden || !calcCanBeBeamed()) {
+        return {};
+    }
+    // search from beginning of measure.
+    auto frame = getFrame();
+    auto prevFrame = frame->getPrevious();
+    if (!prevFrame) {
+        return {};
+    }
+    auto currEntry = frame->getContext().calcNearestEntry(0, /*findExact*/true, frame->getLayerIndex());
+    if (!currEntry) {
+        return {};
+    }
+    util::Fraction prevDurationOffset = prevFrame->measureStaffDuration;
+    auto searchEntry = prevFrame->getContext().calcNearestEntry(prevDurationOffset.calcEduDuration(), /*findExact*/true, prevFrame->getLayerIndex());
+
+    // backup for grace notes, if any
+    while (currEntry.getIndexInFrame() > 0) {
+        currEntry = currEntry.getPreviousInFrame();
+        searchEntry = searchEntry.getPreviousInFrame();
+        if (!searchEntry) {
+            return {};
+        }
+    }
+
+    // search forward to exactly our index value.
+    for (size_t x = 0; x <= getIndexInFrame(); x++) {
+        auto rawSearchEntry = searchEntry->getEntry();
+        auto rawCurrEntry = currEntry->getEntry();
+        if (rawSearchEntry->voice2 != rawCurrEntry->voice2) {
+            return {}; // if we encounter a non matching v1v2, no match
+        }
+        if (rawSearchEntry->duration != rawCurrEntry->duration) {
+            return {}; // if we encounter non-matching symbolic durations, no match
+        }
+        if (searchEntry->actualDuration != currEntry->actualDuration) {
+            return {}; // if we encounter non-matching actual durations, no match
+        }
+        if (searchEntry.calcGraceEllapsedDuration() != currEntry.calcGraceEllapsedDuration()) {
+            return {}; // if we encounter non-matching grace note durations, no match
+        }
+        // Beam Over Barlines does not transpose entries if there is a key change, so concertCompare false is correct.
+        if (!searchEntry.calcIsSameChordOrRest(currEntry, /*concertCompare*/false)) {
+            return {}; // rest display must match.
+        }
+        if (searchEntry->elapsedDuration != currEntry->elapsedDuration + prevDurationOffset && searchEntry.calcGraceEllapsedDuration() == currEntry.calcGraceEllapsedDuration()) {
+            return {};
+        }
+        if (x == getIndexInFrame()) {
+            break;
+        }
+        currEntry = currEntry.getNextInFrame();
+        MUSX_ASSERT_IF(!currEntry) {
+            throw std::logic_error("Unable to advance enough times inside our own frame.");
+        }
+        searchEntry = searchEntry.getNextInFrame();
+        if (!searchEntry) {
+            return {};
+        }
+    }
+    if (searchEntry && searchEntry->getEntry()->isHidden) {
+        // if we get here, we need to back up another measure and search again.
+        return searchEntry.findDisplayEntryForBeamOverBarline();
+    }
+    return searchEntry;
+}
+
 EntryInfoPtr EntryInfoPtr::findMainEntryForGraceNote(bool ignoreRests) const
 {
     const auto entry = (*this)->getEntry();
