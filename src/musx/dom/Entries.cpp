@@ -427,6 +427,42 @@ bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
     return (*this)->getEntry()->getEntryNumber() == src->getEntry()->getEntryNumber();
 }
 
+bool EntryInfoPtr::calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareConcert) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    if (isSameEntry(src)) {
+        return true;
+    }
+    if (calcDisplaysAsRest() != src.calcDisplaysAsRest()) {
+        return false;
+    }
+    const auto entryThis = (*this)->getEntry();
+    const auto entrySrc = src->getEntry();
+    if (entryThis->notes.size() != entrySrc->notes.size()) {
+        return false;
+    }
+    // only need to compare raw key sigs, so skip KeySignature::isSame.
+    const bool sameKeys = this->getFrame()->keySignature->key == src.getFrame()->keySignature->key;
+    for (size_t index = 0; index < entryThis->notes.size(); index++) {
+        const auto noteThis = NoteInfoPtr(*this, index);
+        const auto& noteSrc = NoteInfoPtr(src, index);
+        if (sameKeys || !compareConcert) {
+            if (noteThis->harmLev != noteSrc->harmLev || noteThis->harmAlt != noteSrc->harmAlt) {
+                return false;
+            }
+        } else {
+            auto [noteTypeThis, octaveThis, alterThis, staffLineThis] = noteThis.calcNotePropertiesConcert(true);
+            auto [noteTypeSrc, octaveSrc, alterSrc, staffLineSrc] = noteSrc.calcNotePropertiesConcert(true);
+            if (noteTypeThis != noteTypeSrc || octaveThis != octaveSrc || alterThis != alterSrc) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
 StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
@@ -962,22 +998,34 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
 EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
 {
     auto frame = getFrame();
-    if ((*this)->elapsedDuration <= frame->measureStaffDuration) {
+    if ((*this)->elapsedDuration < frame->measureStaffDuration) {
         return {};
     }
-    // Note that calcNearestEntry skips grace notes unless a grace note ellapsed dura is supplied/
-    auto currEntry = frame->getContext().calcNearestEntry((*this)->elapsedDuration.calcEduDuration(), /*findExact*/true, frame->getLayerIndex());
+    if ((*this)->elapsedDuration == frame->measureStaffDuration) {
+        // Check for grace notes at the beginning of the next frame.
+        if (auto nextFrame = frame->getNext()) {
+            auto nextFirst = EntryInfoPtr(nextFrame, 0);
+            const auto nextGraceDura = nextFirst.calcGraceEllapsedDuration();
+            const auto thisGraceDura = calcGraceEllapsedDuration();
+            if (thisGraceDura < nextGraceDura) {
+                return {}; // out of sync can't be a match.
+            }
+        }
+    }
+    // Note that calcNearestEntry skips grace notes unless a grace note ellapsed dura is supplied.
+    auto currEntry = frame->getContext().calcNearestEntry(frame->measureStaffDuration.calcEduDuration(), /*findExact*/true, frame->getLayerIndex());
     if (!currEntry) {
         return {};
     }
     util::Fraction normalizedStartDuration = (*this)->elapsedDuration - frame->measureStaffDuration;
     bool firstIteration = true;
     for (frame = frame->getNext(); frame && currEntry; frame = frame->getNext()) {
-        // find first non gracenote in frame
-        auto searchEntry = frame->getContext().calcNearestEntry(0, /*findExact*/true, frame->getLayerIndex());
+        auto searchEntry = EntryInfoPtr(frame, 0);
         if (firstIteration) {
+            // find first non gracenote in frame
+            searchEntry = frame->getContext().calcNearestEntry(0, /*findExact*/true, frame->getLayerIndex());
             firstIteration = false;
-            // backup for grace notes
+            // backup for grace notes, if any
             while (searchEntry.getIndexInFrame() > 0) {
                 searchEntry = searchEntry.getPreviousInFrame();
                 currEntry = currEntry.getPreviousInFrame();
@@ -1001,15 +1049,29 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
             if (searchEntry.calcGraceEllapsedDuration() != currEntry.calcGraceEllapsedDuration()) {
                 return {}; // if we encounter non-matching grace note durations, no match
             }
-            /// @todo We should probably compare note values here too, with a helper function.
-            if (currEntry.calcDisplaysAsRest() != searchEntry.calcDisplaysAsRest()) {
+            // Beam Over Barlines does not transpose entries if there is a key change, so concertCompare false is correct.
+            if (!searchEntry.calcIsSameChordOrRest(currEntry, /*concertCompare*/false)) {
                 return {}; // rest display must match.
             }
-            if (searchEntry->elapsedDuration == normalizedStartDuration) {
+            const auto searchGraceDura = searchEntry.calcGraceEllapsedDuration();
+            if (searchEntry->elapsedDuration == frame->measureStaffDuration) {
+                // Beam Over Barline plugin crams hidden entries in the current frame for alls subsequent frames,
+                // so we need an extra check for grace notes at the beginning of the next frame.
+                if (auto nextFrame = frame->getNext()) {
+                    auto nextFirst = EntryInfoPtr(nextFrame, 0);
+                    const auto nextGraceDura = nextFirst.calcGraceEllapsedDuration();
+                    if (nextGraceDura < searchGraceDura) {
+                        return {}; // out of sync can't be a match.
+                    } else if (nextGraceDura == searchGraceDura) {
+                        break;
+                    }
+                }
+            }
+            if (searchEntry->elapsedDuration == normalizedStartDuration && searchGraceDura == this->calcGraceEllapsedDuration()) {
                 return searchEntry; // got it!
             }
         }
-        if (normalizedStartDuration <= frame->measureStaffDuration) {
+        if (normalizedStartDuration < frame->measureStaffDuration) {
             break;
         }
         normalizedStartDuration -= frame->measureStaffDuration;

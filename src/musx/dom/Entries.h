@@ -459,6 +459,14 @@ public:
     /// @return false if either this or src is null and true if they are both non null and refer to the same entry.
     bool isSameEntry(const EntryInfoPtr& src) const;
 
+    /// @brief Returns whether the input and the current instance represent the same chord or rest value(s).
+    /// This function does not take into account duration. The two can have different durations.
+    /// @param src The EntryInfoPtr to compare.
+    /// @param compareConcert If true, the concert pitches of notes are compared. If false, the scale degrees
+    /// of the pitches relative to the key are compared.
+    /// @return false if either this or src is null and true if they are both represent the same chord or rest.
+    bool calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareConcert = true) const;
+
     /// @brief Returns the frame.
     std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
 
@@ -767,6 +775,12 @@ public:
     /// Only the standard SmartShape gliss lines are checked. Other CustomLine values do no qualify.
     bool calcIsGlissToGraceEntry() const;
 
+    /// @brief Find the hidden source entry for a mid-system beam created by the Beam Over Barline plugin.
+    /// This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind
+    /// that plugin's workarounds and detect the entries in a beam that crosses a barline.
+    /// @return The hidden source entry if found, otherwise nullptr.
+    EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
+
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
     {
@@ -797,20 +811,14 @@ private:
     EntryInfoPtr iterateBeamGroup(bool includeHiddenEntries) const;
 
     /// @brief Returns the beam anchor for a beam over barline left. This code captures the logic from the
-    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds a detect the entries
+    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries
     /// in a beam that crosses a barline.
     EntryInfoPtr findLeftBeamAnchorForBeamOverBarline() const;
 
     /// @brief Returns the beam anchor for a beam over barline right. This code captures the logic from the
-    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds a detect the entries
+    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries
     /// in a beam that crosses a barline.
     EntryInfoPtr findRightBeamAnchorForBeamOverBarline() const;
-
-    /// @brief Find the hidden source entry for a mid-system beam created by the Beam Over Barline plugin.
-    /// This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind
-    /// that plugin's workarounds a detect the entries in a beam that crosses a barline.
-    /// @return The hidden source entry if found, otherwise nullptr.
-    EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
 
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
@@ -1122,6 +1130,7 @@ public:
     { return m_entry && m_noteIndex < m_entry->getEntry()->notes.size(); }
 
     /// @brief Returns whether the input and the current instance refer to the same note.
+    /// @param src The EntryInfoPtr to compare with.
     bool isSameNote(const NoteInfoPtr& src) const
     { return m_entry.isSameEntry(src.m_entry) && m_noteIndex == src.m_noteIndex; }
 

@@ -518,6 +518,68 @@ TEST(BeamDetection, BeamsOverBarlinesTraversal)
     }
 }
 
+TEST(BeamDetection, BeamsOverBarlinesHiddenSourceDetect)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_over_graces.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+        ASSERT_GE(entryFrame->getEntries().size(), 22);
+
+        for (size_t x = 3; x < entryFrame->getEntries().size(); x++) {
+            auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
+            auto hiddenEntry = entryInfoPtr.findHiddenSourceForBeamOverBarline();
+            EXPECT_TRUE((x < 6 && !hiddenEntry) || (x >= 6 && hiddenEntry));
+            MeasCmper expectedMeas = 1;
+            size_t indexOffset = 0;
+            if (x >= 6 && x < 18) {
+                expectedMeas = 2;
+                indexOffset = 6;
+            } else if (x >= 18) {
+                expectedMeas = 3;
+                indexOffset = 18;
+            }
+            if (hiddenEntry) {
+                EXPECT_EQ(hiddenEntry.getIndexInFrame(), x - indexOffset);
+                EXPECT_EQ(hiddenEntry.getMeasure(), expectedMeas);
+            }
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 5";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 5";
+        ASSERT_GE(entryFrame->getEntries().size(), 16);
+
+        for (size_t x = 3; x < entryFrame->getEntries().size(); x++) {
+            auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
+            auto hiddenEntry = entryInfoPtr.findHiddenSourceForBeamOverBarline();
+            EXPECT_TRUE((x < 4 && !hiddenEntry) || (x >= 4 && hiddenEntry)) << "Unexpected hidden entry value for index " << x;
+            MeasCmper expectedMeas = 5;
+            size_t indexOffset = 0;
+            if (x >= 4 && x < 14) {
+                expectedMeas = 6;
+                indexOffset = 4;
+            } else if (x >= 14) {
+                expectedMeas = 7;
+                indexOffset = 14;
+            }
+            if (hiddenEntry) {
+                EXPECT_EQ(hiddenEntry.getIndexInFrame(), x - indexOffset);
+                EXPECT_EQ(hiddenEntry.getMeasure(), expectedMeas);
+            }
+        }
+    }
+}
+
+
 TEST(BeamDetection, AdjacentRests)
 {
     std::vector<char> xml;
