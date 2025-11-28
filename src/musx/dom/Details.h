@@ -1115,6 +1115,11 @@ public:
         return std::find_if(frames.begin(), frames.end(), [](Cmper frameId) { return frameId != 0; }) != frames.end();
     }
 
+    /// @brief Find the layer frame and Edu start position for the given layer. A non-zero start position indicates a spacer for a legacy pickup.
+    /// @param layerIndex The layer index to find (0..3)
+    /// @return std::pair containing the frame and the start position.
+    std::pair<MusxInstance<others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;
+
     /// @brief Iterates all the raw entries in a the GFrameHold, passing them to the iterator function. If the iterator function returns false, iteration stops.
     /// @param iterator function.
     /// @return true if all entries iterated, false if the iterator function exited early by returning false.

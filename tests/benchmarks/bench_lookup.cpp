@@ -126,7 +126,7 @@ void traverseEntries(const DocumentPtr& doc)
     auto gfHolds = doc->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
     for (const auto& gfHold : gfHolds) {
         gfHold->iterateRawEntries([&](const MusxInstance<Entry>& entry, LayerIndex) {
-            if (gfHold->getCmper1() != 32767) {
+            if (gfHold->getCmper1() != 32767) { // 32767 is the Studio View click staff
                 auto entryNum = entry->getEntryNumber();
                 auto result = entryList.emplace(entryNum);
                 if (result.second) {
@@ -162,7 +162,7 @@ void traverseEntries(const DocumentPtr& doc)
             orphanEntries.push_back(num);
         }
     }
-    std::cout << "Encountered " << orphanEntries.size() << " with no location.\n";
+    std::cout << "Encountered " << orphanEntries.size() << " entries with no location.\n";
 }
 
 void benchmarkEntries(const DocumentPtr& doc)

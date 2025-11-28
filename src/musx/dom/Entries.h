@@ -64,9 +64,11 @@ public:
      * @param document Weak pointer to the owning Document.
      * @param partId The requested part ID.
      * @param staffId The instrument ID for.
-     * @param meas The measure ID for.
+     * @param measureId The measure ID for.
+     * @param timeOffset Subtract this amount from elapsed durations in created entry frames. A common usage might be to pass in here the
+     * value returned by #others::Measure::calcMinLegacyPickupSpacer.
      */
-    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper meas);
+    GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper measureId, util::Fraction timeOffset = 0);
 
     /**
      * @brief Returns the requested part ID associated with this context.
@@ -103,11 +105,9 @@ public:
     /** @brief Returns the @ref EntryFrame for all entries in the given layer.
      *
      * @param layerIndex The layer index (0..3) to iterate.
-     * @param timeOffset Subtract this amount from elapsed durations. A common usage might be to pass in here the
-     * value returned by #others::Measure::calcMinLegacyPickupSpacer.
      * @return EntryFrame for layer or nullptr if none.
      */
-    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex, util::Fraction timeOffset = 0) const;
+    std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex) const;
     
     /**
      * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
@@ -126,8 +126,8 @@ public:
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
 
     /// @brief Calculates the number of voices used by the GFrameHold instance.
-    /// @return A list of each layer that contains entries and whether that layer uses voice2.
-    std::map<LayerIndex, bool> calcVoices() const;
+    /// @return A list of each layer that contains entries and the number voice2 entries in that layer.
+    std::map<LayerIndex, int> calcVoices() const;
 
     /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
@@ -151,13 +151,9 @@ public:
     util::Fraction calcMinLegacyPickupSpacer() const;
 
 private:
-    /// @brief Find the layer frame and Edu start position for the given layer. A non-zero start position indicates a spacer for a legacy pickup.
-    /// @param layerIndex The layer index to find (0..3)
-    /// @return std::pair containing the frame and the start position.
-    std::pair<MusxInstance<others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;
-
-    MusxInstance<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
-    Cmper m_requestedPartId;                 ///< The requested part context.
+    MusxInstance<GFrameHold> m_hold;        ///< The resolved GFrameHold object, or null if not found.
+    Cmper m_requestedPartId;                ///< The requested part context.
+    util::Fraction m_timeOffset;            ///< The time offset to apply to entry frames. 
 };
 
 } // namespace details
@@ -386,7 +382,7 @@ public:
     /// breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically
     /// involve suppressing Finale's full-measure rest display and replacing them with a text expression.
     bool isPossibleFullMeasureRest() const
-    { return !isNote && !isHidden && !voice2 && duration == Edu(NoteType::Whole); }
+    { return !isNote && !isHidden && duration == Edu(NoteType::Whole); }
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
@@ -436,8 +432,11 @@ public:
     /// @param staffId The ID of the staff to search.
     /// @param measureId The ID of the measure to search.
     /// @param entryNumber The EntryNumber to search for.
+    /// @param timeOffset Subtract this amount from elapsed durations. A common usage might be to pass in here the
+    /// value returned by #others::Measure::calcMinLegacyPickupSpacer.
     /// @return If found, an #EntryInfoPtr for the given entry number. Otherwise an null instance.
-    static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber);
+    static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId,
+        EntryNumber entryNumber, util::Fraction timeOffset = 0);
 
     /// @brief Returns an EntryInfoPtr for the entry specified by @p entryNumber.
     ///
@@ -446,8 +445,10 @@ public:
     /// @param document The document to search.
     /// @param partId The part within the document for which to create the #EntryInfoPtr.
     /// @param entryNumber The entry to find.
+    /// @param timeOffset Subtract this amount from elapsed durations. A common usage might be to pass in here the
+    /// value returned by #others::Measure::calcMinLegacyPickupSpacer.
     /// @return An EntryInfoPtr corresponding to the input entryNumber or null if the entry is not in the requested part or otherwise is not found.
-    static EntryInfoPtr fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber);
+    static EntryInfoPtr fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber, util::Fraction timeOffset = 0);
 
     /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
     const std::shared_ptr<const EntryInfo> operator->() const;

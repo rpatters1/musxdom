@@ -367,10 +367,10 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
 // ***** EntryInfoPtr *****
 // ************************
 
-EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber)
+EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber, util::Fraction timeOffset)
 {
     EntryInfoPtr result;
-    if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId)) {
+    if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId, timeOffset)) {
         gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
             if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
                 result = entryInfo;
@@ -382,12 +382,12 @@ EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper
     return result;
 }
 
-EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber)
+EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber, util::Fraction timeOffset)
 {
     if (const auto entry = document->getEntries()->get(entryNumber)) {
         if (!entry->locations.empty()) {
             auto [staffId, measureId,layerIndex] = entry->locations[0];
-            if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId)) {
+            if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId, timeOffset)) {
                 EntryInfoPtr result;
                 gfhold.iterateEntries(layerIndex, [&](const EntryInfoPtr& entryInfo) {
                     if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
@@ -1612,8 +1612,24 @@ bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
 
 bool EntryInfoPtr::calcIsFullMeasureRest() const
 {
-    if ((*this)->getEntry()->isPossibleFullMeasureRest()) {
-        return m_entryFrame->getEntries().size() == 1 && (*this)->elapsedDuration == 0;
+    const auto entry = (*this)->getEntry();
+    if (entry->isPossibleFullMeasureRest() && (*this)->elapsedDuration == 0) {
+        if (entry->voice2) {
+            auto layerInfo = getFrame()->getContext().calcVoices();
+            auto it = layerInfo.find(getLayerIndex());
+            if (it != layerInfo.end()) {
+                if (it->second == 1) { // exactly 1 v2 entry in this layer.
+                    return calcManuaOffset() > 0; // it has to have been moved towards the center of the measure.
+                }
+            }
+        }
+        if (entry->v2Launch) {
+            if (getNextSameV()) {
+                return false;
+            }
+            return calcManuaOffset() > 0; // it has to have been moved towards the center of the measure.
+        }
+        return m_entryFrame->getEntries().size() == 1;
     }
     return false;
 }
@@ -1804,10 +1820,10 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
 // ***** GFrameHoldContext *****
 // *****************************
 
-details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper meas)
-    : m_requestedPartId(partId)
+details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper measureId, util::Fraction timeOffset)
+    : m_requestedPartId(partId), m_timeOffset(timeOffset)
 {
-    m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, meas);
+    m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, measureId);
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -1832,28 +1848,7 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::pair<MusxInstance<others::Frame>, Edu> details::GFrameHoldContext::findLayerFrame(LayerIndex layerIndex) const
-{
-    MusxInstance<others::Frame> layerFrame;
-    Edu startEdu = 0;
-    if (layerIndex < m_hold->frames.size() && m_hold->frames[layerIndex]) {
-        auto frameIncis = m_hold->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
-        for (const auto& frame : frameIncis) {
-            if (frame->startEntry) {
-                if (layerFrame) {
-                    MUSX_INTEGRITY_ERROR("More than one entry frame inci exists for frame " + std::to_string(m_hold->frames[layerIndex]));
-                }
-                layerFrame = frame;
-            }
-            if (frame->startTime > startEdu) {
-                startEdu = frame->startTime;
-            }
-        }
-    }
-    return std::make_pair(layerFrame, startEdu);
-}
-
-std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, util::Fraction timeOffset) const
+std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex) const
 {
     if (!m_hold) return nullptr;
     if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
@@ -1861,7 +1856,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     }
     if (!m_hold->frames[layerIndex]) return nullptr; // nothing here
     auto document = m_hold->getDocument();
-    auto [frame, startEdu] = findLayerFrame(layerIndex);
+    auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
     std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
         const auto measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
@@ -1881,7 +1876,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
-        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu) - timeOffset;
+        util::Fraction v1ActualElapsedDuration = util::Fraction::fromEdu(startEdu) - m_timeOffset;
         util::Fraction v2ActualElapsedDuration = v1ActualElapsedDuration;
         int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
@@ -1991,24 +1986,23 @@ bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryIn
     return true;
 }
 
-std::map<LayerIndex, bool> details::GFrameHoldContext::calcVoices() const
+std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices() const
 {
-    std::map<LayerIndex, bool> result;
+    std::map<LayerIndex, int> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             bool gotLayer = false;
-            bool gotV2 = false;
+            int numV2 = 0;
             frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
                 gotLayer = true;
                 if (entry->voice2) {
-                    gotV2 = true;
-                    return false;
+                    numV2++;
                 }
                 return true;
             });
             if (gotLayer) {
-                result.emplace(layerIndex, gotV2);
+                result.emplace(layerIndex, numV2);
             }
         }
     }
@@ -2045,7 +2039,7 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 {
     bool foundCue = false;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             auto entries = frame->getEntries();
             if (startEdu == 0 && entries.size() == 1 && entries[0]->isPossibleFullMeasureRest()) {
@@ -2101,7 +2095,7 @@ util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const
 {
     Edu result = -1;
     for (LayerIndex layerIndex = 0; layerIndex < MAX_LAYERS; layerIndex++) {
-        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             if (result < 0 || startEdu < result) {
                 result = startEdu;
