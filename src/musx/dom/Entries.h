@@ -138,8 +138,10 @@ public:
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
     /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
+    /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
-    EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt, std::optional<bool> matchVoice2 = std::nullopt) const;
+    EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
+        std::optional<bool> matchVoice2 = std::nullopt, util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Calculates the minimum legacy pickup spacer, if any.
     ///
@@ -457,6 +459,14 @@ public:
     /// @return false if either this or src is null and true if they are both non null and refer to the same entry.
     bool isSameEntry(const EntryInfoPtr& src) const;
 
+    /// @brief Returns whether the input and the current instance represent the same chord or rest value(s).
+    /// This function does not take into account duration. The two can have different durations.
+    /// @param src The EntryInfoPtr to compare.
+    /// @param compareConcert If true, the concert pitches of notes are compared. If false, the scale degrees
+    /// of the pitches relative to the key are compared.
+    /// @return false if either this or src is null and true if they are both represent the same chord or rest.
+    bool calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareConcert = true) const;
+
     /// @brief Returns the frame.
     std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
 
@@ -488,6 +498,11 @@ public:
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
     unsigned calcReverseGraceIndex() const;
+
+    /// @brief Calculates a grace note's symbolic starting duration as a negative offset from the main note.
+    /// This is useful for comparing grace note sequences.
+    /// @return Negative symbolic offset from the main note, or zero if not a grace note.
+    util::Fraction calcGraceEllapsedDuration() const;
 
     /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
     std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex = 0) const;
@@ -760,6 +775,19 @@ public:
     /// Only the standard SmartShape gliss lines are checked. Other CustomLine values do no qualify.
     bool calcIsGlissToGraceEntry() const;
 
+    /// @brief Find the hidden source entry for a mid-system beam created by the Beam Over Barline plugin.
+    /// This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind
+    /// that plugin's workarounds and detect the entries in a beam that crosses a barline.
+    /// @return The hidden source entry if found, otherwise nullptr.
+    EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
+
+    /// @brief Finds the main entry for a grace note, taking into account hidden entries for beams over barlines.
+    /// @param ignoreRests If true, the returned entry must not be a rest.
+    /// @return The main entry if found. If the grace note is at the end of a measure or v2 sequence,
+    /// or if ignoring rests and the next non-grace is a rest, returns null. Also returns null if this
+    /// is not a grace note.
+    EntryInfoPtr findMainEntryForGraceNote(bool ignoreRests = false) const;
+
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
     {
@@ -790,12 +818,12 @@ private:
     EntryInfoPtr iterateBeamGroup(bool includeHiddenEntries) const;
 
     /// @brief Returns the beam anchor for a beam over barline left. This code captures the logic from the
-    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds a detect the entries
+    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries
     /// in a beam that crosses a barline.
     EntryInfoPtr findLeftBeamAnchorForBeamOverBarline() const;
 
     /// @brief Returns the beam anchor for a beam over barline right. This code captures the logic from the
-    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds a detect the entries
+    /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries
     /// in a beam that crosses a barline.
     EntryInfoPtr findRightBeamAnchorForBeamOverBarline() const;
 
@@ -941,7 +969,8 @@ public:
     */
     std::vector<TupletInfo> tupletInfo;
     MusxInstance<KeySignature> keySignature;    ///< This can be different than the measure key sig if the staff has independent key signatures.
-    util::Fraction maxElapsedDuration;          ///< The max elapsed staff duration that was calculated for the frame. This does not
+    util::Fraction measureStaffDuration;        ///< The duration of the measure in staff duration units.
+    util::Fraction maxElapsedStaffDuration;     ///< The max elapsed staff duration that was calculated for the frame. This does not
                                                 ///< have to equal the measure duration, but normally it does.
 
     /// @brief Get the document for the entry frame
@@ -1108,6 +1137,7 @@ public:
     { return m_entry && m_noteIndex < m_entry->getEntry()->notes.size(); }
 
     /// @brief Returns whether the input and the current instance refer to the same note.
+    /// @param src The EntryInfoPtr to compare with.
     bool isSameNote(const NoteInfoPtr& src) const
     { return m_entry.isSameEntry(src.m_entry) && m_noteIndex == src.m_noteIndex; }
 

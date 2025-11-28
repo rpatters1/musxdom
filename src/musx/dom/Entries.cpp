@@ -427,6 +427,42 @@ bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
     return (*this)->getEntry()->getEntryNumber() == src->getEntry()->getEntryNumber();
 }
 
+bool EntryInfoPtr::calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareConcert) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    if (isSameEntry(src)) {
+        return true;
+    }
+    if (calcDisplaysAsRest() != src.calcDisplaysAsRest()) {
+        return false;
+    }
+    const auto entryThis = (*this)->getEntry();
+    const auto entrySrc = src->getEntry();
+    if (entryThis->notes.size() != entrySrc->notes.size()) {
+        return false;
+    }
+    // only need to compare raw key sigs, so skip KeySignature::isSame.
+    const bool sameKeys = this->getFrame()->keySignature->key == src.getFrame()->keySignature->key;
+    for (size_t index = 0; index < entryThis->notes.size(); index++) {
+        const auto noteThis = NoteInfoPtr(*this, index);
+        const auto& noteSrc = NoteInfoPtr(src, index);
+        if (sameKeys || !compareConcert) {
+            if (noteThis->harmLev != noteSrc->harmLev || noteThis->harmAlt != noteSrc->harmAlt) {
+                return false;
+            }
+        } else {
+            auto [noteTypeThis, octaveThis, alterThis, staffLineThis] = noteThis.calcNotePropertiesConcert(true);
+            auto [noteTypeSrc, octaveSrc, alterSrc, staffLineSrc] = noteSrc.calcNotePropertiesConcert(true);
+            if (noteTypeThis != noteTypeSrc || octaveThis != octaveSrc || alterThis != alterSrc) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
 StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
@@ -483,6 +519,19 @@ unsigned EntryInfoPtr::calcReverseGraceIndex() const
             result++;
         }
         result = result - (*this)->graceIndex + 1;
+    }
+    return result;
+}
+
+util::Fraction EntryInfoPtr::calcGraceEllapsedDuration() const
+{
+    util::Fraction result = 0;
+    for (auto entryInfoPtr = *this; entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextSameV()) {
+        auto entry = entryInfoPtr->getEntry();
+        if (!entryInfoPtr->getEntry()->graceNote) {
+            break;
+        }
+        result -= util::Fraction::fromEdu(entry->duration);
     }
     return result;
 }
@@ -942,6 +991,114 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
             }
             return beamStart;
         }
+    }
+    return {};
+}
+
+EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
+{
+    auto frame = getFrame();
+    if ((*this)->elapsedDuration < frame->measureStaffDuration) {
+        return {};
+    }
+    if ((*this)->elapsedDuration == frame->measureStaffDuration) {
+        // Check for grace notes at the beginning of the next frame.
+        if (auto nextFrame = frame->getNext()) {
+            auto nextFirst = EntryInfoPtr(nextFrame, 0);
+            const auto nextGraceDura = nextFirst.calcGraceEllapsedDuration();
+            const auto thisGraceDura = calcGraceEllapsedDuration();
+            if (thisGraceDura < nextGraceDura) {
+                return {}; // out of sync can't be a match.
+            }
+        }
+    }
+    // Note that calcNearestEntry skips grace notes unless a grace note ellapsed dura is supplied.
+    auto currEntry = frame->getContext().calcNearestEntry(frame->measureStaffDuration.calcEduDuration(), /*findExact*/true, frame->getLayerIndex());
+    if (!currEntry) {
+        return {};
+    }
+    util::Fraction normalizedStartDuration = (*this)->elapsedDuration - frame->measureStaffDuration;
+    bool firstIteration = true;
+    for (frame = frame->getNext(); frame && currEntry; frame = frame->getNext()) {
+        auto searchEntry = EntryInfoPtr(frame, 0);
+        if (firstIteration) {
+            // find first non gracenote in frame
+            searchEntry = frame->getContext().calcNearestEntry(0, /*findExact*/true, frame->getLayerIndex());
+            firstIteration = false;
+            // backup for grace notes, if any
+            while (searchEntry.getIndexInFrame() > 0) {
+                searchEntry = searchEntry.getPreviousInFrame();
+                currEntry = currEntry.getPreviousInFrame();
+                if (!currEntry) {
+                    return {};
+                }
+            }
+        }
+        for (; currEntry && searchEntry; currEntry = currEntry.getNextInFrame(), searchEntry = searchEntry.getNextInFrame()) {
+            auto rawSearchEntry = searchEntry->getEntry();
+            auto rawCurrEntry = currEntry->getEntry();
+            if (!rawSearchEntry->isHidden || rawSearchEntry->voice2 != rawCurrEntry->voice2) {
+                return {}; // if we encounter a non-hidden entry or not matching v1v2, no match
+            }
+            if (rawSearchEntry->duration != rawCurrEntry->duration) {
+                return {}; // if we encounter non-matching symbolic durations, no match
+            }
+            if (searchEntry->actualDuration != currEntry->actualDuration) {
+                return {}; // if we encounter non-matching actual durations, no match
+            }
+            if (searchEntry.calcGraceEllapsedDuration() != currEntry.calcGraceEllapsedDuration()) {
+                return {}; // if we encounter non-matching grace note durations, no match
+            }
+            // Beam Over Barlines does not transpose entries if there is a key change, so concertCompare false is correct.
+            if (!searchEntry.calcIsSameChordOrRest(currEntry, /*concertCompare*/false)) {
+                return {}; // rest display must match.
+            }
+            const auto searchGraceDura = searchEntry.calcGraceEllapsedDuration();
+            if (searchEntry->elapsedDuration == frame->measureStaffDuration) {
+                // Beam Over Barline plugin crams hidden entries in the current frame for alls subsequent frames,
+                // so we need an extra check for grace notes at the beginning of the next frame.
+                if (auto nextFrame = frame->getNext()) {
+                    auto nextFirst = EntryInfoPtr(nextFrame, 0);
+                    const auto nextGraceDura = nextFirst.calcGraceEllapsedDuration();
+                    if (nextGraceDura < searchGraceDura) {
+                        return {}; // out of sync can't be a match.
+                    } else if (nextGraceDura == searchGraceDura) {
+                        break;
+                    }
+                }
+            }
+            if (searchEntry->elapsedDuration == normalizedStartDuration && searchGraceDura == this->calcGraceEllapsedDuration()) {
+                return searchEntry; // got it!
+            }
+        }
+        if (normalizedStartDuration < frame->measureStaffDuration) {
+            break;
+        }
+        normalizedStartDuration -= frame->measureStaffDuration;
+    }
+    return {};
+}
+
+EntryInfoPtr EntryInfoPtr::findMainEntryForGraceNote(bool ignoreRests) const
+{
+    const auto entry = (*this)->getEntry();
+    if (!entry->graceNote) {
+        return {};
+    }
+    if (const auto nextNonGrace = getNextSameVNoGrace()) {
+        if (ignoreRests && nextNonGrace.calcDisplaysAsRest()) {
+            return {};
+        }
+        if (const auto nextNonGraceHiddenForBeamOverBarline = nextNonGrace.findHiddenSourceForBeamOverBarline()) {
+            const auto hiddenForBeamOverBarline = findHiddenSourceForBeamOverBarline();
+            if (!hiddenForBeamOverBarline) {
+                return {};
+            }
+            if (hiddenForBeamOverBarline.getMeasure() != nextNonGraceHiddenForBeamOverBarline.getMeasure()) {
+                return {};
+            }
+        }
+        return nextNonGrace;
     }
     return {};
 }
@@ -1720,6 +1877,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                                          : 1;
         entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch, staff);
         entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
+        entryFrame->measureStaffDuration = measure->calcDuration(m_hold->getStaff());
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
@@ -1802,7 +1960,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 );
             }
         }
-        entryFrame->maxElapsedDuration = (std::max)(v1ActualElapsedDuration, v2ActualElapsedDuration);
+        entryFrame->maxElapsedStaffDuration = (std::max)(v1ActualElapsedDuration, v2ActualElapsedDuration);
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
             + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");
@@ -1905,17 +2063,17 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
     return foundCue;
 }
 
-EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer, std::optional<bool> matchVoice2) const
+EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer,
+    std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
 {
     EntryInfoPtr result;
     unsigned bestDiff = (std::numeric_limits<unsigned>::max)();
 
     auto iterator = [&](const EntryInfoPtr& entryInfo) {
-        const auto entry = entryInfo->getEntry();
-        if (entry->graceNote) {
+        if (entryInfo.calcGraceEllapsedDuration() != atGraceNoteDuration) {
             return true; // iterate past grace notes
         }
-        if (matchVoice2.has_value() && entry->voice2 != *matchVoice2) {
+        if (matchVoice2.has_value() && entryInfo->getEntry()->voice2 != *matchVoice2) {
             return true; // iterate past non-matching v1v2 values
         }
         unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));

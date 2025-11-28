@@ -165,11 +165,9 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
         <keyless/>
       </keySig>
       <beats>2</beats>
-      <divbeat>2</divbeat>
+      <divbeat>2048</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
-      <altNumTsig/>
-      <altDenTsig/>
       <posMode>timesigPlusPos</posMode>
       <barline>normal</barline>
       <forRepBar/>
@@ -891,24 +889,24 @@ TEST(GFrameHold, MaxElapsedEntryTest)
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold);
         auto frame = gfhold.createEntryFrame(0);
-        EXPECT_EQ(frame->maxElapsedDuration, musx::util::Fraction(1, 2));
+        EXPECT_EQ(frame->maxElapsedStaffDuration, musx::util::Fraction(1, 2));
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold);
         auto frame = gfhold.createEntryFrame(0);
-        EXPECT_EQ(frame->maxElapsedDuration, musx::util::Fraction(3, 8));
+        EXPECT_EQ(frame->maxElapsedStaffDuration, musx::util::Fraction(3, 8));
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
         ASSERT_TRUE(gfhold);
         auto frame = gfhold.createEntryFrame(0);
-        EXPECT_EQ(frame->maxElapsedDuration, musx::util::Fraction(1, 1));
+        EXPECT_EQ(frame->maxElapsedStaffDuration, musx::util::Fraction(1, 1));
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
         ASSERT_TRUE(gfhold);
         auto frame = gfhold.createEntryFrame(0);
-        EXPECT_EQ(frame->maxElapsedDuration, musx::util::Fraction(5, 4));
+        EXPECT_EQ(frame->maxElapsedStaffDuration, musx::util::Fraction(5, 4));
     }
 }
