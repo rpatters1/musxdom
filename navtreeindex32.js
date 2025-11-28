@@ -1,5 +1,7 @@
 var NAVTREEINDEX32 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#aec7e460ad737fd2741b5242a80d61291":[1,0,1,0,5,631],
+"namespacemusx_1_1dom_1_1uuid.html#aed1078f9e036083b0adb231b45d0b8fb":[1,0,1,0,5,22],
 "namespacemusx_1_1dom_1_1uuid.html#aed963bb36b7fca58ad471efe3959eea1":[1,0,1,0,5,685],
 "namespacemusx_1_1dom_1_1uuid.html#aedd643acef627235cdd544b93102d4a8":[1,0,1,0,5,723],
 "namespacemusx_1_1dom_1_1uuid.html#aedfafd1063b35deed8f4ecc2518bbae2":[1,0,1,0,5,659],
@@ -247,7 +249,5 @@ var NAVTREEINDEX32 =
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html#ad7b32f5bd6b476a8724c6c0bb7bcc3e4":[1,0,1,0,46,13,0],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html#ad84d2b006fe1a462d0987d5849c98fba":[2,0,1,0,47,13,1],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html#ad84d2b006fe1a462d0987d5849c98fba":[1,0,1,0,46,13,1],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetGray.html":[1,0,1,0,46,14],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetGray.html":[2,0,1,0,47,14],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetGray.html#a98e14f3713c5426ca682078fee0a228f":[2,0,1,0,47,14,0]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetGray.html":[1,0,1,0,46,14]
 };

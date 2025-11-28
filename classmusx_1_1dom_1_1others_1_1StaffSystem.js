@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1StaffSystem =
 [
     [ "StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440", null ],
+    [ "calcEffectiveScaling", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a27be821d045e9eea38e8f1471321ed10", null ],
     [ "calcMinMaxStaffSizes", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a7c389946c1c3da2aad1ee0f41066d5f2", null ],
     [ "calcNumMeasures", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2d768e858a24cf803606fdfc64034b59", null ],
     [ "calcSystemScaling", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a0a69cd425e0dde3521710a337c3e6783", null ],
