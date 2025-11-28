@@ -1086,7 +1086,7 @@ EntryInfoPtr EntryInfoPtr::findMainEntryForGraceNote(bool ignoreRests) const
         return {};
     }
     if (const auto nextNonGrace = getNextSameVNoGrace()) {
-        if (nextNonGrace.calcDisplaysAsRest() && ignoreRests) {
+        if (ignoreRests && nextNonGrace.calcDisplaysAsRest()) {
             return {};
         }
         if (const auto nextNonGraceHiddenForBeamOverBarline = nextNonGrace.findHiddenSourceForBeamOverBarline()) {
