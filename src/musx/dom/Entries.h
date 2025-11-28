@@ -126,8 +126,8 @@ public:
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
 
     /// @brief Calculates the number of voices used by the GFrameHold instance.
-    /// @return A list of each layer that contains entries and whether that layer uses voice2.
-    std::map<LayerIndex, bool> calcVoices() const;
+    /// @return A list of each layer that contains entries and the number voice2 entries in that layer.
+    std::map<LayerIndex, int> calcVoices() const;
 
     /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
@@ -151,11 +151,6 @@ public:
     util::Fraction calcMinLegacyPickupSpacer() const;
 
 private:
-    /// @brief Find the layer frame and Edu start position for the given layer. A non-zero start position indicates a spacer for a legacy pickup.
-    /// @param layerIndex The layer index to find (0..3)
-    /// @return std::pair containing the frame and the start position.
-    std::pair<MusxInstance<others::Frame>, Edu> findLayerFrame(LayerIndex layerIndex) const;
-
     MusxInstance<GFrameHold> m_hold;      ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId;                 ///< The requested part context.
 };

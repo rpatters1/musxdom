@@ -1832,27 +1832,6 @@ struct TupletState
 };
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
-std::pair<MusxInstance<others::Frame>, Edu> details::GFrameHoldContext::findLayerFrame(LayerIndex layerIndex) const
-{
-    MusxInstance<others::Frame> layerFrame;
-    Edu startEdu = 0;
-    if (layerIndex < m_hold->frames.size() && m_hold->frames[layerIndex]) {
-        auto frameIncis = m_hold->getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), m_hold->frames[layerIndex]);
-        for (const auto& frame : frameIncis) {
-            if (frame->startEntry) {
-                if (layerFrame) {
-                    MUSX_INTEGRITY_ERROR("More than one entry frame inci exists for frame " + std::to_string(m_hold->frames[layerIndex]));
-                }
-                layerFrame = frame;
-            }
-            if (frame->startTime > startEdu) {
-                startEdu = frame->startTime;
-            }
-        }
-    }
-    return std::make_pair(layerFrame, startEdu);
-}
-
 std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex, util::Fraction timeOffset) const
 {
     if (!m_hold) return nullptr;
@@ -1861,7 +1840,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
     }
     if (!m_hold->frames[layerIndex]) return nullptr; // nothing here
     auto document = m_hold->getDocument();
-    auto [frame, startEdu] = findLayerFrame(layerIndex);
+    auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
     std::shared_ptr<EntryFrame> entryFrame;
     if (frame) {
         const auto measure = m_hold->getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), m_hold->getMeasure());
@@ -1991,24 +1970,23 @@ bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryIn
     return true;
 }
 
-std::map<LayerIndex, bool> details::GFrameHoldContext::calcVoices() const
+std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices() const
 {
-    std::map<LayerIndex, bool> result;
+    std::map<LayerIndex, int> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             bool gotLayer = false;
-            bool gotV2 = false;
+            int numV2 = 0;
             frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
                 gotLayer = true;
                 if (entry->voice2) {
-                    gotV2 = true;
-                    return false;
+                    numV2++;
                 }
                 return true;
             });
             if (gotLayer) {
-                result.emplace(layerIndex, gotV2);
+                result.emplace(layerIndex, numV2);
             }
         }
     }
@@ -2045,7 +2023,7 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 {
     bool foundCue = false;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             auto entries = frame->getEntries();
             if (startEdu == 0 && entries.size() == 1 && entries[0]->isPossibleFullMeasureRest()) {
@@ -2101,7 +2079,7 @@ util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const
 {
     Edu result = -1;
     for (LayerIndex layerIndex = 0; layerIndex < MAX_LAYERS; layerIndex++) {
-        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             if (result < 0 || startEdu < result) {
                 result = startEdu;

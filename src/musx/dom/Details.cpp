@@ -334,19 +334,36 @@ MusxInstance<CustomStem> CustomStem::getForStem(const EntryInfoPtr& entryInfo, S
 // ***** GFrameHold *****
 // **********************
 
+std::pair<MusxInstance<others::Frame>, Edu> details::GFrameHold::findLayerFrame(LayerIndex layerIndex) const
+{
+    MusxInstance<others::Frame> layerFrame;
+    Edu startEdu = 0;
+    if (layerIndex < frames.size() && frames[layerIndex]) {
+        auto frameIncis = getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), frames[layerIndex]);
+        for (const auto& frame : frameIncis) {
+            if (frame->startEntry) {
+                if (layerFrame) {
+                    MUSX_INTEGRITY_ERROR("More than one entry frame inci with startEntry exists for frame " + std::to_string(frames[layerIndex]));
+                }
+                layerFrame = frame;
+            }
+            if (frame->startTime > startEdu) {
+                startEdu = frame->startTime;
+            }
+        }
+    }
+    return std::make_pair(layerFrame, startEdu);
+}
+
 bool GFrameHold::iterateRawEntries(std::function<bool(const MusxInstance<Entry>&, LayerIndex)> iterator) const
 {
     for (size_t layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
-        if (Cmper frameId = frames[layerIndex]) {
-            auto frames = getDocument()->getOthers()->getArray<others::Frame>(getRequestedPartId(), frameId);
-            for (const auto& frame : frames) {
-                if (frame->startEntry) {
-                    if (!frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) {
-                            return iterator(entry, static_cast<LayerIndex>(layerIndex));
-                        })) {
-                        return false;
-                    }
-                }
+        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        if (frame) {
+            if (!frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) {
+                    return iterator(entry, static_cast<LayerIndex>(layerIndex));
+                })) {
+                return false;
             }
         }
     }
