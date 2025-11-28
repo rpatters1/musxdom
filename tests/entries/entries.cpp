@@ -386,7 +386,7 @@ TEST(EntryTest, IsTrillToNote)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "trill-to.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
@@ -403,7 +403,7 @@ TEST(EntryTest, IsGlissToNote)
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "trill-to.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
     auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
@@ -462,5 +462,54 @@ TEST(EntryTest, EntryPartFieldDetail)
         auto entryInfo = EntryInfoPtr(entryFrame, 0);
         EXPECT_EQ(entryInfo.calcManuaOffset(), 0);
         EXPECT_EQ(entryInfo.calcEntryStemSettings(), std::make_pair(true, false));
+    }
+}
+
+TEST(EntryTest, FullMeasureRestV1V2)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "measurerests_v1v2.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        auto entryInfoPtr = EntryInfoPtr(entryFrame, 0);
+        EXPECT_TRUE(entryInfoPtr->getEntry()->isPossibleFullMeasureRest());
+        EXPECT_FALSE(entryInfoPtr.calcIsFullMeasureRest());
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        auto entryInfoPtr = EntryInfoPtr(entryFrame, 1);
+        EXPECT_TRUE(entryInfoPtr->getEntry()->isPossibleFullMeasureRest());
+        EXPECT_FALSE(entryInfoPtr.calcIsFullMeasureRest());
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        auto entryInfoPtr = EntryInfoPtr(entryFrame, 0);
+        EXPECT_TRUE(entryInfoPtr->getEntry()->isPossibleFullMeasureRest());
+        EXPECT_TRUE(entryInfoPtr.calcIsFullMeasureRest());
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        auto entryInfoPtr = EntryInfoPtr(entryFrame, 1);
+        EXPECT_TRUE(entryInfoPtr->getEntry()->isPossibleFullMeasureRest());
+        EXPECT_TRUE(entryInfoPtr.calcIsFullMeasureRest());
     }
 }

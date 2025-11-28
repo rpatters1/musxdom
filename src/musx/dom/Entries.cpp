@@ -1612,8 +1612,24 @@ bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
 
 bool EntryInfoPtr::calcIsFullMeasureRest() const
 {
-    if ((*this)->getEntry()->isPossibleFullMeasureRest()) {
-        return m_entryFrame->getEntries().size() == 1 && (*this)->elapsedDuration == 0;
+    const auto entry = (*this)->getEntry();
+    if (entry->isPossibleFullMeasureRest() && (*this)->elapsedDuration == 0) {
+        if (entry->voice2) {
+            auto layerInfo = getFrame()->getContext().calcVoices();
+            auto it = layerInfo.find(getLayerIndex());
+            if (it != layerInfo.end()) {
+                if (it->second == 1) { // exactly 1 v2 entry in this layer.
+                    return calcManuaOffset() > 0; // it has to have been moved towards the center of the measure.
+                }
+            }
+        }
+        if (entry->v2Launch) {
+            if (getNextSameV()) {
+                return false;
+            }
+            return calcManuaOffset() > 0; // it has to have been moved towards the center of the measure.
+        }
+        return m_entryFrame->getEntries().size() == 1;
     }
     return false;
 }

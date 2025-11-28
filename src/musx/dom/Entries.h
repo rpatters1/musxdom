@@ -382,7 +382,7 @@ public:
     /// breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically
     /// involve suppressing Finale's full-measure rest display and replacing them with a text expression.
     bool isPossibleFullMeasureRest() const
-    { return !isNote && !isHidden && !voice2 && duration == Edu(NoteType::Whole); }
+    { return !isNote && !isHidden && duration == Edu(NoteType::Whole); }
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
