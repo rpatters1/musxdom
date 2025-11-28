@@ -1,5 +1,7 @@
 var NAVTREEINDEX25 =
 {
+"classmusx_1_1dom_1_1others_1_1StaffSystem.html#a81d083d6208bfcde0680e0d5e2b74c7c":[1,0,1,0,3,78,10],
+"classmusx_1_1dom_1_1others_1_1StaffSystem.html#a85a75cc8595b7d6aa151a65bca9cd45b":[2,0,1,0,3,78,24],
 "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a85a75cc8595b7d6aa151a65bca9cd45b":[1,0,1,0,3,78,24],
 "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a9b158cde22c2bebe65a677da119b98c9":[1,0,1,0,3,78,17],
 "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a9b158cde22c2bebe65a677da119b98c9":[2,0,1,0,3,78,17],
@@ -247,7 +249,5 @@ var NAVTREEINDEX25 =
 "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#afae0c3f06c0d4c6fec2619562b90f5c0":[1,0,1,0,3,86,4],
 "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html":[1,0,1,0,3,87],
 "classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html":[2,0,1,0,3,87],
-"classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html#a16eb6d6996b874384713fe3b28a5b81c":[2,0,1,0,3,87,0],
-"classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html#a16eb6d6996b874384713fe3b28a5b81c":[1,0,1,0,3,87,0],
-"classmusx_1_1dom_1_1others_1_1TextRepeatIndividualPositioning.html":[1,0,1,0,3,88]
+"classmusx_1_1dom_1_1others_1_1TextRepeatEnclosure.html#a16eb6d6996b874384713fe3b28a5b81c":[2,0,1,0,3,87,0]
 };

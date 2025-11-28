@@ -140,6 +140,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsMultiLayer</b> 
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcContainsMusic</b> () const</td></tr>
 <tr class="memdesc:ab1f92bd76d9afb1a7bfd0ea1b25305a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a19a1c72ba46de55a0b948bf3556f7803" title="Constructor function.">GFrameHold</a> contains any layer frames. <br /></td></tr>
 <tr class="separator:ab1f92bd76d9afb1a7bfd0ea1b25305a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb84e20ed507794f7b140810cf5438fd" id="r_aeb84e20ed507794f7b140810cf5438fd"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html">others::Frame</a> &gt;, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#aeb84e20ed507794f7b140810cf5438fd">findLayerFrame</a> (<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> layerIndex) const</td></tr>
+<tr class="memdesc:aeb84e20ed507794f7b140810cf5438fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the layer frame and Edu start position for the given layer. A non-zero start position indicates a spacer for a legacy pickup.  <br /></td></tr>
+<tr class="separator:aeb84e20ed507794f7b140810cf5438fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6489be37c60c0f65ec8476b4645c1b6b" id="r_a6489be37c60c0f65ec8476b4645c1b6b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html#a6489be37c60c0f65ec8476b4645c1b6b">iterateRawEntries</a> (std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;, <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>)&gt; iterator) const</td></tr>
 <tr class="memdesc:a6489be37c60c0f65ec8476b4645c1b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates all the raw entries in a the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html" title="Represents the attributes of a Finale frame holder.">GFrameHold</a>, passing them to the iterator function. If the iterator function returns false, iteration stops.  <br /></td></tr>
 <tr class="separator:a6489be37c60c0f65ec8476b4645c1b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -360,6 +363,33 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aeb84e20ed507794f7b140810cf5438fd" name="aeb84e20ed507794f7b140810cf5438fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb84e20ed507794f7b140810cf5438fd">&#9670;&#160;</a></span>findLayerFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Frame.html">others::Frame</a> &gt;, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> &gt; musx::dom::details::GFrameHold::findLayerFrame </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td>
+          <td class="paramname"><em>layerIndex</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find the layer frame and Edu start position for the given layer. A non-zero start position indicates a spacer for a legacy pickup. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">layerIndex</td><td>The layer index to find (0..3) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::pair containing the frame and the start position. </dd></dl>
+
+</div>
+</div>
 <a id="af6cedce0ec1d699508cffac0f5ab354d" name="af6cedce0ec1d699508cffac0f5ab354d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af6cedce0ec1d699508cffac0f5ab354d">&#9670;&#160;</a></span>integrityCheck()</h2>
 

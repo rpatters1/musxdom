@@ -1,5 +1,7 @@
 var NAVTREEINDEX28 =
 {
+"namespacemembers_vars_e.html":[1,1,2,4],
+"namespacemembers_vars_f.html":[1,1,2,5],
 "namespacemembers_vars_g.html":[1,1,2,6],
 "namespacemembers_vars_h.html":[1,1,2,7],
 "namespacemembers_vars_i.html":[1,1,2,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX28 =
 "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa6497fe1ebf1760a20c550e565fe8e4b7":[1,0,1,0,3,100,0],
 "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa875cab9f80513cc89f4fea437df0c454":[1,0,1,0,3,100,1],
 "namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daa9eb45a4f158352a6aebdd16dcdf20282":[1,0,1,0,3,100,2],
-"namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daafd576995aea5af8c5fa9e675ac8f1c7b":[1,0,1,0,3,100,5],
-"namespacemusx_1_1dom_1_1others.html#a8c831340a452cb492cff24c36447e317":[1,0,1,0,3,94],
-"namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfe":[1,0,1,0,3,98]
+"namespacemusx_1_1dom_1_1others.html#a810539e43acbae04ec77d3f0eff852daafd576995aea5af8c5fa9e675ac8f1c7b":[1,0,1,0,3,100,5]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX33 =
 {
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetGray.html#a98e14f3713c5426ca682078fee0a228f":[1,0,1,0,46,14,0],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Slur.html":[1,0,1,0,46,15],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Slur.html":[2,0,1,0,47,15],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Slur.html#a487bbc7db0e2026c6f8aebcc5b8e2872":[1,0,1,0,46,15,4],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Slur.html#a487bbc7db0e2026c6f8aebcc5b8e2872":[2,0,1,0,47,15,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX33 =
 "structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768da2db06b134b30d1a9303e42979b213050":[2,0,1,2,3,0,3],
 "structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768da35be34bf77ce7236e902456f5702deaa":[2,0,1,2,3,0,2],
 "structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768da6adf97f83acf6453d4a6a4b1070f3754":[2,0,1,2,3,0,0],
-"structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768daa04c4b5345691a366bf4015c05d9e664":[2,0,1,2,3,0,1],
-"structmusx_1_1util_1_1EnigmaStyles.html#a6008a34e4e4779a8e944829cc2c8d06f":[2,0,1,2,3,7],
-"structmusx_1_1util_1_1EnigmaStyles.html#a6f6cd93795becf51ee465644f5d69021":[2,0,1,2,3,2]
+"structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768daa04c4b5345691a366bf4015c05d9e664":[2,0,1,2,3,0,1]
 };

@@ -157,6 +157,6 @@ var searchData=
   ['getvalueas_154',['getValueAs',['../classmusx_1_1xml_1_1IXmlAttribute.html#aafed24238c9407e9d02f3c7c035fc6de',1,'musx::xml::IXmlAttribute']]],
   ['getvaluetrimmed_155',['getValueTrimmed',['../classmusx_1_1xml_1_1IXmlAttribute.html#a0ff092b3b5c6f310a6520ff39607e85b',1,'musx::xml::IXmlAttribute']]],
   ['gframehold_156',['GFrameHold',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#a19a1c72ba46de55a0b948bf3556f7803',1,'musx::dom::details::GFrameHold']]],
-  ['gframeholdcontext_157',['GFrameHoldContext',['../classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a89ef5dfdff068697e127e6f583944ed2',1,'musx::dom::details::GFrameHoldContext']]],
+  ['gframeholdcontext_157',['GFrameHoldContext',['../classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a981066205691c56fd4b0963c0ac243dd',1,'musx::dom::details::GFrameHoldContext']]],
   ['gracenoteoptions_158',['GraceNoteOptions',['../classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html#a89dc2af0cf4aac9ef20e36c90c437545',1,'musx::dom::options::GraceNoteOptions']]]
 ];
