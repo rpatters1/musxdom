@@ -896,6 +896,15 @@ MusxInstance<Page> StaffSystem::getPage() const
     return getDocument()->getOthers()->get<Page>(getRequestedPartId(), pageId);
 }
 
+util::Fraction StaffSystem::calcEffectiveScaling() const
+{
+    auto result = calcSystemScaling();
+    if (auto page = getPage()) {
+        result *= page->calcPageScaling();
+    }
+    return result;
+}
+
 std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() const
 {
     if (hasStaffScaling) {
@@ -1004,10 +1013,7 @@ util::Fraction StaffUsed::calcEffectiveScaling() const
     util::Fraction result(1);
     if (SystemCmper(getCmper()) > 0) { // if this is a page-view system
         if (auto system = getDocument()->getOthers()->get<StaffSystem>(getRequestedPartId(), getCmper())) {
-            result = system->calcSystemScaling();
-            if (auto page = system->getPage()) {
-                result *= page->calcPageScaling();
-            }
+            result = system->calcEffectiveScaling();
             if (system->hasStaffScaling) {
                 if (auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getRequestedPartId(), getCmper(), staffId)) {
                     result *= staffSize->calcStaffScaling();

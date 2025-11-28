@@ -1735,7 +1735,7 @@ public:
     /** @brief is this a blank page */
     bool isBlank() const { return firstSystemId < 0; }
 
-    /// @brief Calculate the effect page scaling.
+    /// @brief Calculate the page scaling.
     util::Fraction calcPageScaling() const
     { return util::Fraction::fromPercent(percent); }
 
@@ -2679,9 +2679,12 @@ public:
     /// @brief Gets the page this system is on.
     MusxInstance<others::Page> getPage() const;
 
-    /// @brief Calculate the effect system scaling.
+    /// @brief Calculate the system scaling.
     util::Fraction calcSystemScaling() const
     { return util::Fraction::fromPercent(ssysPercent) * util::Fraction(staffHeight, 4 * int(EFIX_PER_SPACE)); }
+
+    /// @brief Calculates the effective scaling on this system, taking into account page scaling.
+    util::Fraction calcEffectiveScaling() const;
 
     /// @brief Calculates the maximum and minimum staff scaling values for this system by searching each staff
     /// for individual staff scaling.
@@ -2719,7 +2722,7 @@ public:
     Evpu distFromTop{};                     ///< Distance from the top of the system (negative is down)
     std::shared_ptr<EnigmaMusicRange> range;      ///< The music range. (Late versions of Finale may always include the entire piece here.)
 
-    /// @brief Calculates the effective scaling on this instance.
+    /// @brief Calculates the effective scaling on this instance, taking into accound system and page scaling.
     util::Fraction calcEffectiveScaling() const;
 
     /// @brief Returns the @ref Staff instance for this element, without any staff styles applied

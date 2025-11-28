@@ -1910,7 +1910,7 @@ public:
 
     int staffPercent{}; ///< The staff size percentage override. (A value of 100 means 100%, i.e, no staff scaling.)
 
-    /// @brief Calculate the effect staff scaling.
+    /// @brief Calculate the staff scaling.
     util::Fraction calcStaffScaling() const
     { return util::Fraction::fromPercent(staffPercent); }
 
