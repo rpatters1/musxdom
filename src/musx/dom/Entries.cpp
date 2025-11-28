@@ -1079,6 +1079,30 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
     return {};
 }
 
+EntryInfoPtr EntryInfoPtr::findMainEntryForGraceNote(bool ignoreRests) const
+{
+    const auto entry = (*this)->getEntry();
+    if (!entry->graceNote) {
+        return {};
+    }
+    if (const auto nextNonGrace = getNextSameVNoGrace()) {
+        if (nextNonGrace.calcDisplaysAsRest() && ignoreRests) {
+            return {};
+        }
+        if (const auto nextNonGraceHiddenForBeamOverBarline = nextNonGrace.findHiddenSourceForBeamOverBarline()) {
+            const auto hiddenForBeamOverBarline = findHiddenSourceForBeamOverBarline();
+            if (!hiddenForBeamOverBarline) {
+                return {};
+            }
+            if (hiddenForBeamOverBarline.getMeasure() != nextNonGraceHiddenForBeamOverBarline.getMeasure()) {
+                return {};
+            }
+        }
+        return nextNonGrace;
+    }
+    return {};
+}
+
 EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
 {
     const auto entry = (*this)->getEntry();

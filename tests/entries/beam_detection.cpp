@@ -535,7 +535,7 @@ TEST(BeamDetection, BeamsOverBarlinesHiddenSourceDetect)
         for (size_t x = 3; x < entryFrame->getEntries().size(); x++) {
             auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
             auto hiddenEntry = entryInfoPtr.findHiddenSourceForBeamOverBarline();
-            EXPECT_TRUE((x < 6 && !hiddenEntry) || (x >= 6 && hiddenEntry));
+            EXPECT_TRUE((x < 6 && !hiddenEntry) || (x >= 6 && hiddenEntry)) << "Unexpected hidden entry value for index " << x;
             MeasCmper expectedMeas = 1;
             size_t indexOffset = 0;
             if (x >= 6 && x < 18) {
@@ -577,8 +577,78 @@ TEST(BeamDetection, BeamsOverBarlinesHiddenSourceDetect)
             }
         }
     }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 7);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 7";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 7";
+        ASSERT_GE(entryFrame->getEntries().size(), 7);
+        auto last = EntryInfoPtr(entryFrame, 6);
+        EXPECT_FALSE(last.findHiddenSourceForBeamOverBarline());
+    }
 }
 
+TEST(BeamDetection, GraceNoteMainNoteDetection)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_over_graces.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto checkEntry = [](const EntryInfoPtr entPtr, bool expectedValue, size_t expectedIndex = 0) {
+        const auto mainEntry = entPtr.findMainEntryForGraceNote();
+        EXPECT_EQ(mainEntry, expectedValue);
+        if (mainEntry) {
+            EXPECT_EQ(mainEntry.getIndexInFrame(), expectedIndex);
+        }
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+        ASSERT_GE(entryFrame->getEntries().size(), 22);
+
+        checkEntry(EntryInfoPtr(entryFrame, 3), false); // not a grace note
+        checkEntry(EntryInfoPtr(entryFrame, 4), false);
+        checkEntry(EntryInfoPtr(entryFrame, 5), false);
+        checkEntry(EntryInfoPtr(entryFrame, 10), true, 12);
+        checkEntry(EntryInfoPtr(entryFrame, 11), true, 12);
+        checkEntry(EntryInfoPtr(entryFrame, 16), false);
+        checkEntry(EntryInfoPtr(entryFrame, 17), false);
+        checkEntry(EntryInfoPtr(entryFrame, 18), true, 20);
+        checkEntry(EntryInfoPtr(entryFrame, 19), true, 20);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 5";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 5";
+        ASSERT_GE(entryFrame->getEntries().size(), 16);
+
+        checkEntry(EntryInfoPtr(entryFrame, 4), true, 6);
+        checkEntry(EntryInfoPtr(entryFrame, 5), true, 6);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 7);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 7";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 7";
+        ASSERT_GE(entryFrame->getEntries().size(), 7);
+
+        checkEntry(EntryInfoPtr(entryFrame, 6), false);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 8);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 8";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 8";
+        ASSERT_GE(entryFrame->getEntries().size(), 5);
+
+        checkEntry(EntryInfoPtr(entryFrame, 0), true, 1);
+    }
+}
 
 TEST(BeamDetection, AdjacentRests)
 {

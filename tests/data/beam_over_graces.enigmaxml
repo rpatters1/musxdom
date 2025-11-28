@@ -1630,9 +1630,9 @@
     <beatChart cmper="7" inci="0">
       <control>
         <totalDur>4096</totalDur>
-        <totalWidth>324</totalWidth>
-        <minWidth>172</minWidth>
-        <allotWidth>268</allotWidth>
+        <totalWidth>376</totalWidth>
+        <minWidth>291</minWidth>
+        <allotWidth>680</allotWidth>
       </control>
     </beatChart>
     <beatChart cmper="7" inci="1">
@@ -1653,8 +1653,50 @@
     <beatChart cmper="7" inci="4">
       <dur>2048</dur>
       <pos>188</pos>
+      <endPos>272</endPos>
+      <minPos>123</minPos>
+    </beatChart>
+    <beatChart cmper="7" inci="5">
+      <dur>3072</dur>
+      <pos>272</pos>
       <endPos>324</endPos>
-      <minPos>126</minPos>
+      <minPos>160</minPos>
+    </beatChart>
+    <beatChart cmper="7" inci="6">
+      <dur>3584</dur>
+      <pos>324</pos>
+      <endPos>376</endPos>
+      <minPos>197</minPos>
+    </beatChart>
+    <beatChart cmper="8" inci="0">
+      <control>
+        <totalDur>4096</totalDur>
+        <totalWidth>324</totalWidth>
+        <minWidth>223</minWidth>
+        <allotWidth>319</allotWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="8" inci="1">
+      <endPos>52</endPos>
+      <minPos>51</minPos>
+    </beatChart>
+    <beatChart cmper="8" inci="2">
+      <dur>512</dur>
+      <pos>52</pos>
+      <endPos>104</endPos>
+      <minPos>94</minPos>
+    </beatChart>
+    <beatChart cmper="8" inci="3">
+      <dur>1024</dur>
+      <pos>104</pos>
+      <endPos>188</endPos>
+      <minPos>137</minPos>
+    </beatChart>
+    <beatChart cmper="8" inci="4">
+      <dur>2048</dur>
+      <pos>188</pos>
+      <endPos>324</endPos>
+      <minPos>177</minPos>
     </beatChart>
     <durAllot cmper="0">
       <allotment>84</allotment>
@@ -1810,15 +1852,19 @@
     </frameSpec>
     <frameSpec cmper="12" inci="0">
       <startEntry>77</startEntry>
-      <endEntry>108</endEntry>
+      <endEntry>130</endEntry>
     </frameSpec>
     <frameSpec cmper="13" inci="0">
       <startEntry>81</startEntry>
-      <endEntry>96</endEntry>
+      <endEntry>118</endEntry>
     </frameSpec>
     <frameSpec cmper="14" inci="0">
       <startEntry>91</startEntry>
-      <endEntry>94</endEntry>
+      <endEntry>115</endEntry>
+    </frameSpec>
+    <frameSpec cmper="15" inci="0">
+      <startEntry>116</startEntry>
+      <endEntry>114</endEntry>
     </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
@@ -2172,7 +2218,7 @@
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="7">
-      <width>356</width>
+      <width>450</width>
       <beats>4</beats>
       <divbeat>1024</divbeat>
       <dispBeats>4</dispBeats>
@@ -2182,12 +2228,12 @@
       <leftBarline>default</leftBarline>
     </measSpec>
     <measSpec cmper="8">
-      <width>600</width>
+      <width>407</width>
       <beats>4</beats>
       <divbeat>1024</divbeat>
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
-      <posMode>timesigPlusPos</posMode>
+      <posMode>beatchartPlusPos</posMode>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
@@ -2714,7 +2760,7 @@
     <staffSystemSpec cmper="2">
       <startMeas>5</startMeas>
       <endMeas>9</endMeas>
-      <horzPercent>13319</horzPercent>
+      <horzPercent>14084</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
       <top>-68</top>
@@ -3245,6 +3291,11 @@
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
       <frame1>14</frame1>
+    </gfhold>
+    <gfhold cmper1="1" cmper2="8">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>15</frame1>
     </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
@@ -4380,7 +4431,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="80" prev="79" next="97">
+    <entry entnum="80" prev="79" next="119">
       <dura>512</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -4392,7 +4443,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="81" prev="108" next="82">
+    <entry entnum="81" prev="130" next="82">
       <dura>256</dura>
       <numNotes>1</numNotes>
       <posi>-12</posi>
@@ -4524,7 +4575,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="90" prev="89" next="95">
+    <entry entnum="90" prev="89" next="117">
       <dura>512</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -4538,12 +4589,13 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="91" prev="96" next="92">
+    <entry entnum="91" prev="118" next="92">
       <dura>512</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <isNote/>
       <ignore/>
+      <beam/>
       <upStem/>
       <sorted/>
       <noPlayback/>
@@ -4581,8 +4633,8 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="94" prev="93" next="0">
-      <dura>2048</dura>
+    <entry entnum="94" prev="93" next="109">
+      <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
       <floatRest/>
@@ -4594,7 +4646,105 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="95" prev="90" next="96">
+    <entry entnum="109" prev="94" next="110">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="110" prev="109" next="115">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>7</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="111" prev="116" next="112">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="112" prev="111" next="113">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>9</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="113" prev="112" next="114">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="114" prev="113" next="0">
+      <dura>2048</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+    </entry>
+    <entry entnum="115" prev="110" next="116">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <posi>-27</posi>
+      <isValid/>
+      <isNote/>
+      <graceNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="116" prev="115" next="111">
+      <dura>512</dura>
+      <numNotes>1</numNotes>
+      <posi>-27</posi>
+      <isValid/>
+      <isNote/>
+      <graceNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="117" prev="90" next="118">
       <dura>512</dura>
       <numNotes>1</numNotes>
       <posi>34</posi>
@@ -4611,10 +4761,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="96" prev="95" next="91">
+    <entry entnum="118" prev="117" next="91">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>32</posi>
+      <posi>39</posi>
       <isValid/>
       <isNote/>
       <ignore/>
@@ -4628,7 +4778,7 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="97" prev="80" next="98">
+    <entry entnum="119" prev="80" next="120">
       <dura>256</dura>
       <numNotes>1</numNotes>
       <posi>82</posi>
@@ -4645,10 +4795,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="98" prev="97" next="99">
+    <entry entnum="120" prev="119" next="121">
       <dura>256</dura>
       <numNotes>1</numNotes>
-      <posi>88</posi>
+      <posi>89</posi>
       <isValid/>
       <isNote/>
       <graceNote/>
@@ -4662,10 +4812,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="99" prev="98" next="100">
+    <entry entnum="121" prev="120" next="122">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>95</posi>
+      <posi>94</posi>
       <isValid/>
       <isNote/>
       <sorted/>
@@ -4677,10 +4827,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="100" prev="99" next="101">
+    <entry entnum="122" prev="121" next="123">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>96</posi>
+      <posi>97</posi>
       <isValid/>
       <isNote/>
       <sorted/>
@@ -4692,10 +4842,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="101" prev="100" next="102">
+    <entry entnum="123" prev="122" next="124">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>97</posi>
+      <posi>100</posi>
       <isValid/>
       <isNote/>
       <sorted/>
@@ -4707,10 +4857,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="102" prev="101" next="103">
+    <entry entnum="124" prev="123" next="125">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>101</posi>
+      <posi>103</posi>
       <isValid/>
       <isNote/>
       <sorted/>
@@ -4722,10 +4872,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="103" prev="102" next="104">
+    <entry entnum="125" prev="124" next="126">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>103</posi>
+      <posi>107</posi>
       <isValid/>
       <isNote/>
       <sorted/>
@@ -4737,10 +4887,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="104" prev="103" next="105">
+    <entry entnum="126" prev="125" next="127">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>105</posi>
+      <posi>109</posi>
       <isValid/>
       <isNote/>
       <sorted/>
@@ -4752,10 +4902,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="105" prev="104" next="106">
+    <entry entnum="127" prev="126" next="128">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>108</posi>
+      <posi>112</posi>
       <isValid/>
       <isNote/>
       <sorted/>
@@ -4767,10 +4917,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="106" prev="105" next="107">
+    <entry entnum="128" prev="127" next="129">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>109</posi>
+      <posi>116</posi>
       <isValid/>
       <isNote/>
       <sorted/>
@@ -4782,10 +4932,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="107" prev="106" next="108">
+    <entry entnum="129" prev="128" next="130">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>145</posi>
+      <posi>152</posi>
       <isValid/>
       <isNote/>
       <upStem/>
@@ -4798,10 +4948,10 @@
         <freezeAcci/>
       </note>
     </entry>
-    <entry entnum="108" prev="107" next="81">
+    <entry entnum="130" prev="129" next="81">
       <dura>512</dura>
       <numNotes>1</numNotes>
-      <posi>146</posi>
+      <posi>161</posi>
       <isValid/>
       <isNote/>
       <upStem/>

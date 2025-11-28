@@ -781,6 +781,13 @@ public:
     /// @return The hidden source entry if found, otherwise nullptr.
     EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
 
+    /// @brief Finds the main entry for a grace note, taking into account hidden entries for beams over barlines.
+    /// @param ignoreRests If true, the returned entry must not be a rest.
+    /// @return The main entry if found. If the grace note is at the end of a measure or v2 sequence,
+    /// or if ignoring rests and the next non-grace is a rest, returns null. Also returns null if this
+    /// is not a grace note.
+    EntryInfoPtr findMainEntryForGraceNote(bool ignoreRests = false) const;
+
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
     {
