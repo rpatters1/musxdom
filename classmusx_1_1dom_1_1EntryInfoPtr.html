@@ -125,9 +125,12 @@ const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryInf
 <tr class="memitem:a45d85e3e02c2ce8fe6b5a891a9a0c795" id="r_a45d85e3e02c2ce8fe6b5a891a9a0c795"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795">isSameEntry</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src) const</td></tr>
 <tr class="memdesc:a45d85e3e02c2ce8fe6b5a891a9a0c795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the input and the current instance refer to the same entry.  <br /></td></tr>
 <tr class="separator:a45d85e3e02c2ce8fe6b5a891a9a0c795"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac00953798bf130062398b2b394d708c1" id="r_ac00953798bf130062398b2b394d708c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ac00953798bf130062398b2b394d708c1">calcIsSameChordOrRest</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src, bool compareConcert=true) const</td></tr>
-<tr class="memdesc:ac00953798bf130062398b2b394d708c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the input and the current instance represent the same chord or rest value(s). This function does not take into account duration. The two can have different durations.  <br /></td></tr>
-<tr class="separator:ac00953798bf130062398b2b394d708c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a606b477e5b5fea34498fb35af7073f45" id="r_a606b477e5b5fea34498fb35af7073f45"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a606b477e5b5fea34498fb35af7073f45">calcIsSamePitchContent</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src, bool compareConcert=true) const</td></tr>
+<tr class="memdesc:a606b477e5b5fea34498fb35af7073f45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this entry and <code>src</code> contain the same pitch content or rest value.  <br /></td></tr>
+<tr class="separator:a606b477e5b5fea34498fb35af7073f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a3212f5b3f06487fc8e80616c98d672" id="r_a8a3212f5b3f06487fc8e80616c98d672"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a8a3212f5b3f06487fc8e80616c98d672">calcIsSamePitchContentAndDuration</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src, bool compareConcert=true, bool requireSameVoice=true, bool requireSameGraceElapsedDura=false) const</td></tr>
+<tr class="memdesc:a8a3212f5b3f06487fc8e80616c98d672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this entry and <code>src</code> represent the same notated value.  <br /></td></tr>
+<tr class="separator:a8a3212f5b3f06487fc8e80616c98d672"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87802553e72c2d71f8e23f4cb01f6a56" id="r_a87802553e72c2d71f8e23f4cb01f6a56"><td class="memItemLeft" align="right" valign="top"><a id="a87802553e72c2d71f8e23f4cb01f6a56" name="a87802553e72c2d71f8e23f4cb01f6a56"></a>
 std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFrame</b> () const</td></tr>
 <tr class="memdesc:a87802553e72c2d71f8e23f4cb01f6a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the frame. <br /></td></tr>
@@ -167,9 +170,9 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexInFrame</b>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcReverseGraceIndex</b> () const</td></tr>
 <tr class="memdesc:a284505434c8a4a0b7fe8705062599b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caclulates the grace index counting leftward (used by other standards such as MNX) <br /></td></tr>
 <tr class="separator:a284505434c8a4a0b7fe8705062599b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53b696a9fe423e40299cc22831b25791" id="r_a53b696a9fe423e40299cc22831b25791"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a53b696a9fe423e40299cc22831b25791">calcGraceEllapsedDuration</a> () const</td></tr>
-<tr class="memdesc:a53b696a9fe423e40299cc22831b25791"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a grace note's symbolic starting duration as a negative offset from the main note. This is useful for comparing grace note sequences.  <br /></td></tr>
-<tr class="separator:a53b696a9fe423e40299cc22831b25791"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a66035c5eb6d31759de5e72e9152831" id="r_a6a66035c5eb6d31759de5e72e9152831"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a6a66035c5eb6d31759de5e72e9152831">calcGraceElapsedDuration</a> () const</td></tr>
+<tr class="memdesc:a6a66035c5eb6d31759de5e72e9152831"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a grace note's symbolic starting duration as a negative offset from the main note. This is useful for comparing grace note sequences.  <br /></td></tr>
+<tr class="separator:a6a66035c5eb6d31759de5e72e9152831"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5bf030123af0df89bd68230ec285713" id="r_aa5bf030123af0df89bd68230ec285713"><td class="memItemLeft" align="right" valign="top"><a id="aa5bf030123af0df89bd68230ec285713" name="aa5bf030123af0df89bd68230ec285713"></a>
 std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calcNextTupletIndex</b> (std::optional&lt; size_t &gt; currentIndex=0) const</td></tr>
 <tr class="memdesc:aa5bf030123af0df89bd68230ec285713"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next higher tuplet index that this entry starts, or std::nullopt if none. <br /></td></tr>
@@ -311,9 +314,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamMustStartHere
 <tr class="memitem:aee6b5524df00cd1f2bbb41ebf760b58d" id="r_aee6b5524df00cd1f2bbb41ebf760b58d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aee6b5524df00cd1f2bbb41ebf760b58d">calcIsFullMeasureRest</a> () const</td></tr>
 <tr class="memdesc:aee6b5524df00cd1f2bbb41ebf760b58d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is a full measure rest.  <br /></td></tr>
 <tr class="separator:aee6b5524df00cd1f2bbb41ebf760b58d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad82e20770828b57b9c8dad206e9e92dd" id="r_ad82e20770828b57b9c8dad206e9e92dd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad82e20770828b57b9c8dad206e9e92dd">calcIsBeamedRestWorkaroud</a> () const</td></tr>
-<tr class="memdesc:ad82e20770828b57b9c8dad206e9e92dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.  <br /></td></tr>
-<tr class="separator:ad82e20770828b57b9c8dad206e9e92dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a889bd2a2d34c6e10b0d3e3ef9f5d1caf" id="r_a889bd2a2d34c6e10b0d3e3ef9f5d1caf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a889bd2a2d34c6e10b0d3e3ef9f5d1caf">calcIsBeamedRestWorkaroundHiddenRest</a> () const</td></tr>
+<tr class="memdesc:a889bd2a2d34c6e10b0d3e3ef9f5d1caf"><td class="mdescLeft">&#160;</td><td class="mdescRight">A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.  <br /></td></tr>
+<tr class="separator:a889bd2a2d34c6e10b0d3e3ef9f5d1caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e5709e78e5ae67b5300453290222f65" id="r_a5e5709e78e5ae67b5300453290222f65"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a5e5709e78e5ae67b5300453290222f65">calcIsBeamedRestWorkaroundVisibleRest</a> () const</td></tr>
+<tr class="memdesc:a5e5709e78e5ae67b5300453290222f65"><td class="mdescLeft">&#160;</td><td class="mdescRight">A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.  <br /></td></tr>
+<tr class="separator:a5e5709e78e5ae67b5300453290222f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd810deb36d0bf21b99d27486533ba21" id="r_afd810deb36d0bf21b99d27486533ba21"><td class="memItemLeft" align="right" valign="top">std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#afd810deb36d0bf21b99d27486533ba21">findTupletInfo</a> () const</td></tr>
 <tr class="memdesc:afd810deb36d0bf21b99d27486533ba21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the tuplet info for tuplets that include this entry.  <br /></td></tr>
 <tr class="separator:afd810deb36d0bf21b99d27486533ba21"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -339,6 +345,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSingletonGrace<
 <tr class="memitem:a59c0b80e223e99f95a8fd7682e527f98" id="r_a59c0b80e223e99f95a8fd7682e527f98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a59c0b80e223e99f95a8fd7682e527f98">findHiddenSourceForBeamOverBarline</a> () const</td></tr>
 <tr class="memdesc:a59c0b80e223e99f95a8fd7682e527f98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the hidden source entry for a mid-system beam created by the Beam Over Barline plugin. This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries in a beam that crosses a barline.  <br /></td></tr>
 <tr class="separator:a59c0b80e223e99f95a8fd7682e527f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba9a0999ab9a7395e0f6520840a92fa5" id="r_aba9a0999ab9a7395e0f6520840a92fa5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aba9a0999ab9a7395e0f6520840a92fa5">findDisplayEntryForBeamOverBarline</a> () const</td></tr>
+<tr class="memdesc:aba9a0999ab9a7395e0f6520840a92fa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the display entry for a hidden source entry. The display entry is one or more bars previous to the source entry. This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries in a beam that crosses a barline.  <br /></td></tr>
+<tr class="separator:aba9a0999ab9a7395e0f6520840a92fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11a03b83916995c156d7f6dcdb60a49a" id="r_a11a03b83916995c156d7f6dcdb60a49a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a11a03b83916995c156d7f6dcdb60a49a">findMainEntryForGraceNote</a> (bool ignoreRests=false) const</td></tr>
 <tr class="memdesc:a11a03b83916995c156d7f6dcdb60a49a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the main entry for a grace note, taking into account hidden entries for beams over barlines.  <br /></td></tr>
 <tr class="separator:a11a03b83916995c156d7f6dcdb60a49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -562,14 +571,14 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a53b696a9fe423e40299cc22831b25791" name="a53b696a9fe423e40299cc22831b25791"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53b696a9fe423e40299cc22831b25791">&#9670;&#160;</a></span>calcGraceEllapsedDuration()</h2>
+<a id="a6a66035c5eb6d31759de5e72e9152831" name="a6a66035c5eb6d31759de5e72e9152831"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a66035c5eb6d31759de5e72e9152831">&#9670;&#160;</a></span>calcGraceElapsedDuration()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::EntryInfoPtr::calcGraceEllapsedDuration </td>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::EntryInfoPtr::calcGraceElapsedDuration </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -625,14 +634,14 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad82e20770828b57b9c8dad206e9e92dd" name="ad82e20770828b57b9c8dad206e9e92dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad82e20770828b57b9c8dad206e9e92dd">&#9670;&#160;</a></span>calcIsBeamedRestWorkaroud()</h2>
+<a id="a889bd2a2d34c6e10b0d3e3ef9f5d1caf" name="a889bd2a2d34c6e10b0d3e3ef9f5d1caf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a889bd2a2d34c6e10b0d3e3ef9f5d1caf">&#9670;&#160;</a></span>calcIsBeamedRestWorkaroundHiddenRest()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsBeamedRestWorkaroud </td>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsBeamedRestWorkaroundHiddenRest </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -641,7 +650,27 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation. </p>
-<dl class="section return"><dt>Returns</dt><dd>True if this is either the replacement rest in v2 or the hidden rest in v1. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if this is either the hidden rest in v1. </dd></dl>
+
+</div>
+</div>
+<a id="a5e5709e78e5ae67b5300453290222f65" name="a5e5709e78e5ae67b5300453290222f65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e5709e78e5ae67b5300453290222f65">&#9670;&#160;</a></span>calcIsBeamedRestWorkaroundVisibleRest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsBeamedRestWorkaroundVisibleRest </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if this is either the visible replacement rest in v2. </dd></dl>
 
 </div>
 </div>
@@ -758,14 +787,14 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac00953798bf130062398b2b394d708c1" name="ac00953798bf130062398b2b394d708c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac00953798bf130062398b2b394d708c1">&#9670;&#160;</a></span>calcIsSameChordOrRest()</h2>
+<a id="a606b477e5b5fea34498fb35af7073f45" name="a606b477e5b5fea34498fb35af7073f45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a606b477e5b5fea34498fb35af7073f45">&#9670;&#160;</a></span>calcIsSamePitchContent()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsSameChordOrRest </td>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsSamePitchContent </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
           <td class="paramname"><em>src</em>, </td>
@@ -784,15 +813,69 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns whether the input and the current instance represent the same chord or rest value(s). This function does not take into account duration. The two can have different durations. </p>
+<p>Returns whether this entry and <code>src</code> contain the same pitch content or rest value. </p>
+<p>For note entries, only pitch content is compared; duration is ignored. For rest entries, non-floating rests are compared using their assigned display levels.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">src</td><td>The <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> to compare. </td></tr>
-    <tr><td class="paramname">compareConcert</td><td>If true, the concert pitches of notes are compared. If false, the scale degrees of the pitches relative to the key are compared. </td></tr>
+    <tr><td class="paramname">compareConcert</td><td>If true, compares concert pitches. If false, compares scale degrees relative to the prevailing key. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>false if either this or src is null and true if they are both represent the same chord or rest. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if both pointers are non-null and represent the same pitch content or rest value, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a8a3212f5b3f06487fc8e80616c98d672" name="a8a3212f5b3f06487fc8e80616c98d672"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a3212f5b3f06487fc8e80616c98d672">&#9670;&#160;</a></span>calcIsSamePitchContentAndDuration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsSamePitchContentAndDuration </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>compareConcert</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>requireSameVoice</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>requireSameGraceElapsedDura</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether this entry and <code>src</code> represent the same notated value. </p>
+<p>This function performs the same pitch/rest comparison as <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a606b477e5b5fea34498fb35af7073f45" title="Returns whether this entry and src contain the same pitch content or rest value.">calcIsSamePitchContent</a> and additionally compares symbolic duration, actual duration, and optionally v1v2 voice number and grace-note elapsed duration.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> to compare. </td></tr>
+    <tr><td class="paramname">compareConcert</td><td>If true, compares concert pitches. If false, compares scale degrees relative to the prevailing key. </td></tr>
+    <tr><td class="paramname">requireSameVoice</td><td>If true, the entries must have identical v1v2 voice numbers. </td></tr>
+    <tr><td class="paramname">requireSameGraceElapsedDura</td><td>If true, grace-note elapsed durations must match.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if both pointers are non-null and all required properties match; false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -1063,6 +1146,26 @@ Static Public Member Functions</h2></td></tr>
 <p>Finds the first entry of a beamed group or returns the current entry if it is not beams. </p>
 <dl class="section note"><dt>Note</dt><dd>This behavior is different than other beam functions in that it returns the current entry if there is no beam rather than returning NULL. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The first entry of a beamed group or the current entry if no beam. </dd></dl>
+
+</div>
+</div>
+<a id="aba9a0999ab9a7395e0f6520840a92fa5" name="aba9a0999ab9a7395e0f6520840a92fa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba9a0999ab9a7395e0f6520840a92fa5">&#9670;&#160;</a></span>findDisplayEntryForBeamOverBarline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryInfoPtr::findDisplayEntryForBeamOverBarline </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find the display entry for a hidden source entry. The display entry is one or more bars previous to the source entry. This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries in a beam that crosses a barline. </p>
+<dl class="section return"><dt>Returns</dt><dd>The display entry if this is a hidden source entry, otherwise nullptr. </dd></dl>
 
 </div>
 </div>

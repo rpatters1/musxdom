@@ -5,7 +5,7 @@ var classmusx_1_1dom_1_1details_1_1GFrameHoldContext =
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a8fff05d40b94995cc544370b58f59af3", null ],
     [ "calcIsCuesOnly", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d", null ],
     [ "calcMinLegacyPickupSpacer", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4", null ],
-    [ "calcNearestEntry", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa595f74424d13c37f1a4405fa348614a", null ],
+    [ "calcNearestEntry", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a53b422e2450b764129e8bc524f5f2e55", null ],
     [ "calcVoices", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aed9662825d18582852d4bd62c95fe32e", null ],
     [ "createEntryFrame", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a5ee488176e8e510a181cc59b9bcfeef9", null ],
     [ "getRequestedPartId", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#acff7329c626f98038fffe6cfff7ee880", null ],

@@ -2,6 +2,7 @@ var classmusx_1_1util_1_1Fraction =
 [
     [ "Fraction", "classmusx_1_1util_1_1Fraction.html#a53148c96102e3c9063815698642f2f0c", null ],
     [ "Fraction", "classmusx_1_1util_1_1Fraction.html#ab3a1097731acab882bcd033b6ca84df6", null ],
+    [ "abs", "classmusx_1_1util_1_1Fraction.html#a848234ceadb9f10f10ed314b2d450dd9", null ],
     [ "calcEduDuration", "classmusx_1_1util_1_1Fraction.html#a7e647ecefdfbf2a02b25d16467393f3a", null ],
     [ "denominator", "classmusx_1_1util_1_1Fraction.html#a40e9fc0ad4a437eb1fdcc450021943de", null ],
     [ "numerator", "classmusx_1_1util_1_1Fraction.html#a19f5a89536f40e005c9fbc112143eb5f", null ],
