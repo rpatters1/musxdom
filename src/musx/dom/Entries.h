@@ -460,13 +460,29 @@ public:
     /// @return false if either this or src is null and true if they are both non null and refer to the same entry.
     bool isSameEntry(const EntryInfoPtr& src) const;
 
-    /// @brief Returns whether the input and the current instance represent the same chord or rest value(s).
-    /// This function does not take into account duration. The two can have different durations.
+    /// @brief Returns whether this entry and @p src contain the same pitch content or rest value.
+    ///
+    /// For note entries, only pitch content is compared; duration is ignored.
+    /// For rest entries, non-floating rests are compared using their assigned display levels.
+    ///
     /// @param src The EntryInfoPtr to compare.
-    /// @param compareConcert If true, the concert pitches of notes are compared. If false, the scale degrees
-    /// of the pitches relative to the key are compared.
-    /// @return false if either this or src is null and true if they are both represent the same chord or rest.
-    bool calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareConcert = true) const;
+    /// @param compareConcert If true, compares concert pitches. If false, compares scale degrees relative to the prevailing key.
+    /// @return true if both pointers are non-null and represent the same pitch content or rest value, false otherwise.
+    bool calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert = true) const;
+
+    /// @brief Returns whether this entry and @p src represent the same notated value.
+    ///
+    /// This function performs the same pitch/rest comparison as #calcIsSamePitchContent and additionally
+    /// compares symbolic duration, actual duration, and optionally v1v2 voice number and grace-note elapsed duration.
+    ///
+    /// @param src The EntryInfoPtr to compare.
+    /// @param compareConcert If true, compares concert pitches. If false, compares scale degrees
+    ///        relative to the prevailing key.
+    /// @param requireSameVoice If true, the entries must have identical v1v2 voice numbers.
+    /// @param requireSameGraceElapsedDura If true, grace-note elapsed durations must match.
+    ///
+    /// @return true if both pointers are non-null and all required properties match; false otherwise.
+    bool calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bool compareConcert = true, bool requireSameVoice = true, bool requireSameGraceElapsedDura = false) const;
 
     /// @brief Returns the frame.
     std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
@@ -503,7 +519,7 @@ public:
     /// @brief Calculates a grace note's symbolic starting duration as a negative offset from the main note.
     /// This is useful for comparing grace note sequences.
     /// @return Negative symbolic offset from the main note, or zero if not a grace note.
-    util::Fraction calcGraceEllapsedDuration() const;
+    util::Fraction calcGraceElapsedDuration() const;
 
     /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
     std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex = 0) const;

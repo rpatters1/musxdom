@@ -197,7 +197,7 @@ EntryInfoPtr EntryFrame::calcNearestEntry(util::Fraction position, bool findExac
     util::Fraction bestDiff = (util::Fraction::max)();
 
     auto iterator = [&](const EntryInfoPtr& entryInfo) {
-        if (entryInfo.calcGraceEllapsedDuration() != atGraceNoteDuration) {
+        if (entryInfo.calcGraceElapsedDuration() != atGraceNoteDuration) {
             return true; // iterate past non-matching grace notes
         }
         if (matchVoice2.has_value() && entryInfo->getEntry()->voice2 != *matchVoice2) {
@@ -466,7 +466,7 @@ bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
     return (*this)->getEntry()->getEntryNumber() == src->getEntry()->getEntryNumber();
 }
 
-bool EntryInfoPtr::calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareConcert) const
+bool EntryInfoPtr::calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert) const
 {
     if (!*this || !src) {
         return false;
@@ -502,6 +502,34 @@ bool EntryInfoPtr::calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareCo
     return true;
 }
 
+bool EntryInfoPtr::calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bool compareConcert, bool requireSameVoice, bool requireSameGraceElapsedDura) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    if (isSameEntry(src)) {
+        return true;
+    }
+
+    const auto entryThis = (*this)->getEntry();
+    const auto entrySrc = src->getEntry();
+
+    if (entryThis->duration != entrySrc->duration) {
+        return false;
+    }
+    if (requireSameVoice && entryThis->voice2 != entrySrc->voice2) {
+        return false;
+    }
+    if ((*this)->actualDuration != src->actualDuration) {
+        return false;
+    }
+    if (requireSameGraceElapsedDura && calcGraceElapsedDuration() != src.calcGraceElapsedDuration()) {
+        return false;
+    }
+
+    return calcIsSamePitchContent(src, compareConcert);
+}
+    
 LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
 StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
@@ -562,7 +590,7 @@ unsigned EntryInfoPtr::calcReverseGraceIndex() const
     return result;
 }
 
-util::Fraction EntryInfoPtr::calcGraceEllapsedDuration() const
+util::Fraction EntryInfoPtr::calcGraceElapsedDuration() const
 {
     util::Fraction result = 0;
     for (auto entryInfoPtr = *this; entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextSameV()) {
@@ -1044,14 +1072,14 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
         // Check for grace notes at the beginning of the next frame.
         if (auto nextFrame = frame->getNext()) {
             auto nextFirst = EntryInfoPtr(nextFrame, 0);
-            const auto nextGraceDura = nextFirst.calcGraceEllapsedDuration();
-            const auto thisGraceDura = calcGraceEllapsedDuration();
+            const auto nextGraceDura = nextFirst.calcGraceElapsedDuration();
+            const auto thisGraceDura = calcGraceElapsedDuration();
             if (thisGraceDura < nextGraceDura) {
                 return {}; // out of sync can't be a match.
             }
         }
     }
-    // Note that calcNearestEntry skips grace notes unless a grace note ellapsed dura is supplied.
+    // Note that calcNearestEntry skips grace notes unless a grace note elapsed dura is supplied.
     auto currEntry = frame->calcNearestEntry(frame->measureStaffDuration, /*findExact*/true);
     if (!currEntry) {
         return {};
@@ -1076,29 +1104,20 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
         for (; currEntry && searchEntry; currEntry = currEntry.getNextInFrame(), searchEntry = searchEntry.getNextInFrame()) {
             auto rawSearchEntry = searchEntry->getEntry();
             auto rawCurrEntry = currEntry->getEntry();
-            if (!rawSearchEntry->isHidden || rawSearchEntry->voice2 != rawCurrEntry->voice2) {
+            if (!rawSearchEntry->isHidden) {
                 return {}; // if we encounter a non-hidden entry or not matching v1v2, no match
             }
-            if (rawSearchEntry->duration != rawCurrEntry->duration) {
-                return {}; // if we encounter non-matching symbolic durations, no match
-            }
-            if (searchEntry->actualDuration != currEntry->actualDuration) {
-                return {}; // if we encounter non-matching actual durations, no match
-            }
-            if (searchEntry.calcGraceEllapsedDuration() != currEntry.calcGraceEllapsedDuration()) {
-                return {}; // if we encounter non-matching grace note durations, no match
-            }
             // Beam Over Barlines does not transpose entries if there is a key change, so concertCompare false is correct.
-            if (!searchEntry.calcIsSameChordOrRest(currEntry, /*concertCompare*/false)) {
+            if (!searchEntry.calcIsSamePitchContentAndDuration(currEntry, /*concertCompare*/false)) {
                 return {}; // rest display must match.
             }
-            const auto searchGraceDura = searchEntry.calcGraceEllapsedDuration();
+            const auto searchGraceDura = searchEntry.calcGraceElapsedDuration();
             if (searchEntry->elapsedDuration == frame->measureStaffDuration) {
                 // Beam Over Barline plugin crams hidden entries in the current frame for alls subsequent frames,
                 // so we need an extra check for grace notes at the beginning of the next frame.
                 if (auto nextFrame = frame->getNext()) {
                     auto nextFirst = EntryInfoPtr(nextFrame, 0);
-                    const auto nextGraceDura = nextFirst.calcGraceEllapsedDuration();
+                    const auto nextGraceDura = nextFirst.calcGraceElapsedDuration();
                     if (nextGraceDura < searchGraceDura) {
                         return {}; // out of sync can't be a match.
                     } else if (nextGraceDura == searchGraceDura) {
@@ -1106,7 +1125,7 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
                     }
                 }
             }
-            if (searchEntry->elapsedDuration == normalizedStartDuration && searchGraceDura == this->calcGraceEllapsedDuration()) {
+            if (searchEntry->elapsedDuration == normalizedStartDuration && searchGraceDura == this->calcGraceElapsedDuration()) {
                 return searchEntry; // got it!
             }
         }
@@ -1146,25 +1165,10 @@ EntryInfoPtr EntryInfoPtr::findDisplayEntryForBeamOverBarline() const
 
     // search forward to exactly our index value.
     for (size_t x = 0; x <= getIndexInFrame(); x++) {
-        auto rawSearchEntry = searchEntry->getEntry();
-        auto rawCurrEntry = currEntry->getEntry();
-        if (rawSearchEntry->voice2 != rawCurrEntry->voice2) {
-            return {}; // if we encounter a non matching v1v2, no match
+        if (!searchEntry.calcIsSamePitchContentAndDuration(currEntry, /*concertCompare*/false)) {
+            return {};
         }
-        if (rawSearchEntry->duration != rawCurrEntry->duration) {
-            return {}; // if we encounter non-matching symbolic durations, no match
-        }
-        if (searchEntry->actualDuration != currEntry->actualDuration) {
-            return {}; // if we encounter non-matching actual durations, no match
-        }
-        if (searchEntry.calcGraceEllapsedDuration() != currEntry.calcGraceEllapsedDuration()) {
-            return {}; // if we encounter non-matching grace note durations, no match
-        }
-        // Beam Over Barlines does not transpose entries if there is a key change, so concertCompare false is correct.
-        if (!searchEntry.calcIsSameChordOrRest(currEntry, /*concertCompare*/false)) {
-            return {}; // rest display must match.
-        }
-        if (searchEntry->elapsedDuration != currEntry->elapsedDuration + prevDurationOffset && searchEntry.calcGraceEllapsedDuration() == currEntry.calcGraceEllapsedDuration()) {
+        if (searchEntry->elapsedDuration != currEntry->elapsedDuration + prevDurationOffset && searchEntry.calcGraceElapsedDuration() == currEntry.calcGraceElapsedDuration()) {
             return {};
         }
         if (x == getIndexInFrame()) {
