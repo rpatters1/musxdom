@@ -284,7 +284,7 @@ EntryInfoPtr MeasureExprAssign::calcAssociatedEntry(bool findExact) const
     if (staffAssign > 0) {
         if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffAssign, getCmper())) {
             const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;
-            return gfHold.calcNearestEntry(eduPosition, findExact, matchLayer, voice2);
+            return gfHold.calcNearestEntry(util::Fraction::fromEdu(eduPosition), findExact, matchLayer, voice2);
         }
     }
     return {};

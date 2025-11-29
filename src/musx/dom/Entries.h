@@ -133,14 +133,14 @@ public:
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
     bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
 
-    /// @brief Calculates the nearest non-grace-note entry at the given @p eduPosition.
-    /// @param eduPosition The EDU position to find.
+    /// @brief Calculates the nearest non-grace-note entry at the given @p position.
+    /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
     /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
-    EntryInfoPtr calcNearestEntry(Edu eduPosition, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
+    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
         std::optional<bool> matchVoice2 = std::nullopt, util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Calculates the minimum legacy pickup spacer, if any.
@@ -460,13 +460,29 @@ public:
     /// @return false if either this or src is null and true if they are both non null and refer to the same entry.
     bool isSameEntry(const EntryInfoPtr& src) const;
 
-    /// @brief Returns whether the input and the current instance represent the same chord or rest value(s).
-    /// This function does not take into account duration. The two can have different durations.
+    /// @brief Returns whether this entry and @p src contain the same pitch content or rest value.
+    ///
+    /// For note entries, only pitch content is compared; duration is ignored.
+    /// For rest entries, non-floating rests are compared using their assigned display levels.
+    ///
     /// @param src The EntryInfoPtr to compare.
-    /// @param compareConcert If true, the concert pitches of notes are compared. If false, the scale degrees
-    /// of the pitches relative to the key are compared.
-    /// @return false if either this or src is null and true if they are both represent the same chord or rest.
-    bool calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareConcert = true) const;
+    /// @param compareConcert If true, compares concert pitches. If false, compares scale degrees relative to the prevailing key.
+    /// @return true if both pointers are non-null and represent the same pitch content or rest value, false otherwise.
+    bool calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert = true) const;
+
+    /// @brief Returns whether this entry and @p src represent the same notated value.
+    ///
+    /// This function performs the same pitch/rest comparison as #calcIsSamePitchContent and additionally
+    /// compares symbolic duration, actual duration, and optionally v1v2 voice number and grace-note elapsed duration.
+    ///
+    /// @param src The EntryInfoPtr to compare.
+    /// @param compareConcert If true, compares concert pitches. If false, compares scale degrees
+    ///        relative to the prevailing key.
+    /// @param requireSameVoice If true, the entries must have identical v1v2 voice numbers.
+    /// @param requireSameGraceElapsedDura If true, grace-note elapsed durations must match.
+    ///
+    /// @return true if both pointers are non-null and all required properties match; false otherwise.
+    bool calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bool compareConcert = true, bool requireSameVoice = true, bool requireSameGraceElapsedDura = false) const;
 
     /// @brief Returns the frame.
     std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
@@ -503,7 +519,7 @@ public:
     /// @brief Calculates a grace note's symbolic starting duration as a negative offset from the main note.
     /// This is useful for comparing grace note sequences.
     /// @return Negative symbolic offset from the main note, or zero if not a grace note.
-    util::Fraction calcGraceEllapsedDuration() const;
+    util::Fraction calcGraceElapsedDuration() const;
 
     /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
     std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex = 0) const;
@@ -722,8 +738,13 @@ public:
 
     /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with
     /// a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.
-    /// @return True if this is either the replacement rest in v2 or the hidden rest in v1.
-    bool calcIsBeamedRestWorkaroud() const;
+    /// @return True if this is either the hidden rest in v1.
+    bool calcIsBeamedRestWorkaroundHiddenRest() const;
+
+    /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with
+    /// a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.
+    /// @return True if this is either the visible replacement rest in v2.
+    bool calcIsBeamedRestWorkaroundVisibleRest() const;
 
     /// @brief Finds the tuplet info for tuplets that include this entry
     /// @return A list of indices of TupletInfo records that include the entry.
@@ -781,6 +802,13 @@ public:
     /// that plugin's workarounds and detect the entries in a beam that crosses a barline.
     /// @return The hidden source entry if found, otherwise nullptr.
     EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
+
+    /// @brief Find the display entry for a hidden source entry. The display entry is one or more bars previous
+    /// to the source entry.
+    /// This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind
+    /// that plugin's workarounds and detect the entries in a beam that crosses a barline.
+    /// @return The display entry if this is a hidden source entry, otherwise nullptr.
+    EntryInfoPtr findDisplayEntryForBeamOverBarline() const;
 
     /// @brief Finds the main entry for a grace note, taking into account hidden entries for beams over barlines.
     /// @param ignoreRests If true, the returned entry must not be a rest.
@@ -1050,6 +1078,21 @@ public:
     /// only the staff at edu position 0 should be checked.
     /// @return true if all entries in the frame are hidden.
     bool calcAreAllEntriesHiddenInFrame() const;
+
+    /// @brief Calculates the nearest non-grace-note entry at the given @p position.
+    /// @param position The measure position to find.
+    /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
+    /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
+    /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
+    /// @return The entry if found, otherwise `nullptr`.
+    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<bool> matchVoice2 = std::nullopt,
+        util::Fraction atGraceNoteDuration = 0) const;
+
+    /// @brief Iterates the entries for the specified layer in this @ref GFrameHold from left to right.
+    /// @param iterator The callback function for each iteration.
+    /// @return true if higher-level iteration should continue; false if it should halt.
+    /// @throws std::invalid_argument if the layer index is out of range.
+    bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
 
 private:
     details::GFrameHoldContext m_context;

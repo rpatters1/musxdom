@@ -191,6 +191,45 @@ bool EntryFrame::calcAreAllEntriesHiddenInFrame() const
     return true;
 }
 
+EntryInfoPtr EntryFrame::calcNearestEntry(util::Fraction position, bool findExact, std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
+{
+    EntryInfoPtr result;
+    util::Fraction bestDiff = (util::Fraction::max)();
+
+    auto iterator = [&](const EntryInfoPtr& entryInfo) {
+        if (entryInfo.calcGraceElapsedDuration() != atGraceNoteDuration) {
+            return true; // iterate past non-matching grace notes
+        }
+        if (matchVoice2.has_value() && entryInfo->getEntry()->voice2 != *matchVoice2) {
+            return true; // iterate past non-matching v1v2 values
+        }
+        using std::abs;
+        auto posDiff = abs(position - entryInfo->elapsedDuration);
+        if (posDiff <= util::Fraction::fromEdu(1)) {
+            result = entryInfo;
+            return false; // stop iterating
+        }
+        if (!findExact && posDiff < bestDiff) {
+            bestDiff = posDiff;
+            result = entryInfo;
+        }
+        return true;
+    };
+
+    iterateEntries(iterator);
+    return result;
+}
+
+bool EntryFrame::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const
+{
+    for (size_t x = 0; x < m_entries.size(); x++) {
+        if (!iterator(EntryInfoPtr(shared_from_this(), x))) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool EntryFrame::TupletInfo::calcIsTremolo() const
 {
     MUSX_ASSERT_IF(!tuplet) {
@@ -427,7 +466,7 @@ bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
     return (*this)->getEntry()->getEntryNumber() == src->getEntry()->getEntryNumber();
 }
 
-bool EntryInfoPtr::calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareConcert) const
+bool EntryInfoPtr::calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert) const
 {
     if (!*this || !src) {
         return false;
@@ -463,6 +502,34 @@ bool EntryInfoPtr::calcIsSameChordOrRest(const EntryInfoPtr& src, bool compareCo
     return true;
 }
 
+bool EntryInfoPtr::calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bool compareConcert, bool requireSameVoice, bool requireSameGraceElapsedDura) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    if (isSameEntry(src)) {
+        return true;
+    }
+
+    const auto entryThis = (*this)->getEntry();
+    const auto entrySrc = src->getEntry();
+
+    if (entryThis->duration != entrySrc->duration) {
+        return false;
+    }
+    if (requireSameVoice && entryThis->voice2 != entrySrc->voice2) {
+        return false;
+    }
+    if ((*this)->actualDuration != src->actualDuration) {
+        return false;
+    }
+    if (requireSameGraceElapsedDura && calcGraceElapsedDuration() != src.calcGraceElapsedDuration()) {
+        return false;
+    }
+
+    return calcIsSamePitchContent(src, compareConcert);
+}
+    
 LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
 StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
@@ -523,7 +590,7 @@ unsigned EntryInfoPtr::calcReverseGraceIndex() const
     return result;
 }
 
-util::Fraction EntryInfoPtr::calcGraceEllapsedDuration() const
+util::Fraction EntryInfoPtr::calcGraceElapsedDuration() const
 {
     util::Fraction result = 0;
     for (auto entryInfoPtr = *this; entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextSameV()) {
@@ -1005,15 +1072,15 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
         // Check for grace notes at the beginning of the next frame.
         if (auto nextFrame = frame->getNext()) {
             auto nextFirst = EntryInfoPtr(nextFrame, 0);
-            const auto nextGraceDura = nextFirst.calcGraceEllapsedDuration();
-            const auto thisGraceDura = calcGraceEllapsedDuration();
+            const auto nextGraceDura = nextFirst.calcGraceElapsedDuration();
+            const auto thisGraceDura = calcGraceElapsedDuration();
             if (thisGraceDura < nextGraceDura) {
                 return {}; // out of sync can't be a match.
             }
         }
     }
-    // Note that calcNearestEntry skips grace notes unless a grace note ellapsed dura is supplied.
-    auto currEntry = frame->getContext().calcNearestEntry(frame->measureStaffDuration.calcEduDuration(), /*findExact*/true, frame->getLayerIndex());
+    // Note that calcNearestEntry skips grace notes unless a grace note elapsed dura is supplied.
+    auto currEntry = frame->calcNearestEntry(frame->measureStaffDuration, /*findExact*/true);
     if (!currEntry) {
         return {};
     }
@@ -1023,7 +1090,7 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
         auto searchEntry = EntryInfoPtr(frame, 0);
         if (firstIteration) {
             // find first non gracenote in frame
-            searchEntry = frame->getContext().calcNearestEntry(0, /*findExact*/true, frame->getLayerIndex());
+            searchEntry = frame->calcNearestEntry(0, /*findExact*/true);
             firstIteration = false;
             // backup for grace notes, if any
             while (searchEntry.getIndexInFrame() > 0) {
@@ -1037,29 +1104,20 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
         for (; currEntry && searchEntry; currEntry = currEntry.getNextInFrame(), searchEntry = searchEntry.getNextInFrame()) {
             auto rawSearchEntry = searchEntry->getEntry();
             auto rawCurrEntry = currEntry->getEntry();
-            if (!rawSearchEntry->isHidden || rawSearchEntry->voice2 != rawCurrEntry->voice2) {
+            if (!rawSearchEntry->isHidden) {
                 return {}; // if we encounter a non-hidden entry or not matching v1v2, no match
             }
-            if (rawSearchEntry->duration != rawCurrEntry->duration) {
-                return {}; // if we encounter non-matching symbolic durations, no match
-            }
-            if (searchEntry->actualDuration != currEntry->actualDuration) {
-                return {}; // if we encounter non-matching actual durations, no match
-            }
-            if (searchEntry.calcGraceEllapsedDuration() != currEntry.calcGraceEllapsedDuration()) {
-                return {}; // if we encounter non-matching grace note durations, no match
-            }
             // Beam Over Barlines does not transpose entries if there is a key change, so concertCompare false is correct.
-            if (!searchEntry.calcIsSameChordOrRest(currEntry, /*concertCompare*/false)) {
+            if (!searchEntry.calcIsSamePitchContentAndDuration(currEntry, /*concertCompare*/false)) {
                 return {}; // rest display must match.
             }
-            const auto searchGraceDura = searchEntry.calcGraceEllapsedDuration();
+            const auto searchGraceDura = searchEntry.calcGraceElapsedDuration();
             if (searchEntry->elapsedDuration == frame->measureStaffDuration) {
                 // Beam Over Barline plugin crams hidden entries in the current frame for alls subsequent frames,
                 // so we need an extra check for grace notes at the beginning of the next frame.
                 if (auto nextFrame = frame->getNext()) {
                     auto nextFirst = EntryInfoPtr(nextFrame, 0);
-                    const auto nextGraceDura = nextFirst.calcGraceEllapsedDuration();
+                    const auto nextGraceDura = nextFirst.calcGraceElapsedDuration();
                     if (nextGraceDura < searchGraceDura) {
                         return {}; // out of sync can't be a match.
                     } else if (nextGraceDura == searchGraceDura) {
@@ -1067,7 +1125,7 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
                     }
                 }
             }
-            if (searchEntry->elapsedDuration == normalizedStartDuration && searchGraceDura == this->calcGraceEllapsedDuration()) {
+            if (searchEntry->elapsedDuration == normalizedStartDuration && searchGraceDura == this->calcGraceElapsedDuration()) {
                 return searchEntry; // got it!
             }
         }
@@ -1077,6 +1135,59 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
         normalizedStartDuration -= frame->measureStaffDuration;
     }
     return {};
+}
+
+EntryInfoPtr EntryInfoPtr::findDisplayEntryForBeamOverBarline() const
+{
+    if (!(*this)->getEntry()->isHidden || !calcCanBeBeamed()) {
+        return {};
+    }
+    // search from beginning of measure.
+    auto frame = getFrame();
+    auto prevFrame = frame->getPrevious();
+    if (!prevFrame) {
+        return {};
+    }
+    auto currEntry = frame->calcNearestEntry(0, /*findExact*/true);
+    MUSX_ASSERT_IF(!currEntry) {
+        throw std::logic_error("Unable to find first entry in our own frame.");
+    }
+    util::Fraction prevDurationOffset = prevFrame->measureStaffDuration;
+    auto searchEntry = prevFrame->calcNearestEntry(prevDurationOffset, /*findExact*/true);
+    // backup for grace notes, if any
+    while (searchEntry && currEntry.getIndexInFrame() > 0) {
+        currEntry = currEntry.getPreviousInFrame();
+        searchEntry = searchEntry.getPreviousInFrame();
+    }
+    if (!searchEntry) {
+        return {};
+    }
+
+    // search forward to exactly our index value.
+    for (size_t x = 0; x <= getIndexInFrame(); x++) {
+        if (!searchEntry.calcIsSamePitchContentAndDuration(currEntry, /*concertCompare*/false)) {
+            return {};
+        }
+        if (searchEntry->elapsedDuration != currEntry->elapsedDuration + prevDurationOffset && searchEntry.calcGraceElapsedDuration() == currEntry.calcGraceElapsedDuration()) {
+            return {};
+        }
+        if (x == getIndexInFrame()) {
+            break;
+        }
+        currEntry = currEntry.getNextInFrame();
+        MUSX_ASSERT_IF(!currEntry) {
+            throw std::logic_error("Unable to advance enough times inside our own frame.");
+        }
+        searchEntry = searchEntry.getNextInFrame();
+        if (!searchEntry) {
+            return {};
+        }
+    }
+    if (searchEntry && searchEntry->getEntry()->isHidden) {
+        // if we get here, we need to back up another measure and search again.
+        return searchEntry.findDisplayEntryForBeamOverBarline();
+    }
+    return searchEntry;
 }
 
 EntryInfoPtr EntryInfoPtr::findMainEntryForGraceNote(bool ignoreRests) const
@@ -1634,7 +1745,7 @@ bool EntryInfoPtr::calcIsFullMeasureRest() const
     return false;
 }
 
-bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
+bool EntryInfoPtr::calcIsBeamedRestWorkaroundHiddenRest() const
 {
     auto entry = (*this)->getEntry();
     if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
@@ -1650,7 +1761,17 @@ bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
                 }
             }
         }
-    } else if (!entry->isHidden && entry->voice2) {
+    }
+    return false;
+}
+
+bool EntryInfoPtr::calcIsBeamedRestWorkaroundVisibleRest() const
+{
+    auto entry = (*this)->getEntry();
+    if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
+        return false;
+    }
+    if (!entry->isHidden && entry->voice2) {
         // if this is a visible stand-alone v2 rest, check to see if there is an equivalent invisible v2 launch rest preceding it
         if (auto next = getNextInFrame(); !next || !next->getEntry()->voice2) {
             if (auto prev = getPreviousInFrame(); prev && prev->getEntry()->v2Launch) {
@@ -1967,11 +2088,7 @@ bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::func
 {
     auto entryFrame = createEntryFrame(layerIndex);
     if (entryFrame) {
-        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
-            if (!iterator(EntryInfoPtr(entryFrame, x))) {
-                return false;
-            }
-        }
+        return entryFrame->iterateEntries(iterator);
     }
     return true;
 }
@@ -2057,38 +2174,22 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
     return foundCue;
 }
 
-EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer,
+EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction position, bool findExact, std::optional<LayerIndex> matchLayer,
     std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
 {
-    EntryInfoPtr result;
-    unsigned bestDiff = (std::numeric_limits<unsigned>::max)();
-
-    auto iterator = [&](const EntryInfoPtr& entryInfo) {
-        if (entryInfo.calcGraceEllapsedDuration() != atGraceNoteDuration) {
-            return true; // iterate past grace notes
+    LayerIndex startLayer = matchLayer.value_or(0);
+    for (LayerIndex layerIndex = startLayer; layerIndex < m_hold->frames.size(); layerIndex++) {
+        if (auto entryFrame = createEntryFrame(layerIndex)) {
+            if (auto result = entryFrame->calcNearestEntry(position, findExact, matchVoice2, atGraceNoteDuration)) {
+                return result;
+            }
         }
-        if (matchVoice2.has_value() && entryInfo->getEntry()->voice2 != *matchVoice2) {
-            return true; // iterate past non-matching v1v2 values
+        if (matchLayer.has_value()) {
+            break; // only iterate once if matchLayer specified.
         }
-        unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
-        if (eduDiff <= 1) {
-            result = entryInfo;
-            return false; // stop iterating
-        }
-        if (!findExact && eduDiff < bestDiff) {
-            bestDiff = eduDiff;
-            result = entryInfo;
-        }
-        return true;
-    };
-
-    if (matchLayer.has_value()) {
-        iterateEntries(*matchLayer, iterator);
-    } else {
-        iterateEntries(iterator);
     }
 
-    return result;
+    return {};
 }
 
 util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const

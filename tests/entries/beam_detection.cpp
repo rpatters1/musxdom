@@ -588,6 +588,101 @@ TEST(BeamDetection, BeamsOverBarlinesHiddenSourceDetect)
     }
 }
 
+TEST(BeamDetection, BeamsOverBarlinesDisplayEntryDetect)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_over_graces.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+
+        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
+            auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
+            auto displayEntry = entryInfoPtr.findDisplayEntryForBeamOverBarline();
+            EXPECT_FALSE(displayEntry);
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
+        ASSERT_GE(entryFrame->getEntries().size(), 16);
+
+        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
+            auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
+            auto displayEntry = entryInfoPtr.findDisplayEntryForBeamOverBarline();
+            EXPECT_EQ(displayEntry.getMeasure(), 1);
+            EXPECT_EQ(displayEntry.getIndexInFrame(), entryInfoPtr.getIndexInFrame() + 6);
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 3";
+        ASSERT_GE(entryFrame->getEntries().size(), 6);
+
+        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
+            auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
+            auto displayEntry = entryInfoPtr.findDisplayEntryForBeamOverBarline();
+            EXPECT_TRUE((x < 4 && displayEntry) || (x >= 4 && !displayEntry));
+            if (displayEntry) {
+                EXPECT_EQ(displayEntry.getMeasure(), 1);
+                EXPECT_EQ(displayEntry.getIndexInFrame(), entryInfoPtr.getIndexInFrame() + 18);
+            }
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 5";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 5";
+
+        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
+            auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
+            auto displayEntry = entryInfoPtr.findDisplayEntryForBeamOverBarline();
+            EXPECT_FALSE(displayEntry);
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 6";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 6";
+        ASSERT_GE(entryFrame->getEntries().size(), 12);
+
+        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
+            auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
+            auto displayEntry = entryInfoPtr.findDisplayEntryForBeamOverBarline();
+            EXPECT_EQ(displayEntry.getMeasure(), 5);
+            EXPECT_EQ(displayEntry.getIndexInFrame(), entryInfoPtr.getIndexInFrame() + 4);
+        }
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 7);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 7";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 7";
+        ASSERT_GE(entryFrame->getEntries().size(), 7);
+
+        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
+            auto entryInfoPtr = EntryInfoPtr(entryFrame, x);
+            auto displayEntry = entryInfoPtr.findDisplayEntryForBeamOverBarline();
+            EXPECT_TRUE((x < 2 && displayEntry) || (x >= 2 && !displayEntry));
+            if (displayEntry) {
+                EXPECT_EQ(displayEntry.getMeasure(), 5);
+                EXPECT_EQ(displayEntry.getIndexInFrame(), entryInfoPtr.getIndexInFrame() + 14);
+            }
+        }
+    }
+}
+
 TEST(BeamDetection, GraceNoteMainNoteDetection)
 {
     std::vector<char> xml;
