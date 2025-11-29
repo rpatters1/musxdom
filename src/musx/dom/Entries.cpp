@@ -1745,7 +1745,7 @@ bool EntryInfoPtr::calcIsFullMeasureRest() const
     return false;
 }
 
-bool EntryInfoPtr::calcIsBeamedRestWorkaround() const
+bool EntryInfoPtr::calcIsBeamedRestWorkaroundHiddenRest() const
 {
     auto entry = (*this)->getEntry();
     if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
@@ -1761,7 +1761,17 @@ bool EntryInfoPtr::calcIsBeamedRestWorkaround() const
                 }
             }
         }
-    } else if (!entry->isHidden && entry->voice2) {
+    }
+    return false;
+}
+
+bool EntryInfoPtr::calcIsBeamedRestWorkaroundVisibleRest() const
+{
+    auto entry = (*this)->getEntry();
+    if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
+        return false;
+    }
+    if (!entry->isHidden && entry->voice2) {
         // if this is a visible stand-alone v2 rest, check to see if there is an equivalent invisible v2 launch rest preceding it
         if (auto next = getNextInFrame(); !next || !next->getEntry()->voice2) {
             if (auto prev = getPreviousInFrame(); prev && prev->getEntry()->v2Launch) {
