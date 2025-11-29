@@ -133,7 +133,7 @@ public:
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
     bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
 
-    /// @brief Calculates the nearest non-grace-note entry at the given @p eduPosition.
+    /// @brief Calculates the nearest non-grace-note entry at the given @p position.
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
@@ -1057,6 +1057,15 @@ public:
     /// only the staff at edu position 0 should be checked.
     /// @return true if all entries in the frame are hidden.
     bool calcAreAllEntriesHiddenInFrame() const;
+
+    /// @brief Calculates the nearest non-grace-note entry at the given @p position.
+    /// @param position The measure position to find.
+    /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
+    /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
+    /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
+    /// @return The entry if found, otherwise `nullptr`.
+    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<bool> matchVoice2 = std::nullopt,
+        util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Iterates the entries for the specified layer in this @ref GFrameHold from left to right.
     /// @param iterator The callback function for each iteration.
