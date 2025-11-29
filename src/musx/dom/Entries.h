@@ -739,7 +739,7 @@ public:
     /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with
     /// a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.
     /// @return True if this is either the replacement rest in v2 or the hidden rest in v1.
-    bool calcIsBeamedRestWorkaroud() const;
+    bool calcIsBeamedRestWorkaround() const;
 
     /// @brief Finds the tuplet info for tuplets that include this entry
     /// @return A list of indices of TupletInfo records that include the entry.

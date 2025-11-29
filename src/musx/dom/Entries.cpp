@@ -1745,7 +1745,7 @@ bool EntryInfoPtr::calcIsFullMeasureRest() const
     return false;
 }
 
-bool EntryInfoPtr::calcIsBeamedRestWorkaroud() const
+bool EntryInfoPtr::calcIsBeamedRestWorkaround() const
 {
     auto entry = (*this)->getEntry();
     if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
