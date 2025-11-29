@@ -155,6 +155,16 @@ public:
     }
 
     /**
+     * @brief Calculates the absolute value of a Fraction.
+     */
+    constexpr Fraction abs() const
+    {
+        if (numerator() < 0)
+            return fromConstExpr(-numerator(), denominator());
+        return *this;
+    }
+
+    /**
      * @brief Converts the fraction to floating point double.
      */
     constexpr double toDouble() const {
@@ -348,6 +358,12 @@ public:
         return is;
     }
 };
+
+/// @brief Free-standing abs function for Fraction
+constexpr Fraction abs(const Fraction& v) noexcept
+{
+    return v.abs();
+}
 
 } // namespace util
 } // namespace musx

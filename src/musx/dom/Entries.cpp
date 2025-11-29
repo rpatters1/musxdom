@@ -191,6 +191,16 @@ bool EntryFrame::calcAreAllEntriesHiddenInFrame() const
     return true;
 }
 
+bool EntryFrame::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const
+{
+    for (size_t x = 0; x < m_entries.size(); x++) {
+        if (!iterator(EntryInfoPtr(shared_from_this(), x))) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool EntryFrame::TupletInfo::calcIsTremolo() const
 {
     MUSX_ASSERT_IF(!tuplet) {
@@ -1013,7 +1023,7 @@ EntryInfoPtr EntryInfoPtr::findHiddenSourceForBeamOverBarline() const
         }
     }
     // Note that calcNearestEntry skips grace notes unless a grace note ellapsed dura is supplied.
-    auto currEntry = frame->getContext().calcNearestEntry(frame->measureStaffDuration.calcEduDuration(), /*findExact*/true, frame->getLayerIndex());
+    auto currEntry = frame->getContext().calcNearestEntry(frame->measureStaffDuration, /*findExact*/true, frame->getLayerIndex());
     if (!currEntry) {
         return {};
     }
@@ -1095,7 +1105,7 @@ EntryInfoPtr EntryInfoPtr::findDisplayEntryForBeamOverBarline() const
         return {};
     }
     util::Fraction prevDurationOffset = prevFrame->measureStaffDuration;
-    auto searchEntry = prevFrame->getContext().calcNearestEntry(prevDurationOffset.calcEduDuration(), /*findExact*/true, prevFrame->getLayerIndex());
+    auto searchEntry = prevFrame->getContext().calcNearestEntry(prevDurationOffset, /*findExact*/true, prevFrame->getLayerIndex());
 
     // backup for grace notes, if any
     while (currEntry.getIndexInFrame() > 0) {
@@ -2036,11 +2046,7 @@ bool details::GFrameHoldContext::iterateEntries(LayerIndex layerIndex, std::func
 {
     auto entryFrame = createEntryFrame(layerIndex);
     if (entryFrame) {
-        for (size_t x = 0; x < entryFrame->getEntries().size(); x++) {
-            if (!iterator(EntryInfoPtr(entryFrame, x))) {
-                return false;
-            }
-        }
+        return entryFrame->iterateEntries(iterator);
     }
     return true;
 }
@@ -2126,26 +2132,27 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
     return foundCue;
 }
 
-EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(Edu eduPosition, bool findExact, std::optional<LayerIndex> matchLayer,
+EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction position, bool findExact, std::optional<LayerIndex> matchLayer,
     std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
 {
     EntryInfoPtr result;
-    unsigned bestDiff = (std::numeric_limits<unsigned>::max)();
+    util::Fraction bestDiff = (util::Fraction::max)();
 
     auto iterator = [&](const EntryInfoPtr& entryInfo) {
         if (entryInfo.calcGraceEllapsedDuration() != atGraceNoteDuration) {
-            return true; // iterate past grace notes
+            return true; // iterate past non-matching grace notes
         }
         if (matchVoice2.has_value() && entryInfo->getEntry()->voice2 != *matchVoice2) {
             return true; // iterate past non-matching v1v2 values
         }
-        unsigned eduDiff = static_cast<unsigned>(std::labs(eduPosition - entryInfo->elapsedDuration.calcEduDuration()));
-        if (eduDiff <= 1) {
+        using std::abs;
+        auto posDiff = abs(position - entryInfo->elapsedDuration);
+        if (posDiff <= util::Fraction::fromEdu(1)) {
             result = entryInfo;
             return false; // stop iterating
         }
-        if (!findExact && eduDiff < bestDiff) {
-            bestDiff = eduDiff;
+        if (!findExact && posDiff < bestDiff) {
+            bestDiff = posDiff;
             result = entryInfo;
         }
         return true;
