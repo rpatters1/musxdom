@@ -1130,19 +1130,18 @@ EntryInfoPtr EntryInfoPtr::findDisplayEntryForBeamOverBarline() const
         return {};
     }
     auto currEntry = frame->calcNearestEntry(0, /*findExact*/true);
-    if (!currEntry) {
-        return {};
+    MUSX_ASSERT_IF(!currEntry) {
+        throw std::logic_error("Unable to find first entry in our own frame.");
     }
     util::Fraction prevDurationOffset = prevFrame->measureStaffDuration;
     auto searchEntry = prevFrame->calcNearestEntry(prevDurationOffset, /*findExact*/true);
-
     // backup for grace notes, if any
-    while (currEntry.getIndexInFrame() > 0) {
+    while (searchEntry && currEntry.getIndexInFrame() > 0) {
         currEntry = currEntry.getPreviousInFrame();
         searchEntry = searchEntry.getPreviousInFrame();
-        if (!searchEntry) {
-            return {};
-        }
+    }
+    if (!searchEntry) {
+        return {};
     }
 
     // search forward to exactly our index value.
