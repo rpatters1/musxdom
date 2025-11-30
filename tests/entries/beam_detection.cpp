@@ -43,7 +43,8 @@ static void checkEntry(const std::shared_ptr<const EntryFrame>& entryFrame, size
     }
 }
 
-static void expectEntriesInBeam(const std::shared_ptr<const EntryFrame>& entryFrame, const std::vector<size_t>& expectedIndices, bool includeHidden = false)
+static void expectEntriesInBeam(const std::shared_ptr<const EntryFrame>& entryFrame, const std::vector<size_t>& expectedIndices,
+    EntryInfoPtr::BeamIterationMode beamIterationMode = EntryInfoPtr::BeamIterationMode::Normal)
 {
     ASSERT_FALSE(expectedIndices.empty());
     auto next = EntryInfoPtr(entryFrame, expectedIndices[0]);
@@ -56,7 +57,7 @@ static void expectEntriesInBeam(const std::shared_ptr<const EntryFrame>& entryFr
         EXPECT_TRUE(x < expectedIndices.size()) << "number of entries in forward iteration exceeds number of expected values";
         if (x >= expectedIndices.size()) return;
         EXPECT_EQ(next.getIndexInFrame(), expectedIndices[x]) << "beam index " << x << " is not the expected value in forward iteration";
-        next = next.getNextInBeamGroup(includeHidden);
+        next = next.getNextInBeamGroup(beamIterationMode);
         x++;
     }
     EXPECT_EQ(x, expectedIndices.size()) << "forward interation did not find enough values";
@@ -68,7 +69,7 @@ static void expectEntriesInBeam(const std::shared_ptr<const EntryFrame>& entryFr
         EXPECT_TRUE(x < expectedIndices.size()) << "number of entries in backward iteration exceeds number of expected values";
         if (x >= expectedIndices.size()) return;
         EXPECT_EQ(prev.getIndexInFrame(), expectedIndices[x]) << "beam index " << x << " is not the expected value in backward iteration";
-        prev = prev.getPreviousInBeamGroup(includeHidden);
+        prev = prev.getPreviousInBeamGroup(beamIterationMode);
         x--;
     }
     EXPECT_EQ(x + 1, 0) << "backward interation did not find enough values";
@@ -274,18 +275,20 @@ TEST(BeamDetection, InvisibleEntries)
     auto measures = others->getArray<others::Measure>(SCORE_PARTID);
     EXPECT_GE(measures.size(), 4);
 
+    constexpr auto inclHidden = EntryInfoPtr::BeamIterationMode::IncludeAllHidden;
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
 
-        checkEntry(entryFrame, 0, false, true, 3);              // start
-        checkEntry(entryFrame, 1, false, false, 3);             // invisible (but also part of beam 0..3 beam)
-        checkEntry(entryFrame, 2, true, false, 2);              // v2 rest
-        checkEntry(entryFrame, 3, false, false, 3);             // end of beam
-        expectEntriesInBeam(entryFrame, { 0, 3 });              // invisible entry 1 should not be found
-        expectEntriesInBeam(entryFrame, { 0, 1, 3 }, true);     // invisible entry 1 should be found with includeHidden = true
+        checkEntry(entryFrame, 0, false, true, 3);                  // start
+        checkEntry(entryFrame, 1, false, false, 3);                 // invisible (but also part of beam 0..3 beam)
+        checkEntry(entryFrame, 2, true, false, 2);                  // v2 rest
+        checkEntry(entryFrame, 3, false, false, 3);                 // end of beam
+        expectEntriesInBeam(entryFrame, { 0, 3 });                  // invisible entry 1 should not be found
+        expectEntriesInBeam(entryFrame, { 0, 1, 3 }, inclHidden);   // invisible entry 1 should be found with inclHidden
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
@@ -304,7 +307,7 @@ TEST(BeamDetection, InvisibleEntries)
         checkEntry(entryFrame, 6, false, false, 6);             // end of beam
         checkEntry(entryFrame, 7, true, false, 0);              // invisible (unbeamed)
         expectEntriesInBeam(entryFrame, { 4, 5, 6 });
-        expectEntriesInBeam(entryFrame, { 4, 5, 6, 7 }, true);
+        expectEntriesInBeam(entryFrame, { 4, 5, 6, 7 }, inclHidden);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
@@ -336,7 +339,7 @@ TEST(BeamDetection, InvisibleEntries)
         checkEntry(entryFrame, 6, false, false, 7);             //
         checkEntry(entryFrame, 7, false, false, 7);             // end
         expectEntriesInBeam(entryFrame, { 0, 1, 2, 4, 5, 6, 7 });
-        expectEntriesInBeam(entryFrame, { 0, 1, 2, 3, 4, 5, 6, 7 }, true);
+        expectEntriesInBeam(entryFrame, { 0, 1, 2, 3, 4, 5, 6, 7 }, inclHidden);
 
         checkEntry(entryFrame, 8, true, false, 0);              // quarter
     }

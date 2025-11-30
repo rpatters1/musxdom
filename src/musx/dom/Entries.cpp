@@ -733,7 +733,7 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
     return prev;
 }
 
-EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(bool includeHiddenEntries) const
+EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode) const
 {
     if (auto nextBarCont = calcBeamContinuesRightOverBarline()) {
         return nextBarCont;
@@ -742,14 +742,14 @@ EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(bool includeHiddenEntrie
     if (anchor && !anchor.findBeamEnd().isSameEntry(*this)) {
         auto result = getNextSameVNoGrace();
         if (result && result.calcCreatesSingletonBeamLeft()) {
-            result = result.getNextInBeamGroup(includeHiddenEntries);
+            result = result.getNextInBeamGroup(beamIterationMode);
         }
         return result;
     }
-    return getNextInBeamGroup(includeHiddenEntries);
+    return getNextInBeamGroup(beamIterationMode);
 }
 
-EntryInfoPtr EntryInfoPtr::getPreviousInBeamGroupAcrossBars(bool includeHiddenEntries) const
+EntryInfoPtr EntryInfoPtr::getPreviousInBeamGroupAcrossBars(BeamIterationMode beamIterationMode) const
 {
     if (auto prevBarCont = calcBeamContinuesLeftOverBarline()) {
         return prevBarCont;
@@ -758,11 +758,11 @@ EntryInfoPtr EntryInfoPtr::getPreviousInBeamGroupAcrossBars(bool includeHiddenEn
     if (anchor && !anchor.isSameEntry(*this)) {
         auto result = getPreviousSameVNoGrace();
         if (result && result.findBeamStartOrCurrent().calcCreatesSingletonBeamRight()) {
-            result = result.getPreviousInBeamGroup(includeHiddenEntries);
+            result = result.getPreviousInBeamGroup(beamIterationMode);
         }
         return result;
     }
-    return getPreviousInBeamGroup(includeHiddenEntries);
+    return getPreviousInBeamGroup(beamIterationMode);
 }
 
 bool EntryInfoPtr::calcDisplaysAsRest() const
@@ -1588,37 +1588,49 @@ EntryInfoPtr EntryInfoPtr::iteratePotentialEntryInBeam() const
     return result;
 }
 
-EntryInfoPtr EntryInfoPtr::nextPotentialInBeam(bool includeHiddenEntries) const
+EntryInfoPtr EntryInfoPtr::nextPotentialInBeam(BeamIterationMode beamIterationMode) const
 {
     auto next = iteratePotentialEntryInBeam<&EntryInfoPtr::getNextSameV>();
     if (!next || next->getEntry()->beam) {
         return EntryInfoPtr();
     }
-    if (next && next->getEntry()->isHidden && !includeHiddenEntries) {
-        return next.nextPotentialInBeam(includeHiddenEntries);
+    if (next && next->getEntry()->isHidden) {
+        bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
+        if (!skipHidden && beamIterationMode == BeamIterationMode::IncludeBeamWorkaroundHiddenRests && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
+            skipHidden = true;
+        }
+        if (skipHidden) {
+            return next.nextPotentialInBeam(beamIterationMode);
+        }
     }
     return next;
 }
 
-EntryInfoPtr EntryInfoPtr::previousPotentialInBeam(bool includeHiddenEntries) const
+EntryInfoPtr EntryInfoPtr::previousPotentialInBeam(BeamIterationMode beamIterationMode) const
 {
     if ((*this)->getEntry()->beam) {
         return EntryInfoPtr();
     }
     auto prev = iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
-    if (prev && prev->getEntry()->isHidden && !includeHiddenEntries) {
-        return prev.previousPotentialInBeam(includeHiddenEntries);
+    if (prev && prev->getEntry()->isHidden) {
+        bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
+        if (!skipHidden && beamIterationMode == BeamIterationMode::IncludeBeamWorkaroundHiddenRests && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
+            skipHidden = true;
+        }
+        if (skipHidden) {
+            return prev.previousPotentialInBeam(beamIterationMode);
+        }
     }
     return prev;
 }
 
-template<EntryInfoPtr(EntryInfoPtr::* Iterator)(bool) const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)(bool) const>
-EntryInfoPtr EntryInfoPtr::iterateBeamGroup(bool includeHiddenEntries) const
+template<EntryInfoPtr::BeamIteratorFn Iterator, EntryInfoPtr::BeamIteratorFn ReverseIterator>
+EntryInfoPtr EntryInfoPtr::iterateBeamGroup(BeamIterationMode beamIterationMode) const
 {
     if (!calcCanBeBeamed()) {
         return EntryInfoPtr();
     }
-    EntryInfoPtr result = (this->*Iterator)(includeHiddenEntries); // either nextPotentialInBeam or previousPotentialInBeam
+    EntryInfoPtr result = (this->*Iterator)(beamIterationMode); // either nextPotentialInBeam or previousPotentialInBeam
     if (result) {
         auto thisRawEntry = (*this)->getEntry();
         auto resultEntry = result->getEntry();
@@ -1627,8 +1639,8 @@ EntryInfoPtr EntryInfoPtr::iterateBeamGroup(bool includeHiddenEntries) const
             MUSX_ASSERT_IF(!beamOpts) {
                 throw std::logic_error("Document has no BeamOptions.");
             }
-            auto searchForNoteFrom = [includeHiddenEntries](EntryInfoPtr from, EntryInfoPtr(EntryInfoPtr::* iterator)(bool) const) -> bool {
-                for (auto next = from; next; next = (next.*iterator)(includeHiddenEntries)) {
+            auto searchForNoteFrom = [beamIterationMode](EntryInfoPtr from, EntryInfoPtr::BeamIteratorFn iterator) -> bool {
+                for (auto next = from; next; next = (next.*iterator)(beamIterationMode)) {
                     if (!next.calcDisplaysAsRest()) {
                         return true;
                     }

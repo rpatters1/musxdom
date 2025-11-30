@@ -415,6 +415,16 @@ class NoteInfoPtr;
 class EntryInfoPtr
 {
 public:
+    /// @enum BeamIterationMode
+    /// @brief Controls which entries are included when iterating over beams.
+    enum class BeamIterationMode
+    {
+        Normal,                             ///< Skip hidden entries. This is how Finale displays beams.
+        IncludeAllHidden,                   ///< Include all entries, even if they are hidden.
+        IncludeBeamWorkaroundHiddenRests    ///< Include hidden entries only when hidden due to the beamed-rest workaround.
+                                            ///< (See #calcIsBeamedRestWorkaroundHiddenRest.)
+    };
+
     /** @brief Default constructor */
     EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
         
@@ -571,22 +581,22 @@ public:
     EntryInfoPtr getPreviousInVoice(int voice) const;
 
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
-    EntryInfoPtr getNextInBeamGroup(bool includeHiddenEntries = false) const
-    { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(includeHiddenEntries); }
+    EntryInfoPtr getNextInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
+    { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(beamIterationMode); }
 
     /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
-    EntryInfoPtr getPreviousInBeamGroup(bool includeHiddenEntries = false) const
-    { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(includeHiddenEntries); }
+    EntryInfoPtr getPreviousInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
+    { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(beamIterationMode); }
 
     /// @brief Gets the next entry in a beamed group, or nullptr if the entry is not beamed or is the last in the group.
     /// This function is simular to #getNextInBeamGroup but it traverses into the next bar when it detects a beam across a barline,
     /// as created by the Beam Over Barline plugin.
-    EntryInfoPtr getNextInBeamGroupAcrossBars(bool includeHiddenEntries = false) const;
+    EntryInfoPtr getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
 
     /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
     /// This function is simular to #getPreviousInBeamGroup but it traverses into the previous bar when it detects a beam across a barline,
     /// as created by the Beam Over Barline plugin.
-    EntryInfoPtr getPreviousInBeamGroupAcrossBars(bool includeHiddenEntries = false) const;
+    EntryInfoPtr getPreviousInBeamGroupAcrossBars(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
 
     /// @brief Calculates if an entry displays as a rest.
     /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
@@ -839,12 +849,13 @@ private:
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
     bool iterateNotesExistLeftOrRight() const;
 
-    EntryInfoPtr nextPotentialInBeam(bool includeHiddenEntries) const;
+    EntryInfoPtr nextPotentialInBeam(BeamIterationMode beamIterationMode) const;
 
-    EntryInfoPtr previousPotentialInBeam(bool includeHiddenEntries) const;
+    EntryInfoPtr previousPotentialInBeam(BeamIterationMode beamIterationMode) const;
 
-    template<EntryInfoPtr(EntryInfoPtr::* Iterator)(bool) const, EntryInfoPtr(EntryInfoPtr::* ReverseIterator)(bool) const>
-    EntryInfoPtr iterateBeamGroup(bool includeHiddenEntries) const;
+    using BeamIteratorFn = EntryInfoPtr (EntryInfoPtr::*)(BeamIterationMode) const;
+    template<BeamIteratorFn Iterator, BeamIteratorFn ReverseIterator>
+    EntryInfoPtr iterateBeamGroup(BeamIterationMode beamIterationMode) const;
 
     /// @brief Returns the beam anchor for a beam over barline left. This code captures the logic from the
     /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries
