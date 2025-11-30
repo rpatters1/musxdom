@@ -1,5 +1,13 @@
 var NAVTREEINDEX34 =
 {
+"structmusx_1_1util_1_1DateTime.html":[2,0,1,2,0],
+"structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75":[2,0,1,2,0,0],
+"structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a30bb747c98bccdd11b3f89e644c4d0ad":[2,0,1,2,0,0,0],
+"structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a8394f0347c184cf156ac5924dccb773b":[2,0,1,2,0,0,1],
+"structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a9e37beb27c126d7cf9e63e0943d9b683":[2,0,1,2,0,0,2],
+"structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html":[2,0,1,2,2,0],
+"structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a1955dca68d1c248dd2d2e097a311522e":[2,0,1,2,2,0,2],
+"structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a263d032aaded744d0e112d41b7900be0":[2,0,1,2,2,0,0],
 "structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a26c726f6852c0984dab0c0a022d9dbae":[2,0,1,2,2,0,1],
 "structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a643d6e29d771186916a8402725afb080":[2,0,1,2,2,0,6],
 "structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a8cf0bc9198c167dee7a437dc3ed07ec9":[2,0,1,2,2,0,3],

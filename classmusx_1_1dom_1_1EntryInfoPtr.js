@@ -1,5 +1,10 @@
 var classmusx_1_1dom_1_1EntryInfoPtr =
 [
+    [ "BeamIterationMode", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dce", [
+      [ "Normal", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dcea960b44c579bc2f6818d2daaf9e4c16f0", null ],
+      [ "IncludeAllHidden", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dceafb58d8934478a606c575e1c16d016ee8", null ],
+      [ "IncludeBeamWorkaroundHiddenRests", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dceae6d9a984f67cc8af07f67a324754c850", null ]
+    ] ],
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html#ad2b5a35a87aa853929fb934aa1d5fbc6", null ],
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0b49081647bf2faa55ae9d0cfc6d8d7e", null ],
     [ "calcBeamContinuesLeftOverBarline", "classmusx_1_1dom_1_1EntryInfoPtr.html#a15d67f4ab95cc0685c21f2cb95f4e019", null ],
@@ -53,16 +58,16 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "getKeySignature", "classmusx_1_1dom_1_1EntryInfoPtr.html#a91de76e696c547eccfe0bf49ae82c7ed", null ],
     [ "getLayerIndex", "classmusx_1_1dom_1_1EntryInfoPtr.html#a74236138126070c987733a0aaa8d570d", null ],
     [ "getMeasure", "classmusx_1_1dom_1_1EntryInfoPtr.html#af07b2f3513daaca9f26cb8dc0b96489c", null ],
-    [ "getNextInBeamGroup", "classmusx_1_1dom_1_1EntryInfoPtr.html#a6192cc28f317f8874486401988abbeb5", null ],
-    [ "getNextInBeamGroupAcrossBars", "classmusx_1_1dom_1_1EntryInfoPtr.html#a28ed66e817384705ba4db4bed23c4097", null ],
+    [ "getNextInBeamGroup", "classmusx_1_1dom_1_1EntryInfoPtr.html#a169c47079b92f0bca14160a59ca0c9fb", null ],
+    [ "getNextInBeamGroupAcrossBars", "classmusx_1_1dom_1_1EntryInfoPtr.html#a823022f5d84c16375db3c447c3030d1d", null ],
     [ "getNextInFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a003e61490f1a175379baff25dae915ba", null ],
     [ "getNextInLayer", "classmusx_1_1dom_1_1EntryInfoPtr.html#a5adc36e78c516ba4f39a4e7ba34f019a", null ],
     [ "getNextInVoice", "classmusx_1_1dom_1_1EntryInfoPtr.html#ac32c7dc63fac40c07b1c4f4cabeca705", null ],
     [ "getNextSameV", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0e3ba69e5e87f779065e9fef99a0a171", null ],
     [ "getNextSameVNoGrace", "classmusx_1_1dom_1_1EntryInfoPtr.html#af0d720901aec74e53e8e251cb3e5635f", null ],
     [ "getPartFieldData", "classmusx_1_1dom_1_1EntryInfoPtr.html#a2e66f9a4903c145849fd1d908ff14dab", null ],
-    [ "getPreviousInBeamGroup", "classmusx_1_1dom_1_1EntryInfoPtr.html#a687a8659229e26eef9febed16eeea460", null ],
-    [ "getPreviousInBeamGroupAcrossBars", "classmusx_1_1dom_1_1EntryInfoPtr.html#a3253b5dc4e4c84c68de1799c00592421", null ],
+    [ "getPreviousInBeamGroup", "classmusx_1_1dom_1_1EntryInfoPtr.html#a959a038f79f141c1acdc9a5db727053e", null ],
+    [ "getPreviousInBeamGroupAcrossBars", "classmusx_1_1dom_1_1EntryInfoPtr.html#a06e4545c3f643be18f9dff6f4b9d517c", null ],
     [ "getPreviousInFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a869aec40b9a1c5f4032ea07a037a5981", null ],
     [ "getPreviousInLayer", "classmusx_1_1dom_1_1EntryInfoPtr.html#a4bfc297a5f61b9e7d63bad46953bc63b", null ],
     [ "getPreviousInVoice", "classmusx_1_1dom_1_1EntryInfoPtr.html#a1c8203176b8e64a3c2240b8bc6c45b10", null ],
