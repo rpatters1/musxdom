@@ -322,7 +322,7 @@ public:
      * @brief Checks if the fraction is nonzero.
      * @return True if the fraction is nonzero, false otherwise.
      */
-    constexpr explicit operator bool() const {
+    constexpr explicit operator bool() const noexcept {
         return m_numerator != 0;
     }
 

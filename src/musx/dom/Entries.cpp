@@ -29,6 +29,16 @@
 namespace musx {
 namespace dom {
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+static bool forVoice2(int voice)
+{
+    MUSX_ASSERT_IF(voice != 1 && voice != 2) {
+        throw std::logic_error("Voice must be 1 or 2. Got " + std::to_string(voice));
+    }
+    return voice != 2;
+}
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
+
 // *****************
 // ***** Entry *****
 // *****************
@@ -106,9 +116,9 @@ MusxInstance<others::LayerAttributes> EntryFrame::getLayerAttributes() const
     return m_cachedLayerAttributes;
 }
 
-EntryInfoPtr EntryFrame::getFirstInVoice(int voice, bool skipBeamedRestWorkaround) const
+EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
 {
-    bool forV2 = voice == 2;
+    const bool forV2 = forVoice2(voice);
     auto firstEntry = EntryInfoPtr(shared_from_this(), 0);
     if (firstEntry->getEntry()->voice2) {
         if (!forV2) {
@@ -119,22 +129,29 @@ EntryInfoPtr EntryFrame::getFirstInVoice(int voice, bool skipBeamedRestWorkaroun
     } else if (forV2) {
         firstEntry = firstEntry.getNextInVoice(voice);
     }
-    if (forV2 && skipBeamedRestWorkaround) {
-        while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
-            firstEntry = firstEntry.getNextInVoice(voice);
-        }
-    }
     return firstEntry;
 }
 
 EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
 {
-    bool forV2 = voice == 2;
+    const bool forV2 = forVoice2(voice);
     auto lastEntry = EntryInfoPtr(shared_from_this(), m_entries.size() - 1);
     if (!lastEntry || lastEntry->getEntry()->voice2 == forV2) {
         return lastEntry;
     }
     return lastEntry.getPreviousInVoice(voice);
+}
+
+EntryInfoPtr::BeamedRestWorkaroundAwareResult EntryFrame::getFirstInVoiceBeamedRestWorkaroundAware(int voice) const
+{
+    auto firstEntry = getFirstInVoice(voice);
+    if (!firstEntry) {
+        return {};
+    }
+    while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
+        firstEntry = firstEntry.getNextInVoice(voice);
+    }
+    return { firstEntry, firstEntry->getEntry()->isHidden };
 }
 
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
@@ -458,7 +475,7 @@ const std::shared_ptr<const EntryInfo> EntryInfoPtr::operator->() const
     return m_entryFrame->getEntries()[m_indexInFrame];
 }
 
-EntryInfoPtr::operator bool() const
+EntryInfoPtr::operator bool() const noexcept
 {
     return m_entryFrame && m_indexInFrame < m_entryFrame->getEntries().size();
 }
@@ -535,7 +552,7 @@ bool EntryInfoPtr::calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bo
     return calcIsSamePitchContent(src, compareConcert);
 }
     
-LayerIndex  EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
+LayerIndex EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
 StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
 
@@ -715,7 +732,7 @@ EntryInfoPtr EntryInfoPtr::getPreviousSameVNoGrace() const
 }
 EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
 {
-    bool forV2 = voice == 2;
+    const bool forV2 = forVoice2(voice);
     auto next = getNextInFrame();
     while (next && next->getEntry()->voice2 != forV2) {
         next = next.getNextInFrame();
@@ -725,7 +742,7 @@ EntryInfoPtr EntryInfoPtr::getNextInVoice(int voice) const
 
 EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
 {
-    bool forV2 = voice == 2;
+    const bool forV2 = forVoice2(voice);
     auto prev = getPreviousInFrame();
     while (prev && prev->getEntry()->voice2 != forV2) {
         prev = prev.getPreviousInFrame();
@@ -733,6 +750,26 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
     return prev;
 }
 
+EntryInfoPtr::BeamedRestWorkaroundAwareResult EntryInfoPtr::getNextInVoiceBeamedRestWorkaroundAware(int voice) const
+{
+    for (auto next = *this; next; next = next.getNextInVoice(voice)) {
+        if (next.calcIsBeamedRestWorkaroundVisibleRest()) {
+            continue; // skip any entry that is part of a beaming workaround
+        }
+        const auto nextEntry = next->getEntry();
+        bool effectiveHidden = nextEntry->isHidden;
+        if (effectiveHidden) {
+            if (next.calcIsBeamedRestWorkaroundHiddenRest()) {
+                effectiveHidden = false;
+                util::Logger::log(util::Logger::LogLevel::Verbose, "Recognized hidden rest " + std::to_string(nextEntry->getEntryNumber())
+                    + " as beaming workaround and converted it to visible.");
+            }
+        }
+        return { next, effectiveHidden };
+    }
+    return {};
+}
+   
 EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode) const
 {
     if (auto nextBarCont = calcBeamContinuesRightOverBarline()) {
@@ -1765,10 +1802,10 @@ bool EntryInfoPtr::calcIsFullMeasureRest() const
 bool EntryInfoPtr::calcIsBeamedRestWorkaroundHiddenRest() const
 {
     auto entry = (*this)->getEntry();
-    if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
-        return false;
-    }
     if (entry->isHidden && entry->v2Launch) {
+        if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
+            return false;
+        }
         // if this is a hidden v2 launch rest, check to see if there is an equivalent visible stand-alone v2 rest of the same type
         if (auto next = getNextInFrame()) {
             auto nextEntry = next->getEntry();
@@ -1785,10 +1822,10 @@ bool EntryInfoPtr::calcIsBeamedRestWorkaroundHiddenRest() const
 bool EntryInfoPtr::calcIsBeamedRestWorkaroundVisibleRest() const
 {
     auto entry = (*this)->getEntry();
-    if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
-        return false;
-    }
     if (!entry->isHidden && entry->voice2) {
+        if (entry->isNote || calcNumberOfBeams() < 2) { // must be at least a 16th note
+            return false;
+        }
         // if this is a visible stand-alone v2 rest, check to see if there is an equivalent invisible v2 launch rest preceding it
         if (auto next = getNextInFrame(); !next || !next->getEntry()->voice2) {
             if (auto prev = getPreviousInFrame(); prev && prev->getEntry()->v2Launch) {
