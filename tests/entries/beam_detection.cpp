@@ -408,7 +408,7 @@ TEST(BeamDetection, BeamsOverBarlines)
 
     auto checkBeamOvers = [](const EntryInfoPtr entryInfo, bool isBeamOverRight, bool isBeamOverLeft) -> void {
         auto nextRight = entryInfo.calcBeamContinuesRightOverBarline();
-        EXPECT_EQ(nextRight, isBeamOverRight);
+        EXPECT_EQ(bool(nextRight), isBeamOverRight);
         if (nextRight) {
             auto tryPrev = nextRight.calcBeamContinuesLeftOverBarline();
             EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
@@ -416,7 +416,7 @@ TEST(BeamDetection, BeamsOverBarlines)
             EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
         }
         auto prevLeft = entryInfo.calcBeamContinuesLeftOverBarline();
-        EXPECT_EQ(prevLeft, isBeamOverLeft);
+        EXPECT_EQ(bool(prevLeft), isBeamOverLeft);
         if (prevLeft) {
             auto tryNext = prevLeft.calcBeamContinuesRightOverBarline();
             EXPECT_TRUE(entryInfo.isSameEntry(tryNext));
@@ -708,7 +708,7 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
 
     auto checkEntry = [](const EntryInfoPtr entPtr, bool expectedValue, size_t expectedIndex = 0) {
         const auto mainEntry = entPtr.findMainEntryForGraceNote();
-        EXPECT_EQ(mainEntry, expectedValue);
+        EXPECT_EQ(bool(mainEntry), expectedValue);
         if (mainEntry) {
             EXPECT_EQ(mainEntry.getIndexInFrame(), expectedIndex);
         }
