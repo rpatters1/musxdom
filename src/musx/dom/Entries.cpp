@@ -106,18 +106,23 @@ MusxInstance<others::LayerAttributes> EntryFrame::getLayerAttributes() const
     return m_cachedLayerAttributes;
 }
 
-EntryInfoPtr EntryFrame::getFirstInVoice(int voice) const
+EntryInfoPtr EntryFrame::getFirstInVoice(int voice, bool skipBeamedRestWorkaround) const
 {
     bool forV2 = voice == 2;
     auto firstEntry = EntryInfoPtr(shared_from_this(), 0);
     if (firstEntry->getEntry()->voice2) {
-        MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(getStaff()) + " measure " + std::to_string(getMeasure())
-            + " layer " + std::to_string(m_layerIndex + 1) + " starts with voice2.");
         if (!forV2) {
             firstEntry = firstEntry.getNextInVoice(voice);
         }
+        MUSX_INTEGRITY_ERROR("Entry frame for staff " + std::to_string(getStaff()) + " measure " + std::to_string(getMeasure())
+            + " layer " + std::to_string(m_layerIndex + 1) + " starts with voice2.");
     } else if (forV2) {
         firstEntry = firstEntry.getNextInVoice(voice);
+    }
+    if (forV2 && skipBeamedRestWorkaround) {
+        while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
+            firstEntry = firstEntry.getNextInVoice(voice);
+        }
     }
     return firstEntry;
 }

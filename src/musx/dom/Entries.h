@@ -1034,7 +1034,9 @@ public:
     /// @brief Returns the first entry in the specified v1/v2 or null if none.
     ///
     /// @param voice 1 or 2
-    EntryInfoPtr getFirstInVoice(int voice) const;
+    /// @param skipBeamedRestWorkaround If true, skip any voice2 visible rests that are part of a beamed rests workaround.
+    /// See #calcIsBeamedRestWorkaroundVisibleRest.
+    EntryInfoPtr getFirstInVoice(int voice, bool skipBeamedRestWorkaround = false) const;
 
     /// @brief Returns the last entry in the specified v1/v2 or null if none.
     ///
