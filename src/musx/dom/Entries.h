@@ -467,7 +467,7 @@ public:
     const std::shared_ptr<const EntryInfo> operator->() const;
 
     /// @brief Provides a boolean conversion based on whether the frame is valid and contains entries.
-    explicit operator bool() const noexcept;
+    operator bool() const noexcept;
 
     /// @brief Returns whether the input and the current instance refer to the same entry.
     /// @return false if either this or src is null and true if they are both non null and refer to the same entry.

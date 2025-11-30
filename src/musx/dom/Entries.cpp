@@ -35,7 +35,7 @@ static bool forVoice2(int voice)
     MUSX_ASSERT_IF(voice != 1 && voice != 2) {
         throw std::logic_error("Voice must be 1 or 2. Got " + std::to_string(voice));
     }
-    return voice != 2;
+    return voice == 2;
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
