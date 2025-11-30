@@ -10,7 +10,7 @@ var classmusx_1_1dom_1_1EntryFrame =
     [ "getContext", "classmusx_1_1dom_1_1EntryFrame.html#ac80fbc599223150820d8ab656787f6c4", null ],
     [ "getDocument", "classmusx_1_1dom_1_1EntryFrame.html#acfc09385cdd5a627483229c232e05bcc", null ],
     [ "getEntries", "classmusx_1_1dom_1_1EntryFrame.html#a76a2be5370083bb43c0c492509e5cece", null ],
-    [ "getFirstInVoice", "classmusx_1_1dom_1_1EntryFrame.html#a8387ecf374717defbeb6389ea79ecf42", null ],
+    [ "getFirstInVoice", "classmusx_1_1dom_1_1EntryFrame.html#ad98f134a0ebe0f2620ac9d1d414cbc3b", null ],
     [ "getLastInVoice", "classmusx_1_1dom_1_1EntryFrame.html#a24114e330ad19480f818117ce9cabe8c", null ],
     [ "getLayerAttributes", "classmusx_1_1dom_1_1EntryFrame.html#abc1187368aefaf64c4f86bb11fd5cd9f", null ],
     [ "getLayerIndex", "classmusx_1_1dom_1_1EntryFrame.html#ac9d4d9e8977b895a1f0f1439ada79a1f", null ],

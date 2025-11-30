@@ -161,9 +161,9 @@ const <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html"
 const std::vector&lt; std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getEntries</b> () const</td></tr>
 <tr class="memdesc:a76a2be5370083bb43c0c492509e5cece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the entry list. <br /></td></tr>
 <tr class="separator:a76a2be5370083bb43c0c492509e5cece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8387ecf374717defbeb6389ea79ecf42" id="r_a8387ecf374717defbeb6389ea79ecf42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a8387ecf374717defbeb6389ea79ecf42">getFirstInVoice</a> (int voice) const</td></tr>
-<tr class="memdesc:a8387ecf374717defbeb6389ea79ecf42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first entry in the specified v1/v2 or null if none.  <br /></td></tr>
-<tr class="separator:a8387ecf374717defbeb6389ea79ecf42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad98f134a0ebe0f2620ac9d1d414cbc3b" id="r_ad98f134a0ebe0f2620ac9d1d414cbc3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#ad98f134a0ebe0f2620ac9d1d414cbc3b">getFirstInVoice</a> (int voice, bool skipBeamedRestWorkaround=false) const</td></tr>
+<tr class="memdesc:ad98f134a0ebe0f2620ac9d1d414cbc3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first entry in the specified v1/v2 or null if none.  <br /></td></tr>
+<tr class="separator:ad98f134a0ebe0f2620ac9d1d414cbc3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24114e330ad19480f818117ce9cabe8c" id="r_a24114e330ad19480f818117ce9cabe8c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a24114e330ad19480f818117ce9cabe8c">getLastInVoice</a> (int voice) const</td></tr>
 <tr class="memdesc:a24114e330ad19480f818117ce9cabe8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the last entry in the specified v1/v2 or null if none.  <br /></td></tr>
 <tr class="separator:a24114e330ad19480f818117ce9cabe8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -419,8 +419,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8387ecf374717defbeb6389ea79ecf42" name="a8387ecf374717defbeb6389ea79ecf42"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8387ecf374717defbeb6389ea79ecf42">&#9670;&#160;</a></span>getFirstInVoice()</h2>
+<a id="ad98f134a0ebe0f2620ac9d1d414cbc3b" name="ad98f134a0ebe0f2620ac9d1d414cbc3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad98f134a0ebe0f2620ac9d1d414cbc3b">&#9670;&#160;</a></span>getFirstInVoice()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -429,8 +429,18 @@ Public Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::EntryFrame::getFirstInVoice </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>voice</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>voice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>skipBeamedRestWorkaround</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -439,6 +449,7 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">voice</td><td>1 or 2 </td></tr>
+    <tr><td class="paramname">skipBeamedRestWorkaround</td><td>If true, skip any voice2 visible rests that are part of a beamed rests workaround. See #calcIsBeamedRestWorkaroundVisibleRest. </td></tr>
   </table>
   </dd>
 </dl>
