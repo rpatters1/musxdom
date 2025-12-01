@@ -655,7 +655,7 @@ public:
     bool calcUnbeamed() const;
 
     /// @brief Returns whether this is the start of a primary beam
-    bool calcIsBeamStart() const;
+    bool calcIsBeamStart(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
 
     /// @brief Determines if this entry contains a tuplet that creates a singleton beam left.
     /// See #EntryFrame::TupletInfo::calcCreatesSingletonBeamLeft for more information.

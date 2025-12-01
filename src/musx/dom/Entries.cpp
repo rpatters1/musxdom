@@ -981,10 +981,15 @@ bool EntryInfoPtr::calcBeamMustStartHere() const
     return (*this)->getEntry()->beam || !calcCanBeBeamed();
 }
 
-bool EntryInfoPtr::calcIsBeamStart() const
+bool EntryInfoPtr::calcIsBeamStart(BeamIterationMode beamIterationMode) const
 {
     if ((*this)->getEntry()->isHidden) return false;
     if (!calcCanBeBeamed()) return false;
+    if (beamIterationMode == EntryInfoPtr::BeamIterationMode::Interpreted) {
+        if (auto beamStart = findBeamStartOrCurrent(); beamStart && beamStart.calcCreatesSingletonBeamLeft()) {
+            return !isSameEntry(beamStart);
+        }
+    }
     return (!getPreviousInBeamGroup() && getNextInBeamGroup());
 }
 

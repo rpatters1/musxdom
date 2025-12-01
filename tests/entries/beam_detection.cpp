@@ -49,7 +49,7 @@ static void expectEntriesInBeam(const std::shared_ptr<const EntryFrame>& entryFr
     ASSERT_FALSE(expectedIndices.empty());
     auto next = EntryInfoPtr(entryFrame, expectedIndices[0]);
     ASSERT_TRUE(next);
-    bool isStart = next.calcIsBeamStart() || next.findBeamStartOrCurrent().calcCreatesSingletonBeamLeft();
+    bool isStart = next.calcIsBeamStart(beamIterationMode);
     EXPECT_TRUE(isStart) << "entry is not start of beam";
     if (!isStart) return;
     size_t x = 0;
