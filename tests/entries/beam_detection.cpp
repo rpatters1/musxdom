@@ -49,7 +49,7 @@ static void expectEntriesInBeam(const std::shared_ptr<const EntryFrame>& entryFr
     ASSERT_FALSE(expectedIndices.empty());
     auto next = EntryInfoPtr(entryFrame, expectedIndices[0]);
     ASSERT_TRUE(next);
-    bool isStart = next.calcIsBeamStart();
+    bool isStart = next.calcIsBeamStart() || next.findBeamStartOrCurrent().calcCreatesSingletonBeamLeft();
     EXPECT_TRUE(isStart) << "entry is not start of beam";
     if (!isStart) return;
     size_t x = 0;
@@ -377,6 +377,7 @@ TEST(BeamDetection, SingletonBeams)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
 
         checkSingleton(EntryInfoPtr(entryFrame, 1), true, false);
+        expectEntriesInBeam(entryFrame, { 1 }, EntryInfoPtr::BeamIterationMode::Interpreted); // singleton right
     }
     
     {
@@ -386,6 +387,7 @@ TEST(BeamDetection, SingletonBeams)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
 
         checkSingleton(EntryInfoPtr(entryFrame, 1), false, true);
+        expectEntriesInBeam(entryFrame, { 2 }, EntryInfoPtr::BeamIterationMode::Interpreted); // singleton left
     }
     
     {

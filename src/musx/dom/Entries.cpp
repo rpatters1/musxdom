@@ -145,7 +145,7 @@ EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
 EntryInfoPtr::InterpretedIterator EntryFrame::getFirstInterpretedIterator(int voice) const
 {
     if (auto firstEntry = getFirstInVoice(voice)) {
-        while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
+        while (firstEntry && (firstEntry.calcIsBeamedRestWorkaroundVisibleRest() || firstEntry.calcCreatesSingletonBeamLeft())) {
             firstEntry = firstEntry.getNextInVoice(voice);
         }
         if (firstEntry) {
@@ -1624,9 +1624,15 @@ EntryInfoPtr EntryInfoPtr::nextPotentialInBeam(BeamIterationMode beamIterationMo
     if (!next || next->getEntry()->beam) {
         return EntryInfoPtr();
     }
+    const bool isIntepreted = beamIterationMode == BeamIterationMode::Interpreted;
+    if (isIntepreted) {
+        if (next && calcCreatesSingletonBeamRight()) {
+            next = next.nextPotentialInBeam(beamIterationMode);
+        }
+    }
     if (next && next->getEntry()->isHidden) {
         bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
-        if (!skipHidden && beamIterationMode == BeamIterationMode::Interpreted && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
+        if (!skipHidden && isIntepreted && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
             skipHidden = true;
         }
         if (skipHidden) {
@@ -1642,9 +1648,15 @@ EntryInfoPtr EntryInfoPtr::previousPotentialInBeam(BeamIterationMode beamIterati
         return EntryInfoPtr();
     }
     auto prev = iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
+    const bool isIntepreted = beamIterationMode == BeamIterationMode::Interpreted;
+    if (isIntepreted) {
+        if (prev && prev.calcCreatesSingletonBeamLeft()) {
+            prev = prev.previousPotentialInBeam(beamIterationMode);
+        }
+    }
     if (prev && prev->getEntry()->isHidden) {
         bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
-        if (!skipHidden && beamIterationMode == BeamIterationMode::Interpreted && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
+        if (!skipHidden && isIntepreted && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
             skipHidden = true;
         }
         if (skipHidden) {
