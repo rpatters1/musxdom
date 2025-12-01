@@ -142,7 +142,7 @@ EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
     return lastEntry.getPreviousInVoice(voice);
 }
 
-EntryInfoPtr::WorkaroundAwareResult EntryFrame::getFirstInVoiceWorkaroundAware(int voice) const
+EntryInfoPtr::WorkaroundIterator EntryFrame::getFirstWorkaroundIterator(int voice) const
 {
     if (auto firstEntry = getFirstInVoice(voice)) {
         while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
@@ -751,29 +751,10 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
     return prev;
 }
 
-EntryInfoPtr::WorkaroundAwareResult EntryInfoPtr::getNextInVoiceWorkaroundAware(int voice) const
+EntryInfoPtr::WorkaroundIterator EntryInfoPtr::asWorkaroundAwareResult() const
 {
-    for (auto next = getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
-        if (next.calcIsBeamedRestWorkaroundVisibleRest()) {
-            continue; // skip any entry that is part of a beaming workaround
-        }
-        const auto nextEntry = next->getEntry();
-        bool effectiveHidden = nextEntry->isHidden;
-        if (effectiveHidden) {
-            if (next.calcIsBeamedRestWorkaroundHiddenRest()) {
-                effectiveHidden = false;
-                util::Logger::log(util::Logger::LogLevel::Verbose, "Recognized hidden rest " + std::to_string(nextEntry->getEntryNumber())
-                    + " as beaming workaround and converted it to visible.");
-            }
-        }
-        return { next, effectiveHidden };
-    }
-    return {};
-}
-
-EntryInfoPtr::WorkaroundAwareResult EntryInfoPtr::asWorkaroundAwareResult() const
-{
-    return { *this, (*this)->getEntry()->isHidden };
+    const auto entry = (*this)->getEntry();
+    return { entry->voice2, *this, entry->isHidden };
 }
 
 EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode) const
@@ -1995,6 +1976,31 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
         }
     }
     return false;
+}
+
+// ********************************************
+// ***** EntryInfoPtr::WorkaroundIterator *****
+// ********************************************
+
+EntryInfoPtr::WorkaroundIterator EntryInfoPtr::WorkaroundIterator::getNext() const
+{
+    const int voice = getVoice();
+    for (auto next = m_entry.getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
+        if (next.calcIsBeamedRestWorkaroundVisibleRest()) {
+            continue; // skip any entry that is part of a beaming workaround
+        }
+        const auto nextEntry = next->getEntry();
+        bool effectiveHidden = nextEntry->isHidden;
+        if (effectiveHidden) {
+            if (next.calcIsBeamedRestWorkaroundHiddenRest()) {
+                effectiveHidden = false;
+                util::Logger::log(util::Logger::LogLevel::Verbose, "Recognized hidden rest " + std::to_string(nextEntry->getEntryNumber())
+                    + " as beaming workaround and converted it to visible.");
+            }
+        }
+        return { m_voice2, next, effectiveHidden };
+    }
+    return {};
 }
 
 // *****************************
