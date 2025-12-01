@@ -142,16 +142,17 @@ EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
     return lastEntry.getPreviousInVoice(voice);
 }
 
-EntryInfoPtr::BeamedRestWorkaroundAwareResult EntryFrame::getFirstInVoiceBeamedRestWorkaroundAware(int voice) const
+EntryInfoPtr::WorkaroundAwareResult EntryFrame::getFirstInVoiceWorkaroundAware(int voice) const
 {
-    auto firstEntry = getFirstInVoice(voice);
-    if (!firstEntry) {
-        return {};
+    if (auto firstEntry = getFirstInVoice(voice)) {
+        while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
+            firstEntry = firstEntry.getNextInVoice(voice);
+        }
+        if (firstEntry) {
+            return firstEntry.asWorkaroundAwareResult();
+        }
     }
-    while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
-        firstEntry = firstEntry.getNextInVoice(voice);
-    }
-    return { firstEntry, firstEntry->getEntry()->isHidden };
+    return {};
 }
 
 std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
@@ -750,9 +751,9 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
     return prev;
 }
 
-EntryInfoPtr::BeamedRestWorkaroundAwareResult EntryInfoPtr::getNextInVoiceBeamedRestWorkaroundAware(int voice) const
+EntryInfoPtr::WorkaroundAwareResult EntryInfoPtr::getNextInVoiceWorkaroundAware(int voice) const
 {
-    for (auto next = *this; next; next = next.getNextInVoice(voice)) {
+    for (auto next = getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
         if (next.calcIsBeamedRestWorkaroundVisibleRest()) {
             continue; // skip any entry that is part of a beaming workaround
         }
@@ -769,7 +770,12 @@ EntryInfoPtr::BeamedRestWorkaroundAwareResult EntryInfoPtr::getNextInVoiceBeamed
     }
     return {};
 }
-   
+
+EntryInfoPtr::WorkaroundAwareResult EntryInfoPtr::asWorkaroundAwareResult() const
+{
+    return { *this, (*this)->getEntry()->isHidden };
+}
+
 EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode) const
 {
     if (auto nextBarCont = calcBeamContinuesRightOverBarline()) {
@@ -1633,7 +1639,7 @@ EntryInfoPtr EntryInfoPtr::nextPotentialInBeam(BeamIterationMode beamIterationMo
     }
     if (next && next->getEntry()->isHidden) {
         bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
-        if (!skipHidden && beamIterationMode == BeamIterationMode::IncludeBeamWorkaroundHiddenRests && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
+        if (!skipHidden && beamIterationMode == BeamIterationMode::WorkaroundAware && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
             skipHidden = true;
         }
         if (skipHidden) {
@@ -1651,7 +1657,7 @@ EntryInfoPtr EntryInfoPtr::previousPotentialInBeam(BeamIterationMode beamIterati
     auto prev = iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
     if (prev && prev->getEntry()->isHidden) {
         bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
-        if (!skipHidden && beamIterationMode == BeamIterationMode::IncludeBeamWorkaroundHiddenRests && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
+        if (!skipHidden && beamIterationMode == BeamIterationMode::WorkaroundAware && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
             skipHidden = true;
         }
         if (skipHidden) {

@@ -419,14 +419,17 @@ public:
     /// @brief Controls which entries are included when iterating over beams.
     enum class BeamIterationMode
     {
-        Normal,                             ///< Skip hidden entries. This is how Finale displays beams.
-        IncludeAllHidden,                   ///< Include all entries, even if they are hidden.
-        IncludeBeamWorkaroundHiddenRests    ///< Include hidden entries only when hidden due to the beamed-rest workaround.
-                                            ///< (See #calcIsBeamedRestWorkaroundHiddenRest.)
+        Normal,             ///< Skip hidden entries. This is how Finale displays beams.
+        IncludeAll,         ///< Include all entries, even if they are hidden.
+        WorkaroundAware     ///< Apply musxdom's interpretation of known entry workarounds when
+                            ///< iterating beams. Depending on the situation, this mode may skip,
+                            ///< include, or reinterpret entries that participate in recognized
+                            ///< workarounds. See #EntryFrame::getFirstInVoiceWorkaroundAware
+                            ///< for detailed behavior.
     };
 
-    /// @brief Result of beamed-rest-aware voice traversal.
-    struct BeamedRestWorkaroundAwareResult;
+    /// @brief Result of workaround-aware voice traversal.
+    struct WorkaroundAwareResult;
 
     /** @brief Default constructor */
     EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
@@ -584,24 +587,36 @@ public:
     EntryInfoPtr getPreviousInVoice(int voice) const;
 
     /// @brief Returns the next forward entry in this voice using musxdom's
-    ///        beamed-rest workaround interpretation.
+    ///        workaround-aware interpretation.
     ///
-    /// This function continues forward traversal from this EntryInfoPtr.  It applies the same
-    /// workaround-interpretation rules documented in
-    /// #EntryFrame::getFirstInVoiceBeamedRestWorkaroundAware:
+    /// This function continues forward traversal from this EntryInfoPtr. It applies
+    /// the same workaround-aware rules used by
+    /// #EntryFrame::getFirstInVoiceWorkaroundAware. Currently this means the beamed-rest workaround,
+    /// where additional visible or hidden rests are inserted solely to break
+    /// beams over internal rests when the beam is otherwise a hook.
+    /// Other workarounds may be added in the future.
     ///
-    /// - Extra visible voice-2 workaround rests are **skipped**.
+    /// The following rules govern selection of the next entry:
+    ///
+    /// - Extra visible voice-2 workaround rests inserted solely to influence beam
+    ///   display are **skipped**.
     /// - Hidden voice-1 workaround rests used to force a beam shape are **returned**
-    ///   with BeamedRestWorkaroundAwareResult::effectiveHidden set to @c false.
-    /// - All other entries retain their stored hidden state.
+    ///   with #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden set to @c false.
+    /// - All other entries are returned with
+    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden matching their
+    ///   stored @c isHidden value.
     ///
     /// If no further usable entry exists, the returned
-    /// #BeamedRestWorkaroundAwareResult will have a null entry.
+    /// @ref EntryInfoPtr::WorkaroundAwareResult will have a null
+    /// #EntryInfoPtr::WorkaroundAwareResult::entry.
     ///
     /// @param voice  Must be 1 or 2.
-    /// @return A BeamedRestWorkaroundAwareResult containing the next usable entry (or null) and its
-    ///         effective-hidden flag.
-    BeamedRestWorkaroundAwareResult getNextInVoiceBeamedRestWorkaroundAware(int voice) const;
+    /// @return A WorkaroundAwareResult containing the next usable entry (or null)
+    ///         and its effective-hidden flag.
+    WorkaroundAwareResult getNextInVoiceWorkaroundAware(int voice) const;
+
+    /// @brief Returns this EntryInfoPtr in a @ref WorkaroundAwareResult instance.
+    WorkaroundAwareResult asWorkaroundAwareResult() const;
 
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
     EntryInfoPtr getNextInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
@@ -900,7 +915,9 @@ private:
     mutable std::optional<bool> m_upStem;
 };
 
-struct EntryInfoPtr::BeamedRestWorkaroundAwareResult
+/// @struct EntryInfoPtr::WorkaroundAwareResult
+/// @brief The result returned by voice iteration function that are aware of beamed rest workaround.
+struct EntryInfoPtr::WorkaroundAwareResult
 {
     EntryInfoPtr entry;         ///< The entry found, or null if there is no usable entry.
     bool effectiveHidden{};     ///< True if the entry should be treated as effectively hidden.
@@ -1089,29 +1106,34 @@ public:
     EntryInfoPtr getLastInVoice(int voice) const;
 
     /// @brief Returns the first entry in the specified voice using musxdom's
-    ///        beamed-rest workaround interpretation.
+    ///        workaround-aware interpretation.
     ///
-    /// This function begins forward traversal at the first raw entry for the given voice
-    /// (voice 1 or 2).  It interprets user-created beamed-rest workarounds commonly found
-    /// in Finale documents.  These workarounds hide or insert additional rests solely to
-    /// influence beam shapes.
+    /// This function begins forward traversal at the first raw entry for the given
+    /// voice (1 or 2). It applies musxdom’s interpretation of known user-created
+    /// Finale workarounds. Currently this means the beamed-rest workaround,
+    /// where additional visible or hidden rests are inserted solely to break
+    /// beams over internal rests when the beam is otherwise a hook.
+    /// Other workarounds may be added in the future.
     ///
     /// The following rules are applied when selecting the returned entry:
     ///
-    /// - Extra visible voice-2 workaround rests inserted only to display a beam correctly
-    ///   are **skipped entirely**.
-    /// - Hidden voice-1 workaround rests used to enforce a beam shape are **returned**
-    ///   and treated as visible, with #EntryInfoPtr::BeamedRestWorkaroundAwareResult::effectiveHidden set to @c false.
-    /// - All remaining entries are returned with #EntryInfoPtr::BeamedRestWorkaroundAwareResult::effectiveHidden
-    ///   matching their stored @c isHidden value.
+    /// - Extra visible voice-2 workaround rests inserted only to complete or shape
+    ///   a beam are **skipped entirely**.
+    /// - Hidden voice-1 workaround rests used to enforce a beam shape are
+    ///   **returned**, and are treated as visible by setting
+    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden to @c false.
+    /// - All remaining entries are returned with
+    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden matching their
+    ///   stored @c isHidden value.
     ///
     /// If no usable entry remains after applying these rules, the returned
-    /// @ref BeamedRestWorkaroundAwareResult will have a null @ref BeamedRestWorkaroundAwareResult::entry.
+    /// @ref EntryInfoPtr::WorkaroundAwareResult will have a null
+    /// #EntryInfoPtr::WorkaroundAwareResult::entry.
     ///
     /// @param voice  Must be 1 or 2.
-    /// @return A BeamedRestWorkaroundAwareResult containing the selected entry (or null) and its
-    ///         effective-hidden flag.
-    EntryInfoPtr::BeamedRestWorkaroundAwareResult getFirstInVoiceBeamedRestWorkaroundAware(int voice) const;
+    /// @return A WorkaroundAwareResult containing the selected entry (or null) and
+    ///         its effective-hidden flag.
+    EntryInfoPtr::WorkaroundAwareResult getFirstInVoiceWorkaroundAware(int voice) const;
 
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)
