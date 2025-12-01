@@ -1,5 +1,17 @@
 var NAVTREEINDEX34 =
 {
+"structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#aeaed1050261f2cb3b0f6ba2c6b8c8427":[2,0,1,0,4,0,6],
+"structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html#af78e0f2fa39e30ec81e60aad67b5197e":[2,0,1,0,4,0,1],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html":[1,0,1,1,10,0],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html":[2,0,1,1,10,0],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a2231cc7f88c9deb59d9e005dc3299ca5":[1,0,1,1,10,0,1],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a2231cc7f88c9deb59d9e005dc3299ca5":[2,0,1,1,10,0,1],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a5ba450a034494d114b29489e8797f0bb":[1,0,1,1,10,0,2],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a5ba450a034494d114b29489e8797f0bb":[2,0,1,1,10,0,2],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a654b9bdf82e38af9bd53d4efe81036fc":[1,0,1,1,10,0,0],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a654b9bdf82e38af9bd53d4efe81036fc":[2,0,1,1,10,0,0],
+"structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html":[1,0,1,1,10,1],
+"structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html":[2,0,1,1,10,1],
 "structmusx_1_1util_1_1DateTime.html":[2,0,1,2,0],
 "structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75":[2,0,1,2,0,0],
 "structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a30bb747c98bccdd11b3f89e644c4d0ad":[2,0,1,2,0,0,0],

@@ -113,10 +113,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abafc8ded0db6f072316ecfee838eaa38" id="r_abafc8ded0db6f072316ecfee838eaa38"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#abafc8ded0db6f072316ecfee838eaa38">NoteInfoPtr</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;entryInfo, size_t noteIndex)</td></tr>
 <tr class="memdesc:abafc8ded0db6f072316ecfee838eaa38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
 <tr class="separator:abafc8ded0db6f072316ecfee838eaa38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ce7e900bd85f90b8e7b83e3d61c2094" id="r_a6ce7e900bd85f90b8e7b83e3d61c2094"><td class="memItemLeft" align="right" valign="top"><a id="a6ce7e900bd85f90b8e7b83e3d61c2094" name="a6ce7e900bd85f90b8e7b83e3d61c2094"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const</td></tr>
-<tr class="memdesc:a6ce7e900bd85f90b8e7b83e3d61c2094"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a boolean conversion based on whether the <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> is valid and the note index is valid. <br /></td></tr>
-<tr class="separator:a6ce7e900bd85f90b8e7b83e3d61c2094"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eff3d58782f2fcc81383758dc682ba9" id="r_a6eff3d58782f2fcc81383758dc682ba9"><td class="memItemLeft" align="right" valign="top"><a id="a6eff3d58782f2fcc81383758dc682ba9" name="a6eff3d58782f2fcc81383758dc682ba9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const noexcept</td></tr>
+<tr class="memdesc:a6eff3d58782f2fcc81383758dc682ba9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a boolean conversion based on whether the <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> is valid and the note index is valid. <br /></td></tr>
+<tr class="separator:a6eff3d58782f2fcc81383758dc682ba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44670e047067bd603fdb709fa695e2a0" id="r_a44670e047067bd603fdb709fa695e2a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a44670e047067bd603fdb709fa695e2a0">isSameNote</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;src) const</td></tr>
 <tr class="memdesc:a44670e047067bd603fdb709fa695e2a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the input and the current instance refer to the same note.  <br /></td></tr>
 <tr class="separator:a44670e047067bd603fdb709fa695e2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -175,10 +175,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsEnharmonicRespe
 <tr class="memitem:aad11d0055ca42686bfb5d5f8dfa98247" id="r_aad11d0055ca42686bfb5d5f8dfa98247"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aad11d0055ca42686bfb5d5f8dfa98247">calcCrossStaffDirection</a> (<a class="el" href="classmusx_1_1dom_1_1DeferredReference.html">DeferredReference</a>&lt; <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt; &gt; staffList={}) const</td></tr>
 <tr class="memdesc:aad11d0055ca42686bfb5d5f8dfa98247"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this note is cross-staffed and if so, which direction.  <br /></td></tr>
 <tr class="separator:aad11d0055ca42686bfb5d5f8dfa98247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a426c0c1e964e363f9a2dff66e683a75b" id="r_a426c0c1e964e363f9a2dff66e683a75b"><td class="memItemLeft" align="right" valign="top"><a id="a426c0c1e964e363f9a2dff66e683a75b" name="a426c0c1e964e363f9a2dff66e683a75b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;other) const</td></tr>
-<tr class="memdesc:a426c0c1e964e363f9a2dff66e683a75b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicit operator&lt; for std::map. <br /></td></tr>
-<tr class="separator:a426c0c1e964e363f9a2dff66e683a75b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps an <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instance and a note index. </p>

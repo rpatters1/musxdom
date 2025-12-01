@@ -429,5 +429,6 @@ var hierarchy =
       ] ]
     ] ],
     [ "musx::dom::ShapeDefInstruction::VerticalMode", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html", null ],
-    [ "musx::dom::options::LyricOptions::WordExtConnectStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1WordExtConnectStyle.html", null ]
+    [ "musx::dom::options::LyricOptions::WordExtConnectStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1WordExtConnectStyle.html", null ],
+    [ "musx::dom::EntryInfoPtr::WorkaroundAwareResult", "structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html", null ]
 ];

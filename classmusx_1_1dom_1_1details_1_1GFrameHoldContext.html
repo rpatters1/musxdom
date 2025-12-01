@@ -115,9 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a200ea257e62dd6fb5c5f820d70febd49" id="r_a200ea257e62dd6fb5c5f820d70febd49"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a200ea257e62dd6fb5c5f820d70febd49">operator-&gt;</a> () const</td></tr>
 <tr class="memdesc:a200ea257e62dd6fb5c5f820d70febd49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides const pointer-style access to the underlying <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a>.  <br /></td></tr>
 <tr class="separator:a200ea257e62dd6fb5c5f820d70febd49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a761d54ac8d9acb4bf574024948075326" id="r_a761d54ac8d9acb4bf574024948075326"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a761d54ac8d9acb4bf574024948075326">operator bool</a> () const</td></tr>
-<tr class="memdesc:a761d54ac8d9acb4bf574024948075326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the internal <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> is valid.  <br /></td></tr>
-<tr class="separator:a761d54ac8d9acb4bf574024948075326"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaabfe703ecfc3d56496efc9995e5bbbe" id="r_aaabfe703ecfc3d56496efc9995e5bbbe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aaabfe703ecfc3d56496efc9995e5bbbe">operator bool</a> () const noexcept</td></tr>
+<tr class="memdesc:aaabfe703ecfc3d56496efc9995e5bbbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the internal <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> is valid.  <br /></td></tr>
+<tr class="separator:aaabfe703ecfc3d56496efc9995e5bbbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7dfee19597fcc58f5a0e518a9cb58d1" id="r_af7dfee19597fcc58f5a0e518a9cb58d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#af7dfee19597fcc58f5a0e518a9cb58d1">calcClefIndexAt</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> position) const</td></tr>
 <tr class="memdesc:af7dfee19597fcc58f5a0e518a9cb58d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the clef index in effect for at the specified <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> position. This function does not take into account transposing clefs. Those are addressed in <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a5ee488176e8e510a181cc59b9bcfeef9" title="Returns the EntryFrame for all entries in the given layer.">createEntryFrame</a>.  <br /></td></tr>
 <tr class="separator:af7dfee19597fcc58f5a0e518a9cb58d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -483,7 +483,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if higher-level iteration should continue. false if it should halt. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the caller should continue iteration; false to stop early. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>if the layer index is out of range </td></tr>
@@ -516,12 +516,12 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if higher-level iteration should continue. false if it should halt. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the caller should continue iteration; false to stop early. </dd></dl>
 
 </div>
 </div>
-<a id="a761d54ac8d9acb4bf574024948075326" name="a761d54ac8d9acb4bf574024948075326"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a761d54ac8d9acb4bf574024948075326">&#9670;&#160;</a></span>operator bool()</h2>
+<a id="aaabfe703ecfc3d56496efc9995e5bbbe" name="aaabfe703ecfc3d56496efc9995e5bbbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaabfe703ecfc3d56496efc9995e5bbbe">&#9670;&#160;</a></span>operator bool()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -538,7 +538,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

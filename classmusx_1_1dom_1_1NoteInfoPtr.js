@@ -19,7 +19,6 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
     [ "getNext", "classmusx_1_1dom_1_1NoteInfoPtr.html#af5fcf2f36d580ace7c9c110e71b724fe", null ],
     [ "getPrevious", "classmusx_1_1dom_1_1NoteInfoPtr.html#a76835b3c0d66d473c019835646744d5c", null ],
     [ "isSameNote", "classmusx_1_1dom_1_1NoteInfoPtr.html#a44670e047067bd603fdb709fa695e2a0", null ],
-    [ "operator bool", "classmusx_1_1dom_1_1NoteInfoPtr.html#a6ce7e900bd85f90b8e7b83e3d61c2094", null ],
-    [ "operator->", "classmusx_1_1dom_1_1NoteInfoPtr.html#a2f0b18fc87b70d16c96b40cc97b87ee2", null ],
-    [ "operator<", "classmusx_1_1dom_1_1NoteInfoPtr.html#a426c0c1e964e363f9a2dff66e683a75b", null ]
+    [ "operator bool", "classmusx_1_1dom_1_1NoteInfoPtr.html#a6eff3d58782f2fcc81383758dc682ba9", null ],
+    [ "operator->", "classmusx_1_1dom_1_1NoteInfoPtr.html#a2f0b18fc87b70d16c96b40cc97b87ee2", null ]
 ];
