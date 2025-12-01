@@ -794,10 +794,10 @@ TEST(GFrameHold, SingletonBeamsTest)
         std::string msg = "Staff " + std::to_string(entryFrame->getStaff()) + " measure " + std::to_string(entryFrame->getMeasure())
             + " tuplet index " + std::to_string(tupletIndex);
         ASSERT_LT(tupletIndex, entryFrame->tupletInfo.size()) << msg << " tuplet index is too big";
-        EXPECT_EQ(isSingletonRight, entryFrame->tupletInfo[tupletIndex].calcCreatesSingletonBeamRight()) << msg << " mismatch on singleton right";
-        EXPECT_EQ(isSingletonLeft, entryFrame->tupletInfo[tupletIndex].calcCreatesSingletonBeamLeft()) << msg << " mismatch on singleton left";
-        EXPECT_EQ(isContinuationRight, EntryInfoPtr(entryFrame, entryFrame->tupletInfo[tupletIndex].startIndex).calcBeamContinuesRightOverBarline()) << msg << " mismatch on continuation left";
-        EXPECT_EQ(isContinuationLeft, EntryInfoPtr(entryFrame, entryFrame->tupletInfo[tupletIndex].startIndex).calcBeamContinuesLeftOverBarline()) << msg << " mismatch on continuation right";
+        EXPECT_EQ(isSingletonRight, bool(entryFrame->tupletInfo[tupletIndex].calcCreatesSingletonBeamRight())) << msg << " mismatch on singleton right";
+        EXPECT_EQ(isSingletonLeft, bool(entryFrame->tupletInfo[tupletIndex].calcCreatesSingletonBeamLeft())) << msg << " mismatch on singleton left";
+        EXPECT_EQ(isContinuationRight, bool(EntryInfoPtr(entryFrame, entryFrame->tupletInfo[tupletIndex].startIndex).calcBeamContinuesRightOverBarline())) << msg << " mismatch on continuation left";
+        EXPECT_EQ(isContinuationLeft, bool(EntryInfoPtr(entryFrame, entryFrame->tupletInfo[tupletIndex].startIndex).calcBeamContinuesLeftOverBarline())) << msg << " mismatch on continuation right";
     };
 
     {

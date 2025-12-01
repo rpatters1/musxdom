@@ -275,7 +275,7 @@ TEST(BeamDetection, InvisibleEntries)
     auto measures = others->getArray<others::Measure>(SCORE_PARTID);
     EXPECT_GE(measures.size(), 4);
 
-    constexpr auto inclHidden = EntryInfoPtr::BeamIterationMode::IncludeAllHidden;
+    constexpr auto inclHidden = EntryInfoPtr::BeamIterationMode::IncludeAll;
 
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
@@ -330,18 +330,31 @@ TEST(BeamDetection, InvisibleEntries)
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 4";
 
-        checkEntry(entryFrame, 0, false, true, 7);              // start
-        checkEntry(entryFrame, 1, false, false, 7);             //
-        checkEntry(entryFrame, 2, false, false, 7);             //
-        checkEntry(entryFrame, 3, false, false, 7);             // invisible
-        checkEntry(entryFrame, 4, false, false, 7);             //
-        checkEntry(entryFrame, 5, false, false, 7);             //
-        checkEntry(entryFrame, 6, false, false, 7);             //
-        checkEntry(entryFrame, 7, false, false, 7);             // end
         expectEntriesInBeam(entryFrame, { 0, 1, 2, 4, 5, 6, 7 });
         expectEntriesInBeam(entryFrame, { 0, 1, 2, 3, 4, 5, 6, 7 }, inclHidden);
 
         checkEntry(entryFrame, 8, true, false, 0);              // quarter
+    }
+}
+
+TEST(BeamDetection, BeamedRestWorkaround)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_invisibles.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+
+    constexpr auto iterMode = EntryInfoPtr::BeamIterationMode::WorkaroundAware;
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
+
+        expectEntriesInBeam(entryFrame, { 0, 3 });                  // invisible entry 1 should not be found
+        expectEntriesInBeam(entryFrame, { 0, 1, 3 }, iterMode);     // invisible entry 1 should be found with WorkaroundAware
     }
 }
 
@@ -395,7 +408,7 @@ TEST(BeamDetection, BeamsOverBarlines)
 
     auto checkBeamOvers = [](const EntryInfoPtr entryInfo, bool isBeamOverRight, bool isBeamOverLeft) -> void {
         auto nextRight = entryInfo.calcBeamContinuesRightOverBarline();
-        EXPECT_EQ(nextRight, isBeamOverRight);
+        EXPECT_EQ(bool(nextRight), isBeamOverRight);
         if (nextRight) {
             auto tryPrev = nextRight.calcBeamContinuesLeftOverBarline();
             EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
@@ -403,7 +416,7 @@ TEST(BeamDetection, BeamsOverBarlines)
             EXPECT_TRUE(entryInfo.isSameEntry(tryPrev));
         }
         auto prevLeft = entryInfo.calcBeamContinuesLeftOverBarline();
-        EXPECT_EQ(prevLeft, isBeamOverLeft);
+        EXPECT_EQ(bool(prevLeft), isBeamOverLeft);
         if (prevLeft) {
             auto tryNext = prevLeft.calcBeamContinuesRightOverBarline();
             EXPECT_TRUE(entryInfo.isSameEntry(tryNext));
@@ -695,7 +708,7 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
 
     auto checkEntry = [](const EntryInfoPtr entPtr, bool expectedValue, size_t expectedIndex = 0) {
         const auto mainEntry = entPtr.findMainEntryForGraceNote();
-        EXPECT_EQ(mainEntry, expectedValue);
+        EXPECT_EQ(bool(mainEntry), expectedValue);
         if (mainEntry) {
             EXPECT_EQ(mainEntry.getIndexInFrame(), expectedIndex);
         }

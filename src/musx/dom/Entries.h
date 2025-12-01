@@ -89,7 +89,7 @@ public:
      * 
      * @return True if the @ref GFrameHold was successfully retrieved; false otherwise.
      */
-    explicit operator bool() const { return static_cast<bool>(m_hold); }
+    explicit operator bool() const noexcept { return static_cast<bool>(m_hold); }
 
     /// @brief Returns the clef index in effect for at the specified @ref Edu position.
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
@@ -113,7 +113,7 @@ public:
      * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
      * @param layerIndex The layer index (0..3) to iterate.
      * @param iterator The callback function for each iteration.
-     * @return true if higher-level iteration should continue. false if it should halt.
+     * @return true if the caller should continue iteration; false to stop early.
      * @throws std::invalid_argument if the layer index is out of range
      */
     bool iterateEntries(LayerIndex layerIndex, std::function<bool(const EntryInfoPtr&)> iterator) const;
@@ -121,7 +121,7 @@ public:
     /**
      * @brief iterates the entries for this @ref GFrameHold from left to right for each layer in order
      * @param iterator The callback function for each iteration.
-     * @return true if higher-level iteration should continue. false if it should halt.
+     * @return true if the caller should continue iteration; false to stop early.
      */
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
 
@@ -419,11 +419,17 @@ public:
     /// @brief Controls which entries are included when iterating over beams.
     enum class BeamIterationMode
     {
-        Normal,                             ///< Skip hidden entries. This is how Finale displays beams.
-        IncludeAllHidden,                   ///< Include all entries, even if they are hidden.
-        IncludeBeamWorkaroundHiddenRests    ///< Include hidden entries only when hidden due to the beamed-rest workaround.
-                                            ///< (See #calcIsBeamedRestWorkaroundHiddenRest.)
+        Normal,             ///< Skip hidden entries. This is how Finale displays beams.
+        IncludeAll,         ///< Include all entries, even if they are hidden.
+        WorkaroundAware     ///< Apply musxdom's interpretation of known entry workarounds when
+                            ///< iterating beams. Depending on the situation, this mode may skip,
+                            ///< include, or reinterpret entries that participate in recognized
+                            ///< workarounds. See #EntryFrame::getFirstInVoiceWorkaroundAware
+                            ///< for detailed behavior.
     };
+
+    /// @brief Result of workaround-aware voice traversal.
+    struct WorkaroundAwareResult;
 
     /** @brief Default constructor */
     EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
@@ -464,7 +470,7 @@ public:
     const std::shared_ptr<const EntryInfo> operator->() const;
 
     /// @brief Provides a boolean conversion based on whether the frame is valid and contains entries.
-    operator bool() const;
+    operator bool() const noexcept;
 
     /// @brief Returns whether the input and the current instance refer to the same entry.
     /// @return false if either this or src is null and true if they are both non null and refer to the same entry.
@@ -570,15 +576,47 @@ public:
     ///
     /// Unlike #getNextSameV, this returns the next v2 entry in any v2 launch sequence.
     ///
-    /// @param voice 1 or 2
+    /// @param voice  Must be 1 or 2.
     EntryInfoPtr getNextInVoice(int voice) const;
 
     /// @brief Returns the previous entry in the frame in the specified v1/v2 or null if none.
     ///
     /// Unlike #getPreviousSameV, this returns the next v2 entry in any v2 launch sequence.
     ///
-    /// @param voice 1 or 2
+    /// @param voice  Must be 1 or 2.
     EntryInfoPtr getPreviousInVoice(int voice) const;
+
+    /// @brief Returns the next forward entry in this voice using musxdom's
+    ///        workaround-aware interpretation.
+    ///
+    /// This function continues forward traversal from this EntryInfoPtr. It applies
+    /// the same workaround-aware rules used by
+    /// #EntryFrame::getFirstInVoiceWorkaroundAware. Currently this means the beamed-rest workaround,
+    /// where additional visible or hidden rests are inserted solely to break
+    /// beams over internal rests when the beam is otherwise a hook.
+    /// Other workarounds may be added in the future.
+    ///
+    /// The following rules govern selection of the next entry:
+    ///
+    /// - Extra visible voice-2 workaround rests inserted solely to influence beam
+    ///   display are **skipped**.
+    /// - Hidden voice-1 workaround rests used to force a beam shape are **returned**
+    ///   with #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden set to @c false.
+    /// - All other entries are returned with
+    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden matching their
+    ///   stored @c isHidden value.
+    ///
+    /// If no further usable entry exists, the returned
+    /// @ref EntryInfoPtr::WorkaroundAwareResult will have a null
+    /// #EntryInfoPtr::WorkaroundAwareResult::entry.
+    ///
+    /// @param voice  Must be 1 or 2.
+    /// @return A WorkaroundAwareResult containing the next usable entry (or null)
+    ///         and its effective-hidden flag.
+    WorkaroundAwareResult getNextInVoiceWorkaroundAware(int voice) const;
+
+    /// @brief Returns this EntryInfoPtr in a @ref WorkaroundAwareResult instance.
+    WorkaroundAwareResult asWorkaroundAwareResult() const;
 
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
     EntryInfoPtr getNextInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
@@ -877,6 +915,21 @@ private:
     mutable std::optional<bool> m_upStem;
 };
 
+/// @struct EntryInfoPtr::WorkaroundAwareResult
+/// @brief The result returned by voice iteration function that are aware of beamed rest workaround.
+struct EntryInfoPtr::WorkaroundAwareResult
+{
+    EntryInfoPtr entry;         ///< The entry found, or null if there is no usable entry.
+    bool effectiveHidden{};     ///< True if the entry should be treated as effectively hidden.
+
+    /// @brief Allows the result to be used directly in boolean contexts.
+    /// @return true if @ref entry is non-null; false otherwise.
+    explicit operator bool() const noexcept
+    {
+        return static_cast<bool>(entry);
+    }
+};
+
 /**
  * @class EntryFrame
  * @brief Represents a vector of @ref EntryInfo instances for a given frame, along with computed information.
@@ -1044,15 +1097,43 @@ public:
 
     /// @brief Returns the first entry in the specified v1/v2 or null if none.
     ///
-    /// @param voice 1 or 2
-    /// @param skipBeamedRestWorkaround If true, skip any voice2 visible rests that are part of a beamed rests workaround.
-    /// See #calcIsBeamedRestWorkaroundVisibleRest.
-    EntryInfoPtr getFirstInVoice(int voice, bool skipBeamedRestWorkaround = false) const;
+    /// @param voice  Must be 1 or 2.
+    EntryInfoPtr getFirstInVoice(int voice) const;
 
     /// @brief Returns the last entry in the specified v1/v2 or null if none.
     ///
-    /// @param voice 1 or 2
+    /// @param voice  Must be 1 or 2.
     EntryInfoPtr getLastInVoice(int voice) const;
+
+    /// @brief Returns the first entry in the specified voice using musxdom's
+    ///        workaround-aware interpretation.
+    ///
+    /// This function begins forward traversal at the first raw entry for the given
+    /// voice (1 or 2). It applies musxdom’s interpretation of known user-created
+    /// Finale workarounds. Currently this means the beamed-rest workaround,
+    /// where additional visible or hidden rests are inserted solely to break
+    /// beams over internal rests when the beam is otherwise a hook.
+    /// Other workarounds may be added in the future.
+    ///
+    /// The following rules are applied when selecting the returned entry:
+    ///
+    /// - Extra visible voice-2 workaround rests inserted only to complete or shape
+    ///   a beam are **skipped entirely**.
+    /// - Hidden voice-1 workaround rests used to enforce a beam shape are
+    ///   **returned**, and are treated as visible by setting
+    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden to @c false.
+    /// - All remaining entries are returned with
+    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden matching their
+    ///   stored @c isHidden value.
+    ///
+    /// If no usable entry remains after applying these rules, the returned
+    /// @ref EntryInfoPtr::WorkaroundAwareResult will have a null
+    /// #EntryInfoPtr::WorkaroundAwareResult::entry.
+    ///
+    /// @param voice  Must be 1 or 2.
+    /// @return A WorkaroundAwareResult containing the selected entry (or null) and
+    ///         its effective-hidden flag.
+    EntryInfoPtr::WorkaroundAwareResult getFirstInVoiceWorkaroundAware(int voice) const;
 
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)
@@ -1101,9 +1182,9 @@ public:
     EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<bool> matchVoice2 = std::nullopt,
         util::Fraction atGraceNoteDuration = 0) const;
 
-    /// @brief Iterates the entries for the specified layer in this @ref GFrameHold from left to right.
+    /// @brief Iterates the entries for the specified layer in this EntryFrame from left to right.
     /// @param iterator The callback function for each iteration.
-    /// @return true if higher-level iteration should continue; false if it should halt.
+    /// @return true if the caller should continue iteration; false to stop early.
     /// @throws std::invalid_argument if the layer index is out of range.
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
 
@@ -1190,7 +1271,7 @@ public:
     {}
 
     /// @brief Provides a boolean conversion based on whether the EntryInfoPtr is valid and the note index is valid.
-    operator bool() const
+    explicit operator bool() const noexcept
     { return m_entry && m_noteIndex < m_entry->getEntry()->notes.size(); }
 
     /// @brief Returns whether the input and the current instance refer to the same note.
@@ -1319,14 +1400,6 @@ public:
     ///   - **0**  if the note is not cross-staffed  
     ///   - **−1** if the note crosses downward to a lower staff
     int calcCrossStaffDirection(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
-
-    /// @brief Explicit operator< for std::map
-    bool operator<(const NoteInfoPtr& other) const
-    {
-        if (m_entry != other.m_entry)
-            return m_entry < other.m_entry;
-        return m_noteIndex < other.m_noteIndex;
-    }
 
 private:
     /// @brief Returns true if the two notes represent the same concert pitch or
