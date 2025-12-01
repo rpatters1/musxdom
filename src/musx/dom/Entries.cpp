@@ -142,14 +142,14 @@ EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
     return lastEntry.getPreviousInVoice(voice);
 }
 
-EntryInfoPtr::WorkaroundIterator EntryFrame::getFirstWorkaroundIterator(int voice) const
+EntryInfoPtr::InterpretedIterator EntryFrame::getFirstInterpretedIterator(int voice) const
 {
     if (auto firstEntry = getFirstInVoice(voice)) {
         while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
             firstEntry = firstEntry.getNextInVoice(voice);
         }
         if (firstEntry) {
-            return firstEntry.asWorkaroundAwareResult();
+            return firstEntry.asInterpretedIterator();
         }
     }
     return {};
@@ -631,6 +631,12 @@ std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> cu
     size_t firstIndex = currentIndex ? *currentIndex + 1 : 0;
     for (size_t x = firstIndex; x < m_entryFrame->tupletInfo.size(); x++) {
         const auto& tuplInf = m_entryFrame->tupletInfo[x];
+        if (tuplInf.tuplet->calcRatio() == 0) {
+            // The InterpretedIterator handles these automatically, so skip them here.
+            if (tuplInf.calcCreatesSingletonBeamRight() || tuplInf.calcCreatesSingletonBeamLeft()) {
+                continue;
+            }
+        }
         if (tuplInf.startIndex == m_indexInFrame) {
             return x;
         }
@@ -751,7 +757,7 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
     return prev;
 }
 
-EntryInfoPtr::WorkaroundIterator EntryInfoPtr::asWorkaroundAwareResult() const
+EntryInfoPtr::InterpretedIterator EntryInfoPtr::asInterpretedIterator() const
 {
     const auto entry = (*this)->getEntry();
     return { entry->voice2, *this, entry->isHidden };
@@ -1620,7 +1626,7 @@ EntryInfoPtr EntryInfoPtr::nextPotentialInBeam(BeamIterationMode beamIterationMo
     }
     if (next && next->getEntry()->isHidden) {
         bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
-        if (!skipHidden && beamIterationMode == BeamIterationMode::WorkaroundAware && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
+        if (!skipHidden && beamIterationMode == BeamIterationMode::Interpreted && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
             skipHidden = true;
         }
         if (skipHidden) {
@@ -1638,7 +1644,7 @@ EntryInfoPtr EntryInfoPtr::previousPotentialInBeam(BeamIterationMode beamIterati
     auto prev = iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
     if (prev && prev->getEntry()->isHidden) {
         bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
-        if (!skipHidden && beamIterationMode == BeamIterationMode::WorkaroundAware && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
+        if (!skipHidden && beamIterationMode == BeamIterationMode::Interpreted && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
             skipHidden = true;
         }
         if (skipHidden) {
@@ -1978,18 +1984,31 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
     return false;
 }
 
-// ********************************************
-// ***** EntryInfoPtr::WorkaroundIterator *****
-// ********************************************
+// *********************************************
+// ***** EntryInfoPtr::InterpretedIterator *****
+// *********************************************
 
-EntryInfoPtr::WorkaroundIterator EntryInfoPtr::WorkaroundIterator::getNext() const
+util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveActualDuration() const
+{
+    return getLaunchEntry()->actualDuration;
+}
+
+EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() const
 {
     const int voice = getVoice();
-    for (auto next = m_entry.getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
-        if (next.calcIsBeamedRestWorkaroundVisibleRest()) {
-            continue; // skip any entry that is part of a beaming workaround
+    for (auto next = getLaunchEntry().getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
+        if (next.calcIsBeamedRestWorkaroundVisibleRest() || next.calcCreatesSingletonBeamLeft()) {
+            continue; // skip any entry that is part of a beaming workaround or a singleton beam left
         }
+        EntryInfoPtr launchEntry;
         const auto nextEntry = next->getEntry();
+        if (next.calcCreatesSingletonBeamRight()) {
+            launchEntry = next.getNextInVoice(voice);
+            MUSX_ASSERT_IF(!launchEntry) {
+                throw std::logic_error("calcCreatesSingletonRight returned true for entry "
+                    + std::to_string(nextEntry->getEntryNumber()) + ", but next in voice was empty.");
+            }
+        }
         bool effectiveHidden = nextEntry->isHidden;
         if (effectiveHidden) {
             if (next.calcIsBeamedRestWorkaroundHiddenRest()) {
@@ -1998,7 +2017,7 @@ EntryInfoPtr::WorkaroundIterator EntryInfoPtr::WorkaroundIterator::getNext() con
                     + " as beaming workaround and converted it to visible.");
             }
         }
-        return { m_voice2, next, effectiveHidden };
+        return { m_voice2, next, effectiveHidden, launchEntry };
     }
     return {};
 }

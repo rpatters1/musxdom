@@ -345,7 +345,7 @@ TEST(BeamDetection, BeamedRestWorkaround)
     ASSERT_TRUE(doc);
 
 
-    constexpr auto iterMode = EntryInfoPtr::BeamIterationMode::WorkaroundAware;
+    constexpr auto iterMode = EntryInfoPtr::BeamIterationMode::Interpreted;
 
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
@@ -354,7 +354,7 @@ TEST(BeamDetection, BeamedRestWorkaround)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
 
         expectEntriesInBeam(entryFrame, { 0, 3 });                  // invisible entry 1 should not be found
-        expectEntriesInBeam(entryFrame, { 0, 1, 3 }, iterMode);     // invisible entry 1 should be found with WorkaroundAware
+        expectEntriesInBeam(entryFrame, { 0, 1, 3 }, iterMode);     // invisible entry 1 should be found with Interpreted
     }
 }
 

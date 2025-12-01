@@ -421,14 +421,14 @@ public:
     {
         Normal,             ///< Skip hidden entries. This is how Finale displays beams.
         IncludeAll,         ///< Include all entries, even if they are hidden.
-        WorkaroundAware     ///< Apply musxdom's interpretation of known entry workarounds when
+        Interpreted         ///< Apply musxdom's interpretation of known entry workarounds when
                             ///< iterating beams. Depending on the situation, this mode may skip,
                             ///< include, or reinterpret entries that participate in recognized
-                            ///< workarounds. See  @ref WorkaroundIterator
+                            ///< workarounds. See  @ref InterpretedIterator
                             ///< for detailed behavior.
     };
 
-    struct WorkaroundIterator;
+    class InterpretedIterator;
 
     /** @brief Default constructor */
     EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
@@ -585,8 +585,8 @@ public:
     /// @param voice  Must be 1 or 2.
     EntryInfoPtr getPreviousInVoice(int voice) const;
 
-    /// @brief Returns this EntryInfoPtr in a @ref WorkaroundIterator instance.
-    WorkaroundIterator asWorkaroundAwareResult() const;
+    /// @brief Returns this EntryInfoPtr in a @ref InterpretedIterator instance.
+    InterpretedIterator asInterpretedIterator() const;
 
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
     EntryInfoPtr getNextInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
@@ -885,13 +885,13 @@ private:
     mutable std::optional<bool> m_upStem;
 };
 
-/// @class EntryInfoPtr::WorkaroundIterator
+/// @class EntryInfoPtr::InterpretedIterator
 /// @brief Iterator-style wrapper for workaround-aware voice traversal.
 ///
-/// WorkaroundIterator represents a single position in a voice-1 or voice-2
+/// InterpretedIterator represents a single position in a voice-1 or voice-2
 /// entry sequence using musxdom's interpretation of Finale user workarounds.
-/// It is obtained from EntryFrame::getFirstWorkaroundIterator() and advanced
-/// with WorkaroundIterator::getNext().
+/// It is obtained from #EntryFrame::getFirstInterpretedIterator and advanced
+/// with InterpretedIterator::getNext().
 ///
 /// The iterator encapsulates:
 /// - The target voice (1 or 2).
@@ -901,13 +901,13 @@ private:
 ///
 /// ### Beamed-rest workaround
 ///
-/// Currently, WorkaroundIterator implements only the "beamed-rest workaround".
+/// Currently, InterpretedIterator implements only the "beamed-rest workaround".
 /// This is the common Finale technique where additional rests are inserted
 /// solely to shape beams (for example, to create 16th-note hooks over internal
 /// rests by hiding or duplicating rests between voiced layers).
 ///
 /// Whenever a position is selected or advanced (including the initial position
-/// returned by EntryFrame::getFirstWorkaroundIterator()), the following rules
+/// returned by #EntryFrame::getFirstInterpretedIterator), the following rules
 /// are applied:
 ///
 /// - Hidden voice-1 workaround rests used to enforce a beam shape are
@@ -923,22 +923,30 @@ private:
 ///       workarounds or mid-system beam-over-barline workarounds) may be
 ///       layered onto this iterator in the future without changing its public
 ///       interface.
-class EntryInfoPtr::WorkaroundIterator
+class EntryInfoPtr::InterpretedIterator
 {
-    bool m_voice2{};            ///< True for voice 2, false for voice 1.
-    EntryInfoPtr m_entry;       ///< The entry found, or null if there is no usable entry.
-    bool m_effectiveHidden{};   ///< True if the entry should be treated as effectively hidden.
+    bool m_voice2{};                            ///< True for voice 2, false for voice 1.
+    EntryInfoPtr m_entry;                       ///< The entry found, or null if there is no usable entry.
+    bool m_effectiveHidden{};                   ///< True if the entry should be treated as effectively hidden.
+    // --------
+    // internal
+    // --------
+    EntryInfoPtr m_launchEntry;                 ///< The entry to launch from on the next call to getNext.
 
     /// @brief Gets the voice as integer value 1 or 2.
     [[nodiscard]] int getVoice() const noexcept { return int(m_voice2) + 1; }
 
+    [[nodiscard]] const EntryInfoPtr& getLaunchEntry() const
+    { return m_launchEntry ? m_launchEntry : m_entry; }
+
     /// @internal
-    /// @brief Constructs a workaround-aware iterator for the specified voice.
-    /// @param voice2          If true, iterate voice 2. If false, iterate voice 1
-    /// @param entry           The initial entry at this iterator position (may be null).
-    /// @param effectiveHidden The effective-hidden state after applying workaround rules.
-    WorkaroundIterator(bool voice2, EntryInfoPtr entry, bool effectiveHidden)
-        : m_voice2(voice2), m_entry(entry), m_effectiveHidden(effectiveHidden)
+    /// @brief Constructs an interpreted iterator for the specified voice.
+    /// @param voice2           If true, iterate voice 2. If false, iterate voice 1
+    /// @param entry            The initial entry at this iterator position (may be null).
+    /// @param effectiveHidden  The effective-hidden state after applying workaround rules.
+    /// @param launchEntry      The entry to use as launch point for the next call to #getNext.
+    InterpretedIterator(bool voice2, EntryInfoPtr entry, bool effectiveHidden, EntryInfoPtr launchEntry = {})
+        : m_voice2(voice2), m_entry(entry), m_effectiveHidden(effectiveHidden), m_launchEntry(launchEntry)
     {}
 
     friend class EntryFrame;
@@ -946,7 +954,7 @@ class EntryInfoPtr::WorkaroundIterator
     
 public:
     /// @brief Default constructor allows null return values by caller
-    WorkaroundIterator() = default;
+    InterpretedIterator() = default;
     
     /// @brief Returns the entry at the current iterator position.
     /// @return A const reference to the underlying EntryInfoPtr (which may be null).
@@ -957,14 +965,18 @@ public:
     /// described in the class documentation and @c false if it is effectively unhidden.
     [[nodiscard]] bool getEffectiveHidden() const noexcept { return m_effectiveHidden; }
 
+    /// @brief Return the effective actual duration of the entry. Calling code using InterpretedIterator
+    /// should use this value rather than the one in the entry.
+    [[nodiscard]] util::Fraction getEffectiveActualDuration() const;
+
     /// @brief Returns an iterator advanced to the next usable entry in this voice.
     ///
     /// The same workaround rules described in the class documentation are applied
     /// when selecting the next position.
     ///
-    /// @return A new WorkaroundIterator positioned at the next usable entry, or
+    /// @return A new InterpretedIterator positioned at the next usable entry, or
     ///         an empty iterator if no further entry exists.
-    [[nodiscard]] WorkaroundIterator getNext() const;
+    [[nodiscard]] InterpretedIterator getNext() const;
 
     /// @brief Allows the iterator to be used directly in boolean contexts.
     /// @return @c true if the iterator currently refers to a usable entry;
@@ -1155,14 +1167,14 @@ public:
     ///
     /// The returned iterator begins forward traversal at the first raw entry
     /// for the given voice (1 or 2) and applies the workaround rules described
-    /// in @ref EntryInfoPtr::WorkaroundIterator.
+    /// in @ref EntryInfoPtr::InterpretedIterator.
     ///
-    /// Use #EntryInfoPtr::WorkaroundIterator::getNext to advance.
+    /// Use #EntryInfoPtr::InterpretedIterator::getNext to advance.
     ///
     /// @param voice  Must be 1 or 2.
-    /// @return A WorkaroundIterator positioned at the first usable entry, or an
+    /// @return A InterpretedIterator positioned at the first usable entry, or an
     ///         empty iterator if no usable entry exists.
-    EntryInfoPtr::WorkaroundIterator getFirstWorkaroundIterator(int voice) const;
+    EntryInfoPtr::InterpretedIterator getFirstInterpretedIterator(int voice) const;
 
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)

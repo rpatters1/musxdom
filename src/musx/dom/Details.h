@@ -2144,7 +2144,7 @@ public:
     int displayNumber{};                    ///< The number of notes to display (xml node is `<symbolicNum>`)
     Edu displayDuration{};                  ///< The duration of each note to display (xml node is `<symbolicDur>`)
     int referenceNumber{};                  ///< The number of notes "in the time of" (xml node is `<refNum>`)
-    Edu referenceDuration{};                ///< The duration of eacn note "in the time of" (xml node is `<refDur>`)
+    Edu referenceDuration{};                ///< The duration of each note "in the time of" (xml node is `<refDur>`)
     bool alwaysFlat{};                      ///< "Always Flat" (xml node is `<flat>`)
     bool fullDura{};                        ///< "Bracket Full Duration"
     bool metricCenter{};                    ///< "Center Number Using Duration"
