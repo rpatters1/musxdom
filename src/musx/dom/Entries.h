@@ -939,13 +939,20 @@ class EntryInfoPtr::InterpretedIterator
     // --------
     // internal
     // --------
-    EntryInfoPtr m_launchEntry;                 ///< The entry to launch from on the next call to getNext.
+    EntryInfoPtr m_iteratedEntry;               ///< The underlying entry from which we are iterating (or null if the same as m_entry).
+    bool m_useIteratedForBackLaunch{};          ///< If true, use m_iteratedEntry for the backwards launch to previous.
 
     /// @brief Gets the voice as integer value 1 or 2.
     [[nodiscard]] int getVoice() const noexcept { return int(m_voice2) + 1; }
 
-    [[nodiscard]] const EntryInfoPtr& getLaunchEntry() const
-    { return m_launchEntry ? m_launchEntry : m_entry; }
+    [[nodiscard]] const EntryInfoPtr& getIteratedEntry() const noexcept
+    { return m_iteratedEntry ? m_iteratedEntry : m_entry; }
+
+    [[nodiscard]] const EntryInfoPtr& getForwardLaunchEntry() const noexcept
+    { return getIteratedEntry(); }
+
+    [[nodiscard]] const EntryInfoPtr& getBackwardLaunchEntry() const noexcept
+    { return m_useIteratedForBackLaunch ? getIteratedEntry() : m_entry; }
 
     /// @internal
     /// @brief Constructs an interpreted iterator for the specified voice.

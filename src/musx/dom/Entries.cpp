@@ -2013,40 +2013,46 @@ EntryInfoPtr::InterpretedIterator::InterpretedIterator(EntryInfoPtr entry)
     auto rawEntry = entry->getEntry();
     m_voice2 = rawEntry->voice2;
     m_effectiveHidden = rawEntry->isHidden;
+    if (m_entry.calcCreatesSingletonBeamRight()) {
+        m_iteratedEntry = m_entry.getNextInVoice(getVoice());
+    }
+    if (auto display = m_entry.findDisplayEntryForBeamOverBarline()) {
+        m_iteratedEntry = m_entry;
+        m_entry = display;
+        m_effectiveHidden = display->getEntry()->isHidden;
+        m_useIteratedForBackLaunch = true;
+    }
     if (m_effectiveHidden) {
         if (m_entry.calcIsBeamedRestWorkaroundHiddenRest()) {
             m_effectiveHidden = false;
         }
-    }
-    if (m_entry.calcCreatesSingletonBeamRight()) {
-        m_launchEntry = m_entry.getNextInVoice(getVoice());
     }
 }
 
 util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveActualDuration(bool global) const
 {
     if (global) {
-        return getLaunchEntry().calcGlobalActualDuration();
+        return getIteratedEntry().calcGlobalActualDuration();
     }
-    return getLaunchEntry()->actualDuration;
+    return getIteratedEntry()->actualDuration;
 }
 
 util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveElapsedDuration(bool global) const
 {
     if (global) {
-        return getLaunchEntry().calcGlobalElapsedDuration();
+        return getIteratedEntry().calcGlobalElapsedDuration();
     }
-    return getLaunchEntry()->elapsedDuration;
+    return getIteratedEntry()->elapsedDuration;
 }
 
 util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveMeasureStaffDuration() const
 {
-    return getLaunchEntry().getFrame()->measureStaffDuration;
+    return getIteratedEntry().getFrame()->measureStaffDuration;
 }
 
 bool EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame() const
 {
-    auto entryInfo = getLaunchEntry();
+    auto entryInfo = getIteratedEntry();
     auto frame = entryInfo.getFrame();
     if (entryInfo->elapsedDuration > frame->measureStaffDuration) {
         return true;
@@ -2063,7 +2069,7 @@ bool EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame() const
 EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() const
 {
     const int voice = getVoice();
-    for (auto next = getLaunchEntry().getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
+    for (auto next = getForwardLaunchEntry().getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
         if (next.calcIsBeamedRestWorkaroundVisibleRest() || next.calcCreatesSingletonBeamLeft()) {
             continue; // skip any entry that is part of a beaming workaround or a singleton beam left
         }
@@ -2075,9 +2081,9 @@ EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() c
 EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getPrevious() const
 {
     const int voice = getVoice();
-    /// @todo Currently m_launchEntry is the forward launcher only. However, when we incorporate mid-system
+    /// @todo Currently m_iteratedEntry is the forward launcher only. However, when we incorporate mid-system
     /// beams it will become a backwards launcher as well, and then we will need to differentiate.
-    for (auto prev = m_entry.getPreviousInVoice(voice); prev; prev = prev.getPreviousInVoice(voice)) {
+    for (auto prev = getBackwardLaunchEntry().getPreviousInVoice(voice); prev; prev = prev.getPreviousInVoice(voice)) {
         if (prev.calcIsBeamedRestWorkaroundVisibleRest()) {
             continue; // skip any entry that is part of a beaming workaround
         }
