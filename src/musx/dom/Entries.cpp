@@ -760,7 +760,7 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
 EntryInfoPtr::InterpretedIterator EntryInfoPtr::asInterpretedIterator() const
 {
     const auto entry = (*this)->getEntry();
-    return { entry->voice2, *this, entry->isHidden };
+    return { *this };
 }
 
 EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode) const
@@ -1182,7 +1182,6 @@ EntryInfoPtr EntryInfoPtr::findDisplayEntryForBeamOverBarline() const
     if (!(*this)->getEntry()->isHidden || !calcCanBeBeamed()) {
         return {};
     }
-    // search from beginning of measure.
     auto frame = getFrame();
     auto prevFrame = frame->getPrevious();
     if (!prevFrame) {
@@ -2005,6 +2004,25 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
 // ***** EntryInfoPtr::InterpretedIterator *****
 // *********************************************
 
+EntryInfoPtr::InterpretedIterator::InterpretedIterator(EntryInfoPtr entry)
+    : m_entry(entry)
+{
+    if (!m_entry) {
+        return;
+    }
+    auto rawEntry = entry->getEntry();
+    m_voice2 = rawEntry->voice2;
+    m_effectiveHidden = rawEntry->isHidden;
+    if (m_effectiveHidden) {
+        if (m_entry.calcIsBeamedRestWorkaroundHiddenRest()) {
+            m_effectiveHidden = false;
+        }
+    }
+    if (m_entry.calcCreatesSingletonBeamRight()) {
+        m_launchEntry = m_entry.getNextInVoice(getVoice());
+    }
+}
+
 util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveActualDuration(bool global) const
 {
     if (global) {
@@ -2049,24 +2067,7 @@ EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() c
         if (next.calcIsBeamedRestWorkaroundVisibleRest() || next.calcCreatesSingletonBeamLeft()) {
             continue; // skip any entry that is part of a beaming workaround or a singleton beam left
         }
-        EntryInfoPtr launchEntry;
-        const auto nextEntry = next->getEntry();
-        if (next.calcCreatesSingletonBeamRight()) {
-            launchEntry = next.getNextInVoice(voice);
-            MUSX_ASSERT_IF(!launchEntry) {
-                throw std::logic_error("calcCreatesSingletonRight returned true for entry "
-                    + std::to_string(nextEntry->getEntryNumber()) + ", but next in voice was empty.");
-            }
-        }
-        bool effectiveHidden = nextEntry->isHidden;
-        if (effectiveHidden) {
-            if (next.calcIsBeamedRestWorkaroundHiddenRest()) {
-                effectiveHidden = false;
-                util::Logger::log(util::Logger::LogLevel::Verbose, "Recognized hidden rest " + std::to_string(nextEntry->getEntryNumber())
-                    + " as beaming workaround and converted it to visible.");
-            }
-        }
-        return { m_voice2, next, effectiveHidden, launchEntry };
+        return { next };
     }
     return {};
 }
@@ -2074,31 +2075,23 @@ EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() c
 EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getPrevious() const
 {
     const int voice = getVoice();
-    for (auto prev = getLaunchEntry().getPreviousInVoice(voice); prev; prev = prev.getPreviousInVoice(voice)) {
-        if (prev.calcIsBeamedRestWorkaroundVisibleRest() || prev.calcCreatesSingletonBeamRight()) {
-            continue; // skip any entry that is part of a beaming workaround or a singleton beam right
+    /// @todo Currently m_launchEntry is the forward launcher only. However, when we incorporate mid-system
+    /// beams it will become a backwards launcher as well, and then we will need to differentiate.
+    for (auto prev = m_entry.getPreviousInVoice(voice); prev; prev = prev.getPreviousInVoice(voice)) {
+        if (prev.calcIsBeamedRestWorkaroundVisibleRest()) {
+            continue; // skip any entry that is part of a beaming workaround
         }
-
-        EntryInfoPtr launchEntry;
-        const auto prevEntry = prev->getEntry();
-
-        if (prev.calcCreatesSingletonBeamLeft()) {
-            launchEntry = prev.getPreviousInVoice(voice);
-            MUSX_ASSERT_IF(!launchEntry) {
-                throw std::logic_error("calcCreatesSingletonBeamLeft returned true for entry "
-                    + std::to_string(prevEntry->getEntryNumber())
-                    + ", but previous in voice was empty.");
+        if (auto beamStart = prev.findBeamStartOrCurrent()) {
+            // skip any entry that is the hidden part of a singleton beam
+            if (prev.isSameEntry(beamStart)) {
+                if (beamStart.calcCreatesSingletonBeamLeft()) {
+                    continue;
+                }
+            } else if (beamStart.calcCreatesSingletonBeamRight()) {
+                continue;
             }
         }
-
-        bool effectiveHidden = prevEntry->isHidden;
-        if (effectiveHidden) {
-            if (prev.calcIsBeamedRestWorkaroundHiddenRest()) {
-                effectiveHidden = false;
-            }
-        }
-
-        return { m_voice2, prev, effectiveHidden, launchEntry };
+        return { prev };
     }
     return {};
 }

@@ -949,13 +949,8 @@ class EntryInfoPtr::InterpretedIterator
 
     /// @internal
     /// @brief Constructs an interpreted iterator for the specified voice.
-    /// @param voice2           If true, iterate voice 2. If false, iterate voice 1
     /// @param entry            The initial entry at this iterator position (may be null).
-    /// @param effectiveHidden  The effective-hidden state after applying workaround rules.
-    /// @param launchEntry      The entry to use as launch point for the next call to #getNext.
-    InterpretedIterator(bool voice2, EntryInfoPtr entry, bool effectiveHidden, EntryInfoPtr launchEntry = {})
-        : m_voice2(voice2), m_entry(entry), m_effectiveHidden(effectiveHidden), m_launchEntry(launchEntry)
-    {}
+    InterpretedIterator(EntryInfoPtr entry);
 
     friend class EntryFrame;
     friend class EntryInfoPtr;

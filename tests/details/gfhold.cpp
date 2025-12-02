@@ -808,7 +808,6 @@ TEST(GFrameHold, SingletonBeamsTest)
         ASSERT_TRUE(entryFrame);
         checkTuplet(entryFrame, 0, true, false, true, false);
     }
-
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold);
@@ -818,7 +817,6 @@ TEST(GFrameHold, SingletonBeamsTest)
         checkTuplet(entryFrame, 0, false, true, false, true);
         checkTuplet(entryFrame, 1, true, false, false, false);
     }
-
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
         ASSERT_TRUE(gfhold);
@@ -826,6 +824,68 @@ TEST(GFrameHold, SingletonBeamsTest)
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
         checkTuplet(entryFrame, 0, false, true, false, false);
+    }
+}
+
+TEST(GFrameHold, InterpretedIterateSingletonBeamsTest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "singbeam.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto checkSequence = [](const std::shared_ptr<const EntryFrame>& entryFrame, std::vector<size_t> indexSequence) {
+        std::string msg = "Staff " + std::to_string(entryFrame->getStaff()) + " measure " + std::to_string(entryFrame->getMeasure());
+        size_t counter = 0;
+        for (auto next = entryFrame->getFirstInterpretedIterator(1); next; next = next.getNext()) {
+            EXPECT_LT(counter, indexSequence.size()) << msg << " iteration exceeded size of expected sequence";
+            if (counter < indexSequence.size()) {
+                EXPECT_EQ(next.getEntryInfo().getIndexInFrame(), indexSequence[counter]) << msg << " unexpected index";
+            } else {
+                break;
+            }
+            counter++;
+        }
+        EXPECT_EQ(counter, indexSequence.size()) << msg << " iterated forward " << counter << " times: expected " << indexSequence.size();
+        EXPECT_GT(indexSequence.size(), 0) << msg << " indexSequence is empty";
+        if (indexSequence.size() > 0) {
+            counter = indexSequence.size();
+            for (auto prev = EntryInfoPtr(entryFrame, indexSequence[counter - 1]).asInterpretedIterator(); prev; prev = prev.getPrevious()) {
+                EXPECT_GE(counter - 1, 0) << msg << " iteration exceeded size of expected sequence";
+                if (counter > 0) {
+                    EXPECT_EQ(prev.getEntryInfo().getIndexInFrame(), indexSequence[counter - 1]) << msg << " unexpected index";
+                } else {
+                    break;
+                }
+                counter--;
+            }
+        }
+        EXPECT_EQ(counter, 0) << msg << " iterated backward " << indexSequence.size() - counter << " times: expected " << indexSequence.size();
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkSequence(entryFrame, { 0, 1, 3 });
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkSequence(entryFrame, { 0, 2, 3 });
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkSequence(entryFrame, { 0, 1, 2, 3 });
     }
 }
 
