@@ -978,6 +978,15 @@ public:
     /// @param global If true, return the global effective actual duration.
     [[nodiscard]] util::Fraction getEffectiveActualDuration(bool global = false) const;
 
+    /// @brief Return the effective elapsed duration of the entry. Calling code using InterpretedIterator
+    /// should use this value rather than the one in the entry.
+    /// @param global If true, return the global effective elapsed duration.
+    [[nodiscard]] util::Fraction getEffectiveElapsedDuration(bool global = false) const;
+
+    /// @brief Return the effective measure staff duration of the entry. Calling code using InterpretedIterator
+    /// should use this value rather than the one in the entry.
+    [[nodiscard]] util::Fraction getEffectiveMeasureStaffDuration() const;
+
     /// @brief Returns true is this entry is past the logical end of the frame, as defined
     /// by the length of the measure on the frame's staff.
     [[nodiscard]] bool calcIsPastLogicalEndOfFrame() const;
@@ -990,6 +999,15 @@ public:
     /// @return A new InterpretedIterator positioned at the next usable entry, or
     ///         an empty iterator if no further entry exists.
     [[nodiscard]] InterpretedIterator getNext() const;
+
+    /// @brief Returns an iterator advanced to the previous usable entry in this voice.
+    ///
+    /// The same workaround rules described in the class documentation are applied
+    /// when selecting the previous position.
+    ///
+    /// @return A new InterpretedIterator positioned at the previous usable entry, or
+    ///         an empty iterator if no further entry exists.
+    [[nodiscard]] InterpretedIterator getPrevious() const;
 
     /// @brief Allows the iterator to be used directly in boolean contexts.
     /// @return @c true if the iterator currently refers to a usable entry;

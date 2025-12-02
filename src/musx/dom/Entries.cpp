@@ -2013,6 +2013,19 @@ util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveActualDuration(boo
     return getLaunchEntry()->actualDuration;
 }
 
+util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveElapsedDuration(bool global) const
+{
+    if (global) {
+        return getLaunchEntry().calcGlobalElapsedDuration();
+    }
+    return getLaunchEntry()->elapsedDuration;
+}
+
+util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveMeasureStaffDuration() const
+{
+    return getLaunchEntry().getFrame()->measureStaffDuration;
+}
+
 bool EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame() const
 {
     auto entryInfo = getLaunchEntry();
@@ -2054,6 +2067,38 @@ EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() c
             }
         }
         return { m_voice2, next, effectiveHidden, launchEntry };
+    }
+    return {};
+}
+
+EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getPrevious() const
+{
+    const int voice = getVoice();
+    for (auto prev = getLaunchEntry().getPreviousInVoice(voice); prev; prev = prev.getPreviousInVoice(voice)) {
+        if (prev.calcIsBeamedRestWorkaroundVisibleRest() || prev.calcCreatesSingletonBeamRight()) {
+            continue; // skip any entry that is part of a beaming workaround or a singleton beam right
+        }
+
+        EntryInfoPtr launchEntry;
+        const auto prevEntry = prev->getEntry();
+
+        if (prev.calcCreatesSingletonBeamLeft()) {
+            launchEntry = prev.getPreviousInVoice(voice);
+            MUSX_ASSERT_IF(!launchEntry) {
+                throw std::logic_error("calcCreatesSingletonBeamLeft returned true for entry "
+                    + std::to_string(prevEntry->getEntryNumber())
+                    + ", but previous in voice was empty.");
+            }
+        }
+
+        bool effectiveHidden = prevEntry->isHidden;
+        if (effectiveHidden) {
+            if (prev.calcIsBeamedRestWorkaroundHiddenRest()) {
+                effectiveHidden = false;
+            }
+        }
+
+        return { m_voice2, prev, effectiveHidden, launchEntry };
     }
     return {};
 }
