@@ -2054,16 +2054,30 @@ bool EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame() const
 {
     auto entryInfo = getIteratedEntry();
     auto frame = entryInfo.getFrame();
-    if (entryInfo->elapsedDuration > frame->measureStaffDuration) {
-        return true;
-    }
-    if (entryInfo->elapsedDuration < frame->measureStaffDuration) {
+    const auto elapsed  = entryInfo->elapsedDuration;
+    const auto measured = frame->measureStaffDuration;
+
+    // Anything strictly before the notated end is definitely not "past"
+    if (elapsed < measured) {
         return false;
     }
-    if (entryInfo->getEntry()->graceNote) {
-        return static_cast<bool>(entryInfo.findMainEntryForGraceNote());
+
+    // From here on, we are at or beyond the notated duration, but we only
+    // want to treat very specific Finale workarounds as "logically next measure".
+
+    // 1) `findMainEntryForGraceNote` is aware of beam-over-barlines special case.
+    if (entryInfo->getEntry()->graceNote && static_cast<bool>(entryInfo.findMainEntryForGraceNote())) {
+        return true;
     }
-    return true;
+
+    // 2) Beam-over-barline plugin workaround: hidden source entry must exist.
+    if (entryInfo.findHiddenSourceForBeamOverBarline()) {
+        return true;
+    }
+
+    // 3) All other cases (including elapsed > measured with no workaround) are
+    //    just overfull measures, not "logically past end".
+    return false;
 }
 
 EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() const
