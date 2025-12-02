@@ -945,9 +945,6 @@ class EntryInfoPtr::InterpretedIterator
     /// @brief Gets the voice as integer value 1 or 2.
     [[nodiscard]] int getVoice() const noexcept { return int(m_voice2) + 1; }
 
-    [[nodiscard]] const EntryInfoPtr& getIteratedEntry() const noexcept
-    { return m_iteratedEntry ? m_iteratedEntry : m_entry; }
-
     [[nodiscard]] const EntryInfoPtr& getForwardLaunchEntry() const noexcept
     { return getIteratedEntry(); }
 
@@ -969,6 +966,16 @@ public:
     /// @brief Returns the entry at the current iterator position.
     /// @return A const reference to the underlying EntryInfoPtr (which may be null).
     [[nodiscard]] const EntryInfoPtr& getEntryInfo() const noexcept { return m_entry; }
+
+    /// @brief Returns the underlying iterated entry at the current iterator position.
+    /// This is the raw entry that InterpretedIterator uses to keep its place. In all
+    /// normal cases, it is the same as the entry returned by #getEntry. It is primarily
+    /// useful when iterating a mid-system beam over a barline that the Beam Over Barline
+    /// plugin crammed into the first measure. This allows you to do your own iteration on
+    /// the source entries. Nevertheless, even then it should be used sparingly and only in
+    /// situations where it is absolutely required.
+    [[nodiscard]] const EntryInfoPtr& getIteratedEntry() const noexcept
+    { return m_iteratedEntry ? m_iteratedEntry : m_entry; }
 
     /// @brief Returns whether the entry should be treated as hidden.
     /// @return @c true if the entry is effectively hidden after applying workaround rules
