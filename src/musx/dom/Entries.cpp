@@ -2052,6 +2052,11 @@ util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveMeasureStaffDurati
 
 bool EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame() const
 {
+    // if we reached the real end of frame, we are also logically past the end.
+    if (!*this) {
+        return true;
+    }
+
     auto entryInfo = getIteratedEntry();
     auto frame = entryInfo.getFrame();
     const auto elapsed  = entryInfo->elapsedDuration;
