@@ -126,8 +126,9 @@ public:
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
 
     /// @brief Calculates the number of voices used by the GFrameHold instance.
+    /// @param excludeHidden If true, hidden entries are excluded from consideration.
     /// @return A list of each layer that contains entries and the number voice2 entries in that layer.
-    std::map<LayerIndex, int> calcVoices() const;
+    std::map<LayerIndex, int> calcVoices(bool excludeHidden = false) const;
 
     /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
@@ -898,6 +899,8 @@ private:
 /// - The current entry (which may be null if iteration is exhausted).
 /// - An "effective hidden" flag that reflects how the entry should be
 ///   treated by higher-level consumers after applying workaround rules.
+/// - An "effective actual duration" that provides the actual duration value
+//    the the caller should use for calculating elapsed time.
 ///
 /// ### Beamed-rest workaround
 ///
@@ -914,6 +917,11 @@ private:
 ///   **returned**, and are treated as visible by making #getEffectiveHidden return @c false.
 /// - All other entries are returned with #getEffectiveHidden matching their stored @c isHidden value.
 ///   @c isHidden value.
+///
+/// ### Singleton beam workaround
+///
+/// Handles traversal of beams created by zero-length tuplets.
+/// See #EntryFrame::TupletInfo::calcCreatesSingletonBeamRight for more information.
 ///
 /// If no usable entry exists at or beyond the current position, the iterator
 /// evaluates to @c false in a boolean context and getEntry() returns a null
@@ -967,7 +975,12 @@ public:
 
     /// @brief Return the effective actual duration of the entry. Calling code using InterpretedIterator
     /// should use this value rather than the one in the entry.
-    [[nodiscard]] util::Fraction getEffectiveActualDuration() const;
+    /// @param global If true, return the global effective actual duration.
+    [[nodiscard]] util::Fraction getEffectiveActualDuration(bool global = false) const;
+
+    /// @brief Returns true is this entry is past the logical end of the frame, as defined
+    /// by the length of the measure on the frame's staff.
+    [[nodiscard]] bool calcIsPastLogicalEndOfFrame() const;
 
     /// @brief Returns an iterator advanced to the next usable entry in this voice.
     ///
@@ -1062,7 +1075,7 @@ public:
         /// Finale has no built-in support for beams on singleton notes. As a workaround, users and (especially)
         /// plugins such as Beam Over Barline create singleton beams using a 0-length tuplet and hiding either the tuplet
         /// note or its next neighbor, depending on whether the beam goes to the left or the right. You should never
-        /// encounter a 0-length tuplet encompassing more than one entry, but these functions guarantee this if they return `true`.
+        /// encounter a 0-length tuplet encompassing more than one entry, but these functions guarantee this if they return @c true.
         ///
         /// @return True if this tuplet creates a singleton beam to the right. You may handle this as follows.
         ///     - The entry with the tuplet is the visible entry to use. You can mark this entry as having a singleton beam right, if your application allows it.

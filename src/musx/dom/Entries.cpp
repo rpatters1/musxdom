@@ -1789,7 +1789,7 @@ bool EntryInfoPtr::calcIsFullMeasureRest() const
 {
     const auto entry = (*this)->getEntry();
     if (entry->isPossibleFullMeasureRest() && (*this)->elapsedDuration == 0) {
-        if (entry->voice2) {
+        if (entry->voice2 && !entry->isHidden) {
             auto layerInfo = getFrame()->getContext().calcVoices();
             auto it = layerInfo.find(getLayerIndex());
             if (it != layerInfo.end()) {
@@ -2005,9 +2005,28 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
 // ***** EntryInfoPtr::InterpretedIterator *****
 // *********************************************
 
-util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveActualDuration() const
+util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveActualDuration(bool global) const
 {
+    if (global) {
+        return getLaunchEntry().calcGlobalActualDuration();
+    }
     return getLaunchEntry()->actualDuration;
+}
+
+bool EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame() const
+{
+    auto entryInfo = getLaunchEntry();
+    auto frame = entryInfo.getFrame();
+    if (entryInfo->elapsedDuration > frame->measureStaffDuration) {
+        return true;
+    }
+    if (entryInfo->elapsedDuration < frame->measureStaffDuration) {
+        return false;
+    }
+    if (entryInfo->getEntry()->graceNote) {
+        return static_cast<bool>(entryInfo.findMainEntryForGraceNote());
+    }
+    return true;
 }
 
 EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() const
@@ -2205,7 +2224,7 @@ bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryIn
     return true;
 }
 
-std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices() const
+std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices(bool excludeHidden) const
 {
     std::map<LayerIndex, int> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
@@ -2214,6 +2233,9 @@ std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices() const
             bool gotLayer = false;
             int numV2 = 0;
             frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
+                if (excludeHidden && entry->isHidden) {
+                    return true; // skip hidden entries.
+                }
                 gotLayer = true;
                 if (entry->voice2) {
                     numV2++;

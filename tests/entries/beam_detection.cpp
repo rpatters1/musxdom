@@ -708,12 +708,13 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto checkEntry = [](const EntryInfoPtr entPtr, bool expectedValue, size_t expectedIndex = 0) {
+    auto checkEntry = [](const EntryInfoPtr entPtr, bool expectedValue, size_t expectedIndex = 0, bool pastEndOfFrame = true) {
         const auto mainEntry = entPtr.findMainEntryForGraceNote();
         EXPECT_EQ(bool(mainEntry), expectedValue);
         if (mainEntry) {
             EXPECT_EQ(mainEntry.getIndexInFrame(), expectedIndex);
         }
+        EXPECT_EQ(entPtr.asInterpretedIterator().calcIsPastLogicalEndOfFrame(), pastEndOfFrame);
     };
 
     {
@@ -723,9 +724,9 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
         ASSERT_GE(entryFrame->getEntries().size(), 22);
 
-        checkEntry(EntryInfoPtr(entryFrame, 3), false); // not a grace note
-        checkEntry(EntryInfoPtr(entryFrame, 4), false);
-        checkEntry(EntryInfoPtr(entryFrame, 5), false);
+        checkEntry(EntryInfoPtr(entryFrame, 3), false, 0, false); // not a grace note
+        checkEntry(EntryInfoPtr(entryFrame, 4), false, 0, false);
+        checkEntry(EntryInfoPtr(entryFrame, 5), false, 0, false);
         checkEntry(EntryInfoPtr(entryFrame, 10), true, 12);
         checkEntry(EntryInfoPtr(entryFrame, 11), true, 12);
         checkEntry(EntryInfoPtr(entryFrame, 16), false);
@@ -750,7 +751,7 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 7";
         ASSERT_GE(entryFrame->getEntries().size(), 7);
 
-        checkEntry(EntryInfoPtr(entryFrame, 6), false);
+        checkEntry(EntryInfoPtr(entryFrame, 6), false, 0, false);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 8);
@@ -759,7 +760,7 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 8";
         ASSERT_GE(entryFrame->getEntries().size(), 5);
 
-        checkEntry(EntryInfoPtr(entryFrame, 0), true, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 0), true, 1, false);
     }
 }
 
