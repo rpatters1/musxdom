@@ -969,7 +969,7 @@ public:
 
     /// @brief Returns the underlying iterated entry at the current iterator position.
     /// This is the raw entry that InterpretedIterator uses to keep its place. In all
-    /// normal cases, it is the same as the entry returned by #getEntry. It is primarily
+    /// normal cases, it is the same as the entry returned by #getEntryInfo. It is primarily
     /// useful when iterating a mid-system beam over a barline that the Beam Over Barline
     /// plugin crammed into the first measure. This allows you to do your own iteration on
     /// the source entries. Nevertheless, even then it should be used sparingly and only in
