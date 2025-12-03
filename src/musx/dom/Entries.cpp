@@ -37,6 +37,7 @@ static bool forVoice2(int voice)
     }
     return voice == 2;
 }
+
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 // *****************
@@ -487,6 +488,11 @@ bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
         return false;
     }
     return (*this)->getEntry()->getEntryNumber() == src->getEntry()->getEntryNumber();
+}
+
+int EntryInfoPtr::getVoice() const
+{
+    return int((*this)->getEntry()->voice2) + 1;
 }
 
 bool EntryInfoPtr::calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert) const
@@ -1030,7 +1036,7 @@ EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const
     if (entry->graceNote) {
         return {};
     }
-    int voice = static_cast<int>(entry->voice2) + 1;
+    int voice = getVoice();
     auto frame = getFrame();
     auto anchorEntryInfo = frame->getLastInVoice(voice);
     while (anchorEntryInfo && anchorEntryInfo->getEntry()->graceNote) {
@@ -1067,7 +1073,7 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
     if (entry->graceNote) {
         return {};
     }
-    int voice = static_cast<int>(entry->voice2) + 1;
+    int voice = getVoice();
     auto frame = getFrame();
     auto anchorEntryInfo = frame->getFirstInVoice(voice);
     while (anchorEntryInfo && anchorEntryInfo->getEntry()->graceNote) {
@@ -1235,8 +1241,19 @@ EntryInfoPtr EntryInfoPtr::findMainEntryForGraceNote(bool ignoreRests) const
     if (!entry->graceNote) {
         return {};
     }
-    if (const auto nextNonGrace = getNextSameVNoGrace()) {
+    const int voice = getVoice();
+    for (auto nextNonGrace = getNextInVoice(voice); nextNonGrace; nextNonGrace = nextNonGrace.getNextInVoice(voice)) {
+        if (nextNonGrace->getEntry()->graceNote) {
+            continue;
+        }
         if (ignoreRests && nextNonGrace.calcDisplaysAsRest()) {
+            return {};
+        }
+        if (nextNonGrace->elapsedDuration != (*this)->elapsedDuration) {
+            // This can happen in voice2 if we find a different voice2 sequence. But we want
+            // to *allow* a different voice2 sequence if it starts at the same location as the
+            // grace note. (Consider the case when a grace note has a v2 grace note sequence
+            ///and then the main note has a corresponding v2 sequence at the same elapsed duration.)
             return {};
         }
         if (const auto nextNonGraceHiddenForBeamOverBarline = nextNonGrace.findHiddenSourceForBeamOverBarline()) {
@@ -1280,7 +1297,7 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
     if (!prevFrame) {
         return {};
     }
-    int voice = static_cast<int>(entry->voice2) + 1;
+    int voice = getVoice();
     for (auto prevEntryInfo = prevFrame->getLastInVoice(voice); prevEntryInfo; prevEntryInfo = prevEntryInfo.getPreviousSameV()) {
         if (prevEntryInfo->getEntry()->graceNote) {
             continue;
@@ -1325,7 +1342,7 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesRightOverBarline() const
     if (!nextFrame) {
         return {};
     }
-    int voice = static_cast<int>(entry->voice2) + 1;
+    int voice = getVoice();
     for (auto nextEntryInfo = nextFrame->getFirstInVoice(voice); nextEntryInfo; nextEntryInfo = nextEntryInfo.getNextSameV()) {
         if (nextEntryInfo->getEntry()->graceNote) {
             continue;
@@ -2011,10 +2028,9 @@ EntryInfoPtr::InterpretedIterator::InterpretedIterator(EntryInfoPtr entry, bool 
         return;
     }
     auto rawEntry = entry->getEntry();
-    m_voice2 = rawEntry->voice2;
     m_effectiveHidden = rawEntry->isHidden;
     if (m_entry.calcCreatesSingletonBeamRight()) {
-        m_iteratedEntry = m_entry.getNextInVoice(getVoice());
+        m_iteratedEntry = m_entry.getNextInVoice(m_entry.getVoice());
     }
     if (m_remapBeamOverBarlineEntries) {
         if (auto display = m_entry.findDisplayEntryForBeamOverBarline()) {
@@ -2089,7 +2105,7 @@ bool EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame() const
 
 EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() const
 {
-    const int voice = getVoice();
+    const int voice = m_entry.getVoice();
     for (auto next = getForwardLaunchEntry().getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
         if (next.calcIsBeamedRestWorkaroundVisibleRest() || next.calcCreatesSingletonBeamLeft()) {
             continue; // skip any entry that is part of a beamed rest workaround or a singleton beam left
@@ -2101,7 +2117,7 @@ EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() c
 
 EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getPrevious() const
 {
-    const int voice = getVoice();
+    const int voice = m_entry.getVoice();
     /// @todo Currently m_iteratedEntry is the forward launcher only. However, when we incorporate mid-system
     /// beams it will become a backwards launcher as well, and then we will need to differentiate.
     for (auto prev = getBackwardLaunchEntry().getPreviousInVoice(voice); prev; prev = prev.getPreviousInVoice(voice)) {
