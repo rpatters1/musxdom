@@ -6,6 +6,5 @@ var searchData=
   ['windows_3',['windows',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a8b757b0c6d31a24943436399bc778cbdaaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::others::FontDefinition::Windows'],['../namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391aaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::header::Windows'],['../namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133aaea23489ce3aa9b6406ebb28e0cda430',1,'musx::dom::header::Windows']]],
   ['wordext_4',['WordExt',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#af8f5c0bceb30383a2c1fa569c63192beaa7a16be8d0ac2559f67ae5535215f52a',1,'musx::dom::options::LyricOptions']]],
   ['wordextension_5',['WordExtension',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa34d6e89875e45d6b7e2aa5f89bf150e2',1,'musx::dom::others::SmartShape']]],
-  ['workaroundaware_6',['WorkaroundAware',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dcea0c89a114540e8695c187d9d4584e4d7a',1,'musx::dom::EntryInfoPtr']]],
-  ['written_7',['Written',['../classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28a685710b38fa0c2510fc1079843dec6b9',1,'musx::dom::KeySignature']]]
+  ['written_6',['Written',['../classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28a685710b38fa0c2510fc1079843dec6b9',1,'musx::dom::KeySignature']]]
 ];

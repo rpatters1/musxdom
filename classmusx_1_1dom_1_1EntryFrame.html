@@ -167,9 +167,9 @@ const std::vector&lt; std::shared_ptr&lt; const <a class="el" href="classmusx_1_
 <tr class="memitem:a24114e330ad19480f818117ce9cabe8c" id="r_a24114e330ad19480f818117ce9cabe8c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a24114e330ad19480f818117ce9cabe8c">getLastInVoice</a> (int voice) const</td></tr>
 <tr class="memdesc:a24114e330ad19480f818117ce9cabe8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the last entry in the specified v1/v2 or null if none.  <br /></td></tr>
 <tr class="separator:a24114e330ad19480f818117ce9cabe8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee75a195ef4dd7a9c57d53de4eea54ac" id="r_aee75a195ef4dd7a9c57d53de4eea54ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html">EntryInfoPtr::WorkaroundAwareResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#aee75a195ef4dd7a9c57d53de4eea54ac">getFirstInVoiceWorkaroundAware</a> (int voice) const</td></tr>
-<tr class="memdesc:aee75a195ef4dd7a9c57d53de4eea54ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first entry in the specified voice using musxdom's workaround-aware interpretation.  <br /></td></tr>
-<tr class="separator:aee75a195ef4dd7a9c57d53de4eea54ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af02ff67e9e60f49bfead228fa4ec2a6c" id="r_af02ff67e9e60f49bfead228fa4ec2a6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html">EntryInfoPtr::InterpretedIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#af02ff67e9e60f49bfead228fa4ec2a6c">getFirstInterpretedIterator</a> (int voice, bool remapBeamOverBarlineEntries=true) const</td></tr>
+<tr class="memdesc:af02ff67e9e60f49bfead228fa4ec2a6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a workaround-aware iterator at the first entry in the specified voice.  <br /></td></tr>
+<tr class="separator:af02ff67e9e60f49bfead228fa4ec2a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6352800f5a3791aa5cc988867ac1a5ad" id="r_a6352800f5a3791aa5cc988867ac1a5ad"><td class="memItemLeft" align="right" valign="top"><a id="a6352800f5a3791aa5cc988867ac1a5ad" name="a6352800f5a3791aa5cc988867ac1a5ad"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addEntry</b> (const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> &gt; &amp;entry)</td></tr>
 <tr class="memdesc:a6352800f5a3791aa5cc988867ac1a5ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an entry to the list. <br /></td></tr>
@@ -322,7 +322,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculates if this entry frame is part of a cue. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">includeVisibleInScore</td><td>If true, include cues that are visible in the score. </td></tr>
@@ -422,6 +422,55 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af02ff67e9e60f49bfead228fa4ec2a6c" name="af02ff67e9e60f49bfead228fa4ec2a6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af02ff67e9e60f49bfead228fa4ec2a6c">&#9670;&#160;</a></span>getFirstInterpretedIterator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html">EntryInfoPtr::InterpretedIterator</a> musx::dom::EntryFrame::getFirstInterpretedIterator </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>voice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>remapBeamOverBarlineEntries</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a workaround-aware iterator at the first entry in the specified voice. </p>
+<p>The returned iterator begins forward traversal at the first raw entry for the given voice (1 or 2) and applies the workaround rules described in <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html">EntryInfoPtr::InterpretedIterator</a>.</p>
+<p>Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html#a5175012d03055da3d0decb066efe8a75" title="Returns an iterator advanced to the next usable entry in this voice.">EntryInfoPtr::InterpretedIterator::getNext</a> to advance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">voice</td><td>Must be 1 or 2. </td></tr>
+    <tr><td class="paramname">remapBeamOverBarlineEntries</td><td>Controls how mid-system "beam over barline" workarounds created by Finale's <em>Beam Over Barline</em> plugin are presented by this iterator.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Background: one way the plugin encodes a beam that crosses a barline is by cramming all visible continuation notes into the frame where the beam <em>starts</em>. The continuation entries that would normally appear in later measures are then hidden in their source measures. As a result, the raw data contains:</p><ul>
+<li>A cluster of visible continuation entries in the starting frame, and</li>
+<li>Hidden source entries in the subsequent measures where those notes would logically belong.</li>
+</ul>
+<p>musxdom can handle this workaround in two ways:</p>
+<p>**(1) Remap continuation entries to their logical measures (default: true)** <br  />
+ When <code>remapBeamOverBarlineEntries</code> is true, the iterator presents each hidden source entry as its corresponding visible continuation entry, effectively remapping the continuation notes back into their logical source measures. In other words, hidden source entries are <b>not skipped</b>; they are <b>substituted with their display-entry counterparts</b> and returned from the iterator as if Finale had stored them in their proper measures. In this mode, callers must use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html#a3cff08040cfaef1d6413468681e01330" title="Returns true is this entry is past the logical end of the frame, as defined by the length of the meas...">EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame</a> to determine the logical end of each frame so as not to encounter the physically crammed display entries where they appear in the raw data.</p>
+<p>**(2) Process raw frames and skip hidden source entries in the caller (set to false)** <br  />
+ When <code>remapBeamOverBarlineEntries</code> is false, the iterator presents the entries exactly as they appear in the raw data: the visible continuation entries remain in the starting frame, and the hidden source entries appear in the subsequent measures. <br  />
+ In this mode, callers are responsible for ignoring the hidden source entries, because their visible counterparts were already handled when the starting measure was processed. Callers should not use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html#a3cff08040cfaef1d6413468681e01330" title="Returns true is this entry is past the logical end of the frame, as defined by the length of the meas...">EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame</a> for iteration termination in this mode; instead they should exhaust the frame using a structural validity check (such as <code>operator bool</code> on the iterator). </p><dl class="section return"><dt>Returns</dt><dd>A InterpretedIterator positioned at the first usable entry, or an empty iterator if no usable entry exists. </dd></dl>
+
+</div>
+</div>
 <a id="a8387ecf374717defbeb6389ea79ecf42" name="a8387ecf374717defbeb6389ea79ecf42"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8387ecf374717defbeb6389ea79ecf42">&#9670;&#160;</a></span>getFirstInVoice()</h2>
 
@@ -445,41 +494,6 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="aee75a195ef4dd7a9c57d53de4eea54ac" name="aee75a195ef4dd7a9c57d53de4eea54ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee75a195ef4dd7a9c57d53de4eea54ac">&#9670;&#160;</a></span>getFirstInVoiceWorkaroundAware()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html">EntryInfoPtr::WorkaroundAwareResult</a> musx::dom::EntryFrame::getFirstInVoiceWorkaroundAware </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>voice</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the first entry in the specified voice using musxdom's workaround-aware interpretation. </p>
-<p>This function begins forward traversal at the first raw entry for the given voice (1 or 2). It applies musxdom’s interpretation of known user-created Finale workarounds. Currently this means the beamed-rest workaround, where additional visible or hidden rests are inserted solely to break beams over internal rests when the beam is otherwise a hook. Other workarounds may be added in the future.</p>
-<p>The following rules are applied when selecting the returned entry:</p>
-<ul>
-<li>Extra visible voice-2 workaround rests inserted only to complete or shape a beam are <b>skipped entirely</b>.</li>
-<li>Hidden voice-1 workaround rests used to enforce a beam shape are <b>returned</b>, and are treated as visible by setting <a class="el" href="structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html#ab6fc72d5fcae384f4177a876cb1c2587" title="True if the entry should be treated as effectively hidden.">EntryInfoPtr::WorkaroundAwareResult::effectiveHidden</a> to <code>false</code>.</li>
-<li>All remaining entries are returned with <a class="el" href="structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html#ab6fc72d5fcae384f4177a876cb1c2587" title="True if the entry should be treated as effectively hidden.">EntryInfoPtr::WorkaroundAwareResult::effectiveHidden</a> matching their stored <code>isHidden</code> value.</li>
-</ul>
-<p>If no usable entry remains after applying these rules, the returned <a class="el" href="structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html">EntryInfoPtr::WorkaroundAwareResult</a> will have a null <a class="el" href="structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html#af69ab15ab0ea8a26f93cb5ff59815041" title="The entry found, or null if there is no usable entry.">EntryInfoPtr::WorkaroundAwareResult::entry</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">voice</td><td>Must be 1 or 2. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A WorkaroundAwareResult containing the selected entry (or null) and its effective-hidden flag. </dd></dl>
 
 </div>
 </div>

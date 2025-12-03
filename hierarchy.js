@@ -340,6 +340,7 @@ var hierarchy =
     [ "musx::dom::header::Header", "structmusx_1_1dom_1_1header_1_1Header.html", null ],
     [ "musx::dom::others::ShapeInstructionList::InstructionInfo", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1InstructionInfo.html", null ],
     [ "musx::dom::InstrumentInfo", "structmusx_1_1dom_1_1InstrumentInfo.html", null ],
+    [ "musx::dom::EntryInfoPtr::InterpretedIterator", "classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html", null ],
     [ "musx::xml::IXmlAttribute", "classmusx_1_1xml_1_1IXmlAttribute.html", [
       [ "musx::xml::pugi::Attribute", "classmusx_1_1xml_1_1pugi_1_1Attribute.html", null ],
       [ "musx::xml::rapidxml::Attribute", "classmusx_1_1xml_1_1rapidxml_1_1Attribute.html", null ],
@@ -429,6 +430,5 @@ var hierarchy =
       ] ]
     ] ],
     [ "musx::dom::ShapeDefInstruction::VerticalMode", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html", null ],
-    [ "musx::dom::options::LyricOptions::WordExtConnectStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1WordExtConnectStyle.html", null ],
-    [ "musx::dom::EntryInfoPtr::WorkaroundAwareResult", "structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html", null ]
+    [ "musx::dom::options::LyricOptions::WordExtConnectStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1WordExtConnectStyle.html", null ]
 ];

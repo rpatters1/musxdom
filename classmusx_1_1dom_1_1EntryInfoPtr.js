@@ -1,14 +1,14 @@
 var classmusx_1_1dom_1_1EntryInfoPtr =
 [
-    [ "WorkaroundAwareResult", "structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult.html", "structmusx_1_1dom_1_1EntryInfoPtr_1_1WorkaroundAwareResult" ],
+    [ "InterpretedIterator", "classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html", "classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator" ],
     [ "BeamIterationMode", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dce", [
       [ "Normal", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dcea960b44c579bc2f6818d2daaf9e4c16f0", null ],
       [ "IncludeAll", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dceabd8f2523a5e7f2daaacc6adbdae30d42", null ],
-      [ "WorkaroundAware", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dcea0c89a114540e8695c187d9d4584e4d7a", null ]
+      [ "Interpreted", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32b33a2fc47c10be12a5bc0c0c094dcea8210287b65ca21fee5ea1fe8858d6662", null ]
     ] ],
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html#ad2b5a35a87aa853929fb934aa1d5fbc6", null ],
     [ "EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0b49081647bf2faa55ae9d0cfc6d8d7e", null ],
-    [ "asWorkaroundAwareResult", "classmusx_1_1dom_1_1EntryInfoPtr.html#afd939004cb58dec14e587c933446f173", null ],
+    [ "asInterpretedIterator", "classmusx_1_1dom_1_1EntryInfoPtr.html#a960544016cd19b010dd40c2086bdbd6d", null ],
     [ "calcBeamContinuesLeftOverBarline", "classmusx_1_1dom_1_1EntryInfoPtr.html#a15d67f4ab95cc0685c21f2cb95f4e019", null ],
     [ "calcBeamContinuesRightOverBarline", "classmusx_1_1dom_1_1EntryInfoPtr.html#ac4c4eb59f8dc5b3c5b692f53508fca39", null ],
     [ "calcBeamMustStartHere", "classmusx_1_1dom_1_1EntryInfoPtr.html#a09ad33c9878ef3faf3795842f12f3182", null ],
@@ -27,7 +27,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcIsAuxiliaryPitchMarker", "classmusx_1_1dom_1_1EntryInfoPtr.html#abbfa1f3bf8950151977f8ede1c74150b", null ],
     [ "calcIsBeamedRestWorkaroundHiddenRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#a889bd2a2d34c6e10b0d3e3ef9f5d1caf", null ],
     [ "calcIsBeamedRestWorkaroundVisibleRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#a5e5709e78e5ae67b5300453290222f65", null ],
-    [ "calcIsBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#ab127dfae15a3bb5c27b76cbd55c812a1", null ],
+    [ "calcIsBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0944be727f65a75c300e77877bd362e4", null ],
     [ "calcIsCue", "classmusx_1_1dom_1_1EntryInfoPtr.html#a933091a4840ecd2596b70069a11201ef", null ],
     [ "calcIsFeatheredBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#afe092ac6f686263ca7b26d6ca0d4b6ee", null ],
     [ "calcIsFullMeasureRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#aee6b5524df00cd1f2bbb41ebf760b58d", null ],
@@ -65,7 +65,6 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "getNextInFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a003e61490f1a175379baff25dae915ba", null ],
     [ "getNextInLayer", "classmusx_1_1dom_1_1EntryInfoPtr.html#a5adc36e78c516ba4f39a4e7ba34f019a", null ],
     [ "getNextInVoice", "classmusx_1_1dom_1_1EntryInfoPtr.html#ac32c7dc63fac40c07b1c4f4cabeca705", null ],
-    [ "getNextInVoiceWorkaroundAware", "classmusx_1_1dom_1_1EntryInfoPtr.html#a6d4fa060119dc21bc5d468dce8de64f2", null ],
     [ "getNextSameV", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0e3ba69e5e87f779065e9fef99a0a171", null ],
     [ "getNextSameVNoGrace", "classmusx_1_1dom_1_1EntryInfoPtr.html#af0d720901aec74e53e8e251cb3e5635f", null ],
     [ "getPartFieldData", "classmusx_1_1dom_1_1EntryInfoPtr.html#a2e66f9a4903c145849fd1d908ff14dab", null ],
@@ -77,6 +76,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "getPreviousSameV", "classmusx_1_1dom_1_1EntryInfoPtr.html#ab1b0a9ba02cfc7985aa40ed3ae044eb0", null ],
     [ "getPreviousSameVNoGrace", "classmusx_1_1dom_1_1EntryInfoPtr.html#a2c436b3b3f34b3fe754f8fa587974c2b", null ],
     [ "getStaff", "classmusx_1_1dom_1_1EntryInfoPtr.html#aa8b16c8007cbdbf5602207f581e26c30", null ],
+    [ "getVoice", "classmusx_1_1dom_1_1EntryInfoPtr.html#a88dfe9aea6bce2d27557ea6e31e653ee", null ],
     [ "isSameEntry", "classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795", null ],
     [ "operator bool", "classmusx_1_1dom_1_1EntryInfoPtr.html#af7ccc316e270150a457743bfdf30f28d", null ],
     [ "operator->", "classmusx_1_1dom_1_1EntryInfoPtr.html#acbc874af2cdeb4ad7e8a706ea8f85285", null ],

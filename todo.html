@@ -99,25 +99,27 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a2cbd52ed27bd8b65673d4440e2cb2c4c">musx::dom::EntryFrame::calcAreAllEntriesHiddenInFrame</a>  () const</dt>
 <dd><a class="anchor" id="_todo000001"></a>check if the entry is hidden by voiced parts.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#af934596122cb5cd63787c096466d7b0e">musx::dom::EntryFrame::calcIsCueFrame</a>  (bool includeVisibleInScore=false) const</dt>
-<dd><a class="anchor" id="_todo000005"></a>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue.  </dd>
+<dd><a class="anchor" id="_todo000006"></a>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b">musx::dom::EntryInfoPtr::calcDisplaysAsRest</a>  () const</dt>
 <dd><p class="startdd"><a class="anchor" id="_todo000002"></a>Add code to detect that the entry is converted to a rest by voiced part settings </p>
-<p class="enddd"><a class="anchor" id="_todo000004"></a>Eventually calcDisplaysAsRest should take into account voiced parts.  </p>
+<p class="enddd"><a class="anchor" id="_todo000005"></a>Eventually calcDisplaysAsRest should take into account voiced parts.  </p>
 </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html#a7695a9be72a0454184fd406a0f86d7af">musx::dom::EntryInfoPtr::InterpretedIterator::getPrevious</a>  () const</dt>
+<dd><a class="anchor" id="_todo000004"></a>Currently m_iteratedEntry is the forward launcher only. However, when we incorporate mid-system beams it will become a backwards launcher as well, and then we will need to differentiate.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#ad766742621a9d1e43a68c2779d30d7c8">musx::dom::others::PartDefinition::getNameRawTextCtx</a>  () const</dt>
-<dd><a class="anchor" id="_todo000006"></a>perhaps additional logic as in getName, but not until something is broken.  </dd>
+<dd><a class="anchor" id="_todo000007"></a>perhaps additional logic as in getName, but not until something is broken.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html#a881c319547c5309dda20863a1846a1b3">musx::dom::others::StaffListSet&lt; ScoreList, PartsList, ScoreForcedList, PartsForcedList &gt;::contains</a>  (StaffCmper staffId, const MusxInstanceList&lt; StaffUsed &gt; &amp;systemStaves, bool isHidden=false) const noexcept</dt>
-<dd><a class="anchor" id="_todo000007"></a>It may be necessary to add some fuzzy logic around StaffGroup here, at least for category staff lists. Finale includes a staff if it is the top staff in a group, when the top staff of a group is included. We defer this to another day.  </dd>
+<dd><a class="anchor" id="_todo000008"></a>It may be necessary to add some fuzzy logic around StaffGroup here, at least for category staff lists. Finale includes a staff if it is the top staff in a group, when the top staff of a group is included. We defer this to another day.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a53148c96102e3c9063815698642f2f0c">musx::util::Fraction::Fraction</a>  (int num, int den)</dt>
-<dd><a class="anchor" id="_todo000008"></a>Make this constructor constexpr when we drop C++17 support.  </dd>
+<dd><a class="anchor" id="_todo000009"></a>Make this constructor constexpr when we drop C++17 support.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a6b0c43a6ff364c44a37edc240c229281">musx::util::Fraction::fromEdu</a>  (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5" title="&quot;Enigma Durational Units&quot; value (1024 per quarter note)">dom::Edu</a> edu)</dt>
-<dd><a class="anchor" id="_todo000009"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dd><a class="anchor" id="_todo000010"></a>Make this function constexpr when we drop C++17 support.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ae099c1bdde8f857a3542fcf812fa3b4c">musx::util::Fraction::operator/</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other) const</dt>
-<dd><a class="anchor" id="_todo000011"></a>Make this function constexpr when we drop C++17 support.  </dd>
-<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ae3505b301fa50b2ada26a6345a871e1c">musx::util::Fraction::operator/=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
 <dd><a class="anchor" id="_todo000012"></a>Make this function constexpr when we drop C++17 support.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#ae3505b301fa50b2ada26a6345a871e1c">musx::util::Fraction::operator/=</a>  (const <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> &amp;other)</dt>
+<dd><a class="anchor" id="_todo000013"></a>Make this function constexpr when we drop C++17 support.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1Fraction.html#a451dee1ae0c731665ef51318e3613e95">musx::util::Fraction::reciprocal</a>  () const</dt>
-<dd><a class="anchor" id="_todo000010"></a>Make this function constexpr when we drop C++17 support. </dd>
+<dd><a class="anchor" id="_todo000011"></a>Make this function constexpr when we drop C++17 support. </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
