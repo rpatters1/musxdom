@@ -587,7 +587,8 @@ public:
     EntryInfoPtr getPreviousInVoice(int voice) const;
 
     /// @brief Returns this EntryInfoPtr in a @ref InterpretedIterator instance.
-    InterpretedIterator asInterpretedIterator() const;
+    /// @param remapBeamOverBarlineEntries See comments at #EntryFrame::getFirstInterpretedIterator.
+    InterpretedIterator asInterpretedIterator(bool remapBeamOverBarlineEntries = true) const;
 
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
     EntryInfoPtr getNextInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
@@ -941,9 +942,13 @@ class EntryInfoPtr::InterpretedIterator
     // --------
     EntryInfoPtr m_iteratedEntry;               ///< The underlying entry from which we are iterating (or null if the same as m_entry).
     bool m_useIteratedForBackLaunch{};          ///< If true, use m_iteratedEntry for the backwards launch to previous.
+    bool m_remapBeamOverBarlineEntries{};       ///< See comments at #EntryFrame::getFirstInterpretedIterator.
 
     /// @brief Gets the voice as integer value 1 or 2.
     [[nodiscard]] int getVoice() const noexcept { return int(m_voice2) + 1; }
+
+    [[nodiscard]] const EntryInfoPtr& getIteratedEntry() const noexcept
+    { return m_iteratedEntry ? m_iteratedEntry : m_entry; }
 
     [[nodiscard]] const EntryInfoPtr& getForwardLaunchEntry() const noexcept
     { return getIteratedEntry(); }
@@ -954,7 +959,7 @@ class EntryInfoPtr::InterpretedIterator
     /// @internal
     /// @brief Constructs an interpreted iterator for the specified voice.
     /// @param entry            The initial entry at this iterator position (may be null).
-    InterpretedIterator(EntryInfoPtr entry);
+    InterpretedIterator(EntryInfoPtr entry, bool remapBeamOverBarlineEntries);
 
     friend class EntryFrame;
     friend class EntryInfoPtr;
@@ -966,16 +971,6 @@ public:
     /// @brief Returns the entry at the current iterator position.
     /// @return A const reference to the underlying EntryInfoPtr (which may be null).
     [[nodiscard]] const EntryInfoPtr& getEntryInfo() const noexcept { return m_entry; }
-
-    /// @brief Returns the underlying iterated entry at the current iterator position.
-    /// This is the raw entry that InterpretedIterator uses to keep its place. In all
-    /// normal cases, it is the same as the entry returned by #getEntryInfo. It is primarily
-    /// useful when iterating a mid-system beam over a barline that the Beam Over Barline
-    /// plugin crammed into the first measure. This allows you to do your own iteration on
-    /// the source entries. Nevertheless, even then it should be used sparingly and only in
-    /// situations where it is absolutely required.
-    [[nodiscard]] const EntryInfoPtr& getIteratedEntry() const noexcept
-    { return m_iteratedEntry ? m_iteratedEntry : m_entry; }
 
     /// @brief Returns whether the entry should be treated as hidden.
     /// @return @c true if the entry is effectively hidden after applying workaround rules
@@ -1212,9 +1207,49 @@ public:
     /// Use #EntryInfoPtr::InterpretedIterator::getNext to advance.
     ///
     /// @param voice  Must be 1 or 2.
+    /// @param remapBeamOverBarlineEntries
+    ///        Controls how mid-system "beam over barline" workarounds created by
+    ///        Finale's *Beam Over Barline* plugin are presented by this iterator.
+    ///
+    ///        Background: one way the plugin encodes a beam that crosses a barline is
+    ///        by cramming all visible continuation notes into the frame where the
+    ///        beam *starts*. The continuation entries that would normally appear
+    ///        in later measures are then hidden in their source measures. As a
+    ///        result, the raw data contains:
+    ///        - A cluster of visible continuation entries in the starting frame, and
+    ///        - Hidden source entries in the subsequent measures where those notes
+    ///          would logically belong.
+    ///
+    ///        musxdom can handle this workaround in two ways:
+    ///
+    ///        **(1) Remap continuation entries to their logical measures (default: true)**  
+    ///            When @p remapBeamOverBarlineEntries is true, the iterator presents
+    ///            each hidden source entry as its corresponding visible continuation
+    ///            entry, effectively remapping the continuation notes back into their
+    ///            logical source measures. In other words, hidden source entries are
+    ///            **not skipped**; they are **substituted with their display-entry
+    ///            counterparts** and returned from the iterator as if Finale had stored
+    ///            them in their proper measures. In this mode, callers must use
+    ///            #EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame
+    ///            to determine the logical end of each frame so as not to encounter
+    ///            the physically crammed display entries where they appear in the raw
+    ///            data.
+    ///
+    ///        **(2) Process raw frames and skip hidden source entries in the caller (set to false)**  
+    ///            When @p remapBeamOverBarlineEntries is false, the iterator
+    ///            presents the entries exactly as they appear in the raw data: the
+    ///            visible continuation entries remain in the starting frame, and the
+    ///            hidden source entries appear in the subsequent measures.  
+    ///            In this mode, callers are responsible for ignoring the hidden source
+    ///            entries, because their visible counterparts were already handled when
+    ///            the starting measure was processed. Callers should not use
+    ///            #EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame
+    ///            for iteration termination in this mode; instead they should exhaust
+    ///            the frame using a structural validity check (such as `operator bool`
+    ///            on the iterator).
     /// @return A InterpretedIterator positioned at the first usable entry, or an
     ///         empty iterator if no usable entry exists.
-    EntryInfoPtr::InterpretedIterator getFirstInterpretedIterator(int voice) const;
+    EntryInfoPtr::InterpretedIterator getFirstInterpretedIterator(int voice, bool remapBeamOverBarlineEntries = true) const;
 
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)

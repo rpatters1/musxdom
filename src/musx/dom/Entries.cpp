@@ -142,14 +142,14 @@ EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
     return lastEntry.getPreviousInVoice(voice);
 }
 
-EntryInfoPtr::InterpretedIterator EntryFrame::getFirstInterpretedIterator(int voice) const
+EntryInfoPtr::InterpretedIterator EntryFrame::getFirstInterpretedIterator(int voice, bool remapBeamOverBarlineEntries) const
 {
     if (auto firstEntry = getFirstInVoice(voice)) {
         while (firstEntry && (firstEntry.calcIsBeamedRestWorkaroundVisibleRest() || firstEntry.calcCreatesSingletonBeamLeft())) {
             firstEntry = firstEntry.getNextInVoice(voice);
         }
         if (firstEntry) {
-            return firstEntry.asInterpretedIterator();
+            return firstEntry.asInterpretedIterator(remapBeamOverBarlineEntries);
         }
     }
     return {};
@@ -757,10 +757,10 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
     return prev;
 }
 
-EntryInfoPtr::InterpretedIterator EntryInfoPtr::asInterpretedIterator() const
+EntryInfoPtr::InterpretedIterator EntryInfoPtr::asInterpretedIterator(bool remapBeamOverBarlineEntries) const
 {
     const auto entry = (*this)->getEntry();
-    return { *this };
+    return { *this, remapBeamOverBarlineEntries };
 }
 
 EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode) const
@@ -2004,8 +2004,8 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
 // ***** EntryInfoPtr::InterpretedIterator *****
 // *********************************************
 
-EntryInfoPtr::InterpretedIterator::InterpretedIterator(EntryInfoPtr entry)
-    : m_entry(entry)
+EntryInfoPtr::InterpretedIterator::InterpretedIterator(EntryInfoPtr entry, bool remapBeamOverBarlineEntries)
+    : m_entry(entry), m_remapBeamOverBarlineEntries(remapBeamOverBarlineEntries)
 {
     if (!m_entry) {
         return;
@@ -2016,11 +2016,13 @@ EntryInfoPtr::InterpretedIterator::InterpretedIterator(EntryInfoPtr entry)
     if (m_entry.calcCreatesSingletonBeamRight()) {
         m_iteratedEntry = m_entry.getNextInVoice(getVoice());
     }
-    if (auto display = m_entry.findDisplayEntryForBeamOverBarline()) {
-        m_iteratedEntry = m_entry;
-        m_entry = display;
-        m_effectiveHidden = display->getEntry()->isHidden;
-        m_useIteratedForBackLaunch = true;
+    if (m_remapBeamOverBarlineEntries) {
+        if (auto display = m_entry.findDisplayEntryForBeamOverBarline()) {
+            m_iteratedEntry = m_entry;
+            m_entry = display;
+            m_effectiveHidden = display->getEntry()->isHidden;
+            m_useIteratedForBackLaunch = true;
+        }
     }
     if (m_effectiveHidden) {
         if (m_entry.calcIsBeamedRestWorkaroundHiddenRest()) {
@@ -2090,9 +2092,9 @@ EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() c
     const int voice = getVoice();
     for (auto next = getForwardLaunchEntry().getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
         if (next.calcIsBeamedRestWorkaroundVisibleRest() || next.calcCreatesSingletonBeamLeft()) {
-            continue; // skip any entry that is part of a beaming workaround or a singleton beam left
+            continue; // skip any entry that is part of a beamed rest workaround or a singleton beam left
         }
-        return { next };
+        return { next, m_remapBeamOverBarlineEntries };
     }
     return {};
 }
@@ -2104,7 +2106,7 @@ EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getPrevious
     /// beams it will become a backwards launcher as well, and then we will need to differentiate.
     for (auto prev = getBackwardLaunchEntry().getPreviousInVoice(voice); prev; prev = prev.getPreviousInVoice(voice)) {
         if (prev.calcIsBeamedRestWorkaroundVisibleRest()) {
-            continue; // skip any entry that is part of a beaming workaround
+            continue; // skip any entry that is part of a beamed rest workaround
         }
         if (auto beamStart = prev.findBeamStartOrCurrent()) {
             // skip any entry that is the hidden part of a singleton beam
@@ -2116,7 +2118,7 @@ EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getPrevious
                 continue;
             }
         }
-        return { prev };
+        return { prev, m_remapBeamOverBarlineEntries };
     }
     return {};
 }
