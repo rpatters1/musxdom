@@ -49,7 +49,7 @@ static void expectEntriesInBeam(const std::shared_ptr<const EntryFrame>& entryFr
     ASSERT_FALSE(expectedIndices.empty());
     auto next = EntryInfoPtr(entryFrame, expectedIndices[0]);
     ASSERT_TRUE(next);
-    bool isStart = next.calcIsBeamStart();
+    bool isStart = next.calcIsBeamStart(beamIterationMode);
     EXPECT_TRUE(isStart) << "entry is not start of beam";
     if (!isStart) return;
     size_t x = 0;
@@ -345,7 +345,7 @@ TEST(BeamDetection, BeamedRestWorkaround)
     ASSERT_TRUE(doc);
 
 
-    constexpr auto iterMode = EntryInfoPtr::BeamIterationMode::WorkaroundAware;
+    constexpr auto iterMode = EntryInfoPtr::BeamIterationMode::Interpreted;
 
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
@@ -354,7 +354,7 @@ TEST(BeamDetection, BeamedRestWorkaround)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
 
         expectEntriesInBeam(entryFrame, { 0, 3 });                  // invisible entry 1 should not be found
-        expectEntriesInBeam(entryFrame, { 0, 1, 3 }, iterMode);     // invisible entry 1 should be found with WorkaroundAware
+        expectEntriesInBeam(entryFrame, { 0, 1, 3 }, iterMode);     // invisible entry 1 should be found with Interpreted
     }
 }
 
@@ -377,6 +377,7 @@ TEST(BeamDetection, SingletonBeams)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
 
         checkSingleton(EntryInfoPtr(entryFrame, 1), true, false);
+        expectEntriesInBeam(entryFrame, { 1 }, EntryInfoPtr::BeamIterationMode::Interpreted); // singleton right
     }
     
     {
@@ -386,6 +387,7 @@ TEST(BeamDetection, SingletonBeams)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 2";
 
         checkSingleton(EntryInfoPtr(entryFrame, 1), false, true);
+        expectEntriesInBeam(entryFrame, { 2 }, EntryInfoPtr::BeamIterationMode::Interpreted); // singleton left
     }
     
     {
@@ -706,12 +708,13 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto checkEntry = [](const EntryInfoPtr entPtr, bool expectedValue, size_t expectedIndex = 0) {
+    auto checkEntry = [](const EntryInfoPtr entPtr, bool expectedValue, size_t expectedIndex = 0, bool pastEndOfFrame = true) {
         const auto mainEntry = entPtr.findMainEntryForGraceNote();
         EXPECT_EQ(bool(mainEntry), expectedValue);
         if (mainEntry) {
             EXPECT_EQ(mainEntry.getIndexInFrame(), expectedIndex);
         }
+        EXPECT_EQ(entPtr.asInterpretedIterator().calcIsPastLogicalEndOfFrame(), pastEndOfFrame);
     };
 
     {
@@ -721,9 +724,9 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 1";
         ASSERT_GE(entryFrame->getEntries().size(), 22);
 
-        checkEntry(EntryInfoPtr(entryFrame, 3), false); // not a grace note
-        checkEntry(EntryInfoPtr(entryFrame, 4), false);
-        checkEntry(EntryInfoPtr(entryFrame, 5), false);
+        checkEntry(EntryInfoPtr(entryFrame, 3), false, 0, false); // not a grace note
+        checkEntry(EntryInfoPtr(entryFrame, 4), false, 0, false);
+        checkEntry(EntryInfoPtr(entryFrame, 5), false, 0, false);
         checkEntry(EntryInfoPtr(entryFrame, 10), true, 12);
         checkEntry(EntryInfoPtr(entryFrame, 11), true, 12);
         checkEntry(EntryInfoPtr(entryFrame, 16), false);
@@ -748,7 +751,7 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 7";
         ASSERT_GE(entryFrame->getEntries().size(), 7);
 
-        checkEntry(EntryInfoPtr(entryFrame, 6), false);
+        checkEntry(EntryInfoPtr(entryFrame, 6), false, 0, false);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 8);
@@ -757,7 +760,7 @@ TEST(BeamDetection, GraceNoteMainNoteDetection)
         ASSERT_TRUE(entryFrame) << "entry frame not created for 1, 8";
         ASSERT_GE(entryFrame->getEntries().size(), 5);
 
-        checkEntry(EntryInfoPtr(entryFrame, 0), true, 1);
+        checkEntry(EntryInfoPtr(entryFrame, 0), true, 1, false);
     }
 }
 

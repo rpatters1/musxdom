@@ -126,8 +126,9 @@ public:
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
 
     /// @brief Calculates the number of voices used by the GFrameHold instance.
+    /// @param excludeHidden If true, hidden entries are excluded from consideration.
     /// @return A list of each layer that contains entries and the number voice2 entries in that layer.
-    std::map<LayerIndex, int> calcVoices() const;
+    std::map<LayerIndex, int> calcVoices(bool excludeHidden = false) const;
 
     /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
@@ -421,15 +422,14 @@ public:
     {
         Normal,             ///< Skip hidden entries. This is how Finale displays beams.
         IncludeAll,         ///< Include all entries, even if they are hidden.
-        WorkaroundAware     ///< Apply musxdom's interpretation of known entry workarounds when
+        Interpreted         ///< Apply musxdom's interpretation of known entry workarounds when
                             ///< iterating beams. Depending on the situation, this mode may skip,
                             ///< include, or reinterpret entries that participate in recognized
-                            ///< workarounds. See #EntryFrame::getFirstInVoiceWorkaroundAware
+                            ///< workarounds. See  @ref InterpretedIterator
                             ///< for detailed behavior.
     };
 
-    /// @brief Result of workaround-aware voice traversal.
-    struct WorkaroundAwareResult;
+    class InterpretedIterator;
 
     /** @brief Default constructor */
     EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
@@ -451,6 +451,7 @@ public:
     /// @param timeOffset Subtract this amount from elapsed durations. A common usage might be to pass in here the
     /// value returned by #others::Measure::calcMinLegacyPickupSpacer.
     /// @return If found, an #EntryInfoPtr for the given entry number. Otherwise an null instance.
+    [[nodiscard]]
     static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId,
         EntryNumber entryNumber, util::Fraction timeOffset = 0);
 
@@ -464,6 +465,7 @@ public:
     /// @param timeOffset Subtract this amount from elapsed durations. A common usage might be to pass in here the
     /// value returned by #others::Measure::calcMinLegacyPickupSpacer.
     /// @return An EntryInfoPtr corresponding to the input entryNumber or null if the entry is not in the requested part or otherwise is not found.
+    [[nodiscard]]
     static EntryInfoPtr fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber, util::Fraction timeOffset = 0);
 
     /// @brief Allows `->` access to the underlying @ref EntryInfo instance.
@@ -472,9 +474,12 @@ public:
     /// @brief Provides a boolean conversion based on whether the frame is valid and contains entries.
     operator bool() const noexcept;
 
+    /// @brief Gets the voice as integer value 1 or 2.
+    [[nodiscard]] int getVoice() const;
+
     /// @brief Returns whether the input and the current instance refer to the same entry.
     /// @return false if either this or src is null and true if they are both non null and refer to the same entry.
-    bool isSameEntry(const EntryInfoPtr& src) const;
+    [[nodiscard]] bool isSameEntry(const EntryInfoPtr& src) const;
 
     /// @brief Returns whether this entry and @p src contain the same pitch content or rest value.
     ///
@@ -484,7 +489,7 @@ public:
     /// @param src The EntryInfoPtr to compare.
     /// @param compareConcert If true, compares concert pitches. If false, compares scale degrees relative to the prevailing key.
     /// @return true if both pointers are non-null and represent the same pitch content or rest value, false otherwise.
-    bool calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert = true) const;
+    [[nodiscard]] bool calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert = true) const;
 
     /// @brief Returns whether this entry and @p src represent the same notated value.
     ///
@@ -498,164 +503,139 @@ public:
     /// @param requireSameGraceElapsedDura If true, grace-note elapsed durations must match.
     ///
     /// @return true if both pointers are non-null and all required properties match; false otherwise.
+    [[nodiscard]]
     bool calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bool compareConcert = true, bool requireSameVoice = true, bool requireSameGraceElapsedDura = false) const;
 
     /// @brief Returns the frame.
-    std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
+    [[nodiscard]] std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
 
     /// @brief Returns the index within the frame.
-    size_t getIndexInFrame() const { return m_indexInFrame; }
+    [[nodiscard]] size_t getIndexInFrame() const { return m_indexInFrame; }
 
     /// @brief Get the layer index (0..3) of the entry
-    LayerIndex getLayerIndex() const;
+    [[nodiscard]] LayerIndex getLayerIndex() const;
 
     /// @brief Get the staff cmper
-    StaffCmper getStaff() const;
+    [[nodiscard]] StaffCmper getStaff() const;
 
     /// @brief Creates the current StaffComposite for the entry
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
-    MusxInstance<others::StaffComposite> createCurrentStaff(const std::optional<StaffCmper>& forStaffId = std::nullopt) const;
+    [[nodiscard]] MusxInstance<others::StaffComposite> createCurrentStaff(const std::optional<StaffCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the measure cmper
-    MeasCmper getMeasure() const;
+    [[nodiscard]] MeasCmper getMeasure() const;
 
     /// @brief Get the key signature of the entry
-    MusxInstance<KeySignature> getKeySignature() const;
+    [[nodiscard]] MusxInstance<KeySignature> getKeySignature() const;
 
     /// @brief Gets the applicable part data for the entry, or nullptr if none.
-    MusxInstance<details::EntryPartFieldDetail> getPartFieldData() const;
+    [[nodiscard]] MusxInstance<details::EntryPartFieldDetail> getPartFieldData() const;
 
     /// @brief Returns the manual offset of the entry for the current requested part. This function encapsulates
     /// handling of the case when the manual offset is unlinked and different in score and part(s).
-    Evpu calcManuaOffset() const;
+    [[nodiscard]] Evpu calcManuaOffset() const;
 
     /// @brief Caclulates the grace index counting leftward (used by other standards such as MNX)
-    unsigned calcReverseGraceIndex() const;
+    [[nodiscard]] unsigned calcReverseGraceIndex() const;
 
     /// @brief Calculates a grace note's symbolic starting duration as a negative offset from the main note.
     /// This is useful for comparing grace note sequences.
     /// @return Negative symbolic offset from the main note, or zero if not a grace note.
-    util::Fraction calcGraceElapsedDuration() const;
+    [[nodiscard]] util::Fraction calcGraceElapsedDuration() const;
 
     /// @brief Returns the next higher tuplet index that this entry starts, or std::nullopt if none
-    std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex = 0) const;
+    [[nodiscard]] std::optional<size_t> calcNextTupletIndex(std::optional<size_t> currentIndex = 0) const;
 
     /// @brief Get the next entry in the frame
-    EntryInfoPtr getNextInFrame() const;
+    [[nodiscard]] EntryInfoPtr getNextInFrame() const;
 
     /// @brief Get the next entry in the same layer and staff. This can be in the next measure.
     /// @return  The next continguous entry. Returns nullptr if it encounters an empty frame or end of file.
-    EntryInfoPtr getNextInLayer() const;
+    [[nodiscard]] EntryInfoPtr getNextInLayer() const;
 
     /// @brief Get the next entry in the frame in the same voice.
     ///
     /// For V2, it returns null after the current V2 launch sequence.
-    EntryInfoPtr getNextSameV() const;
+    [[nodiscard]] EntryInfoPtr getNextSameV() const;
 
     /// @brief Get the next entry in the frame in the same voice, skipping grace notes.
     /// @return The same as #getNextSameV except grace notes are skipped.
-    EntryInfoPtr getNextSameVNoGrace() const;
+    [[nodiscard]] EntryInfoPtr getNextSameVNoGrace() const;
 
     /// @brief Get the previous entry in the same layer and staff. This can be in the previous measure.
     /// @return  The previous continguous entry. Returns nullptr if it encounters an empty frame or the beginning of the file.
-    EntryInfoPtr getPreviousInLayer() const;
+    [[nodiscard]] EntryInfoPtr getPreviousInLayer() const;
 
     /// @brief Get the previous entry in the frame
-    EntryInfoPtr getPreviousInFrame() const;
+    [[nodiscard]] EntryInfoPtr getPreviousInFrame() const;
 
     /// @brief Get the previous entry in the frame in the same voice
     ///
     /// For V2, it returns null when it hits the v2Launch note for the current V2 launch sequence.
-    EntryInfoPtr getPreviousSameV() const;
+    [[nodiscard]] EntryInfoPtr getPreviousSameV() const;
 
     /// @brief Get the previous entry in the frame in the same voice, skipping grace notes.
     /// @return The same as #getPreviousSameV except grace notes are skipped.
-    EntryInfoPtr getPreviousSameVNoGrace() const;
+    [[nodiscard]] EntryInfoPtr getPreviousSameVNoGrace() const;
 
     /// @brief Returns the next entry in the frame in the specified v1/v2 or null if none.
     ///
     /// Unlike #getNextSameV, this returns the next v2 entry in any v2 launch sequence.
     ///
     /// @param voice  Must be 1 or 2.
-    EntryInfoPtr getNextInVoice(int voice) const;
+    [[nodiscard]] EntryInfoPtr getNextInVoice(int voice) const;
 
     /// @brief Returns the previous entry in the frame in the specified v1/v2 or null if none.
     ///
     /// Unlike #getPreviousSameV, this returns the next v2 entry in any v2 launch sequence.
     ///
     /// @param voice  Must be 1 or 2.
-    EntryInfoPtr getPreviousInVoice(int voice) const;
+    [[nodiscard]] EntryInfoPtr getPreviousInVoice(int voice) const;
 
-    /// @brief Returns the next forward entry in this voice using musxdom's
-    ///        workaround-aware interpretation.
-    ///
-    /// This function continues forward traversal from this EntryInfoPtr. It applies
-    /// the same workaround-aware rules used by
-    /// #EntryFrame::getFirstInVoiceWorkaroundAware. Currently this means the beamed-rest workaround,
-    /// where additional visible or hidden rests are inserted solely to break
-    /// beams over internal rests when the beam is otherwise a hook.
-    /// Other workarounds may be added in the future.
-    ///
-    /// The following rules govern selection of the next entry:
-    ///
-    /// - Extra visible voice-2 workaround rests inserted solely to influence beam
-    ///   display are **skipped**.
-    /// - Hidden voice-1 workaround rests used to force a beam shape are **returned**
-    ///   with #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden set to @c false.
-    /// - All other entries are returned with
-    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden matching their
-    ///   stored @c isHidden value.
-    ///
-    /// If no further usable entry exists, the returned
-    /// @ref EntryInfoPtr::WorkaroundAwareResult will have a null
-    /// #EntryInfoPtr::WorkaroundAwareResult::entry.
-    ///
-    /// @param voice  Must be 1 or 2.
-    /// @return A WorkaroundAwareResult containing the next usable entry (or null)
-    ///         and its effective-hidden flag.
-    WorkaroundAwareResult getNextInVoiceWorkaroundAware(int voice) const;
-
-    /// @brief Returns this EntryInfoPtr in a @ref WorkaroundAwareResult instance.
-    WorkaroundAwareResult asWorkaroundAwareResult() const;
+    /// @brief Returns this EntryInfoPtr in a @ref InterpretedIterator instance.
+    /// @param remapBeamOverBarlineEntries See comments at #EntryFrame::getFirstInterpretedIterator.
+    [[nodiscard]] InterpretedIterator asInterpretedIterator(bool remapBeamOverBarlineEntries = true) const;
 
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
+    [[nodiscard]] 
     EntryInfoPtr getNextInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
     { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(beamIterationMode); }
 
     /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
+    [[nodiscard]] 
     EntryInfoPtr getPreviousInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
     { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(beamIterationMode); }
 
     /// @brief Gets the next entry in a beamed group, or nullptr if the entry is not beamed or is the last in the group.
     /// This function is simular to #getNextInBeamGroup but it traverses into the next bar when it detects a beam across a barline,
     /// as created by the Beam Over Barline plugin.
-    EntryInfoPtr getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
+    [[nodiscard]] EntryInfoPtr getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
 
     /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
     /// This function is simular to #getPreviousInBeamGroup but it traverses into the previous bar when it detects a beam across a barline,
     /// as created by the Beam Over Barline plugin.
-    EntryInfoPtr getPreviousInBeamGroupAcrossBars(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
+    [[nodiscard]] EntryInfoPtr getPreviousInBeamGroupAcrossBars(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
 
     /// @brief Calculates if an entry displays as a rest.
     /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
-    bool calcDisplaysAsRest() const;
+    [[nodiscard]] bool calcDisplaysAsRest() const;
 
     /// @brief Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not
     /// be called on a floating rest. It asserts and throws if so.
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
-    std::pair<int, int> calcTopBottomStaffPositions() const;
+    [[nodiscard]] std::pair<int, int> calcTopBottomStaffPositions() const;
 
     /// @brief Returns the Entry stem settings for the current requested part. This function encapsulates handling of the case when the
     /// two booleans are unlinked and different in score and part(s).
     /// @note This function is only for getting the entry's two boolean stem settings. Use #calcUpStem to get the entry's effective stem direction,
     /// taking into account all options and situations.
     /// @return A std::pair<bool, bool> with the first being the freezeStem setting and the second being the upStem setting.
-    std::pair<bool, bool> calcEntryStemSettings() const;
+    [[nodiscard]] std::pair<bool, bool> calcEntryStemSettings() const;
 
     /// @brief Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or
     /// manual overrides.
     /// @return True if the entry is upstem barring any other factors that would override the stem direction. False if it is downstem.
-    bool calcUpStemDefault() const;
+    [[nodiscard]] bool calcUpStemDefault() const;
 
     /// @brief Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides,
     /// and cross-staff notation.
@@ -671,7 +651,7 @@ public:
     /// without the entry frame being re-edited. It also does not reflect cross-staff stem directions or staff-level overrides of stem direction.
     ///
     /// @return True if the stem is up; false if it is down.
-    bool calcUpStem() const
+    [[nodiscard]] bool calcUpStem() const
     {
         if (m_upStem.has_value()) {
             return m_upStem.value();
@@ -682,18 +662,18 @@ public:
 
     /// @brief Returns whether this is an unbeamed entry
     /// @return 
-    bool calcUnbeamed() const;
+    [[nodiscard]] bool calcUnbeamed() const;
 
     /// @brief Returns whether this is the start of a primary beam
-    bool calcIsBeamStart() const;
+    [[nodiscard]] bool calcIsBeamStart(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
 
     /// @brief Determines if this entry contains a tuplet that creates a singleton beam left.
     /// See #EntryFrame::TupletInfo::calcCreatesSingletonBeamLeft for more information.
-    bool calcCreatesSingletonBeamLeft() const;
+    [[nodiscard]] bool calcCreatesSingletonBeamLeft() const;
 
     /// @brief Determines if this entry contains a tuplet that creates a singleton beam right.
     /// See #EntryFrame::TupletInfo::calcCreatesSingletonBeamRight for more information.
-    bool calcCreatesSingletonBeamRight() const;
+    [[nodiscard]] bool calcCreatesSingletonBeamRight() const;
 
     /// @brief Determines if this entry continues a beam across a barline from the previous measure.
     ///
@@ -702,7 +682,7 @@ public:
     ///
     /// @return If the function returns non-null, the return value here is the previous real entry in the beam over a barline,
     /// taking into account tuplets that create faux singleton beams.
-    EntryInfoPtr calcBeamContinuesLeftOverBarline() const;
+    [[nodiscard]] EntryInfoPtr calcBeamContinuesLeftOverBarline() const;
 
     /// @brief Determines if this entry continues a beam across a barline to the next measure.
     ///
@@ -711,97 +691,97 @@ public:
     ///
     /// @return If the function returns non-null, the return value here is the next real entry in the beam over a barline,
     /// taking into account tuplets that create faux singleton beams.
-    EntryInfoPtr calcBeamContinuesRightOverBarline() const;
+    [[nodiscard]] EntryInfoPtr calcBeamContinuesRightOverBarline() const;
 
     /// @brief Calculates if the entry starts a feathered beam and returns information about it if so.
     /// @param [out] outLeftY The height of the left side of the feathered beam
     /// @param [out] outRightY The height of the right side of the feathered beam
     /// @return true if this is a feathered beam. If the return value is false, outLeftY and outRightY are unchanged.
-    bool calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) const;
+    [[nodiscard]] bool calcIsFeatheredBeamStart(Evpu& outLeftY, Evpu& outRightY) const;
 
     /// @brief Finds the first entry of a beamed group or returns the current entry if it is not beams.
     /// @note This behavior is different than other beam functions in that it returns the current entry if there is no beam
     /// rather than returning NULL.
     /// @return The first entry of a beamed group or the current entry if no beam.
-    EntryInfoPtr findBeamStartOrCurrent() const;
+    [[nodiscard]] EntryInfoPtr findBeamStartOrCurrent() const;
 
     /// @brief Finds the end entry of a beamed group.
     /// @return The entry if found, NULL if the entry cannot be beamed or if it is not part of a beamed group.
-    EntryInfoPtr findBeamEnd() const;
+    [[nodiscard]] EntryInfoPtr findBeamEnd() const;
 
     /// @brief Calculates the number of beams or flags on the entry.
-    unsigned calcNumberOfBeams() const;
+    [[nodiscard]] unsigned calcNumberOfBeams() const;
 
     /// @brief Returns the lowest beam number starting at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
     /// @param considerBeamOverBarlines If true, consider beams over barlines as created for system breaks by the Beam Over Barlines plugin.
     /// @return 0 if not beamed or no beam starts this entry; otherwise, the beam number
-    unsigned calcLowestBeamStart(bool considerBeamOverBarlines = false) const;
+    [[nodiscard]] unsigned calcLowestBeamStart(bool considerBeamOverBarlines = false) const;
 
     /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
     /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
-    unsigned calcLowestBeamEnd() const;
+    [[nodiscard]] unsigned calcLowestBeamEnd() const;
 
     /// @brief Returns the lowest beam number ending at this entry, where 1 = 8th note beam, 2 = 16th note beam, etc.
     /// This function takes into account beams the cross barlines, as created by the Beam Over Barline plugin.
     /// @return 0 if not beamed or no beam ends this entry; otherwise, the beam number
-    unsigned calcLowestBeamEndAcrossBarlines() const;
+    [[nodiscard]] unsigned calcLowestBeamEndAcrossBarlines() const;
 
     /// @brief Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc.
     /// @return 0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number
-    unsigned calcLowestBeamStub() const;
+    [[nodiscard]] unsigned calcLowestBeamStub() const;
 
     /// @brief Calculates if a beam stub on this entry would go left or right. It does not check that an entry actually has a beam stub.
     /// Use #calcLowestBeamStub to discover if the entry has a beam stub.
     /// @note This is a best approximation of Finale's behavior for default beam stub direction. No doubt there are edge cases
     /// where it does not match.
     /// @return True if a beam stub would go left; false if it would go right or if no calculation is possible.
-    bool calcBeamStubIsLeft() const;
+    [[nodiscard]] bool calcBeamStubIsLeft() const;
 
     /// @brief Calculates the elapsed duration in global edu, removing any time stretch due to independent time signature
-    util::Fraction calcGlobalElapsedDuration() const;
+    [[nodiscard]] util::Fraction calcGlobalElapsedDuration() const;
 
     /// @brief Calculates the actual duration in global edu, removing any time stretch due to independent time signature
-    util::Fraction calcGlobalActualDuration() const;
+    [[nodiscard]] util::Fraction calcGlobalActualDuration() const;
 
     /// @brief Determines if this entry can be beamed.
-    bool calcCanBeBeamed() const;
+    [[nodiscard]] bool calcCanBeBeamed() const;
 
     /// @brief Determines if a beam *must* start on this entry.
-    bool calcBeamMustStartHere() const;
+    [[nodiscard]] bool calcBeamMustStartHere() const;
 
     /// @brief Returns the entry size as a percentage, taking into account the beaming.
     /// @return Integer percentage where 100 means 100%.
-    int calcEntrySize() const;
+    [[nodiscard]] int calcEntrySize() const;
 
     /// @brief Calculates if this entry is part of a cue.
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
     /// @return true if
     ///         - the entry is reduced in size
     ///         - the entry is hidden by "Blank Notation" or "Blank Notation with Rests" alternate notation in the score but not in a part.
-    bool calcIsCue(bool includeVisibleInScore = false) const;
+    [[nodiscard]] bool calcIsCue(bool includeVisibleInScore = false) const;
 
     /// @brief Returns whether this is a full measure rest.
     /// @note Note that in Finale, only whole rests are used as full measure rests.
-    bool calcIsFullMeasureRest() const;
+    [[nodiscard]] bool calcIsFullMeasureRest() const;
 
     /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with
     /// a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.
     /// @return True if this is either the hidden rest in v1.
-    bool calcIsBeamedRestWorkaroundHiddenRest() const;
+    [[nodiscard]] bool calcIsBeamedRestWorkaroundHiddenRest() const;
 
     /// @brief A common workaround in Finale is to hide a rest in v1 and supply it in v2. Typically it is used when a beam starts or ends with
     /// a 16th beam hook, has a 16th rest in the middle and an 8th note on the other end. This code detects that situation.
     /// @return True if this is either the visible replacement rest in v2.
-    bool calcIsBeamedRestWorkaroundVisibleRest() const;
+    [[nodiscard]] bool calcIsBeamedRestWorkaroundVisibleRest() const;
 
     /// @brief Finds the tuplet info for tuplets that include this entry
     /// @return A list of indices of TupletInfo records that include the entry.
-    std::vector<size_t> findTupletInfo() const;
+    [[nodiscard]] std::vector<size_t> findTupletInfo() const;
 
     /// @brief Calculates whether the conditions are met for the layer attributes dependent on #others::LayerAttributes::onlyIfOtherLayersHaveNotes.
     /// This also takes into account #others::LayerAttributes::ignoreHiddenNotesOnly and #others::LayerAttributes::ignoreHiddenLayers.
     /// @return true if the layer settings dependent on #others::LayerAttributes::onlyIfOtherLayersHaveNotes are in effect. Otherwise false.
-    bool calcIfLayerSettingsApply() const;
+    [[nodiscard]] bool calcIfLayerSettingsApply() const;
 
     /// @brief Calculates if this entry has cross-staffed notes all in a single direction.
     /// @param staffList Optional staff list used to determine staff order.
@@ -812,17 +792,17 @@ public:
     ///   - **1**  if all cross-staffed notes cross upward to a higher staff.
     ///   - **0**  if the note is not cross-staffed, or if notes are crossed both up and down.
     ///   - **−1** if all cross-staffed notes cross downward to a lower staff.
-    int calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
+    [[nodiscard]] int calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
 
     /// @brief Return true if this entry is a grace note and the only grace in the sequence at this location.
-    bool calcIsSingletonGrace() const;
+    [[nodiscard]] bool calcIsSingletonGrace() const;
 
     /// @brief Return true if this entry is an auxiliary pitch marker (specifically, a trill-to or gliss-to pitch marker.)
     ///
     /// The conditions that must be met are:
     /// - The entry is a singleton grace note.
     /// - The entry has a hidden custom stem.
-    int calcIsAuxiliaryPitchMarker() const;
+    [[nodiscard]] int calcIsAuxiliaryPitchMarker() const;
 
     /// @brief Calculates if this entry is a trill-to entry as created by the Parenthesize Trill-To Notes plugin.
     ///
@@ -834,7 +814,7 @@ public:
     /// Note that the main note is not checked for the existence of a trill. Callers should decide on their own
     /// whether this is important and, if so, how to check for it. Finale provides too many different fonts and options
     /// for creating trill markers to reliably check for it in this function.
-    bool calcIsTrillToGraceEntry() const;
+    [[nodiscard]] bool calcIsTrillToGraceEntry() const;
 
     /// @brief Calculates if this entry is a gliss-to entry as created by the Parenthesize Trill-To Notes plugin.
     ///
@@ -843,27 +823,27 @@ public:
     /// - The entry must be the terminator for one of the standard entry-attached SmartShape gliss lines.
     ///
     /// Only the standard SmartShape gliss lines are checked. Other CustomLine values do no qualify.
-    bool calcIsGlissToGraceEntry() const;
+    [[nodiscard]] bool calcIsGlissToGraceEntry() const;
 
     /// @brief Find the hidden source entry for a mid-system beam created by the Beam Over Barline plugin.
     /// This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind
     /// that plugin's workarounds and detect the entries in a beam that crosses a barline.
     /// @return The hidden source entry if found, otherwise nullptr.
-    EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
+    [[nodiscard]] EntryInfoPtr findHiddenSourceForBeamOverBarline() const;
 
     /// @brief Find the display entry for a hidden source entry. The display entry is one or more bars previous
     /// to the source entry.
     /// This code captures the logic from the Beam Over Barling plugin, allowing the caller to unwind
     /// that plugin's workarounds and detect the entries in a beam that crosses a barline.
     /// @return The display entry if this is a hidden source entry, otherwise nullptr.
-    EntryInfoPtr findDisplayEntryForBeamOverBarline() const;
+    [[nodiscard]] EntryInfoPtr findDisplayEntryForBeamOverBarline() const;
 
     /// @brief Finds the main entry for a grace note, taking into account hidden entries for beams over barlines.
     /// @param ignoreRests If true, the returned entry must not be a rest.
     /// @return The main entry if found. If the grace note is at the end of a measure or v2 sequence,
     /// or if ignoring rests and the next non-grace is a rest, returns null. Also returns null if this
     /// is not a grace note.
-    EntryInfoPtr findMainEntryForGraceNote(bool ignoreRests = false) const;
+    [[nodiscard]] EntryInfoPtr findMainEntryForGraceNote(bool ignoreRests = false) const;
 
     /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
@@ -874,36 +854,36 @@ public:
     }
 
 private:
-    unsigned calcVisibleBeams() const;
+    [[nodiscard]] unsigned calcVisibleBeams() const;
 
-    bool calcUpStemImpl() const;
-
-    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
-    std::optional<unsigned> iterateFindRestsInSecondaryBeam(const EntryInfoPtr nextOrPrevInBeam) const;
+    [[nodiscard]] bool calcUpStemImpl() const;
 
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
-    EntryInfoPtr iteratePotentialEntryInBeam() const;
+    [[nodiscard]] std::optional<unsigned> iterateFindRestsInSecondaryBeam(const EntryInfoPtr nextOrPrevInBeam) const;
 
     template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
-    bool iterateNotesExistLeftOrRight() const;
+    [[nodiscard]] EntryInfoPtr iteratePotentialEntryInBeam() const;
 
-    EntryInfoPtr nextPotentialInBeam(BeamIterationMode beamIterationMode) const;
+    template<EntryInfoPtr(EntryInfoPtr::* Iterator)() const>
+    [[nodiscard]] bool iterateNotesExistLeftOrRight() const;
 
-    EntryInfoPtr previousPotentialInBeam(BeamIterationMode beamIterationMode) const;
+    [[nodiscard]] EntryInfoPtr nextPotentialInBeam(BeamIterationMode beamIterationMode) const;
+
+    [[nodiscard]] EntryInfoPtr previousPotentialInBeam(BeamIterationMode beamIterationMode) const;
 
     using BeamIteratorFn = EntryInfoPtr (EntryInfoPtr::*)(BeamIterationMode) const;
     template<BeamIteratorFn Iterator, BeamIteratorFn ReverseIterator>
-    EntryInfoPtr iterateBeamGroup(BeamIterationMode beamIterationMode) const;
+    [[nodiscard]] EntryInfoPtr iterateBeamGroup(BeamIterationMode beamIterationMode) const;
 
     /// @brief Returns the beam anchor for a beam over barline left. This code captures the logic from the
     /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries
     /// in a beam that crosses a barline.
-    EntryInfoPtr findLeftBeamAnchorForBeamOverBarline() const;
+    [[nodiscard]] EntryInfoPtr findLeftBeamAnchorForBeamOverBarline() const;
 
     /// @brief Returns the beam anchor for a beam over barline right. This code captures the logic from the
     /// Beam Over Barling plugin, allowing the caller to unwind that plugin's workarounds and detect the entries
     /// in a beam that crosses a barline.
-    EntryInfoPtr findRightBeamAnchorForBeamOverBarline() const;
+    [[nodiscard]] EntryInfoPtr findRightBeamAnchorForBeamOverBarline() const;
 
     std::shared_ptr<const EntryFrame> m_entryFrame;
     size_t m_indexInFrame{};              ///< the index of this item in the frame.
@@ -915,18 +895,134 @@ private:
     mutable std::optional<bool> m_upStem;
 };
 
-/// @struct EntryInfoPtr::WorkaroundAwareResult
-/// @brief The result returned by voice iteration function that are aware of beamed rest workaround.
-struct EntryInfoPtr::WorkaroundAwareResult
+/// @class EntryInfoPtr::InterpretedIterator
+/// @brief Iterator-style wrapper for workaround-aware voice traversal.
+///
+/// InterpretedIterator represents a single position in a voice-1 or voice-2
+/// entry sequence using musxdom's interpretation of Finale user workarounds.
+/// It is obtained from #EntryFrame::getFirstInterpretedIterator and advanced
+/// with InterpretedIterator::getNext().
+///
+/// The iterator encapsulates:
+/// - The target voice (1 or 2).
+/// - The current entry (which may be null if iteration is exhausted).
+/// - An "effective hidden" flag that reflects how the entry should be
+///   treated by higher-level consumers after applying workaround rules.
+/// - An "effective actual duration" that provides the actual duration value
+//    the the caller should use for calculating elapsed time.
+///
+/// ### Beamed-rest workaround
+///
+/// Currently, InterpretedIterator implements only the "beamed-rest workaround".
+/// This is the common Finale technique where additional rests are inserted
+/// solely to shape beams (for example, to create 16th-note hooks over internal
+/// rests by hiding or duplicating rests between voiced layers).
+///
+/// Whenever a position is selected or advanced (including the initial position
+/// returned by #EntryFrame::getFirstInterpretedIterator), the following rules
+/// are applied:
+///
+/// - Hidden voice-1 workaround rests used to enforce a beam shape are
+///   **returned**, and are treated as visible by making #getEffectiveHidden return @c false.
+/// - All other entries are returned with #getEffectiveHidden matching their stored @c isHidden value.
+///   @c isHidden value.
+///
+/// ### Singleton beam workaround
+///
+/// Handles traversal of beams created by zero-length tuplets.
+/// See #EntryFrame::TupletInfo::calcCreatesSingletonBeamRight for more information.
+///
+/// If no usable entry exists at or beyond the current position, the iterator
+/// evaluates to @c false in a boolean context and getEntry() returns a null
+/// EntryInfoPtr.
+///
+/// @note Additional workaround families (for example, singleton-beam
+///       workarounds or mid-system beam-over-barline workarounds) may be
+///       layered onto this iterator in the future without changing its public
+///       interface.
+class EntryInfoPtr::InterpretedIterator
 {
-    EntryInfoPtr entry;         ///< The entry found, or null if there is no usable entry.
-    bool effectiveHidden{};     ///< True if the entry should be treated as effectively hidden.
+    EntryInfoPtr m_entry;                       ///< The entry found, or null if there is no usable entry.
+    bool m_effectiveHidden{};                   ///< True if the entry should be treated as effectively hidden.
+    // --------
+    // internal
+    // --------
+    EntryInfoPtr m_iteratedEntry;               ///< The underlying entry from which we are iterating (or null if the same as m_entry).
+    bool m_useIteratedForBackLaunch{};          ///< If true, use m_iteratedEntry for the backwards launch to previous.
+    bool m_remapBeamOverBarlineEntries{};       ///< See comments at #EntryFrame::getFirstInterpretedIterator.
 
-    /// @brief Allows the result to be used directly in boolean contexts.
-    /// @return true if @ref entry is non-null; false otherwise.
+    [[nodiscard]] const EntryInfoPtr& getIteratedEntry() const noexcept
+    { return m_iteratedEntry ? m_iteratedEntry : m_entry; }
+
+    [[nodiscard]] const EntryInfoPtr& getForwardLaunchEntry() const noexcept
+    { return getIteratedEntry(); }
+
+    [[nodiscard]] const EntryInfoPtr& getBackwardLaunchEntry() const noexcept
+    { return m_useIteratedForBackLaunch ? getIteratedEntry() : m_entry; }
+
+    /// @internal
+    /// @brief Constructs an interpreted iterator for the specified voice.
+    /// @param entry            The initial entry at this iterator position (may be null).
+    InterpretedIterator(EntryInfoPtr entry, bool remapBeamOverBarlineEntries);
+
+    friend class EntryFrame;
+    friend class EntryInfoPtr;
+    
+public:
+    /// @brief Default constructor allows null return values by caller
+    InterpretedIterator() = default;
+    
+    /// @brief Returns the entry at the current iterator position.
+    /// @return A const reference to the underlying EntryInfoPtr (which may be null).
+    [[nodiscard]] const EntryInfoPtr& getEntryInfo() const noexcept { return m_entry; }
+
+    /// @brief Returns whether the entry should be treated as hidden.
+    /// @return @c true if the entry is effectively hidden after applying workaround rules
+    /// described in the class documentation and @c false if it is effectively unhidden.
+    [[nodiscard]] bool getEffectiveHidden() const noexcept { return m_effectiveHidden; }
+
+    /// @brief Return the effective actual duration of the entry. Calling code using InterpretedIterator
+    /// should use this value rather than the one in the entry.
+    /// @param global If true, return the global effective actual duration.
+    [[nodiscard]] util::Fraction getEffectiveActualDuration(bool global = false) const;
+
+    /// @brief Return the effective elapsed duration of the entry. Calling code using InterpretedIterator
+    /// should use this value rather than the one in the entry.
+    /// @param global If true, return the global effective elapsed duration.
+    [[nodiscard]] util::Fraction getEffectiveElapsedDuration(bool global = false) const;
+
+    /// @brief Return the effective measure staff duration of the entry. Calling code using InterpretedIterator
+    /// should use this value rather than the one in the entry.
+    [[nodiscard]] util::Fraction getEffectiveMeasureStaffDuration() const;
+
+    /// @brief Returns true is this entry is past the logical end of the frame, as defined
+    /// by the length of the measure on the frame's staff.
+    [[nodiscard]] bool calcIsPastLogicalEndOfFrame() const;
+
+    /// @brief Returns an iterator advanced to the next usable entry in this voice.
+    ///
+    /// The same workaround rules described in the class documentation are applied
+    /// when selecting the next position.
+    ///
+    /// @return A new InterpretedIterator positioned at the next usable entry, or
+    ///         an empty iterator if no further entry exists.
+    [[nodiscard]] InterpretedIterator getNext() const;
+
+    /// @brief Returns an iterator advanced to the previous usable entry in this voice.
+    ///
+    /// The same workaround rules described in the class documentation are applied
+    /// when selecting the previous position.
+    ///
+    /// @return A new InterpretedIterator positioned at the previous usable entry, or
+    ///         an empty iterator if no further entry exists.
+    [[nodiscard]] InterpretedIterator getPrevious() const;
+
+    /// @brief Allows the iterator to be used directly in boolean contexts.
+    /// @return @c true if the iterator currently refers to a usable entry;
+    ///         @c false if iteration is exhausted.
     explicit operator bool() const noexcept
     {
-        return static_cast<bool>(entry);
+        return static_cast<bool>(m_entry);
     }
 };
 
@@ -1005,7 +1101,7 @@ public:
         /// Finale has no built-in support for beams on singleton notes. As a workaround, users and (especially)
         /// plugins such as Beam Over Barline create singleton beams using a 0-length tuplet and hiding either the tuplet
         /// note or its next neighbor, depending on whether the beam goes to the left or the right. You should never
-        /// encounter a 0-length tuplet encompassing more than one entry, but these functions guarantee this if they return `true`.
+        /// encounter a 0-length tuplet encompassing more than one entry, but these functions guarantee this if they return @c true.
         ///
         /// @return True if this tuplet creates a singleton beam to the right. You may handle this as follows.
         ///     - The entry with the tuplet is the visible entry to use. You can mark this entry as having a singleton beam right, if your application allows it.
@@ -1105,35 +1201,59 @@ public:
     /// @param voice  Must be 1 or 2.
     EntryInfoPtr getLastInVoice(int voice) const;
 
-    /// @brief Returns the first entry in the specified voice using musxdom's
-    ///        workaround-aware interpretation.
+    /// @brief Returns a workaround-aware iterator at the first entry in the
+    ///        specified voice.
     ///
-    /// This function begins forward traversal at the first raw entry for the given
-    /// voice (1 or 2). It applies musxdom’s interpretation of known user-created
-    /// Finale workarounds. Currently this means the beamed-rest workaround,
-    /// where additional visible or hidden rests are inserted solely to break
-    /// beams over internal rests when the beam is otherwise a hook.
-    /// Other workarounds may be added in the future.
+    /// The returned iterator begins forward traversal at the first raw entry
+    /// for the given voice (1 or 2) and applies the workaround rules described
+    /// in @ref EntryInfoPtr::InterpretedIterator.
     ///
-    /// The following rules are applied when selecting the returned entry:
-    ///
-    /// - Extra visible voice-2 workaround rests inserted only to complete or shape
-    ///   a beam are **skipped entirely**.
-    /// - Hidden voice-1 workaround rests used to enforce a beam shape are
-    ///   **returned**, and are treated as visible by setting
-    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden to @c false.
-    /// - All remaining entries are returned with
-    ///   #EntryInfoPtr::WorkaroundAwareResult::effectiveHidden matching their
-    ///   stored @c isHidden value.
-    ///
-    /// If no usable entry remains after applying these rules, the returned
-    /// @ref EntryInfoPtr::WorkaroundAwareResult will have a null
-    /// #EntryInfoPtr::WorkaroundAwareResult::entry.
+    /// Use #EntryInfoPtr::InterpretedIterator::getNext to advance.
     ///
     /// @param voice  Must be 1 or 2.
-    /// @return A WorkaroundAwareResult containing the selected entry (or null) and
-    ///         its effective-hidden flag.
-    EntryInfoPtr::WorkaroundAwareResult getFirstInVoiceWorkaroundAware(int voice) const;
+    /// @param remapBeamOverBarlineEntries
+    ///        Controls how mid-system "beam over barline" workarounds created by
+    ///        Finale's *Beam Over Barline* plugin are presented by this iterator.
+    ///
+    ///        Background: one way the plugin encodes a beam that crosses a barline is
+    ///        by cramming all visible continuation notes into the frame where the
+    ///        beam *starts*. The continuation entries that would normally appear
+    ///        in later measures are then hidden in their source measures. As a
+    ///        result, the raw data contains:
+    ///        - A cluster of visible continuation entries in the starting frame, and
+    ///        - Hidden source entries in the subsequent measures where those notes
+    ///          would logically belong.
+    ///
+    ///        musxdom can handle this workaround in two ways:
+    ///
+    ///        **(1) Remap continuation entries to their logical measures (default: true)**  
+    ///            When @p remapBeamOverBarlineEntries is true, the iterator presents
+    ///            each hidden source entry as its corresponding visible continuation
+    ///            entry, effectively remapping the continuation notes back into their
+    ///            logical source measures. In other words, hidden source entries are
+    ///            **not skipped**; they are **substituted with their display-entry
+    ///            counterparts** and returned from the iterator as if Finale had stored
+    ///            them in their proper measures. In this mode, callers must use
+    ///            #EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame
+    ///            to determine the logical end of each frame so as not to encounter
+    ///            the physically crammed display entries where they appear in the raw
+    ///            data.
+    ///
+    ///        **(2) Process raw frames and skip hidden source entries in the caller (set to false)**  
+    ///            When @p remapBeamOverBarlineEntries is false, the iterator
+    ///            presents the entries exactly as they appear in the raw data: the
+    ///            visible continuation entries remain in the starting frame, and the
+    ///            hidden source entries appear in the subsequent measures.  
+    ///            In this mode, callers are responsible for ignoring the hidden source
+    ///            entries, because their visible counterparts were already handled when
+    ///            the starting measure was processed. Callers should not use
+    ///            #EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame
+    ///            for iteration termination in this mode; instead they should exhaust
+    ///            the frame using a structural validity check (such as `operator bool`
+    ///            on the iterator).
+    /// @return A InterpretedIterator positioned at the first usable entry, or an
+    ///         empty iterator if no usable entry exists.
+    EntryInfoPtr::InterpretedIterator getFirstInterpretedIterator(int voice, bool remapBeamOverBarlineEntries = true) const;
 
     /// @brief Add an entry to the list.
     void addEntry(const std::shared_ptr<const EntryInfo>& entry)

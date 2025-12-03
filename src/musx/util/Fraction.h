@@ -103,7 +103,7 @@ public:
     /// @brief Constructs the max fractional value.
     static constexpr Fraction max() noexcept
     {
-        return Fraction(std::numeric_limits<int>::max());
+        return Fraction((std::numeric_limits<int>::max)());
     }
 
     /// @brief Constructs a Fraction from a percent (where 100 is 100%)

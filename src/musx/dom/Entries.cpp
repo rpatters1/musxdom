@@ -37,6 +37,7 @@ static bool forVoice2(int voice)
     }
     return voice == 2;
 }
+
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 // *****************
@@ -142,14 +143,14 @@ EntryInfoPtr EntryFrame::getLastInVoice(int voice) const
     return lastEntry.getPreviousInVoice(voice);
 }
 
-EntryInfoPtr::WorkaroundAwareResult EntryFrame::getFirstInVoiceWorkaroundAware(int voice) const
+EntryInfoPtr::InterpretedIterator EntryFrame::getFirstInterpretedIterator(int voice, bool remapBeamOverBarlineEntries) const
 {
     if (auto firstEntry = getFirstInVoice(voice)) {
-        while (firstEntry && firstEntry.calcIsBeamedRestWorkaroundVisibleRest()) {
+        while (firstEntry && (firstEntry.calcIsBeamedRestWorkaroundVisibleRest() || firstEntry.calcCreatesSingletonBeamLeft())) {
             firstEntry = firstEntry.getNextInVoice(voice);
         }
         if (firstEntry) {
-            return firstEntry.asWorkaroundAwareResult();
+            return firstEntry.asInterpretedIterator(remapBeamOverBarlineEntries);
         }
     }
     return {};
@@ -489,6 +490,11 @@ bool EntryInfoPtr::isSameEntry(const EntryInfoPtr& src) const
     return (*this)->getEntry()->getEntryNumber() == src->getEntry()->getEntryNumber();
 }
 
+int EntryInfoPtr::getVoice() const
+{
+    return int((*this)->getEntry()->voice2) + 1;
+}
+
 bool EntryInfoPtr::calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert) const
 {
     if (!*this || !src) {
@@ -631,6 +637,12 @@ std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> cu
     size_t firstIndex = currentIndex ? *currentIndex + 1 : 0;
     for (size_t x = firstIndex; x < m_entryFrame->tupletInfo.size(); x++) {
         const auto& tuplInf = m_entryFrame->tupletInfo[x];
+        if (tuplInf.tuplet->calcRatio() == 0) {
+            // The InterpretedIterator handles these automatically, so skip them here.
+            if (tuplInf.calcCreatesSingletonBeamRight() || tuplInf.calcCreatesSingletonBeamLeft()) {
+                continue;
+            }
+        }
         if (tuplInf.startIndex == m_indexInFrame) {
             return x;
         }
@@ -751,29 +763,10 @@ EntryInfoPtr EntryInfoPtr::getPreviousInVoice(int voice) const
     return prev;
 }
 
-EntryInfoPtr::WorkaroundAwareResult EntryInfoPtr::getNextInVoiceWorkaroundAware(int voice) const
+EntryInfoPtr::InterpretedIterator EntryInfoPtr::asInterpretedIterator(bool remapBeamOverBarlineEntries) const
 {
-    for (auto next = getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
-        if (next.calcIsBeamedRestWorkaroundVisibleRest()) {
-            continue; // skip any entry that is part of a beaming workaround
-        }
-        const auto nextEntry = next->getEntry();
-        bool effectiveHidden = nextEntry->isHidden;
-        if (effectiveHidden) {
-            if (next.calcIsBeamedRestWorkaroundHiddenRest()) {
-                effectiveHidden = false;
-                util::Logger::log(util::Logger::LogLevel::Verbose, "Recognized hidden rest " + std::to_string(nextEntry->getEntryNumber())
-                    + " as beaming workaround and converted it to visible.");
-            }
-        }
-        return { next, effectiveHidden };
-    }
-    return {};
-}
-
-EntryInfoPtr::WorkaroundAwareResult EntryInfoPtr::asWorkaroundAwareResult() const
-{
-    return { *this, (*this)->getEntry()->isHidden };
+    const auto entry = (*this)->getEntry();
+    return { *this, remapBeamOverBarlineEntries };
 }
 
 EntryInfoPtr EntryInfoPtr::getNextInBeamGroupAcrossBars(BeamIterationMode beamIterationMode) const
@@ -994,10 +987,15 @@ bool EntryInfoPtr::calcBeamMustStartHere() const
     return (*this)->getEntry()->beam || !calcCanBeBeamed();
 }
 
-bool EntryInfoPtr::calcIsBeamStart() const
+bool EntryInfoPtr::calcIsBeamStart(BeamIterationMode beamIterationMode) const
 {
     if ((*this)->getEntry()->isHidden) return false;
     if (!calcCanBeBeamed()) return false;
+    if (beamIterationMode == EntryInfoPtr::BeamIterationMode::Interpreted) {
+        if (auto beamStart = findBeamStartOrCurrent(); beamStart && beamStart.calcCreatesSingletonBeamLeft()) {
+            return !isSameEntry(beamStart);
+        }
+    }
     return (!getPreviousInBeamGroup() && getNextInBeamGroup());
 }
 
@@ -1038,7 +1036,7 @@ EntryInfoPtr EntryInfoPtr::findLeftBeamAnchorForBeamOverBarline() const
     if (entry->graceNote) {
         return {};
     }
-    int voice = static_cast<int>(entry->voice2) + 1;
+    int voice = getVoice();
     auto frame = getFrame();
     auto anchorEntryInfo = frame->getLastInVoice(voice);
     while (anchorEntryInfo && anchorEntryInfo->getEntry()->graceNote) {
@@ -1075,7 +1073,7 @@ EntryInfoPtr EntryInfoPtr::findRightBeamAnchorForBeamOverBarline() const
     if (entry->graceNote) {
         return {};
     }
-    int voice = static_cast<int>(entry->voice2) + 1;
+    int voice = getVoice();
     auto frame = getFrame();
     auto anchorEntryInfo = frame->getFirstInVoice(voice);
     while (anchorEntryInfo && anchorEntryInfo->getEntry()->graceNote) {
@@ -1190,7 +1188,6 @@ EntryInfoPtr EntryInfoPtr::findDisplayEntryForBeamOverBarline() const
     if (!(*this)->getEntry()->isHidden || !calcCanBeBeamed()) {
         return {};
     }
-    // search from beginning of measure.
     auto frame = getFrame();
     auto prevFrame = frame->getPrevious();
     if (!prevFrame) {
@@ -1244,8 +1241,19 @@ EntryInfoPtr EntryInfoPtr::findMainEntryForGraceNote(bool ignoreRests) const
     if (!entry->graceNote) {
         return {};
     }
-    if (const auto nextNonGrace = getNextSameVNoGrace()) {
+    const int voice = getVoice();
+    for (auto nextNonGrace = getNextInVoice(voice); nextNonGrace; nextNonGrace = nextNonGrace.getNextInVoice(voice)) {
+        if (nextNonGrace->getEntry()->graceNote) {
+            continue;
+        }
         if (ignoreRests && nextNonGrace.calcDisplaysAsRest()) {
+            return {};
+        }
+        if (nextNonGrace->elapsedDuration != (*this)->elapsedDuration) {
+            // This can happen in voice2 if we find a different voice2 sequence. But we want
+            // to *allow* a different voice2 sequence if it starts at the same location as the
+            // grace note. (Consider the case when a grace note has a v2 grace note sequence
+            ///and then the main note has a corresponding v2 sequence at the same elapsed duration.)
             return {};
         }
         if (const auto nextNonGraceHiddenForBeamOverBarline = nextNonGrace.findHiddenSourceForBeamOverBarline()) {
@@ -1289,7 +1297,7 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesLeftOverBarline() const
     if (!prevFrame) {
         return {};
     }
-    int voice = static_cast<int>(entry->voice2) + 1;
+    int voice = getVoice();
     for (auto prevEntryInfo = prevFrame->getLastInVoice(voice); prevEntryInfo; prevEntryInfo = prevEntryInfo.getPreviousSameV()) {
         if (prevEntryInfo->getEntry()->graceNote) {
             continue;
@@ -1334,7 +1342,7 @@ EntryInfoPtr EntryInfoPtr::calcBeamContinuesRightOverBarline() const
     if (!nextFrame) {
         return {};
     }
-    int voice = static_cast<int>(entry->voice2) + 1;
+    int voice = getVoice();
     for (auto nextEntryInfo = nextFrame->getFirstInVoice(voice); nextEntryInfo; nextEntryInfo = nextEntryInfo.getNextSameV()) {
         if (nextEntryInfo->getEntry()->graceNote) {
             continue;
@@ -1637,9 +1645,15 @@ EntryInfoPtr EntryInfoPtr::nextPotentialInBeam(BeamIterationMode beamIterationMo
     if (!next || next->getEntry()->beam) {
         return EntryInfoPtr();
     }
+    const bool isIntepreted = beamIterationMode == BeamIterationMode::Interpreted;
+    if (isIntepreted) {
+        if (next && calcCreatesSingletonBeamRight()) {
+            next = next.nextPotentialInBeam(beamIterationMode);
+        }
+    }
     if (next && next->getEntry()->isHidden) {
         bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
-        if (!skipHidden && beamIterationMode == BeamIterationMode::WorkaroundAware && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
+        if (!skipHidden && isIntepreted && !next.calcIsBeamedRestWorkaroundHiddenRest()) {
             skipHidden = true;
         }
         if (skipHidden) {
@@ -1655,9 +1669,15 @@ EntryInfoPtr EntryInfoPtr::previousPotentialInBeam(BeamIterationMode beamIterati
         return EntryInfoPtr();
     }
     auto prev = iteratePotentialEntryInBeam<&EntryInfoPtr::getPreviousSameV>();
+    const bool isIntepreted = beamIterationMode == BeamIterationMode::Interpreted;
+    if (isIntepreted) {
+        if (prev && prev.calcCreatesSingletonBeamLeft()) {
+            prev = prev.previousPotentialInBeam(beamIterationMode);
+        }
+    }
     if (prev && prev->getEntry()->isHidden) {
         bool skipHidden = beamIterationMode == BeamIterationMode::Normal;
-        if (!skipHidden && beamIterationMode == BeamIterationMode::WorkaroundAware && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
+        if (!skipHidden && isIntepreted && !prev.calcIsBeamedRestWorkaroundHiddenRest()) {
             skipHidden = true;
         }
         if (skipHidden) {
@@ -1785,7 +1805,7 @@ bool EntryInfoPtr::calcIsFullMeasureRest() const
 {
     const auto entry = (*this)->getEntry();
     if (entry->isPossibleFullMeasureRest() && (*this)->elapsedDuration == 0) {
-        if (entry->voice2) {
+        if (entry->voice2 && !entry->isHidden) {
             auto layerInfo = getFrame()->getContext().calcVoices();
             auto it = layerInfo.find(getLayerIndex());
             if (it != layerInfo.end()) {
@@ -1997,6 +2017,128 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
     return false;
 }
 
+// *********************************************
+// ***** EntryInfoPtr::InterpretedIterator *****
+// *********************************************
+
+EntryInfoPtr::InterpretedIterator::InterpretedIterator(EntryInfoPtr entry, bool remapBeamOverBarlineEntries)
+    : m_entry(entry), m_remapBeamOverBarlineEntries(remapBeamOverBarlineEntries)
+{
+    if (!m_entry) {
+        return;
+    }
+    auto rawEntry = entry->getEntry();
+    m_effectiveHidden = rawEntry->isHidden;
+    if (m_entry.calcCreatesSingletonBeamRight()) {
+        m_iteratedEntry = m_entry.getNextInVoice(m_entry.getVoice());
+    }
+    if (m_remapBeamOverBarlineEntries) {
+        if (auto display = m_entry.findDisplayEntryForBeamOverBarline()) {
+            m_iteratedEntry = m_entry;
+            m_entry = display;
+            m_effectiveHidden = display->getEntry()->isHidden;
+            m_useIteratedForBackLaunch = true;
+        }
+    }
+    if (m_effectiveHidden) {
+        if (m_entry.calcIsBeamedRestWorkaroundHiddenRest()) {
+            m_effectiveHidden = false;
+        }
+    }
+}
+
+util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveActualDuration(bool global) const
+{
+    if (global) {
+        return getIteratedEntry().calcGlobalActualDuration();
+    }
+    return getIteratedEntry()->actualDuration;
+}
+
+util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveElapsedDuration(bool global) const
+{
+    if (global) {
+        return getIteratedEntry().calcGlobalElapsedDuration();
+    }
+    return getIteratedEntry()->elapsedDuration;
+}
+
+util::Fraction EntryInfoPtr::InterpretedIterator::getEffectiveMeasureStaffDuration() const
+{
+    return getIteratedEntry().getFrame()->measureStaffDuration;
+}
+
+bool EntryInfoPtr::InterpretedIterator::calcIsPastLogicalEndOfFrame() const
+{
+    // if we reached the real end of frame, we are also logically past the end.
+    if (!*this) {
+        return true;
+    }
+
+    auto entryInfo = getIteratedEntry();
+    auto frame = entryInfo.getFrame();
+    const auto elapsed  = entryInfo->elapsedDuration;
+    const auto measured = frame->measureStaffDuration;
+
+    // Anything strictly before the notated end is definitely not "past"
+    if (elapsed < measured) {
+        return false;
+    }
+
+    // From here on, we are at or beyond the notated duration, but we only
+    // want to treat very specific Finale workarounds as "logically next measure".
+
+    // 1) `findMainEntryForGraceNote` is aware of beam-over-barlines special case.
+    if (entryInfo->getEntry()->graceNote && static_cast<bool>(entryInfo.findMainEntryForGraceNote())) {
+        return true;
+    }
+
+    // 2) Beam-over-barline plugin workaround: hidden source entry must exist.
+    if (entryInfo.findHiddenSourceForBeamOverBarline()) {
+        return true;
+    }
+
+    // 3) All other cases (including elapsed > measured with no workaround) are
+    //    just overfull measures, not "logically past end".
+    return false;
+}
+
+EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getNext() const
+{
+    const int voice = m_entry.getVoice();
+    for (auto next = getForwardLaunchEntry().getNextInVoice(voice); next; next = next.getNextInVoice(voice)) {
+        if (next.calcIsBeamedRestWorkaroundVisibleRest() || next.calcCreatesSingletonBeamLeft()) {
+            continue; // skip any entry that is part of a beamed rest workaround or a singleton beam left
+        }
+        return { next, m_remapBeamOverBarlineEntries };
+    }
+    return {};
+}
+
+EntryInfoPtr::InterpretedIterator EntryInfoPtr::InterpretedIterator::getPrevious() const
+{
+    const int voice = m_entry.getVoice();
+    /// @todo Currently m_iteratedEntry is the forward launcher only. However, when we incorporate mid-system
+    /// beams it will become a backwards launcher as well, and then we will need to differentiate.
+    for (auto prev = getBackwardLaunchEntry().getPreviousInVoice(voice); prev; prev = prev.getPreviousInVoice(voice)) {
+        if (prev.calcIsBeamedRestWorkaroundVisibleRest()) {
+            continue; // skip any entry that is part of a beamed rest workaround
+        }
+        if (auto beamStart = prev.findBeamStartOrCurrent()) {
+            // skip any entry that is the hidden part of a singleton beam
+            if (prev.isSameEntry(beamStart)) {
+                if (beamStart.calcCreatesSingletonBeamLeft()) {
+                    continue;
+                }
+            } else if (beamStart.calcCreatesSingletonBeamRight()) {
+                continue;
+            }
+        }
+        return { prev, m_remapBeamOverBarlineEntries };
+    }
+    return {};
+}
+
 // *****************************
 // ***** GFrameHoldContext *****
 // *****************************
@@ -2163,7 +2305,7 @@ bool details::GFrameHoldContext::iterateEntries(std::function<bool(const EntryIn
     return true;
 }
 
-std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices() const
+std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices(bool excludeHidden) const
 {
     std::map<LayerIndex, int> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
@@ -2172,6 +2314,9 @@ std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices() const
             bool gotLayer = false;
             int numV2 = 0;
             frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) -> bool {
+                if (excludeHidden && entry->isHidden) {
+                    return true; // skip hidden entries.
+                }
                 gotLayer = true;
                 if (entry->voice2) {
                     numV2++;
