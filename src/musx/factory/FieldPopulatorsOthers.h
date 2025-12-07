@@ -263,11 +263,12 @@ MUSX_RESOLVER_ENTRY(ShapeExpressionDef, {
         for (const auto& instance : exps) {
             if (instance->categoryId) {
                 auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getSourcePartId(), instance->categoryId);
-                if (!markingCat) {
-                    MUSX_INTEGRITY_ERROR("Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
+                if (markingCat) {
+                    auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
+                    mutableMarkingCat->shapeExpressions.emplace(instance->getCmper(), instance);
+                } else {
+                    util::Logger::log(util::Logger::LogLevel::Info, "Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
-                auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
-                mutableMarkingCat->shapeExpressions.emplace(instance->getCmper(), instance);
             }
         }
     }
@@ -296,11 +297,12 @@ MUSX_RESOLVER_ENTRY(TextExpressionDef, {
         for (const auto& instance : exps) {
             if (instance->categoryId) {
                 auto markingCat = document->getOthers()->get<MarkingCategory>(instance->getSourcePartId(), instance->categoryId);
-                if (!markingCat) {
-                    MUSX_INTEGRITY_ERROR("Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
+                if (markingCat) {
+                    auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
+                    mutableMarkingCat->textExpressions.emplace(instance->getCmper(), instance);
+                } else {
+                    util::Logger::log(util::Logger::LogLevel::Info, "Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
-                auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
-                mutableMarkingCat->textExpressions.emplace(instance->getCmper(), instance);
             }
         }
     }

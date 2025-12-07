@@ -272,7 +272,7 @@ TEST(PartDefinitionTest, MissingPartGlobals)
 )xml";
 
     EXPECT_THROW(
-        musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(missingPartGlobalXml),
+        static_cast<void>(musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(missingPartGlobalXml)),
         musx::dom::integrity_error
     );
 }
