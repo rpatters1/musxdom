@@ -558,3 +558,12 @@ TEST(ExpressionAssignments, HiddenByAltNotation)
     }
     EXPECT_EQ(processedExps, 8);
 }
+
+TEST(ExpressionDefinitions, ExpressionsWithNoCategory)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "exps_orphan.enigmaxml", xml);
+    EXPECT_NO_THROW(
+        static_cast<void>(musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml));
+    ) << "this document contains expressions with no catagory id and should load without errors.";
+}

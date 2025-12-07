@@ -49,7 +49,7 @@ public:
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
     template <typename XmlDocumentType>
-    static DocumentPtr create(const char * data, size_t size)
+    [[nodiscard]] static DocumentPtr create(const char * data, size_t size)
     {
         static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value, 
                       "XmlReaderType must derive from IXmlDocument.");
@@ -123,7 +123,7 @@ public:
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
     template <typename XmlDocumentType>
-    static DocumentPtr create(const std::vector<char>& xmlBuffer)
+    [[nodiscard]] static DocumentPtr create(const std::vector<char>& xmlBuffer)
     {
         return create<XmlDocumentType>(xmlBuffer.data(), xmlBuffer.size());
     }
