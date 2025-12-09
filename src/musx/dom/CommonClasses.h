@@ -144,6 +144,14 @@ public:
     bool absolute{};    ///< Fixed size effect.
     bool hidden{};      ///< Hidden effect.
 
+    /// @brief Return true if the two fonts represent the same font.
+    /// @param src The input font to compare with.
+    bool isSame(const FontInfo& src) const
+    {
+        return fontId == src.fontId && fontSize == src.fontSize && m_sizeIsPercent == src.m_sizeIsPercent
+            && getEnigmaStyles() == src.getEnigmaStyles();
+    }
+
     /// @brief If true, the size of this font is calculated as a percent of the preceding font size (in an Enigma string)
     bool getSizeIsPercent() const { return m_sizeIsPercent; }
 
