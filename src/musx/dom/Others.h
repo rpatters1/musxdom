@@ -1084,6 +1084,23 @@ public:
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     CategoryStaffListSet createStaffListSet() const;
 
+    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    {
+        this->OthersBase::integrityCheck(ptrToThis);
+        if (!textFont) {
+            textFont = std::make_shared<FontInfo>(ptrToThis->getDocument());
+            MUSX_INTEGRITY_ERROR("Marking category " + std::to_string(getCmper()) + " is missing text font.");
+        }
+        if (!musicFont) {
+            musicFont = std::make_shared<FontInfo>(ptrToThis->getDocument());
+            MUSX_INTEGRITY_ERROR("Marking category " + std::to_string(getCmper()) + " is missing music font.");
+        }
+        if (!numberFont) {
+            numberFont = std::make_shared<FontInfo>(ptrToThis->getDocument());
+            util::Logger::log(util::Logger::LogLevel::Info, "Marking category " + std::to_string(getCmper()) + " is missing number font.");
+        }
+    }
+
     constexpr static std::string_view XmlNodeName = "markingsCategory"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MarkingCategory>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -1465,6 +1482,23 @@ public:
         AlignJustify startJustify{}; ///< Justification for numbers at the start of system.
         AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
         AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
+
+        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+        {
+            this->ContainedClassBase::integrityCheck(ptrToThis);
+            if (!startFont) {
+                startFont = std::make_shared<FontInfo>(ptrToThis->getDocument());
+                //MUSX_INTEGRITY_ERROR("Measure number region score part data is missing start font.");
+            }
+            if (!multipleFont) {
+                multipleFont = std::make_shared<FontInfo>(ptrToThis->getDocument());
+                MUSX_INTEGRITY_ERROR("Measure number region score part data is missing multiple numbers font.");
+            }
+            if (!mmRestFont) {
+                mmRestFont = std::make_shared<FontInfo>(ptrToThis->getDocument());
+                MUSX_INTEGRITY_ERROR("Measure number region score part data is missing multimeasure rest range font.");
+            }
+        }
 
         static const xml::XmlElementArray<ScorePartData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };

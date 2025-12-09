@@ -387,14 +387,6 @@ inline std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::s
     return result;
 }
 
-template <>
-template <typename... Args>
-inline std::shared_ptr<FontInfo> FieldPopulator<FontInfo>::createAndPopulate(const XmlElementPtr& element, Args&&... args)
-{
-    if (!element->getFirstChildElement()) return nullptr;
-    return FieldPopulator<FontInfo>::createAndPopulateImpl(element, std::forward<Args>(args)...);
-}
-
 void populateFontEfx(const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i);
 
 template <typename T>
