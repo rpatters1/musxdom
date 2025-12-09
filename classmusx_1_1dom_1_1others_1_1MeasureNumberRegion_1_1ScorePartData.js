@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData =
 [
     [ "ContainedClassBase", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a53872e9c0b07633f81f5780d7ba13b9f", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a9be3d82135966b35fc4919f6365302db", null ],
     [ "breakMmRest", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#afcb835abb55d91c8e7aa35e65bf112c7", null ],
     [ "excludeOthers", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a6bdd14ae516689a55b2f32acd849ea1f", null ],
     [ "hideFirstMeasure", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a948d6691ae092d83eb9993f2a62c8dee", null ],

@@ -13,6 +13,7 @@ var classmusx_1_1dom_1_1others_1_1MarkingCategory =
     [ "MarkingCategory", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ac9704a53879f462ef45fe10d9404e554", null ],
     [ "createStaffListSet", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a92e5216185bc191ba1daa98a160b4061", null ],
     [ "getName", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a15e05f61a10d3a92b4399feda7259506", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a34860126e86e83d42e72d0fbfc7df9ed", null ],
     [ "breakMmRest", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#ab5e72426d1e44dc8d12632441c8726a9", null ],
     [ "categoryType", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#af1ee5a4eb2f3864079627aebd99ff5b0", null ],
     [ "horzAlign", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#af1c2c79138184dcf8f929e90c88e0bd5", null ],

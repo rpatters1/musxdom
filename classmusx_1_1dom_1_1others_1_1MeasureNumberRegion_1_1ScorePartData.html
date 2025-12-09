@@ -120,6 +120,9 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1others_1_1MeasureN
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a9be3d82135966b35fc4919f6365302db" id="r_a9be3d82135966b35fc4919f6365302db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a9be3d82135966b35fc4919f6365302db">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis) override</td></tr>
+<tr class="memdesc:a9be3d82135966b35fc4919f6365302db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
+<tr class="separator:a9be3d82135966b35fc4919f6365302db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53872e9c0b07633f81f5780d7ba13b9f" id="r_a53872e9c0b07633f81f5780d7ba13b9f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html#a53872e9c0b07633f81f5780d7ba13b9f">ContainedClassBase</a> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;parent)</td></tr>
 <tr class="memdesc:a53872e9c0b07633f81f5780d7ba13b9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1dom_1_1ContainedClassBase.html" title="Base class for classes that are contained by other classes.">ContainedClassBase</a> object.  <br /></td></tr>
 <tr class="separator:a53872e9c0b07633f81f5780d7ba13b9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,9 +158,6 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (const std::string &amp;nodeName)</td></tr>
 <tr class="memdesc:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a shared node for this instance. <br /></td></tr>
 <tr class="separator:ab65d4a6942a09ecc3a2b6ae5c96d434a inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_aaab6820828edca2a769b91999025ab5f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;ptrToThis)</td></tr>
-<tr class="memdesc:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes.  <br /></td></tr>
-<tr class="separator:aaab6820828edca2a769b91999025ab5f inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base" id="r_a3bee36f4048e813c0f267b8eb84ec68e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Base.html#a3bee36f4048e813c0f267b8eb84ec68e">requireAllFields</a> () const</td></tr>
 <tr class="memdesc:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.  <br /></td></tr>
 <tr class="separator:a3bee36f4048e813c0f267b8eb84ec68e inherit pub_methods_classmusx_1_1dom_1_1Base"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -368,6 +368,49 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a9be3d82135966b35fc4919f6365302db" name="a9be3d82135966b35fc4919f6365302db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9be3d82135966b35fc4919f6365302db">&#9670;&#160;</a></span>integrityCheck()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::others::MeasureNumberRegion::ScorePartData::integrityCheck </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Base.html">Base</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ptrToThis</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allows a class to determine if it has been properly contructed by the factory and fix issues that it can, such as creating default instances of contained classes. </p>
+<p>The default implementation should always be called inside an overridden implementation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptrToThis</td><td>This instance in a shared_ptr. (Avoids need for shared_from_this.)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classmusx_1_1dom_1_1integrity__error.html" title="Exception for integrity errors. (Used when MUSX_THROW_ON_INTEGRITY_CHECK_FAIL is defined....">musx::dom::integrity_error</a></td><td>if there is a problem. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1Base.html#aaab6820828edca2a769b91999025ab5f">musx::dom::Base</a>.</p>
 
 </div>
 </div>

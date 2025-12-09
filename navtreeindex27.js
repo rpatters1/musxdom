@@ -1,5 +1,9 @@
 var NAVTREEINDEX27 =
 {
+"classmusx_1_1util_1_1Fraction.html#a8ac0bd6d4e4b51fd98127667311124e1":[2,0,1,2,4,25],
+"classmusx_1_1util_1_1Fraction.html#a8cca0fc2701d71de7db93a4b67edc20f":[2,0,1,2,4,23],
+"classmusx_1_1util_1_1Fraction.html#a9fa0caf55fd2ad525456fc28040185ed":[2,0,1,2,4,26],
+"classmusx_1_1util_1_1Fraction.html#ab3a1097731acab882bcd033b6ca84df6":[2,0,1,2,4,1],
 "classmusx_1_1util_1_1Fraction.html#abba0e24603b829777d812314d1a9f112":[2,0,1,2,4,19],
 "classmusx_1_1util_1_1Fraction.html#acb703afdb9178045f99fa6b5496d20cb":[2,0,1,2,4,9],
 "classmusx_1_1util_1_1Fraction.html#acfade47536866a5100ec69486c7fcd17":[2,0,1,2,4,12],
@@ -245,9 +249,5 @@ var NAVTREEINDEX27 =
 "functions_vars_h.html":[2,3,2,7],
 "functions_vars_i.html":[2,3,2,8],
 "functions_vars_j.html":[2,3,2,9],
-"functions_vars_k.html":[2,3,2,10],
-"functions_vars_l.html":[2,3,2,11],
-"functions_vars_m.html":[2,3,2,12],
-"functions_vars_n.html":[2,3,2,13],
-"functions_vars_o.html":[2,3,2,14]
+"functions_vars_k.html":[2,3,2,10]
 };

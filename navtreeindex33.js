@@ -1,5 +1,9 @@
 var NAVTREEINDEX33 =
 {
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a6e1c2e028cf25587e977208245e9337e":[2,0,1,0,47,6,1],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a6e1c2e028cf25587e977208245e9337e":[1,0,1,0,46,6,1],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a70bbee262056ee20493ced866888d2f5":[2,0,1,0,47,6,0],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a70bbee262056ee20493ced866888d2f5":[1,0,1,0,46,6,0],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#accd22a526f550d38df1d9e4beb44ed01":[2,0,1,0,47,6,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#accd22a526f550d38df1d9e4beb44ed01":[1,0,1,0,46,6,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html":[2,0,1,0,47,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX33 =
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html":[1,0,1,0,2,25,1],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html":[2,0,1,0,2,25,1],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76":[2,0,1,0,2,25,1,1],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76":[1,0,1,0,2,25,1,1],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521":[2,0,1,0,2,25,1,2],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521":[1,0,1,0,2,25,1,2],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#afe4b6ea02c99a6cf888ebf50f9837d5f":[2,0,1,0,2,25,1,0],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#afe4b6ea02c99a6cf888ebf50f9837d5f":[1,0,1,0,2,25,1,0]
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76":[1,0,1,0,2,25,1,1]
 };
