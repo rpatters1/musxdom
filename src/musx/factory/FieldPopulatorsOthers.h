@@ -301,7 +301,7 @@ MUSX_RESOLVER_ENTRY(TextExpressionDef, {
                     auto mutableMarkingCat = const_cast<MarkingCategory*>(markingCat.get());
                     mutableMarkingCat->textExpressions.emplace(instance->getCmper(), instance);
                 } else {
-                    util::Logger::log(util::Logger::LogLevel::Info, "Marking category for shape expression " + std::to_string(instance->getCmper()) + " does not exist.");
+                    util::Logger::log(util::Logger::LogLevel::Info, "Marking category for text expression " + std::to_string(instance->getCmper()) + " does not exist.");
                 }
             }
         }
