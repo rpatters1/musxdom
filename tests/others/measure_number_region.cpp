@@ -94,7 +94,11 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
         <multipleJustify>center</multipleJustify>
         <mmRestJustify>center</mmRestJustify>
       </scoreData>
-      <partData/>
+      <partData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </partData>
       <startMeas>1</startMeas>
       <endMeas>1000</endMeas>
       <startChar>164</startChar>
@@ -203,6 +207,7 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_TRUE(scoreData->excludeOthers);
     EXPECT_TRUE(scoreData->breakMmRest);
 }
+
 TEST(MeasureNumberIndividualPositioningTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(

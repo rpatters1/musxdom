@@ -140,7 +140,11 @@ constexpr static musxtest::string_view partDefXml = R"xml(
         <multipleJustify>center</multipleJustify>
         <mmRestJustify>center</mmRestJustify>
       </scoreData>
-      <partData/>
+      <partData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </partData>
       <startMeas>1</startMeas>
       <endMeas>1000</endMeas>
       <startChar>164</startChar>

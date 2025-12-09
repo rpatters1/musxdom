@@ -48,6 +48,8 @@ TEST(TextExpressionDef, ValidExpression)
       <descStr>fortissimo (velocity = 101)</descStr>
     </textExprDef>
     <markingsCategory cmper="1">
+      <textFont/>
+      <musicFont/>
       <categoryType>dynamics</categoryType>
     </markingsCategory>
   </others>
@@ -183,8 +185,8 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     EXPECT_FALSE(markingCategory->musicFont->absolute);
     EXPECT_FALSE(markingCategory->musicFont->hidden);
 
-    // numberFont should be nullptr because it has no subnodes
-    EXPECT_EQ(markingCategory->numberFont, nullptr) << "NumberFont should be nullptr but is not";
+    ASSERT_TRUE(markingCategory->numberFont);
+    EXPECT_EQ(markingCategory->numberFont->fontSize, 0) << "NumberFont should contain nothing";
 
     // Other properties
     EXPECT_EQ(markingCategory->justification, others::HorizontalTextJustification::Right);  // From XML
@@ -229,6 +231,8 @@ TEST(TextExpressionDef, EnumDefaults)
       <descStr>fortissimo (velocity = 101)</descStr>
     </textExprDef>
     <markingsCategory cmper="1">
+      <textFont/>
+      <musicFont/>
       <categoryType>dynamics</categoryType>
     </markingsCategory>
   </others>
@@ -255,7 +259,10 @@ TEST(MarkingCategory, MissingCategoryType)
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
   <others>
-    <markingsCategory cmper="10"/>
+    <markingsCategory cmper="10">
+      <textFont/>
+      <musicFont/>
+    </markingsCategory>
     <markingsCategoryName cmper="10">
       <name>Vocal Dynamics</name>
     </markingsCategoryName>
@@ -364,6 +371,8 @@ TEST(ShapeExpressionDef, Populate)
       <descStr>Weird Number</descStr>
     </shapeExprDef>
     <markingsCategory cmper="12">
+      <textFont/>
+      <musicFont/>
       <categoryType>dynamics</categoryType>
     </markingsCategory>
   </others>
