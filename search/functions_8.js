@@ -19,7 +19,7 @@ var searchData=
   ['ismultipage_16',['ismultipage',['../classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a389eb7117b051124209d3b65f9916a16',1,'musx::dom::others::PageGraphicAssign::isMultiPage()'],['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#aef23981ba0f98f17ba27ffaf2039c6ab',1,'musx::dom::others::PageTextAssign::isMultiPage()']]],
   ['isnonlinear_17',['isNonLinear',['../classmusx_1_1dom_1_1KeySignature.html#abadbb6a5913f0869fe40f4385f750874',1,'musx::dom::KeySignature']]],
   ['ispossiblefullmeasurerest_18',['isPossibleFullMeasureRest',['../classmusx_1_1dom_1_1Entry.html#ad38f227b8b7c0dfc847aae2a32cc3e53',1,'musx::dom::Entry']]],
-  ['issame_19',['issame',['../classmusx_1_1dom_1_1KeySignature.html#a0a53673a9bddcf72adc048e1005ae8a7',1,'musx::dom::KeySignature::isSame()'],['../classmusx_1_1dom_1_1TimeSignature.html#a2cf2ed8240bce33ef314790e57db3fbc',1,'musx::dom::TimeSignature::isSame()']]],
+  ['issame_19',['issame',['../classmusx_1_1dom_1_1FontInfo.html#ab16918facac73b28273576d8df541eab',1,'musx::dom::FontInfo::isSame()'],['../classmusx_1_1dom_1_1KeySignature.html#a0a53673a9bddcf72adc048e1005ae8a7',1,'musx::dom::KeySignature::isSame()'],['../classmusx_1_1dom_1_1TimeSignature.html#a2cf2ed8240bce33ef314790e57db3fbc',1,'musx::dom::TimeSignature::isSame()']]],
   ['issameconcert_20',['isSameConcert',['../classmusx_1_1dom_1_1KeySignature.html#abfbcd0e08eee41ac7a28447a379c4f31',1,'musx::dom::KeySignature']]],
   ['issameentry_21',['isSameEntry',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795',1,'musx::dom::EntryInfoPtr']]],
   ['issamenote_22',['isSameNote',['../classmusx_1_1dom_1_1NoteInfoPtr.html#a44670e047067bd603fdb709fa695e2a0',1,'musx::dom::NoteInfoPtr']]],
