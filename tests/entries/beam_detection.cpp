@@ -154,7 +154,7 @@ TEST(BeamDetection, PrimaryNoIncludeRests)
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, true, false, 0);
-        checkEntry(entryFrame, 1, true, false, 0);      
+        checkEntry(entryFrame, 1, true, false, 0);
         checkEntry(entryFrame, 2, false, true, 3);      // fake start (real start hidden by no-stems staff style)
         checkEntry(entryFrame, 3, false, false, 3);     // end (start hidden by no-stems staff style)
         checkEntry(entryFrame, 4, true, false, 0);
@@ -247,7 +247,7 @@ TEST(BeamDetection, PrimaryIncludeRests)
         ASSERT_TRUE(entryFrame);
 
         checkEntry(entryFrame, 0, true, false, 0);
-        checkEntry(entryFrame, 1, true, false, 0);      
+        checkEntry(entryFrame, 1, true, false, 0);
         checkEntry(entryFrame, 2, false, true, 3);      // fake start (real start hidden by no-stems staff style)
         checkEntry(entryFrame, 3, false, false, 3);     // end (start hidden by no-stems staff style)
         checkEntry(entryFrame, 4, true, false, 0);
@@ -369,7 +369,7 @@ TEST(BeamDetection, SingletonBeams)
         EXPECT_EQ(entryInfo.calcCreatesSingletonBeamRight(), isSingletonRight);
         EXPECT_EQ(entryInfo.calcCreatesSingletonBeamLeft(), isSingletonLeft);
     };
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold) << "gfhold not found for 1, 1";
@@ -379,7 +379,7 @@ TEST(BeamDetection, SingletonBeams)
         checkSingleton(EntryInfoPtr(entryFrame, 1), true, false);
         expectEntriesInBeam(entryFrame, { 1 }, EntryInfoPtr::BeamIterationMode::Interpreted); // singleton right
     }
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold) << "gfhold not found for 1, 2";
@@ -389,7 +389,7 @@ TEST(BeamDetection, SingletonBeams)
         checkSingleton(EntryInfoPtr(entryFrame, 1), false, true);
         expectEntriesInBeam(entryFrame, { 2 }, EntryInfoPtr::BeamIterationMode::Interpreted); // singleton left
     }
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
         ASSERT_TRUE(gfhold) << "gfhold not found for 1, 3";

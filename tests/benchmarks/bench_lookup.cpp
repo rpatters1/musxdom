@@ -92,7 +92,7 @@ void adHocTest([[maybe_unused]]const DocumentPtr& doc)
             std::cout << std::endl;
             return true;
         });
-    } 
+    }
 */
 }
 
@@ -155,7 +155,7 @@ void traverseEntries(const DocumentPtr& doc)
         }
     }
     std::cout << "Encountered " << missing.size() << " missing entries in the lightweight search.\n";
-                
+
     std::vector<EntryNumber> orphanEntries;
     for (const auto& [num, entry] : entryPool) {
         if (entry->locations.empty()) {
@@ -324,7 +324,7 @@ int main(int argc, char* argv[])
             std::cout << msg << std::endl;
         }
     });
-    
+
     std::filesystem::path filePath = argv[1];
     std::ifstream file(filePath, std::ios::binary | std::ios::ate);
     if (!file) {

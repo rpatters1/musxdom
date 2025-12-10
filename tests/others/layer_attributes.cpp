@@ -182,7 +182,7 @@ TEST(LayerAttributesTest, WrongCmperVals)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml),
         integrity_error
     );
-    
+
     constexpr static musxtest::string_view xml2 = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>

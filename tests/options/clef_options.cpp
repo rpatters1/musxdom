@@ -219,7 +219,7 @@ TEST(ClefOptionsTest, Only2ClefDefs)
       </options>
     </finale>
     )xml";
-    
+
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(only2Defs);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);

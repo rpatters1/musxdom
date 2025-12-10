@@ -434,7 +434,7 @@ TEST(TextsTest, FileInfoText)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
-    
+
     // Test Title
     auto fileInfo = texts->get<FileInfoText>(Cmper(Type::Title));
     ASSERT_TRUE(fileInfo);
@@ -499,7 +499,7 @@ TEST(TextsTest, LyricsText)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
-    
+
     // Test Verse
     auto lyricsVerse = texts->get<LyricsVerse>(1);
     ASSERT_TRUE(lyricsVerse);
@@ -517,7 +517,7 @@ TEST(TextsTest, LyricsText)
     ASSERT_EQ(texts->getArray<LyricsChorus>().size(), 1);
     EXPECT_EQ(texts->getArray<LyricsChorus>()[0]->getTextNumber(), 1);
     EXPECT_EQ(texts->getArray<LyricsChorus>(2).size(), 0);
-    
+
     // Test Section
     auto lyricsSection = texts->get<LyricsSection>(1);
     ASSERT_TRUE(lyricsSection);
@@ -538,7 +538,7 @@ TEST(TextsTest, OtherText)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textXml);
     auto texts = doc->getTexts();
     ASSERT_TRUE(texts);
-    
+
     // Test block text
     auto blockText = texts->get<BlockText>(23);
     ASSERT_TRUE(blockText);
@@ -557,7 +557,7 @@ TEST(TextsTest, OtherText)
     ASSERT_EQ(texts->getArray<SmartShapeText>().size(), 62);
     EXPECT_EQ(texts->getArray<SmartShapeText>()[8]->getTextNumber(), 13);
     EXPECT_EQ(texts->getArray<SmartShapeText>(10).size(), 0);
-    
+
     // Test Section
     auto expText = texts->get<ExpressionText>(3);
     ASSERT_TRUE(expText);
@@ -566,7 +566,7 @@ TEST(TextsTest, OtherText)
     ASSERT_EQ(texts->getArray<ExpressionText>().size(), 53);
     EXPECT_EQ(texts->getArray<ExpressionText>()[0]->getTextNumber(), 1);
     EXPECT_EQ(texts->getArray<ExpressionText>(225).size(), 0);
-    
+
     // Test bookmark text
     auto bookmark = texts->get<BookmarkText>(1);
     ASSERT_TRUE(bookmark);
@@ -779,7 +779,7 @@ TEST(TextsTest, EnigmaAccidentalSubstitution)
     auto result = replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^^composer()"); //ascii default
     EXPECT_EQ(result, "#b^composer()");
     result = replaceAccidentalTags("^font(New York)^sharp()^natural()^flat()^^composer()", EnigmaString::AccidentalStyle::Smufl);
-    std::string text = "" 
+    std::string text = ""
                     + EnigmaString::fromU8(u8"\uE262")  // SMuFL sharp
                     + EnigmaString::fromU8(u8"\uE261")  // SMuFL natural
                     + EnigmaString::fromU8(u8"\uE260")  // SMuFL flat

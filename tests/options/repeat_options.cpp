@@ -60,7 +60,7 @@ TEST(RepeatOptionsTest, PropertiesTest)
   </options>
 </finale>
 )xml";
-    
+
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
@@ -107,7 +107,7 @@ TEST(RepeatOptionsTest, DefaultEnumsTest)
   </options>
 </finale>
 )xml";
-    
+
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);

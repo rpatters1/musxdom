@@ -23,10 +23,10 @@
  #include "gtest/gtest.h"
  #include "musx/musx.h"
  #include "test_utils.h"
- 
+
  using namespace musx::dom;
  using namespace musx::util;
- 
+
  TEST(ChordAssignTest, PopulateFields)
  {
     constexpr static musxtest::string_view xml = R"xml(

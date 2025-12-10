@@ -192,7 +192,7 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff2->autoNumbering, others::Staff::AutoNumberingStyle::ArabicPrefix);
     EXPECT_EQ(staff2->fretInstId, 1);
     EXPECT_EQ(staff2->useAutoNumbering, true);
-    
+
     auto staff3 = others->get<others::Staff>(SCORE_PARTID, 11);
     ASSERT_TRUE(staff2) << "Staff with cmper 11 not found";
 

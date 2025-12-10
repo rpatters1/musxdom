@@ -112,7 +112,7 @@ TEST(TupletDefTest, PopulateFields)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(tupletXml);
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
-    
+
     auto tupletDef = details->get<details::TupletDef>(SCORE_PARTID, 7, 0);
     ASSERT_TRUE(tupletDef) << "TupletDef with entnum 7 and inci 0 not found";
 
@@ -151,10 +151,10 @@ TEST(TupletDefTest, PartCheck)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(tupletXml);
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
-    
+
     auto tupletDef = details->getArray<details::TupletDef>(1, 6);
     ASSERT_EQ(tupletDef.size(), 2) << "TupletDef array for part1 entnum 6 had " << std::to_string(tupletDef.size()) << " items";
-    
+
     tupletDef = details->getArray<details::TupletDef>(1, 7);
     ASSERT_EQ(tupletDef.size(), 1) << "TupletDef array for part1 entnum 7 had " << std::to_string(tupletDef.size()) << " items";
 }

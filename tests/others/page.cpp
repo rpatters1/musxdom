@@ -58,10 +58,10 @@ TEST(PageTest, PopulateFields)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(pageXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
-    
+
     auto page = others->get<others::Page>(SCORE_PARTID, 1);
     ASSERT_TRUE(page) << "Page with cmper 1 not found";
-    
+
     EXPECT_EQ(page->height, 3744);
     EXPECT_EQ(page->width, 2880);
     EXPECT_EQ(page->percent, 80);
