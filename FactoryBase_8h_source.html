@@ -345,7 +345,7 @@ $(document).ready(function(){initNavTree('FactoryBase_8h_source.html',''); initR
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>            <span class="keywordflow">if</span> (requireFields) {</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>                MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;xml element &lt;&quot;</span> + fieldElement-&gt;getParent()-&gt;getTagName() + <span class="stringliteral">&quot;&gt; has child &lt;&quot;</span> + fieldElement-&gt;getTagName() + <span class="stringliteral">&quot;&gt; which is not in the element list.&quot;</span>);</div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>            }</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        }    </div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        }</div>
 <div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    }</div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> populate(<span class="keyword">const</span> std::shared_ptr&lt;T&gt;&amp; instance, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element)</div>
@@ -376,7 +376,7 @@ $(document).ready(function(){initNavTree('FactoryBase_8h_source.html',''); initR
 <div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    {</div>
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>       <span class="keywordflow">return</span> FieldPopulator&lt;T&gt;::createAndPopulateImpl(element, std::forward&lt;Args&gt;(args)...);</div>
 <div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>    }</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    </div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="keyword">static</span> <span class="keyword">const</span> std::unordered_map&lt;std::string_view, XmlElementPopulator&lt;T&gt;&gt;&amp; elementXref()</div>
 <div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    {</div>

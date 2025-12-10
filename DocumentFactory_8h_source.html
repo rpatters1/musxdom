@@ -144,7 +144,7 @@ $(document).ready(function(){initNavTree('DocumentFactory_8h_source.html',''); i
 <div class="foldopen" id="foldopen00052" data-start="{" data-end="}">
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="classmusx_1_1factory_1_1DocumentFactory.html#a99addb7044f05ca121c446568dc9045f">   52</a></span>    [[nodiscard]] <span class="keyword">static</span> DocumentPtr <a class="code hl_function" href="classmusx_1_1factory_1_1DocumentFactory.html#a99addb7044f05ca121c446568dc9045f">create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> * data, <span class="keywordtype">size_t</span> size)</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    {</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">static_assert</span>(std::is_base_of&lt;musx::xml::IXmlDocument, XmlDocumentType&gt;::value, </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">static_assert</span>(std::is_base_of&lt;musx::xml::IXmlDocument, XmlDocumentType&gt;::value,</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                      <span class="stringliteral">&quot;XmlReaderType must derive from IXmlDocument.&quot;</span>);</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        std::unique_ptr&lt;musx::xml::IXmlDocument&gt; xmlDocument = std::make_unique&lt;XmlDocumentType&gt;();</div>
@@ -180,7 +180,7 @@ $(document).ready(function(){initNavTree('DocumentFactory_8h_source.html',''); i
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordflow">if</span> (!document-&gt;getDetails()) document-&gt;getDetails() = std::make_shared&lt;musx::dom::DetailsPool&gt;(document);</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <span class="keywordflow">if</span> (!document-&gt;getEntries()) document-&gt;getEntries() = std::make_shared&lt;musx::dom::EntryPool&gt;(document);</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        <span class="keywordflow">if</span> (!document-&gt;getTexts()) document-&gt;getTexts() = std::make_shared&lt;musx::dom::TextsPool&gt;(document);</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="preprocessor">#ifdef MUSX_DISPLAY_NODE_NAMES</span></div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        <a class="code hl_function" href="classmusx_1_1util_1_1Logger.html#a039905239762ae96745483d24588a68e">util::Logger::log</a>(<a class="code hl_enumvalue" href="classmusx_1_1util_1_1Logger.html#a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf">util::Logger::LogLevel::Verbose</a>, <span class="stringliteral">&quot;============&quot;</span>);</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="preprocessor">#endif</span></div>

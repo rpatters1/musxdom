@@ -259,7 +259,7 @@ $(document).ready(function(){initNavTree('ObjectPool_8h_source.html',''); initRe
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>                m_shareMode[poolIt-&gt;first.nodeId] = <span class="keywordtype">object</span>-&gt;getShareMode();</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>            } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>                MUSX_INTEGRITY_ERROR(<span class="stringliteral">&quot;Share mode for added &quot;</span> + std::string(poolIt-&gt;first.nodeId) + <span class="stringliteral">&quot; object [&quot;</span> + std::to_string(<span class="keywordtype">int</span>(object-&gt;getShareMode()))</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                    + <span class="stringliteral">&quot;] does not match previous [&quot;</span> + std::to_string(<span class="keywordtype">int</span>(shareModeIt-&gt;second)) + <span class="stringliteral">&quot;]&quot;</span>);                </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                    + <span class="stringliteral">&quot;] does not match previous [&quot;</span> + std::to_string(<span class="keywordtype">int</span>(shareModeIt-&gt;second)) + <span class="stringliteral">&quot;]&quot;</span>);</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>            }</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        }</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    }</div>
@@ -277,7 +277,7 @@ $(document).ready(function(){initNavTree('ObjectPool_8h_source.html',''); initRe
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>                key.<a class="code hl_variable" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#acf2e6818f0cea369ce48784084d0c86b">nodeId</a>,</div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>                key.<a class="code hl_variable" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a5a9830417056caccedfd9acf91fb4334">partId</a>,</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>                key.<a class="code hl_variable" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a48e28f7a3d2b82d9cb0d25a7a1560b58">cmper1</a>.value_or((std::numeric_limits&lt;Cmper&gt;::max)()),</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>                key.<a class="code hl_variable" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a1ac1f0bf9e5f8306ff660c4acfce45c3">cmper2</a>.value_or((std::numeric_limits&lt;Cmper&gt;::max)()), </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>                key.<a class="code hl_variable" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a1ac1f0bf9e5f8306ff660c4acfce45c3">cmper2</a>.value_or((std::numeric_limits&lt;Cmper&gt;::max)()),</div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>                key.<a class="code hl_variable" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#ad2e5a90b7b815427fc5f1ea91fe30a97">inci</a>.value_or((std::numeric_limits&lt;Inci&gt;::max)())</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>            }</div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        );</div>
@@ -361,7 +361,7 @@ $(document).ready(function(){initNavTree('ObjectPool_8h_source.html',''); initRe
 <div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        <span class="keywordflow">return</span> getSource&lt;T&gt;(scoreKey);</div>
 <div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    }</div>
 </div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    </div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
 <div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00334" data-start="{" data-end="}">
 <div class="line"><a id="l00334" name="l00334"></a><span class="lineno"><a class="line" href="classmusx_1_1dom_1_1ObjectPool.html#addf661a4327a0748043216b0824a3ab6">  334</a></span>    <a class="code hl_typedef" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance&lt;T&gt;</a> <a class="code hl_function" href="classmusx_1_1dom_1_1ObjectPool.html#addf661a4327a0748043216b0824a3ab6">getEffectiveForPart</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a>&amp; key)<span class="keyword"> const</span></div>
@@ -457,7 +457,7 @@ $(document).ready(function(){initNavTree('ObjectPool_8h_source.html',''); initRe
 <div class="line"><a id="l00427" name="l00427"></a><span class="lineno"><a class="line" href="classmusx_1_1dom_1_1OthersPool.html#a6b88411a1f5a138eac12d68b36c3b8a5">  427</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classmusx_1_1dom_1_1OthersPool.html#a6b88411a1f5a138eac12d68b36c3b8a5">add</a>(std::string_view nodeName, <span class="keyword">const</span> std::shared_ptr&lt;OthersBase&gt;&amp; instance)</div>
 <div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>    { m_pool.<a class="code hl_function" href="classmusx_1_1dom_1_1ObjectPool.html#ad3ffb171f6897f6d8c4ee274c855d2b4">add</a>({nodeName, instance-&gt;getSourcePartId(), instance-&gt;getCmper(), std::nullopt, instance-&gt;getInci()}, instance); }</div>
 </div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>    </div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span> </div>
 <div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00432" data-start="{" data-end="}">
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno"><a class="line" href="classmusx_1_1dom_1_1OthersPool.html#af5fc3f645b665d8fe92c518eb0187da0">  432</a></span>    <a class="code hl_class" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList&lt;T&gt;</a> <a class="code hl_function" href="classmusx_1_1dom_1_1OthersPool.html#af5fc3f645b665d8fe92c518eb0187da0">getArray</a>(<a class="code hl_typedef" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, std::optional&lt;Cmper&gt; cmper = std::nullopt)<span class="keyword"> const</span></div>
@@ -619,7 +619,7 @@ $(document).ready(function(){initNavTree('ObjectPool_8h_source.html',''); initRe
 <div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>        m_pool.<a class="code hl_function" href="classmusx_1_1dom_1_1ObjectPool.html#ad3ffb171f6897f6d8c4ee274c855d2b4">add</a>({ nodeName, basePtr-&gt;<a class="code hl_function" href="classmusx_1_1dom_1_1Base.html#a4c2b4aab4fcb0e9ac1834d224528d166">getSourcePartId</a>(), instance-&gt;getTextNumber() }, instance);</div>
 <div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>    }</div>
 </div>
-<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span>    </div>
+<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span> </div>
 <div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00593" data-start="{" data-end="}">
 <div class="line"><a id="l00593" name="l00593"></a><span class="lineno"><a class="line" href="classmusx_1_1dom_1_1TextsPool.html#a00929fbc1d91a48d405832f01ccd3ecd">  593</a></span>    <a class="code hl_class" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList&lt;T&gt;</a> <a class="code hl_function" href="classmusx_1_1dom_1_1TextsPool.html#a00929fbc1d91a48d405832f01ccd3ecd">getArray</a>(std::optional&lt;Cmper&gt; cmper = std::nullopt)<span class="keyword"> const</span></div>

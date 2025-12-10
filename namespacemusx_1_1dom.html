@@ -739,89 +739,60 @@ template&lt;typename T &gt; </div>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113afcb2132b65cdd119b19be66fbc3622e2" name="a93764339b56e531ea37af5181b20b113afcb2132b65cdd119b19be66fbc3622e2"></a>Undocumented&#160;</td><td class="fielddoc"><p>catch-all for possible undocumented instruction tags. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ab5c644787d66a37b2d0e7eefaf11506b" name="a93764339b56e531ea37af5181b20b113ab5c644787d66a37b2d0e7eefaf11506b"></a>Bracket&#160;</td><td class="fielddoc"><p>bracket <br  />
- data items: (1) bracket type (piano brace, bracket, etc.) </p><dl class="section note"><dt>Note</dt><dd>This does not actually draw the bracket. It simply indicates the start of automatically created instructions that draw the bracket, ending with ClosePath. </dd></dl>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ab5c644787d66a37b2d0e7eefaf11506b" name="a93764339b56e531ea37af5181b20b113ab5c644787d66a37b2d0e7eefaf11506b"></a>Bracket&#160;</td><td class="fielddoc"><p>bracket data items: (1) bracket type (piano brace, bracket, etc.) </p><dl class="section note"><dt>Note</dt><dd>This does not actually draw the bracket. It simply indicates the start of automatically created instructions that draw the bracket, ending with ClosePath. </dd></dl>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a55c3e960afea2bb200e05469a33ed71b" name="a93764339b56e531ea37af5181b20b113a55c3e960afea2bb200e05469a33ed71b"></a>CloneChar&#160;</td><td class="fielddoc"><p>cloned character for horizontal lines (e.g. trills) <br  />
- data items: (5)</p><ul>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a55c3e960afea2bb200e05469a33ed71b" name="a93764339b56e531ea37af5181b20b113a55c3e960afea2bb200e05469a33ed71b"></a>CloneChar&#160;</td><td class="fielddoc"><p>cloned character for horizontal lines (e.g. trills) data items: (5)</p><ul>
 <li>0, 1: x and y of endpoint (y ignored)</li>
 <li>2: unused</li>
 <li>3: baseline shift in EMs (1/1000 of current point size)</li>
 <li>4: the 32-bit codepoint of the character to clone </li>
 </ul>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a77d08cec0db233b7cd5e62b270417b86" name="a93764339b56e531ea37af5181b20b113a77d08cec0db233b7cd5e62b270417b86"></a>ClosePath&#160;</td><td class="fielddoc"><p>close path <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a77d08cec0db233b7cd5e62b270417b86" name="a93764339b56e531ea37af5181b20b113a77d08cec0db233b7cd5e62b270417b86"></a>ClosePath&#160;</td><td class="fielddoc"><p>close path data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a1166f11da62ca076ca161ec56d799b50" name="a93764339b56e531ea37af5181b20b113a1166f11da62ca076ca161ec56d799b50"></a>CurveTo&#160;</td><td class="fielddoc"><p>relative curveto (bezier) <br  />
- data items: (6) 2 bezier control points and an end point </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a1166f11da62ca076ca161ec56d799b50" name="a93764339b56e531ea37af5181b20b113a1166f11da62ca076ca161ec56d799b50"></a>CurveTo&#160;</td><td class="fielddoc"><p>relative curveto (bezier) data items: (6) 2 bezier control points and an end point </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ade9a94c8c7949a8fc462d3bdf33a76cc" name="a93764339b56e531ea37af5181b20b113ade9a94c8c7949a8fc462d3bdf33a76cc"></a>DrawChar&#160;</td><td class="fielddoc"><p>draw character (current font) <br  />
- data items: (1) The 32-bit codepoint of the character to draw </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ade9a94c8c7949a8fc462d3bdf33a76cc" name="a93764339b56e531ea37af5181b20b113ade9a94c8c7949a8fc462d3bdf33a76cc"></a>DrawChar&#160;</td><td class="fielddoc"><p>draw character (current font) data items: (1) The 32-bit codepoint of the character to draw </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a119518c2134c46108179369f0ce81fa2" name="a93764339b56e531ea37af5181b20b113a119518c2134c46108179369f0ce81fa2"></a>Ellipse&#160;</td><td class="fielddoc"><p>ellipse <br  />
- data items: (2) width and height of bounding rectangle <br  />
- current point is lower left corner </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a119518c2134c46108179369f0ce81fa2" name="a93764339b56e531ea37af5181b20b113a119518c2134c46108179369f0ce81fa2"></a>Ellipse&#160;</td><td class="fielddoc"><p>ellipse data items: (2) width and height of bounding rectangle current point is lower left corner </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a1e540b80dde88838699e9238de8b675e" name="a93764339b56e531ea37af5181b20b113a1e540b80dde88838699e9238de8b675e"></a>EndGroup&#160;</td><td class="fielddoc"><p>marks the end of a group <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a1e540b80dde88838699e9238de8b675e" name="a93764339b56e531ea37af5181b20b113a1e540b80dde88838699e9238de8b675e"></a>EndGroup&#160;</td><td class="fielddoc"><p>marks the end of a group data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ae573b5a7233a67517012b95e1e61d802" name="a93764339b56e531ea37af5181b20b113ae573b5a7233a67517012b95e1e61d802"></a>ExternalGraphic&#160;</td><td class="fielddoc"><p>external graphic (eps, pict, tiff, etc) <br  />
- data items: (3) width, height of graphic, cmper of corresponding graphic. See <a class="el" href="classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a6d50d2dba40196c05bf990d629a48470">others::PageGraphicAssign::graphicCmper</a> for explanation. </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ae573b5a7233a67517012b95e1e61d802" name="a93764339b56e531ea37af5181b20b113ae573b5a7233a67517012b95e1e61d802"></a>ExternalGraphic&#160;</td><td class="fielddoc"><p>external graphic (eps, pict, tiff, etc) data items: (3) width, height of graphic, cmper of corresponding graphic. See <a class="el" href="classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a6d50d2dba40196c05bf990d629a48470">others::PageGraphicAssign::graphicCmper</a> for explanation. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a340c0a994e6a0f971c242e350553f7b1" name="a93764339b56e531ea37af5181b20b113a340c0a994e6a0f971c242e350553f7b1"></a>FillAlt&#160;</td><td class="fielddoc"><p>fill path (alternating, or even-odd rule) <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a340c0a994e6a0f971c242e350553f7b1" name="a93764339b56e531ea37af5181b20b113a340c0a994e6a0f971c242e350553f7b1"></a>FillAlt&#160;</td><td class="fielddoc"><p>fill path (alternating, or even-odd rule) data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a2de91761941f2181acf486e4b6d0c4ae" name="a93764339b56e531ea37af5181b20b113a2de91761941f2181acf486e4b6d0c4ae"></a>FillSolid&#160;</td><td class="fielddoc"><p>fill path (solid, or non-zero winding rule) <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a2de91761941f2181acf486e4b6d0c4ae" name="a93764339b56e531ea37af5181b20b113a2de91761941f2181acf486e4b6d0c4ae"></a>FillSolid&#160;</td><td class="fielddoc"><p>fill path (solid, or non-zero winding rule) data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a6dbbac0a576417d5b5bdf70c6a02dc9c" name="a93764339b56e531ea37af5181b20b113a6dbbac0a576417d5b5bdf70c6a02dc9c"></a>GoToOrigin&#160;</td><td class="fielddoc"><p>go to origin point <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a6dbbac0a576417d5b5bdf70c6a02dc9c" name="a93764339b56e531ea37af5181b20b113a6dbbac0a576417d5b5bdf70c6a02dc9c"></a>GoToOrigin&#160;</td><td class="fielddoc"><p>go to origin point data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a5d7f7e81aa8208d8c7916e0ec7642552" name="a93764339b56e531ea37af5181b20b113a5d7f7e81aa8208d8c7916e0ec7642552"></a>GoToStart&#160;</td><td class="fielddoc"><p>go to start of path, same as close path for filled shapes <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a5d7f7e81aa8208d8c7916e0ec7642552" name="a93764339b56e531ea37af5181b20b113a5d7f7e81aa8208d8c7916e0ec7642552"></a>GoToStart&#160;</td><td class="fielddoc"><p>go to start of path, same as close path for filled shapes data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113adcf84fe120b3e292deb67ad75eb63012" name="a93764339b56e531ea37af5181b20b113adcf84fe120b3e292deb67ad75eb63012"></a>LineWidth&#160;</td><td class="fielddoc"><p>line width <br  />
- data items: (1) the new line width in Efix </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113adcf84fe120b3e292deb67ad75eb63012" name="a93764339b56e531ea37af5181b20b113adcf84fe120b3e292deb67ad75eb63012"></a>LineWidth&#160;</td><td class="fielddoc"><p>line width data items: (1) the new line width in Efix </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ace9291906a4c3b042650b70d7f3b152e" name="a93764339b56e531ea37af5181b20b113ace9291906a4c3b042650b70d7f3b152e"></a>Rectangle&#160;</td><td class="fielddoc"><p>rectangle <br  />
- data items: (2) width and height of rectangle <br  />
- current point is lower left corner </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ace9291906a4c3b042650b70d7f3b152e" name="a93764339b56e531ea37af5181b20b113ace9291906a4c3b042650b70d7f3b152e"></a>Rectangle&#160;</td><td class="fielddoc"><p>rectangle data items: (2) width and height of rectangle current point is lower left corner </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ad418b7f2f60278313e8e0655f0ef3703" name="a93764339b56e531ea37af5181b20b113ad418b7f2f60278313e8e0655f0ef3703"></a>RLineTo&#160;</td><td class="fielddoc"><p>relative lineto <br  />
- data items: (2) X, Y endpoint </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ad418b7f2f60278313e8e0655f0ef3703" name="a93764339b56e531ea37af5181b20b113ad418b7f2f60278313e8e0655f0ef3703"></a>RLineTo&#160;</td><td class="fielddoc"><p>relative lineto data items: (2) X, Y endpoint </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113af4ec75d018e53ff16859e88f21c36352" name="a93764339b56e531ea37af5181b20b113af4ec75d018e53ff16859e88f21c36352"></a>RMoveTo&#160;</td><td class="fielddoc"><p>relative moveto <br  />
- data items: (2) X, Y endpoint </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113af4ec75d018e53ff16859e88f21c36352" name="a93764339b56e531ea37af5181b20b113af4ec75d018e53ff16859e88f21c36352"></a>RMoveTo&#160;</td><td class="fielddoc"><p>relative moveto data items: (2) X, Y endpoint </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ae6c8603537164df7d6f44cc48b44d1b3" name="a93764339b56e531ea37af5181b20b113ae6c8603537164df7d6f44cc48b44d1b3"></a>SetArrowhead&#160;</td><td class="fielddoc"><p>set arrowhead <br  />
- data items: (4) startArrowID, endArrowID, startFlags, endFlags <br  />
- the meaning of the flags is currently untested, but they are likely only used to specify built-in vs. custom arrowhead </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ae6c8603537164df7d6f44cc48b44d1b3" name="a93764339b56e531ea37af5181b20b113ae6c8603537164df7d6f44cc48b44d1b3"></a>SetArrowhead&#160;</td><td class="fielddoc"><p>set arrowhead data items: (4) startArrowID, endArrowID, startFlags, endFlags the meaning of the flags is currently untested, but they are likely only used to specify built-in vs. custom arrowhead </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a3e9af05adfca77e0d1b8e6f7828ca8ce" name="a93764339b56e531ea37af5181b20b113a3e9af05adfca77e0d1b8e6f7828ca8ce"></a>SetBlack&#160;</td><td class="fielddoc"><p>set black: equivalent to <code><a class="el" href="namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a7a6a8adddddea70b52a8cf891da4f893">SetGray(0)</a></code> <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a3e9af05adfca77e0d1b8e6f7828ca8ce" name="a93764339b56e531ea37af5181b20b113a3e9af05adfca77e0d1b8e6f7828ca8ce"></a>SetBlack&#160;</td><td class="fielddoc"><p>set black: equivalent to <code><a class="el" href="namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a7a6a8adddddea70b52a8cf891da4f893">SetGray(0)</a></code> data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a83c3d0899505c3c2e072c5c096ae9f4e" name="a93764339b56e531ea37af5181b20b113a83c3d0899505c3c2e072c5c096ae9f4e"></a>SetDash&#160;</td><td class="fielddoc"><p>set dash <br  />
- data items: (2) dash length, space between dashes </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a83c3d0899505c3c2e072c5c096ae9f4e" name="a93764339b56e531ea37af5181b20b113a83c3d0899505c3c2e072c5c096ae9f4e"></a>SetDash&#160;</td><td class="fielddoc"><p>set dash data items: (2) dash length, space between dashes </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113acb95d0c1f5d7bc7a4658f6cca60c9d74" name="a93764339b56e531ea37af5181b20b113acb95d0c1f5d7bc7a4658f6cca60c9d74"></a>SetFont&#160;</td><td class="fielddoc"><p>set font <br  />
- data items: (3) font id, size, efx </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113acb95d0c1f5d7bc7a4658f6cca60c9d74" name="a93764339b56e531ea37af5181b20b113acb95d0c1f5d7bc7a4658f6cca60c9d74"></a>SetFont&#160;</td><td class="fielddoc"><p>set font data items: (3) font id, size, efx </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a7a6a8adddddea70b52a8cf891da4f893" name="a93764339b56e531ea37af5181b20b113a7a6a8adddddea70b52a8cf891da4f893"></a>SetGray&#160;</td><td class="fielddoc"><p>set gray <br  />
- data items: (1) gray value between 1 and 100 where 0=black and 100=white </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a7a6a8adddddea70b52a8cf891da4f893" name="a93764339b56e531ea37af5181b20b113a7a6a8adddddea70b52a8cf891da4f893"></a>SetGray&#160;</td><td class="fielddoc"><p>set gray data items: (1) gray value between 1 and 100 where 0=black and 100=white </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a76bd7e5338e13b4b78cfaa1551a7ba04" name="a93764339b56e531ea37af5181b20b113a76bd7e5338e13b4b78cfaa1551a7ba04"></a>SetWhite&#160;</td><td class="fielddoc"><p>set white: equivalent to <code><a class="el" href="namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a7a6a8adddddea70b52a8cf891da4f893">SetGray(100)</a></code> <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a76bd7e5338e13b4b78cfaa1551a7ba04" name="a93764339b56e531ea37af5181b20b113a76bd7e5338e13b4b78cfaa1551a7ba04"></a>SetWhite&#160;</td><td class="fielddoc"><p>set white: equivalent to <code><a class="el" href="namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a7a6a8adddddea70b52a8cf891da4f893">SetGray(100)</a></code> data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a76ddef8b6ba62064b651ebe9fc708332" name="a93764339b56e531ea37af5181b20b113a76ddef8b6ba62064b651ebe9fc708332"></a>Slur&#160;</td><td class="fielddoc"><p>slur <br  />
- data items: (6) 2 bezier control points and an end point <br  />
- like curve, except 2 more control points are deduced from a global slur thickness setting </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a76ddef8b6ba62064b651ebe9fc708332" name="a93764339b56e531ea37af5181b20b113a76ddef8b6ba62064b651ebe9fc708332"></a>Slur&#160;</td><td class="fielddoc"><p>slur data items: (6) 2 bezier control points and an end point like curve, except 2 more control points are deduced from a global slur thickness setting </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a8468a30ae7d8f8c41daed04cf1f7253d" name="a93764339b56e531ea37af5181b20b113a8468a30ae7d8f8c41daed04cf1f7253d"></a>StartGroup&#160;</td><td class="fielddoc"><p>start group <br  />
- data items: (11) same as StartObject </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a8468a30ae7d8f8c41daed04cf1f7253d" name="a93764339b56e531ea37af5181b20b113a8468a30ae7d8f8c41daed04cf1f7253d"></a>StartGroup&#160;</td><td class="fielddoc"><p>start group data items: (11) same as StartObject </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ad34204d72ef88942903d871c12f1cc50" name="a93764339b56e531ea37af5181b20b113ad34204d72ef88942903d871c12f1cc50"></a>StartObject&#160;</td><td class="fielddoc"><p>start object <br  />
- data items: (11) with indices as noted:</p><ul>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113ad34204d72ef88942903d871c12f1cc50" name="a93764339b56e531ea37af5181b20b113ad34204d72ef88942903d871c12f1cc50"></a>StartObject&#160;</td><td class="fielddoc"><p>start object data items: (11) with indices as noted:</p><ul>
 <li>0, 1: origin point (x, y)</li>
 <li>2..5: bounding rect (left, top, right, bottom)</li>
 <li>6, 7: x and y transform (scale ratio * 1000)</li>
@@ -829,12 +800,9 @@ template&lt;typename T &gt; </div>
 <li>9,10: unused/undocumented </li>
 </ul>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a8e763d9065582268c9ffa345a3f81f5f" name="a93764339b56e531ea37af5181b20b113a8e763d9065582268c9ffa345a3f81f5f"></a>Stroke&#160;</td><td class="fielddoc"><p>stroke path <br  />
- data items: none </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a8e763d9065582268c9ffa345a3f81f5f" name="a93764339b56e531ea37af5181b20b113a8e763d9065582268c9ffa345a3f81f5f"></a>Stroke&#160;</td><td class="fielddoc"><p>stroke path data items: none </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a95196e7fcad262a2a801cb4ab78b3520" name="a93764339b56e531ea37af5181b20b113a95196e7fcad262a2a801cb4ab78b3520"></a>VerticalMode&#160;</td><td class="fielddoc"><p>pen vertical mode <br  />
- data items: (1) 1=center, 2=left, 3=right <br  />
- tells line-drawing commands to draw the line center, on the left, or on the right of the drawing coordinates specified. </p>
+<tr><td class="fieldname"><a id="a93764339b56e531ea37af5181b20b113a95196e7fcad262a2a801cb4ab78b3520" name="a93764339b56e531ea37af5181b20b113a95196e7fcad262a2a801cb4ab78b3520"></a>VerticalMode&#160;</td><td class="fielddoc"><p>pen vertical mode data items: (1) 1=center, 2=left, 3=right tells line-drawing commands to draw the line center, on the left, or on the right of the drawing coordinates specified. </p>
 </td></tr>
 </table>
 
