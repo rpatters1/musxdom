@@ -720,7 +720,7 @@ void StaffComposite::applyStyle(const MusxInstance<StaffStyle>& staffStyle)
 
     if (staffStyle->hasInstrumentAssigned()) {
         instUuid = staffStyle->instUuid;
-        // there appears to be no mask for instUuid.
+        m_instUuidChanged = true;     // indicates that we overrode the raw staff's instUuid.
     }
     if (srcMasks->floatNoteheadFont) {
         noteFont = staffStyle->noteFont;
