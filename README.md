@@ -137,6 +137,75 @@ To run the tests:
 ```bash
 ctest --test-dir build
 ```
+## Visual Studio Code Setup
+
+1. Install the following extensions:
+   - C/C++ (from Microsoft)
+   - C/C++ Extension Pack (from Microsoft)
+   - C/C++ Themes (from Microsoft)
+   - CMake (from twxs)
+   - CMake Tools (from Microsoft)
+   - codeLLDB (from Vadim Chugunov)
+2. Use the following `.vscode/tasks.json` file:
+
+```json
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "cmake --build build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
+```
+
+3. Use the following `.vscode/launch.json` for debugging on macOS:
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Debug (codeLLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/tests/musxdomtests",
+            "args": [],
+            "cwd": "${workspaceFolder}/tests/data",
+            "stopOnEntry": false,
+            //"externalConsole": false,
+            "env": {},
+            "preLaunchTask": "build" // Optional: specify a task to build your program before debugging
+        }
+    ]
+}
+```
+
+on Windows:
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Debug (codeLLDB)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/tests/Debug/musxdomtests.exe",
+            "cwd": "${workspaceFolder}\\tests\\data",
+            "stopAtEntry": false,
+            "environment": [],
+            "preLaunchTask": "build" // Optional: specify a task to build your program before debugging
+        }
+    ]
+}
+```
 
 ### To Build the Documentation
 

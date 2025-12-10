@@ -677,6 +677,7 @@ private:
 
     const MeasCmper m_measureId;
     const Edu m_eduPosition;
+    bool m_instUuidChanged{};
 
 public:
     /// @brief Calculates the current staff at the specified metric position by applying all relevant staff styles,
@@ -696,7 +697,10 @@ public:
     MeasCmper getMeasureId() const { return m_measureId; }
 
     /// @brief Returns the Edu position this staff composite was created with.
-    Edu eduPosition() const { return m_eduPosition; }
+    Edu getEduPosition() const { return m_eduPosition; }
+
+    /// @brief Returns if this composite staff includes an instrument uuid changed by a staff style.
+    bool getInstrumentUuidChanged() const { return m_instUuidChanged; }
 
     /// @brief Returns the underlying staff without any staff styles applied.
     MusxInstance<others::Staff> getRawStaff() const;
