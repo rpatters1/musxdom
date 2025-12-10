@@ -1,5 +1,7 @@
 var NAVTREEINDEX32 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#ad716415915dc3f312f69cb3ce44af86d":[1,0,1,0,5,588],
+"namespacemusx_1_1dom_1_1uuid.html#ad71f28b305a933ce93292ed01bba688b":[1,0,1,0,5,725],
 "namespacemusx_1_1dom_1_1uuid.html#ad751440ba2a492b437074fc1a0cd256c":[1,0,1,0,5,728],
 "namespacemusx_1_1dom_1_1uuid.html#ad7892fc908db8c001ce396624c5b070b":[1,0,1,0,5,208],
 "namespacemusx_1_1dom_1_1uuid.html#ad7dc59eaf44461276bd645b36c32c178":[1,0,1,0,5,183],
@@ -247,7 +249,5 @@ var NAVTREEINDEX32 =
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a35c350296ca4f628a3872ad288a16441":[1,0,1,0,46,5,0],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a35c350296ca4f628a3872ad288a16441":[2,0,1,0,47,5,0],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[1,0,1,0,46,5,1],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[2,0,1,0,47,5,1],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html":[1,0,1,0,46,6],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html":[2,0,1,0,47,6]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[2,0,1,0,47,5,1]
 };
