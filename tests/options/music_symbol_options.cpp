@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
- #include "gtest/gtest.h"
- #include "musx/musx.h"
- #include "test_utils.h"
+#include "gtest/gtest.h"
+#include "musx/musx.h"
+#include "test_utils.h"
 
 TEST(MusicSymbolOptionsTest, PropertiesTest)
 {
