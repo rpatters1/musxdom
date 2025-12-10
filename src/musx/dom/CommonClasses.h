@@ -347,7 +347,7 @@ public:
     void setTransposition(const MusxInstance<others::Staff>& staff);
 
     /// @brief Calculates the tonal center index for the key, where C=0, D=1, E=2, ...
-    /// 
+    ///
     /// This is the modal tonal center, so a minor key with no sharps or flats returns 5 (=A).
     int calcTonalCenterIndex(KeyContext ctx) const;
 
@@ -392,7 +392,7 @@ private:
 
     int m_octaveDisplacement{};         ///< Displace notes by this many octaves (for transposed keys)
     int m_alterationOffset{};           ///< Offset of alteration (for transposed keys)
-    
+
     int getAlterationOffset(KeyContext ctx) const
     { return ctx == KeyContext::Written ? m_alterationOffset : 0; }
 
@@ -419,7 +419,7 @@ public:
         CommonClassBase(document), baselinePosition(baseline), lyricsType(type), lyricNumber(lyricNo), assignments(document, requestedPartId)
     {
     }
-    
+
     Evpu baselinePosition;              ///< baseline position of this line on this system, relative to the staff's reference line
     std::string_view lyricsType;        ///< the type of lyric ("chorus", "verse", or "section", corresponding to the xml tags for lyrics text)
     Cmper lyricNumber;                  ///< the text number for all lyric assignments on this line.
@@ -472,7 +472,7 @@ private:
  *
  * @class MusicRange
  * @brief Utility class that represents of a range of musical time.
- * 
+ *
  * This class is used to specify start and end points in a musical range using measures and util::Fraction values.
  *
  * The class is agnostic as to whether the positions are global- or staff-position values. The consuming code
@@ -603,14 +603,14 @@ private:
 
     /**
      * @brief Constructor for measures and independent time signature records.
-     * @param measure An instance of 
+     * @param measure An instance of
      */
     explicit TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom,
         std::optional<bool> abbreviate = std::nullopt);
 
     /**
      * @brief Constructor for components
-     * @param measure An instance of 
+     * @param measure An instance of
      */
     explicit TimeSignature(const DocumentWeakPtr& document, const TimeSigComponent& timeSigUnit, std::optional<bool> abbreviate)
         : CommonClassBase(document), m_abbreviate(abbreviate)
@@ -683,7 +683,7 @@ public:
  *
  * @class EnigmaMusicRange
  * @brief The representation of a range of music used by Enigma files.
- * 
+ *
  * This class is used to specify start and end points in a musical range using measures and EDUs.
  * This is a data class and not a utility class. Internal and external callers should prefer
  * @ref MusicRange, which uses Fraction values to capture the range rather than EDUs.
@@ -741,7 +741,7 @@ public:
 /**
  * @class NamePositioning
  * @brief Contains horizontal and vertical offsets, alignment, and expansion settings for name positioning.
- * 
+ *
  * This class is used both for default names as well as name positioning @ref Staff, @ref StaffStyle,
  * and @ref details::StaffGroup.
  */
@@ -767,7 +767,7 @@ public:
         Right,  ///< Right alignment.
         Center  ///< Center alignment.
     };
-    
+
     Evpu horzOff{};             ///< Horizontal distance from staff in @ref Evpu.
     Evpu vertOff{};             ///< Vertical offset from staff in @ref Evpu.
     AlignJustify justify{};     ///< Justification for the name text.

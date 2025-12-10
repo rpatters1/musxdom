@@ -351,7 +351,7 @@ public:
      *
      * This function scans an Enigma-formatted string (typically Finale-style encoded text),
      * extracts text chunks and control inserts, and invokes a callback for each contiguous span
-     * of text using the current font state. It automatically interprets font-related inserts 
+     * of text using the current font state. It automatically interprets font-related inserts
      * like ^fontTxt, ^fontMus, ^fontid, ^size, and ^nfx, updating the font info accordingly.
      *
      * Escaped carets ("^^") are converted to literal '^' characters. All other unrecognized
@@ -432,7 +432,7 @@ public:
     EnigmaParsingContext()
         : m_rawText(nullptr), m_forPartId(dom::SCORE_PARTID), m_insertFunc(EnigmaString::defaultInsertsCallback)
     {}
-        
+
     /// @brief Constructor
     /// @param rawText The raw text to use
     /// @param forPartId The linked part ID to use for ^partname and ^totpages inserts

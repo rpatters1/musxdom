@@ -153,7 +153,7 @@ public:
         if (!typePtr.has_value()) {
             return std::nullopt; // Type not yet implemented
         }
-        
+
         return std::visit(
             [&](auto const& ptr) -> CreatedInstanceInfo {
                 using T = std::remove_pointer_t<std::remove_reference_t<decltype(ptr)>>;
@@ -237,8 +237,8 @@ using RegisteredOthers = TypeRegistry <
     dom::others::AcciAmountSharps,
     dom::others::AcciOrderFlats,
     dom::others::AcciOrderSharps,
-    dom::others::OssiaBounds,           // this was possibly internally "arbitBounds" at one time, which may be why it serializes here  
-    dom::others::OssiaHeader,           // this was possibly internally "arbitHeader" at one time, which may be why it serializes here  
+    dom::others::OssiaBounds,           // this was possibly internally "arbitBounds" at one time, which may be why it serializes here
+    dom::others::OssiaHeader,           // this was possibly internally "arbitHeader" at one time, which may be why it serializes here
     dom::others::OssiaMusic,            // this was possibly internally "arbitMusic" at one time, which may be why it serializes here
     dom::others::ArticulationDef,
     dom::others::BeatChartElement,

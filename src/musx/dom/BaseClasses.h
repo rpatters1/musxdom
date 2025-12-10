@@ -102,7 +102,7 @@ public:
 
     /**
      * @brief Gets a reference to the Document.
-     * 
+     *
      * @return A pointer to the Document instance.
      */
     DocumentPtr getDocument() const
@@ -168,7 +168,7 @@ public:
 protected:
     /**
      * @brief Constructs the base class.
-     * 
+     *
      * @param document A weak pointer to the parent document
      * @param partId The part ID for this instance, or zero if for score.
      * @param shareMode The @ref ShareMode for this instance.
@@ -203,7 +203,7 @@ class CommonClassBase : public Base
 public:
     /**
      * @brief Constructs a CommonClassBase object.
-     * 
+     *
      * @param document A weak pointer to the parent document.
      */
     CommonClassBase(const DocumentWeakPtr& document)
@@ -227,7 +227,7 @@ class ContainedClassBase : public Base
 public:
     /**
      * @brief Constructs a ContainedClassBase object.
-     * 
+     *
      * @param parent A shared pointer to the parent document.
      */
     ContainedClassBase(const MusxInstance<Base>& parent)
@@ -248,14 +248,14 @@ public:
             return std::dynamic_pointer_cast<const ParentClass>(result);
         }
     }
-    
+
 private:
     const MusxInstanceWeak<Base> m_parent;
 };
 
 /**
  * @brief Base class for all "options" types.
- * 
+ *
  * Options types derive from this base class so they can reside in the options pool.
  */
 class OptionsBase : public Base {
@@ -275,7 +275,7 @@ protected:
 
 /**
  * @brief Base class for all "others" types.
- * 
+ *
  * This class provides common attributes and methods for handling
  * "others" types in the DOM, including `cmper` and `inci`.
  */
@@ -289,7 +289,7 @@ class OthersBase : public Base
 protected:
     /**
      * @brief Constructs an OthersBase object.
-     * 
+     *
      * @param document A weak pointer to the parent document
      * @param partId The part Id for this Other, or zero if for score.
      * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
@@ -322,14 +322,14 @@ public:
 
     /**
      * @brief Gets the `cmper` key value.
-     * 
+     *
      * @return The `cmper` value.
      */
     Cmper getCmper() const { return m_cmper; }
 
     /**
      * @brief Gets the optional array index (`inci`).
-     * 
+     *
      * @return The `inci` value.
      */
     std::optional<Inci> getInci() const { return m_inci; }
@@ -402,12 +402,12 @@ public:
 
     std::string name;       ///< the name
 
-    static const xml::XmlElementArray<OthersName>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.    
+    static const xml::XmlElementArray<OthersName>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
 /**
  * @brief Base class for all "details" types.
- * 
+ *
  * This class provides common attributes and methods for handling
  * "details" types in the DOM, including `cmper1`, `cmper2`, and `inci`.
  */
@@ -421,7 +421,7 @@ class DetailsBase : public Base
 protected:
     /**
      * @brief Constructs a DetailsBase object.
-     * 
+     *
      * @param document A weak pointer to the parent document
      * @param partId The part Id for this Detail, or zero if for score.
      * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
@@ -499,7 +499,7 @@ public:
 protected:
     /**
      * @brief Constructs a EntryDetailsBase object.
-     * 
+     *
      * @param document A weak pointer to the parent document
      * @param partId The part Id for this Detail, or zero if for score.
      * @param shareMode Usually `ShareMode::All`. This parameter is used with linked parts data.
@@ -579,7 +579,7 @@ protected:
 class FontInfo;
 /**
  * @brief Base class for all text blocks.
- * 
+ *
  * Options types derive from this base class so they can reside in the text pool.
  */
 class TextsBase : public Base
@@ -589,7 +589,7 @@ class TextsBase : public Base
 public:
     /**
      * @brief Constructs a `TextsBase` object.
-     * 
+     *
      * @param document A weak pointer to the parent document
      * @param partId Always 0, but this parameter is needed for the generic factory routine
      * @param shareMode Always `ShareMode::All`, but this parameter is needed for the generic factory routine.

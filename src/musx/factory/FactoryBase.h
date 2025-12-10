@@ -289,7 +289,7 @@ struct FieldPopulator : public FactoryBase
             if (requireFields) {
                 MUSX_UNKNOWN_XML("xml element <" + fieldElement->getParent()->getTagName() + "> has child <" + fieldElement->getTagName() + "> which is not in the element list.");
             }
-        }    
+        }
     }
 
     static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element)
@@ -320,7 +320,7 @@ struct FieldPopulator : public FactoryBase
     {
        return FieldPopulator<T>::createAndPopulateImpl(element, std::forward<Args>(args)...);
     }
-    
+
 private:
     static const std::unordered_map<std::string_view, XmlElementPopulator<T>>& elementXref()
     {

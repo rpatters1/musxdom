@@ -1598,7 +1598,7 @@ public:
 
     /// @brief Calculates the number of measures spanned by this multimeasure rest
     int calcNumberOfMeasures() const { return (std::max)(nextMeas - getStartMeasure(), 0); }
-    
+
     /// @brief Calculates if the number on this multimeasure rest is visible.
     bool calcIsNumberVisible() const { return calcNumberOfMeasures() >= numStart; }
 
@@ -1657,7 +1657,7 @@ public:
     std::optional<size_t> getIndexOf(StaffCmper staffId) const
     {
         for (size_t x = 0; x < staffNums.size(); x++) {
-            if (staffNums[x] == staffId) return x;        
+            if (staffNums[x] == staffId) return x;
         }
         return std::nullopt;
     }
@@ -1667,7 +1667,7 @@ public:
     MusxInstance<details::StaffGroup> getStaffGroup(Cmper forPartId) const;
 
     /// @brief Used by the factory to calculate all multistaff ids and visual ids for instances of @ref Staff.
-    /// @param document 
+    /// @param document
     static void calcAllMultiStaffGroupIds(const DocumentPtr& document);
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
@@ -1795,7 +1795,7 @@ class TextBlock;
  *
  * If the cmper is 0, the #startPage and #endPage values specify the range of page assignment IDs to which
  * this text is assigned. An #endPage of 0 indicates the last page of the document.
- * 
+ *
  * If cmper is non-zero, #startPage and #endPage should have the same value as the cmper.
  *
  * The inci value specifies a particular page text when more than one exists for the cmper value.
@@ -1932,8 +1932,8 @@ public:
     bool needsRecalc{};                 ///< Indicates if the part needs update layout.
     bool useAsSmpInst{};                ///< Indicates if the part is used as a SmartMusic instrument.
     int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
-    Cmper defaultNameStaff{};           ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.) 
-    Cmper defaultNameGroup{};           ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.) 
+    Cmper defaultNameStaff{};           ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.)
+    Cmper defaultNameGroup{};           ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.)
 
     int numberOfLeadingBlankPages{};    ///< The number of leading blank pages in the part. This is not in the xml but calculated in #factory::DocumentFactory::create.
     int numberOfPages{};                ///< The total number of pages in the part. This is not in the xml but calculated in #factory::DocumentFactory::create.
@@ -1962,7 +1962,7 @@ public:
     /// @param pageId The page for which to get the assignment ID.
     /// @return The calculated page assignment ID.
     PageCmper calcAssignmentIdFromPageNumber(PageCmper pageId) const;
-    
+
     /** @brief Return the instance for the score */
     static MusxInstance<PartDefinition> getScore(const DocumentPtr& document);
 
@@ -2112,7 +2112,7 @@ public:
     /// @return value used to distinguish different copies of the same note id.
     unsigned getNoteTypeOrderId() const
     { return(percNoteType & 0xf000) >> 12; }
-    
+
     /// @brief Gets a reference to the PercussionNoteType record for this note id.
     /// @return Record from #percussion::percussionNoteTypeMap.
     const percussion::PercussionNoteType& getNoteType() const;
@@ -2193,7 +2193,7 @@ public:
     constexpr static std::string_view XmlNodeName = "repeatBack"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatBack>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
 /**
  * @class RepeatEndingStart
  * @brief Represents a repeat ending start marker in the document.
@@ -2286,7 +2286,7 @@ public:
     explicit RepeatEndingText(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    std::string text; ///< The text 
+    std::string text; ///< The text
 
     constexpr static std::string_view XmlNodeName = "repeatEndingText"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatEndingText>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -2449,7 +2449,7 @@ public:
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
 /**
  * @class SplitMeasure
  * @brief Defines the split point(s) where a measure may be divided between two systems. A measure can only
@@ -2467,7 +2467,7 @@ public:
  * As a result, split points are rare in Finale files. The older the file, the more likely they are to appear,
  * but even then they remain uncommon.
  *
- * @warning Early versions of Finale could create multiple split points, while recent versions allow only one.  
+ * @warning Early versions of Finale could create multiple split points, while recent versions allow only one.
  * Older files that contain multiple split points can still be opened and saved in newer Finale releases (even as
  * recent as 27.4) without removing them. In all versions tested, however, multiple split points lead to crashes
  * or unstable measure layouts. They are effectively unusable in any version of Finale.
@@ -2677,7 +2677,7 @@ public:
     MeasCmper startMeas{};          ///< Starting measure of the staff system. See @ref Measure.
     MeasCmper endMeas{};            ///< The ending measure of the staff system, stored as *one greater* than the last measure
                                     ///< on this system. In other words, it is the first measure of the next system, or one past
-                                    ///< the last measure in the document. See @ref Measure.  
+                                    ///< the last measure in the document. See @ref Measure.
                                     ///< If #endMeas is a split measure, its first part may still appear on this system depending
                                     ///< on spacing. (Finale does not record this in the data.) If the system is locked, the first
                                     ///< part of the split always appears on this system. See @ref SplitMeasure and @ref SystemLock.
@@ -2805,7 +2805,7 @@ public:
  * The most common tool for creating TempoChange instances was the plugin JW Tempo.
  * It only ever used absolute ratios, so the focus of this class is on them.
  *
- * The cmper is the measure number, and incis should be stored in order by #eduPosition. 
+ * The cmper is the measure number, and incis should be stored in order by #eduPosition.
  *
  * This class is identified by the XML node name "tempoDef".
  */
@@ -2837,7 +2837,7 @@ public:
     constexpr static std::string_view XmlNodeName = "tempoDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TempoChange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
 /**
  * @class TextBlock
  * @brief Represents the attributes of a Finale "textBlock".
@@ -2917,7 +2917,7 @@ public:
     explicit TextExpressionDef(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this 
+    Cmper textIdKey{};                              ///< Identifier for the @ref TextBlock associated with this
     Cmper categoryId{};                             ///< Identifier for the category of the text expression.
     RehearsalMarkStyle rehearsalMarkStyle{};        ///< Auto-sequencing style for rehearsal marks.
     int value{};                                    ///< Value associated with the expression (e.g., velocity).
@@ -2952,7 +2952,7 @@ public:
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     MusxInstance<Enclosure> getEnclosure() const;
-  
+
     constexpr static std::string_view XmlNodeName = "textExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -3020,7 +3020,7 @@ public:
     constexpr static std::string_view XmlNodeName = "textRepeatAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextRepeatAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
 /**
  * @class TextRepeatDef
  * @brief Defines text repeat elements with font styling and justification.
@@ -3100,18 +3100,18 @@ public:
     {
     }
 
-    std::string text; ///< The text 
+    std::string text; ///< The text
 
     constexpr static std::string_view XmlNodeName = "textRepeatText"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextRepeatText>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
 /**
  * @class TimeCompositeLower
  * @brief Represents the lower composite time signature array.
  *
  * The cmper taken from the `unit` value when `hasCompositeBottom` is true. (See @ref TimeSignature.)
- * 
+ *
  * This class is identified by the XML node name "timeLower".
  */
 class TimeCompositeLower : public OthersBase
@@ -3146,7 +3146,7 @@ public:
  * @brief Represents the upper composite time signature structure.
  *
  * The cmper taken from the `beats` value when `hasCompositeTop` is true. (See @ref TimeSignature.)
- * 
+ *
  * This class is identified by the XML node name "timeUpper".
  */
 class TimeCompositeUpper : public OthersBase

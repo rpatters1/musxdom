@@ -33,7 +33,7 @@ namespace music_theory {
 enum class NoteName : int;
 class Transposer;
 } // namespace music_theory
-    
+
 namespace musx {
 namespace dom {
 
@@ -60,7 +60,7 @@ class GFrameHoldContext {
 public:
     /**
      * @brief Constructs a context-aware @ref GFrameHold wrapper.
-     * 
+     *
      * @param document Weak pointer to the owning Document.
      * @param partId The requested part ID.
      * @param staffId The instrument ID for.
@@ -72,21 +72,21 @@ public:
 
     /**
      * @brief Returns the requested part ID associated with this context.
-     * 
+     *
      * @return The requested part ID.
      */
     Cmper getRequestedPartId() const { return m_requestedPartId; }
 
     /**
      * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
-     * 
+     *
      * @return A const pointer to @ref GFrameHold.
      */
     const GFrameHold* operator->() const { return m_hold.get(); }
 
     /**
      * @brief Returns true if the internal @ref GFrameHold is valid.
-     * 
+     *
      * @return True if the @ref GFrameHold was successfully retrieved; false otherwise.
      */
     explicit operator bool() const noexcept { return static_cast<bool>(m_hold); }
@@ -108,7 +108,7 @@ public:
      * @return EntryFrame for layer or nullptr if none.
      */
     std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex) const;
-    
+
     /**
      * @brief iterates the entries for the specified layer in this @ref GFrameHold from left to right
      * @param layerIndex The layer index (0..3) to iterate.
@@ -154,7 +154,7 @@ public:
 private:
     MusxInstance<GFrameHold> m_hold;        ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId;                ///< The requested part context.
-    util::Fraction m_timeOffset;            ///< The time offset to apply to entry frames. 
+    util::Fraction m_timeOffset;            ///< The time offset to apply to entry frames.
 };
 
 } // namespace details
@@ -199,7 +199,7 @@ public:
      *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
      */
     using NoteProperties = std::tuple<music_theory::NoteName, int, int, int>;
-    
+
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
     bool isValid{};     ///< Should always be true but otherwise appears to be used internally by Finale.
@@ -400,7 +400,7 @@ public:
     constexpr static std::string_view XmlNodeName = "entry"; ///< The XML node name for this type.
     static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
-private:    
+private:
     EntryNumber m_entnum;   ///< Entry number.
     EntryNumber m_prev;     ///< Previous entry number in the list. (0 if none)
     EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
@@ -433,11 +433,11 @@ public:
 
     /** @brief Default constructor */
     EntryInfoPtr() : m_entryFrame(nullptr), m_indexInFrame(0) {}
-        
+
     /** @brief Constructor function
      *
      * @param entryFrame The entry frame.
-     * @param index The index of this instance within the frame. 
+     * @param index The index of this instance within the frame.
     */
     explicit EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
         : m_entryFrame(entryFrame), m_indexInFrame(index) {}
@@ -597,12 +597,12 @@ public:
     [[nodiscard]] InterpretedIterator asInterpretedIterator(bool remapBeamOverBarlineEntries = true) const;
 
     /// @brief Gets the next entry in a beamed group or nullptr if the entry is not beamed or is the last in the group.
-    [[nodiscard]] 
+    [[nodiscard]]
     EntryInfoPtr getNextInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
     { return iterateBeamGroup<&EntryInfoPtr::nextPotentialInBeam, &EntryInfoPtr::previousPotentialInBeam>(beamIterationMode); }
 
     /// @brief Gets the previous entry in a beamed group or nullptr if the entry is not beamed or is the first in the group.
-    [[nodiscard]] 
+    [[nodiscard]]
     EntryInfoPtr getPreviousInBeamGroup(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const
     { return iterateBeamGroup<&EntryInfoPtr::previousPotentialInBeam, &EntryInfoPtr::nextPotentialInBeam>(beamIterationMode); }
 
@@ -661,7 +661,7 @@ public:
     }
 
     /// @brief Returns whether this is an unbeamed entry
-    /// @return 
+    /// @return
     [[nodiscard]] bool calcUnbeamed() const;
 
     /// @brief Returns whether this is the start of a primary beam
@@ -967,11 +967,11 @@ class EntryInfoPtr::InterpretedIterator
 
     friend class EntryFrame;
     friend class EntryInfoPtr;
-    
+
 public:
     /// @brief Default constructor allows null return values by caller
     InterpretedIterator() = default;
-    
+
     /// @brief Returns the entry at the current iterator position.
     /// @return A const reference to the underlying EntryInfoPtr (which may be null).
     [[nodiscard]] const EntryInfoPtr& getEntryInfo() const noexcept { return m_entry; }
@@ -1129,7 +1129,7 @@ public:
         /// display a different time signature. Invisible tuplets then create the appearance of time stretch.
         ///
         /// @return This function returns true if
-        ///     - the tuplet's total reference duration matches the length of the measure exactly 
+        ///     - the tuplet's total reference duration matches the length of the measure exactly
         ///     - the tuplet is invisible
         ///     - the staff has an independent time signature
         //      - the independent display time signature matches the tuplet's total display duration
@@ -1142,7 +1142,7 @@ public:
         {
             auto result = m_parent.lock();
             MUSX_ASSERT_IF(!result) {
-                throw std::logic_error("Unable to obtain lock on parent entry frame.");               
+                throw std::logic_error("Unable to obtain lock on parent entry frame.");
             }
             return result;
         }
@@ -1226,7 +1226,7 @@ public:
     ///
     ///        musxdom can handle this workaround in two ways:
     ///
-    ///        **(1) Remap continuation entries to their logical measures (default: true)**  
+    ///        **(1) Remap continuation entries to their logical measures (default: true)**
     ///            When @p remapBeamOverBarlineEntries is true, the iterator presents
     ///            each hidden source entry as its corresponding visible continuation
     ///            entry, effectively remapping the continuation notes back into their
@@ -1239,11 +1239,11 @@ public:
     ///            the physically crammed display entries where they appear in the raw
     ///            data.
     ///
-    ///        **(2) Process raw frames and skip hidden source entries in the caller (set to false)**  
+    ///        **(2) Process raw frames and skip hidden source entries in the caller (set to false)**
     ///            When @p remapBeamOverBarlineEntries is false, the iterator
     ///            presents the entries exactly as they appear in the raw data: the
     ///            visible continuation entries remain in the starting frame, and the
-    ///            hidden source entries appear in the subsequent measures.  
+    ///            hidden source entries appear in the subsequent measures.
     ///            In this mode, callers are responsible for ignoring the hidden source
     ///            entries, because their visible counterparts were already handled when
     ///            the starting measure was processed. Callers should not use
@@ -1358,7 +1358,7 @@ public:
     ClefIndex clefIndexConcert{};       ///< the concert clef index in effect for the entry.
 
     /// @brief Get the entry
-    /// @throws std::logic_error if the entry pointer is no longer valid 
+    /// @throws std::logic_error if the entry pointer is no longer valid
     MusxInstance<Entry> getEntry() const
     {
         auto retval = m_entry.lock();
@@ -1454,7 +1454,7 @@ public:
     MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
     /// @brief Calculates the staff position for this note, taking into account percussion notes.
-    /// @return 
+    /// @return
     int calcStaffPosition() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
@@ -1516,8 +1516,8 @@ public:
     ///        from the document. Supplying an explicit list can be used to avoid repeatedly fetching the
     ///        staff list when calling this function in a loop (for example, within a beam).
     /// @return
-    ///   - **1**  if the note crosses upward to a higher staff  
-    ///   - **0**  if the note is not cross-staffed  
+    ///   - **1**  if the note crosses upward to a higher staff
+    ///   - **0**  if the note is not cross-staffed
     ///   - **−1** if the note crosses downward to a lower staff
     int calcCrossStaffDirection(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
 

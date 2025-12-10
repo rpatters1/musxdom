@@ -57,7 +57,7 @@ enum class DirectionType
 /**
  * @enum EntryConnectionType
  * @brief Indicates the entry connection type for entry-attached @ref others::SmartShape instances.
- * 
+ *
  * These values are untested, so the documentation provides only a best guess as to what they do.
  * Some values are also used for beat-attached shapes, but how they apply in this context (if at all) is unknown.
  */
@@ -218,7 +218,7 @@ public:
             ctlPtAdj->integrityCheck(ptrToThis);
             breakAdj->integrityCheck(ptrToThis);
         }
-    
+
         static const xml::XmlElementArray<TerminationSeg>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
     };
 

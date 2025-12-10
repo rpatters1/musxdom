@@ -96,7 +96,7 @@ public:
         }
         return std::make_shared<Attribute>(attr, 0);
     }
-    
+
     std::shared_ptr<IXmlAttribute> findAttribute(const std::string& name) const override {
         // work around Qt bug that attributeNode is not marked const
         QDomElement& nonConstElement = const_cast<QDomElement&>(m_element);

@@ -217,11 +217,11 @@ constexpr bool calcTranspositionIsOctave(int displacement, int alteration)
 class Transposer
 {
 private:
-    int m_displacement; 
+    int m_displacement;
     int m_alteration;               // alteration from key signature
     int m_numberOfEdoDivisions;     // number of divisions in the EDO (default 12)
     std::vector<int> m_keyMap;      // step map for the EDO
-    
+
 public:
     /// @brief Constructor function
     /// @param displacement     the scale step displacement value. 0 signifies the tonic in the C4 (middle-C) octave.
@@ -230,7 +230,7 @@ public:
     /// 0 signifies that the note has no accidental in the key signature.
     /// @param isMinor          true if you wish to use the default keymap for minor mode. (Ignored if @p keyMap is provided.)
     /// @param numberOfEdoDivisions the number of divisions in the EDO. (E.g., 31-EDO would pass 31.)
-    /// @param keyMap           a 7-element map specifying the starting EDO division of each diatonic step. 12-EDO Major (the default) is { 0, 2, 4, 5, 7, 9, 11 }. 
+    /// @param keyMap           a 7-element map specifying the starting EDO division of each diatonic step. 12-EDO Major (the default) is { 0, 2, 4, 5, 7, 9, 11 }.
     Transposer(int displacement, int alteration,
         bool isMinor = false, int numberOfEdoDivisions = STANDARD_12EDO_STEPS,
         const std::optional <std::vector<int>>& keyMap = std::nullopt)
@@ -269,7 +269,7 @@ public:
         diatonicTranspose(sign(direction));
         m_alteration -= sign(direction) * keyStepEnharmonic;
     }
-    
+
     /**
      * @brief Chromatically transposes by a specified chromatic interval.
      *
@@ -297,9 +297,9 @@ public:
         const int stepsInAlteration = calcStepsInAlteration(interval, chromaticAlteration);
         const int stepsInInterval = calcStepsInNormalizedInterval(intervalNormalized);
         const int stepsInDiatonicInterval = calcStepsBetweenScaleDegrees(m_displacement, m_displacement + intervalNormalized);
-    
+
         const int effectiveAlteration = stepsInAlteration + stepsInInterval - sign(interval) * stepsInDiatonicInterval;
-    
+
         diatonicTranspose(interval);
         m_alteration += effectiveAlteration;
     }
@@ -314,7 +314,7 @@ public:
     {
         while (std::abs(m_alteration) > 0) {
             const int currSign = sign(m_alteration);
-            const int currAbsDisp = std::abs(m_alteration);    
+            const int currAbsDisp = std::abs(m_alteration);
             enharmonicTranspose(currSign);
             if (std::abs(m_alteration) >= currAbsDisp) {
                 enharmonicTranspose(-currSign);
@@ -362,7 +362,7 @@ private:
         static constexpr double kFifthsMultiplier = 0.5849625007211562;
         return static_cast<int>(std::floor(m_numberOfEdoDivisions * kFifthsMultiplier) + 0.5);
     }
-    
+
     int calcScaleDegree(int interval) const
     { return positiveModulus(interval, int(m_keyMap.size())); }
 
@@ -399,7 +399,7 @@ private:
     int calcAbsoluteDivision(int displacement, int alteration) const {
         const int scaleDegree = calcScaleDegree(displacement); // 0..6
         const int baseStep = m_keyMap[scaleDegree];
-    
+
         const int octaveCount = (displacement < 0 && displacement % STANDARD_DIATONIC_STEPS != 0)
                               ? (displacement / STANDARD_DIATONIC_STEPS) - 1
                               : (displacement / STANDARD_DIATONIC_STEPS);

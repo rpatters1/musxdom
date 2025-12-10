@@ -943,7 +943,7 @@ MusxInstance<Staff> StaffComposite::getRawStaff() const
 {
     auto result = getDocument()->getOthers()->get<Staff>(getRequestedPartId(), getCmper());
     if (!result) {
-        MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(getCmper()) + " from StaffComposite.");        
+        MUSX_INTEGRITY_ERROR("Unable to load staff " + std::to_string(getCmper()) + " from StaffComposite.");
     }
     return result;
 }

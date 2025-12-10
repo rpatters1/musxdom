@@ -204,5 +204,5 @@ util::EnigmaParsingContext others::SmartShapeCustomLine::getRawTextCtx(Cmper for
     return {};
 }
 
-} // namespace dom    
+} // namespace dom
 } // namespace musx
