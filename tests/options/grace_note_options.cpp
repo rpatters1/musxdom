@@ -41,7 +41,7 @@ TEST(GraceNoteOptionsTest, PropertiesTest)
   </options>
 </finale>
 )xml";
-    
+
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);

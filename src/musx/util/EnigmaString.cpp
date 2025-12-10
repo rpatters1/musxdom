@@ -99,7 +99,7 @@ std::vector<std::string> EnigmaString::parseComponents(const std::string& input,
     }
 
     size_t i = 1; // Start after '^'
-    while (i < input.size() && std::isalpha(input[i])) 
+    while (i < input.size() && std::isalpha(input[i]))
         ++i;
 
     if (i == 1) {
@@ -112,14 +112,14 @@ std::vector<std::string> EnigmaString::parseComponents(const std::string& input,
     if (i < input.size() && input[i] == '(') {
         size_t start = ++i, depth = 1;
         while (i < input.size() && depth > 0) {
-            if (input[i] == '(') 
+            if (input[i] == '(')
                 ++depth;
-            else if (input[i] == ')') 
+            else if (input[i] == ')')
                 --depth;
             ++i;
         }
 
-        if (depth != 0) 
+        if (depth != 0)
             return {}; // Unbalanced parentheses
 
         std::string params = input.substr(start, i - start - 1);
@@ -128,12 +128,12 @@ std::vector<std::string> EnigmaString::parseComponents(const std::string& input,
         // Split parameters by ',' while respecting nested parentheses
         while (j <= params.size()) {
             if (j == params.size() || (params[j] == ',' && parenDepth == 0)) {
-                if (j > paramStart) 
+                if (j > paramStart)
                     components.push_back(params.substr(paramStart, j - paramStart));
                 paramStart = j + 1;
-            } else if (params[j] == '(') 
+            } else if (params[j] == '(')
                 ++parenDepth;
-            else if (params[j] == ')') 
+            else if (params[j] == ')')
                 --parenDepth;
             ++j;
         }

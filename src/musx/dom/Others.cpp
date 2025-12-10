@@ -90,7 +90,7 @@ MusxInstanceList<details::FretboardDiagram> FretboardGroup::getFretboardDiagrams
                 + " is missing a fretboard diagram for pitch class " + std::to_string(cmper2Offset));
 #ifndef MUSX_THROW_ON_INTEGRITY_CHECK_FAIL
             break;
-#endif        
+#endif
         }
     }
     return result;
@@ -475,7 +475,7 @@ void Page::calcSystemInfo(const DocumentPtr& document)
                                     return nextPage->firstSystemId - 1;
                                 } else {
                                     return 0;
-                                }                            
+                                }
                             }
                         }
                         return SystemCmper(systems.size());
@@ -485,13 +485,13 @@ void Page::calcSystemInfo(const DocumentPtr& document)
                             mutablePage->firstMeasureId = sys->startMeas;
                         } else {
                             MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                                + " has a no system instance for its first system.");                        
+                                + " has a no system instance for its first system.");
                         }
                         if (auto sys = document->getOthers()->get<StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
                             mutablePage->lastMeasureId = sys->getLastMeasure();
                         } else {
                             MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                                + " has a no system instance for its last system.");                        
+                                + " has a no system instance for its last system.");
                         }
                         for (size_t x = size_t(page->firstSystemId - 1); x < size_t(page->lastSystemId.value()); x++) {
                             StaffSystem* mutableSystem = const_cast<StaffSystem*>(systems[x].get());
@@ -880,7 +880,7 @@ bool StaffListSet<ScoreList, PartsList, ScoreForcedList, PartsForcedList>::conta
     if (!isHidden && staffListContainsStaff(m_staffList)) {
         return true;
     }
-    
+
     return staffListContainsStaff(m_forcedStaffList);
 }
 
@@ -933,10 +933,10 @@ int TempoChange::getAbsoluteTempo(NoteType noteType) const
         throw std::logic_error("Tempo change at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value())
             + " is a relative tempo change.");
     }
-    double result = (ratio * unit) / 65536.0; 
+    double result = (ratio * unit) / 65536.0;
     /* The value here is relative to 60 BPM == 1024 */
-    result *= 60.0;            
-    result /= double(noteType);            
+    result *= 60.0;
+    result /= double(noteType);
     return int(std::lround(result));
 }
 

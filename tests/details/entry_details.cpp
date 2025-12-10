@@ -258,7 +258,7 @@ TEST(BeamAlterationsTest, BeamWidths)
     };
 
     checkEntry(0, beamOptions->beamWidth, beamOptions->beamWidth, beamOptions->beamWidth, beamOptions->beamWidth);
-    checkEntry(6, 302, 302, 1165, 1165);    
+    checkEntry(6, 302, 302, 1165, 1165);
 }
 
 TEST(BeamExtensionTest, PopulateFields)

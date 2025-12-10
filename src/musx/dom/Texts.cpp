@@ -57,7 +57,7 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
 
     const bool stripUnderscores = [&]() {
         if (auto lyricOptions = getDocument()->getOptions()->get<options::LyricOptions>()) {
-            return lyricOptions->useSmartWordExtensions;   
+            return lyricOptions->useSmartWordExtensions;
         }
         return false;
     }();

@@ -21,38 +21,38 @@
  */
 
 #include <gtest/gtest.h>
- 
+
  using namespace music_theory;
- 
+
  TEST(TransposerTest, Basic12EDOEquivalents) {
      Transposer t(0, 0); // C natural
- 
+
      // C == C
      EXPECT_TRUE(t.isEnharmonicEquivalent(0, 0));
- 
+
      // Dbb == C
      EXPECT_TRUE(t.isEnharmonicEquivalent(1, -2));
- 
+
      // B♯ == C
      EXPECT_TRUE(t.isEnharmonicEquivalent(-1, 1));
- 
+
      // C in next octave
      EXPECT_FALSE(t.isEnharmonicEquivalent(7, 0));
- 
+
      // C♯ != C
      EXPECT_FALSE(t.isEnharmonicEquivalent(0, 1));
  }
- 
+
  TEST(TransposerTest, StepwiseTranspose12EDO) {
      Transposer t(0, 0); // C natural
      t.stepwiseTranspose(1); // Up one chromatic step (C#)
      EXPECT_EQ(t.alteration(), 1);
- 
+
      t.stepwiseTranspose(1); // Up another chromatic step (D)
      EXPECT_EQ(t.alteration(), 0);
      EXPECT_EQ(t.displacement(), 1);
  }
- 
+
  TEST(TransposerTest, ChromaticTransposeFromRandomBasesWithExpectedResults)
  {
     struct IntervalTestCase {
@@ -118,7 +118,7 @@
         EXPECT_EQ(t.alteration(), baseAlt);
     }
  }
- 
+
  TEST(TransposerTest, ChromaticTransposeFromRandomBasesWithExpectedResults31EDO)
 {
     struct IntervalTestCase {
@@ -206,7 +206,7 @@ TEST(TransposerTest, Non12EDOEquivalentPitch) {
     // but one more flat is equivalent
     EXPECT_TRUE(t.isEnharmonicEquivalent(1, -2));
 }
- 
+
  TEST(TransposerTest, SimplifySpellingWorks) {
      Transposer t(1, -2); // D double flat
      t.simplifySpelling();
@@ -214,7 +214,7 @@ TEST(TransposerTest, Non12EDOEquivalentPitch) {
      EXPECT_EQ(t.displacement(), 0);
      EXPECT_EQ(t.alteration(), 0);
  }
- 
+
  TEST(TransposerTest, LargeInterval)
  {
      Transposer t(1, -1); // D4 flat

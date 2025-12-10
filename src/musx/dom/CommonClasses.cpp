@@ -132,7 +132,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     static_assert(false, "Unsupported OS for FontInfo::calcSMuFLPaths");
 #endif
 
-#if ! defined(MUSX_RUNNING_ON_WINDOWS)    
+#if ! defined(MUSX_RUNNING_ON_WINDOWS)
     auto getHomePath = []() -> std::string {
         auto homeEnv = getenv("HOME");
         if (homeEnv) {
@@ -179,7 +179,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
             else if (envVariable == "XDG_DATA_DIRS") {
                 paths.emplace_back("/usr/local/share");
                 paths.emplace_back("/usr/share");
-#endif         
+#endif
             } else {
                 return {};
             }
@@ -360,7 +360,7 @@ void KeySignature::setTransposition(int interval, int keyAdjustment, bool simpli
     int concertAlteration = getAlteration(KeyContext::Concert);
     int concertTonalCenterIndex = calcTonalCenterIndex(KeyContext::Concert);
     int tonalCenterOffset = interval % music_theory::STANDARD_DIATONIC_STEPS;
-    
+
     int alteration = concertAlteration + keyAdjustment;
     if (simplify && keyAdjustment) {
         // Finale does not simplify microtonal key sigs correctly.
@@ -591,7 +591,7 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
     auto computeGCD = [](const std::vector<Edu>& values) {
         return values.empty() ? 1 : std::reduce(values.begin() + 1, values.end(), values[0], std::gcd<Edu, Edu>);
     };
-    
+
     std::vector<Edu> allUnits;
     std::vector<std::pair<util::Fraction, Edu>> summedUnits;
 
@@ -622,5 +622,5 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
     return { totalBeats * otherPrimes, NoteType(1 << power2) };
 }
 
-} // namespace dom    
+} // namespace dom
 } // namespace musx

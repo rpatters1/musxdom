@@ -52,7 +52,7 @@ class FileInfoText : public TextsBase
 public:
     /**
      * @brief Constructs a `FileInfoText` object.
-     * 
+     *
      * @param document A weak pointer to the parent document
      * @param shareMode Always `ShareMode::All`, but this parameeter is needed for the generic factory routine.
      * @param partId Always 0, but this parameter is needed for the generic factory routine.
@@ -68,7 +68,7 @@ public:
 
     /**
      * @brief Constructs a `FileInfoText` object.
-     * 
+     *
      * @param document A weak pointer to the parent document
      * @param textNumber The text number (`Cmper`).
      */
@@ -138,7 +138,7 @@ public:
     void createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis);
 
 private:
-    std::vector<util::EnigmaStyles> m_syllableStyles; ///< the list of font styles in this text.    
+    std::vector<util::EnigmaStyles> m_syllableStyles; ///< the list of font styles in this text.
 };
 
 /**

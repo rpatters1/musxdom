@@ -49,7 +49,7 @@ TEST(BarlineOptionsTest, PropertiesTest)
   </options>
 </finale>
 )xml";
-    
+
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);
@@ -90,7 +90,7 @@ TEST(BarlineOptionsTest, FalseBooleans)
   </options>
 </finale>
 )xml";
-    
+
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);

@@ -42,7 +42,7 @@ class DocumentFactory : FactoryBase
 public:
     /**
      * @brief Creates a `Document` object from an XML buffer.
-     * 
+     *
      * @param data Pointer to a buffer containing EnigmaXML for a musx file.
      * @param size The size of the buffer.
      * @return A fully populated `Document` object.
@@ -51,7 +51,7 @@ public:
     template <typename XmlDocumentType>
     [[nodiscard]] static DocumentPtr create(const char * data, size_t size)
     {
-        static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value, 
+        static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value,
                       "XmlReaderType must derive from IXmlDocument.");
 
         std::unique_ptr<musx::xml::IXmlDocument> xmlDocument = std::make_unique<XmlDocumentType>();
@@ -87,7 +87,7 @@ public:
         if (!document->getDetails()) document->getDetails() = std::make_shared<musx::dom::DetailsPool>(document);
         if (!document->getEntries()) document->getEntries() = std::make_shared<musx::dom::EntryPool>(document);
         if (!document->getTexts()) document->getTexts() = std::make_shared<musx::dom::TextsPool>(document);
-        
+
 #ifdef MUSX_DISPLAY_NODE_NAMES
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
 #endif
@@ -117,7 +117,7 @@ public:
 
     /**
      * @brief Creates a `Document` object from an XML buffer.
-     * 
+     *
      * @param xmlBuffer Buffer containing EnigmaXML for a musx file.
      * @return A fully populated `Document` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.

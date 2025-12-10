@@ -31,7 +31,7 @@ namespace util {
 /**
  * @brief A utility class for handling logging with customizable callbacks.
  *
- * The `Logger` class provides a centralized mechanism for logging messages 
+ * The `Logger` class provides a centralized mechanism for logging messages
  * with different severity levels. By default, messages are sent to `std::cerr`,
  * but a custom logging callback can be registered to handle messages in other ways
  * (e.g., writing to a file, console, or network).

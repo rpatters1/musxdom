@@ -244,7 +244,7 @@ TEST(EntryTest, IntegrityCheck)
         musx::dom::integrity_error
     ) << "previous entry does not exist";
 }
- 
+
 TEST(EntryTest, UnlinkedEnharmonicSpelling)
 {
     std::vector<char> xml;

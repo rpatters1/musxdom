@@ -290,7 +290,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     if (targetActual < util::Fraction::fromEdu(targetNotated) * 2) {
         return false;
     }
-    
+
     // all entries must have the same notated and actual durations
     for (size_t i = startIndex + 1; i <= endIndex; ++i) {
         EntryInfoPtr curr(frame, i);
@@ -558,7 +558,7 @@ bool EntryInfoPtr::calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bo
 
     return calcIsSamePitchContent(src, compareConcert);
 }
-    
+
 LayerIndex EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
 StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }

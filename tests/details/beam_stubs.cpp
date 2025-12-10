@@ -58,10 +58,10 @@ TEST(BeamStubsTest, Populate)
     ASSERT_TRUE(beamStub6) << "BeamStubDirection with entnum 6 not found";
 
     EXPECT_EQ(beamStub6->mask,
-              unsigned(NoteType::Eighth) | unsigned(NoteType::Note16th) | 
-              unsigned(NoteType::Note32nd) | unsigned(NoteType::Note64th) | 
-              unsigned(NoteType::Note128th) | unsigned(NoteType::Note256th) | 
-              unsigned(NoteType::Note512th) | unsigned(NoteType::Note1024th) | 
+              unsigned(NoteType::Eighth) | unsigned(NoteType::Note16th) |
+              unsigned(NoteType::Note32nd) | unsigned(NoteType::Note64th) |
+              unsigned(NoteType::Note128th) | unsigned(NoteType::Note256th) |
+              unsigned(NoteType::Note512th) | unsigned(NoteType::Note1024th) |
               unsigned(NoteType::Note2048th) | unsigned(NoteType::Note4096th));
     EXPECT_TRUE(beamStub6->isLeft());
 
@@ -102,7 +102,7 @@ TEST(BeamStubsTest, DetectDirection)
         }
     }
 */
-    
+
     auto testStub = [&](const EntryInfoPtr& entryInfo, bool expectLeft, bool expectStub = true) {
         ASSERT_TRUE(entryInfo);
         std::string msg = "Staff " + std::to_string(entryInfo.getStaff()) + " measure " + std::to_string(entryInfo.getMeasure())
@@ -113,7 +113,7 @@ TEST(BeamStubsTest, DetectDirection)
             EXPECT_EQ(entryInfo.calcBeamStubIsLeft(), expectLeft) << msg << " stub direction did not match";
         }
     };
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold);
@@ -130,7 +130,7 @@ TEST(BeamStubsTest, DetectDirection)
         testStub(EntryInfoPtr(frame, 13), true);
         testStub(EntryInfoPtr(frame, 14), true);
     }
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold);
@@ -162,7 +162,7 @@ TEST(BeamStubsTest, DetectDirection)
         testStub(EntryInfoPtr(frame, 3), true);
         testStub(EntryInfoPtr(frame, 5), true);
     }
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
         ASSERT_TRUE(gfhold);

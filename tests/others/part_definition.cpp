@@ -201,10 +201,10 @@ TEST(PartDefinitionTest, PopulateFields)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(partDefXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
-    
+
     auto partDef = others->get<others::PartDefinition>(SCORE_PARTID, 1);
     ASSERT_TRUE(partDef) << "PartDefinition with cmper 1 not found";
-    
+
     EXPECT_EQ(partDef->nameId, 42);
     EXPECT_EQ(partDef->partOrder, 3);
     EXPECT_EQ(partDef->copies, 2);

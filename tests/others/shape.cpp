@@ -83,7 +83,7 @@ constexpr static musxtest::string_view shapeXml = R"xml(
     </others>
 </finale>
     )xml";
-    
+
 TEST(ShapeDefTest, PopulateFields)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeXml);

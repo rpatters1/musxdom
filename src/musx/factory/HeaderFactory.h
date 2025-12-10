@@ -39,7 +39,7 @@ class HeaderFactory : public FactoryBase
 public:
     /**
      * @brief Creates a `Header` object from an XML element.
-     * 
+     *
      * @param element The XML element representing the `<header>` node.
      * @return A fully populated `Header` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
@@ -63,7 +63,7 @@ public:
 private:
     /**
      * @brief Parses the `WordOrder` enum from a string.
-     * 
+     *
      * @param value The string value to parse.
      * @return The corresponding `WordOrder` enum value.
      * @throws std::invalid_argument if the word order value is invalid.
@@ -78,7 +78,7 @@ private:
 
     /**
      * @brief Parses the `TextEncoding` enum from a string.
-     * 
+     *
      * @param value The string value to parse.
      * @return The corresponding `TextEncoding` enum value.
      */
@@ -92,7 +92,7 @@ private:
 
     /**
      * @brief Parses the `Platform` enum from a string.
-     * 
+     *
      * @param value The string value to parse.
      * @return The corresponding `Platform` enum value.
      */
@@ -106,7 +106,7 @@ private:
 
     /**
      * @brief Parses a `FileInfo` object from an XML element.
-     * 
+     *
      * @param element The XML element representing a `<created>` or `<modified>` node.
      * @return A fully populated `FileInfo` object.
      */
@@ -129,7 +129,7 @@ private:
 
     /**
      * @brief Parses a `FinaleVersion` object from an XML element.
-     * 
+     *
      * @param element The XML element representing a `<version>` node.
      * @return A fully populated `FinaleVersion` object.
      * @throws std::runtime_error If required nodes or attributes are missing or invalid.

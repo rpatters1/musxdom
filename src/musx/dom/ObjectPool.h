@@ -66,7 +66,7 @@ inline constexpr bool is_pool_type_v = is_pool_type<Pool, T>::value;
 /**
  * @class ObjectPool
  * @brief A pool that manages collections of `OthersBase` objects, organized by XML node names and `Cmper` values.
- * 
+ *
  * This class provides functionality to store and retrieve objects derived from a `Base` object type,
  * It supports dynamic retrieval of objects cast to their specific derived types.
  *
@@ -148,8 +148,8 @@ public:
 
     /**
      * @brief Adds an `ObjectBaseType` object to the pool.
-     * 
-     * @param key The key with which to store the object 
+     *
+     * @param key The key with which to store the object
      * @param object A shared pointer to the `ObjectBaseType` object to add.
      */
     void add(ObjectKey key, ObjectPtr object)
@@ -174,7 +174,7 @@ public:
                 m_shareMode[poolIt->first.nodeId] = object->getShareMode();
             } else {
                 MUSX_INTEGRITY_ERROR("Share mode for added " + std::string(poolIt->first.nodeId) + " object [" + std::to_string(int(object->getShareMode()))
-                    + "] does not match previous [" + std::to_string(int(shareModeIt->second)) + "]");                
+                    + "] does not match previous [" + std::to_string(int(shareModeIt->second)) + "]");
             }
         }
     }
@@ -203,7 +203,7 @@ public:
                 key.nodeId,
                 key.partId,
                 key.cmper1.value_or((std::numeric_limits<Cmper>::max)()),
-                key.cmper2.value_or((std::numeric_limits<Cmper>::max)()), 
+                key.cmper2.value_or((std::numeric_limits<Cmper>::max)()),
                 key.inci.value_or((std::numeric_limits<Inci>::max)())
             }
         );
@@ -316,7 +316,7 @@ public:
         scoreKey.partId = SCORE_PARTID;
         return getSource<T>(scoreKey);
     }
-    
+
     /**
      * @brief Retrieves the first (and usually only) object of a specific type from the pool for a part.
      *
@@ -426,7 +426,7 @@ public:
     /** @brief OthersPool version of #ObjectPool::add */
     void add(std::string_view nodeName, const std::shared_ptr<OthersBase>& instance)
     { m_pool.add({nodeName, instance->getSourcePartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
-    
+
     /** @brief OthersPool version of #ObjectPool::getArray */
     template <typename T>
     MusxInstanceList<T> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
@@ -449,7 +449,7 @@ using OthersPoolPtr = std::shared_ptr<OthersPool>;
 /**
  * @class DetailsPool
  * @brief A pool that manages collections of `DetailsBase` objects, organized by XML node names and `Cmper` values.
- * 
+ *
  * Examples of `OneCmperBase` classes are @ref OthersBase and @ref TextsBase.
  */
 class DetailsPool
@@ -587,7 +587,7 @@ public:
         }
         m_pool.add({ nodeName, basePtr->getSourcePartId(), instance->getTextNumber() }, instance);
     }
-    
+
     /** @brief Texts version of #ObjectPool::getArray */
     template <typename T>
     MusxInstanceList<T> getArray(std::optional<Cmper> cmper = std::nullopt) const

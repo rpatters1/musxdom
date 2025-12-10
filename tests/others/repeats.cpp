@@ -23,9 +23,9 @@
  #include "gtest/gtest.h"
  #include "musx/musx.h"
  #include "test_utils.h"
- 
+
  using namespace musx::dom;
- 
+
  TEST(RepeatBack, Populate)
  {
      constexpr static musxtest::string_view xml = R"xml(
@@ -49,14 +49,14 @@
          </others>
      </finale>
      )xml";
- 
+
      auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
      auto others = doc->getOthers();
      ASSERT_TRUE(others);
- 
+
      auto repeatBack = others->get<others::RepeatBack>(SCORE_PARTID, 6);
      ASSERT_TRUE(repeatBack) << "RepeatBack with cmper 6 not found";
- 
+
      EXPECT_EQ(repeatBack->passNumber, 2);
      EXPECT_EQ(repeatBack->targetValue, -2);
      EXPECT_EQ(repeatBack->leftHPos, -35);
@@ -187,7 +187,7 @@ TEST(TextRepeatDef, Populate)
     // Test TextRepeatText
     auto textRepeatText = others->get<others::TextRepeatText>(SCORE_PARTID, 1);
     ASSERT_TRUE(textRepeatText) << "TextRepeatText with cmper 1 not found";
-    
+
     EXPECT_EQ(textRepeatText->text, "Segno");
 
     // Test TextRepeatDef 2 (with no explicit font data)
@@ -430,7 +430,7 @@ TEST(RepeatEndingStart, EndingText)
         ASSERT_TRUE(repeatEnding);
         EXPECT_EQ(repeatEnding->createEndingText(), "user text");
     }
-    
+
     auto repeatOptions = doc->getOptions()->get<options::RepeatOptions>();
     ASSERT_TRUE(repeatOptions);
     auto mutableOpts = const_cast<options::RepeatOptions*>(repeatOptions.get());

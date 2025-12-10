@@ -903,7 +903,7 @@ TEST(GFrameHold, FeatheredBeamsTest)
         EXPECT_EQ(leftY, expLeftY);
         EXPECT_EQ(rightY, expRightY);
     };
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold);
@@ -914,7 +914,7 @@ TEST(GFrameHold, FeatheredBeamsTest)
         checkEntry(EntryInfoPtr(entryFrame, 0), true, 48, 12);
         checkEntry(EntryInfoPtr(entryFrame, 9), true, 24, 48);
     }
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold);
@@ -925,7 +925,7 @@ TEST(GFrameHold, FeatheredBeamsTest)
         checkEntry(EntryInfoPtr(entryFrame, 0), false, 0, 0);
         checkEntry(EntryInfoPtr(entryFrame, 5), false, 0, 0);
     }
-    
+
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
         ASSERT_TRUE(gfhold);

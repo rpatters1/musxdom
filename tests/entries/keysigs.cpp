@@ -25,7 +25,7 @@
 #include "test_utils.h"
 
 using namespace musx::dom;
- 
+
 TEST(KeySigs, Test12EDO)
 {
     std::vector<char> xml;
@@ -91,7 +91,7 @@ TEST(KeySigs, Test12EDO)
             x++;
             return true;
         });
-        EXPECT_EQ(x, expectedNotes.size());            
+        EXPECT_EQ(x, expectedNotes.size());
     }
 }
 
@@ -158,7 +158,7 @@ TEST(KeySigs, Test31EDO)
             x++;
             return true;
         });
-        EXPECT_EQ(x, expectedNotes.size());            
+        EXPECT_EQ(x, expectedNotes.size());
     }
 }
 

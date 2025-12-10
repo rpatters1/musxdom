@@ -683,7 +683,7 @@ public:
         UnderRoot,
         Subtext
     };
-    
+
     Cmper suffixId{};               ///< The Cmper of the @ref others::ChordSuffixElement instances. Zero means there is no suffix.
                                     ///< When #useFretboardFont is false, this same Cmper is also used to look up the
                                     ///< @ref others::FretboardGroup and related fretboard data.
@@ -1106,7 +1106,7 @@ public:
     /// @brief Returns true if the #GFrameHold instance has more than one layer
     bool calcIsMultiLayer() const
     {
-        return std::count_if(frames.begin(), frames.end(), [](Cmper frameId) { return frameId != 0; }) > 1;    
+        return std::count_if(frames.begin(), frames.end(), [](Cmper frameId) { return frameId != 0; }) > 1;
     }
 
     /// @brief Returns true if the #GFrameHold contains any layer frames.
@@ -1239,7 +1239,7 @@ public:
  * @brief Contains assignment data for a lyric assignment (a single syllable)
  */
 class LyricAssign : public EntryDetailsBase
-{    
+{
 public:
     /**
      * @brief Constructor function
@@ -1672,7 +1672,7 @@ public:
     std::vector<std::shared_ptr<NoteShapes>> noteShapes; ///< Notehead shapes (only the first seven elements are used).
     bool arrangedByPitch{};     ///< If true, the shapes correspond to pitches (C, D, E, F, G, A, B).
                                 ///< If false, the shapes correspond to scale degrees 0..6 in the key signauture.
-                                            
+
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
         this->DetailsBase::integrityCheck(ptrToThis);
@@ -1822,7 +1822,7 @@ public:
     /// @return Abbreviated instrument name if this group is associated with a @ref others::MultiStaffInstrumentGroup. Otherwise #getAbbreviatedName.
     std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
-    /// @brief Returns true if this group spans all measures. 
+    /// @brief Returns true if this group spans all measures.
     bool isAllMeasures() const
     { return (startMeas == 1 && endMeas == (std::numeric_limits<MeasCmper>::max)()); }
 
@@ -2114,7 +2114,7 @@ public:
     constexpr static std::string_view XmlNodeName = "tieAlterStart"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TieAlterStart>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
-    
+
 /**
  * @class TupletDef
  * @brief Options controlling the appearance of tuplets.
@@ -2178,7 +2178,7 @@ public:
 
     /** @brief return the tuplet ratio (reference / display) */
     util::Fraction calcRatio() const { return util::Fraction(referenceNumber * referenceDuration, displayNumber * displayDuration); }
-        
+
     constexpr static std::string_view XmlNodeName = "tupletDef";    ///< The XML node name for this type.
     static const xml::XmlElementArray<TupletDef>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };

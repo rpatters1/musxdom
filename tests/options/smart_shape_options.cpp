@@ -395,7 +395,7 @@ TEST(SmartShapeOptionsTest, PropertiesTest)
 TEST(SmartShapeOptions, ArrayTests)
 {
     using SmartShapeOptions = musx::dom::options::SmartShapeOptions;
-    
+
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(smartShapeOptsXml);
     auto options = doc->getOptions();
     ASSERT_TRUE(options);

@@ -23,9 +23,9 @@
  #include "gtest/gtest.h"
  #include "musx/musx.h"
  #include "test_utils.h"
- 
+
  using namespace musx::dom;
- 
+
 TEST(SmartShape, Populate)
 {
     constexpr static musxtest::string_view xml = R"xml(

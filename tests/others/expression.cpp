@@ -543,7 +543,7 @@ TEST(ExpressionAssignments, HiddenByAltNotation)
             if (exp->staffAssign == 2) {
                 EXPECT_TRUE(exp->calcIsHiddenByAlternateNotation());
             } else {
-                EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());            
+                EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());
             }
             processedExps++;
             break;
@@ -551,7 +551,7 @@ TEST(ExpressionAssignments, HiddenByAltNotation)
             if (exp->staffAssign == 2) {
                 EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());
             } else {
-                EXPECT_TRUE(exp->calcIsHiddenByAlternateNotation());            
+                EXPECT_TRUE(exp->calcIsHiddenByAlternateNotation());
             }
             processedExps++;
             break;
@@ -559,7 +559,7 @@ TEST(ExpressionAssignments, HiddenByAltNotation)
             if (exp->staffAssign == 2) {
                 EXPECT_TRUE(exp->calcIsHiddenByAlternateNotation());
             } else {
-                EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());            
+                EXPECT_FALSE(exp->calcIsHiddenByAlternateNotation());
             }
             processedExps++;
             break;

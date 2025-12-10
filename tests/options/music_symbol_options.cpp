@@ -23,11 +23,11 @@
  #include "gtest/gtest.h"
  #include "musx/musx.h"
  #include "test_utils.h"
- 
- TEST(MusicSymbolOptionsTest, PropertiesTest)
- {
-     constexpr static musxtest::string_view xml = R"xml(
- <?xml version="1.0" encoding="UTF-8"?>
+
+TEST(MusicSymbolOptionsTest, PropertiesTest)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
  <finale>
    <options>
      <musicSymbolOptions>
@@ -99,79 +99,78 @@
      </musicSymbolOptions>
    </options>
  </finale>
- )xml";
- 
-     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
-     auto options = doc->getOptions();
-     ASSERT_TRUE(options);
- 
-     auto musicSymbolOptions = options->get<musx::dom::options::MusicSymbolOptions>();
-     ASSERT_TRUE(musicSymbolOptions);
- 
-     EXPECT_EQ(musicSymbolOptions->noteheadQuarter, 57508);
-     EXPECT_EQ(musicSymbolOptions->noteheadHalf, 57507);
-     EXPECT_EQ(musicSymbolOptions->noteheadWhole, 57506);
-     EXPECT_EQ(musicSymbolOptions->noteheadDblWhole, 57504);
-     EXPECT_EQ(musicSymbolOptions->natural, 57953);
-     EXPECT_EQ(musicSymbolOptions->flat, 57952);
-     EXPECT_EQ(musicSymbolOptions->sharp, 57954);
-     EXPECT_EQ(musicSymbolOptions->dblFlat, 57956);
-     EXPECT_EQ(musicSymbolOptions->dblSharp, 57955);
-     EXPECT_EQ(musicSymbolOptions->parenNatural, 62934);
-     EXPECT_EQ(musicSymbolOptions->parenFlat, 62933);
-     EXPECT_EQ(musicSymbolOptions->parenSharp, 62935);
-     EXPECT_EQ(musicSymbolOptions->parenDblFlat, 62937);
-     EXPECT_EQ(musicSymbolOptions->parenDblSharp, 62936);
-     EXPECT_EQ(musicSymbolOptions->chordNatural, 57953);
-     EXPECT_EQ(musicSymbolOptions->chordFlat, 57952);
-     EXPECT_EQ(musicSymbolOptions->chordSharp, 57954);
-     EXPECT_EQ(musicSymbolOptions->chordDblFlat, 57956);
-     EXPECT_EQ(musicSymbolOptions->chordDblSharp, 57955);
-     EXPECT_EQ(musicSymbolOptions->keySigNatural, 57953);
-     EXPECT_EQ(musicSymbolOptions->keySigFlat, 57952);
-     EXPECT_EQ(musicSymbolOptions->keySigSharp, 57954);
-     EXPECT_EQ(musicSymbolOptions->keySigDblFlat, 57956);
-     EXPECT_EQ(musicSymbolOptions->keySigDblSharp, 57955);
-     EXPECT_EQ(musicSymbolOptions->restLonga, 57505);
-     EXPECT_EQ(musicSymbolOptions->restDblWhole, 58594);
-     EXPECT_EQ(musicSymbolOptions->restWhole, 58595);
-     EXPECT_EQ(musicSymbolOptions->restHalf, 58596);
-     EXPECT_EQ(musicSymbolOptions->restQuarter, 58597);
-     EXPECT_EQ(musicSymbolOptions->restEighth, 58598);
-     EXPECT_EQ(musicSymbolOptions->rest16th, 58599);
-     EXPECT_EQ(musicSymbolOptions->rest32nd, 58600);
-     EXPECT_EQ(musicSymbolOptions->rest64th, 58601);
-     EXPECT_EQ(musicSymbolOptions->rest128th, 58602);
-     EXPECT_EQ(musicSymbolOptions->restDefMeas, 58595);
-     EXPECT_EQ(musicSymbolOptions->oneBarRepeat, 58624);
-     EXPECT_EQ(musicSymbolOptions->twoBarRepeat, 58625);
-     EXPECT_EQ(musicSymbolOptions->slashBar, 58628);
-     EXPECT_EQ(musicSymbolOptions->quarterSlash, 57600);
-     EXPECT_EQ(musicSymbolOptions->halfSlash, 57604);
-     EXPECT_EQ(musicSymbolOptions->wholeSlash, 57604);
-     EXPECT_EQ(musicSymbolOptions->dblWholeSlash, 57602);
-     EXPECT_EQ(musicSymbolOptions->timeSigPlus, 57485);
-     EXPECT_EQ(musicSymbolOptions->timeSigPlusParts, 57485);
-     EXPECT_EQ(musicSymbolOptions->timeSigAbrvCommon, 57484);
-     EXPECT_EQ(musicSymbolOptions->timeSigAbrvCut, 57486);
-     EXPECT_EQ(musicSymbolOptions->timeSigAbrvCommonParts, 57482);
-     EXPECT_EQ(musicSymbolOptions->timeSigAbrvCutParts, 57483);
-     EXPECT_EQ(musicSymbolOptions->augDot, 57831);
-     EXPECT_EQ(musicSymbolOptions->forwardRepeatDot, 57412);
-     EXPECT_EQ(musicSymbolOptions->backRepeatDot, 57412);
-     EXPECT_EQ(musicSymbolOptions->eightVaUp, 58641);
-     EXPECT_EQ(musicSymbolOptions->eightVbDown, 58641);
-     EXPECT_EQ(musicSymbolOptions->fifteenMaUp, 58645);
-     EXPECT_EQ(musicSymbolOptions->fifteenMbDown, 58645);
-     EXPECT_EQ(musicSymbolOptions->trillChar, 58726);
-     EXPECT_EQ(musicSymbolOptions->wiggleChar, 60068);
-     EXPECT_EQ(musicSymbolOptions->flagUp, 57920);
-     EXPECT_EQ(musicSymbolOptions->flagDown, 57921);
-     EXPECT_EQ(musicSymbolOptions->flag16Up, 57922);
-     EXPECT_EQ(musicSymbolOptions->flag16Down, 57923);
-     EXPECT_EQ(musicSymbolOptions->flag2Up, 57936);
-     EXPECT_EQ(musicSymbolOptions->flag2Down, 57937);
-     EXPECT_EQ(musicSymbolOptions->flagStraightUp, 62479);
-     EXPECT_EQ(musicSymbolOptions->flagStraightDown, 62481);
- }
- 
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+
+    auto musicSymbolOptions = options->get<musx::dom::options::MusicSymbolOptions>();
+    ASSERT_TRUE(musicSymbolOptions);
+
+    EXPECT_EQ(musicSymbolOptions->noteheadQuarter, 57508);
+    EXPECT_EQ(musicSymbolOptions->noteheadHalf, 57507);
+    EXPECT_EQ(musicSymbolOptions->noteheadWhole, 57506);
+    EXPECT_EQ(musicSymbolOptions->noteheadDblWhole, 57504);
+    EXPECT_EQ(musicSymbolOptions->natural, 57953);
+    EXPECT_EQ(musicSymbolOptions->flat, 57952);
+    EXPECT_EQ(musicSymbolOptions->sharp, 57954);
+    EXPECT_EQ(musicSymbolOptions->dblFlat, 57956);
+    EXPECT_EQ(musicSymbolOptions->dblSharp, 57955);
+    EXPECT_EQ(musicSymbolOptions->parenNatural, 62934);
+    EXPECT_EQ(musicSymbolOptions->parenFlat, 62933);
+    EXPECT_EQ(musicSymbolOptions->parenSharp, 62935);
+    EXPECT_EQ(musicSymbolOptions->parenDblFlat, 62937);
+    EXPECT_EQ(musicSymbolOptions->parenDblSharp, 62936);
+    EXPECT_EQ(musicSymbolOptions->chordNatural, 57953);
+    EXPECT_EQ(musicSymbolOptions->chordFlat, 57952);
+    EXPECT_EQ(musicSymbolOptions->chordSharp, 57954);
+    EXPECT_EQ(musicSymbolOptions->chordDblFlat, 57956);
+    EXPECT_EQ(musicSymbolOptions->chordDblSharp, 57955);
+    EXPECT_EQ(musicSymbolOptions->keySigNatural, 57953);
+    EXPECT_EQ(musicSymbolOptions->keySigFlat, 57952);
+    EXPECT_EQ(musicSymbolOptions->keySigSharp, 57954);
+    EXPECT_EQ(musicSymbolOptions->keySigDblFlat, 57956);
+    EXPECT_EQ(musicSymbolOptions->keySigDblSharp, 57955);
+    EXPECT_EQ(musicSymbolOptions->restLonga, 57505);
+    EXPECT_EQ(musicSymbolOptions->restDblWhole, 58594);
+    EXPECT_EQ(musicSymbolOptions->restWhole, 58595);
+    EXPECT_EQ(musicSymbolOptions->restHalf, 58596);
+    EXPECT_EQ(musicSymbolOptions->restQuarter, 58597);
+    EXPECT_EQ(musicSymbolOptions->restEighth, 58598);
+    EXPECT_EQ(musicSymbolOptions->rest16th, 58599);
+    EXPECT_EQ(musicSymbolOptions->rest32nd, 58600);
+    EXPECT_EQ(musicSymbolOptions->rest64th, 58601);
+    EXPECT_EQ(musicSymbolOptions->rest128th, 58602);
+    EXPECT_EQ(musicSymbolOptions->restDefMeas, 58595);
+    EXPECT_EQ(musicSymbolOptions->oneBarRepeat, 58624);
+    EXPECT_EQ(musicSymbolOptions->twoBarRepeat, 58625);
+    EXPECT_EQ(musicSymbolOptions->slashBar, 58628);
+    EXPECT_EQ(musicSymbolOptions->quarterSlash, 57600);
+    EXPECT_EQ(musicSymbolOptions->halfSlash, 57604);
+    EXPECT_EQ(musicSymbolOptions->wholeSlash, 57604);
+    EXPECT_EQ(musicSymbolOptions->dblWholeSlash, 57602);
+    EXPECT_EQ(musicSymbolOptions->timeSigPlus, 57485);
+    EXPECT_EQ(musicSymbolOptions->timeSigPlusParts, 57485);
+    EXPECT_EQ(musicSymbolOptions->timeSigAbrvCommon, 57484);
+    EXPECT_EQ(musicSymbolOptions->timeSigAbrvCut, 57486);
+    EXPECT_EQ(musicSymbolOptions->timeSigAbrvCommonParts, 57482);
+    EXPECT_EQ(musicSymbolOptions->timeSigAbrvCutParts, 57483);
+    EXPECT_EQ(musicSymbolOptions->augDot, 57831);
+    EXPECT_EQ(musicSymbolOptions->forwardRepeatDot, 57412);
+    EXPECT_EQ(musicSymbolOptions->backRepeatDot, 57412);
+    EXPECT_EQ(musicSymbolOptions->eightVaUp, 58641);
+    EXPECT_EQ(musicSymbolOptions->eightVbDown, 58641);
+    EXPECT_EQ(musicSymbolOptions->fifteenMaUp, 58645);
+    EXPECT_EQ(musicSymbolOptions->fifteenMbDown, 58645);
+    EXPECT_EQ(musicSymbolOptions->trillChar, 58726);
+    EXPECT_EQ(musicSymbolOptions->wiggleChar, 60068);
+    EXPECT_EQ(musicSymbolOptions->flagUp, 57920);
+    EXPECT_EQ(musicSymbolOptions->flagDown, 57921);
+    EXPECT_EQ(musicSymbolOptions->flag16Up, 57922);
+    EXPECT_EQ(musicSymbolOptions->flag16Down, 57923);
+    EXPECT_EQ(musicSymbolOptions->flag2Up, 57936);
+    EXPECT_EQ(musicSymbolOptions->flag2Down, 57937);
+    EXPECT_EQ(musicSymbolOptions->flagStraightUp, 62479);
+    EXPECT_EQ(musicSymbolOptions->flagStraightDown, 62481);
+}

@@ -58,7 +58,7 @@ public:
 
     std::string getName() const override { return m_attribute->Name(); }
     std::string getValue() const override { return m_attribute->Value(); }
-    
+
     std::shared_ptr<IXmlAttribute> nextAttribute() const override {
         const ::tinyxml2::XMLAttribute *next = m_attribute->Next();
         return next ? std::make_shared<Attribute>(next) : nullptr;

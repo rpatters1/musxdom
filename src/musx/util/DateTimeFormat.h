@@ -187,7 +187,7 @@ struct DateTime
         return oss.str();
     }
 #endif // !MUSX_RUNNING_ON_WINDOWS
-    
+
     /**
      * @brief Formats a time according to the current locale.
      *
@@ -273,7 +273,7 @@ struct DateTime
 
 #endif
     }
-    
+
 };
 
 } // namespace util

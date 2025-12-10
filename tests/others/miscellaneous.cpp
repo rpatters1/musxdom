@@ -55,7 +55,7 @@ TEST(Miscellaneous, TempoChange)
     EXPECT_TRUE(tempo0->isRelative);
     EXPECT_EQ(tempo0->eduPosition, 512);
     EXPECT_EQ(tempo0->unit, 1000);
-    
+
     EXPECT_THROW(
         tempo0->getAbsoluteTempo(),
         std::logic_error

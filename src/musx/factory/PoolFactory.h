@@ -38,8 +38,8 @@ namespace factory {
 /**
  * @brief Factory class for creating a `dom::ObjectPool` from XML.
  *
- * This factory class uses CRTP (Curiously Recurring Template Pattern) to implement a polymorphic factory for creating 
- * `ObjectPool` objects from an XML representation. The derived classes are responsible for specifying their own 
+ * This factory class uses CRTP (Curiously Recurring Template Pattern) to implement a polymorphic factory for creating
+ * `ObjectPool` objects from an XML representation. The derived classes are responsible for specifying their own
  * creation mechanisms by providing appropriate specializations.
  *
  * @tparam DerivedType The derived type for CRTP, which will implement specific extraction behavior from XML.
@@ -49,15 +49,15 @@ namespace factory {
 template<typename DerivedType, typename ObjectBase, typename PoolType>
 class PoolFactory : public FactoryBase
 {
-//    static_assert(std::is_base_of<PoolFactory<DerivedType, DerivedType>::value, 
+//    static_assert(std::is_base_of<PoolFactory<DerivedType, DerivedType>::value,
 //                "ObjectBase must derive from PoolFactory.");
 
-public:    
+public:
     /**
      * @brief Creates a `OthersPool` object from an XML element.
      *
      * This function creates an object pool by parsing the XML element representing the `<others>` node.
-     * It iterates over each child element of the XML element, extracts relevant information using 
+     * It iterates over each child element of the XML element, extracts relevant information using
      * `DerivedType::extractFromXml`, and adds the created objects to the pool.
      *
      * @param element The XML element representing the `<others>` node.
@@ -77,7 +77,7 @@ public:
         util::Logger::log(util::Logger::LogLevel::Verbose, "============");
 #endif
 
-        for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {            
+        for (auto childElement = element->getFirstChildElement(); childElement; childElement = childElement->getNextSibling()) {
             if (auto instanceInfo = DerivedType::extractFromXml(childElement, document, elementLinker, pool)) {
 #ifdef MUSX_DISPLAY_NODE_NAMES
                 if (currentTag != childElement->getTagName()) {
@@ -117,8 +117,8 @@ public:
 /**
  * @brief Factory class for creating `Options` objects from XML.
  *
- * This class specializes `PoolFactory` to handle the creation of `Options` objects, which 
- * represent various document options stored in a `ScalarPool`. It includes functionality 
+ * This class specializes `PoolFactory` to handle the creation of `Options` objects, which
+ * represent various document options stored in a `ScalarPool`. It includes functionality
  * for extracting and creating these objects from XML elements.
  */
 class OptionsFactory : public PoolFactory<OptionsFactory, dom::OptionsBase, dom::OptionsPool>
@@ -129,7 +129,7 @@ public:
     /**
      * @brief Extracts an `OptionsBase` object from an XML element.
      *
-     * Extracts an `OptionsBase` derived object from the given XML element by delegating 
+     * Extracts an `OptionsBase` derived object from the given XML element by delegating
      * to the `RegisteredOptions` class. This allows the creation of `Options` objects from XML.
      *
      * @param element The XML element from which to extract the object.
@@ -147,8 +147,8 @@ public:
 /**
  * @brief Factory class for creating `Others` objects from XML.
  *
- * This class specializes `PoolFactory` to handle the creation of `Others` objects, representing 
- * various attributes stored in an `OthersPool`. It includes an XML parsing mechanism to 
+ * This class specializes `PoolFactory` to handle the creation of `Others` objects, representing
+ * various attributes stored in an `OthersPool`. It includes an XML parsing mechanism to
  * extract and create these objects, which are used in the document model.
  */
 class OthersFactory : public PoolFactory<OthersFactory, dom::OthersBase, dom::OthersPool>
@@ -159,7 +159,7 @@ public:
     /**
      * @brief Extracts an `OthersBase` object from an XML element.
      *
-     * Extracts an `OthersBase` derived object from the given XML element using the specified 
+     * Extracts an `OthersBase` derived object from the given XML element using the specified
      * attributes `cmper` and `inci`. Throws an exception if a required attribute is missing.
      *
      * @param element The XML element from which to extract the object.
@@ -190,8 +190,8 @@ public:
 /**
  * @brief Factory class for creating `Details` objects from XML.
  *
- * This class specializes `PoolFactory` to handle the creation of `Others` objects, representing 
- * various attributes stored in an `OthersPool`. It includes an XML parsing mechanism to 
+ * This class specializes `PoolFactory` to handle the creation of `Others` objects, representing
+ * various attributes stored in an `OthersPool`. It includes an XML parsing mechanism to
  * extract and create these objects, which are used in the document model.
  */
 class DetailsFactory : public PoolFactory<DetailsFactory, dom::DetailsBase, dom::DetailsPool>
@@ -202,7 +202,7 @@ public:
     /**
      * @brief Extracts an `OthersBase` object from an XML element.
      *
-     * Extracts an `OthersBase` derived object from the given XML element using the specified 
+     * Extracts an `OthersBase` derived object from the given XML element using the specified
      * attributes `cmper` and `inci`. Throws an exception if a required attribute is missing.
      *
      * @param element The XML element from which to extract the object.
@@ -248,7 +248,7 @@ public:
 /**
  * @brief Factory class for creating `Entry` objects from XML.
  *
- * This class specializes `PoolFactory` to handle the creation of `Entry` objects, which 
+ * This class specializes `PoolFactory` to handle the creation of `Entry` objects, which
  * represent chords and notes.
  */
 class EntryFactory : public PoolFactory<EntryFactory, dom::Entry, dom::EntryPool>
@@ -259,7 +259,7 @@ public:
     /**
      * @brief Extracts an `Entry` object from an XML element.
      *
-     * Extracts an `EntryFactory` derived object from the given XML element by delegating 
+     * Extracts an `EntryFactory` derived object from the given XML element by delegating
      * to the `RegisteredEntries` class. This allows the creation of `Options` objects from XML.
      *
      * @param element The XML element from which to extract the object.
@@ -292,8 +292,8 @@ public:
 /**
  * @brief Factory class for creating `Texts` objects from XML.
  *
- * This class specializes `PoolFactory` to handle the creation of `Texts` objects, representing 
- * various attributes stored in an `TextsPool`. It includes an XML parsing mechanism to 
+ * This class specializes `PoolFactory` to handle the creation of `Texts` objects, representing
+ * various attributes stored in an `TextsPool`. It includes an XML parsing mechanism to
  * extract and create these objects, which are used in the document model.
  */
 class TextsFactory : public PoolFactory<TextsFactory, dom::TextsBase, dom::TextsPool>
@@ -304,7 +304,7 @@ public:
     /**
      * @brief Extracts a `TextsBase` object from an XML element.
      *
-     * Extracts a `TextsBase` derived object from the given XML element using the specified 
+     * Extracts a `TextsBase` derived object from the given XML element using the specified
      * attributes such as `number` or `type`. Throws an exception if a required attribute is missing.
      *
      * @param element The XML element from which to extract the object.

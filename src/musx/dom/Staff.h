@@ -151,10 +151,10 @@ public:
     public:
         bool setToClef{};               ///< If true, forces the clef in #Staff::transposedClef.
         bool noSimplifyKey{};           ///< Inverse of "Simplify Key" (xml node is `<noKeyOpt>`)
-        
+
         /// Shared pointer to the key signature transposition details, if any.
         std::shared_ptr<KeySigTransposition> keysig;
-        
+
         /// Shared pointer to the chromatic transposition details, if any.
         std::shared_ptr<ChromaticTransposition> chromatic;
 
@@ -263,7 +263,7 @@ public:
 
     // The following values are not in xml but computed by the factory.
 
-    Cmper noteShapesId{};           ///< Calculated cmper for note shapes. If not overridden by a staff style, it is the same as the 
+    Cmper noteShapesId{};           ///< Calculated cmper for note shapes. If not overridden by a staff style, it is the same as the
                                     ///< staff cmper or zero if default. (Populated by in #calcAllRuntimeValues.)
     bool noteShapesFromStyle{};     ///< True if #noteShapesId is for a staff style. (Determines which note shapes class to retrieve.)
     Cmper fullNamePosId{};          ///< Calculated cmper for full name position id. If not overridden by a staff style, it is the
@@ -330,7 +330,7 @@ public:
 
     /**
      * @brief Get the auto-numbering value for this staff, if applicable.
-     * 
+     *
      * Calculates #autoNumberValue for every staff based on the occurrences of the instrument UUID
      * and in each staff instance. If numbering is not applicable (e.g., auto numbering
      * is disabled, the UUID is empty, or there is only one instance), #autoNumberValue has no value.
@@ -455,11 +455,11 @@ public:
         if (!staffLines && !customStaff) {
             MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has neither a standard nor a custom staff definition.");
         } else if (staffLines && customStaff) {
-            MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has both a standard and a custom staff definition.");            
+            MUSX_INTEGRITY_ERROR("Staff or StaffStyle " + std::to_string(getCmper()) + " has both a standard and a custom staff definition.");
         }
         if (customStaff) { // guarantee ascending order of staves.
             std::sort(customStaff.value().begin(), customStaff.value().end(),
-                [](const auto& a, const auto& b) { return a < b; });    
+                [](const auto& a, const auto& b) { return a < b; });
         }
         if (transposition) {
             if (!transposition->chromatic && !transposition->keysig) {

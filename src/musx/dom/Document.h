@@ -71,22 +71,22 @@ public:
     HeaderPtr& getHeader() { return m_header; }
     /**  @brief Retrieves the const header */
     const HeaderPtr& getHeader() const { return m_header; }
-    
+
     /** @brief Retrieves the options pool */
     OptionsPoolPtr& getOptions() { return m_options; }
     /** @brief Retrieves the const options pool */
     const OptionsPoolPtr& getOptions() const { return m_options; }
-    
+
     /** @brief Retrieves the others pool */
     OthersPoolPtr& getOthers() { return m_others; }
     /** @brief Retrieves the const others pool */
     const OthersPoolPtr& getOthers() const { return m_others; }
-    
+
     /** @brief Retrieves the details pool */
     DetailsPoolPtr& getDetails() { return m_details; }
     /** @brief Retrieves the const others pool */
     const DetailsPoolPtr& getDetails() const { return m_details; }
-    
+
     /** @brief Retrieves the entry pool */
     EntryPoolPtr& getEntries() { return m_entries; }
     /** @brief Retrieves the entry others pool */
@@ -103,7 +103,7 @@ public:
     constexpr Cmper calcScrollViewCmper([[maybe_unused]]Cmper partId) const noexcept
     {
         // as of now, there is no calculation, but keep that assumption encapsulated.
-        return BASE_SYSTEM_ID;        
+        return BASE_SYSTEM_ID;
     }
 
     /// @brief Returns the scroll view staves for the given @p partId.
@@ -151,7 +151,7 @@ public:
 
     /// @brief Calcuate a @ref MusicRange instance for the entire document.
     MusicRange calcEntireDocument() const;
-    
+
     /// @brief Iterate all entries in the document by staff and then measure. This function wraps MusxInstanceList<others::StaffUsed>::iterateEntries.
     /// @param partId The linked part id to iterate. (Use #SCORE_PARTID to iterate the score.)
     /// @param iterator The callback function.

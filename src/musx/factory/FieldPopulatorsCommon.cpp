@@ -59,7 +59,7 @@ void populateFontEfx(const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo
         } else if (efxName == "hidden") {
             i->hidden = true;
         }
-    }        
+    }
 }
 #endif // DOXYGEN_SHOULD_IGNORE_THIS
 
@@ -118,7 +118,7 @@ MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e); }},
     {"expand", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->expand = populateBoolean(e, i); }},
 });
-    
+
 } // namespace others
 } // namespace dom
 } // namespace musx

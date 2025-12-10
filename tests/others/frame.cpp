@@ -54,7 +54,7 @@ TEST(FrameTest, PopulateFields)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(frameXml);
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
-    
+
     auto frame = others->get<others::Frame>(SCORE_PARTID, 1, 0);
     ASSERT_TRUE(frame) << "Frame with cmper 1 inci 0 not found";
 
@@ -115,7 +115,7 @@ TEST(FrameTest, IntegrityCheck)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlStartTime),
         musx::dom::integrity_error
     ) << "startTime supplied along with start and end entries";
-        
+
     constexpr static musxtest::string_view xmlMissingStart = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
@@ -131,7 +131,7 @@ TEST(FrameTest, IntegrityCheck)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xmlMissingStart),
         musx::dom::integrity_error
     ) << "missing start entry";
-        
+
     constexpr static musxtest::string_view xmlMissingEnd = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>

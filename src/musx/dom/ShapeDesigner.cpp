@@ -337,7 +337,7 @@ static bool isTenutoMark(const ShapeDef& shape)
                 }
             }
         }, inst.data);
-        
+
         if (!result) {
             return false;
         }

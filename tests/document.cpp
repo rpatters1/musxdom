@@ -33,7 +33,7 @@ TEST(DocumentTest, DocumentFormation)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(missingData),
         std::invalid_argument
     );
-    
+
     constexpr static musxtest::string_view emptyData = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale/>

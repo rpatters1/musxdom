@@ -23,7 +23,7 @@
  #include "gtest/gtest.h"
  #include "musx/musx.h"
  #include "test_utils.h"
- 
+
 using namespace musx::dom;
 
 TEST(SecondaryBeamBreakTest, PopulateFields)
@@ -67,10 +67,10 @@ TEST(SecondaryBeamBreakTest, PopulateFields)
     auto beamBreak7 = details->get<details::SecondaryBeamBreak>(SCORE_PARTID, 7);
     ASSERT_TRUE(beamBreak7) << "SecondaryBeamBreak with entnum 7 and inci 0 not found";
 
-    EXPECT_EQ(beamBreak7->mask, 
-              unsigned(NoteType::Note32nd) | unsigned(NoteType::Note64th) | 
-              unsigned(NoteType::Note128th) | unsigned(NoteType::Note256th) | 
-              unsigned(NoteType::Note512th) | unsigned(NoteType::Note1024th) | 
+    EXPECT_EQ(beamBreak7->mask,
+              unsigned(NoteType::Note32nd) | unsigned(NoteType::Note64th) |
+              unsigned(NoteType::Note128th) | unsigned(NoteType::Note256th) |
+              unsigned(NoteType::Note512th) | unsigned(NoteType::Note1024th) |
               unsigned(NoteType::Note2048th) | unsigned(NoteType::Note4096th));
     EXPECT_TRUE(beamBreak7->breakThrough);
     EXPECT_EQ(beamBreak7->calcLowestBreak(), 3);
@@ -87,9 +87,9 @@ TEST(SecondaryBeamBreakTest, PopulateFields)
     auto beamBreak11 = details->get<details::SecondaryBeamBreak>(SCORE_PARTID, 11);
     ASSERT_TRUE(beamBreak11) << "SecondaryBeamBreak with entnum 11 and inci 0 not found";
 
-    EXPECT_EQ(beamBreak11->mask, 
-              unsigned(NoteType::Note64th) | unsigned(NoteType::Note128th) | 
-              unsigned(NoteType::Note512th) | unsigned(NoteType::Note1024th) | 
+    EXPECT_EQ(beamBreak11->mask,
+              unsigned(NoteType::Note64th) | unsigned(NoteType::Note128th) |
+              unsigned(NoteType::Note512th) | unsigned(NoteType::Note1024th) |
               unsigned(NoteType::Note2048th) | unsigned(NoteType::Note4096th));
     EXPECT_TRUE(beamBreak11->breakThrough);
     EXPECT_EQ(beamBreak11->calcLowestBreak(), 4);

@@ -65,7 +65,7 @@ private:
         result.m_denominator = d;
         return result;
     }
-    
+
 public:
     constexpr Fraction() = default;
 
