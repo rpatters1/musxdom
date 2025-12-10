@@ -925,9 +925,9 @@ std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() co
 
 std::optional<Evpu> StaffSystem::calcHorzNeighborSystemDistance() const
 {
-    const MusxInstance<StaffSystem>& prev = getDocument()->getOthers()->get<StaffSystem>(getRequestedPartId(), getCmper() - 1);
-    const MusxInstance<StaffSystem>& page = getPage();
-    const MusxInstanceList<StaffUsed>& instrumentsInSystem = getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), getCmper() - 1);
+    MusxInstance<StaffSystem> prev = getDocument()->getOthers()->get<StaffSystem>(getRequestedPartId(), getCmper() - 1);
+    MusxInstance<StaffSystem> page = getPage();
+    MusxInstanceList<StaffUsed> instrumentsInSystem = getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), getCmper() - 1);
     if (!prev || !page || instrumentsInSystem.empty()) {
         return std::nullopt;
     }
@@ -935,7 +935,7 @@ std::optional<Evpu> StaffSystem::calcHorzNeighborSystemDistance() const
     // Check if horizontal distance between systems is larger than 0,
     // systems are scaled equally, systems are on same page, and
     // first staves appear at same height.
-    const Evpu dist = left * calcEffectiveScaling() - (page->width - page->margLeft - (-page->margRight) - (prev->right * calcEffectiveScaling()));
+    const Evpu dist = left * calcEffectiveScaling() - (page->width - page->margLeft - (-page->margRight) - (-prev->right * calcEffectiveScaling()));
 
     if (dist > 0
         && calcEffectiveScaling() == prev->calcEffectiveScaling()
