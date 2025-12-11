@@ -145,13 +145,39 @@ public:
     }
 
     /**
-     * @brief Calculates duration as a fraction of a whole note
+     * @brief Calculates duration as a fraction of a whole note.
+     *        The result is rounded to the nearest integer Edu value,
+     *        with 0.5 rounded away from zero, and saturated to the
+     *        numeric range of dom::Edu.
      */
-    constexpr dom::Edu calcEduDuration() const {
-        const int num = numerator() * EDU_PER_WHOLE_NOTE;
-        const int den = denominator();
-        const double div = double(num) / double(den);
-        return dom::Edu(static_cast<int>(div + (div >= 0.0 ? 0.5 : -0.5)));
+    constexpr dom::Edu calcEduDuration() const
+    {
+        using Edu = dom::Edu;
+        using Wide = std::int64_t;
+
+        // Do the scaling in wide integer to avoid overflow.
+        const auto num = Wide(m_numerator) * Wide(EDU_PER_WHOLE_NOTE);
+        const auto den = Wide(m_denominator); // always > 0 by class invariant
+
+        // Round to nearest, 0.5 away from zero, without using double.
+        auto rounded = Wide{};
+        if (num >= 0) {
+            rounded = (num + den / 2) / den;
+        } else {
+            rounded = (num - den / 2) / den;
+        }
+
+        // Saturate to dom::Edu range.
+        static constexpr auto maxEdu = static_cast<Wide>((std::numeric_limits<Edu>::max)());
+        static constexpr auto minEdu = static_cast<Wide>((std::numeric_limits<Edu>::min)());
+
+        if (rounded > maxEdu) {
+            rounded = maxEdu;
+        } else if (rounded < minEdu) {
+            rounded = minEdu;
+        }
+
+        return Edu(static_cast<int>(rounded));
     }
 
     /**

@@ -40,3 +40,12 @@ TEST(Fraction, HashTest)
     EXPECT_EQ(fractionMap[Fraction(1, 2)], 1);
     EXPECT_EQ(fractionMap[Fraction(3, 4)], 2);
 }
+
+TEST(Fraction, MaxMin)
+{
+    static constexpr auto maxFrac = (Fraction::max)();
+    static constexpr auto maxEdu = (std::numeric_limits<musx::dom::Edu>::max)();
+    EXPECT_EQ(maxFrac.calcEduDuration(), maxEdu);
+    auto maxEduFrac = Fraction::fromEdu(maxEdu);
+    EXPECT_EQ(maxEduFrac.calcEduDuration(), maxEdu);
+}
