@@ -306,11 +306,15 @@ public:
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
+    /// @brief Returns true if the staff shows its full or abbreviated name for the current requested partId.
+    bool calcShowName() const;
+
     /// @brief Returns the @ref MultiStaffInstrumentGroup for this staff if it is part of one in the data. Otherwise nullptr.
     MusxInstance<MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
 
     /// @brief Returns the @ref details::StaffGroup for this staff if it is part of a multistaff instrument (as defined in #Document::getInstruments).
-    MusxInstance<details::StaffGroup> getMultiStaffInstVisualGroup() const;
+    /// @param forPartId The part id to use.
+    MusxInstance<details::StaffGroup> getMultiStaffInstVisualGroup(Cmper forPartId) const;
 
     /// @brief Returns the parsing context for the full name.
     /// @param forPartId The part id to use for partname and page inserts
@@ -333,6 +337,9 @@ public:
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
     std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
+
+    /// @brief Returns true if the staff shows its full or abbreviated instrument name for the current requested partId.
+    bool calcShowInstrumentName() const;
 
     /// @brief Returns the note shape record in effect for this staff instance
     MusxInstance<details::ShapeNoteBase> getNoteShapes() const;

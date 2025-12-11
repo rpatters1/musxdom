@@ -284,6 +284,14 @@ std::string Staff::getAbbreviatedName(util::EnigmaString::AccidentalStyle accide
     return TextBlock::getText(getDocument(), abbrvNameTextId, SCORE_PARTID, true, accidentalStyle); // true: strip enigma tags
 }
 
+bool Staff::calcShowName() const
+{
+    if (getRequestedPartId() == SCORE_PARTID) {
+        return !hideNameInScore;
+    }
+    return showNameInParts;
+}
+
 MusxInstance<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
 {
     if (multiStaffInstId) {
@@ -295,14 +303,24 @@ MusxInstance<MultiStaffInstrumentGroup> Staff::getMultiStaffInstGroup() const
     return nullptr;
 }
 
-MusxInstance<details::StaffGroup> Staff::getMultiStaffInstVisualGroup() const
+MusxInstance<details::StaffGroup> Staff::getMultiStaffInstVisualGroup(Cmper forPartId) const
 {
-    Cmper groupId = getDocument()->getInstrumentForStaff(getCmper()).staffGroupId;
-    if (groupId != 0) {
-        if (auto retval = getDocument()->getDetails()->get<details::StaffGroup>(SCORE_PARTID, getDocument()->calcScrollViewCmper(SCORE_PARTID), groupId)) {
+    const auto groupId = [&]() -> std::optional<Cmper> {
+        if (forPartId == SCORE_PARTID) {
+            return getDocument()->getInstrumentForStaff(getCmper()).staffGroupId;
+        }
+        const auto map = getDocument()->createInstrumentMap(forPartId);
+        auto result = InstrumentInfo::getInstrumentForStaff(map, getCmper());
+        if (result) {
+            return result->staffGroupId;
+        }
+        return std::nullopt;
+    }();
+    if (groupId.value_or(0) != 0) {
+        if (auto retval = getDocument()->getDetails()->get<details::StaffGroup>(forPartId, getDocument()->calcScrollViewCmper(forPartId), groupId.value())) {
             return retval;
         } else {
-            MUSX_INTEGRITY_ERROR("Instrument map " + std::to_string(getCmper()) + " points to non-existent StaffGroup " + std::to_string(groupId)
+            MUSX_INTEGRITY_ERROR("Instrument map " + std::to_string(getCmper()) + " points to non-existent StaffGroup " + std::to_string(groupId.value())
                 + " for staff " + std::to_string(getCmper()));
         }
     }
@@ -313,7 +331,7 @@ util::EnigmaParsingContext Staff::getFullInstrumentNameCtx(Cmper forPartId, bool
 {
     auto block = [&]() -> MusxInstance<TextBlock> {
         if (!preferStaffName || !fullNameTextId) {
-            if (auto group = getMultiStaffInstVisualGroup()) {
+            if (auto group = getMultiStaffInstVisualGroup(forPartId)) {
                 return getDocument()->getOthers()->get<TextBlock>(forPartId, group->fullNameId);
             }
         }
@@ -331,7 +349,7 @@ util::EnigmaParsingContext Staff::getFullInstrumentNameCtx(Cmper forPartId, bool
 
 std::string Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
 {
-    if (auto ctx = getFullInstrumentNameCtx(SCORE_PARTID, preferStaffName)) {
+    if (auto ctx = getFullInstrumentNameCtx(getRequestedPartId(), preferStaffName)) {
         return ctx.getText(true, accidentalStyle);
     }
     return {};
@@ -341,7 +359,7 @@ util::EnigmaParsingContext Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartI
 {
     auto block = [&]() -> MusxInstance<TextBlock> {
         if (!preferStaffName || !abbrvNameTextId) {
-            if (auto group = getMultiStaffInstVisualGroup()) {
+            if (auto group = getMultiStaffInstVisualGroup(forPartId)) {
                 return getDocument()->getOthers()->get<TextBlock>(forPartId, group->abbrvNameId);
             }
         }
@@ -359,10 +377,18 @@ util::EnigmaParsingContext Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartI
 
 std::string Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle, bool preferStaffName) const
 {
-    if (auto ctx = getAbbreviatedInstrumentNameCtx(SCORE_PARTID, preferStaffName)) {
+    if (auto ctx = getAbbreviatedInstrumentNameCtx(getRequestedPartId(), preferStaffName)) {
         return ctx.getText(true, accidentalStyle);
     }
     return {};
+}
+
+bool Staff::calcShowInstrumentName() const
+{
+    if (auto group = getMultiStaffInstVisualGroup(getRequestedPartId())) {
+        return !group->hideName;
+    }
+    return calcShowName();
 }
 
 MusxInstance<details::ShapeNoteBase> Staff::getNoteShapes() const
