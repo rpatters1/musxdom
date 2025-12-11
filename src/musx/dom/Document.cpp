@@ -188,18 +188,12 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 
 const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 {
-    const auto& instIt = m_instruments.find(staffId);
-    if (instIt != m_instruments.end()) {
-        return instIt->second;
-    } else {
-        for (const auto& [top, info] : m_instruments) {
-            if (info.staves.find(staffId) != info.staves.end()) {
-                return info;
-            }
-        }
+    auto result = InstrumentInfo::getInstrumentForStaff(m_instruments, staffId);
+    if (!result) {
+        assert(false); // flag this as early as possible, because getting here is a program bug.
+        throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
     }
-    assert(false); // flag this as early as possible, because getting here is a program bug.
-    throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
+    return *result;
 }
 
 MusicRange Document::calcEntireDocument() const
@@ -251,6 +245,21 @@ std::vector<StaffCmper> InstrumentInfo::getSequentialStaves() const
         result.push_back(staffId);
     }
     return result;
+}
+
+const InstrumentInfo* InstrumentInfo::getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId)
+{
+    const auto& instIt = map.find(staffId);
+    if (instIt != map.end()) {
+        return &instIt->second;
+    } else {
+        for (const auto& [top, info] : map) {
+            if (info.staves.find(staffId) != info.staves.end()) {
+                return &info;
+            }
+        }
+    }
+    return nullptr;
 }
 
 } // namespace dom

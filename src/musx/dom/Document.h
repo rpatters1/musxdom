@@ -47,6 +47,8 @@ namespace dom {
 
 using namespace header;
 
+struct InstrumentInfo;
+using InstrumentMap = std::unordered_map<StaffCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 /// @class InstrumentInfo
 /// @brief Represents information about each instrument in the document. This is calculated from the staves,
 /// staff groups, and multistaff instrument groups.
@@ -58,8 +60,13 @@ struct InstrumentInfo
 
     /// @brief Returns the staffIds in sequence as they appear in Scroll View in the score.
     std::vector<StaffCmper> getSequentialStaves() const;
+
+    /// @brief Get the instrument info for the given staffId in the given map
+    /// @param map The map to search.
+    /// @param staffId The staffId to find.
+    /// @return The InstrumentInfo for the @p staffId or null if not found.
+    static const InstrumentInfo* getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId);
 };
-using InstrumentMap = std::unordered_map<StaffCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
