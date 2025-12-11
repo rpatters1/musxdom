@@ -1,5 +1,13 @@
 var NAVTREEINDEX32 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#ad4bb0a2e2967f45b0b0e9519f6306eeb":[1,0,1,0,5,416],
+"namespacemusx_1_1dom_1_1uuid.html#ad4eb7e5cc48cf8685533d148840b02bb":[1,0,1,0,5,238],
+"namespacemusx_1_1dom_1_1uuid.html#ad507b12215ba46f734d1f72019f3ddce":[1,0,1,0,5,269],
+"namespacemusx_1_1dom_1_1uuid.html#ad541bb8f84c03af35cec4358e0d67330":[1,0,1,0,5,495],
+"namespacemusx_1_1dom_1_1uuid.html#ad65133b116e226a8db7f67555a42f35b":[1,0,1,0,5,500],
+"namespacemusx_1_1dom_1_1uuid.html#ad6a235691f62ad6f6516437e6801acbb":[1,0,1,0,5,1],
+"namespacemusx_1_1dom_1_1uuid.html#ad6cd55a8f955a088e0d54cc0b7ed8274":[1,0,1,0,5,489],
+"namespacemusx_1_1dom_1_1uuid.html#ad6e0c2d9875eddb61c48c0d34d46b6ad":[1,0,1,0,5,197],
 "namespacemusx_1_1dom_1_1uuid.html#ad716415915dc3f312f69cb3ce44af86d":[1,0,1,0,5,588],
 "namespacemusx_1_1dom_1_1uuid.html#ad71f28b305a933ce93292ed01bba688b":[1,0,1,0,5,725],
 "namespacemusx_1_1dom_1_1uuid.html#ad751440ba2a492b437074fc1a0cd256c":[1,0,1,0,5,728],
@@ -241,13 +249,5 @@ var NAVTREEINDEX32 =
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ae041ab69c922d8e201204087caa8f965":[1,0,1,0,46,3,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ae041ab69c922d8e201204087caa8f965":[2,0,1,0,47,3,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html":[2,0,1,0,47,4],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html":[1,0,1,0,46,4],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html#a0cb71d1267494145afff2e0500ec61af":[1,0,1,0,46,4,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html#a0cb71d1267494145afff2e0500ec61af":[2,0,1,0,47,4,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html":[1,0,1,0,46,5],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html":[2,0,1,0,47,5],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a35c350296ca4f628a3872ad288a16441":[1,0,1,0,46,5,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a35c350296ca4f628a3872ad288a16441":[2,0,1,0,47,5,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[1,0,1,0,46,5,1],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[2,0,1,0,47,5,1]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html":[1,0,1,0,46,4]
 };

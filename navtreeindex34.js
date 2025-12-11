@@ -1,5 +1,13 @@
 var NAVTREEINDEX34 =
 {
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html":[2,0,1,0,2,25,0],
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html":[1,0,1,0,2,25,0],
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac6eefffa4606f7d0d2dccd281c886ae2":[2,0,1,0,2,25,0,1],
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac6eefffa4606f7d0d2dccd281c886ae2":[1,0,1,0,2,25,0,1],
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac7f9189d5a1f626f3cadc19984ba9093":[1,0,1,0,2,25,0,0],
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac7f9189d5a1f626f3cadc19984ba9093":[2,0,1,0,2,25,0,0],
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html":[1,0,1,0,2,25,1],
+"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html":[2,0,1,0,2,25,1],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76":[2,0,1,0,2,25,1,1],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a0c5e6582015464b75322fd77aa391b76":[1,0,1,0,2,25,1,1],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html#a3681523f5bd1ce2e0c3fdbb93d2de521":[2,0,1,0,2,25,1,2],

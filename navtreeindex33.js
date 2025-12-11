@@ -1,5 +1,13 @@
 var NAVTREEINDEX33 =
 {
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html#a0cb71d1267494145afff2e0500ec61af":[1,0,1,0,46,4,0],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html#a0cb71d1267494145afff2e0500ec61af":[2,0,1,0,47,4,0],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html":[1,0,1,0,46,5],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html":[2,0,1,0,47,5],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a35c350296ca4f628a3872ad288a16441":[1,0,1,0,46,5,0],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a35c350296ca4f628a3872ad288a16441":[2,0,1,0,47,5,0],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[1,0,1,0,46,5,1],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[2,0,1,0,47,5,1],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html":[1,0,1,0,46,6],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html":[2,0,1,0,47,6],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a6e1c2e028cf25587e977208245e9337e":[2,0,1,0,47,6,1],
@@ -241,13 +249,5 @@ var NAVTREEINDEX33 =
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a8038c695540334a67aee1b2ba42deb00":[2,0,1,0,2,24,0,2],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a8038c695540334a67aee1b2ba42deb00":[1,0,1,0,2,24,0,2],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#ae2d93cb453eabd285b1680f1dfe782a2":[2,0,1,0,2,24,0,6],
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#ae2d93cb453eabd285b1680f1dfe782a2":[1,0,1,0,2,24,0,6],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html":[2,0,1,0,2,25,0],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html":[1,0,1,0,2,25,0],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac6eefffa4606f7d0d2dccd281c886ae2":[2,0,1,0,2,25,0,1],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac6eefffa4606f7d0d2dccd281c886ae2":[1,0,1,0,2,25,0,1],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac7f9189d5a1f626f3cadc19984ba9093":[1,0,1,0,2,25,0,0],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac7f9189d5a1f626f3cadc19984ba9093":[2,0,1,0,2,25,0,0],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html":[1,0,1,0,2,25,1],
-"structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlPoint.html":[2,0,1,0,2,25,1]
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#ae2d93cb453eabd285b1680f1dfe782a2":[1,0,1,0,2,24,0,6]
 };

@@ -1,5 +1,13 @@
 var NAVTREEINDEX28 =
 {
+"functions_vars_b.html":[2,3,2,1],
+"functions_vars_c.html":[2,3,2,2],
+"functions_vars_d.html":[2,3,2,3],
+"functions_vars_e.html":[2,3,2,4],
+"functions_vars_f.html":[2,3,2,5],
+"functions_vars_g.html":[2,3,2,6],
+"functions_vars_h.html":[2,3,2,7],
+"functions_vars_i.html":[2,3,2,8],
 "functions_vars_j.html":[2,3,2,9],
 "functions_vars_k.html":[2,3,2,10],
 "functions_vars_l.html":[2,3,2,11],
@@ -24,8 +32,8 @@ var NAVTREEINDEX28 =
 "index.html":[],
 "music__theory_8hpp_source.html":[3,0,0,0,0],
 "musx_8h_source.html":[3,0,0,1,4],
-"namespacemembers.html":[1,1,0,0],
 "namespacemembers.html":[1,1,0],
+"namespacemembers.html":[1,1,0,0],
 "namespacemembers_b.html":[1,1,0,1],
 "namespacemembers_c.html":[1,1,0,2],
 "namespacemembers_d.html":[1,1,0,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX28 =
 "namespacemusx_1_1dom_1_1details.html":[1,0,1,0,0],
 "namespacemusx_1_1dom_1_1header.html":[1,0,1,0,1],
 "namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391":[1,0,1,0,1,5],
-"namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391a1748c0644a50090814d3e170723ccc5c":[1,0,1,0,1,5,0],
-"namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391a6311ae17c1ee52b36e68aaf4ad066387":[1,0,1,0,1,5,2],
-"namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391aaea23489ce3aa9b6406ebb28e0cda430":[1,0,1,0,1,5,1],
-"namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9":[1,0,1,0,1,6],
-"namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9a2ce7a92ae43763828ac4acb4560c2a5b":[1,0,1,0,1,6,1],
-"namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9a3c0ba6b22b526d7fd50c3026435a8c02":[1,0,1,0,1,6,0],
-"namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133":[1,0,1,0,1,4],
-"namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133a1748c0644a50090814d3e170723ccc5c":[1,0,1,0,1,4,0],
-"namespacemusx_1_1dom_1_1header.html#a4d9b0093d30e2cec54c60e346a0d8133a6311ae17c1ee52b36e68aaf4ad066387":[1,0,1,0,1,4,2]
+"namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391a1748c0644a50090814d3e170723ccc5c":[1,0,1,0,1,5,0]
 };

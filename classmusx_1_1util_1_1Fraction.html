@@ -131,7 +131,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a451dee1ae0c731665ef51318e3613e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e647ecefdfbf2a02b25d16467393f3a" id="r_a7e647ecefdfbf2a02b25d16467393f3a"><td class="memItemLeft" align="right" valign="top"><a id="a7e647ecefdfbf2a02b25d16467393f3a" name="a7e647ecefdfbf2a02b25d16467393f3a"></a>
 constexpr <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">dom::Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcEduDuration</b> () const</td></tr>
-<tr class="memdesc:a7e647ecefdfbf2a02b25d16467393f3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates duration as a fraction of a whole note. <br /></td></tr>
+<tr class="memdesc:a7e647ecefdfbf2a02b25d16467393f3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates duration as a fraction of a whole note. The result is rounded to the nearest integer Edu value, with 0.5 rounded away from zero, and saturated to the numeric range of <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5" title="&quot;Enigma Durational Units&quot; value (1024 per quarter note)">dom::Edu</a>. <br /></td></tr>
 <tr class="separator:a7e647ecefdfbf2a02b25d16467393f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a848234ceadb9f10f10ed314b2d450dd9" id="r_a848234ceadb9f10f10ed314b2d450dd9"><td class="memItemLeft" align="right" valign="top"><a id="a848234ceadb9f10f10ed314b2d450dd9" name="a848234ceadb9f10f10ed314b2d450dd9"></a>
 constexpr <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>abs</b> () const</td></tr>
@@ -192,16 +192,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a6b0c43a6ff364c44a37edc240c229281" id="r_a6b0c43a6ff364c44a37edc240c229281"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a6b0c43a6ff364c44a37edc240c229281">fromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">dom::Edu</a> edu)</td></tr>
 <tr class="memdesc:a6b0c43a6ff364c44a37edc240c229281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> from edu.  <br /></td></tr>
 <tr class="separator:a6b0c43a6ff364c44a37edc240c229281"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2162d977bfb8cafaf8fb9155f8f1912d" id="r_a2162d977bfb8cafaf8fb9155f8f1912d"><td class="memItemLeft" align="right" valign="top"><a id="a2162d977bfb8cafaf8fb9155f8f1912d" name="a2162d977bfb8cafaf8fb9155f8f1912d"></a>
-static constexpr <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>max</b> () noexcept</td></tr>
-<tr class="memdesc:a2162d977bfb8cafaf8fb9155f8f1912d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the max fractional value. <br /></td></tr>
-<tr class="separator:a2162d977bfb8cafaf8fb9155f8f1912d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2154d703070b963f95896a11df847148" id="r_a2154d703070b963f95896a11df847148"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a2154d703070b963f95896a11df847148">fromPercent</a> (int percent)</td></tr>
 <tr class="memdesc:a2154d703070b963f95896a11df847148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">Fraction</a> from a percent (where 100 is 100%)  <br /></td></tr>
 <tr class="separator:a2154d703070b963f95896a11df847148"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
+<tr class="memitem:af69e8c7d083a50021bc7eb6acf045003" id="r_af69e8c7d083a50021bc7eb6acf045003"><td class="memItemLeft" align="right" valign="top"><a id="af69e8c7d083a50021bc7eb6acf045003" name="af69e8c7d083a50021bc7eb6acf045003"></a>
+struct&#160;</td><td class="memItemRight" valign="bottom"><b>std::numeric_limits&lt; Fraction &gt;</b></td></tr>
+<tr class="separator:af69e8c7d083a50021bc7eb6acf045003"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ac0bd6d4e4b51fd98127667311124e1" id="r_a8ac0bd6d4e4b51fd98127667311124e1"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Fraction.html#a8ac0bd6d4e4b51fd98127667311124e1">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classmusx_1_1util_1_1Fraction.html">Fraction</a> &amp;frac)</td></tr>
 <tr class="memdesc:a8ac0bd6d4e4b51fd98127667311124e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stream output operator.  <br /></td></tr>
 <tr class="separator:a8ac0bd6d4e4b51fd98127667311124e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
