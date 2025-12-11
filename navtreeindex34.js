@@ -1,5 +1,9 @@
 var NAVTREEINDEX34 =
 {
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a8038c695540334a67aee1b2ba42deb00":[2,0,1,0,2,24,0,2],
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a8038c695540334a67aee1b2ba42deb00":[1,0,1,0,2,24,0,2],
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#ae2d93cb453eabd285b1680f1dfe782a2":[2,0,1,0,2,24,0,6],
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#ae2d93cb453eabd285b1680f1dfe782a2":[1,0,1,0,2,24,0,6],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html":[2,0,1,0,2,25,0],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html":[1,0,1,0,2,25,0],
 "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html#ac6eefffa4606f7d0d2dccd281c886ae2":[2,0,1,0,2,25,0,1],

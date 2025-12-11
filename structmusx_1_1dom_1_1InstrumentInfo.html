@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('structmusx_1_1dom_1_1InstrumentInfo.ht
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structmusx_1_1dom_1_1InstrumentInfo-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::dom::InstrumentInfo Class Reference</div></div>
@@ -112,6 +113,12 @@ std::vector&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764
 <tr class="memdesc:a13ebee35878b1dd488b4b389dfbca77e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the staffIds in sequence as they appear in Scroll View in the score. <br /></td></tr>
 <tr class="separator:a13ebee35878b1dd488b4b389dfbca77e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a6686e2ee5a6f6cbf8c79bdd74f711ea8" id="r_a6686e2ee5a6f6cbf8c79bdd74f711ea8"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html#a6686e2ee5a6f6cbf8c79bdd74f711ea8">getInstrumentForStaff</a> (const <a class="el" href="namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69">InstrumentMap</a> &amp;map, <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId)</td></tr>
+<tr class="memdesc:a6686e2ee5a6f6cbf8c79bdd74f711ea8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the instrument info for the given staffId in the given map.  <br /></td></tr>
+<tr class="separator:a6686e2ee5a6f6cbf8c79bdd74f711ea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:af90d7466164d3c326502c3bb786f4d63" id="r_af90d7466164d3c326502c3bb786f4d63"><td class="memItemLeft" align="right" valign="top"><a id="af90d7466164d3c326502c3bb786f4d63" name="af90d7466164d3c326502c3bb786f4d63"></a>
@@ -129,7 +136,54 @@ std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents information about each instrument in the document. This is calculated from the staves, staff groups, and multistaff instrument groups. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6686e2ee5a6f6cbf8c79bdd74f711ea8" name="a6686e2ee5a6f6cbf8c79bdd74f711ea8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6686e2ee5a6f6cbf8c79bdd74f711ea8">&#9670;&#160;</a></span>getInstrumentForStaff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> * musx::dom::InstrumentInfo::getInstrumentForStaff </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69">InstrumentMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>map</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td>
+          <td class="paramname"><em>staffId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the instrument info for the given staffId in the given map. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map</td><td>The map to search. </td></tr>
+    <tr><td class="paramname">staffId</td><td>The staffId to find. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html" title="Represents information about each instrument in the document. This is calculated from the staves,...">InstrumentInfo</a> for the <code>staffId</code> or null if not found. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

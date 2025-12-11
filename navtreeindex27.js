@@ -1,5 +1,9 @@
 var NAVTREEINDEX27 =
 {
+"classmusx_1_1util_1_1Fraction.html#a0b2deebb89a0eea510a378463a836feb":[2,0,1,2,4,21],
+"classmusx_1_1util_1_1Fraction.html#a1689d4b0c911c1fb4188c12567ae8fd5":[2,0,1,2,4,24],
+"classmusx_1_1util_1_1Fraction.html#a19f5a89536f40e005c9fbc112143eb5f":[2,0,1,2,4,5],
+"classmusx_1_1util_1_1Fraction.html#a3217261c44aaef7e6980311a63a49066":[2,0,1,2,4,8],
 "classmusx_1_1util_1_1Fraction.html#a327aaaeac1f7a366fe8354fad70d062f":[2,0,1,2,4,13],
 "classmusx_1_1util_1_1Fraction.html#a3ef3a693cf5d0441e354c97609ba4f06":[2,0,1,2,4,16],
 "classmusx_1_1util_1_1Fraction.html#a405d4376622c66e4b0391838222bf815":[2,0,1,2,4,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX27 =
 "functions_rela.html":[2,3,5],
 "functions_s.html":[2,3,0,18],
 "functions_t.html":[2,3,0,19],
-"functions_type.html":[2,3,3],
-"functions_u.html":[2,3,0,20],
-"functions_v.html":[2,3,0,21],
-"functions_vars.html":[2,3,2],
-"functions_vars.html":[2,3,2,0]
+"functions_type.html":[2,3,3]
 };

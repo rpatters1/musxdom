@@ -204,14 +204,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa3c1793372716cecbf5066470c356690" id="r_aa3c1793372716cecbf5066470c356690"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#aa3c1793372716cecbf5066470c356690">getAbbreviatedName</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>) const</td></tr>
 <tr class="memdesc:aa3c1793372716cecbf5066470c356690"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the abbreviated staff name without Enigma tags. If the abbreviated name contains part-specific tags (rare), they are inserted for the score.  <br /></td></tr>
 <tr class="separator:aa3c1793372716cecbf5066470c356690"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacfe72f7240a1b3eb62862639ede7997" id="r_aacfe72f7240a1b3eb62862639ede7997"><td class="memItemLeft" align="right" valign="top"><a id="aacfe72f7240a1b3eb62862639ede7997" name="aacfe72f7240a1b3eb62862639ede7997"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShowName</b> () const</td></tr>
+<tr class="memdesc:aacfe72f7240a1b3eb62862639ede7997"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the staff shows its full or abbreviated name for the current requested partId. <br /></td></tr>
+<tr class="separator:aacfe72f7240a1b3eb62862639ede7997"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f539dcfa7b2a81589c84f398563f435" id="r_a3f539dcfa7b2a81589c84f398563f435"><td class="memItemLeft" align="right" valign="top"><a id="a3f539dcfa7b2a81589c84f398563f435" name="a3f539dcfa7b2a81589c84f398563f435"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMultiStaffInstGroup</b> () const</td></tr>
 <tr class="memdesc:a3f539dcfa7b2a81589c84f398563f435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html">MultiStaffInstrumentGroup</a> for this staff if it is part of one in the data. Otherwise nullptr. <br /></td></tr>
 <tr class="separator:a3f539dcfa7b2a81589c84f398563f435"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa89485193b69e2dee4c19eb548e42774" id="r_aa89485193b69e2dee4c19eb548e42774"><td class="memItemLeft" align="right" valign="top"><a id="aa89485193b69e2dee4c19eb548e42774" name="aa89485193b69e2dee4c19eb548e42774"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMultiStaffInstVisualGroup</b> () const</td></tr>
-<tr class="memdesc:aa89485193b69e2dee4c19eb548e42774"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> for this staff if it is part of a multistaff instrument (as defined in <a class="el" href="classmusx_1_1dom_1_1Document.html#a5f737b924b967fc0cfe22d79c763c164" title="Returns the instrument map for this document. It is computed by the factory.">Document::getInstruments</a>). <br /></td></tr>
-<tr class="separator:aa89485193b69e2dee4c19eb548e42774"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae023ecd87b3b43f79764a96c739cc79d" id="r_ae023ecd87b3b43f79764a96c739cc79d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#ae023ecd87b3b43f79764a96c739cc79d">getMultiStaffInstVisualGroup</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
+<tr class="memdesc:ae023ecd87b3b43f79764a96c739cc79d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> for this staff if it is part of a multistaff instrument (as defined in <a class="el" href="classmusx_1_1dom_1_1Document.html#a5f737b924b967fc0cfe22d79c763c164" title="Returns the instrument map for this document. It is computed by the factory.">Document::getInstruments</a>).  <br /></td></tr>
+<tr class="separator:ae023ecd87b3b43f79764a96c739cc79d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ed843a907b9d55b69ccab814f01e434" id="r_a7ed843a907b9d55b69ccab814f01e434"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7ed843a907b9d55b69ccab814f01e434">getFullInstrumentNameCtx</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, bool preferStaffName=false) const</td></tr>
 <tr class="memdesc:a7ed843a907b9d55b69ccab814f01e434"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the parsing context for the full name.  <br /></td></tr>
 <tr class="separator:a7ed843a907b9d55b69ccab814f01e434"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,6 +227,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af1c317f8ad198ae1788ca7a565fbc4b7" id="r_af1c317f8ad198ae1788ca7a565fbc4b7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#af1c317f8ad198ae1788ca7a565fbc4b7">getAbbreviatedInstrumentName</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>, bool preferStaffName=false) const</td></tr>
 <tr class="memdesc:af1c317f8ad198ae1788ca7a565fbc4b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the abbreviated instrument name for this staff without Enigma tags and with autonumbering (if any)  <br /></td></tr>
 <tr class="separator:af1c317f8ad198ae1788ca7a565fbc4b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f5673a3186d7261bbc96dddd096114c" id="r_a5f5673a3186d7261bbc96dddd096114c"><td class="memItemLeft" align="right" valign="top"><a id="a5f5673a3186d7261bbc96dddd096114c" name="a5f5673a3186d7261bbc96dddd096114c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShowInstrumentName</b> () const</td></tr>
+<tr class="memdesc:a5f5673a3186d7261bbc96dddd096114c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the staff shows its full or abbreviated instrument name for the current requested partId. <br /></td></tr>
+<tr class="separator:a5f5673a3186d7261bbc96dddd096114c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65dddeed8b69726453a77e4d378f39b8" id="r_a65dddeed8b69726453a77e4d378f39b8"><td class="memItemLeft" align="right" valign="top"><a id="a65dddeed8b69726453a77e4d378f39b8" name="a65dddeed8b69726453a77e4d378f39b8"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1ShapeNoteBase.html">details::ShapeNoteBase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteShapes</b> () const</td></tr>
 <tr class="memdesc:a65dddeed8b69726453a77e4d378f39b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the note shape record in effect for this staff instance. <br /></td></tr>
@@ -1586,6 +1593,32 @@ template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a 
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">accidentalStyle</td><td>The style for accidental subsitution in names like "Clarinet in Bb". </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae023ecd87b3b43f79764a96c739cc79d" name="ae023ecd87b3b43f79764a96c739cc79d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae023ecd87b3b43f79764a96c739cc79d">&#9670;&#160;</a></span>getMultiStaffInstVisualGroup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> &gt; musx::dom::others::Staff::getMultiStaffInstVisualGroup </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>forPartId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroup.html">details::StaffGroup</a> for this staff if it is part of a multistaff instrument (as defined in <a class="el" href="classmusx_1_1dom_1_1Document.html#a5f737b924b967fc0cfe22d79c763c164" title="Returns the instrument map for this document. It is computed by the factory.">Document::getInstruments</a>). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forPartId</td><td>The part id to use. </td></tr>
   </table>
   </dd>
 </dl>
