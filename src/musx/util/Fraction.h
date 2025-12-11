@@ -66,6 +66,8 @@ private:
         return result;
     }
 
+    friend struct std::numeric_limits<Fraction>;
+
 public:
     constexpr Fraction() = default;
 
@@ -98,13 +100,7 @@ public:
     /// @param edu The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is
     /// constructed as Fraction(1, 4).
     /// @todo Make this function constexpr when we drop C++17 support.
-    constexpr Fraction fromEdu(dom::Edu edu) { return fromConstExpr(edu, EDU_PER_WHOLE_NOTE); }
-
-    /// @brief Constructs the max fractional value.
-    constexpr Fraction max() noexcept
-    {
-        return Fraction((std::numeric_limits<int>::max)());
-    }
+    static constexpr Fraction fromEdu(dom::Edu edu) { return fromConstExpr(edu, EDU_PER_WHOLE_NOTE); }
 
     /// @brief Constructs a Fraction from a percent (where 100 is 100%)
     /// @param percent The integral percent value to convert.
@@ -168,8 +164,8 @@ public:
         }
 
         // Saturate to dom::Edu range.
-        static constexpr auto maxEdu = static_cast<Wide>((std::numeric_limits<Edu>::max)());
-        static constexpr auto minEdu = static_cast<Wide>((std::numeric_limits<Edu>::min)());
+        constexpr auto maxEdu = static_cast<Wide>((std::numeric_limits<Edu>::max)());
+        constexpr auto minEdu = static_cast<Wide>((std::numeric_limits<Edu>::min)());
 
         if (rounded > maxEdu) {
             rounded = maxEdu;
@@ -404,18 +400,18 @@ public:
     static constexpr bool is_specialized = true;
 
     // Smallest positive normalized value (not necessarily lowest)
-    static musx::util::Fraction min() noexcept {
-        return musx::util::Fraction(1, std::numeric_limits<int>::max());
+    static constexpr musx::util::Fraction min() noexcept {
+        return musx::util::Fraction::fromConstExpr(1, std::numeric_limits<int>::max());
     }
 
     // Largest representable positive fraction
-    static musx::util::Fraction max() noexcept {
-        return musx::util::Fraction(std::numeric_limits<int>::max(), 1);
+    static constexpr musx::util::Fraction max() noexcept {
+        return musx::util::Fraction(std::numeric_limits<int>::max());
     }
 
     // Most negative representable fraction
-    static musx::util::Fraction lowest() noexcept {
-        return musx::util::Fraction(std::numeric_limits<int>::lowest(), 1);
+    static constexpr musx::util::Fraction lowest() noexcept {
+        return musx::util::Fraction(std::numeric_limits<int>::lowest());
     }
 
     static constexpr int digits    = std::numeric_limits<int>::digits;
@@ -428,17 +424,17 @@ public:
     static constexpr bool has_quiet_NaN  = false;
     static constexpr bool has_signaling_NaN = false;
 
-    static musx::util::Fraction epsilon() noexcept {
-        return musx::util::Fraction(1, std::numeric_limits<int>::max());
+    static constexpr musx::util::Fraction epsilon() noexcept {
+        return musx::util::Fraction::fromConstExpr(1, std::numeric_limits<int>::max());
     }
 
-    static musx::util::Fraction round_error() noexcept {
+    static constexpr musx::util::Fraction round_error() noexcept {
         return musx::util::Fraction(0);
     }
 
     static constexpr int radix = 2;
 
-    static musx::util::Fraction infinity() noexcept { return musx::util::Fraction(0); }
+    static constexpr musx::util::Fraction infinity() noexcept { return musx::util::Fraction(0); }
     static musx::util::Fraction quiet_NaN() noexcept { return musx::util::Fraction(0); }
     static musx::util::Fraction signaling_NaN() noexcept { return musx::util::Fraction(0); }
 

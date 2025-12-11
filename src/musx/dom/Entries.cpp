@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include <string>
-#include <vector>
 #include <cstdlib>
 #include <exception>
+#include <limits>
+#include <string>
+#include <vector>
 
 #include "musx/musx.h"
 
@@ -218,7 +219,7 @@ bool EntryFrame::calcAreAllEntriesHiddenInFrame() const
 EntryInfoPtr EntryFrame::calcNearestEntry(util::Fraction position, bool findExact, std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
 {
     EntryInfoPtr result;
-    util::Fraction bestDiff = (util::Fraction::max)();
+    util::Fraction bestDiff = (std::numeric_limits<util::Fraction>::max)();
 
     auto iterator = [&](const EntryInfoPtr& entryInfo) {
         if (entryInfo.calcGraceElapsedDuration() != atGraceNoteDuration) {
