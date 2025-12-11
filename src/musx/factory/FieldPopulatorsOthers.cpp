@@ -1344,7 +1344,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"showNameParts", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->showNameInParts = populateBoolean(e, i); }},
     {"showNoteColors", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->showNoteColors = populateBoolean(e, i); }},
     {"transposition", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i)
-        { i->transposition = FieldPopulator<Staff::Transposition>::createAndPopulate(e); }},
+        { i->transposition = FieldPopulator<Staff::Transposition>::createAndPopulate(e, i); }},
     {"hideStfNameInScore", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideNameInScore = populateBoolean(e, i); }},
     {"botBarlineOffset", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->botBarlineOffset = e->getTextAs<Evpu>(); }},
     {"altNotation", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->altNotation = toEnum<Staff::AlternateNotation>(e); }},

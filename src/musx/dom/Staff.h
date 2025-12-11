@@ -146,9 +146,11 @@ public:
      * Contains flags (such as setToClef and noKeyOpt) and shared pointers
      * to embedded transposition types: key signature and chromatic.
      */
-    class Transposition
+    class Transposition : public ContainedClassBase
     {
     public:
+        using  ContainedClassBase::ContainedClassBase;
+
         bool setToClef{};               ///< If true, forces the clef in #Staff::transposedClef.
         bool noSimplifyKey{};           ///< Inverse of "Simplify Key" (xml node is `<noKeyOpt>`)
 
@@ -157,6 +159,23 @@ public:
 
         /// Shared pointer to the chromatic transposition details, if any.
         std::shared_ptr<ChromaticTransposition> chromatic;
+
+        /// @brief Returns true if the input has the same contents as this.
+        bool isSame(const Transposition& other) const;
+
+        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+        {
+            ContainedClassBase::integrityCheck(ptrToThis);
+            Cmper thisCmper = 0;
+            if (const auto parent = getParent<others::Staff>()) {
+                thisCmper = parent->getCmper();
+            }
+            if (!keysig && !chromatic) {
+                MUSX_INTEGRITY_ERROR("Transposition settings " + std::to_string(thisCmper) + " has neither a key signature nor chromatic settings.");
+            } else if (keysig && chromatic) {
+                MUSX_INTEGRITY_ERROR("Transposition settings " + std::to_string(thisCmper) + " has both key signature and chromatic settings.");
+            }
+        }
 
         static const xml::XmlElementArray<Transposition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
@@ -448,6 +467,10 @@ public:
     /// @param iterator The callback function.
     /// @return True if iteration completed. False if the @p iterator returned false and exited early.
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const;
+
+    /// @brief Returns true if both instances have the same notation style settings. This is helpful for determining if
+    /// there is an instrument change.
+    bool calcIsSameNotationStyle(const Staff& other) const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {

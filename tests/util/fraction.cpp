@@ -19,7 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
 */
-#include "unordered_map"
+#include <limits>
+#include <unordered_map>
 
 #include "gtest/gtest.h"
 #include "musx/musx.h"
@@ -39,4 +40,13 @@ TEST(Fraction, HashTest)
     EXPECT_TRUE(fractionMap.contains(Fraction(6, 8)));
     EXPECT_EQ(fractionMap[Fraction(1, 2)], 1);
     EXPECT_EQ(fractionMap[Fraction(3, 4)], 2);
+}
+
+TEST(Fraction, MaxMin)
+{
+    static constexpr auto maxFrac = (std::numeric_limits<Fraction>::max)();
+    static constexpr auto maxEdu = (std::numeric_limits<musx::dom::Edu>::max)();
+    EXPECT_EQ(maxFrac.calcEduDuration(), maxEdu);
+    auto maxEduFrac = Fraction::fromEdu(maxEdu);
+    EXPECT_EQ(maxEduFrac.calcEduDuration(), maxEdu);
 }

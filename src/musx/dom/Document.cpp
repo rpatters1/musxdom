@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include <string>
-#include <vector>
 #include <cstdlib>
 #include <exception>
+#include <limits>
+#include <string>
+#include <vector>
 
 #include "musx/musx.h"
 
@@ -204,7 +205,7 @@ const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 MusicRange Document::calcEntireDocument() const
 {
     auto measures = getOthers()->getArray<others::Measure>(SCORE_PARTID);
-    return MusicRange(m_self, 1, 0, static_cast<MeasCmper>(measures.size()), (util::Fraction::max)());
+    return MusicRange(m_self, 1, 0, static_cast<MeasCmper>(measures.size()), (std::numeric_limits<util::Fraction>::max)());
 }
 
 bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
