@@ -1448,7 +1448,7 @@ public:
     {
     public:
         using ContainedClassBase::ContainedClassBase;
-     
+
         std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
         std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
         std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.
@@ -2719,6 +2719,10 @@ public:
 
     /// @brief Calculates the effective scaling on this system, taking into account page scaling.
     util::Fraction calcEffectiveScaling() const;
+
+    /// @brief If this system is at the same height and on the same page as the previous, returns the horizontal distance between them.
+    /// @return The distance between systems in Evpu, or std::nullopt if the systems are not neighbors.
+    std::optional<Evpu> calcHorzNeighborSystemDistance() const;
 
     /// @brief Calculates the maximum and minimum staff scaling values for this system by searching each staff
     /// for individual staff scaling.

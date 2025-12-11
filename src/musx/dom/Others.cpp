@@ -923,6 +923,30 @@ std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() co
     return std::make_pair(util::Fraction(1), util::Fraction(1));;
 }
 
+std::optional<Evpu> StaffSystem::calcHorzNeighborSystemDistance() const
+{
+    MusxInstance<StaffSystem> prev = getDocument()->getOthers()->get<StaffSystem>(getRequestedPartId(), getCmper() - 1);
+    MusxInstance<StaffSystem> page = getPage();
+    MusxInstanceList<StaffUsed> instrumentsInSystem = getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), getCmper() - 1);
+    if (!prev || !page || instrumentsInSystem.empty()) {
+        return std::nullopt;
+    }
+
+    // Check if horizontal distance between systems is larger than 0,
+    // systems are scaled equally, systems are on same page, and
+    // first staves appear at same height.
+    const Evpu dist = left * calcEffectiveScaling() - (page->width - page->margLeft - (-page->margRight) - (-prev->right * calcEffectiveScaling()));
+
+    if (dist > 0
+        && calcEffectiveScaling() == prev->calcEffectiveScaling()
+        && pageId == prev->pageId
+        && staffSystems[j]->distanceToPrev * calcEffectiveScaling() + top
+           == (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + prev->bottom) * calcEffectiveScaling()) {
+        return dist;
+    }
+    return std::nullopt;
+}
+
 // ***********************
 // ***** TempoChange *****
 // ***********************
