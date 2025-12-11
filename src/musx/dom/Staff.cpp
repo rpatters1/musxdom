@@ -710,6 +710,94 @@ bool Staff::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) co
     return scrollView.iterateEntries(index.value(), index.value(), doc->calcEntireDocument(), iterator);
 }
 
+bool Staff::calcIsSameNotationStyle(const Staff& other) const
+{
+    if (notationStyle != other.notationStyle) {
+        return false;
+    }
+    if (capoPos != other.capoPos) {
+        return false;
+    }
+    if (lowestFret != other.lowestFret) {
+        return false;
+    }
+    if (vertTabNumOff != other.vertTabNumOff) {
+        return false;
+    }
+    if (showTabClefAllSys != other.showTabClefAllSys) {
+        return false;
+    }
+    if (useTabLetters != other.useTabLetters) {
+        return false;
+    }
+    if (breakTabLinesAtNotes != other.breakTabLinesAtNotes) {
+        return false;
+    }
+    if (hideTuplets != other.hideTuplets) {
+        return false;
+    }
+    if (fretInstId != other.fretInstId) {
+        return false;
+    }    
+    if (percussionMapId != other.percussionMapId) {
+        return false;
+    }
+    return true;
+}
+
+// ********************************
+// ***** Staff::Transposition *****
+// ********************************
+
+bool Staff::Transposition::isSame(const Staff::Transposition& other) const
+{
+    if (setToClef != other.setToClef) {
+        return false;
+    }
+    if (setToClef) {
+        const auto& thisParent = getParent<Staff>();
+        const auto& otherParent = other.getParent<Staff>();
+        MUSX_ASSERT_IF(!thisParent || !otherParent) {
+            throw std::logic_error("Unable to find parent staff instance for transposition instance.");
+        }
+        if (thisParent->transposedClef != otherParent->transposedClef) {
+            return false;
+        }
+    }
+    
+    if (noSimplifyKey != other.noSimplifyKey) {
+        return false;
+    }
+
+    // keysig: both present or both absent?
+    if (static_cast<bool>(keysig) != static_cast<bool>(other.keysig)) {
+        return false;
+    }
+    if (keysig && other.keysig) {
+        if (keysig->interval != other.keysig->interval) {
+            return false;
+        }
+        if (keysig->adjust != other.keysig->adjust) {
+            return false;
+        }
+    }
+
+    // chromatic: both present or both absent?
+    if (static_cast<bool>(chromatic) != static_cast<bool>(other.chromatic)) {
+        return false;
+    }
+    if (chromatic && other.chromatic) {
+        if (chromatic->alteration != other.chromatic->alteration) {
+            return false;
+        }
+        if (chromatic->diatonic != other.chromatic->diatonic) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 // **************************
 // ***** StaffComposite *****
 // **************************

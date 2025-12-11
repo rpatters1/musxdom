@@ -213,10 +213,10 @@ public:
             if (!breakAdj) {
                 breakAdj = std::make_shared<smartshape::EndPointAdjustment>(getParent());
             }
-            endPoint->integrityCheck(ptrToThis);
-            endPointAdj->integrityCheck(ptrToThis);
-            ctlPtAdj->integrityCheck(ptrToThis);
-            breakAdj->integrityCheck(ptrToThis);
+            endPoint->integrityCheck(endPoint);
+            endPointAdj->integrityCheck(endPointAdj);
+            ctlPtAdj->integrityCheck(ctlPtAdj);
+            breakAdj->integrityCheck(breakAdj);
         }
 
         static const xml::XmlElementArray<TerminationSeg>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
