@@ -98,10 +98,10 @@ public:
     /// @param edu The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is
     /// constructed as Fraction(1, 4).
     /// @todo Make this function constexpr when we drop C++17 support.
-    static constexpr Fraction fromEdu(dom::Edu edu) { return fromConstExpr(edu, EDU_PER_WHOLE_NOTE); }
+    constexpr Fraction fromEdu(dom::Edu edu) { return fromConstExpr(edu, EDU_PER_WHOLE_NOTE); }
 
     /// @brief Constructs the max fractional value.
-    static constexpr Fraction max() noexcept
+    constexpr Fraction max() noexcept
     {
         return Fraction((std::numeric_limits<int>::max)());
     }
